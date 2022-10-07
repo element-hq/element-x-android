@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 rootProject.name = "ElementX"
 include ':app'
 include ':libraries:ui:theme'
+include ':libraries:ui:screens:login'

@@ -47,6 +47,7 @@ android {
 
 dependencies {
     implementation project(":libraries:ui:theme")
+    implementation project(":libraries:ui:screens:login")
 
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation "androidx.compose.ui:ui:$compose_version"
