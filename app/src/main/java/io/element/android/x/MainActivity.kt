@@ -4,8 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import io.element.android.x.ui.screen.login.LoginActivity
 import io.element.android.x.ui.screen.login.RoomListActivity
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private val launcher =
@@ -18,11 +21,17 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Just start the LoginActivity for now.
-        // TODO if a session exist, start the room list
-        launcher.launch(Intent(this, LoginActivity::class.java))
+        lifecycleScope.launch {
+            if (viewModel.hasSession()) {
+                startRoomActivityAndFinish()
+            } else {
+                launcher.launch(Intent(this@MainActivity, LoginActivity::class.java))
+            }
+        }
     }
 
     private fun startRoomActivityAndFinish() {
