@@ -1,7 +1,7 @@
 package io.element.android.x.sdk.matrix
 
 import android.content.Context
-import uniffi.matrix_sdk_ffi.AuthenticationService
+import org.matrix.rustcomponents.sdk.AuthenticationService
 import java.io.File
 
 class Matrix(

@@ -28,6 +28,6 @@ android {
 }
 
 dependencies {
-    implementation(name: 'sdk-android-release', ext: 'aar')
+    implementation(name: 'matrix-rust-sdk', ext: 'aar')
     implementation "net.java.dev.jna:jna:5.10.0@aar"
 }
