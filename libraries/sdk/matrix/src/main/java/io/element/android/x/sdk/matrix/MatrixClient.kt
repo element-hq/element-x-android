@@ -1,11 +1,12 @@
 package io.element.android.x.sdk.matrix
 
 import android.util.Log
-import org.matrix.rustcomponents.sdk.Client
-import org.matrix.rustcomponents.sdk.ClientDelegate
+import io.element.android.x.sdk.matrix.store.SessionStore
+import org.matrix.rustcomponents.sdk.*
 
 class MatrixClient internal constructor(
-    private val client: Client
+    private val client: Client,
+    private val sessionStore: SessionStore,
 ) {
     fun startSync() {
         val clientDelegate = object : ClientDelegate {
@@ -31,7 +32,31 @@ class MatrixClient internal constructor(
         }
     }
 
-    fun logout() {
+    fun slidingSync(onSyncUpdate: (UpdateSummary) -> Unit): StoppableSpawn {
+        val slidingSyncView = SlidingSyncViewBuilder()
+            .timelineLimit(limit = 10u)
+            .requiredState(requiredState = listOf(RequiredState(key = "m.room.avatar", value = "")))
+            .name(name = "HomeScreenView")
+            .syncMode(mode = SlidingSyncMode.FULL_SYNC)
+            .build()
+
+        val slidingSync = client
+            .slidingSync()
+            .homeserver("https://slidingsync.lab.element.dev")
+            .addView(slidingSyncView)
+            .build()
+
+        slidingSync.setObserver(object : SlidingSyncObserver {
+            override fun didReceiveSyncUpdate(summary: UpdateSummary) {
+                Log.v(LOG_TAG, "didReceiveSyncUpdate=$summary")
+                onSyncUpdate.invoke(summary)
+            }
+        })
+        return slidingSync.sync()
+    }
+
+    suspend fun logout() {
         client.logout()
+        sessionStore.reset()
     }
 }

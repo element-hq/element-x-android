@@ -22,6 +22,8 @@ internal class SessionStore(
     private val store = context.dataStore
 
     private val userIdPreference = stringPreferencesKey("userId")
+    // TODO It contains the access token, so it has to be stored in a more secured storage.
+    // I would expect the Rust SDK to provide a more obscure token.
     private val restoreTokenPreference = stringPreferencesKey("restoreToken")
 
     suspend fun storeData(sessionData: SessionData) {
