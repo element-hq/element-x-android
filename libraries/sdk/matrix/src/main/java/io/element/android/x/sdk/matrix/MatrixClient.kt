@@ -1,8 +1,8 @@
 package io.element.android.x.sdk.matrix
 
 import android.util.Log
-import uniffi.matrix_sdk_ffi.Client
-import uniffi.matrix_sdk_ffi.ClientDelegate
+import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.ClientDelegate
 
 class MatrixClient internal constructor(
     private val client: Client
