@@ -7,7 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import io.element.android.x.ui.screen.login.LoginActivity
-import io.element.android.x.ui.screen.login.RoomListActivity
+import io.element.android.x.ui.screen.roomlist.RoomListActivity
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
