@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'io.element.android.x.ui.screen.login'
+    namespace 'io.element.android.x.ui.screen.roomlist'
     compileSdk 33
 
     defaultConfig {

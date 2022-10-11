@@ -17,6 +17,8 @@ dependencyResolutionManagement {
 }
 rootProject.name = "ElementX"
 include ':app'
+include ':libraries:core'
 include ':libraries:ui:theme'
 include ':libraries:ui:screens:login'
+include ':libraries:ui:screens:roomlist'
 include ':libraries:sdk:matrix'
