@@ -10,9 +10,13 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        flatDir {
+            dirs 'libs'
+        }
     }
 }
 rootProject.name = "ElementX"
 include ':app'
 include ':libraries:ui:theme'
 include ':libraries:ui:screens:login'
+include ':libraries:sdk:matrix'
