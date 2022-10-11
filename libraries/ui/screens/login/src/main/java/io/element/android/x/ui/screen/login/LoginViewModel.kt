@@ -1,26 +1,38 @@
 package io.element.android.x.ui.screen.login
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MavericksViewModel
+import com.airbnb.mvrx.Success
 import io.element.android.x.sdk.matrix.MatrixInstance
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(initialState: LoginViewState) :
+    MavericksViewModel<LoginViewState>(initialState) {
 
     private val matrix = MatrixInstance.getInstance()
-
-    private val _state = MutableStateFlow(LoginViewState())
-    val state = _state.asStateFlow()
 
     init {
         observeState()
     }
 
     private fun observeState() {
-        // TODO Update submitEnabled when other state members are updated.
+        onEach(
+            LoginViewState::homeserver,
+            LoginViewState::login,
+            LoginViewState::password,
+            LoginViewState::isLoggedIn,
+        ) { homeserver, login, password, isLoggedIn ->
+            setState {
+                copy(
+                    submitEnabled = homeserver.isNotEmpty() &&
+                            login.isNotEmpty() &&
+                            password.isNotEmpty() &&
+                            isLoggedIn !is Loading
+                )
+            }
+        }
     }
 
     fun handle(action: LoginActions) {
@@ -33,40 +45,40 @@ class LoginViewModel : ViewModel() {
     }
 
     private fun handleSetHomeserver(action: LoginActions.SetHomeserver) {
-        _state.value = _state.value.copy(
-            homeserver = action.homeserver,
-            submitEnabled = _state.value.login.isNotEmpty() &&
-                    _state.value.password.isNotEmpty() &&
-                    action.homeserver.isNotEmpty()
-        )
+        setState {
+            copy(
+                homeserver = action.homeserver
+            )
+        }
     }
 
-    private fun handleSubmit() {
+    private fun handleSubmit() = withState { state ->
         viewModelScope.launch {
-            val currentState = state.value
+            setState { copy(isLoggedIn = Loading()) }
             try {
-                matrix.login(currentState.homeserver, currentState.login, currentState.password)
+                matrix.login(state.homeserver, state.login, state.password)
+                setState { copy(isLoggedIn = Success(Unit)) }
             } catch (throwable: Throwable) {
                 Log.e("Error", "Cannot login", throwable)
+                setState { copy(isLoggedIn = Fail(throwable)) }
             }
         }
     }
 
     private fun handleSetPassword(action: LoginActions.SetPassword) {
-        _state.value = _state.value.copy(
-            password = action.password,
-            submitEnabled = _state.value.login.isNotEmpty() &&
-                    _state.value.homeserver.isNotEmpty() &&
-                    action.password.isNotEmpty()
-        )
+        setState {
+            copy(
+                password = action.password
+            )
+        }
     }
 
     private fun handleSetName(action: LoginActions.SetLogin) {
-        _state.value = _state.value.copy(
-            login = action.login,
-            submitEnabled = action.login.isNotEmpty() &&
-                    _state.value.homeserver.isNotEmpty() &&
-                    _state.value.password.isNotEmpty()
-        )
+        setState {
+            copy(
+
+                login = action.login
+            )
+        }
     }
 }

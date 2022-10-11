@@ -9,10 +9,11 @@ import androidx.compose.ui.Modifier
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VectorTextField(value: String, onValueChange: (String) -> Unit) {
+fun VectorTextField(value: String, onValueChange: (String) -> Unit, isError: Boolean = false) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        isError = isError
     )
 }

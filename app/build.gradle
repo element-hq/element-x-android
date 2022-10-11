@@ -57,6 +57,7 @@ android {
 dependencies {
     implementation project(":libraries:ui:theme")
     implementation project(":libraries:ui:screens:login")
+    implementation project(":libraries:ui:screens:roomlist")
     implementation project(":libraries:sdk:matrix")
 
     implementation 'androidx.core:core-ktx:1.9.0'
@@ -67,4 +68,6 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.6.0'
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+
+    implementation 'com.airbnb.android:mavericks-compose:2.7.0'
 }
