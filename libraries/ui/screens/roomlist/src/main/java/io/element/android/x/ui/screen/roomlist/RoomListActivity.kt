@@ -10,6 +10,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.ui.theme.ElementXTheme
 
@@ -21,6 +23,7 @@ class RoomListActivity : ComponentActivity() {
         setContent {
             ElementXTheme {
                 val viewModel: RoomListViewModel = mavericksViewModel()
+                val state = viewModel.collectAsState()
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier
@@ -36,9 +39,11 @@ class RoomListActivity : ComponentActivity() {
                         val state = viewModel.state.collectAsState().value
                         RoomListHeader()
                         RoomList()
-
                          */
                     }
+                }
+                if (state.value.logoutAction is Success) {
+                    finish()
                 }
             }
         }
