@@ -37,6 +37,11 @@ class LoginActivity : ComponentActivity() {
                     ) {
                         val state = viewModel.state.collectAsState().value
                         VectorTextField(
+                            value = state.homeserver,
+                            onValueChange = {
+                                viewModel.handle(LoginActions.SetHomeserver(it))
+                            })
+                        VectorTextField(
                             value = state.login,
                             onValueChange = {
                                 viewModel.handle(LoginActions.SetLogin(it))
