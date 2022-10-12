@@ -7,13 +7,13 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.*
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -22,10 +22,10 @@ import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.ui.theme.ElementXTheme
 import io.element.android.x.ui.theme.components.VectorButton
-import io.element.android.x.ui.theme.components.VectorTextField
 
 class LoginActivity : ComponentActivity() {
 
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,21 +44,34 @@ class LoginActivity : ComponentActivity() {
                         val viewModel: LoginViewModel = mavericksViewModel()
                         val state by viewModel.collectAsState()
                         val isError = state.isLoggedIn is Fail
-                        VectorTextField(value = state.homeserver,
+                        OutlinedTextField(
+                            value = state.homeserver,
                             onValueChange = {
                                 viewModel.handle(LoginActions.SetHomeserver(it))
-                            })
-                        VectorTextField(
+                            },
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Uri,
+                            ),
+                        )
+                        OutlinedTextField(
                             value = state.login,
                             onValueChange = {
                                 viewModel.handle(LoginActions.SetLogin(it))
-                            })
-                        VectorTextField(
+                            },
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Text,
+                            ),
+                        )
+                        OutlinedTextField(
                             value = state.password,
                             onValueChange = {
                                 viewModel.handle(LoginActions.SetPassword(it))
                             },
-                            isError = isError
+                            isError = isError,
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Password,
+                                imeAction = ImeAction.Send,
+                            ),
                         )
                         if (isError) {
                             Text(
