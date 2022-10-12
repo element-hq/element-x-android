@@ -58,4 +58,5 @@ dependencies {
     implementation 'androidx.fragment:fragment-ktx:1.5.3'
 
     implementation 'com.airbnb.android:mavericks-compose:2.7.0'
+    implementation 'io.coil-kt:coil-compose:2.2.1'
 }

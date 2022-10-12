@@ -8,6 +8,8 @@ class MatrixClient internal constructor(
     private val client: Client,
     private val sessionStore: SessionStore,
 ) {
+    private val roomWrapper = RoomWrapper(client)
+
     fun startSync() {
         val clientDelegate = object : ClientDelegate {
             override fun didReceiveAuthError(isSoftLogout: Boolean) {
@@ -32,7 +34,7 @@ class MatrixClient internal constructor(
         }
     }
 
-    fun slidingSync(onSyncUpdate: (UpdateSummary) -> Unit): StoppableSpawn {
+    fun slidingSync(listener: SlidingSyncListener): StoppableSpawn {
         val slidingSyncView = SlidingSyncViewBuilder()
             .timelineLimit(limit = 10u)
             .requiredState(requiredState = listOf(RequiredState(key = "m.room.avatar", value = "")))
@@ -49,7 +51,10 @@ class MatrixClient internal constructor(
         slidingSync.setObserver(object : SlidingSyncObserver {
             override fun didReceiveSyncUpdate(summary: UpdateSummary) {
                 Log.v(LOG_TAG, "didReceiveSyncUpdate=$summary")
-                onSyncUpdate.invoke(summary)
+                val rooms = summary.rooms.mapNotNull {
+                    roomWrapper.getRoom(it)
+                }
+                listener.onSyncUpdate(summary, rooms)
             }
         })
         return slidingSync.sync()
@@ -58,5 +63,12 @@ class MatrixClient internal constructor(
     suspend fun logout() {
         client.logout()
         sessionStore.reset()
+    }
+
+    fun username(): String = client.displayName()
+    fun avatarUrl(): String = client.avatarUrl()
+
+    interface SlidingSyncListener {
+        fun onSyncUpdate(summary: UpdateSummary, rooms: List<Room>)
     }
 }
