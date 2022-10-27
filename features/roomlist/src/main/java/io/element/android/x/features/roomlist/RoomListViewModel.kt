@@ -5,8 +5,8 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.Success
 import io.element.android.x.core.data.tryOrNull
-import io.element.android.x.sdk.matrix.MatrixClient
-import io.element.android.x.sdk.matrix.MatrixInstance
+import io.element.android.x.matrix.MatrixClient
+import io.element.android.x.matrix.MatrixInstance
 import kotlinx.coroutines.launch
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.StoppableSpawn

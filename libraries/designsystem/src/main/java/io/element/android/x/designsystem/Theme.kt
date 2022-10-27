@@ -1,4 +1,4 @@
-package io.element.android.x.libraries.designsystem
+package io.element.android.x.designsystem
 
 import android.app.Activity
 import android.os.Build

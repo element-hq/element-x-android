@@ -1,8 +1,8 @@
-package io.element.android.x.sdk.matrix
+package io.element.android.x.matrix
 
 import android.content.Context
-import io.element.android.x.sdk.matrix.store.SessionStore
-import io.element.android.x.sdk.matrix.util.logError
+import io.element.android.x.matrix.store.SessionStore
+import io.element.android.x.matrix.util.logError
 import org.matrix.rustcomponents.sdk.AuthenticationService
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import java.io.File

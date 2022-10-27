@@ -19,7 +19,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
-import io.element.android.x.libraries.designsystem.components.VectorButton
+import io.element.android.x.designsystem.components.VectorButton
 
 @Composable
 fun LoginScreen(

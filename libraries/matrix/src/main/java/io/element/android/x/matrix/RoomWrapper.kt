@@ -1,4 +1,4 @@
-package io.element.android.x.sdk.matrix
+package io.element.android.x.matrix
 
 import android.util.Log
 import org.matrix.rustcomponents.sdk.Client

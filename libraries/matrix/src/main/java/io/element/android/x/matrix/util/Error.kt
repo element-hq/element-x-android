@@ -1,7 +1,7 @@
-package io.element.android.x.sdk.matrix.util
+package io.element.android.x.matrix.util
 
 import android.util.Log
-import io.element.android.x.sdk.matrix.LOG_TAG
+import io.element.android.x.matrix.LOG_TAG
 import org.matrix.rustcomponents.sdk.ClientException
 
 fun logError(throwable: Throwable) {
