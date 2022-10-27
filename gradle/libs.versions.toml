@@ -1,0 +1,67 @@
+[versions]
+# Project
+android_gradle_plugin = "7.3.1"
+kotlin = "1.7.20"
+
+# AndroidX
+material = "1.6.1"
+corektx = "1.9.0"
+datastore = "1.0.0"
+
+# Compose
+compose_compiler = "1.3.2"
+compose_bom = "2022.10.00"
+
+# Coroutines
+coroutines = "1.6.4"
+
+# Accompanist
+accompanist = "0.27.0"
+
+# Test
+test_junit = "4.13.2"
+test_runner = "1.4.0"
+test_core = "1.4.0"
+test_mockk = "1.13.2"
+test_uiautomator = "2.2.0"
+test_junitext = "1.1.3"
+test_barista = "4.2.0"
+test_hamcrest = "2.2"
+test_orchestrator = "1.4.1"
+
+[libraries]
+# Project
+android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "android_gradle_plugin" }
+kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+
+# AndroidX
+androidx_material = { module = "com.google.android.material:material", version.ref = "material" }
+androidx_corektx = { module = "androidx.core:core-ktx", version.ref = "corektx" }
+androidx_datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+
+androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose_bom" }
+androidx_compose_foundation = { group = "androidx.compose.foundation", name = "foundation" }
+
+# Coroutines
+coroutines_core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines_test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+
+# Accompanist
+accompanist_animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
+accompanist_permission = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
+accompanist_material = { module = "com.google.accompanist:accompanist-navigation-material", version.ref = "accompanist" }
+
+# Test
+test_junit = { module = "junit:junit", version.ref = "test_junit" }
+test_runner = { module = "androidx.test:runner", version.ref = "test_runner" }
+test_core = { module = "androidx.test:core", version.ref = "test_core" }
+test_corektx = { module = "androidx.test:core-ktx", version.ref = "test_core" }
+test_uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "test_uiautomator" }
+test_junitext = { module = "androidx.test.ext:junit", version.ref = "test_junitext" }
+test_mockk = { module = "io.mockk:mockk", version.ref = "test_mockk" }
+test_barista = { module = "com.adevinta.android:barista", version.ref = "test_barista" }
+test_hamcrest = { module = "org.hamcrest:hamcrest", version.ref = "test_hamcrest" }
+test_orchestrator = { module = "androidx.test:orchestrator", version.ref = "test_orchestrator" }
+
+[bundles]
+
