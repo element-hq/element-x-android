@@ -7,8 +7,8 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.rememberNavHostEngine
+import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.destinations.LoginScreenNavigationDestination
-import io.element.android.x.libraries.designsystem.ElementXTheme
 import kotlinx.coroutines.runBlocking
 
 class MainActivity : ComponentActivity() {

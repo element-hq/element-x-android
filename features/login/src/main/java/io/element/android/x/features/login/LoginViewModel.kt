@@ -5,7 +5,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.Success
-import io.element.android.x.sdk.matrix.MatrixInstance
+import io.element.android.x.matrix.MatrixInstance
 import kotlinx.coroutines.launch
 
 class LoginViewModel(initialState: LoginViewState) :

@@ -1,4 +1,4 @@
-package io.element.android.x.libraries.designsystem
+package io.element.android.x.designsystem
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

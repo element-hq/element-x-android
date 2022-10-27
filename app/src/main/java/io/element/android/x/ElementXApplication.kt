@@ -2,7 +2,7 @@ package io.element.android.x
 
 import android.app.Application
 import com.airbnb.mvrx.Mavericks
-import io.element.android.x.sdk.matrix.MatrixInstance
+import io.element.android.x.matrix.MatrixInstance
 
 class ElementXApplication : Application() {
 

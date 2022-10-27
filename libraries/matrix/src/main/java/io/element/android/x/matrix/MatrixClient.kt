@@ -1,7 +1,7 @@
-package io.element.android.x.sdk.matrix
+package io.element.android.x.matrix
 
 import android.util.Log
-import io.element.android.x.sdk.matrix.store.SessionStore
+import io.element.android.x.matrix.store.SessionStore
 import org.matrix.rustcomponents.sdk.*
 
 class MatrixClient internal constructor(

@@ -1,4 +1,4 @@
-package io.element.android.x.sdk.matrix.store
+package io.element.android.x.matrix.store
 
 import android.content.Context
 import androidx.datastore.core.DataStore
