@@ -65,8 +65,12 @@ class MatrixClient internal constructor(
         sessionStore.reset()
     }
 
+    fun userId(): String = client.userId()
     fun username(): String = client.displayName()
     fun avatarUrl(): String = client.avatarUrl()
+
+    fun loadMedia(source: MediaSource) = client.getMediaContent(source)
+    fun loadMedia2(mxcUrl: String) = client.getMediaContent(mediaSourceFromUrl(mxcUrl))
 
     interface SlidingSyncListener {
         fun onSyncUpdate(summary: UpdateSummary, rooms: List<Room>)

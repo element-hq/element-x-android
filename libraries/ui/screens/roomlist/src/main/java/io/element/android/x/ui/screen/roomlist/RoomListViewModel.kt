@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.StoppableSpawn
 import org.matrix.rustcomponents.sdk.UpdateSummary
+import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
 
 class RoomListViewModel(initialState: RoomListViewState) :
     MavericksViewModel<RoomListViewState>(initialState), MatrixClient.SlidingSyncListener {
@@ -29,11 +30,15 @@ class RoomListViewModel(initialState: RoomListViewState) :
     private fun handleInit() {
         viewModelScope.launch {
             val client = getClient()
+            val url = client.avatarUrl()
+            val mediaSource = mediaSourceFromUrl(url)
+            mediaSource.url()
             setState {
                 copy(
                     user = MatrixUser(
-                        tryOrNull { client.username() } ?: "Room list",
-                        tryOrNull { client.avatarUrl() } ?: "https://previews.123rf.com/images/lkeskinen/lkeskinen1802/lkeskinen180208322/95731150-exemple-de-tampon-%C3%A9tiquette-typographique-timbre-ou-ic%C3%B4ne.jpg",
+                        username = tryOrNull { client.username() } ?: "Room list",
+                        avatarUrl = mediaSource.url(),
+                        avatarData = client.loadMedia2(url)
                     )
                 )
             }

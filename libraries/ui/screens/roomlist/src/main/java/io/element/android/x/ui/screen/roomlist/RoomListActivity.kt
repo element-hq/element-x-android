@@ -1,6 +1,7 @@
 package io.element.android.x.ui.screen.roomlist
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,6 +24,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.ui.theme.ElementXTheme
+import io.element.android.x.ui.theme.components.Avatar
 import org.matrix.rustcomponents.sdk.Room
 
 class RoomListActivity : ComponentActivity() {
@@ -107,14 +109,7 @@ class RoomListActivity : ComponentActivity() {
                 Row(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Image(
-                        painter = rememberAsyncImagePainter(matrixUser.avatarUrl),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(48.dp)
-                            .clip(CircleShape)
-                            .border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
-                    )
+                    Avatar(data = matrixUser.avatarData)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("${matrixUser.username}")
                 }
