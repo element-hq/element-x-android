@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import io.element.android.x.destinations.LoginScreenNavigationDestination
 import io.element.android.x.destinations.RoomListScreenNavigationDestination
 import io.element.android.x.features.login.LoginScreen
 import io.element.android.x.features.roomlist.RoomListScreen
@@ -21,8 +22,10 @@ fun LoginScreenNavigation(navigator: DestinationsNavigator) {
 @RootNavGraph(start = true)
 @Destination
 @Composable
-fun RoomListScreenNavigation() {
-    RoomListScreen()
+fun RoomListScreenNavigation(navigator: DestinationsNavigator) {
+    RoomListScreen(onSuccessLogout = {
+        navigator.clearBackStack(LoginScreenNavigationDestination)
+    })
 }
 
 
