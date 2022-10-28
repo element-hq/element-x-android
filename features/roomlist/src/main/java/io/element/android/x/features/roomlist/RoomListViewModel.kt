@@ -35,7 +35,6 @@ class RoomListViewModel(initialState: RoomListViewState) :
             val client = getClient()
             val url = client.avatarUrl()
             val mediaSource = mediaSourceFromUrl(url)
-            mediaSource.url()
             setState {
                 copy(
                     user = MatrixUser(
