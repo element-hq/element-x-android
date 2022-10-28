@@ -1,4 +1,4 @@
-package io.element.android.x.ui.theme.components
+package io.element.android.x.designsystem.components
 
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 
@@ -18,7 +19,7 @@ import coil.compose.rememberAsyncImagePainter
 @Composable
 fun Avatar(
     data: List<UByte>?,
-    size: Int = 48,
+    size: Dp = 48.dp,
 ) {
     Image(
         painter = rememberAsyncImagePainter(
@@ -28,7 +29,7 @@ fun Avatar(
             }),
         contentDescription = null,
         modifier = Modifier
-            .size(size.dp)
+            .size(size)
             .clip(CircleShape)
             .border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
     )

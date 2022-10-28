@@ -1,8 +1,10 @@
 package io.element.android.x.matrix
 
 import android.content.Context
-import io.element.android.x.matrix.store.SessionStore
+import io.element.android.x.core.data.CoroutineDispatchers
+import io.element.android.x.matrix.session.SessionStore
 import io.element.android.x.matrix.util.logError
+import kotlinx.coroutines.Dispatchers
 import org.matrix.rustcomponents.sdk.AuthenticationService
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import java.io.File
@@ -10,6 +12,12 @@ import java.io.File
 class Matrix(
     context: Context,
 ) {
+
+    private val coroutineDispatchers = CoroutineDispatchers(
+        io = Dispatchers.IO,
+        computation = Dispatchers.Default,
+        main = Dispatchers.Main
+    )
     private val baseFolder = File(context.filesDir, "matrix")
     private val sessionStore = SessionStore(context)
 
@@ -17,18 +25,18 @@ class Matrix(
         return sessionStore.getStoredData()
             ?.let { sessionData ->
                 try {
-                    val client = ClientBuilder()
+                    ClientBuilder()
                         .basePath(baseFolder.absolutePath)
                         .username(sessionData.userId)
-                        .build()
-                    client.restoreLogin(sessionData.restoreToken)
-                    client
+                        .build().apply {
+                            restoreLogin(sessionData.restoreToken)
+                        }
                 } catch (throwable: Throwable) {
                     logError(throwable)
                     null
                 }
             }?.let {
-                MatrixClient(it, sessionStore)
+                MatrixClient(it, sessionStore, coroutineDispatchers)
             }
     }
 
@@ -37,6 +45,6 @@ class Matrix(
         authService.configureHomeserver(homeserver)
         val client = authService.login(username, password, "MatrixRustSDKSample", null)
         sessionStore.storeData(SessionStore.SessionData(client.userId(), client.restoreToken()))
-        return MatrixClient(client, sessionStore)
+        return MatrixClient(client, sessionStore, coroutineDispatchers)
     }
 }

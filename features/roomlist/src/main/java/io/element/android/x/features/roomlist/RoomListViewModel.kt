@@ -4,19 +4,14 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.Success
-import io.element.android.x.core.data.tryOrNull
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.MatrixInstance
 import kotlinx.coroutines.launch
-import org.matrix.rustcomponents.sdk.Room
-import org.matrix.rustcomponents.sdk.StoppableSpawn
-import org.matrix.rustcomponents.sdk.UpdateSummary
 import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
 
 class RoomListViewModel(initialState: RoomListViewState) :
-    MavericksViewModel<RoomListViewState>(initialState), MatrixClient.SlidingSyncListener {
+    MavericksViewModel<RoomListViewState>(initialState) {
 
-    private var sync: StoppableSpawn? = null
     private val matrix = MatrixInstance.getInstance()
 
     init {
@@ -33,18 +28,26 @@ class RoomListViewModel(initialState: RoomListViewState) :
     private fun handleInit() {
         viewModelScope.launch {
             val client = getClient()
-            val url = client.avatarUrl()
-            val mediaSource = mediaSourceFromUrl(url)
+            client.startSync()
+            val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
+            val userDisplayName = client.loadUserDisplayName().getOrNull()
+            val avatarData = userAvatarUrl?.let {
+                mediaSourceFromUrl(it)
+            }?.let {
+                client.loadMediaContentForSource(it)
+            }
             setState {
                 copy(
                     user = MatrixUser(
-                        username = tryOrNull { client.username() } ?: "Room list",
-                        avatarUrl = mediaSource.url(),
-                        avatarData = client.loadMedia2(url)
+                        username = userDisplayName,
+                        avatarUrl = userAvatarUrl,
+                        avatarData = avatarData?.getOrNull()
                     )
                 )
             }
-            sync = client.slidingSync(listener = this@RoomListViewModel)
+            client.roomSummaryDataSource().roomSummaries().execute {
+                copy(rooms = it)
+            }
         }
     }
 
@@ -64,31 +67,7 @@ class RoomListViewModel(initialState: RoomListViewState) :
         return matrix.restoreSession()!!
     }
 
-    override fun onSyncUpdate(
-        summary: UpdateSummary,
-        rooms: List<Room>
-    ) = withState { state ->
-        val list = state.rooms().orEmpty().toMutableList()
-        rooms.forEach { room ->
-            // Either replace or add the room
-            val idx = list.indexOfFirst { it.id() == room.id() }
-            if (idx == -1) {
-                list.add(room)
-            } else {
-                list[idx] = room
-            }
-        }
-
-        setState {
-            copy(
-                rooms = Success(list),
-                summary = Success(summary)
-            )
-        }
-    }
-
     override fun onCleared() {
         super.onCleared()
-        sync?.cancel()
     }
 }
