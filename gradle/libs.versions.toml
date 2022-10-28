@@ -29,6 +29,10 @@ test_barista = "4.2.0"
 test_hamcrest = "2.2"
 test_orchestrator = "1.4.1"
 
+#other
+mavericks = "3.0.1"
+timber = "5.0.1"
+
 [libraries]
 # Project
 android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "android_gradle_plugin" }
@@ -63,5 +67,7 @@ test_barista = { module = "com.adevinta.android:barista", version.ref = "test_ba
 test_hamcrest = { module = "org.hamcrest:hamcrest", version.ref = "test_hamcrest" }
 test_orchestrator = { module = "androidx.test:orchestrator", version.ref = "test_orchestrator" }
 
+mavericks_compose = { module = "com.airbnb.android:mavericks-compose", version.ref = "mavericks" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 [bundles]
 

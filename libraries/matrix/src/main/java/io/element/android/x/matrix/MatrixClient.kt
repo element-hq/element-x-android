@@ -8,6 +8,7 @@ import io.element.android.x.matrix.room.RustRoomSummaryDataSource
 import io.element.android.x.matrix.session.SessionStore
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.*
+import timber.log.Timber
 import java.io.Closeable
 
 class MatrixClient internal constructor(
@@ -18,21 +19,21 @@ class MatrixClient internal constructor(
 
     private val clientDelegate = object : ClientDelegate {
         override fun didReceiveAuthError(isSoftLogout: Boolean) {
-            Log.v(LOG_TAG, "didReceiveAuthError()")
+            Timber.v("didReceiveAuthError()")
         }
 
         override fun didReceiveSyncUpdate() {
-            Log.v(LOG_TAG, "didReceiveSyncUpdate()")
+            Timber.v("didReceiveSyncUpdate()")
         }
 
         override fun didUpdateRestoreToken() {
-            Log.v(LOG_TAG, "didUpdateRestoreToken()")
+            Timber.v("didUpdateRestoreToken()")
         }
     }
 
     private val slidingSyncObserver = object : SlidingSyncObserver {
         override fun didReceiveSyncUpdate(summary: UpdateSummary) {
-            Log.v(LOG_TAG, "didReceiveSyncUpdate=$summary")
+            Timber.v("didReceiveSyncUpdate=$summary")
             roomSummaryDataSource.updateRoomsWithIdentifiers(summary.rooms)
         }
     }
