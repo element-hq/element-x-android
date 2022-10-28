@@ -12,17 +12,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
-import io.element.android.x.ui.theme.components.Avatar
-import org.matrix.rustcomponents.sdk.Room
+import io.element.android.x.designsystem.components.Avatar
+import io.element.android.x.matrix.core.RoomId
+import io.element.android.x.matrix.room.RoomSummary
 
 @Composable
 fun RoomListScreen(
     viewModel: RoomListViewModel = mavericksViewModel(),
-    onRoomClicked: (String) -> Unit = { },
     onLogoutClicked: () -> Unit = { },
+    onRoomClicked: (RoomId) -> Unit = { }
 ) {
     val state by viewModel.collectAsState()
     RoomListContent(state, onRoomClicked, onLogoutClicked)
@@ -31,8 +33,8 @@ fun RoomListScreen(
 @Composable
 fun RoomListContent(
     state: RoomListViewState,
-    onRoomClicked: (String) -> Unit,
-    onLogoutClicked: () -> Unit
+    onRoomClicked: (RoomId) -> Unit,
+    onLogoutClicked: () -> Unit,
 ) {
     Surface(color = MaterialTheme.colorScheme.background) {
         Column(
@@ -62,7 +64,8 @@ fun RoomListTopBar(state: RoomListViewState, onLogoutClicked: () -> Unit) {
     TopAppBar(
         title = {
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 val matrixUser = state.user
                 Avatar(data = matrixUser.avatarData)
@@ -83,19 +86,24 @@ fun RoomListTopBar(state: RoomListViewState, onLogoutClicked: () -> Unit) {
 @Composable
 private fun RoomItem(
     modifier: Modifier = Modifier,
-    room: Room,
-    onClick: (String) -> Unit
+    room: RoomSummary,
+    onClick: (RoomId) -> Unit
 ) {
+    if (room !is RoomSummary.Filled) {
+        return
+    }
+    val details = room.details
     Row(verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .clickable {
-                onClick(room.id())
+                onClick(room.details.roomId)
             }
             .fillMaxWidth()
+            .padding(horizontal = 8.dp)
     ) {
         Column(modifier = modifier.padding(8.dp)) {
-            Text(text = "Room: ${room.name() ?: room.id()}")
-            Text(text = if (room.isDirect()) "Direct" else "Room")
+            Text(fontSize = 18.sp, text = details.name.orEmpty())
+            Text(text = details.lastMessage?.toString().orEmpty(), maxLines = 2)
         }
     }
 }

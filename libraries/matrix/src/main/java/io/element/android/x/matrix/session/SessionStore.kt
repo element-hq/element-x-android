@@ -1,4 +1,4 @@
-package io.element.android.x.matrix.store
+package io.element.android.x.matrix.session
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -8,12 +8,12 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.firstOrNull
 
-
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "elementx_sessions")
 private val userIdPreference = stringPreferencesKey("userId")
 // TODO It contains the access token, so it has to be stored in a more secured storage.
 // I would expect the Rust SDK to provide a more obscure token.
 private val restoreTokenPreference = stringPreferencesKey("restoreToken")
+
 
 internal class SessionStore(
     context: Context
