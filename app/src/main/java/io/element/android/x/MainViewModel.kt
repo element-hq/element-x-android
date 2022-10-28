@@ -1,7 +1,7 @@
 package io.element.android.x
 
 import androidx.lifecycle.ViewModel
-import io.element.android.x.sdk.matrix.MatrixInstance
+import io.element.android.x.matrix.MatrixInstance
 
 class MainViewModel : ViewModel() {
     private val matrix = MatrixInstance.getInstance()
