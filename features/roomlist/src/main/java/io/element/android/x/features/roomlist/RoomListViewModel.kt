@@ -4,6 +4,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.Success
+import io.element.android.x.features.roomlist.model.MatrixUser
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.MatrixInstance
 import kotlinx.coroutines.launch
@@ -23,6 +24,10 @@ class RoomListViewModel(initialState: RoomListViewState) :
             RoomListActions.LoadMore -> TODO()
             RoomListActions.Logout -> handleLogout()
         }
+    }
+
+    fun logout(){
+        handleLogout()
     }
 
     private fun handleInit() {

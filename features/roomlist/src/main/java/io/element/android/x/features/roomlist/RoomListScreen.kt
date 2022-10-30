@@ -16,53 +16,57 @@ import androidx.compose.ui.unit.sp
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
+import io.element.android.x.core.data.LogCompositions
 import io.element.android.x.designsystem.components.Avatar
+import io.element.android.x.features.roomlist.model.MatrixUser
 import io.element.android.x.matrix.core.RoomId
 import io.element.android.x.matrix.room.RoomSummary
 
 @Composable
 fun RoomListScreen(
-    viewModel: RoomListViewModel = mavericksViewModel(),
     onSuccessLogout: () -> Unit = { },
     onRoomClicked: (RoomId) -> Unit = { }
 ) {
-    val state by viewModel.collectAsState()
-    if (state.logoutAction is Success) {
+    val viewModel: RoomListViewModel = mavericksViewModel()
+    val logoutAction by viewModel.collectAsState(RoomListViewState::logoutAction)
+    if (logoutAction is Success) {
         onSuccessLogout()
         return
     }
+    LogCompositions(tag = "RoomListScreen", msg = "Root")
+    val roomSummaries by viewModel.collectAsState(RoomListViewState::rooms)
+    val matrixUser by viewModel.collectAsState(RoomListViewState::user)
     RoomListContent(
-        state = state,
+        roomSummaries = roomSummaries().orEmpty(),
+        matrixUser = matrixUser,
         onRoomClicked = onRoomClicked,
-        onLogoutClicked = {
-            viewModel.handle(RoomListActions.Logout)
-        }
+        onLogoutClicked = viewModel::logout
     )
 }
 
 @Composable
 fun RoomListContent(
-    state: RoomListViewState,
+    roomSummaries: List<RoomSummary>,
+    matrixUser: MatrixUser,
     onRoomClicked: (RoomId) -> Unit,
     onLogoutClicked: () -> Unit,
 ) {
+    LogCompositions(tag = "RoomListScreen", msg = "Content")
     Surface(color = MaterialTheme.colorScheme.background) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
             RoomListTopBar(
-                state = state,
+                matrixUser = matrixUser,
                 onLogoutClicked = onLogoutClicked
             )
-            val rooms = state.rooms
-            if (rooms is Success) {
-                LazyColumn {
-                    items(rooms()) { room ->
-                        RoomItem(room = room) {
-                            onRoomClicked(it)
-                        }
+            LazyColumn {
+                items(roomSummaries, key = { it.identifier() }) { room ->
+                    RoomItem(room = room) {
+                        onRoomClicked(it)
                     }
                 }
+
             }
         }
     }
@@ -70,14 +74,14 @@ fun RoomListContent(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoomListTopBar(state: RoomListViewState, onLogoutClicked: () -> Unit) {
+fun RoomListTopBar(matrixUser: MatrixUser, onLogoutClicked: () -> Unit) {
+    LogCompositions(tag = "RoomListScreen", msg = "TopBar")
     TopAppBar(
         title = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                val matrixUser = state.user
                 Avatar(data = matrixUser.avatarData)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("${matrixUser.username}")
