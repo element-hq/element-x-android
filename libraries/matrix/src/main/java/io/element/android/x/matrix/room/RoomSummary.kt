@@ -18,7 +18,7 @@ sealed interface RoomSummary {
 
 data class RoomSummaryDetails(
     val roomId: RoomId,
-    val name: String?,
+    val name: String,
     val isDirect: Boolean,
     val avatarURLString: String?,
     val lastMessage: CharSequence?,
