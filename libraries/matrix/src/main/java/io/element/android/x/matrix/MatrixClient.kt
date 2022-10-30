@@ -1,6 +1,5 @@
 package io.element.android.x.matrix
 
-import android.util.Log
 import io.element.android.x.core.data.CoroutineDispatchers
 import io.element.android.x.matrix.core.UserId
 import io.element.android.x.matrix.room.RoomSummaryDataSource
@@ -33,13 +32,13 @@ class MatrixClient internal constructor(
 
     private val slidingSyncObserver = object : SlidingSyncObserver {
         override fun didReceiveSyncUpdate(summary: UpdateSummary) {
-            Timber.v("didReceiveSyncUpdate=$summary")
+            Timber.v("didReceiveSyncUpdate=$summary on Thread: ${Thread.currentThread()}")
             roomSummaryDataSource.updateRoomsWithIdentifiers(summary.rooms)
         }
     }
 
     private val slidingSyncView = SlidingSyncViewBuilder()
-        .timelineLimit(limit = 10u)
+        .timelineLimit(limit = 1u)
         .requiredState(requiredState = listOf(RequiredState(key = "m.room.avatar", value = "")))
         .name(name = "HomeScreenView")
         .syncMode(mode = SlidingSyncMode.FULL_SYNC)
@@ -65,6 +64,7 @@ class MatrixClient internal constructor(
     }
 
     fun stopSync() {
+        roomSummaryDataSource.stopSync()
         slidingSync.setObserver(null)
         slidingSyncObserverToken?.cancel()
     }
@@ -73,6 +73,7 @@ class MatrixClient internal constructor(
 
     override fun close() {
         stopSync()
+        roomSummaryDataSource.close()
         client.setDelegate(null)
     }
 

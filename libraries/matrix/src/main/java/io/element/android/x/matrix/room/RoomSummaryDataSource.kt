@@ -5,14 +5,14 @@ import io.element.android.x.matrix.core.RoomId
 import io.element.android.x.matrix.room.message.RoomMessageFactory
 import io.element.android.x.matrix.sync.roomListDiff
 import io.element.android.x.matrix.sync.state
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.flow.*
 import org.matrix.rustcomponents.sdk.*
+import timber.log.Timber
+import java.io.Closeable
 import java.util.*
 
 interface RoomSummaryDataSource {
@@ -24,7 +24,7 @@ internal class RustRoomSummaryDataSource(
     private val slidingSyncView: SlidingSyncView,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val roomMessageFactory: RoomMessageFactory = RoomMessageFactory(),
-) : RoomSummaryDataSource {
+) : RoomSummaryDataSource, Closeable {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + coroutineDispatchers.io)
 
@@ -33,6 +33,7 @@ internal class RustRoomSummaryDataSource(
 
     init {
         slidingSyncView.roomListDiff()
+            .buffer(50)
             .onEach { diff ->
                 updateRoomSummaries {
                     applyDiff(diff)
@@ -40,32 +41,43 @@ internal class RustRoomSummaryDataSource(
             }.launchIn(coroutineScope)
 
         slidingSyncView.state()
-            .onEach { newRoomState ->
-                state.value = newRoomState
+            .onEach { slidingSyncState ->
+                Timber.v("New sliding sync state: $slidingSyncState")
+                state.value = slidingSyncState
             }.launchIn(coroutineScope)
     }
 
+    fun stopSync() {
+        coroutineScope.coroutineContext.cancelChildren()
+    }
+
+    override fun close() {
+        coroutineScope.cancel()
+    }
+
     override fun roomSummaries(): Flow<List<RoomSummary>> {
-        return roomSummaries
+        return roomSummaries.sample(100)
     }
 
     internal fun updateRoomsWithIdentifiers(identifiers: List<String>) {
+        Timber.v("UpdateRooms with identifiers: $identifiers")
         if (state.value != SlidingSyncState.LIVE) {
             return
         }
-        val roomSummaryList = roomSummaries.value.toMutableList()
-        for (identifier in identifiers) {
-            val index = roomSummaryList.indexOfFirst { it.identifier() == identifier }
-            if (index == -1) {
-                continue
+        updateRoomSummaries {
+            for (identifier in identifiers) {
+                val index = indexOfFirst { it.identifier() == identifier }
+                if (index == -1) {
+                    continue
+                }
+                val updatedRoomSummary = buildRoomSummaryForIdentifier(identifier)
+                set(index, updatedRoomSummary)
             }
-            val updatedRoomSummary = buildRoomSummaryForIdentifier(identifier)
-            roomSummaryList[index] = updatedRoomSummary
         }
-        roomSummaries.value = roomSummaryList
     }
 
     private fun MutableList<RoomSummary>.applyDiff(diff: SlidingSyncViewRoomsListDiff) {
+        Timber.v("ApplyDiff: $diff")
         if (diff.isInvalidation()) {
             return
         }
