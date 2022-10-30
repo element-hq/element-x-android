@@ -123,7 +123,7 @@ internal class RustRoomSummaryDataSource(
         return RoomSummary.Filled(
             details = RoomSummaryDetails(
                 roomId = RoomId(identifier),
-                name = room.name(),
+                name = room.name() ?: identifier,
                 isDirect = room.isDm() ?: false,
                 avatarURLString = room.fullRoom()?.avatarUrl(),
                 unreadNotificationCount = room.unreadNotifications().notificationCount(),

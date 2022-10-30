@@ -32,6 +32,7 @@ test_orchestrator = "1.4.1"
 #other
 mavericks = "3.0.1"
 timber = "5.0.1"
+coil = "2.2.1"
 
 [libraries]
 # Project
@@ -69,5 +70,6 @@ test_orchestrator = { module = "androidx.test:orchestrator", version.ref = "test
 
 mavericks_compose = { module = "com.airbnb.android:mavericks-compose", version.ref = "mavericks" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+coil_compose =  { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 [bundles]
 
