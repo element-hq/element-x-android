@@ -1,11 +1,13 @@
 package io.element.android.x.features.roomlist
 
-import android.widget.Space
+import Avatar
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.ripple.rememberRipple
@@ -15,9 +17,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.airbnb.mvrx.Success
@@ -25,10 +29,10 @@ import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.core.data.LogCompositions
 import io.element.android.x.designsystem.LightGrey
-import io.element.android.x.designsystem.components.Avatar
 import io.element.android.x.features.roomlist.model.MatrixUser
+import io.element.android.x.features.roomlist.model.RoomListRoomSummary
+import io.element.android.x.features.roomlist.model.RoomListViewState
 import io.element.android.x.matrix.core.RoomId
-import io.element.android.x.matrix.room.RoomSummary
 
 @Composable
 fun RoomListScreen(
@@ -54,7 +58,7 @@ fun RoomListScreen(
 
 @Composable
 fun RoomListContent(
-    roomSummaries: List<RoomSummary>,
+    roomSummaries: List<RoomListRoomSummary>,
     matrixUser: MatrixUser,
     onRoomClicked: (RoomId) -> Unit,
     onLogoutClicked: () -> Unit,
@@ -69,12 +73,11 @@ fun RoomListContent(
                 onLogoutClicked = onLogoutClicked
             )
             LazyColumn {
-                items(roomSummaries, key = { it.identifier() }) { room ->
+                items(roomSummaries, key = { it.id }) { room ->
                     RoomItem(room = room) {
                         onRoomClicked(it)
                     }
                 }
-
             }
         }
     }
@@ -90,7 +93,7 @@ fun RoomListTopBar(matrixUser: MatrixUser, onLogoutClicked: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Avatar(data = matrixUser.avatarData)
+                Avatar(data = matrixUser.avatarData, size = 32.dp)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("${matrixUser.username}")
             }
@@ -108,18 +111,17 @@ fun RoomListTopBar(matrixUser: MatrixUser, onLogoutClicked: () -> Unit) {
 @Composable
 private fun RoomItem(
     modifier: Modifier = Modifier,
-    room: RoomSummary,
+    room: RoomListRoomSummary,
     onClick: (RoomId) -> Unit
 ) {
-    if (room !is RoomSummary.Filled) {
+    if (room.isPlaceholder) {
         return
     }
-    val details = room.details
     Column(
         modifier = modifier
             .fillMaxWidth()
             .clickable(
-                onClick = { onClick(room.details.roomId) },
+                onClick = { onClick(room.roomId) },
                 indication = rememberRipple(),
                 interactionSource = remember { MutableInteractionSource() }
             ),
@@ -128,12 +130,9 @@ private fun RoomItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Box(modifier = Modifier
-                    .align(Alignment.CenterVertically)
-            ) {
-                Avatar(data = null)
-            }
+            Avatar(data = room.avatarData)
             Column(
                 modifier = Modifier
                     .padding(12.dp)
@@ -143,31 +142,56 @@ private fun RoomItem(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
-                    text = details.name,
+                    text = room.name,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = details.lastMessage?.toString().orEmpty(),
+                    text = room.lastMessage?.toString().orEmpty(),
                     color = LightGrey,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
             }
             Column(
-                Modifier
-                    .padding(horizontal = 8.dp)
-                    .align(Alignment.CenterVertically)
+                Modifier.padding(horizontal = 8.dp)
             ) {
                 Text(
                     fontSize = 12.sp,
-                    text = "14:18",
-                    color = LightGrey
+                    text = room.timestamp ?: "",
+                    color = LightGrey,
                 )
-                Spacer(Modifier.size(20.dp))
+                Spacer(modifier.size(4.dp))
+                val unreadIndicatorColor = if(room.hasUnread) Color.Black else Color.Transparent
+                Box(
+                    modifier = Modifier
+                        .size(12.dp)
+                        .clip(CircleShape)
+                        .background(unreadIndicatorColor)
+                        .align(Alignment.End),
+                )
             }
         }
     }
+}
 
-
+@Preview
+@Composable
+private fun PreviewableRoomListContent() {
+    val roomSummaries = listOf(
+        RoomListRoomSummary(
+            name = "Room",
+            hasUnread = true,
+            timestamp = "14:18",
+            lastMessage = "A message",
+            avatarData = null,
+            id = "roomId"
+        )
+    )
+    RoomListContent(
+        roomSummaries = roomSummaries,
+        matrixUser = MatrixUser("User#1"),
+        onRoomClicked = {},
+        onLogoutClicked = {}
+    )
 }

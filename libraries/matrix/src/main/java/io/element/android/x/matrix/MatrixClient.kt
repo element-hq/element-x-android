@@ -96,10 +96,21 @@ class MatrixClient internal constructor(
         }
     }
 
-    suspend fun loadMediaContentForSource(source: MediaSource): Result<List<UByte>> =
+    suspend fun loadMediaContentForSource(source: MediaSource): Result<ByteArray> =
         withContext(dispatchers.io) {
             runCatching {
-                client.getMediaContent(source)
+                client.getMediaContent(source).toUByteArray().toByteArray()
+            }
+        }
+
+    suspend fun loadMediaThumbnailForSource(
+        source: MediaSource,
+        width: Long,
+        height: Long
+    ): Result<ByteArray> =
+        withContext(dispatchers.io) {
+            runCatching {
+                client.getMediaThumbnail(source, width.toULong(), height.toULong()).toUByteArray().toByteArray()
             }
         }
 

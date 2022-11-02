@@ -23,5 +23,5 @@ data class RoomSummaryDetails(
     val avatarURLString: String?,
     val lastMessage: CharSequence?,
     val lastMessageTimestamp: Long?,
-    val unreadNotificationCount: UInt,
+    val unreadNotificationCount: Int,
 )

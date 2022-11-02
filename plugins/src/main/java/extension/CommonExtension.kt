@@ -7,13 +7,14 @@ import composeVersion
 import org.gradle.api.artifacts.VersionCatalog
 
 fun CommonExtension<*, *, *, *>.androidConfig() {
-
-
-
     defaultConfig {
         compileSdk = Versions.compileSdk
         minSdk = Versions.minSdk
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
     }
 
     testOptions {

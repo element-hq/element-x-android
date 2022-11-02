@@ -126,7 +126,7 @@ internal class RustRoomSummaryDataSource(
                 name = room.name() ?: identifier,
                 isDirect = room.isDm() ?: false,
                 avatarURLString = room.fullRoom()?.avatarUrl(),
-                unreadNotificationCount = room.unreadNotifications().notificationCount(),
+                unreadNotificationCount = room.unreadNotifications().notificationCount().toInt(),
                 lastMessage = latestRoomMessage?.body,
                 lastMessageTimestamp = latestRoomMessage?.originServerTs
             )

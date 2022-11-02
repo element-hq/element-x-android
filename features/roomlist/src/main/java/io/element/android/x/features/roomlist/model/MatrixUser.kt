@@ -6,5 +6,5 @@ import androidx.compose.runtime.Stable
 data class MatrixUser(
     val username: String? = null,
     val avatarUrl: String? = null,
-    val avatarData: List<UByte>? = null,
+    val avatarData: ByteArray? = null,
 )

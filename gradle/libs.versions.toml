@@ -33,6 +33,7 @@ test_orchestrator = "1.4.1"
 mavericks = "3.0.1"
 timber = "5.0.1"
 coil = "2.2.1"
+datetime = "0.4.0"
 
 [libraries]
 # Project
@@ -70,6 +71,8 @@ test_orchestrator = { module = "androidx.test:orchestrator", version.ref = "test
 
 mavericks_compose = { module = "com.airbnb.android:mavericks-compose", version.ref = "mavericks" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
-coil_compose =  { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
+
 [bundles]
 

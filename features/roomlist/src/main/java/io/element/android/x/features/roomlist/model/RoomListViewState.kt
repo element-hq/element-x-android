@@ -1,4 +1,4 @@
-package io.element.android.x.features.roomlist
+package io.element.android.x.features.roomlist.model
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
@@ -8,7 +8,7 @@ import io.element.android.x.matrix.room.RoomSummary
 
 data class RoomListViewState(
     val user: MatrixUser = MatrixUser(),
-    val rooms: Async<List<RoomSummary>> = Uninitialized,
+    val rooms: Async<List<RoomListRoomSummary>> = Uninitialized,
     val canLoadMore: Boolean = false,
     val logoutAction: Async<Unit> = Uninitialized,
 ) : MavericksState
