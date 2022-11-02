@@ -28,7 +28,6 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.core.data.LogCompositions
-import io.element.android.x.designsystem.LightGrey
 import io.element.android.x.features.roomlist.model.MatrixUser
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListViewState
@@ -141,28 +140,27 @@ private fun RoomItem(
                 Text(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black,
                     text = room.name,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = room.lastMessage?.toString().orEmpty(),
-                    color = LightGrey,
+                    color = MaterialTheme.colorScheme.secondary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
             }
             Column(
-                Modifier.padding(horizontal = 8.dp)
             ) {
                 Text(
                     fontSize = 12.sp,
                     text = room.timestamp ?: "",
-                    color = LightGrey,
+                    color = MaterialTheme.colorScheme.secondary,
                 )
                 Spacer(modifier.size(4.dp))
-                val unreadIndicatorColor = if(room.hasUnread) Color.Black else Color.Transparent
+                val unreadIndicatorColor =
+                    if (room.hasUnread) MaterialTheme.colorScheme.primary else Color.Transparent
                 Box(
                     modifier = Modifier
                         .size(12.dp)
