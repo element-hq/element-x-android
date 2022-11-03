@@ -1,5 +1,6 @@
 package io.element.android.x.features.roomlist.model
 
+import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.matrix.core.RoomId
 
 data class RoomListRoomSummary(
@@ -9,6 +10,6 @@ data class RoomListRoomSummary(
     val hasUnread: Boolean = false,
     val timestamp: String? = null,
     val lastMessage: CharSequence? = null,
-    val avatarData: ByteArray? = null,
+    val avatarData: AvatarData = AvatarData(),
     val isPlaceholder: Boolean = false,
 )

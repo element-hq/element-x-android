@@ -1,0 +1,34 @@
+package io.element.android.x.designsystem.components.avatar
+
+import androidx.compose.runtime.Stable
+
+@Stable
+data class AvatarData(
+    val initials: String = "",
+    val model: ByteArray? = null,
+    val size: Int = 0
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as AvatarData
+
+        if (initials != other.initials) return false
+        if (model != null) {
+            if (other.model == null) return false
+            if (!model.contentEquals(other.model)) return false
+        } else if (other.model != null) return false
+        if (size != other.size) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = initials.hashCode()
+        result = 31 * result + (model?.contentHashCode() ?: 0)
+        result = 31 * result + size
+        return result
+    }
+
+}

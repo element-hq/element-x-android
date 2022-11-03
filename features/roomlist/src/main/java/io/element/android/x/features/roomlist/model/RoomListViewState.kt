@@ -7,7 +7,7 @@ import io.element.android.x.features.roomlist.model.MatrixUser
 import io.element.android.x.matrix.room.RoomSummary
 
 data class RoomListViewState(
-    val user: MatrixUser = MatrixUser(),
+    val user: Async<MatrixUser> = Uninitialized,
     val rooms: Async<List<RoomListRoomSummary>> = Uninitialized,
     val canLoadMore: Boolean = false,
     val logoutAction: Async<Unit> = Uninitialized,
