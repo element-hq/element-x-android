@@ -6,7 +6,7 @@ import androidx.compose.runtime.Stable
 data class AvatarData(
     val initials: String = "",
     val model: ByteArray? = null,
-    val size: Int = 0
+    val size: AvatarSize = AvatarSize.MEDIUM
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -27,7 +27,7 @@ data class AvatarData(
     override fun hashCode(): Int {
         var result = initials.hashCode()
         result = 31 * result + (model?.contentHashCode() ?: 0)
-        result = 31 * result + size
+        result = 31 * result + size.value
         return result
     }
 

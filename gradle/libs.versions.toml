@@ -57,6 +57,7 @@ accompanist_animation = { module = "com.google.accompanist:accompanist-navigatio
 accompanist_permission = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 accompanist_material = { module = "com.google.accompanist:accompanist-navigation-material", version.ref = "accompanist" }
 accompanist_systemui = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
+accompanist_placeholder = { module = "com.google.accompanist:accompanist-placeholder-material", version.ref = "accompanist" }
 
 # Test
 test_junit = { module = "junit:junit", version.ref = "test_junit" }

@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -20,18 +21,17 @@ import io.element.android.x.designsystem.components.avatar.AvatarData
 
 @Composable
 fun Avatar(avatarData: AvatarData, modifier: Modifier = Modifier) {
+    val commonModifier = modifier
+        .size(avatarData.size.dp)
+        .clip(CircleShape)
     if (avatarData.model == null) {
         InitialsAvatar(
-            modifier = modifier
-                .size(avatarData.size.dp)
-                .clip(CircleShape),
+            modifier = commonModifier,
             initials = avatarData.initials
         )
     } else {
         ImageAvatar(
-            modifier = modifier
-                .size(avatarData.size.dp)
-                .clip(CircleShape),
+            modifier = commonModifier,
             avatarData = avatarData
         )
     }
@@ -50,8 +50,6 @@ private fun ImageAvatar(
         contentDescription = null,
         contentScale = ContentScale.Crop,
         modifier = modifier
-            .size(avatarData.size.dp)
-            .clip(CircleShape)
     )
 }
 
@@ -65,15 +63,15 @@ private fun InitialsAvatar(
         listOf(
             AvatarGradientStart,
             AvatarGradientEnd,
-        )
+        ),
+        start = Offset(0.0f, 100f),
+        end = Offset(100f, 0f)
     )
     Box(
-        modifier
-            .background(brush = initialsGradient)
+        modifier.background(brush = initialsGradient)
     ) {
         Text(
-            modifier = Modifier
-                .align(Alignment.Center),
+            modifier = Modifier.align(Alignment.Center),
             text = initials,
             fontSize = 24.sp,
             color = Color.White,
