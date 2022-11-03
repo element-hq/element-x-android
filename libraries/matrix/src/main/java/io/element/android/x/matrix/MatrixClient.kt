@@ -39,7 +39,10 @@ class MatrixClient internal constructor(
 
     private val slidingSyncView = SlidingSyncViewBuilder()
         .timelineLimit(limit = 1u)
-        .requiredState(requiredState = listOf(RequiredState(key = "m.room.avatar", value = "")))
+        .requiredState(requiredState = listOf(
+            RequiredState(key = "m.room.avatar", value = ""),
+            RequiredState(key = "m.room.encryption", value = ""),
+        ))
         .name(name = "HomeScreenView")
         .syncMode(mode = SlidingSyncMode.FULL_SYNC)
         .build()
@@ -47,6 +50,7 @@ class MatrixClient internal constructor(
     private val slidingSync = client
         .slidingSync()
         .homeserver("https://slidingsync.lab.element.dev")
+        .withCommonExtensions()
         .addView(slidingSyncView)
         .build()
 
