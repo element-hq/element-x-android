@@ -28,6 +28,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.core.data.LogCompositions
+import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.roomlist.model.MatrixUser
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListViewState
@@ -49,7 +50,7 @@ fun RoomListScreen(
     val matrixUser by viewModel.collectAsState(RoomListViewState::user)
     RoomListContent(
         roomSummaries = roomSummaries().orEmpty(),
-        matrixUser = matrixUser,
+        matrixUser = matrixUser(),
         onRoomClicked = onRoomClicked,
         onLogoutClicked = viewModel::logout
     )
@@ -58,7 +59,7 @@ fun RoomListScreen(
 @Composable
 fun RoomListContent(
     roomSummaries: List<RoomListRoomSummary>,
-    matrixUser: MatrixUser,
+    matrixUser: MatrixUser?,
     onRoomClicked: (RoomId) -> Unit,
     onLogoutClicked: () -> Unit,
 ) {
@@ -84,15 +85,16 @@ fun RoomListContent(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoomListTopBar(matrixUser: MatrixUser, onLogoutClicked: () -> Unit) {
+fun RoomListTopBar(matrixUser: MatrixUser?, onLogoutClicked: () -> Unit) {
     LogCompositions(tag = "RoomListScreen", msg = "TopBar")
+    if (matrixUser == null) return
     TopAppBar(
         title = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Avatar(data = matrixUser.avatarData, size = 32.dp)
+                Avatar(matrixUser.avatarData)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("${matrixUser.username}")
             }
@@ -131,7 +133,7 @@ private fun RoomItem(
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Avatar(data = room.avatarData)
+            Avatar(room.avatarData)
             Column(
                 modifier = Modifier
                     .padding(12.dp)
@@ -182,13 +184,13 @@ private fun PreviewableRoomListContent() {
             hasUnread = true,
             timestamp = "14:18",
             lastMessage = "A message",
-            avatarData = null,
+            avatarData = AvatarData("R"),
             id = "roomId"
         )
     )
     RoomListContent(
         roomSummaries = roomSummaries,
-        matrixUser = MatrixUser("User#1"),
+        matrixUser = MatrixUser("User#1", avatarData = AvatarData("U")),
         onRoomClicked = {},
         onLogoutClicked = {}
     )

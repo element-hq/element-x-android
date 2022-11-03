@@ -5,6 +5,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.Success
 import io.element.android.x.core.data.parallelMap
+import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.roomlist.model.MatrixUser
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListViewState
@@ -41,17 +42,18 @@ class RoomListViewModel(initialState: RoomListViewState) :
         viewModelScope.launch {
             val client = getClient()
             client.startSync()
-            val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
-            val userDisplayName = client.loadUserDisplayName().getOrNull()
-            val avatarData = loadAvatarData(client, userAvatarUrl)
-            setState {
-                copy(
-                    user = MatrixUser(
-                        username = userDisplayName,
-                        avatarUrl = userAvatarUrl,
-                        avatarData = avatarData,
-                    )
+            suspend {
+                val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
+                val userDisplayName = client.loadUserDisplayName().getOrNull()
+                val avatarData =
+                    loadAvatarData(client, userDisplayName ?: client.userId().value, userAvatarUrl)
+                MatrixUser(
+                    username = userDisplayName ?: client.userId().value,
+                    avatarUrl = userAvatarUrl,
+                    avatarData = avatarData,
                 )
+            }.execute {
+                copy(user = it)
             }
             client.roomSummaryDataSource().roomSummaries()
                 .map { roomSummaries ->
@@ -75,7 +77,11 @@ class RoomListViewModel(initialState: RoomListViewState) :
                     isPlaceholder = true
                 )
                 is RoomSummary.Filled -> {
-                    val avatarData = loadAvatarData(client, roomSummary.details.avatarURLString)
+                    val avatarData = loadAvatarData(
+                        client,
+                        roomSummary.details.name,
+                        roomSummary.details.avatarURLString
+                    )
                     RoomListRoomSummary(
                         id = roomSummary.identifier(),
                         name = roomSummary.details.name,
@@ -89,7 +95,12 @@ class RoomListViewModel(initialState: RoomListViewState) :
         }
     }
 
-    private suspend fun loadAvatarData(client: MatrixClient, url: String?, size: Long = 48): ByteArray? {
+    private suspend fun loadAvatarData(
+        client: MatrixClient,
+        name: String,
+        url: String?,
+        size: Long = 48
+    ): AvatarData {
         val mediaContent = url?.let {
             val mediaSource = mediaSourceFromUrl(it)
             client.loadMediaThumbnailForSource(mediaSource, size, size)
@@ -97,7 +108,9 @@ class RoomListViewModel(initialState: RoomListViewState) :
         return mediaContent?.fold(
             { it },
             { null }
-        )
+        ).let { model ->
+            AvatarData(name.first().toString(), model, size.toInt())
+        }
     }
 
     private fun handleLogout() {
