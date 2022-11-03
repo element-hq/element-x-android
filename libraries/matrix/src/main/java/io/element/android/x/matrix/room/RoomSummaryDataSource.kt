@@ -33,7 +33,6 @@ internal class RustRoomSummaryDataSource(
 
     init {
         slidingSyncView.roomListDiff()
-            .buffer(50)
             .onEach { diff ->
                 updateRoomSummaries {
                     applyDiff(diff)
@@ -77,16 +76,20 @@ internal class RustRoomSummaryDataSource(
     }
 
     private fun MutableList<RoomSummary>.applyDiff(diff: SlidingSyncViewRoomsListDiff) {
-        Timber.v("ApplyDiff: $diff")
-        if (diff.isInvalidation()) {
-            return
+
+        fun MutableList<RoomSummary>.fillUntil(untilIndex: Int) {
+            repeat((size-1 until untilIndex).count()) {
+                add(buildEmptyRoomSummary())
+            }
         }
+        Timber.v("ApplyDiff: $diff for list with size: $size")
         when (diff) {
             is SlidingSyncViewRoomsListDiff.Push -> {
                 val roomSummary = buildSummaryForRoomListEntry(diff.value)
                 add(roomSummary)
             }
             is SlidingSyncViewRoomsListDiff.UpdateAt -> {
+                fillUntil(diff.index.toInt())
                 val roomSummary = buildSummaryForRoomListEntry(diff.value)
                 set(diff.index.toInt(), roomSummary)
             }
@@ -109,16 +112,25 @@ internal class RustRoomSummaryDataSource(
 
     private fun buildSummaryForRoomListEntry(entry: RoomListEntry): RoomSummary {
         return when (entry) {
-            RoomListEntry.Empty -> RoomSummary.Empty(UUID.randomUUID().toString())
+            RoomListEntry.Empty -> buildEmptyRoomSummary()
             is RoomListEntry.Invalidated -> buildRoomSummaryForIdentifier(entry.roomId)
             is RoomListEntry.Filled -> buildRoomSummaryForIdentifier(entry.roomId)
         }
+    }
+
+    private fun buildEmptyRoomSummary(): RoomSummary {
+        return RoomSummary.Empty(UUID.randomUUID().toString())
     }
 
     private fun buildRoomSummaryForIdentifier(identifier: String): RoomSummary {
         val room = slidingSync.getRoom(identifier) ?: return RoomSummary.Empty(identifier)
         val latestRoomMessage = room.latestRoomMessage()?.let {
             roomMessageFactory.create(it)
+        }
+        val computedLastMessage = when {
+            latestRoomMessage == null -> null
+            room.isDm() == true -> latestRoomMessage.body
+            else -> "${latestRoomMessage.sender.value}: ${latestRoomMessage.body}"
         }
         return RoomSummary.Filled(
             details = RoomSummaryDetails(
@@ -127,7 +139,7 @@ internal class RustRoomSummaryDataSource(
                 isDirect = room.isDm() ?: false,
                 avatarURLString = room.fullRoom()?.avatarUrl(),
                 unreadNotificationCount = room.unreadNotifications().notificationCount().toInt(),
-                lastMessage = latestRoomMessage?.body,
+                lastMessage = computedLastMessage,
                 lastMessageTimestamp = latestRoomMessage?.originServerTs
             )
         )
