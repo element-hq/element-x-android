@@ -12,4 +12,18 @@ data class RoomListRoomSummary(
     val lastMessage: CharSequence? = null,
     val avatarData: AvatarData = AvatarData(),
     val isPlaceholder: Boolean = false,
-)
+) {
+
+    companion object {
+        fun placeholder(id: String): RoomListRoomSummary {
+            return RoomListRoomSummary(
+                id = id,
+                isPlaceholder = true,
+                name = "Short name",
+                timestamp = "hh:mm",
+                lastMessage = "Last message for placeholder",
+                avatarData = AvatarData("S")
+            )
+        }
+    }
+}

@@ -1,12 +1,12 @@
 package io.element.android.x.features.roomlist
 
-import androidx.compose.ui.unit.dp
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.Success
 import io.element.android.x.core.data.parallelMap
 import io.element.android.x.designsystem.components.avatar.AvatarData
+import io.element.android.x.designsystem.components.avatar.AvatarSize
 import io.element.android.x.features.roomlist.model.MatrixUser
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListViewState
@@ -47,7 +47,7 @@ class RoomListViewModel(initialState: RoomListViewState) :
                 val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
                 val userDisplayName = client.loadUserDisplayName().getOrNull()
                 val avatarData =
-                    loadAvatarData(client, userDisplayName ?: client.userId().value, userAvatarUrl, 32)
+                    loadAvatarData(client, userDisplayName ?: client.userId().value, userAvatarUrl, AvatarSize.SMALL)
                 MatrixUser(
                     username = userDisplayName ?: client.userId().value,
                     avatarUrl = userAvatarUrl,
@@ -73,10 +73,7 @@ class RoomListViewModel(initialState: RoomListViewState) :
     ): List<RoomListRoomSummary> {
         return roomSummaries.parallelMap { roomSummary ->
             when (roomSummary) {
-                is RoomSummary.Empty -> RoomListRoomSummary(
-                    id = roomSummary.identifier,
-                    isPlaceholder = true
-                )
+                is RoomSummary.Empty -> RoomListRoomSummary.placeholder(roomSummary.identifier)
                 is RoomSummary.Filled -> {
                     val avatarData = loadAvatarData(
                         client,
@@ -100,17 +97,17 @@ class RoomListViewModel(initialState: RoomListViewState) :
         client: MatrixClient,
         name: String,
         url: String?,
-        size: Long = 48
+        size: AvatarSize = AvatarSize.MEDIUM
     ): AvatarData {
         val mediaContent = url?.let {
             val mediaSource = mediaSourceFromUrl(it)
-            client.loadMediaThumbnailForSource(mediaSource, size, size)
+            client.loadMediaThumbnailForSource(mediaSource, size.value.toLong(), size.value.toLong())
         }
         return mediaContent?.fold(
             { it },
             { null }
         ).let { model ->
-            AvatarData(name.first().toString(), model, size.toInt())
+            AvatarData(name.first().uppercase(), model, size)
         }
     }
 
