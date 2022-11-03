@@ -1,5 +1,6 @@
 package io.element.android.x.features.roomlist
 
+import androidx.compose.ui.unit.dp
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModel
@@ -46,7 +47,7 @@ class RoomListViewModel(initialState: RoomListViewState) :
                 val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
                 val userDisplayName = client.loadUserDisplayName().getOrNull()
                 val avatarData =
-                    loadAvatarData(client, userDisplayName ?: client.userId().value, userAvatarUrl)
+                    loadAvatarData(client, userDisplayName ?: client.userId().value, userAvatarUrl, 32)
                 MatrixUser(
                     username = userDisplayName ?: client.userId().value,
                     avatarUrl = userAvatarUrl,
