@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package io.element.android.x.features.roomlist
 
 import Avatar
@@ -19,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -63,40 +66,48 @@ fun RoomListContent(
     onRoomClicked: (RoomId) -> Unit,
     onLogoutClicked: () -> Unit,
 ) {
+    val appBarState = rememberTopAppBarState()
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
     LogCompositions(tag = "RoomListScreen", msg = "Content")
-    Surface(color = MaterialTheme.colorScheme.background) {
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            RoomListTopBar(
-                matrixUser = matrixUser,
-                onLogoutClicked = onLogoutClicked
-            )
-            LazyColumn {
-                items(roomSummaries, key = { it.id }) { room ->
+    Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            RoomListTopBar(matrixUser, onLogoutClicked, scrollBehavior)
+        },
+        content = { padding ->
+            LazyColumn(modifier = Modifier.padding(padding)) {
+                items(roomSummaries) { room ->
                     RoomItem(room = room) {
                         onRoomClicked(it)
                     }
                 }
             }
         }
-    }
+    )
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoomListTopBar(matrixUser: MatrixUser?, onLogoutClicked: () -> Unit) {
+fun RoomListTopBar(
+    matrixUser: MatrixUser?,
+    onLogoutClicked: () -> Unit,
+    scrollBehavior: TopAppBarScrollBehavior
+) {
     LogCompositions(tag = "RoomListScreen", msg = "TopBar")
     if (matrixUser == null) return
-    TopAppBar(
+    MediumTopAppBar(
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         title = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Text(
+                fontWeight = FontWeight.Bold,
+                text = "All Chats"
+            )
+        },
+        navigationIcon = {
+            IconButton(onClick = {}) {
                 Avatar(matrixUser.avatarData)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text("${matrixUser.username}")
             }
         },
         actions = {
@@ -105,7 +116,8 @@ fun RoomListTopBar(matrixUser: MatrixUser?, onLogoutClicked: () -> Unit) {
             ) {
                 Icon(Icons.Default.ExitToApp, contentDescription = "logout")
             }
-        }
+        },
+        scrollBehavior = scrollBehavior,
     )
 }
 
@@ -121,6 +133,7 @@ private fun RoomItem(
     Column(
         modifier = modifier
             .fillMaxWidth()
+            .height(72.dp)
             .clickable(
                 onClick = { onClick(room.roomId) },
                 indication = rememberRipple(),
@@ -141,7 +154,7 @@ private fun RoomItem(
             ) {
                 Text(
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.SemiBold,
                     text = room.name,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -149,6 +162,7 @@ private fun RoomItem(
                 Text(
                     text = room.lastMessage?.toString().orEmpty(),
                     color = MaterialTheme.colorScheme.secondary,
+                    fontSize = 15.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
