@@ -33,7 +33,7 @@ class LastMessageFormatter(
     fun format(timestamp: Long?): String {
         if (timestamp == null) return ""
         val now: Instant = clock.now()
-        val tsInstant = Instant.fromEpochSeconds(timestamp)
+        val tsInstant = Instant.fromEpochMilliseconds(timestamp)
         val nowDateTime = now.toLocalDateTime(TimeZone.currentSystemDefault())
         val tsDateTime = tsInstant.toLocalDateTime(TimeZone.currentSystemDefault())
         val isSameDay = nowDateTime.date == tsDateTime.date
