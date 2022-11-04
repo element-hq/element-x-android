@@ -68,6 +68,7 @@ dependencies {
     implementation project(":libraries:matrix")
     implementation project(":features:login")
     implementation project(":features:roomlist")
+    implementation project(":features:messages")
 
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.2.0"
     implementation 'io.github.raamcosta.compose-destinations:core:1.7.23-beta'

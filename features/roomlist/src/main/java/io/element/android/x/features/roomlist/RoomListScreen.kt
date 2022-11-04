@@ -14,11 +14,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.core.data.LogCompositions
 import io.element.android.x.designsystem.ElementXTheme
+import io.element.android.x.designsystem.components.ProgressDialog
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.roomlist.components.RoomItem
 import io.element.android.x.features.roomlist.components.RoomListTopBar
@@ -46,7 +48,8 @@ fun RoomListScreen(
         roomSummaries = roomSummaries().orEmpty(),
         matrixUser = matrixUser(),
         onRoomClicked = onRoomClicked,
-        onLogoutClicked = viewModel::logout
+        onLogoutClicked = viewModel::logout,
+        isLoginOut = logoutAction is Loading
     )
 }
 
@@ -56,6 +59,7 @@ fun RoomListContent(
     matrixUser: MatrixUser?,
     onRoomClicked: (RoomId) -> Unit,
     onLogoutClicked: () -> Unit,
+    isLoginOut: Boolean,
 ) {
     val appBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
@@ -75,6 +79,9 @@ fun RoomListContent(
             }
         }
     )
+    if (isLoginOut) {
+        ProgressDialog("Login out...")
+    }
 }
 
 
@@ -86,7 +93,8 @@ private fun PreviewableRoomListContent() {
             roomSummaries = stubbedRoomSummaries(),
             matrixUser = MatrixUser("User#1", avatarData = AvatarData("U")),
             onRoomClicked = {},
-            onLogoutClicked = {}
+            onLogoutClicked = {},
+            isLoginOut = false
         )
     }
 }
@@ -99,7 +107,8 @@ private fun PreviewableDarkRoomListContent() {
             roomSummaries = stubbedRoomSummaries(),
             matrixUser = MatrixUser("User#1", avatarData = AvatarData("U")),
             onRoomClicked = {},
-            onLogoutClicked = {}
+            onLogoutClicked = {},
+            isLoginOut = true
         )
     }
 }

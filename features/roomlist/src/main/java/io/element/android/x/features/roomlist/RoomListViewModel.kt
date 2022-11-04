@@ -1,9 +1,6 @@
 package io.element.android.x.features.roomlist
 
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModel
-import com.airbnb.mvrx.Success
 import io.element.android.x.core.data.parallelMap
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
@@ -14,6 +11,8 @@ import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.MatrixInstance
 import io.element.android.x.matrix.room.RoomSummary
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -47,7 +46,12 @@ class RoomListViewModel(initialState: RoomListViewState) :
                 val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
                 val userDisplayName = client.loadUserDisplayName().getOrNull()
                 val avatarData =
-                    loadAvatarData(client, userDisplayName ?: client.userId().value, userAvatarUrl, AvatarSize.SMALL)
+                    loadAvatarData(
+                        client,
+                        userDisplayName ?: client.userId().value,
+                        userAvatarUrl,
+                        AvatarSize.SMALL
+                    )
                 MatrixUser(
                     username = userDisplayName ?: client.userId().value,
                     avatarUrl = userAvatarUrl,
@@ -101,7 +105,11 @@ class RoomListViewModel(initialState: RoomListViewState) :
     ): AvatarData {
         val mediaContent = url?.let {
             val mediaSource = mediaSourceFromUrl(it)
-            client.loadMediaThumbnailForSource(mediaSource, size.value.toLong(), size.value.toLong())
+            client.loadMediaThumbnailForSource(
+                mediaSource,
+                size.value.toLong(),
+                size.value.toLong()
+            )
         }
         return mediaContent?.fold(
             { it },
@@ -113,18 +121,17 @@ class RoomListViewModel(initialState: RoomListViewState) :
 
     private fun handleLogout() {
         viewModelScope.launch {
-            setState { copy(logoutAction = Loading()) }
-            try {
+            suspend {
+                delay(2000)
                 getClient().logout()
-                setState { copy(logoutAction = Success(Unit)) }
-            } catch (throwable: Throwable) {
-                setState { copy(logoutAction = Fail(throwable)) }
+            }.execute {
+                copy(logoutAction = it)
             }
         }
     }
 
     private suspend fun getClient(): MatrixClient {
-        return matrix.restoreSession()!!
+        return matrix.matrixClient().first().get()
     }
 
     override fun onCleared() {
