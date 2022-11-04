@@ -1,10 +1,6 @@
 package io.element.android.x.features.login
 
-import android.util.Log
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModel
-import com.airbnb.mvrx.Success
 import io.element.android.x.matrix.MatrixInstance
 import kotlinx.coroutines.launch
 
@@ -24,13 +20,11 @@ class LoginViewModel(initialState: LoginViewState) :
 
     private fun handleSubmit() = withState { state ->
         viewModelScope.launch {
-            setState { copy(isLoggedIn = Loading()) }
-            try {
+            suspend {
                 matrix.login(state.homeserver, state.login, state.password)
-                setState { copy(isLoggedIn = Success(Unit)) }
-            } catch (throwable: Throwable) {
-                Log.e("Error", "Cannot login", throwable)
-                setState { copy(isLoggedIn = Fail(throwable)) }
+                Unit
+            }.execute {
+                copy(isLoggedIn = it)
             }
         }
     }

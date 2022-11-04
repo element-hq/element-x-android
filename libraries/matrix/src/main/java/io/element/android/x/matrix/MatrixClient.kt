@@ -61,7 +61,6 @@ class MatrixClient internal constructor(
     init {
         client.setDelegate(clientDelegate)
     }
-
     fun startSync() {
         slidingSync.setObserver(slidingSyncObserver)
         slidingSyncObserverToken = slidingSync.sync()

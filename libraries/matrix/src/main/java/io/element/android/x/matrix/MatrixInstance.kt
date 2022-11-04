@@ -2,6 +2,7 @@ package io.element.android.x.matrix
 
 import android.annotation.SuppressLint
 import android.content.Context
+import kotlinx.coroutines.GlobalScope
 
 
 object MatrixInstance {
@@ -9,7 +10,7 @@ object MatrixInstance {
     private lateinit var instance: Matrix
 
     fun init(context: Context) {
-        instance = Matrix(context)
+        instance = Matrix(GlobalScope, context)
     }
 
     fun getInstance(): Matrix {

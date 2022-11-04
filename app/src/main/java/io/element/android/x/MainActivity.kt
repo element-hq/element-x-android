@@ -33,7 +33,12 @@ private fun MainScreen(viewModel: MainViewModel) {
     val engine = rememberNavHostEngine()
     val navController = engine.rememberNavController()
     val startRoute = runBlocking {
-        if (!viewModel.hasSession()) LoginScreenNavigationDestination else NavGraphs.root.startRoute
+        if (!viewModel.isLoggedIn()) {
+            LoginScreenNavigationDestination
+        } else {
+            viewModel.restoreSession()
+            NavGraphs.root.startRoute
+        }
     }
 
     DestinationsNavHost(
