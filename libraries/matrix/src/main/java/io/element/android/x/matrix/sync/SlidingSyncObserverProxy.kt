@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import org.matrix.rustcomponents.sdk.SlidingSyncObserver
 import org.matrix.rustcomponents.sdk.UpdateSummary
+import org.matrix.rustcomponents.sdk.setupTracing
 
 class SlidingSyncObserverProxy(private val coroutineScope: CoroutineScope) : SlidingSyncObserver {
 
@@ -13,8 +14,10 @@ class SlidingSyncObserverProxy(private val coroutineScope: CoroutineScope) : Sli
     val updateSummaryFlow: Flow<UpdateSummary> = updateSummaryMutableFlow
 
     override fun didReceiveSyncUpdate(summary: UpdateSummary) {
+        if (summary.rooms.isEmpty()) return
         coroutineScope.launch {
             updateSummaryMutableFlow.emit(summary)
         }
     }
+
 }
