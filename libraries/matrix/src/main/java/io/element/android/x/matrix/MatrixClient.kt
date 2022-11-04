@@ -2,9 +2,14 @@ package io.element.android.x.matrix
 
 import io.element.android.x.core.data.CoroutineDispatchers
 import io.element.android.x.matrix.core.UserId
+import io.element.android.x.matrix.room.MatrixRoom
 import io.element.android.x.matrix.room.RoomSummaryDataSource
+import io.element.android.x.matrix.room.RoomSummaryDetailsFactory
 import io.element.android.x.matrix.room.RustRoomSummaryDataSource
+import io.element.android.x.matrix.room.message.RoomMessageFactory
 import io.element.android.x.matrix.session.SessionStore
+import io.element.android.x.matrix.sync.SlidingSyncObserverProxy
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.*
 import timber.log.Timber
@@ -13,6 +18,7 @@ import java.io.Closeable
 class MatrixClient internal constructor(
     private val client: Client,
     private val sessionStore: SessionStore,
+    private val coroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
 ) : Closeable {
 
@@ -30,19 +36,15 @@ class MatrixClient internal constructor(
         }
     }
 
-    private val slidingSyncObserver = object : SlidingSyncObserver {
-        override fun didReceiveSyncUpdate(summary: UpdateSummary) {
-            Timber.v("didReceiveSyncUpdate=$summary on Thread: ${Thread.currentThread()}")
-            roomSummaryDataSource.updateRoomsWithIdentifiers(summary.rooms)
-        }
-    }
-
     private val slidingSyncView = SlidingSyncViewBuilder()
         .timelineLimit(limit = 1u)
-        .requiredState(requiredState = listOf(
-            RequiredState(key = "m.room.avatar", value = ""),
-            RequiredState(key = "m.room.encryption", value = ""),
-        ))
+        .requiredState(
+            requiredState = listOf(
+                RequiredState(key = "m.room.avatar", value = ""),
+                RequiredState(key = "m.room.name", value = ""),
+                RequiredState(key = "m.room.encryption", value = ""),
+            )
+        )
         .name(name = "HomeScreenView")
         .syncMode(mode = SlidingSyncMode.FULL_SYNC)
         .build()
@@ -54,15 +56,28 @@ class MatrixClient internal constructor(
         .addView(slidingSyncView)
         .build()
 
+    private val slidingSyncObserverProxy = SlidingSyncObserverProxy(coroutineScope)
     private val roomSummaryDataSource: RustRoomSummaryDataSource =
-        RustRoomSummaryDataSource(slidingSync, slidingSyncView, dispatchers)
+        RustRoomSummaryDataSource(slidingSyncObserverProxy.updateSummaryFlow, slidingSync, slidingSyncView, dispatchers)
     private var slidingSyncObserverToken: StoppableSpawn? = null
 
     init {
         client.setDelegate(clientDelegate)
     }
+
+    fun getRoom(roomId: String): MatrixRoom? {
+        val slidingSyncRoom = slidingSync.getRoom(roomId) ?: return null
+        val room = slidingSyncRoom.fullRoom() ?: return null
+        return MatrixRoom(
+            slidingSyncUpdateFlow = slidingSyncObserverProxy.updateSummaryFlow,
+            slidingSyncRoom = slidingSyncRoom,
+            room = room
+        )
+    }
+
     fun startSync() {
-        slidingSync.setObserver(slidingSyncObserver)
+        roomSummaryDataSource.startSync()
+        slidingSync.setObserver(slidingSyncObserverProxy)
         slidingSyncObserverToken = slidingSync.sync()
     }
 
@@ -113,7 +128,8 @@ class MatrixClient internal constructor(
     ): Result<ByteArray> =
         withContext(dispatchers.io) {
             runCatching {
-                client.getMediaThumbnail(source, width.toULong(), height.toULong()).toUByteArray().toByteArray()
+                client.getMediaThumbnail(source, width.toULong(), height.toULong()).toUByteArray()
+                    .toByteArray()
             }
         }
 
