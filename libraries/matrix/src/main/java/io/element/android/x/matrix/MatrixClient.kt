@@ -37,7 +37,7 @@ class MatrixClient internal constructor(
     }
 
     private val slidingSyncView = SlidingSyncViewBuilder()
-        .timelineLimit(limit = 1u)
+        .timelineLimit(limit = 10u)
         .requiredState(
             requiredState = listOf(
                 RequiredState(key = "m.room.avatar", value = ""),
