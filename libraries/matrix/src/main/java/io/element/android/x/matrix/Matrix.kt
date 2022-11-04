@@ -12,10 +12,10 @@ import org.matrix.rustcomponents.sdk.AuthenticationService
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import java.io.File
-import java.util.Optional
+import java.util.*
 
 class Matrix(
-    coroutineScope: CoroutineScope,
+    private val coroutineScope: CoroutineScope,
     context: Context,
 ) {
     private val coroutineDispatchers = CoroutineDispatchers(
@@ -44,8 +44,12 @@ class Matrix(
         return isLoggedIn
     }
 
-    fun matrixClient(): Flow<Optional<MatrixClient>> {
+    fun client(): Flow<Optional<MatrixClient>> {
         return matrixClient
+    }
+
+    fun activeClient(): MatrixClient {
+        return matrixClient.value.get()
     }
 
     suspend fun restoreSession() = withContext(coroutineDispatchers.io) {
@@ -80,6 +84,7 @@ class Matrix(
         return MatrixClient(
             client = client,
             sessionStore = sessionStore,
+            coroutineScope = coroutineScope,
             dispatchers = coroutineDispatchers
         ).also {
             matrixClient.value = Optional.of(it)

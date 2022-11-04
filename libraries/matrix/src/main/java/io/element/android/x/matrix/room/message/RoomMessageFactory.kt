@@ -5,7 +5,6 @@ import io.element.android.x.matrix.core.UserId
 import org.matrix.rustcomponents.sdk.EventTimelineItem
 
 class RoomMessageFactory {
-
     fun create(eventTimelineItem: EventTimelineItem?): RoomMessage? {
         eventTimelineItem ?: return null
         return RoomMessage(

@@ -131,7 +131,7 @@ class RoomListViewModel(initialState: RoomListViewState) :
     }
 
     private suspend fun getClient(): MatrixClient {
-        return matrix.matrixClient().first().get()
+        return matrix.client().first().get()
     }
 
     override fun onCleared() {

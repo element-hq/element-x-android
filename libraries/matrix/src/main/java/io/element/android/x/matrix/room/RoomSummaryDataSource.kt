@@ -1,7 +1,6 @@
 package io.element.android.x.matrix.room
 
 import io.element.android.x.core.data.CoroutineDispatchers
-import io.element.android.x.matrix.core.RoomId
 import io.element.android.x.matrix.room.message.RoomMessageFactory
 import io.element.android.x.matrix.sync.roomListDiff
 import io.element.android.x.matrix.sync.state
@@ -20,10 +19,11 @@ interface RoomSummaryDataSource {
 }
 
 internal class RustRoomSummaryDataSource(
+    private val slidingSyncUpdateFlow: Flow<UpdateSummary>,
     private val slidingSync: SlidingSync,
     private val slidingSyncView: SlidingSyncView,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val roomMessageFactory: RoomMessageFactory = RoomMessageFactory(),
+    private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory()
 ) : RoomSummaryDataSource, Closeable {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + coroutineDispatchers.io)
@@ -31,7 +31,8 @@ internal class RustRoomSummaryDataSource(
     private val roomSummaries = MutableStateFlow<List<RoomSummary>>(emptyList())
     private val state = MutableStateFlow(SlidingSyncState.COLD)
 
-    init {
+
+    fun startSync(){
         slidingSyncView.roomListDiff()
             .onEach { diff ->
                 updateRoomSummaries {
@@ -43,6 +44,11 @@ internal class RustRoomSummaryDataSource(
             .onEach { slidingSyncState ->
                 Timber.v("New sliding sync state: $slidingSyncState")
                 state.value = slidingSyncState
+            }.launchIn(coroutineScope)
+
+        slidingSyncUpdateFlow
+            .onEach {
+                didReceiveSyncUpdate(it)
             }.launchIn(coroutineScope)
     }
 
@@ -58,13 +64,13 @@ internal class RustRoomSummaryDataSource(
         return roomSummaries.sample(100)
     }
 
-    internal fun updateRoomsWithIdentifiers(identifiers: List<String>) {
-        Timber.v("UpdateRooms with identifiers: $identifiers")
+    private fun didReceiveSyncUpdate(summary: UpdateSummary) {
+        Timber.v("UpdateRooms with identifiers: ${summary.rooms}")
         if (state.value != SlidingSyncState.LIVE) {
             return
         }
         updateRoomSummaries {
-            for (identifier in identifiers) {
+            for (identifier in summary.rooms) {
                 val index = indexOfFirst { it.identifier() == identifier }
                 if (index == -1) {
                     continue
@@ -78,7 +84,7 @@ internal class RustRoomSummaryDataSource(
     private fun MutableList<RoomSummary>.applyDiff(diff: SlidingSyncViewRoomsListDiff) {
 
         fun MutableList<RoomSummary>.fillUntil(untilIndex: Int) {
-            repeat((size-1 until untilIndex).count()) {
+            repeat((size - 1 until untilIndex).count()) {
                 add(buildEmptyRoomSummary())
             }
         }
@@ -89,7 +95,7 @@ internal class RustRoomSummaryDataSource(
                 add(roomSummary)
             }
             is SlidingSyncViewRoomsListDiff.UpdateAt -> {
-                fillUntil(diff.index.toInt())
+                //fillUntil(diff.index.toInt())
                 val roomSummary = buildSummaryForRoomListEntry(diff.value)
                 set(diff.index.toInt(), roomSummary)
             }
@@ -124,24 +130,8 @@ internal class RustRoomSummaryDataSource(
 
     private fun buildRoomSummaryForIdentifier(identifier: String): RoomSummary {
         val room = slidingSync.getRoom(identifier) ?: return RoomSummary.Empty(identifier)
-        val latestRoomMessage = room.latestRoomMessage()?.let {
-            roomMessageFactory.create(it)
-        }
-        val computedLastMessage = when {
-            latestRoomMessage == null -> null
-            room.isDm() == true -> latestRoomMessage.body
-            else -> "${latestRoomMessage.sender.value}: ${latestRoomMessage.body}"
-        }
         return RoomSummary.Filled(
-            details = RoomSummaryDetails(
-                roomId = RoomId(identifier),
-                name = room.name() ?: identifier,
-                isDirect = room.isDm() ?: false,
-                avatarURLString = room.fullRoom()?.avatarUrl(),
-                unreadNotificationCount = room.unreadNotifications().notificationCount().toInt(),
-                lastMessage = computedLastMessage,
-                lastMessageTimestamp = latestRoomMessage?.originServerTs
-            )
+            details = roomSummaryDetailsFactory.create(room, room.fullRoom())
         )
     }
 
