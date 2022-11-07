@@ -10,8 +10,8 @@ data class MessagesViewState(
     val roomId: String,
     val roomName: String? = null,
     val roomAvatar: AvatarData? = null,
-    val timelineItems: Async<List<MatrixTimelineItem>> = Uninitialized,
-    val hasMoreToLoad: Boolean = false,
+    val timelineItems: Async<List<MessagesTimelineItemState>> = Uninitialized,
+    val hasMoreToLoad: Boolean = true,
 ) : MavericksState {
 
     @Suppress("unused")
