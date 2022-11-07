@@ -1,17 +1,20 @@
 package io.element.android.x.matrix.timeline
 
+import io.element.android.x.core.data.CoroutineDispatchers
 import io.element.android.x.matrix.core.EventId
 import io.element.android.x.matrix.room.MatrixRoom
+import io.element.android.x.matrix.room.timelineDiff
 import kotlinx.coroutines.flow.*
-import org.matrix.rustcomponents.sdk.TimelineChange
-import org.matrix.rustcomponents.sdk.TimelineDiff
+import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.*
 import timber.log.Timber
 import java.util.*
 
 class MatrixTimeline(
-    private val room: MatrixRoom,
+    private val matrixRoom: MatrixRoom,
+    private val room: Room,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) {
-
     interface Callback {
         fun onUpdatedTimelineItem(eventId: EventId)
         fun onStartedBackPaginating()
@@ -20,6 +23,7 @@ class MatrixTimeline(
 
     var callback: Callback? = null
 
+    private val paginationOutcome = MutableStateFlow(PaginationOutcome(true))
     private val timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
         MutableStateFlow(emptyList())
 
@@ -29,6 +33,12 @@ class MatrixTimeline(
             timelineItems.value.reversed()
         }
     }
+
+    val hasMoreToLoad: Boolean
+        get() {
+            return paginationOutcome.value.moreMessages
+        }
+
 
     private fun diffFlow(): Flow<Unit> {
         return room.timelineDiff()
@@ -78,28 +88,31 @@ class MatrixTimeline(
         }
     }
 
+    suspend fun paginateBackwards(count: Int): Result<Unit> = withContext(coroutineDispatchers.io) {
+        if (!paginationOutcome.value.moreMessages) {
+            return@withContext Result.failure(IllegalStateException("no more message"))
+        }
+        runCatching {
+            paginationOutcome.value = room.paginateBackwards(count.toUShort())
+        }
+    }
+
     private fun updateTimelineItems(block: MutableList<MatrixTimelineItem>.() -> Unit) {
         val mutableTimelineItems = timelineItems.value.toMutableList()
         block(mutableTimelineItems)
         timelineItems.value = mutableTimelineItems
     }
 
-
-    suspend fun processItemAppearance(itemId: String) {
-
+    fun addListener(timelineListener: TimelineListener) {
+        room.addTimelineListener(timelineListener)
     }
 
-    suspend fun processItemDisappearance(itemId: String) {
-
-    }
-
-    suspend fun paginateBackwards(count: Int): Result<Unit> {
-        return room.paginateBackwards(count)
+    fun dispose(){
+        room.removeTimeline()
     }
 
     suspend fun sendMessage(message: String): Result<Unit> {
         return Result.success(Unit)
     }
-
 
 }

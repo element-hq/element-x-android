@@ -8,11 +8,12 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,7 +34,14 @@ fun MessagesScreen(roomId: String) {
     val roomTitle by viewModel.collectAsState(MessagesViewState::roomName)
     val roomAvatar by viewModel.collectAsState(MessagesViewState::roomAvatar)
     val timelineItems by viewModel.collectAsState(MessagesViewState::timelineItems)
-    MessagesContent(roomTitle, roomAvatar, timelineItems().orEmpty())
+    val hasMoreToLoad by viewModel.collectAsState(MessagesViewState::hasMoreToLoad)
+    MessagesContent(
+        roomTitle = roomTitle,
+        roomAvatar = roomAvatar,
+        timelineItems = timelineItems().orEmpty(),
+        hasMoreToLoad = hasMoreToLoad,
+        onReachedLoadMore = viewModel::loadMore
+    )
 }
 
 @Composable
@@ -41,6 +49,8 @@ fun MessagesContent(
     roomTitle: String?,
     roomAvatar: AvatarData?,
     timelineItems: List<MatrixTimelineItem>,
+    hasMoreToLoad: Boolean,
+    onReachedLoadMore: () -> Unit,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Content")
     val lazyListState = rememberLazyListState()
@@ -61,7 +71,9 @@ fun MessagesContent(
             TimelineItems(
                 padding = padding,
                 lazyListState = lazyListState,
-                timelineItems = timelineItems
+                timelineItems = timelineItems,
+                hasMoreToLoad = hasMoreToLoad,
+                onReachedLoadMore = onReachedLoadMore,
             )
         }
     )
@@ -71,7 +83,9 @@ fun MessagesContent(
 fun TimelineItems(
     padding: PaddingValues,
     lazyListState: LazyListState,
-    timelineItems: List<MatrixTimelineItem>
+    timelineItems: List<MatrixTimelineItem>,
+    hasMoreToLoad: Boolean,
+    onReachedLoadMore: () -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -82,11 +96,17 @@ fun TimelineItems(
         verticalArrangement = Arrangement.Bottom,
         reverseLayout = true
     ) {
-        items(timelineItems) { timelineItem ->
+        itemsIndexed(timelineItems) { index, timelineItem ->
             TimelineItemRow(timelineItem = timelineItem)
+        }
+        if (hasMoreToLoad) {
+            item {
+                MessagesLoadingMoreIndicator(onReachedLoadMore)
+            }
         }
     }
 }
+
 
 @Composable
 fun TimelineItemRow(
@@ -124,7 +144,7 @@ fun TimelineItemRow(
 }
 
 @Composable
-internal fun MessagesLoadingMoreIndicator() {
+internal fun MessagesLoadingMoreIndicator(onReachedLoadMore: () -> Unit) {
     Box(
         Modifier
             .fillMaxWidth()
@@ -133,6 +153,10 @@ internal fun MessagesLoadingMoreIndicator() {
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(strokeWidth = 2.dp, color = MaterialTheme.colorScheme.primary)
+        LaunchedEffect(Unit) {
+            onReachedLoadMore()
+        }
     }
+
 }
 

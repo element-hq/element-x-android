@@ -9,13 +9,17 @@ import io.element.android.x.features.messages.model.MessagesViewState
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.MatrixInstance
 import io.element.android.x.matrix.room.MatrixRoom
+import io.element.android.x.matrix.timeline.MatrixTimeline
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
 
+private const val PAGINATION_COUNT = 50
 class MessagesViewModel(
     private val client: MatrixClient,
     private val room: MatrixRoom,
+    private val timeline: MatrixTimeline,
     private val initialState: MessagesViewState
 ) :
     MavericksViewModel<MessagesViewState>(initialState) {
@@ -29,7 +33,7 @@ class MessagesViewModel(
             val matrix = MatrixInstance.getInstance()
             val client = matrix.activeClient()
             val room = client.getRoom(state.roomId) ?: return null
-            return MessagesViewModel(client, room, state)
+            return MessagesViewModel(client, room, room.timeline(), state)
         }
 
     }
@@ -39,7 +43,18 @@ class MessagesViewModel(
         handleInit()
     }
 
+    fun loadMore(){
+        viewModelScope.launch {
+            timeline.paginateBackwards(PAGINATION_COUNT)
+            setState { copy(hasMoreToLoad = timeline.hasMoreToLoad) }
+        }
+    }
+
     private fun handleInit() {
+        setState {
+            copy(hasMoreToLoad = timeline.hasMoreToLoad)
+        }
+
         room.syncUpdateFlow()
             .onEach {
                 val avatarData =
@@ -51,7 +66,7 @@ class MessagesViewModel(
                 }
             }.launchIn(viewModelScope)
 
-        room.timeline().timelineItems()
+        timeline.timelineItems()
             .execute {
                 copy(timelineItems = it)
             }
