@@ -1,6 +1,7 @@
 package io.element.android.x.matrix.room
 
 import io.element.android.x.core.data.CoroutineDispatchers
+import io.element.android.x.core.data.flow.chunk
 import io.element.android.x.matrix.room.message.RoomMessageFactory
 import io.element.android.x.matrix.sync.roomListDiff
 import io.element.android.x.matrix.sync.state
@@ -34,9 +35,12 @@ internal class RustRoomSummaryDataSource(
 
     fun startSync(){
         slidingSyncView.roomListDiff()
-            .onEach { diff ->
+            .chunk(100)
+            .onEach { diffs ->
                 updateRoomSummaries {
-                    applyDiff(diff)
+                    diffs.forEach {
+                        applyDiff(it)
+                    }
                 }
             }.launchIn(coroutineScope)
 

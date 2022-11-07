@@ -1,6 +1,7 @@
 package io.element.android.x.matrix.timeline
 
 import io.element.android.x.core.data.CoroutineDispatchers
+import io.element.android.x.core.data.flow.chunk
 import io.element.android.x.matrix.core.EventId
 import io.element.android.x.matrix.room.MatrixRoom
 import io.element.android.x.matrix.room.timelineDiff
@@ -42,9 +43,12 @@ class MatrixTimeline(
 
     private fun diffFlow(): Flow<Unit> {
         return room.timelineDiff()
-            .onEach { timelineDiff ->
+            .chunk(100)
+            .onEach { timelineDiffs ->
                 updateTimelineItems {
-                    applyDiff(timelineDiff)
+                    timelineDiffs.onEach {
+                        applyDiff(it)
+                    }
                 }
             }.map { }
     }
@@ -107,7 +111,7 @@ class MatrixTimeline(
         room.addTimelineListener(timelineListener)
     }
 
-    fun dispose(){
+    fun dispose() {
         room.removeTimeline()
     }
 
