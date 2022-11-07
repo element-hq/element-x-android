@@ -50,6 +50,11 @@ class MessagesViewModel(
                     )
                 }
             }.launchIn(viewModelScope)
+
+        room.timeline().timelineItems()
+            .execute {
+                copy(timelineItems = it)
+            }
     }
 
     private suspend fun loadAvatarData(

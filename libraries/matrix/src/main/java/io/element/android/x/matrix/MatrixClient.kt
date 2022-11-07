@@ -4,9 +4,7 @@ import io.element.android.x.core.data.CoroutineDispatchers
 import io.element.android.x.matrix.core.UserId
 import io.element.android.x.matrix.room.MatrixRoom
 import io.element.android.x.matrix.room.RoomSummaryDataSource
-import io.element.android.x.matrix.room.RoomSummaryDetailsFactory
 import io.element.android.x.matrix.room.RustRoomSummaryDataSource
-import io.element.android.x.matrix.room.message.RoomMessageFactory
 import io.element.android.x.matrix.session.SessionStore
 import io.element.android.x.matrix.sync.SlidingSyncObserverProxy
 import kotlinx.coroutines.CoroutineScope
@@ -58,7 +56,12 @@ class MatrixClient internal constructor(
 
     private val slidingSyncObserverProxy = SlidingSyncObserverProxy(coroutineScope)
     private val roomSummaryDataSource: RustRoomSummaryDataSource =
-        RustRoomSummaryDataSource(slidingSyncObserverProxy.updateSummaryFlow, slidingSync, slidingSyncView, dispatchers)
+        RustRoomSummaryDataSource(
+            slidingSyncObserverProxy.updateSummaryFlow,
+            slidingSync,
+            slidingSyncView,
+            dispatchers
+        )
     private var slidingSyncObserverToken: StoppableSpawn? = null
 
     init {
@@ -71,7 +74,8 @@ class MatrixClient internal constructor(
         return MatrixRoom(
             slidingSyncUpdateFlow = slidingSyncObserverProxy.updateSummaryFlow,
             slidingSyncRoom = slidingSyncRoom,
-            room = room
+            room = room,
+            coroutineDispatchers = dispatchers
         )
     }
 

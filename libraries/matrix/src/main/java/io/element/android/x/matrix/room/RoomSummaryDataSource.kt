@@ -95,7 +95,7 @@ internal class RustRoomSummaryDataSource(
                 add(roomSummary)
             }
             is SlidingSyncViewRoomsListDiff.UpdateAt -> {
-                //fillUntil(diff.index.toInt())
+                fillUntil(diff.index.toInt())
                 val roomSummary = buildSummaryForRoomListEntry(diff.value)
                 set(diff.index.toInt(), roomSummary)
             }
