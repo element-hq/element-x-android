@@ -31,7 +31,7 @@ class MatrixTimeline(
 
     fun timelineItems(): Flow<List<MatrixTimelineItem>> {
         return diffFlow().combine(timelineItems) { _, _ ->
-            timelineItems.value.reversed()
+            timelineItems.value
         }
     }
 

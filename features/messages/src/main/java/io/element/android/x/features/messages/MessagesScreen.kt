@@ -3,6 +3,7 @@
 package io.element.android.x.features.messages
 
 import Avatar
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -10,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -18,14 +20,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.core.data.LogCompositions
 import io.element.android.x.designsystem.components.avatar.AvatarData
+import io.element.android.x.features.messages.model.MessagesItemGroupPosition
+import io.element.android.x.features.messages.model.MessagesTimelineItemState
 import io.element.android.x.features.messages.model.MessagesViewState
-import io.element.android.x.matrix.timeline.MatrixTimelineItem
 
 @Composable
 fun MessagesScreen(roomId: String) {
@@ -48,7 +52,7 @@ fun MessagesScreen(roomId: String) {
 fun MessagesContent(
     roomTitle: String?,
     roomAvatar: AvatarData?,
-    timelineItems: List<MatrixTimelineItem>,
+    timelineItems: List<MessagesTimelineItemState>,
     hasMoreToLoad: Boolean,
     onReachedLoadMore: () -> Unit,
 ) {
@@ -83,7 +87,7 @@ fun MessagesContent(
 fun TimelineItems(
     padding: PaddingValues,
     lazyListState: LazyListState,
-    timelineItems: List<MatrixTimelineItem>,
+    timelineItems: List<MessagesTimelineItemState>,
     hasMoreToLoad: Boolean,
     onReachedLoadMore: () -> Unit,
 ) {
@@ -110,36 +114,92 @@ fun TimelineItems(
 
 @Composable
 fun TimelineItemRow(
-    timelineItem: MatrixTimelineItem
+    timelineItem: MessagesTimelineItemState
 ) {
     when (timelineItem) {
-        MatrixTimelineItem.Other -> return
-        MatrixTimelineItem.Virtual -> return
-        is MatrixTimelineItem.Event -> {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(
-                        onClick = { },
-                        indication = rememberRipple(),
-                        interactionSource = remember { MutableInteractionSource() }
-                    ),
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .height(IntrinsicSize.Min),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        fontSize = 14.sp,
-                        text = timelineItem.event.raw() ?: "",
-                    )
+        is MessagesTimelineItemState.Virtual -> return
+        is MessagesTimelineItemState.MessageEvent -> MessageEventRow(messageEvent = timelineItem)
+    }
+}
+
+@Composable
+fun MessageEventRow(
+    messageEvent: MessagesTimelineItemState.MessageEvent,
+    modifier: Modifier = Modifier
+) {
+    val contentAlignment = if (messageEvent.isMine) {
+        Alignment.CenterEnd
+    } else {
+        Alignment.CenterStart
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
+        contentAlignment = contentAlignment
+    ) {
+        Row(modifier = modifier
+            .widthIn(max = 300.dp)
+            .clickable(
+                onClick = { },
+                indication = rememberRipple(),
+                interactionSource = remember { MutableInteractionSource() }
+            )) {
+            if (!messageEvent.isMine) {
+                Spacer(modifier = Modifier.width(16.dp))
+            }
+            Column {
+                if (messageEvent.groupPosition.showSenderInformation() && !messageEvent.isMine) {
+                    MessageSenderInformation(messageEvent.sender, messageEvent.senderAvatar)
                 }
+                MessageEventBubble(messageEvent)
+            }
+            if (messageEvent.isMine) {
+                Spacer(modifier = Modifier.width(16.dp))
             }
         }
+    }
+    if (messageEvent.groupPosition is MessagesItemGroupPosition.First) {
+        Spacer(modifier = Modifier.height(8.dp))
+    } else {
+        Spacer(modifier = Modifier.height(4.dp))
+    }
+}
 
+@Composable
+private fun MessageSenderInformation(sender: String, senderAvatar: AvatarData?) {
+    Row {
+        if (senderAvatar != null) {
+            Avatar(senderAvatar)
+            Spacer(modifier = Modifier.width(8.dp))
+        }
+        Text(
+            text = sender,
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier
+                .alignBy(LastBaseline)
+                .paddingFrom(LastBaseline, after = 8.dp)
+        )
+    }
+}
+
+@Composable
+fun MessageEventBubble(
+    messageEvent: MessagesTimelineItemState.MessageEvent,
+) {
+    val backgroundBubbleColor = if (messageEvent.isMine) {
+        MaterialTheme.colorScheme.surfaceVariant
+    } else {
+        MaterialTheme.colorScheme.primary
+    }
+    Surface(
+        color = backgroundBubbleColor,
+        shape = RoundedCornerShape(20.dp, 20.dp, 20.dp, 20.dp),
+    ) {
+        Text(
+            modifier = Modifier.padding(16.dp),
+            text = messageEvent.content ?: "",
+        )
     }
 }
 
