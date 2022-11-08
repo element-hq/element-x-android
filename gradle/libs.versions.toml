@@ -7,6 +7,7 @@ kotlin = "1.7.20"
 material = "1.6.1"
 corektx = "1.9.0"
 datastore = "1.0.0"
+constraintlayout = "2.1.4"
 
 # Compose
 compose_compiler = "1.3.2"
@@ -34,6 +35,7 @@ mavericks = "3.0.1"
 timber = "5.0.1"
 coil = "2.2.1"
 datetime = "0.4.0"
+wysiwyg = "0.4.0"
 
 [libraries]
 # Project
@@ -44,6 +46,7 @@ kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 androidx_material = { module = "com.google.android.material:material", version.ref = "material" }
 androidx_corektx = { module = "androidx.core:core-ktx", version.ref = "corektx" }
 androidx_datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+androidx_constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 
 androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose_bom" }
 androidx_compose_foundation = { group = "androidx.compose.foundation", name = "foundation" }
@@ -75,6 +78,9 @@ mavericks_compose = { module = "com.airbnb.android:mavericks-compose", version.r
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
+
+# Composer
+wysiwyg = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 
 [bundles]
 

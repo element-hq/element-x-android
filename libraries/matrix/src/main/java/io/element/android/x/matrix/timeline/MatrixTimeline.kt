@@ -116,6 +116,8 @@ class MatrixTimeline(
     }
 
     suspend fun sendMessage(message: String): Result<Unit> {
+        val content = messageEventContentFromMarkdown(message)
+        room.send(content, null)
         return Result.success(Unit)
     }
 
