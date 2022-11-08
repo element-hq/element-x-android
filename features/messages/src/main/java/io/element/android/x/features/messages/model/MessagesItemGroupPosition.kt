@@ -6,12 +6,4 @@ sealed interface MessagesItemGroupPosition {
     object Last : MessagesItemGroupPosition
     object None : MessagesItemGroupPosition
 
-    fun showSenderInformation(): Boolean {
-        return when (this) {
-            First, None -> true
-            else -> false
-        }
-    }
-
-
 }

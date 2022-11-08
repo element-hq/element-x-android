@@ -73,9 +73,20 @@ class MessagesViewModel(
                     val currentTimelineItem = timelineItems[index]
                     val timelineItemState = when (currentTimelineItem) {
                         is MatrixTimelineItem.Event -> {
-                            val prevTimelineItem = timelineItems.getOrNull(index - 1)
-                            val nextTimelineItem = timelineItems.getOrNull(index + 1)
+                            val prevTimelineItem =
+                                timelineItems.getOrNull(index - 1) as? MatrixTimelineItem.Event
+                            val nextTimelineItem =
+                                timelineItems.getOrNull(index + 1) as? MatrixTimelineItem.Event
+                            val currentSender = currentTimelineItem.event.sender()
+                            val previousSender = prevTimelineItem?.event?.sender()
+                            val nextSender = nextTimelineItem?.event?.sender()
 
+                            val groupPosition = when {
+                                previousSender != currentSender && nextSender == currentSender -> MessagesItemGroupPosition.First
+                                previousSender == currentSender && nextSender == currentSender -> MessagesItemGroupPosition.Middle
+                                previousSender == currentSender && nextSender != currentSender -> MessagesItemGroupPosition.Last
+                                else -> MessagesItemGroupPosition.None
+                            }
                             val messageType =
                                 currentTimelineItem.event.content().asMessage()?.msgtype()
                             val contentStr = when (messageType) {
@@ -91,7 +102,7 @@ class MessagesViewModel(
                                 sender = currentTimelineItem.event.sender(),
                                 content = contentStr,
                                 isMine = currentTimelineItem.event.sender() == client.userId().value,
-                                groupPosition = MessagesItemGroupPosition.None
+                                groupPosition = groupPosition
                             )
                         }
                         is MatrixTimelineItem.Virtual -> MessagesTimelineItemState.Virtual(
