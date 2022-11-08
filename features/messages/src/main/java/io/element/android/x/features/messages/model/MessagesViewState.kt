@@ -11,7 +11,6 @@ data class MessagesViewState(
     val roomAvatar: AvatarData? = null,
     val timelineItems: Async<List<MessagesTimelineItemState>> = Uninitialized,
     val hasMoreToLoad: Boolean = true,
-    val composerFullScreen: Boolean = false,
 ) : MavericksState {
 
     @Suppress("unused")
