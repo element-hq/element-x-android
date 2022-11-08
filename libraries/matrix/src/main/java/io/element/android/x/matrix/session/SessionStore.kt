@@ -9,45 +9,63 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
+import kotlinx.serialization.json.Json
+import org.matrix.rustcomponents.sdk.Session
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "elementx_sessions")
-private val userIdPreference = stringPreferencesKey("userId")
 
 // TODO It contains the access token, so it has to be stored in a more secured storage.
-// I would expect the Rust SDK to provide a more obscure token.
-private val restoreTokenPreference = stringPreferencesKey("restoreToken")
-
+private val sessionKey = stringPreferencesKey("session")
 
 internal class SessionStore(
     context: Context
 ) {
+    @Serializable
     data class SessionData(
-        val userId: String,
-        val restoreToken: String,
+        val accessToken: String,
+        val deviceId: String,
+        val homeserverUrl: String,
+        val isSoftLogout: Boolean,
+        val refreshToken: String?,
+        val userId: String
     )
 
     private val store = context.dataStore
 
     fun isLoggedIn(): Flow<Boolean> {
         return store.data.map { prefs ->
-            prefs[userIdPreference] != null && prefs[restoreTokenPreference] != null
+            prefs[sessionKey] != null
         }
     }
 
-    suspend fun storeData(sessionData: SessionData) {
+    suspend fun storeData(session: Session) {
         store.edit { prefs ->
-            prefs[userIdPreference] = sessionData.userId
-            prefs[restoreTokenPreference] = sessionData.restoreToken
+            val sessionData = SessionData(
+                accessToken = session.accessToken,
+                deviceId = session.deviceId,
+                homeserverUrl = session.homeserverUrl,
+                isSoftLogout = session.isSoftLogout,
+                refreshToken = session.refreshToken,
+                userId = session.userId
+            )
+            val encodedSession = Json.encodeToString(sessionData)
+            prefs[sessionKey] = encodedSession
         }
     }
 
-    suspend fun getStoredData(): SessionData? {
+    suspend fun getLatestSession(): Session? {
         return store.data.firstOrNull()?.let { prefs ->
-            val userId = prefs[userIdPreference] ?: return@let null
-            val restoreToken = prefs[restoreTokenPreference] ?: return@let null
-            SessionData(
-                userId = userId,
-                restoreToken = restoreToken,
+            val encodedSession = prefs[sessionKey] ?: return@let null
+            val sessionData = Json.decodeFromString<SessionData>(encodedSession)
+            Session(
+                accessToken = sessionData.accessToken,
+                deviceId = sessionData.deviceId,
+                homeserverUrl = sessionData.homeserverUrl,
+                isSoftLogout = sessionData.isSoftLogout,
+                refreshToken = sessionData.refreshToken,
+                userId = sessionData.userId
             )
         }
     }
