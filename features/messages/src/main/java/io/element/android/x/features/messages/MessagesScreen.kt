@@ -38,6 +38,8 @@ import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.messages.model.MessagesItemGroupPosition
 import io.element.android.x.features.messages.model.MessagesTimelineItemState
 import io.element.android.x.features.messages.model.MessagesViewState
+import io.element.android.x.features.messages.textcomposer.MessageComposerViewModel
+import io.element.android.x.features.messages.textcomposer.MessageComposerViewState
 import io.element.android.x.textcomposer.TextComposer
 
 private val BUBBLE_RADIUS = 16.dp
@@ -49,12 +51,13 @@ fun MessagesScreen(
     onBackPressed: () -> Unit
 ) {
     val viewModel: MessagesViewModel = mavericksViewModel(argsFactory = { roomId })
+    val composerViewModel: MessageComposerViewModel = mavericksViewModel(argsFactory = { roomId })
     LogCompositions(tag = "MessagesScreen", msg = "Root")
     val roomTitle by viewModel.collectAsState(MessagesViewState::roomName)
     val roomAvatar by viewModel.collectAsState(MessagesViewState::roomAvatar)
     val timelineItems by viewModel.collectAsState(MessagesViewState::timelineItems)
     val hasMoreToLoad by viewModel.collectAsState(MessagesViewState::hasMoreToLoad)
-    val composerFullScreen by viewModel.collectAsState(MessagesViewState::composerFullScreen)
+    val composerFullScreen by composerViewModel.collectAsState(MessageComposerViewState::isFullScreen)
     MessagesContent(
         roomTitle = roomTitle,
         roomAvatar = roomAvatar,
@@ -64,7 +67,7 @@ fun MessagesScreen(
         onBackPressed = onBackPressed,
         onSendMessage = viewModel::sendMessage,
         composerFullScreen = composerFullScreen,
-        onComposerFullScreenChange = viewModel::onComposerFullScreenChange,
+        onComposerFullScreenChange = composerViewModel::onComposerFullScreenChange,
     )
 }
 
