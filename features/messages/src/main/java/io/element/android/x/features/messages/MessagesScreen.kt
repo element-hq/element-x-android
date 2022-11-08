@@ -3,6 +3,7 @@
 package io.element.android.x.features.messages
 
 import Avatar
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -21,6 +22,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -33,6 +36,8 @@ import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.messages.model.MessagesItemGroupPosition
 import io.element.android.x.features.messages.model.MessagesTimelineItemState
 import io.element.android.x.features.messages.model.MessagesViewState
+
+private val BUBBLE_RADIUS = 16.dp
 
 @Composable
 fun MessagesScreen(
@@ -124,6 +129,9 @@ fun TimelineItems(
         verticalArrangement = Arrangement.Bottom,
         reverseLayout = true
     ) {
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+        }
         itemsIndexed(timelineItems) { index, timelineItem ->
             TimelineItemRow(timelineItem = timelineItem)
         }
@@ -184,9 +192,9 @@ fun MessageEventRow(
         }
     }
     if (messageEvent.groupPosition is MessagesItemGroupPosition.First) {
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
     } else {
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(2.dp))
     }
 }
 
@@ -211,17 +219,42 @@ private fun MessageSenderInformation(sender: String, senderAvatar: AvatarData?) 
 fun MessageEventBubble(
     messageEvent: MessagesTimelineItemState.MessageEvent,
 ) {
-    val backgroundBubbleColor = if (messageEvent.isMine) {
-        MaterialTheme.colorScheme.surfaceVariant
+
+    fun MessagesTimelineItemState.MessageEvent.bubbleShape(): Shape {
+        return when (groupPosition) {
+            MessagesItemGroupPosition.First -> if (isMine) {
+                RoundedCornerShape(BUBBLE_RADIUS, BUBBLE_RADIUS, 0.dp, BUBBLE_RADIUS)
+            } else {
+                RoundedCornerShape(BUBBLE_RADIUS, BUBBLE_RADIUS, BUBBLE_RADIUS, 0.dp)
+            }
+            MessagesItemGroupPosition.Middle -> if (isMine) {
+                RoundedCornerShape(BUBBLE_RADIUS, 0.dp, 0.dp, BUBBLE_RADIUS)
+            } else {
+                RoundedCornerShape(0.dp, BUBBLE_RADIUS, BUBBLE_RADIUS, 0.dp)
+            }
+            MessagesItemGroupPosition.Last -> if (isMine) {
+                RoundedCornerShape(BUBBLE_RADIUS, 0.dp, BUBBLE_RADIUS, BUBBLE_RADIUS)
+            } else {
+                RoundedCornerShape(0.dp, BUBBLE_RADIUS, BUBBLE_RADIUS, BUBBLE_RADIUS)
+            }
+            MessagesItemGroupPosition.None ->
+                RoundedCornerShape(BUBBLE_RADIUS, BUBBLE_RADIUS, BUBBLE_RADIUS, BUBBLE_RADIUS)
+        }
+    }
+
+    val (backgroundBubbleColor, border) = if (messageEvent.isMine) {
+        Pair(MaterialTheme.colorScheme.surfaceVariant, null)
     } else {
-        MaterialTheme.colorScheme.primary
+        Pair(Color.Transparent, BorderStroke(1.dp, MaterialTheme.colorScheme.surfaceVariant))
     }
     Surface(
+        modifier = Modifier.widthIn(min = 80.dp),
         color = backgroundBubbleColor,
-        shape = RoundedCornerShape(20.dp, 20.dp, 20.dp, 20.dp),
+        shape = messageEvent.bubbleShape(),
+        border = border
     ) {
         Text(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
             text = messageEvent.content ?: "",
         )
     }
@@ -243,4 +276,3 @@ internal fun MessagesLoadingMoreIndicator(onReachedLoadMore: () -> Unit) {
     }
 
 }
-
