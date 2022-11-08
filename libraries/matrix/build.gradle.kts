@@ -1,5 +1,6 @@
 plugins {
     id("io.element.android-library")
+    kotlin("plugin.serialization") version "1.7.20"
 }
 
 android {
@@ -11,6 +12,6 @@ dependencies {
     implementation(project(":libraries:core"))
     implementation(libs.timber)
     implementation("net.java.dev.jna:jna:5.10.0@aar")
-    implementation("androidx.datastore:datastore-core:1.0.0")
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.serialization.json)
 }

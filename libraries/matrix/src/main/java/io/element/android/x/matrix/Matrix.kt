@@ -53,14 +53,14 @@ class Matrix(
     }
 
     suspend fun restoreSession() = withContext(coroutineDispatchers.io) {
-        sessionStore.getStoredData()
-            ?.let { sessionData ->
+        sessionStore.getLatestSession()
+            ?.let { session ->
                 try {
                     ClientBuilder()
                         .basePath(baseFolder.absolutePath)
-                        .username(sessionData.userId)
+                        .username(session.userId)
                         .build().apply {
-                            restoreLogin(sessionData.restoreToken)
+                            restoreSession(session)
                         }
                 } catch (throwable: Throwable) {
                     logError(throwable)
@@ -76,7 +76,7 @@ class Matrix(
             val authService = AuthenticationService(baseFolder.absolutePath)
             authService.configureHomeserver(homeserver)
             val client = authService.login(username, password, "MatrixRustSDKSample", null)
-            sessionStore.storeData(SessionStore.SessionData(client.userId(), client.restoreToken()))
+            sessionStore.storeData(client.session())
             createMatrixClient(client)
         }
 

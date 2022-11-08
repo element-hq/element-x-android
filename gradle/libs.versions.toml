@@ -36,6 +36,7 @@ timber = "5.0.1"
 coil = "2.2.1"
 datetime = "0.4.0"
 wysiwyg = "0.4.0"
+serialization-json = "1.4.1"
 
 [libraries]
 # Project
@@ -45,7 +46,8 @@ kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 # AndroidX
 androidx_material = { module = "com.google.android.material:material", version.ref = "material" }
 androidx_corektx = { module = "androidx.core:core-ktx", version.ref = "corektx" }
-androidx_datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+androidx_datastore_preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+androidx_datastore_datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 androidx_constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 
 androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose_bom" }
@@ -78,6 +80,7 @@ mavericks_compose = { module = "com.airbnb.android:mavericks-compose", version.r
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
+serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization-json" }
 
 # Composer
 wysiwyg = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
