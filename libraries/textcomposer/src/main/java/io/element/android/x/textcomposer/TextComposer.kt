@@ -1,9 +1,7 @@
 package io.element.android.x.textcomposer
 
-import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.isVisible
 import io.element.android.x.element.resources.R as ElementR
@@ -11,12 +9,10 @@ import io.element.android.x.element.resources.R as ElementR
 @Composable
 fun TextComposer(
     callback: Callback,
-    height: Dp,
+    modifier: Modifier = Modifier,
 ){
     AndroidView(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(height),
+        modifier = modifier,
         factory = { context ->
             RichTextComposerLayout(context).apply {
                 // Sets up listeners for View -> Compose communication
