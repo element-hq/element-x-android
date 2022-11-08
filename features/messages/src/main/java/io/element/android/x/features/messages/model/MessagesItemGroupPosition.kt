@@ -6,4 +6,9 @@ sealed interface MessagesItemGroupPosition {
     object Last : MessagesItemGroupPosition
     object None : MessagesItemGroupPosition
 
+    fun isNew(): Boolean = when (this) {
+        First, None -> true
+        else -> false
+    }
+
 }

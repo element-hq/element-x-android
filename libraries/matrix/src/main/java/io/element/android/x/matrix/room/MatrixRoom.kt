@@ -2,11 +2,13 @@ package io.element.android.x.matrix.room
 
 import io.element.android.x.core.data.CoroutineDispatchers
 import io.element.android.x.matrix.core.RoomId
+import io.element.android.x.matrix.core.UserId
 import io.element.android.x.matrix.timeline.MatrixTimeline
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 import org.matrix.rustcomponents.sdk.UpdateSummary
@@ -53,5 +55,18 @@ class MatrixRoom(
             return room.avatarUrl()
         }
 
+    suspend fun userDisplayName(userId: String): Result<String?> =
+        withContext(coroutineDispatchers.io) {
+            runCatching {
+                room.memberDisplayName(userId)
+            }
+        }
+
+    suspend fun userAvatarUrl(userId: String): Result<String?> =
+        withContext(coroutineDispatchers.io) {
+            runCatching {
+                room.memberAvatarUrl(userId)
+            }
+        }
 
 }

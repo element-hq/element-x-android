@@ -4,7 +4,7 @@ import androidx.compose.runtime.Stable
 
 @Stable
 data class AvatarData(
-    val initials: String = "",
+    val name: String = "",
     val model: ByteArray? = null,
     val size: AvatarSize = AvatarSize.MEDIUM
 ) {
@@ -14,7 +14,7 @@ data class AvatarData(
 
         other as AvatarData
 
-        if (initials != other.initials) return false
+        if (name != other.name) return false
         if (model != null) {
             if (other.model == null) return false
             if (!model.contentEquals(other.model)) return false
@@ -25,7 +25,7 @@ data class AvatarData(
     }
 
     override fun hashCode(): Int {
-        var result = initials.hashCode()
+        var result = name.hashCode()
         result = 31 * result + (model?.contentHashCode() ?: 0)
         result = 31 * result + size.value
         return result
