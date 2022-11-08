@@ -64,6 +64,19 @@ class MessagesViewModel(
         viewModelScope.launch {
             timeline.sendMessage(text.toString())
         }
+        setState {
+            copy(
+                composerFullScreen = false
+            )
+        }
+    }
+
+    fun onComposerFullScreenChange() {
+        setState {
+            copy(
+                composerFullScreen = !composerFullScreen
+            )
+        }
     }
 
     private fun handleInit() {
