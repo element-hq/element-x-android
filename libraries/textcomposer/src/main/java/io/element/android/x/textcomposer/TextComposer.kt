@@ -1,5 +1,6 @@
 package io.element.android.x.textcomposer
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
@@ -8,15 +9,39 @@ import io.element.android.x.element.resources.R as ElementR
 
 @Composable
 fun TextComposer(
-    callback: Callback,
+    onSendMessage: (CharSequence) -> Unit,
     modifier: Modifier = Modifier,
-){
+) {
     AndroidView(
         modifier = modifier,
         factory = { context ->
             RichTextComposerLayout(context).apply {
                 // Sets up listeners for View -> Compose communication
-                this.callback = callback
+                this.callback = object : Callback {
+                    override fun onRichContentSelected(contentUri: Uri): Boolean {
+                        return false
+                    }
+
+                    override fun onTextChanged(text: CharSequence) {
+                    }
+
+                    override fun onCloseRelatedMessage() {
+                    }
+
+                    override fun onSendMessage(text: CharSequence) {
+                        onSendMessage(text)
+                    }
+
+                    override fun onAddAttachment() {
+                    }
+
+                    override fun onExpandOrCompactChange() {
+                    }
+
+                    override fun onFullScreenModeChanged() {
+                    }
+
+                }
                 val messageComposerView = (this as MessageComposerView)
                 setupComposer(messageComposerView)
             }

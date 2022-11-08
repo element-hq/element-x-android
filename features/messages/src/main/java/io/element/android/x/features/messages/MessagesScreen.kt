@@ -3,7 +3,6 @@
 package io.element.android.x.features.messages
 
 import Avatar
-import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -39,7 +38,6 @@ import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.messages.model.MessagesItemGroupPosition
 import io.element.android.x.features.messages.model.MessagesTimelineItemState
 import io.element.android.x.features.messages.model.MessagesViewState
-import io.element.android.x.textcomposer.Callback
 import io.element.android.x.textcomposer.TextComposer
 
 private val BUBBLE_RADIUS = 16.dp
@@ -122,30 +120,7 @@ fun MessagesContent(
                     modifier = Modifier.weight(1f)
                 )
                 TextComposer(
-                    callback = object : Callback {
-                        override fun onRichContentSelected(contentUri: Uri): Boolean {
-                            return false
-                        }
-
-                        override fun onTextChanged(text: CharSequence) {
-                        }
-
-                        override fun onCloseRelatedMessage() {
-                        }
-
-                        override fun onSendMessage(text: CharSequence) {
-                            onSendMessage.invoke(text)
-                        }
-
-                        override fun onAddAttachment() {
-                        }
-
-                        override fun onExpandOrCompactChange() {
-                        }
-
-                        override fun onFullScreenModeChanged() {
-                        }
-                    },
+                    onSendMessage = onSendMessage,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(COMPOSER_HEIGHT)
