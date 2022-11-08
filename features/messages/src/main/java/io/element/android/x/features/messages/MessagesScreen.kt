@@ -3,7 +3,6 @@
 package io.element.android.x.features.messages
 
 import Avatar
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -12,6 +11,8 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -20,9 +21,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.LastBaseline
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.core.data.LogCompositions
@@ -32,7 +35,10 @@ import io.element.android.x.features.messages.model.MessagesTimelineItemState
 import io.element.android.x.features.messages.model.MessagesViewState
 
 @Composable
-fun MessagesScreen(roomId: String) {
+fun MessagesScreen(
+    roomId: String,
+    onBackPressed: () -> Unit
+) {
     val viewModel: MessagesViewModel = mavericksViewModel(argsFactory = { roomId })
     LogCompositions(tag = "MessagesScreen", msg = "Root")
     val roomTitle by viewModel.collectAsState(MessagesViewState::roomName)
@@ -44,7 +50,8 @@ fun MessagesScreen(roomId: String) {
         roomAvatar = roomAvatar,
         timelineItems = timelineItems().orEmpty(),
         hasMoreToLoad = hasMoreToLoad,
-        onReachedLoadMore = viewModel::loadMore
+        onReachedLoadMore = viewModel::loadMore,
+        onBackPressed = onBackPressed
     )
 }
 
@@ -55,6 +62,7 @@ fun MessagesContent(
     timelineItems: List<MessagesTimelineItemState>,
     hasMoreToLoad: Boolean,
     onReachedLoadMore: () -> Unit,
+    onBackPressed: () -> Unit
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Content")
     val lazyListState = rememberLazyListState()
@@ -62,13 +70,29 @@ fun MessagesContent(
         topBar = {
             TopAppBar(
                 navigationIcon = {
-                    if (roomAvatar != null) {
-                        IconButton(onClick = {}) {
-                            Avatar(roomAvatar)
-                        }
+                    IconButton(onClick = onBackPressed) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
                     }
                 },
-                title = { Text(text = roomTitle ?: "") }
+                title = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        if (roomAvatar != null) {
+                            Avatar(roomAvatar)
+                            Spacer(modifier = Modifier.width(8.dp))
+                        }
+                        Text(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            text = roomTitle ?: "Unknown room",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }
+
             )
         },
         content = { padding ->

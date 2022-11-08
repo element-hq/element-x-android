@@ -18,8 +18,8 @@ import io.element.android.x.matrix.core.RoomId
 fun LoginScreenNavigation(navigator: DestinationsNavigator) {
     LoginScreen(
         onLoginWithSuccess = {
-            navigator.navigate(RoomListScreenNavigationDestination){
-                popUpTo(LoginScreenNavigationDestination){
+            navigator.navigate(RoomListScreenNavigationDestination) {
+                popUpTo(LoginScreenNavigationDestination) {
                     inclusive = true
                 }
             }
@@ -36,8 +36,8 @@ fun RoomListScreenNavigation(navigator: DestinationsNavigator) {
             navigator.navigate(MessagesScreenNavigationDestination(roomId = roomId.value))
         },
         onSuccessLogout = {
-            navigator.navigate(LoginScreenNavigationDestination){
-                popUpTo(RoomListScreenNavigationDestination){
+            navigator.navigate(LoginScreenNavigationDestination) {
+                popUpTo(RoomListScreenNavigationDestination) {
                     inclusive = true
                 }
             }
@@ -46,8 +46,8 @@ fun RoomListScreenNavigation(navigator: DestinationsNavigator) {
 
 @Destination
 @Composable
-fun MessagesScreenNavigation(roomId: String) {
-    MessagesScreen(roomId)
+fun MessagesScreenNavigation(roomId: String, navigator: DestinationsNavigator) {
+    MessagesScreen(roomId, navigator::navigateUp)
 }
 
 
