@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.LastBaseline
@@ -29,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.core.data.LogCompositions
@@ -170,47 +172,51 @@ fun MessageEventRow(
             .wrapContentHeight(),
         contentAlignment = contentAlignment
     ) {
-        Row(modifier = modifier
-            .widthIn(max = 300.dp)
-            .clickable(
-                onClick = { },
-                indication = rememberRipple(),
-                interactionSource = remember { MutableInteractionSource() }
-            )) {
+        Row(
+            modifier = modifier
+                .widthIn(max = 300.dp)
+        ) {
             if (!messageEvent.isMine) {
                 Spacer(modifier = Modifier.width(16.dp))
             }
             Column {
                 if (messageEvent.showSenderInformation) {
-                    MessageSenderInformation(messageEvent.sender, messageEvent.senderAvatar)
+                    MessageSenderInformation(
+                        messageEvent.safeSenderName,
+                        messageEvent.senderAvatar,
+                        Modifier.zIndex(1f)
+                    )
                 }
-                MessageEventBubble(messageEvent)
+                MessageEventBubble(messageEvent, Modifier.zIndex(-1f))
             }
             if (messageEvent.isMine) {
                 Spacer(modifier = Modifier.width(16.dp))
             }
         }
     }
-    if (messageEvent.groupPosition is MessagesItemGroupPosition.First) {
-        Spacer(modifier = Modifier.height(16.dp))
+    if (messageEvent.groupPosition.isNew()) {
+        Spacer(modifier = Modifier.height(8.dp))
     } else {
         Spacer(modifier = Modifier.height(2.dp))
     }
 }
 
 @Composable
-private fun MessageSenderInformation(sender: String, senderAvatar: AvatarData?) {
-    Row {
+private fun MessageSenderInformation(
+    sender: String,
+    senderAvatar: AvatarData?,
+    modifier: Modifier = Modifier
+) {
+    Row(modifier = modifier) {
         if (senderAvatar != null) {
             Avatar(senderAvatar)
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(4.dp))
         }
         Text(
             text = sender,
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .alignBy(LastBaseline)
-                .paddingFrom(LastBaseline, after = 8.dp)
         )
     }
 }
@@ -218,6 +224,7 @@ private fun MessageSenderInformation(sender: String, senderAvatar: AvatarData?) 
 @Composable
 fun MessageEventBubble(
     messageEvent: MessagesTimelineItemState.MessageEvent,
+    modifier: Modifier = Modifier,
 ) {
 
     fun MessagesTimelineItemState.MessageEvent.bubbleShape(): Shape {
@@ -247,10 +254,28 @@ fun MessageEventBubble(
     } else {
         Pair(Color.Transparent, BorderStroke(1.dp, MaterialTheme.colorScheme.surfaceVariant))
     }
+
+    fun Modifier.offsetForItem(messageEvent: MessagesTimelineItemState.MessageEvent): Modifier {
+        return if (messageEvent.isMine) {
+            offset(y = -(12.dp))
+        } else {
+            offset(x = 20.dp, y = -(12.dp))
+        }
+    }
+
+    val bubbleShape = remember { messageEvent.bubbleShape() }
     Surface(
-        modifier = Modifier.widthIn(min = 80.dp),
+        modifier = modifier
+            .widthIn(min = 80.dp)
+            .offsetForItem(messageEvent)
+            .clip(bubbleShape)
+            .clickable(
+                onClick = { },
+                indication = rememberRipple(),
+                interactionSource = remember { MutableInteractionSource() }
+            ),
         color = backgroundBubbleColor,
-        shape = messageEvent.bubbleShape(),
+        shape = bubbleShape,
         border = border
     ) {
         Text(

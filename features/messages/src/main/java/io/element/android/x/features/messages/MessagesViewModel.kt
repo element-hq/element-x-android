@@ -8,6 +8,7 @@ import io.element.android.x.designsystem.components.avatar.AvatarSize
 import io.element.android.x.features.messages.model.MessagesViewState
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.MatrixInstance
+import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.MatrixRoom
 import io.element.android.x.matrix.timeline.MatrixTimeline
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +16,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
 
 private const val PAGINATION_COUNT = 50
 
@@ -38,7 +38,7 @@ class MessagesViewModel(
             val client = matrix.activeClient()
             val room = client.getRoom(state.roomId) ?: return null
             val messageTimelineItemStateMapper =
-                MessageTimelineItemStateMapper(client.userId(), room, Dispatchers.Default)
+                MessageTimelineItemStateMapper(client, room, Dispatchers.Default)
             return MessagesViewModel(
                 client,
                 room,
@@ -84,20 +84,9 @@ class MessagesViewModel(
         url: String?,
         size: AvatarSize = AvatarSize.MEDIUM
     ): AvatarData {
-        val mediaContent = url?.let {
-            val mediaSource = mediaSourceFromUrl(it)
-            client.loadMediaThumbnailForSource(
-                mediaSource,
-                size.value.toLong(),
-                size.value.toLong()
-            )
-        }
-        return mediaContent?.fold(
-            { it },
-            { null }
-        ).let { model ->
-            AvatarData(name.first().uppercase(), model, size)
-        }
+        val model = client.mediaResolver()
+            .resolve(url, kind = MediaResolver.Kind.Thumbnail(size.value))
+        return AvatarData(name, model, size)
     }
 
     override fun onCleared() {

@@ -9,18 +9,19 @@ sealed interface MessagesTimelineItemState {
 
     data class MessageEvent(
         val id: String = "",
-        val sender: String = "",
-        val senderAvatar: AvatarData? = null,
+        val senderId: String,
+        val senderDisplayName: String?,
+        val senderAvatar: AvatarData,
         val content: String? = null,
         val sentTime: String = "",
         val isMine: Boolean = false,
         val groupPosition: MessagesItemGroupPosition = MessagesItemGroupPosition.None
     ) : MessagesTimelineItemState {
 
-        val showSenderInformation: Boolean = when (groupPosition) {
-            MessagesItemGroupPosition.First, MessagesItemGroupPosition.None -> !isMine
-            else -> false
-        }
+        val showSenderInformation = groupPosition.isNew() && !isMine
+
+        val safeSenderName: String = senderDisplayName ?: senderId
+
     }
 
 }

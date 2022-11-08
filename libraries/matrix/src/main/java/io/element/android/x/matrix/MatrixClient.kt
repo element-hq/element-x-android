@@ -2,6 +2,8 @@ package io.element.android.x.matrix
 
 import io.element.android.x.core.data.CoroutineDispatchers
 import io.element.android.x.matrix.core.UserId
+import io.element.android.x.matrix.media.MediaResolver
+import io.element.android.x.matrix.media.RustMediaResolver
 import io.element.android.x.matrix.room.MatrixRoom
 import io.element.android.x.matrix.room.RoomSummaryDataSource
 import io.element.android.x.matrix.room.RustRoomSummaryDataSource
@@ -64,6 +66,8 @@ class MatrixClient internal constructor(
         )
     private var slidingSyncObserverToken: StoppableSpawn? = null
 
+    private val mediaResolver = RustMediaResolver(this)
+
     init {
         client.setDelegate(clientDelegate)
     }
@@ -92,6 +96,8 @@ class MatrixClient internal constructor(
     }
 
     fun roomSummaryDataSource(): RoomSummaryDataSource = roomSummaryDataSource
+
+    fun mediaResolver(): MediaResolver = mediaResolver
 
     override fun close() {
         stopSync()

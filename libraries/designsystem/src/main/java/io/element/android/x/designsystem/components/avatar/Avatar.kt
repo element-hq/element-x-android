@@ -12,7 +12,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import io.element.android.x.designsystem.AvatarGradientEnd
@@ -27,7 +26,7 @@ fun Avatar(avatarData: AvatarData, modifier: Modifier = Modifier) {
     if (avatarData.model == null) {
         InitialsAvatar(
             modifier = commonModifier,
-            initials = avatarData.initials
+            initials = avatarData.name.first().uppercase()
         )
     } else {
         ImageAvatar(

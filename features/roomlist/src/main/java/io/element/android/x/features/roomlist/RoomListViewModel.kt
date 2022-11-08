@@ -9,6 +9,7 @@ import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListViewState
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.MatrixInstance
+import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.RoomSummary
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -103,20 +104,9 @@ class RoomListViewModel(initialState: RoomListViewState) :
         url: String?,
         size: AvatarSize = AvatarSize.MEDIUM
     ): AvatarData {
-        val mediaContent = url?.let {
-            val mediaSource = mediaSourceFromUrl(it)
-            client.loadMediaThumbnailForSource(
-                mediaSource,
-                size.value.toLong(),
-                size.value.toLong()
-            )
-        }
-        return mediaContent?.fold(
-            { it },
-            { null }
-        ).let { model ->
-            AvatarData(name.first().uppercase(), model, size)
-        }
+        val model = client.mediaResolver()
+            .resolve(url, kind = MediaResolver.Kind.Thumbnail(size.value))
+        return AvatarData(name, model, size)
     }
 
     private fun handleLogout() {
