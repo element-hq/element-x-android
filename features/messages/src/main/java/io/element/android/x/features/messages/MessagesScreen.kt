@@ -109,7 +109,7 @@ fun MessagesContent(
             )
         },
         content = { padding ->
-            Box(
+            Column(
                 modifier = Modifier
                     .padding(padding)
                     .fillMaxSize()
@@ -119,38 +119,37 @@ fun MessagesContent(
                     timelineItems = timelineItems,
                     hasMoreToLoad = hasMoreToLoad,
                     onReachedLoadMore = onReachedLoadMore,
+                    modifier = Modifier.weight(1f)
                 )
-                Box(
-                    modifier = Modifier.align(Alignment.BottomCenter)
-                ) {
-                    TextComposer(
-                        callback = object : Callback {
-                            override fun onRichContentSelected(contentUri: Uri): Boolean {
-                                return false
-                            }
+                TextComposer(
+                    callback = object : Callback {
+                        override fun onRichContentSelected(contentUri: Uri): Boolean {
+                            return false
+                        }
 
-                            override fun onTextChanged(text: CharSequence) {
-                            }
+                        override fun onTextChanged(text: CharSequence) {
+                        }
 
-                            override fun onCloseRelatedMessage() {
-                            }
+                        override fun onCloseRelatedMessage() {
+                        }
 
-                            override fun onSendMessage(text: CharSequence) {
-                                onSendMessage.invoke(text)
-                            }
+                        override fun onSendMessage(text: CharSequence) {
+                            onSendMessage.invoke(text)
+                        }
 
-                            override fun onAddAttachment() {
-                            }
+                        override fun onAddAttachment() {
+                        }
 
-                            override fun onExpandOrCompactChange() {
-                            }
+                        override fun onExpandOrCompactChange() {
+                        }
 
-                            override fun onFullScreenModeChanged() {
-                            }
-                        },
-                        height = COMPOSER_HEIGHT
-                    )
-                }
+                        override fun onFullScreenModeChanged() {
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(COMPOSER_HEIGHT)
+                )
             }
         }
     )
@@ -162,19 +161,15 @@ fun TimelineItems(
     timelineItems: List<MessagesTimelineItemState>,
     hasMoreToLoad: Boolean,
     onReachedLoadMore: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = Modifier
-            .padding(bottom = COMPOSER_HEIGHT)
-            .fillMaxSize(),
+        modifier = modifier.fillMaxWidth(),
         state = lazyListState,
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Bottom,
         reverseLayout = true
     ) {
-        item {
-            Spacer(modifier = Modifier.height(8.dp))
-        }
         itemsIndexed(timelineItems) { index, timelineItem ->
             TimelineItemRow(timelineItem = timelineItem)
         }
@@ -267,7 +262,6 @@ fun MessageEventBubble(
     messageEvent: MessagesTimelineItemState.MessageEvent,
     modifier: Modifier = Modifier,
 ) {
-
     fun MessagesTimelineItemState.MessageEvent.bubbleShape(): Shape {
         return when (groupPosition) {
             MessagesItemGroupPosition.First -> if (isMine) {
@@ -295,6 +289,14 @@ fun MessageEventBubble(
         }
     }
 
+    fun Modifier.offsetForItem(messageEvent: MessagesTimelineItemState.MessageEvent): Modifier {
+        return if (messageEvent.isMine) {
+            offset(y = -(12.dp))
+        } else {
+            offset(x = 20.dp, y = -(12.dp))
+        }
+    }
+
     val (backgroundBubbleColor, border) = if (messageEvent.isMine) {
         Pair(MaterialTheme.colorScheme.surfaceVariant, null)
     } else {
@@ -304,15 +306,7 @@ fun MessageEventBubble(
         )
     }
 
-    fun Modifier.offsetForItem(messageEvent: MessagesTimelineItemState.MessageEvent): Modifier {
-        return if (messageEvent.isMine) {
-            offset(y = -(12.dp))
-        } else {
-            offset(x = 20.dp, y = -(12.dp))
-        }
-    }
-
-    val bubbleShape = remember { messageEvent.bubbleShape() }
+    val bubbleShape = messageEvent.bubbleShape()
     Surface(
         modifier = modifier
             .widthIn(min = 80.dp)
