@@ -3,6 +3,7 @@
 package io.element.android.x.features.messages
 
 import Avatar
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -36,8 +37,11 @@ import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.messages.model.MessagesItemGroupPosition
 import io.element.android.x.features.messages.model.MessagesTimelineItemState
 import io.element.android.x.features.messages.model.MessagesViewState
+import io.element.android.x.textcomposer.Callback
+import io.element.android.x.textcomposer.TextComposer
 
 private val BUBBLE_RADIUS = 16.dp
+private val COMPOSER_HEIGHT = 112.dp
 
 @Composable
 fun MessagesScreen(
@@ -56,7 +60,8 @@ fun MessagesScreen(
         timelineItems = timelineItems().orEmpty(),
         hasMoreToLoad = hasMoreToLoad,
         onReachedLoadMore = viewModel::loadMore,
-        onBackPressed = onBackPressed
+        onBackPressed = onBackPressed,
+        onSendMessage = viewModel::sendMessage
     )
 }
 
@@ -67,7 +72,8 @@ fun MessagesContent(
     timelineItems: List<MessagesTimelineItemState>,
     hasMoreToLoad: Boolean,
     onReachedLoadMore: () -> Unit,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    onSendMessage: (CharSequence) -> Unit,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Content")
     val lazyListState = rememberLazyListState()
@@ -101,20 +107,55 @@ fun MessagesContent(
             )
         },
         content = { padding ->
-            TimelineItems(
-                padding = padding,
-                lazyListState = lazyListState,
-                timelineItems = timelineItems,
-                hasMoreToLoad = hasMoreToLoad,
-                onReachedLoadMore = onReachedLoadMore,
-            )
+            Box(
+                modifier = Modifier
+                    .padding(padding)
+                    .fillMaxSize()
+            ) {
+                TimelineItems(
+                    lazyListState = lazyListState,
+                    timelineItems = timelineItems,
+                    hasMoreToLoad = hasMoreToLoad,
+                    onReachedLoadMore = onReachedLoadMore,
+                )
+                Box(
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                ) {
+                    TextComposer(
+                        callback = object : Callback {
+                            override fun onRichContentSelected(contentUri: Uri): Boolean {
+                                return false
+                            }
+
+                            override fun onTextChanged(text: CharSequence) {
+                            }
+
+                            override fun onCloseRelatedMessage() {
+                            }
+
+                            override fun onSendMessage(text: CharSequence) {
+                                onSendMessage.invoke(text)
+                            }
+
+                            override fun onAddAttachment() {
+                            }
+
+                            override fun onExpandOrCompactChange() {
+                            }
+
+                            override fun onFullScreenModeChanged() {
+                            }
+                        },
+                        height = COMPOSER_HEIGHT
+                    )
+                }
+            }
         }
     )
 }
 
 @Composable
 fun TimelineItems(
-    padding: PaddingValues,
     lazyListState: LazyListState,
     timelineItems: List<MessagesTimelineItemState>,
     hasMoreToLoad: Boolean,
@@ -122,7 +163,7 @@ fun TimelineItems(
 ) {
     LazyColumn(
         modifier = Modifier
-            .padding(padding)
+            .padding(bottom = COMPOSER_HEIGHT)
             .fillMaxSize(),
         state = lazyListState,
         horizontalAlignment = Alignment.Start,
@@ -182,7 +223,10 @@ fun MessageEventRow(
             }
             Column {
                 if (messageEvent.showSenderInformation) {
-                    MessageSenderInformation(messageEvent.sender, messageEvent.senderAvatar)
+                    MessageSenderInformation(
+                        messageEvent.sender,
+                        messageEvent.senderAvatar
+                    )
                 }
                 MessageEventBubble(messageEvent)
             }
@@ -238,14 +282,22 @@ fun MessageEventBubble(
                 RoundedCornerShape(0.dp, BUBBLE_RADIUS, BUBBLE_RADIUS, BUBBLE_RADIUS)
             }
             MessagesItemGroupPosition.None ->
-                RoundedCornerShape(BUBBLE_RADIUS, BUBBLE_RADIUS, BUBBLE_RADIUS, BUBBLE_RADIUS)
+                RoundedCornerShape(
+                    BUBBLE_RADIUS,
+                    BUBBLE_RADIUS,
+                    BUBBLE_RADIUS,
+                    BUBBLE_RADIUS
+                )
         }
     }
 
     val (backgroundBubbleColor, border) = if (messageEvent.isMine) {
         Pair(MaterialTheme.colorScheme.surfaceVariant, null)
     } else {
-        Pair(Color.Transparent, BorderStroke(1.dp, MaterialTheme.colorScheme.surfaceVariant))
+        Pair(
+            Color.Transparent,
+            BorderStroke(1.dp, MaterialTheme.colorScheme.surfaceVariant)
+        )
     }
     Surface(
         modifier = Modifier.widthIn(min = 80.dp),
@@ -269,7 +321,10 @@ internal fun MessagesLoadingMoreIndicator(onReachedLoadMore: () -> Unit) {
             .padding(8.dp),
         contentAlignment = Alignment.Center,
     ) {
-        CircularProgressIndicator(strokeWidth = 2.dp, color = MaterialTheme.colorScheme.primary)
+        CircularProgressIndicator(
+            strokeWidth = 2.dp,
+            color = MaterialTheme.colorScheme.primary
+        )
         LaunchedEffect(Unit) {
             onReachedLoadMore()
         }
