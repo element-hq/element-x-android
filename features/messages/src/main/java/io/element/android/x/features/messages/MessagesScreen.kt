@@ -149,7 +149,7 @@ fun MessageEventRow(
                 Spacer(modifier = Modifier.width(16.dp))
             }
             Column {
-                if (messageEvent.groupPosition.showSenderInformation() && !messageEvent.isMine) {
+                if (messageEvent.showSenderInformation) {
                     MessageSenderInformation(messageEvent.sender, messageEvent.senderAvatar)
                 }
                 MessageEventBubble(messageEvent)
