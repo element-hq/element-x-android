@@ -11,6 +11,8 @@ import io.element.android.x.element.resources.R as ElementR
 fun TextComposer(
     onSendMessage: (CharSequence) -> Unit,
     modifier: Modifier = Modifier,
+    fullscreen: Boolean,
+    onFullscreenToggle: () -> Unit,
 ) {
     AndroidView(
         modifier = modifier,
@@ -39,10 +41,12 @@ fun TextComposer(
                     }
 
                     override fun onFullScreenModeChanged() {
+                        onFullscreenToggle()
                     }
 
                 }
                 val messageComposerView = (this as MessageComposerView)
+                messageComposerView.toggleFullScreen(fullscreen)
                 setupComposer(messageComposerView)
             }
         },
@@ -54,6 +58,8 @@ fun TextComposer(
             // whenever the state changes
             // Example of Compose -> View communication
             val messageComposerView = (view as MessageComposerView)
+            messageComposerView.toggleFullScreen(fullscreen)
+            messageComposerView.sendButton.isVisible = true
         }
     )
 }

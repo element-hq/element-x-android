@@ -54,6 +54,7 @@ fun MessagesScreen(
     val roomAvatar by viewModel.collectAsState(MessagesViewState::roomAvatar)
     val timelineItems by viewModel.collectAsState(MessagesViewState::timelineItems)
     val hasMoreToLoad by viewModel.collectAsState(MessagesViewState::hasMoreToLoad)
+    val composerFullScreen by viewModel.collectAsState(MessagesViewState::composerFullScreen)
     MessagesContent(
         roomTitle = roomTitle,
         roomAvatar = roomAvatar,
@@ -61,7 +62,9 @@ fun MessagesScreen(
         hasMoreToLoad = hasMoreToLoad,
         onReachedLoadMore = viewModel::loadMore,
         onBackPressed = onBackPressed,
-        onSendMessage = viewModel::sendMessage
+        onSendMessage = viewModel::sendMessage,
+        composerFullScreen = composerFullScreen,
+        onComposerFullScreenChange = viewModel::onComposerFullScreenChange,
     )
 }
 
@@ -74,6 +77,8 @@ fun MessagesContent(
     onReachedLoadMore: () -> Unit,
     onBackPressed: () -> Unit,
     onSendMessage: (CharSequence) -> Unit,
+    composerFullScreen: Boolean,
+    onComposerFullScreenChange: () -> Unit,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Content")
     val lazyListState = rememberLazyListState()
@@ -112,18 +117,28 @@ fun MessagesContent(
                     .padding(padding)
                     .fillMaxSize()
             ) {
-                TimelineItems(
-                    lazyListState = lazyListState,
-                    timelineItems = timelineItems,
-                    hasMoreToLoad = hasMoreToLoad,
-                    onReachedLoadMore = onReachedLoadMore,
-                    modifier = Modifier.weight(1f)
-                )
+                if (!composerFullScreen) {
+                    TimelineItems(
+                        lazyListState = lazyListState,
+                        timelineItems = timelineItems,
+                        hasMoreToLoad = hasMoreToLoad,
+                        onReachedLoadMore = onReachedLoadMore,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
                 TextComposer(
                     onSendMessage = onSendMessage,
+                    fullscreen = composerFullScreen,
+                    onFullscreenToggle = onComposerFullScreenChange,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(COMPOSER_HEIGHT)
+                        .let {
+                            if (composerFullScreen) {
+                                it.weight(1f)
+                            } else {
+                                it.height(COMPOSER_HEIGHT)
+                            }
+                        },
                 )
             }
         }
