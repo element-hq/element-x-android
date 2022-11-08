@@ -20,6 +20,8 @@ rootProject.name = "ElementX"
 include(":app")
 include(":libraries:core")
 include(":libraries:matrix")
+include(":libraries:textcomposer")
+include(":libraries:elementresources")
 include(":features:login")
 include(":features:roomlist")
 include(":features:messages")
