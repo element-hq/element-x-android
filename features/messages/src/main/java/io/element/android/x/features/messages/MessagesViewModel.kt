@@ -60,6 +60,12 @@ class MessagesViewModel(
         }
     }
 
+    fun sendMessage(text: CharSequence) {
+        viewModelScope.launch {
+            timeline.sendMessage(text.toString())
+        }
+    }
+
     private fun handleInit() {
         room.syncUpdateFlow()
             .onEach {
