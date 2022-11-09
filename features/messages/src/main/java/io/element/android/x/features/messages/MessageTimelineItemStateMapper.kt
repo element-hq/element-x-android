@@ -2,7 +2,9 @@ package io.element.android.x.features.messages
 
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
+import io.element.android.x.features.messages.model.AggregatedReaction
 import io.element.android.x.features.messages.model.MessagesItemGroupPosition
+import io.element.android.x.features.messages.model.MessagesItemReactionState
 import io.element.android.x.features.messages.model.MessagesTimelineItemState
 import io.element.android.x.features.messages.model.content.*
 import io.element.android.x.matrix.MatrixClient
@@ -51,6 +53,7 @@ class MessageTimelineItemStateMapper(
         val senderAvatarData =
             loadAvatarData(senderDisplayName ?: currentSender, senderAvatarUrl)
 
+
         return MessagesTimelineItemState.MessageEvent(
             id = currentTimelineItem.event.eventId() ?: "",
             senderId = currentSender,
@@ -58,8 +61,16 @@ class MessageTimelineItemStateMapper(
             senderAvatar = senderAvatarData,
             content = currentTimelineItem.computeContent(),
             isMine = currentTimelineItem.event.isOwn(),
-            groupPosition = groupPosition
+            groupPosition = groupPosition,
+            reactionsState = currentTimelineItem.computeReactionsState()
         )
+    }
+
+    private fun MatrixTimelineItem.Event.computeReactionsState(): MessagesItemReactionState {
+        val aggregatedReactions = event.reactions().map {
+            AggregatedReaction(key = it.key, count = it.count.toString(), isHighlighted = false)
+        }
+        return MessagesItemReactionState(aggregatedReactions)
     }
 
     private fun MatrixTimelineItem.Event.computeContent(): MessagesTimelineItemContent {

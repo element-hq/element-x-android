@@ -17,6 +17,7 @@ sealed interface MessagesTimelineItemState {
         val sentTime: String = "",
         val isMine: Boolean = false,
         val groupPosition: MessagesItemGroupPosition = MessagesItemGroupPosition.None,
+        val reactionsState: MessagesItemReactionState
     ) : MessagesTimelineItemState {
 
         val showSenderInformation = groupPosition.isNew() && !isMine
