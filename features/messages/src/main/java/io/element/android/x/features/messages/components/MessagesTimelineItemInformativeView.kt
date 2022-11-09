@@ -2,6 +2,7 @@ package io.element.android.x.features.messages.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,7 +29,8 @@ fun MessagesTimelineItemInformativeView(
         Icon(
             imageVector = icon,
             tint = MaterialTheme.colorScheme.secondary,
-            contentDescription = iconDescription
+            contentDescription = iconDescription,
+            modifier = Modifier.size(16.dp)
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
