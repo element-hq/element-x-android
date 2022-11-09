@@ -7,11 +7,11 @@ import androidx.compose.ui.Modifier
 
 
 @Composable
-fun VectorButton(text: String, enabled: Boolean, onClick: () -> Unit, modifier: Modifier? = null) {
+fun VectorButton(text: String, enabled: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Button(
         onClick = onClick,
         enabled = enabled,
-        modifier = modifier ?: Modifier
+        modifier = modifier
     ) {
         Text(text = text)
     }
