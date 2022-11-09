@@ -115,9 +115,13 @@ class MatrixTimeline(
         room.removeTimeline()
     }
 
+    /**
+     * @param message markdown message
+     */
     suspend fun sendMessage(message: String): Result<Unit> {
+        val transactionId = genTransactionId()
         val content = messageEventContentFromMarkdown(message)
-        room.send(content, null)
+        room.send(content, transactionId)
         return Result.success(Unit)
     }
 

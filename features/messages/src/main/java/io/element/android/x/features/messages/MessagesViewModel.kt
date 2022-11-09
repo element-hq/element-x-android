@@ -60,9 +60,9 @@ class MessagesViewModel(
         }
     }
 
-    fun sendMessage(text: CharSequence) {
+    fun sendMessage(text: String) {
         viewModelScope.launch {
-            timeline.sendMessage(text.toString())
+            timeline.sendMessage(text)
         }
     }
 
