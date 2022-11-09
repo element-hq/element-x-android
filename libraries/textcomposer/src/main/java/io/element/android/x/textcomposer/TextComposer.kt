@@ -10,7 +10,7 @@ import io.element.android.x.element.resources.R as ElementR
 
 @Composable
 fun TextComposer(
-    onSendMessage: (CharSequence) -> Unit,
+    onSendMessage: (String) -> Unit,
     modifier: Modifier = Modifier,
     fullscreen: Boolean,
     onFullscreenToggle: () -> Unit,
@@ -36,7 +36,9 @@ fun TextComposer(
                     }
 
                     override fun onSendMessage(text: CharSequence) {
-                        onSendMessage(text)
+                        // TODO The Wysiwyg team is working to be able to get a markdown version of the text
+                        // For now we send only the plain text. `formattedText` is Html.
+                        onSendMessage(text.toString())
                     }
 
                     override fun onAddAttachment() {

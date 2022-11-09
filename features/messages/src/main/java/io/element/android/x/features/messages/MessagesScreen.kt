@@ -88,7 +88,7 @@ fun MessagesContent(
     hasMoreToLoad: Boolean,
     onReachedLoadMore: () -> Unit,
     onBackPressed: () -> Unit,
-    onSendMessage: (CharSequence) -> Unit,
+    onSendMessage: (String) -> Unit,
     composerFullScreen: Boolean,
     onComposerFullScreenChange: () -> Unit,
     onComposerTextChange: (CharSequence) -> Unit,
