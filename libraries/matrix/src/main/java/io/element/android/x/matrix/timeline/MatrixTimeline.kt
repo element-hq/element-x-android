@@ -43,7 +43,7 @@ class MatrixTimeline(
 
     private fun diffFlow(): Flow<Unit> {
         return room.timelineDiff()
-            .chunk(100)
+            .chunk(30)
             .onEach { timelineDiffs ->
                 updateTimelineItems {
                     timelineDiffs.onEach {
@@ -119,10 +119,7 @@ class MatrixTimeline(
      * @param message markdown message
      */
     suspend fun sendMessage(message: String): Result<Unit> {
-        val transactionId = genTransactionId()
-        val content = messageEventContentFromMarkdown(message)
-        room.send(content, transactionId)
-        return Result.success(Unit)
+        return matrixRoom.sendMessage(message)
     }
 
 }

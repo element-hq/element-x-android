@@ -1,6 +1,7 @@
 package io.element.android.x.features.messages.model
 
 import io.element.android.x.designsystem.components.avatar.AvatarData
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemContent
 
 sealed interface MessagesTimelineItemState {
     data class Virtual(
@@ -12,10 +13,10 @@ sealed interface MessagesTimelineItemState {
         val senderId: String,
         val senderDisplayName: String?,
         val senderAvatar: AvatarData,
-        val content: String? = null,
+        val content: MessagesTimelineItemContent,
         val sentTime: String = "",
         val isMine: Boolean = false,
-        val groupPosition: MessagesItemGroupPosition = MessagesItemGroupPosition.None
+        val groupPosition: MessagesItemGroupPosition = MessagesItemGroupPosition.None,
     ) : MessagesTimelineItemState {
 
         val showSenderInformation = groupPosition.isNew() && !isMine
