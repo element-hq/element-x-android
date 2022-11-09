@@ -4,6 +4,7 @@ import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
 import io.element.android.x.features.messages.model.MessagesItemGroupPosition
 import io.element.android.x.features.messages.model.MessagesTimelineItemState
+import io.element.android.x.features.messages.model.content.*
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.MatrixRoom
@@ -61,15 +62,30 @@ class MessageTimelineItemStateMapper(
         )
     }
 
-    private fun MatrixTimelineItem.Event.computeContent(): String? {
-        val messageType =
-            event.content().asMessage()?.msgtype()
-        return when (messageType) {
-            is MessageType.Emote -> messageType.content.body
-            is MessageType.Image -> messageType.content.body
-            is MessageType.Notice -> messageType.content.body
-            is MessageType.Text -> messageType.content.body
-            null -> null
+    private fun MatrixTimelineItem.Event.computeContent(): MessagesTimelineItemContent {
+        val content = event.content()
+        content.asUnableToDecrypt()?.let { encryptedMessage ->
+            return MessagesTimelineItemEncryptedContent(encryptedMessage)
+        }
+        if (content.isRedactedMessage()) {
+            return MessagesTimelineItemRedactedContent
+        }
+        val contentAsMessage = content.asMessage()
+        return when (val messageType = contentAsMessage?.msgtype()) {
+            is MessageType.Emote -> MessagesTimelineItemEmoteContent(
+                body = messageType.content.body,
+                formattedBody = messageType.content.formatted
+            )
+            is MessageType.Image -> MessagesTimelineItemUnknownContent
+            is MessageType.Notice -> MessagesTimelineItemNoticeContent(
+                body = messageType.content.body,
+                formattedBody = messageType.content.formatted
+            )
+            is MessageType.Text -> MessagesTimelineItemTextContent(
+                body = messageType.content.body,
+                formattedBody = messageType.content.formatted
+            )
+            null -> MessagesTimelineItemUnknownContent
         }
     }
 
