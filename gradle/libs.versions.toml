@@ -65,6 +65,7 @@ accompanist_systemui = { module = "com.google.accompanist:accompanist-systemuico
 accompanist_placeholder = { module = "com.google.accompanist:accompanist-placeholder-material", version.ref = "accompanist" }
 accompanist_pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
 accompanist_pagerindicator = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
+accompanist_flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
 
 # Test
 test_junit = { module = "junit:junit", version.ref = "test_junit" }

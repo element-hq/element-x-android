@@ -21,6 +21,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.End
+import androidx.compose.ui.Alignment.Companion.Start
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -36,10 +38,7 @@ import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.core.data.LogCompositions
 import io.element.android.x.core.data.StableCharSequence
 import io.element.android.x.designsystem.components.avatar.AvatarData
-import io.element.android.x.features.messages.components.MessagesTimelineItemEncryptedView
-import io.element.android.x.features.messages.components.MessagesTimelineItemRedactedView
-import io.element.android.x.features.messages.components.MessagesTimelineItemTextView
-import io.element.android.x.features.messages.components.MessagesTimelineItemUnknownView
+import io.element.android.x.features.messages.components.*
 import io.element.android.x.features.messages.model.MessagesItemGroupPosition
 import io.element.android.x.features.messages.model.MessagesTimelineItemState
 import io.element.android.x.features.messages.model.MessagesViewState
@@ -213,25 +212,25 @@ fun MessageEventRow(
     messageEvent: MessagesTimelineItemState.MessageEvent,
     modifier: Modifier = Modifier
 ) {
-    val contentAlignment = if (messageEvent.isMine) {
-        Alignment.CenterEnd
+    val (parentAlignment, contentAlignment) = if (messageEvent.isMine) {
+        Pair(Alignment.CenterEnd, End)
     } else {
-        Alignment.CenterStart
+        Pair(Alignment.CenterStart, Start)
     }
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight(),
-        contentAlignment = contentAlignment
+        contentAlignment = parentAlignment
     ) {
         Row(
             modifier = modifier
-                .widthIn(max = 300.dp)
+                .widthIn(max = 300.dp),
         ) {
             if (!messageEvent.isMine) {
                 Spacer(modifier = Modifier.width(16.dp))
             }
-            Column {
+            Column(horizontalAlignment = contentAlignment) {
                 if (messageEvent.showSenderInformation) {
                     MessageSenderInformation(
                         messageEvent.safeSenderName,
@@ -245,7 +244,7 @@ fun MessageEventRow(
                     modifier = Modifier
                         .zIndex(-1f)
                 ) {
-                    val contentModifier =  Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                    val contentModifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                     when (messageEvent.content) {
                         is MessagesTimelineItemEncryptedContent -> MessagesTimelineItemEncryptedView(
                             content = messageEvent.content,
@@ -265,6 +264,13 @@ fun MessageEventRow(
                         )
                     }
                 }
+                MessagesReactionsView(
+                    reactionsState = messageEvent.reactionsState,
+                    modifier = Modifier
+                        .zIndex(1f)
+                        .offset(x = if (messageEvent.isMine) 0.dp else 20.dp, y = -(16.dp))
+                )
+
             }
             if (messageEvent.isMine) {
                 Spacer(modifier = Modifier.width(16.dp))
