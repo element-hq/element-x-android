@@ -34,6 +34,7 @@ import androidx.compose.ui.zIndex
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.core.data.LogCompositions
+import io.element.android.x.core.data.StableCharSequence
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.messages.model.MessagesItemGroupPosition
 import io.element.android.x.features.messages.model.MessagesTimelineItemState
@@ -58,6 +59,8 @@ fun MessagesScreen(
     val timelineItems by viewModel.collectAsState(MessagesViewState::timelineItems)
     val hasMoreToLoad by viewModel.collectAsState(MessagesViewState::hasMoreToLoad)
     val composerFullScreen by composerViewModel.collectAsState(MessageComposerViewState::isFullScreen)
+    val composerCanSendMessage by composerViewModel.collectAsState(MessageComposerViewState::isSendButtonVisible)
+    val composerText by composerViewModel.collectAsState(MessageComposerViewState::text)
     MessagesContent(
         roomTitle = roomTitle,
         roomAvatar = roomAvatar,
@@ -65,9 +68,15 @@ fun MessagesScreen(
         hasMoreToLoad = hasMoreToLoad,
         onReachedLoadMore = viewModel::loadMore,
         onBackPressed = onBackPressed,
-        onSendMessage = viewModel::sendMessage,
+        onSendMessage = {
+            viewModel.sendMessage(it)
+            composerViewModel.updateText("")
+        },
         composerFullScreen = composerFullScreen,
         onComposerFullScreenChange = composerViewModel::onComposerFullScreenChange,
+        onComposerTextChange = composerViewModel::updateText,
+        composerCanSendMessage = composerCanSendMessage,
+        composerText = composerText,
     )
 }
 
@@ -82,6 +91,9 @@ fun MessagesContent(
     onSendMessage: (CharSequence) -> Unit,
     composerFullScreen: Boolean,
     onComposerFullScreenChange: () -> Unit,
+    onComposerTextChange: (CharSequence) -> Unit,
+    composerCanSendMessage: Boolean,
+    composerText: StableCharSequence?,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Content")
     val lazyListState = rememberLazyListState()
@@ -133,6 +145,9 @@ fun MessagesContent(
                     onSendMessage = onSendMessage,
                     fullscreen = composerFullScreen,
                     onFullscreenToggle = onComposerFullScreenChange,
+                    onComposerTextChange = onComposerTextChange,
+                    composerCanSendMessage = composerCanSendMessage,
+                    composerText = composerText?.charSequence,
                     modifier = Modifier
                         .fillMaxWidth()
                         .let {

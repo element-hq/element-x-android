@@ -3,6 +3,7 @@ package io.element.android.x.features.messages.textcomposer
 import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
+import io.element.android.x.core.data.StableCharSequence
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.MatrixInstance
 
@@ -32,6 +33,15 @@ class MessageComposerViewModel(
         setState {
             copy(
                 isFullScreen = !isFullScreen
+            )
+        }
+    }
+
+    fun updateText(newText: CharSequence) {
+        setState {
+            copy(
+                text = StableCharSequence(newText),
+                isSendButtonVisible = newText.isNotEmpty(),
             )
         }
     }

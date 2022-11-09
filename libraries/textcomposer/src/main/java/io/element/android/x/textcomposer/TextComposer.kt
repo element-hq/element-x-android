@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import io.element.android.x.element.resources.R as ElementR
 
@@ -13,6 +14,9 @@ fun TextComposer(
     modifier: Modifier = Modifier,
     fullscreen: Boolean,
     onFullscreenToggle: () -> Unit,
+    onComposerTextChange: (CharSequence) -> Unit,
+    composerCanSendMessage: Boolean,
+    composerText: CharSequence?,
 ) {
     AndroidView(
         modifier = modifier,
@@ -25,6 +29,7 @@ fun TextComposer(
                     }
 
                     override fun onTextChanged(text: CharSequence) {
+                        onComposerTextChange(text)
                     }
 
                     override fun onCloseRelatedMessage() {
@@ -59,7 +64,8 @@ fun TextComposer(
             // Example of Compose -> View communication
             val messageComposerView = (view as MessageComposerView)
             messageComposerView.toggleFullScreen(fullscreen)
-            messageComposerView.sendButton.isVisible = true
+            messageComposerView.sendButton.isInvisible = !composerCanSendMessage
+            messageComposerView.setTextIfDifferent(composerText ?: "")
         }
     )
 }
