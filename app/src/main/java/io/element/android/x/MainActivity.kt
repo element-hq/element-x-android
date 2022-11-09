@@ -15,6 +15,7 @@ import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.rememberNavHostEngine
 import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.destinations.LoginScreenNavigationDestination
+import io.element.android.x.destinations.OnBoardingScreenNavigationDestination
 import kotlinx.coroutines.runBlocking
 
 class MainActivity : ComponentActivity() {
@@ -37,7 +38,7 @@ private fun MainScreen(viewModel: MainViewModel) {
     val navController = engine.rememberNavController()
     val startRoute = runBlocking {
         if (!viewModel.isLoggedIn()) {
-            LoginScreenNavigationDestination
+            OnBoardingScreenNavigationDestination
         } else {
             viewModel.restoreSession()
             NavGraphs.root.startRoute

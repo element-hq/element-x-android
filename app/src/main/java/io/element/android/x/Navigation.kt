@@ -8,10 +8,25 @@ import com.ramcosta.composedestinations.navigation.popUpTo
 import io.element.android.x.destinations.LoginScreenNavigationDestination
 import io.element.android.x.destinations.MessagesScreenNavigationDestination
 import io.element.android.x.destinations.RoomListScreenNavigationDestination
+import io.element.android.x.destinations.OnBoardingScreenNavigationDestination
 import io.element.android.x.features.login.LoginScreen
 import io.element.android.x.features.messages.MessagesScreen
+import io.element.android.x.features.onboarding.OnBoardingScreen
 import io.element.android.x.features.roomlist.RoomListScreen
 import io.element.android.x.matrix.core.RoomId
+
+@Destination
+@Composable
+fun OnBoardingScreenNavigation(navigator: DestinationsNavigator) {
+    OnBoardingScreen(
+        onSignUp = {
+            // TODO
+        },
+        onSignIn = {
+            navigator.navigate(LoginScreenNavigationDestination)
+        }
+    )
+}
 
 @Destination
 @Composable
@@ -19,7 +34,7 @@ fun LoginScreenNavigation(navigator: DestinationsNavigator) {
     LoginScreen(
         onLoginWithSuccess = {
             navigator.navigate(RoomListScreenNavigationDestination) {
-                popUpTo(LoginScreenNavigationDestination) {
+                popUpTo(OnBoardingScreenNavigationDestination) {
                     inclusive = true
                 }
             }
@@ -36,7 +51,7 @@ fun RoomListScreenNavigation(navigator: DestinationsNavigator) {
             navigator.navigate(MessagesScreenNavigationDestination(roomId = roomId.value))
         },
         onSuccessLogout = {
-            navigator.navigate(LoginScreenNavigationDestination) {
+            navigator.navigate(OnBoardingScreenNavigationDestination) {
                 popUpTo(RoomListScreenNavigationDestination) {
                     inclusive = true
                 }

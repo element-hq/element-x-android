@@ -9,3 +9,5 @@ class StableCharSequence(val charSequence: CharSequence) {
     override fun hashCode() = hash
     override fun equals(other: Any?) = other is StableCharSequence && other.hash == hash
 }
+
+fun CharSequence.toStableCharSequence() = StableCharSequence(this)
