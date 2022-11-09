@@ -36,9 +36,17 @@ import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.core.data.LogCompositions
 import io.element.android.x.core.data.StableCharSequence
 import io.element.android.x.designsystem.components.avatar.AvatarData
+import io.element.android.x.features.messages.components.MessagesTimelineItemEncryptedView
+import io.element.android.x.features.messages.components.MessagesTimelineItemRedactedView
+import io.element.android.x.features.messages.components.MessagesTimelineItemTextView
+import io.element.android.x.features.messages.components.MessagesTimelineItemUnknownView
 import io.element.android.x.features.messages.model.MessagesItemGroupPosition
 import io.element.android.x.features.messages.model.MessagesTimelineItemState
 import io.element.android.x.features.messages.model.MessagesViewState
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemEncryptedContent
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemRedactedContent
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemTextBasedContent
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemUnknownContent
 import io.element.android.x.features.messages.textcomposer.MessageComposerViewModel
 import io.element.android.x.features.messages.textcomposer.MessageComposerViewState
 import io.element.android.x.textcomposer.TextComposer
@@ -231,7 +239,32 @@ fun MessageEventRow(
                         Modifier.zIndex(1f)
                     )
                 }
-                MessageEventBubble(messageEvent, Modifier.zIndex(-1f))
+                MessageEventBubble(
+                    groupPosition = messageEvent.groupPosition,
+                    isMine = messageEvent.isMine,
+                    modifier = Modifier
+                        .zIndex(-1f)
+                ) {
+                    val contentModifier =  Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                    when (messageEvent.content) {
+                        is MessagesTimelineItemEncryptedContent -> MessagesTimelineItemEncryptedView(
+                            content = messageEvent.content,
+                            modifier = contentModifier
+                        )
+                        is MessagesTimelineItemRedactedContent -> MessagesTimelineItemRedactedView(
+                            content = messageEvent.content,
+                            modifier = contentModifier
+                        )
+                        is MessagesTimelineItemTextBasedContent -> MessagesTimelineItemTextView(
+                            content = messageEvent.content,
+                            modifier = contentModifier
+                        )
+                        is MessagesTimelineItemUnknownContent -> MessagesTimelineItemUnknownView(
+                            content = messageEvent.content,
+                            modifier = contentModifier
+                        )
+                    }
+                }
             }
             if (messageEvent.isMine) {
                 Spacer(modifier = Modifier.width(16.dp))
@@ -267,10 +300,12 @@ private fun MessageSenderInformation(
 
 @Composable
 fun MessageEventBubble(
-    messageEvent: MessagesTimelineItemState.MessageEvent,
+    groupPosition: MessagesItemGroupPosition,
+    isMine: Boolean,
     modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
 ) {
-    fun MessagesTimelineItemState.MessageEvent.bubbleShape(): Shape {
+    fun bubbleShape(): Shape {
         return when (groupPosition) {
             MessagesItemGroupPosition.First -> if (isMine) {
                 RoundedCornerShape(BUBBLE_RADIUS, BUBBLE_RADIUS, 0.dp, BUBBLE_RADIUS)
@@ -297,15 +332,15 @@ fun MessageEventBubble(
         }
     }
 
-    fun Modifier.offsetForItem(messageEvent: MessagesTimelineItemState.MessageEvent): Modifier {
-        return if (messageEvent.isMine) {
+    fun Modifier.offsetForItem(): Modifier {
+        return if (isMine) {
             offset(y = -(12.dp))
         } else {
             offset(x = 20.dp, y = -(12.dp))
         }
     }
 
-    val (backgroundBubbleColor, border) = if (messageEvent.isMine) {
+    val (backgroundBubbleColor, border) = if (isMine) {
         Pair(MaterialTheme.colorScheme.surfaceVariant, null)
     } else {
         Pair(
@@ -313,12 +348,11 @@ fun MessageEventBubble(
             BorderStroke(1.dp, MaterialTheme.colorScheme.surfaceVariant)
         )
     }
-
-    val bubbleShape = messageEvent.bubbleShape()
+    val bubbleShape = bubbleShape()
     Surface(
         modifier = modifier
             .widthIn(min = 80.dp)
-            .offsetForItem(messageEvent)
+            .offsetForItem()
             .clip(bubbleShape)
             .clickable(
                 onClick = { },
@@ -327,13 +361,9 @@ fun MessageEventBubble(
             ),
         color = backgroundBubbleColor,
         shape = bubbleShape,
-        border = border
-    ) {
-        Text(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-            text = messageEvent.content ?: "",
-        )
-    }
+        border = border,
+        content = content
+    )
 }
 
 @Composable
