@@ -96,7 +96,8 @@ class MessageTimelineItemStateMapper(
                 body = messageType.content.body,
                 formattedBody = messageType.content.formatted
             )
-            null -> MessagesTimelineItemUnknownContent
+            else -> MessagesTimelineItemUnknownContent
+
         }
     }
 
