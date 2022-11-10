@@ -1,6 +1,6 @@
 package io.element.android.x.matrix
 
-import io.element.android.x.core.data.CoroutineDispatchers
+import io.element.android.x.core.coroutine.CoroutineDispatchers
 import io.element.android.x.matrix.core.UserId
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.media.RustMediaResolver
@@ -14,6 +14,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.*
 import timber.log.Timber
 import java.io.Closeable
+import java.util.concurrent.atomic.AtomicBoolean
 
 class MatrixClient internal constructor(
     private val client: Client,
@@ -67,6 +68,7 @@ class MatrixClient internal constructor(
     private var slidingSyncObserverToken: StoppableSpawn? = null
 
     private val mediaResolver = RustMediaResolver(this)
+    private val isSyncing = AtomicBoolean(false)
 
     init {
         client.setDelegate(clientDelegate)
@@ -84,15 +86,19 @@ class MatrixClient internal constructor(
     }
 
     fun startSync() {
-        roomSummaryDataSource.startSync()
-        slidingSync.setObserver(slidingSyncObserverProxy)
-        slidingSyncObserverToken = slidingSync.sync()
+        if (isSyncing.compareAndSet(false, true)) {
+            roomSummaryDataSource.startSync()
+            slidingSync.setObserver(slidingSyncObserverProxy)
+            slidingSyncObserverToken = slidingSync.sync()
+        }
     }
 
     fun stopSync() {
-        roomSummaryDataSource.stopSync()
-        slidingSync.setObserver(null)
-        slidingSyncObserverToken?.cancel()
+        if (isSyncing.compareAndSet(true, false)) {
+            roomSummaryDataSource.stopSync()
+            slidingSync.setObserver(null)
+            slidingSyncObserverToken?.cancel()
+        }
     }
 
     fun roomSummaryDataSource(): RoomSummaryDataSource = roomSummaryDataSource

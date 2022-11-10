@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
-import io.element.android.x.core.data.LogCompositions
+import io.element.android.x.core.compose.LogCompositions
 import io.element.android.x.features.roomlist.model.MatrixUser
 
 @Composable

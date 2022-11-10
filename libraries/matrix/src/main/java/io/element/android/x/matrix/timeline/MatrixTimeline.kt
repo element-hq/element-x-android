@@ -1,6 +1,6 @@
 package io.element.android.x.matrix.timeline
 
-import io.element.android.x.core.data.CoroutineDispatchers
+import io.element.android.x.core.coroutine.CoroutineDispatchers
 import io.element.android.x.core.data.flow.chunk
 import io.element.android.x.matrix.core.EventId
 import io.element.android.x.matrix.room.MatrixRoom

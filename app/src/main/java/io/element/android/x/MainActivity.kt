@@ -11,12 +11,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.Lifecycle
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.rememberNavHostEngine
+import io.element.android.x.core.compose.OnLifecycleEvent
 import io.element.android.x.designsystem.ElementXTheme
-import io.element.android.x.destinations.LoginScreenNavigationDestination
 import io.element.android.x.destinations.OnBoardingScreenNavigationDestination
 import kotlinx.coroutines.runBlocking
+import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
 
@@ -52,4 +54,8 @@ private fun MainScreen(viewModel: MainViewModel) {
         navGraph = NavGraphs.root,
         startRoute = startRoute
     )
+
+    OnLifecycleEvent { _, event ->
+        Timber.v("OnLifecycleEvent: $event")
+    }
 }
