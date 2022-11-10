@@ -1,6 +1,8 @@
 package io.element.android.x.features.roomlist
 
 import com.airbnb.mvrx.MavericksViewModel
+import com.airbnb.mvrx.MavericksViewModelFactory
+import com.airbnb.mvrx.ViewModelContext
 import io.element.android.x.core.data.parallelMap
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
@@ -13,66 +15,76 @@ import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.RoomSummary
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
 
-class RoomListViewModel(initialState: RoomListViewState) :
+class RoomListViewModel(
+    private val client: MatrixClient,
+    initialState: RoomListViewState
+) :
     MavericksViewModel<RoomListViewState>(initialState) {
 
-    private val matrix = MatrixInstance.getInstance()
+    companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> {
+
+        override fun create(
+            viewModelContext: ViewModelContext,
+            state: RoomListViewState
+        ): RoomListViewModel {
+            val matrix = MatrixInstance.getInstance()
+            val client = matrix.activeClient()
+            return RoomListViewModel(
+                client,
+                state
+            )
+        }
+    }
+
     private val lastMessageFormatter = LastMessageFormatter()
 
     init {
         handleInit()
     }
 
-    fun handle(action: RoomListActions) {
-        when (action) {
-            RoomListActions.Logout -> handleLogout()
-        }
-    }
-
     fun logout() {
-        handleLogout()
+        viewModelScope.launch {
+            suspend {
+                delay(2000)
+                client.logout()
+            }.execute {
+                copy(logoutAction = it)
+            }
+        }
     }
 
     private fun handleInit() {
-        viewModelScope.launch {
-            val client = getClient()
-            suspend {
-                val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
-                val userDisplayName = client.loadUserDisplayName().getOrNull()
-                val avatarData =
-                    loadAvatarData(
-                        client,
-                        userDisplayName ?: client.userId().value,
-                        userAvatarUrl,
-                        AvatarSize.SMALL
-                    )
-                MatrixUser(
-                    username = userDisplayName ?: client.userId().value,
-                    avatarUrl = userAvatarUrl,
-                    avatarData = avatarData,
+        suspend {
+            val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
+            val userDisplayName = client.loadUserDisplayName().getOrNull()
+            val avatarData =
+                loadAvatarData(
+                    userDisplayName ?: client.userId().value,
+                    userAvatarUrl,
+                    AvatarSize.SMALL
                 )
-            }.execute {
-                copy(user = it)
-            }
-            client.roomSummaryDataSource().roomSummaries()
-                .map { roomSummaries ->
-                    mapRoomSummaries(client, roomSummaries)
-                }
-                .flowOn(Dispatchers.Default)
-                .execute {
-                    copy(rooms = it)
-                }
+            MatrixUser(
+                username = userDisplayName ?: client.userId().value,
+                avatarUrl = userAvatarUrl,
+                avatarData = avatarData,
+            )
+        }.execute {
+            copy(user = it)
         }
+
+        client.roomSummaryDataSource().roomSummaries()
+            .map(::mapRoomSummaries)
+            .flowOn(Dispatchers.Default)
+            .execute {
+                copy(rooms = it)
+            }
     }
 
     private suspend fun mapRoomSummaries(
-        client: MatrixClient,
         roomSummaries: List<RoomSummary>
     ): List<RoomListRoomSummary> {
         return roomSummaries.parallelMap { roomSummary ->
@@ -80,7 +92,6 @@ class RoomListViewModel(initialState: RoomListViewState) :
                 is RoomSummary.Empty -> RoomListRoomSummary.placeholder(roomSummary.identifier)
                 is RoomSummary.Filled -> {
                     val avatarData = loadAvatarData(
-                        client,
                         roomSummary.details.name,
                         roomSummary.details.avatarURLString
                     )
@@ -98,7 +109,6 @@ class RoomListViewModel(initialState: RoomListViewState) :
     }
 
     private suspend fun loadAvatarData(
-        client: MatrixClient,
         name: String,
         url: String?,
         size: AvatarSize = AvatarSize.MEDIUM
@@ -108,22 +118,4 @@ class RoomListViewModel(initialState: RoomListViewState) :
         return AvatarData(name, model, size)
     }
 
-    private fun handleLogout() {
-        viewModelScope.launch {
-            suspend {
-                delay(2000)
-                getClient().logout()
-            }.execute {
-                copy(logoutAction = it)
-            }
-        }
-    }
-
-    private suspend fun getClient(): MatrixClient {
-        return matrix.client().first().get()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-    }
 }
