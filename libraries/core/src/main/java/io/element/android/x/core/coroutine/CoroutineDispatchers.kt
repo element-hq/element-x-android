@@ -1,4 +1,4 @@
-package io.element.android.x.core.data
+package io.element.android.x.core.coroutine
 
 import kotlinx.coroutines.CoroutineDispatcher
 

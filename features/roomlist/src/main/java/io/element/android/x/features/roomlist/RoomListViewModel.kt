@@ -42,7 +42,6 @@ class RoomListViewModel(initialState: RoomListViewState) :
     private fun handleInit() {
         viewModelScope.launch {
             val client = getClient()
-            client.startSync()
             suspend {
                 val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
                 val userDisplayName = client.loadUserDisplayName().getOrNull()

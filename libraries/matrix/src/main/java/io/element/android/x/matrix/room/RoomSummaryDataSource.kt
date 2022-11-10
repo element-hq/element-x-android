@@ -1,19 +1,16 @@
 package io.element.android.x.matrix.room
 
-import io.element.android.x.core.data.CoroutineDispatchers
+import io.element.android.x.core.coroutine.CoroutineDispatchers
 import io.element.android.x.core.data.flow.chunk
-import io.element.android.x.matrix.room.message.RoomMessageFactory
 import io.element.android.x.matrix.sync.roomListDiff
 import io.element.android.x.matrix.sync.state
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.matrix.rustcomponents.sdk.*
 import timber.log.Timber
 import java.io.Closeable
 import java.util.*
+import java.util.concurrent.Executors
 
 interface RoomSummaryDataSource {
     fun roomSummaries(): Flow<List<RoomSummary>>
@@ -27,33 +24,43 @@ internal class RustRoomSummaryDataSource(
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory()
 ) : RoomSummaryDataSource, Closeable {
 
-    private val coroutineScope = CoroutineScope(SupervisorJob() + coroutineDispatchers.io)
+    private val singleDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+
+    private val coroutineScope = CoroutineScope(SupervisorJob() + singleDispatcher)
 
     private val roomSummaries = MutableStateFlow<List<RoomSummary>>(emptyList())
     private val state = MutableStateFlow(SlidingSyncState.COLD)
 
+    fun startSync() {
+        coroutineScope.launch {
+            updateRoomSummaries {
+                clear()
+                addAll(
+                    slidingSyncView.currentRoomsList().map(::buildSummaryForRoomListEntry)
+                )
+            }
 
-    fun startSync(){
-        slidingSyncView.roomListDiff()
-            .chunk(100)
-            .onEach { diffs ->
-                updateRoomSummaries {
-                    diffs.forEach {
-                        applyDiff(it)
+            slidingSyncView.roomListDiff()
+                .chunk(30)
+                .onEach { diffs ->
+                    updateRoomSummaries {
+                        diffs.forEach {
+                            applyDiff(it)
+                        }
                     }
-                }
-            }.launchIn(coroutineScope)
+                }.collect()
 
-        slidingSyncView.state()
-            .onEach { slidingSyncState ->
-                Timber.v("New sliding sync state: $slidingSyncState")
-                state.value = slidingSyncState
-            }.launchIn(coroutineScope)
+            slidingSyncView.state()
+                .onEach { slidingSyncState ->
+                    Timber.v("New sliding sync state: $slidingSyncState")
+                    state.value = slidingSyncState
+                }.collect()
 
-        slidingSyncUpdateFlow
-            .onEach {
-                didReceiveSyncUpdate(it)
-            }.launchIn(coroutineScope)
+            slidingSyncUpdateFlow
+                .onEach {
+                    didReceiveSyncUpdate(it)
+                }.collect()
+        }
     }
 
     fun stopSync() {

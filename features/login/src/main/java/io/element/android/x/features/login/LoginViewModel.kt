@@ -22,7 +22,7 @@ class LoginViewModel(initialState: LoginViewState) :
         viewModelScope.launch {
             suspend {
                 matrix.login(state.homeserver, state.login, state.password)
-                Unit
+                matrix.activeClient().startSync()
             }.execute {
                 copy(isLoggedIn = it)
             }

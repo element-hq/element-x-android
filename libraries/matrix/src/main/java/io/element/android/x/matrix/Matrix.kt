@@ -1,7 +1,7 @@
 package io.element.android.x.matrix
 
 import android.content.Context
-import io.element.android.x.core.data.CoroutineDispatchers
+import io.element.android.x.core.coroutine.CoroutineDispatchers
 import io.element.android.x.matrix.session.SessionStore
 import io.element.android.x.matrix.util.logError
 import kotlinx.coroutines.CoroutineScope

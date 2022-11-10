@@ -1,4 +1,4 @@
-package io.element.android.x.core.data
+package io.element.android.x.core.compose
 
 import android.util.Log
 import androidx.compose.runtime.Composable

@@ -1,6 +1,6 @@
 package io.element.android.x.matrix.room
 
-import io.element.android.x.core.data.CoroutineDispatchers
+import io.element.android.x.core.coroutine.CoroutineDispatchers
 import io.element.android.x.matrix.core.RoomId
 import io.element.android.x.matrix.core.UserId
 import io.element.android.x.matrix.timeline.MatrixTimeline
