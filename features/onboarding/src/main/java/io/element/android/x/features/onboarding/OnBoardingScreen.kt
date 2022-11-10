@@ -77,6 +77,7 @@ fun OnBoardingContent(
                         .align(CenterHorizontally)
                         .padding(16.dp),
                 )
+                /*
                 VectorButton(
                     text = "CREATE ACCOUNT",
                     onClick = {
@@ -87,8 +88,9 @@ fun OnBoardingContent(
                         .align(CenterHorizontally)
                         .padding(top = 16.dp)
                 )
+                 */
                 VectorButton(
-                    text = "I ALREADY HAVE AN ACCOUNT",
+                    text = "Sign in",
                     onClick = {
                         onSignIn()
                     },
