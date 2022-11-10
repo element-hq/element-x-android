@@ -32,7 +32,7 @@ class MatrixTimeline(
     fun timelineItems(): Flow<List<MatrixTimelineItem>> {
         return diffFlow().combine(timelineItems) { _, _ ->
             timelineItems.value
-        }
+        }.sample(50)
     }
 
     val hasMoreToLoad: Boolean
@@ -43,50 +43,56 @@ class MatrixTimeline(
 
     private fun diffFlow(): Flow<Unit> {
         return room.timelineDiff()
-            .chunk(30)
             .onEach { timelineDiffs ->
+                //Timber.v("Apply ${timelineDiffs.size} diffs on thread: ${Thread.currentThread()}")
                 updateTimelineItems {
-                    timelineDiffs.onEach {
-                        applyDiff(it)
-                    }
+                    applyDiff(timelineDiffs)
                 }
             }.map { }
+            .flowOn(coroutineDispatchers.computation)
     }
 
     private fun MutableList<MatrixTimelineItem>.applyDiff(diff: TimelineDiff) {
-        Timber.v("ApplyDiff: ${diff.change()} for list with size: $size")
         when (diff.change()) {
             TimelineChange.PUSH -> {
+                Timber.v("Apply push on list with size: $size")
                 val item = diff.push()?.asMatrixTimelineItem() ?: return
                 add(item)
             }
             TimelineChange.UPDATE_AT -> {
                 val updateAtData = diff.updateAt() ?: return
+                Timber.v("Apply $updateAtData on list with size: $size")
                 val item = updateAtData.item.asMatrixTimelineItem()
                 set(updateAtData.index.toInt(), item)
             }
             TimelineChange.INSERT_AT -> {
                 val insertAtData = diff.insertAt() ?: return
+                Timber.v("Apply $insertAtData on list with size: $size")
                 val item = insertAtData.item.asMatrixTimelineItem()
                 add(insertAtData.index.toInt(), item)
             }
             TimelineChange.MOVE -> {
                 val moveData = diff.move() ?: return
+                Timber.v("Apply $moveData on list with size: $size")
                 Collections.swap(this, moveData.oldIndex.toInt(), moveData.newIndex.toInt())
             }
             TimelineChange.REMOVE_AT -> {
                 val removeAtData = diff.removeAt() ?: return
+                Timber.v("Apply $removeAtData on list with size: $size")
                 removeAt(removeAtData.toInt())
             }
             TimelineChange.REPLACE -> {
+                Timber.v("Apply REPLACE on list with size: $size")
                 clear()
                 val items = diff.replace()?.map { it.asMatrixTimelineItem() } ?: return
                 addAll(items)
             }
             TimelineChange.POP -> {
+                Timber.v("Apply POP on list with size: $size")
                 removeLast()
             }
             TimelineChange.CLEAR -> {
+                Timber.v("Apply CLEAR on list with size: $size")
                 clear()
             }
         }

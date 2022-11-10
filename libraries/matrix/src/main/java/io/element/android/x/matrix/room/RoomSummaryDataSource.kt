@@ -1,7 +1,6 @@
 package io.element.android.x.matrix.room
 
 import io.element.android.x.core.coroutine.CoroutineDispatchers
-import io.element.android.x.core.data.flow.chunk
 import io.element.android.x.matrix.sync.roomListDiff
 import io.element.android.x.matrix.sync.state
 import kotlinx.coroutines.*
@@ -25,7 +24,6 @@ internal class RustRoomSummaryDataSource(
 ) : RoomSummaryDataSource, Closeable {
 
     private val singleDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-
     private val coroutineScope = CoroutineScope(SupervisorJob() + singleDispatcher)
 
     private val roomSummaries = MutableStateFlow<List<RoomSummary>>(emptyList())
@@ -41,12 +39,9 @@ internal class RustRoomSummaryDataSource(
             }
 
             slidingSyncView.roomListDiff()
-                .chunk(30)
                 .onEach { diffs ->
                     updateRoomSummaries {
-                        diffs.forEach {
-                            applyDiff(it)
-                        }
+                        applyDiff(diffs)
                     }
                 }.collect()
 
@@ -72,7 +67,7 @@ internal class RustRoomSummaryDataSource(
     }
 
     override fun roomSummaries(): Flow<List<RoomSummary>> {
-        return roomSummaries.sample(100)
+        return roomSummaries.sample(50)
     }
 
     private fun didReceiveSyncUpdate(summary: UpdateSummary) {
