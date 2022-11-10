@@ -8,9 +8,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -26,6 +24,8 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import io.element.android.x.designsystem.components.VectorButton
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun OnBoardingScreen(
@@ -36,6 +36,7 @@ fun OnBoardingScreen(
     val state: OnBoardingViewState by viewModel.collectAsState()
     OnBoardingContent(
         state,
+        onPageChanged = viewModel::onPageChanged,
         onSignUp = onSignUp,
         onSignIn = onSignIn,
     )
@@ -46,10 +47,13 @@ fun OnBoardingScreen(
 @Composable
 fun OnBoardingContent(
     state: OnBoardingViewState,
+    onPageChanged: (Int) -> Unit,
     onSignUp: () -> Unit,
     onSignIn: () -> Unit,
 ) {
     val carrouselState = remember { SplashCarouselStateFactory().create() }
+    val nbOfPages = carrouselState.items.size
+    var key by remember { mutableStateOf(false) }
     Surface(
         color = MaterialTheme.colorScheme.background,
     ) {
@@ -62,10 +66,23 @@ fun OnBoardingContent(
                 modifier = Modifier.fillMaxSize(),
             ) {
                 val pagerState = rememberPagerState()
-                // pagerState.scrollToPage(state.currentPage)
+                LaunchedEffect(key) {
+                    launch {
+                        delay(3_000)
+                        pagerState.animateScrollToPage((pagerState.currentPage + 1) % nbOfPages)
+                        // https://stackoverflow.com/questions/73714228/accompanist-pager-animatescrolltopage-doesnt-scroll-to-next-page-correctly
+                        key = !key
+                    }
+                }
+                LaunchedEffect(pagerState) {
+                    // Collect from the pager state a snapshotFlow reading the currentPage
+                    snapshotFlow { pagerState.currentPage }.collect { page ->
+                        onPageChanged(page)
+                    }
+                }
                 HorizontalPager(
                     modifier = Modifier.weight(1f),
-                    count = carrouselState.items.size,
+                    count = nbOfPages,
                     state = pagerState,
                 ) { page ->
                     // Our page content
