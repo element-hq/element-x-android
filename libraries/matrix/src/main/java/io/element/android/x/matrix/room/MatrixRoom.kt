@@ -4,6 +4,7 @@ import io.element.android.x.core.coroutine.CoroutineDispatchers
 import io.element.android.x.matrix.core.RoomId
 import io.element.android.x.matrix.core.UserId
 import io.element.android.x.matrix.timeline.MatrixTimeline
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
@@ -15,6 +16,7 @@ class MatrixRoom(
     private val slidingSyncUpdateFlow: Flow<UpdateSummary>,
     private val slidingSyncRoom: SlidingSyncRoom,
     private val room: Room,
+    private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) {
 
@@ -28,7 +30,7 @@ class MatrixRoom(
     }
 
     fun timeline(): MatrixTimeline {
-        return MatrixTimeline(this, room, coroutineDispatchers)
+        return MatrixTimeline(this, room, coroutineScope, coroutineDispatchers)
     }
 
     val roomId = RoomId(room.id())

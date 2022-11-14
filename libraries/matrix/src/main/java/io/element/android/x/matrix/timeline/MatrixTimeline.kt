@@ -1,11 +1,13 @@
 package io.element.android.x.matrix.timeline
 
 import io.element.android.x.core.coroutine.CoroutineDispatchers
-import io.element.android.x.core.data.flow.chunk
 import io.element.android.x.matrix.core.EventId
 import io.element.android.x.matrix.room.MatrixRoom
-import io.element.android.x.matrix.room.timelineDiff
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.sample
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.*
 import timber.log.Timber
@@ -14,8 +16,9 @@ import java.util.*
 class MatrixTimeline(
     private val matrixRoom: MatrixRoom,
     private val room: Room,
+    private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
-) {
+) : TimelineListener {
     interface Callback {
         fun onUpdatedTimelineItem(eventId: EventId)
         fun onStartedBackPaginating()
@@ -30,9 +33,7 @@ class MatrixTimeline(
 
 
     fun timelineItems(): Flow<List<MatrixTimelineItem>> {
-        return diffFlow().combine(timelineItems) { _, _ ->
-            timelineItems.value
-        }.sample(50)
+        return timelineItems.sample(50)
     }
 
     val hasMoreToLoad: Boolean
@@ -40,17 +41,6 @@ class MatrixTimeline(
             return paginationOutcome.value.moreMessages
         }
 
-
-    private fun diffFlow(): Flow<Unit> {
-        return room.timelineDiff()
-            .onEach { timelineDiffs ->
-                //Timber.v("Apply ${timelineDiffs.size} diffs on thread: ${Thread.currentThread()}")
-                updateTimelineItems {
-                    applyDiff(timelineDiffs)
-                }
-            }.map { }
-            .flowOn(coroutineDispatchers.computation)
-    }
 
     private fun MutableList<MatrixTimelineItem>.applyDiff(diff: TimelineDiff) {
         when (diff.change()) {
@@ -107,14 +97,19 @@ class MatrixTimeline(
         }
     }
 
-    private fun updateTimelineItems(block: MutableList<MatrixTimelineItem>.() -> Unit) {
-        val mutableTimelineItems = timelineItems.value.toMutableList()
-        block(mutableTimelineItems)
-        timelineItems.value = mutableTimelineItems
-    }
+    private suspend fun updateTimelineItems(block: MutableList<MatrixTimelineItem>.() -> Unit) =
+        withContext(coroutineDispatchers.diffUpdateDispatcher) {
+            val mutableTimelineItems = timelineItems.value.toMutableList()
+            block(mutableTimelineItems)
+            timelineItems.value = mutableTimelineItems
+        }
 
     fun addListener(timelineListener: TimelineListener) {
         room.addTimelineListener(timelineListener)
+    }
+
+    fun initialize() {
+        addListener(this)
     }
 
     fun dispose() {
@@ -126,6 +121,14 @@ class MatrixTimeline(
      */
     suspend fun sendMessage(message: String): Result<Unit> {
         return matrixRoom.sendMessage(message)
+    }
+
+    override fun onUpdate(update: TimelineDiff) {
+        coroutineScope.launch {
+            updateTimelineItems {
+                applyDiff(update)
+            }
+        }
     }
 
 }
