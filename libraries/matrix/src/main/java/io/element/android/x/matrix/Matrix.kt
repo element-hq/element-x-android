@@ -6,14 +6,15 @@ import io.element.android.x.matrix.session.SessionStore
 import io.element.android.x.matrix.util.logError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.AuthenticationService
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import java.io.File
 import java.util.*
+import java.util.concurrent.Executors
 
 class Matrix(
     private val coroutineScope: CoroutineScope,
@@ -22,7 +23,8 @@ class Matrix(
     private val coroutineDispatchers = CoroutineDispatchers(
         io = Dispatchers.IO,
         computation = Dispatchers.Default,
-        main = Dispatchers.Main
+        main = Dispatchers.Main,
+        diffUpdateDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
     )
     private val baseFolder = File(context.filesDir, "matrix")
     private val sessionStore = SessionStore(context)
