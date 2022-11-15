@@ -7,7 +7,6 @@ import io.element.android.x.matrix.util.logError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.AuthenticationService
 import org.matrix.rustcomponents.sdk.Client
@@ -27,6 +26,7 @@ class Matrix(
     private val baseFolder = File(context.filesDir, "matrix")
     private val sessionStore = SessionStore(context)
     private val matrixClient = MutableStateFlow<Optional<MatrixClient>>(Optional.empty())
+    private val authService = AuthenticationService(baseFolder.absolutePath)
 
     init {
         sessionStore.isLoggedIn()
@@ -70,10 +70,14 @@ class Matrix(
             }
     }
 
-    suspend fun login(homeserver: String, username: String, password: String): MatrixClient =
+    suspend fun setHomeserver(homeserver: String) {
         withContext(coroutineDispatchers.io) {
-            val authService = AuthenticationService(baseFolder.absolutePath)
             authService.configureHomeserver(homeserver)
+        }
+    }
+
+    suspend fun login(username: String, password: String): MatrixClient =
+        withContext(coroutineDispatchers.io) {
             val client = authService.login(username, password, "MatrixRustSDKSample", null)
             sessionStore.storeData(client.session())
             createMatrixClient(client)
