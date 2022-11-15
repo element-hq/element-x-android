@@ -5,11 +5,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
-import io.element.android.x.destinations.LoginScreenNavigationDestination
-import io.element.android.x.destinations.MessagesScreenNavigationDestination
-import io.element.android.x.destinations.RoomListScreenNavigationDestination
-import io.element.android.x.destinations.OnBoardingScreenNavigationDestination
+import io.element.android.x.destinations.*
 import io.element.android.x.features.login.LoginScreen
+import io.element.android.x.features.login.changeserver.ChangeServerScreen
 import io.element.android.x.features.messages.MessagesScreen
 import io.element.android.x.features.onboarding.OnBoardingScreen
 import io.element.android.x.features.roomlist.RoomListScreen
@@ -32,12 +30,27 @@ fun OnBoardingScreenNavigation(navigator: DestinationsNavigator) {
 @Composable
 fun LoginScreenNavigation(navigator: DestinationsNavigator) {
     LoginScreen(
+        homeserver = "matrix.org",
+        onChangeServer = {
+            navigator.navigate(ChangeServerScreenNavigationDestination)
+        },
         onLoginWithSuccess = {
             navigator.navigate(RoomListScreenNavigationDestination) {
                 popUpTo(OnBoardingScreenNavigationDestination) {
                     inclusive = true
                 }
             }
+        }
+    )
+}
+
+// TODO Create a subgraph in Login module
+@Destination
+@Composable
+fun ChangeServerScreenNavigation(navigator: DestinationsNavigator) {
+    ChangeServerScreen(
+        onChangeServerSuccess = {
+            navigator.popBackStack()
         }
     )
 }

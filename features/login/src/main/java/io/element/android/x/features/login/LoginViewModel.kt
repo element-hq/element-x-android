@@ -1,27 +1,28 @@
 package io.element.android.x.features.login
 
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModel
+import com.airbnb.mvrx.Uninitialized
 import io.element.android.x.matrix.MatrixInstance
 import kotlinx.coroutines.launch
 
 class LoginViewModel(initialState: LoginViewState) :
     MavericksViewModel<LoginViewState>(initialState) {
 
+    lateinit var homeserver: String
+
     private val matrix = MatrixInstance.getInstance()
 
-    fun handle(action: LoginActions) {
-        when (action) {
-            is LoginActions.SetHomeserver -> handleSetHomeserver(action)
-            is LoginActions.SetLogin -> handleSetName(action)
-            is LoginActions.SetPassword -> handleSetPassword(action)
-            LoginActions.Submit -> handleSubmit()
+    fun onSubmit() = withState { state ->
+        setState {
+            copy(isLoggedIn = Loading())
         }
-    }
 
-    private fun handleSubmit() = withState { state ->
         viewModelScope.launch {
             suspend {
-                matrix.login(state.homeserver, state.login, state.password)
+                // Ensure the server is passed to the Rust SDK
+                matrix.setHomeserver(homeserver)
+                matrix.login(state.login, state.password)
                 matrix.activeClient().startSync()
             }.execute {
                 copy(isLoggedIn = it)
@@ -29,15 +30,21 @@ class LoginViewModel(initialState: LoginViewState) :
         }
     }
 
-    private fun handleSetHomeserver(action: LoginActions.SetHomeserver) {
-        setState { copy(homeserver = action.homeserver) }
+    fun onSetPassword(password: String) {
+        setState {
+            copy(
+                password = password,
+                isLoggedIn = Uninitialized,
+            )
+        }
     }
 
-    private fun handleSetPassword(action: LoginActions.SetPassword) {
-        setState { copy(password = action.password) }
-    }
-
-    private fun handleSetName(action: LoginActions.SetLogin) {
-        setState { copy(login = action.login) }
+    fun onSetName(name: String) {
+        setState {
+            copy(
+                login = name,
+                isLoggedIn = Uninitialized,
+            )
+        }
     }
 }
