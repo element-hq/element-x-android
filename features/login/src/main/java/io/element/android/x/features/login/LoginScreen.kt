@@ -25,21 +25,21 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.designsystem.ElementXTheme
+import timber.log.Timber
 
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = mavericksViewModel(),
-    homeserver: String,
     onChangeServer: () -> Unit = { },
     onLoginWithSuccess: () -> Unit = { },
 ) {
     val state: LoginViewState by viewModel.collectAsState()
     LaunchedEffect(key1 = Unit) {
-        viewModel.homeserver = homeserver
+        Timber.d("resume")
+        viewModel.onResume()
     }
     LoginContent(
         state = state,
-        homeserver = homeserver,
         onChangeServer = onChangeServer,
         onLoginChanged = viewModel::onSetName,
         onPasswordChanged = viewModel::onSetPassword,
@@ -53,7 +53,6 @@ fun LoginScreen(
 @Composable
 fun LoginContent(
     state: LoginViewState,
-    homeserver: String = "",
     onChangeServer: () -> Unit = {},
     onLoginChanged: (String) -> Unit = {},
     onPasswordChanged: (String) -> Unit = {},
@@ -92,7 +91,7 @@ fun LoginContent(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         OutlinedTextField(
-                            value = homeserver,
+                            value = state.homeserver,
                             modifier = Modifier.fillMaxWidth(),
                             onValueChange = { /* no op */ },
                             enabled = false,
@@ -178,8 +177,9 @@ fun LoginContent(
 private fun LoginContentPreview() {
     ElementXTheme(darkTheme = false) {
         LoginContent(
-            state = LoginViewState(),
-            homeserver = "matrix.org",
+            state = LoginViewState(
+                homeserver = "matrix.org",
+            ),
         )
     }
 }

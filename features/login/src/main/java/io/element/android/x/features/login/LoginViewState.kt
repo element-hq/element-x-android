@@ -6,6 +6,7 @@ import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 
 data class LoginViewState(
+    val homeserver: String = "",
     val login: String = "",
     val password: String = "",
     val isLoggedIn: Async<Unit> = Uninitialized,

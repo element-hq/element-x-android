@@ -9,9 +9,16 @@ import kotlinx.coroutines.launch
 class LoginViewModel(initialState: LoginViewState) :
     MavericksViewModel<LoginViewState>(initialState) {
 
-    lateinit var homeserver: String
-
     private val matrix = MatrixInstance.getInstance()
+
+    fun onResume() {
+        val currentHomeserver = matrix.getHomeserverOrDefault()
+        setState {
+            copy(
+                homeserver = currentHomeserver
+            )
+        }
+    }
 
     fun onSubmit() = withState { state ->
         setState {
@@ -20,8 +27,10 @@ class LoginViewModel(initialState: LoginViewState) :
 
         viewModelScope.launch {
             suspend {
-                // Ensure the server is passed to the Rust SDK
-                matrix.setHomeserver(homeserver)
+                // Ensure the server is provided to the Rust SDK
+                if (matrix.getHomeserver() == null) {
+                    matrix.setHomeserver(state.homeserver)
+                }
                 matrix.login(state.login, state.password)
                 matrix.activeClient().startSync()
             }.execute {

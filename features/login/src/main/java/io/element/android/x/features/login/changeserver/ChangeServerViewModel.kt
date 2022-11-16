@@ -10,6 +10,14 @@ class ChangeServerViewModel(initialState: ChangeServerViewState) :
 
     private val matrix = MatrixInstance.getInstance()
 
+    init {
+        setState {
+            copy(
+                homeserver = matrix.getHomeserverOrDefault()
+            )
+        }
+    }
+
     fun setServer(server: String) {
         setState {
             copy(homeserver = server)
