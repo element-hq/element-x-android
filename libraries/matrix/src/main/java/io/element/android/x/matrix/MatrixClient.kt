@@ -57,7 +57,7 @@ class MatrixClient internal constructor(
         .addView(slidingSyncView)
         .build()
 
-    private val slidingSyncObserverProxy = SlidingSyncObserverProxy(coroutineScope)
+    private val slidingSyncObserverProxy = SlidingSyncObserverProxy(coroutineScope, dispatchers)
     private val roomSummaryDataSource: RustRoomSummaryDataSource =
         RustRoomSummaryDataSource(
             slidingSyncObserverProxy.updateSummaryFlow,
@@ -81,6 +81,7 @@ class MatrixClient internal constructor(
             slidingSyncUpdateFlow = slidingSyncObserverProxy.updateSummaryFlow,
             slidingSyncRoom = slidingSyncRoom,
             room = room,
+            coroutineScope = coroutineScope,
             coroutineDispatchers = dispatchers
         )
     }
