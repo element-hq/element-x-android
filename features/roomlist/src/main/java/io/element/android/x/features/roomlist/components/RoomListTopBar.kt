@@ -3,10 +3,6 @@
 package io.element.android.x.features.roomlist.components
 
 import Avatar
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.*
@@ -16,8 +12,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import io.element.android.x.core.compose.LogCompositions
+import io.element.android.x.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.x.features.roomlist.model.MatrixUser
 
 @Composable
@@ -53,52 +49,12 @@ fun RoomListTopBar(
         },
         scrollBehavior = scrollBehavior,
     )
-    if (openDialog.value) {
-        AskLogoutConfirmDialog(onLogoutClicked) {
-            openDialog.value = false
-        }
-    }
-}
-
-@Composable
-fun AskLogoutConfirmDialog(onLogoutClicked: () -> Unit, onDismiss: () -> Unit) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
-            Text(text = "Log out")
-        },
-        text = {
-            Text("Do you confirm you want to log out?")
-        },
-        confirmButton = {
-            Row(
-                modifier = Modifier.padding(all = 8.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        onDismiss()
-                        onLogoutClicked()
-                    })
-                {
-                    Text("Logout")
-                }
-            }
-        },
-        dismissButton = {
-            Row(
-                modifier = Modifier.padding(all = 8.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = onDismiss
-                )
-                {
-                    Text("Cancel")
-                }
-            }
-        }
+    // Log out confirmation dialog
+    ConfirmationDialog(
+        openDialog,
+        title = "Log out",
+        content = "Do you confirm you want to log out?",
+        submitText = "Log out",
+        onSubmitClicked = onLogoutClicked,
     )
 }
