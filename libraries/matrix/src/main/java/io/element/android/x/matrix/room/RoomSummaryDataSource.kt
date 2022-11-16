@@ -9,7 +9,6 @@ import org.matrix.rustcomponents.sdk.*
 import timber.log.Timber
 import java.io.Closeable
 import java.util.*
-import java.util.concurrent.Executors
 
 interface RoomSummaryDataSource {
     fun roomSummaries(): Flow<List<RoomSummary>>
@@ -23,8 +22,7 @@ internal class RustRoomSummaryDataSource(
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory()
 ) : RoomSummaryDataSource, Closeable {
 
-    private val singleDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-    private val coroutineScope = CoroutineScope(SupervisorJob() + singleDispatcher)
+    private val coroutineScope = CoroutineScope(SupervisorJob() + coroutineDispatchers.io)
 
     private val roomSummaries = MutableStateFlow<List<RoomSummary>>(emptyList())
     private val state = MutableStateFlow(SlidingSyncState.COLD)
@@ -32,30 +30,31 @@ internal class RustRoomSummaryDataSource(
     fun startSync() {
         coroutineScope.launch {
             updateRoomSummaries {
-                clear()
                 addAll(
                     slidingSyncView.currentRoomsList().map(::buildSummaryForRoomListEntry)
                 )
             }
-
-            slidingSyncView.roomListDiff()
-                .onEach { diffs ->
-                    updateRoomSummaries {
-                        applyDiff(diffs)
-                    }
-                }.collect()
-
-            slidingSyncView.state()
-                .onEach { slidingSyncState ->
-                    Timber.v("New sliding sync state: $slidingSyncState")
-                    state.value = slidingSyncState
-                }.collect()
-
-            slidingSyncUpdateFlow
-                .onEach {
-                    didReceiveSyncUpdate(it)
-                }.collect()
         }
+
+        slidingSyncUpdateFlow
+            .onEach {
+                didReceiveSyncUpdate(it)
+            }.launchIn(coroutineScope)
+
+        slidingSyncView.roomListDiff(coroutineScope)
+            .onEach { diffs ->
+                updateRoomSummaries {
+                    applyDiff(diffs)
+                }
+            }
+            .launchIn(coroutineScope)
+
+        slidingSyncView.state(coroutineScope)
+            .onEach { slidingSyncState ->
+                Timber.v("New sliding sync state: $slidingSyncState")
+                state.value = slidingSyncState
+            }.launchIn(coroutineScope)
+
     }
 
     fun stopSync() {
@@ -70,7 +69,7 @@ internal class RustRoomSummaryDataSource(
         return roomSummaries.sample(50)
     }
 
-    private fun didReceiveSyncUpdate(summary: UpdateSummary) {
+    private suspend fun didReceiveSyncUpdate(summary: UpdateSummary) {
         Timber.v("UpdateRooms with identifiers: ${summary.rooms}")
         if (state.value != SlidingSyncState.LIVE) {
             return
@@ -141,19 +140,18 @@ internal class RustRoomSummaryDataSource(
         )
     }
 
-    private fun updateRoomSummaries(block: MutableList<RoomSummary>.() -> Unit) {
+    private suspend fun updateRoomSummaries(block: MutableList<RoomSummary>.() -> Unit) = withContext(coroutineDispatchers.diffUpdateDispatcher){
         val mutableRoomSummaries = roomSummaries.value.toMutableList()
         block(mutableRoomSummaries)
         roomSummaries.value = mutableRoomSummaries
     }
 
-}
-
-fun SlidingSyncViewRoomsListDiff.isInvalidation(): Boolean {
-    return when (this) {
-        is SlidingSyncViewRoomsListDiff.InsertAt -> this.value is RoomListEntry.Invalidated
-        is SlidingSyncViewRoomsListDiff.UpdateAt -> this.value is RoomListEntry.Invalidated
-        is SlidingSyncViewRoomsListDiff.Push -> this.value is RoomListEntry.Invalidated
-        else -> false
+    fun SlidingSyncViewRoomsListDiff.isInvalidation(): Boolean {
+        return when (this) {
+            is SlidingSyncViewRoomsListDiff.InsertAt -> this.value is RoomListEntry.Invalidated
+            is SlidingSyncViewRoomsListDiff.UpdateAt -> this.value is RoomListEntry.Invalidated
+            is SlidingSyncViewRoomsListDiff.Push -> this.value is RoomListEntry.Invalidated
+            else -> false
+        }
     }
 }

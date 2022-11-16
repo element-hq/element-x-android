@@ -67,6 +67,7 @@ class MessagesViewModel(
     }
 
     private fun handleInit() {
+        timeline.initialize()
         room.syncUpdateFlow()
             .onEach {
                 val avatarData =
@@ -97,5 +98,6 @@ class MessagesViewModel(
 
     override fun onCleared() {
         super.onCleared()
+        timeline.dispose()
     }
 }
