@@ -69,7 +69,8 @@ fun RoomListScreenNavigation(navigator: DestinationsNavigator) {
                     inclusive = true
                 }
             }
-        })
+        }
+    )
 }
 
 @Destination
