@@ -70,6 +70,10 @@ class Matrix(
             }
     }
 
+    fun getHomeserver(): String? = authService.homeserverDetails()?.url()
+
+    fun getHomeserverOrDefault(): String = getHomeserver() ?: "matrix.org"
+
     suspend fun setHomeserver(homeserver: String) {
         withContext(coroutineDispatchers.io) {
             authService.configureHomeserver(homeserver)

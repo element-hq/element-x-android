@@ -30,7 +30,6 @@ fun OnBoardingScreenNavigation(navigator: DestinationsNavigator) {
 @Composable
 fun LoginScreenNavigation(navigator: DestinationsNavigator) {
     LoginScreen(
-        homeserver = "matrix.org",
         onChangeServer = {
             navigator.navigate(ChangeServerScreenNavigationDestination)
         },

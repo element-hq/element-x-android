@@ -6,7 +6,7 @@ import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 
 data class ChangeServerViewState(
-    val homeserver: String = "matrix.org",
+    val homeserver: String = "",
     val changeServerAction: Async<Unit> = Uninitialized,
 ) : MavericksState {
     val submitEnabled = homeserver.isNotEmpty() && changeServerAction !is Loading
