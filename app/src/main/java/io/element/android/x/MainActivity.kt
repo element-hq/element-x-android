@@ -11,9 +11,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.Lifecycle
+import androidx.compose.ui.tooling.preview.Preview
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.rememberNavHostEngine
+import com.ramcosta.composedestinations.spec.Route
 import io.element.android.x.core.compose.OnLifecycleEvent
 import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.destinations.OnBoardingScreenNavigationDestination
@@ -36,8 +37,6 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun MainScreen(viewModel: MainViewModel) {
-    val engine = rememberNavHostEngine()
-    val navController = engine.rememberNavController()
     val startRoute = runBlocking {
         if (!viewModel.isLoggedIn()) {
             OnBoardingScreenNavigationDestination
@@ -47,6 +46,20 @@ private fun MainScreen(viewModel: MainViewModel) {
         }
     }
 
+    MainContent(
+        startRoute = startRoute
+    )
+
+    OnLifecycleEvent { _, event ->
+        Timber.v("OnLifecycleEvent: $event")
+    }
+}
+
+@Composable
+private fun MainContent(startRoute: Route) {
+    val engine = rememberNavHostEngine()
+    val navController = engine.rememberNavController()
+
     DestinationsNavHost(
         modifier = Modifier.background(MaterialTheme.colorScheme.background),
         engine = engine,
@@ -54,8 +67,10 @@ private fun MainScreen(viewModel: MainViewModel) {
         navGraph = NavGraphs.root,
         startRoute = startRoute
     )
+}
 
-    OnLifecycleEvent { _, event ->
-        Timber.v("OnLifecycleEvent: $event")
-    }
+@Composable
+@Preview
+private fun MainContentPreview() {
+    MainContent(startRoute = OnBoardingScreenNavigationDestination)
 }
