@@ -8,7 +8,7 @@ android {
 }
 
 dependencies {
-    api(files("./libs/matrix-rust-sdk.aar"))
+    api(project(":libraries:rustSdk"))
     implementation(project(":libraries:core"))
     implementation(libs.timber)
     implementation("net.java.dev.jna:jna:5.10.0@aar")
