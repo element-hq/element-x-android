@@ -43,10 +43,7 @@ import io.element.android.x.features.messages.components.*
 import io.element.android.x.features.messages.model.MessagesItemGroupPosition
 import io.element.android.x.features.messages.model.MessagesTimelineItemState
 import io.element.android.x.features.messages.model.MessagesViewState
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemEncryptedContent
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemRedactedContent
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemTextBasedContent
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemUnknownContent
+import io.element.android.x.features.messages.model.content.*
 import io.element.android.x.features.messages.textcomposer.MessageComposerViewModel
 import io.element.android.x.features.messages.textcomposer.MessageComposerViewState
 import io.element.android.x.textcomposer.TextComposer
@@ -299,6 +296,10 @@ fun MessageEventRow(
                             modifier = contentModifier
                         )
                         is MessagesTimelineItemUnknownContent -> MessagesTimelineItemUnknownView(
+                            content = messageEvent.content,
+                            modifier = contentModifier
+                        )
+                        is MessagesTimelineItemImageContent -> MessagesTimelineItemImageView(
                             content = messageEvent.content,
                             modifier = contentModifier
                         )
