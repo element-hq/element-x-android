@@ -87,7 +87,16 @@ class MessageTimelineItemStateMapper(
                 body = messageType.content.body,
                 formattedBody = messageType.content.formatted
             )
-            is MessageType.Image -> MessagesTimelineItemUnknownContent
+            is MessageType.Image -> {
+                MessagesTimelineItemImageContent(
+                    body = messageType.content.body,
+                    imageMeta = MediaResolver.Meta(
+                        source = messageType.content.source,
+                        kind = MediaResolver.Kind.Content
+                    ),
+                    blurhash = messageType.content.info?.blurhash
+                )
+            }
             is MessageType.Notice -> MessagesTimelineItemNoticeContent(
                 body = messageType.content.body,
                 formattedBody = messageType.content.formatted
