@@ -1,10 +1,11 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 
 package io.element.android.x.features.messages
 
 import Avatar
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,14 +13,14 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Alignment.Companion.Start
@@ -49,6 +50,8 @@ import io.element.android.x.features.messages.model.content.MessagesTimelineItem
 import io.element.android.x.features.messages.textcomposer.MessageComposerViewModel
 import io.element.android.x.features.messages.textcomposer.MessageComposerViewState
 import io.element.android.x.textcomposer.TextComposer
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 private val BUBBLE_RADIUS = 16.dp
 private val COMPOSER_HEIGHT = 112.dp
@@ -61,6 +64,10 @@ fun MessagesScreen(
     val viewModel: MessagesViewModel = mavericksViewModel(argsFactory = { roomId })
     val composerViewModel: MessageComposerViewModel = mavericksViewModel(argsFactory = { roomId })
     LogCompositions(tag = "MessagesScreen", msg = "Root")
+    val actionsSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+    )
+    val coroutineScope = rememberCoroutineScope()
     val roomTitle by viewModel.collectAsState(MessagesViewState::roomName)
     val roomAvatar by viewModel.collectAsState(MessagesViewState::roomAvatar)
     val timelineItems by viewModel.collectAsState(MessagesViewState::timelineItems)
@@ -84,6 +91,21 @@ fun MessagesScreen(
         onComposerTextChange = composerViewModel::updateText,
         composerCanSendMessage = composerCanSendMessage,
         composerText = composerText,
+        onClick = {
+            Timber.v("onClick on timeline item: ${it.id}")
+        },
+        onLongClick = {
+            viewModel.computeActionsSheetState(it)
+            coroutineScope.launch {
+                actionsSheetState.show()
+            }
+        }
+    )
+    val itemActionsSheetState by viewModel.collectAsState(prop1 = MessagesViewState::itemActionsSheetState)
+    TimelineItemActionsScreen(
+        sheetState = actionsSheetState,
+        actionsSheetState = itemActionsSheetState(),
+        onActionClicked = viewModel::handleItemAction
     )
 }
 
@@ -96,6 +118,8 @@ fun MessagesContent(
     onReachedLoadMore: () -> Unit,
     onBackPressed: () -> Unit,
     onSendMessage: (String) -> Unit,
+    onClick: (MessagesTimelineItemState.MessageEvent) -> Unit,
+    onLongClick: ((MessagesTimelineItemState.MessageEvent)) -> Unit,
     composerFullScreen: Boolean,
     onComposerFullScreenChange: () -> Unit,
     onComposerTextChange: (CharSequence) -> Unit,
@@ -145,7 +169,9 @@ fun MessagesContent(
                         timelineItems = timelineItems,
                         hasMoreToLoad = hasMoreToLoad,
                         onReachedLoadMore = onReachedLoadMore,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        onClick = onClick,
+                        onLongClick = onLongClick
                     )
                 }
                 TextComposer(
@@ -175,6 +201,8 @@ fun TimelineItems(
     lazyListState: LazyListState,
     timelineItems: List<MessagesTimelineItemState>,
     hasMoreToLoad: Boolean,
+    onClick: (MessagesTimelineItemState.MessageEvent) -> Unit,
+    onLongClick: ((MessagesTimelineItemState.MessageEvent)) -> Unit,
     onReachedLoadMore: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -186,7 +214,11 @@ fun TimelineItems(
         reverseLayout = true
     ) {
         itemsIndexed(timelineItems) { index, timelineItem ->
-            TimelineItemRow(timelineItem = timelineItem)
+            TimelineItemRow(
+                timelineItem = timelineItem,
+                onClick = onClick,
+                onLongClick = onLongClick
+            )
         }
         if (hasMoreToLoad) {
             item {
@@ -199,17 +231,25 @@ fun TimelineItems(
 
 @Composable
 fun TimelineItemRow(
-    timelineItem: MessagesTimelineItemState
+    timelineItem: MessagesTimelineItemState,
+    onClick: (MessagesTimelineItemState.MessageEvent) -> Unit,
+    onLongClick: (MessagesTimelineItemState.MessageEvent) -> Unit,
 ) {
     when (timelineItem) {
         is MessagesTimelineItemState.Virtual -> return
-        is MessagesTimelineItemState.MessageEvent -> MessageEventRow(messageEvent = timelineItem)
+        is MessagesTimelineItemState.MessageEvent -> MessageEventRow(
+            messageEvent = timelineItem,
+            onClick = { onClick(timelineItem) },
+            onLongClick = { onLongClick(timelineItem) }
+        )
     }
 }
 
 @Composable
 fun MessageEventRow(
     messageEvent: MessagesTimelineItemState.MessageEvent,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val (parentAlignment, contentAlignment) = if (messageEvent.isMine) {
@@ -241,6 +281,8 @@ fun MessageEventRow(
                 MessageEventBubble(
                     groupPosition = messageEvent.groupPosition,
                     isMine = messageEvent.isMine,
+                    onClick = onClick,
+                    onLongClick = onLongClick,
                     modifier = Modifier
                         .zIndex(-1f)
                 ) {
@@ -304,11 +346,14 @@ private fun MessageSenderInformation(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MessageEventBubble(
     groupPosition: MessagesItemGroupPosition,
     isMine: Boolean,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
     content: @Composable () -> Unit,
 ) {
     fun bubbleShape(): Shape {
@@ -360,8 +405,9 @@ fun MessageEventBubble(
             .widthIn(min = 80.dp)
             .offsetForItem()
             .clip(bubbleShape)
-            .clickable(
-                onClick = { },
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick,
                 indication = rememberRipple(),
                 interactionSource = remember { MutableInteractionSource() }
             ),

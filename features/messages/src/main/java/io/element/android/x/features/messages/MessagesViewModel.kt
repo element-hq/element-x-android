@@ -5,6 +5,9 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
+import io.element.android.x.features.messages.model.MessagesItemAction
+import io.element.android.x.features.messages.model.MessagesItemActionsSheetState
+import io.element.android.x.features.messages.model.MessagesTimelineItemState
 import io.element.android.x.features.messages.model.MessagesViewState
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.MatrixInstance
@@ -16,6 +19,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 private const val PAGINATION_COUNT = 50
 
@@ -63,6 +67,28 @@ class MessagesViewModel(
     fun sendMessage(text: String) {
         viewModelScope.launch {
             timeline.sendMessage(text)
+        }
+    }
+
+    fun handleItemAction(action: MessagesItemAction) {
+        viewModelScope.launch(Dispatchers.Default) {
+            val currentState = awaitState()
+            Timber.v("Handle $action for ${currentState.itemActionsSheetState}")
+        }
+    }
+
+    fun computeActionsSheetState(messagesTimelineItemState: MessagesTimelineItemState.MessageEvent) {
+        suspend {
+            val actions = listOf(
+                MessagesItemAction.Forward,
+                MessagesItemAction.Copy,
+            )
+            MessagesItemActionsSheetState(
+                targetItem = messagesTimelineItemState,
+                actions = actions
+            )
+        }.execute(Dispatchers.Default) {
+            copy(itemActionsSheetState = it)
         }
     }
 
