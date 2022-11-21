@@ -263,10 +263,7 @@ fun MessageEventRow(
             .wrapContentHeight(),
         contentAlignment = parentAlignment
     ) {
-        Row(
-            modifier = modifier
-                .widthIn(max = 300.dp),
-        ) {
+        Row {
             if (!messageEvent.isMine) {
                 Spacer(modifier = Modifier.width(16.dp))
             }
@@ -285,6 +282,7 @@ fun MessageEventRow(
                     onLongClick = onLongClick,
                     modifier = Modifier
                         .zIndex(-1f)
+                        .widthIn(max = 320.dp)
                 ) {
                     val contentModifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                     when (messageEvent.content) {
