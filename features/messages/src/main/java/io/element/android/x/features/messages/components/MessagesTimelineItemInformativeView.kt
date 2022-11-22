@@ -36,7 +36,7 @@ fun MessagesTimelineItemInformativeView(
         Text(
             fontStyle = FontStyle.Italic,
             color = MaterialTheme.colorScheme.secondary,
-            fontSize = 12.sp,
+            fontSize = 14.sp,
             text = text
         )
     }

@@ -5,7 +5,6 @@ import coil.ImageLoader
 import coil.ImageLoaderFactory
 import com.airbnb.mvrx.Mavericks
 import io.element.android.x.matrix.MatrixInstance
-import io.element.android.x.matrix.media.MediaFetcher
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.plus
@@ -26,7 +25,7 @@ class ElementXApplication : Application(), ImageLoaderFactory {
         return ImageLoader
             .Builder(this)
             .components {
-                add(MediaFetcher.Factory(MatrixInstance.getInstance()))
+                MatrixInstance.getInstance().registerComponents(this)
             }
             .build()
     }
