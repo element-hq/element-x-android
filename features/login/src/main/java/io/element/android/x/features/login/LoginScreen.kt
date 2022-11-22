@@ -28,7 +28,6 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
-import io.element.android.x.core.compose.textFieldState
 import io.element.android.x.designsystem.ElementXTheme
 import timber.log.Timber
 
@@ -39,12 +38,14 @@ fun LoginScreen(
     onLoginWithSuccess: () -> Unit = { },
 ) {
     val state: LoginViewState by viewModel.collectAsState()
+    val formState: LoginFormState by viewModel.formState
     LaunchedEffect(key1 = Unit) {
         Timber.d("resume")
         viewModel.onResume()
     }
     LoginContent(
         state = state,
+        formState = formState,
         onChangeServer = onChangeServer,
         onLoginChanged = viewModel::onSetName,
         onPasswordChanged = viewModel::onSetPassword,
@@ -58,6 +59,7 @@ fun LoginScreen(
 @Composable
 fun LoginContent(
     state: LoginViewState,
+    formState: LoginFormState,
     onChangeServer: () -> Unit = {},
     onLoginChanged: (String) -> Unit = {},
     onPasswordChanged: (String) -> Unit = {},
@@ -117,39 +119,31 @@ fun LoginContent(
                             }
                         )
                     }
-                    var login by textFieldState(state.login)
                     OutlinedTextField(
-                        value = login,
+                        value = formState.login,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 60.dp),
                         label = {
                             Text(text = "Email or username")
                         },
-                        onValueChange = {
-                            login = it
-                            onLoginChanged(it)
-                        },
+                        onValueChange = onLoginChanged,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
                         ),
                     )
                     var passwordVisible by remember { mutableStateOf(false) }
-                    var password by textFieldState(state.password)
                     if (state.isLoggedIn is Loading) {
                         // Ensure password is hidden when user submits the form
                         passwordVisible = false
                     }
                     OutlinedTextField(
-                        value = password,
+                        value = formState.password,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 24.dp),
-                        onValueChange = {
-                            password = it
-                            onPasswordChanged(it)
-                        },
+                        onValueChange = onPasswordChanged,
                         label = {
                             Text(text = "Password")
                         },
@@ -213,6 +207,7 @@ private fun LoginContentPreview() {
             state = LoginViewState(
                 homeserver = "matrix.org",
             ),
+            formState = LoginFormState("", "")
         )
     }
 }
