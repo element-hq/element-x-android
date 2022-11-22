@@ -16,7 +16,7 @@ private val DarkColorScheme = darkColorScheme(
     background = Color.Black,
     onBackground = Color.White,
     surface = Color.Black,
-    surfaceVariant = SystemGrey6Dark,
+    surfaceVariant = SystemGrey5Dark,
     onSurface = Color.White,
     onSurfaceVariant = Color.White,
 )
@@ -28,7 +28,7 @@ private val LightColorScheme = lightColorScheme(
     background = Color.White,
     onBackground = Color.Black,
     surface = Color.White,
-    surfaceVariant = SystemGrey6Light,
+    surfaceVariant = SystemGrey5Light,
     onSurface = Color.Black,
     onSurfaceVariant = Color.Black,
 
@@ -48,7 +48,7 @@ private val LightColorScheme = lightColorScheme(
 fun ElementXTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
