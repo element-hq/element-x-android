@@ -14,6 +14,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.*
 import timber.log.Timber
 import java.io.Closeable
+import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 
 class MatrixClient internal constructor(
@@ -21,6 +22,7 @@ class MatrixClient internal constructor(
     private val sessionStore: SessionStore,
     private val coroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
+    private val baseDirectory: File,
 ) : Closeable {
 
     private val clientDelegate = object : ClientDelegate {
@@ -114,7 +116,12 @@ class MatrixClient internal constructor(
 
     suspend fun logout() = withContext(dispatchers.io) {
         close()
-        client.logout()
+        try {
+            client.logout()
+        } catch (failure: Throwable) {
+            Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
+        }
+        baseDirectory.deleteSessionDirectory(userID = client.userId())
         sessionStore.reset()
     }
 
@@ -150,5 +157,10 @@ class MatrixClient internal constructor(
             }
         }
 
-
+    private fun File.deleteSessionDirectory(userID: String): Boolean {
+        // Rust sanitises the user ID replacing invalid characters with an _
+        val sanitisedUserID = userID.replace(":", "_")
+        val sessionDirectory = File(this, sanitisedUserID)
+        return sessionDirectory.deleteRecursively()
+    }
 }

@@ -4,17 +4,18 @@ package io.element.android.x.features.login
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,6 +25,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
+import io.element.android.x.core.compose.textFieldState
 import io.element.android.x.designsystem.ElementXTheme
 import timber.log.Timber
 
@@ -59,6 +61,8 @@ fun LoginContent(
     onSubmitClicked: () -> Unit = {},
     onLoginWithSuccess: () -> Unit = {},
 ) {
+    var login by textFieldState(state.login)
+    var password by textFieldState(state.password)
     Surface(color = MaterialTheme.colorScheme.background) {
         Box(
             modifier = Modifier
@@ -113,31 +117,42 @@ fun LoginContent(
                         )
                     }
                     OutlinedTextField(
-                        value = state.login,
+                        value = login,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 60.dp),
                         label = {
                             Text(text = "Email or username")
                         },
-                        onValueChange = onLoginChanged,
+                        onValueChange = {
+                            login = it
+                            onLoginChanged(it)
+                        },
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
+                            keyboardType = KeyboardType.Email,
+                            imeAction = ImeAction.Next
                         ),
                     )
                     OutlinedTextField(
-                        value = state.password,
+                        value = password,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 24.dp),
-                        onValueChange = onPasswordChanged,
+                        onValueChange = {
+                            password = it
+                            onPasswordChanged(it)
+                        },
                         label = {
                             Text(text = "Password")
                         },
                         isError = isError,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Send,
+                            imeAction = ImeAction.Done,
+                        ),
+                        visualTransformation = PasswordVisualTransformation(),
+                        keyboardActions = KeyboardActions(
+                            onDone = { onSubmitClicked() }
                         ),
                     )
                     if (isError) {

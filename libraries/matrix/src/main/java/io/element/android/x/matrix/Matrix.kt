@@ -12,6 +12,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.AuthenticationService
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
+import timber.log.Timber
 import java.io.File
 import java.util.*
 import java.util.concurrent.Executors
@@ -26,10 +27,10 @@ class Matrix(
         main = Dispatchers.Main,
         diffUpdateDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
     )
-    private val baseFolder = File(context.filesDir, "matrix")
+    private val baseDirectory = File(context.filesDir, "sessions")
     private val sessionStore = SessionStore(context)
     private val matrixClient = MutableStateFlow<Optional<MatrixClient>>(Optional.empty())
-    private val authService = AuthenticationService(baseFolder.absolutePath)
+    private val authService = AuthenticationService(baseDirectory.absolutePath)
 
     init {
         sessionStore.isLoggedIn()
@@ -59,7 +60,7 @@ class Matrix(
             ?.let { session ->
                 try {
                     ClientBuilder()
-                        .basePath(baseFolder.absolutePath)
+                        .basePath(baseDirectory.absolutePath)
                         .username(session.userId)
                         .build().apply {
                             restoreSession(session)
@@ -85,7 +86,12 @@ class Matrix(
 
     suspend fun login(username: String, password: String): MatrixClient =
         withContext(coroutineDispatchers.io) {
-            val client = authService.login(username, password, "MatrixRustSDKSample", null)
+            val client = try {
+                authService.login(username, password, "ElementX", null)
+            }catch (failure:Throwable){
+                Timber.e(failure,"Fail login")
+                throw failure
+            }
             sessionStore.storeData(client.session())
             createMatrixClient(client)
         }
@@ -95,7 +101,8 @@ class Matrix(
             client = client,
             sessionStore = sessionStore,
             coroutineScope = coroutineScope,
-            dispatchers = coroutineDispatchers
+            dispatchers = coroutineDispatchers,
+            baseDirectory = baseDirectory,
         ).also {
             matrixClient.value = Optional.of(it)
         }
