@@ -1,14 +1,13 @@
 package io.element.android.x.features.roomlist
 
-import com.airbnb.mvrx.MavericksViewModel
-import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.*
 import io.element.android.x.core.data.parallelMap
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
 import io.element.android.x.features.roomlist.model.MatrixUser
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListViewState
+import io.element.android.x.features.roomlist.model.createFakePlaceHolders
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.MatrixInstance
 import io.element.android.x.matrix.media.MediaResolver
@@ -80,7 +79,19 @@ class RoomListViewModel(
             .map(::mapRoomSummaries)
             .flowOn(Dispatchers.Default)
             .execute {
-                copy(rooms = it)
+                copy(
+                    rooms = when {
+                        it is Loading ||
+                                // Note: this second case will prevent to handle correctly the empty case
+                                (it is Success && it().isEmpty()) -> {
+                            // Show fake placeholders to avoid having empty screen
+                            Loading(createFakePlaceHolders())
+                        }
+                        else -> {
+                            it
+                        }
+                    }
+                )
             }
     }
 
