@@ -95,7 +95,7 @@ class Matrix(
     suspend fun login(username: String, password: String): MatrixClient =
         withContext(coroutineDispatchers.io) {
             val client = try {
-                authService.login(username, password, "ElementX", null)
+                authService.login(username, password, "ElementX Android", null)
             } catch (failure: Throwable) {
                 Timber.e(failure, "Fail login")
                 throw failure
