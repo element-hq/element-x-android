@@ -1,7 +1,10 @@
 package io.element.android.x.matrix
 
 import android.content.Context
+import coil.ComponentRegistry
 import io.element.android.x.core.coroutine.CoroutineDispatchers
+import io.element.android.x.matrix.media.MediaFetcher
+import io.element.android.x.matrix.media.MediaKeyer
 import io.element.android.x.matrix.session.SessionStore
 import io.element.android.x.matrix.util.logError
 import kotlinx.coroutines.CoroutineScope
@@ -55,6 +58,11 @@ class Matrix(
         return matrixClient.value.get()
     }
 
+    fun registerComponents(builder: ComponentRegistry.Builder) {
+        builder.add(MediaKeyer())
+        builder.add(MediaFetcher.Factory(this))
+    }
+
     suspend fun restoreSession() = withContext(coroutineDispatchers.io) {
         sessionStore.getLatestSession()
             ?.let { session ->
@@ -88,8 +96,8 @@ class Matrix(
         withContext(coroutineDispatchers.io) {
             val client = try {
                 authService.login(username, password, "ElementX", null)
-            }catch (failure:Throwable){
-                Timber.e(failure,"Fail login")
+            } catch (failure: Throwable) {
+                Timber.e(failure, "Fail login")
                 throw failure
             }
             sessionStore.storeData(client.session())

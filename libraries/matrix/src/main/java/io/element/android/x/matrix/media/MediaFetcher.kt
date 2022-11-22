@@ -7,7 +7,7 @@ import coil.request.Options
 import io.element.android.x.matrix.Matrix
 import java.nio.ByteBuffer
 
-class MediaFetcher(
+internal class MediaFetcher(
     private val mediaResolver: MediaResolver,
     private val meta: MediaResolver.Meta,
     private val options: Options,
