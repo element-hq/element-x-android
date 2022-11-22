@@ -81,7 +81,7 @@ dependencies {
     implementation project(":features:messages")
 
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.2.0"
-    implementation 'io.github.raamcosta.compose-destinations:core:1.7.23-beta'
+    implementation 'io.github.raamcosta.compose-destinations:animations-core:1.7.23-beta'
     ksp 'io.github.raamcosta.compose-destinations:ksp:1.7.23-beta'
 
     def composeBom = platform('androidx.compose:compose-bom:2022.10.00')
