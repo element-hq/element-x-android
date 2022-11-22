@@ -4,8 +4,8 @@
     <!-- Alias to the palette colors
       Source: https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=1521%3A23026 -->
 
-    <color name="element_accent_light">@color/palette_element_green</color>
-    <color name="element_accent_dark">@color/palette_element_green</color>
+    <color name="element_accent_light">@android:color/black</color>
+    <color name="element_accent_dark">@android:color/white</color>
 
     <color name="element_alert_light">@color/palette_vermilion</color>
     <color name="element_alert_dark">@color/palette_vermilion</color>
