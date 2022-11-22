@@ -1,7 +1,5 @@
 package io.element.android.x.features.login
 
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.Uninitialized
 import io.element.android.x.matrix.MatrixInstance
