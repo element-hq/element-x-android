@@ -1,6 +1,5 @@
 package io.element.android.x.features.login.changeserver
 
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModel
 import io.element.android.x.matrix.MatrixInstance
 import kotlinx.coroutines.launch
@@ -24,13 +23,10 @@ class ChangeServerViewModel(initialState: ChangeServerViewState) :
         }
     }
 
-    fun setServerSubmit() = withState { state ->
-        setState {
-            copy(changeServerAction = Loading())
-        }
-
+    fun setServerSubmit() {
         viewModelScope.launch {
             suspend {
+                val state = awaitState()
                 matrix.setHomeserver(state.homeserver)
             }.execute { it ->
                 copy(changeServerAction = it)

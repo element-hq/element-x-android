@@ -24,9 +24,7 @@ class LoginViewModel(initialState: LoginViewState) :
             suspend {
                 val state = awaitState()
                 // Ensure the server is provided to the Rust SDK
-                if (matrix.getHomeserver() == null) {
-                    matrix.setHomeserver(state.homeserver)
-                }
+                matrix.setHomeserver(state.homeserver)
                 matrix.login(state.login.trim(), state.password.trim())
                 matrix.activeClient().startSync()
             }.execute {
