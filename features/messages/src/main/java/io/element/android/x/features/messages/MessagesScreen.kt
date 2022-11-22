@@ -102,7 +102,12 @@ fun MessagesScreen(
     TimelineItemActionsScreen(
         sheetState = actionsSheetState,
         actionsSheetState = itemActionsSheetState(),
-        onActionClicked = viewModel::handleItemAction
+        onActionClicked = {
+            viewModel.handleItemAction(it)
+            coroutineScope.launch {
+                actionsSheetState.hide()
+            }
+        }
     )
 }
 

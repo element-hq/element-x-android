@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.element.android.x.designsystem.components.VectorIcon
 import io.element.android.x.features.messages.model.MessagesItemAction
@@ -51,8 +52,18 @@ private fun SheetContent(
                 modifier = Modifier.clickable {
                     onActionClicked(it)
                 },
-                text = { Text(it.title) },
-                icon = { VectorIcon(it.icon) }
+                text = {
+                    Text(
+                        text = it.title,
+                        color = if (it.destructive) MaterialTheme.colors.error else Color.Unspecified,
+                    )
+                },
+                icon = {
+                    VectorIcon(
+                        resourceId = it.icon,
+                        tint = if (it.destructive) MaterialTheme.colors.error else LocalContentColor.current,
+                    )
+                }
             )
         }
     }
