@@ -1,9 +1,7 @@
 package io.element.android.x.textcomposer
 
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
-import androidx.appcompat.widget.AppCompatEditText
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,7 +18,7 @@ fun TextComposer(
     onFullscreenToggle: () -> Unit,
     onComposerTextChange: (CharSequence) -> Unit,
     composerCanSendMessage: Boolean,
-    composerText: CharSequence?,
+    composerText: String?,
 ) {
     val isInDarkMode = isSystemInDarkTheme()
     AndroidView(

@@ -60,6 +60,12 @@ fun MessagesScreen(
 ) {
     val viewModel: MessagesViewModel = mavericksViewModel(argsFactory = { roomId })
     val composerViewModel: MessageComposerViewModel = mavericksViewModel(argsFactory = { roomId })
+
+    fun onSendMessage(textMessage: String) {
+        viewModel.sendMessage(textMessage)
+        composerViewModel.updateText("")
+    }
+
     LogCompositions(tag = "MessagesScreen", msg = "Root")
     val actionsSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
@@ -81,10 +87,7 @@ fun MessagesScreen(
         hasMoreToLoad = hasMoreToLoad,
         onReachedLoadMore = viewModel::loadMore,
         onBackPressed = onBackPressed,
-        onSendMessage = {
-            viewModel.sendMessage(it)
-            composerViewModel.updateText("")
-        },
+        onSendMessage = ::onSendMessage,
         composerFullScreen = composerFullScreen,
         onComposerFullScreenChange = composerViewModel::onComposerFullScreenChange,
         onComposerTextChange = composerViewModel::updateText,
@@ -193,7 +196,7 @@ fun MessagesContent(
                     onFullscreenToggle = onComposerFullScreenChange,
                     onComposerTextChange = onComposerTextChange,
                     composerCanSendMessage = composerCanSendMessage,
-                    composerText = composerText?.charSequence,
+                    composerText = composerText?.charSequence?.toString(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .let {
