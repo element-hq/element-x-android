@@ -14,6 +14,8 @@ import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.RoomSummary
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -56,6 +58,14 @@ class RoomListViewModel(
         }
     }
 
+    fun filterRoom(filter: String) {
+        setState {
+            copy(
+                filter = filter
+            )
+        }
+    }
+
     private fun handleInit() {
         suspend {
             val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
@@ -75,15 +85,27 @@ class RoomListViewModel(
             copy(user = it)
         }
 
-        client.roomSummaryDataSource().roomSummaries()
-            .map(::mapRoomSummaries)
-            .flowOn(Dispatchers.Default)
+        // Observe the room list and the filter
+        combine(
+            client.roomSummaryDataSource().roomSummaries()
+                .map(::mapRoomSummaries)
+                .flowOn(Dispatchers.Default),
+            stateFlow
+                .map { it.filter }
+                .distinctUntilChanged(),
+        ) { list, filter ->
+            if (filter.isEmpty()) {
+                list
+            } else {
+                list.filter { it.name.contains(filter, ignoreCase = true) }
+            }
+        }
             .execute {
                 copy(
                     rooms = when {
                         it is Loading ||
                                 // Note: this second case will prevent to handle correctly the empty case
-                                (it is Success && it().isEmpty()) -> {
+                                (it is Success && it().isEmpty() && filter.isEmpty()) -> {
                             // Show fake placeholders to avoid having empty screen
                             Loading(createFakePlaceHolders())
                         }
