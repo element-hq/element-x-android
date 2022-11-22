@@ -29,7 +29,13 @@ class MatrixRoom(
     }
 
     fun timeline(): MatrixTimeline {
-        return MatrixTimeline(this, room, coroutineScope, coroutineDispatchers)
+        return MatrixTimeline(
+            matrixRoom = this,
+            room = room,
+            slidingSyncRoom = slidingSyncRoom,
+            coroutineScope = coroutineScope,
+            coroutineDispatchers = coroutineDispatchers
+        )
     }
 
     val roomId = RoomId(room.id())
