@@ -16,6 +16,7 @@ import java.util.*
 class MatrixTimeline(
     private val matrixRoom: MatrixRoom,
     private val room: Room,
+    private val slidingSyncRoom: SlidingSyncRoom,
     private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : TimelineListener {
@@ -105,7 +106,7 @@ class MatrixTimeline(
         }
 
     fun addListener(timelineListener: TimelineListener) {
-        room.addTimelineListener(timelineListener)
+        slidingSyncRoom.addTimelineListener(timelineListener)
     }
 
     fun initialize() {
@@ -113,7 +114,7 @@ class MatrixTimeline(
     }
 
     fun dispose() {
-        room.removeTimeline()
+        slidingSyncRoom.removeTimeline()
     }
 
     /**
