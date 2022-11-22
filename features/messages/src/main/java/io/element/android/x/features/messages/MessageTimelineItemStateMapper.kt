@@ -88,13 +88,21 @@ class MessageTimelineItemStateMapper(
                 formattedBody = messageType.content.formatted
             )
             is MessageType.Image -> {
+                val height = messageType.content.info?.height?.toFloat()
+                val width = messageType.content.info?.width?.toFloat()
+                val aspectRatio = if (height != null && width != null) {
+                    width / height
+                } else {
+                    0.7f
+                }
                 MessagesTimelineItemImageContent(
                     body = messageType.content.body,
                     imageMeta = MediaResolver.Meta(
                         source = messageType.content.source,
                         kind = MediaResolver.Kind.Content
                     ),
-                    blurhash = messageType.content.info?.blurhash
+                    blurhash = messageType.content.info?.blurhash,
+                    aspectRatio = aspectRatio
                 )
             }
             is MessageType.Notice -> MessagesTimelineItemNoticeContent(
