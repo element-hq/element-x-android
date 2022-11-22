@@ -7,9 +7,20 @@ import com.airbnb.mvrx.Uninitialized
 
 data class LoginViewState(
     val homeserver: String = "",
-    val login: String = "",
-    val password: String = "",
     val isLoggedIn: Async<Unit> = Uninitialized,
+    val formState: LoginFormState = LoginFormState.Default,
 ) : MavericksState {
-    val submitEnabled = login.isNotEmpty() && password.isNotEmpty() && isLoggedIn !is Loading
+    val submitEnabled =
+        formState.login.isNotEmpty() && formState.password.isNotEmpty() && isLoggedIn !is Loading
+}
+
+data class LoginFormState(
+    val login: String,
+    val password: String
+) {
+
+    companion object {
+        val Default = LoginFormState("", "")
+    }
+
 }

@@ -1,14 +1,26 @@
 package io.element.android.x.features.login
 
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshotFlow
 import com.airbnb.mvrx.MavericksViewModel
-import com.airbnb.mvrx.Uninitialized
 import io.element.android.x.matrix.MatrixInstance
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class LoginViewModel(initialState: LoginViewState) :
     MavericksViewModel<LoginViewState>(initialState) {
 
     private val matrix = MatrixInstance.getInstance()
+    var formState = mutableStateOf(LoginFormState.Default)
+        private set
+
+    init {
+        snapshotFlow { formState.value }
+            .onEach {
+                setState { copy(formState = it) }
+            }.launchIn(viewModelScope)
+    }
 
     fun onResume() {
         val currentHomeserver = matrix.getHomeserverOrDefault()
@@ -25,7 +37,7 @@ class LoginViewModel(initialState: LoginViewState) :
                 val state = awaitState()
                 // Ensure the server is provided to the Rust SDK
                 matrix.setHomeserver(state.homeserver)
-                matrix.login(state.login.trim(), state.password.trim())
+                matrix.login(state.formState.login.trim(), state.formState.password.trim())
                 matrix.activeClient().startSync()
             }.execute {
                 copy(isLoggedIn = it)
@@ -34,20 +46,10 @@ class LoginViewModel(initialState: LoginViewState) :
     }
 
     fun onSetPassword(password: String) {
-        setState {
-            copy(
-                password = password,
-                isLoggedIn = Uninitialized,
-            )
-        }
+        formState.value = formState.value.copy(password = password)
     }
 
     fun onSetName(name: String) {
-        setState {
-            copy(
-                login = name,
-                isLoggedIn = Uninitialized,
-            )
-        }
+        formState.value = formState.value.copy(login = name)
     }
 }
