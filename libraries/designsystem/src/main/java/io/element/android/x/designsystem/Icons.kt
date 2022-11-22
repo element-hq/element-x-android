@@ -5,4 +5,5 @@ import io.element.android.x.libraries.designsystem.R
 object VectorIcons {
     val Copy = R.drawable.ic_content_copy
     val ArrowForward = R.drawable.ic_content_arrow_forward
+    val Delete = R.drawable.ic_baseline_delete_outline_24
 }

@@ -2,7 +2,6 @@ package io.element.android.x.matrix.room
 
 import io.element.android.x.core.coroutine.CoroutineDispatchers
 import io.element.android.x.matrix.core.RoomId
-import io.element.android.x.matrix.core.UserId
 import io.element.android.x.matrix.timeline.MatrixTimeline
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -74,6 +73,13 @@ class MatrixRoom(
         val content = messageEventContentFromMarkdown(message)
         runCatching {
             room.send(content, transactionId)
+        }
+    }
+
+    suspend fun redactEvent(eventId: String, reason: String? = null, ) = withContext(coroutineDispatchers.io) {
+        val transactionId = genTransactionId()
+        runCatching {
+            room.redact(eventId, reason, transactionId)
         }
     }
 }

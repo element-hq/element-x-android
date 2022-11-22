@@ -74,15 +74,31 @@ class MessagesViewModel(
         viewModelScope.launch(Dispatchers.Default) {
             val currentState = awaitState()
             Timber.v("Handle $action for ${currentState.itemActionsSheetState}")
+            val targetEvent =
+                currentState.itemActionsSheetState.invoke()?.targetItem ?: return@launch
+            when (action) {
+                MessagesItemAction.Copy -> Unit // TODO
+                MessagesItemAction.Forward -> Unit // TODO
+                MessagesItemAction.Redact -> handleActionRedact(targetEvent)
+            }
+        }
+    }
+
+    private fun handleActionRedact(event: MessagesTimelineItemState.MessageEvent) {
+        viewModelScope.launch {
+            room.redactEvent(event.id)
         }
     }
 
     fun computeActionsSheetState(messagesTimelineItemState: MessagesTimelineItemState.MessageEvent) {
         suspend {
-            val actions = listOf(
+            val actions = mutableListOf(
                 MessagesItemAction.Forward,
                 MessagesItemAction.Copy,
             )
+            if (messagesTimelineItemState.isMine) {
+                actions.add(MessagesItemAction.Redact)
+            }
             MessagesItemActionsSheetState(
                 targetItem = messagesTimelineItemState,
                 actions = actions
