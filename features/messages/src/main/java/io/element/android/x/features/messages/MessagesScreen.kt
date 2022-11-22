@@ -69,9 +69,11 @@ fun MessagesScreen(
     val roomAvatar by viewModel.collectAsState(MessagesViewState::roomAvatar)
     val timelineItems by viewModel.collectAsState(MessagesViewState::timelineItems)
     val hasMoreToLoad by viewModel.collectAsState(MessagesViewState::hasMoreToLoad)
+    val snackBarContent by viewModel.collectAsState(MessagesViewState::snackbarContent)
     val composerFullScreen by composerViewModel.collectAsState(MessageComposerViewState::isFullScreen)
     val composerCanSendMessage by composerViewModel.collectAsState(MessageComposerViewState::isSendButtonVisible)
     val composerText by composerViewModel.collectAsState(MessageComposerViewState::text)
+    val snackbarHostState = remember { SnackbarHostState() }
     MessagesContent(
         roomTitle = roomTitle,
         roomAvatar = roomAvatar,
@@ -96,7 +98,8 @@ fun MessagesScreen(
             coroutineScope.launch {
                 actionsSheetState.show()
             }
-        }
+        },
+        snackbarHostState = snackbarHostState,
     )
     val itemActionsSheetState by viewModel.collectAsState(prop1 = MessagesViewState::itemActionsSheetState)
     TimelineItemActionsScreen(
@@ -109,6 +112,12 @@ fun MessagesScreen(
             }
         }
     )
+    snackBarContent?.let {
+        coroutineScope.launch {
+            snackbarHostState.showSnackbar(it)
+        }
+        viewModel.onSnackbarShown()
+    }
 }
 
 @Composable
@@ -121,15 +130,17 @@ fun MessagesContent(
     onBackPressed: () -> Unit,
     onSendMessage: (String) -> Unit,
     onClick: (MessagesTimelineItemState.MessageEvent) -> Unit,
-    onLongClick: ((MessagesTimelineItemState.MessageEvent)) -> Unit,
+    onLongClick: (MessagesTimelineItemState.MessageEvent) -> Unit,
     composerFullScreen: Boolean,
     onComposerFullScreenChange: () -> Unit,
     onComposerTextChange: (CharSequence) -> Unit,
     composerCanSendMessage: Boolean,
     composerText: StableCharSequence?,
+    snackbarHostState: SnackbarHostState,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Content")
     val lazyListState = rememberLazyListState()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -194,7 +205,8 @@ fun MessagesContent(
                         },
                 )
             }
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     )
 }
 

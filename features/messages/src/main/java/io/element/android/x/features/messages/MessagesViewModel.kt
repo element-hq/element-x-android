@@ -77,11 +77,23 @@ class MessagesViewModel(
             val targetEvent =
                 currentState.itemActionsSheetState.invoke()?.targetItem ?: return@launch
             when (action) {
-                MessagesItemAction.Copy -> Unit // TODO
-                MessagesItemAction.Forward -> Unit // TODO
+                MessagesItemAction.Copy -> notImplementedYet()
+                MessagesItemAction.Forward -> notImplementedYet()
                 MessagesItemAction.Redact -> handleActionRedact(targetEvent)
             }
         }
+    }
+
+    private fun notImplementedYet() {
+        setSnackbarContent("Not implemented yet!")
+    }
+
+    fun onSnackbarShown() {
+        setSnackbarContent(null)
+    }
+
+    private fun setSnackbarContent(message: String?) {
+        setState { copy(snackbarContent = message) }
     }
 
     private fun handleActionRedact(event: MessagesTimelineItemState.MessageEvent) {
