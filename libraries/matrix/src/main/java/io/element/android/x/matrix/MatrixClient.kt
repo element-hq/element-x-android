@@ -56,6 +56,7 @@ class MatrixClient internal constructor(
         .slidingSync()
         .homeserver("https://slidingsync.lab.element.dev")
         .withCommonExtensions()
+        .coldCache("ElementX")
         .addView(slidingSyncView)
         .build()
 
