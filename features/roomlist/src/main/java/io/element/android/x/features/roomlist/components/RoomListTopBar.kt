@@ -23,6 +23,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import io.element.android.x.core.compose.LogCompositions
+import io.element.android.x.core.compose.textFieldState
 import io.element.android.x.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.x.features.roomlist.model.MatrixUser
 
@@ -44,6 +45,7 @@ fun RoomListTopBar(
             text = filter,
             onFilterChanged = onFilterChanged,
             onCloseClicked = {
+                onFilterChanged("")
                 searchWidgetStateIsOpened = false
             },
             scrollBehavior = scrollBehavior,
@@ -68,6 +70,7 @@ fun SearchRoomListTopBar(
     onCloseClicked: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
+    var filterState by textFieldState(stateValue = text)
     val focusRequester = remember { FocusRequester() }
     TopAppBar(
         modifier = Modifier
@@ -77,11 +80,12 @@ fun SearchRoomListTopBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(focusRequester),
-                value = text,
+                value = filterState,
                 textStyle = TextStyle(
                     fontSize = 17.sp
                 ),
                 onValueChange = {
+                    filterState = it
                     onFilterChanged(it)
                 },
                 placeholder = {
@@ -100,7 +104,7 @@ fun SearchRoomListTopBar(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Close,
-                                contentDescription = "close",
+                                contentDescription = "clear",
                                 tint = MaterialTheme.colorScheme.onBackground
                             )
                         }
