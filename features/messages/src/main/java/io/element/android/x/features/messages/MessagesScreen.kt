@@ -224,29 +224,32 @@ fun TimelineItems(
     onReachedLoadMore: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(
-        modifier = modifier.fillMaxWidth(),
-        state = lazyListState,
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.Bottom,
-        reverseLayout = true
-    ) {
-        items(
-            items = timelineItems,
-            contentType = { timelineItem -> timelineItem.contentType() },
-            key = { timelineItem -> timelineItem.key() },
-        ) { timelineItem ->
-            TimelineItemRow(
-                timelineItem = timelineItem,
-                onClick = onClick,
-                onLongClick = onLongClick
-            )
-        }
-        if (hasMoreToLoad) {
-            item {
-                MessagesLoadingMoreIndicator(onReachedLoadMore)
+    Box(modifier = modifier.fillMaxWidth()) {
+        LazyColumn(
+            modifier = modifier.fillMaxWidth(),
+            state = lazyListState,
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Bottom,
+            reverseLayout = true
+        ) {
+            items(
+                items = timelineItems,
+                contentType = { timelineItem -> timelineItem.contentType() },
+                key = { timelineItem -> timelineItem.key() },
+            ) { timelineItem ->
+                TimelineItemRow(
+                    timelineItem = timelineItem,
+                    onClick = onClick,
+                    onLongClick = onLongClick
+                )
+            }
+            if (hasMoreToLoad) {
+                item {
+                    MessagesLoadingMoreIndicator(onReachedLoadMore)
+                }
             }
         }
+        MessagesScrollHelper(lazyListState = lazyListState, timelineItems = timelineItems)
     }
 }
 
@@ -453,6 +456,22 @@ fun MessageEventBubble(
         border = border,
         content = content
     )
+}
+
+@Composable
+internal fun MessagesScrollHelper(
+    lazyListState: LazyListState,
+    timelineItems: List<MessagesTimelineItemState>,
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val firstVisibleItemIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
+    LaunchedEffect(timelineItems, firstVisibleItemIndex) {
+        if (!lazyListState.isScrollInProgress &&
+            firstVisibleItemIndex < 2
+        ) coroutineScope.launch {
+            lazyListState.animateScrollToItem(0)
+        }
+    }
 }
 
 @Composable
