@@ -44,19 +44,19 @@ class MatrixClient internal constructor(
         .requiredState(
             requiredState = listOf(
                 RequiredState(key = "m.room.avatar", value = ""),
-                RequiredState(key = "m.room.name", value = ""),
                 RequiredState(key = "m.room.encryption", value = ""),
             )
         )
         .name(name = "HomeScreenView")
-        .syncMode(mode = SlidingSyncMode.FULL_SYNC)
+        .syncMode(mode = SlidingSyncMode.SELECTIVE)
+        .addRange(0u, 10u)
         .build()
 
     private val slidingSync = client
         .slidingSync()
         .homeserver("https://slidingsync.lab.element.dev")
         .withCommonExtensions()
-        .coldCache("ElementX")
+        //.coldCache("ElementX")
         .addView(slidingSyncView)
         .build()
 
@@ -66,7 +66,8 @@ class MatrixClient internal constructor(
             slidingSyncObserverProxy.updateSummaryFlow,
             slidingSync,
             slidingSyncView,
-            dispatchers
+            dispatchers,
+            ::onRestartSync
         )
     private var slidingSyncObserverToken: StoppableSpawn? = null
 
@@ -75,6 +76,10 @@ class MatrixClient internal constructor(
 
     init {
         client.setDelegate(clientDelegate)
+    }
+
+    private fun onRestartSync(){
+        slidingSyncObserverToken = slidingSync.sync()
     }
 
     fun getRoom(roomId: String): MatrixRoom? {

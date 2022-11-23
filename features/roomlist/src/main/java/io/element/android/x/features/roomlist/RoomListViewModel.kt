@@ -66,6 +66,13 @@ class RoomListViewModel(
         }
     }
 
+    fun updateVisibleRange(range: IntRange) {
+        viewModelScope.launch {
+            if (range.isEmpty()) return@launch
+            client.roomSummaryDataSource().setSlidingSyncRange(range)
+        }
+    }
+
     private fun handleInit() {
         suspend {
             val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
