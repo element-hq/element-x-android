@@ -6,20 +6,26 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.placeholder.material.placeholder
@@ -49,18 +55,15 @@ internal fun RoomSummaryRow(
             .heightIn(min = minHeight)
             .then(clickModifier)
     ) {
-        DefaultRoomSummaryRow(modifier = modifier, room = room)
+        DefaultRoomSummaryRow(room = room)
     }
 
 }
 
 @Composable
 internal fun DefaultRoomSummaryRow(
-    modifier: Modifier = Modifier,
     room: RoomListRoomSummary,
 ) {
-    val placeholderShape = PlaceholderShape()
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -81,7 +84,7 @@ internal fun DefaultRoomSummaryRow(
             // Name
             Text(
                 modifier = Modifier
-                    .placeholder(room.isPlaceholder, shape = placeholderShape),
+                    .placeholder(room.isPlaceholder, shape = TextPlaceholderShape),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
                 text = room.name,
@@ -90,7 +93,7 @@ internal fun DefaultRoomSummaryRow(
             )
             // Last Message
             Text(
-                modifier = Modifier.placeholder(room.isPlaceholder, shape = placeholderShape),
+                modifier = Modifier.placeholder(room.isPlaceholder, shape = TextPlaceholderShape),
                 text = room.lastMessage?.toString().orEmpty(),
                 color = MaterialTheme.colorScheme.secondary,
                 fontSize = 14.sp,
@@ -104,12 +107,12 @@ internal fun DefaultRoomSummaryRow(
                 .alignByBaseline(),
         ) {
             Text(
-                modifier = Modifier.placeholder(room.isPlaceholder, shape = placeholderShape),
+                modifier = Modifier.placeholder(room.isPlaceholder, shape = TextPlaceholderShape),
                 fontSize = 12.sp,
                 text = room.timestamp ?: "",
                 color = MaterialTheme.colorScheme.secondary,
             )
-            Spacer(modifier.size(4.dp))
+            Spacer(Modifier.size(4.dp))
             val unreadIndicatorColor =
                 if (room.hasUnread) MaterialTheme.colorScheme.primary else Color.Transparent
             Box(
@@ -123,15 +126,25 @@ internal fun DefaultRoomSummaryRow(
     }
 }
 
-@Composable
-fun PlaceholderShape(): GenericShape {
-    return GenericShape { size, _ ->
-        val rect = Rect(
-            0f,
-            size.height / 4,
-            size.width,
-            size.height - size.height / 4
-        )
-        addRect(rect)
+val TextPlaceholderShape = PercentRectangleSizeShape(0.5f)
+
+class PercentRectangleSizeShape(private val percent: Float) : Shape {
+    override fun createOutline(
+        size: Size,
+        layoutDirection: LayoutDirection,
+        density: Density
+    ): Outline {
+        val halfPercent = percent / 2f
+        val path = Path().apply {
+            val rect = Rect(
+                0f,
+                size.height * halfPercent,
+                size.width,
+                size.height - (size.height * halfPercent)
+            )
+            addRect(rect)
+            close()
+        }
+        return Outline.Generic(path)
     }
 }

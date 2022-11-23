@@ -20,6 +20,6 @@ internal fun stubbedRoomSummaries(): List<RoomListRoomSummary> {
             avatarData = AvatarData("Z"),
             id = "roomId2"
         ),
-        RoomListRoomSummary.placeholder("roomId2")
+        RoomListRoomSummaryPlaceholders.create("roomId2")
     )
 }
