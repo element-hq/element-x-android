@@ -17,8 +17,10 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Velocity
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.compose.collectAsState
@@ -27,8 +29,8 @@ import io.element.android.x.core.compose.LogCompositions
 import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.designsystem.components.ProgressDialog
 import io.element.android.x.designsystem.components.avatar.AvatarData
-import io.element.android.x.features.roomlist.components.RoomSummaryRow
 import io.element.android.x.features.roomlist.components.RoomListTopBar
+import io.element.android.x.features.roomlist.components.RoomSummaryRow
 import io.element.android.x.features.roomlist.model.MatrixUser
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListViewState
@@ -89,11 +91,17 @@ fun RoomListContent(
             firstItemIndex until firstItemIndex + size
         }
     }
-    if (!lazyListState.isScrollInProgress) {
-        onScrollOver(visibleRange)
-    }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
     LogCompositions(tag = "RoomListScreen", msg = "Content")
+
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
+                onScrollOver(visibleRange)
+                return super.onPostFling(consumed, available)
+            }
+        }
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -109,7 +117,9 @@ fun RoomListContent(
         content = { padding ->
             Column(modifier = Modifier.padding(padding)) {
                 LazyColumn(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .nestedScroll(nestedScrollConnection),
                     state = lazyListState,
                 ) {
                     items(roomSummaries) { room ->

@@ -6,8 +6,8 @@ import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
 import io.element.android.x.features.roomlist.model.MatrixUser
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
+import io.element.android.x.features.roomlist.model.RoomListRoomSummaryPlaceholders
 import io.element.android.x.features.roomlist.model.RoomListViewState
-import io.element.android.x.features.roomlist.model.createFakePlaceHolders
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.MatrixInstance
 import io.element.android.x.matrix.media.MediaResolver
@@ -114,7 +114,7 @@ class RoomListViewModel(
                                 // Note: this second case will prevent to handle correctly the empty case
                                 (it is Success && it().isEmpty() && filter.isEmpty()) -> {
                             // Show fake placeholders to avoid having empty screen
-                            Loading(createFakePlaceHolders())
+                            Loading(RoomListRoomSummaryPlaceholders.createFakeList(size = 16))
                         }
                         else -> {
                             it
@@ -129,7 +129,7 @@ class RoomListViewModel(
     ): List<RoomListRoomSummary> {
         return roomSummaries.parallelMap { roomSummary ->
             when (roomSummary) {
-                is RoomSummary.Empty -> RoomListRoomSummary.placeholder(roomSummary.identifier)
+                is RoomSummary.Empty -> RoomListRoomSummaryPlaceholders.create(roomSummary.identifier)
                 is RoomSummary.Filled -> {
                     val avatarData = loadAvatarData(
                         roomSummary.details.name,
