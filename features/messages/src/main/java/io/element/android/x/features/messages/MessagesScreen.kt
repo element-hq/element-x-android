@@ -12,11 +12,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
@@ -459,12 +461,14 @@ fun MessageEventBubble(
 }
 
 @Composable
-internal fun MessagesScrollHelper(
+internal fun BoxScope.MessagesScrollHelper(
     lazyListState: LazyListState,
     timelineItems: List<MessagesTimelineItemState>,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val firstVisibleItemIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
+
+    // Auto-scroll when new timeline items appear
     LaunchedEffect(timelineItems, firstVisibleItemIndex) {
         if (!lazyListState.isScrollInProgress &&
             firstVisibleItemIndex < 2
@@ -472,6 +476,28 @@ internal fun MessagesScrollHelper(
             lazyListState.animateScrollToItem(0)
         }
     }
+
+    // Jump to bottom button
+    if (firstVisibleItemIndex > 2) {
+        FloatingActionButton(
+            onClick = {
+                coroutineScope.launch {
+                    if (firstVisibleItemIndex > 10) {
+                        lazyListState.scrollToItem(0)
+                    } else {
+                        lazyListState.animateScrollToItem(0)
+                    }
+                }
+            },
+            shape = CircleShape,
+            modifier = Modifier.align(Alignment.BottomCenter).size(40.dp),
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+        ) {
+            Icon(Icons.Default.ArrowDownward, "")
+        }
+    }
+
 }
 
 @Composable
