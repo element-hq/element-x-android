@@ -1,6 +1,7 @@
 [versions]
 # Project
 android_gradle_plugin = "7.3.1"
+firebase_gradle_plugin = "3.0.2"
 kotlin = "1.7.20"
 
 # AndroidX
@@ -41,6 +42,7 @@ serialization-json = "1.4.1"
 [libraries]
 # Project
 android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "android_gradle_plugin" }
+firebase_gradle_plugin = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebase_gradle_plugin" }
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 # AndroidX
