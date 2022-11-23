@@ -32,7 +32,7 @@ fun MessagesTimelineItemImageView(
         0.7f
     }
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(widthPercent)
             .aspectRatio(content.aspectRatio),
         contentAlignment = Alignment.Center,

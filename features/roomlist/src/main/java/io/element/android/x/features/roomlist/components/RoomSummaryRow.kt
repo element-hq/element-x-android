@@ -41,9 +41,9 @@ internal fun RoomSummaryRow(
 ) {
 
     val clickModifier = if (room.isPlaceholder) {
-        Modifier
+        modifier
     } else {
-        Modifier.clickable(
+        modifier.clickable(
             onClick = { onClick(room) },
             indication = rememberRipple(),
             interactionSource = remember { MutableInteractionSource() }

@@ -275,7 +275,7 @@ fun MessageEventRow(
         Pair(Alignment.CenterStart, Start)
     }
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight(),
         contentAlignment = parentAlignment
@@ -331,7 +331,6 @@ fun MessageEventRow(
                         .zIndex(1f)
                         .offset(x = if (messageEvent.isMine) 0.dp else 20.dp, y = -(16.dp))
                 )
-
             }
             if (messageEvent.isMine) {
                 Spacer(modifier = Modifier.width(16.dp))
@@ -339,9 +338,9 @@ fun MessageEventRow(
         }
     }
     if (messageEvent.groupPosition.isNew()) {
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = modifier.height(8.dp))
     } else {
-        Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = modifier.height(2.dp))
     }
 }
 
