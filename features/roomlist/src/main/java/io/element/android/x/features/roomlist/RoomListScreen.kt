@@ -122,7 +122,10 @@ fun RoomListContent(
                         .nestedScroll(nestedScrollConnection),
                     state = lazyListState,
                 ) {
-                    items(roomSummaries) { room ->
+                    items(
+                        items = roomSummaries,
+                        contentType = { room -> room.contentType() },
+                    ) { room ->
                         RoomSummaryRow(room = room, onClick = ::onRoomClicked)
                     }
                 }
@@ -133,6 +136,8 @@ fun RoomListContent(
         ProgressDialog("Login out...")
     }
 }
+
+private fun RoomListRoomSummary.contentType() = isPlaceholder
 
 private fun LazyListState.isScrolled(): Boolean {
     return firstVisibleItemIndex > 0 || firstVisibleItemScrollOffset > 0
