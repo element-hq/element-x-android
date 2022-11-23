@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.devtools.ksp' version '1.7.20-1.0.7'
+    id 'com.google.firebase.appdistribution' version '3.0.2'
 }
 
 android {
@@ -20,6 +21,21 @@ android {
         }
     }
 
+    signingConfigs {
+        debug {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file('./signature/debug.keystore')
+            storePassword 'android'
+        }
+        nightly {
+            keyAlias System.env.ELEMENT_ANDROID_NIGHTLY_KEYID ?: project.property("signing.element.nightly.keyId")
+            keyPassword System.env.ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD ?: project.property("signing.element.nightly.keyPassword")
+            storeFile file('./signature/nightly.keystore')
+            storePassword System.env.ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD ?: project.property("signing.element.nightly.storePassword")
+        }
+    }
+
     buildTypes {
         debug {
             resValue "string", "app_name", "ElementX dbg"
@@ -33,6 +49,24 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
+        nightly {
+            initWith release
+            applicationIdSuffix ".nightly"
+            versionNameSuffix "-nightly"
+            resValue "string", "app_name", "ElementX nightly"
+            matchingFallbacks = ['release']
+            signingConfig signingConfigs.nightly
+            firebaseAppDistribution {
+                artifactType = "APK"
+                // releaseNotesFile = TODO
+                groups = "external-testers"
+                // This should not be required, but if I do not add the appId, I get this error:
+                // "App Distribution halted because it had a problem uploading the APK: [404] Requested entity was not found."
+                appId = "1:912726360885:android:e17435e0beb0303000427c"
+            }
+        }
+
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -58,15 +92,6 @@ android {
             getByName(variant.name) {
                 kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
             }
-        }
-    }
-
-    signingConfigs {
-        debug {
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
-            storeFile file('./signature/debug.keystore')
-            storePassword 'android'
         }
     }
 }
