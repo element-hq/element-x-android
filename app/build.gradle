@@ -84,7 +84,7 @@ dependencies {
     implementation 'io.github.raamcosta.compose-destinations:animations-core:1.7.23-beta'
     ksp 'io.github.raamcosta.compose-destinations:ksp:1.7.23-beta'
 
-    def composeBom = platform('androidx.compose:compose-bom:2022.10.00')
+    def composeBom = platform('androidx.compose:compose-bom:2022.11.00')
     implementation composeBom
     androidTestImplementation composeBom
 
