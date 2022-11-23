@@ -12,6 +12,7 @@ import java.util.*
 
 interface RoomSummaryDataSource {
     fun roomSummaries(): Flow<List<RoomSummary>>
+    fun setSlidingSyncRange(range: IntRange)
 }
 
 internal class RustRoomSummaryDataSource(
@@ -19,7 +20,8 @@ internal class RustRoomSummaryDataSource(
     private val slidingSync: SlidingSync,
     private val slidingSyncView: SlidingSyncView,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory()
+    private val onRestartSync: () -> Unit,
+    private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
 ) : RoomSummaryDataSource, Closeable {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + coroutineDispatchers.io)
@@ -67,6 +69,12 @@ internal class RustRoomSummaryDataSource(
 
     override fun roomSummaries(): Flow<List<RoomSummary>> {
         return roomSummaries.sample(50)
+    }
+
+    override fun setSlidingSyncRange(range: IntRange) {
+        Timber.v("setVisibleRange=$range")
+        slidingSyncView.setRange(range.first.toUInt(), range.last.toUInt())
+        onRestartSync()
     }
 
     private suspend fun didReceiveSyncUpdate(summary: UpdateSummary) {
@@ -140,11 +148,12 @@ internal class RustRoomSummaryDataSource(
         )
     }
 
-    private suspend fun updateRoomSummaries(block: MutableList<RoomSummary>.() -> Unit) = withContext(coroutineDispatchers.diffUpdateDispatcher){
-        val mutableRoomSummaries = roomSummaries.value.toMutableList()
-        block(mutableRoomSummaries)
-        roomSummaries.value = mutableRoomSummaries
-    }
+    private suspend fun updateRoomSummaries(block: MutableList<RoomSummary>.() -> Unit) =
+        withContext(coroutineDispatchers.diffUpdateDispatcher) {
+            val mutableRoomSummaries = roomSummaries.value.toMutableList()
+            block(mutableRoomSummaries)
+            roomSummaries.value = mutableRoomSummaries
+        }
 
     fun SlidingSyncViewRoomsListDiff.isInvalidation(): Boolean {
         return when (this) {
