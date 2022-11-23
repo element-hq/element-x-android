@@ -60,9 +60,15 @@ fun ElementXTheme(
         else -> LightColorScheme
     }
     val systemUiController = rememberSystemUiController()
+    val useDarkIcons = !darkTheme
+
     SideEffect {
         systemUiController.setStatusBarColor(
             color = colorScheme.background
+        )
+        systemUiController.setSystemBarsColor(
+            color = Color.Transparent,
+            darkIcons = useDarkIcons
         )
     }
 

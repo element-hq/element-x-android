@@ -113,6 +113,7 @@ fun OnBoardingContent(
                     },
                     enabled = true,
                     modifier = Modifier
+                        .navigationBarsPadding()
                         .align(CenterHorizontally)
                         .padding(top = 16.dp)
                 )
