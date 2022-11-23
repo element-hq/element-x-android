@@ -35,10 +35,10 @@ import io.element.android.x.matrix.core.RoomId
 
 @Composable
 fun RoomListScreen(
+    viewModel: RoomListViewModel = mavericksViewModel(),
     onSuccessLogout: () -> Unit = { },
     onRoomClicked: (RoomId) -> Unit = { }
 ) {
-    val viewModel: RoomListViewModel = mavericksViewModel()
     val logoutAction by viewModel.collectAsState(RoomListViewState::logoutAction)
     val filter by viewModel.collectAsState(RoomListViewState::filter)
     if (logoutAction is Success) {
