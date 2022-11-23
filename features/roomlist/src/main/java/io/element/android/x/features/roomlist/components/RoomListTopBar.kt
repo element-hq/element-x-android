@@ -35,19 +35,24 @@ fun RoomListTopBar(
     onLogoutClicked: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
+
     LogCompositions(tag = "RoomListScreen", msg = "TopBar")
     var searchWidgetStateIsOpened by rememberSaveable { mutableStateOf(false) }
-    BackHandler(enabled = searchWidgetStateIsOpened) {
+
+    fun closeFilter() {
+        onFilterChanged("")
         searchWidgetStateIsOpened = false
     }
+
+    BackHandler(enabled = searchWidgetStateIsOpened) {
+        closeFilter()
+    }
+
     if (searchWidgetStateIsOpened) {
         SearchRoomListTopBar(
             text = filter,
             onFilterChanged = onFilterChanged,
-            onCloseClicked = {
-                onFilterChanged("")
-                searchWidgetStateIsOpened = false
-            },
+            onCloseClicked = ::closeFilter,
             scrollBehavior = scrollBehavior,
         )
     } else {
