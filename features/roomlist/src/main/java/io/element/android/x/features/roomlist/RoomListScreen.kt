@@ -125,7 +125,6 @@ fun RoomListContent(
                     items(
                         items = roomSummaries,
                         contentType = { room -> room.contentType() },
-                        key = { room -> room.key() },
                     ) { room ->
                         RoomSummaryRow(room = room, onClick = ::onRoomClicked)
                     }
@@ -138,7 +137,6 @@ fun RoomListContent(
     }
 }
 
-private fun RoomListRoomSummary.key() = id
 private fun RoomListRoomSummary.contentType() = isPlaceholder
 
 private fun LazyListState.isScrolled(): Boolean {
