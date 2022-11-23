@@ -14,6 +14,7 @@ import io.element.android.x.matrix.timeline.MatrixTimelineItem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.MessageType
+import org.matrix.rustcomponents.sdk.TimelineKey
 
 class MessageTimelineItemStateMapper(
     private val client: MatrixClient,
@@ -52,10 +53,12 @@ class MessageTimelineItemStateMapper(
         val senderAvatarUrl = room.userAvatarUrl(currentSender).getOrNull()
         val senderAvatarData =
             loadAvatarData(senderDisplayName ?: currentSender, senderAvatarUrl)
-
-
+        val uniqueId = when (val eventKey = currentTimelineItem.event.key()) {
+            is TimelineKey.TransactionId -> eventKey.txnId
+            is TimelineKey.EventId -> eventKey.eventId
+        }
         return MessagesTimelineItemState.MessageEvent(
-            id = currentTimelineItem.event.eventId() ?: "",
+            id = uniqueId,
             senderId = currentSender,
             senderDisplayName = senderDisplayName,
             senderAvatar = senderAvatarData,
