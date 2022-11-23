@@ -10,7 +10,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
@@ -230,7 +230,11 @@ fun TimelineItems(
         verticalArrangement = Arrangement.Bottom,
         reverseLayout = true
     ) {
-        itemsIndexed(timelineItems) { index, timelineItem ->
+        items(
+            items = timelineItems,
+            contentType = { timelineItem -> timelineItem.contentType() },
+            key = { timelineItem -> timelineItem.key() },
+        ) { timelineItem ->
             TimelineItemRow(
                 timelineItem = timelineItem,
                 onClick = onClick,
@@ -242,6 +246,20 @@ fun TimelineItems(
                 MessagesLoadingMoreIndicator(onReachedLoadMore)
             }
         }
+    }
+}
+
+private fun MessagesTimelineItemState.key(): String {
+    return when (this) {
+        is MessagesTimelineItemState.MessageEvent -> id
+        is MessagesTimelineItemState.Virtual -> id
+    }
+}
+
+private fun MessagesTimelineItemState.contentType(): Int {
+    return when (this) {
+        is MessagesTimelineItemState.MessageEvent -> 0
+        is MessagesTimelineItemState.Virtual -> 1
     }
 }
 
