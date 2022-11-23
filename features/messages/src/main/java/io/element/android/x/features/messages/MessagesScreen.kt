@@ -199,6 +199,7 @@ fun MessagesContent(
                     composerText = composerText?.charSequence?.toString(),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .imePadding()
                         .let {
                             if (composerFullScreen) {
                                 it.weight(1f)
