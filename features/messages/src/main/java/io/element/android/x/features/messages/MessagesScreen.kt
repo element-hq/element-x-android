@@ -82,7 +82,7 @@ fun MessagesScreen(
     val composerCanSendMessage by composerViewModel.collectAsState(MessageComposerViewState::isSendButtonVisible)
     val composerText by composerViewModel.collectAsState(MessageComposerViewState::text)
     val snackbarHostState = remember { SnackbarHostState() }
-    MessagesContent(
+    MessagesScreenContent(
         roomTitle = roomTitle,
         roomAvatar = roomAvatar,
         timelineItems = timelineItems().orEmpty(),
@@ -126,7 +126,7 @@ fun MessagesScreen(
 }
 
 @Composable
-fun MessagesContent(
+fun MessagesScreenContent(
     roomTitle: String?,
     roomAvatar: AvatarData?,
     timelineItems: List<MessagesTimelineItemState>,
@@ -144,75 +144,118 @@ fun MessagesContent(
     snackbarHostState: SnackbarHostState,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Content")
-    val lazyListState = rememberLazyListState()
-
     Scaffold(
         topBar = {
-            TopAppBar(
-                navigationIcon = {
-                    IconButton(onClick = onBackPressed) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
-                },
-                title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        if (roomAvatar != null) {
-                            Avatar(roomAvatar)
-                            Spacer(modifier = Modifier.width(8.dp))
-                        }
-                        Text(
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            text = roomTitle ?: "Unknown room",
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                }
-
+            MessagesTopAppBar(
+                roomTitle = roomTitle,
+                roomAvatar = roomAvatar,
+                onBackPressed = onBackPressed
             )
         },
         content = { padding ->
-            Column(
-                modifier = Modifier
-                    .padding(padding)
-                    .fillMaxSize()
-            ) {
-                if (!composerFullScreen) {
-                    TimelineItems(
-                        lazyListState = lazyListState,
-                        timelineItems = timelineItems,
-                        hasMoreToLoad = hasMoreToLoad,
-                        onReachedLoadMore = onReachedLoadMore,
-                        modifier = Modifier.weight(1f),
-                        onClick = onClick,
-                        onLongClick = onLongClick
-                    )
-                }
-                TextComposer(
-                    onSendMessage = onSendMessage,
-                    fullscreen = composerFullScreen,
-                    onFullscreenToggle = onComposerFullScreenChange,
-                    onComposerTextChange = onComposerTextChange,
-                    composerCanSendMessage = composerCanSendMessage,
-                    composerText = composerText?.charSequence?.toString(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .imePadding()
-                        .let {
-                            if (composerFullScreen) {
-                                it.weight(1f)
-                            } else {
-                                it.height(COMPOSER_HEIGHT)
-                            }
-                        },
+            MessagesContent(
+                modifier = Modifier.padding(padding),
+                timelineItems = timelineItems,
+                hasMoreToLoad = hasMoreToLoad,
+                onReachedLoadMore = onReachedLoadMore,
+                onSendMessage = onSendMessage,
+                onClick = onClick,
+                onLongClick = onLongClick,
+                composerFullScreen = composerFullScreen,
+                onComposerFullScreenChange = onComposerFullScreenChange,
+                onComposerTextChange = onComposerTextChange,
+                composerCanSendMessage = composerCanSendMessage,
+                composerText = composerText
+            )
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+    )
+}
+
+@Composable
+fun MessagesContent(
+    timelineItems: List<MessagesTimelineItemState>,
+    hasMoreToLoad: Boolean,
+    onReachedLoadMore: () -> Unit,
+    onSendMessage: (String) -> Unit,
+    onClick: (MessagesTimelineItemState.MessageEvent) -> Unit,
+    onLongClick: (MessagesTimelineItemState.MessageEvent) -> Unit,
+    composerFullScreen: Boolean,
+    onComposerFullScreenChange: () -> Unit,
+    onComposerTextChange: (CharSequence) -> Unit,
+    composerCanSendMessage: Boolean,
+    composerText: StableCharSequence?,
+    modifier: Modifier = Modifier
+) {
+
+    val lazyListState = rememberLazyListState()
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
+        if (!composerFullScreen) {
+            TimelineItems(
+                lazyListState = lazyListState,
+                timelineItems = timelineItems,
+                hasMoreToLoad = hasMoreToLoad,
+                onReachedLoadMore = onReachedLoadMore,
+                modifier = Modifier.weight(1f),
+                onClick = onClick,
+                onLongClick = onLongClick
+            )
+        }
+        TextComposer(
+            onSendMessage = onSendMessage,
+            fullscreen = composerFullScreen,
+            onFullscreenToggle = onComposerFullScreenChange,
+            onComposerTextChange = onComposerTextChange,
+            composerCanSendMessage = composerCanSendMessage,
+            composerText = composerText?.charSequence?.toString(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .imePadding()
+                .let {
+                    if (composerFullScreen) {
+                        it.weight(1f)
+                    } else {
+                        it.height(COMPOSER_HEIGHT)
+                    }
+                },
+        )
+    }
+}
+
+@Composable
+fun MessagesTopAppBar(
+    roomTitle: String?,
+    roomAvatar: AvatarData?,
+    onBackPressed: () -> Unit,
+) {
+    TopAppBar(
+        navigationIcon = {
+            IconButton(onClick = onBackPressed) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Back"
                 )
             }
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        title = {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (roomAvatar != null) {
+                    Avatar(roomAvatar)
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+                Text(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    text = roomTitle ?: "Unknown room",
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+
     )
 }
 
@@ -228,7 +271,7 @@ fun TimelineItems(
 ) {
     Box(modifier = modifier.fillMaxWidth()) {
         LazyColumn(
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxSize(),
             state = lazyListState,
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Bottom,
@@ -253,6 +296,7 @@ fun TimelineItems(
         }
         MessagesScrollHelper(lazyListState = lazyListState, timelineItems = timelineItems)
     }
+
 }
 
 private fun MessagesTimelineItemState.key(): String {
@@ -490,7 +534,9 @@ internal fun BoxScope.MessagesScrollHelper(
                 }
             },
             shape = CircleShape,
-            modifier = Modifier.align(Alignment.BottomCenter).size(40.dp),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .size(40.dp),
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant
         ) {
