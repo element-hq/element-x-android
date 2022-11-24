@@ -4,6 +4,7 @@ package io.element.android.x.features.messages.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -24,7 +25,7 @@ fun TimelineItemActionsScreen(
     modifier: Modifier = Modifier
 ) {
     ModalBottomSheetLayout(
-        modifier = modifier,
+        modifier = modifier.navigationBarsPadding(),
         sheetState = sheetState,
         sheetContent = {
             SheetContent(
