@@ -164,7 +164,9 @@ fun LoginContent(
                             imeAction = ImeAction.Done,
                         ),
                         keyboardActions = KeyboardActions(
-                            onDone = { onSubmitClicked() }
+                            onDone = {
+                                if (state.submitEnabled) onSubmitClicked()
+                            }
                         ),
                     )
                     if (isError) {
