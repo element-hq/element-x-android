@@ -3,33 +3,24 @@
 package io.element.android.x.features.messages
 
 import Avatar
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Alignment.Companion.Start
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -40,10 +31,8 @@ import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.core.compose.LogCompositions
 import io.element.android.x.core.data.StableCharSequence
-import io.element.android.x.designsystem.*
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.messages.components.*
-import io.element.android.x.features.messages.model.MessagesItemGroupPosition
 import io.element.android.x.features.messages.model.MessagesTimelineItemState
 import io.element.android.x.features.messages.model.MessagesViewState
 import io.element.android.x.features.messages.model.content.*
@@ -53,7 +42,6 @@ import io.element.android.x.textcomposer.TextComposer
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-private val BUBBLE_RADIUS = 16.dp
 private val COMPOSER_HEIGHT = 112.dp
 
 @Composable
@@ -432,83 +420,6 @@ private fun MessageSenderInformation(
         )
     }
 }
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun MessageEventBubble(
-    groupPosition: MessagesItemGroupPosition,
-    isMine: Boolean,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-    onLongClick: () -> Unit,
-    content: @Composable () -> Unit,
-) {
-    fun bubbleShape(): Shape {
-        return when (groupPosition) {
-            MessagesItemGroupPosition.First -> if (isMine) {
-                RoundedCornerShape(BUBBLE_RADIUS, BUBBLE_RADIUS, 0.dp, BUBBLE_RADIUS)
-            } else {
-                RoundedCornerShape(BUBBLE_RADIUS, BUBBLE_RADIUS, BUBBLE_RADIUS, 0.dp)
-            }
-            MessagesItemGroupPosition.Middle -> if (isMine) {
-                RoundedCornerShape(BUBBLE_RADIUS, 0.dp, 0.dp, BUBBLE_RADIUS)
-            } else {
-                RoundedCornerShape(0.dp, BUBBLE_RADIUS, BUBBLE_RADIUS, 0.dp)
-            }
-            MessagesItemGroupPosition.Last -> if (isMine) {
-                RoundedCornerShape(BUBBLE_RADIUS, 0.dp, BUBBLE_RADIUS, BUBBLE_RADIUS)
-            } else {
-                RoundedCornerShape(0.dp, BUBBLE_RADIUS, BUBBLE_RADIUS, BUBBLE_RADIUS)
-            }
-            MessagesItemGroupPosition.None ->
-                RoundedCornerShape(
-                    BUBBLE_RADIUS,
-                    BUBBLE_RADIUS,
-                    BUBBLE_RADIUS,
-                    BUBBLE_RADIUS
-                )
-        }
-    }
-
-    fun Modifier.offsetForItem(): Modifier {
-        return if (isMine) {
-            offset(y = -(12.dp))
-        } else {
-            offset(x = 20.dp, y = -(12.dp))
-        }
-    }
-
-    val backgroundBubbleColor = if (isMine) {
-        if(LocalIsDarkTheme.current){
-            SystemGrey5Dark
-        }else {
-            SystemGrey5Light
-        }
-    } else {
-        if(LocalIsDarkTheme.current){
-            SystemGrey6Dark
-        }else {
-            SystemGrey6Light
-        }
-    }
-    val bubbleShape = bubbleShape()
-    Surface(
-        modifier = modifier
-            .widthIn(min = 80.dp)
-            .offsetForItem()
-            .clip(bubbleShape)
-            .combinedClickable(
-                onClick = onClick,
-                onLongClick = onLongClick,
-                indication = rememberRipple(),
-                interactionSource = remember { MutableInteractionSource() }
-            ),
-        color = backgroundBubbleColor,
-        shape = bubbleShape,
-        content = content
-    )
-}
-
 @Composable
 internal fun BoxScope.MessagesScrollHelper(
     lazyListState: LazyListState,
