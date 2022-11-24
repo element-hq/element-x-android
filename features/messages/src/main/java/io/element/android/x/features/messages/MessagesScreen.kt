@@ -39,6 +39,7 @@ import io.element.android.x.features.messages.model.content.*
 import io.element.android.x.features.messages.textcomposer.MessageComposerViewModel
 import io.element.android.x.features.messages.textcomposer.MessageComposerViewState
 import io.element.android.x.textcomposer.TextComposer
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -279,11 +280,15 @@ fun TimelineItems(
             }
             if (hasMoreToLoad) {
                 item {
-                    MessagesLoadingMoreIndicator(onReachedLoadMore)
+                    MessagesLoadingMoreIndicator()
                 }
             }
         }
-        MessagesScrollHelper(lazyListState = lazyListState, timelineItems = timelineItems)
+        MessagesScrollHelper(
+            lazyListState = lazyListState,
+            timelineItems = timelineItems,
+            onLoadMore = onReachedLoadMore
+        )
     }
 
 }
@@ -420,10 +425,12 @@ private fun MessageSenderInformation(
         )
     }
 }
+
 @Composable
 internal fun BoxScope.MessagesScrollHelper(
     lazyListState: LazyListState,
     timelineItems: List<MessagesTimelineItemState>,
+    onLoadMore: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val firstVisibleItemIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
@@ -435,6 +442,24 @@ internal fun BoxScope.MessagesScrollHelper(
         ) coroutineScope.launch {
             lazyListState.animateScrollToItem(0)
         }
+    }
+
+    // Handle load more preloading
+    val loadMore by remember {
+        derivedStateOf {
+            val layoutInfo = lazyListState.layoutInfo
+            val totalItemsNumber = layoutInfo.totalItemsCount
+            val lastVisibleItemIndex = (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0) + 1
+            lastVisibleItemIndex > (totalItemsNumber - 30)
+        }
+    }
+
+    LaunchedEffect(loadMore) {
+        snapshotFlow { loadMore }
+            .distinctUntilChanged()
+            .collect {
+                onLoadMore()
+            }
     }
 
     // Jump to bottom button
@@ -463,7 +488,7 @@ internal fun BoxScope.MessagesScrollHelper(
 }
 
 @Composable
-internal fun MessagesLoadingMoreIndicator(onReachedLoadMore: () -> Unit) {
+internal fun MessagesLoadingMoreIndicator() {
     Box(
         Modifier
             .fillMaxWidth()
@@ -475,9 +500,6 @@ internal fun MessagesLoadingMoreIndicator(onReachedLoadMore: () -> Unit) {
             strokeWidth = 2.dp,
             color = MaterialTheme.colorScheme.primary
         )
-        LaunchedEffect(Unit) {
-            onReachedLoadMore()
-        }
     }
 
 }
