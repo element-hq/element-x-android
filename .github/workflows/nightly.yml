@@ -4,7 +4,6 @@ on:
   schedule:
     # Every nights at 4
     - cron: "0 4 * * *"
-  workflow_dispatch:
 
 env:
   GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
