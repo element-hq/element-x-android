@@ -3,6 +3,7 @@ package io.element.android.x.features.login
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshotFlow
 import com.airbnb.mvrx.MavericksViewModel
+import com.airbnb.mvrx.Uninitialized
 import io.element.android.x.matrix.MatrixInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -47,9 +48,11 @@ class LoginViewModel(initialState: LoginViewState) :
 
     fun onSetPassword(password: String) {
         formState.value = formState.value.copy(password = password)
+        setState { copy(isLoggedIn = Uninitialized) }
     }
 
     fun onSetName(name: String) {
         formState.value = formState.value.copy(login = name)
+        setState { copy(isLoggedIn = Uninitialized) }
     }
 }

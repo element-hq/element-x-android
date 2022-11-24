@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -25,6 +26,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
+import io.element.android.x.features.login.error.changeServerError
 
 @Composable
 fun ChangeServerScreen(
@@ -107,12 +109,18 @@ fun ChangeServerContent(
                     isError = isError,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password,
-                        imeAction = ImeAction.Send,
+                        imeAction = ImeAction.Done,
                     ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { onChangeServerSubmit() }
+                    )
                 )
-                if (isError) {
+                if (state.changeServerAction is Fail) {
                     Text(
-                        text = (state.changeServerAction as? Fail)?.toString().orEmpty(),
+                        text = changeServerError(
+                            state.homeserver,
+                            state.changeServerAction.error
+                        ),
                         color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.padding(start = 16.dp)
