@@ -29,6 +29,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.designsystem.ElementXTheme
+import io.element.android.x.features.login.error.loginError
 import timber.log.Timber
 
 @Composable
@@ -164,14 +165,12 @@ fun LoginContent(
                             imeAction = ImeAction.Done,
                         ),
                         keyboardActions = KeyboardActions(
-                            onDone = {
-                                if (state.submitEnabled) onSubmitClicked()
-                            }
+                            onDone = { onSubmitClicked() }
                         ),
                     )
-                    if (isError) {
+                    if (state.isLoggedIn is Fail) {
                         Text(
-                            text = (state.isLoggedIn as? Fail)?.toString().orEmpty(),
+                            text = loginError(state.formState, state.isLoggedIn.error),
                             color = MaterialTheme.colorScheme.error,
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier.padding(start = 16.dp)

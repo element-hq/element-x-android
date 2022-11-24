@@ -10,6 +10,7 @@ dependencies {
     implementation(project(":libraries:core"))
     implementation(project(":libraries:matrix"))
     implementation(project(":libraries:designsystem"))
+    implementation(project(":libraries:elementresources"))
     implementation(libs.mavericks.compose)
     implementation(libs.timber)
     testImplementation("junit:junit:4.13.2")
