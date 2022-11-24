@@ -17,7 +17,7 @@ val SystemGrey3Dark = Color(0xFF48484A)
 val SystemGrey4Light = Color(0xFFD1D1D6)
 val SystemGrey4Dark = Color(0xFF3A3A3C)
 val SystemGrey5Light = Color(0xFFE5E5EA)
-val SystemGrey5Dark = Color(0xFF1C1C1E)
+val SystemGrey5Dark = Color(0xFF2C2C2E)
 val SystemGrey6Light = Color(0xFFF2F2F7)
 val SystemGrey6Dark = Color(0xFF1C1C1E)
 

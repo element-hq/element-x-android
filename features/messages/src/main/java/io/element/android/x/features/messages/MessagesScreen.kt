@@ -40,6 +40,7 @@ import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.core.compose.LogCompositions
 import io.element.android.x.core.data.StableCharSequence
+import io.element.android.x.designsystem.*
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.messages.components.*
 import io.element.android.x.features.messages.model.MessagesItemGroupPosition
@@ -477,13 +478,18 @@ fun MessageEventBubble(
         }
     }
 
-    val (backgroundBubbleColor, border) = if (isMine) {
-        Pair(MaterialTheme.colorScheme.surfaceVariant, null)
+    val backgroundBubbleColor = if (isMine) {
+        if(LocalIsDarkTheme.current){
+            SystemGrey5Dark
+        }else {
+            SystemGrey5Light
+        }
     } else {
-        Pair(
-            Color.Transparent,
-            BorderStroke(1.dp, MaterialTheme.colorScheme.surfaceVariant)
-        )
+        if(LocalIsDarkTheme.current){
+            SystemGrey6Dark
+        }else {
+            SystemGrey6Light
+        }
     }
     val bubbleShape = bubbleShape()
     Surface(
@@ -499,7 +505,6 @@ fun MessageEventBubble(
             ),
         color = backgroundBubbleColor,
         shape = bubbleShape,
-        border = border,
         content = content
     )
 }
