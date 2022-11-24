@@ -49,7 +49,7 @@ class MatrixClient internal constructor(
         )
         .name(name = "HomeScreenView")
         .syncMode(mode = SlidingSyncMode.SELECTIVE)
-        .addRange(0u, 10u)
+        .addRange(0u, 30u)
         .build()
 
     private val slidingSync = client

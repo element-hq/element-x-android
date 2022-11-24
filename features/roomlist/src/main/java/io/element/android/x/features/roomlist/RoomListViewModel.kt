@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
+private const val extendedRangeSize = 40
+
 class RoomListViewModel(
     private val client: MatrixClient,
     initialState: RoomListViewState
@@ -69,7 +71,12 @@ class RoomListViewModel(
     fun updateVisibleRange(range: IntRange) {
         viewModelScope.launch {
             if (range.isEmpty()) return@launch
-            client.roomSummaryDataSource().setSlidingSyncRange(range)
+            val midExtendedRangeSize = extendedRangeSize / 2
+            val extendedRangeStart = (range.first - midExtendedRangeSize).coerceAtLeast(0)
+            // Safe to give bigger size than room list
+            val extendedRangeEnd = range.last + midExtendedRangeSize
+            val extendedRange = IntRange(extendedRangeStart, extendedRangeEnd)
+            client.roomSummaryDataSource().setSlidingSyncRange(extendedRange)
         }
     }
 
