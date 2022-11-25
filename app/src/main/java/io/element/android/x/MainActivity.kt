@@ -35,6 +35,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // FIXME Scrolling is broken on login screens. Commenting this line fixes the issue.
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             ElementXTheme {
