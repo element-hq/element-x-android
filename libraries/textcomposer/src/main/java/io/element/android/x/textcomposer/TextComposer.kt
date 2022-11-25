@@ -39,8 +39,7 @@ fun TextComposer(
                     }
 
                     override fun onSendMessage(text: CharSequence) {
-                        // TODO The Wysiwyg team is working to be able to get a markdown version of the text
-                        // For now we send only the plain text. `formattedText` is Html.
+                        // text contains markdown.
                         onSendMessage(text.toString())
                     }
 
