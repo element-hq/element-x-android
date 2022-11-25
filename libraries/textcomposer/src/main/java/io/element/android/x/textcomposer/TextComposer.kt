@@ -54,7 +54,7 @@ fun TextComposer(
                     }
 
                 }
-                setFullScreen(fullscreen)
+                setFullScreen(fullscreen, true)
                 (this as MessageComposerView).apply {
                     setup(isInDarkMode)
                 }
@@ -68,7 +68,7 @@ fun TextComposer(
             // whenever the state changes
             // Example of Compose -> View communication
             val messageComposerView = (view as MessageComposerView)
-            view.setFullScreen(fullscreen)
+            view.setFullScreen(fullscreen, false)
             messageComposerView.sendButton.isInvisible = !composerCanSendMessage
             messageComposerView.setTextIfDifferent(composerText ?: "")
         }

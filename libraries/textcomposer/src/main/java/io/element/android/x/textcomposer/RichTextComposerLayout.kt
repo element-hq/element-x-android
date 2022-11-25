@@ -35,7 +35,6 @@ import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.text.toSpannable
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -119,7 +118,7 @@ class RichTextComposerLayout @JvmOverloads constructor(
 
     private val dimensionConverter = DimensionConverter(resources)
 
-    fun setFullScreen(isFullScreen: Boolean) {
+    fun setFullScreen(isFullScreen: Boolean, manageKeyboard: Boolean) {
         editText.updateLayoutParams<ViewGroup.LayoutParams> {
             height = if (isFullScreen) 0 else ViewGroup.LayoutParams.WRAP_CONTENT
         }
@@ -135,10 +134,12 @@ class RichTextComposerLayout @JvmOverloads constructor(
         )
 
         views.bottomSheetHandle.isVisible = isFullScreen
-        if (isFullScreen) {
-            editText.showKeyboard(true)
-        } else {
-            editText.hideKeyboard()
+        if (manageKeyboard) {
+            if (isFullScreen) {
+                editText.showKeyboard(true)
+            } else {
+                editText.hideKeyboard()
+            }
         }
         this.isFullScreen = isFullScreen
     }
@@ -213,7 +214,8 @@ class RichTextComposerLayout @JvmOverloads constructor(
         }
 
         views.sendButton.setOnClickListener {
-            val textMessage = views.richTextComposerEditText.getMarkdown() // text?.toSpannable() ?: ""
+            val textMessage =
+                views.richTextComposerEditText.getMarkdown() // text?.toSpannable() ?: ""
             callback?.onSendMessage(textMessage)
         }
 
@@ -506,7 +508,8 @@ class RichTextComposerLayout @JvmOverloads constructor(
             is MessageComposerMode.Reply -> {
                 // TODO We need sender info
                 // val senderInfo = mode.event.senderInfo
-                val userName = "TODO Sender name" // senderInfo.displayName ?: senderInfo.disambiguatedDisplayName
+                val userName =
+                    "TODO Sender name" // senderInfo.displayName ?: senderInfo.disambiguatedDisplayName
                 views.composerModeTitleView.text =
                     resources.getString(R.string.replying_to, userName)
                 views.composerModeIconView.setImageResource(R.drawable.ic_reply)
