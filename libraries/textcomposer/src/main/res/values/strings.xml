@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="editing">Editing</string>
+    <string name="replying_to">Replying to %s</string>
+    <string name="quoting">Quoting</string>
+
+</resources>

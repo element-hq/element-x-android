@@ -55,8 +55,9 @@ fun TextComposer(
                     }
 
                 }
+                setFullScreen(fullscreen)
                 (this as MessageComposerView).apply {
-                    setup(fullscreen, isInDarkMode)
+                    setup(isInDarkMode)
                 }
             }
         },
@@ -68,14 +69,14 @@ fun TextComposer(
             // whenever the state changes
             // Example of Compose -> View communication
             val messageComposerView = (view as MessageComposerView)
-            messageComposerView.toggleFullScreen(fullscreen)
+            view.setFullScreen(fullscreen)
             messageComposerView.sendButton.isInvisible = !composerCanSendMessage
             messageComposerView.setTextIfDifferent(composerText ?: "")
         }
     )
 }
 
-private fun MessageComposerView.setup(fullscreen: Boolean, isDarkMode: Boolean) {
+private fun MessageComposerView.setup(isDarkMode: Boolean) {
     val editTextColor = if(isDarkMode){
         Color.WHITE
     }else{
@@ -83,7 +84,6 @@ private fun MessageComposerView.setup(fullscreen: Boolean, isDarkMode: Boolean) 
     }
     editText.setTextColor(editTextColor)
     editText.setHintTextColor(editTextColor)
-    toggleFullScreen(fullscreen)
     editText.setHint(ElementR.string.room_message_placeholder)
     emojiButton?.isVisible = true
     sendButton.isVisible = true
