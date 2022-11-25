@@ -20,11 +20,13 @@ import android.net.Uri
 import android.text.Editable
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 
 // Imported from Element Android
 interface MessageComposerView {
+
+    companion object {
+        const val MAX_LINES_WHEN_COLLAPSED = 10
+    }
 
     val text: Editable?
     val formattedText: String?
@@ -32,24 +34,11 @@ interface MessageComposerView {
     val emojiButton: ImageButton?
     val sendButton: ImageButton
     val attachmentButton: ImageButton
-    val fullScreenButton: ImageButton?
-    val composerRelatedMessageTitle: TextView
-    val composerRelatedMessageContent: TextView
-    val composerRelatedMessageImage: ImageView
-    val composerRelatedMessageActionIcon: ImageView
-    val composerRelatedMessageAvatar: ImageView
 
     var callback: Callback?
 
-    var isVisible: Boolean
-
-    fun collapse(animate: Boolean = true, transitionComplete: (() -> Unit)? = null)
-    fun expand(animate: Boolean = true, transitionComplete: (() -> Unit)? = null)
     fun setTextIfDifferent(text: CharSequence?): Boolean
-    fun replaceFormattedContent(text: CharSequence)
-    fun toggleFullScreen(newValue: Boolean)
-
-    fun setInvisible(isInvisible: Boolean)
+    fun renderComposerMode(mode: MessageComposerMode)
 }
 
 interface Callback {
@@ -65,4 +54,3 @@ interface Callback {
     fun onExpandOrCompactChange()
     fun onFullScreenModeChanged()
 }
-

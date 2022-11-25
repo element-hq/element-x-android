@@ -43,13 +43,6 @@
     <dimen name="menu_item_ripple_size">48dp</dimen>
     <dimen name="menu_item_width_small">34dp</dimen>
 
-    <!-- Composer -->
-    <dimen name="composer_min_height">56dp</dimen>
-    <dimen name="composer_attachment_size">52dp</dimen>
-    <dimen name="composer_attachment_margin">1dp</dimen>
-    <dimen name="rich_text_composer_corner_radius_single_line">28dp</dimen>
-    <dimen name="rich_text_composer_corner_radius_expanded">14dp</dimen>
-
     <dimen name="chat_bubble_margin_start">28dp</dimen>
     <dimen name="chat_bubble_margin_end">6dp</dimen>
     <dimen name="chat_bubble_fixed_size">350sp</dimen>
