@@ -213,7 +213,7 @@ class RichTextComposerLayout @JvmOverloads constructor(
         }
 
         views.sendButton.setOnClickListener {
-            val textMessage = text?.toSpannable() ?: ""
+            val textMessage = views.richTextComposerEditText.getMarkdown() // text?.toSpannable() ?: ""
             callback?.onSendMessage(textMessage)
         }
 
