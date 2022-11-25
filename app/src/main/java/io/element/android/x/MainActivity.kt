@@ -15,9 +15,11 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
+import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
@@ -66,6 +68,7 @@ private fun MainScreen(viewModel: MainViewModel) {
 }
 
 private const val transitionAnimationDuration = 500
+
 @Composable
 private fun MainContent(startRoute: Route) {
     val engine = rememberAnimatedNavHostEngine(
@@ -97,6 +100,7 @@ private fun MainContent(startRoute: Route) {
         )
     )
     val navController = engine.rememberNavController()
+    LogNavigation(navController)
 
     DestinationsNavHost(
         modifier = Modifier.background(MaterialTheme.colorScheme.background),
@@ -105,6 +109,15 @@ private fun MainContent(startRoute: Route) {
         navGraph = NavGraphs.root,
         startRoute = startRoute
     )
+}
+
+@Composable
+private fun LogNavigation(navController: NavHostController) {
+    LaunchedEffect(key1 = navController) {
+        navController.appCurrentDestinationFlow.collect {
+            Timber.d("Navigating to ${it.route}")
+        }
+    }
 }
 
 @Composable
