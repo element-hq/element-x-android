@@ -3,8 +3,18 @@ package io.element.android.x.textcomposer
 import android.graphics.Color
 import android.net.Uri
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -20,6 +30,10 @@ fun TextComposer(
     composerCanSendMessage: Boolean,
     composerText: String?,
 ) {
+    if (LocalInspectionMode.current) {
+        FakeComposer(modifier)
+        return
+    }
     val isInDarkMode = isSystemInDarkTheme()
     AndroidView(
         modifier = modifier,
@@ -75,10 +89,28 @@ fun TextComposer(
     )
 }
 
+@Composable
+private fun FakeComposer(modifier: Modifier) {
+    // AndroidView is not Available in this mode, just render a Text
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(80.dp)
+    ) {
+        Text(
+            modifier = Modifier
+                .align(Alignment.Center),
+            textAlign = TextAlign.Center,
+            text = "Composer Preview",
+            fontSize = 20.sp
+        )
+    }
+}
+
 private fun MessageComposerView.setup(isDarkMode: Boolean) {
-    val editTextColor = if(isDarkMode){
+    val editTextColor = if (isDarkMode) {
         Color.WHITE
-    }else{
+    } else {
         Color.BLACK
     }
     editText.setTextColor(editTextColor)
@@ -86,4 +118,17 @@ private fun MessageComposerView.setup(isDarkMode: Boolean) {
     editText.setHint(ElementR.string.room_message_placeholder)
     emojiButton?.isVisible = true
     sendButton.isVisible = true
+}
+
+@Preview
+@Composable
+fun TextComposerPreview() {
+    TextComposer(
+        onSendMessage = {},
+        fullscreen = false,
+        onFullscreenToggle = { },
+        onComposerTextChange = {},
+        composerCanSendMessage = true,
+        composerText = "Message",
+    )
 }
