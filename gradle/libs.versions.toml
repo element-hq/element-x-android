@@ -3,6 +3,7 @@
 android_gradle_plugin = "7.3.1"
 firebase_gradle_plugin = "3.0.2"
 kotlin = "1.7.20"
+ksp = "1.7.20-1.0.7"
 
 # AndroidX
 material = "1.6.1"
@@ -92,3 +93,5 @@ wysiwyg = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 
 [bundles]
 
+[plugins]
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
