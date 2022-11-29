@@ -202,7 +202,7 @@ fun LoginContent(
 
 @Composable
 @Preview
-private fun LoginContentPreview() {
+fun LoginContentPreview() {
     ElementXTheme(darkTheme = false) {
         LoginContent(
             state = LoginViewState(

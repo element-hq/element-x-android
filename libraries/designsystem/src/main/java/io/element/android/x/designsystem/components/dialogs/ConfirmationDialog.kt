@@ -71,7 +71,7 @@ fun ConfirmationDialog(
 
 @Composable
 @Preview
-private fun ConfirmationDialogPreview() {
+fun ConfirmationDialogPreview() {
     ConfirmationDialog(
         isDisplayed = remember { mutableStateOf(true) },
         title = "Title",

@@ -1,8 +1,11 @@
 package io.element.android.x.designsystem
 
 import androidx.compose.ui.graphics.Color
+import com.airbnb.android.showkase.annotation.ShowkaseColor
 
+@ShowkaseColor(name = "LightGrey", group = "Material Design")
 val LightGrey = Color(0x993C3C43)
+@ShowkaseColor(name = "DarkGrey", group = "Material Design")
 val DarkGrey = Color(0x99EBEBF5)
 
 val AvatarGradientStart = Color(0xFF4CA1AF)

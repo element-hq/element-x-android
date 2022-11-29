@@ -145,7 +145,7 @@ private fun LazyListState.isScrolled(): Boolean {
 
 @Preview
 @Composable
-private fun PreviewableRoomListContent() {
+fun PreviewableRoomListContent() {
     ElementXTheme(darkTheme = false) {
         RoomListContent(
             roomSummaries = stubbedRoomSummaries(),
@@ -162,7 +162,7 @@ private fun PreviewableRoomListContent() {
 
 @Preview
 @Composable
-private fun PreviewableDarkRoomListContent() {
+fun PreviewableDarkRoomListContent() {
     ElementXTheme(darkTheme = true) {
         RoomListContent(
             roomSummaries = stubbedRoomSummaries(),

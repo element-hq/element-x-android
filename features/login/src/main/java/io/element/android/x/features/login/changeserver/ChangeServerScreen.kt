@@ -150,7 +150,7 @@ fun ChangeServerContent(
 
 @Composable
 @Preview
-private fun ChangeServerContentPreview() {
+fun ChangeServerContentPreview() {
     ChangeServerContent(
         state = ChangeServerViewState(homeserver = "matrix.org"),
     )

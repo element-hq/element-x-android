@@ -13,13 +13,23 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
+import com.airbnb.android.showkase.models.Showkase
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
@@ -40,8 +50,38 @@ class MainActivity : ComponentActivity() {
         // FIXME Scrolling is broken on login screens. Commenting this line fixes the issue.
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            ElementXTheme {
-                MainScreen(viewModel = viewModel)
+            Box(modifier = Modifier.fillMaxSize()) {
+                ElementXTheme {
+                    MainScreen(viewModel = viewModel)
+                }
+                ShowkaseButton(
+                    onClick = { startActivity(Showkase.getBrowserIntent(this@MainActivity)) }
+                )
+            }
+        }
+    }
+
+}
+
+@Composable
+private fun ShowkaseButton(
+    onClick: () -> Unit = {}
+) {
+    val showkaseButtonVisible = remember { mutableStateOf(true) }
+    if (showkaseButtonVisible.value) {
+        Button(
+            modifier = Modifier
+                .padding(top = 32.dp, start = 16.dp),
+            onClick = onClick
+        ) {
+            Text(text = "Showkase Browser")
+            IconButton(
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .size(16.dp),
+                onClick = { showkaseButtonVisible.value = false },
+            ) {
+                Icon(imageVector = Icons.Filled.Close, contentDescription = "")
             }
         }
     }
@@ -122,6 +162,6 @@ private fun LogNavigation(navController: NavHostController) {
 
 @Composable
 @Preview
-private fun MainContentPreview() {
+fun MainContentPreview() {
     MainContent(startRoute = OnBoardingScreenNavigationDestination)
 }

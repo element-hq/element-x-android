@@ -5,6 +5,8 @@ import extension.proguardConfig
 plugins {
     id("com.android.library")
     id("kotlin-android")
+//    alias(libs.plugins.ksp)
+//    id("com.google.devtools.ksp") // version "1.7.20-1.0.7"
 }
 
 android {
@@ -28,4 +30,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    implementation("com.airbnb.android:showkase:1.0.0-beta14")
+  //  ksp("com.airbnb.android:showkase-processor:1.0.0-beta14")
 }
