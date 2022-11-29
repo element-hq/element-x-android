@@ -24,17 +24,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.core.compose.LogCompositions
+import io.element.android.x.core.compose.PairCombinedPreviewParameter
 import io.element.android.x.core.data.StableCharSequence
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.messages.components.*
-import io.element.android.x.features.messages.model.MessagesTimelineItemState
-import io.element.android.x.features.messages.model.MessagesViewState
+import io.element.android.x.features.messages.model.*
 import io.element.android.x.features.messages.model.content.*
 import io.element.android.x.features.messages.textcomposer.MessageComposerViewModel
 import io.element.android.x.features.messages.textcomposer.MessageComposerViewState
@@ -42,6 +44,7 @@ import io.element.android.x.textcomposer.TextComposer
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.lang.Math.random
 
 private val COMPOSER_HEIGHT = 112.dp
 
@@ -253,11 +256,11 @@ fun MessagesTopAppBar(
 fun TimelineItems(
     lazyListState: LazyListState,
     timelineItems: List<MessagesTimelineItemState>,
-    hasMoreToLoad: Boolean,
-    onClick: (MessagesTimelineItemState.MessageEvent) -> Unit,
-    onLongClick: ((MessagesTimelineItemState.MessageEvent)) -> Unit,
-    onReachedLoadMore: () -> Unit,
     modifier: Modifier = Modifier,
+    hasMoreToLoad: Boolean = false,
+    onClick: (MessagesTimelineItemState.MessageEvent) -> Unit = {},
+    onLongClick: ((MessagesTimelineItemState.MessageEvent)) -> Unit = {},
+    onReachedLoadMore: () -> Unit = {},
 ) {
     Box(modifier = modifier.fillMaxWidth()) {
         LazyColumn(
@@ -385,6 +388,7 @@ fun MessageEventRow(
                             content = messageEvent.content,
                             modifier = contentModifier
                         )
+                        else -> TODO() /* compiler issue ? */
                     }
                 }
                 MessagesReactionsView(
@@ -502,4 +506,76 @@ internal fun MessagesLoadingMoreIndicator() {
         )
     }
 
+}
+
+class MessagesItemGroupPositionToMessagesTimelineItemContentProvider :
+    PairCombinedPreviewParameter<MessagesItemGroupPosition, MessagesTimelineItemContent>(
+        MessagesItemGroupPositionProvider() to MessagesTimelineItemContentProvider()
+    )
+
+@Preview(showBackground = true)
+@Composable
+fun TimelineItemsPreview(
+    @PreviewParameter(MessagesTimelineItemContentProvider::class)
+    content: MessagesTimelineItemContent
+) {
+    TimelineItems(
+        lazyListState = LazyListState(),
+        timelineItems = listOf(
+            // 3 items (First Middle Last) with isMine = false
+            createMessageEvent(
+                isMine = false,
+                content = content,
+                groupPosition = MessagesItemGroupPosition.First
+            ),
+            createMessageEvent(
+                isMine = false,
+                content = content,
+                groupPosition = MessagesItemGroupPosition.Middle
+            ),
+            createMessageEvent(
+                isMine = false,
+                content = content,
+                groupPosition = MessagesItemGroupPosition.Last
+            ),
+            // 3 items (First Middle Last) with isMine = true
+            createMessageEvent(
+                isMine = true,
+                content = content,
+                groupPosition = MessagesItemGroupPosition.First
+            ),
+            createMessageEvent(
+                isMine = true,
+                content = content,
+                groupPosition = MessagesItemGroupPosition.Middle
+            ),
+            createMessageEvent(
+                isMine = true,
+                content = content,
+                groupPosition = MessagesItemGroupPosition.Last
+            ),
+        ),
+        hasMoreToLoad = true,
+    )
+}
+
+private fun createMessageEvent(
+    isMine: Boolean,
+    content: MessagesTimelineItemContent,
+    groupPosition: MessagesItemGroupPosition
+): MessagesTimelineItemState {
+    return MessagesTimelineItemState.MessageEvent(
+        id = random().toString(),
+        senderId = "senderId",
+        senderAvatar = AvatarData("sender"),
+        content = content,
+        reactionsState = MessagesItemReactionState(
+            listOf(
+                AggregatedReaction("👍", "1")
+            )
+        ),
+        isMine = isMine,
+        senderDisplayName = "sender",
+        groupPosition = groupPosition,
+    )
 }

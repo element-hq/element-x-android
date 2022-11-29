@@ -9,6 +9,7 @@ import io.element.android.x.features.messages.model.MessagesItemAction
 import io.element.android.x.features.messages.model.MessagesItemActionsSheetState
 import io.element.android.x.features.messages.model.MessagesTimelineItemState
 import io.element.android.x.features.messages.model.MessagesViewState
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemRedactedContent
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.MatrixInstance
 import io.element.android.x.matrix.media.MediaResolver
@@ -104,13 +105,19 @@ class MessagesViewModel(
 
     fun computeActionsSheetState(messagesTimelineItemState: MessagesTimelineItemState.MessageEvent) {
         suspend {
-            val actions = mutableListOf(
-                MessagesItemAction.Forward,
-                MessagesItemAction.Copy,
-            )
-            if (messagesTimelineItemState.isMine) {
-                actions.add(MessagesItemAction.Redact)
-            }
+            val actions =
+                if (messagesTimelineItemState.content is MessagesTimelineItemRedactedContent) {
+                    emptyList()
+                } else {
+                    mutableListOf(
+                        MessagesItemAction.Forward,
+                        MessagesItemAction.Copy,
+                    ).also {
+                        if (messagesTimelineItemState.isMine) {
+                            it.add(MessagesItemAction.Redact)
+                        }
+                    }
+                }
             MessagesItemActionsSheetState(
                 targetItem = messagesTimelineItemState,
                 actions = actions

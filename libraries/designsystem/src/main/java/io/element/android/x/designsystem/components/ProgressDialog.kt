@@ -51,6 +51,6 @@ fun ProgressDialog(text: String? = null, onDismiss: () -> Unit = {}) {
 
 @Composable
 @Preview
-private fun ProgressDialogPreview() {
+fun ProgressDialogPreview() {
     ProgressDialog("test dialog content")
 }

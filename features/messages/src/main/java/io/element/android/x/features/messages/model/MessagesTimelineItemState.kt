@@ -9,7 +9,7 @@ sealed interface MessagesTimelineItemState {
     ) : MessagesTimelineItemState
 
     data class MessageEvent(
-        val id: String = "",
+        val id: String,
         val senderId: String,
         val senderDisplayName: String?,
         val senderAvatar: AvatarData,
