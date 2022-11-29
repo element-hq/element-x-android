@@ -13,6 +13,10 @@ import io.element.android.x.matrix.room.MatrixRoom
 import io.element.android.x.matrix.timeline.MatrixTimelineItem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.matrix.rustcomponents.sdk.FormattedBody
+import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.MessageType
 import org.matrix.rustcomponents.sdk.TimelineKey
 
@@ -88,7 +92,7 @@ class MessageTimelineItemStateMapper(
         return when (val messageType = contentAsMessage?.msgtype()) {
             is MessageType.Emote -> MessagesTimelineItemEmoteContent(
                 body = messageType.content.body,
-                formattedBody = messageType.content.formatted
+                htmlDocument = messageType.content.formatted?.toHtmlDocument()
             )
             is MessageType.Image -> {
                 val height = messageType.content.info?.height?.toFloat()
@@ -110,14 +114,20 @@ class MessageTimelineItemStateMapper(
             }
             is MessageType.Notice -> MessagesTimelineItemNoticeContent(
                 body = messageType.content.body,
-                formattedBody = messageType.content.formatted
+                htmlDocument = messageType.content.formatted?.toHtmlDocument()
             )
             is MessageType.Text -> MessagesTimelineItemTextContent(
                 body = messageType.content.body,
-                formattedBody = messageType.content.formatted
+                htmlDocument = messageType.content.formatted?.toHtmlDocument()
             )
             else -> MessagesTimelineItemUnknownContent
 
+        }
+    }
+
+    private fun FormattedBody.toHtmlDocument(): Document? {
+        return takeIf { it.format == MessageFormat.HTML }?.body?.let { formattedBody ->
+            Jsoup.parse(formattedBody)
         }
     }
 
