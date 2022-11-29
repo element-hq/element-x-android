@@ -515,7 +515,7 @@ class MessagesItemGroupPositionToMessagesTimelineItemContentProvider :
 
 @Preview(showBackground = true)
 @Composable
-private fun TimelineItemsPreview(
+fun TimelineItemsPreview(
     @PreviewParameter(MessagesTimelineItemContentProvider::class)
     content: MessagesTimelineItemContent
 ) {
