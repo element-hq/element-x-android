@@ -124,6 +124,14 @@ class MatrixTimeline(
         return matrixRoom.sendMessage(message)
     }
 
+    suspend fun editMessage(originalEventId: String, message: String): Result<Unit> {
+        return matrixRoom.editMessage(originalEventId, message = message)
+    }
+
+    suspend fun replyMessage(inReplyToEventId: String, message: String): Result<Unit> {
+        return matrixRoom.replyMessage(inReplyToEventId, message)
+    }
+
     override fun onUpdate(update: TimelineDiff) {
         coroutineScope.launch {
             updateTimelineItems {
