@@ -1,8 +1,8 @@
 package io.element.android.x.features.messages.model.content
 
-import org.matrix.rustcomponents.sdk.FormattedBody
+import org.jsoup.nodes.Document
 
 data class MessagesTimelineItemEmoteContent(
     override val body: String,
-    override val formattedBody: FormattedBody?,
+    override val htmlDocument: Document?
 ) : MessagesTimelineItemTextBasedContent

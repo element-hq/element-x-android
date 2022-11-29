@@ -1,8 +1,8 @@
 package io.element.android.x.features.messages.model.content
 
-import org.matrix.rustcomponents.sdk.FormattedBody
+import org.jsoup.nodes.Document
 
 sealed interface MessagesTimelineItemTextBasedContent : MessagesTimelineItemContent {
     val body: String
-    val formattedBody: FormattedBody?
+    val htmlDocument: Document?
 }
