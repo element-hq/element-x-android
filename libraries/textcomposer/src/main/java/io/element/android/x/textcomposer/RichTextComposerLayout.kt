@@ -506,10 +506,7 @@ class RichTextComposerLayout @JvmOverloads constructor(
                 views.composerModeIconView.setImageResource(R.drawable.ic_quote)
             }
             is MessageComposerMode.Reply -> {
-                // TODO We need sender info
-                // val senderInfo = mode.event.senderInfo
-                val userName =
-                    "TODO Sender name" // senderInfo.displayName ?: senderInfo.disambiguatedDisplayName
+                val userName = mode.senderName
                 views.composerModeTitleView.text =
                     resources.getString(R.string.replying_to, userName)
                 views.composerModeIconView.setImageResource(R.drawable.ic_reply)
