@@ -11,7 +11,7 @@ class MessagesTimelineItemContentProvider : PreviewParameterProvider<MessagesTim
     override val values = sequenceOf(
         MessagesTimelineItemEmoteContent(
             body = "Emote",
-            formattedBody = FormattedBody(MessageFormat.HTML, "Formatted emote")
+            htmlDocument = null
         ),
         MessagesTimelineItemEncryptedContent(
             encryptedMessage = EncryptedMessage.Unknown
@@ -19,12 +19,12 @@ class MessagesTimelineItemContentProvider : PreviewParameterProvider<MessagesTim
         // TODO MessagesTimelineItemImageContent(),
         MessagesTimelineItemNoticeContent(
             body = "Notice",
-            formattedBody = FormattedBody(MessageFormat.HTML, "Formatted notice")
+            htmlDocument = null
         ),
         MessagesTimelineItemRedactedContent,
         MessagesTimelineItemTextContent(
             body = "Text",
-            formattedBody = FormattedBody(MessageFormat.HTML, "Formatted text")
+            htmlDocument = null
         ),
         MessagesTimelineItemUnknownContent,
     )
