@@ -87,7 +87,11 @@ private fun HtmlPreformatted(pre: Element, modifier: Modifier = Modifier) {
     val isCode = pre.firstElementChild()?.normalName() == "code"
     val backgroundColor =
         if (isCode) MaterialTheme.colorScheme.codeBackground() else Color.Unspecified
-    Box(modifier.background(color = backgroundColor)) {
+    Box(
+        modifier
+            .background(color = backgroundColor)
+            .padding(horizontal = 8.dp)
+    ) {
         Text(
             text = pre.wholeText(),
             style = TextStyle(fontFamily = FontFamily.Monospace),
