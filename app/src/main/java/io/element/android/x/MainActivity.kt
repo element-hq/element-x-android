@@ -20,10 +20,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,6 +39,8 @@ import io.element.android.x.destinations.OnBoardingScreenNavigationDestination
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
+private const val transitionAnimationDuration = 500
+
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
@@ -50,118 +50,121 @@ class MainActivity : ComponentActivity() {
         // FIXME Scrolling is broken on login screens. Commenting this line fixes the issue.
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            Box(modifier = Modifier.fillMaxSize()) {
-                ElementXTheme {
-                    MainScreen(viewModel = viewModel)
-                }
-                ShowkaseButton(
-                    onClick = { startActivity(Showkase.getBrowserIntent(this@MainActivity)) }
-                )
+            ElementXTheme {
+                MainScreen(viewModel = viewModel)
             }
         }
     }
 
-}
-
-@Composable
-private fun ShowkaseButton(
-    onClick: () -> Unit = {}
-) {
-    val showkaseButtonVisible = remember { mutableStateOf(true) }
-    if (showkaseButtonVisible.value) {
-        Button(
-            modifier = Modifier
-                .padding(top = 32.dp, start = 16.dp),
-            onClick = onClick
-        ) {
-            Text(text = "Showkase Browser")
-            IconButton(
+    @Composable
+    private fun ShowkaseButton(
+        isVisible: Boolean,
+        onClick: () -> Unit,
+        onCloseClicked: () -> Unit
+    ) {
+        if (isVisible) {
+            Button(
                 modifier = Modifier
-                    .padding(start = 8.dp)
-                    .size(16.dp),
-                onClick = { showkaseButtonVisible.value = false },
+                    .padding(top = 32.dp, start = 16.dp),
+                onClick = onClick
             ) {
-                Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+                Text(text = "Showkase Browser")
+                IconButton(
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .size(16.dp),
+                    onClick = onCloseClicked,
+                ) {
+                    Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+                }
             }
         }
     }
-}
 
-@Composable
-private fun MainScreen(viewModel: MainViewModel) {
-    val startRoute = runBlocking {
-        if (!viewModel.isLoggedIn()) {
-            OnBoardingScreenNavigationDestination
-        } else {
-            viewModel.restoreSession()
-            NavGraphs.root.startRoute
-        }
-    }
-
-    MainContent(
-        startRoute = startRoute
-    )
-
-    OnLifecycleEvent { _, event ->
-        Timber.v("OnLifecycleEvent: $event")
-    }
-}
-
-private const val transitionAnimationDuration = 500
-
-@Composable
-private fun MainContent(startRoute: Route) {
-    val engine = rememberAnimatedNavHostEngine(
-        rootDefaultAnimations = RootNavGraphDefaultAnimations(
-            enterTransition = {
-                slideIntoContainer(
-                    AnimatedContentScope.SlideDirection.Left,
-                    animationSpec = tween(transitionAnimationDuration)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Left,
-                    animationSpec = tween(transitionAnimationDuration)
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    AnimatedContentScope.SlideDirection.Right,
-                    animationSpec = tween(transitionAnimationDuration)
-                )
-            },
-            popExitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Right,
-                    animationSpec = tween(transitionAnimationDuration)
-                )
+    @Composable
+    private fun MainScreen(viewModel: MainViewModel) {
+        val startRoute = runBlocking {
+            if (!viewModel.isLoggedIn()) {
+                OnBoardingScreenNavigationDestination
+            } else {
+                viewModel.restoreSession()
+                NavGraphs.root.startRoute
             }
+        }
+
+        var isShowkaseButtonVisible by remember { mutableStateOf(BuildConfig.DEBUG) }
+
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+            MainContent(
+                startRoute = startRoute
+            )
+            ShowkaseButton(
+                isVisible = isShowkaseButtonVisible,
+                onCloseClicked = { isShowkaseButtonVisible = false },
+                onClick = { startActivity(Showkase.getBrowserIntent(this@MainActivity)) }
+            )
+        }
+        OnLifecycleEvent { _, event ->
+            Timber.v("OnLifecycleEvent: $event")
+        }
+
+    }
+
+    @Composable
+    private fun MainContent(startRoute: Route) {
+        val engine = rememberAnimatedNavHostEngine(
+            rootDefaultAnimations = RootNavGraphDefaultAnimations(
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentScope.SlideDirection.Left,
+                        animationSpec = tween(transitionAnimationDuration)
+                    )
+                },
+                exitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentScope.SlideDirection.Left,
+                        animationSpec = tween(transitionAnimationDuration)
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentScope.SlideDirection.Right,
+                        animationSpec = tween(transitionAnimationDuration)
+                    )
+                },
+                popExitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentScope.SlideDirection.Right,
+                        animationSpec = tween(transitionAnimationDuration)
+                    )
+                }
+            )
         )
-    )
-    val navController = engine.rememberNavController()
-    LogNavigation(navController)
+        val navController = engine.rememberNavController()
+        LogNavigation(navController)
 
-    DestinationsNavHost(
-        modifier = Modifier.background(MaterialTheme.colorScheme.background),
-        engine = engine,
-        navController = navController,
-        navGraph = NavGraphs.root,
-        startRoute = startRoute
-    )
-}
+        DestinationsNavHost(
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
+            engine = engine,
+            navController = navController,
+            navGraph = NavGraphs.root,
+            startRoute = startRoute
+        )
+    }
 
-@Composable
-private fun LogNavigation(navController: NavHostController) {
-    LaunchedEffect(key1 = navController) {
-        navController.appCurrentDestinationFlow.collect {
-            Timber.d("Navigating to ${it.route}")
+    @Composable
+    private fun LogNavigation(navController: NavHostController) {
+        LaunchedEffect(key1 = navController) {
+            navController.appCurrentDestinationFlow.collect {
+                Timber.d("Navigating to ${it.route}")
+            }
         }
     }
-}
 
-@Composable
-@Preview
-fun MainContentPreview() {
-    MainContent(startRoute = OnBoardingScreenNavigationDestination)
+    @Composable
+    @Preview
+    fun MainContentPreview() {
+        MainContent(startRoute = OnBoardingScreenNavigationDestination)
+    }
+
 }
