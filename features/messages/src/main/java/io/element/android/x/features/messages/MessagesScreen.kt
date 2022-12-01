@@ -382,6 +382,7 @@ fun MessageEventRow(
                 MessageEventBubble(
                     groupPosition = messageEvent.groupPosition,
                     isMine = messageEvent.isMine,
+                    isHighlighted = messageEvent.isHighlighted,
                     onClick = onClick,
                     onLongClick = onLongClick,
                     modifier = Modifier
