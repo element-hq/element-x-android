@@ -24,6 +24,7 @@ private val BUBBLE_RADIUS = 16.dp
 fun MessageEventBubble(
     groupPosition: MessagesItemGroupPosition,
     isMine: Boolean,
+    isHighlighted: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
@@ -64,17 +65,25 @@ fun MessageEventBubble(
         }
     }
 
-    val backgroundBubbleColor = if (isMine) {
+    val backgroundBubbleColor = if (isHighlighted) {
         if (LocalIsDarkTheme.current) {
-            SystemGrey5Dark
+            MessageHighlightDark
         } else {
-            SystemGrey5Light
+            MessageHighlightLight
         }
     } else {
-        if (LocalIsDarkTheme.current) {
-            SystemGrey6Dark
+        if (isMine) {
+            if (LocalIsDarkTheme.current) {
+                SystemGrey5Dark
+            } else {
+                SystemGrey5Light
+            }
         } else {
-            SystemGrey6Light
+            if (LocalIsDarkTheme.current) {
+                SystemGrey6Dark
+            } else {
+                SystemGrey6Light
+            }
         }
     }
     val bubbleShape = bubbleShape()

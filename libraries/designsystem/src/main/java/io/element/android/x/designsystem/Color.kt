@@ -34,3 +34,8 @@ val Melon = Color(0xFFFF812D)
 val ElementGreen = Color(0xFF0DBD8B)
 val ElementOrange = Color(0xFFD9B072)
 val Vermilion = Color(0xFFFF5B55)
+
+// TODO Update color
+val MessageHighlightLight = Azure
+// TODO Update color
+val MessageHighlightDark = Azure

@@ -25,6 +25,7 @@ class MessageTimelineItemStateMapper(
     private val room: MatrixRoom,
     private val dispatcher: CoroutineDispatcher,
 ) {
+    var highlightedEventId: String? = null
 
     suspend fun map(timelineItems: List<MatrixTimelineItem>): List<MessagesTimelineItemState> =
         withContext(dispatcher) {
@@ -33,7 +34,12 @@ class MessageTimelineItemStateMapper(
                 val currentTimelineItem = timelineItems[index]
                 val timelineItemState = when (currentTimelineItem) {
                     is MatrixTimelineItem.Event -> {
-                        buildMessageEvent(currentTimelineItem, index, timelineItems)
+                        buildMessageEvent(
+                            currentTimelineItem,
+                            index,
+                            timelineItems,
+                            highlightedEventId
+                        )
                     }
                     is MatrixTimelineItem.Virtual -> MessagesTimelineItemState.Virtual(
                         "virtual_item_$index"
@@ -48,7 +54,8 @@ class MessageTimelineItemStateMapper(
     private suspend fun buildMessageEvent(
         currentTimelineItem: MatrixTimelineItem.Event,
         index: Int,
-        timelineItems: List<MatrixTimelineItem>
+        timelineItems: List<MatrixTimelineItem>,
+        highlightedEventId: String?,
     ): MessagesTimelineItemState.MessageEvent {
         val currentSender = currentTimelineItem.event.sender()
         val groupPosition =
@@ -68,6 +75,7 @@ class MessageTimelineItemStateMapper(
             senderAvatar = senderAvatarData,
             content = currentTimelineItem.computeContent(),
             isMine = currentTimelineItem.event.isOwn(),
+            isHighlighted = currentTimelineItem.event.eventId().orEmpty() == highlightedEventId,
             groupPosition = groupPosition,
             reactionsState = currentTimelineItem.computeReactionsState()
         )
