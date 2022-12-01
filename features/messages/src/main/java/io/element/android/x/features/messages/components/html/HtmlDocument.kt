@@ -1,24 +1,20 @@
 package io.element.android.x.features.messages.components.html
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.PressInteraction
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -27,6 +23,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
+import io.element.android.x.designsystem.components.ClickableLinkText
 import io.element.android.x.matrix.permalink.PermalinkData
 import io.element.android.x.matrix.permalink.PermalinkParser
 import org.jsoup.nodes.Document
@@ -500,7 +497,7 @@ private fun AnnotatedString.Builder.appendLink(link: Element) {
     val permalinkData = PermalinkParser.parse(uriString)
     when (permalinkData) {
         is PermalinkData.FallbackLink -> {
-            pushStringAnnotation(tag = "link", annotation = link.ownText())
+            pushStringAnnotation(tag = "URL", annotation = link.ownText())
             withStyle(
                 style = SpanStyle(color = Color.Blue)
             ) {
@@ -529,41 +526,16 @@ private fun HtmlText(
     onLongClick: () -> Unit,
     interactionSource: MutableInteractionSource,
 ) {
-    val uriHandler = LocalUriHandler.current
-    val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
-    val pressIndicator = Modifier.pointerInput(onClick) {
-        detectTapGestures(
-            onPress = { offset: Offset ->
-                val pressInteraction = PressInteraction.Press(offset)
-                interactionSource.emit(pressInteraction)
-                awaitRelease()
-                interactionSource.emit(PressInteraction.Release(pressInteraction))
-            },
-            onLongPress = { _ ->
-                onLongClick()
-            }
-        ) { offset ->
-            layoutResult.value?.let { layoutResult ->
-                val position = layoutResult.getOffsetForPosition(offset)
-                val linkAnnotations = text.getStringAnnotations("link", position, position)
-                if (linkAnnotations.isEmpty()) {
-                    onClick()
-                } else {
-                    uriHandler.openUri(linkAnnotations.first().item)
-                }
-            }
-
-        }
-    }
     val inlineContentMap = emptyMap<String, InlineTextContent>()
-    Text(
+    ClickableLinkText(
         text = text,
-        modifier = modifier.then(pressIndicator),
+        linkAnnotationTag = "URL",
         style = style,
-        onTextLayout = {
-            layoutResult.value = it
-        },
-        inlineContent = inlineContentMap
+        modifier = modifier,
+        inlineContent = inlineContentMap,
+        interactionSource = interactionSource,
+        onClick = onClick,
+        onLongClick = onLongClick
     )
 }
 
