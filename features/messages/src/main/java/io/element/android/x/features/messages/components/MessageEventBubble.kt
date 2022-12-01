@@ -24,6 +24,7 @@ private val BUBBLE_RADIUS = 16.dp
 fun MessageEventBubble(
     groupPosition: MessagesItemGroupPosition,
     isMine: Boolean,
+    interactionSource: MutableInteractionSource,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
@@ -87,7 +88,7 @@ fun MessageEventBubble(
                 onClick = onClick,
                 onLongClick = onLongClick,
                 indication = rememberRipple(),
-                interactionSource = remember { MutableInteractionSource() }
+                interactionSource = interactionSource
             ),
         color = backgroundBubbleColor,
         shape = bubbleShape,

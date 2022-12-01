@@ -1,5 +1,6 @@
 package io.element.android.x.features.messages.components
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -10,11 +11,18 @@ import io.element.android.x.features.messages.model.content.MessagesTimelineItem
 @Composable
 fun MessagesTimelineItemTextView(
     content: MessagesTimelineItemTextBasedContent,
-    modifier: Modifier = Modifier
+    interactionSource: MutableInteractionSource,
+    modifier: Modifier = Modifier,
+    onTextClicked: () -> Unit,
 ) {
     val htmlDocument = content.htmlDocument
     if (htmlDocument != null) {
-        HtmlDocument(document = htmlDocument, modifier)
+        HtmlDocument(
+            document = htmlDocument,
+            modifier = modifier,
+            onTextClicked = onTextClicked,
+            interactionSource = interactionSource
+        )
     } else {
         Box(modifier) {
             Text(text = content.body)

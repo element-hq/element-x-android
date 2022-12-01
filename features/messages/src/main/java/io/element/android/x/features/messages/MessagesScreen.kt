@@ -3,6 +3,7 @@
 package io.element.android.x.features.messages
 
 import Avatar
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -334,6 +335,7 @@ fun MessageEventRow(
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     val (parentAlignment, contentAlignment) = if (messageEvent.isMine) {
         Pair(Alignment.CenterEnd, End)
     } else {
@@ -360,6 +362,7 @@ fun MessageEventRow(
                 MessageEventBubble(
                     groupPosition = messageEvent.groupPosition,
                     isMine = messageEvent.isMine,
+                    interactionSource = interactionSource,
                     onClick = onClick,
                     onLongClick = onLongClick,
                     modifier = Modifier
@@ -378,7 +381,9 @@ fun MessageEventRow(
                         )
                         is MessagesTimelineItemTextBasedContent -> MessagesTimelineItemTextView(
                             content = messageEvent.content,
-                            modifier = contentModifier
+                            interactionSource = interactionSource,
+                            modifier = contentModifier,
+                            onTextClicked = onClick
                         )
                         is MessagesTimelineItemUnknownContent -> MessagesTimelineItemUnknownView(
                             content = messageEvent.content,
