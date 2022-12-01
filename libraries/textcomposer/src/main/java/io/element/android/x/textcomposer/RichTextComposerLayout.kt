@@ -133,7 +133,7 @@ class RichTextComposerLayout @JvmOverloads constructor(
             if (isFullScreen) R.drawable.ic_composer_collapse else R.drawable.ic_composer_full_screen
         )
 
-        views.bottomSheetHandle.isVisible = isFullScreen
+        views.bottomSheetHandle.isVisible = false // EAx: always gone, we do not have a bottom sheet here. // isFullScreen
         if (manageKeyboard) {
             if (isFullScreen) {
                 editText.showKeyboard(true)
@@ -171,7 +171,7 @@ class RichTextComposerLayout @JvmOverloads constructor(
         views.richTextComposerEditText.maxLines = maxLines
         views.plainTextComposerEditText.maxLines = maxLines
 
-        views.bottomSheetHandle.isVisible = true
+        views.bottomSheetHandle.isVisible = false // EAx: always gone, we do not have a bottom sheet here.
     }
 
     init {
