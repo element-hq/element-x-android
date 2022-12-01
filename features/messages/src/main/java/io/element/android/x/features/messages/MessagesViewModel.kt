@@ -28,7 +28,7 @@ class MessagesViewModel(
     private val client: MatrixClient,
     private val room: MatrixRoom,
     private val timeline: MatrixTimeline,
-    private val messageTimelineItemStateMapper: MessageTimelineItemStateMapper,
+    private val messageTimelineItemStateFactory: MessageTimelineItemStateFactory,
     private val initialState: MessagesViewState
 ) :
     MavericksViewModel<MessagesViewState>(initialState) {
@@ -42,13 +42,13 @@ class MessagesViewModel(
             val matrix = MatrixInstance.getInstance()
             val client = matrix.activeClient()
             val room = client.getRoom(state.roomId) ?: return null
-            val messageTimelineItemStateMapper =
-                MessageTimelineItemStateMapper(client, room, Dispatchers.Default)
+            val messageTimelineItemStateFactory =
+                MessageTimelineItemStateFactory(client, room, Dispatchers.Default)
             return MessagesViewModel(
                 client,
                 room,
                 room.timeline(),
-                messageTimelineItemStateMapper,
+                messageTimelineItemStateFactory,
                 state
             )
         }
@@ -191,20 +191,18 @@ class MessagesViewModel(
 
         combine(
             timeline.timelineItems(),
-            stateFlow
-                .map { it.composerMode }
-                .distinctUntilChanged()
-        ) { timelineItems, messageComposerMode ->
-            // Set the highlightedEventId to messageTimelineItemStateMapper, before the mapping occurs
-            messageTimelineItemStateMapper.highlightedEventId = when (messageComposerMode) {
-                is MessageComposerMode.Normal -> null
-                is MessageComposerMode.Edit -> messageComposerMode.eventId
-                is MessageComposerMode.Quote -> null
-                is MessageComposerMode.Reply -> messageComposerMode.eventId
+            stateFlow.map {
+                when (it.composerMode) {
+                    is MessageComposerMode.Normal -> null
+                    is MessageComposerMode.Edit -> it.composerMode.eventId
+                    is MessageComposerMode.Quote -> null
+                    is MessageComposerMode.Reply -> it.composerMode.eventId
+                }
             }
-            timelineItems
+                .distinctUntilChanged()
+        ) { timelineItems, highlightedEventId ->
+            messageTimelineItemStateFactory.create(timelineItems, highlightedEventId)
         }
-            .map(messageTimelineItemStateMapper::map)
             .execute {
                 copy(timelineItems = it)
             }

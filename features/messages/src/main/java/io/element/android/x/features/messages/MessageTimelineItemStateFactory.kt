@@ -20,14 +20,15 @@ import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.MessageType
 import org.matrix.rustcomponents.sdk.TimelineKey
 
-class MessageTimelineItemStateMapper(
+class MessageTimelineItemStateFactory(
     private val client: MatrixClient,
     private val room: MatrixRoom,
     private val dispatcher: CoroutineDispatcher,
 ) {
-    var highlightedEventId: String? = null
-
-    suspend fun map(timelineItems: List<MatrixTimelineItem>): List<MessagesTimelineItemState> =
+    suspend fun create(
+        timelineItems: List<MatrixTimelineItem>,
+        highlightedEventId: String? = null,
+    ): List<MessagesTimelineItemState> =
         withContext(dispatcher) {
             val messagesTimelineItemState = ArrayList<MessagesTimelineItemState>()
             for (index in timelineItems.indices.reversed()) {
