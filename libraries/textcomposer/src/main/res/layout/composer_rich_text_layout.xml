@@ -5,8 +5,9 @@
     android:id="@+id/composerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/bg_composer_rich_bottom_sheet">
+    android:orientation="vertical">
+
+    <!-- EAx: Remove android:background="@drawable/bg_composer_rich_bottom_sheet" from ^ -->
 
     <!--
     There are issues here:
