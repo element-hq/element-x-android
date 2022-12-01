@@ -406,7 +406,8 @@ fun MessageEventRow(
                             content = messageEvent.content,
                             interactionSource = interactionSource,
                             modifier = contentModifier,
-                            onTextClicked = onClick
+                            onTextClicked = onClick,
+                            onTextLongClicked = onLongClick
                         )
                         is MessagesTimelineItemUnknownContent -> MessagesTimelineItemUnknownView(
                             content = messageEvent.content,
