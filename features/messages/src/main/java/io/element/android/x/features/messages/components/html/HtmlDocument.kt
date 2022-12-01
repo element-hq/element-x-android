@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterialApi::class)
-
 package io.element.android.x.features.messages.components.html
 
 import androidx.compose.foundation.background
@@ -15,7 +13,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
@@ -32,7 +29,6 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
 import io.element.android.x.matrix.permalink.PermalinkData
 import io.element.android.x.matrix.permalink.PermalinkParser
-import kotlinx.coroutines.launch
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.nodes.Node
@@ -45,12 +41,14 @@ fun HtmlDocument(
     document: Document,
     interactionSource: MutableInteractionSource,
     onTextClicked: () -> Unit,
+    onTextLongClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     HtmlBody(
         body = document.body(),
         modifier = modifier,
         onTextClicked = onTextClicked,
+        onTextLongClicked = onTextLongClicked,
         interactionSource = interactionSource
     )
 }
@@ -60,6 +58,7 @@ private fun HtmlBody(
     body: Element,
     modifier: Modifier = Modifier,
     onTextClicked: () -> Unit,
+    onTextLongClicked: () -> Unit,
     interactionSource: MutableInteractionSource,
 ) {
 
@@ -67,6 +66,7 @@ private fun HtmlBody(
     fun NodesFlowRode(
         nodes: Iterator<Node>,
         onTextClicked: () -> Unit,
+        onTextLongClicked: () -> Unit,
         interactionSource: MutableInteractionSource,
     ) = FlowRow(
         mainAxisSpacing = 2.dp,
@@ -85,12 +85,14 @@ private fun HtmlBody(
                         HtmlInline(
                             node,
                             onTextClicked = onTextClicked,
+                            onTextLongClicked = onTextLongClicked,
                             interactionSource = interactionSource
                         )
                     } else {
                         HtmlBlock(
                             element = node,
                             onTextClicked = onTextClicked,
+                            onTextLongClicked = onTextLongClicked,
                             interactionSource = interactionSource
                         )
                         sameRow = false
@@ -107,6 +109,7 @@ private fun HtmlBody(
             NodesFlowRode(
                 nodes = nodesIterator,
                 onTextClicked = onTextClicked,
+                onTextLongClicked = onTextLongClicked,
                 interactionSource = interactionSource
             )
         }
@@ -126,6 +129,7 @@ private fun HtmlBlock(
     element: Element,
     modifier: Modifier = Modifier,
     onTextClicked: () -> Unit,
+    onTextLongClicked: () -> Unit,
     interactionSource: MutableInteractionSource,
 ) {
     val blockModifier = modifier
@@ -135,30 +139,35 @@ private fun HtmlBlock(
             paragraph = element,
             modifier = blockModifier,
             onTextClicked = onTextClicked,
+            onTextLongClicked = onTextLongClicked,
             interactionSource = interactionSource
         )
         "h1", "h2", "h3", "h4", "h5", "h6" -> HtmlHeading(
             heading = element,
             modifier = blockModifier,
             onTextClicked = onTextClicked,
+            onTextLongClicked = onTextLongClicked,
             interactionSource = interactionSource
         )
         "ol" -> HtmlOrderedList(
             orderedList = element,
             modifier = blockModifier,
             onTextClicked = onTextClicked,
+            onTextLongClicked = onTextLongClicked,
             interactionSource = interactionSource
         )
         "ul" -> HtmlUnorderedList(
             unorderedList = element,
             modifier = blockModifier,
             onTextClicked = onTextClicked,
+            onTextLongClicked = onTextLongClicked,
             interactionSource = interactionSource
         )
         "blockquote" -> HtmlBlockquote(
             blockquote = element,
             modifier = blockModifier,
             onTextClicked = onTextClicked,
+            onTextLongClicked = onTextLongClicked,
             interactionSource = interactionSource
         )
         "pre" -> HtmlPreformatted(element, blockModifier)
@@ -166,6 +175,7 @@ private fun HtmlBlock(
             mxReply = element,
             modifier = blockModifier,
             onTextClicked = onTextClicked,
+            onTextLongClicked = onTextLongClicked,
             interactionSource = interactionSource
         )
         else -> return
@@ -177,13 +187,19 @@ private fun HtmlInline(
     element: Element,
     modifier: Modifier = Modifier,
     onTextClicked: () -> Unit,
+    onTextLongClicked: () -> Unit,
     interactionSource: MutableInteractionSource,
 ) {
     Box(modifier) {
         val styledText = buildAnnotatedString {
             appendInlineElement(element, MaterialTheme.colorScheme)
         }
-        HtmlText(text = styledText, onClick = onTextClicked, interactionSource = interactionSource)
+        HtmlText(
+            text = styledText,
+            onClick = onTextClicked,
+            onLongClick = onTextLongClicked,
+            interactionSource = interactionSource
+        )
     }
 }
 
@@ -208,14 +224,17 @@ private fun HtmlPreformatted(pre: Element, modifier: Modifier = Modifier) {
 private fun HtmlParagraph(
     paragraph: Element,
     modifier: Modifier = Modifier,
-    onTextClicked: () -> Unit,
+    onTextClicked: () -> Unit, onTextLongClicked: () -> Unit,
     interactionSource: MutableInteractionSource,
 ) {
     Box(modifier) {
         val styledText = buildAnnotatedString {
             appendInlineChildrenElements(paragraph.childNodes(), MaterialTheme.colorScheme)
         }
-        HtmlText(text = styledText, onClick = onTextClicked, interactionSource = interactionSource)
+        HtmlText(
+            text = styledText, onClick = onTextClicked,
+            onLongClick = onTextLongClicked, interactionSource = interactionSource
+        )
     }
 }
 
@@ -223,7 +242,7 @@ private fun HtmlParagraph(
 private fun HtmlBlockquote(
     blockquote: Element,
     modifier: Modifier = Modifier,
-    onTextClicked: () -> Unit,
+    onTextClicked: () -> Unit, onTextLongClicked: () -> Unit,
     interactionSource: MutableInteractionSource,
 ) {
     val color = MaterialTheme.colorScheme.onBackground
@@ -244,7 +263,10 @@ private fun HtmlBlockquote(
                 appendInlineChildrenElements(blockquote.childNodes(), MaterialTheme.colorScheme)
             }
         }
-        HtmlText(text = text, onClick = onTextClicked, interactionSource = interactionSource)
+        HtmlText(
+            text = text, onClick = onTextClicked,
+            onLongClick = onTextLongClicked, interactionSource = interactionSource
+        )
     }
 }
 
@@ -253,7 +275,7 @@ private fun HtmlBlockquote(
 private fun HtmlHeading(
     heading: Element,
     modifier: Modifier = Modifier,
-    onTextClicked: () -> Unit,
+    onTextClicked: () -> Unit, onTextLongClicked: () -> Unit,
     interactionSource: MutableInteractionSource,
 ) {
     val style = when (heading.normalName()) {
@@ -275,6 +297,7 @@ private fun HtmlHeading(
             text = text,
             style = style,
             onClick = onTextClicked,
+            onLongClick = onTextLongClicked,
             interactionSource = interactionSource
         )
     }
@@ -284,7 +307,7 @@ private fun HtmlHeading(
 private fun HtmlMxReply(
     mxReply: Element,
     modifier: Modifier = Modifier,
-    onTextClicked: () -> Unit,
+    onTextClicked: () -> Unit, onTextLongClicked: () -> Unit,
     interactionSource: MutableInteractionSource,
 ) {
     val blockquote = mxReply.childNodes().firstOrNull() ?: return
@@ -326,6 +349,7 @@ private fun HtmlMxReply(
             text = text,
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
             onClick = onTextClicked,
+            onLongClick = onTextLongClicked,
             interactionSource = interactionSource
         )
     }
@@ -335,7 +359,7 @@ private fun HtmlMxReply(
 private fun HtmlOrderedList(
     orderedList: Element,
     modifier: Modifier = Modifier,
-    onTextClicked: () -> Unit,
+    onTextClicked: () -> Unit, onTextLongClicked: () -> Unit,
     interactionSource: MutableInteractionSource,
 ) {
     var number = 1
@@ -343,13 +367,16 @@ private fun HtmlOrderedList(
     HtmlListItems(
         list = orderedList,
         modifier = modifier,
-        onTextClicked = onTextClicked,
+        onTextClicked = onTextClicked, onTextLongClicked = onTextLongClicked,
         interactionSource = interactionSource
     ) {
         val text = buildAnnotatedString {
             append("${number++}$delimiter ${it.text()}")
         }
-        HtmlText(text = text, onClick = onTextClicked, interactionSource = interactionSource)
+        HtmlText(
+            text = text, onClick = onTextClicked,
+            onLongClick = onTextLongClicked, interactionSource = interactionSource
+        )
     }
 }
 
@@ -357,20 +384,23 @@ private fun HtmlOrderedList(
 private fun HtmlUnorderedList(
     unorderedList: Element,
     modifier: Modifier = Modifier,
-    onTextClicked: () -> Unit,
+    onTextClicked: () -> Unit, onTextLongClicked: () -> Unit,
     interactionSource: MutableInteractionSource,
 ) {
     val marker = "・"
     HtmlListItems(
         list = unorderedList,
         modifier = modifier,
-        onTextClicked = onTextClicked,
+        onTextClicked = onTextClicked, onTextLongClicked = onTextLongClicked,
         interactionSource = interactionSource
     ) {
         val text = buildAnnotatedString {
             append("$marker ${it.text()}")
         }
-        HtmlText(text = text, onClick = onTextClicked, interactionSource = interactionSource)
+        HtmlText(
+            text = text, onClick = onTextClicked,
+            onLongClick = onTextLongClicked, interactionSource = interactionSource
+        )
     }
 }
 
@@ -379,7 +409,7 @@ private fun HtmlUnorderedList(
 private fun HtmlListItems(
     list: Element,
     modifier: Modifier = Modifier,
-    onTextClicked: () -> Unit,
+    onTextClicked: () -> Unit, onTextLongClicked: () -> Unit,
     interactionSource: MutableInteractionSource,
     content: @Composable (node: TextNode) -> Unit
 ) {
@@ -393,7 +423,7 @@ private fun HtmlListItems(
                     is Element -> HtmlBlock(
                         element = innerNode,
                         modifier = modifier.padding(start = 4.dp),
-                        onTextClicked = onTextClicked,
+                        onTextClicked = onTextClicked, onTextLongClicked = onTextLongClicked,
                         interactionSource = interactionSource
                     )
                 }
@@ -496,23 +526,28 @@ private fun HtmlText(
     modifier: Modifier = Modifier,
     style: TextStyle = LocalTextStyle.current,
     onClick: () -> Unit,
+    onLongClick: () -> Unit,
     interactionSource: MutableInteractionSource,
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current
     val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
     val pressIndicator = Modifier.pointerInput(onClick) {
-        detectTapGestures { offset ->
+        detectTapGestures(
+            onPress = { offset: Offset ->
+                val pressInteraction = PressInteraction.Press(offset)
+                interactionSource.emit(pressInteraction)
+                awaitRelease()
+                interactionSource.emit(PressInteraction.Release(pressInteraction))
+            },
+            onLongPress = { _ ->
+                onLongClick()
+            }
+        ) { offset ->
             layoutResult.value?.let { layoutResult ->
                 val position = layoutResult.getOffsetForPosition(offset)
                 val linkAnnotations = text.getStringAnnotations("link", position, position)
                 if (linkAnnotations.isEmpty()) {
                     onClick()
-                    coroutineScope.launch {
-                        val pressInteraction = PressInteraction.Press(offset)
-                        interactionSource.emit(pressInteraction)
-                        interactionSource.emit(PressInteraction.Release(pressInteraction))
-                    }
                 } else {
                     uriHandler.openUri(linkAnnotations.first().item)
                 }
