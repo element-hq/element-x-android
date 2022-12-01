@@ -10,15 +10,15 @@ import io.element.android.x.features.messages.model.MessagesItemActionsSheetStat
 import io.element.android.x.features.messages.model.MessagesTimelineItemState
 import io.element.android.x.features.messages.model.MessagesViewState
 import io.element.android.x.features.messages.model.content.MessagesTimelineItemRedactedContent
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemTextBasedContent
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.MatrixInstance
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.MatrixRoom
 import io.element.android.x.matrix.timeline.MatrixTimeline
+import io.element.android.x.textcomposer.MessageComposerMode
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -28,7 +28,7 @@ class MessagesViewModel(
     private val client: MatrixClient,
     private val room: MatrixRoom,
     private val timeline: MatrixTimeline,
-    private val messageTimelineItemStateMapper: MessageTimelineItemStateMapper,
+    private val messageTimelineItemStateFactory: MessageTimelineItemStateFactory,
     private val initialState: MessagesViewState
 ) :
     MavericksViewModel<MessagesViewState>(initialState) {
@@ -42,13 +42,13 @@ class MessagesViewModel(
             val matrix = MatrixInstance.getInstance()
             val client = matrix.activeClient()
             val room = client.getRoom(state.roomId) ?: return null
-            val messageTimelineItemStateMapper =
-                MessageTimelineItemStateMapper(client, room, Dispatchers.Default)
+            val messageTimelineItemStateFactory =
+                MessageTimelineItemStateFactory(client, room, Dispatchers.Default)
             return MessagesViewModel(
                 client,
                 room,
                 room.timeline(),
-                messageTimelineItemStateMapper,
+                messageTimelineItemStateFactory,
                 state
             )
         }
@@ -66,22 +66,69 @@ class MessagesViewModel(
     }
 
     fun sendMessage(text: String) {
-        viewModelScope.launch {
-            timeline.sendMessage(text)
+        withState { state ->
+            viewModelScope.launch {
+                when (state.composerMode) {
+                    is MessageComposerMode.Normal -> timeline.sendMessage(text)
+                    is MessageComposerMode.Edit -> timeline.editMessage(
+                        state.composerMode.eventId,
+                        text
+                    )
+                    is MessageComposerMode.Quote -> TODO()
+                    is MessageComposerMode.Reply -> timeline.replyMessage(
+                        state.composerMode.eventId,
+                        text
+                    )
+                }
+                // Reset composer
+                setNormalMode()
+            }
         }
+    }
+
+    suspend fun getTargetEvent(): MessagesTimelineItemState.MessageEvent? {
+        val currentState = awaitState()
+        return currentState.itemActionsSheetState.invoke()?.targetItem
     }
 
     fun handleItemAction(action: MessagesItemAction) {
         viewModelScope.launch(Dispatchers.Default) {
             val currentState = awaitState()
             Timber.v("Handle $action for ${currentState.itemActionsSheetState}")
-            val targetEvent =
-                currentState.itemActionsSheetState.invoke()?.targetItem ?: return@launch
+            val targetEvent = getTargetEvent()
+                ?: return@launch
             when (action) {
                 MessagesItemAction.Copy -> notImplementedYet()
                 MessagesItemAction.Forward -> notImplementedYet()
                 MessagesItemAction.Redact -> handleActionRedact(targetEvent)
+                MessagesItemAction.Edit -> handleActionEdit(targetEvent)
+                MessagesItemAction.Reply -> handleActionReply(targetEvent)
             }
+        }
+    }
+
+    fun setNormalMode() {
+        setComposerMode(MessageComposerMode.Normal(""))
+    }
+
+    private fun handleActionEdit(targetEvent: MessagesTimelineItemState.MessageEvent) {
+        setComposerMode(
+            MessageComposerMode.Edit(
+                targetEvent.id,
+                (targetEvent.content as? MessagesTimelineItemTextBasedContent)?.body.orEmpty()
+            )
+        )
+    }
+
+    private fun handleActionReply(targetEvent: MessagesTimelineItemState.MessageEvent) {
+        setComposerMode(MessageComposerMode.Reply(targetEvent.safeSenderName, targetEvent.id, ""))
+    }
+
+    private fun setComposerMode(mode: MessageComposerMode) {
+        setState {
+            copy(
+                composerMode = mode
+            )
         }
     }
 
@@ -110,10 +157,12 @@ class MessagesViewModel(
                     emptyList()
                 } else {
                     mutableListOf(
+                        MessagesItemAction.Reply,
                         MessagesItemAction.Forward,
                         MessagesItemAction.Copy,
                     ).also {
                         if (messagesTimelineItemState.isMine) {
+                            it.add(MessagesItemAction.Edit)
                             it.add(MessagesItemAction.Redact)
                         }
                     }
@@ -140,8 +189,20 @@ class MessagesViewModel(
                 }
             }.launchIn(viewModelScope)
 
-        timeline.timelineItems()
-            .map(messageTimelineItemStateMapper::map)
+        combine(
+            timeline.timelineItems(),
+            stateFlow.map {
+                when (it.composerMode) {
+                    is MessageComposerMode.Normal -> null
+                    is MessageComposerMode.Edit -> it.composerMode.eventId
+                    is MessageComposerMode.Quote -> null
+                    is MessageComposerMode.Reply -> it.composerMode.eventId
+                }
+            }
+                .distinctUntilChanged()
+        ) { timelineItems, highlightedEventId ->
+            messageTimelineItemStateFactory.create(timelineItems, highlightedEventId)
+        }
             .execute {
                 copy(timelineItems = it)
             }

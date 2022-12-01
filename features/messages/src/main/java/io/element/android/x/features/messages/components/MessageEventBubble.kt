@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
@@ -25,6 +24,7 @@ fun MessageEventBubble(
     groupPosition: MessagesItemGroupPosition,
     isMine: Boolean,
     interactionSource: MutableInteractionSource,
+    isHighlighted: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
@@ -65,17 +65,25 @@ fun MessageEventBubble(
         }
     }
 
-    val backgroundBubbleColor = if (isMine) {
+    val backgroundBubbleColor = if (isHighlighted) {
         if (LocalIsDarkTheme.current) {
-            SystemGrey5Dark
+            MessageHighlightDark
         } else {
-            SystemGrey5Light
+            MessageHighlightLight
         }
     } else {
-        if (LocalIsDarkTheme.current) {
-            SystemGrey6Dark
+        if (isMine) {
+            if (LocalIsDarkTheme.current) {
+                SystemGrey5Dark
+            } else {
+                SystemGrey5Light
+            }
         } else {
-            SystemGrey6Light
+            if (LocalIsDarkTheme.current) {
+                SystemGrey6Dark
+            } else {
+                SystemGrey6Light
+            }
         }
     }
     val bubbleShape = bubbleShape()

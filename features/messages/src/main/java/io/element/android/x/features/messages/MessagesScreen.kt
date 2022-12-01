@@ -41,6 +41,7 @@ import io.element.android.x.features.messages.model.*
 import io.element.android.x.features.messages.model.content.*
 import io.element.android.x.features.messages.textcomposer.MessageComposerViewModel
 import io.element.android.x.features.messages.textcomposer.MessageComposerViewState
+import io.element.android.x.textcomposer.MessageComposerMode
 import io.element.android.x.textcomposer.TextComposer
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -72,6 +73,7 @@ fun MessagesScreen(
     val timelineItems by viewModel.collectAsState(MessagesViewState::timelineItems)
     val hasMoreToLoad by viewModel.collectAsState(MessagesViewState::hasMoreToLoad)
     val snackBarContent by viewModel.collectAsState(MessagesViewState::snackbarContent)
+    val composerMode by viewModel.collectAsState(MessagesViewState::composerMode)
     val composerFullScreen by composerViewModel.collectAsState(MessageComposerViewState::isFullScreen)
     val composerCanSendMessage by composerViewModel.collectAsState(MessageComposerViewState::isSendButtonVisible)
     val composerText by composerViewModel.collectAsState(MessageComposerViewState::text)
@@ -87,6 +89,8 @@ fun MessagesScreen(
         composerFullScreen = composerFullScreen,
         onComposerFullScreenChange = composerViewModel::onComposerFullScreenChange,
         onComposerTextChange = composerViewModel::updateText,
+        composerMode = composerMode,
+        onCloseSpecialMode = viewModel::setNormalMode,
         composerCanSendMessage = composerCanSendMessage,
         composerText = composerText,
         onClick = {
@@ -107,6 +111,16 @@ fun MessagesScreen(
         onActionClicked = {
             viewModel.handleItemAction(it)
             coroutineScope.launch {
+                val targetEvent = viewModel.getTargetEvent()
+                when (it) {
+                    is MessagesItemAction.Edit -> {
+                        // Entering Edit mode, update the text in the composer.
+                        val newComposerText =
+                            (targetEvent?.content as? MessagesTimelineItemTextBasedContent)?.body.orEmpty()
+                        composerViewModel.updateText(newComposerText)
+                    }
+                    else -> Unit
+                }
                 actionsSheetState.hide()
             }
         }
@@ -133,6 +147,8 @@ fun MessagesScreenContent(
     composerFullScreen: Boolean,
     onComposerFullScreenChange: () -> Unit,
     onComposerTextChange: (CharSequence) -> Unit,
+    composerMode: MessageComposerMode,
+    onCloseSpecialMode: () -> Unit,
     composerCanSendMessage: Boolean,
     composerText: StableCharSequence?,
     snackbarHostState: SnackbarHostState,
@@ -155,6 +171,8 @@ fun MessagesScreenContent(
                 onSendMessage = onSendMessage,
                 onClick = onClick,
                 onLongClick = onLongClick,
+                composerMode = composerMode,
+                onCloseSpecialMode = onCloseSpecialMode,
                 composerFullScreen = composerFullScreen,
                 onComposerFullScreenChange = onComposerFullScreenChange,
                 onComposerTextChange = onComposerTextChange,
@@ -174,6 +192,8 @@ fun MessagesContent(
     onSendMessage: (String) -> Unit,
     onClick: (MessagesTimelineItemState.MessageEvent) -> Unit,
     onLongClick: (MessagesTimelineItemState.MessageEvent) -> Unit,
+    composerMode: MessageComposerMode,
+    onCloseSpecialMode: () -> Unit,
     composerFullScreen: Boolean,
     onComposerFullScreenChange: () -> Unit,
     onComposerTextChange: (CharSequence) -> Unit,
@@ -202,6 +222,8 @@ fun MessagesContent(
             onSendMessage = onSendMessage,
             fullscreen = composerFullScreen,
             onFullscreenToggle = onComposerFullScreenChange,
+            composerMode = composerMode,
+            onCloseSpecialMode = onCloseSpecialMode,
             onComposerTextChange = onComposerTextChange,
             composerCanSendMessage = composerCanSendMessage,
             composerText = composerText?.charSequence?.toString(),
@@ -363,6 +385,7 @@ fun MessageEventRow(
                     groupPosition = messageEvent.groupPosition,
                     isMine = messageEvent.isMine,
                     interactionSource = interactionSource,
+                    isHighlighted = messageEvent.isHighlighted,
                     onClick = onClick,
                     onLongClick = onLongClick,
                     modifier = Modifier

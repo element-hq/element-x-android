@@ -20,20 +20,27 @@ import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.MessageType
 import org.matrix.rustcomponents.sdk.TimelineKey
 
-class MessageTimelineItemStateMapper(
+class MessageTimelineItemStateFactory(
     private val client: MatrixClient,
     private val room: MatrixRoom,
     private val dispatcher: CoroutineDispatcher,
 ) {
-
-    suspend fun map(timelineItems: List<MatrixTimelineItem>): List<MessagesTimelineItemState> =
+    suspend fun create(
+        timelineItems: List<MatrixTimelineItem>,
+        highlightedEventId: String? = null,
+    ): List<MessagesTimelineItemState> =
         withContext(dispatcher) {
             val messagesTimelineItemState = ArrayList<MessagesTimelineItemState>()
             for (index in timelineItems.indices.reversed()) {
                 val currentTimelineItem = timelineItems[index]
                 val timelineItemState = when (currentTimelineItem) {
                     is MatrixTimelineItem.Event -> {
-                        buildMessageEvent(currentTimelineItem, index, timelineItems)
+                        buildMessageEvent(
+                            currentTimelineItem,
+                            index,
+                            timelineItems,
+                            highlightedEventId
+                        )
                     }
                     is MatrixTimelineItem.Virtual -> MessagesTimelineItemState.Virtual(
                         "virtual_item_$index"
@@ -48,7 +55,8 @@ class MessageTimelineItemStateMapper(
     private suspend fun buildMessageEvent(
         currentTimelineItem: MatrixTimelineItem.Event,
         index: Int,
-        timelineItems: List<MatrixTimelineItem>
+        timelineItems: List<MatrixTimelineItem>,
+        highlightedEventId: String?,
     ): MessagesTimelineItemState.MessageEvent {
         val currentSender = currentTimelineItem.event.sender()
         val groupPosition =
@@ -68,6 +76,7 @@ class MessageTimelineItemStateMapper(
             senderAvatar = senderAvatarData,
             content = currentTimelineItem.computeContent(),
             isMine = currentTimelineItem.event.isOwn(),
+            isHighlighted = currentTimelineItem.event.eventId().orEmpty() == highlightedEventId,
             groupPosition = groupPosition,
             reactionsState = currentTimelineItem.computeReactionsState()
         )
