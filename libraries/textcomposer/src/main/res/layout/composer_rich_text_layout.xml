@@ -5,8 +5,19 @@
     android:id="@+id/composerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/bg_composer_rich_bottom_sheet">
+    android:orientation="vertical">
+
+    <!-- EAx: Remove android:background="@drawable/bg_composer_rich_bottom_sheet" from ^ -->
+
+    <!--
+    There are issues here:
+
+    View class androidx.appcompat.widget.AppCompatImageView is an AppCompat widget that can only be used with a Theme.AppCompat theme (or descendant).
+    View class io.element.android.wysiwyg.EditorEditText is an AppCompat widget that can only be used with a Theme.AppCompat theme (or descendant).
+    layout_constraintHeight_default="wrap" is deprecated. Use layout_height="WRAP_CONTENT" and layout_constrainedHeight="true" instead.
+    View class com.google.android.material.textfield.TextInputEditText is an AppCompat widget that can only be used with a Theme.AppCompat theme (or descendant).
+    layout_constraintHeight_default="wrap" is deprecated. Use layout_height="WRAP_CONTENT" and layout_constrainedHeight="true" instead.
+    -->
 
     <FrameLayout
         android:id="@+id/bottomSheetHandle"

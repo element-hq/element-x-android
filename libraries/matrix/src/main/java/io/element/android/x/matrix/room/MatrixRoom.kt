@@ -82,6 +82,22 @@ class MatrixRoom(
         }
     }
 
+    suspend fun editMessage(originalEventId: String, message: String): Result<Unit> = withContext(coroutineDispatchers.io) {
+        val transactionId = genTransactionId()
+        val content = messageEventContentFromMarkdown(message)
+        runCatching {
+            room.edit(/* TODO use content */ message, originalEventId, transactionId)
+        }
+    }
+
+    suspend fun replyMessage(eventId: String, message: String): Result<Unit> = withContext(coroutineDispatchers.io) {
+        val transactionId = genTransactionId()
+        val content = messageEventContentFromMarkdown(message)
+        runCatching {
+            room.sendReply(/* TODO use content */ message, eventId, transactionId)
+        }
+    }
+
     suspend fun redactEvent(eventId: String, reason: String? = null, ) = withContext(coroutineDispatchers.io) {
         val transactionId = genTransactionId()
         runCatching {

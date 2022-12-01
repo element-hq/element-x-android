@@ -19,8 +19,18 @@ package io.element.android.x.textcomposer
 sealed interface MessageComposerMode {
     data class Normal(val content: CharSequence?) : MessageComposerMode
 
-    sealed class Special(open val event: Any /* TODO set correct type here */, open val defaultContent: CharSequence) : MessageComposerMode
-    data class Edit(override val event: Any, override val defaultContent: CharSequence) : Special(event, defaultContent)
-    class Quote(override val event: Any, override val defaultContent: CharSequence) : Special(event, defaultContent)
-    class Reply(override val event: Any, override val defaultContent: CharSequence) : Special(event, defaultContent)
+    sealed class Special(open val eventId: String, open val defaultContent: CharSequence) :
+        MessageComposerMode
+
+    data class Edit(override val eventId: String, override val defaultContent: CharSequence) :
+        Special(eventId, defaultContent)
+
+    class Quote(override val eventId: String, override val defaultContent: CharSequence) :
+        Special(eventId, defaultContent)
+
+    class Reply(
+        val senderName: String,
+        override val eventId: String,
+        override val defaultContent: CharSequence
+    ) : Special(eventId, defaultContent)
 }

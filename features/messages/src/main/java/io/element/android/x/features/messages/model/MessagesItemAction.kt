@@ -13,4 +13,6 @@ sealed class MessagesItemAction(
     object Forward : MessagesItemAction("Forward", VectorIcons.ArrowForward)
     object Copy : MessagesItemAction("Copy", VectorIcons.Copy)
     object Redact : MessagesItemAction("Redact", VectorIcons.Delete, destructive = true)
+    object Reply : MessagesItemAction("Reply", VectorIcons.Reply)
+    object Edit : MessagesItemAction("Edit", VectorIcons.Edit)
 }

@@ -26,6 +26,8 @@ fun TextComposer(
     modifier: Modifier = Modifier,
     fullscreen: Boolean,
     onFullscreenToggle: () -> Unit,
+    composerMode: MessageComposerMode,
+    onCloseSpecialMode: () -> Unit,
     onComposerTextChange: (CharSequence) -> Unit,
     composerCanSendMessage: Boolean,
     composerText: String?,
@@ -50,6 +52,7 @@ fun TextComposer(
                     }
 
                     override fun onCloseRelatedMessage() {
+                        onCloseSpecialMode()
                     }
 
                     override fun onSendMessage(text: CharSequence) {
@@ -70,7 +73,7 @@ fun TextComposer(
                 }
                 setFullScreen(fullscreen, true)
                 (this as MessageComposerView).apply {
-                    setup(isInDarkMode)
+                    setup(isInDarkMode, composerMode)
                 }
             }
         },
@@ -83,6 +86,7 @@ fun TextComposer(
             // Example of Compose -> View communication
             val messageComposerView = (view as MessageComposerView)
             view.setFullScreen(fullscreen, false)
+            // TODO messageComposerView.renderComposerMode(composerMode)
             messageComposerView.sendButton.isInvisible = !composerCanSendMessage
             messageComposerView.setTextIfDifferent(composerText ?: "")
         }
@@ -107,7 +111,7 @@ private fun FakeComposer(modifier: Modifier) {
     }
 }
 
-private fun MessageComposerView.setup(isDarkMode: Boolean) {
+private fun MessageComposerView.setup(isDarkMode: Boolean, composerMode: MessageComposerMode) {
     val editTextColor = if (isDarkMode) {
         Color.WHITE
     } else {
@@ -118,6 +122,7 @@ private fun MessageComposerView.setup(isDarkMode: Boolean) {
     editText.setHint(ElementR.string.room_message_placeholder)
     emojiButton?.isVisible = true
     sendButton.isVisible = true
+    // TODO renderComposerMode(composerMode)
 }
 
 @Preview
@@ -128,6 +133,8 @@ fun TextComposerPreview() {
         fullscreen = false,
         onFullscreenToggle = { },
         onComposerTextChange = {},
+        composerMode = MessageComposerMode.Normal(""),
+        onCloseSpecialMode = {},
         composerCanSendMessage = true,
         composerText = "Message",
     )
