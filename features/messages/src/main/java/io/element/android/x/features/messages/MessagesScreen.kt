@@ -232,9 +232,9 @@ fun MessagesContent(
                 .imePadding()
                 .let {
                     if (composerFullScreen) {
-                        it.weight(1f)
+                        it.weight(1f, fill = false)
                     } else {
-                        it.height(COMPOSER_HEIGHT)
+                        it.wrapContentHeight(Alignment.Bottom)
                     }
                 },
         )
