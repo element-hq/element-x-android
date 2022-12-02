@@ -3,9 +3,7 @@
 package io.element.android.x.features.messages.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
@@ -25,12 +23,13 @@ fun TimelineItemActionsScreen(
     modifier: Modifier = Modifier
 ) {
     ModalBottomSheetLayout(
-        modifier = modifier.navigationBarsPadding(),
+        modifier = modifier,
         sheetState = sheetState,
         sheetContent = {
             SheetContent(
                 actionsSheetState = actionsSheetState,
-                onActionClicked = onActionClicked
+                onActionClicked = onActionClicked,
+                modifier = Modifier.navigationBarsPadding()
             )
         }
     ) {}
@@ -41,13 +40,17 @@ fun TimelineItemActionsScreen(
 private fun SheetContent(
     actionsSheetState: MessagesItemActionsSheetState?,
     onActionClicked: (MessagesItemAction) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     if (actionsSheetState == null || actionsSheetState.actions.isEmpty()) {
         // Crashes if sheetContent size is zero
-        Box(modifier = Modifier.size(1.dp))
+        Box(modifier = modifier.size(1.dp))
         return
     }
-    LazyColumn {
+    LazyColumn(
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
         items(actionsSheetState.actions) {
             ListItem(
                 modifier = Modifier.clickable {

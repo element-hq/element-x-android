@@ -60,6 +60,7 @@ fun OnBoardingContent(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .systemBarsPadding()
                 .padding(vertical = 16.dp)
         ) {
             Column(
@@ -113,7 +114,6 @@ fun OnBoardingContent(
                     },
                     enabled = true,
                     modifier = Modifier
-                        .navigationBarsPadding()
                         .align(CenterHorizontally)
                         .padding(top = 16.dp)
                 )

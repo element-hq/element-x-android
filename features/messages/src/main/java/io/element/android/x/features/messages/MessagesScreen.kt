@@ -80,7 +80,6 @@ fun MessagesScreen(
     val composerText by composerViewModel.collectAsState(MessageComposerViewState::text)
     val snackbarHostState = remember { SnackbarHostState() }
     MessagesScreenContent(
-
         roomTitle = roomTitle,
         roomAvatar = roomAvatar,
         timelineItems = timelineItems().orEmpty(),
@@ -159,6 +158,7 @@ fun MessagesScreenContent(
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Content")
     Scaffold(
+        contentWindowInsets = WindowInsets.statusBars,
         topBar = {
             MessagesTopAppBar(
                 roomTitle = roomTitle,
@@ -212,6 +212,8 @@ fun MessagesContent(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .navigationBarsPadding()
+            .imePadding()
     ) {
         if (!composerFullScreen) {
             TimelineItems(
@@ -236,7 +238,6 @@ fun MessagesContent(
             composerText = composerText?.charSequence?.toString(),
             modifier = Modifier
                 .fillMaxWidth()
-                .imePadding()
                 .let {
                     if (composerFullScreen) {
                         it.weight(1f)
