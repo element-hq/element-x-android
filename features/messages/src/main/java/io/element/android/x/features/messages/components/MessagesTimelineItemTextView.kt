@@ -2,20 +2,17 @@ package io.element.android.x.features.messages.components
 
 import android.text.SpannableString
 import android.text.style.URLSpan
-import android.text.util.Linkify
-import android.text.util.Linkify.*
+import android.text.util.Linkify.PHONE_NUMBERS
+import android.text.util.Linkify.WEB_URLS
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.platform.UriHandler
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.core.text.util.LinkifyCompat
+import io.element.android.x.designsystem.LinkColor
 import io.element.android.x.designsystem.components.ClickableLinkText
 import io.element.android.x.features.messages.components.html.HtmlDocument
 import io.element.android.x.features.messages.model.content.MessagesTimelineItemTextBasedContent
@@ -38,10 +35,9 @@ fun MessagesTimelineItemTextView(
             interactionSource = interactionSource
         )
     } else {
-        val uriHandler = LocalUriHandler.current
         Box(modifier) {
             val linkStyle = SpanStyle(
-                color = Color.Blue,
+                color = LinkColor,
             )
             val styledText = remember(content.body) { content.body.linkify(linkStyle) }
             ClickableLinkText(
