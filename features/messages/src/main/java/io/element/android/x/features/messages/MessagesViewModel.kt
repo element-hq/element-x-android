@@ -68,22 +68,21 @@ class MessagesViewModel(
     }
 
     fun sendMessage(text: String) {
-        withState { state ->
-            viewModelScope.launch {
-                when (state.composerMode) {
-                    is MessageComposerMode.Normal -> timeline.sendMessage(text)
-                    is MessageComposerMode.Edit -> timeline.editMessage(
-                        state.composerMode.eventId,
-                        text
-                    )
-                    is MessageComposerMode.Quote -> TODO()
-                    is MessageComposerMode.Reply -> timeline.replyMessage(
-                        state.composerMode.eventId,
-                        text
-                    )
-                }
-                // Reset composer
-                setNormalMode()
+        viewModelScope.launch {
+            val state = awaitState()
+            // Reset composer right away
+            setNormalMode()
+            when (state.composerMode) {
+                is MessageComposerMode.Normal -> timeline.sendMessage(text)
+                is MessageComposerMode.Edit -> timeline.editMessage(
+                    state.composerMode.eventId,
+                    text
+                )
+                is MessageComposerMode.Quote -> TODO()
+                is MessageComposerMode.Reply -> timeline.replyMessage(
+                    state.composerMode.eventId,
+                    text
+                )
             }
         }
     }
