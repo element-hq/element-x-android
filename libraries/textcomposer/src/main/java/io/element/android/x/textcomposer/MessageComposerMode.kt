@@ -33,4 +33,16 @@ sealed interface MessageComposerMode {
         override val eventId: String,
         override val defaultContent: CharSequence
     ) : Special(eventId, defaultContent)
+
+
+    val relatedEventId: String?
+        get() = when (this) {
+            is Normal -> null
+            is Edit -> eventId
+            is Quote -> eventId
+            is Reply -> eventId
+        }
+
+
 }
+

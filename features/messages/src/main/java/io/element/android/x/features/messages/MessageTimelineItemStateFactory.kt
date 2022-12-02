@@ -27,7 +27,6 @@ class MessageTimelineItemStateFactory(
 ) {
     suspend fun create(
         timelineItems: List<MatrixTimelineItem>,
-        highlightedEventId: String? = null,
     ): List<MessagesTimelineItemState> =
         withContext(dispatcher) {
             val messagesTimelineItemState = ArrayList<MessagesTimelineItemState>()
@@ -39,7 +38,6 @@ class MessageTimelineItemStateFactory(
                             currentTimelineItem,
                             index,
                             timelineItems,
-                            highlightedEventId
                         )
                     }
                     is MatrixTimelineItem.Virtual -> MessagesTimelineItemState.Virtual(
@@ -56,7 +54,6 @@ class MessageTimelineItemStateFactory(
         currentTimelineItem: MatrixTimelineItem.Event,
         index: Int,
         timelineItems: List<MatrixTimelineItem>,
-        highlightedEventId: String?,
     ): MessagesTimelineItemState.MessageEvent {
         val currentSender = currentTimelineItem.event.sender()
         val groupPosition =
@@ -76,7 +73,6 @@ class MessageTimelineItemStateFactory(
             senderAvatar = senderAvatarData,
             content = currentTimelineItem.computeContent(),
             isMine = currentTimelineItem.event.isOwn(),
-            isHighlighted = currentTimelineItem.event.eventId().orEmpty() == highlightedEventId,
             groupPosition = groupPosition,
             reactionsState = currentTimelineItem.computeReactionsState()
         )
