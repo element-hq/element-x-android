@@ -26,6 +26,8 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
+import io.element.android.x.designsystem.components.VectorIcon
+import io.element.android.x.features.login.R
 import io.element.android.x.features.login.error.changeServerError
 
 @Composable
@@ -62,7 +64,7 @@ fun ChangeServerContent(
             )
             {
                 val isError = state.changeServerAction is Fail
-                Text(
+                Box(
                     modifier = Modifier
                         .padding(top = 99.dp)
                         .size(width = 81.dp, height = 73.dp)
@@ -70,11 +72,16 @@ fun ChangeServerContent(
                         .background(
                             color = MaterialTheme.colorScheme.surfaceVariant,
                             shape = RoundedCornerShape(32.dp)
-                        ),
-                    text = "\uDBC2\uDEAC",
-                    fontSize = 34.sp,
-                    textAlign = TextAlign.Center,
-                )
+                        )
+                ) {
+                    VectorIcon(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .size(width = 48.dp, height = 48.dp),
+                        // TODO Update with design input
+                        resourceId = R.drawable.ic_baseline_dataset_24,
+                    )
+                }
                 Text(
                     text = "Your server",
                     modifier = Modifier
