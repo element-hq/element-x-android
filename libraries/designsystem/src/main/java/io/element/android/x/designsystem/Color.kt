@@ -39,3 +39,5 @@ val Vermilion = Color(0xFFFF5B55)
 val MessageHighlightLight = Azure
 // TODO Update color
 val MessageHighlightDark = Azure
+
+val LinkColor = Color(0xFF054F6E)

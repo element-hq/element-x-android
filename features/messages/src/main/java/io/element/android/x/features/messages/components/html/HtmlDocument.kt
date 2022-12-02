@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
+import io.element.android.x.designsystem.LinkColor
 import io.element.android.x.designsystem.components.ClickableLinkText
 import io.element.android.x.matrix.permalink.PermalinkData
 import io.element.android.x.matrix.permalink.PermalinkParser
@@ -499,7 +500,7 @@ private fun AnnotatedString.Builder.appendLink(link: Element) {
         is PermalinkData.FallbackLink -> {
             pushStringAnnotation(tag = "URL", annotation = link.ownText())
             withStyle(
-                style = SpanStyle(color = Color.Blue)
+                style = SpanStyle(color = LinkColor)
             ) {
                 append(link.ownText())
             }
