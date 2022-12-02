@@ -53,10 +53,10 @@ private val COMPOSER_HEIGHT = 112.dp
 @Composable
 fun MessagesScreen(
     roomId: String,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    viewModel: MessagesViewModel = mavericksViewModel(argsFactory = { roomId }),
+    composerViewModel: MessageComposerViewModel = mavericksViewModel(argsFactory = { roomId })
 ) {
-    val viewModel: MessagesViewModel = mavericksViewModel(argsFactory = { roomId })
-    val composerViewModel: MessageComposerViewModel = mavericksViewModel(argsFactory = { roomId })
 
     fun onSendMessage(textMessage: String) {
         viewModel.sendMessage(textMessage)
@@ -74,11 +74,13 @@ fun MessagesScreen(
     val hasMoreToLoad by viewModel.collectAsState(MessagesViewState::hasMoreToLoad)
     val snackBarContent by viewModel.collectAsState(MessagesViewState::snackbarContent)
     val composerMode by viewModel.collectAsState(MessagesViewState::composerMode)
+    val highlightedEventId by viewModel.collectAsState(MessagesViewState::highlightedEventId)
     val composerFullScreen by composerViewModel.collectAsState(MessageComposerViewState::isFullScreen)
     val composerCanSendMessage by composerViewModel.collectAsState(MessageComposerViewState::isSendButtonVisible)
     val composerText by composerViewModel.collectAsState(MessageComposerViewState::text)
     val snackbarHostState = remember { SnackbarHostState() }
     MessagesScreenContent(
+
         roomTitle = roomTitle,
         roomAvatar = roomAvatar,
         timelineItems = timelineItems().orEmpty(),
@@ -90,6 +92,7 @@ fun MessagesScreen(
         onComposerFullScreenChange = composerViewModel::onComposerFullScreenChange,
         onComposerTextChange = composerViewModel::updateText,
         composerMode = composerMode,
+        highlightedEventId = highlightedEventId,
         onCloseSpecialMode = viewModel::setNormalMode,
         composerCanSendMessage = composerCanSendMessage,
         composerText = composerText,
@@ -148,6 +151,7 @@ fun MessagesScreenContent(
     onComposerFullScreenChange: () -> Unit,
     onComposerTextChange: (CharSequence) -> Unit,
     composerMode: MessageComposerMode,
+    highlightedEventId: String?,
     onCloseSpecialMode: () -> Unit,
     composerCanSendMessage: Boolean,
     composerText: StableCharSequence?,
@@ -171,6 +175,7 @@ fun MessagesScreenContent(
                 onSendMessage = onSendMessage,
                 onClick = onClick,
                 onLongClick = onLongClick,
+                highlightedEventId = highlightedEventId,
                 composerMode = composerMode,
                 onCloseSpecialMode = onCloseSpecialMode,
                 composerFullScreen = composerFullScreen,
@@ -193,6 +198,7 @@ fun MessagesContent(
     onClick: (MessagesTimelineItemState.MessageEvent) -> Unit,
     onLongClick: (MessagesTimelineItemState.MessageEvent) -> Unit,
     composerMode: MessageComposerMode,
+    highlightedEventId: String?,
     onCloseSpecialMode: () -> Unit,
     composerFullScreen: Boolean,
     onComposerFullScreenChange: () -> Unit,
@@ -211,6 +217,7 @@ fun MessagesContent(
             TimelineItems(
                 lazyListState = lazyListState,
                 timelineItems = timelineItems,
+                highlightedEventId = highlightedEventId,
                 hasMoreToLoad = hasMoreToLoad,
                 onReachedLoadMore = onReachedLoadMore,
                 modifier = Modifier.weight(1f),
@@ -279,6 +286,7 @@ fun MessagesTopAppBar(
 fun TimelineItems(
     lazyListState: LazyListState,
     timelineItems: List<MessagesTimelineItemState>,
+    highlightedEventId: String?,
     modifier: Modifier = Modifier,
     hasMoreToLoad: Boolean = false,
     onClick: (MessagesTimelineItemState.MessageEvent) -> Unit = {},
@@ -300,6 +308,7 @@ fun TimelineItems(
             ) { timelineItem ->
                 TimelineItemRow(
                     timelineItem = timelineItem,
+                    isHighlighted = timelineItem.key() == highlightedEventId,
                     onClick = onClick,
                     onLongClick = onLongClick
                 )
@@ -337,6 +346,7 @@ private fun MessagesTimelineItemState.contentType(): Int {
 @Composable
 fun TimelineItemRow(
     timelineItem: MessagesTimelineItemState,
+    isHighlighted: Boolean,
     onClick: (MessagesTimelineItemState.MessageEvent) -> Unit,
     onLongClick: (MessagesTimelineItemState.MessageEvent) -> Unit,
 ) {
@@ -344,6 +354,7 @@ fun TimelineItemRow(
         is MessagesTimelineItemState.Virtual -> return
         is MessagesTimelineItemState.MessageEvent -> MessageEventRow(
             messageEvent = timelineItem,
+            isHighlighted = isHighlighted,
             onClick = { onClick(timelineItem) },
             onLongClick = { onLongClick(timelineItem) }
         )
@@ -353,6 +364,7 @@ fun TimelineItemRow(
 @Composable
 fun MessageEventRow(
     messageEvent: MessagesTimelineItemState.MessageEvent,
+    isHighlighted: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -385,7 +397,7 @@ fun MessageEventRow(
                     groupPosition = messageEvent.groupPosition,
                     isMine = messageEvent.isMine,
                     interactionSource = interactionSource,
-                    isHighlighted = messageEvent.isHighlighted,
+                    isHighlighted = isHighlighted,
                     onClick = onClick,
                     onLongClick = onLongClick,
                     modifier = Modifier
@@ -584,6 +596,7 @@ fun TimelineItemsPreview(
                 groupPosition = MessagesItemGroupPosition.Last
             ),
         ),
+        highlightedEventId = null,
         hasMoreToLoad = true,
     )
 }

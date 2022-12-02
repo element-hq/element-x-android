@@ -18,7 +18,9 @@ import io.element.android.x.matrix.room.MatrixRoom
 import io.element.android.x.matrix.timeline.MatrixTimeline
 import io.element.android.x.textcomposer.MessageComposerMode
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -127,7 +129,8 @@ class MessagesViewModel(
     private fun setComposerMode(mode: MessageComposerMode) {
         setState {
             copy(
-                composerMode = mode
+                composerMode = mode,
+                highlightedEventId = mode.relatedEventId
             )
         }
     }
@@ -189,20 +192,9 @@ class MessagesViewModel(
                 }
             }.launchIn(viewModelScope)
 
-        combine(
-            timeline.timelineItems(),
-            stateFlow.map {
-                when (it.composerMode) {
-                    is MessageComposerMode.Normal -> null
-                    is MessageComposerMode.Edit -> it.composerMode.eventId
-                    is MessageComposerMode.Quote -> null
-                    is MessageComposerMode.Reply -> it.composerMode.eventId
-                }
-            }
-                .distinctUntilChanged()
-        ) { timelineItems, highlightedEventId ->
-            messageTimelineItemStateFactory.create(timelineItems, highlightedEventId)
-        }
+        timeline
+            .timelineItems()
+            .map(messageTimelineItemStateFactory::create)
             .execute {
                 copy(timelineItems = it)
             }
