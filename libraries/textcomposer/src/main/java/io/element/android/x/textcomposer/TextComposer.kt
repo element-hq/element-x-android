@@ -36,6 +36,7 @@ fun TextComposer(
         FakeComposer(modifier)
         return
     }
+
     val isInDarkMode = isSystemInDarkTheme()
     AndroidView(
         modifier = modifier,
@@ -86,10 +87,10 @@ fun TextComposer(
             // Example of Compose -> View communication
             val messageComposerView = (view as MessageComposerView)
             view.setFullScreen(fullscreen, animated = false, manageKeyboard = false)
-            // TODO: un-comment once we update to a version of the lib > 0.8.0
-            // messageComposerView.renderComposerMode(composerMode)
+            messageComposerView.renderComposerMode(composerMode)
             messageComposerView.sendButton.isInvisible = !composerCanSendMessage
             messageComposerView.setTextIfDifferent(composerText ?: "")
+            messageComposerView.editText.requestFocus()
         }
     )
 }
@@ -124,8 +125,7 @@ private fun MessageComposerView.setup(isDarkMode: Boolean, composerMode: Message
     emojiButton?.isVisible = true
     sendButton.isVisible = true
     editText.maxLines = MessageComposerView.MAX_LINES_WHEN_COLLAPSED
-    // TODO: un-comment once we update to a version of the lib > 0.8.0
-    // renderComposerMode(composerMode)
+    renderComposerMode(composerMode)
 }
 
 @Preview

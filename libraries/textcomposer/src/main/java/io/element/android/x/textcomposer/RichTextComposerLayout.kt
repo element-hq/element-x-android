@@ -485,11 +485,15 @@ class RichTextComposerLayout @JvmOverloads constructor(
         } else {
             views.composerModeGroup.isGone = true
             (mode as? MessageComposerMode.Normal)?.content?.let { text ->
+                // TODO: un-comment once we update to a version of the lib > 0.8.0
+                /*
                 if (isTextFormattingEnabled) {
                     replaceFormattedContent(text)
                 } else {
                     views.plainTextComposerEditText.setText(text)
                 }
+                 */
+                views.plainTextComposerEditText.setText(text)
             }
             views.sendButton.contentDescription = resources.getString(ElementR.string.action_send)
             hasRelatedMessage = false
