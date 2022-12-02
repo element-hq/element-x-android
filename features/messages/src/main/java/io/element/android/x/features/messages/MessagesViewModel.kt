@@ -2,6 +2,7 @@ package io.element.android.x.features.messages
 
 import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.MavericksViewModelFactory
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
@@ -92,12 +93,8 @@ class MessagesViewModel(
         return currentState.itemActionsSheetState.invoke()?.targetItem
     }
 
-    fun handleItemAction(action: MessagesItemAction) {
+    fun handleItemAction(action: MessagesItemAction, targetEvent: MessagesTimelineItemState.MessageEvent) {
         viewModelScope.launch(Dispatchers.Default) {
-            val currentState = awaitState()
-            Timber.v("Handle $action for ${currentState.itemActionsSheetState}")
-            val targetEvent = getTargetEvent()
-                ?: return@launch
             when (action) {
                 MessagesItemAction.Copy -> notImplementedYet()
                 MessagesItemAction.Forward -> notImplementedYet()
@@ -152,7 +149,11 @@ class MessagesViewModel(
         }
     }
 
-    fun computeActionsSheetState(messagesTimelineItemState: MessagesTimelineItemState.MessageEvent) {
+    fun computeActionsSheetState(messagesTimelineItemState: MessagesTimelineItemState.MessageEvent?) {
+        if (messagesTimelineItemState == null) {
+            setState { copy(itemActionsSheetState = Uninitialized) }
+            return
+        }
         suspend {
             val actions =
                 if (messagesTimelineItemState.content is MessagesTimelineItemRedactedContent) {
