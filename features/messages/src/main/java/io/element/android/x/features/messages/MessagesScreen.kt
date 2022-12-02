@@ -1,4 +1,8 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@file:OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalMaterialApi::class,
+    ExperimentalComposeUiApi::class
+)
 
 package io.element.android.x.features.messages
 
@@ -21,8 +25,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Alignment.Companion.Start
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.LastBaseline
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,8 +54,6 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.lang.Math.random
 
-private val COMPOSER_HEIGHT = 112.dp
-
 @Composable
 fun MessagesScreen(
     roomId: String,
@@ -64,10 +68,12 @@ fun MessagesScreen(
     }
 
     LogCompositions(tag = "MessagesScreen", msg = "Root")
-    val actionsSheetState = rememberModalBottomSheetState(
+    val itemActionsBottomSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
     )
+    val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
     val roomTitle by viewModel.collectAsState(MessagesViewState::roomName)
     val roomAvatar by viewModel.collectAsState(MessagesViewState::roomAvatar)
     val timelineItems by viewModel.collectAsState(MessagesViewState::timelineItems)
@@ -78,7 +84,7 @@ fun MessagesScreen(
     val composerFullScreen by composerViewModel.collectAsState(MessageComposerViewState::isFullScreen)
     val composerCanSendMessage by composerViewModel.collectAsState(MessageComposerViewState::isSendButtonVisible)
     val composerText by composerViewModel.collectAsState(MessageComposerViewState::text)
-    val snackbarHostState = remember { SnackbarHostState() }
+
     MessagesScreenContent(
         roomTitle = roomTitle,
         roomAvatar = roomAvatar,
@@ -99,33 +105,18 @@ fun MessagesScreen(
             Timber.v("onClick on timeline item: ${it.id}")
         },
         onLongClick = {
+            focusManager.clearFocus(force = true)
             viewModel.computeActionsSheetState(it)
             coroutineScope.launch {
-                actionsSheetState.show()
+                itemActionsBottomSheetState.show()
             }
         },
         snackbarHostState = snackbarHostState,
     )
-    val itemActionsSheetState by viewModel.collectAsState(prop1 = MessagesViewState::itemActionsSheetState)
     TimelineItemActionsScreen(
-        sheetState = actionsSheetState,
-        actionsSheetState = itemActionsSheetState(),
-        onActionClicked = {
-            viewModel.handleItemAction(it)
-            coroutineScope.launch {
-                val targetEvent = viewModel.getTargetEvent()
-                when (it) {
-                    is MessagesItemAction.Edit -> {
-                        // Entering Edit mode, update the text in the composer.
-                        val newComposerText =
-                            (targetEvent?.content as? MessagesTimelineItemTextBasedContent)?.body.orEmpty()
-                        composerViewModel.updateText(newComposerText)
-                    }
-                    else -> Unit
-                }
-                actionsSheetState.hide()
-            }
-        }
+        viewModel = viewModel,
+        composerViewModel = composerViewModel,
+        modalBottomSheetState = itemActionsBottomSheetState,
     )
     snackBarContent?.let {
         coroutineScope.launch {
@@ -185,7 +176,12 @@ fun MessagesScreenContent(
                 composerText = composerText
             )
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        snackbarHost = {
+            SnackbarHost(
+                snackbarHostState,
+                modifier = Modifier.navigationBarsPadding()
+            )
+        },
     )
 }
 
