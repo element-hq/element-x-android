@@ -71,6 +71,8 @@ fun LoginContent(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .systemBarsPadding()
+                .imePadding()
         ) {
             val scrollState = rememberScrollState()
             Column(

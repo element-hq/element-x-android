@@ -26,6 +26,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
+import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.designsystem.components.VectorIcon
 import io.element.android.x.features.login.R
 import io.element.android.x.features.login.error.changeServerError
@@ -53,14 +54,19 @@ fun ChangeServerContent(
     onChangeServerSuccess: () -> Unit = {},
 ) {
     Surface(color = MaterialTheme.colorScheme.background) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            val scrollState = rememberScrollState()
+        val scrollState = rememberScrollState()
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .systemBarsPadding()
+                .imePadding()
+        ) {
             Column(
                 modifier = Modifier
                     .verticalScroll(
                         state = scrollState,
                     )
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp)
             )
             {
                 val isError = state.changeServerAction is Fail
@@ -158,7 +164,9 @@ fun ChangeServerContent(
 @Composable
 @Preview
 fun ChangeServerContentPreview() {
-    ChangeServerContent(
-        state = ChangeServerViewState(homeserver = "matrix.org"),
-    )
+    ElementXTheme {
+        ChangeServerContent(
+            state = ChangeServerViewState(homeserver = "matrix.org"),
+        )
+    }
 }
