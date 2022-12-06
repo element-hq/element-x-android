@@ -18,6 +18,7 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.datetime)
     implementation(libs.accompanist.flowlayout)
+    implementation(libs.androidx.recyclerview)
     implementation("org.jsoup:jsoup:1.15.3")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")

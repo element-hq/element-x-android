@@ -10,6 +10,7 @@ material = "1.6.1"
 corektx = "1.9.0"
 datastore = "1.0.0"
 constraintlayout = "2.1.4"
+recyclerview = "1.2.1"
 
 # Compose
 compose_compiler = "1.3.2"
@@ -52,6 +53,7 @@ androidx_corektx = { module = "androidx.core:core-ktx", version.ref = "corektx" 
 androidx_datastore_preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx_datastore_datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 androidx_constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+androidx_recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 
 androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose_bom" }
 androidx_compose_foundation = { group = "androidx.compose.foundation", name = "foundation" }
