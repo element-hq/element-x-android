@@ -1,7 +1,6 @@
 package io.element.android.x.matrix.timeline
 
 import io.element.android.x.core.coroutine.CoroutineDispatchers
-import io.element.android.x.matrix.core.EventId
 import io.element.android.x.matrix.room.MatrixRoom
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -20,10 +19,10 @@ class MatrixTimeline(
     private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : TimelineListener {
+
     interface Callback {
-        fun onUpdatedTimelineItem(eventId: EventId)
-        fun onStartedBackPaginating()
-        fun onFinishedBackPaginating()
+        fun onUpdatedTimelineItem(timelineItem: MatrixTimelineItem) = Unit
+        fun onPushedTimelineItem(timelineItem: MatrixTimelineItem) = Unit
     }
 
     var callback: Callback? = null
@@ -48,12 +47,14 @@ class MatrixTimeline(
             TimelineChange.PUSH -> {
                 Timber.v("Apply push on list with size: $size")
                 val item = diff.push()?.asMatrixTimelineItem() ?: return
+                callback?.onPushedTimelineItem(item)
                 add(item)
             }
             TimelineChange.UPDATE_AT -> {
                 val updateAtData = diff.updateAt() ?: return
                 Timber.v("Apply $updateAtData on list with size: $size")
                 val item = updateAtData.item.asMatrixTimelineItem()
+                callback?.onUpdatedTimelineItem(item)
                 set(updateAtData.index.toInt(), item)
             }
             TimelineChange.INSERT_AT -> {

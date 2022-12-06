@@ -10,11 +10,15 @@ import io.element.android.x.features.messages.model.MessagesItemGroupPosition
 import io.element.android.x.features.messages.model.MessagesItemReactionState
 import io.element.android.x.features.messages.model.MessagesTimelineItemState
 import io.element.android.x.features.messages.model.content.*
+import io.element.android.x.features.messages.util.invalidateLast
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.MatrixRoom
 import io.element.android.x.matrix.timeline.MatrixTimelineItem
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -32,51 +36,66 @@ class MessageTimelineItemStateFactory(
     private val dispatcher: CoroutineDispatcher,
 ) {
 
-    private val timelineItemCaches = arrayListOf<MessagesTimelineItemState?>()
-    private var currentSnapshot: List<MatrixTimelineItem> = emptyList()
+    private val timelineItemStates = MutableStateFlow<List<MessagesTimelineItemState>>(emptyList())
+    private val timelineItemStatesCache = arrayListOf<MessagesTimelineItemState?>()
+
+    // Items from rust sdk, used for diffing
+    private var timelineItems: List<MatrixTimelineItem> = emptyList()
 
     private val lock = Mutex()
-    private val cacheInvalidator = CacheInvalidator(timelineItemCaches)
+    private val cacheInvalidator = CacheInvalidator(timelineItemStatesCache)
 
-    suspend fun create(
+    fun flow(): StateFlow<List<MessagesTimelineItemState>> = timelineItemStates.asStateFlow()
+
+    suspend fun replaceWith(
         timelineItems: List<MatrixTimelineItem>,
-    ): List<MessagesTimelineItemState> =
-        withContext(dispatcher) {
-            lock.withLock {
-                calculateAndApplyDiff(timelineItems)
-                getOrCreateFromCache(timelineItems)
-            }
+    ) = withContext(dispatcher) {
+        lock.withLock {
+            calculateAndApplyDiff(timelineItems)
+            buildAndEmitTimelineItemStates(timelineItems)
         }
+    }
 
-    private suspend fun getOrCreateFromCache(timelineItems: List<MatrixTimelineItem>): List<MessagesTimelineItemState> {
-        val messagesTimelineItemState = ArrayList<MessagesTimelineItemState>()
-        for (index in timelineItemCaches.indices.reversed()) {
-            val cacheItem = timelineItemCaches[index]
+    suspend fun pushItem(
+        timelineItem: MatrixTimelineItem,
+    ) = withContext(dispatcher) {
+        lock.withLock {
+            // Makes sure to invalidate last as we need to recompute some data (like groupPosition)
+            timelineItemStatesCache.invalidateLast()
+            timelineItemStatesCache.add(null)
+            timelineItems = timelineItems + timelineItem
+            buildAndEmitTimelineItemStates(timelineItems)
+        }
+    }
+
+    private suspend fun buildAndEmitTimelineItemStates(timelineItems: List<MatrixTimelineItem>) {
+        val newTimelineItemStates = ArrayList<MessagesTimelineItemState>()
+        for (index in timelineItemStatesCache.indices.reversed()) {
+            val cacheItem = timelineItemStatesCache[index]
             if (cacheItem == null) {
                 buildAndCacheItem(timelineItems, index)?.also { timelineItemState ->
-                    messagesTimelineItemState.add(timelineItemState)
+                    newTimelineItemStates.add(timelineItemState)
                 }
             } else {
-                messagesTimelineItemState.add(cacheItem)
+                newTimelineItemStates.add(cacheItem)
             }
         }
-        return messagesTimelineItemState
+        timelineItemStates.emit(newTimelineItemStates)
     }
 
 
-    private fun calculateAndApplyDiff(timelineItems: List<MatrixTimelineItem>) {
+    private fun calculateAndApplyDiff(newTimelineItems: List<MatrixTimelineItem>) {
         val timeToDiff = measureTimeMillis {
             val diffCallback =
                 MatrixTimelineItemsDiffCallback(
-                    oldList = currentSnapshot,
-                    newList = timelineItems
+                    oldList = timelineItems,
+                    newList = newTimelineItems
                 )
-
             val diffResult = DiffUtil.calculateDiff(diffCallback, false)
-            currentSnapshot = timelineItems
+            timelineItems = newTimelineItems
             diffResult.dispatchUpdatesTo(cacheInvalidator)
         }
-        Timber.v("Time to apply diff on new list of ${timelineItems.size} items: $timeToDiff ms")
+        Timber.v("Time to apply diff on new list of ${newTimelineItems.size} items: $timeToDiff ms")
     }
 
     private suspend fun buildAndCacheItem(
@@ -97,7 +116,7 @@ class MessageTimelineItemStateFactory(
                 )
                 MatrixTimelineItem.Other -> null
             }
-        timelineItemCaches[index] = timelineItemState
+        timelineItemStatesCache[index] = timelineItemState
         return timelineItemState
     }
 
@@ -213,4 +232,5 @@ class MessageTimelineItemStateFactory(
             .resolve(url, kind = MediaResolver.Kind.Thumbnail(size.value))
         return AvatarData(name, model, size)
     }
+
 }
