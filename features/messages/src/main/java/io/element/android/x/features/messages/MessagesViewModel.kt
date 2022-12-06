@@ -17,13 +17,12 @@ import io.element.android.x.matrix.MatrixInstance
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.MatrixRoom
 import io.element.android.x.matrix.timeline.MatrixTimeline
+import io.element.android.x.matrix.timeline.MatrixTimelineItem
 import io.element.android.x.textcomposer.MessageComposerMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 private const val PAGINATION_COUNT = 50
 
@@ -54,6 +53,14 @@ class MessagesViewModel(
                 messageTimelineItemStateFactory,
                 state
             )
+        }
+    }
+
+    private val timelineCallback = object : MatrixTimeline.Callback {
+        override fun onPushedTimelineItem(timelineItem: MatrixTimelineItem) {
+            viewModelScope.launch {
+                messageTimelineItemStateFactory.pushItem(timelineItem)
+            }
         }
     }
 
@@ -93,7 +100,10 @@ class MessagesViewModel(
         return currentState.itemActionsSheetState.invoke()?.targetItem
     }
 
-    fun handleItemAction(action: MessagesItemAction, targetEvent: MessagesTimelineItemState.MessageEvent) {
+    fun handleItemAction(
+        action: MessagesItemAction,
+        targetEvent: MessagesTimelineItemState.MessageEvent
+    ) {
         viewModelScope.launch(Dispatchers.Default) {
             when (action) {
                 MessagesItemAction.Copy -> notImplementedYet()
@@ -109,44 +119,8 @@ class MessagesViewModel(
         setComposerMode(MessageComposerMode.Normal(""))
     }
 
-    private fun handleActionEdit(targetEvent: MessagesTimelineItemState.MessageEvent) {
-        setComposerMode(
-            MessageComposerMode.Edit(
-                targetEvent.id,
-                (targetEvent.content as? MessagesTimelineItemTextBasedContent)?.body.orEmpty()
-            )
-        )
-    }
-
-    private fun handleActionReply(targetEvent: MessagesTimelineItemState.MessageEvent) {
-        setComposerMode(MessageComposerMode.Reply(targetEvent.safeSenderName, targetEvent.id, ""))
-    }
-
-    private fun setComposerMode(mode: MessageComposerMode) {
-        setState {
-            copy(
-                composerMode = mode,
-                highlightedEventId = mode.relatedEventId
-            )
-        }
-    }
-
-    private fun notImplementedYet() {
-        setSnackbarContent("Not implemented yet!")
-    }
-
     fun onSnackbarShown() {
         setSnackbarContent(null)
-    }
-
-    private fun setSnackbarContent(message: String?) {
-        setState { copy(snackbarContent = message) }
-    }
-
-    private fun handleActionRedact(event: MessagesTimelineItemState.MessageEvent) {
-        viewModelScope.launch {
-            room.redactEvent(event.id)
-        }
     }
 
     fun computeActionsSheetState(messagesTimelineItemState: MessagesTimelineItemState.MessageEvent?) {
@@ -181,6 +155,7 @@ class MessagesViewModel(
 
     private fun handleInit() {
         timeline.initialize()
+        timeline.callback = timelineCallback
         room.syncUpdateFlow()
             .onEach {
                 val avatarData =
@@ -194,10 +169,50 @@ class MessagesViewModel(
 
         timeline
             .timelineItems()
-            .map(messageTimelineItemStateFactory::create)
+            .onEach(messageTimelineItemStateFactory::replaceWith)
+            .launchIn(viewModelScope)
+
+        messageTimelineItemStateFactory
+            .flow()
             .execute {
                 copy(timelineItems = it)
             }
+    }
+
+    private fun setSnackbarContent(message: String?) {
+        setState { copy(snackbarContent = message) }
+    }
+
+    private fun handleActionRedact(event: MessagesTimelineItemState.MessageEvent) {
+        viewModelScope.launch {
+            room.redactEvent(event.id)
+        }
+    }
+
+    private fun handleActionEdit(targetEvent: MessagesTimelineItemState.MessageEvent) {
+        setComposerMode(
+            MessageComposerMode.Edit(
+                targetEvent.id,
+                (targetEvent.content as? MessagesTimelineItemTextBasedContent)?.body.orEmpty()
+            )
+        )
+    }
+
+    private fun handleActionReply(targetEvent: MessagesTimelineItemState.MessageEvent) {
+        setComposerMode(MessageComposerMode.Reply(targetEvent.safeSenderName, targetEvent.id, ""))
+    }
+
+    private fun setComposerMode(mode: MessageComposerMode) {
+        setState {
+            copy(
+                composerMode = mode,
+                highlightedEventId = mode.relatedEventId
+            )
+        }
+    }
+
+    private fun notImplementedYet() {
+        setSnackbarContent("Not implemented yet!")
     }
 
     private suspend fun loadAvatarData(
@@ -212,6 +227,7 @@ class MessagesViewModel(
 
     override fun onCleared() {
         super.onCleared()
+        timeline.callback = null
         timeline.dispose()
     }
 }
