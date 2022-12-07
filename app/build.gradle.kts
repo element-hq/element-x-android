@@ -49,13 +49,13 @@ android {
         named("release") {
             resValue("string", "app_name", "ElementX")
             signingConfig = signingConfigs.getByName("debug")
-            isMinifyEnabled = false
-            setProguardFiles(
-                listOf(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
-                )
-            )
+
+            postprocessing {
+                isRemoveUnusedCode = true
+                isObfuscate = false
+                isOptimizeCode = true
+                proguardFiles("proguard-rules.pro")
+            }
         }
 
         register("nightly") {
