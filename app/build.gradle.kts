@@ -54,6 +54,7 @@ android {
                 isRemoveUnusedCode = true
                 isObfuscate = false
                 isOptimizeCode = true
+                isRemoveUnusedResources = true
                 proguardFiles("proguard-rules.pro")
             }
         }
