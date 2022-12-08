@@ -1,7 +1,7 @@
 plugins {
-    id("com.android.application")
+    id("io.element.android-compose-application")
     id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp") version "1.7.20-1.0.7"
+    alias(libs.plugins.ksp) version "1.7.20-1.0.7"
     id("com.google.firebase.appdistribution") version "3.0.2"
 }
 
@@ -125,23 +125,14 @@ dependencies {
     implementation("io.github.raamcosta.compose-destinations:animations-core:1.7.23-beta")
     ksp("io.github.raamcosta.compose-destinations:ksp:1.7.23-beta")
 
-    val composeBom = platform("androidx.compose:compose-bom:2022.11.00")
-    implementation(composeBom)
-    androidTestImplementation(composeBom)
-
     implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
     implementation("androidx.activity:activity-compose:1.6.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
     implementation("io.coil-kt:coil:2.2.1")
     implementation("com.jakewharton.timber:timber:5.0.1")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("com.airbnb.android:mavericks-compose:3.0.1")
 
     implementation("com.airbnb.android:showkase:1.0.0-beta14")
-    ksp("com.airbnb.android:showkase-processor:1.0.0-beta14")
+    ksp(libs.showkase.processor)
 }

@@ -1,23 +1,15 @@
-import extension.androidConfig
-import extension.composeConfig
-import extension.proguardConfig
+package extension
 
-plugins {
-    id("com.android.library")
-    id("kotlin-android")
-//    alias(libs.plugins.ksp)
-//    id("com.google.devtools.ksp") // version "1.7.20-1.0.7"
-}
+import gradle.kotlin.dsl.accessors._4b7ad2363fc1fce7c774e054dc9a9300.androidTestImplementation
+import gradle.kotlin.dsl.accessors._4b7ad2363fc1fce7c774e054dc9a9300.debugImplementation
+import gradle.kotlin.dsl.accessors._4b7ad2363fc1fce7c774e054dc9a9300.implementation
+import org.gradle.kotlin.dsl.DependencyHandlerScope
 
-android {
-    androidConfig()
-    proguardConfig()
-    composeConfig()
-}
 
-dependencies {
-    implementation(platform("androidx.compose:compose-bom:2022.11.00"))
-
+fun DependencyHandlerScope.composeDependencies(){
+    val composeBom = platform("androidx.compose:compose-bom:2022.11.00")
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material:material")
     implementation("androidx.compose.material3:material3")
@@ -29,7 +21,6 @@ dependencies {
     implementation("com.airbnb.android:mavericks-compose:3.0.1")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-
     implementation("com.airbnb.android:showkase:1.0.0-beta14")
-  //  ksp("com.airbnb.android:showkase-processor:1.0.0-beta14")
 }
+

@@ -1,7 +1,6 @@
 plugins {
-    id("io.element.android-compose")
-    // TODO Move to common config
-    id("com.google.devtools.ksp") version "1.7.20-1.0.7"
+    id("io.element.android-compose-library")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -9,9 +8,8 @@ android {
 
     dependencies {
         // Should not be there, but this is a POC
-        implementation("io.coil-kt:coil-compose:2.2.1")
+        implementation(libs.coil.compose)
         implementation(libs.accompanist.systemui)
-        // TODO Move to common config
-        ksp("com.airbnb.android:showkase-processor:1.0.0-beta14")
+        ksp(libs.showkase.processor)
     }
 }

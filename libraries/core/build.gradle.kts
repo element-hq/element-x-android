@@ -1,5 +1,5 @@
 plugins {
-    id("io.element.android-compose")
+    id("io.element.android-compose-library")
 }
 
 android {

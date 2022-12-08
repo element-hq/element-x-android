@@ -1,7 +1,6 @@
 plugins {
-    id("io.element.android-compose")
-    // TODO Move to common config
-    id("com.google.devtools.ksp") version "1.7.20-1.0.7"
+    id("io.element.android-compose-library")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -17,6 +16,5 @@ dependencies {
     implementation(libs.wysiwyg)
     implementation(libs.androidx.constraintlayout)
     implementation("com.google.android.material:material:1.7.0")
-    // TODO Move to common config
-    ksp("com.airbnb.android:showkase-processor:1.0.0-beta14")
+    ksp(libs.showkase.processor)
 }
