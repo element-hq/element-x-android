@@ -1,17 +1,15 @@
 plugins {
     id("io.element.android-compose-application")
     id("org.jetbrains.kotlin.android")
-    alias(libs.plugins.ksp) version "1.7.20-1.0.7"
+    alias(libs.plugins.ksp)
     id("com.google.firebase.appdistribution") version "3.0.2"
 }
 
 android {
     namespace = "io.element.android.x"
-    compileSdk = 33
 
     defaultConfig {
         applicationId = "io.element.android.x"
-        minSdk = 29
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -122,17 +120,17 @@ dependencies {
     implementation(project(":features:messages"))
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.0")
-    implementation("io.github.raamcosta.compose-destinations:animations-core:1.7.23-beta")
-    ksp("io.github.raamcosta.compose-destinations:ksp:1.7.23-beta")
+    implementation(libs.compose.destinations)
+    ksp(libs.compose.destinations.processor)
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
-    implementation("androidx.activity:activity-compose:1.6.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
-    implementation("io.coil-kt:coil:2.2.1")
-    implementation("com.jakewharton.timber:timber:5.0.1")
-    implementation("com.airbnb.android:mavericks-compose:3.0.1")
+    implementation(libs.androidx.corektx)
+    implementation(libs.androidx.lifecycle.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.coil)
+    implementation(libs.timber)
+    implementation(libs.mavericks.compose)
 
-    implementation("com.airbnb.android:showkase:1.0.0-beta14")
+    implementation(libs.showkase)
     ksp(libs.showkase.processor)
 }
