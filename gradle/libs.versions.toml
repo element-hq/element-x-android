@@ -39,7 +39,10 @@ timber = "5.0.1"
 coil = "2.2.1"
 datetime = "0.4.0"
 wysiwyg = "0.7.0.1"
-serialization-json = "1.4.1"
+serialization_json = "1.4.1"
+showkase = "1.0.0-beta14"
+compose_destinations = "1.7.23-beta"
+jsoup = "1.15.3"
 
 [libraries]
 # Project
@@ -88,7 +91,11 @@ mavericks_compose = { module = "com.airbnb.android:mavericks-compose", version.r
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization-json" }
+serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization_json" }
+compose_destinations = { module = "io.github.raamcosta.compose-destinations:animations-core", version.ref = "compose_destinations" }
+showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
+showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 
 # Composer
 wysiwyg = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
@@ -96,4 +103,7 @@ wysiwyg = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 [bundles]
 
 [plugins]
+android_application = { id = "com.android.application", version.ref = "android_gradle_plugin" }
+android_library = { id = "com.android.library", version.ref = "android_gradle_plugin" }
+kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

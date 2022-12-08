@@ -1,7 +1,6 @@
 plugins {
-    id("io.element.android-compose")
-    // TODO Move to common config
-    id("com.google.devtools.ksp") version "1.7.20-1.0.7"
+    id("io.element.android-compose-library")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -14,11 +13,9 @@ dependencies {
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:elementresources"))
     implementation(libs.mavericks.compose)
+    ksp(libs.showkase.processor)
     implementation(libs.timber)
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    testImplementation(libs.test.junit)
+    androidTestImplementation(libs.test.junitext)
 
-    // TODO Move to common config
-    ksp("com.airbnb.android:showkase-processor:1.0.0-beta14")
 }

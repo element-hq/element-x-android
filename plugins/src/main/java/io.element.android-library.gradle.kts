@@ -1,5 +1,4 @@
 import extension.androidConfig
-import extension.proguardConfig
 
 plugins {
     id("com.android.library")
@@ -8,5 +7,4 @@ plugins {
 
 android {
     androidConfig()
-    proguardConfig()
 }
