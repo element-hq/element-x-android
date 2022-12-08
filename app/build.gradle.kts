@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "io.element.android.x"
-        targetSdk = 33
+        targetSdk = 33 // TODO Use Versions.targetSdk
         versionCode = 1
         versionName = "1.0"
 
