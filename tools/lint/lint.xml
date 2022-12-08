@@ -113,5 +113,5 @@
     <issue id="LaunchActivityFromNotification" severity="error" />
 
     <!-- DI -->
-    <issue id="JvmStaticProvidesInObjectDetector" severity="error" />
+    <!-- issue id="JvmStaticProvidesInObjectDetector" severity="error" /-->
 </lint>
