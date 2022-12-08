@@ -3,6 +3,7 @@ package io.element.android.x.matrix.timeline
 import io.element.android.x.core.coroutine.CoroutineDispatchers
 import io.element.android.x.matrix.room.MatrixRoom
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.sample
@@ -36,6 +37,7 @@ class MatrixTimeline(
     private val timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
         MutableStateFlow(emptyList())
 
+    @OptIn(FlowPreview::class)
     fun timelineItems(): Flow<List<MatrixTimelineItem>> {
         return timelineItems.sample(50)
     }

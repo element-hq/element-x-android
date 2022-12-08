@@ -4,6 +4,7 @@ import io.element.android.x.core.coroutine.CoroutineDispatchers
 import io.element.android.x.matrix.sync.roomListDiff
 import io.element.android.x.matrix.sync.state
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelChildren
@@ -81,6 +82,7 @@ internal class RustRoomSummaryDataSource(
         coroutineScope.cancel()
     }
 
+    @OptIn(FlowPreview::class)
     override fun roomSummaries(): Flow<List<RoomSummary>> {
         return roomSummaries.sample(50)
     }
