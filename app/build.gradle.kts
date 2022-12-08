@@ -108,6 +108,12 @@ android {
             kotlin.srcDir("build/generated/ksp/test/kotlin")
         }
     }
+
+    lint {
+        lintConfig = file("../tools/lint/lint.xml")
+        checkDependencies = true
+        abortOnError = true
+    }
 }
 
 dependencies {
