@@ -1,0 +1,37 @@
+name: Move labelled issues to correct boards and columns
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  move_element_x_issues:
+    name: ElementX issues to ElementX project board
+    runs-on: ubuntu-latest
+    # Skip in forks
+    if: >
+      github.repository == 'vector-im/element-x-android' &&
+      (contains(github.event.issue.labels.*.name, 'Z-Setup') ||
+        contains(github.event.issue.labels.*.name, 'Z-BBQ-Alpha') ||
+        contains(github.event.issue.labels.*.name, 'Z-BBQ-Beta') ||
+        contains(github.event.issue.labels.*.name, 'Z-BBQ-Release') ||
+        contains(github.event.issue.labels.*.name, 'Z-Banquet-Alpha') ||
+        contains(github.event.issue.labels.*.name, 'Z-Banquet-Beta') ||
+        contains(github.event.issue.labels.*.name, 'Z-Banquet-Release'))
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:ID!,$contentid:ID!) {
+              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PN_kwDOAM0swc4ABTXY"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
