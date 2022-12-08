@@ -150,6 +150,7 @@ class MatrixClient internal constructor(
         }
     }
 
+    @OptIn(ExperimentalUnsignedTypes::class)
     suspend fun loadMediaContentForSource(source: MediaSource): Result<ByteArray> =
         withContext(dispatchers.io) {
             runCatching {
@@ -157,6 +158,7 @@ class MatrixClient internal constructor(
             }
         }
 
+    @OptIn(ExperimentalUnsignedTypes::class)
     suspend fun loadMediaThumbnailForSource(
         source: MediaSource,
         width: Long,

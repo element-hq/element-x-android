@@ -476,7 +476,6 @@ fun MessageEventRow(
                             content = messageEvent.content,
                             modifier = contentModifier
                         )
-                        else -> TODO() /* compiler issue ? */
                     }
                 }
                 MessagesReactionsView(
