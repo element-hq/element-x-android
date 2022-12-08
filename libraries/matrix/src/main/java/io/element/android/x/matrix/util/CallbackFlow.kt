@@ -1,6 +1,3 @@
-@file:OptIn(ExperimentalCoroutinesApi::class)
-
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
