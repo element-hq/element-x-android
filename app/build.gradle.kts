@@ -59,12 +59,17 @@ android {
         }
 
         register("nightly") {
-            initWith(getByName("release"))
+            val release = getByName("release")
+            initWith(release)
             applicationIdSuffix = ".nightly"
             versionNameSuffix = "-nightly"
             resValue("string", "app_name", "ElementX nightly")
             matchingFallbacks += listOf("release")
             signingConfig = signingConfigs.getByName("nightly")
+
+            postprocessing {
+                initWith(release.postprocessing)
+            }
 
             firebaseAppDistribution {
                 artifactType = "APK"
