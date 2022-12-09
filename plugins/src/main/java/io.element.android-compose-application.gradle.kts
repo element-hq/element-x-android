@@ -1,4 +1,5 @@
 import extension.androidConfig
+import extension.commonDependencies
 import extension.composeConfig
 import extension.composeDependencies
 
@@ -13,5 +14,6 @@ android {
 }
 
 dependencies {
+    commonDependencies()
     composeDependencies()
 }

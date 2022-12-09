@@ -1,4 +1,5 @@
 import extension.androidConfig
+import extension.commonDependencies
 
 plugins {
     id("com.android.library")
@@ -7,4 +8,8 @@ plugins {
 
 android {
     androidConfig(project)
+}
+
+dependencies {
+    commonDependencies()
 }
