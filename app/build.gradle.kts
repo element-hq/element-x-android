@@ -109,12 +109,6 @@ android {
         }
     }
 
-    lint {
-        lintConfig = file("../tools/lint/lint.xml")
-        checkDependencies = true
-        abortOnError = true
-    }
-
     // See https://github.com/JLLeitschuh/ktlint-gradle#configuration
     configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
         // See https://github.com/pinterest/ktlint/releases/
