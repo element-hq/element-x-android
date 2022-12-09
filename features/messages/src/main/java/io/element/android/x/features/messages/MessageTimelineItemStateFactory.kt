@@ -9,7 +9,14 @@ import io.element.android.x.features.messages.model.AggregatedReaction
 import io.element.android.x.features.messages.model.MessagesItemGroupPosition
 import io.element.android.x.features.messages.model.MessagesItemReactionState
 import io.element.android.x.features.messages.model.MessagesTimelineItemState
-import io.element.android.x.features.messages.model.content.*
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemContent
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemEmoteContent
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemEncryptedContent
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemImageContent
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemNoticeContent
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemRedactedContent
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemTextContent
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemUnknownContent
 import io.element.android.x.features.messages.util.invalidateLast
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.media.MediaResolver
@@ -82,7 +89,6 @@ class MessageTimelineItemStateFactory(
         }
         timelineItemStates.emit(newTimelineItemStates)
     }
-
 
     private fun calculateAndApplyDiff(newTimelineItems: List<MatrixTimelineItem>) {
         val timeToDiff = measureTimeMillis {
@@ -232,5 +238,4 @@ class MessageTimelineItemStateFactory(
             .resolve(url, kind = MediaResolver.Kind.Thumbnail(size.value))
         return AvatarData(name, model, size)
     }
-
 }

@@ -2,7 +2,6 @@ package io.element.android.x.features.roomlist.model
 
 import io.element.android.x.designsystem.components.avatar.AvatarData
 
-
 object RoomListRoomSummaryPlaceholders {
 
     fun create(id: String): RoomListRoomSummary {
@@ -23,6 +22,5 @@ object RoomListRoomSummaryPlaceholders {
             }
         }
     }
-
 }
 

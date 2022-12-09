@@ -29,12 +29,12 @@ android {
         }
         register("nightly") {
             keyAlias = System.getenv("ELEMENT_ANDROID_NIGHTLY_KEYID")
-                    ?: project.property("signing.element.nightly.keyId") as? String?
+                ?: project.property("signing.element.nightly.keyId") as? String?
             keyPassword = System.getenv("ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD")
-                    ?: project.property("signing.element.nightly.keyPassword") as? String?
+                ?: project.property("signing.element.nightly.keyPassword") as? String?
             storeFile = file("./signature/nightly.keystore")
             storePassword = System.getenv("ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD")
-                    ?: project.property("signing.element.nightly.storePassword") as? String?
+                ?: project.property("signing.element.nightly.storePassword") as? String?
         }
     }
 
@@ -80,7 +80,6 @@ android {
                 appId = "1:912726360885:android:e17435e0beb0303000427c"
             }
         }
-
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -135,29 +134,29 @@ android {
             exclude { element -> element.file.path.contains("$buildDir/generated/") }
         }
         disabledRules.set(
-                setOf(
-                        // TODO Re-enable these 4 rules after reformatting project
-                        "indent",
-                        "experimental:argument-list-wrapping",
-                        "max-line-length",
-                        "parameter-list-wrapping",
+            setOf(
+                // TODO Re-enable these 4 rules after reformatting project
+                "indent",
+                "experimental:argument-list-wrapping",
+                "max-line-length",
+                "parameter-list-wrapping",
 
-                        "spacing-between-declarations-with-comments",
-                        "no-multi-spaces",
-                        "experimental:spacing-between-declarations-with-annotations",
-                        "experimental:annotation",
-                        // - Missing newline after "("
-                        // - Missing newline before ")"
-                        "wrapping",
-                        // - Unnecessary trailing comma before ")"
-                        "experimental:trailing-comma",
-                        // - A block comment in between other elements on the same line is disallowed
-                        "experimental:comment-wrapping",
-                        // - A KDoc comment after any other element on the same line must be separated by a new line
-                        "experimental:kdoc-wrapping",
-                        // Ignore error "Redundant curly braces", since we use it to fix false positives, for instance in "elementLogs.${i}.txt"
-                        "string-template",
-                )
+                "spacing-between-declarations-with-comments",
+                "no-multi-spaces",
+                "experimental:spacing-between-declarations-with-annotations",
+                "experimental:annotation",
+                // - Missing newline after "("
+                // - Missing newline before ")"
+                "wrapping",
+                // - Unnecessary trailing comma before ")"
+                "experimental:trailing-comma",
+                // - A block comment in between other elements on the same line is disallowed
+                "experimental:comment-wrapping",
+                // - A KDoc comment after any other element on the same line must be separated by a new line
+                "experimental:kdoc-wrapping",
+                // Ignore error "Redundant curly braces", since we use it to fix false positives, for instance in "elementLogs.${i}.txt"
+                "string-template",
+            )
         )
     }
 }

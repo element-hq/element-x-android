@@ -52,7 +52,6 @@ private fun ImageAvatar(
     )
 }
 
-
 @Composable
 private fun InitialsAvatar(
     initials: String,

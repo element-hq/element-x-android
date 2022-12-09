@@ -13,7 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
-import io.element.android.x.designsystem.*
+import io.element.android.x.designsystem.LocalIsDarkTheme
+import io.element.android.x.designsystem.MessageHighlightDark
+import io.element.android.x.designsystem.MessageHighlightLight
+import io.element.android.x.designsystem.SystemGrey5Dark
+import io.element.android.x.designsystem.SystemGrey5Light
+import io.element.android.x.designsystem.SystemGrey6Dark
+import io.element.android.x.designsystem.SystemGrey6Light
 import io.element.android.x.features.messages.model.MessagesItemGroupPosition
 
 private val BUBBLE_RADIUS = 16.dp

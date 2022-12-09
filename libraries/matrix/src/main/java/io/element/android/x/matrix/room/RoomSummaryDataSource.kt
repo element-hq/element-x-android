@@ -3,12 +3,27 @@ package io.element.android.x.matrix.room
 import io.element.android.x.core.coroutine.CoroutineDispatchers
 import io.element.android.x.matrix.sync.roomListDiff
 import io.element.android.x.matrix.sync.state
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import org.matrix.rustcomponents.sdk.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.sample
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.RoomListEntry
+import org.matrix.rustcomponents.sdk.SlidingSync
+import org.matrix.rustcomponents.sdk.SlidingSyncState
+import org.matrix.rustcomponents.sdk.SlidingSyncView
+import org.matrix.rustcomponents.sdk.SlidingSyncViewRoomsListDiff
+import org.matrix.rustcomponents.sdk.UpdateSummary
 import timber.log.Timber
 import java.io.Closeable
-import java.util.*
+import java.util.Collections
+import java.util.UUID
 
 interface RoomSummaryDataSource {
     fun roomSummaries(): Flow<List<RoomSummary>>
@@ -56,7 +71,6 @@ internal class RustRoomSummaryDataSource(
                 Timber.v("New sliding sync state: $slidingSyncState")
                 state.value = slidingSyncState
             }.launchIn(coroutineScope)
-
     }
 
     fun stopSync() {

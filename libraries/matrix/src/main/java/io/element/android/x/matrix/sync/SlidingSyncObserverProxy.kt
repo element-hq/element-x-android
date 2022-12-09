@@ -11,6 +11,7 @@ import org.matrix.rustcomponents.sdk.UpdateSummary
 
 // Sounds like a reasonable buffer size before it suspends emitting new items.
 private const val BUFFER_SIZE = 64
+
 class SlidingSyncObserverProxy(
     private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers
@@ -26,5 +27,4 @@ class SlidingSyncObserverProxy(
             updateSummaryMutableFlow.emit(summary)
         }
     }
-
 }

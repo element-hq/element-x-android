@@ -7,7 +7,6 @@ import io.element.android.x.matrix.tracing.setupTracing
 import io.element.android.x.sdk.matrix.BuildConfig
 import kotlinx.coroutines.CoroutineScope
 
-
 object MatrixInstance {
     @SuppressLint("StaticFieldLeak")
     private lateinit var instance: Matrix

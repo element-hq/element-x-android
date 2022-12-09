@@ -7,7 +7,6 @@ plugins {
     id("kotlin-android")
 }
 
-
 android {
     androidConfig()
     composeConfig()

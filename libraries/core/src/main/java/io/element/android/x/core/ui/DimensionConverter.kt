@@ -24,18 +24,18 @@ class DimensionConverter(val resources: Resources) {
     @Px
     fun dpToPx(dp: Int): Int {
         return TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dp.toFloat(),
-                resources.displayMetrics
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp.toFloat(),
+            resources.displayMetrics
         ).toInt()
     }
 
     @Px
     fun spToPx(sp: Int): Int {
         return TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_SP,
-                sp.toFloat(),
-                resources.displayMetrics
+            TypedValue.COMPLEX_UNIT_SP,
+            sp.toFloat(),
+            resources.displayMetrics
         ).toInt()
     }
 

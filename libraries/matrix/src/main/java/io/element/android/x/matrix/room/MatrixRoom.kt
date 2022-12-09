@@ -9,7 +9,11 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.*
+import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.SlidingSyncRoom
+import org.matrix.rustcomponents.sdk.UpdateSummary
+import org.matrix.rustcomponents.sdk.genTransactionId
+import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 
 class MatrixRoom(
     private val slidingSyncUpdateFlow: Flow<UpdateSummary>,
@@ -98,7 +102,7 @@ class MatrixRoom(
         }
     }
 
-    suspend fun redactEvent(eventId: String, reason: String? = null, ) = withContext(coroutineDispatchers.io) {
+    suspend fun redactEvent(eventId: String, reason: String? = null) = withContext(coroutineDispatchers.io) {
         val transactionId = genTransactionId()
         runCatching {
             room.redact(eventId, reason, transactionId)

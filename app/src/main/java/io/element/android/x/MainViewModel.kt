@@ -13,14 +13,14 @@ class MainViewModel : ViewModel() {
         return matrix.isLoggedIn().first()
     }
 
-    fun startSyncIfLogged(){
+    fun startSyncIfLogged() {
         viewModelScope.launch {
-            if(!isLoggedIn()) return@launch
+            if (!isLoggedIn()) return@launch
             matrix.activeClient().startSync()
         }
     }
 
-    fun stopSyncIfLogged(){
+    fun stopSyncIfLogged() {
         viewModelScope.launch {
             if (!isLoggedIn()) return@launch
             matrix.activeClient().stopSync()

@@ -9,7 +9,6 @@ data class TracingConfiguration(
         targets.map { "${it.key.filter}=${it.value.filter}" }.joinToString(separator = ",")
     }"
 
-
     sealed class Target(open val filter: String) {
         object Hyper : Target("hyper")
         object Sled : Target("sled")
@@ -31,7 +30,6 @@ data class TracingConfiguration(
         object Debug : LogLevel("debug")
         object Error : LogLevel("error")
     }
-
 }
 
 fun setupTracing(tracingConfiguration: TracingConfiguration) {

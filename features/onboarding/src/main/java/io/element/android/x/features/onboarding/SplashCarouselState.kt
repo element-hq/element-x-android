@@ -20,12 +20,12 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 
 data class SplashCarouselState(
-        val items: List<Item>
+    val items: List<Item>
 ) {
     data class Item(
-            @StringRes val title: Int,
-            @StringRes val body: Int,
-            @DrawableRes val image: Int,
-            @DrawableRes val pageBackground: Int
+        @StringRes val title: Int,
+        @StringRes val body: Int,
+        @DrawableRes val image: Int,
+        @DrawableRes val pageBackground: Int
     )
 }

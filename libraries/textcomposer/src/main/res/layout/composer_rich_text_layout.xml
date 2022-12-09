@@ -81,7 +81,8 @@
             app:layout_constraintStart_toStartOf="@id/composerEditTextOuterBorder"
             app:tint="?vctr_content_tertiary" />
 
-        <TextView android:id="@+id/composerModeTitleView"
+        <TextView
+            android:id="@+id/composerModeTitleView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
@@ -93,7 +94,8 @@
             app:layout_constraintTop_toTopOf="@id/composerEditTextOuterBorder"
             app:layout_constraintStart_toEndOf="@id/composerModeIconView" />
 
-        <ImageButton android:id="@+id/composerModeCloseView"
+        <ImageButton
+            android:id="@+id/composerModeCloseView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_composer_rich_text_editor_close"
@@ -187,7 +189,8 @@
             tools:ignore="MissingPrefix,RtlSymmetry"
             tools:visibility="visible" />
 
-        <HorizontalScrollView android:id="@+id/richTextMenuScrollView"
+        <HorizontalScrollView
+            android:id="@+id/richTextMenuScrollView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:minHeight="52dp"

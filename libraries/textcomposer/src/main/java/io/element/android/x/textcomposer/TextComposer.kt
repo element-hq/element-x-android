@@ -70,7 +70,6 @@ fun TextComposer(
                     override fun onFullScreenModeChanged() {
                         onFullscreenToggle()
                     }
-
                 }
                 setFullScreen(fullscreen, animated = false, manageKeyboard = true)
                 (this as MessageComposerView).apply {
