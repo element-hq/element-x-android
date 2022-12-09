@@ -1,7 +1,8 @@
 plugins {
     id("io.element.android-compose-application")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.anvil)
     id("com.google.firebase.appdistribution") version "3.0.2"
 }
 
@@ -130,6 +131,8 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.timber)
     implementation(libs.mavericks.compose)
+
+    implementation(libs.dagger)
 
     implementation(libs.showkase)
     ksp(libs.showkase.processor)
