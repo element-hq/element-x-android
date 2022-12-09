@@ -6,5 +6,5 @@ plugins {
 }
 
 android {
-    androidConfig()
+    androidConfig(project)
 }

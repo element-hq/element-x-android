@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    androidConfig()
+    androidConfig(project)
     composeConfig()
 }
 
