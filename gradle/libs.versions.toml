@@ -13,6 +13,7 @@ constraintlayout = "2.1.4"
 recyclerview = "1.2.1"
 lifecycle = "2.5.1"
 activity_compose = "1.6.1"
+fragment = "1.5.5"
 
 # Compose
 compose_compiler = "1.3.2"
@@ -46,6 +47,10 @@ showkase = "1.0.0-beta14"
 compose_destinations = "1.7.23-beta"
 jsoup = "1.15.3"
 
+# DI
+dagger = "2.32"
+anvil = "2.4.2"
+
 [libraries]
 # Project
 android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "android_gradle_plugin" }
@@ -62,6 +67,7 @@ androidx_recyclerview = { module = "androidx.recyclerview:recyclerview", version
 androidx_lifecycle_runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx_lifecycle_viewmodel_compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity_compose" }
+androidx_fragment = {module = "androidx.fragment:fragment-ktx", version.ref = "fragment"}
 
 androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose_bom" }
 androidx_compose_foundation = { group = "androidx.compose.foundation", name = "foundation" }
@@ -92,6 +98,7 @@ test_barista = { module = "com.adevinta.android:barista", version.ref = "test_ba
 test_hamcrest = { module = "org.hamcrest:hamcrest", version.ref = "test_hamcrest" }
 test_orchestrator = { module = "androidx.test:orchestrator", version.ref = "test_orchestrator" }
 
+# Others
 mavericks_compose = { module = "com.airbnb.android:mavericks-compose", version.ref = "mavericks" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
@@ -104,6 +111,12 @@ showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 
+# Di
+inject = {module = "javax.inject:javax.inject", version = "1"}
+dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
+anvil_compiler_api = { module = "com.squareup.anvil:compiler-api", version.ref = "anvil" }
+anvil_compiler_utils = { module = "com.squareup.anvil:compiler-utils", version.ref = "anvil" }
+
 # Composer
 wysiwyg = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 
@@ -113,4 +126,7 @@ wysiwyg = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 android_application = { id = "com.android.application", version.ref = "android_gradle_plugin" }
 android_library = { id = "com.android.library", version.ref = "android_gradle_plugin" }
 kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin_jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kapt = {id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin"}
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+anvil = {id = "com.squareup.anvil", version.ref = "anvil"}
