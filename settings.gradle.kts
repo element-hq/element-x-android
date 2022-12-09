@@ -19,7 +19,7 @@ dependencyResolutionManagement {
 rootProject.name = "ElementX"
 include(":app")
 include(":libraries:core")
-include(":libraries:rustSdk")
+include(":libraries:rustsdk")
 include(":libraries:matrix")
 include(":libraries:textcomposer")
 include(":libraries:elementresources")
