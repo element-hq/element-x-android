@@ -5,6 +5,16 @@ import gradle.kotlin.dsl.accessors._4b7ad2363fc1fce7c774e054dc9a9300.debugImplem
 import gradle.kotlin.dsl.accessors._4b7ad2363fc1fce7c774e054dc9a9300.implementation
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 
+/**
+ * Dependencies used by all the modules
+ */
+fun DependencyHandlerScope.commonDependencies() {
+    implementation("com.jakewharton.timber:timber:5.0.1")
+}
+
+/**
+ * Dependencies used by all the modules with composable items
+ */
 fun DependencyHandlerScope.composeDependencies() {
     val composeBom = platform("androidx.compose:compose-bom:2022.11.00")
     implementation(composeBom)

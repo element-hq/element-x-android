@@ -173,7 +173,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.coil)
-    implementation(libs.timber)
     implementation(libs.mavericks.compose)
 
     implementation(libs.showkase)

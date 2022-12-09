@@ -37,7 +37,6 @@ test_orchestrator = "1.4.1"
 
 #other
 mavericks = "3.0.1"
-timber = "5.0.1"
 coil = "2.2.1"
 datetime = "0.4.0"
 wysiwyg = "0.7.0.1"
@@ -93,7 +92,6 @@ test_hamcrest = { module = "org.hamcrest:hamcrest", version.ref = "test_hamcrest
 test_orchestrator = { module = "androidx.test:orchestrator", version.ref = "test_orchestrator" }
 
 mavericks_compose = { module = "com.airbnb.android:mavericks-compose", version.ref = "mavericks" }
-timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
