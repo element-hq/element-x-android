@@ -2,7 +2,7 @@
 <lint>
 
     <!-- Ensure this file does not contain unknown Ids -->
-    <issue id="UnknownIssueId" severity="error" />
+    <issue id="UnknownIssueId" severity="warning" />
 
     <!-- Modify some severity -->
 
