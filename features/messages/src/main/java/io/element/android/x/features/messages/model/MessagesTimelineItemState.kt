@@ -23,10 +23,7 @@ sealed interface MessagesTimelineItemState {
         val showSenderInformation = groupPosition.isNew() && !isMine
 
         val safeSenderName: String = senderDisplayName ?: senderId
-
     }
-
-
 }
 
 

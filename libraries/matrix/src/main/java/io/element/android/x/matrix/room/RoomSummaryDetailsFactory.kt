@@ -7,7 +7,7 @@ import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 
 class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFactory = RoomMessageFactory()) {
 
-    fun create(slidingSyncRoom: SlidingSyncRoom, room: Room?): RoomSummaryDetails{
+    fun create(slidingSyncRoom: SlidingSyncRoom, room: Room?): RoomSummaryDetails {
         val latestRoomMessage = slidingSyncRoom.latestRoomMessage()?.let {
             roomMessageFactory.create(it)
         }
@@ -17,14 +17,13 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
             else -> "${latestRoomMessage.sender.value}: ${latestRoomMessage.body}"
         }
         return RoomSummaryDetails(
-                roomId = RoomId(slidingSyncRoom.roomId()),
-                name = slidingSyncRoom.name() ?: slidingSyncRoom.roomId(),
-                isDirect = slidingSyncRoom.isDm() ?: false,
-                avatarURLString = room?.avatarUrl(),
-                unreadNotificationCount = slidingSyncRoom.unreadNotifications().notificationCount().toInt(),
-                lastMessage = computedLastMessage,
-                lastMessageTimestamp = latestRoomMessage?.originServerTs
+            roomId = RoomId(slidingSyncRoom.roomId()),
+            name = slidingSyncRoom.name() ?: slidingSyncRoom.roomId(),
+            isDirect = slidingSyncRoom.isDm() ?: false,
+            avatarURLString = room?.avatarUrl(),
+            unreadNotificationCount = slidingSyncRoom.unreadNotifications().notificationCount().toInt(),
+            lastMessage = computedLastMessage,
+            lastMessageTimestamp = latestRoomMessage?.originServerTs
         )
     }
-
 }

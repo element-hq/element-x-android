@@ -22,5 +22,4 @@ data class LoginFormState(
     companion object {
         val Default = LoginFormState("", "")
     }
-
 }

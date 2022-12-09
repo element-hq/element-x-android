@@ -12,7 +12,6 @@ sealed interface MessagesItemGroupPosition {
         First, None -> true
         else -> false
     }
-
 }
 
 internal class MessagesItemGroupPositionProvider : PreviewParameterProvider<MessagesItemGroupPosition> {

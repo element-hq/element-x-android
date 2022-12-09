@@ -11,7 +11,13 @@ import io.element.android.x.matrix.session.SessionStore
 import io.element.android.x.matrix.sync.SlidingSyncObserverProxy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.*
+import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.ClientDelegate
+import org.matrix.rustcomponents.sdk.MediaSource
+import org.matrix.rustcomponents.sdk.RequiredState
+import org.matrix.rustcomponents.sdk.SlidingSyncMode
+import org.matrix.rustcomponents.sdk.SlidingSyncViewBuilder
+import org.matrix.rustcomponents.sdk.StoppableSpawn
 import timber.log.Timber
 import java.io.Closeable
 import java.io.File
@@ -78,7 +84,7 @@ class MatrixClient internal constructor(
         client.setDelegate(clientDelegate)
     }
 
-    private fun onRestartSync(){
+    private fun onRestartSync() {
         slidingSyncObserverToken = slidingSync.sync()
     }
 

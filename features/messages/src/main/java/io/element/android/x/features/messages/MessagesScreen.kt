@@ -8,7 +8,25 @@ package io.element.android.x.features.messages
 
 import Avatar
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -20,8 +38,24 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Alignment.Companion.Start
@@ -42,9 +76,27 @@ import io.element.android.x.core.compose.LogCompositions
 import io.element.android.x.core.compose.PairCombinedPreviewParameter
 import io.element.android.x.core.data.StableCharSequence
 import io.element.android.x.designsystem.components.avatar.AvatarData
-import io.element.android.x.features.messages.components.*
-import io.element.android.x.features.messages.model.*
-import io.element.android.x.features.messages.model.content.*
+import io.element.android.x.features.messages.components.MessageEventBubble
+import io.element.android.x.features.messages.components.MessagesReactionsView
+import io.element.android.x.features.messages.components.MessagesTimelineItemEncryptedView
+import io.element.android.x.features.messages.components.MessagesTimelineItemImageView
+import io.element.android.x.features.messages.components.MessagesTimelineItemRedactedView
+import io.element.android.x.features.messages.components.MessagesTimelineItemTextView
+import io.element.android.x.features.messages.components.MessagesTimelineItemUnknownView
+import io.element.android.x.features.messages.components.TimelineItemActionsScreen
+import io.element.android.x.features.messages.model.AggregatedReaction
+import io.element.android.x.features.messages.model.MessagesItemGroupPosition
+import io.element.android.x.features.messages.model.MessagesItemGroupPositionProvider
+import io.element.android.x.features.messages.model.MessagesItemReactionState
+import io.element.android.x.features.messages.model.MessagesTimelineItemState
+import io.element.android.x.features.messages.model.MessagesViewState
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemContent
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemContentProvider
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemEncryptedContent
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemImageContent
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemRedactedContent
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemTextBasedContent
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemUnknownContent
 import io.element.android.x.features.messages.textcomposer.MessageComposerViewModel
 import io.element.android.x.features.messages.textcomposer.MessageComposerViewState
 import io.element.android.x.textcomposer.MessageComposerMode
@@ -322,7 +374,6 @@ fun TimelineItems(
             onLoadMore = onReachedLoadMore
         )
     }
-
 }
 
 private fun MessagesTimelineItemState.key(): String {
@@ -338,7 +389,6 @@ private fun MessagesTimelineItemState.contentType(): Int {
         is MessagesTimelineItemState.Virtual -> 1
     }
 }
-
 
 @Composable
 fun TimelineItemRow(
@@ -526,7 +576,6 @@ internal fun BoxScope.MessagesScrollHelper(
             Icon(Icons.Default.ArrowDownward, "")
         }
     }
-
 }
 
 @Composable
@@ -543,7 +592,6 @@ internal fun MessagesLoadingMoreIndicator() {
             color = MaterialTheme.colorScheme.primary
         )
     }
-
 }
 
 class MessagesItemGroupPositionToMessagesTimelineItemContentProvider :

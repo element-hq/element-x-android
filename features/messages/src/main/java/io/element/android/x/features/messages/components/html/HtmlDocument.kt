@@ -9,17 +9,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
-import androidx.compose.material3.*
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.*
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
@@ -268,7 +276,6 @@ private fun HtmlBlockquote(
     }
 }
 
-
 @Composable
 private fun HtmlHeading(
     heading: Element,
@@ -402,7 +409,6 @@ private fun HtmlUnorderedList(
     }
 }
 
-
 @Composable
 private fun HtmlListItems(
     list: Element,
@@ -426,7 +432,6 @@ private fun HtmlListItems(
                     )
                 }
             }
-
         }
     }
 }
@@ -451,7 +456,6 @@ private fun AnnotatedString.Builder.appendInlineChildrenElements(
         }
     }
 }
-
 
 private fun AnnotatedString.Builder.appendInlineElement(element: Element, colors: ColorScheme) {
     when (element.normalName()) {
@@ -490,7 +494,6 @@ private fun AnnotatedString.Builder.appendInlineElement(element: Element, colors
             appendInlineChildrenElements(element.childNodes(), colors)
         }
     }
-
 }
 
 private fun AnnotatedString.Builder.appendLink(link: Element) {

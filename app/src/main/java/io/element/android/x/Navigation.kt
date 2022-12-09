@@ -77,6 +77,3 @@ fun RoomListScreenNavigation(navigator: DestinationsNavigator) {
 fun MessagesScreenNavigation(roomId: String, navigator: DestinationsNavigator) {
     MessagesScreen(roomId, navigator::navigateUp)
 }
-
-
-
