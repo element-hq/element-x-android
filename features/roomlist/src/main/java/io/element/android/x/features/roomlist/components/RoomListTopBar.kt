@@ -96,8 +96,8 @@ fun SearchRoomListTopBar(
         title = {
             TextField(
                 modifier = Modifier
-                        .fillMaxWidth()
-                        .focusRequester(focusRequester),
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester),
                 value = filterState,
                 textStyle = TextStyle(
                     fontSize = 17.sp

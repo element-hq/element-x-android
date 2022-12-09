@@ -3,7 +3,6 @@ package extension
 import Versions
 import com.android.build.api.dsl.CommonExtension
 
-
 fun CommonExtension<*, *, *, *>.androidConfig() {
     defaultConfig {
         compileSdk = Versions.compileSdk

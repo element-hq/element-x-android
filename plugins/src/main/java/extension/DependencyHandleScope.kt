@@ -5,8 +5,7 @@ import gradle.kotlin.dsl.accessors._4b7ad2363fc1fce7c774e054dc9a9300.debugImplem
 import gradle.kotlin.dsl.accessors._4b7ad2363fc1fce7c774e054dc9a9300.implementation
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 
-
-fun DependencyHandlerScope.composeDependencies(){
+fun DependencyHandlerScope.composeDependencies() {
     val composeBom = platform("androidx.compose:compose-bom:2022.11.00")
     implementation(composeBom)
     androidTestImplementation(composeBom)
