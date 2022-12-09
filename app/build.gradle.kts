@@ -157,6 +157,7 @@ android {
 }
 
 allprojects {
+    // TODO it does not seem to analyse subprojects.
     detekt {
         // preconfigure defaults
         buildUponDefaultConfig = true
