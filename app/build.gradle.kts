@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.ksp)
     id("com.google.firebase.appdistribution") version "3.0.2"
     id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
+    id("io.gitlab.arturbosch.detekt") version "1.22.0"
 }
 
 android {
@@ -152,6 +153,17 @@ android {
                 "string-template",
             )
         )
+    }
+}
+
+allprojects {
+    detekt {
+        // preconfigure defaults
+        buildUponDefaultConfig = true
+        // activate all available (even unstable) rules.
+        allRules = true
+        // point to your custom config defining rules to run, overwriting default behavior
+        config = files("$rootDir/tools/detekt/detekt.yml")
     }
 }
 
