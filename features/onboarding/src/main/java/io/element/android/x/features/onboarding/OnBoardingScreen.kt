@@ -122,7 +122,7 @@ fun OnBoardingContent(
                     modifier = Modifier
                         .align(CenterHorizontally)
                         .padding(top = 16.dp)
-                        .semantics { testTag = "sign_in"; testTagsAsResourceId = true }
+                        .semantics { testTag = "onboarding-sign_in"; testTagsAsResourceId = true }
 
                 )
             }
