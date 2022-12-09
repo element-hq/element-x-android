@@ -191,4 +191,5 @@ dependencies {
 
     implementation(libs.showkase)
     ksp(libs.showkase.processor)
+    detektPlugins("com.twitter.compose.rules:detekt:0.0.26")
 }
