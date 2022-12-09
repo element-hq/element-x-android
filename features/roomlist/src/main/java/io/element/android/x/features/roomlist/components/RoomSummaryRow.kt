@@ -1,6 +1,5 @@
 package io.element.android.x.features.roomlist.components
 
-import Avatar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -37,6 +36,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.placeholder.material.placeholder
+import io.element.android.x.designsystem.components.avatar.Avatar
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 
 private val minHeight = 72.dp

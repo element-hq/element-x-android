@@ -1,9 +1,9 @@
 package io.element.android.x.matrix.sync
 
+import io.element.android.x.matrix.util.mxCallbackFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import mxCallbackFlow
 import org.matrix.rustcomponents.sdk.SlidingSyncState
 import org.matrix.rustcomponents.sdk.SlidingSyncView
 import org.matrix.rustcomponents.sdk.SlidingSyncViewRoomListObserver

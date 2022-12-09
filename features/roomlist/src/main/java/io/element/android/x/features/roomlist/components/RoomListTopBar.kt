@@ -2,7 +2,6 @@
 
 package io.element.android.x.features.roomlist.components
 
-import Avatar
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.ContentAlpha
@@ -38,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import io.element.android.x.core.compose.LogCompositions
 import io.element.android.x.core.compose.textFieldState
+import io.element.android.x.designsystem.components.avatar.Avatar
 import io.element.android.x.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.x.features.roomlist.model.MatrixUser
 

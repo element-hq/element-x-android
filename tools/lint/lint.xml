@@ -27,7 +27,7 @@
         <ignore path="**/src/debug/**" />
     </issue>
 
-    <issue id="UnusedResources" severity="error">
+    <issue id="UnusedResources" severity="warning">
         <!-- Ignore unused resource in debug build type -->
         <ignore path="**/src/debug/**" />
 
@@ -111,6 +111,10 @@
 
     <!-- Notification -->
     <issue id="LaunchActivityFromNotification" severity="error" />
+
+    <!-- Compose -->
+    <issue id="ComposableLambdaParameterNaming" severity="error" />
+    <issue id="ComposableLambdaParameterPosition" severity="error" />
 
     <!-- DI -->
     <!-- issue id="JvmStaticProvidesInObjectDetector" severity="error" /-->
