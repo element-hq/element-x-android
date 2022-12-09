@@ -8,7 +8,7 @@ android {
 }
 
 dependencies {
-    api(project(":libraries:rustSdk"))
+    api(project(":libraries:rustsdk"))
     implementation(project(":libraries:core"))
     implementation(libs.timber)
     implementation("net.java.dev.jna:jna:5.12.1@aar")
