@@ -71,6 +71,9 @@ naming:
   TopLevelPropertyNaming:
     # TODO Enable it
     active: false
+  FunctionNaming:
+    active: true
+    ignoreAnnotated: ['Composable']
 
 performance:
   SpreadOperator:
