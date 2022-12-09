@@ -99,7 +99,7 @@ coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization_json" }
 compose_destinations = { module = "io.github.raamcosta.compose-destinations:animations-core", version.ref = "compose_destinations" }
-compose_destinations_processor = {module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "compose_destinations"}
+compose_destinations_processor = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "compose_destinations" }
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
