@@ -13,7 +13,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -46,6 +50,7 @@ fun ChangeServerScreen(
 }
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ChangeServerContent(
     state: ChangeServerViewState,
@@ -114,8 +119,10 @@ fun ChangeServerContent(
                     value = state.homeserver,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 200.dp),
-                    onValueChange = onChangeServer,
+                        .padding(top = 200.dp)
+                        .semantics { testTag = "change_server-server"; testTagsAsResourceId = true },
+
+                onValueChange = onChangeServer,
                     label = {
                         Text(text = "Server")
                     },
@@ -145,6 +152,7 @@ fun ChangeServerContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 44.dp)
+                        .semantics { testTag = "change_server-continue"; testTagsAsResourceId = true }
                 ) {
                     Text(text = "Continue")
                 }

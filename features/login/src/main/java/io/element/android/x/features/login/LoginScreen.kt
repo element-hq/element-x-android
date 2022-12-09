@@ -13,7 +13,11 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -56,7 +60,7 @@ fun LoginScreen(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun LoginContent(
     state: LoginViewState,
@@ -116,7 +120,9 @@ fun LoginContent(
                             onClick = onChangeServer,
                             modifier = Modifier
                                 .align(Alignment.CenterEnd)
-                                .padding(top = 8.dp, end = 8.dp),
+                                .padding(top = 8.dp, end = 8.dp)
+                                .semantics { testTag = "login-change_server"; testTagsAsResourceId = true }
+                            ,
                             content = {
                                 Text(text = "Change")
                             }
@@ -126,7 +132,9 @@ fun LoginContent(
                         value = formState.login,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 60.dp),
+                            .padding(top = 60.dp)
+                            .semantics { testTag = "login-email_username"; testTagsAsResourceId = true }
+                        ,
                         label = {
                             Text(text = "Email or username")
                         },
@@ -145,7 +153,9 @@ fun LoginContent(
                         value = formState.password,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 24.dp),
+                            .padding(top = 24.dp)
+                            .semantics { testTag = "login-password"; testTagsAsResourceId = true }
+                        ,
                         onValueChange = onPasswordChanged,
                         label = {
                             Text(text = "Password")
@@ -186,6 +196,8 @@ fun LoginContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 32.dp)
+                        .semantics { testTag = "login-continue"; testTagsAsResourceId = true }
+
                 ) {
                     Text(text = "Continue")
                 }
