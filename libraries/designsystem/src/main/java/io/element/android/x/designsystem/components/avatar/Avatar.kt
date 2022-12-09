@@ -1,3 +1,5 @@
+package io.element.android.x.designsystem.components.avatar
+
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,7 +18,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import io.element.android.x.designsystem.AvatarGradientEnd
 import io.element.android.x.designsystem.AvatarGradientStart
-import io.element.android.x.designsystem.components.avatar.AvatarData
 
 @Composable
 fun Avatar(avatarData: AvatarData, modifier: Modifier = Modifier) {
@@ -76,5 +77,3 @@ private fun InitialsAvatar(
         )
     }
 }
-
-

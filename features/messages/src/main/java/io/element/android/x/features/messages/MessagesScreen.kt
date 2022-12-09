@@ -6,7 +6,6 @@
 
 package io.element.android.x.features.messages
 
-import Avatar
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -75,6 +74,7 @@ import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.core.compose.LogCompositions
 import io.element.android.x.core.compose.PairCombinedPreviewParameter
 import io.element.android.x.core.data.StableCharSequence
+import io.element.android.x.designsystem.components.avatar.Avatar
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.messages.components.MessageEventBubble
 import io.element.android.x.features.messages.components.MessagesReactionsView
