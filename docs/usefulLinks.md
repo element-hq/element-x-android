@@ -1,3 +1,10 @@
+<!--- TOC -->
+
+  * [VersionCatalog](#versioncatalog)
+  * [Jetpack Compose](#jetpack-compose)
+
+<!--- END -->
+
 ### VersionCatalog
 
 ### Jetpack Compose
