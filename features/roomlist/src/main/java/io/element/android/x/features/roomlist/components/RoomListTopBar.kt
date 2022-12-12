@@ -198,10 +198,13 @@ private fun DefaultRoomListTopBar(
     )
     // Log out confirmation dialog
     ConfirmationDialog(
-        openDialog,
+        isDisplayed = openDialog.value,
         title = "Log out",
         content = "Do you confirm you want to log out?",
         submitText = "Log out",
         onSubmitClicked = onLogoutClicked,
+        onDismiss = {
+            openDialog.value = false
+        }
     )
 }
