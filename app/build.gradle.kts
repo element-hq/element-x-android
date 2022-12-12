@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.ksp)
     id("com.google.firebase.appdistribution") version "3.0.2"
     id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
-    id("io.gitlab.arturbosch.detekt") version "1.22.0"
     id("org.jetbrains.kotlinx.knit") version "0.4.0"
 }
 
@@ -157,18 +156,6 @@ android {
     }
 }
 
-allprojects {
-    // TODO it does not seem to analyse subprojects.
-    detekt {
-        // preconfigure defaults
-        buildUponDefaultConfig = true
-        // activate all available (even unstable) rules.
-        allRules = true
-        // point to your custom config defining rules to run, overwriting default behavior
-        config = files("$rootDir/tools/detekt/detekt.yml")
-    }
-}
-
 dependencies {
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:matrix"))
@@ -191,5 +178,4 @@ dependencies {
 
     implementation(libs.showkase)
     ksp(libs.showkase.processor)
-    detektPlugins("com.twitter.compose.rules:detekt:0.0.26")
 }
