@@ -135,7 +135,7 @@ fun RoomListContent(
         }
     )
     if (isLoginOut) {
-        ProgressDialog("Login out...")
+        ProgressDialog(text = "Login out...")
     }
 }
 

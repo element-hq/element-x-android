@@ -35,6 +35,7 @@ import io.element.android.x.designsystem.LinkColor
 import io.element.android.x.designsystem.components.ClickableLinkText
 import io.element.android.x.matrix.permalink.PermalinkData
 import io.element.android.x.matrix.permalink.PermalinkParser
+import kotlinx.collections.immutable.persistentMapOf
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.nodes.Node
@@ -539,7 +540,7 @@ private fun HtmlText(
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = {},
 ) {
-    val inlineContentMap = emptyMap<String, InlineTextContent>()
+    val inlineContentMap = persistentMapOf<String, InlineTextContent>()
     ClickableLinkText(
         text = text,
         linkAnnotationTag = "URL",
