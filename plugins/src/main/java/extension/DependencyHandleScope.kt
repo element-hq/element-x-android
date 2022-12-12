@@ -31,5 +31,6 @@ fun DependencyHandlerScope.composeDependencies() {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("com.airbnb.android:showkase:1.0.0-beta14")
+    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 }
 
