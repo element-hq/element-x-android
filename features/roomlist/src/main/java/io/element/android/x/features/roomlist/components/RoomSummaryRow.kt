@@ -43,11 +43,10 @@ private val minHeight = 72.dp
 
 @Composable
 internal fun RoomSummaryRow(
-    modifier: Modifier = Modifier,
     room: RoomListRoomSummary,
-    onClick: (RoomListRoomSummary) -> Unit
+    modifier: Modifier = Modifier,
+    onClick: (RoomListRoomSummary) -> Unit = {},
 ) {
-
     val clickModifier = if (room.isPlaceholder) {
         modifier
     } else {

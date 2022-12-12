@@ -101,6 +101,9 @@ import io.element.android.x.features.messages.textcomposer.MessageComposerViewMo
 import io.element.android.x.features.messages.textcomposer.MessageComposerViewState
 import io.element.android.x.textcomposer.MessageComposerMode
 import io.element.android.x.textcomposer.TextComposer
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -140,7 +143,7 @@ fun MessagesScreen(
     MessagesScreenContent(
         roomTitle = roomTitle,
         roomAvatar = roomAvatar,
-        timelineItems = timelineItems().orEmpty(),
+        timelineItems = timelineItems().orEmpty().toImmutableList(),
         hasMoreToLoad = hasMoreToLoad,
         onReachedLoadMore = viewModel::loadMore,
         onBackPressed = onBackPressed,
@@ -182,7 +185,7 @@ fun MessagesScreen(
 fun MessagesScreenContent(
     roomTitle: String?,
     roomAvatar: AvatarData?,
-    timelineItems: List<MessagesTimelineItemState>,
+    timelineItems: ImmutableList<MessagesTimelineItemState>,
     hasMoreToLoad: Boolean,
     onReachedLoadMore: () -> Unit,
     onBackPressed: () -> Unit,
@@ -241,7 +244,7 @@ fun MessagesScreenContent(
 
 @Composable
 fun MessagesContent(
-    timelineItems: List<MessagesTimelineItemState>,
+    timelineItems: ImmutableList<MessagesTimelineItemState>,
     hasMoreToLoad: Boolean,
     onReachedLoadMore: () -> Unit,
     onSendMessage: (String) -> Unit,
@@ -337,7 +340,7 @@ fun MessagesTopAppBar(
 @Composable
 fun TimelineItems(
     lazyListState: LazyListState,
-    timelineItems: List<MessagesTimelineItemState>,
+    timelineItems: ImmutableList<MessagesTimelineItemState>,
     highlightedEventId: String?,
     modifier: Modifier = Modifier,
     hasMoreToLoad: Boolean = false,
@@ -523,7 +526,7 @@ private fun MessageSenderInformation(
 @Composable
 internal fun BoxScope.MessagesScrollHelper(
     lazyListState: LazyListState,
-    timelineItems: List<MessagesTimelineItemState>,
+    timelineItems: ImmutableList<MessagesTimelineItemState>,
     onLoadMore: () -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -609,7 +612,7 @@ private fun TimelineItemsPreview(
 ) {
     TimelineItems(
         lazyListState = LazyListState(),
-        timelineItems = listOf(
+        timelineItems = persistentListOf(
             // 3 items (First Middle Last) with isMine = false
             createMessageEvent(
                 isMine = false,
