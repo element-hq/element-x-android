@@ -13,6 +13,7 @@ https://docs.gradle.org/current/userguide/platforms.html
 
 https://developer.android.com/jetpack/compose/mental-model
 https://developer.android.com/jetpack/compose/libraries
+https://developer.android.com/jetpack/compose/modifiers-list
 
 https://android.googlesource.com/platform/frameworks/support/+/androidx-main/compose/docs/compose-api-guidelines.md#api-guidelines-for-jetpack-compose
 
