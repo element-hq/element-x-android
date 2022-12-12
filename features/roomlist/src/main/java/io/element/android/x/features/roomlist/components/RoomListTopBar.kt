@@ -84,14 +84,15 @@ fun RoomListTopBar(
 @Composable
 fun SearchRoomListTopBar(
     text: String,
-    onFilterChanged: (String) -> Unit,
-    onCloseClicked: () -> Unit,
-    scrollBehavior: TopAppBarScrollBehavior
+    scrollBehavior: TopAppBarScrollBehavior,
+    modifier: Modifier = Modifier,
+    onFilterChanged: (String) -> Unit = {},
+    onCloseClicked: () -> Unit = {},
 ) {
     var filterState by textFieldState(stateValue = text)
     val focusRequester = remember { FocusRequester() }
     TopAppBar(
-        modifier = Modifier
+        modifier = modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         title = {
             TextField(
