@@ -603,7 +603,7 @@ class MessagesItemGroupPositionToMessagesTimelineItemContentProvider :
 
 @Preview(showBackground = true)
 @Composable
-fun TimelineItemsPreview(
+private fun TimelineItemsPreview(
     @PreviewParameter(MessagesTimelineItemContentProvider::class)
     content: MessagesTimelineItemContent
 ) {

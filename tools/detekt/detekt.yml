@@ -138,12 +138,13 @@ TwitterCompose:
   PreviewPublic:
     active: true
     # You can optionally disable that only previews with @PreviewParameter are flagged
-    # previewPublicOnlyIfParams: false
+    previewPublicOnlyIfParams: false
   RememberMissing:
     active: true
   UnstableCollections:
     active: true
   ViewModelForwarding:
-    active: true
+    ## TODO Set to true later
+    active: false
   ViewModelInjection:
     active: true
