@@ -20,6 +20,7 @@ fun ConfirmationDialog(
     isDisplayed: MutableState<Boolean>,
     title: String,
     content: String,
+    modifier: Modifier = Modifier,
     submitText: String = "OK",
     cancelText: String = "Cancel",
     onSubmitClicked: () -> Unit = {},
@@ -27,6 +28,7 @@ fun ConfirmationDialog(
 ) {
     if (!isDisplayed.value) return
     AlertDialog(
+        modifier = modifier,
         onDismissRequest = onDismiss,
         title = {
             Text(text = title)
