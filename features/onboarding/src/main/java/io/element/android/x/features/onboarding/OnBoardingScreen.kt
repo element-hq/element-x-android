@@ -58,14 +58,16 @@ fun OnBoardingScreen(
 @Composable
 fun OnBoardingContent(
     state: OnBoardingViewState,
-    onPageChanged: (Int) -> Unit,
-    onSignUp: () -> Unit,
-    onSignIn: () -> Unit,
+    modifier: Modifier = Modifier,
+    onPageChanged: (Int) -> Unit = {},
+    onSignUp: () -> Unit = {},
+    onSignIn: () -> Unit = {},
 ) {
     val carrouselState = remember { SplashCarouselStateFactory().create() }
     val nbOfPages = carrouselState.items.size
     var key by remember { mutableStateOf(false) }
     Surface(
+        modifier = modifier,
         color = MaterialTheme.colorScheme.background,
     ) {
         Box(
@@ -136,8 +138,11 @@ fun OnBoardingContent(
 @Composable
 fun OnBoardingPage(
     item: SplashCarouselState.Item,
+    modifier: Modifier = Modifier,
 ) {
-    Box {
+    Box(
+        modifier = modifier,
+    ) {
         /*
         Image(
             painterResource(id = item.pageBackground),
