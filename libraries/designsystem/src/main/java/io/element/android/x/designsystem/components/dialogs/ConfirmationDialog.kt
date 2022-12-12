@@ -8,16 +8,13 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun ConfirmationDialog(
-    isDisplayed: MutableState<Boolean>,
+    isDisplayed: Boolean,
     title: String,
     content: String,
     modifier: Modifier = Modifier,
@@ -26,7 +23,7 @@ fun ConfirmationDialog(
     onSubmitClicked: () -> Unit = {},
     onDismiss: () -> Unit = {},
 ) {
-    if (!isDisplayed.value) return
+    if (!isDisplayed) return
     AlertDialog(
         modifier = modifier,
         onDismissRequest = onDismiss,
@@ -44,7 +41,6 @@ fun ConfirmationDialog(
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-                        isDisplayed.value = false
                         onDismiss()
                         onSubmitClicked()
                     })
@@ -61,7 +57,6 @@ fun ConfirmationDialog(
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-                        isDisplayed.value = false
                         onDismiss()
                     }) {
                     Text(cancelText)
@@ -75,7 +70,7 @@ fun ConfirmationDialog(
 @Preview
 fun ConfirmationDialogPreview() {
     ConfirmationDialog(
-        isDisplayed = remember { mutableStateOf(true) },
+        isDisplayed = true,
         title = "Title",
         content = "Content",
     )
