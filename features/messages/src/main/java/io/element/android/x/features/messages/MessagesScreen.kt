@@ -198,9 +198,11 @@ fun MessagesScreenContent(
     composerCanSendMessage: Boolean,
     composerText: StableCharSequence?,
     snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Content")
     Scaffold(
+        modifier = modifier,
         contentWindowInsets = WindowInsets.statusBars,
         topBar = {
             MessagesTopAppBar(
@@ -255,7 +257,6 @@ fun MessagesContent(
     composerText: StableCharSequence?,
     modifier: Modifier = Modifier
 ) {
-
     val lazyListState = rememberLazyListState()
     Column(
         modifier = modifier
@@ -301,9 +302,11 @@ fun MessagesContent(
 fun MessagesTopAppBar(
     roomTitle: String?,
     roomAvatar: AvatarData?,
-    onBackPressed: () -> Unit,
+    modifier: Modifier = Modifier,
+    onBackPressed: () -> Unit = {},
 ) {
     TopAppBar(
+        modifier = modifier,
         navigationIcon = {
             IconButton(onClick = onBackPressed) {
                 Icon(
@@ -521,7 +524,7 @@ private fun MessageSenderInformation(
 internal fun BoxScope.MessagesScrollHelper(
     lazyListState: LazyListState,
     timelineItems: List<MessagesTimelineItemState>,
-    onLoadMore: () -> Unit,
+    onLoadMore: () -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
     val firstVisibleItemIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }

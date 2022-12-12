@@ -22,8 +22,8 @@ fun MessagesTimelineItemTextView(
     content: MessagesTimelineItemTextBasedContent,
     interactionSource: MutableInteractionSource,
     modifier: Modifier = Modifier,
-    onTextClicked: () -> Unit,
-    onTextLongClicked: () -> Unit,
+    onTextClicked: () -> Unit = {},
+    onTextLongClicked: () -> Unit = {},
 ) {
     val htmlDocument = content.htmlDocument
     if (htmlDocument != null) {

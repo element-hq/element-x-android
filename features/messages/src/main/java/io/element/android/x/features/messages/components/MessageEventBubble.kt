@@ -32,9 +32,9 @@ fun MessageEventBubble(
     interactionSource: MutableInteractionSource,
     isHighlighted: Boolean,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-    onLongClick: () -> Unit,
-    content: @Composable () -> Unit,
+    onClick: () -> Unit = {},
+    onLongClick: () -> Unit = {},
+    content: @Composable () -> Unit = {},
 ) {
     fun bubbleShape(): Shape {
         return when (groupPosition) {
