@@ -110,6 +110,27 @@ android {
     }
 }
 
+// Knit
+apply {
+    plugin("kotlinx-knit")
+}
+
+knit {
+    files = fileTree(project.rootDir) {
+        include(
+            "**/*.md",
+            "**/*.kt",
+            "*/*.kts",
+        )
+        exclude(
+            "**/build/**",
+            "*/.gradle/**",
+            "*/towncrier/template.md",
+            "**/CHANGES.md",
+        )
+    }
+}
+
 dependencies {
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:matrix"))
