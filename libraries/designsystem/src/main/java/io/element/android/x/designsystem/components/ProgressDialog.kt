@@ -56,5 +56,5 @@ fun ProgressDialog(
 @Composable
 @Preview
 fun ProgressDialogPreview() {
-    ProgressDialog("test dialog content")
+    ProgressDialog(text = "test dialog content")
 }

@@ -604,9 +604,10 @@ class MessagesItemGroupPositionToMessagesTimelineItemContentProvider :
         MessagesItemGroupPositionProvider() to MessagesTimelineItemContentProvider()
     )
 
+@Suppress("PreviewPublic")
 @Preview(showBackground = true)
 @Composable
-private fun TimelineItemsPreview(
+fun TimelineItemsPreview(
     @PreviewParameter(MessagesTimelineItemContentProvider::class)
     content: MessagesTimelineItemContent
 ) {
