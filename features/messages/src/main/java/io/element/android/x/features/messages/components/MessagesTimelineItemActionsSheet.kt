@@ -95,36 +95,36 @@ fun TimelineItemActionsScreen(
 @Composable
 private fun SheetContent(
     actionsSheetState: MessagesItemActionsSheetState?,
-    onActionClicked: (MessagesItemAction, MessagesTimelineItemState.MessageEvent) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onActionClicked: (MessagesItemAction, MessagesTimelineItemState.MessageEvent) -> Unit = { _, _ -> },
 ) {
     if (actionsSheetState == null || actionsSheetState.actions.isEmpty()) {
         // Crashes if sheetContent size is zero
         Box(modifier = modifier.size(1.dp))
-        return
-    }
-    LazyColumn(
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        items(actionsSheetState.actions) {
-            ListItem(
-                modifier = Modifier.clickable {
-                    onActionClicked(it, actionsSheetState.targetItem)
-                },
-                text = {
-                    Text(
-                        text = it.title,
-                        color = if (it.destructive) MaterialTheme.colors.error else Color.Unspecified,
-                    )
-                },
-                icon = {
-                    VectorIcon(
-                        resourceId = it.icon,
-                        tint = if (it.destructive) MaterialTheme.colors.error else LocalContentColor.current,
-                    )
-                }
-            )
+    } else {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxWidth()
+        ) {
+            items(actionsSheetState.actions) {
+                ListItem(
+                    modifier = Modifier.clickable {
+                        onActionClicked(it, actionsSheetState.targetItem)
+                    },
+                    text = {
+                        Text(
+                            text = it.title,
+                            color = if (it.destructive) MaterialTheme.colors.error else Color.Unspecified,
+                        )
+                    },
+                    icon = {
+                        VectorIcon(
+                            resourceId = it.icon,
+                            tint = if (it.destructive) MaterialTheme.colors.error else LocalContentColor.current,
+                        )
+                    }
+                )
+            }
         }
     }
 }
