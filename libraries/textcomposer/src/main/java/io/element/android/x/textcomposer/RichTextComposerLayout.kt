@@ -485,7 +485,7 @@ class RichTextComposerLayout @JvmOverloads constructor(
         } else {
             views.composerModeGroup.isGone = true
             (mode as? MessageComposerMode.Normal)?.content?.let { text ->
-                // TODO: un-comment once we update to a version of the lib > 0.8.0
+                // TODO un-comment once we update to a version of the lib > 0.8.0
                 /*
                 if (isTextFormattingEnabled) {
                     replaceFormattedContent(text)
