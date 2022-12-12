@@ -48,6 +48,7 @@ private val LightColorScheme = lightColorScheme(
     onSurface = Color(0xFF1C1B1F),
     */
 )
+@Suppress("CompositionLocalAllowlist")
 val LocalIsDarkTheme = compositionLocalOf<Boolean> { error("Not defined") }
 
 @Composable
