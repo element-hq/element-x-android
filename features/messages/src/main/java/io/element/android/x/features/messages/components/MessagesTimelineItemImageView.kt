@@ -35,7 +35,6 @@ fun MessagesTimelineItemImageView(
             .aspectRatio(content.aspectRatio),
         contentAlignment = Alignment.Center,
     ) {
-
         var isLoading = rememberSaveable(content.imageMeta) { mutableStateOf(true) }
         val context = LocalContext.current
         val model = ImageRequest.Builder(context)

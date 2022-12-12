@@ -58,7 +58,6 @@ fun ClickableLinkText(
                     uriHandler.openUri(linkAnnotations.first().item)
                 }
             }
-
         }
     }
     Text(
@@ -71,4 +70,3 @@ fun ClickableLinkText(
         inlineContent = inlineContent
     )
 }
-

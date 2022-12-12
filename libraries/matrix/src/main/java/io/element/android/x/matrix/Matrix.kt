@@ -7,6 +7,9 @@ import io.element.android.x.matrix.media.MediaFetcher
 import io.element.android.x.matrix.media.MediaKeyer
 import io.element.android.x.matrix.session.SessionStore
 import io.element.android.x.matrix.util.logError
+import java.io.File
+import java.util.Optional
+import java.util.concurrent.Executors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -20,9 +23,6 @@ import org.matrix.rustcomponents.sdk.AuthenticationService
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import timber.log.Timber
-import java.io.File
-import java.util.Optional
-import java.util.concurrent.Executors
 
 class Matrix(
     private val coroutineScope: CoroutineScope,

@@ -21,6 +21,4 @@ fun Room.timelineDiff(scope: CoroutineScope): Flow<TimelineDiff> = callbackFlow 
     awaitClose {
         removeTimeline()
     }
-
 }
-

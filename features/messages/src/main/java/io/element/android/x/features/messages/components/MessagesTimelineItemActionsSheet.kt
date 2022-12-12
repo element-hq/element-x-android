@@ -76,7 +76,6 @@ fun TimelineItemActionsScreen(
         }
     }
 
-
     ModalBottomSheetLayout(
         modifier = modifier,
         sheetState = modalBottomSheetState,

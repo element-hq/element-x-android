@@ -84,8 +84,7 @@ fun ChangeServerContent(
                         state = scrollState,
                     )
                     .padding(horizontal = 16.dp)
-            )
-            {
+            ) {
                 val isError = state.changeServerAction is Fail
                 Box(
                     modifier = Modifier

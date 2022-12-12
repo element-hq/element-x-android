@@ -43,8 +43,8 @@ fun ConfirmationDialog(
                     onClick = {
                         onDismiss()
                         onSubmitClicked()
-                    })
-                {
+                    }
+                ) {
                     Text(submitText)
                 }
             }

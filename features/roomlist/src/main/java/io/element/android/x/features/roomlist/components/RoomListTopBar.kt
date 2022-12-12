@@ -49,7 +49,6 @@ fun RoomListTopBar(
     onLogoutClicked: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
-
     LogCompositions(tag = "RoomListScreen", msg = "TopBar")
     var searchWidgetStateIsOpened by rememberSaveable { mutableStateOf(false) }
 

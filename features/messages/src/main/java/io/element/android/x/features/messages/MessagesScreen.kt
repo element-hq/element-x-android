@@ -101,13 +101,13 @@ import io.element.android.x.features.messages.textcomposer.MessageComposerViewMo
 import io.element.android.x.features.messages.textcomposer.MessageComposerViewState
 import io.element.android.x.textcomposer.MessageComposerMode
 import io.element.android.x.textcomposer.TextComposer
+import java.lang.Math.random
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.lang.Math.random
 
 @Composable
 fun MessagesScreen(
@@ -116,7 +116,6 @@ fun MessagesScreen(
     viewModel: MessagesViewModel = mavericksViewModel(argsFactory = { roomId }),
     composerViewModel: MessageComposerViewModel = mavericksViewModel(argsFactory = { roomId })
 ) {
-
     fun onSendMessage(textMessage: String) {
         viewModel.sendMessage(textMessage)
         composerViewModel.updateText("")
