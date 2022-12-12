@@ -7,6 +7,8 @@
 
 ### VersionCatalog
 
+https://docs.gradle.org/current/userguide/platforms.html
+
 ### Jetpack Compose
 
 https://developer.android.com/jetpack/compose/mental-model
