@@ -62,11 +62,15 @@ fun ChangeServerScreen(
 @Composable
 fun ChangeServerContent(
     state: ChangeServerViewState,
+    modifier: Modifier = Modifier,
     onChangeServer: (String) -> Unit = {},
     onChangeServerSubmit: () -> Unit = {},
     onChangeServerSuccess: () -> Unit = {},
 ) {
-    Surface(color = MaterialTheme.colorScheme.background) {
+    Surface(
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.background,
+    ) {
         val scrollState = rememberScrollState()
         Box(
             modifier = Modifier

@@ -79,13 +79,17 @@ fun LoginScreen(
 fun LoginContent(
     state: LoginViewState,
     formState: LoginFormState,
+    modifier: Modifier = Modifier,
     onChangeServer: () -> Unit = {},
     onLoginChanged: (String) -> Unit = {},
     onPasswordChanged: (String) -> Unit = {},
     onSubmitClicked: () -> Unit = {},
     onLoginWithSuccess: () -> Unit = {},
 ) {
-    Surface(color = MaterialTheme.colorScheme.background) {
+    Surface(
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.background,
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
