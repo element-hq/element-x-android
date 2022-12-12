@@ -45,12 +45,12 @@ import io.element.android.wysiwyg.inputhandlers.models.InlineFormat
 import io.element.android.x.core.ui.DimensionConverter
 import io.element.android.x.core.ui.hideKeyboard
 import io.element.android.x.core.ui.showKeyboard
+import io.element.android.x.element.resources.R as ElementR
 import io.element.android.x.textcomposer.databinding.ComposerRichTextLayoutBinding
 import io.element.android.x.textcomposer.databinding.ViewRichTextMenuButtonBinding
 import io.element.android.x.textcomposer.tools.setTextIfDifferent
 import uniffi.wysiwyg_composer.ActionState
 import uniffi.wysiwyg_composer.ComposerAction
-import io.element.android.x.element.resources.R as ElementR
 
 // Imported from Element Android
 class RichTextComposerLayout @JvmOverloads constructor(

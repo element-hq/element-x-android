@@ -9,6 +9,9 @@ import io.element.android.x.matrix.room.RoomSummaryDataSource
 import io.element.android.x.matrix.room.RustRoomSummaryDataSource
 import io.element.android.x.matrix.session.SessionStore
 import io.element.android.x.matrix.sync.SlidingSyncObserverProxy
+import java.io.Closeable
+import java.io.File
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
@@ -19,9 +22,6 @@ import org.matrix.rustcomponents.sdk.SlidingSyncMode
 import org.matrix.rustcomponents.sdk.SlidingSyncViewBuilder
 import org.matrix.rustcomponents.sdk.StoppableSpawn
 import timber.log.Timber
-import java.io.Closeable
-import java.io.File
-import java.util.concurrent.atomic.AtomicBoolean
 
 class MatrixClient internal constructor(
     private val client: Client,
@@ -62,7 +62,7 @@ class MatrixClient internal constructor(
         .slidingSync()
         .homeserver("https://slidingsync.lab.element.dev")
         .withCommonExtensions()
-        //.coldCache("ElementX")
+        // .coldCache("ElementX")
         .addView(slidingSyncView)
         .build()
 

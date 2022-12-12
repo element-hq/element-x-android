@@ -25,6 +25,3 @@ sealed interface MessagesTimelineItemState {
         val safeSenderName: String = senderDisplayName ?: senderId
     }
 }
-
-
-

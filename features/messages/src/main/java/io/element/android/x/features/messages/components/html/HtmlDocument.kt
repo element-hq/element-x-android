@@ -454,7 +454,6 @@ private fun AnnotatedString.Builder.appendInlineChildrenElements(
     childNodes: List<Node>,
     colors: ColorScheme
 ) {
-
     for (node in childNodes) {
         when (node) {
             is TextNode -> {
@@ -552,4 +551,3 @@ private fun HtmlText(
         onLongClick = onLongClick
     )
 }
-

@@ -2,6 +2,7 @@ package io.element.android.x.matrix.timeline
 
 import io.element.android.x.core.coroutine.CoroutineDispatchers
 import io.element.android.x.matrix.room.MatrixRoom
+import java.util.Collections
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +17,6 @@ import org.matrix.rustcomponents.sdk.TimelineChange
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineListener
 import timber.log.Timber
-import java.util.Collections
 
 class MatrixTimeline(
     private val matrixRoom: MatrixRoom,

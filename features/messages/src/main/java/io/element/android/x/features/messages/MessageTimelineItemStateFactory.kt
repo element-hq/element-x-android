@@ -22,6 +22,7 @@ import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.MatrixRoom
 import io.element.android.x.matrix.timeline.MatrixTimelineItem
+import kotlin.system.measureTimeMillis
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,7 +36,6 @@ import org.matrix.rustcomponents.sdk.FormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.MessageType
 import timber.log.Timber
-import kotlin.system.measureTimeMillis
 
 class MessageTimelineItemStateFactory(
     private val client: MatrixClient,
@@ -198,7 +198,6 @@ class MessageTimelineItemStateFactory(
                 htmlDocument = messageType.content.formatted?.toHtmlDocument()
             )
             else -> MessagesTimelineItemUnknownContent
-
         }
     }
 

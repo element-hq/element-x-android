@@ -42,4 +42,3 @@ sealed interface MessageComposerMode {
             is Reply -> eventId
         }
 }
-

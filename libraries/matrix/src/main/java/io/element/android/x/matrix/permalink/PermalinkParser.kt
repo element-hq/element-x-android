@@ -3,8 +3,8 @@ package io.element.android.x.matrix.permalink
 import android.net.Uri
 import android.net.UrlQuerySanitizer
 import io.element.android.x.matrix.core.MatrixPatterns
-import timber.log.Timber
 import java.net.URLDecoder
+import timber.log.Timber
 
 /**
  * This class turns a uri to a [PermalinkData].

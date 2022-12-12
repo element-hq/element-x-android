@@ -117,7 +117,7 @@ fun LoginContent(
                 )
                 // Form
                 Column(
-                    //modifier = Modifier.weight(1f),
+                    // modifier = Modifier.weight(1f),
                 ) {
                     Box(
                         modifier = Modifier.fillMaxWidth()
