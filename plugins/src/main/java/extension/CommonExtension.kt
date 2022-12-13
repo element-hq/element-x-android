@@ -42,5 +42,11 @@ fun CommonExtension<*, *, *, *>.composeConfig() {
             add("META-INF/LGPL2.1")
         }
     }
+
+    lint {
+        // Extra rules for compose
+        error.add("ComposableLambdaParameterNaming")
+        error.add("ComposableLambdaParameterPosition")
+    }
 }
 

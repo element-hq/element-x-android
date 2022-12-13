@@ -112,10 +112,6 @@
     <!-- Notification -->
     <issue id="LaunchActivityFromNotification" severity="error" />
 
-    <!-- Compose -->
-    <issue id="ComposableLambdaParameterNaming" severity="error" />
-    <issue id="ComposableLambdaParameterPosition" severity="error" />
-
     <!-- DI -->
     <!-- issue id="JvmStaticProvidesInObjectDetector" severity="error" /-->
 </lint>
