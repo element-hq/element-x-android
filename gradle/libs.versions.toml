@@ -48,6 +48,10 @@ showkase = "1.0.0-beta14"
 compose_destinations = "1.7.23-beta"
 jsoup = "1.15.3"
 
+# quality
+detekt = "1.22.0"
+ktlint = "11.0.0"
+
 [libraries]
 # Project
 android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "android_gradle_plugin" }
@@ -115,3 +119,6 @@ android_application = { id = "com.android.application", version.ref = "android_g
 android_library = { id = "com.android.library", version.ref = "android_gradle_plugin" }
 kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+
