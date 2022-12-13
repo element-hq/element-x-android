@@ -16,6 +16,8 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
 
 @Composable
 fun ClickableLinkText(
@@ -26,7 +28,7 @@ fun ClickableLinkText(
     interactionSource: MutableInteractionSource,
     modifier: Modifier = Modifier,
     style: TextStyle = LocalTextStyle.current,
-    inlineContent: Map<String, InlineTextContent> = mapOf(),
+    inlineContent: ImmutableMap<String, InlineTextContent> = persistentMapOf(),
 ) {
     val uriHandler = LocalUriHandler.current
     val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
@@ -56,7 +58,6 @@ fun ClickableLinkText(
                     uriHandler.openUri(linkAnnotations.first().item)
                 }
             }
-
         }
     }
     Text(
@@ -69,4 +70,3 @@ fun ClickableLinkText(
         inlineContent = inlineContent
     )
 }
-

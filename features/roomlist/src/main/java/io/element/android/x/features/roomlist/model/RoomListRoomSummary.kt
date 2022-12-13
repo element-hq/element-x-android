@@ -13,4 +13,5 @@ data class RoomListRoomSummary(
     val timestamp: String? = null,
     val lastMessage: CharSequence? = null,
     val avatarData: AvatarData = AvatarData(),
-    val isPlaceholder: Boolean = false,)
+    val isPlaceholder: Boolean = false,
+)

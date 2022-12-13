@@ -1,7 +1,11 @@
 package io.element.android.x.features.roomlist
 
-import com.airbnb.mvrx.*
-import io.element.android.x.core.data.parallelMap
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MavericksViewModel
+import com.airbnb.mvrx.MavericksViewModelFactory
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.ViewModelContext
+import io.element.android.x.core.coroutine.parallelMap
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
 import io.element.android.x.features.roomlist.model.MatrixUser
@@ -118,8 +122,8 @@ class RoomListViewModel(
                 copy(
                     rooms = when {
                         it is Loading ||
-                                // Note: this second case will prevent to handle correctly the empty case
-                                (it is Success && it().isEmpty() && filter.isEmpty()) -> {
+                            // Note: this second case will prevent to handle correctly the empty case
+                            (it is Success && it().isEmpty() && filter.isEmpty()) -> {
                             // Show fake placeholders to avoid having empty screen
                             Loading(RoomListRoomSummaryPlaceholders.createFakeList(size = 16))
                         }
@@ -164,5 +168,4 @@ class RoomListViewModel(
             .resolve(url, kind = MediaResolver.Kind.Thumbnail(size.value))
         return AvatarData(name, model, size)
     }
-
 }

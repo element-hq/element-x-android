@@ -35,9 +35,9 @@ fun View.showKeyboard(andRequestFocus: Boolean = false) {
 
 fun View.setHorizontalPadding(padding: Int) {
     setPadding(
-            padding,
-            paddingTop,
-            padding,
-            paddingBottom
+        padding,
+        paddingTop,
+        padding,
+        paddingBottom
     )
 }

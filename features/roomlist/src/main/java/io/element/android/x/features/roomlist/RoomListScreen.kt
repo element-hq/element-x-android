@@ -36,6 +36,8 @@ import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListViewState
 import io.element.android.x.features.roomlist.model.stubbedRoomSummaries
 import io.element.android.x.matrix.core.RoomId
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun RoomListScreen(
@@ -53,7 +55,7 @@ fun RoomListScreen(
     val roomSummaries by viewModel.collectAsState(RoomListViewState::rooms)
     val matrixUser by viewModel.collectAsState(RoomListViewState::user)
     RoomListContent(
-        roomSummaries = roomSummaries().orEmpty(),
+        roomSummaries = roomSummaries().orEmpty().toImmutableList(),
         matrixUser = matrixUser(),
         onRoomClicked = onRoomClicked,
         onLogoutClicked = viewModel::logout,
@@ -66,16 +68,16 @@ fun RoomListScreen(
 
 @Composable
 fun RoomListContent(
-    roomSummaries: List<RoomListRoomSummary>,
+    roomSummaries: ImmutableList<RoomListRoomSummary>,
     matrixUser: MatrixUser?,
-    onRoomClicked: (RoomId) -> Unit,
     filter: String,
-    onFilterChanged: (String) -> Unit,
-    onLogoutClicked: () -> Unit,
-    onScrollOver: (IntRange) -> Unit,
     isLoginOut: Boolean,
+    modifier: Modifier = Modifier,
+    onRoomClicked: (RoomId) -> Unit = {},
+    onFilterChanged: (String) -> Unit = {},
+    onLogoutClicked: () -> Unit = {},
+    onScrollOver: (IntRange) -> Unit = {},
 ) {
-
     fun onRoomClicked(room: RoomListRoomSummary) {
         onRoomClicked(room.roomId)
     }
@@ -104,7 +106,7 @@ fun RoomListContent(
     }
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             RoomListTopBar(
                 matrixUser = matrixUser,
@@ -133,7 +135,7 @@ fun RoomListContent(
         }
     )
     if (isLoginOut) {
-        ProgressDialog("Login out...")
+        ProgressDialog(text = "Login out...")
     }
 }
 
@@ -176,4 +178,3 @@ fun PreviewableDarkRoomListContent() {
         )
     }
 }
-

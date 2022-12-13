@@ -12,7 +12,6 @@ dependencies {
     implementation(project(":libraries:matrix"))
     implementation(project(":libraries:designsystem"))
     implementation(libs.mavericks.compose)
-    implementation(libs.timber)
     implementation(libs.datetime)
     implementation(libs.accompanist.placeholder)
     testImplementation(libs.test.junit)

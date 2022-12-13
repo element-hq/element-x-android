@@ -5,7 +5,11 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
-import io.element.android.x.destinations.*
+import io.element.android.x.destinations.ChangeServerScreenNavigationDestination
+import io.element.android.x.destinations.LoginScreenNavigationDestination
+import io.element.android.x.destinations.MessagesScreenNavigationDestination
+import io.element.android.x.destinations.OnBoardingScreenNavigationDestination
+import io.element.android.x.destinations.RoomListScreenNavigationDestination
 import io.element.android.x.features.login.LoginScreen
 import io.element.android.x.features.login.changeserver.ChangeServerScreen
 import io.element.android.x.features.messages.MessagesScreen
@@ -77,6 +81,3 @@ fun RoomListScreenNavigation(navigator: DestinationsNavigator) {
 fun MessagesScreenNavigation(roomId: String, navigator: DestinationsNavigator) {
     MessagesScreen(roomId, navigator::navigateUp)
 }
-
-
-

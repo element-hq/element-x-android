@@ -7,7 +7,6 @@ import io.element.android.x.core.data.StableCharSequence
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.MatrixInstance
 
-
 class MessageComposerViewModel(
     private val client: MatrixClient,
     private val initialState: MessageComposerViewState

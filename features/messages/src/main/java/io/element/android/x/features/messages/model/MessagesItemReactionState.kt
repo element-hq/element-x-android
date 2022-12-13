@@ -6,6 +6,7 @@ import androidx.compose.runtime.Stable
 data class MessagesItemReactionState(
     val reactions: List<AggregatedReaction>
 )
+
 @Stable
 data class AggregatedReaction(
     val key: String,
