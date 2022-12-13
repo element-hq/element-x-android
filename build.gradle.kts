@@ -4,8 +4,8 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.ksp) apply false
-    id("io.gitlab.arturbosch.detekt") version "1.22.0"
-    id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.ktlint)
 }
 
 tasks.register<Delete>("clean").configure {
