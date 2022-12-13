@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     alias(libs.plugins.ksp)
     id("com.google.firebase.appdistribution") version "3.0.2"
+    id("org.jetbrains.kotlinx.knit") version "0.4.0"
 }
 
 android {
@@ -10,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "io.element.android.x"
-        targetSdk = 33
+        targetSdk = 33 // TODO Use Versions.targetSdk
         versionCode = 1
         versionName = "1.0"
 
@@ -79,7 +80,6 @@ android {
                 appId = "1:912726360885:android:e17435e0beb0303000427c"
             }
         }
-
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -110,6 +110,27 @@ android {
     }
 }
 
+// Knit
+apply {
+    plugin("kotlinx-knit")
+}
+
+knit {
+    files = fileTree(project.rootDir) {
+        include(
+            "**/*.md",
+            "**/*.kt",
+            "*/*.kts",
+        )
+        exclude(
+            "**/build/**",
+            "*/.gradle/**",
+            "*/towncrier/template.md",
+            "**/CHANGES.md",
+        )
+    }
+}
+
 dependencies {
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:matrix"))
@@ -128,7 +149,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.coil)
-    implementation(libs.timber)
     implementation(libs.mavericks.compose)
 
     implementation(libs.showkase)
