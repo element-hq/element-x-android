@@ -247,28 +247,28 @@ class RichTextComposerLayout @JvmOverloads constructor(
 
     private fun setupRichTextMenu() {
         addRichTextMenuItem(
-            ElementR.drawable.ic_composer_bold,
+            R.drawable.ic_composer_bold,
             ElementR.string.rich_text_editor_format_bold,
             ComposerAction.BOLD
         ) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Bold)
         }
         addRichTextMenuItem(
-            ElementR.drawable.ic_composer_italic,
+            R.drawable.ic_composer_italic,
             ElementR.string.rich_text_editor_format_italic,
             ComposerAction.ITALIC
         ) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Italic)
         }
         addRichTextMenuItem(
-            ElementR.drawable.ic_composer_underlined,
+            R.drawable.ic_composer_underlined,
             ElementR.string.rich_text_editor_format_underline,
             ComposerAction.UNDERLINE
         ) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Underline)
         }
         addRichTextMenuItem(
-            ElementR.drawable.ic_composer_strikethrough,
+            R.drawable.ic_composer_strikethrough,
             ElementR.string.rich_text_editor_format_strikethrough,
             ComposerAction.STRIKE_THROUGH
         ) {
