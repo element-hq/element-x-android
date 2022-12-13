@@ -1,4 +1,8 @@
+/**
+ * This will generate the plugin "io.element.android-compose-library", used in android library with compose modules.
+ */
 import extension.androidConfig
+import extension.commonDependencies
 import extension.composeConfig
 import extension.composeDependencies
 
@@ -7,12 +11,12 @@ plugins {
     id("kotlin-android")
 }
 
-
 android {
-    androidConfig()
+    androidConfig(project)
     composeConfig()
 }
 
 dependencies {
+    commonDependencies()
     composeDependencies()
 }

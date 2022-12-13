@@ -2,7 +2,7 @@ name: Move labelled issues to correct boards and columns
 
 on:
   issues:
-    types: [labeled]
+    types: [ labeled ]
 
 jobs:
   move_element_x_issues:

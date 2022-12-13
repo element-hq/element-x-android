@@ -32,7 +32,7 @@ class ChangeServerViewModel(initialState: ChangeServerViewState) :
             suspend {
                 val state = awaitState()
                 matrix.setHomeserver(state.homeserver)
-            }.execute { it ->
+            }.execute {
                 copy(changeServerAction = it)
             }
         }

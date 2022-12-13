@@ -31,5 +31,4 @@ internal class MatrixTimelineItemsDiffCallback(
         val newItem = newList.getOrNull(newItemPosition)
         return oldItem == newItem
     }
-
 }

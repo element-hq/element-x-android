@@ -45,12 +45,12 @@ import io.element.android.wysiwyg.inputhandlers.models.InlineFormat
 import io.element.android.x.core.ui.DimensionConverter
 import io.element.android.x.core.ui.hideKeyboard
 import io.element.android.x.core.ui.showKeyboard
+import io.element.android.x.element.resources.R as ElementR
 import io.element.android.x.textcomposer.databinding.ComposerRichTextLayoutBinding
 import io.element.android.x.textcomposer.databinding.ViewRichTextMenuButtonBinding
 import io.element.android.x.textcomposer.tools.setTextIfDifferent
 import uniffi.wysiwyg_composer.ActionState
 import uniffi.wysiwyg_composer.ComposerAction
-import io.element.android.x.element.resources.R as ElementR
 
 // Imported from Element Android
 class RichTextComposerLayout @JvmOverloads constructor(
@@ -247,28 +247,28 @@ class RichTextComposerLayout @JvmOverloads constructor(
 
     private fun setupRichTextMenu() {
         addRichTextMenuItem(
-            ElementR.drawable.ic_composer_bold,
+            R.drawable.ic_composer_bold,
             ElementR.string.rich_text_editor_format_bold,
             ComposerAction.BOLD
         ) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Bold)
         }
         addRichTextMenuItem(
-            ElementR.drawable.ic_composer_italic,
+            R.drawable.ic_composer_italic,
             ElementR.string.rich_text_editor_format_italic,
             ComposerAction.ITALIC
         ) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Italic)
         }
         addRichTextMenuItem(
-            ElementR.drawable.ic_composer_underlined,
+            R.drawable.ic_composer_underlined,
             ElementR.string.rich_text_editor_format_underline,
             ComposerAction.UNDERLINE
         ) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Underline)
         }
         addRichTextMenuItem(
-            ElementR.drawable.ic_composer_strikethrough,
+            R.drawable.ic_composer_strikethrough,
             ElementR.string.rich_text_editor_format_strikethrough,
             ComposerAction.STRIKE_THROUGH
         ) {
@@ -485,7 +485,7 @@ class RichTextComposerLayout @JvmOverloads constructor(
         } else {
             views.composerModeGroup.isGone = true
             (mode as? MessageComposerMode.Normal)?.content?.let { text ->
-                // TODO: un-comment once we update to a version of the lib > 0.8.0
+                // TODO un-comment once we update to a version of the lib > 0.8.0
                 /*
                 if (isTextFormattingEnabled) {
                     replaceFormattedContent(text)

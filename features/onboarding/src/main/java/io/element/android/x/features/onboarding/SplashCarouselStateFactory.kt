@@ -3,7 +3,7 @@ package io.element.android.x.features.onboarding
 import androidx.annotation.DrawableRes
 import io.element.android.x.element.resources.R as ElementR
 
-class SplashCarouselStateFactory() {
+class SplashCarouselStateFactory {
     fun create(): SplashCarouselState {
         val lightTheme = true
         fun background(@DrawableRes lightDrawable: Int) =

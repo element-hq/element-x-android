@@ -9,7 +9,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.airbnb.android.showkase.annotation.ShowkaseTypography
 
-
 @ShowkaseTypography(name = "Body Large", group = "Element")
 val bodyLarge = TextStyle(
     fontFamily = FontFamily.Default,
@@ -47,7 +46,7 @@ val Typography = Typography(
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
     )
-    */
+     */
 )
 
 object ElementTextStyles {
@@ -231,6 +230,4 @@ object ElementTextStyles {
             textAlign = TextAlign.Center
         )
     }
-
-
 }

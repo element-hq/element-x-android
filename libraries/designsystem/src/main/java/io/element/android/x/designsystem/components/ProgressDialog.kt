@@ -18,14 +18,18 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 
 @Composable
-fun ProgressDialog(text: String? = null, onDismiss: () -> Unit = {}) {
+fun ProgressDialog(
+    modifier: Modifier = Modifier,
+    text: String? = null,
+    onDismiss: () -> Unit = {},
+) {
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
     ) {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .background(
                     color = MaterialTheme.colorScheme.onBackground,
@@ -52,5 +56,5 @@ fun ProgressDialog(text: String? = null, onDismiss: () -> Unit = {}) {
 @Composable
 @Preview
 fun ProgressDialogPreview() {
-    ProgressDialog("test dialog content")
+    ProgressDialog(text = "test dialog content")
 }
