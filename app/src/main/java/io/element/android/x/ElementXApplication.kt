@@ -1,32 +1,31 @@
 package io.element.android.x
 
 import android.app.Application
-import coil.ImageLoader
-import coil.ImageLoaderFactory
-import com.airbnb.mvrx.Mavericks
+import androidx.startup.AppInitializer
+import io.element.android.x.core.di.DaggerComponentOwner
+import io.element.android.x.di.DaggerAppComponent
+import io.element.android.x.initializer.CoilInitializer
+import io.element.android.x.initializer.MavericksInitializer
+import io.element.android.x.initializer.TimberInitializer
 import io.element.android.x.matrix.MatrixInstance
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.plus
-import timber.log.Timber
 
-class ElementXApplication : Application(), ImageLoaderFactory {
+class ElementXApplication : Application(), DaggerComponentOwner {
+
+    override lateinit var daggerComponent: Any
 
     private val applicationScope = MainScope() + CoroutineName("ElementX Scope")
 
     override fun onCreate() {
         super.onCreate()
-        Timber.plant(Timber.DebugTree())
+        daggerComponent = DaggerAppComponent.factory().create(this)
         MatrixInstance.init(this, applicationScope)
-        Mavericks.initialize(this)
-    }
-
-    override fun newImageLoader(): ImageLoader {
-        return ImageLoader
-            .Builder(this)
-            .components {
-                MatrixInstance.getInstance().registerComponents(this)
-            }
-            .build()
+        AppInitializer.getInstance(this).apply {
+            initializeComponent(TimberInitializer::class.java)
+            initializeComponent(CoilInitializer::class.java)
+            initializeComponent(MavericksInitializer::class.java)
+        }
     }
 }
