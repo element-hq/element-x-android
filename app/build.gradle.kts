@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.anvil)
+    alias(libs.plugins.kapt)
     id("com.google.firebase.appdistribution") version "3.0.2"
 }
 
@@ -101,15 +102,15 @@ android {
         }
     }
 
-    kotlin {
-        sourceSets.main {
-            kotlin.srcDir("build/generated/ksp/main/kotlin")
-        }
-        sourceSets.test {
-            kotlin.srcDir("build/generated/ksp/test/kotlin")
+    applicationVariants.all {
+        kotlin.sourceSets {
+            getByName(name) {
+                kotlin.srcDir("build/generated/ksp/$name/kotlin")
+            }
         }
     }
 }
+
 
 dependencies {
     implementation(project(":libraries:designsystem"))
@@ -119,6 +120,7 @@ dependencies {
     implementation(project(":features:login"))
     implementation(project(":features:roomlist"))
     implementation(project(":features:messages"))
+    implementation(project(":libraries:daggerscopes"))
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.0")
     implementation(libs.compose.destinations)
@@ -128,11 +130,13 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.startup)
     implementation(libs.coil)
     implementation(libs.timber)
     implementation(libs.mavericks.compose)
 
     implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
 
     implementation(libs.showkase)
     ksp(libs.showkase.processor)

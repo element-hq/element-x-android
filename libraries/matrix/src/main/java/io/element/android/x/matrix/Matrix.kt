@@ -1,8 +1,10 @@
 package io.element.android.x.matrix
 
-import android.content.Context
+import android.app.Application
 import coil.ComponentRegistry
 import io.element.android.x.core.coroutine.CoroutineDispatchers
+import io.element.android.x.di.AppScope
+import io.element.android.x.di.SingleIn
 import io.element.android.x.matrix.media.MediaFetcher
 import io.element.android.x.matrix.media.MediaKeyer
 import io.element.android.x.matrix.session.SessionStore
@@ -19,10 +21,12 @@ import timber.log.Timber
 import java.io.File
 import java.util.*
 import java.util.concurrent.Executors
+import javax.inject.Inject
 
-class Matrix(
+@SingleIn(AppScope::class)
+class Matrix @Inject constructor(
     private val coroutineScope: CoroutineScope,
-    context: Context,
+    context: Application,
 ) {
     private val coroutineDispatchers = CoroutineDispatchers(
         io = Dispatchers.IO,
@@ -58,7 +62,7 @@ class Matrix(
         return matrixClient.value.get()
     }
 
-    fun registerComponents(builder: ComponentRegistry.Builder) {
+    fun registerCoilComponents(builder: ComponentRegistry.Builder) {
         builder.add(MediaKeyer())
         builder.add(MediaFetcher.Factory(this))
     }

@@ -32,8 +32,11 @@ import com.google.accompanist.navigation.material.ExperimentalMaterialNavigation
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
 import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
+import com.ramcosta.composedestinations.manualcomposablecalls.animatedComposable
+import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.spec.Route
 import io.element.android.x.core.compose.OnLifecycleEvent
+import io.element.android.x.core.di.DaggerComponentOwner
 import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.destinations.OnBoardingScreenNavigationDestination
 import kotlinx.coroutines.runBlocking
@@ -147,7 +150,10 @@ class MainActivity : ComponentActivity() {
             engine = engine,
             navController = navController,
             navGraph = NavGraphs.root,
-            startRoute = startRoute
+            startRoute = startRoute,
+            dependenciesContainerBuilder = {
+
+            }
         )
     }
 
