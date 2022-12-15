@@ -22,7 +22,7 @@ import com.airbnb.mvrx.ViewModelContext
  * }
  */
 
-inline fun <reified VM : MavericksViewModel<S>, S : MavericksState> daggerMavericksViewModelFactory() = DaggerMavericksViewModelFactory<VM, S>(VM::class.java)
+inline fun <reified VM : MavericksViewModel<S>, S : MavericksState> daggerMavericksViewModelFactory() = DaggerMavericksViewModelFactory(VM::class.java)
 
 /**
  * A [MavericksViewModelFactory] makes it easy to create instances of a ViewModel
@@ -55,14 +55,6 @@ class DaggerMavericksViewModelFactory<VM : MavericksViewModel<S>, S : MavericksS
     }
 }
 
-/**
- * These Anvil/Dagger bindings are used by [DaggerMavericksViewModelFactory]. The factory will find the nearest [DaggerComponentOwner]
- * that implements these bindings. It will then attempt to retrieve the [AssistedViewModelFactory] for the given ViewModel class.
- *
- * In this example, this bindings class is implemented by [com.airbnb.mvrx.sample.anvil.feature.ExampleFeatureComponent] because
- * it provides the [com.airbnb.mvrx.sample.anvil.feature.ExampleFeatureViewModel]. Any component that will generate ViewModels should
- * either implement this directly or have this added via `@ContributesTo(YourScope::class)`.
- */
 interface DaggerMavericksBindings {
     fun viewModelFactories(): Map<Class<out MavericksViewModel<*>>, AssistedViewModelFactory<*, *>>
 }

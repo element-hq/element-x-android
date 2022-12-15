@@ -1,13 +1,19 @@
 package io.element.android.x.features.roomlist
 
 import com.airbnb.mvrx.*
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import io.element.android.x.anvilannotations.ContributesViewModel
 import io.element.android.x.core.data.parallelMap
+import io.element.android.x.core.di.daggerMavericksViewModelFactory
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
+import io.element.android.x.di.AppScope
 import io.element.android.x.features.roomlist.model.MatrixUser
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListRoomSummaryPlaceholders
 import io.element.android.x.features.roomlist.model.RoomListViewState
+import io.element.android.x.matrix.Matrix
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.MatrixInstance
 import io.element.android.x.matrix.media.MediaResolver
@@ -22,28 +28,17 @@ import kotlinx.coroutines.launch
 
 private const val extendedRangeSize = 40
 
-class RoomListViewModel(
-    private val client: MatrixClient,
-    initialState: RoomListViewState
+@ContributesViewModel(AppScope::class)
+class RoomListViewModel @AssistedInject constructor(
+    matrix: Matrix,
+    @Assisted initialState: RoomListViewState
 ) :
     MavericksViewModel<RoomListViewState>(initialState) {
 
-    companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> {
-
-        override fun create(
-            viewModelContext: ViewModelContext,
-            state: RoomListViewState
-        ): RoomListViewModel {
-            val matrix = MatrixInstance.getInstance()
-            val client = matrix.activeClient()
-            return RoomListViewModel(
-                client,
-                state
-            )
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> by daggerMavericksViewModelFactory()
 
     private val lastMessageFormatter = LastMessageFormatter()
+    private val client = matrix.activeClient()
 
     init {
         handleInit()

@@ -2,32 +2,24 @@ package io.element.android.x.features.messages.textcomposer
 
 import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import io.element.android.x.anvilannotations.ContributesViewModel
 import io.element.android.x.core.data.StableCharSequence
-import io.element.android.x.matrix.MatrixClient
-import io.element.android.x.matrix.MatrixInstance
+import io.element.android.x.core.di.daggerMavericksViewModelFactory
+import io.element.android.x.di.AppScope
+import io.element.android.x.matrix.Matrix
 
-
-class MessageComposerViewModel(
-    private val client: MatrixClient,
-    private val initialState: MessageComposerViewState
+@ContributesViewModel(AppScope::class)
+class MessageComposerViewModel @AssistedInject constructor(
+    private val matrix: Matrix,
+    @Assisted private val initialState: MessageComposerViewState
 ) : MavericksViewModel<MessageComposerViewState>(initialState) {
 
     companion object :
-        MavericksViewModelFactory<MessageComposerViewModel, MessageComposerViewState> {
+        MavericksViewModelFactory<MessageComposerViewModel, MessageComposerViewState> by daggerMavericksViewModelFactory()
 
-        override fun create(
-            viewModelContext: ViewModelContext,
-            state: MessageComposerViewState
-        ): MessageComposerViewModel? {
-            val matrix = MatrixInstance.getInstance()
-            val client = matrix.activeClient()
-            return MessageComposerViewModel(
-                client,
-                state
-            )
-        }
-    }
+    private val client = matrix.activeClient()
 
     fun onComposerFullScreenChange() {
         setState {
