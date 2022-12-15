@@ -1,8 +1,9 @@
 package io.element.android.x.matrix
 
-import android.app.Application
+import android.content.Context
 import coil.ComponentRegistry
 import io.element.android.x.core.coroutine.CoroutineDispatchers
+import io.element.android.x.di.ApplicationContext
 import io.element.android.x.di.AppScope
 import io.element.android.x.di.SingleIn
 import io.element.android.x.matrix.media.MediaFetcher
@@ -26,7 +27,7 @@ import javax.inject.Inject
 @SingleIn(AppScope::class)
 class Matrix @Inject constructor(
     private val coroutineScope: CoroutineScope,
-    context: Application,
+    @ApplicationContext context: Context,
 ) {
     private val coroutineDispatchers = CoroutineDispatchers(
         io = Dispatchers.IO,

@@ -10,7 +10,7 @@ class MavericksInitializer : Initializer<Unit> {
         Mavericks.initialize(context)
     }
 
-    override fun dependencies(): MutableList<Class<out Initializer<*>>> = mutableListOf()
+    override fun dependencies(): List<Class<out Initializer<*>>> = listOf()
 
 
 }
