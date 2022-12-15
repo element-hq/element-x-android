@@ -121,6 +121,8 @@ dependencies {
     implementation(project(":features:roomlist"))
     implementation(project(":features:messages"))
     implementation(project(":libraries:di"))
+    implementation(project(":anvilannotations"))
+    anvil(project(":anvilcodegen"))
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.0")
     implementation(libs.compose.destinations)

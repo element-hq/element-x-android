@@ -3,16 +3,27 @@ package io.element.android.x.features.login
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshotFlow
 import com.airbnb.mvrx.MavericksViewModel
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import io.element.android.x.anvilannotations.ContributesViewModel
+import io.element.android.x.core.di.daggerMavericksViewModelFactory
+import io.element.android.x.di.AppScope
+import io.element.android.x.matrix.Matrix
 import io.element.android.x.matrix.MatrixInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class LoginViewModel(initialState: LoginViewState) :
+@ContributesViewModel(AppScope::class)
+class LoginViewModel @AssistedInject constructor(
+    private val matrix: Matrix,
+    @Assisted initialState: LoginViewState) :
     MavericksViewModel<LoginViewState>(initialState) {
 
-    private val matrix = MatrixInstance.getInstance()
+    companion object : MavericksViewModelFactory<LoginViewModel, LoginViewState> by daggerMavericksViewModelFactory()
+
     var formState = mutableStateOf(LoginFormState.Default)
         private set
 

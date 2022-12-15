@@ -4,10 +4,11 @@ import android.content.Context
 import com.squareup.anvil.annotations.MergeComponent
 import dagger.BindsInstance
 import dagger.Component
+import io.element.android.x.core.di.DaggerMavericksBindings
 
 @SingleIn(AppScope::class)
 @MergeComponent(AppScope::class)
-interface AppComponent {
+interface AppComponent: DaggerMavericksBindings {
 
     @Component.Factory
     interface Factory {

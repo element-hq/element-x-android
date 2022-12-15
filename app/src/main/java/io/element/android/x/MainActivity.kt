@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
 import com.airbnb.android.showkase.models.Showkase
+import com.airbnb.mvrx.compose.mavericksActivityViewModel
+import com.airbnb.mvrx.compose.mavericksViewModel
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
@@ -46,14 +48,12 @@ private const val transitionAnimationDuration = 500
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: MainViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             ElementXTheme {
-                MainScreen(viewModel = viewModel)
+                MainScreen(viewModel = mavericksActivityViewModel())
             }
         }
     }

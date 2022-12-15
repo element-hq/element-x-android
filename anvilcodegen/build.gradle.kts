@@ -3,16 +3,6 @@ plugins {
     alias(libs.plugins.kapt)
 }
 
-/*
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-    kotlinOptions {
-        freeCompilerArgs += listOf(
-            "-opt-in=com.squareup.anvil.annotations.ExperimentalAnvilApi")
-    }
-}
-
- */
-
 dependencies {
     implementation(project(":anvilannotations"))
     api(libs.anvil.compiler.api)

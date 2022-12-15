@@ -3,19 +3,21 @@ package io.element.android.x.features.messages
 import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import io.element.android.x.anvilannotations.ContributesViewModel
+import io.element.android.x.core.di.daggerMavericksViewModelFactory
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
+import io.element.android.x.di.AppScope
 import io.element.android.x.features.messages.model.MessagesItemAction
 import io.element.android.x.features.messages.model.MessagesItemActionsSheetState
 import io.element.android.x.features.messages.model.MessagesTimelineItemState
 import io.element.android.x.features.messages.model.MessagesViewState
 import io.element.android.x.features.messages.model.content.MessagesTimelineItemRedactedContent
 import io.element.android.x.features.messages.model.content.MessagesTimelineItemTextBasedContent
-import io.element.android.x.matrix.MatrixClient
-import io.element.android.x.matrix.MatrixInstance
+import io.element.android.x.matrix.Matrix
 import io.element.android.x.matrix.media.MediaResolver
-import io.element.android.x.matrix.room.MatrixRoom
 import io.element.android.x.matrix.timeline.MatrixTimeline
 import io.element.android.x.matrix.timeline.MatrixTimelineItem
 import io.element.android.x.textcomposer.MessageComposerMode
@@ -26,35 +28,20 @@ import kotlinx.coroutines.launch
 
 private const val PAGINATION_COUNT = 50
 
-class MessagesViewModel(
-    private val client: MatrixClient,
-    private val room: MatrixRoom,
-    private val timeline: MatrixTimeline,
-    private val messageTimelineItemStateFactory: MessageTimelineItemStateFactory,
-    private val initialState: MessagesViewState
+@ContributesViewModel(AppScope::class)
+class MessagesViewModel @AssistedInject constructor(
+    matrix: Matrix,
+    @Assisted private val initialState: MessagesViewState
 ) :
     MavericksViewModel<MessagesViewState>(initialState) {
 
-    companion object : MavericksViewModelFactory<MessagesViewModel, MessagesViewState> {
+    companion object : MavericksViewModelFactory<MessagesViewModel, MessagesViewState> by daggerMavericksViewModelFactory()
 
-        override fun create(
-            viewModelContext: ViewModelContext,
-            state: MessagesViewState
-        ): MessagesViewModel? {
-            val matrix = MatrixInstance.getInstance()
-            val client = matrix.activeClient()
-            val room = client.getRoom(state.roomId) ?: return null
-            val messageTimelineItemStateFactory =
-                MessageTimelineItemStateFactory(client, room, Dispatchers.Default)
-            return MessagesViewModel(
-                client,
-                room,
-                room.timeline(),
-                messageTimelineItemStateFactory,
-                state
-            )
-        }
-    }
+    private val client = matrix.activeClient()
+    private val room = client.getRoom(initialState.roomId)!!
+    private val messageTimelineItemStateFactory =
+        MessageTimelineItemStateFactory(client, room, Dispatchers.Default)
+    private val timeline = room.timeline()
 
     private val timelineCallback = object : MatrixTimeline.Callback {
         override fun onPushedTimelineItem(timelineItem: MatrixTimelineItem) {
