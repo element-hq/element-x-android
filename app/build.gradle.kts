@@ -120,7 +120,7 @@ dependencies {
     implementation(project(":features:login"))
     implementation(project(":features:roomlist"))
     implementation(project(":features:messages"))
-    implementation(project(":libraries:daggerscopes"))
+    implementation(project(":libraries:di"))
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.0")
     implementation(libs.compose.destinations)
