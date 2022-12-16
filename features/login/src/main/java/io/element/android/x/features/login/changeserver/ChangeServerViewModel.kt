@@ -1,14 +1,25 @@
 package io.element.android.x.features.login.changeserver
 
 import com.airbnb.mvrx.MavericksViewModel
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
-import io.element.android.x.matrix.MatrixInstance
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import io.element.android.x.anvilannotations.ContributesViewModel
+import io.element.android.x.core.di.daggerMavericksViewModelFactory
+import io.element.android.x.di.AppScope
+import io.element.android.x.matrix.Matrix
 import kotlinx.coroutines.launch
 
-class ChangeServerViewModel(initialState: ChangeServerViewState) :
+@ContributesViewModel(AppScope::class)
+class ChangeServerViewModel @AssistedInject constructor(
+    private val matrix: Matrix,
+    @Assisted initialState: ChangeServerViewState
+) :
     MavericksViewModel<ChangeServerViewState>(initialState) {
 
-    private val matrix = MatrixInstance.getInstance()
+    companion object :
+        MavericksViewModelFactory<ChangeServerViewModel, ChangeServerViewState> by daggerMavericksViewModelFactory()
 
     init {
         setState {
@@ -32,7 +43,7 @@ class ChangeServerViewModel(initialState: ChangeServerViewState) :
             suspend {
                 val state = awaitState()
                 matrix.setHomeserver(state.homeserver)
-            }.execute { it ->
+            }.execute {
                 copy(changeServerAction = it)
             }
         }

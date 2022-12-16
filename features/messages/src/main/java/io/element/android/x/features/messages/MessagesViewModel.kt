@@ -10,6 +10,7 @@ import io.element.android.x.core.di.daggerMavericksViewModelFactory
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
 import io.element.android.x.di.AppScope
+import io.element.android.x.di.SessionScope
 import io.element.android.x.features.messages.model.MessagesItemAction
 import io.element.android.x.features.messages.model.MessagesItemActionsSheetState
 import io.element.android.x.features.messages.model.MessagesTimelineItemState
@@ -17,6 +18,7 @@ import io.element.android.x.features.messages.model.MessagesViewState
 import io.element.android.x.features.messages.model.content.MessagesTimelineItemRedactedContent
 import io.element.android.x.features.messages.model.content.MessagesTimelineItemTextBasedContent
 import io.element.android.x.matrix.Matrix
+import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.timeline.MatrixTimeline
 import io.element.android.x.matrix.timeline.MatrixTimelineItem
@@ -28,16 +30,15 @@ import kotlinx.coroutines.launch
 
 private const val PAGINATION_COUNT = 50
 
-@ContributesViewModel(AppScope::class)
+@ContributesViewModel(SessionScope::class)
 class MessagesViewModel @AssistedInject constructor(
-    matrix: Matrix,
+    private val client: MatrixClient,
     @Assisted private val initialState: MessagesViewState
 ) :
     MavericksViewModel<MessagesViewState>(initialState) {
 
     companion object : MavericksViewModelFactory<MessagesViewModel, MessagesViewState> by daggerMavericksViewModelFactory()
 
-    private val client = matrix.activeClient()
     private val room = client.getRoom(initialState.roomId)!!
     private val messageTimelineItemStateFactory =
         MessageTimelineItemStateFactory(client, room, Dispatchers.Default)

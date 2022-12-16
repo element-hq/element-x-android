@@ -9,13 +9,13 @@ import io.element.android.x.core.di.daggerMavericksViewModelFactory
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
 import io.element.android.x.di.AppScope
+import io.element.android.x.di.SessionScope
 import io.element.android.x.features.roomlist.model.MatrixUser
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListRoomSummaryPlaceholders
 import io.element.android.x.features.roomlist.model.RoomListViewState
 import io.element.android.x.matrix.Matrix
 import io.element.android.x.matrix.MatrixClient
-import io.element.android.x.matrix.MatrixInstance
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.RoomSummary
 import kotlinx.coroutines.Dispatchers
@@ -28,9 +28,9 @@ import kotlinx.coroutines.launch
 
 private const val extendedRangeSize = 40
 
-@ContributesViewModel(AppScope::class)
+@ContributesViewModel(SessionScope::class)
 class RoomListViewModel @AssistedInject constructor(
-    matrix: Matrix,
+    private val client: MatrixClient,
     @Assisted initialState: RoomListViewState
 ) :
     MavericksViewModel<RoomListViewState>(initialState) {
@@ -38,7 +38,6 @@ class RoomListViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> by daggerMavericksViewModelFactory()
 
     private val lastMessageFormatter = LastMessageFormatter()
-    private val client = matrix.activeClient()
 
     init {
         handleInit()

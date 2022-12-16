@@ -30,13 +30,14 @@ import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.features.login.error.loginError
+import io.element.android.x.matrix.MatrixClient
 import timber.log.Timber
 
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = mavericksViewModel(),
     onChangeServer: () -> Unit = { },
-    onLoginWithSuccess: () -> Unit = { },
+    onLoginWithSuccess: (MatrixClient) -> Unit = { },
 ) {
     val state: LoginViewState by viewModel.collectAsState()
     val formState: LoginFormState by viewModel.formState
@@ -65,7 +66,7 @@ fun LoginContent(
     onLoginChanged: (String) -> Unit = {},
     onPasswordChanged: (String) -> Unit = {},
     onSubmitClicked: () -> Unit = {},
-    onLoginWithSuccess: () -> Unit = {},
+    onLoginWithSuccess: (MatrixClient) -> Unit = {},
 ) {
     Surface(color = MaterialTheme.colorScheme.background) {
         Box(
@@ -82,7 +83,7 @@ fun LoginContent(
                     )
                     .padding(horizontal = 16.dp),
             ) {
-                val isError = state.isLoggedIn is Fail
+                val isError = state.loggedInClient is Fail
                 // Title
                 Text(
                     text = "Welcome back",
@@ -137,7 +138,7 @@ fun LoginContent(
                         ),
                     )
                     var passwordVisible by remember { mutableStateOf(false) }
-                    if (state.isLoggedIn is Loading) {
+                    if (state.loggedInClient is Loading) {
                         // Ensure password is hidden when user submits the form
                         passwordVisible = false
                     }
@@ -170,9 +171,9 @@ fun LoginContent(
                             onDone = { onSubmitClicked() }
                         ),
                     )
-                    if (state.isLoggedIn is Fail) {
+                    if (state.loggedInClient is Fail) {
                         Text(
-                            text = loginError(state.formState, state.isLoggedIn.error),
+                            text = loginError(state.formState, state.loggedInClient.error),
                             color = MaterialTheme.colorScheme.error,
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier.padding(start = 16.dp)
@@ -189,11 +190,12 @@ fun LoginContent(
                 ) {
                     Text(text = "Continue")
                 }
-                if (state.isLoggedIn is Success) {
-                    onLoginWithSuccess()
+                when (val loggedInClient = state.loggedInClient) {
+                    is Success -> onLoginWithSuccess(loggedInClient())
+                    else -> Unit
                 }
             }
-            if (state.isLoggedIn is Loading) {
+            if (state.loggedInClient is Loading) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )

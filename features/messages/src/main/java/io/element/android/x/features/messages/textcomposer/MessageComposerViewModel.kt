@@ -7,19 +7,17 @@ import dagger.assisted.AssistedInject
 import io.element.android.x.anvilannotations.ContributesViewModel
 import io.element.android.x.core.data.StableCharSequence
 import io.element.android.x.core.di.daggerMavericksViewModelFactory
-import io.element.android.x.di.AppScope
-import io.element.android.x.matrix.Matrix
+import io.element.android.x.di.SessionScope
+import io.element.android.x.matrix.MatrixClient
 
-@ContributesViewModel(AppScope::class)
+@ContributesViewModel(SessionScope::class)
 class MessageComposerViewModel @AssistedInject constructor(
-    private val matrix: Matrix,
+    private val client: MatrixClient,
     @Assisted private val initialState: MessageComposerViewState
 ) : MavericksViewModel<MessageComposerViewState>(initialState) {
 
     companion object :
         MavericksViewModelFactory<MessageComposerViewModel, MessageComposerViewState> by daggerMavericksViewModelFactory()
-
-    private val client = matrix.activeClient()
 
     fun onComposerFullScreenChange() {
         setState {

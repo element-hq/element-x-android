@@ -25,7 +25,13 @@ private class ElementImageLoaderFactory(
         return ImageLoader
             .Builder(context)
             .components {
-                context.bindings<AppBindings>().matrix().registerCoilComponents(this)
+                val appBindings = context.bindings<AppBindings>()
+                val matrix = appBindings.matrix()
+                val matrixClientProvider = {
+                    appBindings
+                        .sessionComponentsOwner().activeSessionComponent?.matrixClient()
+                }
+                matrix.registerCoilComponents(this, matrixClientProvider)
             }
             .build()
     }
