@@ -1,7 +1,6 @@
 package io.element.android.x.di
 
 import com.squareup.anvil.annotations.ContributesTo
-import io.element.android.x.di.AppScope
 import io.element.android.x.matrix.Matrix
 import kotlinx.coroutines.CoroutineScope
 
@@ -9,4 +8,5 @@ import kotlinx.coroutines.CoroutineScope
 interface AppBindings {
     fun coroutineScope(): CoroutineScope
     fun matrix(): Matrix
+    fun sessionComponentsOwner(): SessionComponentsOwner
 }

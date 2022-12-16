@@ -3,8 +3,8 @@ package io.element.android.x.matrix
 import android.content.Context
 import coil.ComponentRegistry
 import io.element.android.x.core.coroutine.CoroutineDispatchers
-import io.element.android.x.di.ApplicationContext
 import io.element.android.x.di.AppScope
+import io.element.android.x.di.ApplicationContext
 import io.element.android.x.di.SingleIn
 import io.element.android.x.matrix.media.MediaFetcher
 import io.element.android.x.matrix.media.MediaKeyer
@@ -37,35 +37,18 @@ class Matrix @Inject constructor(
     )
     private val baseDirectory = File(context.filesDir, "sessions")
     private val sessionStore = SessionStore(context)
-    private val matrixClient = MutableStateFlow<Optional<MatrixClient>>(Optional.empty())
     private val authService = AuthenticationService(baseDirectory.absolutePath)
-
-    init {
-        sessionStore.isLoggedIn()
-            .distinctUntilChanged()
-            .onEach { isLoggedIn ->
-                if (!isLoggedIn) {
-                    matrixClient.value = Optional.empty()
-                }
-            }
-            .launchIn(coroutineScope)
-    }
 
     fun isLoggedIn(): Flow<Boolean> {
         return sessionStore.isLoggedIn()
     }
 
-    fun client(): Flow<Optional<MatrixClient>> {
-        return matrixClient
-    }
-
-    fun activeClient(): MatrixClient {
-        return matrixClient.value.get()
-    }
-
-    fun registerCoilComponents(builder: ComponentRegistry.Builder) {
+    fun registerCoilComponents(
+        builder: ComponentRegistry.Builder,
+        activeClientProvider: () -> MatrixClient?
+    ) {
         builder.add(MediaKeyer())
-        builder.add(MediaFetcher.Factory(this))
+        builder.add(MediaFetcher.Factory(activeClientProvider))
     }
 
     suspend fun restoreSession() = withContext(coroutineDispatchers.io) {
@@ -116,8 +99,6 @@ class Matrix @Inject constructor(
             coroutineScope = coroutineScope,
             dispatchers = coroutineDispatchers,
             baseDirectory = baseDirectory,
-        ).also {
-            matrixClient.value = Optional.of(it)
-        }
+        )
     }
 }

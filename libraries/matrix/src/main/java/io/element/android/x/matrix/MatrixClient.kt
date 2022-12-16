@@ -1,6 +1,7 @@
 package io.element.android.x.matrix
 
 import io.element.android.x.core.coroutine.CoroutineDispatchers
+import io.element.android.x.di.SingleIn
 import io.element.android.x.matrix.core.UserId
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.media.RustMediaResolver
@@ -24,6 +25,9 @@ class MatrixClient internal constructor(
     private val dispatchers: CoroutineDispatchers,
     private val baseDirectory: File,
 ) : Closeable {
+
+    val sessionId: String
+        get() = "${client.session().userId}_${client.session().deviceId}"
 
     private val clientDelegate = object : ClientDelegate {
         override fun didReceiveAuthError(isSoftLogout: Boolean) {
@@ -78,7 +82,7 @@ class MatrixClient internal constructor(
         client.setDelegate(clientDelegate)
     }
 
-    private fun onRestartSync(){
+    private fun onRestartSync() {
         slidingSyncObserverToken = slidingSync.sync()
     }
 

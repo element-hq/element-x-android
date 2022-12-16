@@ -11,7 +11,6 @@ import io.element.android.x.anvilannotations.ContributesViewModel
 import io.element.android.x.core.di.daggerMavericksViewModelFactory
 import io.element.android.x.di.AppScope
 import io.element.android.x.matrix.Matrix
-import io.element.android.x.matrix.MatrixInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -49,21 +48,22 @@ class LoginViewModel @AssistedInject constructor(
                 val state = awaitState()
                 // Ensure the server is provided to the Rust SDK
                 matrix.setHomeserver(state.homeserver)
-                matrix.login(state.formState.login.trim(), state.formState.password.trim())
-                matrix.activeClient().startSync()
+                matrix.login(state.formState.login.trim(), state.formState.password.trim()).also {
+                    it.startSync()
+                }
             }.execute {
-                copy(isLoggedIn = it)
+                copy(loggedInClient = it)
             }
         }
     }
 
     fun onSetPassword(password: String) {
         formState.value = formState.value.copy(password = password)
-        setState { copy(isLoggedIn = Uninitialized) }
+        setState { copy(loggedInClient = Uninitialized) }
     }
 
     fun onSetName(name: String) {
         formState.value = formState.value.copy(login = name)
-        setState { copy(isLoggedIn = Uninitialized) }
+        setState { copy(loggedInClient = Uninitialized) }
     }
 }
