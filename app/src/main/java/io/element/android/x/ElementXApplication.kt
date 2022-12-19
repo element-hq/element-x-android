@@ -30,6 +30,4 @@ class ElementXApplication : Application(), DaggerComponentOwner {
             initializeComponent(MavericksInitializer::class.java)
         }
     }
-
-
 }

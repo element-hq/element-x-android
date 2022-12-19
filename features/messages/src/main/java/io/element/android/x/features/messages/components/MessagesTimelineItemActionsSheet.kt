@@ -3,14 +3,28 @@
 package io.element.android.x.features.messages.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ListItem
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.airbnb.mvrx.compose.collectAsState
 import io.element.android.x.designsystem.components.VectorIcon
@@ -21,7 +35,6 @@ import io.element.android.x.features.messages.model.MessagesTimelineItemState
 import io.element.android.x.features.messages.model.MessagesViewState
 import io.element.android.x.features.messages.model.content.MessagesTimelineItemTextBasedContent
 import io.element.android.x.features.messages.textcomposer.MessageComposerViewModel
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
@@ -63,7 +76,6 @@ fun TimelineItemActionsScreen(
         }
     }
 
-
     ModalBottomSheetLayout(
         modifier = modifier,
         sheetState = modalBottomSheetState,
@@ -71,46 +83,47 @@ fun TimelineItemActionsScreen(
             SheetContent(
                 actionsSheetState = itemActionsSheetState(),
                 onActionClicked = ::onItemActionClicked,
-                modifier = Modifier.navigationBarsPadding().imePadding()
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .imePadding()
             )
         }
     ) {}
-
 }
 
 @Composable
 private fun SheetContent(
     actionsSheetState: MessagesItemActionsSheetState?,
-    onActionClicked: (MessagesItemAction, MessagesTimelineItemState.MessageEvent) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onActionClicked: (MessagesItemAction, MessagesTimelineItemState.MessageEvent) -> Unit = { _, _ -> },
 ) {
     if (actionsSheetState == null || actionsSheetState.actions.isEmpty()) {
         // Crashes if sheetContent size is zero
         Box(modifier = modifier.size(1.dp))
-        return
-    }
-    LazyColumn(
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        items(actionsSheetState.actions) {
-            ListItem(
-                modifier = Modifier.clickable {
-                    onActionClicked(it, actionsSheetState.targetItem)
-                },
-                text = {
-                    Text(
-                        text = it.title,
-                        color = if (it.destructive) MaterialTheme.colors.error else Color.Unspecified,
-                    )
-                },
-                icon = {
-                    VectorIcon(
-                        resourceId = it.icon,
-                        tint = if (it.destructive) MaterialTheme.colors.error else LocalContentColor.current,
-                    )
-                }
-            )
+    } else {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxWidth()
+        ) {
+            items(actionsSheetState.actions) {
+                ListItem(
+                    modifier = Modifier.clickable {
+                        onActionClicked(it, actionsSheetState.targetItem)
+                    },
+                    text = {
+                        Text(
+                            text = it.title,
+                            color = if (it.destructive) MaterialTheme.colors.error else Color.Unspecified,
+                        )
+                    },
+                    icon = {
+                        VectorIcon(
+                            resourceId = it.icon,
+                            tint = if (it.destructive) MaterialTheme.colors.error else LocalContentColor.current,
+                        )
+                    }
+                )
+            }
         }
     }
 }

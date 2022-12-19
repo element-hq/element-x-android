@@ -2,9 +2,10 @@ package extension
 
 import Versions
 import com.android.build.api.dsl.CommonExtension
+import org.gradle.api.Project
+import java.io.File
 
-
-fun CommonExtension<*, *, *, *>.androidConfig() {
+fun CommonExtension<*, *, *, *>.androidConfig(project: Project) {
     defaultConfig {
         compileSdk = Versions.compileSdk
         minSdk = Versions.minSdk
@@ -17,6 +18,12 @@ fun CommonExtension<*, *, *, *>.androidConfig() {
 
     testOptions {
         unitTests.isReturnDefaultValues = true
+    }
+
+    lint {
+        lintConfig = File("${project.rootDir}/tools/lint/lint.xml")
+        checkDependencies = true
+        abortOnError = true
     }
 }
 
@@ -34,6 +41,12 @@ fun CommonExtension<*, *, *, *>.composeConfig() {
             add("META-INF/AL2.0")
             add("META-INF/LGPL2.1")
         }
+    }
+
+    lint {
+        // Extra rules for compose
+        error.add("ComposableLambdaParameterNaming")
+        error.add("ComposableLambdaParameterPosition")
     }
 }
 

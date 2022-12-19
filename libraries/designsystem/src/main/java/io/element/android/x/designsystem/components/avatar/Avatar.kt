@@ -1,4 +1,5 @@
-import android.util.Log
+package io.element.android.x.designsystem.components.avatar
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -16,7 +17,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import io.element.android.x.designsystem.AvatarGradientEnd
 import io.element.android.x.designsystem.AvatarGradientStart
-import io.element.android.x.designsystem.components.avatar.AvatarData
+import timber.log.Timber
 
 @Composable
 fun Avatar(avatarData: AvatarData, modifier: Modifier = Modifier) {
@@ -44,14 +45,13 @@ private fun ImageAvatar(
     AsyncImage(
         model = avatarData.model,
         onError = {
-            Log.e("TAG", "Error $it\n${it.result}", it.result.throwable)
+            Timber.e("TAG", "Error $it\n${it.result}", it.result.throwable)
         },
         contentDescription = null,
         contentScale = ContentScale.Crop,
         modifier = modifier
     )
 }
-
 
 @Composable
 private fun InitialsAvatar(
@@ -77,5 +77,3 @@ private fun InitialsAvatar(
         )
     }
 }
-
-

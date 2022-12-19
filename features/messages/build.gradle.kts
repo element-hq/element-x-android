@@ -23,7 +23,6 @@ dependencies {
     implementation(project(":libraries:textcomposer"))
     implementation(libs.mavericks.compose)
     implementation(libs.coil.compose)
-    implementation(libs.timber)
     implementation(libs.datetime)
     implementation(libs.accompanist.flowlayout)
     implementation(libs.androidx.recyclerview)

@@ -11,7 +11,7 @@ object Versions {
 
     const val compileSdk = 33
     const val targetSdk = 33
-    const val minSdk = 24
+    const val minSdk = 21
     val javaCompileVersion = JavaVersion.VERSION_11
     val javaLanguageVersion: JavaLanguageVersion = JavaLanguageVersion.of(11)
 }

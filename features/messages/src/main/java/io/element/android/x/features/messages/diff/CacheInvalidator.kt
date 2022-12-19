@@ -37,5 +37,4 @@ internal class CacheInvalidator(private val itemStatesCache: MutableList<Message
             itemStatesCache.removeAt(position)
         }
     }
-
 }

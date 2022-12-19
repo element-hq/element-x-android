@@ -26,19 +26,7 @@
         <item name="vctr_waiting_background_color">@color/vctr_waiting_background_color_light</item>
         <item name="vctr_chat_effect_snow_background">@color/vctr_chat_effect_snow_background_light</item>
         <item name="vctr_toolbar_background">@color/element_background_light</item>
-        <item name="vctr_message_bubble_inbound">@color/vctr_message_bubble_inbound_light</item>
-        <item name="vctr_message_bubble_outbound">@color/vctr_message_bubble_outbound_light</item>
         <item name="vctr_badge_color_border">@color/vctr_badge_color_border_light</item>
-
-        <!-- room message colors -->
-        <item name="vctr_notice_secondary">#61708B</item>
-        <item name="vctr_unsent_message_text_color">?colorError</item>
-        <item name="vctr_message_text_color">@color/element_content_primary_light</item>
-        <item name="vctr_notice_text_color">#FF61708b</item>
-        <item name="vctr_encrypting_message_text_color">@color/palette_element_green</item>
-        <item name="vctr_sending_message_text_color">@color/element_content_secondary_light</item>
-        <item name="vctr_markdown_block_background_color">#FFEEEEEE</item>
-        <item name="vctr_spoiler_background_color">#FF000000</item>
 
         <!-- Presence Indicator colors -->
         <item name="vctr_presence_indicator_offline">@color/vctr_presence_indicator_offline_light</item>
@@ -67,36 +55,7 @@
         <item name="android:colorBackground">@color/element_background_light</item>
         <item name="colorOnBackground">?vctr_content_primary</item>
 
-        <!--Material type attributes-->
-        <item name="textAppearanceButton">@style/TextAppearance.Vector.Button</item>
-        <item name="textAppearanceCaption">@style/TextAppearance.Vector.Caption</item>
-        <!-- Default Text appearance for TextViews -->
-        <item name="android:textAppearanceSmall">@style/TextAppearance.Vector.Body</item>
-        <!-- Text appearance for List item -->
-        <item name="textAppearanceListItem">@style/TextAppearance.Vector.Subtitle</item>
-        <item name="textAppearanceListItemSecondary">@style/TextAppearance.Vector.Body</item>
-        <item name="textAppearanceListItemSmall">@style/TextAppearance.Vector.Body</item>
-
-        <!-- Default styles -->
-        <item name="android:textViewStyle">@style/Widget.Vector.TextView.Body</item>
-        <item name="materialButtonStyle">@style/Widget.Vector.Button</item>
-        <item name="toolbarStyle">@style/Widget.Vector.Toolbar</item>
-        <!--
-        <item name="bottomNavigationStyle">@style/BottomNavigation.Vector</item>
-        <item name="searchViewStyle">@style/Widget.Vector.SearchView</item>
-        -->
-        <item name="textInputStyle">@style/Widget.Vector.TextInputLayout</item>
-        <item name="appBarLayoutStyle">@style/Widget.Vector.AppBarLayout</item>
-        <item name="popupMenuStyle">@style/Widget.Vector.PopupMenu</item>
-        <item name="snackbarStyle">@style/Widget.Vector.SnackBar</item>
-        <item name="snackbarButtonStyle">@style/Widget.Vector.SnackBar.Button</item>
-        <item name="snackbarTextViewStyle">@style/Widget.Vector.SnackBar.TextView</item>
-        <item name="actionModeStyle">@style/Widget.Vector.ActionMode</item>
-
         <!-- Default theme -->
-        <item name="bottomSheetDialogTheme">@style/Theme.Vector.BottomSheetDialog.Light</item>
-        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Vector.MaterialAlertDialog</item>
-
         <item name="android:textColorLink">@color/element_link_light</item>
 
         <!-- Menu text color -->
@@ -132,10 +91,6 @@
         <!-- enable window content transitions -->
         <item name="android:windowContentTransitions">true</item>
 
-        <!-- specify shared element enter and exit transitions -->
-        <item name="android:windowSharedElementEnterTransition">@transition/image_preview_transition</item>
-        <item name="android:windowSharedElementExitTransition">@transition/image_preview_transition</item>
-
         <!--
         <item name="vctr_social_login_button_google_style">@style/Widget.Vector.Button.Outlined.SocialLogin.Google.Light</item>
         <item name="vctr_social_login_button_github_style">@style/Widget.Vector.Button.Outlined.SocialLogin.Github.Light</item>
@@ -145,16 +100,12 @@
         <item name="vctr_social_login_button_gitlab_style">@style/Widget.Vector.Button.Outlined.SocialLogin.Gitlab.Light</item>
         -->
 
-        <item name="vctr_jump_to_unread_style">@style/Widget.Vector.JumpToUnread.Light</item>
-
         <!-- Keywords -->
         <!--
         <item name="vctr_keyword_style">@style/Widget.Vector.Keyword</item>
         -->
 
         <item name="vctr_toast_background">@color/vctr_toast_background_light</item>
-
-        <item name="android:actionButtonStyle">@style/Widget.Vector.ActionButton</item>
 
         <!-- Location sharing -->
         <item name="vctr_live_location">@color/vctr_live_location_light</item>

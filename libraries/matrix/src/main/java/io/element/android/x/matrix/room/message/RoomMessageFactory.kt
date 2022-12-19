@@ -14,5 +14,4 @@ class RoomMessageFactory {
             originServerTs = eventTimelineItem.originServerTs()?.toLong() ?: 0L
         )
     }
-
 }

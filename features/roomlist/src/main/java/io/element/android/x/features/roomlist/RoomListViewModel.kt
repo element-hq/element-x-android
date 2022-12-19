@@ -4,17 +4,15 @@ import com.airbnb.mvrx.*
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.x.anvilannotations.ContributesViewModel
-import io.element.android.x.core.data.parallelMap
+import io.element.android.x.core.coroutine.parallelMap
 import io.element.android.x.core.di.daggerMavericksViewModelFactory
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
-import io.element.android.x.di.AppScope
 import io.element.android.x.di.SessionScope
 import io.element.android.x.features.roomlist.model.MatrixUser
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListRoomSummaryPlaceholders
 import io.element.android.x.features.roomlist.model.RoomListViewState
-import io.element.android.x.matrix.Matrix
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.RoomSummary
@@ -112,8 +110,8 @@ class RoomListViewModel @AssistedInject constructor(
                 copy(
                     rooms = when {
                         it is Loading ||
-                                // Note: this second case will prevent to handle correctly the empty case
-                                (it is Success && it().isEmpty() && filter.isEmpty()) -> {
+                            // Note: this second case will prevent to handle correctly the empty case
+                            (it is Success && it().isEmpty() && filter.isEmpty()) -> {
                             // Show fake placeholders to avoid having empty screen
                             Loading(RoomListRoomSummaryPlaceholders.createFakeList(size = 16))
                         }
@@ -158,5 +156,4 @@ class RoomListViewModel @AssistedInject constructor(
             .resolve(url, kind = MediaResolver.Kind.Thumbnail(size.value))
         return AvatarData(name, model, size)
     }
-
 }

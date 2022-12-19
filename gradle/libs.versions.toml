@@ -1,3 +1,6 @@
+# This file is referenced in ./plugins/settings.gradle.kts to generate the version catalog.
+# https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
+
 [versions]
 # Project
 android_gradle_plugin = "7.3.1"
@@ -39,7 +42,6 @@ test_orchestrator = "1.4.1"
 
 #other
 mavericks = "3.0.1"
-timber = "5.0.1"
 coil = "2.2.1"
 datetime = "0.4.0"
 wysiwyg = "0.7.0.1"
@@ -51,6 +53,10 @@ jsoup = "1.15.3"
 # DI
 dagger = "2.43"
 anvil = "2.4.2"
+
+# quality
+detekt = "1.22.0"
+ktlint = "11.0.0"
 
 [libraries]
 # Project
@@ -102,13 +108,12 @@ test_orchestrator = { module = "androidx.test:orchestrator", version.ref = "test
 
 # Others
 mavericks_compose = { module = "com.airbnb.android:mavericks-compose", version.ref = "mavericks" }
-timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization_json" }
 compose_destinations = { module = "io.github.raamcosta.compose-destinations:animations-core", version.ref = "compose_destinations" }
-compose_destinations_processor = {module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "compose_destinations"}
+compose_destinations_processor = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "compose_destinations" }
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
@@ -134,3 +139,5 @@ kotlin_jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kapt = {id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin"}
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = {id = "com.squareup.anvil", version.ref = "anvil"}
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }

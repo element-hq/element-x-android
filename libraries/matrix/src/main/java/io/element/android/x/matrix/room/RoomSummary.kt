@@ -2,7 +2,6 @@ package io.element.android.x.matrix.room
 
 import io.element.android.x.matrix.core.RoomId
 
-
 sealed interface RoomSummary {
     data class Empty(val identifier: String) : RoomSummary
     data class Filled(val details: RoomSummaryDetails) : RoomSummary
@@ -13,7 +12,6 @@ sealed interface RoomSummary {
             is Filled -> details.roomId.value
         }
     }
-
 }
 
 data class RoomSummaryDetails(

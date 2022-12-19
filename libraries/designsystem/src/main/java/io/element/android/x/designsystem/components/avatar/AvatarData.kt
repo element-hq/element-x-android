@@ -30,5 +30,4 @@ data class AvatarData(
         result = 31 * result + size.value
         return result
     }
-
 }

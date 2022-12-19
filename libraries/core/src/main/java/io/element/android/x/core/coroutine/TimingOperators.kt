@@ -1,4 +1,4 @@
-package io.element.android.x.core.data.flow
+package io.element.android.x.core.coroutine
 
 import android.os.SystemClock
 import kotlinx.coroutines.CoroutineScope

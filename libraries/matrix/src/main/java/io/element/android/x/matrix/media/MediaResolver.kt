@@ -24,7 +24,6 @@ interface MediaResolver {
     suspend fun resolve(meta: Meta): ByteArray?
 }
 
-
 internal class RustMediaResolver(private val client: MatrixClient) : MediaResolver {
 
     override suspend fun resolve(url: String?, kind: MediaResolver.Kind): ByteArray? {
@@ -43,6 +42,4 @@ internal class RustMediaResolver(private val client: MatrixClient) : MediaResolv
             )
         }.getOrNull()
     }
-
-
 }

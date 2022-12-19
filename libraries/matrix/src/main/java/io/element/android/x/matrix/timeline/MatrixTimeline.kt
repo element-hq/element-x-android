@@ -2,15 +2,21 @@ package io.element.android.x.matrix.timeline
 
 import io.element.android.x.core.coroutine.CoroutineDispatchers
 import io.element.android.x.matrix.room.MatrixRoom
+import java.util.Collections
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.*
+import org.matrix.rustcomponents.sdk.PaginationOutcome
+import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.SlidingSyncRoom
+import org.matrix.rustcomponents.sdk.TimelineChange
+import org.matrix.rustcomponents.sdk.TimelineDiff
+import org.matrix.rustcomponents.sdk.TimelineListener
 import timber.log.Timber
-import java.util.*
 
 class MatrixTimeline(
     private val matrixRoom: MatrixRoom,
@@ -31,7 +37,7 @@ class MatrixTimeline(
     private val timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
         MutableStateFlow(emptyList())
 
-
+    @OptIn(FlowPreview::class)
     fun timelineItems(): Flow<List<MatrixTimelineItem>> {
         return timelineItems.sample(50)
     }
@@ -40,7 +46,6 @@ class MatrixTimeline(
         get() {
             return paginationOutcome.value.moreMessages
         }
-
 
     private fun MutableList<MatrixTimelineItem>.applyDiff(diff: TimelineDiff) {
         when (diff.change()) {
@@ -140,5 +145,4 @@ class MatrixTimeline(
             }
         }
     }
-
 }

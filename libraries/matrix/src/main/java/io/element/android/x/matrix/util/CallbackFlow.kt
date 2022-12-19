@@ -1,6 +1,5 @@
-@file:OptIn(ExperimentalCoroutinesApi::class)
+package io.element.android.x.matrix.util
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
