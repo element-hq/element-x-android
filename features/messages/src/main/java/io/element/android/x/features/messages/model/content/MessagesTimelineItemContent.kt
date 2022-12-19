@@ -2,8 +2,6 @@ package io.element.android.x.features.messages.model.content
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import org.matrix.rustcomponents.sdk.EncryptedMessage
-import org.matrix.rustcomponents.sdk.FormattedBody
-import org.matrix.rustcomponents.sdk.MessageFormat
 
 sealed interface MessagesTimelineItemContent
 

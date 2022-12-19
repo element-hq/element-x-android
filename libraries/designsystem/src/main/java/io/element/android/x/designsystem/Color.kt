@@ -5,6 +5,7 @@ import com.airbnb.android.showkase.annotation.ShowkaseColor
 
 @ShowkaseColor(name = "LightGrey", group = "Material Design")
 val LightGrey = Color(0x993C3C43)
+
 @ShowkaseColor(name = "DarkGrey", group = "Material Design")
 val DarkGrey = Color(0x99EBEBF5)
 
@@ -37,6 +38,7 @@ val Vermilion = Color(0xFFFF5B55)
 
 // TODO Update color
 val MessageHighlightLight = Azure
+
 // TODO Update color
 val MessageHighlightDark = Azure
 

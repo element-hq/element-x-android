@@ -9,7 +9,11 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.*
+import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.SlidingSyncRoom
+import org.matrix.rustcomponents.sdk.UpdateSummary
+import org.matrix.rustcomponents.sdk.genTransactionId
+import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 
 class MatrixRoom(
     private val slidingSyncUpdateFlow: Flow<UpdateSummary>,
@@ -84,7 +88,7 @@ class MatrixRoom(
 
     suspend fun editMessage(originalEventId: String, message: String): Result<Unit> = withContext(coroutineDispatchers.io) {
         val transactionId = genTransactionId()
-        val content = messageEventContentFromMarkdown(message)
+        // val content = messageEventContentFromMarkdown(message)
         runCatching {
             room.edit(/* TODO use content */ message, originalEventId, transactionId)
         }
@@ -92,13 +96,13 @@ class MatrixRoom(
 
     suspend fun replyMessage(eventId: String, message: String): Result<Unit> = withContext(coroutineDispatchers.io) {
         val transactionId = genTransactionId()
-        val content = messageEventContentFromMarkdown(message)
+        // val content = messageEventContentFromMarkdown(message)
         runCatching {
             room.sendReply(/* TODO use content */ message, eventId, transactionId)
         }
     }
 
-    suspend fun redactEvent(eventId: String, reason: String? = null, ) = withContext(coroutineDispatchers.io) {
+    suspend fun redactEvent(eventId: String, reason: String? = null) = withContext(coroutineDispatchers.io) {
         val transactionId = genTransactionId()
         runCatching {
             room.redact(eventId, reason, transactionId)

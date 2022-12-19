@@ -2,12 +2,18 @@ package io.element.android.x.features.roomlist
 
 import android.text.format.DateFormat
 import android.text.format.DateUtils
-import kotlinx.datetime.*
-import kotlinx.datetime.TimeZone
 import java.time.Period
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Locale
 import kotlin.math.absoluteValue
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toJavaLocalDate
+import kotlinx.datetime.toJavaLocalDateTime
+import kotlinx.datetime.toLocalDateTime
 
 class LastMessageFormatter(
     private val clock: Clock = Clock.System,
@@ -28,7 +34,6 @@ class LastMessageFormatter(
         val pattern = DateFormat.getBestDateTimePattern(locale, "dd.MM.yyyy")
         DateTimeFormatter.ofPattern(pattern)
     }
-
 
     fun format(timestamp: Long?): String {
         if (timestamp == null) return ""
@@ -77,6 +82,4 @@ class LastMessageFormatter(
             DateUtils.FORMAT_SHOW_WEEKDAY
         ).toString()
     }
-
-
 }

@@ -23,8 +23,6 @@ dependencies {
     implementation(project(":libraries:elementresources"))
     implementation(libs.mavericks.compose)
     ksp(libs.showkase.processor)
-    implementation(libs.timber)
     testImplementation(libs.test.junit)
     androidTestImplementation(libs.test.junitext)
-
 }

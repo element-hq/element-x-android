@@ -9,7 +9,6 @@ import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineListener
 
-
 fun Room.timelineDiff(scope: CoroutineScope): Flow<TimelineDiff> = callbackFlow {
     val listener = object : TimelineListener {
         override fun onUpdate(update: TimelineDiff) {
@@ -22,6 +21,4 @@ fun Room.timelineDiff(scope: CoroutineScope): Flow<TimelineDiff> = callbackFlow 
     awaitClose {
         removeTimeline()
     }
-
 }
-

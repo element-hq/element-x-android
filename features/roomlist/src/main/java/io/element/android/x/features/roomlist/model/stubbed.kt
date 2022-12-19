@@ -1,9 +1,11 @@
 package io.element.android.x.features.roomlist.model
 
 import io.element.android.x.designsystem.components.avatar.AvatarData
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
-internal fun stubbedRoomSummaries(): List<RoomListRoomSummary> {
-    return listOf(
+internal fun stubbedRoomSummaries(): ImmutableList<RoomListRoomSummary> {
+    return persistentListOf(
         RoomListRoomSummary(
             name = "Room",
             hasUnread = true,

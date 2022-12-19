@@ -12,7 +12,6 @@ dependencies {
     implementation(project(":libraries:elementresources"))
     implementation(project(":libraries:designsystem"))
     implementation(libs.mavericks.compose)
-    implementation(libs.timber)
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pagerindicator)
     testImplementation(libs.test.junit)

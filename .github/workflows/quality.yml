@@ -1,0 +1,46 @@
+name: Code Quality Checks
+
+on:
+  pull_request: { }
+  push:
+    branches: [ main, develop ]
+
+# Enrich gradle.properties for CI/CD
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -XX:MaxPermSize=512m -Dkotlin.daemon.jvm.options="-Xmx2g" -Dkotlin.incremental=false
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
+
+jobs:
+  check:
+    name: Project Check Suite
+    runs-on: ubuntu-latest
+    # Allow all jobs on main and develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/main' && format('check-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-develop-{0}', github.sha) || format('check-{0}', github.ref) }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run code quality check suite
+        run: ./gradlew check $CI_GRADLE_ARG_PROPERTIES
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: linting-report
+          path: |
+            */build/reports/**/*.*
+      - name: Prepare Danger
+        if: always()
+        run: |
+          npm install --save-dev @babel/core
+          npm install --save-dev @babel/plugin-transform-flow-strip-types
+          yarn add danger-plugin-lint-report --dev
+      - name: Danger lint
+        if: always()
+        uses: danger/danger-js@11.2.0
+        with:
+          args: "--dangerfile ./tools/danger/dangerfile-lint.js"
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
+          # Fallback for forks
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
