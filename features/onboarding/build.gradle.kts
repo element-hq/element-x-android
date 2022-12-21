@@ -14,6 +14,7 @@ dependencies {
     implementation(libs.mavericks.compose)
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pagerindicator)
+    implementation(libs.appyx.core)
     testImplementation(libs.test.junit)
     androidTestImplementation(libs.test.junitext)
     ksp(libs.showkase.processor)

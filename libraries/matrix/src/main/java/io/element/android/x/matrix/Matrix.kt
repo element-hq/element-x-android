@@ -6,9 +6,11 @@ import io.element.android.x.core.coroutine.CoroutineDispatchers
 import io.element.android.x.di.AppScope
 import io.element.android.x.di.ApplicationContext
 import io.element.android.x.di.SingleIn
+import io.element.android.x.matrix.core.SessionId
 import io.element.android.x.matrix.media.MediaFetcher
 import io.element.android.x.matrix.media.MediaKeyer
 import io.element.android.x.matrix.session.SessionStore
+import io.element.android.x.matrix.session.sessionId
 import io.element.android.x.matrix.util.logError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -80,7 +82,7 @@ class Matrix @Inject constructor(
         }
     }
 
-    suspend fun login(username: String, password: String): MatrixClient =
+    suspend fun login(username: String, password: String): SessionId =
         withContext(coroutineDispatchers.io) {
             val client = try {
                 authService.login(username, password, "ElementX Android", null)
@@ -88,8 +90,9 @@ class Matrix @Inject constructor(
                 Timber.e(failure, "Fail login")
                 throw failure
             }
-            sessionStore.storeData(client.session())
-            createMatrixClient(client)
+            val session = client.session()
+            sessionStore.storeData(session)
+            session.sessionId()
         }
 
     private fun createMatrixClient(client: Client): MatrixClient {

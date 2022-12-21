@@ -21,6 +21,7 @@ dependencies {
     implementation(project(":libraries:matrix"))
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:textcomposer"))
+    implementation(libs.appyx.core)
     implementation(libs.mavericks.compose)
     implementation(libs.coil.compose)
     implementation(libs.datetime)

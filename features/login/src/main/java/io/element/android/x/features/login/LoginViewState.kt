@@ -4,15 +4,15 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
-import io.element.android.x.matrix.MatrixClient
+import io.element.android.x.matrix.core.SessionId
 
 data class LoginViewState(
     val homeserver: String = "",
-    val loggedInClient: Async<MatrixClient> = Uninitialized,
+    val loggedInSessionId: Async<SessionId> = Uninitialized,
     val formState: LoginFormState = LoginFormState.Default,
 ) : MavericksState {
     val submitEnabled =
-        formState.login.isNotEmpty() && formState.password.isNotEmpty() && loggedInClient !is Loading
+        formState.login.isNotEmpty() && formState.password.isNotEmpty() && loggedInSessionId !is Loading
 }
 
 data class LoginFormState(

@@ -48,22 +48,20 @@ class LoginViewModel @AssistedInject constructor(
                 val state = awaitState()
                 // Ensure the server is provided to the Rust SDK
                 matrix.setHomeserver(state.homeserver)
-                matrix.login(state.formState.login.trim(), state.formState.password.trim()).also {
-                    it.startSync()
-                }
+                matrix.login(state.formState.login.trim(), state.formState.password.trim())
             }.execute {
-                copy(loggedInClient = it)
+                copy(loggedInSessionId = it)
             }
         }
     }
 
     fun onSetPassword(password: String) {
         formState.value = formState.value.copy(password = password)
-        setState { copy(loggedInClient = Uninitialized) }
+        setState { copy(loggedInSessionId = Uninitialized) }
     }
 
     fun onSetName(name: String) {
         formState.value = formState.value.copy(login = name)
-        setState { copy(loggedInClient = Uninitialized) }
+        setState { copy(loggedInSessionId = Uninitialized) }
     }
 }
