@@ -41,7 +41,8 @@ class RageShake @Inject constructor(
     }
 
     /**
-     * sensitivity will be {0, O.25, 0.5, 0.75, 1} and converted to [ShakeDetector.SENSITIVITY_LIGHT (=11), ShakeDetector.SENSITIVITY_HARD (=15)]
+     * sensitivity will be {0, O.25, 0.5, 0.75, 1} and converted to
+     * [ShakeDetector.SENSITIVITY_LIGHT (=11), ShakeDetector.SENSITIVITY_HARD (=15)].
      */
     fun setSensitivity(sensitivity: Float) {
         shakeDetector?.setSensitivity(
