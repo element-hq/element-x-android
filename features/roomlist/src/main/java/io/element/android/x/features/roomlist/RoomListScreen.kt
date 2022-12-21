@@ -43,7 +43,9 @@ import kotlinx.collections.immutable.toImmutableList
 fun RoomListScreen(
     viewModel: RoomListViewModel = mavericksViewModel(),
     onSuccessLogout: () -> Unit = { },
-    onRoomClicked: (RoomId) -> Unit = { }
+    onRoomClicked: (RoomId) -> Unit = { },
+    onOpenRageShake: () -> Unit = { },
+    onOpenSettings: () -> Unit = { },
 ) {
     val logoutAction by viewModel.collectAsState(RoomListViewState::logoutAction)
     val filter by viewModel.collectAsState(RoomListViewState::filter)
@@ -59,6 +61,8 @@ fun RoomListScreen(
         matrixUser = matrixUser(),
         onRoomClicked = onRoomClicked,
         onLogoutClicked = viewModel::logout,
+        onOpenSettings = onOpenSettings,
+        onOpenRageShake = onOpenRageShake,
         isLoginOut = logoutAction is Loading,
         filter = filter,
         onFilterChanged = viewModel::filterRoom,
@@ -76,6 +80,8 @@ fun RoomListContent(
     onRoomClicked: (RoomId) -> Unit = {},
     onFilterChanged: (String) -> Unit = {},
     onLogoutClicked: () -> Unit = {},
+    onOpenSettings: () -> Unit = {},
+    onOpenRageShake: () -> Unit = { },
     onScrollOver: (IntRange) -> Unit = {},
 ) {
     fun onRoomClicked(room: RoomListRoomSummary) {
@@ -113,6 +119,8 @@ fun RoomListContent(
                 filter = filter,
                 onFilterChanged = onFilterChanged,
                 onLogoutClicked = onLogoutClicked,
+                onOpenSettings = onOpenSettings,
+                onOpenRageShake = onOpenRageShake,
                 scrollBehavior = scrollBehavior
             )
         },

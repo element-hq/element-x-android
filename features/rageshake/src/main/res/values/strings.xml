@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Rageshake configuration -->
+    <string name="bug_report_url" translatable="false">https://riot.im/bugreports/submit</string>
+    <string name="bug_report_app_name" translatable="false">riot-android</string>
+    <string name="bug_report_auto_uisi_app_name" translatable="false">element-auto-uisi</string>
+
+</resources>

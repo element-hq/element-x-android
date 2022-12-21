@@ -10,6 +10,7 @@ android {
         // Should not be there, but this is a POC
         implementation(libs.coil.compose)
         implementation(libs.accompanist.systemui)
+        implementation(project(":libraries:elementresources"))
         ksp(libs.showkase.processor)
     }
 }
