@@ -49,6 +49,7 @@ serialization_json = "1.4.1"
 showkase = "1.0.0-beta14"
 compose_destinations = "1.7.23-beta"
 jsoup = "1.15.3"
+appyx = "1.0.1"
 
 # DI
 dagger = "2.43"
@@ -117,7 +118,7 @@ compose_destinations_processor = { module = "io.github.raamcosta.compose-destina
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
-
+appyx_core = {module = "com.bumble.appyx:core", version.ref = "appyx"}
 
 # Di
 inject = {module = "javax.inject:javax.inject", version = "1"}

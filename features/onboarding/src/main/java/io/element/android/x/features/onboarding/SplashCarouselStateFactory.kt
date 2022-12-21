@@ -11,6 +11,7 @@ class SplashCarouselStateFactory {
 
         fun hero(@DrawableRes lightDrawable: Int, @DrawableRes darkDrawable: Int) =
             if (lightTheme) lightDrawable else darkDrawable
+
         return SplashCarouselState(
             listOf(
                 SplashCarouselState.Item(

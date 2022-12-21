@@ -19,6 +19,7 @@ dependencies {
     implementation(project(":libraries:core"))
     implementation(project(":libraries:matrix"))
     implementation(project(":libraries:designsystem"))
+    implementation(libs.appyx.core)
     implementation(libs.mavericks.compose)
     implementation(libs.datetime)
     implementation(libs.accompanist.placeholder)

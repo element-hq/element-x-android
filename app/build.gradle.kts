@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kapt)
     id("com.google.firebase.appdistribution") version "3.0.2"
     id("org.jetbrains.kotlinx.knit") version "0.4.0"
+    id("kotlin-parcelize")
 }
 
 android {
@@ -147,6 +148,7 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.0")
     implementation(libs.compose.destinations)
     ksp(libs.compose.destinations.processor)
+    implementation(libs.appyx.core)
 
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.lifecycle.runtime)

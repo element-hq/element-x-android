@@ -2,6 +2,7 @@ plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.ksp)
     alias(libs.plugins.anvil)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -21,6 +22,7 @@ dependencies {
     implementation(project(":libraries:matrix"))
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:elementresources"))
+    implementation(libs.appyx.core)
     implementation(libs.mavericks.compose)
     ksp(libs.showkase.processor)
     testImplementation(libs.test.junit)

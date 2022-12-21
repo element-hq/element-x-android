@@ -3,6 +3,7 @@ package io.element.android.x.core.di
 import android.content.Context
 import android.content.ContextWrapper
 import androidx.fragment.app.Fragment
+import com.bumble.appyx.core.node.Node
 
 /**
  * Use this to get the Dagger "Bindings" for your module. Bindings are used if you need to directly interact with a dagger component such as:
@@ -20,12 +21,15 @@ import androidx.fragment.app.Fragment
  * 2) Contribute your interface to the correct component via `@ContributesTo(AppScope::class)`.
  * 3) Call bindings<YourModuleBindings>().inject(this).
  */
+
 inline fun <reified T : Any> Context.bindings() = bindings(T::class.java)
 
 /**
  * @see bindings
  */
 inline fun <reified T : Any> Fragment.bindings() = bindings(T::class.java)
+
+inline fun <reified T : Any> Node.bindings() = bindings(T::class.java)
 
 /** Use no-arg extension function instead: [Context.bindings] */
 fun <T : Any> Context.bindings(klass: Class<T>): T {
@@ -50,4 +54,16 @@ fun <T : Any> Fragment.bindings(klass: Class<T>): T {
         .filterIsInstance(klass)
         .firstOrNull()
         ?: requireActivity().bindings(klass)
+}
+
+/** Use no-arg extension function instead: [Node.bindings] */
+fun <T : Any> Node.bindings(klass: Class<T>): T {
+    // search dagger components in node hierarchy
+    return generateSequence(this, Node::parent)
+        .filterIsInstance<DaggerComponentOwner>()
+        .map { it.daggerComponent }
+        .flatMap { if (it is Collection<*>) it else listOf(it) }
+        .filterIsInstance(klass)
+        .firstOrNull()
+        ?: error("Unable to find bindings for ${klass.name}")
 }

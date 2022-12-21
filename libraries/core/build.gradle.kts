@@ -10,4 +10,5 @@ dependencies {
     api(libs.mavericks.compose)
     api(libs.dagger)
     api(libs.androidx.fragment)
+    api(libs.appyx.core)
 }
