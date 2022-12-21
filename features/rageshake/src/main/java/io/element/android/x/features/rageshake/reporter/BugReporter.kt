@@ -10,6 +10,12 @@ import io.element.android.x.features.rageshake.R
 import io.element.android.x.features.rageshake.crash.CrashDataStore
 import io.element.android.x.features.rageshake.logs.VectorFileLogger
 import io.element.android.x.features.rageshake.screenshot.ScreenshotHolder
+import java.io.File
+import java.io.IOException
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.util.Locale
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -24,12 +30,6 @@ import okhttp3.Response
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
-import java.io.File
-import java.io.IOException
-import java.io.OutputStreamWriter
-import java.net.HttpURLConnection
-import java.util.Locale
-import javax.inject.Inject
 
 /**
  * BugReporter creates and sends the bug reports.
@@ -121,6 +121,7 @@ class BugReporter @Inject constructor(
     /**
      * Send a bug report.
      *
+     * @param coroutineScope The coroutine scope
      * @param reportType The report type (bug, suggestion, feedback)
      * @param withDevicesLogs true to include the device log
      * @param withCrashLogs true to include the crash logs
@@ -241,14 +242,14 @@ class BugReporter @Inject constructor(
                         .addFormDataPart("device", Build.MODEL.trim())
                         // .addFormDataPart("verbose_log", vectorPreferences.labAllowedExtendedLogging().toOnOff())
                         .addFormDataPart("multi_window", inMultiWindowMode.toOnOff())
-                        //.addFormDataPart(
+                        // .addFormDataPart(
                         //        "os", Build.VERSION.RELEASE + " (API " + sdkIntProvider.get() + ") " +
                         //        Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME
-                        //)
+                        // )
                         .addFormDataPart("locale", Locale.getDefault().toString())
-                        //.addFormDataPart("app_language", vectorLocale.applicationLocale.toString())
-                        //.addFormDataPart("default_app_language", systemLocaleProvider.getSystemLocale().toString())
-                        //.addFormDataPart("theme", ThemeUtils.getApplicationTheme(context))
+                        // .addFormDataPart("app_language", vectorLocale.applicationLocale.toString())
+                        // .addFormDataPart("default_app_language", systemLocaleProvider.getSystemLocale().toString())
+                        // .addFormDataPart("theme", ThemeUtils.getApplicationTheme(context))
                         .addFormDataPart("server_version", serverVersion)
                         .apply {
                             customFields?.forEach { (name, value) ->
@@ -442,19 +443,19 @@ class BugReporter @Inject constructor(
     }
      */
 
-    //private fun logOtherInfo() {
+    // private fun logOtherInfo() {
     //    Timber.i("SyncThread state: " + activeSessionHolder.getSafeActiveSession()?.syncService()?.getSyncState())
-    //}
+    // }
 
-    //private fun logDbInfo() {
+    // private fun logDbInfo() {
     //    val dbInfo = matrix.debugService().getDbUsageInfo()
     //    Timber.i(dbInfo)
-    //}
+    // }
 
-    //private fun logProcessInfo() {
+    // private fun logProcessInfo() {
     //    val pInfo = processInfo.getInfo()
     //    Timber.i(pInfo)
-    //}
+    // }
 
     private fun rageShakeAppNameForReport(reportType: ReportType): String {
         // As per https://github.com/matrix-org/rageshake

@@ -1,8 +1,8 @@
 package io.element.android.x.core.file
 
-import timber.log.Timber
 import java.io.File
 import java.util.zip.GZIPOutputStream
+import timber.log.Timber
 
 /**
  * GZip a file.

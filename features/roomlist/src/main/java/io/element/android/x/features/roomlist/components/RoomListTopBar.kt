@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,25 +32,20 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import io.element.android.x.core.compose.LogCompositions
 import io.element.android.x.core.compose.textFieldState
 import io.element.android.x.designsystem.components.avatar.Avatar
-import io.element.android.x.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.x.features.roomlist.model.MatrixUser
-import io.element.android.x.element.resources.R as ElementR
 
 @Composable
 fun RoomListTopBar(
     matrixUser: MatrixUser?,
     filter: String,
     onFilterChanged: (String) -> Unit,
-    onLogoutClicked: () -> Unit,
     onOpenSettings: () -> Unit,
-    onOpenRageShake: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
     LogCompositions(tag = "RoomListScreen", msg = "TopBar")
@@ -77,9 +70,7 @@ fun RoomListTopBar(
     } else {
         DefaultRoomListTopBar(
             matrixUser = matrixUser,
-            onLogoutClicked = onLogoutClicked,
             onOpenSettings = onOpenSettings,
-            onOpenRageShake = onOpenRageShake,
             onSearchClicked = {
                 searchWidgetStateIsOpened = true
             },
@@ -168,13 +159,10 @@ fun SearchRoomListTopBar(
 @Composable
 private fun DefaultRoomListTopBar(
     matrixUser: MatrixUser?,
-    onLogoutClicked: () -> Unit,
-    onOpenRageShake: () -> Unit,
     onOpenSettings: () -> Unit,
     onSearchClicked: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
-    val openDialog = remember { mutableStateOf(false) }
     MediumTopAppBar(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -198,16 +186,6 @@ private fun DefaultRoomListTopBar(
                 Icon(Icons.Default.Search, contentDescription = "search")
             }
             IconButton(
-                onClick = onOpenRageShake
-            ) {
-                Icon(Icons.Default.BugReport, contentDescription = stringResource(id = ElementR.string.send_bug_report))
-            }
-            IconButton(
-                onClick = { openDialog.value = true }
-            ) {
-                Icon(Icons.Default.Logout, contentDescription = "logout")
-            }
-            IconButton(
                 onClick = onOpenSettings
             ) {
                 Icon(Icons.Default.Settings, contentDescription = "Settings")
@@ -215,19 +193,4 @@ private fun DefaultRoomListTopBar(
         },
         scrollBehavior = scrollBehavior,
     )
-    // Log out confirmation dialog
-    if (openDialog.value) {
-        ConfirmationDialog(
-            title = "Log out",
-            content = "Do you confirm you want to log out?",
-            submitText = "Log out",
-            onSubmitClicked = {
-                openDialog.value = false
-                onLogoutClicked()
-            },
-            onDismiss = {
-                openDialog.value = false
-            }
-        )
-    }
 }

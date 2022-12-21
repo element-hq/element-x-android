@@ -71,7 +71,6 @@ fun ChangeServerScreenNavigation(navigator: DestinationsNavigator) {
 @Destination
 @Composable
 fun RoomListScreenNavigation(navigator: DestinationsNavigator) {
-    val sessionComponentsOwner = LocalContext.current.bindings<AppBindings>().sessionComponentsOwner()
     RoomListScreen(
         onRoomClicked = { roomId: RoomId ->
             navigator.navigate(MessagesScreenNavigationDestination(roomId = roomId.value))
@@ -79,18 +78,6 @@ fun RoomListScreenNavigation(navigator: DestinationsNavigator) {
         onOpenSettings = {
             navigator.navigate(PreferencesScreenNavigationDestination())
         },
-        onSuccessLogout = {
-            sessionComponentsOwner.releaseActiveSession()
-            navigator.navigate(OnBoardingScreenNavigationDestination) {
-                popUpTo(RoomListScreenNavigationDestination) {
-                    inclusive = true
-                }
-            }
-        },
-        // Tmp entry point
-        onOpenRageShake = {
-            navigator.navigate(BugReportScreenNavigationDestination)
-        }
     )
 }
 
@@ -111,8 +98,19 @@ fun BugReportScreenNavigation(navigator: DestinationsNavigator) {
 @Destination
 @Composable
 fun PreferencesScreenNavigation(navigator: DestinationsNavigator) {
+    val sessionComponentsOwner = LocalContext.current.bindings<AppBindings>().sessionComponentsOwner()
     PreferencesScreen(
-        onBackPressed = navigator::navigateUp
+        onBackPressed = navigator::navigateUp,
+        onOpenRageShake = {
+            navigator.navigate(BugReportScreenNavigationDestination)
+        },
+        onSuccessLogout = {
+            sessionComponentsOwner.releaseActiveSession()
+            navigator.navigate(OnBoardingScreenNavigationDestination) {
+                popUpTo(RoomListScreenNavigationDestination) {
+                    inclusive = true
+                }
+            }
+        },
     )
 }
-

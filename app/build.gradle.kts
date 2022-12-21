@@ -138,6 +138,7 @@ dependencies {
     implementation(project(":libraries:core"))
     implementation(project(":features:onboarding"))
     implementation(project(":features:login"))
+    implementation(project(":features:logout"))
     implementation(project(":features:roomlist"))
     implementation(project(":features:messages"))
     implementation(project(":features:rageshake"))
