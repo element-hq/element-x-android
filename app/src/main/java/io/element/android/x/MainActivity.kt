@@ -8,7 +8,6 @@ package io.element.android.x
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
@@ -38,16 +37,12 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
 import com.airbnb.android.showkase.models.Showkase
 import com.airbnb.mvrx.compose.mavericksActivityViewModel
-import com.airbnb.mvrx.compose.mavericksViewModel
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
 import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
-import com.ramcosta.composedestinations.manualcomposablecalls.animatedComposable
-import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.spec.Route
 import io.element.android.x.core.compose.OnLifecycleEvent
-import io.element.android.x.core.di.DaggerComponentOwner
 import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.destinations.OnBoardingScreenNavigationDestination
 import kotlinx.coroutines.runBlocking
@@ -160,7 +155,6 @@ class MainActivity : ComponentActivity() {
             navGraph = NavGraphs.root,
             startRoute = startRoute,
             dependenciesContainerBuilder = {
-
             }
         )
     }

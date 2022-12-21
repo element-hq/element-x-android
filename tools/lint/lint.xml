@@ -112,6 +112,9 @@
     <!-- Notification -->
     <issue id="LaunchActivityFromNotification" severity="error" />
 
+    <!-- We handle them manually -->
+    <issue id="EnsureInitializerMetadata" severity="ignore" />
+
     <!-- DI -->
     <!-- issue id="JvmStaticProvidesInObjectDetector" severity="error" /-->
 </lint>

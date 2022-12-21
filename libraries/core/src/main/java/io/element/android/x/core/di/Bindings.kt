@@ -27,7 +27,7 @@ inline fun <reified T : Any> Context.bindings() = bindings(T::class.java)
  */
 inline fun <reified T : Any> Fragment.bindings() = bindings(T::class.java)
 
-/** Use no-arg extension function instead: [Context.bindings] */
+/** Use no-arg extension function instead: [Context.bindings]. */
 fun <T : Any> Context.bindings(klass: Class<T>): T {
     // search dagger components in the context hierarchy
     return generateSequence(this) { (it as? ContextWrapper)?.baseContext }
@@ -40,7 +40,7 @@ fun <T : Any> Context.bindings(klass: Class<T>): T {
         ?: error("Unable to find bindings for ${klass.name}")
 }
 
-/** Use no-arg extension function instead: [Fragment.bindings] */
+/** Use no-arg extension function instead: [Fragment.bindings]. */
 fun <T : Any> Fragment.bindings(klass: Class<T>): T {
     // search dagger components in fragment hierarchy, then fallback to activity and application
     return generateSequence(this, Fragment::getParentFragment)

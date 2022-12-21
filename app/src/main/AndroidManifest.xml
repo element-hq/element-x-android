@@ -33,8 +33,6 @@
             android:exported="false"
             tools:node="remove"/>
 
-
     </application>
-
 
 </manifest>

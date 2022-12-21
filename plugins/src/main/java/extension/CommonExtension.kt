@@ -45,7 +45,8 @@ fun CommonExtension<*, *, *, *>.composeConfig() {
 
     lint {
         // Extra rules for compose
-        error.add("ComposableLambdaParameterNaming")
+        // Disabled until lint stops inspecting generated ksp files...
+        // error.add("ComposableLambdaParameterNaming")
         error.add("ComposableLambdaParameterPosition")
     }
 }

@@ -9,7 +9,7 @@ import io.element.android.x.matrix.MatrixClient
 
 @SingleIn(SessionScope::class)
 @MergeSubcomponent(SessionScope::class)
-interface SessionComponent: DaggerMavericksBindings {
+interface SessionComponent : DaggerMavericksBindings {
 
     fun matrixClient(): MatrixClient
 

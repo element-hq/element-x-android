@@ -41,5 +41,4 @@ class SessionComponentsOwner @Inject constructor(@ApplicationContext private val
             activeSessionComponent = null
         }
     }
-
 }

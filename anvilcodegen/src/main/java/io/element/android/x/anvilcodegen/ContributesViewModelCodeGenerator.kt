@@ -31,10 +31,10 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.multibindings.IntoMap
 import io.element.android.x.anvilannotations.ContributesViewModel
+import java.io.File
 import org.jetbrains.kotlin.descriptors.ModuleDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtFile
-import java.io.File
 
 /**
  * This is an anvil plugin that allows ViewModels to use [ContributesViewModel] alone and let this plugin automatically
@@ -69,7 +69,12 @@ class ContributesViewModelCodeGenerator : CodeGenerator {
                             .returns(assistedViewModelFactoryFqName.asClassName(module).parameterizedBy(STAR, STAR))
                             .addAnnotation(Binds::class)
                             .addAnnotation(IntoMap::class)
-                            .addAnnotation(AnnotationSpec.Companion.builder(viewModelKeyFqName.asClassName(module)).addMember("%T::class", vmClass.asClassName()).build())
+                            .addAnnotation(
+                                AnnotationSpec.Companion
+                                    .builder(viewModelKeyFqName.asClassName(module))
+                                    .addMember("%T::class", vmClass.asClassName())
+                                    .build()
+                            )
                             .build(),
                     )
                     .build(),
