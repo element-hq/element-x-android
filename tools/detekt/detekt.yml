@@ -95,6 +95,7 @@ comments:
     active: true
   OutdatedDocumentation:
     active: true
+    allowParamOnConstructorProperties: true
   UndocumentedPublicClass:
     active: false
   UndocumentedPublicFunction:

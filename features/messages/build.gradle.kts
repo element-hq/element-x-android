@@ -12,7 +12,6 @@ anvil {
     generateDaggerFactories.set(true)
 }
 
-
 dependencies {
     implementation(project(":anvilannotations"))
     anvil(project(":anvilcodegen"))

@@ -35,6 +35,4 @@ private class ElementImageLoaderFactory(
             }
             .build()
     }
-
-
 }

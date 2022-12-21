@@ -29,6 +29,8 @@ inline fun <reified VM : MavericksViewModel<S>, S : MavericksState> daggerMaveri
  * using its AssistedInject Factory. This class should be implemented by the companion object
  * of every ViewModel which uses AssistedInject via [daggerMavericksViewModelFactory].
  *
+ * @param VM The ViewModel type
+ * @param S The ViewState type
  * @param viewModelClass The [Class] of the ViewModel being requested for creation
  *
  * This class accesses the map of ViewModel class to [AssistedViewModelFactory]s from the nearest [DaggerComponentOwner] and

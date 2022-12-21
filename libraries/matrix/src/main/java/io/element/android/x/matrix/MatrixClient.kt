@@ -1,7 +1,6 @@
 package io.element.android.x.matrix
 
 import io.element.android.x.core.coroutine.CoroutineDispatchers
-import io.element.android.x.di.SingleIn
 import io.element.android.x.matrix.core.UserId
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.media.RustMediaResolver

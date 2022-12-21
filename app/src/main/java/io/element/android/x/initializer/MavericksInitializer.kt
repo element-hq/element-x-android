@@ -11,6 +11,4 @@ class MavericksInitializer : Initializer<Unit> {
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> = listOf()
-
-
 }
