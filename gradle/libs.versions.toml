@@ -49,6 +49,7 @@ serialization_json = "1.4.1"
 showkase = "1.0.0-beta14"
 compose_destinations = "1.7.23-beta"
 jsoup = "1.15.3"
+seismic = "1.0.3"
 
 # DI
 dagger = "2.43"
@@ -72,6 +73,9 @@ androidx_datastore_datastore = { module = "androidx.datastore:datastore", versio
 androidx_constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 androidx_recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 androidx_lifecycle_runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+androidx_lifecycle_compose = { module = "androidx.lifecycle:compose", version.ref = "lifecycle" }
+androidx_lifecycle_process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
+
 androidx_lifecycle_viewmodel_compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity_compose" }
 androidx_fragment = {module = "androidx.fragment:fragment-ktx", version.ref = "fragment"}
@@ -93,6 +97,9 @@ accompanist_placeholder = { module = "com.google.accompanist:accompanist-placeho
 accompanist_pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
 accompanist_pagerindicator = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 accompanist_flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
+
+# Libraries
+squareup_seismic = { module = "com.squareup:seismic", version.ref = "seismic" }
 
 # Test
 test_junit = { module = "junit:junit", version.ref = "test_junit" }

@@ -140,6 +140,8 @@ dependencies {
     implementation(project(":features:login"))
     implementation(project(":features:roomlist"))
     implementation(project(":features:messages"))
+    implementation(project(":features:rageshake"))
+    implementation(project(":features:preferences"))
     implementation(project(":libraries:di"))
     implementation(project(":anvilannotations"))
     anvil(project(":anvilcodegen"))
