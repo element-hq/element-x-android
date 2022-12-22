@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.kapt) apply false
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.dependencygraph)
 }
 
 tasks.register<Delete>("clean").configure {
