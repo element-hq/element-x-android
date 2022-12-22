@@ -22,10 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.matrix.ui.components.MatrixUserHeader
@@ -34,13 +30,15 @@ import io.element.android.x.matrix.ui.viewmodels.user.UserViewState
 
 @Composable
 fun UserPreferences(
-    viewModel: UserViewModel = mavericksViewModel()
+    modifier: Modifier = Modifier,
+    viewModel: UserViewModel = mavericksViewModel(),
 ) {
     val user by viewModel.collectAsState(UserViewState::user)
-    when (user) {
-        is Fail -> Spacer(modifier = Modifier.height(1.dp))
-        is Loading -> Spacer(modifier = Modifier.height(1.dp))
-        is Success -> MatrixUserHeader(matrixUser = user.invoke()!!)
-        Uninitialized -> Spacer(modifier = Modifier.height(1.dp))
+    when (user()) {
+        null -> Spacer(modifier = modifier.height(1.dp))
+        else -> MatrixUserHeader(
+            modifier = modifier,
+            matrixUser = user.invoke()!!
+        )
     }
 }
