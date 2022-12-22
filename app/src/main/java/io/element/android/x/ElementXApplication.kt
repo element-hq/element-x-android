@@ -9,8 +9,10 @@ import io.element.android.x.di.AppComponent
 import io.element.android.x.di.DaggerAppComponent
 import io.element.android.x.di.SessionComponentsOwner
 import io.element.android.x.initializer.CoilInitializer
+import io.element.android.x.initializer.CrashInitializer
 import io.element.android.x.initializer.MatrixInitializer
 import io.element.android.x.initializer.MavericksInitializer
+import io.element.android.x.initializer.TimberInitializer
 
 class ElementXApplication : Application(), DaggerComponentOwner {
 
@@ -25,6 +27,8 @@ class ElementXApplication : Application(), DaggerComponentOwner {
         appComponent = DaggerAppComponent.factory().create(applicationContext)
         sessionComponentsOwner = bindings<AppBindings>().sessionComponentsOwner()
         AppInitializer.getInstance(this).apply {
+            initializeComponent(CrashInitializer::class.java)
+            initializeComponent(TimberInitializer::class.java)
             initializeComponent(MatrixInitializer::class.java)
             initializeComponent(CoilInitializer::class.java)
             initializeComponent(MavericksInitializer::class.java)

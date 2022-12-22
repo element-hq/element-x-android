@@ -45,6 +45,9 @@ import com.ramcosta.composedestinations.spec.Route
 import io.element.android.x.core.compose.OnLifecycleEvent
 import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.destinations.OnBoardingScreenNavigationDestination
+import io.element.android.x.features.rageshake.bugreport.BugReportScreen
+import io.element.android.x.features.rageshake.crash.ui.CrashDetectionScreen
+import io.element.android.x.features.rageshake.detection.RageshakeDetectionScreen
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
@@ -99,6 +102,7 @@ class MainActivity : ComponentActivity() {
         }
 
         var isShowkaseButtonVisible by remember { mutableStateOf(BuildConfig.DEBUG) }
+        var isBugReportVisible by remember { mutableStateOf(false) }
 
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
             MainContent(
@@ -109,6 +113,22 @@ class MainActivity : ComponentActivity() {
                 onCloseClicked = { isShowkaseButtonVisible = false },
                 onClick = { startActivity(Showkase.getBrowserIntent(this@MainActivity)) }
             )
+            RageshakeDetectionScreen(
+                onOpenBugReport = {
+                    isBugReportVisible = true
+                }
+            )
+            CrashDetectionScreen(
+                onOpenBugReport = {
+                    isBugReportVisible = true
+                }
+            )
+            if (isBugReportVisible) {
+                // TODO Improve the navigation, when pressing back here, it closes the app.
+                BugReportScreen(
+                    onDone = { isBugReportVisible = false }
+                )
+            }
         }
         OnLifecycleEvent { _, event ->
             Timber.v("OnLifecycleEvent: $event")

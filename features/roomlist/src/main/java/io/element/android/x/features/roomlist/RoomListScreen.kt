@@ -21,13 +21,10 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Velocity
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.core.compose.LogCompositions
 import io.element.android.x.designsystem.ElementXTheme
-import io.element.android.x.designsystem.components.ProgressDialog
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.roomlist.components.RoomListTopBar
 import io.element.android.x.features.roomlist.components.RoomSummaryRow
@@ -42,15 +39,10 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun RoomListScreen(
     viewModel: RoomListViewModel = mavericksViewModel(),
-    onSuccessLogout: () -> Unit = { },
-    onRoomClicked: (RoomId) -> Unit = { }
+    onRoomClicked: (RoomId) -> Unit = { },
+    onOpenSettings: () -> Unit = { },
 ) {
-    val logoutAction by viewModel.collectAsState(RoomListViewState::logoutAction)
     val filter by viewModel.collectAsState(RoomListViewState::filter)
-    if (logoutAction is Success) {
-        onSuccessLogout()
-        return
-    }
     LogCompositions(tag = "RoomListScreen", msg = "Root")
     val roomSummaries by viewModel.collectAsState(RoomListViewState::rooms)
     val matrixUser by viewModel.collectAsState(RoomListViewState::user)
@@ -58,8 +50,7 @@ fun RoomListScreen(
         roomSummaries = roomSummaries().orEmpty().toImmutableList(),
         matrixUser = matrixUser(),
         onRoomClicked = onRoomClicked,
-        onLogoutClicked = viewModel::logout,
-        isLoginOut = logoutAction is Loading,
+        onOpenSettings = onOpenSettings,
         filter = filter,
         onFilterChanged = viewModel::filterRoom,
         onScrollOver = viewModel::updateVisibleRange
@@ -71,11 +62,10 @@ fun RoomListContent(
     roomSummaries: ImmutableList<RoomListRoomSummary>,
     matrixUser: MatrixUser?,
     filter: String,
-    isLoginOut: Boolean,
     modifier: Modifier = Modifier,
     onRoomClicked: (RoomId) -> Unit = {},
     onFilterChanged: (String) -> Unit = {},
-    onLogoutClicked: () -> Unit = {},
+    onOpenSettings: () -> Unit = {},
     onScrollOver: (IntRange) -> Unit = {},
 ) {
     fun onRoomClicked(room: RoomListRoomSummary) {
@@ -112,7 +102,7 @@ fun RoomListContent(
                 matrixUser = matrixUser,
                 filter = filter,
                 onFilterChanged = onFilterChanged,
-                onLogoutClicked = onLogoutClicked,
+                onOpenSettings = onOpenSettings,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -134,9 +124,6 @@ fun RoomListContent(
             }
         }
     )
-    if (isLoginOut) {
-        ProgressDialog(text = "Login out...")
-    }
 }
 
 private fun RoomListRoomSummary.contentType() = isPlaceholder
@@ -153,10 +140,8 @@ fun PreviewableRoomListContent() {
             roomSummaries = stubbedRoomSummaries(),
             matrixUser = MatrixUser("User#1", avatarData = AvatarData("U")),
             onRoomClicked = {},
-            onLogoutClicked = {},
             filter = "filter",
             onFilterChanged = {},
-            isLoginOut = false,
             onScrollOver = {}
         )
     }
@@ -170,10 +155,8 @@ fun PreviewableDarkRoomListContent() {
             roomSummaries = stubbedRoomSummaries(),
             matrixUser = MatrixUser("User#1", avatarData = AvatarData("U")),
             onRoomClicked = {},
-            onLogoutClicked = {},
             filter = "filter",
             onFilterChanged = {},
-            isLoginOut = true,
             onScrollOver = {}
         )
     }

@@ -11,6 +11,5 @@ data class RoomListViewState(
     val rooms: Async<List<RoomListRoomSummary>> = Uninitialized,
     val filter: String = "",
     val canLoadMore: Boolean = false,
-    val logoutAction: Async<Unit> = Uninitialized,
     val roomsById: Map<RoomId, RoomListRoomSummary> = emptyMap()
 ) : MavericksState
