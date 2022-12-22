@@ -48,6 +48,7 @@ import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListViewState
 import io.element.android.x.features.roomlist.model.stubbedRoomSummaries
 import io.element.android.x.matrix.core.RoomId
+import io.element.android.x.matrix.core.UserId
 import io.element.android.x.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -154,7 +155,7 @@ fun PreviewableRoomListContent() {
     ElementXTheme(darkTheme = false) {
         RoomListContent(
             roomSummaries = stubbedRoomSummaries(),
-            matrixUser = MatrixUser("User#1", avatarData = AvatarData("U")),
+            matrixUser = MatrixUser(id = UserId("@id"), username = "User#1", avatarData = AvatarData("U")),
             onRoomClicked = {},
             filter = "filter",
             onFilterChanged = {},
@@ -169,7 +170,7 @@ fun PreviewableDarkRoomListContent() {
     ElementXTheme(darkTheme = true) {
         RoomListContent(
             roomSummaries = stubbedRoomSummaries(),
-            matrixUser = MatrixUser("User#1", avatarData = AvatarData("U")),
+            matrixUser = MatrixUser(id = UserId("@id"), username = "User#1", avatarData = AvatarData("U")),
             onRoomClicked = {},
             filter = "filter",
             onFilterChanged = {},

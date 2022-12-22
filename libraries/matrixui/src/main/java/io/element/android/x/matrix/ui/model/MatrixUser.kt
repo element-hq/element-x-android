@@ -18,10 +18,16 @@ package io.element.android.x.matrix.ui.model
 
 import androidx.compose.runtime.Stable
 import io.element.android.x.designsystem.components.avatar.AvatarData
+import io.element.android.x.matrix.core.UserId
 
 @Stable
 data class MatrixUser(
+    val id: UserId,
     val username: String? = null,
     val avatarUrl: String? = null,
     val avatarData: AvatarData = AvatarData(),
 )
+
+fun MatrixUser.getBestName(): String {
+    return username?.takeIf { it.isNotEmpty() } ?: id.value
+}

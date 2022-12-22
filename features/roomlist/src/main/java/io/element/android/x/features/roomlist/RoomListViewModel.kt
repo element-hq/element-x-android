@@ -89,7 +89,8 @@ class RoomListViewModel @AssistedInject constructor(
                     AvatarSize.SMALL
                 )
             MatrixUser(
-                username = userDisplayName ?: client.userId().value,
+                id = client.userId(),
+                username = userDisplayName,
                 avatarUrl = userAvatarUrl,
                 avatarData = avatarData,
             )
