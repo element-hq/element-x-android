@@ -20,7 +20,6 @@ import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.RoomSummary
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
@@ -33,8 +32,7 @@ private const val extendedRangeSize = 40
 class RoomListViewModel @AssistedInject constructor(
     private val client: MatrixClient,
     @Assisted initialState: RoomListViewState
-) :
-    MavericksViewModel<RoomListViewState>(initialState) {
+) : MavericksViewModel<RoomListViewState>(initialState) {
 
     companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> by daggerMavericksViewModelFactory()
 
@@ -42,17 +40,6 @@ class RoomListViewModel @AssistedInject constructor(
 
     init {
         handleInit()
-    }
-
-    fun logout() {
-        viewModelScope.launch {
-            suspend {
-                delay(2000)
-                client.logout()
-            }.execute {
-                copy(logoutAction = it)
-            }
-        }
     }
 
     fun filterRoom(filter: String) {
