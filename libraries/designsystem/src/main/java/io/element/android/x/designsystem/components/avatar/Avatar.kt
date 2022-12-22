@@ -43,13 +43,13 @@ fun Avatar(avatarData: AvatarData, modifier: Modifier = Modifier) {
         .clip(CircleShape)
     if (avatarData.model == null) {
         InitialsAvatar(
+            avatarData = avatarData,
             modifier = commonModifier,
-            initials = avatarData.name.first().uppercase()
         )
     } else {
         ImageAvatar(
+            avatarData = avatarData,
             modifier = commonModifier,
-            avatarData = avatarData
         )
     }
 }
@@ -72,7 +72,7 @@ private fun ImageAvatar(
 
 @Composable
 private fun InitialsAvatar(
-    initials: String,
+    avatarData: AvatarData,
     modifier: Modifier = Modifier,
 ) {
     val initialsGradient = Brush.linearGradient(
@@ -88,8 +88,8 @@ private fun InitialsAvatar(
     ) {
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = initials,
-            fontSize = 24.sp,
+            text = avatarData.name.first().uppercase(),
+            fontSize = (avatarData.size.value / 2).sp,
             color = Color.White,
         )
     }
@@ -98,5 +98,5 @@ private fun InitialsAvatar(
 @Preview
 @Composable
 fun InitialsAvatar() {
-    InitialsAvatar("A")
+    InitialsAvatar(AvatarData("A"))
 }
