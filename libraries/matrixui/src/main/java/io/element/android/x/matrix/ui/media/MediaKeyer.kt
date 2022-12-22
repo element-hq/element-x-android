@@ -20,7 +20,7 @@ import coil.key.Keyer
 import coil.request.Options
 import io.element.android.x.matrix.media.MediaResolver
 
-class MediaKeyer : Keyer<MediaResolver.Meta> {
+internal class MediaKeyer : Keyer<MediaResolver.Meta> {
     override fun key(data: MediaResolver.Meta, options: Options): String? {
         return "${data.source.url()}_${data.kind}"
     }

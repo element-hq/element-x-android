@@ -55,7 +55,7 @@ class MatrixItemHelper(
 
     suspend fun loadAvatarData(room: MatrixRoom, size: AvatarSize): AvatarData {
         return loadAvatarData(
-            name = room.name ?: room.roomId.value,
+            name = room.bestName,
             url = room.avatarUrl,
             size = size
         )

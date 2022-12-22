@@ -24,7 +24,7 @@ import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.media.MediaResolver
 import java.nio.ByteBuffer
 
-class MediaFetcher(
+internal class MediaFetcher(
     private val mediaResolver: MediaResolver?,
     private val meta: MediaResolver.Meta,
     private val options: Options,
