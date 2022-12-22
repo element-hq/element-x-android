@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.roomlist.model
+package io.element.android.x.matrix.ui.model
 
 import androidx.compose.runtime.Stable
 import io.element.android.x.designsystem.components.avatar.AvatarData

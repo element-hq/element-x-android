@@ -151,6 +151,7 @@ knit {
 dependencies {
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:matrix"))
+    implementation(project(":libraries:matrixui"))
     implementation(project(":libraries:core"))
     implementation(project(":features:onboarding"))
     implementation(project(":features:login"))

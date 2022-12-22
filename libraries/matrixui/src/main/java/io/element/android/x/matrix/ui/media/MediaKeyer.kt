@@ -14,25 +14,14 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-    alias(libs.plugins.anvil)
-    kotlin("plugin.serialization") version "1.7.20"
-}
+package io.element.android.x.matrix.ui.media
 
-android {
-    namespace = "io.element.android.x.matrix"
-}
+import coil.key.Keyer
+import coil.request.Options
+import io.element.android.x.matrix.media.MediaResolver
 
-anvil {
-    generateDaggerFactories.set(true)
-}
-
-dependencies {
-    api(project(":libraries:rustsdk"))
-    implementation(project(":libraries:di"))
-    implementation(project(":libraries:core"))
-    implementation("net.java.dev.jna:jna:5.12.1@aar")
-    implementation(libs.androidx.datastore.preferences)
-    implementation(libs.serialization.json)
+class MediaKeyer : Keyer<MediaResolver.Meta> {
+    override fun key(data: MediaResolver.Meta, options: Options): String? {
+        return "${data.source.url()}_${data.kind}"
+    }
 }

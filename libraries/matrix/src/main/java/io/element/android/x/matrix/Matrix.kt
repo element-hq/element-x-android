@@ -17,13 +17,10 @@
 package io.element.android.x.matrix
 
 import android.content.Context
-import coil.ComponentRegistry
 import io.element.android.x.core.coroutine.CoroutineDispatchers
 import io.element.android.x.di.AppScope
 import io.element.android.x.di.ApplicationContext
 import io.element.android.x.di.SingleIn
-import io.element.android.x.matrix.media.MediaFetcher
-import io.element.android.x.matrix.media.MediaKeyer
 import io.element.android.x.matrix.session.SessionStore
 import io.element.android.x.matrix.util.logError
 import java.io.File
@@ -56,14 +53,6 @@ class Matrix @Inject constructor(
 
     fun isLoggedIn(): Flow<Boolean> {
         return sessionStore.isLoggedIn()
-    }
-
-    fun registerCoilComponents(
-        builder: ComponentRegistry.Builder,
-        activeClientProvider: () -> MatrixClient?
-    ) {
-        builder.add(MediaKeyer())
-        builder.add(MediaFetcher.Factory(activeClientProvider))
     }
 
     suspend fun restoreSession() = withContext(coroutineDispatchers.io) {

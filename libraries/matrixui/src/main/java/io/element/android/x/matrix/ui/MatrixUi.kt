@@ -14,25 +14,21 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-    alias(libs.plugins.anvil)
-    kotlin("plugin.serialization") version "1.7.20"
-}
+package io.element.android.x.matrix.ui
 
-android {
-    namespace = "io.element.android.x.matrix"
-}
+import coil.ComponentRegistry
+import io.element.android.x.matrix.MatrixClient
+import io.element.android.x.matrix.ui.media.MediaFetcher
+import io.element.android.x.matrix.ui.media.MediaKeyer
+import javax.inject.Inject
 
-anvil {
-    generateDaggerFactories.set(true)
-}
+class MatrixUi @Inject constructor() {
 
-dependencies {
-    api(project(":libraries:rustsdk"))
-    implementation(project(":libraries:di"))
-    implementation(project(":libraries:core"))
-    implementation("net.java.dev.jna:jna:5.12.1@aar")
-    implementation(libs.androidx.datastore.preferences)
-    implementation(libs.serialization.json)
+    fun registerCoilComponents(
+        builder: ComponentRegistry.Builder,
+        activeClientProvider: () -> MatrixClient?
+    ) {
+        builder.add(MediaKeyer())
+        builder.add(MediaFetcher.Factory(activeClientProvider))
+    }
 }

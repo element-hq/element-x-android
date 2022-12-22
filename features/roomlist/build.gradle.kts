@@ -34,6 +34,7 @@ dependencies {
     implementation(project(":libraries:di"))
     implementation(project(":libraries:core"))
     implementation(project(":libraries:matrix"))
+    implementation(project(":libraries:matrixui"))
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:elementresources"))
     implementation(libs.mavericks.compose)

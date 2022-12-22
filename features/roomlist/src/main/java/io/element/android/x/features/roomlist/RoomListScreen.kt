@@ -44,11 +44,11 @@ import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.roomlist.components.RoomListTopBar
 import io.element.android.x.features.roomlist.components.RoomSummaryRow
-import io.element.android.x.features.roomlist.model.MatrixUser
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListViewState
 import io.element.android.x.features.roomlist.model.stubbedRoomSummaries
 import io.element.android.x.matrix.core.RoomId
+import io.element.android.x.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
