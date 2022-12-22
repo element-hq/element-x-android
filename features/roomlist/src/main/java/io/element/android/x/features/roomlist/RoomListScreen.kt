@@ -50,19 +50,22 @@ import io.element.android.x.features.roomlist.model.stubbedRoomSummaries
 import io.element.android.x.matrix.core.RoomId
 import io.element.android.x.matrix.core.UserId
 import io.element.android.x.matrix.ui.model.MatrixUser
+import io.element.android.x.matrix.ui.viewmodels.user.UserViewModel
+import io.element.android.x.matrix.ui.viewmodels.user.UserViewState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun RoomListScreen(
     viewModel: RoomListViewModel = mavericksViewModel(),
+    userViewModel: UserViewModel = mavericksViewModel(),
     onRoomClicked: (RoomId) -> Unit = { },
     onOpenSettings: () -> Unit = { },
 ) {
     val filter by viewModel.collectAsState(RoomListViewState::filter)
     LogCompositions(tag = "RoomListScreen", msg = "Root")
     val roomSummaries by viewModel.collectAsState(RoomListViewState::rooms)
-    val matrixUser by viewModel.collectAsState(RoomListViewState::user)
+    val matrixUser by userViewModel.collectAsState(UserViewState::user)
     RoomListContent(
         roomSummaries = roomSummaries().orEmpty().toImmutableList(),
         matrixUser = matrixUser(),

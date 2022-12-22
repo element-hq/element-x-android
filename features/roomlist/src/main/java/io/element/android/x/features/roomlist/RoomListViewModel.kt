@@ -78,10 +78,6 @@ class RoomListViewModel @AssistedInject constructor(
     }
 
     private fun handleInit() {
-        matrixUserHelper.getCurrentUserData(avatarSize = AvatarSize.SMALL).execute {
-            copy(user = it)
-        }
-
         // Observe the room list and the filter
         combine(
             client.roomSummaryDataSource().roomSummaries()
