@@ -29,6 +29,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import io.element.android.x.designsystem.AvatarGradientEnd
@@ -92,4 +93,10 @@ private fun InitialsAvatar(
             color = Color.White,
         )
     }
+}
+
+@Preview
+@Composable
+fun InitialsAvatar() {
+    InitialsAvatar("A")
 }
