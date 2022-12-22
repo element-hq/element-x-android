@@ -21,7 +21,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.sdk.matrix"
+    namespace = "io.element.android.x.matrix"
 }
 
 anvil {
