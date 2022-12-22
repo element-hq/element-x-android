@@ -20,8 +20,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,7 +52,10 @@ fun PreferenceScreen(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Scaffold(
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxSize()
+            .systemBarsPadding()
+            .imePadding(),
         contentWindowInsets = WindowInsets.statusBars,
         topBar = {
             PreferenceTopAppBar(
@@ -56,8 +64,13 @@ fun PreferenceScreen(
             )
         },
         content = {
+            val scrollState = rememberScrollState()
             Column(
-                modifier = Modifier.padding(it)
+                modifier = Modifier
+                    .padding(it)
+                    .verticalScroll(
+                        state = scrollState,
+                    )
             ) {
                 content()
             }

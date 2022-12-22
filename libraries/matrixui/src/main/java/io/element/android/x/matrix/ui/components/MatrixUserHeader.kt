@@ -56,12 +56,12 @@ fun MatrixUserHeader(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Avatar(
-            matrixUser.avatarData.copy(size = AvatarSize.BIG),
+            matrixUser.avatarData.copy(size = AvatarSize.HUGE),
         )
         Spacer(modifier = Modifier.height(16.dp))
         // Name
         Text(
-            fontSize = 16.sp,
+            fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold,
             text = matrixUser.getBestName(),
             maxLines = 1,
@@ -69,7 +69,7 @@ fun MatrixUserHeader(
         )
         // Id
         if (matrixUser.username.isNullOrEmpty().not()) {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = matrixUser.id.value,
                 color = MaterialTheme.colorScheme.secondary,

@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material3.MaterialTheme
@@ -53,7 +54,8 @@ fun PreferenceText(
             PreferenceIcon(icon = icon)
             Text(
                 modifier = Modifier
-                    .weight(1f),
+                    .weight(1f)
+                    .padding(end = preferencePaddingEnd),
                 style = MaterialTheme.typography.bodyLarge,
                 text = title
             )
