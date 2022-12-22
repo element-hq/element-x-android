@@ -95,6 +95,8 @@ allprojects {
                 "experimental:kdoc-wrapping",
                 // Ignore error "Redundant curly braces", since we use it to fix false positives, for instance in "elementLogs.${i}.txt"
                 "string-template",
+                // Not the same order than Android Studio formatter...
+                "import-ordering",
             )
         )
     }
