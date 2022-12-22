@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.x.designsystem.components.preferences.PreferenceScreen
 import io.element.android.x.element.resources.R as ElementR
 import io.element.android.x.features.logout.LogoutPreference
+import io.element.android.x.features.preferences.user.UserPreferences
 import io.element.android.x.features.rageshake.preferences.RageshakePreferences
 
 @Composable
@@ -52,8 +53,9 @@ fun PreferencesContent(
         onBackPressed = onBackPressed,
         title = stringResource(id = ElementR.string.settings)
     ) {
-        LogoutPreference(onSuccessLogout = onSuccessLogout)
+        UserPreferences()
         RageshakePreferences(onOpenRageShake = onOpenRageShake)
+        LogoutPreference(onSuccessLogout = onSuccessLogout)
     }
 }
 

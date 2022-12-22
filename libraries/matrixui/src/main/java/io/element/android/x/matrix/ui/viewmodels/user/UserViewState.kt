@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.roomlist.model
+package io.element.android.x.matrix.ui.viewmodels.user
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
-import io.element.android.x.matrix.core.RoomId
+import io.element.android.x.matrix.ui.model.MatrixUser
 
-data class RoomListViewState(
-    // Will contain the filtered rooms, using ::filter (if filter is not empty)
-    val rooms: Async<List<RoomListRoomSummary>> = Uninitialized,
-    val filter: String = "",
-    val canLoadMore: Boolean = false,
-    val roomsById: Map<RoomId, RoomListRoomSummary> = emptyMap()
+data class UserViewState(
+    val user: Async<MatrixUser> = Uninitialized,
 ) : MavericksState
