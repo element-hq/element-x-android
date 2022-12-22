@@ -28,13 +28,13 @@ import io.element.android.x.core.di.daggerMavericksViewModelFactory
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
 import io.element.android.x.di.SessionScope
-import io.element.android.x.features.roomlist.model.MatrixUser
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListRoomSummaryPlaceholders
 import io.element.android.x.features.roomlist.model.RoomListViewState
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.RoomSummary
+import io.element.android.x.matrix.ui.model.MatrixUser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged

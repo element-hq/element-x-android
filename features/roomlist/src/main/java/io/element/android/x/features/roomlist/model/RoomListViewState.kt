@@ -20,6 +20,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import io.element.android.x.matrix.core.RoomId
+import io.element.android.x.matrix.ui.model.MatrixUser
 
 data class RoomListViewState(
     val user: Async<MatrixUser> = Uninitialized,

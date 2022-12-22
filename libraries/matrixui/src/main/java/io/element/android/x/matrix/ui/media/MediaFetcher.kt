@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.x.matrix.media
+package io.element.android.x.matrix.ui.media
 
 import coil.ImageLoader
 import coil.fetch.FetchResult
 import coil.fetch.Fetcher
 import coil.request.Options
 import io.element.android.x.matrix.MatrixClient
+import io.element.android.x.matrix.media.MediaResolver
 import java.nio.ByteBuffer
 
-internal class MediaFetcher(
+class MediaFetcher(
     private val mediaResolver: MediaResolver?,
     private val meta: MediaResolver.Meta,
     private val options: Options,

@@ -14,13 +14,22 @@
  * limitations under the License.
  */
 
-package io.element.android.x.matrix.media
+plugins {
+    id("io.element.android-compose-library")
+    alias(libs.plugins.anvil)
+}
 
-import coil.key.Keyer
-import coil.request.Options
+android {
+    namespace = "io.element.android.x.matrix.ui"
+}
 
-internal class MediaKeyer : Keyer<MediaResolver.Meta> {
-    override fun key(data: MediaResolver.Meta, options: Options): String? {
-        return "${data.source.url()}_${data.kind}"
-    }
+anvil {
+    generateDaggerFactories.set(true)
+}
+
+dependencies {
+    implementation(project(":libraries:matrix"))
+    implementation(project(":libraries:designsystem"))
+    implementation(project(":libraries:core"))
+    implementation(libs.coil.compose)
 }
