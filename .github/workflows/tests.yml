@@ -23,3 +23,15 @@ jobs:
       - uses: actions/checkout@v3
       - name: Run tests
         run: ./gradlew test $CI_GRADLE_ARG_PROPERTIES
+
+      - name: Run screenshot tests
+        run: ./gradlew verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES
+
+      - name: Archive Screenshot Results on Error
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshot-results
+          path: |
+            **/out/failures/
+            **/build/reports/tests/*UnitTest/
