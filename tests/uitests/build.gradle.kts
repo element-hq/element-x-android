@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+import extension.allLibraries
+import extension.allFeatures
+
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.ksp)
@@ -39,4 +42,7 @@ dependencies {
 
     implementation(libs.showkase)
     ksp(libs.showkase.processor)
+
+    allLibraries()
+    allFeatures()
 }
