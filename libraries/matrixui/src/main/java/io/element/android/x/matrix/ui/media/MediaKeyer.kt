@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.x.matrix.media
+package io.element.android.x.matrix.ui.media
 
 import coil.key.Keyer
 import coil.request.Options
+import io.element.android.x.matrix.media.MediaResolver
 
 internal class MediaKeyer : Keyer<MediaResolver.Meta> {
     override fun key(data: MediaResolver.Meta, options: Options): String? {

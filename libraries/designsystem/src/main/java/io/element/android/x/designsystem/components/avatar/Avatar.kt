@@ -29,6 +29,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import io.element.android.x.designsystem.AvatarGradientEnd
@@ -42,13 +43,13 @@ fun Avatar(avatarData: AvatarData, modifier: Modifier = Modifier) {
         .clip(CircleShape)
     if (avatarData.model == null) {
         InitialsAvatar(
+            avatarData = avatarData,
             modifier = commonModifier,
-            initials = avatarData.name.first().uppercase()
         )
     } else {
         ImageAvatar(
+            avatarData = avatarData,
             modifier = commonModifier,
-            avatarData = avatarData
         )
     }
 }
@@ -71,7 +72,7 @@ private fun ImageAvatar(
 
 @Composable
 private fun InitialsAvatar(
-    initials: String,
+    avatarData: AvatarData,
     modifier: Modifier = Modifier,
 ) {
     val initialsGradient = Brush.linearGradient(
@@ -87,9 +88,15 @@ private fun InitialsAvatar(
     ) {
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = initials,
-            fontSize = 24.sp,
+            text = avatarData.name.first().uppercase(),
+            fontSize = (avatarData.size.value / 2).sp,
             color = Color.White,
         )
     }
+}
+
+@Preview
+@Composable
+fun InitialsAvatar() {
+    InitialsAvatar(AvatarData("A"))
 }

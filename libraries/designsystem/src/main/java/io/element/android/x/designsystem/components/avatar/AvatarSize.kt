@@ -21,7 +21,8 @@ import androidx.compose.ui.unit.dp
 enum class AvatarSize(val value: Int) {
     SMALL(32),
     MEDIUM(40),
-    BIG(48);
+    BIG(48),
+    HUGE(96);
 
     val dp = value.dp
 }

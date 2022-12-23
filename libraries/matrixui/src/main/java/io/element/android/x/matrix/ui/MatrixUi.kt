@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.roomlist.model
+package io.element.android.x.matrix.ui
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.Uninitialized
-import io.element.android.x.matrix.core.RoomId
+import coil.ComponentRegistry
+import io.element.android.x.matrix.MatrixClient
+import io.element.android.x.matrix.ui.media.MediaFetcher
+import io.element.android.x.matrix.ui.media.MediaKeyer
+import javax.inject.Inject
 
-data class RoomListViewState(
-    // Will contain the filtered rooms, using ::filter (if filter is not empty)
-    val rooms: Async<List<RoomListRoomSummary>> = Uninitialized,
-    val filter: String = "",
-    val canLoadMore: Boolean = false,
-    val roomsById: Map<RoomId, RoomListRoomSummary> = emptyMap()
-) : MavericksState
+class MatrixUi @Inject constructor() {
+
+    fun registerCoilComponents(
+        builder: ComponentRegistry.Builder,
+        activeClientProvider: () -> MatrixClient?
+    ) {
+        builder.add(MediaKeyer())
+        builder.add(MediaFetcher.Factory(activeClientProvider))
+    }
+}
