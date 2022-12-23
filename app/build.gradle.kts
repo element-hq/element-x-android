@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-import extension.allLibraries
 import extension.allFeatures
+import extension.allLibraries
 
 // TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
 @Suppress("DSL_SCOPE_VIOLATION")
@@ -128,6 +128,7 @@ android {
         }
     }
 
+    // Waiting for https://github.com/google/ksp/issues/37
     applicationVariants.all {
         kotlin.sourceSets {
             getByName(name) {
