@@ -17,11 +17,12 @@
 import extension.allFeatures
 import extension.allLibraries
 
+// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.ksp)
-    // TODO Create alias
-    id("app.cash.paparazzi") version "1.0.0"
+    alias(libs.plugins.paparazzi)
 }
 
 android {
@@ -30,13 +31,11 @@ android {
 
 dependencies {
     testImplementation(libs.test.junit)
+    testImplementation(libs.test.parameter.injector)
     androidTestImplementation(libs.test.junitext)
     ksp(libs.showkase.processor)
     kspTest(libs.showkase.processor)
 
-    // TODO Move to libs
-    testImplementation("com.airbnb.android:showkase-screenshot-testing:1.0.0-beta14")
-    testImplementation("com.google.testparameterinjector:test-parameter-injector:1.8")
 
     implementation(project(":libraries:designsystem"))
 
