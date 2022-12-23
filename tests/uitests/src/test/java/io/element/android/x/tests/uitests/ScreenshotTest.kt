@@ -17,12 +17,15 @@
 
 package io.element.android.x.tests.uitests
 
+import android.content.res.Configuration
 import android.os.Build
+import android.os.LocaleList
 import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -33,9 +36,11 @@ import app.cash.paparazzi.detectEnvironment
 import com.airbnb.android.showkase.models.Showkase
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
+import io.element.android.x.designsystem.ElementXTheme
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.Locale
 
 /**
  * BMA: Inspired from https://github.com/airbnb/Showkase/blob/master/showkase-screenshot-testing-paparazzi-sample/src/test/java/com/airbnb/android/showkase/screenshot/testing/paparazzi/sample/PaparazziSampleScreenshotTest.kt
@@ -75,8 +80,8 @@ class ScreenshotTest {
         @TestParameter(valuesProvider = PreviewProvider::class) componentTestPreview: TestPreview,
         @TestParameter baseDeviceConfig: BaseDeviceConfig,
         @TestParameter(value = ["1.0", "1.5"]) fontScale: Float,
-        // TODO Test other locale
-        // TODO Test other light and dark theme
+        @TestParameter(value = ["light", "dark"]) theme: String,
+        @TestParameter(value = ["en", "fr", "de", "ru"]) localeStr: String,
     ) {
         paparazzi.unsafeUpdateConfig(
             baseDeviceConfig.deviceConfig.copy(
@@ -91,6 +96,9 @@ class ScreenshotTest {
                     density = LocalDensity.current.density,
                     fontScale = fontScale
                 ),
+                LocalConfiguration provides Configuration().apply {
+                    setLocales(LocaleList(localeStr.toLocale()))
+                },
                 // Needed so that UI that uses it don't crash during screenshot tests
                 LocalOnBackPressedDispatcherOwner provides object : OnBackPressedDispatcherOwner {
                     override fun getLifecycle() = lifecycleOwner.lifecycle
@@ -98,11 +106,22 @@ class ScreenshotTest {
                     override fun getOnBackPressedDispatcher() = OnBackPressedDispatcher()
                 }
             ) {
-                Box {
-                    componentTestPreview.Content()
+                ElementXTheme(darkTheme = (theme == "dark")) {
+                    Box {
+                        componentTestPreview.Content()
+                    }
                 }
             }
         }
+    }
+}
+
+private fun String.toLocale(): Locale {
+    return when (this) {
+        "en" -> Locale.ENGLISH
+        "fr" -> Locale.FRANCE
+        "de" -> Locale.GERMAN
+        else -> Locale.Builder().setLanguage(this).build()
     }
 }
 
