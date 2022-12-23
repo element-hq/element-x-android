@@ -39,6 +39,8 @@ test_junitext = "1.1.3"
 test_barista = "4.2.0"
 test_hamcrest = "2.2"
 test_orchestrator = "1.4.1"
+test_paparazzi = "1.0.0"
+test_parameter_injector = "1.8"
 
 #other
 coil = "2.2.1"
@@ -113,6 +115,7 @@ test_mockk = { module = "io.mockk:mockk", version.ref = "test_mockk" }
 test_barista = { module = "com.adevinta.android:barista", version.ref = "test_barista" }
 test_hamcrest = { module = "org.hamcrest:hamcrest", version.ref = "test_hamcrest" }
 test_orchestrator = { module = "androidx.test:orchestrator", version.ref = "test_orchestrator" }
+test_parameter_injector = { module = "com.google.testparameterinjector:test-parameter-injector", version.ref = "test_parameter_injector" }
 
 # Others
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
@@ -153,3 +156,4 @@ dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
 stem = { id = "com.likethesalad.stem", version.ref = "stem" }
 stemlibrary = { id = "com.likethesalad.stem-library", version.ref = "stem" }
+paparazzi = { id = "app.cash.paparazzi", version.ref = "test_paparazzi" }
