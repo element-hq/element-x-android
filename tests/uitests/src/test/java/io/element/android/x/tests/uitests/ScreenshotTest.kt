@@ -79,9 +79,9 @@ class ScreenshotTest {
     fun preview_tests(
         @TestParameter(valuesProvider = PreviewProvider::class) componentTestPreview: TestPreview,
         @TestParameter baseDeviceConfig: BaseDeviceConfig,
-        @TestParameter(value = ["1.0", "1.5"]) fontScale: Float,
+        @TestParameter(value = ["1.0"/*, "1.5"*/]) fontScale: Float,
         @TestParameter(value = ["light", "dark"]) theme: String,
-        @TestParameter(value = ["en", "fr", "de", "ru"]) localeStr: String,
+        @TestParameter(value = ["en", /*"fr", "de", "ru"*/]) localeStr: String,
     ) {
         paparazzi.unsafeUpdateConfig(
             baseDeviceConfig.deviceConfig.copy(
