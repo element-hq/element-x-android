@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.Density
+import app.cash.paparazzi.DeviceConfig
 import app.cash.paparazzi.Paparazzi
 import app.cash.paparazzi.androidHome
 import app.cash.paparazzi.detectEnvironment
@@ -84,7 +85,7 @@ class ScreenshotTest {
         @TestParameter(value = ["en", /*"fr", "de", "ru"*/]) localeStr: String,
     ) {
         paparazzi.unsafeUpdateConfig(
-            baseDeviceConfig.deviceConfig.copy(
+            deviceConfig = baseDeviceConfig.deviceConfig.copy(
                 softButtons = false,
             )
         )

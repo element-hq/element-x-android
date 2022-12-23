@@ -39,7 +39,7 @@ test_junitext = "1.1.3"
 test_barista = "4.2.0"
 test_hamcrest = "2.2"
 test_orchestrator = "1.4.1"
-test_paparazzi = "1.0.0"
+test_paparazzi = "1.1.0"
 test_parameter_injector = "1.8"
 
 #other
