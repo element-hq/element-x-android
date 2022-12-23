@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import extension.allLibraries
 import extension.allFeatures
+import extension.allLibraries
 
 plugins {
     id("io.element.android-compose-library")
@@ -35,7 +35,7 @@ dependencies {
     kspTest(libs.showkase.processor)
 
     // TODO Move to libs
-    testImplementation("com.airbnb.android:showkase-screenshot-testing:$1.0.0-beta14")
+    testImplementation("com.airbnb.android:showkase-screenshot-testing:1.0.0-beta14")
     testImplementation("com.google.testparameterinjector:test-parameter-injector:1.8")
 
     implementation(project(":libraries:designsystem"))
