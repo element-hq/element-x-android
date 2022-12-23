@@ -35,19 +35,18 @@ class CoilInitializer : Initializer<Unit> {
 
 private class ElementImageLoaderFactory(
     private val context: Context
-) :
-    ImageLoaderFactory {
+) : ImageLoaderFactory {
     override fun newImageLoader(): ImageLoader {
         return ImageLoader
             .Builder(context)
             .components {
                 val appBindings = context.bindings<AppBindings>()
-                val matrix = appBindings.matrix()
+                val matrixUi = appBindings.matrixUi()
                 val matrixClientProvider = {
                     appBindings
                         .sessionComponentsOwner().activeSessionComponent?.matrixClient()
                 }
-                matrix.registerCoilComponents(this, matrixClientProvider)
+                matrixUi.registerCoilComponents(this, matrixClientProvider)
             }
             .build()
     }

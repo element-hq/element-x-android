@@ -16,7 +16,7 @@
 
 package io.element.android.x.matrix.core
 
-import io.element.android.x.sdk.matrix.BuildConfig
+import io.element.android.x.matrix.BuildConfig
 import timber.log.Timber
 
 /**

@@ -33,6 +33,7 @@ dependencies {
     anvil(project(":anvilcodegen"))
     implementation(project(":libraries:di"))
     implementation(project(":libraries:core"))
+    implementation(project(":libraries:matrixui"))
     implementation(project(":features:rageshake"))
     implementation(project(":features:logout"))
     implementation(project(":libraries:designsystem"))

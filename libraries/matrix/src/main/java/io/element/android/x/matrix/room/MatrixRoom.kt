@@ -65,6 +65,11 @@ class MatrixRoom(
             return slidingSyncRoom.name()
         }
 
+    val bestName: String
+        get() {
+            return name?.takeIf { it.isNotEmpty() } ?: room.id()
+        }
+
     val displayName: String
         get() {
             return room.displayName()

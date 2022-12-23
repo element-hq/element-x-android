@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.roomlist.model
+plugins {
+    id("io.element.android-compose-library")
+    alias(libs.plugins.anvil)
+}
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.Uninitialized
-import io.element.android.x.matrix.core.RoomId
+android {
+    namespace = "io.element.android.x.matrix.ui"
+}
 
-data class RoomListViewState(
-    // Will contain the filtered rooms, using ::filter (if filter is not empty)
-    val rooms: Async<List<RoomListRoomSummary>> = Uninitialized,
-    val filter: String = "",
-    val canLoadMore: Boolean = false,
-    val roomsById: Map<RoomId, RoomListRoomSummary> = emptyMap()
-) : MavericksState
+anvil {
+    generateDaggerFactories.set(true)
+}
+
+dependencies {
+    implementation(project(":anvilannotations"))
+    anvil(project(":anvilcodegen"))
+    implementation(project(":libraries:di"))
+    implementation(project(":libraries:matrix"))
+    implementation(project(":libraries:designsystem"))
+    implementation(project(":libraries:core"))
+    implementation(libs.coil.compose)
+}
