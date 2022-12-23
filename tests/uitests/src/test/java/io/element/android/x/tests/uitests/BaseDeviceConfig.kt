@@ -22,5 +22,5 @@ enum class BaseDeviceConfig(
     val deviceConfig: DeviceConfig,
 ) {
     NEXUS_5(DeviceConfig.NEXUS_5),
-    PIXEL_C(DeviceConfig.PIXEL_C),
+    //PIXEL_C(DeviceConfig.PIXEL_C),
 }
