@@ -14,18 +14,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun ShowkaseButton(
-    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
 ) {
     var isShowkaseButtonVisible by remember { mutableStateOf(BuildConfig.DEBUG) }
 
     if (isShowkaseButtonVisible) {
         Button(
-            modifier = Modifier
-                .padding(top = 32.dp, start = 16.dp),
+            modifier = modifier
+                .padding(top = 32.dp),
             onClick = onClick
         ) {
             Text(text = "Showkase Browser")
@@ -39,4 +41,10 @@ fun ShowkaseButton(
             }
         }
     }
+}
+
+@Preview(group = "Buttons", name = "Showkase button")
+@Composable
+fun ShowkaseButtonPreview() {
+    ShowkaseButton()
 }
