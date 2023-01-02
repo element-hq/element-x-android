@@ -64,7 +64,7 @@ fun PreferenceText(
 }
 
 @Composable
-@Preview(showBackground = false)
+@Preview
 fun PreferenceTextPreview() {
     PreferenceText(
         title = "Title",
