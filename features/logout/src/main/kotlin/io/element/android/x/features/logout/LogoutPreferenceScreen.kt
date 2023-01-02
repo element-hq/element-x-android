@@ -25,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.x.architecture.Async
-import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.designsystem.components.ProgressDialog
 import io.element.android.x.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.x.designsystem.components.preferences.PreferenceCategory
@@ -92,7 +91,5 @@ fun LogoutPreferenceContent(
 @Composable
 @Preview
 fun LogoutContentPreview() {
-    ElementXTheme(darkTheme = false) {
-        LogoutPreferenceView(LogoutPreferenceState())
-    }
+    LogoutPreferenceView(LogoutPreferenceState())
 }

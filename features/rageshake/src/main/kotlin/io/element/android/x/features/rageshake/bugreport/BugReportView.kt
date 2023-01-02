@@ -53,7 +53,6 @@ import coil.request.ImageRequest
 import io.element.android.x.architecture.Async
 import io.element.android.x.core.compose.LogCompositions
 import io.element.android.x.core.compose.textFieldState
-import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.designsystem.components.LabelledCheckbox
 import io.element.android.x.designsystem.components.dialogs.ErrorDialog
 import io.element.android.x.ui.strings.R as StringR
@@ -213,9 +212,7 @@ fun BugReportView(
 @Composable
 @Preview
 fun BugReportContentPreview() {
-    ElementXTheme(darkTheme = false) {
-        BugReportView(
-            state = BugReportState(),
-        )
-    }
+    BugReportView(
+        state = BugReportState(),
+    )
 }

@@ -33,7 +33,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.designsystem.components.avatar.Avatar
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.matrix.core.UserId
@@ -88,14 +87,12 @@ fun MatrixUserRow(
 @Preview
 @Composable
 fun MatrixUserRowPreview() {
-    ElementXTheme {
-        MatrixUserRow(
-            MatrixUser(
-                id = UserId("@alice:server.org"),
-                username = "Alice",
-                avatarUrl = null,
-                avatarData = AvatarData("Alice")
-            )
+    MatrixUserRow(
+        MatrixUser(
+            id = UserId("@alice:server.org"),
+            username = "Alice",
+            avatarUrl = null,
+            avatarData = AvatarData("Alice")
         )
-    }
+    )
 }

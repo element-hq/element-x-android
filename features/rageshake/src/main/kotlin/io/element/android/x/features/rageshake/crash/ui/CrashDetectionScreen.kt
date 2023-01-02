@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.x.core.compose.LogCompositions
-import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.x.ui.strings.R as StringR
 
@@ -66,9 +65,7 @@ fun CrashDetectionContent(
 @Preview
 @Composable
 fun CrashDetectionContentPreview() {
-    ElementXTheme {
-        CrashDetectionContent(
-            state = CrashDetectionState()
-        )
-    }
+    CrashDetectionContent(
+        state = CrashDetectionState()
+    )
 }
