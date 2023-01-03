@@ -71,7 +71,10 @@ class RoomListPresenter @Inject constructor(
     }
 
     private suspend fun updateFilteredRoomSummaries(roomSummaries: List<RoomSummary>?, filter: String): ImmutableList<RoomListRoomSummary> {
-        val mappedRoomSummaries = mapRoomSummaries(roomSummaries.orEmpty())
+        if (roomSummaries.isNullOrEmpty()) {
+            return RoomListRoomSummaryPlaceholders.createFakeList(16).toImmutableList()
+        }
+        val mappedRoomSummaries = mapRoomSummaries(roomSummaries)
         return if (filter.isEmpty()) {
             mappedRoomSummaries
         } else {
