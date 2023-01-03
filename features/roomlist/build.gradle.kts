@@ -2,6 +2,7 @@ plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.ksp)
     alias(libs.plugins.anvil)
+    alias(libs.plugins.molecule)
 }
 
 android {
