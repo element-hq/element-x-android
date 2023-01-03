@@ -41,7 +41,7 @@ class MainActivity : NodeComponentActivity(), DaggerComponentOwner {
                     NodeHost(integrationPoint = appyxIntegrationPoint) {
                         RootFlowNode(
                             buildContext = it,
-                            daggerComponentOwner = this,
+                            appComponentOwner = this,
                             matrix = appBindings.matrix(),
                             sessionComponentsOwner = appBindings.sessionComponentsOwner()
                         )

@@ -5,7 +5,6 @@ package io.element.android.x.features.roomlist
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,10 +20,6 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Velocity
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.compose.collectAsState
-import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.core.compose.LogCompositions
 import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.designsystem.components.ProgressDialog
@@ -33,41 +28,35 @@ import io.element.android.x.features.roomlist.components.RoomListTopBar
 import io.element.android.x.features.roomlist.components.RoomSummaryRow
 import io.element.android.x.features.roomlist.model.MatrixUser
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
-import io.element.android.x.features.roomlist.model.RoomListViewState
+import io.element.android.x.features.roomlist.model.RoomListScreen
 import io.element.android.x.features.roomlist.model.stubbedRoomSummaries
 import io.element.android.x.matrix.core.RoomId
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 
 @Composable
-fun RoomListScreen(
-    viewModel: RoomListViewModel = mavericksViewModel(),
-    onSuccessLogout: () -> Unit = { },
-    onRoomClicked: (RoomId) -> Unit = { }
+fun RoomListView(
+    state: RoomListScreen.State,
+    modifier: Modifier = Modifier,
+    onRoomClicked: (RoomId) -> Unit = {},
+    onFilterChanged: (String) -> Unit = {},
+    onLogoutClicked: () -> Unit = {},
+    onScrollOver: (IntRange) -> Unit = {},
 ) {
-    val logoutAction by viewModel.collectAsState(RoomListViewState::logoutAction)
-    val filter by viewModel.collectAsState(RoomListViewState::filter)
-    if (logoutAction is Success) {
-        onSuccessLogout()
-        return
-    }
-    LogCompositions(tag = "RoomListScreen", msg = "Root")
-    val roomSummaries by viewModel.collectAsState(RoomListViewState::rooms)
-    val matrixUser by viewModel.collectAsState(RoomListViewState::user)
-    RoomListContent(
-        roomSummaries = roomSummaries().orEmpty().toImmutableList(),
-        matrixUser = matrixUser(),
+    RoomListView(
+        roomSummaries = state.roomList,
+        matrixUser = state.matrixUser,
+        filter = state.filter,
+        isLoginOut = state.isLoginOut,
+        modifier = modifier,
         onRoomClicked = onRoomClicked,
-        onLogoutClicked = viewModel::logout,
-        isLoginOut = logoutAction is Loading,
-        filter = filter,
-        onFilterChanged = viewModel::filterRoom,
-        onScrollOver = viewModel::updateVisibleRange
+        onFilterChanged = onFilterChanged,
+        onLogoutClicked = onLogoutClicked,
+        onScrollOver = onScrollOver
     )
 }
 
 @Composable
-fun RoomListContent(
+fun RoomListView(
     roomSummaries: ImmutableList<RoomListRoomSummary>,
     matrixUser: MatrixUser?,
     filter: String,
@@ -141,15 +130,11 @@ fun RoomListContent(
 
 private fun RoomListRoomSummary.contentType() = isPlaceholder
 
-private fun LazyListState.isScrolled(): Boolean {
-    return firstVisibleItemIndex > 0 || firstVisibleItemScrollOffset > 0
-}
-
 @Preview
 @Composable
-fun PreviewableRoomListContent() {
+fun PreviewableRoomListView() {
     ElementXTheme(darkTheme = false) {
-        RoomListContent(
+        RoomListView(
             roomSummaries = stubbedRoomSummaries(),
             matrixUser = MatrixUser("User#1", avatarData = AvatarData("U")),
             onRoomClicked = {},
@@ -164,9 +149,9 @@ fun PreviewableRoomListContent() {
 
 @Preview
 @Composable
-fun PreviewableDarkRoomListContent() {
+fun PreviewableDarkRoomListView() {
     ElementXTheme(darkTheme = true) {
-        RoomListContent(
+        RoomListView(
             roomSummaries = stubbedRoomSummaries(),
             matrixUser = MatrixUser("User#1", avatarData = AvatarData("U")),
             onRoomClicked = {},

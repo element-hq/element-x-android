@@ -25,6 +25,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.replace
 import io.element.android.x.BuildConfig
 import io.element.android.x.component.ShowkaseButton
@@ -61,7 +62,7 @@ class RootFlowNode(
         initialElement = NavTarget.SplashScreen,
         savedStateMap = buildContext.savedStateMap,
     ),
-    private val daggerComponentOwner: DaggerComponentOwner,
+    private val appComponentOwner: DaggerComponentOwner,
     private val matrix: Matrix,
     private val sessionComponentsOwner: SessionComponentsOwner,
 ) :
@@ -71,23 +72,32 @@ class RootFlowNode(
         plugins = listOf(SessionComponentsOwnerInteractor(sessionComponentsOwner)),
     ),
 
-    DaggerComponentOwner by daggerComponentOwner {
+    DaggerComponentOwner by appComponentOwner {
+
+    init {
+        Timber.v("Init")
+        lifecycle.subscribe(
+            onCreate = { Timber.v("OnCreate") },
+            onDestroy = { Timber.v("OnDestroy") }
+        )
+    }
 
     init {
         matrix.isLoggedIn()
             .distinctUntilChanged()
             .onEach { isLoggedIn ->
+                Timber.v("IsLoggedIn")
                 if (isLoggedIn) {
                     val matrixClient = matrix.restoreSession()
                     if (matrixClient == null) {
-                        backstack.replace(NavTarget.NotLoggedInFlow)
+                        backstack.newRoot(NavTarget.NotLoggedInFlow)
                     } else {
                         matrixClient.startSync()
                         sessionComponentsOwner.create(matrixClient)
-                        backstack.replace(NavTarget.LoggedInFlow(matrixClient.sessionId))
+                        backstack.newRoot(NavTarget.LoggedInFlow(matrixClient.sessionId))
                     }
                 } else {
-                    backstack.replace(NavTarget.NotLoggedInFlow)
+                    backstack.newRoot(NavTarget.NotLoggedInFlow)
                 }
             }
             .launchIn(lifecycleScope)
@@ -124,7 +134,10 @@ class RootFlowNode(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            is NavTarget.LoggedInFlow -> LoggedInFlowNode(buildContext, navTarget.sessionId)
+            is NavTarget.LoggedInFlow -> {
+                val matrixClient = sessionComponentsOwner.activeSessionComponent!!.matrixClient()
+                LoggedInFlowNode(buildContext, navTarget.sessionId, matrixClient)
+            }
             NavTarget.NotLoggedInFlow -> NotLoggedInFlowNode(buildContext)
             NavTarget.SplashScreen -> node(buildContext) {
                 Box(modifier = it.fillMaxSize(), contentAlignment = Alignment.Center) {
