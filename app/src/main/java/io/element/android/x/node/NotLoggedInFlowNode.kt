@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.composable.Children
+import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
@@ -13,6 +14,7 @@ import io.element.android.x.core.di.viewModelSupportNode
 import io.element.android.x.features.login.node.LoginFlowNode
 import io.element.android.x.features.onboarding.OnBoardingScreen
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 
 class NotLoggedInFlowNode(
     buildContext: BuildContext,
@@ -24,6 +26,13 @@ class NotLoggedInFlowNode(
     navModel = backstack,
     buildContext = buildContext
 ) {
+
+    init {
+        lifecycle.subscribe(
+            onCreate = { Timber.v("OnCreate") },
+            onDestroy = { Timber.v("OnDestroy") }
+        )
+    }
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
