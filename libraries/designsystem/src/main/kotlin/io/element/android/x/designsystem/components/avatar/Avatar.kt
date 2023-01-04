@@ -98,5 +98,5 @@ private fun InitialsAvatar(
 @Preview
 @Composable
 fun InitialsAvatar() {
-    InitialsAvatar(AvatarData("A"))
+    Avatar(AvatarData(name = "A"))
 }
