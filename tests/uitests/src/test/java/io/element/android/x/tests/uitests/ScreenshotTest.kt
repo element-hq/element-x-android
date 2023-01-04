@@ -119,4 +119,3 @@ private fun String.toLocale(): Locale {
         else -> Locale.Builder().setLanguage(this).build()
     }
 }
-
