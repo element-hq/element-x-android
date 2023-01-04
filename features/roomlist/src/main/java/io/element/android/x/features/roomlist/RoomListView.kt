@@ -28,14 +28,14 @@ import io.element.android.x.features.roomlist.components.RoomListTopBar
 import io.element.android.x.features.roomlist.components.RoomSummaryRow
 import io.element.android.x.features.roomlist.model.MatrixUser
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
-import io.element.android.x.features.roomlist.model.RoomListScreen
+import io.element.android.x.features.roomlist.model.RoomListState
 import io.element.android.x.features.roomlist.model.stubbedRoomSummaries
 import io.element.android.x.matrix.core.RoomId
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun RoomListView(
-    state: RoomListScreen.State,
+    state: RoomListState,
     modifier: Modifier = Modifier,
     onRoomClicked: (RoomId) -> Unit = {},
     onFilterChanged: (String) -> Unit = {},
