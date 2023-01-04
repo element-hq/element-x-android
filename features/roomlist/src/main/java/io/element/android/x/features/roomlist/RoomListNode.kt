@@ -8,6 +8,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import io.element.android.x.features.roomlist.model.RoomListEvents
 import io.element.android.x.matrix.core.RoomId
+import io.element.android.x.presentation.presenterConnector
 
 class RoomListNode(
     buildContext: BuildContext,

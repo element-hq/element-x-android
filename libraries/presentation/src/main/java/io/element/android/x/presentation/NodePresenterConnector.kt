@@ -1,11 +1,10 @@
-package io.element.android.x.features.roomlist
+package io.element.android.x.presentation
 
-import androidx.compose.ui.platform.AndroidUiDispatcher
 import androidx.lifecycle.lifecycleScope
+import app.cash.molecule.AndroidUiDispatcher
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.launchMolecule
 import com.bumble.appyx.core.node.Node
-import io.element.android.x.core.architecture.Presenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
