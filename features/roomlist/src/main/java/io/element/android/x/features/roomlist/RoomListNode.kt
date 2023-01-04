@@ -11,10 +11,10 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.x.core.di.AssistedNodeFactory
+import io.element.android.x.architecture.AssistedNodeFactory
 import io.element.android.x.features.roomlist.model.RoomListEvents
 import io.element.android.x.matrix.core.RoomId
-import io.element.android.x.presentation.presenterConnector
+import io.element.android.x.architecture.presenterConnector
 
 class RoomListNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,

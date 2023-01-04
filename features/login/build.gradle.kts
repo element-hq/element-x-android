@@ -19,6 +19,7 @@ dependencies {
     anvil(project(":anvilcodegen"))
     implementation(project(":libraries:di"))
     implementation(project(":libraries:core"))
+    implementation(project(":libraries:architecture"))
     implementation(project(":libraries:matrix"))
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:elementresources"))

@@ -5,7 +5,7 @@ import androidx.startup.Initializer
 import coil.Coil
 import coil.ImageLoader
 import coil.ImageLoaderFactory
-import io.element.android.x.core.di.bindings
+import io.element.android.x.architecture.bindings
 import io.element.android.x.di.AppBindings
 
 class CoilInitializer : Initializer<Unit> {

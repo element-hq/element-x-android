@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.core.di
+package io.element.android.x.architecture.viewmodel
 
 import com.airbnb.mvrx.MavericksViewModel
 import dagger.MapKey

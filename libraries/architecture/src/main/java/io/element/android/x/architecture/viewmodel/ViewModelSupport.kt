@@ -1,4 +1,4 @@
-package io.element.android.x.core.di
+package io.element.android.x.architecture.viewmodel
 
 import android.os.Bundle
 import androidx.compose.runtime.Composable

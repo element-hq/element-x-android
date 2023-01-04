@@ -116,7 +116,7 @@ class ContributesViewModelCodeGenerator : CodeGenerator {
     }
 
     companion object {
-        private val assistedViewModelFactoryFqName = FqName("io.element.android.x.core.di.AssistedViewModelFactory")
-        private val viewModelKeyFqName = FqName("io.element.android.x.core.di.ViewModelKey")
+        private val assistedViewModelFactoryFqName = FqName("io.element.android.x.architecture.viewmodel.AssistedViewModelFactory")
+        private val viewModelKeyFqName = FqName("io.element.android.x.architecture.viewmodel.ViewModelKey")
     }
 }

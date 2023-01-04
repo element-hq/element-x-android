@@ -6,10 +6,9 @@ import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.x.anvilannotations.ContributesViewModel
-import io.element.android.x.core.di.daggerMavericksViewModelFactory
+import io.element.android.x.architecture.viewmodel.daggerMavericksViewModelFactory
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
-import io.element.android.x.di.AppScope
 import io.element.android.x.di.SessionScope
 import io.element.android.x.features.messages.model.MessagesItemAction
 import io.element.android.x.features.messages.model.MessagesItemActionsSheetState
@@ -17,7 +16,6 @@ import io.element.android.x.features.messages.model.MessagesTimelineItemState
 import io.element.android.x.features.messages.model.MessagesViewState
 import io.element.android.x.features.messages.model.content.MessagesTimelineItemRedactedContent
 import io.element.android.x.features.messages.model.content.MessagesTimelineItemTextBasedContent
-import io.element.android.x.matrix.Matrix
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.timeline.MatrixTimeline

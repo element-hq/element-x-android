@@ -20,7 +20,7 @@ import io.element.android.x.features.roomlist.model.RoomListState
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.RoomSummary
-import io.element.android.x.presentation.Presenter
+import io.element.android.x.architecture.Presenter
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList

@@ -5,9 +5,3 @@ plugins {
 android {
     namespace = "io.element.android.x.core"
 }
-
-dependencies {
-    api(libs.mavericks.compose)
-    api(libs.dagger)
-    api(libs.appyx.core)
-}

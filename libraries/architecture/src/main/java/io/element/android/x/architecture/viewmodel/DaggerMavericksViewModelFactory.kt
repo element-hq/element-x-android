@@ -1,10 +1,10 @@
-package io.element.android.x.core.di
+package io.element.android.x.architecture.viewmodel
 
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
+import io.element.android.x.architecture.bindings
 
 /**
  * To connect Mavericks ViewModel creation with Anvil's dependency injection, add the following to your MavericksViewModel.

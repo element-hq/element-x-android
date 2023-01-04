@@ -1,4 +1,4 @@
-package io.element.android.x.core.di
+package io.element.android.x.architecture
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node

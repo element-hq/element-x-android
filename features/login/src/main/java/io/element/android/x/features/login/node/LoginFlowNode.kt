@@ -10,7 +10,7 @@ import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
-import io.element.android.x.core.di.viewModelSupportNode
+import io.element.android.x.architecture.viewmodel.viewModelSupportNode
 import io.element.android.x.features.login.LoginScreen
 import io.element.android.x.features.login.changeserver.ChangeServerScreen
 import kotlinx.parcelize.Parcelize

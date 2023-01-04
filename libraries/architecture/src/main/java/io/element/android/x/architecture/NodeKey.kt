@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.core.di
+package io.element.android.x.architecture
 
 import com.bumble.appyx.core.node.Node
 import dagger.MapKey

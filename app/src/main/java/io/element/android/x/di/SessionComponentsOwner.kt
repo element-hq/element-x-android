@@ -1,7 +1,7 @@
 package io.element.android.x.di
 
 import android.content.Context
-import io.element.android.x.core.di.bindings
+import io.element.android.x.architecture.bindings
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.core.SessionId
 import java.util.concurrent.ConcurrentHashMap

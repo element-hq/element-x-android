@@ -137,6 +137,7 @@ dependencies {
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:matrix"))
     implementation(project(":libraries:core"))
+    implementation(project(":libraries:architecture"))
     implementation(project(":features:onboarding"))
     implementation(project(":features:login"))
     implementation(project(":features:roomlist"))
