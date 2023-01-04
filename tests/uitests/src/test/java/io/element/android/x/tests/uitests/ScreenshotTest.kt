@@ -23,8 +23,11 @@ import android.os.LocaleList
 import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -108,7 +111,7 @@ class ScreenshotTest {
                 }
             ) {
                 ElementXTheme(darkTheme = (theme == "dark")) {
-                    Box {
+                    Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                         componentTestPreview.Content()
                     }
                 }

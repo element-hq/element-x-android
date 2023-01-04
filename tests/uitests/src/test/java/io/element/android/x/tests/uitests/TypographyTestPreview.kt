@@ -19,11 +19,12 @@ package io.element.android.x.tests.uitests
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.airbnb.android.showkase.models.ShowkaseBrowserTypography
 import com.airbnb.android.showkase.ui.padding4x
-import java.util.*
+import java.util.Locale
 
 class TypographyTestPreview(
     private val showkaseBrowserTypography: ShowkaseBrowserTypography
@@ -37,7 +38,9 @@ class TypographyTestPreview(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(padding4x),
-            style = showkaseBrowserTypography.textStyle
+            style = showkaseBrowserTypography.textStyle.copy(
+                color = MaterialTheme.colorScheme.onBackground
+            )
         )
     }
 
