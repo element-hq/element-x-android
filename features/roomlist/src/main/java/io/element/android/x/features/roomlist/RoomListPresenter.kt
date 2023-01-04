@@ -9,7 +9,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import io.element.android.x.core.architecture.Presenter
 import io.element.android.x.core.coroutine.parallelMap
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
@@ -21,6 +20,7 @@ import io.element.android.x.features.roomlist.model.RoomListState
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.RoomSummary
+import io.element.android.x.presentation.Presenter
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList

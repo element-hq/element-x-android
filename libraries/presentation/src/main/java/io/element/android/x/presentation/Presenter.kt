@@ -1,4 +1,4 @@
-package io.element.android.x.core.architecture
+package io.element.android.x.presentation
 
 import androidx.compose.runtime.Composable
 import kotlinx.coroutines.flow.Flow
