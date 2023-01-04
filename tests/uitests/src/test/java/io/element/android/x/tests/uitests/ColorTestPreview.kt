@@ -38,5 +38,5 @@ class ColorTestPreview(
         )
     }
 
-    override fun toString(): String = "${showkaseBrowserColor.colorGroup}_${showkaseBrowserColor.colorName}"
+    override fun toString(): String = "Color_${showkaseBrowserColor.colorGroup}_${showkaseBrowserColor.colorName}"
 }
