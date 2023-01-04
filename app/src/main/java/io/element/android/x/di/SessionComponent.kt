@@ -5,11 +5,12 @@ import com.squareup.anvil.annotations.MergeSubcomponent
 import dagger.BindsInstance
 import dagger.Subcomponent
 import io.element.android.x.core.di.DaggerMavericksBindings
+import io.element.android.x.core.di.NodeFactoriesBindings
 import io.element.android.x.matrix.MatrixClient
 
 @SingleIn(SessionScope::class)
 @MergeSubcomponent(SessionScope::class)
-interface SessionComponent: DaggerMavericksBindings {
+interface SessionComponent: DaggerMavericksBindings, NodeFactoriesBindings {
 
     fun matrixClient(): MatrixClient
 

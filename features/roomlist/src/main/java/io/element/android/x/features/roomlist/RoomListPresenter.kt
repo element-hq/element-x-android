@@ -32,7 +32,7 @@ private const val extendedRangeSize = 40
 
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
-    private val lastMessageFormatter: LastMessageFormatter = LastMessageFormatter(),
+    private val lastMessageFormatter: LastMessageFormatter,
 ) : Presenter<RoomListState, RoomListEvents> {
 
     @Composable

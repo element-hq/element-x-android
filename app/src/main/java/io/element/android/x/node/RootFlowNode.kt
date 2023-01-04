@@ -135,8 +135,7 @@ class RootFlowNode(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             is NavTarget.LoggedInFlow -> {
-                val matrixClient = sessionComponentsOwner.activeSessionComponent!!.matrixClient()
-                LoggedInFlowNode(buildContext, navTarget.sessionId, matrixClient)
+                LoggedInFlowNode(buildContext, navTarget.sessionId)
             }
             NavTarget.NotLoggedInFlow -> NotLoggedInFlowNode(buildContext)
             NavTarget.SplashScreen -> node(buildContext) {

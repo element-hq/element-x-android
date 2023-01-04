@@ -16,10 +16,10 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.absoluteValue
 
-class LastMessageFormatter @Inject constructor(
-    private val clock: Clock = Clock.System,
+class LastMessageFormatter @Inject constructor() {
+
+    private val clock: Clock = Clock.System
     private val locale: Locale = Locale.getDefault()
-) {
 
     private val onlyTimeFormatter: DateTimeFormatter by lazy {
         val pattern = DateFormat.getBestDateTimePattern(locale, "HH:mm")
