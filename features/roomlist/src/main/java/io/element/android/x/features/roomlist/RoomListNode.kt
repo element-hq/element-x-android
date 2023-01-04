@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import io.element.android.x.features.roomlist.model.RoomListScreen
+import io.element.android.x.features.roomlist.model.RoomListEvents
 import io.element.android.x.matrix.core.RoomId
 
 class RoomListNode(
@@ -18,15 +18,15 @@ class RoomListNode(
     private val connector = presenterConnector(presenter)
 
     private fun updateFilter(filter: String) {
-        connector.emitEvent(RoomListScreen.Event.UpdateFilter(filter))
+        connector.emitEvent(RoomListEvents.UpdateFilter(filter))
     }
 
     private fun updateVisibleRange(range: IntRange) {
-        connector.emitEvent((RoomListScreen.Event.UpdateVisibleRange(range)))
+        connector.emitEvent((RoomListEvents.UpdateVisibleRange(range)))
     }
 
     private fun logout() {
-        connector.emitEvent(RoomListScreen.Event.Logout)
+        connector.emitEvent(RoomListEvents.Logout)
     }
 
     @Composable

@@ -14,9 +14,10 @@ import io.element.android.x.core.coroutine.parallelMap
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
 import io.element.android.x.features.roomlist.model.MatrixUser
+import io.element.android.x.features.roomlist.model.RoomListEvents
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListRoomSummaryPlaceholders
-import io.element.android.x.features.roomlist.model.RoomListScreen
+import io.element.android.x.features.roomlist.model.RoomListState
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.RoomSummary
@@ -32,10 +33,10 @@ private const val extendedRangeSize = 40
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
     private val lastMessageFormatter: LastMessageFormatter = LastMessageFormatter(),
-) : Presenter<RoomListScreen.State, RoomListScreen.Event> {
+) : Presenter<RoomListState, RoomListEvents> {
 
     @Composable
-    override fun present(events: Flow<RoomListScreen.Event>): RoomListScreen.State {
+    override fun present(events: Flow<RoomListEvents>): RoomListState {
         val matrixUser: MutableState<MatrixUser?> = remember {
             mutableStateOf(null)
         }
@@ -53,16 +54,16 @@ class RoomListPresenter @Inject constructor(
             initialLoad(matrixUser)
             events.collect { event ->
                 when (event) {
-                    RoomListScreen.Event.Logout -> logout(isLoginOut)
-                    is RoomListScreen.Event.UpdateFilter -> filter = event.newFilter
-                    is RoomListScreen.Event.UpdateVisibleRange -> updateVisibleRange(event.range)
+                    RoomListEvents.Logout -> logout(isLoginOut)
+                    is RoomListEvents.UpdateFilter -> filter = event.newFilter
+                    is RoomListEvents.UpdateVisibleRange -> updateVisibleRange(event.range)
                 }
             }
         }
         LaunchedEffect(roomSummaries, filter) {
             filteredRoomSummaries.value = updateFilteredRoomSummaries(roomSummaries, filter)
         }
-        return RoomListScreen.State(
+        return RoomListState(
             matrixUser = matrixUser.value,
             roomList = filteredRoomSummaries.value,
             filter = filter,
