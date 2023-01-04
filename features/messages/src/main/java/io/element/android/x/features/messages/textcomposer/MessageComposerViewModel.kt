@@ -5,8 +5,8 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.x.anvilannotations.ContributesViewModel
+import io.element.android.x.architecture.viewmodel.daggerMavericksViewModelFactory
 import io.element.android.x.core.data.StableCharSequence
-import io.element.android.x.core.di.daggerMavericksViewModelFactory
 import io.element.android.x.di.SessionScope
 import io.element.android.x.matrix.MatrixClient
 

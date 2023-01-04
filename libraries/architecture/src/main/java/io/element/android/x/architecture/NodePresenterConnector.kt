@@ -1,4 +1,4 @@
-package io.element.android.x.presentation
+package io.element.android.x.architecture
 
 import androidx.lifecycle.lifecycleScope
 import app.cash.molecule.AndroidUiDispatcher

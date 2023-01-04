@@ -4,8 +4,8 @@ import com.squareup.anvil.annotations.ContributesTo
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-import io.element.android.x.core.di.AssistedNodeFactory
-import io.element.android.x.core.di.NodeKey
+import io.element.android.x.architecture.AssistedNodeFactory
+import io.element.android.x.architecture.NodeKey
 import io.element.android.x.di.SessionScope
 
 @Module

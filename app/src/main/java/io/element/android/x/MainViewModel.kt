@@ -6,7 +6,7 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.x.anvilannotations.ContributesViewModel
-import io.element.android.x.core.di.daggerMavericksViewModelFactory
+import io.element.android.x.architecture.viewmodel.daggerMavericksViewModelFactory
 import io.element.android.x.di.AppScope
 import io.element.android.x.di.SessionComponentsOwner
 import io.element.android.x.matrix.Matrix
