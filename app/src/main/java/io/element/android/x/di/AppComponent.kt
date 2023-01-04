@@ -8,7 +8,7 @@ import io.element.android.x.core.di.DaggerMavericksBindings
 
 @SingleIn(AppScope::class)
 @MergeComponent(AppScope::class)
-interface AppComponent: DaggerMavericksBindings {
+interface AppComponent : DaggerMavericksBindings {
 
     @Component.Factory
     interface Factory {

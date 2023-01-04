@@ -22,10 +22,7 @@ import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.di.AppBindings
 import io.element.android.x.node.RootFlowNode
 
-class MainActivity : NodeComponentActivity(), DaggerComponentOwner {
-
-    override val daggerComponent: Any
-        get() = listOfNotNull((applicationContext as? DaggerComponentOwner)?.daggerComponent)
+class MainActivity : NodeComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +38,7 @@ class MainActivity : NodeComponentActivity(), DaggerComponentOwner {
                     NodeHost(integrationPoint = appyxIntegrationPoint) {
                         RootFlowNode(
                             buildContext = it,
-                            appComponentOwner = this,
+                            appComponentOwner = applicationContext as DaggerComponentOwner,
                             matrix = appBindings.matrix(),
                             sessionComponentsOwner = appBindings.sessionComponentsOwner()
                         )

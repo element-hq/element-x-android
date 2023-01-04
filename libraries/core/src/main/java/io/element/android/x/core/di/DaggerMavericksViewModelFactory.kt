@@ -41,10 +41,7 @@ class DaggerMavericksViewModelFactory<VM : MavericksViewModel<S>, S : MavericksS
 ) : MavericksViewModelFactory<VM, S> {
 
     override fun create(viewModelContext: ViewModelContext, state: S): VM {
-        val bindings: DaggerMavericksBindings = when (viewModelContext) {
-            is FragmentViewModelContext -> viewModelContext.fragment.bindings()
-            else -> viewModelContext.activity.bindings()
-        }
+        val bindings: DaggerMavericksBindings = viewModelContext.activity.bindings()
         val viewModelFactoryMap = bindings.viewModelFactories()
         val viewModelFactory = viewModelFactoryMap[viewModelClass] ?: error("Cannot find ViewModelFactory for ${viewModelClass.name}.")
 
