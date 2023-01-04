@@ -75,12 +75,12 @@ fun RageshakePreferencesView(
 
 @Composable
 @Preview
-fun RageshakePreferencesPreview() {
+fun RageshakePreferencesViewPreview() {
     RageshakePreferencesView(RageshakePreferencesState(isEnabled = true, isSupported = true, sensitivity = 0.5f))
 }
 
 @Composable
 @Preview
-fun RageshakePreferencePreviewNotSupported() {
+fun RageshakePreferenceNotSupportedPreview() {
     RageshakePreferencesView(RageshakePreferencesState(isEnabled = true, isSupported = false, sensitivity = 0.5f))
 }
