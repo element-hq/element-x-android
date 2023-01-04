@@ -18,7 +18,6 @@
 package io.element.android.x.tests.uitests
 
 import android.content.res.Configuration
-import android.os.Build
 import android.os.LocaleList
 import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.OnBackPressedDispatcherOwner
@@ -33,10 +32,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.Density
-import app.cash.paparazzi.DeviceConfig
 import app.cash.paparazzi.Paparazzi
-import app.cash.paparazzi.androidHome
-import app.cash.paparazzi.detectEnvironment
 import com.airbnb.android.showkase.models.Showkase
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
@@ -71,11 +67,6 @@ class ScreenshotTest {
 
     @get:Rule
     val paparazzi = Paparazzi(
-        // Apply trick from https://github.com/cashapp/paparazzi/issues/489#issuecomment-1195674603
-        environment = detectEnvironment().copy(
-            platformDir = "${androidHome()}/platforms/android-32",
-            compileSdkVersion = Build.VERSION_CODES.S_V2 /* 32 */
-        ),
         maxPercentDifference = 0.0,
     )
 
@@ -85,7 +76,7 @@ class ScreenshotTest {
         @TestParameter baseDeviceConfig: BaseDeviceConfig,
         @TestParameter(value = ["1.0"/*, "1.5"*/]) fontScale: Float,
         @TestParameter(value = ["light", "dark"]) theme: String,
-        @TestParameter(value = ["en", /*"fr", "de", "ru"*/]) localeStr: String,
+        @TestParameter(value = ["en" /*"fr", "de", "ru"*/]) localeStr: String,
     ) {
         paparazzi.unsafeUpdateConfig(
             deviceConfig = baseDeviceConfig.deviceConfig.copy(
