@@ -9,23 +9,19 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.x.architecture.AssistedNodeFactory
+import io.element.android.x.anvilannotations.ContributesNode
+import io.element.android.x.architecture.presenterConnector
+import io.element.android.x.di.SessionScope
 import io.element.android.x.features.roomlist.model.RoomListEvents
 import io.element.android.x.matrix.core.RoomId
-import io.element.android.x.architecture.presenterConnector
 
+@ContributesNode(SessionScope::class)
 class RoomListNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenter: RoomListPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
-    @AssistedFactory
-    interface Factory : AssistedNodeFactory<RoomListNode> {
-        override fun create(buildContext: BuildContext, plugins: List<Plugin>): RoomListNode
-    }
 
     interface Callback : Plugin {
         fun onRoomClicked(roomId: RoomId)
