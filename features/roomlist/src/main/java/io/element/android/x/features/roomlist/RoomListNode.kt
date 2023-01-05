@@ -31,7 +31,7 @@ class RoomListNode @AssistedInject constructor(
         fun onRoomClicked(roomId: RoomId)
     }
 
-    private val connector = presenterConnector(presenter)
+    private val connector by presenterConnector(presenter)
 
     private fun updateFilter(filter: String) {
         connector.emitEvent(RoomListEvents.UpdateFilter(filter))
