@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,25 +17,16 @@
 // TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("io.element.android-compose-library")
-    alias(libs.plugins.ksp)
-    id("kotlin-parcelize")
+    id("io.element.android-library")
+    alias(libs.plugins.stemlibrary)
 }
 
 android {
-    namespace = "io.element.android.x.textcomposer"
-    buildFeatures {
-        viewBinding = true
-    }
+    namespace = "io.element.android.x.ui.strings"
 }
 
-dependencies {
-    implementation(project(":libraries:elementresources"))
-    implementation(project(":libraries:ui-strings"))
-    implementation(project(":libraries:core"))
-    implementation(project(":libraries:matrix"))
-    implementation(libs.wysiwyg)
-    implementation(libs.androidx.constraintlayout)
-    implementation("com.google.android.material:material:1.7.0")
-    ksp(libs.showkase.processor)
+// forcing the stem string template generator to be cacheable, without this the templates
+// are regenerated causing the app module to recompile its sources
+tasks.withType(com.likethesalad.android.templates.common.tasks.BaseTask::class.java) {
+    outputs.cacheIf { true }
 }

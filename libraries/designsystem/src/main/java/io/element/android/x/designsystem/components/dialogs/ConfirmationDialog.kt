@@ -29,15 +29,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.element.android.x.element.resources.R as ElementR
+import io.element.android.x.ui.strings.R as StringR
 
 @Composable
 fun ConfirmationDialog(
     title: String,
     content: String,
     modifier: Modifier = Modifier,
-    submitText: String = stringResource(id = ElementR.string.ok),
-    cancelText: String = stringResource(id = ElementR.string.action_cancel),
+    submitText: String = stringResource(id = StringR.string.ok),
+    cancelText: String = stringResource(id = StringR.string.action_cancel),
     thirdButtonText: String? = null,
     onSubmitClicked: () -> Unit = {},
     onCancelClicked: () -> Unit = {},

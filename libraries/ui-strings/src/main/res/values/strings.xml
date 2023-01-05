@@ -1,20 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) 2022 New Vector Ltd
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~     http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Cross feature -->
@@ -150,6 +134,9 @@
     <string name="notice_crypto_unable_to_decrypt">** Unable to decrypt: %s **</string>
     <string name="notice_crypto_error_unknown_inbound_session_id">The sender\'s device has not sent us the keys for this message.</string>
 
+    <string name="notice_voice_broadcast_ended">%1$s ended a voice broadcast.</string>
+    <string name="notice_voice_broadcast_ended_by_you">You ended a voice broadcast.</string>
+
     <!-- Messages -->
 
     <!-- Room Screen -->
@@ -209,7 +196,7 @@
     <string name="initial_sync_start_importing_account_data">Initial sync:\nImporting account data</string>
 
     <string name="initial_sync_request_title">Initial sync request</string>
-    <string name="initial_sync_request_content">ElementX needs to perform a clear cache to be up to date, for the following reason:\n%s\n\nNote that this action will restart the app and it may take some time.</string>
+    <string name="initial_sync_request_content">${app_name} needs to perform a clear cache to be up to date, for the following reason:\n%s\n\nNote that this action will restart the app and it may take some time.</string>
     <string name="initial_sync_request_reason_unignored_users">- Some users have been unignored</string>
 
     <string name="event_status_sent_message">Message sent</string>
@@ -432,6 +419,7 @@
     <string name="action_got_it">Got it</string>
     <string name="action_select_all">Select all</string>
     <string name="action_deselect_all">Deselect all</string>
+    <string name="action_stop">Yes, Stop</string>
 
     <string name="copied_to_clipboard">Copied to clipboard</string>
 
@@ -537,8 +525,8 @@
     <string name="start_voice_call_prompt_msg">Are you sure that you want to start a voice call?</string>
     <string name="start_video_call_prompt_msg">Are you sure that you want to start a video call?</string>
 
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="call_failed_no_connection">ElementX Call Failed</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="call_failed_no_connection">${app_name} Call Failed</string>
     <string name="call_failed_no_connection_description">Failed to establish real time connection.\nPlease ask the administrator of your homeserver to configure a TURN server in order for calls to work reliably.</string>
 
     <string name="call_select_sound_device">Select Sound Device</string>
@@ -600,8 +588,8 @@
     <!-- request again e2e key -->
     <string name="e2e_re_request_encryption_key">Re-request encryption keys from your other sessions.</string>
 
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="e2e_re_request_encryption_key_dialog_content">Please launch ElementX on another device that can decrypt the message so it can send the keys to this session.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="e2e_re_request_encryption_key_dialog_content">Please launch ${app_name} on another device that can decrypt the message so it can send the keys to this session.</string>
 
     <!-- Mels -->
     <plurals name="membership_changes">
@@ -621,8 +609,8 @@
     <string name="settings_call_category">Calls</string>
     <string name="settings_call_show_confirmation_dialog_title">Prevent accidental call</string>
     <string name="settings_call_show_confirmation_dialog_summary">Ask for confirmation before starting a call</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="settings_call_ringtone_use_app_ringtone">Use default ElementX ringtone for incoming calls</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="settings_call_ringtone_use_app_ringtone">Use default ${app_name} ringtone for incoming calls</string>
     <string name="settings_call_ringtone_title">Incoming call ringtone</string>
     <string name="settings_call_ringtone_dialog_title">Select ringtone for calls:</string>
 
@@ -659,12 +647,12 @@
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Information</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="permissions_rationale_msg_record_audio">ElementX needs permission to access your microphone to perform audio calls.</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="permissions_rationale_msg_camera_and_audio">ElementX needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="permissions_rationale_msg_notification">ElementX needs permission to display notifications. Notifications can display your messages, your invitations, etc.\n\nPlease allow access on the next pop-ups to be able to view notification.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="permissions_rationale_msg_record_audio">${app_name} needs permission to access your microphone to perform audio calls.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="permissions_rationale_msg_notification">${app_name} needs permission to display notifications. Notifications can display your messages, your invitations, etc.\n\nPlease allow access on the next pop-ups to be able to view notification.</string>
 
     <string name="permissions_denied_qr_code">To scan a QR code, you need to allow camera access.</string>
     <string name="permissions_denied_add_contact">Allow permission to access your contacts.</string>
@@ -884,7 +872,7 @@
     <string name="settings_troubleshoot_test_system_settings_title">System Settings.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Notifications are enabled in the system settings.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Notifications are disabled in the system settings.\nPlease check system settings.</string>
-    <string name="settings_troubleshoot_test_system_settings_permission_failed">ElementX needs the permission to show notifications.\nPlease grant the permission.</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} needs the permission to show notifications.\nPlease grant the permission.</string>
     <string name="open_settings">Open Settings</string>
     <string name="grant_permission">Grant Permission</string>
 
@@ -895,8 +883,8 @@
 
     <string name="settings_troubleshoot_test_device_settings_title">Session Settings.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Notifications are enabled for this session.</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="settings_troubleshoot_test_device_settings_failed">Notifications are not enabled for this session.\nPlease check the ElementX settings.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="settings_troubleshoot_test_device_settings_failed">Notifications are not enabled for this session.\nPlease check the ${app_name} settings.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Enable</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Custom Settings.</string>
@@ -905,19 +893,19 @@
 
     <string name="settings_troubleshoot_test_play_services_title">Play Services Check</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK is available and up-to-date.</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="settings_troubleshoot_test_play_services_failed">ElementX uses Google Play Services to deliver push messages but it doesn’t seem to be configured correctly:\n%1$s</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} uses Google Play Services to deliver push messages but it doesn’t seem to be configured correctly:\n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Fix Play Services</string>
 
     <string name="settings_troubleshoot_test_fcm_title">Firebase Token</string>
     <string name="settings_troubleshoot_test_fcm_success">FCM token successfully retrieved:\n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">Failed to retrieved FCM token:\n%1$s</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]\nThis error is out of control of ElementX and according to Google, this error indicates that the device has too many apps registered with FCM. The error only occurs in cases where there are extreme numbers of apps, so it should not affect the average user.</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]\nThis error is out of control of ElementX. It can occur for several reasons. Maybe it will work if you retry later, you can also check that Google Play Service is not restricted in data usage in the system settings, or that your device clock is correct, or it can happen on custom ROM.</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]\nThis error is out of control of ElementX. There is no Google account on the phone. Please open the account manager and add a Google account.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]\nThis error is out of control of ${app_name} and according to Google, this error indicates that the device has too many apps registered with FCM. The error only occurs in cases where there are extreme numbers of apps, so it should not affect the average user.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]\nThis error is out of control of ${app_name}. It can occur for several reasons. Maybe it will work if you retry later, you can also check that Google Play Service is not restricted in data usage in the system settings, or that your device clock is correct, or it can happen on custom ROM.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]\nThis error is out of control of ${app_name}. There is no Google account on the phone. Please open the account manager and add a Google account.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Add Account</string>
 
     <string name="settings_troubleshoot_test_token_registration_title">Token Registration</string>
@@ -939,20 +927,20 @@
 
     <string name="settings_troubleshoot_test_service_boot_title">Start on boot</string>
     <string name="settings_troubleshoot_test_service_boot_success">Service will start when the device is restarted.</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="settings_troubleshoot_test_service_boot_failed">The service will not start when the device is restarted, you will not receive notifications until ElementX has been opened once.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="settings_troubleshoot_test_service_boot_failed">The service will not start when the device is restarted, you will not receive notifications until ${app_name} has been opened once.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Enable Start on boot</string>
 
     <string name="settings_troubleshoot_test_bg_restricted_title">Check background restrictions</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="settings_troubleshoot_test_bg_restricted_success">Background restrictions are disabled for ElementX. This test should be run using mobile data (no WIFI).\n%1$s</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Background restrictions are enabled for ElementX.\nWork that the app tries to do will be aggressively restricted while it is in the background, and this could affect notifications.\n%1$s</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="settings_troubleshoot_test_bg_restricted_success">Background restrictions are disabled for ${app_name}. This test should be run using mobile data (no WIFI).\n%1$s</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Background restrictions are enabled for ${app_name}.\nWork that the app tries to do will be aggressively restricted while it is in the background, and this could affect notifications.\n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Disable restrictions</string>
 
     <string name="settings_troubleshoot_test_battery_title">Battery Optimization</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="settings_troubleshoot_test_battery_success">ElementX is not affected by Battery Optimization.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="settings_troubleshoot_test_battery_success">${app_name} is not affected by Battery Optimization.</string>
     <string name="settings_troubleshoot_test_battery_failed">If a user leaves a device unplugged and stationary for a period of time, with the screen off, the device enters Doze mode. This prevents apps from accessing the network and defers their jobs, syncs, and standard alarms. </string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignore Optimization</string>
 
@@ -992,11 +980,11 @@
     <string name="settings_background_sync">Background synchronization</string>
     <string name="settings_background_fdroid_sync_mode">Background Sync Mode</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimized for battery</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="settings_background_fdroid_sync_mode_battery_description">ElementX will sync in background in way that preserves the device’s limited resources (battery).\nDepending on your device resource state, the sync may be deferred by the operating system.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} will sync in background in way that preserves the device’s limited resources (battery).\nDepending on your device resource state, the sync may be deferred by the operating system.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimized for real time</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="settings_background_fdroid_sync_mode_real_time_description">ElementX will sync in background periodically at precise time (configurable).\nThis will impact radio and battery usage, there will be a permanent notification displayed stating that ElementX is listening for events.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} will sync in background periodically at precise time (configurable).\nThis will impact radio and battery usage, there will be a permanent notification displayed stating that ${app_name} is listening for events.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">No background sync</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">You will not be notified of incoming messages when the app is in background.</string>
 
@@ -1048,6 +1036,8 @@
     <string name="settings_chat_effects_description">Use /confetti command or send a message containing ❄️ or 🎉</string>
     <string name="settings_autoplay_animated_images_title">Autoplay animated images</string>
     <string name="settings_autoplay_animated_images_summary">Play animated images in the timeline as soon as they are visible</string>
+    <string name="settings_enable_direct_share_title">Enable direct share</string>
+    <string name="settings_enable_direct_share_summary">Show recent chats in the system share menu</string>
     <string name="settings_show_join_leave_messages">Show join and leave events</string>
     <string name="settings_show_join_leave_messages_summary">Invites, removes, and bans are unaffected.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Show account events</string>
@@ -1075,12 +1065,12 @@
     <!-- analytics -->
     <string name="settings_analytics">Analytics</string>
     <string name="settings_opt_in_of_analytics">Send analytics data</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="settings_opt_in_of_analytics_summary">ElementX collects anonymous analytics to allow us to improve the application.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="settings_opt_in_of_analytics_summary">${app_name} collects anonymous analytics to allow us to improve the application.</string>
 
-    <string name="analytics_opt_in_title">Help improve ElementX</string>
+    <string name="analytics_opt_in_title">Help improve ${app_name}</string>
     <!-- The template will be replaced by the value of the resource analytics_opt_in_content_link -->
-    <string name="analytics_opt_in_content">Help us identify issues and improve ElementX by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.\n\nYou can read all our terms %s.</string>
+    <string name="analytics_opt_in_content">Help us identify issues and improve ${app_name} by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.\n\nYou can read all our terms %s.</string>
     <string name="analytics_opt_in_content_link">here</string>
     <string name="analytics_opt_in_list_item_1">We <b>don\'t</b> record or profile any account data</string>
     <string name="analytics_opt_in_list_item_2">We <b>don\'t</b> share information with third parties</string>
@@ -1099,7 +1089,7 @@
     <string name="settings_integration_allow">Allow integrations</string>
     <string name="settings_integration_manager">Integration manager</string>
 
-    <string name="legals_application_title">ElementX policy</string>
+    <string name="legals_application_title">${app_name} policy</string>
     <string name="legals_home_server_title">Your homeserver policy</string>
     <string name="legals_identity_server_title">Your identity server policy</string>
     <string name="legals_third_party_notices">Third party libraries</string>
@@ -1520,8 +1510,8 @@
 
     <!-- Key Backup -->
 
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="keys_backup_passphrase_not_empty_error_message">Please delete the passphrase if you want ElementX to generate a recovery key.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="keys_backup_passphrase_not_empty_error_message">Please delete the passphrase if you want ${app_name} to generate a recovery key.</string>
 
     <string name="keys_backup_setup_step1_title">Never lose encrypted messages</string>
     <string name="keys_backup_setup_step1_description">Messages in encrypted rooms are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.\n\nSecurely back up your keys to avoid losing them.</string>
@@ -1658,7 +1648,10 @@
     <string name="error_user_already_logged_in">It looks like you’re trying to connect to another homeserver. Do you want to sign out?</string>
 
     <string name="edit">Edit</string>
+    <string name="editing">Editing</string>
     <string name="reply">Reply</string>
+    <string name="replying_to">Replying to %s</string>
+    <string name="quoting">Quoting</string>
     <string name="reply_in_thread">Reply in thread</string>
     <string name="view_in_room">View In Room</string>
 
@@ -1695,7 +1688,8 @@
     <string name="create_new_room">Create New Room</string>
     <string name="create_new_space">Create New Space</string>
     <string name="error_no_network">No network. Please check your Internet connection.</string>
-    <string name="error_check_network">Something went wrong. Please check your network connection and try again.</string>
+    <!-- TODO delete -->
+    <string name="error_check_network" tools:ignore="UnusedResources">Something went wrong. Please check your network connection and try again.</string>
     <string name="change_room_directory_network">"Change network"</string>
     <string name="please_wait">"Please wait…"</string>
     <string name="updating_your_data">Updating your data…</string>
@@ -1751,7 +1745,7 @@
 
     <string name="preference_help">Help</string>
     <string name="preference_help_title">Help and support</string>
-    <string name="preference_help_summary">Get help with using ElementX</string>
+    <string name="preference_help_summary">Get help with using ${app_name}</string>
     <string name="preference_versions">Versions</string>
     <string name="preference_system_settings">System settings</string>
 
@@ -1980,8 +1974,8 @@
     <string name="ftue_auth_carousel_secure_body">Secure and independent communication that gives you the same level of privacy as a face-to-face conversation in your own home.</string>
     <string name="ftue_auth_carousel_control_body">Choose where your conversations are kept, giving you control and independence. Connected via Matrix.</string>
     <string name="ftue_auth_carousel_encrypted_body">End-to-end encrypted and no phone number required. No ads or datamining.</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="ftue_auth_carousel_workplace_body">ElementX is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="ftue_auth_carousel_workplace_body">${app_name} is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
 
     <string name="ftue_auth_use_case_title">Who will you chat to the most?</string>
     <string name="ftue_auth_use_case_subtitle">We\'ll help you get connected</string>
@@ -2230,8 +2224,8 @@
     <string name="soft_logout_clear_data_dialog_title">Clear data</string>
     <string name="soft_logout_clear_data_dialog_content">Clear all data currently stored on this device?\nSign in again to access your account data and messages.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">You’ll lose access to secure messages unless you sign in to recover your encryption keys.</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="soft_logout_sso_not_same_user_error">The current session is for user %1$s and you provide credentials for user %2$s. This is not supported by ElementX.\nPlease first clear data, then sign in again on another account.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="soft_logout_sso_not_same_user_error">The current session is for user %1$s and you provide credentials for user %2$s. This is not supported by ${app_name}.\nPlease first clear data, then sign in again on another account.</string>
 
     <string name="permalink_malformed">Your matrix.to link was malformed</string>
     <string name="permalink_unsupported_groups">Cannot open this link: communities have been replaced by spaces</string>
@@ -2253,8 +2247,8 @@
     <string name="autocomplete_limited_results">Showing only the first results, type more letters…</string>
 
     <string name="settings_developer_mode_fail_fast_title">Fail-fast</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="settings_developer_mode_fail_fast_summary">ElementX may crash more often when an unexpected error occurs</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="settings_developer_mode_fail_fast_summary">${app_name} may crash more often when an unexpected error occurs</string>
 
     <string name="settings_developer_mode_show_info_on_screen_title">Show debug info on screen</string>
     <string name="settings_developer_mode_show_info_on_screen_summary">Show some useful info to help debugging the application</string>
@@ -2362,10 +2356,10 @@
     <string name="room_member_open_or_create_dm">Direct message</string>
     <string name="room_member_jump_to_read_receipt">Jump to read receipt</string>
 
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="rendering_event_error_type_of_event_not_handled">ElementX does not handle events of type \'%1$s\'</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="rendering_event_error_exception">ElementX encountered an issue when rendering content of event with id \'%1$s\'</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="rendering_event_error_type_of_event_not_handled">${app_name} does not handle events of type \'%1$s\'</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="rendering_event_error_exception">${app_name} encountered an issue when rendering content of event with id \'%1$s\'</string>
 
     <string name="unignore">Unignore</string>
 
@@ -2491,11 +2485,14 @@
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Keys are already up to date!</string>
 
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="login_default_session_public_name">ElementX Android</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="login_default_session_public_name">${app_name} Android</string>
 
     <string name="settings_key_requests">Key Requests</string>
     <string name="settings_export_trail">Export Audit</string>
+
+    <string name="settings_nightly_build">Nightly build</string>
+    <string name="settings_nightly_build_update">Get the latest build (note: you may have trouble to sign in)</string>
 
     <string name="e2e_use_keybackup">Unlock encrypted messages history</string>
 
@@ -2623,15 +2620,15 @@
     <string name="error_saving_media_file">Could not save media file</string>
     <string name="change_password_summary">Set a new account password…</string>
 
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="use_other_session_content_description">Use the latest ElementX on your other devices, ElementX Web, ElementX Desktop, ElementX iOS, ElementX for Android, or another cross-signing capable Matrix client</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="app_desktop_web">ElementX Web\nElementX Desktop</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="app_ios_android">ElementX iOS\nElementX Android</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="use_other_session_content_description">Use the latest ${app_name} on your other devices, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} for Android, or another cross-signing capable Matrix client</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="app_desktop_web">${app_name} Web\n${app_name} Desktop</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="app_ios_android">${app_name} iOS\n${app_name} Android</string>
     <string name="or_other_mx_capable_client">or another cross-signing capable Matrix client</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="use_latest_app">Use the latest ElementX on your other devices:</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="use_latest_app">Use the latest ${app_name} on your other devices:</string>
     <string name="command_description_discard_session">Forces the current outbound group session in an encrypted room to be discarded</string>
     <string name="command_description_discard_session_not_handled">Only supported in encrypted rooms</string>
     <!-- first will be replaced by recovery_passphrase, second will be replaced by recovery_key-->
@@ -2659,8 +2656,12 @@
     <string name="unencrypted">Unencrypted</string>
     <string name="encrypted_unverified">Encrypted by an unverified device</string>
     <string name="key_authenticity_not_guaranteed">The authenticity of this encrypted message can\'t be guaranteed on this device.</string>
-    <string name="review_logins">Review where you’re logged in</string>
-    <string name="verify_other_sessions">Verify all your sessions to ensure your account &amp; messages are safe</string>
+    <!-- TODO TO BE REMOVED -->
+    <string name="review_logins" tools:ignore="UnusedResources">Review where you’re logged in</string>
+    <!-- TODO TO BE REMOVED -->
+    <string name="verify_other_sessions" tools:ignore="UnusedResources">Verify all your sessions to ensure your account &amp; messages are safe</string>
+    <string name="review_unverified_sessions_title">You have unverified sessions</string>
+    <string name="review_unverified_sessions_description">Review to ensure your account is safe</string>
     <!-- Argument will be replaced by the other session name (e.g, Desktop, mobile) -->
     <string name="verify_this_session">Verify the new login accessing your account: %1$s</string>
 
@@ -2686,10 +2687,10 @@
     <string name="inviting_users_to_room">Inviting users…</string>
     <string name="invite_users_to_room_title">Invite Users</string>
     <string name="invite_friends">Invite friends</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="invite_friends_text">Hey, talk to me on ElementX: %s</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="invite_friends_rich_title">🔐️ Join me on ElementX</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="invite_friends_text">Hey, talk to me on ${app_name}: %s</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="invite_friends_rich_title">🔐️ Join me on ${app_name}</string>
     <string name="invitation_sent_to_one_user">Invitation sent to %1$s</string>
     <string name="invitations_sent_to_two_users">Invitations sent to %1$s and %2$s</string>
     <string name="not_a_valid_qr_code">"It's not a valid matrix QR code"</string>
@@ -2710,13 +2711,13 @@
 
     <string name="open_terms_of">Open terms of %s</string>
     <string name="disconnect_identity_server_dialog_content">Disconnect from the identity server %s?</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="identity_server_error_outdated_identity_server">This identity server is outdated. ElementX support only API V2.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="identity_server_error_outdated_identity_server">This identity server is outdated. ${app_name} support only API V2.</string>
     <string name="identity_server_error_outdated_home_server">This operation is not possible. The homeserver is outdated.</string>
     <string name="identity_server_error_no_identity_server_configured">Please first configure an identity server.</string>
     <string name="identity_server_error_terms_not_signed">Please first accepts the terms of the identity server in the settings.</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="identity_server_error_bulk_sha256_not_supported">For your privacy, ElementX only supports sending hashed user email addresses and phone numbers.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="identity_server_error_bulk_sha256_not_supported">For your privacy, ${app_name} only supports sending hashed user email addresses and phone numbers.</string>
     <string name="identity_server_error_binding_error">The association has failed.</string>
     <string name="identity_server_error_no_current_binding_error">There is no current association with this identifier.</string>
     <string name="identity_server_user_consent_not_provided">The user consent has not been provided.</string>
@@ -2810,17 +2811,17 @@
     <string name="settings_security_pin_code_summary">If you want to reset your PIN, tap Forgot PIN to logout and reset.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Enable biometrics</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Enable device specific biometrics, like fingerprints and face recognition.</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN code is the only way to unlock ElementX.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN code is the only way to unlock ${app_name}.</string>
     <string name="settings_security_pin_code_use_biometrics_error">Could not enable biometric authentication.</string>
     <string name="settings_security_pin_code_notifications_title">Show content in notifications</string>
     <string name="settings_security_pin_code_notifications_summary_on">Show details like room names and message content.</string>
     <string name="settings_security_pin_code_notifications_summary_off">Only display number of unread messages in a simple notification.</string>
     <string name="settings_security_pin_code_grace_period_title">Require PIN after 2 minutes</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="settings_security_pin_code_grace_period_summary_on">PIN code is required after 2 minutes of not using ElementX.</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="settings_security_pin_code_grace_period_summary_off">PIN code is required every time you open ElementX.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="settings_security_pin_code_grace_period_summary_on">PIN code is required after 2 minutes of not using ${app_name}.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="settings_security_pin_code_grace_period_summary_off">PIN code is required every time you open ${app_name}.</string>
     <string name="settings_security_pin_code_change_pin_title">Change PIN</string>
     <string name="settings_security_pin_code_change_pin_summary">Change your current PIN</string>
     <string name="error_opening_banned_room">Can\'t open a room where you are banned from.</string>
@@ -2879,8 +2880,8 @@
     <string name="call_slide_to_end_conference">Slide to end the call</string>
 
     <string name="re_authentication_activity_title">Re-Authentication Needed</string>
-    <!-- Note to translators: the translation MUST contain the string "ElementX", which will be replaced by the application name -->
-    <string name="re_authentication_default_confirm_text">ElementX requires you to enter your credentials to perform this action.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="re_authentication_default_confirm_text">${app_name} requires you to enter your credentials to perform this action.</string>
     <string name="authentication_error">Failed to authenticate</string>
 
     <string name="a11y_screenshot">Screenshot</string>
@@ -3035,7 +3036,7 @@
 
     <string name="labs_auto_report_uisi">Auto Report Decryption Errors.</string>
     <string name="labs_auto_report_uisi_desc">Your system will automatically send logs when an unable to decrypt error occurs</string>
-    <string name="labs_enable_thread_messages">Enable Thread Messages</string>
+    <string name="labs_enable_thread_messages">Enable threaded messages</string>
     <string name="labs_enable_thread_messages_desc">Note: app will be restarted</string>
     <string name="settings_show_latest_profile">Show latest user info</string>
     <string name="settings_show_latest_profile_description">Show the latest profile info (avatar and display name) for all the messages.</string>
@@ -3104,18 +3105,24 @@
     <string name="audio_message_file_size">(%1$s)</string>
 
     <string name="voice_broadcast_live">Live</string>
+    <string name="voice_broadcast_live_broadcast">Live broadcast</string>
+    <!-- TODO Rename id to voice_broadcast_buffering -->
+    <string name="a11y_voice_broadcast_buffering">Buffering…</string>
     <string name="a11y_resume_voice_broadcast_record">Resume voice broadcast record</string>
     <string name="a11y_pause_voice_broadcast_record">Pause voice broadcast record</string>
     <string name="a11y_stop_voice_broadcast_record">Stop voice broadcast record</string>
     <string name="a11y_play_voice_broadcast">Play or resume voice broadcast</string>
     <string name="a11y_pause_voice_broadcast">Pause voice broadcast</string>
-    <string name="a11y_voice_broadcast_buffering">Buffering</string>
     <string name="a11y_voice_broadcast_fast_backward">Fast backward 30 seconds</string>
     <string name="a11y_voice_broadcast_fast_forward">Fast forward 30 seconds</string>
     <string name="error_voice_broadcast_unauthorized_title">Can’t start a new voice broadcast</string>
     <string name="error_voice_broadcast_permission_denied_message">You don’t have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.</string>
     <string name="error_voice_broadcast_blocked_by_someone_else_message">Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.</string>
     <string name="error_voice_broadcast_already_in_progress_message">You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.</string>
+    <!-- Examples of usage: 6h 15min 30sec left / 15min 30sec left / 30sec left -->
+    <string name="voice_broadcast_recording_time_left">%1$s left</string>
+    <string name="stop_voice_broadcast_dialog_title">Stop live broadcasting?</string>
+    <string name="stop_voice_broadcast_content">Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.</string>
 
     <string name="upgrade_room_for_restricted">Anyone in %s will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
     <string name="upgrade_room_for_restricted_no_param">Anyone in a parent space will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
@@ -3129,7 +3136,7 @@
 
     <string name="link_this_email_settings_link">Link this email address with your account</string>
     <!-- %s will be replaced by the value of link_this_email_settings_link and styled as a link -->
-    <string name="link_this_email_with_your_account">%s in Settings to receive invites directly in ElementX.</string>
+    <string name="link_this_email_with_your_account">%s in Settings to receive invites directly in ${app_name}.</string>
 
     <string name="labs_enable_latex_maths">Enable LaTeX mathematics</string>
     <string name="restart_the_application_to_apply_changes">Restart the application for the change to take effect.</string>
@@ -3200,8 +3207,8 @@
     <string name="location_share_live_select_duration_option_1">15 minutes</string>
     <string name="location_share_live_select_duration_option_2">1 hour</string>
     <string name="location_share_live_select_duration_option_3">8 hours</string>
-    <string name="location_not_available_dialog_title">ElementX could not access your location</string>
-    <string name="location_not_available_dialog_content">ElementX could not access your location. Please try again later.</string>
+    <string name="location_not_available_dialog_title">${app_name} could not access your location</string>
+    <string name="location_not_available_dialog_content">${app_name} could not access your location. Please try again later.</string>
     <string name="location_share_external">Open with</string>
     <string name="location_timeline_failed_to_load_map">Failed to load map</string>
     <string name="location_share_loading_map_error">Unable to load map\nThis home server may not be configured to display maps.</string>
@@ -3214,7 +3221,7 @@
     <string name="location_share_live_stop">Stop</string>
     <!-- Examples of usage: 6h 15min 30sec left/15min 30sec left/30 sec left-->
     <string name="location_share_live_remaining_time">%1$s left</string>
-    <string name="live_location_sharing_notification_title">ElementX Live Location</string>
+    <string name="live_location_sharing_notification_title">${app_name} Live Location</string>
     <string name="live_location_sharing_notification_description">Location sharing is in progress</string>
     <string name="labs_enable_live_location">Enable Live Location Sharing</string>
     <string name="labs_enable_live_location_summary">Temporary implementation: locations persist in room history</string>
@@ -3257,7 +3264,7 @@
     <string name="room_message_autocomplete_notification">Room notification</string>
 
     <!-- Screen sharing -->
-    <string name="screen_sharing_notification_title">ElementX Screen Sharing</string>
+    <string name="screen_sharing_notification_title">${app_name} Screen Sharing</string>
     <string name="screen_sharing_notification_description">Screen sharing is in progress</string>
 
     <string name="unifiedpush_getdistributors_dialog_title">Choose how to receive notifications</string>
@@ -3308,6 +3315,7 @@
     <string name="device_manager_verification_status_detail_current_session_unverified">Verify your current session for enhanced secure messaging.</string>
     <string name="device_manager_verification_status_detail_other_session_unverified">Verify or sign out from this session for best security and reliability.</string>
     <string name="device_manager_verification_status_detail_other_session_unknown">Verify your current session to reveal this session\'s verification status.</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">This session doesn\'t support encryption and thus can\'t be verified.</string>
     <string name="device_manager_verify_session">Verify Session</string>
     <string name="device_manager_view_details">View Details</string>
     <string name="device_manager_other_sessions_view_all">View All (%1$d)</string>
@@ -3330,7 +3338,7 @@
         <item quantity="one">Consider signing out from old sessions (%1$d day or more) that you don’t use anymore.</item>
         <item quantity="other">Consider signing out from old sessions (%1$d days or more) that you don’t use anymore.</item>
     </plurals>
-    <string name="device_manager_current_session_title">Current Session</string>
+    <string name="device_manager_current_session_title">Current session</string>
     <string name="device_manager_session_title">Session</string>
     <string name="device_manager_device_title">Device</string>
     <!--  Examples: Last activity Yesterday at 6PM, Last activity Aug 31 at 5:47PM -->
@@ -3361,6 +3369,14 @@
     <string name="device_manager_other_sessions_no_inactive_sessions_found">No inactive sessions found.</string>
     <string name="device_manager_other_sessions_clear_filter">Clear Filter</string>
     <string name="device_manager_other_sessions_select">Select sessions</string>
+    <string name="device_manager_other_sessions_multi_signout_selection">Sign out</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Sign out of %1$d session</item>
+        <item quantity="other">Sign out of %1$d sessions</item>
+    </plurals>
+    <string name="device_manager_signout_all_other_sessions">Sign out of all other sessions</string>
+    <string name="device_manager_other_sessions_show_ip_address">Show IP address</string>
+    <string name="device_manager_other_sessions_hide_ip_address">Hide IP address</string>
     <string name="device_manager_session_overview_signout">Sign out of this session</string>
     <string name="device_manager_session_details_title">Session details</string>
     <string name="device_manager_session_details_description">Application, device, and activity information.</string>
@@ -3389,7 +3405,10 @@
     <string name="device_manager_learn_more_sessions_unverified_title">Unverified sessions</string>
     <string name="device_manager_learn_more_sessions_unverified">Unverified sessions are sessions that have logged in with your credentials but not been cross-verified.\n\nYou should make especially certain that you recognise these sessions as they could represent an unauthorised use of your account.</string>
     <string name="device_manager_learn_more_sessions_verified_title">Verified sessions</string>
-    <string name="device_manager_learn_more_sessions_verified">Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.\n\nThis means they hold encryption keys for your previous messages, and confirm to other users you are communicating with that these sessions are really you.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string name="device_manager_learn_more_sessions_verified" tools:ignore="UnusedResources">Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.\n\nThis means they hold encryption keys for your previous messages, and confirm to other users you are communicating with that these sessions are really you.</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Verified sessions are anywhere you are using this account after entering your passphrase or confirming your identity with another verified session.\n\nThis means that you have all the keys needed to unlock your encrypted messages and confirm to other users that you trust this session.</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">This session doesn\'t support encryption, so it can\'t be verified.\n\nYou won\'t be able to participate in rooms where encryption is enabled when using this session.\n\nFor best security and privacy, it is recommended to use Matrix clients that support encryption.</string>
     <string name="device_manager_learn_more_session_rename_title">Renaming sessions</string>
     <string name="device_manager_learn_more_session_rename">Other users in direct messages and rooms that you join are able to view a full list of your sessions.\n\nThis provides them with confidence that they are really speaking to you, but it also means they can see the session name you enter here.</string>
     <string name="labs_enable_session_manager_title">Enable new session manager</string>
@@ -3404,14 +3423,14 @@
     <!-- Note to translators: for RTL languages, Spaces will be at the bottom left. Please translate "bottom-left" instead of "bottom-right". Thanks!-->
     <string name="home_empty_space_no_rooms_message">Spaces are a new way to group rooms and people. Add an existing room, or create a new one, using the bottom-right button.</string>
     <!--  Note to translators: %s will be replaces with current user displayname -->
-    <string name="home_empty_no_rooms_title">Welcome to ElementX,\n%s.</string>
+    <string name="home_empty_no_rooms_title">Welcome to ${app_name},\n%s.</string>
     <string name="home_empty_no_rooms_message">The all-in-one secure chat app for teams, friends and organisations. Create a chat, or join an existing room, to get started.</string>
     <string name="home_empty_no_unreads_title">Nothing to report.</string>
     <string name="home_empty_no_unreads_message">This is where your unread messages will show up, when you have some.</string>
 
     <string name="onboarding_new_app_layout_welcome_title">Welcome to a new view!</string>
     <!--    Note to translators: for RTL languages, menu will be at the bottom left. Please translate "bottom-left" instead of "bottom-right". Thanks!-->
-    <string name="onboarding_new_app_layout_welcome_message">To simplify your ElementX, tabs are now optional. Manage them using the top-right menu.</string>
+    <string name="onboarding_new_app_layout_welcome_message">To simplify your ${app_name}, tabs are now optional. Manage them using the top-right menu.</string>
     <string name="onboarding_new_app_layout_spaces_title">Access Spaces</string>
     <!--    Note to translators: for RTL languages, Spaces will be at the bottom left. Please translate "bottom-left" instead of "bottom-right". Thanks!-->
     <string name="onboarding_new_app_layout_spaces_message">Access your Spaces (bottom-right) faster and easier than ever before.</string>
@@ -3460,11 +3479,26 @@
     <string name="qr_code_login_confirm_security_code">Confirm</string>
     <string name="qr_code_login_confirm_security_code_description">Please ensure that you know the origin of this code. By linking devices, you will provide someone with full access to your account.</string>
 
-    <!-- WYSIWYG Composer -->
+    <!-- Rich text editor -->
     <string name="rich_text_editor_format_bold">Apply bold format</string>
     <string name="rich_text_editor_format_italic">Apply italic format</string>
     <string name="rich_text_editor_format_strikethrough">Apply strikethrough format</string>
     <string name="rich_text_editor_format_underline">Apply underline format</string>
+    <string name="rich_text_editor_link">Set link</string>
     <string name="rich_text_editor_full_screen_toggle">Toggle full screen mode</string>
 
+    <string name="set_link_text">Text</string>
+    <string name="set_link_link">Link</string>
+    <string name="set_link_create">Create a link</string>
+    <string name="set_link_edit">Edit link</string>
+
+    <!-- ReplyTo events -->
+    <string name="message_reply_to_prefix">In reply to</string>
+    <string name="message_reply_to_sender_sent_file">sent a file.</string>
+    <string name="message_reply_to_sender_sent_audio_file">sent an audio file.</string>
+    <string name="message_reply_to_sender_sent_voice_message">sent a voice message.</string>
+    <string name="message_reply_to_sender_sent_image">sent an image.</string>
+    <string name="message_reply_to_sender_sent_video">sent a video.</string>
+    <string name="message_reply_to_sender_sent_sticker">sent a sticker.</string>
+    <string name="message_reply_to_sender_created_poll">created a poll.</string>
 </resources>

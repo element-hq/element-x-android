@@ -29,6 +29,7 @@ android {
         implementation(libs.coil.compose)
         implementation(libs.accompanist.systemui)
         implementation(project(":libraries:elementresources"))
+        implementation(project(":libraries:ui-strings"))
         ksp(libs.showkase.processor)
     }
 }
