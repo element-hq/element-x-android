@@ -12,7 +12,6 @@ import androidx.compose.runtime.setValue
 import io.element.android.x.core.coroutine.parallelMap
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
-import io.element.android.x.features.roomlist.model.MatrixUser
 import io.element.android.x.features.roomlist.model.RoomListEvents
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListRoomSummaryPlaceholders
@@ -21,6 +20,7 @@ import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.RoomSummary
 import io.element.android.x.architecture.Presenter
+import io.element.android.x.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -93,6 +93,7 @@ class RoomListPresenter @Inject constructor(
                 AvatarSize.SMALL
             )
         matrixUser.value = MatrixUser(
+            id = client.userId(),
             username = userDisplayName ?: client.userId().value,
             avatarUrl = userAvatarUrl,
             avatarData = avatarData,

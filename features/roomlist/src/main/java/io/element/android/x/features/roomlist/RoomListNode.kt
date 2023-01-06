@@ -53,7 +53,7 @@ class RoomListNode @AssistedInject constructor(
             onRoomClicked = this::onRoomClicked,
             onFilterChanged = this::updateFilter,
             onScrollOver = this::updateVisibleRange,
-            onLogoutClicked = this::logout
+            onOpenSettings = this::logout
         )
     }
 }

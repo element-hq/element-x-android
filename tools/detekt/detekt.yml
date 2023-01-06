@@ -82,9 +82,9 @@ performance:
 # Note: all rules for `comments` are disabled by default, but I put them here to be aware of their existence
 comments:
   AbsentOrWrongFileLicense:
-    active: false
+    active: true
     licenseTemplateFile: 'license.template'
-    licenseTemplateIsRegex: false
+    licenseTemplateIsRegex: true
   CommentOverPrivateFunction:
     active: false
   CommentOverPrivateProperty:
@@ -95,6 +95,7 @@ comments:
     active: true
   OutdatedDocumentation:
     active: true
+    allowParamOnConstructorProperties: true
   UndocumentedPublicClass:
     active: false
   UndocumentedPublicFunction:

@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2022 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:OptIn(ExperimentalMaterial3Api::class)
 
 package io.element.android.x.features.roomlist
@@ -22,15 +38,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Velocity
 import io.element.android.x.core.compose.LogCompositions
 import io.element.android.x.designsystem.ElementXTheme
-import io.element.android.x.designsystem.components.ProgressDialog
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.roomlist.components.RoomListTopBar
 import io.element.android.x.features.roomlist.components.RoomSummaryRow
-import io.element.android.x.features.roomlist.model.MatrixUser
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListState
 import io.element.android.x.features.roomlist.model.stubbedRoomSummaries
 import io.element.android.x.matrix.core.RoomId
+import io.element.android.x.matrix.core.UserId
+import io.element.android.x.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -39,19 +55,18 @@ fun RoomListView(
     modifier: Modifier = Modifier,
     onRoomClicked: (RoomId) -> Unit = {},
     onFilterChanged: (String) -> Unit = {},
-    onLogoutClicked: () -> Unit = {},
+    onOpenSettings: () -> Unit = {},
     onScrollOver: (IntRange) -> Unit = {},
 ) {
     RoomListView(
         roomSummaries = state.roomList,
         matrixUser = state.matrixUser,
         filter = state.filter,
-        isLoginOut = state.isLoginOut,
         modifier = modifier,
         onRoomClicked = onRoomClicked,
         onFilterChanged = onFilterChanged,
-        onLogoutClicked = onLogoutClicked,
-        onScrollOver = onScrollOver
+        onOpenSettings = onOpenSettings,
+        onScrollOver = onScrollOver,
     )
 }
 
@@ -60,11 +75,10 @@ fun RoomListView(
     roomSummaries: ImmutableList<RoomListRoomSummary>,
     matrixUser: MatrixUser?,
     filter: String,
-    isLoginOut: Boolean,
     modifier: Modifier = Modifier,
     onRoomClicked: (RoomId) -> Unit = {},
     onFilterChanged: (String) -> Unit = {},
-    onLogoutClicked: () -> Unit = {},
+    onOpenSettings: () -> Unit = {},
     onScrollOver: (IntRange) -> Unit = {},
 ) {
     fun onRoomClicked(room: RoomListRoomSummary) {
@@ -101,7 +115,7 @@ fun RoomListView(
                 matrixUser = matrixUser,
                 filter = filter,
                 onFilterChanged = onFilterChanged,
-                onLogoutClicked = onLogoutClicked,
+                onOpenSettings = onOpenSettings,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -123,9 +137,6 @@ fun RoomListView(
             }
         }
     )
-    if (isLoginOut) {
-        ProgressDialog(text = "Login out...")
-    }
 }
 
 private fun RoomListRoomSummary.contentType() = isPlaceholder
@@ -136,12 +147,10 @@ fun PreviewableRoomListView() {
     ElementXTheme(darkTheme = false) {
         RoomListView(
             roomSummaries = stubbedRoomSummaries(),
-            matrixUser = MatrixUser("User#1", avatarData = AvatarData("U")),
+            matrixUser = MatrixUser(id = UserId("@id"), username = "User#1", avatarData = AvatarData("U")),
             onRoomClicked = {},
-            onLogoutClicked = {},
             filter = "filter",
             onFilterChanged = {},
-            isLoginOut = false,
             onScrollOver = {}
         )
     }
@@ -153,12 +162,10 @@ fun PreviewableDarkRoomListView() {
     ElementXTheme(darkTheme = true) {
         RoomListView(
             roomSummaries = stubbedRoomSummaries(),
-            matrixUser = MatrixUser("User#1", avatarData = AvatarData("U")),
+            matrixUser = MatrixUser(id = UserId("@id"), username = "User#1", avatarData = AvatarData("U")),
             onRoomClicked = {},
-            onLogoutClicked = {},
             filter = "filter",
             onFilterChanged = {},
-            isLoginOut = true,
             onScrollOver = {}
         )
     }
