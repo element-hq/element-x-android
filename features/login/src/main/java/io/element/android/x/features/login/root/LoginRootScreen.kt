@@ -1,6 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
-package io.element.android.x.features.login
+package io.element.android.x.features.login.root
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,7 +24,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,44 +39,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.compose.collectAsState
-import com.airbnb.mvrx.compose.mavericksViewModel
+import io.element.android.x.core.compose.textFieldState
 import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.features.login.error.loginError
 import io.element.android.x.matrix.core.SessionId
-import timber.log.Timber
-
-@Composable
-fun LoginScreen(
-    viewModel: LoginViewModel = mavericksViewModel(),
-    onChangeServer: () -> Unit = { },
-    onLoginWithSuccess: (SessionId) -> Unit = { },
-) {
-    val state: LoginViewState by viewModel.collectAsState()
-    val formState: LoginFormState by viewModel.formState
-    LaunchedEffect(key1 = Unit) {
-        Timber.d("resume")
-        viewModel.onResume()
-    }
-    LoginContent(
-        state = state,
-        formState = formState,
-        onChangeServer = onChangeServer,
-        onLoginChanged = viewModel::onSetName,
-        onPasswordChanged = viewModel::onSetPassword,
-        onSubmitClicked = viewModel::onSubmit,
-        onLoginWithSuccess = onLoginWithSuccess
-    )
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginContent(
-    state: LoginViewState,
-    formState: LoginFormState,
+fun LoginRootScreen(
+    state: LoginRootState,
     modifier: Modifier = Modifier,
     onChangeServer: () -> Unit = {},
     onLoginChanged: (String) -> Unit = {},
@@ -98,6 +66,9 @@ fun LoginContent(
                 .imePadding()
         ) {
             val scrollState = rememberScrollState()
+            var loginFieldState by textFieldState(stateValue = state.formState.login)
+            var passwordFieldState by textFieldState(stateValue = state.formState.password)
+
             Column(
                 modifier = Modifier
                     .verticalScroll(
@@ -105,7 +76,7 @@ fun LoginContent(
                     )
                     .padding(horizontal = 16.dp),
             ) {
-                val isError = state.loggedInSessionId is Fail
+                val isError = state.loggedInState is LoggedInState.ErrorLoggingIn
                 // Title
                 Text(
                     text = "Welcome back",
@@ -146,30 +117,36 @@ fun LoginContent(
                         )
                     }
                     OutlinedTextField(
-                        value = formState.login,
+                        value = loginFieldState,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 60.dp),
                         label = {
                             Text(text = "Email or username")
                         },
-                        onValueChange = onLoginChanged,
+                        onValueChange = {
+                            loginFieldState = it
+                            onLoginChanged(it)
+                        },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
                         ),
                     )
                     var passwordVisible by remember { mutableStateOf(false) }
-                    if (state.loggedInSessionId is Loading) {
+                    if (state.loggedInState is LoggedInState.LoggingIn) {
                         // Ensure password is hidden when user submits the form
                         passwordVisible = false
                     }
                     OutlinedTextField(
-                        value = formState.password,
+                        value = passwordFieldState,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 24.dp),
-                        onValueChange = onPasswordChanged,
+                        onValueChange = {
+                            passwordFieldState = it
+                            onPasswordChanged(it)
+                        },
                         label = {
                             Text(text = "Password")
                         },
@@ -193,9 +170,9 @@ fun LoginContent(
                             onDone = { onSubmitClicked() }
                         ),
                     )
-                    if (state.loggedInSessionId is Fail) {
+                    if (state.loggedInState is LoggedInState.ErrorLoggingIn) {
                         Text(
-                            text = loginError(state.formState, state.loggedInSessionId.error),
+                            text = loginError(state.formState, state.loggedInState.failure),
                             color = MaterialTheme.colorScheme.error,
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier.padding(start = 16.dp)
@@ -212,12 +189,12 @@ fun LoginContent(
                 ) {
                     Text(text = "Continue")
                 }
-                when (val loggedInSessionId = state.loggedInSessionId) {
-                    is Success -> onLoginWithSuccess(loggedInSessionId())
+                when (val loggedInState = state.loggedInState) {
+                    is LoggedInState.LoggedIn -> onLoginWithSuccess(loggedInState.sessionId)
                     else -> Unit
                 }
             }
-            if (state.loggedInSessionId is Loading) {
+            if (state.loggedInState is LoggedInState.LoggingIn) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
@@ -230,11 +207,10 @@ fun LoginContent(
 @Preview
 fun LoginContentPreview() {
     ElementXTheme(darkTheme = false) {
-        LoginContent(
-            state = LoginViewState(
+        LoginRootScreen(
+            state = LoginRootState(
                 homeserver = "matrix.org",
             ),
-            formState = LoginFormState("", "")
         )
     }
 }

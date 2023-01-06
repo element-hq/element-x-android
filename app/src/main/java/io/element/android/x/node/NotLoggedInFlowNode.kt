@@ -8,10 +8,10 @@ import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
+import com.bumble.appyx.core.node.node
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.replace
-import io.element.android.x.architecture.viewmodel.viewModelSupportNode
-import io.element.android.x.features.login.node.LoginFlowNode
+import io.element.android.x.features.login.LoginFlowNode
 import io.element.android.x.features.onboarding.OnBoardingScreen
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -44,7 +44,7 @@ class NotLoggedInFlowNode(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.OnBoarding -> viewModelSupportNode(buildContext) {
+            NavTarget.OnBoarding -> node(buildContext) {
                 OnBoardingScreen(
                     onSignIn = { backstack.replace(NavTarget.LoginFlow) }
                 )

@@ -26,6 +26,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -35,33 +36,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.compose.collectAsState
-import com.airbnb.mvrx.compose.mavericksViewModel
+import io.element.android.x.architecture.Async
+import io.element.android.x.core.compose.textFieldState
 import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.designsystem.components.VectorIcon
 import io.element.android.x.features.login.R
 import io.element.android.x.features.login.error.changeServerError
 
-@Composable
-fun ChangeServerScreen(
-    viewModel: ChangeServerViewModel = mavericksViewModel(),
-    onChangeServerSuccess: () -> Unit = { }
-) {
-    val state: ChangeServerViewState by viewModel.collectAsState()
-    ChangeServerContent(
-        state = state,
-        onChangeServer = viewModel::setServer,
-        onChangeServerSubmit = viewModel::setServerSubmit,
-        onChangeServerSuccess = onChangeServerSuccess
-    )
-}
 
 @Composable
-fun ChangeServerContent(
-    state: ChangeServerViewState,
+fun ChangeServerView(
+    state: ChangeServerState,
     modifier: Modifier = Modifier,
     onChangeServer: (String) -> Unit = {},
     onChangeServerSubmit: () -> Unit = {},
@@ -85,7 +70,7 @@ fun ChangeServerContent(
                     )
                     .padding(horizontal = 16.dp)
             ) {
-                val isError = state.changeServerAction is Fail
+                val isError = state.changeServerAction is Async.Failure
                 Box(
                     modifier = Modifier
                         .padding(top = 99.dp)
@@ -126,12 +111,16 @@ fun ChangeServerContent(
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.secondary
                 )
+                var homeserverFieldState by textFieldState(stateValue = state.homeserver)
                 OutlinedTextField(
-                    value = state.homeserver,
+                    value = homeserverFieldState,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 200.dp),
-                    onValueChange = onChangeServer,
+                    onValueChange = {
+                        homeserverFieldState = it
+                        onChangeServer(it)
+                    },
                     label = {
                         Text(text = "Server")
                     },
@@ -144,7 +133,7 @@ fun ChangeServerContent(
                         onDone = { onChangeServerSubmit() }
                     )
                 )
-                if (state.changeServerAction is Fail) {
+                if (state.changeServerAction is Async.Failure) {
                     Text(
                         text = changeServerError(
                             state.homeserver,
@@ -164,11 +153,11 @@ fun ChangeServerContent(
                 ) {
                     Text(text = "Continue")
                 }
-                if (state.changeServerAction is Success) {
+                if (state.changeServerAction is Async.Success) {
                     onChangeServerSuccess()
                 }
             }
-            if (state.changeServerAction is Loading) {
+            if (state.changeServerAction is Async.Loading) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
@@ -181,8 +170,8 @@ fun ChangeServerContent(
 @Preview
 fun ChangeServerContentPreview() {
     ElementXTheme {
-        ChangeServerContent(
-            state = ChangeServerViewState(homeserver = "matrix.org"),
+        ChangeServerView(
+            state = ChangeServerState(homeserver = "matrix.org"),
         )
     }
 }
