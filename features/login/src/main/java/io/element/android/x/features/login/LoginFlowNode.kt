@@ -1,4 +1,4 @@
-package io.element.android.x.features.login.node
+package io.element.android.x.features.login
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
@@ -8,11 +8,10 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.navmodel.backstack.BackStack
-import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
-import io.element.android.x.architecture.viewmodel.viewModelSupportNode
-import io.element.android.x.features.login.LoginScreen
-import io.element.android.x.features.login.changeserver.ChangeServerScreen
+import io.element.android.x.architecture.createNode
+import io.element.android.x.features.login.changeserver.ChangeServerNode
+import io.element.android.x.features.login.root.LoginRootNode
 import kotlinx.parcelize.Parcelize
 
 class LoginFlowNode(
@@ -26,6 +25,12 @@ class LoginFlowNode(
     buildContext = buildContext
 ) {
 
+    private val loginRootCallback = object : LoginRootNode.Callback {
+        override fun onChangeHomeServer() {
+            backstack.push(NavTarget.ChangeServer)
+        }
+    }
+
     sealed interface NavTarget : Parcelable {
         @Parcelize
         object Root : NavTarget
@@ -36,16 +41,8 @@ class LoginFlowNode(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Root -> viewModelSupportNode(buildContext) {
-                LoginScreen(
-                    onChangeServer = { backstack.push(NavTarget.ChangeServer) }
-                )
-            }
-            NavTarget.ChangeServer -> viewModelSupportNode(buildContext) {
-                ChangeServerScreen(
-                    onChangeServerSuccess = { backstack.pop() }
-                )
-            }
+            NavTarget.Root -> createNode<LoginRootNode>(buildContext, plugins = listOf(loginRootCallback))
+            NavTarget.ChangeServer -> createNode<ChangeServerNode>(buildContext)
         }
     }
 
@@ -53,5 +50,4 @@ class LoginFlowNode(
     override fun View(modifier: Modifier) {
         Children(navModel = backstack)
     }
-
 }
