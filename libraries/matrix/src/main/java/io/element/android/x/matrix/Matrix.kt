@@ -1,17 +1,33 @@
+/*
+ * Copyright (c) 2022 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.element.android.x.matrix
 
 import android.content.Context
-import coil.ComponentRegistry
 import io.element.android.x.core.coroutine.CoroutineDispatchers
 import io.element.android.x.di.AppScope
 import io.element.android.x.di.ApplicationContext
 import io.element.android.x.di.SingleIn
 import io.element.android.x.matrix.core.SessionId
-import io.element.android.x.matrix.media.MediaFetcher
-import io.element.android.x.matrix.media.MediaKeyer
 import io.element.android.x.matrix.session.SessionStore
 import io.element.android.x.matrix.session.sessionId
 import io.element.android.x.matrix.util.logError
+import java.io.File
+import java.util.concurrent.Executors
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -21,10 +37,6 @@ import org.matrix.rustcomponents.sdk.AuthenticationService
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import timber.log.Timber
-import java.io.File
-import java.util.*
-import java.util.concurrent.Executors
-import javax.inject.Inject
 
 @SingleIn(AppScope::class)
 class Matrix @Inject constructor(
@@ -43,14 +55,6 @@ class Matrix @Inject constructor(
 
     fun isLoggedIn(): Flow<Boolean> {
         return sessionStore.isLoggedIn()
-    }
-
-    fun registerCoilComponents(
-        builder: ComponentRegistry.Builder,
-        activeClientProvider: () -> MatrixClient?
-    ) {
-        builder.add(MediaKeyer())
-        builder.add(MediaFetcher.Factory(activeClientProvider))
     }
 
     suspend fun restoreSession() = withContext(coroutineDispatchers.io) {

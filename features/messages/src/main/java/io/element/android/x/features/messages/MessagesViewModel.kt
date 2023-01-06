@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2022 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.element.android.x.features.messages
 
 import com.airbnb.mvrx.MavericksViewModel
@@ -7,7 +23,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.x.anvilannotations.ContributesViewModel
 import io.element.android.x.architecture.viewmodel.daggerMavericksViewModelFactory
-import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
 import io.element.android.x.di.SessionScope
 import io.element.android.x.features.messages.model.MessagesItemAction
@@ -17,9 +32,9 @@ import io.element.android.x.features.messages.model.MessagesViewState
 import io.element.android.x.features.messages.model.content.MessagesTimelineItemRedactedContent
 import io.element.android.x.features.messages.model.content.MessagesTimelineItemTextBasedContent
 import io.element.android.x.matrix.MatrixClient
-import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.timeline.MatrixTimeline
 import io.element.android.x.matrix.timeline.MatrixTimelineItem
+import io.element.android.x.matrix.ui.MatrixItemHelper
 import io.element.android.x.textcomposer.MessageComposerMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
@@ -37,9 +52,10 @@ class MessagesViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<MessagesViewModel, MessagesViewState> by daggerMavericksViewModelFactory()
 
+    private val matrixItemHelper = MatrixItemHelper(client)
     private val room = client.getRoom(initialState.roomId)!!
     private val messageTimelineItemStateFactory =
-        MessageTimelineItemStateFactory(client, room, Dispatchers.Default)
+        MessageTimelineItemStateFactory(matrixItemHelper, room, Dispatchers.Default)
     private val timeline = room.timeline()
 
     private val timelineCallback = object : MatrixTimeline.Callback {
@@ -145,7 +161,10 @@ class MessagesViewModel @AssistedInject constructor(
         room.syncUpdateFlow()
             .onEach {
                 val avatarData =
-                    loadAvatarData(room.name ?: room.roomId.value, room.avatarUrl, AvatarSize.SMALL)
+                    matrixItemHelper.loadAvatarData(
+                        room = room,
+                        size = AvatarSize.SMALL
+                    )
                 setState {
                     copy(
                         roomName = room.name, roomAvatar = avatarData,
@@ -199,16 +218,6 @@ class MessagesViewModel @AssistedInject constructor(
 
     private fun notImplementedYet() {
         setSnackbarContent("Not implemented yet!")
-    }
-
-    private suspend fun loadAvatarData(
-        name: String,
-        url: String?,
-        size: AvatarSize = AvatarSize.MEDIUM
-    ): AvatarData {
-        val model = client.mediaResolver()
-            .resolve(url, kind = MediaResolver.Kind.Thumbnail(size.value))
-        return AvatarData(name, model, size)
     }
 
     override fun onCleared() {

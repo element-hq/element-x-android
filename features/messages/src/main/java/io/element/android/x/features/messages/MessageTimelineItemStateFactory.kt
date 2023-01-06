@@ -1,7 +1,22 @@
+/*
+ * Copyright (c) 2022 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.element.android.x.features.messages
 
 import androidx.recyclerview.widget.DiffUtil
-import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
 import io.element.android.x.features.messages.diff.CacheInvalidator
 import io.element.android.x.features.messages.diff.MatrixTimelineItemsDiffCallback
@@ -18,11 +33,10 @@ import io.element.android.x.features.messages.model.content.MessagesTimelineItem
 import io.element.android.x.features.messages.model.content.MessagesTimelineItemTextContent
 import io.element.android.x.features.messages.model.content.MessagesTimelineItemUnknownContent
 import io.element.android.x.features.messages.util.invalidateLast
-import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.MatrixRoom
 import io.element.android.x.matrix.timeline.MatrixTimelineItem
-import kotlin.system.measureTimeMillis
+import io.element.android.x.matrix.ui.MatrixItemHelper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,9 +50,10 @@ import org.matrix.rustcomponents.sdk.FormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.MessageType
 import timber.log.Timber
+import kotlin.system.measureTimeMillis
 
 class MessageTimelineItemStateFactory(
-    private val client: MatrixClient,
+    private val matrixItemHelper: MatrixItemHelper,
     private val room: MatrixRoom,
     private val dispatcher: CoroutineDispatcher,
 ) {
@@ -137,7 +152,11 @@ class MessageTimelineItemStateFactory(
         val senderDisplayName = room.userDisplayName(currentSender).getOrNull()
         val senderAvatarUrl = room.userAvatarUrl(currentSender).getOrNull()
         val senderAvatarData =
-            loadAvatarData(senderDisplayName ?: currentSender, senderAvatarUrl)
+            matrixItemHelper.loadAvatarData(
+                name = senderDisplayName ?: currentSender,
+                url = senderAvatarUrl,
+                size = AvatarSize.SMALL
+            )
         return MessagesTimelineItemState.MessageEvent(
             id = currentTimelineItem.uniqueId,
             senderId = currentSender,
@@ -226,15 +245,5 @@ class MessageTimelineItemStateFactory(
             previousSender == currentSender && nextSender != currentSender -> MessagesItemGroupPosition.Last
             else -> MessagesItemGroupPosition.None
         }
-    }
-
-    private suspend fun loadAvatarData(
-        name: String,
-        url: String?,
-        size: AvatarSize = AvatarSize.SMALL
-    ): AvatarData {
-        val model = client.mediaResolver()
-            .resolve(url, kind = MediaResolver.Kind.Thumbnail(size.value))
-        return AvatarData(name, model, size)
     }
 }

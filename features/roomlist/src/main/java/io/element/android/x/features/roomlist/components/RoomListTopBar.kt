@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2022 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:OptIn(ExperimentalMaterial3Api::class)
 
 package io.element.android.x.features.roomlist.components
@@ -8,8 +24,8 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,15 +54,14 @@ import androidx.compose.ui.unit.sp
 import io.element.android.x.core.compose.LogCompositions
 import io.element.android.x.core.compose.textFieldState
 import io.element.android.x.designsystem.components.avatar.Avatar
-import io.element.android.x.designsystem.components.dialogs.ConfirmationDialog
-import io.element.android.x.features.roomlist.model.MatrixUser
+import io.element.android.x.matrix.ui.model.MatrixUser
 
 @Composable
 fun RoomListTopBar(
     matrixUser: MatrixUser?,
     filter: String,
     onFilterChanged: (String) -> Unit,
-    onLogoutClicked: () -> Unit,
+    onOpenSettings: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
     LogCompositions(tag = "RoomListScreen", msg = "TopBar")
@@ -71,7 +86,7 @@ fun RoomListTopBar(
     } else {
         DefaultRoomListTopBar(
             matrixUser = matrixUser,
-            onLogoutClicked = onLogoutClicked,
+            onOpenSettings = onOpenSettings,
             onSearchClicked = {
                 searchWidgetStateIsOpened = true
             },
@@ -160,11 +175,10 @@ fun SearchRoomListTopBar(
 @Composable
 private fun DefaultRoomListTopBar(
     matrixUser: MatrixUser?,
-    onLogoutClicked: () -> Unit,
+    onOpenSettings: () -> Unit,
     onSearchClicked: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
-    val openDialog = remember { mutableStateOf(false) }
     MediumTopAppBar(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -188,22 +202,11 @@ private fun DefaultRoomListTopBar(
                 Icon(Icons.Default.Search, contentDescription = "search")
             }
             IconButton(
-                onClick = { openDialog.value = true }
+                onClick = onOpenSettings
             ) {
-                Icon(Icons.Default.Logout, contentDescription = "logout")
+                Icon(Icons.Default.Settings, contentDescription = "Settings")
             }
         },
         scrollBehavior = scrollBehavior,
-    )
-    // Log out confirmation dialog
-    ConfirmationDialog(
-        isDisplayed = openDialog.value,
-        title = "Log out",
-        content = "Do you confirm you want to log out?",
-        submitText = "Log out",
-        onSubmitClicked = onLogoutClicked,
-        onDismiss = {
-            openDialog.value = false
-        }
     )
 }

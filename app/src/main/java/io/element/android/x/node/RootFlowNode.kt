@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +32,9 @@ import io.element.android.x.BuildConfig
 import io.element.android.x.component.ShowkaseButton
 import io.element.android.x.core.di.DaggerComponentOwner
 import io.element.android.x.di.SessionComponentsOwner
+import io.element.android.x.features.rageshake.bugreport.BugReportScreen
+import io.element.android.x.features.rageshake.crash.ui.CrashDetectionScreen
+import io.element.android.x.features.rageshake.detection.RageshakeDetectionScreen
 import io.element.android.x.getBrowserIntent
 import io.element.android.x.matrix.Matrix
 import io.element.android.x.matrix.core.SessionId
@@ -118,6 +122,28 @@ class RootFlowNode(
                 onCloseClicked = { isShowkaseButtonVisible = false },
                 onClick = { startActivity(context, Showkase.getBrowserIntent(context), null) }
             )
+
+            /*
+            var isBugReportVisible by rememberSaveable {
+                mutableStateOf(false)
+            }
+            RageshakeDetectionScreen(
+                onOpenBugReport = {
+                    isBugReportVisible = true
+                }
+            )
+            CrashDetectionScreen(
+                onOpenBugReport = {
+                    isBugReportVisible = true
+                }
+            )
+            if (isBugReportVisible) {
+                // TODO Improve the navigation, when pressing back here, it closes the app.
+                BugReportScreen(
+                    onDone = { isBugReportVisible = false }
+                )
+            }
+             */
         }
     }
 
