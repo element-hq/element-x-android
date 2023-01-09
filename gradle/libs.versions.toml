@@ -50,7 +50,7 @@ showkase = "1.0.0-beta14"
 compose_destinations = "1.7.23-beta"
 jsoup = "1.15.3"
 seismic = "1.0.3"
-dependencycheck = "7.4.2"
+dependencycheck = "7.4.4"
 
 # DI
 dagger = "2.43"
