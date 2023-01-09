@@ -39,7 +39,6 @@ dependencies {
     implementation(project(":libraries:matrix"))
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:elementresources"))
-    implementation(libs.mavericks.compose)
     ksp(libs.showkase.processor)
     testImplementation(libs.test.junit)
     androidTestImplementation(libs.test.junitext)

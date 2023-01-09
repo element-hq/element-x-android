@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PreferenceScreen(
+fun PreferenceView(
     title: String,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
@@ -113,7 +113,7 @@ fun PreferenceTopAppBar(
 @Composable
 @Preview(showBackground = false)
 fun PreferenceScreenPreview() {
-    PreferenceScreen(
+    PreferenceView(
         title = "Preference screen"
     ) {
         PreferenceCategoryPreview()

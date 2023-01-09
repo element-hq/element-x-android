@@ -13,6 +13,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import io.element.android.x.architecture.createNode
 import io.element.android.x.architecture.viewmodel.viewModelSupportNode
 import io.element.android.x.features.messages.MessagesScreen
+import io.element.android.x.features.preferences.PreferencesFlowNode
 import io.element.android.x.features.roomlist.RoomListNode
 import io.element.android.x.matrix.core.RoomId
 import io.element.android.x.matrix.core.SessionId
@@ -34,6 +35,10 @@ class LoggedInFlowNode(
         override fun onRoomClicked(roomId: RoomId) {
             backstack.push(NavTarget.Messages(roomId))
         }
+
+        override fun onSettingsClicked() {
+            backstack.push(NavTarget.Settings)
+        }
     }
 
     sealed interface NavTarget : Parcelable {
@@ -42,6 +47,9 @@ class LoggedInFlowNode(
 
         @Parcelize
         data class Messages(val roomId: RoomId) : NavTarget
+
+        @Parcelize
+        object Settings : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -54,6 +62,9 @@ class LoggedInFlowNode(
                     roomId = navTarget.roomId.value,
                     onBackPressed = { backstack.pop() }
                 )
+            }
+            NavTarget.Settings -> {
+                PreferencesFlowNode(buildContext)
             }
         }
     }

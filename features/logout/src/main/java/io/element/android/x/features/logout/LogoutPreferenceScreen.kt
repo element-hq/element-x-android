@@ -19,15 +19,11 @@ package io.element.android.x.features.logout
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.compose.collectAsState
-import com.airbnb.mvrx.compose.mavericksViewModel
+import io.element.android.x.architecture.Async
 import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.designsystem.components.ProgressDialog
 import io.element.android.x.designsystem.components.dialogs.ConfirmationDialog
@@ -36,12 +32,12 @@ import io.element.android.x.designsystem.components.preferences.PreferenceText
 import io.element.android.x.element.resources.R as ElementR
 
 @Composable
-fun LogoutPreference(
-    viewModel: LogoutViewModel = mavericksViewModel(),
-    onSuccessLogout: () -> Unit = { },
+fun LogoutPreferenceView(
+    state: LogoutPreferenceState,
+    onLogoutClicked: () -> Unit = {},
+    onSuccessLogout: () -> Unit = {},
 ) {
-    val state: LogoutViewState by viewModel.collectAsState()
-    if (state.logoutAction is Success) {
+    if (state.logoutAction is Async.Success) {
         onSuccessLogout()
         return
     }
@@ -65,7 +61,7 @@ fun LogoutPreference(
             },
             onSubmitClicked = {
                 openDialog.value = false
-                viewModel.logout()
+                onLogoutClicked()
             },
             onDismiss = {
                 openDialog.value = false
@@ -73,7 +69,7 @@ fun LogoutPreference(
         )
     }
 
-    if (state.logoutAction is Loading) {
+    if (state.logoutAction is Async.Loading) {
         ProgressDialog(text = "Login out...")
     }
 }
@@ -95,6 +91,6 @@ fun LogoutPreferenceContent(
 @Preview
 fun LogoutContentPreview() {
     ElementXTheme(darkTheme = false) {
-        LogoutPreference()
+        LogoutPreferenceView(LogoutPreferenceState())
     }
 }

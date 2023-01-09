@@ -25,6 +25,7 @@ class RoomListNode @AssistedInject constructor(
 
     interface Callback : Plugin {
         fun onRoomClicked(roomId: RoomId)
+        fun onSettingsClicked()
     }
 
     private val connector = presenterConnector(presenter)
@@ -45,6 +46,10 @@ class RoomListNode @AssistedInject constructor(
         plugins<Callback>().forEach { it.onRoomClicked(roomId) }
     }
 
+    private fun onOpenSettings() {
+        plugins<Callback>().forEach { it.onSettingsClicked() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state by connector.stateFlow.collectAsState()
@@ -53,7 +58,7 @@ class RoomListNode @AssistedInject constructor(
             onRoomClicked = this::onRoomClicked,
             onFilterChanged = this::updateFilter,
             onScrollOver = this::updateVisibleRange,
-            onOpenSettings = this::logout
+            onOpenSettings = this::onOpenSettings
         )
     }
 }
