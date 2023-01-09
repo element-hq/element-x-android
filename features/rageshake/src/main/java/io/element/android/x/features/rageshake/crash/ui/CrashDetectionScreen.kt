@@ -17,40 +17,33 @@
 package io.element.android.x.features.rageshake.crash.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.airbnb.mvrx.compose.collectAsState
-import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.core.compose.LogCompositions
 import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.x.element.resources.R as ElementR
 
 @Composable
-fun CrashDetectionScreen(
-    viewModel: CrashDetectionViewModel = mavericksViewModel(),
+fun CrashDetectionView(
+    state: CrashDetectionState,
     onOpenBugReport: () -> Unit = { },
+    onPopupDismissed: () -> Unit = {}
 ) {
-    val state: CrashDetectionViewState by viewModel.collectAsState()
     LogCompositions(tag = "Crash", msg = "CrashDetectionScreen")
-
     if (state.crashDetected) {
         CrashDetectionContent(
             state,
-            onYesClicked = {
-                viewModel.onYes()
-                onOpenBugReport()
-            },
-            onNoClicked = viewModel::onPopupDismissed,
-            onDismiss = viewModel::onPopupDismissed,
+            onYesClicked = onOpenBugReport,
+            onNoClicked = onPopupDismissed,
+            onDismiss = onPopupDismissed,
         )
     }
 }
 
 @Composable
 fun CrashDetectionContent(
-    state: CrashDetectionViewState,
+    state: CrashDetectionState,
     onNoClicked: () -> Unit = { },
     onYesClicked: () -> Unit = { },
     onDismiss: () -> Unit = { },
@@ -71,7 +64,7 @@ fun CrashDetectionContent(
 fun CrashDetectionContentPreview() {
     ElementXTheme {
         CrashDetectionContent(
-            state = CrashDetectionViewState()
+            state = CrashDetectionState()
         )
     }
 }

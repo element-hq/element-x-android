@@ -16,30 +16,37 @@
 
 package io.element.android.x.features.rageshake.bugreport
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.Uninitialized
+import android.os.Parcelable
+import io.element.android.x.architecture.Async
+import kotlinx.parcelize.Parcelize
 
-data class BugReportViewState(
+data class BugReportState(
     val formState: BugReportFormState = BugReportFormState.Default,
-    val sendLogs: Boolean = true,
     val hasCrashLogs: Boolean = false,
-    val sendCrashLogs: Boolean = true,
-    val canContact: Boolean = false,
-    val sendScreenshot: Boolean = false,
     val screenshotUri: String? = null,
     val sendingProgress: Float = 0F,
-    val sending: Async<Unit> = Uninitialized,
-) : MavericksState {
+    val sending: Async<Unit> = Async.Uninitialized,
+) {
     val submitEnabled =
-        formState.description.length > 10 && sending !is Loading
+        formState.description.length > 10 && sending !is Async.Loading
 }
 
+@Parcelize
 data class BugReportFormState(
     val description: String,
-) {
+    val sendLogs: Boolean,
+    val sendCrashLogs: Boolean,
+    val canContact: Boolean,
+    val sendScreenshot: Boolean
+
+): Parcelable {
     companion object {
-        val Default = BugReportFormState("")
+        val Default = BugReportFormState(
+            description = "",
+            sendLogs = true,
+            sendCrashLogs = true,
+            canContact = false,
+            sendScreenshot = false
+        )
     }
 }

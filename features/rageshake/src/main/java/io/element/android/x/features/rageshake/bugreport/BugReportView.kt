@@ -37,6 +37,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -50,48 +51,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.compose.collectAsState
-import com.airbnb.mvrx.compose.mavericksViewModel
+import io.element.android.x.architecture.Async
 import io.element.android.x.core.compose.LogCompositions
+import io.element.android.x.core.compose.textFieldState
 import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.designsystem.components.LabelledCheckbox
 import io.element.android.x.designsystem.components.dialogs.ErrorDialog
 import io.element.android.x.element.resources.R as ElementR
 
 @Composable
-fun BugReportScreen(
-    viewModel: BugReportViewModel = mavericksViewModel(),
-    onDone: () -> Unit = { },
-) {
-    val state: BugReportViewState by viewModel.collectAsState()
-    val formState: BugReportFormState by viewModel.formState
-    LogCompositions(tag = "Rageshake", msg = "Root")
-    if (state.sending is Success) {
-        onDone()
-    }
-    BugReportContent(
-        state = state,
-        formState = formState,
-        onDescriptionChanged = viewModel::onSetDescription,
-        onSetSendLog = viewModel::onSetSendLog,
-        onSetSendCrashLog = viewModel::onSetSendCrashLog,
-        onSetCanContact = viewModel::onSetCanContact,
-        onSetSendScreenshot = viewModel::onSetSendScreenshot,
-        onSubmit = viewModel::onSubmit,
-        onFailureDialogClosed = viewModel::onFailureDialogClosed,
-        onDone = onDone,
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BugReportContent(
-    state: BugReportViewState,
-    formState: BugReportFormState,
+fun BugReportView(
+    state: BugReportState,
     modifier: Modifier = Modifier,
     onDescriptionChanged: (String) -> Unit = {},
     onSetSendLog: (Boolean) -> Unit = {},
@@ -102,6 +72,10 @@ fun BugReportContent(
     onFailureDialogClosed: () -> Unit = { },
     onDone: () -> Unit = { },
 ) {
+    LogCompositions(tag = "Rageshake", msg = "Root")
+    if (state.sending is Async.Success) {
+        onDone()
+    }
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background,
@@ -120,8 +94,8 @@ fun BugReportContent(
                     )
                     .padding(horizontal = 16.dp),
             ) {
-                val isError = state.sending is Fail
-                val isFormEnabled = state.sending !is Loading
+                val isError = state.sending is Async.Failure
+                val isFormEnabled = state.sending !is Async.Loading
                 // Title
                 Text(
                     text = stringResource(id = ElementR.string.send_bug_report),
@@ -140,11 +114,12 @@ fun BugReportContent(
                         .padding(horizontal = 16.dp, vertical = 16.dp),
                     fontSize = 16.sp,
                 )
+                var descriptionFieldState by textFieldState(stateValue = state.formState.description)
                 Column(
                     // modifier = Modifier.weight(1f),
                 ) {
                     OutlinedTextField(
-                        value = formState.description,
+                        value = descriptionFieldState,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 16.dp),
@@ -155,7 +130,10 @@ fun BugReportContent(
                         supportingText = {
                             Text(text = stringResource(id = ElementR.string.send_bug_report_description_in_english))
                         },
-                        onValueChange = onDescriptionChanged,
+                        onValueChange = {
+                            descriptionFieldState = it
+                            onDescriptionChanged(it)
+                        },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Next
@@ -164,33 +142,33 @@ fun BugReportContent(
                     )
                 }
                 LabelledCheckbox(
-                    checked = state.sendLogs,
+                    checked = state.formState.sendLogs,
                     onCheckedChange = onSetSendLog,
                     enabled = isFormEnabled,
                     text = stringResource(id = ElementR.string.send_bug_report_include_logs)
                 )
                 if (state.hasCrashLogs) {
                     LabelledCheckbox(
-                        checked = state.sendCrashLogs,
+                        checked = state.formState.sendCrashLogs,
                         onCheckedChange = onSetSendCrashLog,
                         enabled = isFormEnabled,
                         text = stringResource(id = ElementR.string.send_bug_report_include_crash_logs)
                     )
                 }
                 LabelledCheckbox(
-                    checked = state.canContact,
+                    checked = state.formState.canContact,
                     onCheckedChange = onSetCanContact,
                     enabled = isFormEnabled,
                     text = stringResource(id = ElementR.string.you_may_contact_me)
                 )
                 if (state.screenshotUri != null) {
                     LabelledCheckbox(
-                        checked = state.sendScreenshot,
+                        checked = state.formState.sendScreenshot,
                         onCheckedChange = onSetSendScreenshot,
                         enabled = isFormEnabled,
                         text = stringResource(id = ElementR.string.send_bug_report_include_screenshot)
                     )
-                    if (state.sendScreenshot) {
+                    if (state.formState.sendScreenshot) {
                         Box(
                             modifier = Modifier.fillMaxWidth(),
                             contentAlignment = Alignment.Center
@@ -219,18 +197,18 @@ fun BugReportContent(
                 }
             }
             when (state.sending) {
-                Uninitialized -> Unit
-                is Loading -> {
+                Async.Uninitialized -> Unit
+                is Async.Loading -> {
                     CircularProgressIndicator(
                         progress = state.sendingProgress,
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
-                is Fail -> ErrorDialog(
+                is Async.Failure -> ErrorDialog(
                     content = state.sending.error.toString(),
                     onDismiss = onFailureDialogClosed,
                 )
-                is Success -> onDone()
+                is Async.Success -> onDone()
             }
         }
     }
@@ -240,9 +218,8 @@ fun BugReportContent(
 @Preview
 fun BugReportContentPreview() {
     ElementXTheme(darkTheme = false) {
-        BugReportContent(
-            state = BugReportViewState(),
-            formState = BugReportFormState.Default
+        BugReportView(
+            state = BugReportState(),
         )
     }
 }
