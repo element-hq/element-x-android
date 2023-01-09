@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,14 +26,10 @@ import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.newRoot
-import com.bumble.appyx.navmodel.backstack.operation.replace
 import io.element.android.x.BuildConfig
 import io.element.android.x.component.ShowkaseButton
 import io.element.android.x.core.di.DaggerComponentOwner
 import io.element.android.x.di.SessionComponentsOwner
-import io.element.android.x.features.rageshake.bugreport.BugReportScreen
-import io.element.android.x.features.rageshake.crash.ui.CrashDetectionScreen
-import io.element.android.x.features.rageshake.detection.RageshakeDetectionScreen
 import io.element.android.x.getBrowserIntent
 import io.element.android.x.matrix.Matrix
 import io.element.android.x.matrix.core.SessionId
