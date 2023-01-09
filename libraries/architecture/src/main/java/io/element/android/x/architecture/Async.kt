@@ -5,8 +5,17 @@ import androidx.compose.runtime.MutableState
 sealed interface Async<out T> {
     object Uninitialized : Async<Nothing>
     data class Loading<out T>(val prevState: T? = null) : Async<T>
-    data class Failure<out T>(val error: Throwable) : Async<T>
+    data class Failure<out T>(val error: Throwable, val prevState: T? = null) : Async<T>
     data class Success<out T>(val state: T) : Async<T>
+
+    fun dataOrNull(): T? {
+        return when (this) {
+            is Failure -> prevState
+            is Loading -> prevState
+            is Success -> state
+            Uninitialized -> null
+        }
+    }
 }
 
 suspend fun <T> (suspend () -> T).execute(state: MutableState<Async<T>>) {
