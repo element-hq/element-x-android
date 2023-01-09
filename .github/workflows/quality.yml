@@ -44,3 +44,22 @@ jobs:
           DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
           # Fallback for forks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Gradle dependency analysis using https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin
+  dependency-analysis:
+    name: Dependency analysis
+    runs-on: ubuntu-latest
+    # Allow all jobs on main and develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/main' && format('dep-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('dep-develop-{0}', github.sha) || format('dep-{0}', github.ref) }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v3
+      - name: Dependency analysis
+        run: ./gradlew dependencyCheckAnalyze $CI_GRADLE_ARG_PROPERTIES
+      - name: Upload dependency analysis
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: dependency-analysis
+          path: build/reports/dependency-check-report.html
