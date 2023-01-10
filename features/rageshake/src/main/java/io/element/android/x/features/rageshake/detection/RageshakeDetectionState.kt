@@ -16,13 +16,11 @@
 
 package io.element.android.x.features.rageshake.detection
 
-import com.airbnb.mvrx.MavericksState
+import io.element.android.x.features.rageshake.preferences.RageshakePreferencesState
 
-data class RageshakeDetectionViewState(
+data class RageshakeDetectionState(
     val takeScreenshot: Boolean = false,
     val showDialog: Boolean = false,
-    val isEnabled: Boolean = true,
     val isStarted: Boolean = false,
-    val isSupported: Boolean = false,
-    val sensitivity: Float = 0.5f,
-) : MavericksState
+    val preferenceState: RageshakePreferencesState = RageshakePreferencesState()
+)
