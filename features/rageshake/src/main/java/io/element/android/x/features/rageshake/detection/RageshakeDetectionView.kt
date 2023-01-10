@@ -18,16 +18,11 @@ package io.element.android.x.features.rageshake.detection
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.Lifecycle
-import com.airbnb.mvrx.compose.collectAsState
-import com.airbnb.mvrx.compose.mavericksViewModel
 import io.element.android.x.core.compose.LogCompositions
-import io.element.android.x.core.compose.OnLifecycleEvent
 import io.element.android.x.core.hardware.vibrate
 import io.element.android.x.core.screenshot.ImageResult
 import io.element.android.x.core.screenshot.screenshot
@@ -36,24 +31,18 @@ import io.element.android.x.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.x.element.resources.R as ElementR
 
 @Composable
-fun RageshakeDetectionScreen(
-    viewModel: RageshakeDetectionViewModel = mavericksViewModel(),
+fun RageshakeDetectionView(
+    state: RageshakeDetectionState,
     onOpenBugReport: () -> Unit = { },
+    onScreenshotTaken: (ImageResult) -> Unit,
+    onDisableClicked: () -> Unit,
+    onNoClicked: () -> Unit
 ) {
-    val state: RageshakeDetectionViewState by viewModel.collectAsState()
     LogCompositions(tag = "Rageshake", msg = "RageshakeDetectionScreen")
     val context = LocalContext.current
-    OnLifecycleEvent { _, event ->
-        when (event) {
-            Lifecycle.Event.ON_RESUME -> viewModel.start()
-            Lifecycle.Event.ON_PAUSE -> viewModel.stop()
-            else -> Unit
-        }
-    }
-
     when {
         state.takeScreenshot -> TakeScreenshot(
-            onScreenshotTaken = viewModel::onScreenshotTaken
+            onScreenshotTaken = onScreenshotTaken
         )
         state.showDialog -> {
             LaunchedEffect(key1 = "RS_diag") {
@@ -61,14 +50,9 @@ fun RageshakeDetectionScreen(
             }
             RageshakeDialogContent(
                 state,
-                onNoClicked = viewModel::onNo,
-                onDisableClicked = {
-                    viewModel.onEnableClicked(false)
-                },
-                onYesClicked = {
-                    onOpenBugReport()
-                    viewModel.onYes()
-                }
+                onNoClicked = onNoClicked,
+                onDisableClicked = onDisableClicked,
+                onYesClicked = onOpenBugReport
             )
         }
     }
@@ -86,7 +70,7 @@ private fun TakeScreenshot(
 
 @Composable
 fun RageshakeDialogContent(
-    state: RageshakeDetectionViewState,
+    state: RageshakeDetectionState,
     onNoClicked: () -> Unit = { },
     onDisableClicked: () -> Unit = { },
     onYesClicked: () -> Unit = { },
@@ -108,7 +92,7 @@ fun RageshakeDialogContent(
 fun RageshakeDialogContentPreview() {
     ElementXTheme {
         RageshakeDialogContent(
-            state = RageshakeDetectionViewState()
+            state = RageshakeDetectionState()
         )
     }
 }

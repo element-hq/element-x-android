@@ -25,7 +25,7 @@ import io.element.android.x.architecture.viewmodel.DaggerMavericksBindings
 
 @SingleIn(AppScope::class)
 @MergeComponent(AppScope::class)
-interface AppComponent : DaggerMavericksBindings, NodeFactoriesBindings {
+interface AppComponent : NodeFactoriesBindings {
 
     @Component.Factory
     interface Factory {
