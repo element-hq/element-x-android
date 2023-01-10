@@ -18,7 +18,7 @@ class CrashDetectionPresenter @Inject constructor(private val crashDataStore: Cr
         LaunchedEffect(Unit) {
             events.collect { event ->
                 when (event) {
-                    CrashDetectionEvents.ResetAll -> resetAll()
+                    CrashDetectionEvents.ResetAllCrashData -> resetAll()
                     CrashDetectionEvents.ResetAppHasCrashed -> resetAppHasCrashed()
                 }
             }
@@ -32,7 +32,7 @@ class CrashDetectionPresenter @Inject constructor(private val crashDataStore: Cr
         crashDataStore.resetAppHasCrashed()
     }
 
-    fun CoroutineScope.resetAll() = launch {
+    private fun CoroutineScope.resetAll() = launch {
         crashDataStore.reset()
     }
 }

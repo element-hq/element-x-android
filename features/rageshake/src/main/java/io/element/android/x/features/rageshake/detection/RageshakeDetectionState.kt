@@ -16,8 +16,10 @@
 
 package io.element.android.x.features.rageshake.detection
 
+import androidx.compose.runtime.Stable
 import io.element.android.x.features.rageshake.preferences.RageshakePreferencesState
 
+@Stable
 data class RageshakeDetectionState(
     val takeScreenshot: Boolean = false,
     val showDialog: Boolean = false,

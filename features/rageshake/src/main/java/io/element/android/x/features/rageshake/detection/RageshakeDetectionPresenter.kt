@@ -13,7 +13,6 @@ import io.element.android.x.core.screenshot.ImageResult
 import io.element.android.x.features.rageshake.preferences.RageshakePreferencesEvents
 import io.element.android.x.features.rageshake.preferences.RageshakePreferencesPresenter
 import io.element.android.x.features.rageshake.rageshake.RageShake
-import io.element.android.x.features.rageshake.rageshake.RageshakeDataStore
 import io.element.android.x.features.rageshake.screenshot.ScreenshotHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +21,6 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class RageshakeDetectionPresenter @Inject constructor(
-    private val rageshakeDataStore: RageshakeDataStore,
     private val screenshotHolder: ScreenshotHolder,
     private val rageShake: RageShake,
     private val preferencesPresenter: RageshakePreferencesPresenter,
@@ -42,12 +40,14 @@ class RageshakeDetectionPresenter @Inject constructor(
         val showDialog = rememberSaveable {
             mutableStateOf(false)
         }
-        val state = RageshakeDetectionState(
-            isStarted = isStarted.value,
-            takeScreenshot = takeScreenshot.value,
-            showDialog = showDialog.value,
-            preferenceState = preferencesState
-        )
+        val state = remember(preferencesState, isStarted.value, takeScreenshot.value, showDialog.value) {
+            RageshakeDetectionState(
+                isStarted = isStarted.value,
+                takeScreenshot = takeScreenshot.value,
+                showDialog = showDialog.value,
+                preferenceState = preferencesState
+            )
+        }
         LaunchedEffect(Unit) {
             events.collect { event ->
                 when (event) {
@@ -62,21 +62,17 @@ class RageshakeDetectionPresenter @Inject constructor(
         LaunchedEffect(preferencesState.sensitivity) {
             rageShake.setSensitivity(preferencesState.sensitivity)
         }
-        val shouldStart = remember {
-            derivedStateOf {
-                preferencesState.isEnabled &&
+        val shouldStart = preferencesState.isEnabled &&
                     preferencesState.isSupported &&
                     isStarted.value &&
                     !takeScreenshot.value &&
                     !showDialog.value
-            }
-        }
+
         LaunchedEffect(shouldStart) {
-            handleRageShake(shouldStart.value, state, takeScreenshot)
+            handleRageShake(shouldStart, state, takeScreenshot)
         }
         return state
     }
-
 
     private fun handleRageShake(start: Boolean, state: RageshakeDetectionState, takeScreenshot: MutableState<Boolean>) {
         if (start) {

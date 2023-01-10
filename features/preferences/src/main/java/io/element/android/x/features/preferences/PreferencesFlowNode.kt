@@ -14,6 +14,7 @@ import kotlinx.parcelize.Parcelize
 
 class PreferencesFlowNode(
     buildContext: BuildContext,
+    private val onOpenBugReport: () -> Unit,
     private val backstack: BackStack<NavTarget> = BackStack(
         initialElement = NavTarget.Root,
         savedStateMap = buildContext.savedStateMap,
@@ -23,6 +24,12 @@ class PreferencesFlowNode(
     buildContext = buildContext
 ) {
 
+    private val preferencesRootNodeCallback = object : PreferencesRootNode.Callback {
+        override fun onOpenBugReport() {
+            onOpenBugReport.invoke()
+        }
+    }
+
     sealed interface NavTarget : Parcelable {
         @Parcelize
         object Root : NavTarget
@@ -30,7 +37,7 @@ class PreferencesFlowNode(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Root -> createNode<PreferencesRootNode>(buildContext)
+            NavTarget.Root -> createNode<PreferencesRootNode>(buildContext, plugins = listOf(preferencesRootNodeCallback))
         }
     }
 

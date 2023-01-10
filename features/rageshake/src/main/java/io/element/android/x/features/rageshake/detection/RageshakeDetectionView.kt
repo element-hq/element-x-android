@@ -34,9 +34,9 @@ import io.element.android.x.element.resources.R as ElementR
 fun RageshakeDetectionView(
     state: RageshakeDetectionState,
     onOpenBugReport: () -> Unit = { },
-    onScreenshotTaken: (ImageResult) -> Unit,
-    onDisableClicked: () -> Unit,
-    onNoClicked: () -> Unit
+    onScreenshotTaken: (ImageResult) -> Unit = {},
+    onDisableClicked: () -> Unit = {},
+    onNoClicked: () -> Unit = {}
 ) {
     LogCompositions(tag = "Rageshake", msg = "RageshakeDetectionScreen")
     val context = LocalContext.current
@@ -63,8 +63,10 @@ private fun TakeScreenshot(
     onScreenshotTaken: (ImageResult) -> Unit = {}
 ) {
     val view = LocalView.current
-    view.screenshot {
-        onScreenshotTaken(it)
+    LaunchedEffect(Unit) {
+        view.screenshot {
+            onScreenshotTaken(it)
+        }
     }
 }
 
