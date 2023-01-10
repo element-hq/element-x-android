@@ -1,7 +1,9 @@
 package io.element.android.x.architecture
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
 
+@Stable
 sealed interface Async<out T> {
     object Uninitialized : Async<Nothing>
     data class Loading<out T>(val prevState: T? = null) : Async<T>

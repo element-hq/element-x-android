@@ -22,6 +22,7 @@ import kotlinx.parcelize.Parcelize
 class LoggedInFlowNode(
     buildContext: BuildContext,
     val sessionId: SessionId,
+    private val onOpenBugReport: () -> Unit,
     private val backstack: BackStack<NavTarget> = BackStack(
         initialElement = NavTarget.RoomList,
         savedStateMap = buildContext.savedStateMap,
@@ -64,7 +65,7 @@ class LoggedInFlowNode(
                 )
             }
             NavTarget.Settings -> {
-                PreferencesFlowNode(buildContext)
+                PreferencesFlowNode(buildContext, onOpenBugReport)
             }
         }
     }

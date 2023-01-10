@@ -4,10 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.core.net.toUri
 import io.element.android.x.architecture.Async
 import io.element.android.x.architecture.Presenter
 import io.element.android.x.features.rageshake.crash.CrashDataStore
@@ -31,6 +33,7 @@ class BugReportPresenter @Inject constructor(
         private val sendingProgress: MutableState<Float>,
         private val sendingAction: MutableState<Async<Unit>>
     ) : BugReporter.IMXBugReportListener {
+
         override fun onUploadCancelled() {
             sendingProgress.value = 0f
             sendingAction.value = Async.Uninitialized
@@ -54,6 +57,11 @@ class BugReportPresenter @Inject constructor(
 
     @Composable
     override fun present(events: Flow<BugReportEvents>): BugReportState {
+        val screenshotUri = rememberSaveable {
+            mutableStateOf(
+                screenshotHolder.getFile()?.toUri()?.toString()
+            )
+        }
         val crashInfo: String by crashDataStore
             .crashInfo()
             .collectAsState(initial = "")
@@ -64,15 +72,21 @@ class BugReportPresenter @Inject constructor(
         val sendingAction: MutableState<Async<Unit>> = remember {
             mutableStateOf(Async.Uninitialized)
         }
-        val formState: MutableState<BugReportFormState> = rememberSaveable {
+        val formState: MutableState<BugReportFormState> = remember {
             mutableStateOf(BugReportFormState.Default)
         }
         val uploadListener = BugReporterUploadListener(sendingProgress, sendingAction)
-        val state = BugReportState(
-            hasCrashLogs = crashInfo.isNotEmpty(),
-            sendingProgress = sendingProgress.value,
-            sending = sendingAction.value
-        )
+        val state by remember {
+            derivedStateOf {
+                BugReportState(
+                    hasCrashLogs = crashInfo.isNotEmpty(),
+                    sendingProgress = sendingProgress.value,
+                    sending = sendingAction.value,
+                    formState = formState.value,
+                    screenshotUri = screenshotUri.value
+                )
+            }
+        }
         LaunchedEffect(Unit) {
             events.collect { event ->
                 when (event) {

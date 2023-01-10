@@ -17,8 +17,7 @@ import javax.inject.Inject
 class RageshakePreferencesPresenter @Inject constructor(
     private val rageshake: RageShake,
     private val rageshakeDataStore: RageshakeDataStore,
-
-    ) : Presenter<RageshakePreferencesState, RageshakePreferencesEvents> {
+) : Presenter<RageshakePreferencesState, RageshakePreferencesEvents> {
 
     @Composable
     override fun present(events: Flow<RageshakePreferencesEvents>): RageshakePreferencesState {

@@ -38,8 +38,7 @@ data class BugReportFormState(
     val sendCrashLogs: Boolean,
     val canContact: Boolean,
     val sendScreenshot: Boolean
-
-): Parcelable {
+) : Parcelable {
     companion object {
         val Default = BugReportFormState(
             description = "",

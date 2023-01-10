@@ -49,7 +49,8 @@ class MainActivity : NodeComponentActivity() {
                             buildContext = it,
                             appComponentOwner = applicationContext as DaggerComponentOwner,
                             matrix = appBindings.matrix(),
-                            sessionComponentsOwner = appBindings.sessionComponentsOwner()
+                            sessionComponentsOwner = appBindings.sessionComponentsOwner(),
+                            rootPresenter = appBindings.rootPresenter()
                         )
                     }
                 }

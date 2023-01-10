@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.x.anvilannotations.ContributesNode
@@ -19,6 +20,10 @@ class PreferencesRootNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: PreferencesRootPresenter,
 ) : Node(buildContext, plugins = plugins) {
+
+    public interface Callback : Plugin {
+        fun onOpenBugReport()
+    }
 
     private val presenterConnector = presenterConnector(presenter)
 
@@ -34,6 +39,10 @@ class PreferencesRootNode @AssistedInject constructor(
         presenterConnector.emitEvent(PreferencesRootEvents.SetRageshakeSensitivity(sensitivity))
     }
 
+    private fun onOpenBugReport() {
+        plugins<Callback>().forEach { it.onOpenBugReport() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state by presenterConnector.stateFlow.collectAsState()
@@ -42,7 +51,8 @@ class PreferencesRootNode @AssistedInject constructor(
             onLogoutClicked = this::onLogoutClicked,
             onBackPressed = this::navigateUp,
             onRageshakeEnabledChanged = this::onRageshakeEnabledChanged,
-            onRageshakeSensitivityChanged = this::onRageshakeSensitivityChanged
+            onRageshakeSensitivityChanged = this::onRageshakeSensitivityChanged,
+            onOpenRageShake = this::onOpenBugReport
         )
     }
 }
