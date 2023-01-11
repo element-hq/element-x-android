@@ -19,6 +19,7 @@ package io.element.android.x.features.logout
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
@@ -34,14 +35,15 @@ import io.element.android.x.element.resources.R as ElementR
 @Composable
 fun LogoutPreferenceView(
     state: LogoutPreferenceState,
-    onLogoutClicked: () -> Unit = {},
-    onSuccessLogout: () -> Unit = {},
+    onSuccessLogout: () -> Unit = {}
 ) {
+    val eventSink = state.eventSink
     if (state.logoutAction is Async.Success) {
-        onSuccessLogout()
+        LaunchedEffect(state.logoutAction) {
+            onSuccessLogout()
+        }
         return
     }
-
     val openDialog = remember { mutableStateOf(false) }
 
     LogoutPreferenceContent(
@@ -61,7 +63,7 @@ fun LogoutPreferenceView(
             },
             onSubmitClicked = {
                 openDialog.value = false
-                onLogoutClicked()
+                eventSink(LogoutPreferenceEvents.Logout)
             },
             onDismiss = {
                 openDialog.value = false

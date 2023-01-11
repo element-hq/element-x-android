@@ -34,9 +34,16 @@ fun RageshakePreferencesView(
     state: RageshakePreferencesState,
     modifier: Modifier = Modifier,
     onOpenRageshake: () -> Unit = {},
-    onIsEnabledChanged: (Boolean) -> Unit = {},
-    onSensitivityChanged: (Float) -> Unit = {}
 ) {
+
+    fun onSensitivityChanged(sensitivity: Float){
+        state.eventSink(RageshakePreferencesEvents.SetSensitivity(sensitivity = sensitivity))
+    }
+
+    fun onEnabledChanged(isEnabled: Boolean){
+        state.eventSink(RageshakePreferencesEvents.SetIsEnabled(isEnabled = isEnabled))
+    }
+
     Column(modifier = modifier) {
         PreferenceCategory(title = stringResource(id = ElementR.string.send_bug_report)) {
             PreferenceText(
@@ -45,12 +52,13 @@ fun RageshakePreferencesView(
                 onClick = onOpenRageshake
             )
         }
+
         PreferenceCategory(title = stringResource(id = ElementR.string.settings_rageshake)) {
             if (state.isSupported) {
                 PreferenceSwitch(
                     title = stringResource(id = ElementR.string.send_bug_report_rage_shake),
                     isChecked = state.isEnabled,
-                    onCheckedChange = onIsEnabledChanged
+                    onCheckedChange = ::onEnabledChanged
                 )
                 PreferenceSlide(
                     title = stringResource(id = ElementR.string.settings_rageshake_detection_threshold),
@@ -58,7 +66,7 @@ fun RageshakePreferencesView(
                     value = state.sensitivity,
                     enabled = state.isEnabled,
                     steps = 3 /* 5 possible values - steps are in ]0, 1[ */,
-                    onValueChange = onSensitivityChanged
+                    onValueChange = ::onSensitivityChanged
                 )
             } else {
                 PreferenceText(title = "Rageshaking is not supported by your device")

@@ -9,4 +9,6 @@ class SharedFlowHolder<Data>(capacity: Int = 64) {
     fun asSharedFlow() = mutableFlow.asSharedFlow()
 
     fun emit(data: Data) = mutableFlow.tryEmit(data)
+
+    suspend fun awaitEmit(data: Data) = mutableFlow.emit(data)
 }

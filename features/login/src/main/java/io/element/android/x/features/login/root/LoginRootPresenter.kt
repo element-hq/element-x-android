@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.x.architecture.Presenter
 import io.element.android.x.matrix.Matrix
@@ -13,10 +14,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class LoginRootPresenter @Inject constructor(private val matrix: Matrix) : Presenter<LoginRootState, LoginRootEvents> {
+class LoginRootPresenter @Inject constructor(private val matrix: Matrix) : Presenter<LoginRootState> {
 
     @Composable
-    override fun present(events: Flow<LoginRootEvents>): LoginRootState {
+    override fun present(): LoginRootState {
+        val localCoroutineScope = rememberCoroutineScope()
         val homeserver = rememberSaveable {
             mutableStateOf(matrix.getHomeserverOrDefault())
         }
@@ -27,24 +29,24 @@ class LoginRootPresenter @Inject constructor(private val matrix: Matrix) : Prese
             mutableStateOf(LoginFormState.Default)
         }
 
-        LaunchedEffect(Unit) {
-            events.collect { event ->
-                when (event) {
-                    LoginRootEvents.RefreshHomeServer -> refreshHomeServer(homeserver)
-                    is LoginRootEvents.SetLogin -> updateFormState(formState) {
-                        copy(login = event.login)
-                    }
-                    is LoginRootEvents.SetPassword -> updateFormState(formState) {
-                        copy(password = event.password)
-                    }
-                    LoginRootEvents.Submit -> submit(homeserver.value, formState.value, loggedInState)
+        fun handleEvents(event: LoginRootEvents){
+            when (event) {
+                LoginRootEvents.RefreshHomeServer -> refreshHomeServer(homeserver)
+                is LoginRootEvents.SetLogin -> updateFormState(formState) {
+                    copy(login = event.login)
                 }
+                is LoginRootEvents.SetPassword -> updateFormState(formState) {
+                    copy(password = event.password)
+                }
+                LoginRootEvents.Submit -> localCoroutineScope.submit(homeserver.value, formState.value, loggedInState)
             }
         }
+
         return LoginRootState(
             homeserver = homeserver.value,
             loggedInState = loggedInState.value,
-            formState = formState.value
+            formState = formState.value,
+            eventSink = ::handleEvents
         )
     }
 

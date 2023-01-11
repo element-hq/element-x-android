@@ -21,23 +21,11 @@ class PreferencesRootNode @AssistedInject constructor(
     private val presenter: PreferencesRootPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
-    public interface Callback : Plugin {
+    interface Callback : Plugin {
         fun onOpenBugReport()
     }
 
     private val presenterConnector = presenterConnector(presenter)
-
-    private fun onLogoutClicked() {
-        presenterConnector.emitEvent(PreferencesRootEvents.Logout)
-    }
-
-    private fun onRageshakeEnabledChanged(isEnabled: Boolean) {
-        presenterConnector.emitEvent(PreferencesRootEvents.SetRageshakeEnabled(isEnabled))
-    }
-
-    private fun onRageshakeSensitivityChanged(sensitivity: Float) {
-        presenterConnector.emitEvent(PreferencesRootEvents.SetRageshakeSensitivity(sensitivity))
-    }
 
     private fun onOpenBugReport() {
         plugins<Callback>().forEach { it.onOpenBugReport() }
@@ -48,10 +36,7 @@ class PreferencesRootNode @AssistedInject constructor(
         val state by presenterConnector.stateFlow.collectAsState()
         PreferencesRootView(
             state = state,
-            onLogoutClicked = this::onLogoutClicked,
             onBackPressed = this::navigateUp,
-            onRageshakeEnabledChanged = this::onRageshakeEnabledChanged,
-            onRageshakeSensitivityChanged = this::onRageshakeSensitivityChanged,
             onOpenRageShake = this::onOpenBugReport
         )
     }

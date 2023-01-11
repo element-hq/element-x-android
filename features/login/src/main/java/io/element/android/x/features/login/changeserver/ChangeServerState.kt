@@ -5,6 +5,7 @@ import io.element.android.x.architecture.Async
 data class ChangeServerState(
     val homeserver: String = "",
     val changeServerAction: Async<Unit> = Async.Uninitialized,
+    val eventSink: (ChangeServerEvents) -> Unit = {},
 ) {
     val submitEnabled = homeserver.isNotEmpty() && changeServerAction !is Async.Loading
 }

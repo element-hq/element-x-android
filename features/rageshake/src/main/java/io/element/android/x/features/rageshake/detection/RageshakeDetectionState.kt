@@ -24,5 +24,6 @@ data class RageshakeDetectionState(
     val takeScreenshot: Boolean = false,
     val showDialog: Boolean = false,
     val isStarted: Boolean = false,
-    val preferenceState: RageshakePreferencesState = RageshakePreferencesState()
+    val preferenceState: RageshakePreferencesState = RageshakePreferencesState(),
+    val eventSink: (RageshakeDetectionEvents) -> Unit = {}
 )

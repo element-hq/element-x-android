@@ -68,11 +68,9 @@ fun LoginRootScreen(
     state: LoginRootState,
     modifier: Modifier = Modifier,
     onChangeServer: () -> Unit = {},
-    onLoginChanged: (String) -> Unit = {},
-    onPasswordChanged: (String) -> Unit = {},
-    onSubmitClicked: () -> Unit = {},
     onLoginWithSuccess: (SessionId) -> Unit = {},
 ) {
+    val eventSink = state.eventSink
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background,
@@ -144,7 +142,7 @@ fun LoginRootScreen(
                         },
                         onValueChange = {
                             loginFieldState = it
-                            onLoginChanged(it)
+                            eventSink(LoginRootEvents.SetLogin(it))
                         },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email,
@@ -163,7 +161,7 @@ fun LoginRootScreen(
                             .padding(top = 24.dp),
                         onValueChange = {
                             passwordFieldState = it
-                            onPasswordChanged(it)
+                            eventSink(LoginRootEvents.SetPassword(it))
                         },
                         label = {
                             Text(text = "Password")
@@ -185,7 +183,7 @@ fun LoginRootScreen(
                             imeAction = ImeAction.Done,
                         ),
                         keyboardActions = KeyboardActions(
-                            onDone = { onSubmitClicked() }
+                            onDone = { eventSink(LoginRootEvents.Submit) }
                         ),
                     )
                     if (state.loggedInState is LoggedInState.ErrorLoggingIn) {
@@ -199,7 +197,7 @@ fun LoginRootScreen(
                 }
                 // Submit
                 Button(
-                    onClick = onSubmitClicked,
+                    onClick = { eventSink(LoginRootEvents.Submit) },
                     enabled = state.submitEnabled,
                     modifier = Modifier
                         .fillMaxWidth()

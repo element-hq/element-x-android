@@ -22,14 +22,6 @@ class ChangeServerNode @AssistedInject constructor(
 
     private val presenterConnector = presenterConnector(presenter)
 
-    private fun onChangeServer(server: String) {
-        presenterConnector.emitEvent(ChangeServerEvents.SetServer(server))
-    }
-
-    private fun onSubmit() {
-        presenterConnector.emitEvent(ChangeServerEvents.Submit)
-    }
-
     private fun onSuccess() {
         navigateUp()
     }
@@ -39,8 +31,6 @@ class ChangeServerNode @AssistedInject constructor(
         val state by presenterConnector.stateFlow.collectAsState()
         ChangeServerView(
             state = state,
-            onChangeServer = this::onChangeServer,
-            onChangeServerSubmit = this::onSubmit,
             onChangeServerSuccess = this::onSuccess,
         )
     }

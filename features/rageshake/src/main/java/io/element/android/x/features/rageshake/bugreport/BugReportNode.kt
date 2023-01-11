@@ -33,43 +33,12 @@ class BugReportNode @AssistedInject constructor(
         BugReportView(
             state = state,
             modifier = modifier,
-            onDescriptionChanged = this::onDescriptionChanged,
-            onSetSendLog = this::onSetSendLog,
-            onSetSendCrashLog = this::onSetSendCrashLog,
-            onSetCanContact = this::onSetCanContact,
-            onSetSendScreenshot = this::onSetSendScreenshot,
-            onSubmit = this::onSubmit,
             onDone = this::onDone
         )
     }
 
     private fun onDone() {
-        presenterConnector.emitEvent(BugReportEvents.ResetAll)
         plugins<Callback>().forEach { it.onBugReportSent() }
-    }
-
-    private fun onSubmit() {
-        presenterConnector.emitEvent(BugReportEvents.SendBugReport)
-    }
-
-    private fun onSetSendLog(sendLog: Boolean) {
-        presenterConnector.emitEvent(BugReportEvents.SetSendLog(sendLog))
-    }
-
-    private fun onSetSendCrashLog(sendCrashLog: Boolean) {
-        presenterConnector.emitEvent(BugReportEvents.SetSendCrashLog(sendCrashLog))
-    }
-
-    private fun onSetSendScreenshot(sendScreenshot: Boolean) {
-        presenterConnector.emitEvent(BugReportEvents.SetSendScreenshot(sendScreenshot))
-    }
-
-    private fun onSetCanContact(canContact: Boolean) {
-        presenterConnector.emitEvent(BugReportEvents.SetCanContact(canContact))
-    }
-
-    private fun onDescriptionChanged(description: String) {
-        presenterConnector.emitEvent(BugReportEvents.SetDescription(description))
     }
 }
 

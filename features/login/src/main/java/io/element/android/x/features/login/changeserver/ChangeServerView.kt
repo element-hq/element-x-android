@@ -64,14 +64,13 @@ import io.element.android.x.features.login.error.changeServerError
 fun ChangeServerView(
     state: ChangeServerState,
     modifier: Modifier = Modifier,
-    onChangeServer: (String) -> Unit = {},
-    onChangeServerSubmit: () -> Unit = {},
     onChangeServerSuccess: () -> Unit = {},
 ) {
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.background,
     ) {
+        val eventSink = state.eventSink
         val scrollState = rememberScrollState()
         Box(
             modifier = Modifier
@@ -135,7 +134,7 @@ fun ChangeServerView(
                         .padding(top = 200.dp),
                     onValueChange = {
                         homeserverFieldState = it
-                        onChangeServer(it)
+                        eventSink(ChangeServerEvents.SetServer(it))
                     },
                     label = {
                         Text(text = "Server")
@@ -146,7 +145,7 @@ fun ChangeServerView(
                         imeAction = ImeAction.Done,
                     ),
                     keyboardActions = KeyboardActions(
-                        onDone = { onChangeServerSubmit() }
+                        onDone = { eventSink(ChangeServerEvents.Submit) }
                     )
                 )
                 if (state.changeServerAction is Async.Failure) {
@@ -161,7 +160,7 @@ fun ChangeServerView(
                     )
                 }
                 Button(
-                    onClick = onChangeServerSubmit,
+                    onClick = { eventSink(ChangeServerEvents.Submit) },
                     enabled = state.submitEnabled,
                     modifier = Modifier
                         .fillMaxWidth()

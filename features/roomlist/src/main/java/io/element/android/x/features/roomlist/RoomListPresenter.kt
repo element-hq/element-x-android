@@ -7,8 +7,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import io.element.android.x.architecture.Presenter
 import io.element.android.x.core.coroutine.parallelMap
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
@@ -19,13 +21,12 @@ import io.element.android.x.features.roomlist.model.RoomListState
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.RoomSummary
-import io.element.android.x.architecture.Presenter
 import io.element.android.x.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val extendedRangeSize = 40
@@ -33,10 +34,10 @@ private const val extendedRangeSize = 40
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
     private val lastMessageFormatter: LastMessageFormatter,
-) : Presenter<RoomListState, RoomListEvents> {
+) : Presenter<RoomListState> {
 
     @Composable
-    override fun present(events: Flow<RoomListEvents>): RoomListState {
+    override fun present(): RoomListState {
         val matrixUser: MutableState<MatrixUser?> = remember {
             mutableStateOf(null)
         }
@@ -52,14 +53,15 @@ class RoomListPresenter @Inject constructor(
         }
         LaunchedEffect(Unit) {
             initialLoad(matrixUser)
-            events.collect { event ->
-                when (event) {
-                    RoomListEvents.Logout -> logout(isLoginOut)
-                    is RoomListEvents.UpdateFilter -> filter = event.newFilter
-                    is RoomListEvents.UpdateVisibleRange -> updateVisibleRange(event.range)
-                }
+        }
+
+        fun handleEvents(event: RoomListEvents) {
+            when (event) {
+                is RoomListEvents.UpdateFilter -> filter = event.newFilter
+                is RoomListEvents.UpdateVisibleRange -> updateVisibleRange(event.range)
             }
         }
+
         LaunchedEffect(roomSummaries, filter) {
             filteredRoomSummaries.value = updateFilteredRoomSummaries(roomSummaries, filter)
         }
@@ -67,7 +69,8 @@ class RoomListPresenter @Inject constructor(
             matrixUser = matrixUser.value,
             roomList = filteredRoomSummaries.value,
             filter = filter,
-            isLoginOut = isLoginOut.value
+            isLoginOut = isLoginOut.value,
+            eventSink = ::handleEvents
         )
     }
 
@@ -83,7 +86,7 @@ class RoomListPresenter @Inject constructor(
         }.toImmutableList()
     }
 
-    private suspend fun initialLoad(matrixUser: MutableState<MatrixUser?>) {
+    private fun CoroutineScope.initialLoad(matrixUser: MutableState<MatrixUser?>) = launch {
         val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
         val userDisplayName = client.loadUserDisplayName().getOrNull()
         val avatarData =
@@ -98,13 +101,6 @@ class RoomListPresenter @Inject constructor(
             avatarUrl = userAvatarUrl,
             avatarData = avatarData,
         )
-    }
-
-    private suspend fun logout(isLoginOut: MutableState<Boolean>) {
-        isLoginOut.value = true
-        delay(2000)
-        client.logout()
-        isLoginOut.value = false
     }
 
     private fun updateVisibleRange(range: IntRange) {
