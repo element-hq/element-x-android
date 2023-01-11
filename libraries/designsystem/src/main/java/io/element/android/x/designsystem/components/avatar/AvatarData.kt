@@ -16,9 +16,9 @@
 
 package io.element.android.x.designsystem.components.avatar
 
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 
-@Stable
+@Immutable
 data class AvatarData(
     val name: String = "",
     val model: ByteArray? = null,
