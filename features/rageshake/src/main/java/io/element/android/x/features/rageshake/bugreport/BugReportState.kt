@@ -26,6 +26,7 @@ data class BugReportState(
     val screenshotUri: String? = null,
     val sendingProgress: Float = 0F,
     val sending: Async<Unit> = Async.Uninitialized,
+    val eventSink: (BugReportEvents) -> Unit = {}
 ) {
     val submitEnabled =
         formState.description.length > 10 && sending !is Async.Loading

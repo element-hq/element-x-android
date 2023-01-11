@@ -22,7 +22,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.Lifecycle
 import io.element.android.x.core.compose.LogCompositions
+import io.element.android.x.core.compose.OnLifecycleEvent
 import io.element.android.x.core.hardware.vibrate
 import io.element.android.x.core.screenshot.ImageResult
 import io.element.android.x.core.screenshot.screenshot
@@ -34,24 +36,28 @@ import io.element.android.x.element.resources.R as ElementR
 fun RageshakeDetectionView(
     state: RageshakeDetectionState,
     onOpenBugReport: () -> Unit = { },
-    onScreenshotTaken: (ImageResult) -> Unit = {},
-    onDisableClicked: () -> Unit = {},
-    onNoClicked: () -> Unit = {}
 ) {
     LogCompositions(tag = "Rageshake", msg = "RageshakeDetectionScreen")
+    val eventSink = state.eventSink
     val context = LocalContext.current
+    OnLifecycleEvent { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_RESUME -> eventSink(RageshakeDetectionEvents.StartDetection)
+            Lifecycle.Event.ON_PAUSE -> eventSink(RageshakeDetectionEvents.StopDetection)
+            else -> Unit
+        }
+    }
     when {
         state.takeScreenshot -> TakeScreenshot(
-            onScreenshotTaken = onScreenshotTaken
+            onScreenshotTaken = { eventSink(RageshakeDetectionEvents.ProcessScreenshot(it)) }
         )
         state.showDialog -> {
-            LaunchedEffect(key1 = "RS_diag") {
+            LaunchedEffect(Unit) {
                 context.vibrate()
             }
             RageshakeDialogContent(
-                state,
-                onNoClicked = onNoClicked,
-                onDisableClicked = onDisableClicked,
+                onNoClicked = { eventSink(RageshakeDetectionEvents.Dismiss) },
+                onDisableClicked = { eventSink(RageshakeDetectionEvents.Disable) },
                 onYesClicked = onOpenBugReport
             )
         }
@@ -72,7 +78,6 @@ private fun TakeScreenshot(
 
 @Composable
 fun RageshakeDialogContent(
-    state: RageshakeDetectionState,
     onNoClicked: () -> Unit = { },
     onDisableClicked: () -> Unit = { },
     onYesClicked: () -> Unit = { },
@@ -83,6 +88,7 @@ fun RageshakeDialogContent(
         thirdButtonText = stringResource(id = ElementR.string.action_disable),
         submitText = stringResource(id = ElementR.string.yes),
         cancelText = stringResource(id = ElementR.string.no),
+        onCancelClicked = onNoClicked,
         onThirdButtonClicked = onDisableClicked,
         onSubmitClicked = onYesClicked,
         onDismiss = onNoClicked,
@@ -93,8 +99,6 @@ fun RageshakeDialogContent(
 @Composable
 fun RageshakeDialogContentPreview() {
     ElementXTheme {
-        RageshakeDialogContent(
-            state = RageshakeDetectionState()
-        )
+        RageshakeDialogContent()
     }
 }

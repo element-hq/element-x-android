@@ -25,8 +25,8 @@ import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import io.element.android.x.architecture.createNode
 import io.element.android.x.architecture.presenterConnector
+import io.element.android.x.core.compose.OnLifecycleEvent
 import io.element.android.x.core.di.DaggerComponentOwner
-import io.element.android.x.core.screenshot.ImageResult
 import io.element.android.x.di.SessionComponentsOwner
 import io.element.android.x.features.rageshake.bugreport.BugReportNode
 import io.element.android.x.matrix.Matrix
@@ -78,22 +78,6 @@ class RootFlowNode(
     private val presenterConnector = presenterConnector(rootPresenter)
 
     init {
-        Timber.v("Init")
-        lifecycle.subscribe(
-            onCreate = { Timber.v("OnCreate") },
-            onResume = {
-                Timber.v("OnResume")
-                presenterConnector.emitEvent(RootEvents.StartRageshakeDetection)
-            },
-            onPause = {
-                Timber.v("OnPause")
-                presenterConnector.emitEvent(RootEvents.StopRageshakeDetection)
-            },
-            onDestroy = { Timber.v("OnDestroy") }
-        )
-    }
-
-    init {
         matrix.isLoggedIn()
             .distinctUntilChanged()
             .onEach { isLoggedIn ->
@@ -114,25 +98,8 @@ class RootFlowNode(
             .launchIn(lifecycleScope)
     }
 
-    private fun hideShowkaseButton() {
-        presenterConnector.emitEvent(RootEvents.HideShowkaseButton)
-    }
-
     private fun onOpenBugReport() {
-        presenterConnector.emitEvent(RootEvents.ResetAppHasCrashed)
         backstack.push(NavTarget.BugReport)
-    }
-
-    private fun onCrashDetectedDismissed() {
-        presenterConnector.emitEvent(RootEvents.ResetAllCrashData)
-    }
-
-    private fun onDismissRageshake() {
-        presenterConnector.emitEvent(RootEvents.DismissRageshake)
-    }
-
-    private fun onDisableRageshake() {
-        presenterConnector.emitEvent(RootEvents.DisableRageshake)
     }
 
     @Composable
@@ -140,19 +107,10 @@ class RootFlowNode(
         val state by presenterConnector.stateFlow.collectAsState()
         RootView(
             state = state,
-            onHideShowkaseClicked = this::hideShowkaseButton,
             onOpenBugReport = this::onOpenBugReport,
-            onCrashDetectedDismissed = this::onCrashDetectedDismissed,
-            onDisableRageshake = this::onDisableRageshake,
-            onDismissRageshake = this::onDismissRageshake,
-            onScreenshotTaken = this::onScreenshotTaken
         ) {
             Children(navModel = backstack)
         }
-    }
-
-    private fun onScreenshotTaken(imageResult: ImageResult) {
-        presenterConnector.emitEvent(RootEvents.ProcessScreenshot(imageResult))
     }
 
     private val bugReportNodeCallback = object : BugReportNode.Callback {

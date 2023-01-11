@@ -8,6 +8,7 @@ data class LoginRootState(
     val homeserver: String = "",
     val loggedInState: LoggedInState = LoggedInState.NotLoggedIn,
     val formState: LoginFormState = LoginFormState.Default,
+    val eventSink: (LoginRootEvents) -> Unit = {}
 ) {
     val submitEnabled =
         formState.login.isNotEmpty() && formState.password.isNotEmpty() && loggedInState != LoggedInState.LoggingIn

@@ -30,18 +30,6 @@ class RoomListNode @AssistedInject constructor(
 
     private val connector = presenterConnector(presenter)
 
-    private fun updateFilter(filter: String) {
-        connector.emitEvent(RoomListEvents.UpdateFilter(filter))
-    }
-
-    private fun updateVisibleRange(range: IntRange) {
-        connector.emitEvent((RoomListEvents.UpdateVisibleRange(range)))
-    }
-
-    private fun logout() {
-        connector.emitEvent(RoomListEvents.Logout)
-    }
-
     private fun onRoomClicked(roomId: RoomId) {
         plugins<Callback>().forEach { it.onRoomClicked(roomId) }
     }
@@ -56,8 +44,6 @@ class RoomListNode @AssistedInject constructor(
         RoomListView(
             state = state,
             onRoomClicked = this::onRoomClicked,
-            onFilterChanged = this::updateFilter,
-            onScrollOver = this::updateVisibleRange,
             onOpenSettings = this::onOpenSettings
         )
     }

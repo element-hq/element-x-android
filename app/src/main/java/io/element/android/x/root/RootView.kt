@@ -10,8 +10,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import com.airbnb.android.showkase.models.Showkase
 import io.element.android.x.component.ShowkaseButton
-import io.element.android.x.core.screenshot.ImageResult
+import io.element.android.x.features.rageshake.crash.ui.CrashDetectionEvents
 import io.element.android.x.features.rageshake.crash.ui.CrashDetectionView
+import io.element.android.x.features.rageshake.detection.RageshakeDetectionEvents
 import io.element.android.x.features.rageshake.detection.RageshakeDetectionView
 import io.element.android.x.getBrowserIntent
 
@@ -19,12 +20,7 @@ import io.element.android.x.getBrowserIntent
 fun RootView(
     state: RootState,
     modifier: Modifier = Modifier,
-    onHideShowkaseClicked: () -> Unit = { },
     onOpenBugReport: () -> Unit = {},
-    onCrashDetectedDismissed: () -> Unit = {},
-    onDisableRageshake: () -> Unit = {},
-    onDismissRageshake: () -> Unit = {},
-    onScreenshotTaken: (ImageResult) -> Unit = {},
     children: @Composable BoxScope.() -> Unit,
 ) {
     Box(
@@ -33,23 +29,27 @@ fun RootView(
         contentAlignment = Alignment.TopCenter,
     ) {
         children()
+        val eventSink = state.eventSink
         val context = LocalContext.current
+
+        fun onOpenBugReport() {
+            state.crashDetectionState.eventSink(CrashDetectionEvents.ResetAppHasCrashed)
+            state.rageshakeDetectionState.eventSink(RageshakeDetectionEvents.Dismiss)
+            onOpenBugReport.invoke()
+        }
+
         ShowkaseButton(
             isVisible = state.isShowkaseButtonVisible,
-            onCloseClicked = onHideShowkaseClicked,
+            onCloseClicked = { eventSink(RootEvents.HideShowkaseButton) },
             onClick = { ContextCompat.startActivity(context, Showkase.getBrowserIntent(context), null) }
         )
         RageshakeDetectionView(
             state = state.rageshakeDetectionState,
-            onOpenBugReport = onOpenBugReport,
-            onDisableClicked = onDisableRageshake,
-            onNoClicked = onDismissRageshake,
-            onScreenshotTaken = onScreenshotTaken
+            onOpenBugReport = ::onOpenBugReport,
         )
         CrashDetectionView(
             state = state.crashDetectionState,
-            onOpenBugReport = onOpenBugReport,
-            onPopupDismissed = onCrashDetectedDismissed
+            onOpenBugReport = ::onOpenBugReport,
         )
     }
 }

@@ -41,6 +41,7 @@ import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.roomlist.components.RoomListTopBar
 import io.element.android.x.features.roomlist.components.RoomSummaryRow
+import io.element.android.x.features.roomlist.model.RoomListEvents
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListState
 import io.element.android.x.features.roomlist.model.stubbedRoomSummaries
@@ -54,19 +55,26 @@ fun RoomListView(
     state: RoomListState,
     modifier: Modifier = Modifier,
     onRoomClicked: (RoomId) -> Unit = {},
-    onFilterChanged: (String) -> Unit = {},
     onOpenSettings: () -> Unit = {},
-    onScrollOver: (IntRange) -> Unit = {},
 ) {
+
+    fun onFilterChanged(filter: String){
+        state.eventSink(RoomListEvents.UpdateFilter(filter))
+    }
+
+    fun onVisibleRangedChanged(range: IntRange){
+        state.eventSink(RoomListEvents.UpdateVisibleRange(range))
+    }
+
     RoomListView(
         roomSummaries = state.roomList,
         matrixUser = state.matrixUser,
         filter = state.filter,
         modifier = modifier,
         onRoomClicked = onRoomClicked,
-        onFilterChanged = onFilterChanged,
+        onFilterChanged = ::onFilterChanged,
         onOpenSettings = onOpenSettings,
-        onScrollOver = onScrollOver,
+        onScrollOver = ::onVisibleRangedChanged,
     )
 }
 

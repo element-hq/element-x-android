@@ -20,4 +20,5 @@ import io.element.android.x.architecture.Async
 
 data class LogoutPreferenceState(
     val logoutAction: Async<Unit> = Async.Uninitialized,
+    val eventSink: (LogoutPreferenceEvents) -> Unit = {},
 )

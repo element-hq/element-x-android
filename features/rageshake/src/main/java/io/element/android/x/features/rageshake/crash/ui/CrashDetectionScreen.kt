@@ -28,15 +28,19 @@ import io.element.android.x.element.resources.R as ElementR
 fun CrashDetectionView(
     state: CrashDetectionState,
     onOpenBugReport: () -> Unit = { },
-    onPopupDismissed: () -> Unit = {}
 ) {
     LogCompositions(tag = "Crash", msg = "CrashDetectionScreen")
+
+    fun onPopupDismissed(){
+        state.eventSink(CrashDetectionEvents.ResetAllCrashData)
+    }
+
     if (state.crashDetected) {
         CrashDetectionContent(
             state,
             onYesClicked = onOpenBugReport,
-            onNoClicked = onPopupDismissed,
-            onDismiss = onPopupDismissed,
+            onNoClicked = ::onPopupDismissed,
+            onDismiss = ::onPopupDismissed,
         )
     }
 }

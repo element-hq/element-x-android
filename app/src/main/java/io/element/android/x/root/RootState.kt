@@ -11,5 +11,6 @@ data class RootState(
     val isShowkaseButtonVisible: Boolean,
     val rageshakeDetectionState: RageshakeDetectionState,
     val crashDetectionState: CrashDetectionState,
-    val bugReportState: BugReportState
+    val bugReportState: BugReportState,
+    val eventSink: (RootEvents) -> Unit
 )

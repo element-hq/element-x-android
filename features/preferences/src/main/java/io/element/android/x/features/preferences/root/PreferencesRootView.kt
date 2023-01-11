@@ -10,6 +10,7 @@ import io.element.android.x.element.resources.R
 import io.element.android.x.features.logout.LogoutPreferenceState
 import io.element.android.x.features.logout.LogoutPreferenceView
 import io.element.android.x.features.preferences.user.UserPreferences
+import io.element.android.x.features.rageshake.preferences.RageshakePreferencesEvents
 import io.element.android.x.features.rageshake.preferences.RageshakePreferencesState
 import io.element.android.x.features.rageshake.preferences.RageshakePreferencesView
 
@@ -18,10 +19,7 @@ fun PreferencesRootView(
     state: PreferencesRootState,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
-    onLogoutClicked: () -> Unit = {},
     onOpenRageShake: () -> Unit = {},
-    onRageshakeEnabledChanged: (Boolean) -> Unit = {},
-    onRageshakeSensitivityChanged: (Float) -> Unit = {},
 ) {
     // TODO Hierarchy!
     // Include pref from other modules
@@ -34,12 +32,9 @@ fun PreferencesRootView(
         RageshakePreferencesView(
             state = state.rageshakeState,
             onOpenRageshake = onOpenRageShake,
-            onSensitivityChanged = onRageshakeSensitivityChanged,
-            onIsEnabledChanged = onRageshakeEnabledChanged,
         )
         LogoutPreferenceView(
             state = state.logoutState,
-            onLogoutClicked = onLogoutClicked,
         )
     }
 }

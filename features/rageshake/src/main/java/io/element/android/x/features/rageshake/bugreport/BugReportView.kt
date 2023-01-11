@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
 
 package io.element.android.x.features.rageshake.bugreport
 
@@ -36,6 +35,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -59,22 +59,21 @@ import io.element.android.x.designsystem.components.LabelledCheckbox
 import io.element.android.x.designsystem.components.dialogs.ErrorDialog
 import io.element.android.x.element.resources.R as ElementR
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BugReportView(
     state: BugReportState,
     modifier: Modifier = Modifier,
-    onDescriptionChanged: (String) -> Unit = {},
-    onSetSendLog: (Boolean) -> Unit = {},
-    onSetSendCrashLog: (Boolean) -> Unit = {},
-    onSetCanContact: (Boolean) -> Unit = {},
-    onSetSendScreenshot: (Boolean) -> Unit = {},
-    onSubmit: () -> Unit = {},
-    onFailureDialogClosed: () -> Unit = { },
     onDone: () -> Unit = { },
 ) {
     LogCompositions(tag = "Rageshake", msg = "Root")
+    val eventSink = state.eventSink
     if (state.sending is Async.Success) {
-        onDone()
+        LaunchedEffect(state.sending) {
+            eventSink(BugReportEvents.ResetAll)
+            onDone()
+        }
+        return
     }
     Surface(
         modifier = modifier,
@@ -132,7 +131,7 @@ fun BugReportView(
                         },
                         onValueChange = {
                             descriptionFieldState = it
-                            onDescriptionChanged(it)
+                            eventSink(BugReportEvents.SetDescription(it))
                         },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
@@ -143,28 +142,28 @@ fun BugReportView(
                 }
                 LabelledCheckbox(
                     checked = state.formState.sendLogs,
-                    onCheckedChange = onSetSendLog,
+                    onCheckedChange = { eventSink(BugReportEvents.SetSendLog(it)) },
                     enabled = isFormEnabled,
                     text = stringResource(id = ElementR.string.send_bug_report_include_logs)
                 )
                 if (state.hasCrashLogs) {
                     LabelledCheckbox(
                         checked = state.formState.sendCrashLogs,
-                        onCheckedChange = onSetSendCrashLog,
+                        onCheckedChange = { eventSink(BugReportEvents.SetSendCrashLog(it)) },
                         enabled = isFormEnabled,
                         text = stringResource(id = ElementR.string.send_bug_report_include_crash_logs)
                     )
                 }
                 LabelledCheckbox(
                     checked = state.formState.canContact,
-                    onCheckedChange = onSetCanContact,
+                    onCheckedChange = { eventSink(BugReportEvents.SetCanContact(it)) },
                     enabled = isFormEnabled,
                     text = stringResource(id = ElementR.string.you_may_contact_me)
                 )
                 if (state.screenshotUri != null) {
                     LabelledCheckbox(
                         checked = state.formState.sendScreenshot,
-                        onCheckedChange = onSetSendScreenshot,
+                        onCheckedChange = { eventSink(BugReportEvents.SetSendScreenshot(it)) },
                         enabled = isFormEnabled,
                         text = stringResource(id = ElementR.string.send_bug_report_include_screenshot)
                     )
@@ -187,7 +186,7 @@ fun BugReportView(
                 }
                 // Submit
                 Button(
-                    onClick = onSubmit,
+                    onClick = { eventSink(BugReportEvents.SendBugReport) },
                     enabled = state.submitEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -197,7 +196,6 @@ fun BugReportView(
                 }
             }
             when (state.sending) {
-                Async.Uninitialized -> Unit
                 is Async.Loading -> {
                     CircularProgressIndicator(
                         progress = state.sendingProgress,
@@ -206,9 +204,8 @@ fun BugReportView(
                 }
                 is Async.Failure -> ErrorDialog(
                     content = state.sending.error.toString(),
-                    onDismiss = onFailureDialogClosed,
                 )
-                is Async.Success -> onDone()
+                else -> Unit
             }
         }
     }

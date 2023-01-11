@@ -1,10 +1,8 @@
 package io.element.android.x.features.rageshake.bugreport
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,7 +16,6 @@ import io.element.android.x.features.rageshake.reporter.BugReporter
 import io.element.android.x.features.rageshake.reporter.ReportType
 import io.element.android.x.features.rageshake.screenshot.ScreenshotHolder
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,7 +24,7 @@ class BugReportPresenter @Inject constructor(
     private val crashDataStore: CrashDataStore,
     private val screenshotHolder: ScreenshotHolder,
     private val appCoroutineScope: CoroutineScope,
-) : Presenter<BugReportState, BugReportEvents> {
+) : Presenter<BugReportState> {
 
     private class BugReporterUploadListener(
         private val sendingProgress: MutableState<Float>,
@@ -56,7 +53,7 @@ class BugReportPresenter @Inject constructor(
     }
 
     @Composable
-    override fun present(events: Flow<BugReportEvents>): BugReportState {
+    override fun present(): BugReportState {
         val screenshotUri = rememberSaveable {
             mutableStateOf(
                 screenshotHolder.getFile()?.toUri()?.toString()
@@ -76,58 +73,54 @@ class BugReportPresenter @Inject constructor(
             mutableStateOf(BugReportFormState.Default)
         }
         val uploadListener = BugReporterUploadListener(sendingProgress, sendingAction)
-        val state by remember {
-            derivedStateOf {
-                BugReportState(
-                    hasCrashLogs = crashInfo.isNotEmpty(),
-                    sendingProgress = sendingProgress.value,
-                    sending = sendingAction.value,
-                    formState = formState.value,
-                    screenshotUri = screenshotUri.value
-                )
-            }
-        }
-        LaunchedEffect(Unit) {
-            events.collect { event ->
-                when (event) {
-                    BugReportEvents.SendBugReport -> appCoroutineScope.sendBugReport(state, uploadListener)
-                    BugReportEvents.ResetAll -> appCoroutineScope.resetAll()
-                    is BugReportEvents.SetDescription -> updateFormState(formState) {
-                        copy(description = event.description)
-                    }
-                    is BugReportEvents.SetCanContact -> updateFormState(formState) {
-                        copy(canContact = event.canContact)
-                    }
-                    is BugReportEvents.SetSendCrashLog -> updateFormState(formState) {
-                        copy(sendCrashLogs = event.sendCrashlog)
-                    }
-                    is BugReportEvents.SetSendLog -> updateFormState(formState) {
-                        copy(sendLogs = event.sendLog)
-                    }
-                    is BugReportEvents.SetSendScreenshot -> updateFormState(formState) {
-                        copy(sendScreenshot = event.sendScreenshot)
-                    }
+
+        fun handleEvents(event: BugReportEvents) {
+            when (event) {
+                BugReportEvents.SendBugReport -> appCoroutineScope.sendBugReport(formState.value, crashInfo.isNotEmpty(), uploadListener)
+                BugReportEvents.ResetAll -> appCoroutineScope.resetAll()
+                is BugReportEvents.SetDescription -> updateFormState(formState) {
+                    copy(description = event.description)
+                }
+                is BugReportEvents.SetCanContact -> updateFormState(formState) {
+                    copy(canContact = event.canContact)
+                }
+                is BugReportEvents.SetSendCrashLog -> updateFormState(formState) {
+                    copy(sendCrashLogs = event.sendCrashlog)
+                }
+                is BugReportEvents.SetSendLog -> updateFormState(formState) {
+                    copy(sendLogs = event.sendLog)
+                }
+                is BugReportEvents.SetSendScreenshot -> updateFormState(formState) {
+                    copy(sendScreenshot = event.sendScreenshot)
                 }
             }
         }
-        return state
+
+        return BugReportState(
+            hasCrashLogs = crashInfo.isNotEmpty(),
+            sendingProgress = sendingProgress.value,
+            sending = sendingAction.value,
+            formState = formState.value,
+            screenshotUri = screenshotUri.value,
+            eventSink = ::handleEvents
+        )
     }
 
     private fun updateFormState(formState: MutableState<BugReportFormState>, operation: BugReportFormState.() -> BugReportFormState) {
         formState.value = operation(formState.value)
     }
 
-    private fun CoroutineScope.sendBugReport(state: BugReportState, listener: BugReporter.IMXBugReportListener) = launch {
+    private fun CoroutineScope.sendBugReport(formState: BugReportFormState, hasCrashLogs: Boolean, listener: BugReporter.IMXBugReportListener) = launch {
         bugReporter.sendBugReport(
             coroutineScope = this,
             reportType = ReportType.BUG_REPORT,
-            withDevicesLogs = state.formState.sendLogs,
-            withCrashLogs = state.hasCrashLogs && state.formState.sendCrashLogs,
+            withDevicesLogs = formState.sendLogs,
+            withCrashLogs = hasCrashLogs && formState.sendCrashLogs,
             withKeyRequestHistory = false,
-            withScreenshot = state.formState.sendScreenshot,
-            theBugDescription = state.formState.description,
+            withScreenshot = formState.sendScreenshot,
+            theBugDescription = formState.description,
             serverVersion = "",
-            canContact = state.formState.canContact,
+            canContact = formState.canContact,
             customFields = emptyMap(),
             listener = listener
         )

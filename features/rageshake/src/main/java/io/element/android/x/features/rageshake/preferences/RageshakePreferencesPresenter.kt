@@ -1,26 +1,26 @@
 package io.element.android.x.features.rageshake.preferences
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.x.architecture.Presenter
 import io.element.android.x.features.rageshake.rageshake.RageShake
 import io.element.android.x.features.rageshake.rageshake.RageshakeDataStore
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RageshakePreferencesPresenter @Inject constructor(
     private val rageshake: RageShake,
     private val rageshakeDataStore: RageshakeDataStore,
-) : Presenter<RageshakePreferencesState, RageshakePreferencesEvents> {
+) : Presenter<RageshakePreferencesState> {
 
     @Composable
-    override fun present(events: Flow<RageshakePreferencesEvents>): RageshakePreferencesState {
+    override fun present(): RageshakePreferencesState {
+        val localCoroutineScope = rememberCoroutineScope()
         val isSupported: MutableState<Boolean> = rememberSaveable {
             mutableStateOf(rageshake.isAvailable())
         }
@@ -32,19 +32,18 @@ class RageshakePreferencesPresenter @Inject constructor(
             .sensitivity()
             .collectAsState(initial = 0f)
 
-        LaunchedEffect(Unit) {
-            events.collect { event ->
-                when (event) {
-                    is RageshakePreferencesEvents.SetIsEnabled -> setIsEnabled(event.isEnabled)
-                    is RageshakePreferencesEvents.SetSensitivity -> setSensitivity(event.sensitivity)
-                }
+        fun handleEvents(event: RageshakePreferencesEvents) {
+            when (event) {
+                is RageshakePreferencesEvents.SetIsEnabled -> localCoroutineScope.setIsEnabled(event.isEnabled)
+                is RageshakePreferencesEvents.SetSensitivity -> localCoroutineScope.setSensitivity(event.sensitivity)
             }
         }
 
         return RageshakePreferencesState(
             isEnabled = isEnabled.value,
             isSupported = isSupported.value,
-            sensitivity = sensitivity.value
+            sensitivity = sensitivity.value,
+            eventSink = ::handleEvents
         )
     }
 
