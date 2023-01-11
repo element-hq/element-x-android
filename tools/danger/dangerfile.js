@@ -43,7 +43,6 @@ if (requiresChangelog) {
             "doc",
             "feature",
             "misc",
-            "sdk",
             "wip",
         ]
         if (!changelogFiles.every(file => validTowncrierExtensions.includes(file.split(".").pop()))) {
@@ -68,13 +67,10 @@ const signOff = "Signed-off-by:"
 
 // Please add new names following the alphabetical order.
 const allowList = [
-    "amitkma",
     "aringenbach",
     "BillCarsonFr",
     "bmarty",
-    "Claire1817",
     "dependabot[bot]",
-    "ericdecanini",
     "fedrunov",
     "Florian14",
     "ganfra",
@@ -86,7 +82,6 @@ const allowList = [
     "manuroe",
     "mnaturel",
     "onurays",
-    "ouchadam",
     "stefanceriu",
     "yostyle",
 ]
