@@ -1,0 +1,9 @@
+appId: ${APP_ID}
+---
+- tapOn: "Settings"
+- tapOn: "Sign out"
+- takeScreenshot: build/maestro/900-SignOutDialg
+- tapOn:
+    text: "Sign out"
+    index: 1
+- runFlow: ../assertions/assertInitDisplayed.yaml

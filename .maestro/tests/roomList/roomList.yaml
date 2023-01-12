@@ -1,0 +1,6 @@
+appId: ${APP_ID}
+---
+- takeScreenshot: build/maestro/300-RoomList
+- runFlow: searchRoomList.yaml
+- runFlow: timeline/timeline.yaml
+
