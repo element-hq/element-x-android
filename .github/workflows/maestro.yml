@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
     # Allow all jobs on develop. Just one per PR.
     concurrency:
-      group: ${{ github.ref == 'refs/heads/develop' && format('build-develop-{0}', github.sha) || format('build-debug-{0}', github.ref)  }}
+      group: ${{ github.ref == 'refs/heads/develop' && format('maestro-develop-{0}', github.sha) || format('maestro-debug-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
