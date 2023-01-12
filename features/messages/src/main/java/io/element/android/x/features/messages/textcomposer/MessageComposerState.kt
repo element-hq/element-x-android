@@ -16,12 +16,12 @@
 
 package io.element.android.x.features.messages.textcomposer
 
-import androidx.compose.runtime.Stable
-import com.airbnb.mvrx.MavericksState
+import androidx.compose.runtime.Immutable
 import io.element.android.x.core.data.StableCharSequence
+import io.element.android.x.textcomposer.MessageComposerMode
 
-@Stable
-data class MessageComposerViewState(
+@Immutable
+data class MessageComposerState(
     // val roomId: String,
     // val canSendMessage: CanSendStatus = CanSendStatus.Allowed,
     val isSendButtonVisible: Boolean = false,
@@ -32,4 +32,6 @@ data class MessageComposerViewState(
     // val voiceBroadcastState: VoiceBroadcastState? = null,
     val text: StableCharSequence? = null,
     val isFullScreen: Boolean = false,
-) : MavericksState
+    val mode: MessageComposerMode = MessageComposerMode.Normal(""),
+    val eventSink: (MessageComposerEvents) -> Unit = {}
+)

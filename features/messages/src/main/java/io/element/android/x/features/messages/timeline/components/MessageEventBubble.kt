@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.messages.components
+package io.element.android.x.features.messages.timeline.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable

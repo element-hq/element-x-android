@@ -16,18 +16,25 @@
 
 package io.element.android.x.textcomposer
 
-sealed interface MessageComposerMode {
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+sealed interface MessageComposerMode : Parcelable {
+    @Parcelize
     data class Normal(val content: CharSequence?) : MessageComposerMode
 
     sealed class Special(open val eventId: String, open val defaultContent: CharSequence) :
         MessageComposerMode
 
+    @Parcelize
     data class Edit(override val eventId: String, override val defaultContent: CharSequence) :
         Special(eventId, defaultContent)
 
+    @Parcelize
     class Quote(override val eventId: String, override val defaultContent: CharSequence) :
         Special(eventId, defaultContent)
 
+    @Parcelize
     class Reply(
         val senderName: String,
         override val eventId: String,

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.messages.components
+package io.element.android.x.features.messages.timeline.components
 
 import android.text.SpannableString
 import android.text.style.URLSpan
@@ -30,7 +30,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.core.text.util.LinkifyCompat
 import io.element.android.x.designsystem.LinkColor
 import io.element.android.x.designsystem.components.ClickableLinkText
-import io.element.android.x.features.messages.components.html.HtmlDocument
+import io.element.android.x.features.messages.timeline.components.html.HtmlDocument
 import io.element.android.x.features.messages.model.content.MessagesTimelineItemTextBasedContent
 
 @Composable
