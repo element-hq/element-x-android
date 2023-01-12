@@ -39,7 +39,6 @@ class MainActivity : NodeComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             ElementXTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -49,7 +48,6 @@ class MainActivity : NodeComponentActivity() {
                             buildContext = it,
                             appComponentOwner = applicationContext as DaggerComponentOwner,
                             matrix = appBindings.matrix(),
-                            sessionComponentsOwner = appBindings.sessionComponentsOwner(),
                             rootPresenter = appBindings.rootPresenter()
                         )
                     }

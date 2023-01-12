@@ -37,16 +37,15 @@ internal class MediaFetcher(
         return imageLoader.components.newFetcher(byteBuffer, options, imageLoader)?.first?.fetch()
     }
 
-    class Factory(private val activeClientProvider: () -> MatrixClient?) :
+    class Factory(private val client: MatrixClient) :
         Fetcher.Factory<MediaResolver.Meta> {
         override fun create(
             data: MediaResolver.Meta,
             options: Options,
             imageLoader: ImageLoader
         ): Fetcher {
-            val activeClient = activeClientProvider()
             return MediaFetcher(
-                mediaResolver = activeClient?.mediaResolver(),
+                mediaResolver = client.mediaResolver(),
                 meta = data,
                 options = options,
                 imageLoader = imageLoader

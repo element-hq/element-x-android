@@ -9,10 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import com.bumble.appyx.core.children.whenChildAttached
-import com.bumble.appyx.core.clienthelper.interactor.Interactor
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
@@ -25,13 +22,11 @@ import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import io.element.android.x.architecture.createNode
 import io.element.android.x.architecture.presenterConnector
-import io.element.android.x.core.compose.OnLifecycleEvent
 import io.element.android.x.core.di.DaggerComponentOwner
-import io.element.android.x.di.SessionComponentsOwner
 import io.element.android.x.features.rageshake.bugreport.BugReportNode
 import io.element.android.x.matrix.Matrix
+import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.core.SessionId
-import io.element.android.x.root.RootEvents
 import io.element.android.x.root.RootPresenter
 import io.element.android.x.root.RootView
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -39,22 +34,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
-
-class SessionComponentsOwnerInteractor(private val sessionComponentsOwner: SessionComponentsOwner) : Interactor<RootFlowNode>() {
-    override fun onCreate(lifecycle: Lifecycle) {
-        lifecycle.subscribe(onCreate = {
-            whenChildAttached { commonLifecycle: Lifecycle, child: LoggedInFlowNode ->
-                Timber.v("LoggedInFlowNode attached: ${child.sessionId} ")
-                commonLifecycle.subscribe(
-                    onDestroy = {
-                        Timber.v("LoggedInFlowNode destroyed: ${child.sessionId}")
-                        sessionComponentsOwner.release(child.sessionId)
-                    }
-                )
-            }
-        })
-    }
-}
+import java.util.concurrent.ConcurrentHashMap
 
 class RootFlowNode(
     buildContext: BuildContext,
@@ -64,20 +44,25 @@ class RootFlowNode(
     ),
     private val appComponentOwner: DaggerComponentOwner,
     private val matrix: Matrix,
-    private val sessionComponentsOwner: SessionComponentsOwner,
     rootPresenter: RootPresenter
 ) :
     ParentNode<RootFlowNode.NavTarget>(
         navModel = backstack,
         buildContext = buildContext,
-        plugins = listOf(SessionComponentsOwnerInteractor(sessionComponentsOwner)),
     ),
 
     DaggerComponentOwner by appComponentOwner {
 
+    private val matrixClientsHolder = ConcurrentHashMap<SessionId, MatrixClient>()
     private val presenterConnector = presenterConnector(rootPresenter)
 
-    init {
+    override fun onBuilt() {
+        super.onBuilt()
+        whenChildAttached(LoggedInFlowNode::class) { _, child ->
+            child.lifecycle.subscribe(
+                onDestroy = { matrixClientsHolder.remove(child.sessionId) }
+            )
+        }
         matrix.isLoggedIn()
             .distinctUntilChanged()
             .onEach { isLoggedIn ->
@@ -87,8 +72,7 @@ class RootFlowNode(
                     if (matrixClient == null) {
                         backstack.newRoot(NavTarget.NotLoggedInFlow)
                     } else {
-                        matrixClient.startSync()
-                        sessionComponentsOwner.create(matrixClient)
+                        matrixClientsHolder[matrixClient.sessionId] = matrixClient
                         backstack.newRoot(NavTarget.LoggedInFlow(matrixClient.sessionId))
                     }
                 } else {
@@ -136,9 +120,12 @@ class RootFlowNode(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             is NavTarget.LoggedInFlow -> {
+                val matrixClient =
+                    matrixClientsHolder[navTarget.sessionId] ?: throw IllegalStateException("Makes sure to give a matrixClient with the given sessionId")
                 LoggedInFlowNode(
                     buildContext = buildContext,
                     sessionId = navTarget.sessionId,
+                    matrixClient = matrixClient,
                     onOpenBugReport = this::onOpenBugReport
                 )
             }

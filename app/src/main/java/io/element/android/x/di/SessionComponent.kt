@@ -26,7 +26,7 @@ import io.element.android.x.matrix.MatrixClient
 
 @SingleIn(SessionScope::class)
 @MergeSubcomponent(SessionScope::class)
-interface SessionComponent: DaggerMavericksBindings, NodeFactoriesBindings {
+interface SessionComponent: NodeFactoriesBindings {
 
     fun matrixClient(): MatrixClient
 

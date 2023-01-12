@@ -57,6 +57,10 @@ class Matrix @Inject constructor(
         return sessionStore.isLoggedIn()
     }
 
+    suspend fun getLatestSessionId(): SessionId? = withContext(coroutineDispatchers.io){
+        sessionStore.getLatestSession()?.sessionId()
+    }
+
     suspend fun restoreSession() = withContext(coroutineDispatchers.io) {
         sessionStore.getLatestSession()
             ?.let { session ->
