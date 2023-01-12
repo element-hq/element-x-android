@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.messages.model
+package io.element.android.x.features.messages.timeline
 
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
+import io.element.android.x.architecture.Async
+import io.element.android.x.features.messages.model.MessagesTimelineItemState
+import io.element.android.x.matrix.core.EventId
 
-@Stable
-data class MessagesItemActionsSheetState(
-    val targetItem: MessagesTimelineItemState.MessageEvent,
-    val actions: List<MessagesItemAction>
+@Immutable
+data class TimelineState(
+    val timelineItems: Async<List<MessagesTimelineItemState>> = Async.Uninitialized,
+    val hasMoreToLoad: Boolean = true,
+    val highlightedEventId: EventId? = null,
+    val eventSink: (TimelineEvents) -> Unit = {}
 )

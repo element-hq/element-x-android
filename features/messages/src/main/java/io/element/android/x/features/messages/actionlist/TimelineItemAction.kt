@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.messages.model
+package io.element.android.x.features.messages.actionlist
 
 import androidx.annotation.DrawableRes
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 import io.element.android.x.designsystem.VectorIcons
 
-@Stable
-sealed class MessagesItemAction(
+@Immutable
+sealed class TimelineItemAction(
     val title: String,
     @DrawableRes val icon: Int,
     val destructive: Boolean = false
 ) {
-    object Forward : MessagesItemAction("Forward", VectorIcons.ArrowForward)
-    object Copy : MessagesItemAction("Copy", VectorIcons.Copy)
-    object Redact : MessagesItemAction("Redact", VectorIcons.Delete, destructive = true)
-    object Reply : MessagesItemAction("Reply", VectorIcons.Reply)
-    object Edit : MessagesItemAction("Edit", VectorIcons.Edit)
+    object Forward : TimelineItemAction("Forward", VectorIcons.ArrowForward)
+    object Copy : TimelineItemAction("Copy", VectorIcons.Copy)
+    object Redact : TimelineItemAction("Redact", VectorIcons.Delete, destructive = true)
+    object Reply : TimelineItemAction("Reply", VectorIcons.Reply)
+    object Edit : TimelineItemAction("Edit", VectorIcons.Edit)
 }

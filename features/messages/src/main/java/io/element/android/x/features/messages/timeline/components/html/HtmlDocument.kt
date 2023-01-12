@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.messages.components.html
+package io.element.android.x.features.messages.timeline.components.html
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource

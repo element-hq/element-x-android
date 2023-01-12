@@ -8,11 +8,8 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.navmodel.backstack.BackStack
-import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import io.element.android.x.architecture.createNode
-import io.element.android.x.architecture.viewmodel.viewModelSupportNode
-import io.element.android.x.features.messages.MessagesScreen
 import io.element.android.x.features.preferences.PreferencesFlowNode
 import io.element.android.x.features.roomlist.RoomListNode
 import io.element.android.x.matrix.core.RoomId
@@ -34,7 +31,7 @@ class LoggedInFlowNode(
 
     private val roomListCallback = object : RoomListNode.Callback {
         override fun onRoomClicked(roomId: RoomId) {
-            backstack.push(NavTarget.Messages(roomId))
+            backstack.push(NavTarget.Room(roomId))
         }
 
         override fun onSettingsClicked() {
@@ -47,7 +44,7 @@ class LoggedInFlowNode(
         object RoomList : NavTarget
 
         @Parcelize
-        data class Messages(val roomId: RoomId) : NavTarget
+        data class Room(val roomId: RoomId) : NavTarget
 
         @Parcelize
         object Settings : NavTarget
@@ -58,11 +55,8 @@ class LoggedInFlowNode(
             NavTarget.RoomList -> {
                 createNode<RoomListNode>(buildContext, plugins = listOf(roomListCallback))
             }
-            is NavTarget.Messages -> viewModelSupportNode(buildContext) {
-                MessagesScreen(
-                    roomId = navTarget.roomId.value,
-                    onBackPressed = { backstack.pop() }
-                )
+            is NavTarget.Room -> {
+                RoomFlowNode(buildContext, navTarget.roomId)
             }
             NavTarget.Settings -> {
                 PreferencesFlowNode(buildContext, onOpenBugReport)

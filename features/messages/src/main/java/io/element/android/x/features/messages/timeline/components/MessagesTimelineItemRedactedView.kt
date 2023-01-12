@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.messages.components
+package io.element.android.x.features.messages.timeline.components
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemEncryptedContent
+import io.element.android.x.features.messages.model.content.MessagesTimelineItemRedactedContent
+import io.element.android.x.features.messages.timeline.components.MessagesTimelineItemInformativeView
 
 @Composable
-fun MessagesTimelineItemEncryptedView(
-    content: MessagesTimelineItemEncryptedContent,
+fun MessagesTimelineItemRedactedView(
+    content: MessagesTimelineItemRedactedContent,
     modifier: Modifier = Modifier
 ) {
     MessagesTimelineItemInformativeView(
-        text = "Decryption error",
-        iconDescription = "Warning",
-        icon = Icons.Default.Warning,
+        text = "This message has been deleted",
+        iconDescription = "Delete",
+        icon = Icons.Default.Delete,
         modifier = modifier
     )
 }

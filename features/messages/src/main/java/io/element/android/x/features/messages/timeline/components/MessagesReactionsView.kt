@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.messages.components
+package io.element.android.x.features.messages.timeline.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Row
