@@ -1,0 +1,35 @@
+name: Meastro
+
+on:
+  pull_request: { }
+  push:
+    branches: [ main, develop ]
+
+# Enrich gradle.properties for CI/CD
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
+
+jobs:
+  maestro-cloud:
+    name: Build debug APKs
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/main'
+    strategy:
+      fail-fast: false
+    # Allow all jobs on develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/develop' && format('build-develop-{0}', github.sha) || format('build-debug-{0}', github.ref)  }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v3
+      - name: Assemble debug APK
+        run: ./gradlew assembleDebug $CI_GRADLE_ARG_PROPERTIES
+      - uses: mobile-dev-inc/action-maestro-cloud@v1.1.1
+        with:
+          api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
+          app-file: app/build/outputs/apk/debug/app-debug.apk
+          env: |
+            USERNAME=maestroelement
+            PASSWORD=${{ secrets.MATRIX_MAESTRO_ACCOUNT_PASSWORD }}
+            APP_ID=io.element.android.x.debug
