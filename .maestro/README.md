@@ -33,9 +33,9 @@ Test result will be printed on the console, and screenshots will be generated at
 
 ## Write test
 
-Tests are yaml file. Generally each yaml file should leave the app in the same screen than at the beginning.
+Tests are yaml files. Generally each yaml file should leave the app in the same screen than at the beginning.
 
-Start the app and run this command to help writing test.
+Start the ElementX app and run this command to help writing test.
 
 ```shell
 maestro studio
@@ -46,4 +46,4 @@ Note that sometimes, this prevent running the test. So kill the `meastro studio`
 ## CI
 
 The CI is running maestro using the workflow `.github/worflow/maestro.yaml` and [maestro cloud](https://cloud.mobile.dev/). For now we are limited to 100 runs a month.
-Some GitHub secret are used to be able to do that: `MAESTRO_CLOUD_API_KEY`, for now api key from `benoitm@element.io` maestro cloud account, and `MATRIX_MAESTRO_ACCOUNT_PASSWORD` which is the password of the account @maestroelement:matrix.org. This account contains a room `MyRoom` to ba able to run the maestro test suite.
+Some GitHub secrets are used to be able to do that: `MAESTRO_CLOUD_API_KEY`, for now api key from `benoitm@element.io` maestro cloud account, and `MATRIX_MAESTRO_ACCOUNT_PASSWORD` which is the password of the account `@maestroelement:matrix.org`. This account contains a room `MyRoom` to be able to run the maestro test suite.
