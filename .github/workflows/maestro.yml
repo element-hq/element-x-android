@@ -12,7 +12,7 @@ env:
 
 jobs:
   maestro-cloud:
-    name: Build debug APKs
+    name: Meastro test suite
     runs-on: ubuntu-latest
     if: github.ref != 'refs/heads/main'
     strategy:
@@ -32,4 +32,5 @@ jobs:
           env: |
             USERNAME=maestroelement
             PASSWORD=${{ secrets.MATRIX_MAESTRO_ACCOUNT_PASSWORD }}
+            ROOM_NAME=MyRoom
             APP_ID=io.element.android.x.debug

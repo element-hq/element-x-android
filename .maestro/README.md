@@ -8,6 +8,7 @@ To setup, please refer at [https://maestro.mobile.dev](https://maestro.mobile.de
 * [Run test](#run-test)
   * [Output](#output)
 * [Write test](#write-test)
+* [CI](#ci)
 
 <!--- END -->
 
