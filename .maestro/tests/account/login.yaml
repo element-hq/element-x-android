@@ -6,8 +6,16 @@ appId: ${APP_ID}
 - runFlow: changeServer.yaml
 - runFlow: ../assertions/assertLoginDisplayed.yaml
 - tapOn: "Email or username"
+# ios
+# - tapOn:
+#     id: "usernameTextField"
+#     index: 0
 - inputText: ${USERNAME}
 - tapOn: "Password"
+# iOS
+#- tapOn:
+#    id: "passwordTextField"
+#    index: 0
 - inputText: ${PASSWORD}
 - tapOn: "Continue"
 - runFlow: ../assertions/assertHomeDisplayed.yaml
