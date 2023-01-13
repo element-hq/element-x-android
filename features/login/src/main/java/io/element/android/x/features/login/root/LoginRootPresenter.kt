@@ -17,7 +17,6 @@
 package io.element.android.x.features.login.root
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,7 +25,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.x.architecture.Presenter
 import io.element.android.x.matrix.Matrix
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -45,7 +43,7 @@ class LoginRootPresenter @Inject constructor(private val matrix: Matrix) : Prese
             mutableStateOf(LoginFormState.Default)
         }
 
-        fun handleEvents(event: LoginRootEvents){
+        fun handleEvents(event: LoginRootEvents) {
             when (event) {
                 LoginRootEvents.RefreshHomeServer -> refreshHomeServer(homeserver)
                 is LoginRootEvents.SetLogin -> updateFormState(formState) {

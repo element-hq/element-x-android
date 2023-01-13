@@ -29,7 +29,6 @@ import dagger.assisted.AssistedInject
 import io.element.android.x.anvilannotations.ContributesNode
 import io.element.android.x.architecture.presenterConnector
 import io.element.android.x.di.SessionScope
-import io.element.android.x.features.roomlist.model.RoomListEvents
 import io.element.android.x.matrix.core.RoomId
 
 @ContributesNode(SessionScope::class)

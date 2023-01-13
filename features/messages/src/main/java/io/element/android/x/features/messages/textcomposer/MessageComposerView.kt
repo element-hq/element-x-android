@@ -25,7 +25,6 @@ fun MessageComposerView(
     state: MessageComposerState,
     modifier: Modifier = Modifier,
 ) {
-
     fun onFullscreenToggle() {
         state.eventSink(MessageComposerEvents.ToggleFullScreenState)
     }

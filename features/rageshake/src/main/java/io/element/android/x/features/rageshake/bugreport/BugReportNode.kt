@@ -57,4 +57,3 @@ class BugReportNode @AssistedInject constructor(
         plugins<Callback>().forEach { it.onBugReportSent() }
     }
 }
-

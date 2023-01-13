@@ -62,7 +62,6 @@ class TimelinePresenter @Inject constructor(
 
     @Composable
     override fun present(): TimelineState {
-
         val localCoroutineScope = rememberCoroutineScope()
         val hasMoreToLoad = rememberSaveable {
             mutableStateOf(timeline.hasMoreToLoad)

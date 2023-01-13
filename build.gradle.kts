@@ -31,7 +31,6 @@ plugins {
     alias(libs.plugins.dependencygraph)
 }
 
-
 tasks.register<Delete>("clean").configure {
     delete(rootProject.buildDir)
 }

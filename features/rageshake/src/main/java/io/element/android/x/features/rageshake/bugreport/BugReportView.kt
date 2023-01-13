@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package io.element.android.x.features.rageshake.bugreport
 
 import androidx.compose.foundation.layout.Box
