@@ -6,8 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.x.architecture.Presenter
-import io.element.android.x.features.messages.model.MessagesTimelineItemState
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemRedactedContent
+import io.element.android.x.features.messages.actionlist.model.TimelineItemAction
+import io.element.android.x.features.messages.timeline.model.TimelineItem
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemRedactedContent
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -37,10 +38,10 @@ class ActionListPresenter @Inject constructor() : Presenter<ActionListState> {
         )
     }
 
-    fun CoroutineScope.computeForMessage(messagesTimelineItemState: MessagesTimelineItemState.MessageEvent, target: MutableState<ActionListState.Target>) = launch {
-        target.value = ActionListState.Target.Loading(messagesTimelineItemState)
+    fun CoroutineScope.computeForMessage(timelineItem: TimelineItem.MessageEvent, target: MutableState<ActionListState.Target>) = launch {
+        target.value = ActionListState.Target.Loading(timelineItem)
         val actions =
-            if (messagesTimelineItemState.content is MessagesTimelineItemRedactedContent) {
+            if (timelineItem.content is TimelineItemRedactedContent) {
                 emptyList()
             } else {
                 mutableListOf(
@@ -48,12 +49,12 @@ class ActionListPresenter @Inject constructor() : Presenter<ActionListState> {
                     TimelineItemAction.Forward,
                     TimelineItemAction.Copy,
                 ).also {
-                    if (messagesTimelineItemState.isMine) {
+                    if (timelineItem.isMine) {
                         it.add(TimelineItemAction.Edit)
                         it.add(TimelineItemAction.Redact)
                     }
                 }
             }
-        target.value = ActionListState.Target.Success(messagesTimelineItemState, actions.toImmutableList())
+        target.value = ActionListState.Target.Success(timelineItem, actions.toImmutableList())
     }
 }

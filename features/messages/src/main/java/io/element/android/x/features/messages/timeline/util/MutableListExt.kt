@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.messages.model
+package io.element.android.x.features.messages.timeline.util
 
-import androidx.compose.runtime.Stable
-
-@Stable
-data class MessagesItemReactionState(
-    val reactions: List<AggregatedReaction>
-)
-
-@Stable
-data class AggregatedReaction(
-    val key: String,
-    val count: String,
-    val isHighlighted: Boolean = false
-)
+internal inline fun <reified T> MutableList<T?>.invalidateLast() {
+    val indexOfLast = size
+    if (indexOfLast > 0) {
+        set(indexOfLast - 1, null)
+    }
+}

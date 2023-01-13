@@ -17,20 +17,20 @@
 package io.element.android.x.features.messages.timeline.components
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemUnknownContent
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemEncryptedContent
 
 @Composable
-fun MessagesTimelineItemUnknownView(
-    content: MessagesTimelineItemUnknownContent,
+fun TimelineItemEncryptedView(
+    content: TimelineItemEncryptedContent,
     modifier: Modifier = Modifier
 ) {
-    MessagesTimelineItemInformativeView(
-        text = "Event not handled by EAX",
-        iconDescription = "Info",
-        icon = Icons.Default.Info,
+    TimelineItemInformativeView(
+        text = "Decryption error",
+        iconDescription = "Warning",
+        icon = Icons.Default.Warning,
         modifier = modifier
     )
 }

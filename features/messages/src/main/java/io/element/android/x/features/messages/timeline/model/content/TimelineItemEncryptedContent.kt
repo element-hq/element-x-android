@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.messages.util
+package io.element.android.x.features.messages.timeline.model.content
 
-internal inline fun <reified T> MutableList<T?>.invalidateLast() {
-    val indexOfLast = size
-    if (indexOfLast > 0) {
-        set(indexOfLast - 1, null)
-    }
-}
+import org.matrix.rustcomponents.sdk.EncryptedMessage
+
+data class TimelineItemEncryptedContent(
+    val encryptedMessage: EncryptedMessage
+) : TimelineItemContent

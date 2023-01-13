@@ -36,7 +36,7 @@ import io.element.android.x.designsystem.SystemGrey5Dark
 import io.element.android.x.designsystem.SystemGrey5Light
 import io.element.android.x.designsystem.SystemGrey6Dark
 import io.element.android.x.designsystem.SystemGrey6Light
-import io.element.android.x.features.messages.model.MessagesItemGroupPosition
+import io.element.android.x.features.messages.timeline.model.MessagesItemGroupPosition
 
 private val BUBBLE_RADIUS = 16.dp
 

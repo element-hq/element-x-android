@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.messages.model.content
+package io.element.android.x.features.messages.timeline.model.content
 
-object MessagesTimelineItemRedactedContent : MessagesTimelineItemContent
+object TimelineItemUnknownContent : TimelineItemContent

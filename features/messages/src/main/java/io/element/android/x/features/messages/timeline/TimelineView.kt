@@ -42,32 +42,31 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import io.element.android.x.architecture.Async
 import io.element.android.x.core.compose.PairCombinedPreviewParameter
 import io.element.android.x.designsystem.components.avatar.Avatar
 import io.element.android.x.designsystem.components.avatar.AvatarData
-import io.element.android.x.features.messages.model.AggregatedReaction
-import io.element.android.x.features.messages.model.MessagesItemGroupPosition
-import io.element.android.x.features.messages.model.MessagesItemGroupPositionProvider
-import io.element.android.x.features.messages.model.MessagesItemReactionState
-import io.element.android.x.features.messages.model.MessagesTimelineItemState
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemContent
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemContentProvider
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemEncryptedContent
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemImageContent
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemRedactedContent
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemTextBasedContent
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemUnknownContent
+import io.element.android.x.features.messages.timeline.model.AggregatedReaction
+import io.element.android.x.features.messages.timeline.model.MessagesItemGroupPosition
+import io.element.android.x.features.messages.timeline.model.TimelineItemGroupPositionProvider
+import io.element.android.x.features.messages.timeline.model.TimelineItemReactions
+import io.element.android.x.features.messages.timeline.model.TimelineItem
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemContent
+import io.element.android.x.features.messages.timeline.model.content.MessagesTimelineItemContentProvider
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemEncryptedContent
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemImageContent
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemRedactedContent
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemTextBasedContent
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemUnknownContent
 import io.element.android.x.features.messages.timeline.components.MessageEventBubble
-import io.element.android.x.features.messages.timeline.components.MessagesReactionsView
-import io.element.android.x.features.messages.timeline.components.MessagesTimelineItemEncryptedView
-import io.element.android.x.features.messages.timeline.components.MessagesTimelineItemImageView
-import io.element.android.x.features.messages.timeline.components.MessagesTimelineItemRedactedView
-import io.element.android.x.features.messages.timeline.components.MessagesTimelineItemTextView
-import io.element.android.x.features.messages.timeline.components.MessagesTimelineItemUnknownView
+import io.element.android.x.features.messages.timeline.components.TimelineItemReactionsView
+import io.element.android.x.features.messages.timeline.components.TimelineItemEncryptedView
+import io.element.android.x.features.messages.timeline.components.TimelineItemImageView
+import io.element.android.x.features.messages.timeline.components.TimelineItemRedactedView
+import io.element.android.x.features.messages.timeline.components.TimelineItemTextView
+import io.element.android.x.features.messages.timeline.components.TimelineItemUnknownView
+import io.element.android.x.matrix.core.EventId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
@@ -75,13 +74,11 @@ import kotlinx.coroutines.launch
 fun TimelineView(
     state: TimelineState,
     modifier: Modifier = Modifier,
-    onMessageClicked: (MessagesTimelineItemState.MessageEvent) -> Unit = {},
-    onMessageLongClicked: (MessagesTimelineItemState.MessageEvent) -> Unit = {},
+    onMessageClicked: (TimelineItem.MessageEvent) -> Unit = {},
+    onMessageLongClicked: (TimelineItem.MessageEvent) -> Unit = {},
 ) {
     val lazyListState = rememberLazyListState()
-    val timelineItems = state.timelineItems.dataOrNull().orEmpty().toImmutableList()
-
-    Box(modifier = modifier.fillMaxWidth()) {
+    Box(modifier = modifier) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = lazyListState,
@@ -90,7 +87,7 @@ fun TimelineView(
             reverseLayout = true
         ) {
             items(
-                items = timelineItems,
+                items = state.timelineItems,
                 contentType = { timelineItem -> timelineItem.contentType() },
                 key = { timelineItem -> timelineItem.key() },
             ) { timelineItem ->
@@ -114,36 +111,36 @@ fun TimelineView(
 
         TimelineScrollHelper(
             lazyListState = lazyListState,
-            timelineItems = timelineItems,
+            timelineItems = state.timelineItems,
             onLoadMore = ::onReachedLoadMore
         )
     }
 }
 
-private fun MessagesTimelineItemState.key(): String {
+private fun TimelineItem.key(): String {
     return when (this) {
-        is MessagesTimelineItemState.MessageEvent -> id
-        is MessagesTimelineItemState.Virtual -> id
+        is TimelineItem.MessageEvent -> id.value
+        is TimelineItem.Virtual -> id
     }
 }
 
-private fun MessagesTimelineItemState.contentType(): Int {
+private fun TimelineItem.contentType(): Int {
     return when (this) {
-        is MessagesTimelineItemState.MessageEvent -> 0
-        is MessagesTimelineItemState.Virtual -> 1
+        is TimelineItem.MessageEvent -> 0
+        is TimelineItem.Virtual -> 1
     }
 }
 
 @Composable
 fun TimelineItemRow(
-    timelineItem: MessagesTimelineItemState,
+    timelineItem: TimelineItem,
     isHighlighted: Boolean,
-    onClick: (MessagesTimelineItemState.MessageEvent) -> Unit,
-    onLongClick: (MessagesTimelineItemState.MessageEvent) -> Unit,
+    onClick: (TimelineItem.MessageEvent) -> Unit,
+    onLongClick: (TimelineItem.MessageEvent) -> Unit,
 ) {
     when (timelineItem) {
-        is MessagesTimelineItemState.Virtual -> return
-        is MessagesTimelineItemState.MessageEvent -> MessageEventRow(
+        is TimelineItem.Virtual -> return
+        is TimelineItem.MessageEvent -> MessageEventRow(
             messageEvent = timelineItem,
             isHighlighted = isHighlighted,
             onClick = { onClick(timelineItem) },
@@ -154,7 +151,7 @@ fun TimelineItemRow(
 
 @Composable
 fun MessageEventRow(
-    messageEvent: MessagesTimelineItemState.MessageEvent,
+    messageEvent: TimelineItem.MessageEvent,
     isHighlighted: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
@@ -197,32 +194,32 @@ fun MessageEventRow(
                 ) {
                     val contentModifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                     when (messageEvent.content) {
-                        is MessagesTimelineItemEncryptedContent -> MessagesTimelineItemEncryptedView(
+                        is TimelineItemEncryptedContent -> TimelineItemEncryptedView(
                             content = messageEvent.content,
                             modifier = contentModifier
                         )
-                        is MessagesTimelineItemRedactedContent -> MessagesTimelineItemRedactedView(
+                        is TimelineItemRedactedContent -> TimelineItemRedactedView(
                             content = messageEvent.content,
                             modifier = contentModifier
                         )
-                        is MessagesTimelineItemTextBasedContent -> MessagesTimelineItemTextView(
+                        is TimelineItemTextBasedContent -> TimelineItemTextView(
                             content = messageEvent.content,
                             interactionSource = interactionSource,
                             modifier = contentModifier,
                             onTextClicked = onClick,
                             onTextLongClicked = onLongClick
                         )
-                        is MessagesTimelineItemUnknownContent -> MessagesTimelineItemUnknownView(
+                        is TimelineItemUnknownContent -> TimelineItemUnknownView(
                             content = messageEvent.content,
                             modifier = contentModifier
                         )
-                        is MessagesTimelineItemImageContent -> MessagesTimelineItemImageView(
+                        is TimelineItemImageContent -> TimelineItemImageView(
                             content = messageEvent.content,
                             modifier = contentModifier
                         )
                     }
                 }
-                MessagesReactionsView(
+                TimelineItemReactionsView(
                     reactionsState = messageEvent.reactionsState,
                     modifier = Modifier
                         .zIndex(1f)
@@ -264,7 +261,7 @@ private fun MessageSenderInformation(
 @Composable
 internal fun BoxScope.TimelineScrollHelper(
     lazyListState: LazyListState,
-    timelineItems: ImmutableList<MessagesTimelineItemState>,
+    timelineItems: ImmutableList<TimelineItem>,
     onLoadMore: () -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -338,8 +335,8 @@ internal fun TimelineLoadingMoreIndicator() {
 }
 
 class MessagesItemGroupPositionToMessagesTimelineItemContentProvider :
-    PairCombinedPreviewParameter<MessagesItemGroupPosition, MessagesTimelineItemContent>(
-        MessagesItemGroupPositionProvider() to MessagesTimelineItemContentProvider()
+    PairCombinedPreviewParameter<MessagesItemGroupPosition, TimelineItemContent>(
+        TimelineItemGroupPositionProvider() to MessagesTimelineItemContentProvider()
     )
 
 @Suppress("PreviewPublic")
@@ -347,7 +344,7 @@ class MessagesItemGroupPositionToMessagesTimelineItemContentProvider :
 @Composable
 fun TimelineItemsPreview(
     @PreviewParameter(MessagesTimelineItemContentProvider::class)
-    content: MessagesTimelineItemContent
+    content: TimelineItemContent
 ) {
     val timelineItems = persistentListOf(
         // 3 items (First Middle Last) with isMine = false
@@ -385,23 +382,26 @@ fun TimelineItemsPreview(
     )
     TimelineView(
         state = TimelineState(
-            timelineItems = Async.Success(timelineItems)
+            timelineItems = timelineItems,
+            hasMoreToLoad = true,
+            highlightedEventId = null,
+            eventSink = {}
         )
     )
 }
 
 private fun createMessageEvent(
     isMine: Boolean,
-    content: MessagesTimelineItemContent,
+    content: TimelineItemContent,
     groupPosition: MessagesItemGroupPosition
-): MessagesTimelineItemState {
-    return MessagesTimelineItemState.MessageEvent(
-        id = Math.random().toString(),
+): TimelineItem {
+    return TimelineItem.MessageEvent(
+        id = EventId(Math.random().toString()),
         senderId = "senderId",
         senderAvatar = AvatarData("sender"),
         content = content,
-        reactionsState = MessagesItemReactionState(
-            listOf(
+        reactionsState = TimelineItemReactions(
+            persistentListOf(
                 AggregatedReaction("👍", "1")
             )
         ),

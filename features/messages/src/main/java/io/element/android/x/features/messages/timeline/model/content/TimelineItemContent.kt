@@ -14,32 +14,32 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.messages.model.content
+package io.element.android.x.features.messages.timeline.model.content
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import org.matrix.rustcomponents.sdk.EncryptedMessage
 
-sealed interface MessagesTimelineItemContent
+sealed interface TimelineItemContent
 
-class MessagesTimelineItemContentProvider : PreviewParameterProvider<MessagesTimelineItemContent> {
+class MessagesTimelineItemContentProvider : PreviewParameterProvider<TimelineItemContent> {
     override val values = sequenceOf(
-        MessagesTimelineItemEmoteContent(
+        TimelineItemEmoteContent(
             body = "Emote",
             htmlDocument = null
         ),
-        MessagesTimelineItemEncryptedContent(
+        TimelineItemEncryptedContent(
             encryptedMessage = EncryptedMessage.Unknown
         ),
         // TODO MessagesTimelineItemImageContent(),
-        MessagesTimelineItemNoticeContent(
+        TimelineItemNoticeContent(
             body = "Notice",
             htmlDocument = null
         ),
-        MessagesTimelineItemRedactedContent,
-        MessagesTimelineItemTextContent(
+        TimelineItemRedactedContent,
+        TimelineItemTextContent(
             body = "Text",
             htmlDocument = null
         ),
-        MessagesTimelineItemUnknownContent,
+        TimelineItemUnknownContent,
     )
 }

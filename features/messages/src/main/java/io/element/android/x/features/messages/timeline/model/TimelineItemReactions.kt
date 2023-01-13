@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.messages.model.content
+package io.element.android.x.features.messages.timeline.model
 
-object MessagesTimelineItemUnknownContent : MessagesTimelineItemContent
+import kotlinx.collections.immutable.ImmutableList
+
+data class TimelineItemReactions(
+    val reactions: ImmutableList<AggregatedReaction>
+)
+
+data class AggregatedReaction(
+    val key: String,
+    val count: String,
+    val isHighlighted: Boolean = false
+)

@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun MessagesTimelineItemInformativeView(
+fun TimelineItemInformativeView(
     text: String,
     iconDescription: String,
     icon: ImageVector,

@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.messages.model.content
+package io.element.android.x.features.messages.timeline.model.content
 
 import org.jsoup.nodes.Document
 
-sealed interface MessagesTimelineItemTextBasedContent : MessagesTimelineItemContent {
-    val body: String
-    val htmlDocument: Document?
-}
+data class TimelineItemNoticeContent(
+    override val body: String,
+    override val htmlDocument: Document?
+) : TimelineItemTextBasedContent

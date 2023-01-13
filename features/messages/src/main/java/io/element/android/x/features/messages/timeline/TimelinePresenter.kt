@@ -8,15 +8,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import io.element.android.x.architecture.Async
 import io.element.android.x.architecture.Presenter
-import io.element.android.x.features.messages.MessageTimelineItemStateFactory
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.core.EventId
 import io.element.android.x.matrix.room.MatrixRoom
 import io.element.android.x.matrix.timeline.MatrixTimeline
 import io.element.android.x.matrix.timeline.MatrixTimelineItem
 import io.element.android.x.matrix.ui.MatrixItemHelper
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
@@ -34,13 +33,13 @@ class TimelinePresenter @Inject constructor(
 
     private val timeline = room.timeline()
     private val matrixItemHelper = MatrixItemHelper(client)
-    private val messageTimelineItemStateFactory =
-        MessageTimelineItemStateFactory(matrixItemHelper, room, Dispatchers.Default)
+    private val timelineItemsFactory =
+        TimelineItemsFactory(matrixItemHelper, room, Dispatchers.Default)
 
-    private class TimelineCallback(private val coroutineScope: CoroutineScope, private val messageTimelineItemStateFactory: MessageTimelineItemStateFactory) : MatrixTimeline.Callback {
+    private class TimelineCallback(private val coroutineScope: CoroutineScope, private val timelineItemsFactory: TimelineItemsFactory) : MatrixTimeline.Callback {
         override fun onPushedTimelineItem(timelineItem: MatrixTimelineItem) {
             coroutineScope.launch {
-                messageTimelineItemStateFactory.pushItem(timelineItem)
+                timelineItemsFactory.pushItem(timelineItem)
             }
         }
     }
@@ -55,7 +54,7 @@ class TimelinePresenter @Inject constructor(
         val highlightedEventId: MutableState<EventId?> = rememberSaveable {
             mutableStateOf(null)
         }
-        val timelineItems = messageTimelineItemStateFactory
+        val timelineItems = timelineItemsFactory
             .flow()
             .collectAsState(emptyList())
 
@@ -69,12 +68,12 @@ class TimelinePresenter @Inject constructor(
         LaunchedEffect(Unit) {
             timeline
                 .timelineItems()
-                .onEach(messageTimelineItemStateFactory::replaceWith)
+                .onEach(timelineItemsFactory::replaceWith)
                 .launchIn(this)
         }
 
         DisposableEffect(Unit) {
-            timeline.callback = TimelineCallback(localCoroutineScope, messageTimelineItemStateFactory)
+            timeline.callback = TimelineCallback(localCoroutineScope, timelineItemsFactory)
             timeline.initialize()
             onDispose {
                 timeline.callback = null
@@ -84,13 +83,13 @@ class TimelinePresenter @Inject constructor(
 
         return TimelineState(
             highlightedEventId = highlightedEventId.value,
-            timelineItems = Async.Success(timelineItems.value),
+            timelineItems = timelineItems.value.toImmutableList(),
             hasMoreToLoad = hasMoreToLoad.value,
             eventSink = ::handleEvents
         )
     }
 
-    fun CoroutineScope.loadMore(hasMoreToLoad: MutableState<Boolean>) = launch {
+    private fun CoroutineScope.loadMore(hasMoreToLoad: MutableState<Boolean>) = launch {
         timeline.paginateBackwards(PAGINATION_COUNT)
         hasMoreToLoad.value = timeline.hasMoreToLoad
     }

@@ -17,6 +17,7 @@
 package io.element.android.x.matrix.timeline
 
 import io.element.android.x.core.coroutine.CoroutineDispatchers
+import io.element.android.x.matrix.core.EventId
 import io.element.android.x.matrix.room.MatrixRoom
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
@@ -146,11 +147,11 @@ class MatrixTimeline(
         return matrixRoom.sendMessage(message)
     }
 
-    suspend fun editMessage(originalEventId: String, message: String): Result<Unit> {
+    suspend fun editMessage(originalEventId: EventId, message: String): Result<Unit> {
         return matrixRoom.editMessage(originalEventId, message = message)
     }
 
-    suspend fun replyMessage(inReplyToEventId: String, message: String): Result<Unit> {
+    suspend fun replyMessage(inReplyToEventId: EventId, message: String): Result<Unit> {
         return matrixRoom.replyMessage(inReplyToEventId, message)
     }
 

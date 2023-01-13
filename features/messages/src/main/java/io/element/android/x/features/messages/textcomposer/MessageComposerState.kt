@@ -22,16 +22,10 @@ import io.element.android.x.textcomposer.MessageComposerMode
 
 @Immutable
 data class MessageComposerState(
-    // val roomId: String,
-    // val canSendMessage: CanSendStatus = CanSendStatus.Allowed,
-    val isSendButtonVisible: Boolean = false,
-    val rootThreadEventId: String? = null,
-    val startsThread: Boolean = false,
-    // val sendMode: SendMode = SendMode.Regular("", false),
-    // val voiceRecordingUiState: VoiceMessageRecorderView.RecordingUiState = VoiceMessageRecorderView.RecordingUiState.Idle,
-    // val voiceBroadcastState: VoiceBroadcastState? = null,
-    val text: StableCharSequence? = null,
-    val isFullScreen: Boolean = false,
-    val mode: MessageComposerMode = MessageComposerMode.Normal(""),
-    val eventSink: (MessageComposerEvents) -> Unit = {}
-)
+    val text: StableCharSequence?,
+    val isFullScreen: Boolean,
+    val mode: MessageComposerMode,
+    val eventSink: (MessageComposerEvents) -> Unit
+) {
+    val isSendButtonVisible: Boolean = text?.charSequence.isNullOrEmpty().not()
+}

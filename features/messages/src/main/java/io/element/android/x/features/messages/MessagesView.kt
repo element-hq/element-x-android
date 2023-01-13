@@ -48,8 +48,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -57,11 +59,13 @@ import androidx.compose.ui.unit.sp
 import io.element.android.x.core.compose.LogCompositions
 import io.element.android.x.designsystem.components.avatar.Avatar
 import io.element.android.x.designsystem.components.avatar.AvatarData
-import io.element.android.x.features.messages.actionlist.TimelineItemAction
+import io.element.android.x.features.messages.actionlist.ActionListEvents
 import io.element.android.x.features.messages.actionlist.ActionListView
-import io.element.android.x.features.messages.model.MessagesTimelineItemState
+import io.element.android.x.features.messages.actionlist.model.TimelineItemAction
+import io.element.android.x.features.messages.timeline.model.TimelineItem
 import io.element.android.x.features.messages.textcomposer.MessageComposerView
 import io.element.android.x.features.messages.timeline.TimelineView
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @Composable
@@ -76,8 +80,28 @@ fun MessagesView(
         initialValue = ModalBottomSheetValue.Hidden,
     )
     val snackbarHostState = remember { SnackbarHostState() }
+    val focusManager = LocalFocusManager.current
+    val coroutineScope = rememberCoroutineScope()
 
     LogCompositions(tag = "MessagesScreen", msg = "Content")
+
+    fun onMessageClicked(messageEvent: TimelineItem.MessageEvent) {
+        Timber.v("OnMessageClicked= ${messageEvent.id}")
+    }
+
+    fun onMessageLongClicked(messageEvent: TimelineItem.MessageEvent) {
+        Timber.v("OnMessageLongClicked= ${messageEvent.id}")
+        focusManager.clearFocus(force = true)
+        state.actionListState.eventSink(ActionListEvents.ComputeForMessage(messageEvent))
+        coroutineScope.launch {
+            itemActionsBottomSheetState.show()
+        }
+    }
+
+    fun onActionSelected(action: TimelineItemAction, messageEvent: TimelineItem.MessageEvent) {
+        state.eventSink(MessagesEvents.HandleAction(action, messageEvent))
+    }
+
     Scaffold(
         modifier = modifier,
         contentWindowInsets = WindowInsets.statusBars,
@@ -92,6 +116,8 @@ fun MessagesView(
             MessagesViewContent(
                 state = state,
                 modifier = Modifier.padding(padding),
+                onMessageClicked = ::onMessageClicked,
+                onMessageLongClicked = ::onMessageLongClicked
             )
         },
         snackbarHost = {
@@ -101,10 +127,6 @@ fun MessagesView(
             )
         },
     )
-
-    fun onActionSelected(action: TimelineItemAction, messageEvent: MessagesTimelineItemState.MessageEvent) {
-        state.eventSink(MessagesEvents.HandleAction(action, messageEvent))
-    }
 
     ActionListView(
         state = state.actionListState,
@@ -116,43 +138,32 @@ fun MessagesView(
 @Composable
 fun MessagesViewContent(
     state: MessagesState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onMessageClicked: (TimelineItem.MessageEvent) -> Unit = {},
+    onMessageLongClicked: (TimelineItem.MessageEvent) -> Unit = {},
 ) {
-
-    fun onMessageClicked(messageEvent: MessagesTimelineItemState.MessageEvent) {
-        Timber.v("OnMessageClicked= $messageEvent")
-    }
-
-    fun onMessageLongClicked(messageEvent: MessagesTimelineItemState.MessageEvent) {
-        Timber.v("OnMessageLongClicked= $messageEvent")
-    }
-
     Column(
         modifier = modifier
             .fillMaxSize()
             .navigationBarsPadding()
             .imePadding()
     ) {
+        // Hide timeline if composer is full screen
         if (!state.composerState.isFullScreen) {
             TimelineView(
                 state = state.timelineState,
-                modifier = Modifier.fillMaxWidth(),
-                onMessageClicked = ::onMessageClicked,
-                onMessageLongClicked = ::onMessageLongClicked
+                modifier = Modifier.weight(1f),
+                onMessageClicked = onMessageClicked,
+                onMessageLongClicked = onMessageLongClicked
             )
         }
         MessageComposerView(
             state = state.composerState,
             modifier = Modifier
                 .fillMaxWidth()
-                .let {
-                    if (state.composerState.isFullScreen) {
-                        it.weight(1f, fill = false)
-                    } else {
-                        it.wrapContentHeight(Alignment.Bottom)
-                    }
-                },
+                .wrapContentHeight(Alignment.Bottom)
         )
+
     }
 }
 

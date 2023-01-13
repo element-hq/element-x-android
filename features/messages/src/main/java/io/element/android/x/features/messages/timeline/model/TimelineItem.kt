@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,30 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.messages.model
+package io.element.android.x.features.messages.timeline.model
 
+import androidx.compose.runtime.Immutable
 import io.element.android.x.designsystem.components.avatar.AvatarData
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemContent
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemContent
+import io.element.android.x.matrix.core.EventId
 
-sealed interface MessagesTimelineItemState {
+@Immutable
+sealed interface TimelineItem {
     data class Virtual(
         val id: String
-    ) : MessagesTimelineItemState
+    ) : TimelineItem
 
     data class MessageEvent(
-        val id: String,
+        val id: EventId,
         val senderId: String,
         val senderDisplayName: String?,
         val senderAvatar: AvatarData,
-        val content: MessagesTimelineItemContent,
+        val content: TimelineItemContent,
         val sentTime: String = "",
         val isMine: Boolean = false,
         val groupPosition: MessagesItemGroupPosition = MessagesItemGroupPosition.None,
-        val reactionsState: MessagesItemReactionState
-    ) : MessagesTimelineItemState {
+        val reactionsState: TimelineItemReactions
+    ) : TimelineItem {
 
         val showSenderInformation = groupPosition.isNew() && !isMine
 
