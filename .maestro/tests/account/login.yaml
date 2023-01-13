@@ -1,6 +1,6 @@
 appId: ${APP_ID}
 ---
-- tapOn: "Sign in"
+- tapOn: "Get started"
 - runFlow: ../assertions/assertLoginDisplayed.yaml
 - takeScreenshot: build/maestro/100-SignIn
 - runFlow: changeServer.yaml
