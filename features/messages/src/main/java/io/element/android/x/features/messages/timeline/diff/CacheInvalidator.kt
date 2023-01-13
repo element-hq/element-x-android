@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.messages.diff
+package io.element.android.x.features.messages.timeline.diff
 
 import androidx.recyclerview.widget.ListUpdateCallback
-import io.element.android.x.features.messages.model.MessagesTimelineItemState
-import io.element.android.x.features.messages.util.invalidateLast
+import io.element.android.x.features.messages.timeline.model.TimelineItem
+import io.element.android.x.features.messages.timeline.util.invalidateLast
 import timber.log.Timber
 
-internal class CacheInvalidator(private val itemStatesCache: MutableList<MessagesTimelineItemState?>) :
+internal class CacheInvalidator(private val itemStatesCache: MutableList<TimelineItem?>) :
     ListUpdateCallback {
 
     override fun onChanged(position: Int, count: Int, payload: Any?) {

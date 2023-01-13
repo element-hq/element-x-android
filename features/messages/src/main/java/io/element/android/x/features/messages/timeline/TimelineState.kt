@@ -17,14 +17,14 @@
 package io.element.android.x.features.messages.timeline
 
 import androidx.compose.runtime.Immutable
-import io.element.android.x.architecture.Async
-import io.element.android.x.features.messages.model.MessagesTimelineItemState
+import io.element.android.x.features.messages.timeline.model.TimelineItem
 import io.element.android.x.matrix.core.EventId
+import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 data class TimelineState(
-    val timelineItems: Async<List<MessagesTimelineItemState>> = Async.Uninitialized,
-    val hasMoreToLoad: Boolean = true,
-    val highlightedEventId: EventId? = null,
-    val eventSink: (TimelineEvents) -> Unit = {}
+    val timelineItems: ImmutableList<TimelineItem>,
+    val hasMoreToLoad: Boolean,
+    val highlightedEventId: EventId?,
+    val eventSink: (TimelineEvents) -> Unit
 )

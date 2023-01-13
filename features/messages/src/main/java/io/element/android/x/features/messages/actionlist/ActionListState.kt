@@ -17,20 +17,21 @@
 package io.element.android.x.features.messages.actionlist
 
 import androidx.compose.runtime.Immutable
-import io.element.android.x.features.messages.model.MessagesTimelineItemState
+import io.element.android.x.features.messages.actionlist.model.TimelineItemAction
+import io.element.android.x.features.messages.timeline.model.TimelineItem
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 data class ActionListState(
-    val target: Target = Target.None,
-    val eventSink: (ActionListEvents) -> Unit = {},
+    val target: Target,
+    val eventSink: (ActionListEvents) -> Unit,
 ) {
 
     sealed interface Target {
         object None : Target
-        data class Loading(val messageEvent: MessagesTimelineItemState.MessageEvent) : Target
+        data class Loading(val messageEvent: TimelineItem.MessageEvent) : Target
         data class Success(
-            val messageEvent: MessagesTimelineItemState.MessageEvent,
+            val messageEvent: TimelineItem.MessageEvent,
             val actions: ImmutableList<TimelineItemAction>,
         ) : Target
     }

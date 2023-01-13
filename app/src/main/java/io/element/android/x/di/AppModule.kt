@@ -19,10 +19,14 @@ package io.element.android.x.di
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import io.element.android.x.core.coroutine.CoroutineDispatchers
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.plus
+import java.util.concurrent.Executors
 
 @Module
 @ContributesTo(AppScope::class)
@@ -32,5 +36,16 @@ object AppModule {
     @SingleIn(AppScope::class)
     fun providesAppCoroutineScope(): CoroutineScope {
         return MainScope() + CoroutineName("ElementX Scope")
+    }
+
+    @Provides
+    @SingleIn(AppScope::class)
+    fun providesCoroutineDispatchers(): CoroutineDispatchers {
+        return CoroutineDispatchers(
+            io = Dispatchers.IO,
+            computation = Dispatchers.Default,
+            main = Dispatchers.Main,
+            diffUpdateDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+        )
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,29 +14,31 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.messages
+package io.element.android.x.features.messages.timeline
 
 import androidx.recyclerview.widget.DiffUtil
 import io.element.android.x.designsystem.components.avatar.AvatarSize
-import io.element.android.x.features.messages.diff.CacheInvalidator
-import io.element.android.x.features.messages.diff.MatrixTimelineItemsDiffCallback
-import io.element.android.x.features.messages.model.AggregatedReaction
-import io.element.android.x.features.messages.model.MessagesItemGroupPosition
-import io.element.android.x.features.messages.model.MessagesItemReactionState
-import io.element.android.x.features.messages.model.MessagesTimelineItemState
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemContent
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemEmoteContent
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemEncryptedContent
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemImageContent
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemNoticeContent
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemRedactedContent
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemTextContent
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemUnknownContent
-import io.element.android.x.features.messages.util.invalidateLast
+import io.element.android.x.features.messages.timeline.diff.CacheInvalidator
+import io.element.android.x.features.messages.timeline.diff.MatrixTimelineItemsDiffCallback
+import io.element.android.x.features.messages.timeline.model.AggregatedReaction
+import io.element.android.x.features.messages.timeline.model.MessagesItemGroupPosition
+import io.element.android.x.features.messages.timeline.model.TimelineItemReactions
+import io.element.android.x.features.messages.timeline.model.TimelineItem
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemContent
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemEmoteContent
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemEncryptedContent
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemImageContent
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemNoticeContent
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemRedactedContent
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemTextContent
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemUnknownContent
+import io.element.android.x.features.messages.timeline.util.invalidateLast
+import io.element.android.x.matrix.core.EventId
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.MatrixRoom
 import io.element.android.x.matrix.timeline.MatrixTimelineItem
 import io.element.android.x.matrix.ui.MatrixItemHelper
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -50,24 +52,25 @@ import org.matrix.rustcomponents.sdk.FormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.MessageType
 import timber.log.Timber
+import javax.inject.Inject
 import kotlin.system.measureTimeMillis
 
-class MessageTimelineItemStateFactory(
+class TimelineItemsFactory @Inject constructor(
     private val matrixItemHelper: MatrixItemHelper,
     private val room: MatrixRoom,
     private val dispatcher: CoroutineDispatcher,
 ) {
 
-    private val timelineItemStates = MutableStateFlow<List<MessagesTimelineItemState>>(emptyList())
-    private val timelineItemStatesCache = arrayListOf<MessagesTimelineItemState?>()
+    private val timelineItems = MutableStateFlow<List<TimelineItem>>(emptyList())
+    private val timelineItemsCache = arrayListOf<TimelineItem?>()
 
     // Items from rust sdk, used for diffing
-    private var timelineItems: List<MatrixTimelineItem> = emptyList()
+    private var matrixTimelineItems: List<MatrixTimelineItem> = emptyList()
 
     private val lock = Mutex()
-    private val cacheInvalidator = CacheInvalidator(timelineItemStatesCache)
+    private val cacheInvalidator = CacheInvalidator(timelineItemsCache)
 
-    fun flow(): StateFlow<List<MessagesTimelineItemState>> = timelineItemStates.asStateFlow()
+    fun flow(): StateFlow<List<TimelineItem>> = timelineItems.asStateFlow()
 
     suspend fun replaceWith(
         timelineItems: List<MatrixTimelineItem>,
@@ -83,17 +86,17 @@ class MessageTimelineItemStateFactory(
     ) = withContext(dispatcher) {
         lock.withLock {
             // Makes sure to invalidate last as we need to recompute some data (like groupPosition)
-            timelineItemStatesCache.invalidateLast()
-            timelineItemStatesCache.add(null)
-            timelineItems = timelineItems + timelineItem
-            buildAndEmitTimelineItemStates(timelineItems)
+            timelineItemsCache.invalidateLast()
+            timelineItemsCache.add(null)
+            matrixTimelineItems = matrixTimelineItems + timelineItem
+            buildAndEmitTimelineItemStates(matrixTimelineItems)
         }
     }
 
     private suspend fun buildAndEmitTimelineItemStates(timelineItems: List<MatrixTimelineItem>) {
-        val newTimelineItemStates = ArrayList<MessagesTimelineItemState>()
-        for (index in timelineItemStatesCache.indices.reversed()) {
-            val cacheItem = timelineItemStatesCache[index]
+        val newTimelineItemStates = ArrayList<TimelineItem>()
+        for (index in timelineItemsCache.indices.reversed()) {
+            val cacheItem = timelineItemsCache[index]
             if (cacheItem == null) {
                 buildAndCacheItem(timelineItems, index)?.also { timelineItemState ->
                     newTimelineItemStates.add(timelineItemState)
@@ -102,18 +105,18 @@ class MessageTimelineItemStateFactory(
                 newTimelineItemStates.add(cacheItem)
             }
         }
-        timelineItemStates.emit(newTimelineItemStates)
+        this.timelineItems.emit(newTimelineItemStates)
     }
 
     private fun calculateAndApplyDiff(newTimelineItems: List<MatrixTimelineItem>) {
         val timeToDiff = measureTimeMillis {
             val diffCallback =
                 MatrixTimelineItemsDiffCallback(
-                    oldList = timelineItems,
+                    oldList = matrixTimelineItems,
                     newList = newTimelineItems
                 )
             val diffResult = DiffUtil.calculateDiff(diffCallback, false)
-            timelineItems = newTimelineItems
+            matrixTimelineItems = newTimelineItems
             diffResult.dispatchUpdatesTo(cacheInvalidator)
         }
         Timber.v("Time to apply diff on new list of ${newTimelineItems.size} items: $timeToDiff ms")
@@ -122,7 +125,7 @@ class MessageTimelineItemStateFactory(
     private suspend fun buildAndCacheItem(
         timelineItems: List<MatrixTimelineItem>,
         index: Int
-    ): MessagesTimelineItemState? {
+    ): TimelineItem? {
         val timelineItemState =
             when (val currentTimelineItem = timelineItems[index]) {
                 is MatrixTimelineItem.Event -> {
@@ -132,12 +135,12 @@ class MessageTimelineItemStateFactory(
                         timelineItems,
                     )
                 }
-                is MatrixTimelineItem.Virtual -> MessagesTimelineItemState.Virtual(
+                is MatrixTimelineItem.Virtual -> TimelineItem.Virtual(
                     "virtual_item_$index"
                 )
                 MatrixTimelineItem.Other -> null
             }
-        timelineItemStatesCache[index] = timelineItemState
+        timelineItemsCache[index] = timelineItemState
         return timelineItemState
     }
 
@@ -145,7 +148,7 @@ class MessageTimelineItemStateFactory(
         currentTimelineItem: MatrixTimelineItem.Event,
         index: Int,
         timelineItems: List<MatrixTimelineItem>,
-    ): MessagesTimelineItemState.MessageEvent {
+    ): TimelineItem.MessageEvent {
         val currentSender = currentTimelineItem.event.sender()
         val groupPosition =
             computeGroupPosition(currentTimelineItem, timelineItems, index)
@@ -157,8 +160,8 @@ class MessageTimelineItemStateFactory(
                 url = senderAvatarUrl,
                 size = AvatarSize.SMALL
             )
-        return MessagesTimelineItemState.MessageEvent(
-            id = currentTimelineItem.uniqueId,
+        return TimelineItem.MessageEvent(
+            id = EventId(currentTimelineItem.uniqueId),
             senderId = currentSender,
             senderDisplayName = senderDisplayName,
             senderAvatar = senderAvatarData,
@@ -169,24 +172,24 @@ class MessageTimelineItemStateFactory(
         )
     }
 
-    private fun MatrixTimelineItem.Event.computeReactionsState(): MessagesItemReactionState {
+    private fun MatrixTimelineItem.Event.computeReactionsState(): TimelineItemReactions {
         val aggregatedReactions = event.reactions().map {
             AggregatedReaction(key = it.key, count = it.count.toString(), isHighlighted = false)
         }
-        return MessagesItemReactionState(aggregatedReactions)
+        return TimelineItemReactions(aggregatedReactions.toImmutableList())
     }
 
-    private fun MatrixTimelineItem.Event.computeContent(): MessagesTimelineItemContent {
+    private fun MatrixTimelineItem.Event.computeContent(): TimelineItemContent {
         val content = event.content()
         content.asUnableToDecrypt()?.let { encryptedMessage ->
-            return MessagesTimelineItemEncryptedContent(encryptedMessage)
+            return TimelineItemEncryptedContent(encryptedMessage)
         }
         if (content.isRedactedMessage()) {
-            return MessagesTimelineItemRedactedContent
+            return TimelineItemRedactedContent
         }
         val contentAsMessage = content.asMessage()
         return when (val messageType = contentAsMessage?.msgtype()) {
-            is MessageType.Emote -> MessagesTimelineItemEmoteContent(
+            is MessageType.Emote -> TimelineItemEmoteContent(
                 body = messageType.content.body,
                 htmlDocument = messageType.content.formatted?.toHtmlDocument()
             )
@@ -198,7 +201,7 @@ class MessageTimelineItemStateFactory(
                 } else {
                     0.7f
                 }
-                MessagesTimelineItemImageContent(
+                TimelineItemImageContent(
                     body = messageType.content.body,
                     imageMeta = MediaResolver.Meta(
                         source = messageType.content.source,
@@ -208,15 +211,15 @@ class MessageTimelineItemStateFactory(
                     aspectRatio = aspectRatio
                 )
             }
-            is MessageType.Notice -> MessagesTimelineItemNoticeContent(
+            is MessageType.Notice -> TimelineItemNoticeContent(
                 body = messageType.content.body,
                 htmlDocument = messageType.content.formatted?.toHtmlDocument()
             )
-            is MessageType.Text -> MessagesTimelineItemTextContent(
+            is MessageType.Text -> TimelineItemTextContent(
                 body = messageType.content.body,
                 htmlDocument = messageType.content.formatted?.toHtmlDocument()
             )
-            else -> MessagesTimelineItemUnknownContent
+            else -> TimelineItemUnknownContent
         }
     }
 

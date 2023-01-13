@@ -17,6 +17,7 @@
 package io.element.android.x.matrix.room
 
 import io.element.android.x.core.coroutine.CoroutineDispatchers
+import io.element.android.x.matrix.core.EventId
 import io.element.android.x.matrix.core.RoomId
 import io.element.android.x.matrix.timeline.MatrixTimeline
 import kotlinx.coroutines.CoroutineScope
@@ -39,13 +40,15 @@ class MatrixRoom(
     private val coroutineDispatchers: CoroutineDispatchers,
 ) {
 
-    fun syncUpdateFlow(): Flow<Unit> {
+    fun syncUpdateFlow(): Flow<Long> {
         return slidingSyncUpdateFlow
             .filter {
                 it.rooms.contains(room.id())
             }
-            .map { }
-            .onStart { emit(Unit) }
+            .map {
+                System.currentTimeMillis()
+            }
+            .onStart { emit(System.currentTimeMillis()) }
     }
 
     fun timeline(): MatrixTimeline {
@@ -107,26 +110,26 @@ class MatrixRoom(
         }
     }
 
-    suspend fun editMessage(originalEventId: String, message: String): Result<Unit> = withContext(coroutineDispatchers.io) {
+    suspend fun editMessage(originalEventId: EventId, message: String): Result<Unit> = withContext(coroutineDispatchers.io) {
         val transactionId = genTransactionId()
         // val content = messageEventContentFromMarkdown(message)
         runCatching {
-            room.edit(/* TODO use content */ message, originalEventId, transactionId)
+            room.edit(/* TODO use content */ message, originalEventId.value, transactionId)
         }
     }
 
-    suspend fun replyMessage(eventId: String, message: String): Result<Unit> = withContext(coroutineDispatchers.io) {
+    suspend fun replyMessage(eventId: EventId, message: String): Result<Unit> = withContext(coroutineDispatchers.io) {
         val transactionId = genTransactionId()
         // val content = messageEventContentFromMarkdown(message)
         runCatching {
-            room.sendReply(/* TODO use content */ message, eventId, transactionId)
+            room.sendReply(/* TODO use content */ message, eventId.value, transactionId)
         }
     }
 
-    suspend fun redactEvent(eventId: String, reason: String? = null) = withContext(coroutineDispatchers.io) {
+    suspend fun redactEvent(eventId: EventId, reason: String? = null) = withContext(coroutineDispatchers.io) {
         val transactionId = genTransactionId()
         runCatching {
-            room.redact(eventId, reason, transactionId)
+            room.redact(eventId.value, reason, transactionId)
         }
     }
 }

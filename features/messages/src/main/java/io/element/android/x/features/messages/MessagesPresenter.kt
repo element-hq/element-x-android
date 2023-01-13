@@ -12,13 +12,14 @@ import io.element.android.x.architecture.Presenter
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
 import io.element.android.x.features.messages.actionlist.ActionListPresenter
-import io.element.android.x.features.messages.actionlist.TimelineItemAction
-import io.element.android.x.features.messages.model.MessagesTimelineItemState
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemTextBasedContent
+import io.element.android.x.features.messages.actionlist.model.TimelineItemAction
 import io.element.android.x.features.messages.textcomposer.MessageComposerEvents
 import io.element.android.x.features.messages.textcomposer.MessageComposerPresenter
 import io.element.android.x.features.messages.textcomposer.MessageComposerState
+import io.element.android.x.features.messages.timeline.TimelineEvents
 import io.element.android.x.features.messages.timeline.TimelinePresenter
+import io.element.android.x.features.messages.timeline.model.TimelineItem
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemTextBasedContent
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.room.MatrixRoom
 import io.element.android.x.matrix.ui.MatrixItemHelper
@@ -60,7 +61,9 @@ class MessagesPresenter @Inject constructor(
                 )
             roomName.value = room.name
         }
-
+        LaunchedEffect(composerState.mode.relatedEventId) {
+            timelineState.eventSink(TimelineEvents.SetHighlightedEvent(composerState.mode.relatedEventId))
+        }
         fun handleEvents(event: MessagesEvents) {
             when (event) {
                 is MessagesEvents.HandleAction -> localCoroutineScope.handleTimelineAction(event.action, event.messageEvent, composerState)
@@ -79,7 +82,7 @@ class MessagesPresenter @Inject constructor(
 
     fun CoroutineScope.handleTimelineAction(
         action: TimelineItemAction,
-        targetEvent: MessagesTimelineItemState.MessageEvent,
+        targetEvent: TimelineItem.MessageEvent,
         composerState: MessageComposerState,
     ) = launch {
         when (action) {
@@ -95,21 +98,21 @@ class MessagesPresenter @Inject constructor(
         Timber.v("NotImplementedYet")
     }
 
-    private suspend fun handleActionRedact(event: MessagesTimelineItemState.MessageEvent) {
+    private suspend fun handleActionRedact(event: TimelineItem.MessageEvent) {
         room.redactEvent(event.id)
     }
 
-    private fun handleActionEdit(targetEvent: MessagesTimelineItemState.MessageEvent, composerState: MessageComposerState) {
+    private fun handleActionEdit(targetEvent: TimelineItem.MessageEvent, composerState: MessageComposerState) {
         val composerMode = MessageComposerMode.Edit(
             targetEvent.id,
-            (targetEvent.content as? MessagesTimelineItemTextBasedContent)?.body.orEmpty()
+            (targetEvent.content as? TimelineItemTextBasedContent)?.body.orEmpty()
         )
         composerState.eventSink(
             MessageComposerEvents.SetMode(composerMode)
         )
     }
 
-    private fun handleActionReply(targetEvent: MessagesTimelineItemState.MessageEvent, composerState: MessageComposerState) {
+    private fun handleActionReply(targetEvent: TimelineItem.MessageEvent, composerState: MessageComposerState) {
         val composerMode = MessageComposerMode.Reply(targetEvent.safeSenderName, targetEvent.id, "")
         composerState.eventSink(
             MessageComposerEvents.SetMode(composerMode)

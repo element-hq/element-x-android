@@ -28,6 +28,7 @@ class MessagesNode @AssistedInject constructor(
         MessagesView(
             state = state,
             onBackPressed = this::navigateUp,
+            modifier = modifier
         )
     }
 }

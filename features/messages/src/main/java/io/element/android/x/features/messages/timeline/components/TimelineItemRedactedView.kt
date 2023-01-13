@@ -17,20 +17,20 @@
 package io.element.android.x.features.messages.timeline.components
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemEncryptedContent
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemRedactedContent
 
 @Composable
-fun MessagesTimelineItemEncryptedView(
-    content: MessagesTimelineItemEncryptedContent,
+fun TimelineItemRedactedView(
+    content: TimelineItemRedactedContent,
     modifier: Modifier = Modifier
 ) {
-    MessagesTimelineItemInformativeView(
-        text = "Decryption error",
-        iconDescription = "Warning",
-        icon = Icons.Default.Warning,
+    TimelineItemInformativeView(
+        text = "This message has been deleted",
+        iconDescription = "Delete",
+        icon = Icons.Default.Delete,
         modifier = modifier
     )
 }

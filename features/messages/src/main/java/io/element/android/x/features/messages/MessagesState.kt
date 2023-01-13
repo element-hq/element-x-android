@@ -10,10 +10,10 @@ import io.element.android.x.matrix.core.RoomId
 @Immutable
 data class MessagesState(
     val roomId: RoomId,
-    val roomName: String? = null,
-    val roomAvatar: AvatarData? = null,
+    val roomName: String?,
+    val roomAvatar: AvatarData?,
     val composerState: MessageComposerState,
     val timelineState: TimelineState,
     val actionListState: ActionListState,
-    val eventSink: (MessagesEvents) -> Unit = {}
+    val eventSink: (MessagesEvents) -> Unit
 )

@@ -32,12 +32,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
-import io.element.android.x.features.messages.model.AggregatedReaction
-import io.element.android.x.features.messages.model.MessagesItemReactionState
+import io.element.android.x.features.messages.timeline.model.AggregatedReaction
+import io.element.android.x.features.messages.timeline.model.TimelineItemReactions
 
 @Composable
-fun MessagesReactionsView(
-    reactionsState: MessagesItemReactionState,
+fun TimelineItemReactionsView(
+    reactionsState: TimelineItemReactions,
     modifier: Modifier = Modifier,
 ) {
     if (reactionsState.reactions.isEmpty()) return

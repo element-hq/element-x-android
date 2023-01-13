@@ -26,7 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.element.android.x.designsystem.components.VectorIcon
-import io.element.android.x.features.messages.model.MessagesTimelineItemState
+import io.element.android.x.features.messages.actionlist.model.TimelineItemAction
+import io.element.android.x.features.messages.timeline.model.TimelineItem
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
@@ -34,7 +35,7 @@ import kotlinx.coroutines.launch
 fun ActionListView(
     state: ActionListState,
     modalBottomSheetState: ModalBottomSheetState,
-    onActionSelected: (action: TimelineItemAction, MessagesTimelineItemState.MessageEvent) -> Unit,
+    onActionSelected: (action: TimelineItemAction, TimelineItem.MessageEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -48,7 +49,7 @@ fun ActionListView(
 
     fun onItemActionClicked(
         itemAction: TimelineItemAction,
-        targetItem: MessagesTimelineItemState.MessageEvent
+        targetItem: TimelineItem.MessageEvent
     ) {
         onActionSelected(itemAction, targetItem)
         coroutineScope.launch {
@@ -75,7 +76,7 @@ fun ActionListView(
 private fun SheetContent(
     state: ActionListState,
     modifier: Modifier = Modifier,
-    onActionClicked: (TimelineItemAction, MessagesTimelineItemState.MessageEvent) -> Unit = { _, _ -> },
+    onActionClicked: (TimelineItemAction, TimelineItem.MessageEvent) -> Unit = { _, _ -> },
 ) {
     when (val target = state.target) {
         is ActionListState.Target.Loading,

@@ -7,7 +7,7 @@ import io.element.android.x.textcomposer.TextComposer
 @Composable
 fun MessageComposerView(
     state: MessageComposerState,
-    modifier: Modifier
+    modifier: Modifier = Modifier,
 ) {
 
     fun onFullscreenToggle() {

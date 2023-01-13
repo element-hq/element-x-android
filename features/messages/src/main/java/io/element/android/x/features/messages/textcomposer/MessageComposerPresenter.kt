@@ -1,12 +1,13 @@
 package io.element.android.x.features.messages.textcomposer
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.x.architecture.Presenter
+import io.element.android.x.core.data.StableCharSequence
 import io.element.android.x.core.data.toStableCharSequence
-import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.room.MatrixRoom
 import io.element.android.x.textcomposer.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope
@@ -15,7 +16,6 @@ import javax.inject.Inject
 
 class MessageComposerPresenter @Inject constructor(
     private val appCoroutineScope: CoroutineScope,
-    private val client: MatrixClient,
     private val room: MatrixRoom
 ) : Presenter<MessageComposerState> {
 
@@ -24,25 +24,32 @@ class MessageComposerPresenter @Inject constructor(
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
         }
-        val text: MutableState<CharSequence> = rememberSaveable {
-            mutableStateOf("")
+        val text: MutableState<StableCharSequence> = rememberSaveable {
+            mutableStateOf(StableCharSequence(""))
         }
         val composerMode: MutableState<MessageComposerMode> = rememberSaveable {
             mutableStateOf(MessageComposerMode.Normal(""))
         }
 
+        LaunchedEffect(composerMode.value) {
+            when (val modeValue = composerMode.value) {
+                is MessageComposerMode.Edit -> text.value = modeValue.defaultContent.toStableCharSequence()
+                else -> Unit
+            }
+        }
+
         fun handleEvents(event: MessageComposerEvents) {
             when (event) {
                 MessageComposerEvents.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
-                is MessageComposerEvents.UpdateText -> text.value = event.text
+                is MessageComposerEvents.UpdateText -> text.value = event.text.toStableCharSequence()
                 MessageComposerEvents.CloseSpecialMode -> composerMode.setToNormal()
-                is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(event.message, composerMode)
+                is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(event.message, composerMode, text)
                 is MessageComposerEvents.SetMode -> composerMode.value = event.composerMode
             }
         }
 
         return MessageComposerState(
-            text = text.value.toStableCharSequence(),
+            text = text.value,
             isFullScreen = isFullScreen.value,
             mode = composerMode.value,
             eventSink = ::handleEvents
@@ -53,9 +60,10 @@ class MessageComposerPresenter @Inject constructor(
         value = MessageComposerMode.Normal("")
     }
 
-    private fun CoroutineScope.sendMessage(text: String, composerMode: MutableState<MessageComposerMode>) = launch {
+    private fun CoroutineScope.sendMessage(text: String, composerMode: MutableState<MessageComposerMode>, textState: MutableState<StableCharSequence>) = launch {
         val capturedMode = composerMode.value
         // Reset composer right away
+        textState.value = "".toStableCharSequence()
         composerMode.setToNormal()
         when (capturedMode) {
             is MessageComposerMode.Normal -> room.sendMessage(text)

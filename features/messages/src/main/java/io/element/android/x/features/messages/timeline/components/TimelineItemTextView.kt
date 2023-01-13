@@ -31,11 +31,11 @@ import androidx.core.text.util.LinkifyCompat
 import io.element.android.x.designsystem.LinkColor
 import io.element.android.x.designsystem.components.ClickableLinkText
 import io.element.android.x.features.messages.timeline.components.html.HtmlDocument
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemTextBasedContent
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemTextBasedContent
 
 @Composable
-fun MessagesTimelineItemTextView(
-    content: MessagesTimelineItemTextBasedContent,
+fun TimelineItemTextView(
+    content: TimelineItemTextBasedContent,
     interactionSource: MutableInteractionSource,
     modifier: Modifier = Modifier,
     onTextClicked: () -> Unit = {},

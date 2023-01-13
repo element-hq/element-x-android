@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.messages.diff
+package io.element.android.x.features.messages.timeline.diff
 
 import androidx.recyclerview.widget.DiffUtil
 import io.element.android.x.matrix.timeline.MatrixTimelineItem

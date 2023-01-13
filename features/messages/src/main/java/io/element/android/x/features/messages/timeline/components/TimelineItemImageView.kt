@@ -33,11 +33,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import io.element.android.x.features.messages.model.content.MessagesTimelineItemImageContent
+import io.element.android.x.features.messages.timeline.model.content.TimelineItemImageContent
 
 @Composable
-fun MessagesTimelineItemImageView(
-    content: MessagesTimelineItemImageContent,
+fun TimelineItemImageView(
+    content: TimelineItemImageContent,
     modifier: Modifier = Modifier
 ) {
     val widthPercent = if (content.aspectRatio > 1f) {
