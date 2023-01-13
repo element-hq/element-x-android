@@ -9,6 +9,7 @@ To setup, please refer at [https://maestro.mobile.dev](https://maestro.mobile.de
   * [Output](#output)
 * [Write test](#write-test)
 * [CI](#ci)
+* [Future](#future)
 
 <!--- END -->
 
@@ -47,3 +48,8 @@ Note that sometimes, this prevent running the test. So kill the `meastro studio`
 
 The CI is running maestro using the workflow `.github/worflow/maestro.yaml` and [maestro cloud](https://cloud.mobile.dev/). For now we are limited to 100 runs a month.
 Some GitHub secrets are used to be able to do that: `MAESTRO_CLOUD_API_KEY`, for now api key from `benoitm@element.io` maestro cloud account, and `MATRIX_MAESTRO_ACCOUNT_PASSWORD` which is the password of the account `@maestroelement:matrix.org`. This account contains a room `MyRoom` to be able to run the maestro test suite.
+
+## Future
+
+- run on Element X iOS. This is already working but it need some change on the test to make it works. Could pass a PLATFORM parameter to have unique test and use conditional test.
+- run specific test on both iOS and Android devices to make them communicate together. Could be possible to test room invite and join, verification, call, etc. To be done when Element X will be able to create account and create room. A main script would be able to detect the Android device and the iOS device, and run several maestro tests sequentially, using `--device` parameter to perform a global test.
