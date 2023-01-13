@@ -39,7 +39,6 @@ dependencies {
     implementation(project(":anvilannotations"))
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:elementresources"))
-    implementation(libs.mavericks.compose)
     implementation(libs.squareup.seismic)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.coil)

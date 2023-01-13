@@ -21,7 +21,6 @@ import com.squareup.anvil.annotations.MergeComponent
 import dagger.BindsInstance
 import dagger.Component
 import io.element.android.x.architecture.NodeFactoriesBindings
-import io.element.android.x.architecture.viewmodel.DaggerMavericksBindings
 
 @SingleIn(AppScope::class)
 @MergeComponent(AppScope::class)

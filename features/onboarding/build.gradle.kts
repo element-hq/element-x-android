@@ -30,7 +30,6 @@ dependencies {
     implementation(project(":libraries:elementresources"))
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:architecture"))
-    implementation(libs.mavericks.compose)
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pagerindicator)
     implementation(libs.appyx.core)

@@ -41,7 +41,6 @@ dependencies {
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:elementresources"))
     implementation(libs.appyx.core)
-    implementation(libs.mavericks.compose)
     ksp(libs.showkase.processor)
     testImplementation(libs.test.junit)
     androidTestImplementation(libs.test.junitext)
