@@ -17,6 +17,7 @@
 package io.element.android.x.matrix
 
 import io.element.android.x.core.coroutine.CoroutineDispatchers
+import io.element.android.x.matrix.core.RoomId
 import io.element.android.x.matrix.core.SessionId
 import io.element.android.x.matrix.core.UserId
 import io.element.android.x.matrix.media.MediaResolver
@@ -108,8 +109,8 @@ class MatrixClient internal constructor(
         slidingSyncObserverToken = slidingSync.sync()
     }
 
-    fun getRoom(roomId: String): MatrixRoom? {
-        val slidingSyncRoom = slidingSync.getRoom(roomId) ?: return null
+    fun getRoom(roomId: RoomId): MatrixRoom? {
+        val slidingSyncRoom = slidingSync.getRoom(roomId.value) ?: return null
         val room = slidingSyncRoom.fullRoom() ?: return null
         return MatrixRoom(
             slidingSyncUpdateFlow = slidingSyncObserverProxy.updateSummaryFlow,

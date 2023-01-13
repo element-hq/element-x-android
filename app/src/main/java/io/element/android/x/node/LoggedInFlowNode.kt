@@ -1,7 +1,11 @@
 package io.element.android.x.node
 
 import android.os.Parcelable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import coil.Coil
 import com.bumble.appyx.core.composable.Children
@@ -9,6 +13,7 @@ import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
+import com.bumble.appyx.core.node.node
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import io.element.android.x.architecture.bindings
@@ -83,7 +88,17 @@ class LoggedInFlowNode(
                 createNode<RoomListNode>(buildContext, plugins = listOf(roomListCallback))
             }
             is NavTarget.Room -> {
-                RoomFlowNode(buildContext, navTarget.roomId)
+                val room = matrixClient.getRoom(roomId = navTarget.roomId)
+                if (room == null) {
+                    // TODO CREATE UNKNOWN ROOM NODE
+                    node(buildContext) {
+                        Box(modifier = it.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            Text(text = "Unknown room with id = ${navTarget.roomId}")
+                        }
+                    }
+                } else {
+                    RoomFlowNode(buildContext, room)
+                }
             }
             NavTarget.Settings -> {
                 PreferencesFlowNode(buildContext, onOpenBugReport)

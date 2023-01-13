@@ -20,25 +20,24 @@ import com.squareup.anvil.annotations.ContributesTo
 import com.squareup.anvil.annotations.MergeSubcomponent
 import dagger.BindsInstance
 import dagger.Subcomponent
-import io.element.android.x.architecture.viewmodel.DaggerMavericksBindings
 import io.element.android.x.architecture.NodeFactoriesBindings
-import io.element.android.x.matrix.MatrixClient
+import io.element.android.x.matrix.room.MatrixRoom
 
-@SingleIn(SessionScope::class)
-@MergeSubcomponent(SessionScope::class)
-interface SessionComponent: NodeFactoriesBindings, RoomComponent.ParentBindings {
+@SingleIn(RoomScope::class)
+@MergeSubcomponent(RoomScope::class)
+interface RoomComponent : NodeFactoriesBindings {
 
-    fun matrixClient(): MatrixClient
+    fun matrixRoom(): MatrixRoom
 
     @Subcomponent.Builder
     interface Builder {
         @BindsInstance
-        fun client(matrixClient: MatrixClient): Builder
-        fun build(): SessionComponent
+        fun room(room: MatrixRoom): Builder
+        fun build(): RoomComponent
     }
 
-    @ContributesTo(AppScope::class)
+    @ContributesTo(SessionScope::class)
     interface ParentBindings {
-        fun sessionComponentBuilder(): Builder
+        fun roomComponentBuilder(): Builder
     }
 }
