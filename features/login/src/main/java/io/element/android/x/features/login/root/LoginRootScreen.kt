@@ -138,7 +138,7 @@ fun LoginRootScreen(
                             .fillMaxWidth()
                             .padding(top = 60.dp),
                         label = {
-                            Text(text = "Email or username")
+                            Text(text = stringResource(id = ElementR.string.login_signin_username_hint))
                         },
                         onValueChange = {
                             loginFieldState = it
