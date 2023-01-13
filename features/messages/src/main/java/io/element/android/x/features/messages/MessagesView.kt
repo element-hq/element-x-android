@@ -74,7 +74,6 @@ fun MessagesView(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit,
 ) {
-
     LogCompositions(tag = "MessagesScreen", msg = "Root")
     val itemActionsBottomSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
@@ -163,7 +162,6 @@ fun MessagesViewContent(
                 .fillMaxWidth()
                 .wrapContentHeight(Alignment.Bottom)
         )
-
     }
 }
 

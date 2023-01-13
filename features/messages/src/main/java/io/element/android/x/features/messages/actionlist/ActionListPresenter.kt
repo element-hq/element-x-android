@@ -34,7 +34,6 @@ class ActionListPresenter @Inject constructor() : Presenter<ActionListState> {
 
     @Composable
     override fun present(): ActionListState {
-
         val localCoroutineScope = rememberCoroutineScope()
 
         val target: MutableState<ActionListState.Target> = remember {

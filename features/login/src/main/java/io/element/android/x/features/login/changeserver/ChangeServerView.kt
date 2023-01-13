@@ -59,7 +59,6 @@ import io.element.android.x.designsystem.components.VectorIcon
 import io.element.android.x.features.login.R
 import io.element.android.x.features.login.error.changeServerError
 
-
 @Composable
 fun ChangeServerView(
     state: ChangeServerState,

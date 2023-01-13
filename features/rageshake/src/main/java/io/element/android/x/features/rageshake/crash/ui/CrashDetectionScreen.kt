@@ -31,7 +31,7 @@ fun CrashDetectionView(
 ) {
     LogCompositions(tag = "Crash", msg = "CrashDetectionScreen")
 
-    fun onPopupDismissed(){
+    fun onPopupDismissed() {
         state.eventSink(CrashDetectionEvents.ResetAllCrashData)
     }
 

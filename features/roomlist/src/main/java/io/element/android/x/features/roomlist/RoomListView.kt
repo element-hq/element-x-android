@@ -57,12 +57,11 @@ fun RoomListView(
     onRoomClicked: (RoomId) -> Unit = {},
     onOpenSettings: () -> Unit = {},
 ) {
-
-    fun onFilterChanged(filter: String){
+    fun onFilterChanged(filter: String) {
         state.eventSink(RoomListEvents.UpdateFilter(filter))
     }
 
-    fun onVisibleRangedChanged(range: IntRange){
+    fun onVisibleRangedChanged(range: IntRange) {
         state.eventSink(RoomListEvents.UpdateVisibleRange(range))
     }
 
