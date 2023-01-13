@@ -42,7 +42,6 @@ dependencies {
     implementation(project(":features:logout"))
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:elementresources"))
-    implementation(libs.mavericks.compose)
     implementation(libs.datetime)
     implementation(libs.accompanist.placeholder)
     testImplementation(libs.test.junit)

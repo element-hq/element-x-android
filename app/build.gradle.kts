@@ -175,11 +175,9 @@ dependencies {
 
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.lifecycle.runtime)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.startup)
     implementation(libs.coil)
-    implementation(libs.mavericks.compose)
 
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)

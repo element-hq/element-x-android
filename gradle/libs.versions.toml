@@ -17,7 +17,6 @@ constraintlayout = "2.1.4"
 recyclerview = "1.2.1"
 lifecycle = "2.5.1"
 activity_compose = "1.6.1"
-fragment = "1.5.5"
 startup = "1.1.1"
 
 # Compose
@@ -42,7 +41,6 @@ test_hamcrest = "2.2"
 test_orchestrator = "1.4.1"
 
 #other
-mavericks = "3.0.1"
 coil = "2.2.1"
 datetime = "0.4.0"
 wysiwyg = "0.7.0.1"
@@ -79,9 +77,7 @@ androidx_lifecycle_runtime = { module = "androidx.lifecycle:lifecycle-runtime-kt
 androidx_lifecycle_compose = { module = "androidx.lifecycle:compose", version.ref = "lifecycle" }
 androidx_lifecycle_process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
 
-androidx_lifecycle_viewmodel_compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity_compose" }
-androidx_fragment = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
 androidx_startup = { module = "androidx.startup:startup-runtime", version.ref = "startup" }
 
 androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose_bom" }
@@ -117,7 +113,6 @@ test_hamcrest = { module = "org.hamcrest:hamcrest", version.ref = "test_hamcrest
 test_orchestrator = { module = "androidx.test:orchestrator", version.ref = "test_orchestrator" }
 
 # Others
-mavericks_compose = { module = "com.airbnb.android:mavericks-compose", version.ref = "mavericks" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
