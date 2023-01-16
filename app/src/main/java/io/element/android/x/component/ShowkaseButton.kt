@@ -30,14 +30,14 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 internal fun ShowkaseButton(
-    modifier: Modifier = Modifier,
     isVisible: Boolean,
     onClick: () -> Unit,
-    onCloseClicked: () -> Unit
+    onCloseClicked: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     if (isVisible) {
         Button(
-            modifier = Modifier
+            modifier = modifier
                 .padding(top = 32.dp, start = 16.dp),
             onClick = onClick
         ) {
