@@ -25,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.x.architecture.Presenter
+import io.element.android.x.core.coroutine.CoroutineDispatchers
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.core.EventId
 import io.element.android.x.matrix.room.MatrixRoom
@@ -33,7 +34,6 @@ import io.element.android.x.matrix.timeline.MatrixTimelineItem
 import io.element.android.x.matrix.ui.MatrixItemHelper
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -42,15 +42,15 @@ import javax.inject.Inject
 private const val PAGINATION_COUNT = 50
 
 class TimelinePresenter @Inject constructor(
-    private val appCoroutineScope: CoroutineScope,
-    private val client: MatrixClient,
-    private val room: MatrixRoom
+    coroutineDispatchers: CoroutineDispatchers,
+    client: MatrixClient,
+    room: MatrixRoom,
 ) : Presenter<TimelineState> {
 
     private val timeline = room.timeline()
     private val matrixItemHelper = MatrixItemHelper(client)
     private val timelineItemsFactory =
-        TimelineItemsFactory(matrixItemHelper, room, Dispatchers.Default)
+        TimelineItemsFactory(matrixItemHelper, room, coroutineDispatchers.computation)
 
     private class TimelineCallback(private val coroutineScope: CoroutineScope, private val timelineItemsFactory: TimelineItemsFactory) : MatrixTimeline.Callback {
         override fun onPushedTimelineItem(timelineItem: MatrixTimelineItem) {

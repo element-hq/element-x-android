@@ -22,8 +22,8 @@ import io.element.android.x.features.messages.timeline.diff.CacheInvalidator
 import io.element.android.x.features.messages.timeline.diff.MatrixTimelineItemsDiffCallback
 import io.element.android.x.features.messages.timeline.model.AggregatedReaction
 import io.element.android.x.features.messages.timeline.model.MessagesItemGroupPosition
-import io.element.android.x.features.messages.timeline.model.TimelineItemReactions
 import io.element.android.x.features.messages.timeline.model.TimelineItem
+import io.element.android.x.features.messages.timeline.model.TimelineItemReactions
 import io.element.android.x.features.messages.timeline.model.content.TimelineItemContent
 import io.element.android.x.features.messages.timeline.model.content.TimelineItemEmoteContent
 import io.element.android.x.features.messages.timeline.model.content.TimelineItemEncryptedContent
