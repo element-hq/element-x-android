@@ -52,7 +52,10 @@ class TimelinePresenter @Inject constructor(
     private val timelineItemsFactory =
         TimelineItemsFactory(matrixItemHelper, room, coroutineDispatchers.computation)
 
-    private class TimelineCallback(private val coroutineScope: CoroutineScope, private val timelineItemsFactory: TimelineItemsFactory) : MatrixTimeline.Callback {
+    private class TimelineCallback(
+        private val coroutineScope: CoroutineScope,
+        private val timelineItemsFactory: TimelineItemsFactory,
+    ) : MatrixTimeline.Callback {
         override fun onPushedTimelineItem(timelineItem: MatrixTimelineItem) {
             coroutineScope.launch {
                 timelineItemsFactory.pushItem(timelineItem)

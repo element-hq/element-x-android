@@ -76,22 +76,23 @@ class MessageComposerPresenter @Inject constructor(
         value = MessageComposerMode.Normal("")
     }
 
-    private fun CoroutineScope.sendMessage(text: String, composerMode: MutableState<MessageComposerMode>, textState: MutableState<StableCharSequence>) = launch {
-        val capturedMode = composerMode.value
-        // Reset composer right away
-        textState.value = "".toStableCharSequence()
-        composerMode.setToNormal()
-        when (capturedMode) {
-            is MessageComposerMode.Normal -> room.sendMessage(text)
-            is MessageComposerMode.Edit -> room.editMessage(
-                capturedMode.eventId,
-                text
-            )
-            is MessageComposerMode.Quote -> TODO()
-            is MessageComposerMode.Reply -> room.replyMessage(
-                capturedMode.eventId,
-                text
-            )
+    private fun CoroutineScope.sendMessage(text: String, composerMode: MutableState<MessageComposerMode>, textState: MutableState<StableCharSequence>) =
+        launch {
+            val capturedMode = composerMode.value
+            // Reset composer right away
+            textState.value = "".toStableCharSequence()
+            composerMode.setToNormal()
+            when (capturedMode) {
+                is MessageComposerMode.Normal -> room.sendMessage(text)
+                is MessageComposerMode.Edit -> room.editMessage(
+                    capturedMode.eventId,
+                    text
+                )
+                is MessageComposerMode.Quote -> TODO()
+                is MessageComposerMode.Reply -> room.replyMessage(
+                    capturedMode.eventId,
+                    text
+                )
+            }
         }
-    }
 }
