@@ -24,7 +24,6 @@ import io.element.android.x.core.di.DaggerComponentOwner
 inline fun <reified T : Any> Node.bindings() = bindings(T::class.java)
 inline fun <reified T : Any> Context.bindings() = bindings(T::class.java)
 
-/** Use no-arg extension function instead: [Context.bindings] */
 fun <T : Any> Context.bindings(klass: Class<T>): T {
     // search dagger components in the context hierarchy
     return generateSequence(this) { (it as? ContextWrapper)?.baseContext }
@@ -37,7 +36,6 @@ fun <T : Any> Context.bindings(klass: Class<T>): T {
         ?: error("Unable to find bindings for ${klass.name}")
 }
 
-/** Use no-arg extension function instead: [Node.bindings] */
 fun <T : Any> Node.bindings(klass: Class<T>): T {
     // search dagger components in node hierarchy
     return generateSequence(this, Node::parent)
