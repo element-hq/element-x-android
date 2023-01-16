@@ -1,3 +1,5 @@
+
+
 /*
  * Copyright (c) 2022 New Vector Ltd
  *
@@ -169,7 +171,8 @@ dependencies {
     implementation(project(":anvilannotations"))
     anvil(project(":anvilcodegen"))
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.0")
+    // https://developer.android.com/studio/write/java8-support#library-desugaring-versions
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.2")
     implementation(libs.compose.destinations)
     ksp(libs.compose.destinations.processor)
     implementation(libs.appyx.core)
