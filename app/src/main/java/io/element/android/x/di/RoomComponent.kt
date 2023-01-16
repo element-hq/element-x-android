@@ -27,8 +27,6 @@ import io.element.android.x.matrix.room.MatrixRoom
 @MergeSubcomponent(RoomScope::class)
 interface RoomComponent : NodeFactoriesBindings {
 
-    fun matrixRoom(): MatrixRoom
-
     @Subcomponent.Builder
     interface Builder {
         @BindsInstance

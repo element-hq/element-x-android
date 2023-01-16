@@ -97,7 +97,7 @@ class Matrix @Inject constructor(
         }
 
     private fun createMatrixClient(client: Client): MatrixClient {
-        return MatrixClient(
+        return RustMatrixClient(
             client = client,
             sessionStore = sessionStore,
             coroutineScope = coroutineScope,
