@@ -26,6 +26,7 @@ plugins {
     alias(libs.plugins.molecule) apply false
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kapt) apply false
+    alias(libs.plugins.dependencycheck) apply false
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.dependencygraph)
@@ -102,5 +103,9 @@ allprojects {
                 "import-ordering",
             )
         )
+    }
+    // Dependency check
+    apply {
+        plugin("org.owasp.dependencycheck")
     }
 }

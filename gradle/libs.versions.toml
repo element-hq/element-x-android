@@ -50,6 +50,7 @@ compose_destinations = "1.7.23-beta"
 jsoup = "1.15.3"
 appyx = "1.0.1"
 seismic = "1.0.3"
+dependencycheck = "7.4.4"
 
 # DI
 dagger = "2.43"
@@ -148,3 +149,4 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 molecule = {id = "app.cash.molecule", version.ref = "molecule"}
 dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.ref = "dependencygraph" }
+dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
