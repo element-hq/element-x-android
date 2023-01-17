@@ -97,7 +97,7 @@ fun LoginRootScreen(
                 val isError = state.loggedInState is LoggedInState.ErrorLoggingIn
                 // Title
                 Text(
-                    text = "Welcome back",
+                    text = stringResource(id = ElementR.string.ftue_auth_welcome_back_title),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 48.dp),
