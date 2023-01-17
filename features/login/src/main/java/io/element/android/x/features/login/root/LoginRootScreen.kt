@@ -48,6 +48,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -61,6 +62,7 @@ import io.element.android.x.core.compose.textFieldState
 import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.features.login.error.loginError
 import io.element.android.x.matrix.core.SessionId
+import io.element.android.x.element.resources.R as ElementR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
