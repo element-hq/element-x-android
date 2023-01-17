@@ -19,26 +19,22 @@ package io.element.android.x.features.preferences.user
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.airbnb.mvrx.compose.collectAsState
-import com.airbnb.mvrx.compose.mavericksViewModel
+import io.element.android.x.architecture.Async
 import io.element.android.x.matrix.ui.components.MatrixUserHeader
-import io.element.android.x.matrix.ui.viewmodels.user.UserViewModel
-import io.element.android.x.matrix.ui.viewmodels.user.UserViewState
+import io.element.android.x.matrix.ui.model.MatrixUser
 
 @Composable
 fun UserPreferences(
+    user: Async<MatrixUser>,
     modifier: Modifier = Modifier,
-    viewModel: UserViewModel = mavericksViewModel(),
 ) {
-    val user by viewModel.collectAsState(UserViewState::user)
-    when (user()) {
+    when (val userData = user.dataOrNull()) {
         null -> Spacer(modifier = modifier.height(1.dp))
         else -> MatrixUserHeader(
             modifier = modifier,
-            matrixUser = user.invoke()!!
+            matrixUser = userData
         )
     }
 }

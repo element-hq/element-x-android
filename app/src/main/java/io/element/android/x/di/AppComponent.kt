@@ -20,11 +20,11 @@ import android.content.Context
 import com.squareup.anvil.annotations.MergeComponent
 import dagger.BindsInstance
 import dagger.Component
-import io.element.android.x.core.di.DaggerMavericksBindings
+import io.element.android.x.architecture.NodeFactoriesBindings
 
 @SingleIn(AppScope::class)
 @MergeComponent(AppScope::class)
-interface AppComponent : DaggerMavericksBindings {
+interface AppComponent : NodeFactoriesBindings {
 
     @Component.Factory
     interface Factory {

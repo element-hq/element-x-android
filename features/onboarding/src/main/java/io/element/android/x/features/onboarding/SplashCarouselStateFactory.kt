@@ -22,11 +22,13 @@ import io.element.android.x.element.resources.R as ElementR
 class SplashCarouselStateFactory {
     fun create(): SplashCarouselState {
         val lightTheme = true
+
         fun background(@DrawableRes lightDrawable: Int) =
             if (lightTheme) lightDrawable else R.drawable.bg_color_background
 
         fun hero(@DrawableRes lightDrawable: Int, @DrawableRes darkDrawable: Int) =
             if (lightTheme) lightDrawable else darkDrawable
+
         return SplashCarouselState(
             listOf(
                 SplashCarouselState.Item(

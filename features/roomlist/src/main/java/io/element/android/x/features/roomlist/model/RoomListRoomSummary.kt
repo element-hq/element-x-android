@@ -16,11 +16,11 @@
 
 package io.element.android.x.features.roomlist.model
 
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.matrix.core.RoomId
 
-@Stable
+@Immutable
 data class RoomListRoomSummary(
     val id: String,
     val roomId: RoomId = RoomId(id),

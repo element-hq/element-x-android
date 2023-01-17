@@ -32,5 +32,5 @@ class MatrixInitializer : Initializer<Unit> {
         }
     }
 
-    override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
+    override fun dependencies(): List<Class<out Initializer<*>>> = listOf(TimberInitializer::class.java)
 }

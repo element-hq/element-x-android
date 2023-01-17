@@ -16,11 +16,11 @@
 
 package io.element.android.x.matrix.ui.model
 
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.matrix.core.UserId
 
-@Stable
+@Immutable
 data class MatrixUser(
     val id: UserId,
     val username: String? = null,

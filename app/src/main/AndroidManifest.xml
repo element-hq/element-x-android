@@ -29,11 +29,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ElementX"
         tools:targetApi="33">
-        <!-- Note: temporary block orientation to sensorPortrait because the RichTextEditor library is crashing on configuration change -->
         <activity
             android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:exported="true"
-            android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="adjustResize"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
@@ -47,7 +46,7 @@
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
             android:exported="false"
-            tools:node="remove"/>
+            tools:node="remove" />
 
     </application>
 

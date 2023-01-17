@@ -18,10 +18,6 @@ package io.element.android.x.features.roomlist
 
 import android.text.format.DateFormat
 import android.text.format.DateUtils
-import java.time.Period
-import java.time.format.DateTimeFormatter
-import java.util.Locale
-import kotlin.math.absoluteValue
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
@@ -30,11 +26,16 @@ import kotlinx.datetime.toInstant
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toLocalDateTime
+import java.time.Period
+import java.time.format.DateTimeFormatter
+import java.util.Locale
+import javax.inject.Inject
+import kotlin.math.absoluteValue
 
-class LastMessageFormatter(
-    private val clock: Clock = Clock.System,
+class LastMessageFormatter @Inject constructor() {
+
+    private val clock: Clock = Clock.System
     private val locale: Locale = Locale.getDefault()
-) {
 
     private val onlyTimeFormatter: DateTimeFormatter by lazy {
         val pattern = DateFormat.getBestDateTimePattern(locale, "HH:mm")
