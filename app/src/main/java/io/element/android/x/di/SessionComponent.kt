@@ -20,14 +20,12 @@ import com.squareup.anvil.annotations.ContributesTo
 import com.squareup.anvil.annotations.MergeSubcomponent
 import dagger.BindsInstance
 import dagger.Subcomponent
-import io.element.android.x.core.di.DaggerMavericksBindings
+import io.element.android.x.architecture.NodeFactoriesBindings
 import io.element.android.x.matrix.MatrixClient
 
 @SingleIn(SessionScope::class)
 @MergeSubcomponent(SessionScope::class)
-interface SessionComponent : DaggerMavericksBindings {
-
-    fun matrixClient(): MatrixClient
+interface SessionComponent : NodeFactoriesBindings, RoomComponent.ParentBindings {
 
     @Subcomponent.Builder
     interface Builder {

@@ -7,6 +7,7 @@ android_gradle_plugin = "7.3.1"
 firebase_gradle_plugin = "3.0.2"
 kotlin = "1.7.20"
 ksp = "1.7.20-1.0.7"
+molecule = "0.6.1"
 
 # AndroidX
 material = "1.6.1"
@@ -16,7 +17,6 @@ constraintlayout = "2.1.4"
 recyclerview = "1.2.1"
 lifecycle = "2.5.1"
 activity_compose = "1.6.1"
-fragment = "1.5.5"
 startup = "1.1.1"
 
 # Compose
@@ -41,7 +41,6 @@ test_hamcrest = "2.2"
 test_orchestrator = "1.4.1"
 
 #other
-mavericks = "3.0.1"
 coil = "2.2.1"
 datetime = "0.4.0"
 wysiwyg = "0.7.0.1"
@@ -49,6 +48,7 @@ serialization_json = "1.4.1"
 showkase = "1.0.0-beta14"
 compose_destinations = "1.7.23-beta"
 jsoup = "1.15.3"
+appyx = "1.0.1"
 seismic = "1.0.3"
 dependencycheck = "7.4.4"
 
@@ -78,9 +78,7 @@ androidx_lifecycle_runtime = { module = "androidx.lifecycle:lifecycle-runtime-kt
 androidx_lifecycle_compose = { module = "androidx.lifecycle:compose", version.ref = "lifecycle" }
 androidx_lifecycle_process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
 
-androidx_lifecycle_viewmodel_compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity_compose" }
-androidx_fragment = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
 androidx_startup = { module = "androidx.startup:startup-runtime", version.ref = "startup" }
 
 androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose_bom" }
@@ -116,7 +114,6 @@ test_hamcrest = { module = "org.hamcrest:hamcrest", version.ref = "test_hamcrest
 test_orchestrator = { module = "androidx.test:orchestrator", version.ref = "test_orchestrator" }
 
 # Others
-mavericks_compose = { module = "com.airbnb.android:mavericks-compose", version.ref = "mavericks" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
@@ -126,7 +123,7 @@ compose_destinations_processor = { module = "io.github.raamcosta.compose-destina
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
-
+appyx_core = {module = "com.bumble.appyx:core", version.ref = "appyx"}
 
 # Di
 inject = { module = "javax.inject:javax.inject", version = "1" }
@@ -150,5 +147,6 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+molecule = {id = "app.cash.molecule", version.ref = "molecule"}
 dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.ref = "dependencygraph" }
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }

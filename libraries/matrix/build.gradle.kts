@@ -33,6 +33,7 @@ anvil {
 dependencies {
     api(project(":libraries:rustsdk"))
     implementation(project(":libraries:di"))
+    implementation(libs.dagger)
     implementation(project(":libraries:core"))
     implementation("net.java.dev.jna:jna:5.12.1@aar")
     implementation(libs.androidx.datastore.preferences)

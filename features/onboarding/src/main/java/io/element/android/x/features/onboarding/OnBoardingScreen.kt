@@ -45,8 +45,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.airbnb.mvrx.compose.collectAsState
-import com.airbnb.mvrx.compose.mavericksViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
@@ -55,25 +53,9 @@ import io.element.android.x.designsystem.components.VectorButton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@Composable
-fun OnBoardingScreen(
-    viewModel: OnBoardingViewModel = mavericksViewModel(),
-    onSignUp: () -> Unit = { },
-    onSignIn: () -> Unit = { },
-) {
-    val state: OnBoardingViewState by viewModel.collectAsState()
-    OnBoardingContent(
-        state,
-        onPageChanged = viewModel::onPageChanged,
-        onSignUp = onSignUp,
-        onSignIn = onSignIn,
-    )
-}
-
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun OnBoardingContent(
-    state: OnBoardingViewState,
+fun OnBoardingScreen(
     modifier: Modifier = Modifier,
     onPageChanged: (Int) -> Unit = {},
     onSignUp: () -> Unit = {},

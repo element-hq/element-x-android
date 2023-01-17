@@ -18,13 +18,12 @@ package io.element.android.x.di
 
 import com.squareup.anvil.annotations.ContributesTo
 import io.element.android.x.matrix.Matrix
-import io.element.android.x.matrix.ui.MatrixUi
+import io.element.android.x.root.RootPresenter
 import kotlinx.coroutines.CoroutineScope
 
 @ContributesTo(AppScope::class)
 interface AppBindings {
     fun coroutineScope(): CoroutineScope
+    fun rootPresenter(): RootPresenter
     fun matrix(): Matrix
-    fun matrixUi(): MatrixUi
-    fun sessionComponentsOwner(): SessionComponentsOwner
 }

@@ -19,8 +19,8 @@ package io.element.android.x.features.login.error
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import io.element.android.x.core.uri.isValidUrl
+import io.element.android.x.features.login.root.LoginFormState
 import io.element.android.x.element.resources.R as ElementR
-import io.element.android.x.features.login.LoginFormState
 
 @Composable
 fun loginError(

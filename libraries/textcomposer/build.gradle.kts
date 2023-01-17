@@ -19,6 +19,7 @@
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.ksp)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -31,6 +32,7 @@ android {
 dependencies {
     implementation(project(":libraries:elementresources"))
     implementation(project(":libraries:core"))
+    implementation(project(":libraries:matrix"))
     implementation(libs.wysiwyg)
     implementation(libs.androidx.constraintlayout)
     implementation("com.google.android.material:material:1.7.0")

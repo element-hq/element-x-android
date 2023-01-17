@@ -1,3 +1,5 @@
+
+
 /*
  * Copyright (c) 2022 New Vector Ltd
  *
@@ -24,6 +26,7 @@ plugins {
     alias(libs.plugins.kapt)
     id("com.google.firebase.appdistribution") version "3.0.2"
     id("org.jetbrains.kotlinx.knit") version "0.4.0"
+    id("kotlin-parcelize")
 }
 
 android {
@@ -156,6 +159,7 @@ dependencies {
     implementation(project(":libraries:matrix"))
     implementation(project(":libraries:matrixui"))
     implementation(project(":libraries:core"))
+    implementation(project(":libraries:architecture"))
     implementation(project(":features:onboarding"))
     implementation(project(":features:login"))
     implementation(project(":features:logout"))
@@ -167,17 +171,17 @@ dependencies {
     implementation(project(":anvilannotations"))
     anvil(project(":anvilcodegen"))
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.0")
+    // https://developer.android.com/studio/write/java8-support#library-desugaring-versions
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.2")
     implementation(libs.compose.destinations)
     ksp(libs.compose.destinations.processor)
+    implementation(libs.appyx.core)
 
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.lifecycle.runtime)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.startup)
     implementation(libs.coil)
-    implementation(libs.mavericks.compose)
 
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
