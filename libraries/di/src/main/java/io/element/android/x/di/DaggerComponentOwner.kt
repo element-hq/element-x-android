@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
-plugins {
-    id("io.element.android-compose-library")
-}
+package io.element.android.x.di
 
-android {
-    namespace = "io.element.android.x.libraries.architecture"
-}
-
-dependencies {
-    api(project(":libraries:di"))
-    api(libs.dagger)
-    api(libs.appyx.core)
-    api(libs.molecule.runtime)
-    api(libs.androidx.lifecycle.runtime)
+/**
+ * A [DaggerComponentOwner] is anything that "owns" a Dagger Component.
+ *
+ */
+interface DaggerComponentOwner {
+    /** This is either a component, or a list of components. */
+    val daggerComponent: Any
 }

@@ -39,6 +39,7 @@ test_junitext = "1.1.3"
 test_barista = "4.2.0"
 test_hamcrest = "2.2"
 test_orchestrator = "1.4.1"
+test_turbine = "0.12.1"
 
 #other
 coil = "2.2.1"
@@ -112,6 +113,9 @@ test_mockk = { module = "io.mockk:mockk", version.ref = "test_mockk" }
 test_barista = { module = "com.adevinta.android:barista", version.ref = "test_barista" }
 test_hamcrest = { module = "org.hamcrest:hamcrest", version.ref = "test_hamcrest" }
 test_orchestrator = { module = "androidx.test:orchestrator", version.ref = "test_orchestrator" }
+test_turbine = { module = "app.cash.turbine:turbine", version.ref = "test_turbine"}
+test_truth = "com.google.truth:truth:1.1.3"
+
 
 # Others
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
@@ -124,6 +128,7 @@ showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 appyx_core = {module = "com.bumble.appyx:core", version.ref = "appyx"}
+molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
 
 # Di
 inject = { module = "javax.inject:javax.inject", version = "1" }
@@ -147,6 +152,5 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
-molecule = {id = "app.cash.molecule", version.ref = "molecule"}
 dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.ref = "dependencygraph" }
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }

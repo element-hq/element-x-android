@@ -27,7 +27,7 @@ import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.navmodel.backstack.BackStack
 import io.element.android.x.architecture.bindings
 import io.element.android.x.architecture.createNode
-import io.element.android.x.core.di.DaggerComponentOwner
+import io.element.android.x.di.DaggerComponentOwner
 import io.element.android.x.di.RoomComponent
 import io.element.android.x.features.messages.MessagesNode
 import io.element.android.x.matrix.room.MatrixRoom

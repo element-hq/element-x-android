@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.x.matrix
+package io.element.android.x.matrix.auth
 
-import android.content.Context
+import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.x.core.coroutine.CoroutineDispatchers
 import io.element.android.x.di.AppScope
-import io.element.android.x.di.ApplicationContext
-import io.element.android.x.di.SingleIn
+import io.element.android.x.matrix.MatrixClient
+import io.element.android.x.matrix.RustMatrixClient
 import io.element.android.x.matrix.core.SessionId
 import io.element.android.x.matrix.session.SessionStore
 import io.element.android.x.matrix.session.sessionId
@@ -35,26 +35,24 @@ import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
-@SingleIn(AppScope::class)
-class Matrix @Inject constructor(
+@ContributesBinding(AppScope::class)
+class RustMatrixAuthenticationService @Inject constructor(
+    private val baseDirectory: File,
     private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
-    @ApplicationContext context: Context,
-) {
+    private val sessionStore: SessionStore,
+    private val authService: AuthenticationService,
+) : MatrixAuthenticationService {
 
-    private val baseDirectory = File(context.filesDir, "sessions")
-    private val sessionStore = SessionStore(context)
-    private val authService = AuthenticationService(baseDirectory.absolutePath)
-
-    fun isLoggedIn(): Flow<Boolean> {
+    override fun isLoggedIn(): Flow<Boolean> {
         return sessionStore.isLoggedIn()
     }
 
-    suspend fun getLatestSessionId(): SessionId? = withContext(coroutineDispatchers.io) {
+    override suspend fun getLatestSessionId(): SessionId? = withContext(coroutineDispatchers.io) {
         sessionStore.getLatestSession()?.sessionId()
     }
 
-    suspend fun restoreSession() = withContext(coroutineDispatchers.io) {
+    override suspend fun restoreSession() = withContext(coroutineDispatchers.io) {
         sessionStore.getLatestSession()
             ?.let { session ->
                 try {
@@ -73,17 +71,17 @@ class Matrix @Inject constructor(
             }
     }
 
-    fun getHomeserver(): String? = authService.homeserverDetails()?.url()
+    override fun getHomeserver(): String? = authService.homeserverDetails()?.url()
 
-    fun getHomeserverOrDefault(): String = getHomeserver() ?: "matrix.org"
+    override fun getHomeserverOrDefault(): String = getHomeserver() ?: "matrix.org"
 
-    suspend fun setHomeserver(homeserver: String) {
+    override suspend fun setHomeserver(homeserver: String) {
         withContext(coroutineDispatchers.io) {
             authService.configureHomeserver(homeserver)
         }
     }
 
-    suspend fun login(username: String, password: String): SessionId =
+    override suspend fun login(username: String, password: String): SessionId =
         withContext(coroutineDispatchers.io) {
             val client = try {
                 authService.login(username, password, "ElementX Android", null)

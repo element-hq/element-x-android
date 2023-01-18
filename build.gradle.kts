@@ -23,7 +23,6 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.anvil) apply false
-    alias(libs.plugins.molecule) apply false
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kapt) apply false
     alias(libs.plugins.dependencycheck) apply false

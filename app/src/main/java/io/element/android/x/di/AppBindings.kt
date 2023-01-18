@@ -17,7 +17,7 @@
 package io.element.android.x.di
 
 import com.squareup.anvil.annotations.ContributesTo
-import io.element.android.x.matrix.Matrix
+import io.element.android.x.matrix.auth.MatrixAuthenticationService
 import io.element.android.x.root.RootPresenter
 import kotlinx.coroutines.CoroutineScope
 
@@ -25,5 +25,5 @@ import kotlinx.coroutines.CoroutineScope
 interface AppBindings {
     fun coroutineScope(): CoroutineScope
     fun rootPresenter(): RootPresenter
-    fun matrix(): Matrix
+    fun authenticationService(): MatrixAuthenticationService
 }

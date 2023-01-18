@@ -34,7 +34,7 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import io.element.android.x.architecture.bindings
 import io.element.android.x.architecture.createNode
-import io.element.android.x.core.di.DaggerComponentOwner
+import io.element.android.x.di.DaggerComponentOwner
 import io.element.android.x.di.SessionComponent
 import io.element.android.x.features.preferences.PreferencesFlowNode
 import io.element.android.x.features.roomlist.RoomListNode
