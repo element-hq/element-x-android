@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- media settings -->
+    <string-array name="compression_levels">
+        <item>@string/compression_opt_list_choose</item>
+        <item>@string/compression_opt_list_original</item>
+        <item>@string/compression_opt_list_large</item>
+        <item>@string/compression_opt_list_medium</item>
+        <item>@string/compression_opt_list_small</item>
+    </string-array>
+    <string-array name="compression_level_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+    <string-array name="media_sources">
+        <item>@string/media_source_choose</item>
+        <item>@string/option_send_files</item>
+        <item>@string/option_send_voice</item>
+        <item>@string/option_send_sticker</item>
+        <item>@string/option_take_photo</item>
+        <item>@string/option_take_video</item>
+    </string-array>
+    <string-array name="media_source_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <!-- Room settings notification -->
+
+    <!-- Theme -->
+    <string-array name="theme_entries">
+        <item>@string/system_theme</item>
+        <item>@string/light_theme</item>
+        <item>@string/dark_theme</item>
+        <item>@string/black_theme</item>
+    </string-array>
+
+    <string-array name="theme_values">
+        <item>system</item>
+        <item>light</item>
+        <item>dark</item>
+        <item>black</item>
+    </string-array>
+
+    <!-- media saving choice list -->
+    <string-array name="media_saving_choice">
+        <item>@string/media_saving_period_3_days</item>
+        <item>@string/media_saving_period_1_week</item>
+        <item>@string/media_saving_period_1_month</item>
+        <item>@string/media_saving_period_forever</item>
+    </string-array>
+
+</resources>

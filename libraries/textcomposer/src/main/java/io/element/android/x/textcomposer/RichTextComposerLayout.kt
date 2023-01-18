@@ -45,12 +45,13 @@ import io.element.android.wysiwyg.inputhandlers.models.InlineFormat
 import io.element.android.x.core.ui.DimensionConverter
 import io.element.android.x.core.ui.hideKeyboard
 import io.element.android.x.core.ui.showKeyboard
-import io.element.android.x.element.resources.R as ElementR
 import io.element.android.x.textcomposer.databinding.ComposerRichTextLayoutBinding
 import io.element.android.x.textcomposer.databinding.ViewRichTextMenuButtonBinding
 import io.element.android.x.textcomposer.tools.setTextIfDifferent
 import uniffi.wysiwyg_composer.ActionState
 import uniffi.wysiwyg_composer.ComposerAction
+import io.element.android.x.element.resources.R as ElementR
+import io.element.android.x.ui.strings.R as StringR
 
 // Imported from Element Android
 class RichTextComposerLayout @JvmOverloads constructor(
@@ -248,28 +249,28 @@ class RichTextComposerLayout @JvmOverloads constructor(
     private fun setupRichTextMenu() {
         addRichTextMenuItem(
             R.drawable.ic_composer_bold,
-            ElementR.string.rich_text_editor_format_bold,
+            StringR.string.rich_text_editor_format_bold,
             ComposerAction.BOLD
         ) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Bold)
         }
         addRichTextMenuItem(
             R.drawable.ic_composer_italic,
-            ElementR.string.rich_text_editor_format_italic,
+            StringR.string.rich_text_editor_format_italic,
             ComposerAction.ITALIC
         ) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Italic)
         }
         addRichTextMenuItem(
             R.drawable.ic_composer_underlined,
-            ElementR.string.rich_text_editor_format_underline,
+            StringR.string.rich_text_editor_format_underline,
             ComposerAction.UNDERLINE
         ) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Underline)
         }
         addRichTextMenuItem(
             R.drawable.ic_composer_strikethrough,
-            ElementR.string.rich_text_editor_format_strikethrough,
+            StringR.string.rich_text_editor_format_strikethrough,
             ComposerAction.STRIKE_THROUGH
         ) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.StrikeThrough)
@@ -495,16 +496,16 @@ class RichTextComposerLayout @JvmOverloads constructor(
                  */
                 views.plainTextComposerEditText.setText(text)
             }
-            views.sendButton.contentDescription = resources.getString(ElementR.string.action_send)
+            views.sendButton.contentDescription = resources.getString(StringR.string.action_send)
             hasRelatedMessage = false
         }
 
         views.sendButton.apply {
             if (mode is MessageComposerMode.Edit) {
-                contentDescription = resources.getString(ElementR.string.action_save)
+                contentDescription = resources.getString(StringR.string.action_save)
                 setImageResource(R.drawable.ic_composer_rich_text_save)
             } else {
-                contentDescription = resources.getString(ElementR.string.action_send)
+                contentDescription = resources.getString(StringR.string.action_send)
                 setImageResource(R.drawable.ic_rich_composer_send)
             }
         }

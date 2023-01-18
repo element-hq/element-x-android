@@ -62,7 +62,7 @@ import io.element.android.x.core.compose.textFieldState
 import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.features.login.error.loginError
 import io.element.android.x.matrix.core.SessionId
-import io.element.android.x.element.resources.R as ElementR
+import io.element.android.x.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -97,7 +97,7 @@ fun LoginRootScreen(
                 val isError = state.loggedInState is LoggedInState.ErrorLoggingIn
                 // Title
                 Text(
-                    text = stringResource(id = ElementR.string.ftue_auth_welcome_back_title),
+                    text = stringResource(id = StringR.string.ftue_auth_welcome_back_title),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 48.dp),
@@ -140,7 +140,7 @@ fun LoginRootScreen(
                             .fillMaxWidth()
                             .padding(top = 60.dp),
                         label = {
-                            Text(text = stringResource(id = ElementR.string.login_signin_username_hint))
+                            Text(text = stringResource(id = StringR.string.login_signin_username_hint))
                         },
                         onValueChange = {
                             loginFieldState = it

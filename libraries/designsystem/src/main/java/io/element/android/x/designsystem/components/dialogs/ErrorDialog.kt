@@ -28,14 +28,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.element.android.x.element.resources.R as ElementR
+import io.element.android.x.ui.strings.R as StringR
 
 @Composable
 fun ErrorDialog(
     content: String,
     modifier: Modifier = Modifier,
-    title: String = stringResource(id = ElementR.string.dialog_title_error),
-    submitText: String = stringResource(id = ElementR.string.ok),
+    title: String = stringResource(id = StringR.string.dialog_title_error),
+    submitText: String = stringResource(id = StringR.string.ok),
     onDismiss: () -> Unit = {},
 ) {
     AlertDialog(
