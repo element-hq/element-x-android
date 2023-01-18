@@ -55,5 +55,4 @@ dependencies {
     androidTestImplementation(libs.test.junitext)
 
     ksp(libs.showkase.processor)
-
 }
