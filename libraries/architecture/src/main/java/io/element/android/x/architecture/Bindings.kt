@@ -19,7 +19,6 @@ package io.element.android.x.architecture
 import android.content.Context
 import android.content.ContextWrapper
 import com.bumble.appyx.core.node.Node
-import io.element.android.x.core.di.DaggerComponentOwner
 
 inline fun <reified T : Any> Node.bindings() = bindings(T::class.java)
 inline fun <reified T : Any> Context.bindings() = bindings(T::class.java)
@@ -28,7 +27,7 @@ fun <T : Any> Context.bindings(klass: Class<T>): T {
     // search dagger components in the context hierarchy
     return generateSequence(this) { (it as? ContextWrapper)?.baseContext }
         .plus(applicationContext)
-        .filterIsInstance<DaggerComponentOwner>()
+        .filterIsInstance<io.element.android.x.di.DaggerComponentOwner>()
         .map { it.daggerComponent }
         .flatMap { if (it is Collection<*>) it else listOf(it) }
         .filterIsInstance(klass)
@@ -39,7 +38,7 @@ fun <T : Any> Context.bindings(klass: Class<T>): T {
 fun <T : Any> Node.bindings(klass: Class<T>): T {
     // search dagger components in node hierarchy
     return generateSequence(this, Node::parent)
-        .filterIsInstance<DaggerComponentOwner>()
+        .filterIsInstance<io.element.android.x.di.DaggerComponentOwner>()
         .map { it.daggerComponent }
         .flatMap { if (it is Collection<*>) it else listOf(it) }
         .filterIsInstance(klass)

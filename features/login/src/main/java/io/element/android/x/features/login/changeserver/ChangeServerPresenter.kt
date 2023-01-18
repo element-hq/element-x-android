@@ -25,18 +25,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.x.architecture.Async
 import io.element.android.x.architecture.Presenter
 import io.element.android.x.architecture.execute
-import io.element.android.x.matrix.Matrix
+import io.element.android.x.matrix.auth.MatrixAuthenticationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ChangeServerPresenter @Inject constructor(private val matrix: Matrix) : Presenter<ChangeServerState> {
+class ChangeServerPresenter @Inject constructor(private val authenticationService: MatrixAuthenticationService) : Presenter<ChangeServerState> {
 
     @Composable
     override fun present(): ChangeServerState {
         val localCoroutineScope = rememberCoroutineScope()
         val homeserver = rememberSaveable {
-            mutableStateOf(matrix.getHomeserverOrDefault())
+            mutableStateOf(authenticationService.getHomeserverOrDefault())
         }
         val changeServerAction: MutableState<Async<Unit>> = remember {
             mutableStateOf(Async.Uninitialized)
@@ -58,7 +58,7 @@ class ChangeServerPresenter @Inject constructor(private val matrix: Matrix) : Pr
 
     private fun CoroutineScope.submit(homeserver: String, changeServerAction: MutableState<Async<Unit>>) = launch {
         suspend {
-            matrix.setHomeserver(homeserver)
+            authenticationService.setHomeserver(homeserver)
         }.execute(changeServerAction)
     }
 }

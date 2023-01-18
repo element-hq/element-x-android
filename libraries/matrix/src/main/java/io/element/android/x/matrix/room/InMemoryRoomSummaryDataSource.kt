@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.x.core.di
+package io.element.android.x.matrix.room
 
-/**
- * A [DaggerComponentOwner] is anything that "owns" a Dagger Component.
- *
- */
-interface DaggerComponentOwner {
-    /** This is either a component, or a list of components. */
-    val daggerComponent: Any
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
+
+class InMemoryRoomSummaryDataSource : RoomSummaryDataSource {
+
+    override fun roomSummaries(): Flow<List<RoomSummary>> {
+        return emptyFlow()
+    }
+
+    override fun setSlidingSyncRange(range: IntRange) = Unit
 }

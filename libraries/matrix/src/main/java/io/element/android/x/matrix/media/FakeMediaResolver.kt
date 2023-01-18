@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.x.features.roomlist
+package io.element.android.x.matrix.media
 
-import org.junit.Assert.assertEquals
-import org.junit.Test
+class FakeMediaResolver : MediaResolver {
+    override suspend fun resolve(url: String?, kind: MediaResolver.Kind): ByteArray? {
+        return null
+    }
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class ExampleUnitTest {
-    @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    override suspend fun resolve(meta: MediaResolver.Meta): ByteArray? {
+        return null
     }
 }
