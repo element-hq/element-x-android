@@ -2,7 +2,6 @@
 
 <!--- TOC -->
 
-  * [Installing from Buildkite](#installing-from-buildkite)
   * [Installing from GitHub](#installing-from-github)
     * [Create a GitHub token](#create-a-github-token)
   * [Provide artifact URL](#provide-artifact-url)
@@ -13,11 +12,9 @@
 
 Installing APK build by the CI is possible
 
-### Installing from Buildkite
-
-The script `./tools/install/installFromBuildkite.sh` can be used, but Builkite will be removed soon. See next section.
-
 ### Installing from GitHub
+
+TODO Import the script from Element Android and make it work, then update this documentation.
 
 To install an APK built by a GitHub action, run the script `./tools/install/installFromGitHub.sh`. You will need to pass a GitHub token to do so.
 

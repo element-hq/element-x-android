@@ -12,6 +12,8 @@
 
 <!--- END -->
 
+# TODO Documentation to update when working on #40
+
 ## Introduction
 
 [Flipper](https://fbflipper.com) is a powerful tool from Meta, which allow to inspect the running application details and states from your computer.
