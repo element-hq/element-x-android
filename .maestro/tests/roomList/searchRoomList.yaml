@@ -1,0 +1,15 @@
+appId: ${APP_ID}
+---
+- tapOn: "search"
+- inputText: ${ROOM_NAME.substring(0, 3)}
+- takeScreenshot: build/maestro/400-SearchRoom
+- tapOn: ${ROOM_NAME}
+# Close keyboard
+- hideKeyboard
+# Back from timeline
+- back
+# Close keyboard
+- hideKeyboard
+# Back from search
+- back
+- runFlow: ../assertions/assertHomeDisplayed.yaml

@@ -20,6 +20,7 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("io.element.android-compose-application")
+    alias(libs.plugins.stem)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.anvil)
@@ -118,7 +119,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.2"
+        kotlinCompilerExtensionVersion = "1.4.0"
     }
     packagingOptions {
         resources {
@@ -175,8 +176,6 @@ dependencies {
 
     // https://developer.android.com/studio/write/java8-support#library-desugaring-versions
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.2")
-    implementation(libs.compose.destinations)
-    ksp(libs.compose.destinations.processor)
     implementation(libs.appyx.core)
 
     implementation(libs.androidx.corektx)

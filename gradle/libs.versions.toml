@@ -5,9 +5,9 @@
 # Project
 android_gradle_plugin = "7.3.1"
 firebase_gradle_plugin = "3.0.2"
-kotlin = "1.7.20"
-ksp = "1.7.20-1.0.7"
-molecule = "0.6.1"
+kotlin = "1.8.0"
+ksp = "1.8.0-1.0.8"
+molecule = "0.7.0"
 
 # AndroidX
 material = "1.6.1"
@@ -20,8 +20,7 @@ activity_compose = "1.6.1"
 startup = "1.1.1"
 
 # Compose
-compose_compiler = "1.3.2"
-compose_bom = "2022.11.00"
+compose_bom = "2023.01.00"
 
 # Coroutines
 coroutines = "1.6.4"
@@ -42,20 +41,20 @@ test_orchestrator = "1.4.1"
 test_turbine = "0.12.1"
 
 #other
-coil = "2.2.1"
+coil = "2.2.2"
 datetime = "0.4.0"
 wysiwyg = "0.7.0.1"
 serialization_json = "1.4.1"
 showkase = "1.0.0-beta14"
-compose_destinations = "1.7.23-beta"
 jsoup = "1.15.3"
 appyx = "1.0.1"
 seismic = "1.0.3"
 dependencycheck = "7.4.4"
+stem = "2.2.3"
 
 # DI
-dagger = "2.43"
-anvil = "2.4.2"
+dagger = "2.44.2"
+anvil = "2.4.4"
 
 # quality
 detekt = "1.22.0"
@@ -83,7 +82,6 @@ androidx_activity_compose = { module = "androidx.activity:activity-compose", ver
 androidx_startup = { module = "androidx.startup:startup-runtime", version.ref = "startup" }
 
 androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose_bom" }
-androidx_compose_foundation = { group = "androidx.compose.foundation", name = "foundation" }
 
 # Coroutines
 coroutines_core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -122,8 +120,6 @@ coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization_json" }
-compose_destinations = { module = "io.github.raamcosta.compose-destinations:animations-core", version.ref = "compose_destinations" }
-compose_destinations_processor = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "compose_destinations" }
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
@@ -154,3 +150,5 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.ref = "dependencygraph" }
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
+stem = { id = "com.likethesalad.stem", version.ref = "stem" }
+stemlibrary = { id = "com.likethesalad.stem-library", version.ref = "stem" }

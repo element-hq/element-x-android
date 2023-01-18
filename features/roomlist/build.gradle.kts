@@ -42,6 +42,7 @@ dependencies {
     implementation(project(":libraries:designsystem"))
     implementation(libs.appyx.core)
     implementation(project(":libraries:elementresources"))
+    implementation(project(":libraries:ui-strings"))
     implementation(libs.datetime)
     implementation(libs.accompanist.placeholder)
 
