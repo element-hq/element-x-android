@@ -22,7 +22,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.libraries.presentation"
+    namespace = "io.element.android.x.architecture"
 }
 
 dependencies {

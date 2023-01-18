@@ -15,11 +15,7 @@
  */
 
 import org.gradle.api.JavaVersion
-import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.jvm.toolchain.JavaLanguageVersion
-
-val VersionCatalog.composeVersion: String
-    get() = findVersion("compose_compiler").get().requiredVersion
 
 object Versions {
     const val versionCode = 100100
