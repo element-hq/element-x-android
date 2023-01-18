@@ -189,4 +189,8 @@ dependencies {
 
     implementation(libs.showkase)
     ksp(libs.showkase.processor)
+
+    // Flipper, debug builds only
+    debugImplementation(libs.debug.flipper)
+    debugImplementation("com.facebook.soloader:soloader:0.10.5")
 }

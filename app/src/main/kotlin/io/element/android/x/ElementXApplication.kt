@@ -22,6 +22,7 @@ import io.element.android.x.core.di.DaggerComponentOwner
 import io.element.android.x.di.AppComponent
 import io.element.android.x.di.DaggerAppComponent
 import io.element.android.x.initializer.CrashInitializer
+import io.element.android.x.initializer.FlipperInitializer
 import io.element.android.x.initializer.MatrixInitializer
 import io.element.android.x.initializer.TimberInitializer
 
@@ -36,6 +37,7 @@ class ElementXApplication : Application(), DaggerComponentOwner {
         super.onCreate()
         appComponent = DaggerAppComponent.factory().create(applicationContext)
         AppInitializer.getInstance(this).apply {
+            initializeComponent(FlipperInitializer::class.java)
             initializeComponent(CrashInitializer::class.java)
             initializeComponent(TimberInitializer::class.java)
             initializeComponent(MatrixInitializer::class.java)

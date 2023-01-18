@@ -52,6 +52,7 @@ appyx = "1.0.1"
 seismic = "1.0.3"
 dependencycheck = "7.4.4"
 stem = "2.2.3"
+flipper = "0.177.0"
 
 # DI
 dagger = "2.43"
@@ -124,7 +125,8 @@ compose_destinations_processor = { module = "io.github.raamcosta.compose-destina
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
-appyx_core = {module = "com.bumble.appyx:core", version.ref = "appyx"}
+appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
+debug_flipper = { module = "com.facebook.flipper:flipper", version.ref = "flipper" }
 
 # Di
 inject = { module = "javax.inject:javax.inject", version = "1" }
@@ -148,7 +150,7 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
-molecule = {id = "app.cash.molecule", version.ref = "molecule"}
+molecule = { id = "app.cash.molecule", version.ref = "molecule" }
 dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.ref = "dependencygraph" }
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
 stem = { id = "com.likethesalad.stem", version.ref = "stem" }
