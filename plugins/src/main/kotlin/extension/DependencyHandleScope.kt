@@ -32,7 +32,7 @@ fun DependencyHandlerScope.commonDependencies() {
  * Dependencies used by all the modules with composable items
  */
 fun DependencyHandlerScope.composeDependencies() {
-    val composeBom = platform("androidx.compose:compose-bom:2022.11.00")
+    val composeBom = platform("androidx.compose:compose-bom:2023.01.00")
     implementation(composeBom)
     androidTestImplementation(composeBom)
     implementation("androidx.compose.ui:ui")
@@ -42,7 +42,6 @@ fun DependencyHandlerScope.composeDependencies() {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
     implementation("androidx.activity:activity-compose:1.6.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("com.airbnb.android:showkase:1.0.0-beta14")
