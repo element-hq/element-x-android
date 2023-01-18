@@ -18,7 +18,6 @@ package io.element.android.x.textcomposer
 
 import android.graphics.Color
 import android.net.Uri
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -42,6 +41,7 @@ fun TextComposer(
     composerText: String?,
     composerMode: MessageComposerMode,
     composerCanSendMessage: Boolean,
+    isInDarkMode: Boolean,
     modifier: Modifier = Modifier,
     onSendMessage: (String) -> Unit = {},
     onFullscreenToggle: () -> Unit = {},
@@ -51,7 +51,6 @@ fun TextComposer(
     if (LocalInspectionMode.current) {
         FakeComposer(modifier)
     } else {
-        val isInDarkMode = isSystemInDarkTheme()
         AndroidView(
             modifier = modifier,
             factory = { context ->
@@ -156,5 +155,6 @@ fun TextComposerPreview() {
         onCloseSpecialMode = {},
         composerCanSendMessage = true,
         composerText = "Message",
+        isInDarkMode = true,
     )
 }
