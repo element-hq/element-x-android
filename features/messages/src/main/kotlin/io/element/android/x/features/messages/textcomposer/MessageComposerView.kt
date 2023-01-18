@@ -18,6 +18,7 @@ package io.element.android.x.features.messages.textcomposer
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import io.element.android.x.designsystem.LocalIsDarkTheme
 import io.element.android.x.textcomposer.TextComposer
 
 @Composable
@@ -50,6 +51,7 @@ fun MessageComposerView(
         onComposerTextChange = ::onComposerTextChange,
         composerCanSendMessage = state.isSendButtonVisible,
         composerText = state.text?.charSequence?.toString(),
+        isInDarkMode = LocalIsDarkTheme.current,
         modifier = modifier
     )
 }
