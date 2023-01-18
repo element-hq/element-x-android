@@ -1,0 +1,8 @@
+appId: ${APP_ID}
+---
+- clearState
+- launchApp:
+    clearKeychain: true
+- tapOn: "Close showkase button"
+- runFlow: ./assertions/assertInitDisplayed.yaml
+- takeScreenshot: build/maestro/000-FirstScreen

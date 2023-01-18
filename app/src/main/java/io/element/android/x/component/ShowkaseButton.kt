@@ -48,7 +48,7 @@ internal fun ShowkaseButton(
                     .size(16.dp),
                 onClick = onCloseClicked,
             ) {
-                Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+                Icon(imageVector = Icons.Filled.Close, contentDescription = "Close showkase button")
             }
         }
     }
