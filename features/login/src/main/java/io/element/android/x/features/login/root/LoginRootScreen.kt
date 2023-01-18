@@ -48,6 +48,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -61,6 +62,7 @@ import io.element.android.x.core.compose.textFieldState
 import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.features.login.error.loginError
 import io.element.android.x.matrix.core.SessionId
+import io.element.android.x.element.resources.R as ElementR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -95,7 +97,7 @@ fun LoginRootScreen(
                 val isError = state.loggedInState is LoggedInState.ErrorLoggingIn
                 // Title
                 Text(
-                    text = "Welcome back",
+                    text = stringResource(id = ElementR.string.ftue_auth_welcome_back_title),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 48.dp),
@@ -138,7 +140,7 @@ fun LoginRootScreen(
                             .fillMaxWidth()
                             .padding(top = 60.dp),
                         label = {
-                            Text(text = "Email or username")
+                            Text(text = stringResource(id = ElementR.string.login_signin_username_hint))
                         },
                         onValueChange = {
                             loginFieldState = it

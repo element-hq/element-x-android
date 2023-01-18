@@ -52,6 +52,7 @@ import com.google.accompanist.pager.rememberPagerState
 import io.element.android.x.designsystem.components.VectorButton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import io.element.android.x.element.resources.R as ElementR
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -119,7 +120,7 @@ fun OnBoardingScreen(
                 )
                  */
                 VectorButton(
-                    text = "Sign in",
+                    text = stringResource(id = ElementR.string.login_splash_submit),
                     onClick = {
                         onSignIn()
                     },
