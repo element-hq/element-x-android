@@ -26,6 +26,8 @@
 
 <!--- END -->
 
+**TODO This documentation is a bit outdated and must be updated when we will set up the design components.**
+
 ## Introduction
 
 Design at element.io is done using Figma - https://www.figma.com

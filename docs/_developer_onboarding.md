@@ -10,9 +10,9 @@
     * [Sync](#sync)
   * [The Android project](#the-android-project)
   * [Application](#application)
-    * [Anvil](#anvil)
-      * [Node](#node)
-    * [Other frameworks](#other-frameworks)
+    * [Global architecture](#global-architecture)
+    * [Jetpack Compose](#jetpack-compose)
+    * [Template](#template)
   * [Push](#push)
   * [Dependencies management](#dependencies-management)
   * [Test](#test)
@@ -103,31 +103,43 @@ Here is the current module dependency graph:
 
 ### Application
 
-(Note: to update)
+This Android project mainly handle the application layer of the whole software. The communication with the Matrix server, as well as the local storage, the cryptography (encryption and decryption of Event, key management, etc.) is managed by the Rust SDK.
 
-This is the UI part of the project.
+The application is responsible to store the session credentials though.
 
-There are two variants of the application: `Gplay` and `Fdroid`.
+#### Global architecture
 
-The main difference is about using Firebase on `Gplay` variant, to have Push from Google Services. `FDroid` variant cannot contain closed source dependency.
+Main libraries and frameworks used in this application:
 
-`Fdroid` is using background polling to lack the missing of Pushed. Now a solution using UnifiedPush has ben added to the project. See refer to [the dedicated documentation](./unifiedpush.md) for more details.
+- Navigation state with [Appyx](https://bumble-tech.github.io/appyx/)
+- DI: [Dagger](https://dagger.dev/) and [Anvil](https://github.com/square/anvil)
+- Reactive State management with Compose runtime and [Molecule](https://github.com/cashapp/molecule)
 
-#### Anvil
+Some patterns are inspired by [Circuit](https://slackhq.github.io/circuit/)
 
-TODO
+**Note**: No more Android Architecture Component ViewModel, no more Mavericks, and of course no more Epoxy!
 
-##### Node
+#### Jetpack Compose
 
-TODO
+Some useful links:
+- https://developer.android.com/jetpack/compose/mental-model
+- https://developer.android.com/jetpack/compose/libraries
+- https://developer.android.com/jetpack/compose/modifiers-list
+- https://android.googlesource.com/platform/frameworks/support/+/androidx-main/compose/docs/compose-api-guidelines.md#api-guidelines-for-jetpack-compose
 
-#### Other frameworks
+About Preview
+- https://alexzh.com/jetpack-compose-preview/
 
-- Dependency injection is managed by [Dagger](https://dagger.dev/) (SDK) and [Hilt](https://developer.android.com/training/dependency-injection/hilt-android) (App);
+#### Template
+
+(TODO: This is coming)
+There is a template module to easily start a new feature. When creating a new module, you can just copy paste the template.
 
 ### Push
 
-Please see the dedicated documentation for more details.
+**Note** Firebase Push is not yet implemented on the project.
+
+Please see the dedicated [documentation](notifications.md) for more details.
 
 This is the classical scenario:
 
@@ -137,19 +149,23 @@ This is the classical scenario:
 
 ### Dependencies management
 
-TODO Update
-All the dependencies are declared in `build.gradle` files. But some versions are declared in [this dedicated file](../dependencies.gradle).
+We are using [Gradle version catalog](https://docs.gradle.org/current/userguide/platforms.html#sub:central-declaration-of-dependencies) on this project.
 
-When adding a new dependency, you will have to update the file [dependencies_groups.gradle](../dependencies_groups.gradle) to allow the dependency to be downloaded from the artifact repository. Sometimes sub-dependencies need to be added too, until the project can compile.
+All the dependencies (including android artifact, gradle plugin, etc.) should be declared in [../gradle/libs.versions.toml](libs.versions.toml) file.
+Some dependency, mainly because they are not shared can be declared in `build.gradle.kts` files.
 
 [Dependabot](https://github.com/dependabot) is set up on the project. This tool will automatically create Pull Request to upgrade our dependencies one by one.
-dependencies_group, gradle files, Dependabot, etc.
+**Note** Dependabot does not support yet Gradle verrsion catalog. This is tracked by [this issue](https://github.com/dependabot/dependabot-core/issues/3121).
 
 ### Test
 
-Please refer to [this dedicated document](./ui-tests.md).
+We have 3 tests frameworks in place:
 
-TODO add link to the dedicated screenshot test documentation
+- Maestro to test the global usage of the application. See the related [documentation](../.maestro/README.md).
+- Combination of [Showkase](https://github.com/airbnb/Showkase) and [Paparazzi](https://github.com/cashapp/paparazzi), to test UI pixel perfect. To add test, just add `@Preview` for the composable you are adding. See the related [documentation](screenshot_testing.md).
+- Tests on presenter with Molecule and [Turbine](https://github.com/cashapp/turbine) (TODO this is coming)
+
+**Note** For now we want to avoid using mock (such as *mockk*), because this should be note necessary.
 
 ### Other points
 
@@ -167,17 +183,16 @@ because automatic tag (= class name) will not be available on the release versio
 
 Also generally it is recommended to provide the `Throwable` to the Timber log functions.
 
-Last point, not that `Timber.v` function may have no effect on some devices. Prefer using `Timber.d` and up.
+Last point, note that `Timber.v` function may have no effect on some devices. Prefer using `Timber.d` and up.
 
 #### Rageshake
 
 Rageshake is a feature to send bug report directly from the application. Just shake your phone and you will be prompted to send a bug report.
 
-Bug report can contain:
+Bug reports can contain:
 - a screenshot of the current application state
 - the application logs from up to 15 application starts
 - the logcat logs
-- the key share history (crypto data)
 
 The data will be sent to an internal server, which is not publicly accessible. A GitHub issue will also be created to a private GitHub repository.
 
@@ -185,13 +200,13 @@ Rageshake can be very useful to get logs from a release version of the applicati
 
 ### Tips
 
-- Element Android has a `developer mode` in the `Settings/Advanced settings`. Other useful options are available here;
-- Show hidden Events can also help to debug feature. When developer mode is enabled, it is possible to view the source (= the Json content) of any Events;
-- Type `/devtools` in a Room composer to access a developer menu. There are some other entry points. Developer mode has to be enabled;
-- Hidden debug menu: when developer mode is enabled and on debug build, there are some extra screens that can be accessible using the green wheel. In those screens, it will be possible to toggle some feature flags;
-- Using logcat, filtering with `onResume` can help you to understand what screen are currently displayed on your device. Searching for string displayed on the screen can also help to find the running code in the codebase.
+- Element Android has a `developer mode` in the `Settings/Advanced settings`. Other useful options are available here; (TODO Not supported yet!)
+- Show hidden Events can also help to debug feature. When developer mode is enabled, it is possible to view the source (= the Json content) of any Events; (TODO Not supported yet!)
+- Type `/devtools` in a Room composer to access a developer menu. There are some other entry points. Developer mode has to be enabled; (TODO Not supported yet!)
+- Hidden debug menu: when developer mode is enabled and on debug build, there are some extra screens that can be accessible using the green wheel. In those screens, it will be possible to toggle some feature flags; (TODO Not supported yet!)
+- Using logcat, filtering with `Compositions` can help you to understand what screen are currently displayed on your device. Searching for string displayed on the screen can also help to find the running code in the codebase.
 - When this is possible, prefer using `sealed interface` instead of `sealed class`;
-- When writing temporary code, using the string "DO NOT COMMIT" in a comment can help to avoid committing things by mistake. If committed and pushed, the CI will detect this String and will warn the user about it.
+- When writing temporary code, using the string "DO NOT COMMIT" in a comment can help to avoid committing things by mistake. If committed and pushed, the CI will detect this String and will warn the user about it. (TODO Not supported yet!)
 
 ## Happy coding!
 
