@@ -28,6 +28,7 @@ android {
 dependencies {
     implementation(project(":libraries:core"))
     implementation(project(":libraries:elementresources"))
+    implementation(project(":libraries:ui-strings"))
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:architecture"))
     implementation(libs.accompanist.pager)
