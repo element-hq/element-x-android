@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import io.element.android.x.element.resources.R as ElementR
+import io.element.android.x.ui.strings.R as StringR
 
 @Composable
 fun TextComposer(
@@ -137,7 +137,7 @@ private fun MessageComposerView.setup(isDarkMode: Boolean, composerMode: Message
     }
     editText.setTextColor(editTextColor)
     editText.setHintTextColor(editTextColor)
-    editText.setHint(ElementR.string.room_message_placeholder)
+    editText.setHint(StringR.string.room_message_placeholder)
     emojiButton?.isVisible = true
     sendButton.isVisible = true
     editText.maxLines = MessageComposerView.MAX_LINES_WHEN_COLLAPSED

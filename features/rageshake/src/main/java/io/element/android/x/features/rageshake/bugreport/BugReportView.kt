@@ -56,7 +56,7 @@ import io.element.android.x.core.compose.textFieldState
 import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.designsystem.components.LabelledCheckbox
 import io.element.android.x.designsystem.components.dialogs.ErrorDialog
-import io.element.android.x.element.resources.R as ElementR
+import io.element.android.x.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -96,7 +96,7 @@ fun BugReportView(
                 val isFormEnabled = state.sending !is Async.Loading
                 // Title
                 Text(
-                    text = stringResource(id = ElementR.string.send_bug_report),
+                    text = stringResource(id = StringR.string.send_bug_report),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 16.dp),
@@ -106,7 +106,7 @@ fun BugReportView(
                 )
                 // Form
                 Text(
-                    text = stringResource(id = ElementR.string.send_bug_report_description),
+                    text = stringResource(id = StringR.string.send_bug_report_description),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 16.dp),
@@ -123,10 +123,10 @@ fun BugReportView(
                             .padding(top = 16.dp),
                         enabled = isFormEnabled,
                         label = {
-                            Text(text = stringResource(id = ElementR.string.send_bug_report_placeholder))
+                            Text(text = stringResource(id = StringR.string.send_bug_report_placeholder))
                         },
                         supportingText = {
-                            Text(text = stringResource(id = ElementR.string.send_bug_report_description_in_english))
+                            Text(text = stringResource(id = StringR.string.send_bug_report_description_in_english))
                         },
                         onValueChange = {
                             descriptionFieldState = it
@@ -143,28 +143,28 @@ fun BugReportView(
                     checked = state.formState.sendLogs,
                     onCheckedChange = { eventSink(BugReportEvents.SetSendLog(it)) },
                     enabled = isFormEnabled,
-                    text = stringResource(id = ElementR.string.send_bug_report_include_logs)
+                    text = stringResource(id = StringR.string.send_bug_report_include_logs)
                 )
                 if (state.hasCrashLogs) {
                     LabelledCheckbox(
                         checked = state.formState.sendCrashLogs,
                         onCheckedChange = { eventSink(BugReportEvents.SetSendCrashLog(it)) },
                         enabled = isFormEnabled,
-                        text = stringResource(id = ElementR.string.send_bug_report_include_crash_logs)
+                        text = stringResource(id = StringR.string.send_bug_report_include_crash_logs)
                     )
                 }
                 LabelledCheckbox(
                     checked = state.formState.canContact,
                     onCheckedChange = { eventSink(BugReportEvents.SetCanContact(it)) },
                     enabled = isFormEnabled,
-                    text = stringResource(id = ElementR.string.you_may_contact_me)
+                    text = stringResource(id = StringR.string.you_may_contact_me)
                 )
                 if (state.screenshotUri != null) {
                     LabelledCheckbox(
                         checked = state.formState.sendScreenshot,
                         onCheckedChange = { eventSink(BugReportEvents.SetSendScreenshot(it)) },
                         enabled = isFormEnabled,
-                        text = stringResource(id = ElementR.string.send_bug_report_include_screenshot)
+                        text = stringResource(id = StringR.string.send_bug_report_include_screenshot)
                     )
                     if (state.formState.sendScreenshot) {
                         Box(
@@ -191,7 +191,7 @@ fun BugReportView(
                         .fillMaxWidth()
                         .padding(vertical = 32.dp)
                 ) {
-                    Text(text = stringResource(id = ElementR.string.action_send))
+                    Text(text = stringResource(id = StringR.string.action_send))
                 }
             }
             when (state.sending) {

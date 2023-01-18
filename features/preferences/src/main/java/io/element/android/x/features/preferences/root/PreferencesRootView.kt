@@ -22,12 +22,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.x.architecture.Async
 import io.element.android.x.designsystem.components.preferences.PreferenceView
-import io.element.android.x.element.resources.R
 import io.element.android.x.features.logout.LogoutPreferenceState
 import io.element.android.x.features.logout.LogoutPreferenceView
 import io.element.android.x.features.preferences.user.UserPreferences
 import io.element.android.x.features.rageshake.preferences.RageshakePreferencesState
 import io.element.android.x.features.rageshake.preferences.RageshakePreferencesView
+import io.element.android.x.ui.strings.R as StringR
 
 @Composable
 fun PreferencesRootView(
@@ -41,7 +41,7 @@ fun PreferencesRootView(
     PreferenceView(
         modifier = modifier,
         onBackPressed = onBackPressed,
-        title = stringResource(id = R.string.settings)
+        title = stringResource(id = StringR.string.settings)
     ) {
         UserPreferences(state.myUser)
         RageshakePreferencesView(
