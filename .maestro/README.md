@@ -43,7 +43,7 @@ Start the ElementX app and run this command to help writing test.
 maestro studio
 ```
 
-Note that sometimes, this prevent running the test. So kill the `meastro studio` process to be able to run the test again.
+Note that sometimes, this prevent running the test. So kill the `maestro studio` process to be able to run the test again.
 
 Also, if updating the application code, do not forget to deploy again the application before running the maestro tests.
 

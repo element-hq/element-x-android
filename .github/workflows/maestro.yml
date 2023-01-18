@@ -1,4 +1,4 @@
-name: Meastro
+name: Maestro
 
 on:
   pull_request: { }
@@ -12,7 +12,7 @@ env:
 
 jobs:
   maestro-cloud:
-    name: Meastro test suite
+    name: Maestro test suite
     runs-on: ubuntu-latest
     if: github.ref != 'refs/heads/main'
     strategy:
