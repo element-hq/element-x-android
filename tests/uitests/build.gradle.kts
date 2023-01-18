@@ -36,8 +36,6 @@ dependencies {
     ksp(libs.showkase.processor)
     kspTest(libs.showkase.processor)
 
-    implementation(project(":libraries:designsystem"))
-
     implementation(libs.showkase)
     ksp(libs.showkase.processor)
 
