@@ -29,7 +29,7 @@ import io.element.android.x.anvilannotations.ContributesNode
 import io.element.android.x.architecture.presenterConnector
 import io.element.android.x.di.AppScope
 
-// TODO: use the right Scope for your feature
+// Change to use the right Scope for your feature.
 @ContributesNode(AppScope::class)
 class TemplateNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,

@@ -17,5 +17,5 @@
 package io.element.android.x.features.template
 
 sealed interface TemplateEvents {
-
+    object MyEvent: TemplateEvents
 }
