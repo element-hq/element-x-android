@@ -53,7 +53,7 @@ fun PreferenceCategory(
 }
 
 @Composable
-@Preview(showBackground = false)
+@Preview
 fun PreferenceCategoryPreview() {
     PreferenceCategory(
         title = "Category title",

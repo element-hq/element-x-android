@@ -37,7 +37,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Velocity
 import io.element.android.x.core.compose.LogCompositions
-import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.roomlist.components.RoomListTopBar
 import io.element.android.x.features.roomlist.components.RoomSummaryRow
@@ -150,30 +149,13 @@ private fun RoomListRoomSummary.contentType() = isPlaceholder
 
 @Preview
 @Composable
-fun PreviewableRoomListView() {
-    ElementXTheme(darkTheme = false) {
-        RoomListView(
-            roomSummaries = stubbedRoomSummaries(),
-            matrixUser = MatrixUser(id = UserId("@id"), username = "User#1", avatarData = AvatarData("U")),
-            onRoomClicked = {},
-            filter = "filter",
-            onFilterChanged = {},
-            onScrollOver = {}
-        )
-    }
-}
-
-@Preview
-@Composable
-fun PreviewableDarkRoomListView() {
-    ElementXTheme(darkTheme = true) {
-        RoomListView(
-            roomSummaries = stubbedRoomSummaries(),
-            matrixUser = MatrixUser(id = UserId("@id"), username = "User#1", avatarData = AvatarData("U")),
-            onRoomClicked = {},
-            filter = "filter",
-            onFilterChanged = {},
-            onScrollOver = {}
-        )
-    }
+fun RoomListViewPreview() {
+    RoomListView(
+        roomSummaries = stubbedRoomSummaries(),
+        matrixUser = MatrixUser(id = UserId("@id"), username = "User#1", avatarData = AvatarData("U")),
+        onRoomClicked = {},
+        filter = "filter",
+        onFilterChanged = {},
+        onScrollOver = {}
+    )
 }

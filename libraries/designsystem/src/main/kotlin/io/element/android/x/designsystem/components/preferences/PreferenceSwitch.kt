@@ -76,7 +76,7 @@ fun PreferenceSwitch(
 }
 
 @Composable
-@Preview(showBackground = false)
+@Preview
 fun PreferenceSwitchPreview() {
     PreferenceSwitch(
         title = "Switch",
