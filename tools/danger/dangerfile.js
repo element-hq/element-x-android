@@ -43,7 +43,6 @@ if (requiresChangelog) {
             "doc",
             "feature",
             "misc",
-            "sdk",
             "wip",
         ]
         if (!changelogFiles.every(file => validTowncrierExtensions.includes(file.split(".").pop()))) {
@@ -68,16 +67,14 @@ const signOff = "Signed-off-by:"
 
 // Please add new names following the alphabetical order.
 const allowList = [
-    "amitkma",
     "aringenbach",
     "BillCarsonFr",
     "bmarty",
-    "Claire1817",
     "dependabot[bot]",
-    "ericdecanini",
     "fedrunov",
     "Florian14",
     "ganfra",
+    "github-actions[bot]",
     "jmartinesp",
     "jonnyandrew",
     "kittykat",
@@ -86,7 +83,6 @@ const allowList = [
     "manuroe",
     "mnaturel",
     "onurays",
-    "ouchadam",
     "stefanceriu",
     "yostyle",
 ]
@@ -121,8 +117,18 @@ if (github.requested_reviewers.users.length == 0 && !pr.draft) {
 }
 
 // Check that translations have not been modified by developers
-if (user != "RiotTranslateBot") {
+const translationAllowList = [
+    "RiotTranslateBot",
+    "github-actions[bot]",
+]
+
+if (!translationAllowList.includes(user)) {
    if (editedFiles.some(file => file.endsWith("strings.xml") && !file.endsWith("values/strings.xml"))) {
-       fail("Some translation files have been edited. Only user `RiotTranslateBot` (i.e. translations coming from Weblate) is allowed to do that.\nPlease read more about translations management [in the doc](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#internationalisation).")
+       fail("Some translation files have been edited. Only user `RiotTranslateBot` (i.e. translations coming from Weblate) or `github-actions[bot]` (i.e. translations coming from automation) are allowed to do that.\nPlease read more about translations management [in the doc](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#internationalisation).")
+   }
+
+   // Check that new strings are not added to `values/strings.xml`
+   if (editedFiles.some(file => file.endsWith("ui-strings/src/main/res/values/strings.xml"))) {
+      fail("`ui-strings/src/main/res/values/strings.xml` has been edited. This file will be overridden in the next strings synchronisation. Please add new strings in the file `values/strings_eax.xml` instead.")
    }
 }
