@@ -54,7 +54,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.x.architecture.Async
 import io.element.android.x.core.compose.textFieldState
-import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.designsystem.components.VectorIcon
 import io.element.android.x.features.login.R
 import io.element.android.x.features.login.error.changeServerError
@@ -183,9 +182,7 @@ fun ChangeServerView(
 @Composable
 @Preview
 fun ChangeServerContentPreview() {
-    ElementXTheme {
-        ChangeServerView(
-            state = ChangeServerState(homeserver = "matrix.org"),
-        )
-    }
+    ChangeServerView(
+        state = ChangeServerState(homeserver = "matrix.org"),
+    )
 }

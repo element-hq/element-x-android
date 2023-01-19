@@ -20,6 +20,7 @@ import gradle.kotlin.dsl.accessors._4b7ad2363fc1fce7c774e054dc9a9300.androidTest
 import gradle.kotlin.dsl.accessors._4b7ad2363fc1fce7c774e054dc9a9300.debugImplementation
 import gradle.kotlin.dsl.accessors._4b7ad2363fc1fce7c774e054dc9a9300.implementation
 import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.gradle.kotlin.dsl.project
 
 /**
  * Dependencies used by all the modules
@@ -48,3 +49,21 @@ fun DependencyHandlerScope.composeDependencies() {
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 }
 
+fun DependencyHandlerScope.allLibraries() {
+    implementation(project(":libraries:designsystem"))
+    implementation(project(":libraries:matrix"))
+    implementation(project(":libraries:matrixui"))
+    implementation(project(":libraries:core"))
+    implementation(project(":libraries:architecture"))
+    implementation(project(":libraries:di"))
+}
+
+fun DependencyHandlerScope.allFeatures() {
+    implementation(project(":features:onboarding"))
+    implementation(project(":features:login"))
+    implementation(project(":features:logout"))
+    implementation(project(":features:roomlist"))
+    implementation(project(":features:messages"))
+    implementation(project(":features:rageshake"))
+    implementation(project(":features:preferences"))
+}

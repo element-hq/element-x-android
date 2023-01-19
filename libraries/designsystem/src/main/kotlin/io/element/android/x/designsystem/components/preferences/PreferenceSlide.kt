@@ -85,7 +85,7 @@ fun PreferenceSlide(
 }
 
 @Composable
-@Preview(showBackground = false)
+@Preview
 fun PreferenceSlidePreview() {
     PreferenceSlide(
         title = "Slide",
