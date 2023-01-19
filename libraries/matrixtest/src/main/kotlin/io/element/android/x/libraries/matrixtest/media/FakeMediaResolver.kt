@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.x.core.di
+package io.element.android.x.libraries.matrixtest.media
 
-/**
- * A [DaggerComponentOwner] is anything that "owns" a Dagger Component.
- *
- */
-interface DaggerComponentOwner {
-    /** This is either a component, or a list of components. */
-    val daggerComponent: Any
+import io.element.android.x.matrix.media.MediaResolver
+
+class FakeMediaResolver : MediaResolver {
+    override suspend fun resolve(url: String?, kind: MediaResolver.Kind): ByteArray? {
+        return null
+    }
+
+    override suspend fun resolve(meta: MediaResolver.Meta): ByteArray? {
+        return null
+    }
 }

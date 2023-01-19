@@ -26,5 +26,5 @@ data class RoomListState(
     val roomList: ImmutableList<RoomListRoomSummary>,
     val filter: String,
     val isLoginOut: Boolean,
-    val eventSink: (RoomListEvents) -> Unit = {}
+    val eventSink: (RoomListEvents) -> Unit
 )

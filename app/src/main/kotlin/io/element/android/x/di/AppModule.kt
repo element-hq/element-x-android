@@ -16,6 +16,7 @@
 
 package io.element.android.x.di
 
+import android.content.Context
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
@@ -26,11 +27,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.plus
+import java.io.File
 import java.util.concurrent.Executors
 
 @Module
 @ContributesTo(AppScope::class)
 object AppModule {
+
+    @Provides
+    fun providesBaseDirectory(@ApplicationContext context: Context): File {
+        return File(context.filesDir, "sessions")
+    }
 
     @Provides
     @SingleIn(AppScope::class)

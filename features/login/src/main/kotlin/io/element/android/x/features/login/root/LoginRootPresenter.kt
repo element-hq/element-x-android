@@ -23,18 +23,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.x.architecture.Presenter
-import io.element.android.x.matrix.Matrix
+import io.element.android.x.matrix.auth.MatrixAuthenticationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class LoginRootPresenter @Inject constructor(private val matrix: Matrix) : Presenter<LoginRootState> {
+class LoginRootPresenter @Inject constructor(private val authenticationService: MatrixAuthenticationService) : Presenter<LoginRootState> {
 
     @Composable
     override fun present(): LoginRootState {
         val localCoroutineScope = rememberCoroutineScope()
         val homeserver = rememberSaveable {
-            mutableStateOf(matrix.getHomeserverOrDefault())
+            mutableStateOf(authenticationService.getHomeserverOrDefault())
         }
         val loggedInState: MutableState<LoggedInState> = remember {
             mutableStateOf(LoggedInState.NotLoggedIn)
@@ -67,8 +67,8 @@ class LoginRootPresenter @Inject constructor(private val matrix: Matrix) : Prese
     private fun CoroutineScope.submit(homeserver: String, formState: LoginFormState, loggedInState: MutableState<LoggedInState>) = launch {
         loggedInState.value = LoggedInState.LoggingIn
         try {
-            matrix.setHomeserver(homeserver)
-            val sessionId = matrix.login(formState.login.trim(), formState.password.trim())
+            authenticationService.setHomeserver(homeserver)
+            val sessionId = authenticationService.login(formState.login.trim(), formState.password.trim())
             loggedInState.value = LoggedInState.LoggedIn(sessionId)
         } catch (failure: Throwable) {
             loggedInState.value = LoggedInState.ErrorLoggingIn(failure)
@@ -80,6 +80,6 @@ class LoginRootPresenter @Inject constructor(private val matrix: Matrix) : Prese
     }
 
     private fun refreshHomeServer(homeserver: MutableState<String>) {
-        homeserver.value = matrix.getHomeserverOrDefault()
+        homeserver.value = authenticationService.getHomeserverOrDefault()
     }
 }

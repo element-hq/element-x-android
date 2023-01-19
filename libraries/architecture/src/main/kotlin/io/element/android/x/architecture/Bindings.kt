@@ -19,7 +19,7 @@ package io.element.android.x.architecture
 import android.content.Context
 import android.content.ContextWrapper
 import com.bumble.appyx.core.node.Node
-import io.element.android.x.core.di.DaggerComponentOwner
+import io.element.android.x.di.DaggerComponentOwner
 
 inline fun <reified T : Any> Node.bindings() = bindings(T::class.java)
 inline fun <reified T : Any> Context.bindings() = bindings(T::class.java)

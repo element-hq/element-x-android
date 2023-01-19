@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
-plugins {
-    id("io.element.android-compose-library")
-}
+package io.element.android.x.matrix.auth
 
-android {
-    namespace = "io.element.android.x.libraries.architecture"
-}
+import io.element.android.x.matrix.MatrixClient
+import io.element.android.x.matrix.core.SessionId
+import kotlinx.coroutines.flow.Flow
 
-dependencies {
-    api(project(":libraries:di"))
-    api(libs.dagger)
-    api(libs.appyx.core)
-    api(libs.molecule.runtime)
-    api(libs.androidx.lifecycle.runtime)
+interface MatrixAuthenticationService {
+    fun isLoggedIn(): Flow<Boolean>
+    suspend fun getLatestSessionId(): SessionId?
+    suspend fun restoreSession(): MatrixClient?
+    fun getHomeserver(): String?
+    fun getHomeserverOrDefault(): String
+    suspend fun setHomeserver(homeserver: String)
+    suspend fun login(username: String, password: String): SessionId
 }
