@@ -59,7 +59,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.x.core.compose.textFieldState
-import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.features.login.error.loginError
 import io.element.android.x.matrix.core.SessionId
 import io.element.android.x.ui.strings.R as StringR
@@ -224,11 +223,9 @@ fun LoginRootScreen(
 @Composable
 @Preview
 fun LoginContentPreview() {
-    ElementXTheme(darkTheme = false) {
-        LoginRootScreen(
-            state = LoginRootState(
-                homeserver = "matrix.org",
-            ),
-        )
-    }
+    LoginRootScreen(
+        state = LoginRootState(
+            homeserver = "matrix.org",
+        ),
+    )
 }

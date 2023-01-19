@@ -356,7 +356,7 @@ class MessagesItemGroupPositionToMessagesTimelineItemContentProvider :
     )
 
 @Suppress("PreviewPublic")
-@Preview(showBackground = true)
+@Preview
 @Composable
 fun TimelineItemsPreview(
     @PreviewParameter(MessagesTimelineItemContentProvider::class)
