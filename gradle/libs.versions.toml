@@ -39,7 +39,7 @@ test_junitext = "1.1.3"
 test_barista = "4.2.0"
 test_hamcrest = "2.2"
 test_orchestrator = "1.4.1"
-test_paparazzi = "1.1.0-sdk33-alpha02"
+test_paparazzi = "1.2.0"
 test_parameter_injector = "1.8"
 
 #other
@@ -156,6 +156,4 @@ dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
 stem = { id = "com.likethesalad.stem", version.ref = "stem" }
 stemlibrary = { id = "com.likethesalad.stem-library", version.ref = "stem" }
-## TODO Revert to official artifact once SDK 33 support is available
-# paparazzi = { id = "app.cash.paparazzi", version.ref = "test_paparazzi" }
-paparazzi = { id = "dev.chrisbanes.paparazzi", version.ref = "test_paparazzi" }
+paparazzi = { id = "app.cash.paparazzi", version.ref = "test_paparazzi" }
