@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.x.matrix.timeline
+package io.element.android.x.libraries.matrixtest.timeline
 
 import io.element.android.x.matrix.core.EventId
+import io.element.android.x.matrix.timeline.MatrixTimeline
+import io.element.android.x.matrix.timeline.MatrixTimelineItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import org.matrix.rustcomponents.sdk.TimelineListener
@@ -24,7 +26,7 @@ import org.matrix.rustcomponents.sdk.TimelineListener
 class FakeMatrixTimeline : MatrixTimeline {
 
     override var callback: MatrixTimeline.Callback?
-        get() = TODO("Not yet implemented")
+        get() = null
         set(value) {}
 
     override val hasMoreToLoad: Boolean
@@ -38,9 +40,7 @@ class FakeMatrixTimeline : MatrixTimeline {
         return Result.success(Unit)
     }
 
-    override fun addListener(timelineListener: TimelineListener) {
-        //
-    }
+    override fun addListener(timelineListener: TimelineListener) = Unit
 
     override fun initialize() = Unit
 

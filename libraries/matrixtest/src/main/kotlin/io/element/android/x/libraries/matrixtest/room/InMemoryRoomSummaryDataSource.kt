@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.x.matrix.media
+package io.element.android.x.libraries.matrixtest.room
 
-class FakeMediaResolver : MediaResolver {
-    override suspend fun resolve(url: String?, kind: MediaResolver.Kind): ByteArray? {
-        return null
+import io.element.android.x.matrix.room.RoomSummary
+import io.element.android.x.matrix.room.RoomSummaryDataSource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
+
+class InMemoryRoomSummaryDataSource : RoomSummaryDataSource {
+
+    override fun roomSummaries(): Flow<List<RoomSummary>> {
+        return emptyFlow()
     }
 
-    override suspend fun resolve(meta: MediaResolver.Meta): ByteArray? {
-        return null
-    }
+    override fun setSlidingSyncRange(range: IntRange) = Unit
 }

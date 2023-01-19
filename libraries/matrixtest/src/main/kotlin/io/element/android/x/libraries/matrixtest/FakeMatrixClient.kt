@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.x.matrix
+package io.element.android.x.libraries.matrixtest
 
+import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.core.RoomId
 import io.element.android.x.matrix.core.SessionId
 import io.element.android.x.matrix.core.UserId
-import io.element.android.x.matrix.media.FakeMediaResolver
+import io.element.android.x.libraries.matrixtest.media.FakeMediaResolver
 import io.element.android.x.matrix.media.MediaResolver
-import io.element.android.x.matrix.room.FakeMatrixRoom
-import io.element.android.x.matrix.room.InMemoryRoomSummaryDataSource
+import io.element.android.x.libraries.matrixtest.room.FakeMatrixRoom
+import io.element.android.x.libraries.matrixtest.room.InMemoryRoomSummaryDataSource
 import io.element.android.x.matrix.room.MatrixRoom
 import io.element.android.x.matrix.room.RoomSummaryDataSource
 import org.matrix.rustcomponents.sdk.MediaSource
