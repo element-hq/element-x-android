@@ -20,6 +20,7 @@ plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.ksp)
     alias(libs.plugins.anvil)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -34,10 +35,11 @@ dependencies {
     implementation(project(":libraries:core"))
     anvil(project(":anvilcodegen"))
     implementation(project(":libraries:di"))
+    implementation(project(":libraries:architecture"))
     implementation(project(":anvilannotations"))
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:elementresources"))
-    implementation(libs.mavericks.compose)
+    implementation(project(":libraries:ui-strings"))
     implementation(libs.squareup.seismic)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.coil)
