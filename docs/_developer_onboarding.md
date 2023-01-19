@@ -86,7 +86,7 @@ The project should compile out of the box.
 This Android project is a multi modules project.
 
 - `app` module is the Android application module. Other modules are libraries;
-- `features` modules contain some UI and can be seen as screen of the application;
+- `features` modules contain some UI and can be seen as screen or flow of screens of the application; 
 - `libraries` modules contain classes that can be useful for other modules to work.
 
 A few details about some modules:
@@ -95,6 +95,9 @@ A few details about some modules:
 - `libraries-designsystem` module contains Composables which can be used across the app (theme, etc.);
 - `libraries-elementresources` module contains resource from Element Android (mainly strings);
 - `libraries-matrix` module contains wrappers around the Matrix Rust SDK.
+
+Most of the time a feature module should not know anything about other feature module.
+The navigation glue is currently done in the `app` module.
 
 Here is the current module dependency graph:
 
@@ -107,6 +110,22 @@ This Android project mainly handle the application layer of the whole software. 
 
 The application is responsible to store the session credentials though.
 
+#### Jetpack Compose
+
+Compose is essentially two libraries : Compose Compiler and Compose UI. The compiler (and his runtime) is actually not specific to UI at all and offer powerful
+state management APIs. See https://jakewharton.com/a-jetpack-compose-by-any-other-name/
+
+Some useful links:
+
+- https://developer.android.com/jetpack/compose/mental-model
+- https://developer.android.com/jetpack/compose/libraries
+- https://developer.android.com/jetpack/compose/modifiers-list
+- https://android.googlesource.com/platform/frameworks/support/+/androidx-main/compose/docs/compose-api-guidelines.md#api-guidelines-for-jetpack-compose
+
+About Preview
+
+- https://alexzh.com/jetpack-compose-preview/
+
 #### Global architecture
 
 Main libraries and frameworks used in this application:
@@ -117,18 +136,16 @@ Main libraries and frameworks used in this application:
 
 Some patterns are inspired by [Circuit](https://slackhq.github.io/circuit/)
 
-**Note**: No more Android Architecture Component ViewModel, no more Mavericks, and of course no more Epoxy!
+Here are the main points:
 
-#### Jetpack Compose
-
-Some useful links:
-- https://developer.android.com/jetpack/compose/mental-model
-- https://developer.android.com/jetpack/compose/libraries
-- https://developer.android.com/jetpack/compose/modifiers-list
-- https://android.googlesource.com/platform/frameworks/support/+/androidx-main/compose/docs/compose-api-guidelines.md#api-guidelines-for-jetpack-compose
-
-About Preview
-- https://alexzh.com/jetpack-compose-preview/
+1. `Presenter` and `View` does not communicate with each other directly, but through `State` and `Event`
+2. Views are compose first
+3. Presenters are also compose first, and have a single `present(): State` method. It's using the power of compose-runtime/compiler. 
+4. The point of connection between a `View` and a `Presenter` is a `Node`.
+5. A `Node` is also responsible for managing Dagger components if any.
+6. A `ParentNode` has some child `Node` and only know about them. 
+7. This is a single activity full compose application. The `MainActivity` is responsible for holding and configuring the `RootNode`.
+8. There is no more needs for Android Architecture Component ViewModel as configuration change should be handled by Composable if needed.
 
 #### Template
 
@@ -190,6 +207,7 @@ Last point, note that `Timber.v` function may have no effect on some devices. Pr
 Rageshake is a feature to send bug report directly from the application. Just shake your phone and you will be prompted to send a bug report.
 
 Bug reports can contain:
+
 - a screenshot of the current application state
 - the application logs from up to 15 application starts
 - the logcat logs
