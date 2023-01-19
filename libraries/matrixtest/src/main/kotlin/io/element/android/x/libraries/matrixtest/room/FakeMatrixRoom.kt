@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.x.matrix.room
+package io.element.android.x.libraries.matrixtest.room
 
 import io.element.android.x.matrix.core.EventId
 import io.element.android.x.matrix.core.RoomId
-import io.element.android.x.matrix.timeline.FakeMatrixTimeline
+import io.element.android.x.matrix.room.MatrixRoom
+import io.element.android.x.libraries.matrixtest.timeline.FakeMatrixTimeline
 import io.element.android.x.matrix.timeline.MatrixTimeline
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow

@@ -20,7 +20,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.x.matrix.FakeMatrixClient
+import io.element.android.x.libraries.matrixtest.FakeMatrixClient
 import io.element.android.x.matrix.core.SessionId
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -30,7 +30,10 @@ class RoomListPresenterTests {
     @Test
     fun `present - should start with no user and then load user with success`() = runTest {
 
-        val presenter = RoomListPresenter(FakeMatrixClient(SessionId("sessionId")), LastMessageFormatter())
+        val presenter = RoomListPresenter(
+            FakeMatrixClient(
+                SessionId("sessionId")
+            ), LastMessageFormatter())
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
