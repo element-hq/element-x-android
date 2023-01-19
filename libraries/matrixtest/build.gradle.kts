@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.x.matrix.media
+// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
+@Suppress("DSL_SCOPE_VIOLATION")
+plugins {
+    id("io.element.android-library")
+}
 
-import org.matrix.rustcomponents.sdk.MediaSource
+android {
+    namespace = "io.element.android.x.libraries.matrix.test"
+}
 
-interface MediaResolver {
-
-    sealed interface Kind {
-        data class Thumbnail(val width: Int, val height: Int) : Kind {
-            constructor(size: Int) : this(size, size)
-        }
-
-        object Content : Kind
-    }
-
-    data class Meta(
-        val source: MediaSource,
-        val kind: Kind
-    )
-
-    suspend fun resolve(url: String?, kind: Kind): ByteArray?
-
-    suspend fun resolve(meta: Meta): ByteArray?
+dependencies {
+    api(project(":libraries:matrix"))
+    api(libs.coroutines.core)
 }

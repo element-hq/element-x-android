@@ -26,7 +26,7 @@ import androidx.core.view.WindowCompat
 import com.bumble.appyx.core.integration.NodeHost
 import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
 import io.element.android.x.architecture.bindings
-import io.element.android.x.core.di.DaggerComponentOwner
+import io.element.android.x.di.DaggerComponentOwner
 import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.di.AppBindings
 import io.element.android.x.node.RootFlowNode
@@ -47,7 +47,7 @@ class MainActivity : NodeComponentActivity() {
                         RootFlowNode(
                             buildContext = it,
                             appComponentOwner = applicationContext as DaggerComponentOwner,
-                            matrix = appBindings.matrix(),
+                            authenticationService = appBindings.authenticationService(),
                             rootPresenter = appBindings.rootPresenter()
                         )
                     }

@@ -38,10 +38,10 @@ import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import io.element.android.x.architecture.createNode
 import io.element.android.x.architecture.presenterConnector
-import io.element.android.x.core.di.DaggerComponentOwner
+import io.element.android.x.di.DaggerComponentOwner
 import io.element.android.x.features.rageshake.bugreport.BugReportNode
-import io.element.android.x.matrix.Matrix
 import io.element.android.x.matrix.MatrixClient
+import io.element.android.x.matrix.auth.MatrixAuthenticationService
 import io.element.android.x.matrix.core.SessionId
 import io.element.android.x.root.RootPresenter
 import io.element.android.x.root.RootView
@@ -59,7 +59,7 @@ class RootFlowNode(
         savedStateMap = buildContext.savedStateMap,
     ),
     private val appComponentOwner: DaggerComponentOwner,
-    private val matrix: Matrix,
+    private val authenticationService: MatrixAuthenticationService,
     rootPresenter: RootPresenter
 ) :
     ParentNode<RootFlowNode.NavTarget>(
@@ -79,12 +79,12 @@ class RootFlowNode(
                 onDestroy = { matrixClientsHolder.remove(child.sessionId) }
             )
         }
-        matrix.isLoggedIn()
+        authenticationService.isLoggedIn()
             .distinctUntilChanged()
             .onEach { isLoggedIn ->
                 Timber.v("isLoggedIn=$isLoggedIn")
                 if (isLoggedIn) {
-                    val matrixClient = matrix.restoreSession()
+                    val matrixClient = authenticationService.restoreSession()
                     if (matrixClient == null) {
                         backstack.newRoot(NavTarget.NotLoggedInFlow)
                     } else {
