@@ -27,7 +27,7 @@ class TemplatePresenter @Inject constructor() : Presenter<TemplateState> {
 
         fun handleEvents(event: TemplateEvents) {
             when (event) {
-                else -> Unit
+                TemplateEvents.MyEvent -> Unit
             }
         }
 
