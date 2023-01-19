@@ -21,13 +21,10 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
-##      - name: Run tests
-##        run: ./gradlew test $CI_GRADLE_ARG_PROPERTIES
+      - name: Run tests
+        run: ./gradlew test $CI_GRADLE_ARG_PROPERTIES
 
-      - name: Run screenshot tests
-        run: ./gradlew verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES
-
-      - name: Archive Screenshot Results on Error
+      - name: Archive test results on error
         if: failure()
         uses: actions/upload-artifact@v3
         with:
