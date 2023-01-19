@@ -16,6 +16,9 @@
  * limitations under the License.
  */
 
+import extension.allFeatures
+import extension.allLibraries
+
 // TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
@@ -127,6 +130,7 @@ android {
         }
     }
 
+    // Waiting for https://github.com/google/ksp/issues/37
     applicationVariants.all {
         kotlin.sourceSets {
             getByName(name) {
@@ -158,19 +162,9 @@ knit {
 }
 
 dependencies {
-    implementation(project(":libraries:designsystem"))
-    implementation(project(":libraries:matrix"))
-    implementation(project(":libraries:matrixui"))
-    implementation(project(":libraries:core"))
-    implementation(project(":libraries:architecture"))
-    implementation(project(":features:onboarding"))
-    implementation(project(":features:login"))
-    implementation(project(":features:logout"))
-    implementation(project(":features:roomlist"))
-    implementation(project(":features:messages"))
-    implementation(project(":features:rageshake"))
-    implementation(project(":features:preferences"))
-    implementation(project(":libraries:di"))
+    allLibraries()
+    allFeatures()
+    implementation(project(":tests:uitests"))
     implementation(project(":anvilannotations"))
     anvil(project(":anvilcodegen"))
 
@@ -186,7 +180,4 @@ dependencies {
 
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
-
-    implementation(libs.showkase)
-    ksp(libs.showkase.processor)
 }

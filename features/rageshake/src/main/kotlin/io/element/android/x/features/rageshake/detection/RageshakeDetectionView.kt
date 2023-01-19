@@ -28,7 +28,6 @@ import io.element.android.x.core.compose.OnLifecycleEvent
 import io.element.android.x.core.hardware.vibrate
 import io.element.android.x.core.screenshot.ImageResult
 import io.element.android.x.core.screenshot.screenshot
-import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.x.ui.strings.R as StringR
 
@@ -98,7 +97,5 @@ fun RageshakeDialogContent(
 @Preview
 @Composable
 fun RageshakeDialogContentPreview() {
-    ElementXTheme {
-        RageshakeDialogContent()
-    }
+    RageshakeDialogContent()
 }

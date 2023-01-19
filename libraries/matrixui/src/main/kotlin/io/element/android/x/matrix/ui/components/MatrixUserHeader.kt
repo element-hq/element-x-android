@@ -33,7 +33,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.element.android.x.designsystem.ElementXTheme
 import io.element.android.x.designsystem.components.avatar.Avatar
 import io.element.android.x.designsystem.components.avatar.AvatarData
 import io.element.android.x.designsystem.components.avatar.AvatarSize
@@ -84,29 +83,25 @@ fun MatrixUserHeader(
 @Preview
 @Composable
 fun MatrixUserHeaderPreview() {
-    ElementXTheme {
-        MatrixUserHeader(
-            MatrixUser(
-                id = UserId("@alice:server.org"),
-                username = "Alice",
-                avatarUrl = null,
-                avatarData = AvatarData("Alice")
-            )
+    MatrixUserHeader(
+        MatrixUser(
+            id = UserId("@alice:server.org"),
+            username = "Alice",
+            avatarUrl = null,
+            avatarData = AvatarData("Alice")
         )
-    }
+    )
 }
 
 @Preview
 @Composable
 fun MatrixUserHeaderNoUsernamePreview() {
-    ElementXTheme {
-        MatrixUserHeader(
-            MatrixUser(
-                id = UserId("@alice:server.org"),
-                username = null,
-                avatarUrl = null,
-                avatarData = AvatarData("Alice")
-            )
+    MatrixUserHeader(
+        MatrixUser(
+            id = UserId("@alice:server.org"),
+            username = null,
+            avatarUrl = null,
+            avatarData = AvatarData("Alice")
         )
-    }
+    )
 }
