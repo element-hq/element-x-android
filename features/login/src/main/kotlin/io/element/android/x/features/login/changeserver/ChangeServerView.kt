@@ -57,6 +57,8 @@ import io.element.android.x.core.compose.textFieldState
 import io.element.android.x.designsystem.components.VectorIcon
 import io.element.android.x.features.login.R
 import io.element.android.x.features.login.error.changeServerError
+import io.element.android.x.libraries.testtags.TestTags
+import io.element.android.x.libraries.testtags.testTag
 
 @Composable
 fun ChangeServerView(
@@ -129,6 +131,7 @@ fun ChangeServerView(
                     value = homeserverFieldState,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .testTag(TestTags.changeServerServer)
                         .padding(top = 200.dp),
                     onValueChange = {
                         homeserverFieldState = it
@@ -162,6 +165,7 @@ fun ChangeServerView(
                     enabled = state.submitEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .testTag(TestTags.changeServerContinue)
                         .padding(top = 44.dp)
                 ) {
                     Text(text = "Continue")

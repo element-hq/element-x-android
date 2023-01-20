@@ -31,6 +31,7 @@ dependencies {
     implementation(project(":libraries:ui-strings"))
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:architecture"))
+    implementation(project(":libraries:testtags"))
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pagerindicator)
     implementation(libs.appyx.core)
