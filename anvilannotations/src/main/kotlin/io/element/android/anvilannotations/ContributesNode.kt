@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.anvilannotations
+package io.element.android.anvilannotations
 
 import kotlin.reflect.KClass
 

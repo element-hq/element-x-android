@@ -16,7 +16,7 @@
 
 @file:OptIn(ExperimentalAnvilApi::class)
 
-package io.element.android.x.anvilcodegen
+package io.element.android.anvilcodegen
 
 import com.google.auto.service.AutoService
 import com.squareup.anvil.annotations.ContributesTo
@@ -46,7 +46,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.multibindings.IntoMap
-import io.element.android.x.anvilannotations.ContributesNode
+import io.element.android.anvilannotations.ContributesNode
 import org.jetbrains.kotlin.descriptors.ModuleDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtFile

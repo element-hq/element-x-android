@@ -19,7 +19,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.element.resources"
+    namespace = "io.element.android.element.resources"
 }
 
 dependencies {

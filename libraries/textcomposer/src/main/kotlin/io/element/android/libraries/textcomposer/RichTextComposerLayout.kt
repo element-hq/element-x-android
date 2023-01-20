@@ -50,7 +50,7 @@ import io.element.android.libraries.textcomposer.databinding.ViewRichTextMenuBut
 import io.element.android.libraries.textcomposer.tools.setTextIfDifferent
 import uniffi.wysiwyg_composer.ActionState
 import uniffi.wysiwyg_composer.ComposerAction
-import io.element.android.x.element.resources.R as ElementR
+import io.element.android.element.resources.R as ElementR
 import io.element.android.libraries.ui.strings.R as StringR
 
 // Imported from Element Android

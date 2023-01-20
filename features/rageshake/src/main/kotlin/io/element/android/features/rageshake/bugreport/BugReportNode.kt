@@ -26,7 +26,7 @@ import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import io.element.android.x.anvilannotations.ContributesNode
+import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.architecture.presenterConnector
 import io.element.android.libraries.di.AppScope
 
