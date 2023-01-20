@@ -36,8 +36,8 @@ import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.x.di.SessionComponent
-import io.element.android.x.features.preferences.PreferencesFlowNode
-import io.element.android.x.features.roomlist.RoomListNode
+import io.element.android.features.preferences.PreferencesFlowNode
+import io.element.android.features.roomlist.RoomListNode
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.core.RoomId
 import io.element.android.libraries.matrix.core.SessionId

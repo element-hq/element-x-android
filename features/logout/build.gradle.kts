@@ -23,7 +23,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.features.logout"
+    namespace = "io.element.android.features.logout"
 }
 
 anvil {

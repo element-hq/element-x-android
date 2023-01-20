@@ -24,7 +24,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.features.preferences"
+    namespace = "io.element.android.features.preferences"
 }
 
 anvil {

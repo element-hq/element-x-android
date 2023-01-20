@@ -23,7 +23,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.features.messages"
+    namespace = "io.element.android.features.messages"
 }
 
 anvil {

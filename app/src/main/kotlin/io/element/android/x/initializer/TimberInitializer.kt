@@ -19,7 +19,7 @@ package io.element.android.x.initializer
 import android.content.Context
 import androidx.startup.Initializer
 import io.element.android.x.BuildConfig
-import io.element.android.x.features.rageshake.logs.VectorFileLogger
+import io.element.android.features.rageshake.logs.VectorFileLogger
 import timber.log.Timber
 
 class TimberInitializer : Initializer<Unit> {
