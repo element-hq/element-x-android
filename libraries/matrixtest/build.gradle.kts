@@ -25,6 +25,6 @@ android {
 }
 
 dependencies {
-    api(project(":libraries:matrix"))
+    api(projects.libraries.matrix)
     api(libs.coroutines.core)
 }

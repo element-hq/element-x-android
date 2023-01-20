@@ -30,12 +30,12 @@ anvil {
 }
 
 dependencies {
-    implementation(project(":anvilannotations"))
-    anvil(project(":anvilcodegen"))
-    implementation(project(":libraries:di"))
-    implementation(project(":libraries:architecture"))
-    implementation(project(":libraries:matrix"))
-    implementation(project(":libraries:designsystem"))
-    implementation(project(":libraries:core"))
+    implementation(projects.anvilannotations)
+    anvil(projects.anvilcodegen)
+    implementation(projects.libraries.di)
+    implementation(projects.libraries.architecture)
+    implementation(projects.libraries.matrix)
+    implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.core)
     implementation(libs.coil.compose)
 }
