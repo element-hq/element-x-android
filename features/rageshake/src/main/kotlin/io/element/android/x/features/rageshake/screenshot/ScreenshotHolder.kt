@@ -18,7 +18,7 @@ package io.element.android.x.features.rageshake.screenshot
 
 import android.content.Context
 import android.graphics.Bitmap
-import io.element.android.x.core.bitmap.writeBitmap
+import io.element.android.libraries.core.bitmap.writeBitmap
 import io.element.android.x.di.AppScope
 import io.element.android.x.di.ApplicationContext
 import io.element.android.x.di.SingleIn

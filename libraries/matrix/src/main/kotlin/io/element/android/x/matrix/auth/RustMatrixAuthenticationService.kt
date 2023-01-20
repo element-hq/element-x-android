@@ -17,7 +17,7 @@
 package io.element.android.x.matrix.auth
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.x.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.x.di.AppScope
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.RustMatrixClient

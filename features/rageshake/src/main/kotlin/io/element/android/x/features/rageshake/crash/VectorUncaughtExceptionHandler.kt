@@ -18,7 +18,7 @@ package io.element.android.x.features.rageshake.crash
 
 import android.content.Context
 import android.os.Build
-import io.element.android.x.core.data.tryOrNull
+import io.element.android.libraries.core.data.tryOrNull
 import java.io.PrintWriter
 import java.io.StringWriter
 import timber.log.Timber

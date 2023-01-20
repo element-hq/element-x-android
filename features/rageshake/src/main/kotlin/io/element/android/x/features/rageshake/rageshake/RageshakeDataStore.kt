@@ -23,7 +23,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import io.element.android.x.core.bool.orTrue
+import io.element.android.libraries.core.bool.orTrue
 import io.element.android.x.di.ApplicationContext
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow

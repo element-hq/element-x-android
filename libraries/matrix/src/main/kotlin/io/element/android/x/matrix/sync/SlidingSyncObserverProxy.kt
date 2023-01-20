@@ -16,7 +16,7 @@
 
 package io.element.android.x.matrix.sync
 
-import io.element.android.x.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow

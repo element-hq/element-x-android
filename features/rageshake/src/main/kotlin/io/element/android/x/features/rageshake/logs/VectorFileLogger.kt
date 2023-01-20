@@ -18,7 +18,7 @@ package io.element.android.x.features.rageshake.logs
 
 import android.content.Context
 import android.util.Log
-import io.element.android.x.core.data.tryOrNull
+import io.element.android.libraries.core.data.tryOrNull
 import java.io.File
 import java.io.PrintWriter
 import java.io.StringWriter

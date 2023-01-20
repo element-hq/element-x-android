@@ -16,7 +16,7 @@
 
 package io.element.android.x.features.rageshake.detection
 
-import io.element.android.x.core.screenshot.ImageResult
+import io.element.android.libraries.core.screenshot.ImageResult
 
 sealed interface RageshakeDetectionEvents {
     object Dismiss : RageshakeDetectionEvents

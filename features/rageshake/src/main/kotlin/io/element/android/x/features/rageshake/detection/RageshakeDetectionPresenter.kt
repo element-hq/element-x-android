@@ -24,7 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.x.core.screenshot.ImageResult
+import io.element.android.libraries.core.screenshot.ImageResult
 import io.element.android.x.features.rageshake.preferences.RageshakePreferencesEvents
 import io.element.android.x.features.rageshake.preferences.RageshakePreferencesPresenter
 import io.element.android.x.features.rageshake.rageshake.RageShake
