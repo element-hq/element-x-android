@@ -18,7 +18,7 @@ package io.element.android.x.features.messages.timeline
 
 import androidx.compose.runtime.Immutable
 import io.element.android.x.features.messages.timeline.model.TimelineItem
-import io.element.android.x.matrix.core.EventId
+import io.element.android.libraries.matrix.core.EventId
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable

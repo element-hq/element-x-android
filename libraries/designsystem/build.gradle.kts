@@ -22,7 +22,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.libraries.designsystem"
+    namespace = "io.element.android.libraries.designsystem"
 
     dependencies {
         // Should not be there, but this is a POC

@@ -38,10 +38,10 @@ import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.x.di.SessionComponent
 import io.element.android.x.features.preferences.PreferencesFlowNode
 import io.element.android.x.features.roomlist.RoomListNode
-import io.element.android.x.matrix.MatrixClient
-import io.element.android.x.matrix.core.RoomId
-import io.element.android.x.matrix.core.SessionId
-import io.element.android.x.matrix.ui.di.MatrixUIBindings
+import io.element.android.libraries.matrix.MatrixClient
+import io.element.android.libraries.matrix.core.RoomId
+import io.element.android.libraries.matrix.core.SessionId
+import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
 import kotlinx.parcelize.Parcelize
 
 class LoggedInFlowNode(

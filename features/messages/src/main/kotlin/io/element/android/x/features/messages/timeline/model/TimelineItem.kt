@@ -19,7 +19,7 @@ package io.element.android.x.features.messages.timeline.model
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.messages.timeline.model.content.TimelineItemContent
-import io.element.android.x.matrix.core.EventId
+import io.element.android.libraries.matrix.core.EventId
 
 @Immutable
 sealed interface TimelineItem {

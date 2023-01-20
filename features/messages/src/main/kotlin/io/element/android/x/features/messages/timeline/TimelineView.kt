@@ -80,7 +80,7 @@ import io.element.android.x.features.messages.timeline.components.TimelineItemIm
 import io.element.android.x.features.messages.timeline.components.TimelineItemRedactedView
 import io.element.android.x.features.messages.timeline.components.TimelineItemTextView
 import io.element.android.x.features.messages.timeline.components.TimelineItemUnknownView
-import io.element.android.x.matrix.core.EventId
+import io.element.android.libraries.matrix.core.EventId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.distinctUntilChanged

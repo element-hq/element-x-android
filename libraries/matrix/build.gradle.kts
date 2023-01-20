@@ -23,7 +23,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.matrix"
+    namespace = "io.element.android.libraries.matrix"
 }
 
 anvil {

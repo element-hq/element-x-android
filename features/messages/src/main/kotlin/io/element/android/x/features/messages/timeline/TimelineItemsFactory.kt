@@ -33,11 +33,11 @@ import io.element.android.x.features.messages.timeline.model.content.TimelineIte
 import io.element.android.x.features.messages.timeline.model.content.TimelineItemTextContent
 import io.element.android.x.features.messages.timeline.model.content.TimelineItemUnknownContent
 import io.element.android.x.features.messages.timeline.util.invalidateLast
-import io.element.android.x.matrix.core.EventId
-import io.element.android.x.matrix.media.MediaResolver
-import io.element.android.x.matrix.room.MatrixRoom
-import io.element.android.x.matrix.timeline.MatrixTimelineItem
-import io.element.android.x.matrix.ui.MatrixItemHelper
+import io.element.android.libraries.matrix.core.EventId
+import io.element.android.libraries.matrix.media.MediaResolver
+import io.element.android.libraries.matrix.room.MatrixRoom
+import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.ui.MatrixItemHelper
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow

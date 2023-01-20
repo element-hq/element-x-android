@@ -19,7 +19,7 @@ package io.element.android.x.features.preferences.root
 import io.element.android.libraries.architecture.Async
 import io.element.android.x.features.logout.LogoutPreferenceState
 import io.element.android.x.features.rageshake.preferences.RageshakePreferencesState
-import io.element.android.x.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.ui.model.MatrixUser
 
 data class PreferencesRootState(
     val logoutState: LogoutPreferenceState,

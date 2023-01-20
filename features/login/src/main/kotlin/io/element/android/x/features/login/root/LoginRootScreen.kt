@@ -62,7 +62,7 @@ import io.element.android.libraries.core.compose.textFieldState
 import io.element.android.x.features.login.error.loginError
 import io.element.android.x.libraries.testtags.TestTags
 import io.element.android.x.libraries.testtags.testTag
-import io.element.android.x.matrix.core.SessionId
+import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.x.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
