@@ -19,7 +19,7 @@ package io.element.android.x.features.messages.textcomposer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import io.element.android.libraries.designsystem.LocalIsDarkTheme
-import io.element.android.x.textcomposer.TextComposer
+import io.element.android.libraries.textcomposer.TextComposer
 
 @Composable
 fun MessageComposerView(

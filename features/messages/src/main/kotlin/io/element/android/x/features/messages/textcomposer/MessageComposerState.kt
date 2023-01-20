@@ -18,7 +18,7 @@ package io.element.android.x.features.messages.textcomposer
 
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.core.data.StableCharSequence
-import io.element.android.x.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.MessageComposerMode
 
 @Immutable
 data class MessageComposerState(

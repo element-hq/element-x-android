@@ -39,7 +39,7 @@ import io.element.android.x.features.messages.timeline.model.content.TimelineIte
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.room.MatrixRoom
 import io.element.android.libraries.matrix.ui.MatrixItemHelper
-import io.element.android.x.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.textcomposer
+package io.element.android.libraries.textcomposer
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -45,9 +45,9 @@ import io.element.android.wysiwyg.inputhandlers.models.InlineFormat
 import io.element.android.libraries.core.ui.DimensionConverter
 import io.element.android.libraries.core.ui.hideKeyboard
 import io.element.android.libraries.core.ui.showKeyboard
-import io.element.android.x.textcomposer.databinding.ComposerRichTextLayoutBinding
-import io.element.android.x.textcomposer.databinding.ViewRichTextMenuButtonBinding
-import io.element.android.x.textcomposer.tools.setTextIfDifferent
+import io.element.android.libraries.textcomposer.databinding.ComposerRichTextLayoutBinding
+import io.element.android.libraries.textcomposer.databinding.ViewRichTextMenuButtonBinding
+import io.element.android.libraries.textcomposer.tools.setTextIfDifferent
 import uniffi.wysiwyg_composer.ActionState
 import uniffi.wysiwyg_composer.ComposerAction
 import io.element.android.x.element.resources.R as ElementR
