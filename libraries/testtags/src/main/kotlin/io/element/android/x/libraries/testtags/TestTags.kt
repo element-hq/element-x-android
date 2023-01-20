@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.x.testtags
+package io.element.android.x.libraries.testtags
 
 @JvmInline
 value class TestTag internal constructor(val value: String)
 
 object TestTags {
     /**
-     * OnBoarding screen
+     * OnBoarding screen.
      */
     val onBoardingSignIn = TestTag("onboarding-sign_in")
 
     /**
-     * Login screen
+     * Login screen.
      */
     val loginChangeServer = TestTag("login-change_server")
     val loginEmailUsername = TestTag("login-email_username")
@@ -34,7 +34,7 @@ object TestTags {
     val loginContinue = TestTag("login-continue")
 
     /**
-     * Change server screen
+     * Change server screen.
      */
     val changeServerServer = TestTag("change_server-server")
     val changeServerContinue = TestTag("change_server-continue")
