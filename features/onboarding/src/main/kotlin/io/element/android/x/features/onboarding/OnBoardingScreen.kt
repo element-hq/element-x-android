@@ -50,8 +50,8 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import io.element.android.libraries.designsystem.components.VectorButton
-import io.element.android.x.libraries.testtags.TestTags
-import io.element.android.x.libraries.testtags.testTag
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import io.element.android.x.ui.strings.R as StringR

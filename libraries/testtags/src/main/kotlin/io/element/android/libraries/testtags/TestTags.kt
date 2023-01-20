@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.libraries.testtags
+package io.element.android.libraries.testtags
 
 @JvmInline
 value class TestTag internal constructor(val value: String)
