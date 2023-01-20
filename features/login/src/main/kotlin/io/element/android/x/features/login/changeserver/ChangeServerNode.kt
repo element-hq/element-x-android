@@ -27,7 +27,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.x.anvilannotations.ContributesNode
 import io.element.android.libraries.architecture.presenterConnector
-import io.element.android.x.di.AppScope
+import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
 class ChangeServerNode @AssistedInject constructor(

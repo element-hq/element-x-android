@@ -17,6 +17,7 @@
 package io.element.android.x.di
 
 import com.squareup.anvil.annotations.ContributesTo
+import io.element.android.libraries.di.AppScope
 import io.element.android.x.matrix.auth.MatrixAuthenticationService
 import io.element.android.x.root.RootPresenter
 import kotlinx.coroutines.CoroutineScope

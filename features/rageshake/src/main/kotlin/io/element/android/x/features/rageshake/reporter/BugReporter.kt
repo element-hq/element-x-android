@@ -21,7 +21,7 @@ import android.os.Build
 import io.element.android.libraries.core.extensions.toOnOff
 import io.element.android.libraries.core.file.compressFile
 import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.x.di.ApplicationContext
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.x.features.rageshake.R
 import io.element.android.x.features.rageshake.crash.CrashDataStore
 import io.element.android.x.features.rageshake.logs.VectorFileLogger

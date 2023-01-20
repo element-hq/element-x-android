@@ -19,9 +19,9 @@ package io.element.android.x.features.rageshake.screenshot
 import android.content.Context
 import android.graphics.Bitmap
 import io.element.android.libraries.core.bitmap.writeBitmap
-import io.element.android.x.di.AppScope
-import io.element.android.x.di.ApplicationContext
-import io.element.android.x.di.SingleIn
+import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.SingleIn
 import java.io.File
 import javax.inject.Inject
 

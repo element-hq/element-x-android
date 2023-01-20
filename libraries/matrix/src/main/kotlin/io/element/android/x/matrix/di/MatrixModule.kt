@@ -19,8 +19,8 @@ package io.element.android.x.matrix.di
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
-import io.element.android.x.di.AppScope
-import io.element.android.x.di.SingleIn
+import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.SingleIn
 import org.matrix.rustcomponents.sdk.AuthenticationService
 import java.io.File
 

@@ -21,6 +21,9 @@ import com.squareup.anvil.annotations.MergeSubcomponent
 import dagger.BindsInstance
 import dagger.Subcomponent
 import io.element.android.libraries.architecture.NodeFactoriesBindings
+import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.SingleIn
 import io.element.android.x.matrix.room.MatrixRoom
 
 @SingleIn(RoomScope::class)

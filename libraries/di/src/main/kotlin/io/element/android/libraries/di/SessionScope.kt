@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-package io.element.android.x.di
+package io.element.android.libraries.di
 
-abstract class RoomScope private constructor()
+abstract class SessionScope private constructor()

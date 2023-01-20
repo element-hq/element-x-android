@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.x.di
+package io.element.android.libraries.di
 
-import javax.inject.Qualifier
+import javax.inject.Scope
+import kotlin.reflect.KClass
 
-@Qualifier annotation class ApplicationContext
+@Scope
+@Retention(AnnotationRetention.RUNTIME)
+annotation class SingleIn(val clazz: KClass<*>)

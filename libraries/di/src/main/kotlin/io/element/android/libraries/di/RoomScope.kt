@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 
-package io.element.android.x.di
+package io.element.android.libraries.di
 
-/**
- * A [DaggerComponentOwner] is anything that "owns" a Dagger Component.
- *
- */
-interface DaggerComponentOwner {
-    /** This is either a component, or a list of components. */
-    val daggerComponent: Any
-}
+abstract class RoomScope private constructor()
