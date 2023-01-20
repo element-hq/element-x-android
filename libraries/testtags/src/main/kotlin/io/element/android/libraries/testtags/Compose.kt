@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.x.libraries.testtags
+package io.element.android.libraries.testtags
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import io.element.android.libraries.testtags.TestTag
 
 /**
  * Add a testTag to a Modifier, to be used by external tool, like TrafficLight for instance.
