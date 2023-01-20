@@ -50,6 +50,8 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import io.element.android.x.designsystem.components.VectorButton
+import io.element.android.x.libraries.testtags.TestTags
+import io.element.android.x.libraries.testtags.testTag
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import io.element.android.x.ui.strings.R as StringR
@@ -127,6 +129,7 @@ fun OnBoardingScreen(
                     enabled = true,
                     modifier = Modifier
                         .align(CenterHorizontally)
+                        .testTag(TestTags.onBoardingSignIn)
                         .padding(top = 16.dp)
                 )
             }
