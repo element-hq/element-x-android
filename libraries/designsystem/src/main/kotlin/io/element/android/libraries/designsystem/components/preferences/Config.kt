@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.x.designsystem
+package io.element.android.libraries.designsystem.components.preferences
 
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
-@Composable
-fun Boolean.toEnabledColor(): Color {
-    return if (this) {
-        MaterialTheme.colorScheme.primary
-    } else {
-        MaterialTheme.colorScheme.secondary
-    }
-}
+internal val preferenceMinHeight = 80.dp
+internal val preferencePaddingEnd = 16.dp

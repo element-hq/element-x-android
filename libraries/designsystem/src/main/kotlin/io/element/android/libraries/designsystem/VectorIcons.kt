@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.x.designsystem.components.avatar
+package io.element.android.libraries.designsystem
 
-import androidx.compose.ui.unit.dp
+import io.element.android.x.libraries.designsystem.R
 
-enum class AvatarSize(val value: Int) {
-    SMALL(32),
-    MEDIUM(40),
-    BIG(48),
-    HUGE(96);
-
-    val dp = value.dp
+object VectorIcons {
+    val Copy = R.drawable.ic_content_copy
+    val ArrowForward = R.drawable.ic_content_arrow_forward
+    val Delete = R.drawable.ic_baseline_delete_outline_24
+    val Reply = R.drawable.ic_baseline_reply_24
+    val Edit = R.drawable.ic_baseline_edit_24
 }

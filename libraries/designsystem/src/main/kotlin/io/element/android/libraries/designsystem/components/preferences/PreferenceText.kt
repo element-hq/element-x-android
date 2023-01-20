@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.designsystem.components.preferences
+package io.element.android.libraries.designsystem.components.preferences
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -31,7 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.x.designsystem.components.preferences.components.PreferenceIcon
+import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
 
 @Composable
 fun PreferenceText(

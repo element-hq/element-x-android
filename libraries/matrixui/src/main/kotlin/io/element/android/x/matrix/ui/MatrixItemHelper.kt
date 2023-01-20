@@ -16,8 +16,8 @@
 
 package io.element.android.x.matrix.ui
 
-import io.element.android.x.designsystem.components.avatar.AvatarData
-import io.element.android.x.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.media.MediaResolver
 import io.element.android.x.matrix.room.MatrixRoom

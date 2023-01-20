@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.architecture.Async
-import io.element.android.x.designsystem.components.preferences.PreferenceView
+import io.element.android.libraries.designsystem.components.preferences.PreferenceView
 import io.element.android.x.features.logout.LogoutPreferenceState
 import io.element.android.x.features.logout.LogoutPreferenceView
 import io.element.android.x.features.preferences.user.UserPreferences

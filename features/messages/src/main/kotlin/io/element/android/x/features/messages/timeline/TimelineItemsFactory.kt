@@ -17,7 +17,7 @@
 package io.element.android.x.features.messages.timeline
 
 import androidx.recyclerview.widget.DiffUtil
-import io.element.android.x.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.x.features.messages.timeline.diff.CacheInvalidator
 import io.element.android.x.features.messages.timeline.diff.MatrixTimelineItemsDiffCallback
 import io.element.android.x.features.messages.timeline.model.AggregatedReaction

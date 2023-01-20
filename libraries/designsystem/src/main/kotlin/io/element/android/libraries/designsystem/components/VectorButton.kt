@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.designsystem.components
+package io.element.android.libraries.designsystem.components
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text

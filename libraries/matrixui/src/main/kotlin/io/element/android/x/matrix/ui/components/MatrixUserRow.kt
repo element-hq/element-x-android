@@ -33,8 +33,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.element.android.x.designsystem.components.avatar.Avatar
-import io.element.android.x.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.x.matrix.core.UserId
 import io.element.android.x.matrix.ui.model.MatrixUser
 import io.element.android.x.matrix.ui.model.getBestName

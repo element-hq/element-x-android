@@ -57,8 +57,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.core.compose.LogCompositions
-import io.element.android.x.designsystem.components.avatar.Avatar
-import io.element.android.x.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.messages.actionlist.ActionListEvents
 import io.element.android.x.features.messages.actionlist.ActionListView
 import io.element.android.x.features.messages.actionlist.model.TimelineItemAction

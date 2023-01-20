@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.x.designsystem
+package io.element.android.libraries.designsystem.components.avatar
 
-import io.element.android.x.libraries.designsystem.R
+import androidx.compose.ui.unit.dp
 
-object VectorIcons {
-    val Copy = R.drawable.ic_content_copy
-    val ArrowForward = R.drawable.ic_content_arrow_forward
-    val Delete = R.drawable.ic_baseline_delete_outline_24
-    val Reply = R.drawable.ic_baseline_reply_24
-    val Edit = R.drawable.ic_baseline_edit_24
+enum class AvatarSize(val value: Int) {
+    SMALL(32),
+    MEDIUM(40),
+    BIG(48),
+    HUGE(96);
+
+    val dp = value.dp
 }

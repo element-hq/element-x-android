@@ -54,7 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.compose.textFieldState
-import io.element.android.x.designsystem.components.VectorIcon
+import io.element.android.libraries.designsystem.components.VectorIcon
 import io.element.android.x.features.login.R
 import io.element.android.x.features.login.error.changeServerError
 import io.element.android.x.libraries.testtags.TestTags
