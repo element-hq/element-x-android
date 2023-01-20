@@ -23,7 +23,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.textcomposer"
+    namespace = "io.element.android.libraries.textcomposer"
     buildFeatures {
         viewBinding = true
     }

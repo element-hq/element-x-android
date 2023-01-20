@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.textcomposer.tools
+package io.element.android.libraries.textcomposer.tools
 
 import androidx.transition.Transition
 
