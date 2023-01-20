@@ -17,7 +17,7 @@
 package io.element.android.x.features.onboarding
 
 import androidx.annotation.DrawableRes
-import io.element.android.x.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.R as StringR
 
 class SplashCarouselStateFactory {
     fun create(): SplashCarouselState {
