@@ -19,7 +19,7 @@ package io.element.android.x.matrix.ui.media
 import android.content.Context
 import coil.ImageLoader
 import coil.ImageLoaderFactory
-import io.element.android.x.di.ApplicationContext
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.x.matrix.MatrixClient
 import javax.inject.Inject
 

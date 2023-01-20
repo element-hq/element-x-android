@@ -38,7 +38,7 @@ import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.presenterConnector
-import io.element.android.x.di.DaggerComponentOwner
+import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.x.features.rageshake.bugreport.BugReportNode
 import io.element.android.x.matrix.MatrixClient
 import io.element.android.x.matrix.auth.MatrixAuthenticationService

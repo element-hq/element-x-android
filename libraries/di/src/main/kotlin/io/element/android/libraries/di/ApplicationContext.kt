@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.x.di
+package io.element.android.libraries.di
 
-abstract class SessionScope private constructor()
+import javax.inject.Qualifier
+
+@Qualifier annotation class ApplicationContext

@@ -27,7 +27,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.x.anvilannotations.ContributesNode
 import io.element.android.libraries.architecture.presenterConnector
-import io.element.android.x.di.RoomScope
+import io.element.android.libraries.di.RoomScope
 
 @ContributesNode(RoomScope::class)
 class MessagesNode @AssistedInject constructor(
