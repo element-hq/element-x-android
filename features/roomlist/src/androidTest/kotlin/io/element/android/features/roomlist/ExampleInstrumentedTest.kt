@@ -33,6 +33,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("io.element.android.x.features.roomlist.test", appContext.packageName)
+        assertEquals("io.element.android.features.roomlist.test", appContext.packageName)
     }
 }
