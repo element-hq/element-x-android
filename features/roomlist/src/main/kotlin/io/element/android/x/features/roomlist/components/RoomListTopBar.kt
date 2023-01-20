@@ -56,7 +56,7 @@ import io.element.android.libraries.core.compose.LogCompositions
 import io.element.android.libraries.core.compose.textFieldState
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.matrix.ui.model.MatrixUser
-import io.element.android.x.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun RoomListTopBar(

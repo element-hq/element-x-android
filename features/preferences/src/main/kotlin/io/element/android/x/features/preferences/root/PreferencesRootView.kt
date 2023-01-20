@@ -27,7 +27,7 @@ import io.element.android.x.features.logout.LogoutPreferenceView
 import io.element.android.x.features.preferences.user.UserPreferences
 import io.element.android.x.features.rageshake.preferences.RageshakePreferencesState
 import io.element.android.x.features.rageshake.preferences.RageshakePreferencesView
-import io.element.android.x.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun PreferencesRootView(

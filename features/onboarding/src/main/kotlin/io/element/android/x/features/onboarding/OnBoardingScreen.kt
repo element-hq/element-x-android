@@ -54,7 +54,7 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import io.element.android.x.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable

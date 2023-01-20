@@ -63,7 +63,7 @@ import io.element.android.x.features.login.error.loginError
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.matrix.core.SessionId
-import io.element.android.x.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

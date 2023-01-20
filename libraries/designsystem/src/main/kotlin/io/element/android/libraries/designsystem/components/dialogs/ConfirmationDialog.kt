@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.element.android.x.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun ConfirmationDialog(

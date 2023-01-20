@@ -21,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.core.compose.LogCompositions
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
-import io.element.android.x.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun CrashDetectionView(
