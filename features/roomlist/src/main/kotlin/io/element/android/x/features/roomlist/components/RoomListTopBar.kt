@@ -52,8 +52,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import io.element.android.x.core.compose.LogCompositions
-import io.element.android.x.core.compose.textFieldState
+import io.element.android.libraries.core.compose.LogCompositions
+import io.element.android.libraries.core.compose.textFieldState
 import io.element.android.x.designsystem.components.avatar.Avatar
 import io.element.android.x.matrix.ui.model.MatrixUser
 import io.element.android.x.ui.strings.R as StringR

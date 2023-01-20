@@ -22,8 +22,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.x.core.data.StableCharSequence
-import io.element.android.x.core.data.toStableCharSequence
+import io.element.android.libraries.core.data.StableCharSequence
+import io.element.android.libraries.core.data.toStableCharSequence
 import io.element.android.x.matrix.room.MatrixRoom
 import io.element.android.x.textcomposer.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope

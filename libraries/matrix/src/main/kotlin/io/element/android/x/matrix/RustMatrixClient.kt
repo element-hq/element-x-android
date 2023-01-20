@@ -16,7 +16,7 @@
 
 package io.element.android.x.matrix
 
-import io.element.android.x.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.x.matrix.core.RoomId
 import io.element.android.x.matrix.core.SessionId
 import io.element.android.x.matrix.core.UserId

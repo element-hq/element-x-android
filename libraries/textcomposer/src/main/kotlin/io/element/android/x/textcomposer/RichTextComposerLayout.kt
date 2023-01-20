@@ -42,9 +42,9 @@ import androidx.core.view.updateLayoutParams
 import com.google.android.material.shape.MaterialShapeDrawable
 import io.element.android.wysiwyg.EditorEditText
 import io.element.android.wysiwyg.inputhandlers.models.InlineFormat
-import io.element.android.x.core.ui.DimensionConverter
-import io.element.android.x.core.ui.hideKeyboard
-import io.element.android.x.core.ui.showKeyboard
+import io.element.android.libraries.core.ui.DimensionConverter
+import io.element.android.libraries.core.ui.hideKeyboard
+import io.element.android.libraries.core.ui.showKeyboard
 import io.element.android.x.textcomposer.databinding.ComposerRichTextLayoutBinding
 import io.element.android.x.textcomposer.databinding.ViewRichTextMenuButtonBinding
 import io.element.android.x.textcomposer.tools.setTextIfDifferent

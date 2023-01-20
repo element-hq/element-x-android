@@ -19,5 +19,5 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.core"
+    namespace = "io.element.android.libraries.core"
 }

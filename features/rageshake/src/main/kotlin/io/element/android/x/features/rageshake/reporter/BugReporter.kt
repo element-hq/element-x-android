@@ -18,9 +18,9 @@ package io.element.android.x.features.rageshake.reporter
 
 import android.content.Context
 import android.os.Build
-import io.element.android.x.core.extensions.toOnOff
-import io.element.android.x.core.file.compressFile
-import io.element.android.x.core.mimetype.MimeTypes
+import io.element.android.libraries.core.extensions.toOnOff
+import io.element.android.libraries.core.file.compressFile
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.x.di.ApplicationContext
 import io.element.android.x.features.rageshake.R
 import io.element.android.x.features.rageshake.crash.CrashDataStore

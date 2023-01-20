@@ -16,7 +16,7 @@
 
 package io.element.android.x.matrix.room
 
-import io.element.android.x.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.x.matrix.sync.roomListDiff
 import io.element.android.x.matrix.sync.state
 import java.io.Closeable

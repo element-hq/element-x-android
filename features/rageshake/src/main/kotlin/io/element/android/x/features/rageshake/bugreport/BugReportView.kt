@@ -51,8 +51,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import io.element.android.libraries.architecture.Async
-import io.element.android.x.core.compose.LogCompositions
-import io.element.android.x.core.compose.textFieldState
+import io.element.android.libraries.core.compose.LogCompositions
+import io.element.android.libraries.core.compose.textFieldState
 import io.element.android.x.designsystem.components.LabelledCheckbox
 import io.element.android.x.designsystem.components.dialogs.ErrorDialog
 import io.element.android.x.ui.strings.R as StringR
