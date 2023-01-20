@@ -16,6 +16,7 @@
 
 package io.element.android.x.features.template
 
+// TODO add your ui models. Remove the eventSink if you don't have events.
 data class TemplateState(
     val eventSink: (TemplateEvents) -> Unit = {}
 )

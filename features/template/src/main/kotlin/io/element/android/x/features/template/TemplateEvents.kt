@@ -16,6 +16,7 @@
 
 package io.element.android.x.features.template
 
+// TODO Add your events or remove the file completely if no events
 sealed interface TemplateEvents {
     object MyEvent: TemplateEvents
 }
