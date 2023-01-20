@@ -24,7 +24,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.features.login"
+    namespace = "io.element.android.features.login"
 }
 
 anvil {

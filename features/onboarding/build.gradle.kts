@@ -22,7 +22,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.features.onboarding"
+    namespace = "io.element.android.features.onboarding"
 }
 
 dependencies {

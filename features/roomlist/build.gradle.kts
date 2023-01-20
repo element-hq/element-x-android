@@ -23,7 +23,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.features.roomlist"
+    namespace = "io.element.android.features.roomlist"
 }
 
 anvil {

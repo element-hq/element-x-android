@@ -24,7 +24,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.features.rageshake"
+    namespace = "io.element.android.features.rageshake"
 }
 
 anvil {
