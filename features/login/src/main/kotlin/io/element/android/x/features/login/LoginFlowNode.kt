@@ -25,7 +25,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
-import io.element.android.x.architecture.createNode
+import io.element.android.libraries.architecture.createNode
 import io.element.android.x.features.login.changeserver.ChangeServerNode
 import io.element.android.x.features.login.root.LoginRootNode
 import kotlinx.parcelize.Parcelize

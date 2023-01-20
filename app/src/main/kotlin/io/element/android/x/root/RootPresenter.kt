@@ -19,7 +19,7 @@ package io.element.android.x.root
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import io.element.android.x.architecture.Presenter
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.x.features.rageshake.bugreport.BugReportPresenter
 import io.element.android.x.features.rageshake.crash.ui.CrashDetectionPresenter
 import io.element.android.x.features.rageshake.detection.RageshakeDetectionPresenter

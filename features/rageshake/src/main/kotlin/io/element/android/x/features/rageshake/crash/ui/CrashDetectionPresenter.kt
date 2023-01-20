@@ -19,13 +19,14 @@ package io.element.android.x.features.rageshake.crash.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
-import io.element.android.x.architecture.Presenter
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.x.features.rageshake.crash.CrashDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class CrashDetectionPresenter @Inject constructor(private val crashDataStore: CrashDataStore) : Presenter<CrashDetectionState> {
+class CrashDetectionPresenter @Inject constructor(private val crashDataStore: CrashDataStore) :
+    Presenter<CrashDetectionState> {
 
     @Composable
     override fun present(): CrashDetectionState {

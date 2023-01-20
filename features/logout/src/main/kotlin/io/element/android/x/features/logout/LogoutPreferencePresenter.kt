@@ -21,15 +21,16 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import io.element.android.x.architecture.Async
-import io.element.android.x.architecture.Presenter
-import io.element.android.x.architecture.execute
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.execute
 import io.element.android.x.matrix.MatrixClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class LogoutPreferencePresenter @Inject constructor(private val matrixClient: MatrixClient) : Presenter<LogoutPreferenceState> {
+class LogoutPreferencePresenter @Inject constructor(private val matrixClient: MatrixClient) :
+    Presenter<LogoutPreferenceState> {
 
     @Composable
     override fun present(): LogoutPreferenceState {

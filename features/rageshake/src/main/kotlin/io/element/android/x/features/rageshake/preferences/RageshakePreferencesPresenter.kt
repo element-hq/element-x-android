@@ -22,7 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import io.element.android.x.architecture.Presenter
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.x.features.rageshake.rageshake.RageShake
 import io.element.android.x.features.rageshake.rageshake.RageshakeDataStore
 import kotlinx.coroutines.CoroutineScope

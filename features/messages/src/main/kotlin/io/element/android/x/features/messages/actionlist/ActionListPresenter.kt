@@ -21,7 +21,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import io.element.android.x.architecture.Presenter
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.x.features.messages.actionlist.model.TimelineItemAction
 import io.element.android.x.features.messages.timeline.model.TimelineItem
 import io.element.android.x.features.messages.timeline.model.content.TimelineItemRedactedContent

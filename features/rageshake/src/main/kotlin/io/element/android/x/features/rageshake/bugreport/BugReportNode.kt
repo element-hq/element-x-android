@@ -27,7 +27,7 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.x.anvilannotations.ContributesNode
-import io.element.android.x.architecture.presenterConnector
+import io.element.android.libraries.architecture.presenterConnector
 import io.element.android.x.di.AppScope
 
 @ContributesNode(AppScope::class)

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.architecture
+package io.element.android.libraries.architecture
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node

@@ -17,7 +17,7 @@
 package io.element.android.x.features.template
 
 import androidx.compose.runtime.Composable
-import io.element.android.x.architecture.Presenter
+import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 
 class TemplatePresenter @Inject constructor() : Presenter<TemplateState> {

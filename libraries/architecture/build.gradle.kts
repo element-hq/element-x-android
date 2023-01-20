@@ -21,7 +21,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.libraries.architecture"
+    namespace = "io.element.android.libraries.architecture"
 }
 
 dependencies {

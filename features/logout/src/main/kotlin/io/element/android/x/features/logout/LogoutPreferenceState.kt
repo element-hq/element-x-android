@@ -16,7 +16,7 @@
 
 package io.element.android.x.features.logout
 
-import io.element.android.x.architecture.Async
+import io.element.android.libraries.architecture.Async
 
 data class LogoutPreferenceState(
     val logoutAction: Async<Unit> = Async.Uninitialized,

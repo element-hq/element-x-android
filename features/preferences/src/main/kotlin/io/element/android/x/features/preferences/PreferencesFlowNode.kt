@@ -24,7 +24,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.navmodel.backstack.BackStack
-import io.element.android.x.architecture.createNode
+import io.element.android.libraries.architecture.createNode
 import io.element.android.x.features.preferences.root.PreferencesRootNode
 import kotlinx.parcelize.Parcelize
 

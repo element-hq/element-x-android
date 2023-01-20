@@ -52,7 +52,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.element.android.x.architecture.Async
+import io.element.android.libraries.architecture.Async
 import io.element.android.x.core.compose.textFieldState
 import io.element.android.x.designsystem.components.VectorIcon
 import io.element.android.x.features.login.R
