@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.x.tests.uitests
+package io.element.android.tests.uitests
 
-import android.app.Activity
-import com.airbnb.android.showkase.models.Showkase
+import com.airbnb.android.showkase.annotation.ShowkaseRoot
+import com.airbnb.android.showkase.annotation.ShowkaseRootModule
 
-fun openShowkase(activity: Activity) {
-    activity.startActivity(Showkase.getBrowserIntent(activity))
-}
+@ShowkaseRoot
+class ElementXShowkaseRootModule : ShowkaseRootModule
