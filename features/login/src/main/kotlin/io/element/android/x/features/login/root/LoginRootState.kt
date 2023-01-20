@@ -17,7 +17,7 @@
 package io.element.android.x.features.login.root
 
 import android.os.Parcelable
-import io.element.android.x.matrix.core.SessionId
+import io.element.android.libraries.matrix.core.SessionId
 import kotlinx.parcelize.Parcelize
 
 data class LoginRootState(

@@ -30,7 +30,7 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.x.di.RoomComponent
 import io.element.android.x.features.messages.MessagesNode
-import io.element.android.x.matrix.room.MatrixRoom
+import io.element.android.libraries.matrix.room.MatrixRoom
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 

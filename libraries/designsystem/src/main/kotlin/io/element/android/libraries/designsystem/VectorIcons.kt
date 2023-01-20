@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 
 package io.element.android.libraries.designsystem
-
-import io.element.android.x.libraries.designsystem.R
 
 object VectorIcons {
     val Copy = R.drawable.ic_content_copy

@@ -33,10 +33,10 @@ import io.element.android.x.features.roomlist.model.RoomListEvents
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListRoomSummaryPlaceholders
 import io.element.android.x.features.roomlist.model.RoomListState
-import io.element.android.x.matrix.MatrixClient
-import io.element.android.x.matrix.media.MediaResolver
-import io.element.android.x.matrix.room.RoomSummary
-import io.element.android.x.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.MatrixClient
+import io.element.android.libraries.matrix.media.MediaResolver
+import io.element.android.libraries.matrix.room.RoomSummary
+import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList

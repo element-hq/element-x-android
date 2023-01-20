@@ -17,7 +17,7 @@
 package io.element.android.x.features.roomlist.model
 
 import androidx.compose.runtime.Immutable
-import io.element.android.x.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable

@@ -44,9 +44,9 @@ import io.element.android.x.features.roomlist.model.RoomListEvents
 import io.element.android.x.features.roomlist.model.RoomListRoomSummary
 import io.element.android.x.features.roomlist.model.RoomListState
 import io.element.android.x.features.roomlist.model.stubbedRoomSummaries
-import io.element.android.x.matrix.core.RoomId
-import io.element.android.x.matrix.core.UserId
-import io.element.android.x.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.core.RoomId
+import io.element.android.libraries.matrix.core.UserId
+import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable

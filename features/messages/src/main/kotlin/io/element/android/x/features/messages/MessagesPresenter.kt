@@ -36,9 +36,9 @@ import io.element.android.x.features.messages.timeline.TimelineEvents
 import io.element.android.x.features.messages.timeline.TimelinePresenter
 import io.element.android.x.features.messages.timeline.model.TimelineItem
 import io.element.android.x.features.messages.timeline.model.content.TimelineItemTextBasedContent
-import io.element.android.x.matrix.MatrixClient
-import io.element.android.x.matrix.room.MatrixRoom
-import io.element.android.x.matrix.ui.MatrixItemHelper
+import io.element.android.libraries.matrix.MatrixClient
+import io.element.android.libraries.matrix.room.MatrixRoom
+import io.element.android.libraries.matrix.ui.MatrixItemHelper
 import io.element.android.x.textcomposer.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

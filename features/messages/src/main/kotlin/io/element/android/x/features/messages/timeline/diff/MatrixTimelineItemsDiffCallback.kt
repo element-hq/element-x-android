@@ -17,7 +17,7 @@
 package io.element.android.x.features.messages.timeline.diff
 
 import androidx.recyclerview.widget.DiffUtil
-import io.element.android.x.matrix.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
 
 internal class MatrixTimelineItemsDiffCallback(
     private val oldList: List<MatrixTimelineItem>,
