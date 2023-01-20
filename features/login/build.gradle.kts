@@ -40,6 +40,7 @@ dependencies {
     implementation(project(":libraries:matrix"))
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:elementresources"))
+    implementation(project(":libraries:testtags"))
     implementation(libs.appyx.core)
     implementation(project(":libraries:ui-strings"))
     ksp(libs.showkase.processor)

@@ -60,6 +60,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.x.core.compose.textFieldState
 import io.element.android.x.features.login.error.loginError
+import io.element.android.x.libraries.testtags.TestTags
+import io.element.android.x.libraries.testtags.testTag
 import io.element.android.x.matrix.core.SessionId
 import io.element.android.x.ui.strings.R as StringR
 
@@ -127,6 +129,7 @@ fun LoginRootScreen(
                             onClick = onChangeServer,
                             modifier = Modifier
                                 .align(Alignment.CenterEnd)
+                                .testTag(TestTags.loginChangeServer)
                                 .padding(top = 8.dp, end = 8.dp),
                             content = {
                                 Text(text = "Change")
@@ -137,6 +140,7 @@ fun LoginRootScreen(
                         value = loginFieldState,
                         modifier = Modifier
                             .fillMaxWidth()
+                            .testTag(TestTags.loginEmailUsername)
                             .padding(top = 60.dp),
                         label = {
                             Text(text = stringResource(id = StringR.string.login_signin_username_hint))
@@ -159,6 +163,7 @@ fun LoginRootScreen(
                         value = passwordFieldState,
                         modifier = Modifier
                             .fillMaxWidth()
+                            .testTag(TestTags.loginPassword)
                             .padding(top = 24.dp),
                         onValueChange = {
                             passwordFieldState = it
@@ -202,6 +207,7 @@ fun LoginRootScreen(
                     enabled = state.submitEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .testTag(TestTags.loginContinue)
                         .padding(vertical = 32.dp)
                 ) {
                     Text(text = "Continue")
