@@ -57,8 +57,8 @@ import io.element.android.x.core.compose.textFieldState
 import io.element.android.x.designsystem.components.VectorIcon
 import io.element.android.x.features.login.R
 import io.element.android.x.features.login.error.changeServerError
-import io.element.android.x.testtags.TestTags
-import io.element.android.x.testtags.testTag
+import io.element.android.x.libraries.testtags.TestTags
+import io.element.android.x.libraries.testtags.testTag
 
 @Composable
 fun ChangeServerView(

@@ -19,5 +19,5 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.testtags"
+    namespace = "io.element.android.x.libraries.testtags"
 }

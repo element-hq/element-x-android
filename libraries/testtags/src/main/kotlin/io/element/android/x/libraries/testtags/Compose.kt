@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.testtags
+package io.element.android.x.libraries.testtags
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
