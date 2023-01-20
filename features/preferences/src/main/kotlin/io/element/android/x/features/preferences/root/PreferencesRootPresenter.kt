@@ -17,8 +17,8 @@
 package io.element.android.x.features.preferences.root
 
 import androidx.compose.runtime.Composable
-import io.element.android.x.architecture.Async
-import io.element.android.x.architecture.Presenter
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.x.features.logout.LogoutPreferencePresenter
 import io.element.android.x.features.rageshake.preferences.RageshakePreferencesPresenter
 import javax.inject.Inject

@@ -22,9 +22,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import io.element.android.x.architecture.Async
-import io.element.android.x.architecture.Presenter
-import io.element.android.x.architecture.execute
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.execute
 import io.element.android.x.matrix.auth.MatrixAuthenticationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

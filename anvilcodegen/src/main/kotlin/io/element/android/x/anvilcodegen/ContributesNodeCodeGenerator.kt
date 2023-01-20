@@ -148,7 +148,7 @@ class ContributesNodeCodeGenerator : CodeGenerator {
     }
 
     companion object {
-        private val assistedNodeFactoryFqName = FqName("io.element.android.x.architecture.AssistedNodeFactory")
-        private val nodeKeyFqName = FqName("io.element.android.x.architecture.NodeKey")
+        private val assistedNodeFactoryFqName = FqName("io.element.android.libraries.architecture.AssistedNodeFactory")
+        private val nodeKeyFqName = FqName("io.element.android.libraries.architecture.NodeKey")
     }
 }

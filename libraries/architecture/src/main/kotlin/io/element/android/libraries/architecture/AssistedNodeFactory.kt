@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.x.architecture
+package io.element.android.libraries.architecture
 
+import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import dagger.MapKey
-import kotlin.reflect.KClass
+import com.bumble.appyx.core.plugin.Plugin
 
-@Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.FUNCTION, AnnotationTarget.CLASS)
-@MapKey
-annotation class NodeKey(val value: KClass<out Node>)
+interface AssistedNodeFactory<NODE : Node> {
+    fun create(buildContext: BuildContext, plugins: List<Plugin>): NODE
+}

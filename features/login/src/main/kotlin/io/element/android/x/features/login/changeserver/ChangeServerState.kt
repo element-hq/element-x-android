@@ -16,7 +16,7 @@
 
 package io.element.android.x.features.login.changeserver
 
-import io.element.android.x.architecture.Async
+import io.element.android.libraries.architecture.Async
 
 data class ChangeServerState(
     val homeserver: String = "",

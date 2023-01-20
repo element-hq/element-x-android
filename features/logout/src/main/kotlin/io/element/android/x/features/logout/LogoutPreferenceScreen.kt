@@ -24,7 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.x.architecture.Async
+import io.element.android.libraries.architecture.Async
 import io.element.android.x.designsystem.components.ProgressDialog
 import io.element.android.x.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.x.designsystem.components.preferences.PreferenceCategory

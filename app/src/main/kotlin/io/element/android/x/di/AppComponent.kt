@@ -20,7 +20,7 @@ import android.content.Context
 import com.squareup.anvil.annotations.MergeComponent
 import dagger.BindsInstance
 import dagger.Component
-import io.element.android.x.architecture.NodeFactoriesBindings
+import io.element.android.libraries.architecture.NodeFactoriesBindings
 
 @SingleIn(AppScope::class)
 @MergeComponent(AppScope::class)

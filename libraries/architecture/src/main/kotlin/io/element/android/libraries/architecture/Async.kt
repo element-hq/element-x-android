@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.architecture
+package io.element.android.libraries.architecture
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable

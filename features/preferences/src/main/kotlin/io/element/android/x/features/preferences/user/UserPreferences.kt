@@ -21,7 +21,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.element.android.x.architecture.Async
+import io.element.android.libraries.architecture.Async
 import io.element.android.x.matrix.ui.components.MatrixUserHeader
 import io.element.android.x.matrix.ui.model.MatrixUser
 

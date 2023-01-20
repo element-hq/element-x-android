@@ -17,7 +17,7 @@
 package io.element.android.x.features.rageshake.bugreport
 
 import android.os.Parcelable
-import io.element.android.x.architecture.Async
+import io.element.android.libraries.architecture.Async
 import kotlinx.parcelize.Parcelize
 
 data class BugReportState(

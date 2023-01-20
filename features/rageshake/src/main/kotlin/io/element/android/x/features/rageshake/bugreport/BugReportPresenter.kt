@@ -24,8 +24,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.core.net.toUri
-import io.element.android.x.architecture.Async
-import io.element.android.x.architecture.Presenter
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.x.features.rageshake.crash.CrashDataStore
 import io.element.android.x.features.rageshake.logs.VectorFileLogger
 import io.element.android.x.features.rageshake.reporter.BugReporter
