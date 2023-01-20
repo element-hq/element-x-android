@@ -28,7 +28,7 @@ import io.element.android.libraries.core.compose.OnLifecycleEvent
 import io.element.android.libraries.core.hardware.vibrate
 import io.element.android.libraries.core.screenshot.ImageResult
 import io.element.android.libraries.core.screenshot.screenshot
-import io.element.android.x.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.x.ui.strings.R as StringR
 
 @Composable

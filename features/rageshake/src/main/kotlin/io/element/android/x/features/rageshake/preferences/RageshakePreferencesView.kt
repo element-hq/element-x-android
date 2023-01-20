@@ -23,10 +23,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.x.designsystem.components.preferences.PreferenceCategory
-import io.element.android.x.designsystem.components.preferences.PreferenceSlide
-import io.element.android.x.designsystem.components.preferences.PreferenceSwitch
-import io.element.android.x.designsystem.components.preferences.PreferenceText
+import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
+import io.element.android.libraries.designsystem.components.preferences.PreferenceSlide
+import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
+import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.x.ui.strings.R as StringR
 
 @Composable

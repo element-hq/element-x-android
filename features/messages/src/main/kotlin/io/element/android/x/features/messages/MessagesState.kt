@@ -17,7 +17,7 @@
 package io.element.android.x.features.messages
 
 import androidx.compose.runtime.Immutable
-import io.element.android.x.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.messages.actionlist.ActionListState
 import io.element.android.x.features.messages.textcomposer.MessageComposerState
 import io.element.android.x.features.messages.timeline.TimelineState

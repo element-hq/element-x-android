@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.designsystem.components.avatar
+package io.element.android.libraries.designsystem.components.avatar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -32,8 +32,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import io.element.android.x.designsystem.AvatarGradientEnd
-import io.element.android.x.designsystem.AvatarGradientStart
+import io.element.android.libraries.designsystem.AvatarGradientEnd
+import io.element.android.libraries.designsystem.AvatarGradientStart
 import timber.log.Timber
 
 @Composable

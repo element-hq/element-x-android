@@ -41,7 +41,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import io.element.android.x.designsystem.components.VectorIcon
+import io.element.android.libraries.designsystem.components.VectorIcon
 import io.element.android.x.features.messages.actionlist.model.TimelineItemAction
 import io.element.android.x.features.messages.timeline.model.TimelineItem
 import kotlinx.coroutines.flow.filter

@@ -59,8 +59,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import io.element.android.libraries.core.compose.PairCombinedPreviewParameter
-import io.element.android.x.designsystem.components.avatar.Avatar
-import io.element.android.x.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.x.features.messages.timeline.model.AggregatedReaction
 import io.element.android.x.features.messages.timeline.model.MessagesItemGroupPosition
 import io.element.android.x.features.messages.timeline.model.TimelineItemGroupPositionProvider

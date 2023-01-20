@@ -14,34 +14,25 @@
  * limitations under the License.
  */
 
-package io.element.android.x.designsystem.components.preferences.components
+package io.element.android.libraries.designsystem.components
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
-import io.element.android.x.designsystem.toEnabledColor
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 
 @Composable
-fun PreferenceIcon(
-    icon: ImageVector?,
+fun VectorIcon(
+    resourceId: Int,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    tint: Color = LocalContentColor.current,
 ) {
-    if (icon != null) {
-        Icon(
-            imageVector = icon,
-            contentDescription = "",
-            tint = enabled.toEnabledColor(),
-            modifier = modifier
-                .padding(start = 8.dp)
-                .width(48.dp),
-        )
-    } else {
-        Spacer(modifier = modifier.width(56.dp))
-    }
+    Icon(
+        painter = painterResource(id = resourceId),
+        contentDescription = null,
+        modifier = modifier,
+        tint = tint
+    )
 }

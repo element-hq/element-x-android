@@ -28,8 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.core.text.util.LinkifyCompat
-import io.element.android.x.designsystem.LinkColor
-import io.element.android.x.designsystem.components.ClickableLinkText
+import io.element.android.libraries.designsystem.LinkColor
+import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.x.features.messages.timeline.components.html.HtmlDocument
 import io.element.android.x.features.messages.timeline.model.content.TimelineItemTextBasedContent
 

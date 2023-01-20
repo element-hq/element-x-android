@@ -25,8 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.x.designsystem.components.avatar.AvatarData
-import io.element.android.x.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.x.features.messages.actionlist.ActionListPresenter
 import io.element.android.x.features.messages.actionlist.model.TimelineItemAction
 import io.element.android.x.features.messages.textcomposer.MessageComposerEvents
