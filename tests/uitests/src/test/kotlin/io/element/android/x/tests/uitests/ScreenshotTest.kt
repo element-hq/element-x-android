@@ -37,6 +37,7 @@ import com.airbnb.android.showkase.models.Showkase
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import io.element.android.libraries.designsystem.ElementXTheme
+import io.element.android.libraries.tests.uitests.getMetadata
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

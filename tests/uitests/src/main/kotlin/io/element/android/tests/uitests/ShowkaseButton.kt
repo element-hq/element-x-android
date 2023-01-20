@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.tests.uitests
+package io.element.android.tests.uitests
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
