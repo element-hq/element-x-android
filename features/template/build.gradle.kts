@@ -23,6 +23,7 @@ plugins {
 }
 
 android {
+    // TODO change the namespace (and your classes package)
     namespace = "io.element.android.x.features.template"
 }
 
