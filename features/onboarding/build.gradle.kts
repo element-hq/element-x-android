@@ -26,12 +26,12 @@ android {
 }
 
 dependencies {
-    implementation(project(":libraries:core"))
-    implementation(project(":libraries:elementresources"))
-    implementation(project(":libraries:ui-strings"))
-    implementation(project(":libraries:designsystem"))
-    implementation(project(":libraries:architecture"))
-    implementation(project(":libraries:testtags"))
+    implementation(projects.libraries.core)
+    implementation(projects.libraries.elementresources)
+    implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.architecture)
+    implementation(projects.libraries.testtags)
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pagerindicator)
     implementation(libs.appyx.core)

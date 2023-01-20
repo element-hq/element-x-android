@@ -31,18 +31,18 @@ anvil {
 }
 
 dependencies {
-    anvil(project(":anvilcodegen"))
-    implementation(project(":anvilannotations"))
+    anvil(projects.anvilcodegen)
+    implementation(projects.anvilannotations)
 
-    implementation(project(":libraries:di"))
-    implementation(project(":libraries:core"))
-    implementation(project(":libraries:architecture"))
-    implementation(project(":libraries:matrix"))
-    implementation(project(":libraries:matrixui"))
-    implementation(project(":libraries:designsystem"))
+    implementation(projects.libraries.di)
+    implementation(projects.libraries.core)
+    implementation(projects.libraries.architecture)
+    implementation(projects.libraries.matrix)
+    implementation(projects.libraries.matrixui)
+    implementation(projects.libraries.designsystem)
     implementation(libs.appyx.core)
-    implementation(project(":libraries:elementresources"))
-    implementation(project(":libraries:ui-strings"))
+    implementation(projects.libraries.elementresources)
+    implementation(projects.libraries.uiStrings)
     implementation(libs.datetime)
     implementation(libs.accompanist.placeholder)
 
@@ -51,7 +51,7 @@ dependencies {
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
-    testImplementation(project(":libraries:matrixtest"))
+    testImplementation(projects.libraries.matrixtest)
 
     androidTestImplementation(libs.test.junitext)
 

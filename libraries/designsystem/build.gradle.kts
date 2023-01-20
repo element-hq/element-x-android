@@ -28,8 +28,8 @@ android {
         // Should not be there, but this is a POC
         implementation(libs.coil.compose)
         implementation(libs.accompanist.systemui)
-        implementation(project(":libraries:elementresources"))
-        implementation(project(":libraries:ui-strings"))
+        implementation(projects.libraries.elementresources)
+        implementation(projects.libraries.uiStrings)
         ksp(libs.showkase.processor)
     }
 }

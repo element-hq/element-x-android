@@ -164,9 +164,9 @@ knit {
 dependencies {
     allLibraries()
     allFeatures()
-    implementation(project(":tests:uitests"))
-    implementation(project(":anvilannotations"))
-    anvil(project(":anvilcodegen"))
+    implementation(projects.tests.uitests)
+    implementation(projects.anvilannotations)
+    anvil(projects.anvilcodegen)
 
     // https://developer.android.com/studio/write/java8-support#library-desugaring-versions
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.2")
