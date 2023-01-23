@@ -32,6 +32,9 @@ dependencyResolutionManagement {
         }
     }
 }
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "ElementX"
 include(":app")
 include(":libraries:core")

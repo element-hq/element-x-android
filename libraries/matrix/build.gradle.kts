@@ -23,7 +23,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.matrix"
+    namespace = "io.element.android.libraries.matrix"
 }
 
 anvil {
@@ -31,10 +31,10 @@ anvil {
 }
 
 dependencies {
-    api(project(":libraries:rustsdk"))
-    implementation(project(":libraries:di"))
+    api(projects.libraries.rustsdk)
+    implementation(projects.libraries.di)
     implementation(libs.dagger)
-    implementation(project(":libraries:core"))
+    implementation(projects.libraries.core)
     implementation("net.java.dev.jna:jna:5.13.0@aar")
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.serialization.json)

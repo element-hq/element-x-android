@@ -22,7 +22,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.ui.strings"
+    namespace = "io.element.android.libraries.ui.strings"
 }
 
 // forcing the stem string template generator to be cacheable, without this the templates

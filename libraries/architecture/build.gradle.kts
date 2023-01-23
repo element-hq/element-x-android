@@ -21,11 +21,11 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.libraries.architecture"
+    namespace = "io.element.android.libraries.architecture"
 }
 
 dependencies {
-    api(project(":libraries:di"))
+    api(projects.libraries.di)
     api(libs.dagger)
     api(libs.appyx.core)
     api(libs.molecule.runtime)
