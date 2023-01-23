@@ -21,6 +21,7 @@ import androidx.startup.AppInitializer
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.x.di.AppComponent
 import io.element.android.x.di.DaggerAppComponent
+import io.element.android.x.info.Logs
 import io.element.android.x.initializer.CrashInitializer
 import io.element.android.x.initializer.MatrixInitializer
 import io.element.android.x.initializer.TimberInitializer
@@ -40,5 +41,6 @@ class ElementXApplication : Application(), DaggerComponentOwner {
             initializeComponent(TimberInitializer::class.java)
             initializeComponent(MatrixInitializer::class.java)
         }
+        Logs().logApplicationInfo()
     }
 }
