@@ -27,8 +27,8 @@ import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.replace
-import io.element.android.x.features.login.LoginFlowNode
-import io.element.android.x.features.onboarding.OnBoardingScreen
+import io.element.android.features.login.LoginFlowNode
+import io.element.android.features.onboarding.OnBoardingScreen
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 

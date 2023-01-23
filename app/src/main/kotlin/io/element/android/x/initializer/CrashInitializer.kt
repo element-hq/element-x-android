@@ -18,7 +18,7 @@ package io.element.android.x.initializer
 
 import android.content.Context
 import androidx.startup.Initializer
-import io.element.android.x.features.rageshake.crash.VectorUncaughtExceptionHandler
+import io.element.android.features.rageshake.crash.VectorUncaughtExceptionHandler
 
 class CrashInitializer : Initializer<Unit> {
 
