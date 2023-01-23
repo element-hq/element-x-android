@@ -235,10 +235,10 @@ class BugReporter @Inject constructor(
 
                 if (!mIsCancelled) {
                     val text = when (reportType) {
-                        ReportType.BUG_REPORT -> "[ElementX] $bugDescription"
-                        ReportType.SUGGESTION -> "[ElementX] [Suggestion] $bugDescription"
-                        ReportType.SPACE_BETA_FEEDBACK -> "[ElementX] [spaces-feedback] $bugDescription"
-                        ReportType.THREADS_BETA_FEEDBACK -> "[ElementX] [threads-feedback] $bugDescription"
+                        ReportType.BUG_REPORT -> bugDescription
+                        ReportType.SUGGESTION -> "[Suggestion] $bugDescription"
+                        ReportType.SPACE_BETA_FEEDBACK -> "[spaces-feedback] $bugDescription"
+                        ReportType.THREADS_BETA_FEEDBACK -> "[threads-feedback] $bugDescription"
                         ReportType.AUTO_UISI_SENDER,
                         ReportType.AUTO_UISI -> bugDescription
                     }
@@ -297,9 +297,6 @@ class BugReporter @Inject constructor(
                     // builder.addFormDataPart("label", buildMeta.versionName)
                     // builder.addFormDataPart("label", buildMeta.flavorDescription)
                     // builder.addFormDataPart("label", buildMeta.gitBranchName)
-
-                    // Special for ElementX
-                    builder.addFormDataPart("label", "[ElementX]")
 
                     // Possible values for BuildConfig.BUILD_TYPE: "debug", "nightly", "release".
                     // builder.addFormDataPart("label", BuildConfig.BUILD_TYPE)
