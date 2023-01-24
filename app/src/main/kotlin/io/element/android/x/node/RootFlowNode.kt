@@ -107,6 +107,7 @@ class RootFlowNode(
         val state by presenterConnector.stateFlow.collectAsState()
         RootView(
             state = state,
+            modifier = modifier,
             onOpenBugReport = this::onOpenBugReport,
         ) {
             Children(navModel = backstack)

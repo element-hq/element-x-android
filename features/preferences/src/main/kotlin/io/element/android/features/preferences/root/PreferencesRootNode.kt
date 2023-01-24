@@ -52,6 +52,7 @@ class PreferencesRootNode @AssistedInject constructor(
         val state by presenterConnector.stateFlow.collectAsState()
         PreferencesRootView(
             state = state,
+            modifier = modifier,
             onBackPressed = this::navigateUp,
             onOpenRageShake = this::onOpenBugReport
         )

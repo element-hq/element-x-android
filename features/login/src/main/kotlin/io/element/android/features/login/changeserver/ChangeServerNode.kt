@@ -47,6 +47,7 @@ class ChangeServerNode @AssistedInject constructor(
         val state by presenterConnector.stateFlow.collectAsState()
         ChangeServerView(
             state = state,
+            modifier = modifier,
             onChangeServerSuccess = this::onSuccess,
         )
     }
