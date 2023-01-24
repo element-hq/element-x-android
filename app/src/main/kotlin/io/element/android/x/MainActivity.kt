@@ -48,7 +48,7 @@ class MainActivity : NodeComponentActivity() {
                             buildContext = it,
                             appComponentOwner = applicationContext as DaggerComponentOwner,
                             authenticationService = appBindings.authenticationService(),
-                            rootPresenter = appBindings.rootPresenter()
+                            presenter = appBindings.rootPresenter()
                         )
                     }
                 }
