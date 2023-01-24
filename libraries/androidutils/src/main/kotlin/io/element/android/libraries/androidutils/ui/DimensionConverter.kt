@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.element.android.libraries.core.ui
+package io.element.android.libraries.androidutils.ui
 
 import android.content.res.Resources
 import android.util.TypedValue
 import androidx.annotation.Px
 
-class DimensionConverter(val resources: Resources) {
+class DimensionConverter(private val resources: Resources) {
 
     @Px
     fun dpToPx(dp: Int): Int {

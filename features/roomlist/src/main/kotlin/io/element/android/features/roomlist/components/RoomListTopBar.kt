@@ -52,9 +52,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import io.element.android.libraries.core.compose.LogCompositions
-import io.element.android.libraries.core.compose.textFieldState
 import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.form.textFieldState
+import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -66,7 +66,10 @@ fun RoomListTopBar(
     onOpenSettings: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
-    LogCompositions(tag = "RoomListScreen", msg = "TopBar")
+    LogCompositions(
+        tag = "RoomListScreen",
+        msg = "TopBar"
+    )
     var searchWidgetStateIsOpened by rememberSaveable { mutableStateOf(false) }
 
     fun closeFilter() {

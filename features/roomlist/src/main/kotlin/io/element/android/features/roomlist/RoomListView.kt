@@ -36,7 +36,6 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Velocity
-import io.element.android.libraries.core.compose.LogCompositions
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.features.roomlist.components.RoomListTopBar
 import io.element.android.features.roomlist.components.RoomSummaryRow
@@ -44,6 +43,7 @@ import io.element.android.features.roomlist.model.RoomListEvents
 import io.element.android.features.roomlist.model.RoomListRoomSummary
 import io.element.android.features.roomlist.model.RoomListState
 import io.element.android.features.roomlist.model.stubbedRoomSummaries
+import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.core.RoomId
 import io.element.android.libraries.matrix.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
@@ -103,7 +103,10 @@ fun RoomListView(
         }
     }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
-    LogCompositions(tag = "RoomListScreen", msg = "Content")
+    LogCompositions(
+        tag = "RoomListScreen",
+        msg = "Content"
+    )
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {

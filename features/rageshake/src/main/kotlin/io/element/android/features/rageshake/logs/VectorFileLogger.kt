@@ -19,17 +19,17 @@ package io.element.android.features.rageshake.logs
 import android.content.Context
 import android.util.Log
 import io.element.android.libraries.core.data.tryOrNull
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.File
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.util.logging.FileHandler
 import java.util.logging.Level
 import java.util.logging.Logger
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 /**
  * Will be planted in Timber.
@@ -85,7 +85,9 @@ class VectorFileLogger(
             tryOrNull { file.delete() }
         }
 
-        fileHandler = tryOrNull("Failed to initialize FileLogger") {
+        fileHandler = tryOrNull(
+            onError = { Timber.e(it, "Failed to initialize FileLogger") }
+        ) {
             FileHandler(
                 cacheDirectory.absolutePath + "/" + fileNamePrefix + ".%g.txt",
                 maxLogSizeByte,
@@ -134,7 +136,9 @@ class VectorFileLogger(
      * @return The list of files with logs.
      */
     fun getLogFiles(): List<File> {
-        return tryOrNull("## getLogFiles() failed") {
+        return tryOrNull(
+            onError = { Timber.e(it, "## getLogFiles() failed") }
+        ) {
             fileHandler
                 ?.flush()
                 ?.let { 0 until logRotationCount }

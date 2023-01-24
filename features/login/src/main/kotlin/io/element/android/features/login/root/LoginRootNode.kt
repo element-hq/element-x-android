@@ -29,7 +29,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.architecture.presenterConnector
-import io.element.android.libraries.core.compose.OnLifecycleEvent
+import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)

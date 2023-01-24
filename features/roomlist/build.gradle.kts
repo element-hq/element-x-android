@@ -34,13 +34,11 @@ dependencies {
     anvil(projects.anvilcodegen)
     implementation(projects.anvilannotations)
 
-    implementation(projects.libraries.di)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix)
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
-    implementation(libs.appyx.core)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
     implementation(libs.datetime)
