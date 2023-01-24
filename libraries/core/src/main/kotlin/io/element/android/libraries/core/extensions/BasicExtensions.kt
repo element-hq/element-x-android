@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.core.extensions
 
-
 fun Boolean.toOnOff() = if (this) "ON" else "OFF"
 
 inline fun <T> T.ooi(block: (T) -> Unit): T = also(block)
