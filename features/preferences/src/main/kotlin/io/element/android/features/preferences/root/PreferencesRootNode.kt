@@ -34,7 +34,7 @@ import io.element.android.libraries.di.SessionScope
 class PreferencesRootNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: PreferencesRootPresenter,
+    presenter: PreferencesRootPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
     interface Callback : Plugin {

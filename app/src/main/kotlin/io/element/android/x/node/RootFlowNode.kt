@@ -60,7 +60,7 @@ class RootFlowNode(
     ),
     private val appComponentOwner: DaggerComponentOwner,
     private val authenticationService: MatrixAuthenticationService,
-    rootPresenter: RootPresenter
+    presenter: RootPresenter
 ) :
     ParentNode<RootFlowNode.NavTarget>(
         navModel = backstack,
@@ -70,7 +70,7 @@ class RootFlowNode(
     DaggerComponentOwner by appComponentOwner {
 
     private val matrixClientsHolder = ConcurrentHashMap<SessionId, MatrixClient>()
-    private val presenterConnector = presenterConnector(rootPresenter)
+    private val presenterConnector = presenterConnector(presenter)
 
     override fun onBuilt() {
         super.onBuilt()
