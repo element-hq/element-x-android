@@ -23,12 +23,12 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
-import io.element.android.libraries.core.compose.LogCompositions
-import io.element.android.libraries.core.compose.OnLifecycleEvent
-import io.element.android.libraries.core.hardware.vibrate
-import io.element.android.libraries.core.screenshot.ImageResult
-import io.element.android.libraries.core.screenshot.screenshot
+import io.element.android.features.rageshake.screenshot.ImageResult
+import io.element.android.features.rageshake.screenshot.screenshot
+import io.element.android.libraries.androidutils.hardware.vibrate
+import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
@@ -36,7 +36,10 @@ fun RageshakeDetectionView(
     state: RageshakeDetectionState,
     onOpenBugReport: () -> Unit = { },
 ) {
-    LogCompositions(tag = "Rageshake", msg = "RageshakeDetectionScreen")
+    LogCompositions(
+        tag = "Rageshake",
+        msg = "RageshakeDetectionScreen"
+    )
     val eventSink = state.eventSink
     val context = LocalContext.current
     OnLifecycleEvent { _, event ->

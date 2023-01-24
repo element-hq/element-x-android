@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.core.coroutine
+package io.element.android.libraries.designsystem.utils
 
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
-// https://jivimberg.io/blog/2018/05/04/parallel-map-in-kotlin/
-suspend fun <A, B> Iterable<A>.parallelMap(f: suspend (A) -> B): List<B> = coroutineScope {
-    map { async { f(it) } }.awaitAll()
+open class PairCombinedPreviewParameter<T1, T2>(
+    private val provider: Pair<PreviewParameterProvider<T1>, PreviewParameterProvider<T2>>
+) : PreviewParameterProvider<Pair<T1, T2>> {
+    override val values: Sequence<Pair<T1, T2>>
+        get() = provider.first.values.flatMap { first ->
+            provider.second.values.map { second ->
+                first to second
+            }
+        }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.core.file
+package io.element.android.libraries.androidutils.file
 
+import timber.log.Timber
 import java.io.File
 import java.util.zip.GZIPOutputStream
-import timber.log.Timber
 
 /**
  * GZip a file.

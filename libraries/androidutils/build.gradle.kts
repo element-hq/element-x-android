@@ -1,5 +1,6 @@
+
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +15,15 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.core.bitmap
+plugins {
+    id("io.element.android-library")
+}
 
-import android.graphics.Bitmap
-import java.io.File
+android {
+    namespace = "io.element.android.libraries.androidutils"
+}
 
-fun File.writeBitmap(bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int) {
-    outputStream().use { out ->
-        bitmap.compress(format, quality, out)
-        out.flush()
-    }
+dependencies {
+    implementation(libs.timber)
+    implementation(libs.androidx.corektx)
 }

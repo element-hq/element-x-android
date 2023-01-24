@@ -40,17 +40,17 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.google.android.material.shape.MaterialShapeDrawable
-import io.element.android.wysiwyg.EditorEditText
-import io.element.android.wysiwyg.inputhandlers.models.InlineFormat
-import io.element.android.libraries.core.ui.DimensionConverter
-import io.element.android.libraries.core.ui.hideKeyboard
-import io.element.android.libraries.core.ui.showKeyboard
+import io.element.android.libraries.androidutils.ui.DimensionConverter
+import io.element.android.libraries.androidutils.ui.hideKeyboard
+import io.element.android.libraries.androidutils.ui.showKeyboard
 import io.element.android.libraries.textcomposer.databinding.ComposerRichTextLayoutBinding
 import io.element.android.libraries.textcomposer.databinding.ViewRichTextMenuButtonBinding
 import io.element.android.libraries.textcomposer.tools.setTextIfDifferent
+import io.element.android.wysiwyg.EditorEditText
+import io.element.android.wysiwyg.inputhandlers.models.InlineFormat
 import uniffi.wysiwyg_composer.ActionState
 import uniffi.wysiwyg_composer.ComposerAction
-import io.element.android.element.resources.R as ElementR
+import io.element.android.libraries.resources.R as ElementR
 import io.element.android.libraries.ui.strings.R as StringR
 
 // Imported from Element Android

@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.core.compose
+package io.element.android.libraries.androidutils.hardware
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import androidx.core.content.getSystemService
 
-open class PairCombinedPreviewParameter<T1, T2>(
-    private val provider: Pair<PreviewParameterProvider<T1>, PreviewParameterProvider<T2>>
-) : PreviewParameterProvider<Pair<T1, T2>> {
-    override val values: Sequence<Pair<T1, T2>>
-        get() = provider.first.values.flatMap { first ->
-            provider.second.values.map { second ->
-                first to second
-            }
-        }
+fun Context.vibrate(durationMillis: Long = 100) {
+    val vibrator = getSystemService<Vibrator>() ?: return
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        vibrator.vibrate(VibrationEffect.createOneShot(durationMillis, VibrationEffect.DEFAULT_AMPLITUDE))
+    } else {
+        @Suppress("DEPRECATION")
+        vibrator.vibrate(durationMillis)
+    }
 }

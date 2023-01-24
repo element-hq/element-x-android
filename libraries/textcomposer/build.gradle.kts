@@ -32,6 +32,7 @@ android {
 dependencies {
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.matrix)
     implementation(libs.wysiwyg)

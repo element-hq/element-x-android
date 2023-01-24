@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.core.hardware
+package io.element.android.libraries.androidutils.bitmap
 
-import android.content.Context
-import android.os.Build
-import android.os.VibrationEffect
-import android.os.Vibrator
-import androidx.core.content.getSystemService
+import android.graphics.Bitmap
+import java.io.File
 
-fun Context.vibrate(durationMillis: Long = 100) {
-    val vibrator = getSystemService<Vibrator>() ?: return
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        vibrator.vibrate(VibrationEffect.createOneShot(durationMillis, VibrationEffect.DEFAULT_AMPLITUDE))
-    } else {
-        @Suppress("DEPRECATION")
-        vibrator.vibrate(durationMillis)
+fun File.writeBitmap(bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int) {
+    outputStream().use { out ->
+        bitmap.compress(format, quality, out)
+        out.flush()
     }
 }

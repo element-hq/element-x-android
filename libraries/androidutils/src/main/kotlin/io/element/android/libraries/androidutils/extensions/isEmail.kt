@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.core.compose
+package io.element.android.libraries.androidutils.extensions
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import android.util.Patterns
 
-@Composable
-public fun textFieldState(stateValue: String): MutableState<String> =
-    remember(stateValue) { mutableStateOf(stateValue) }
+/**
+ * Check if a CharSequence is an email.
+ */
+fun CharSequence.isEmail() = Patterns.EMAIL_ADDRESS.matcher(this).matches()

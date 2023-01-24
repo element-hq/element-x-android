@@ -23,12 +23,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.core.screenshot.ImageResult
 import io.element.android.features.rageshake.preferences.RageshakePreferencesEvents
 import io.element.android.features.rageshake.preferences.RageshakePreferencesPresenter
 import io.element.android.features.rageshake.rageshake.RageShake
+import io.element.android.features.rageshake.screenshot.ImageResult
 import io.element.android.features.rageshake.screenshot.ScreenshotHolder
+import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber

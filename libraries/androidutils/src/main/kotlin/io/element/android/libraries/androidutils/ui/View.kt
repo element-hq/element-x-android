@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.core.ui
+package io.element.android.libraries.androidutils.ui
 
 import android.view.View
 import android.view.inputmethod.InputMethodManager
