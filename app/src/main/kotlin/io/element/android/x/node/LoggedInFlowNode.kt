@@ -32,16 +32,16 @@ import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
+import io.element.android.features.preferences.PreferencesFlowNode
+import io.element.android.features.roomlist.RoomListNode
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.DaggerComponentOwner
-import io.element.android.x.di.SessionComponent
-import io.element.android.features.preferences.PreferencesFlowNode
-import io.element.android.features.roomlist.RoomListNode
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.core.RoomId
 import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
+import io.element.android.x.di.SessionComponent
 import kotlinx.parcelize.Parcelize
 
 class LoggedInFlowNode(
@@ -124,6 +124,9 @@ class LoggedInFlowNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(navModel = backstack)
+        Children(
+            navModel = backstack,
+            modifier = modifier,
+        )
     }
 }

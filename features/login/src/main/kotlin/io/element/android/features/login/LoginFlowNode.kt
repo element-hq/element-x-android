@@ -64,6 +64,9 @@ class LoginFlowNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(navModel = backstack)
+        Children(
+            navModel = backstack,
+            modifier = modifier,
+        )
     }
 }

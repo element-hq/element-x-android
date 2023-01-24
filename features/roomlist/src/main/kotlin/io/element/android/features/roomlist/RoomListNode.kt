@@ -58,6 +58,7 @@ class RoomListNode @AssistedInject constructor(
         val state by connector.stateFlow.collectAsState()
         RoomListView(
             state = state,
+            modifier = modifier,
             onRoomClicked = this::onRoomClicked,
             onOpenSettings = this::onOpenSettings
         )

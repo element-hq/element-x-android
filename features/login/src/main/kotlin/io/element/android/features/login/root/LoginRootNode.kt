@@ -60,6 +60,7 @@ class LoginRootNode @AssistedInject constructor(
         }
         LoginRootScreen(
             state = state,
+            modifier = modifier,
             onChangeServer = this::onChangeHomeServer,
         )
     }
