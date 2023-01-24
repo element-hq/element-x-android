@@ -19,7 +19,7 @@ package io.element.android.features.rageshake.reporter
 import android.content.Context
 import android.os.Build
 import io.element.android.libraries.core.extensions.toOnOff
-import io.element.android.libraries.core.file.compressFile
+import io.element.android.libraries.androidutils.file.compressFile
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.features.rageshake.R

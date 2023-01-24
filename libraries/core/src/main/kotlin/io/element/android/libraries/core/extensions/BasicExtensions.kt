@@ -16,18 +16,10 @@
 
 package io.element.android.libraries.core.extensions
 
-import android.util.Patterns
 
 fun Boolean.toOnOff() = if (this) "ON" else "OFF"
 
 inline fun <T> T.ooi(block: (T) -> Unit): T = also(block)
-
-/**
- * Check if a CharSequence is an email.
- */
-fun CharSequence.isEmail() = Patterns.EMAIL_ADDRESS.matcher(this).matches()
-
-// fun CharSequence.isMatrixId() = MatrixPatterns.isUserId(this.toString())
 
 /**
  * Return empty CharSequence if the CharSequence is null.

@@ -19,8 +19,8 @@ package io.element.android.features.rageshake.crash.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.core.compose.LogCompositions
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
@@ -28,7 +28,10 @@ fun CrashDetectionView(
     state: CrashDetectionState,
     onOpenBugReport: () -> Unit = { },
 ) {
-    LogCompositions(tag = "Crash", msg = "CrashDetectionScreen")
+    LogCompositions(
+        tag = "Crash",
+        msg = "CrashDetectionScreen"
+    )
 
     fun onPopupDismissed() {
         state.eventSink(CrashDetectionEvents.ResetAllCrashData)

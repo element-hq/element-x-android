@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2022 New Vector Ltd
  *
@@ -14,10 +15,18 @@
  * limitations under the License.
  */
 
+// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("io.element.android-compose-library")
+    id("java-library")
+    alias(libs.plugins.kotlin.jvm)
 }
 
-android {
-    namespace = "io.element.android.libraries.core"
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    implementation(libs.coroutines.core)
 }

@@ -35,7 +35,6 @@ dependencies {
     anvil(projects.anvilcodegen)
     implementation(projects.anvilannotations)
 
-    implementation(projects.libraries.di)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix)
@@ -43,8 +42,6 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
-
-    implementation(libs.appyx.core)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
