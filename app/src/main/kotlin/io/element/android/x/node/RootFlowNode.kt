@@ -36,10 +36,11 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
+import io.element.android.features.rageshake.bugreport.BugReportNode
+import io.element.android.libraries.architecture.animation.getDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.presenterConnector
 import io.element.android.libraries.di.DaggerComponentOwner
-import io.element.android.features.rageshake.bugreport.BugReportNode
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.core.SessionId
@@ -110,7 +111,11 @@ class RootFlowNode(
             modifier = modifier,
             onOpenBugReport = this::onOpenBugReport,
         ) {
-            Children(navModel = backstack)
+            Children(
+                navModel = backstack,
+                // Animate opening the bug report screen
+                transitionHandler = getDefaultTransitionHandler(),
+            )
         }
     }
 
