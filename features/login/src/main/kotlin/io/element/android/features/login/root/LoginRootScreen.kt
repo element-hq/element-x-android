@@ -58,7 +58,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.element.android.libraries.core.compose.textFieldState
+import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.features.login.error.loginError
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag

@@ -32,11 +32,11 @@ anvil {
 }
 
 dependencies {
-    implementation(projects.libraries.core)
     anvil(projects.anvilcodegen)
-    implementation(projects.libraries.di)
-    implementation(projects.libraries.architecture)
     implementation(projects.anvilannotations)
+    implementation(projects.libraries.androidutils)
+    implementation(projects.libraries.core)
+    implementation(projects.libraries.architecture)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)

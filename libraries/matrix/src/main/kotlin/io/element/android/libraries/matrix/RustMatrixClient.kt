@@ -26,7 +26,6 @@ import io.element.android.libraries.matrix.room.MatrixRoom
 import io.element.android.libraries.matrix.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.room.RustMatrixRoom
 import io.element.android.libraries.matrix.room.RustRoomSummaryDataSource
-import io.element.android.libraries.matrix.session.PreferencesSessionStore
 import io.element.android.libraries.matrix.session.SessionStore
 import io.element.android.libraries.matrix.session.sessionId
 import io.element.android.libraries.matrix.sync.SlidingSyncObserverProxy
