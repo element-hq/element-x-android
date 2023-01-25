@@ -34,7 +34,7 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import io.element.android.features.preferences.PreferencesFlowNode
 import io.element.android.features.roomlist.RoomListNode
-import io.element.android.libraries.architecture.animation.getDefaultTransitionHandler
+import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.DaggerComponentOwner
@@ -129,7 +129,7 @@ class LoggedInFlowNode(
             navModel = backstack,
             modifier = modifier,
             // Animate navigation to settings and to a room
-            transitionHandler = getDefaultTransitionHandler(),
+            transitionHandler = rememberDefaultTransitionHandler(),
         )
     }
 }

@@ -29,7 +29,7 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import io.element.android.features.login.LoginFlowNode
 import io.element.android.features.onboarding.OnBoardingScreen
-import io.element.android.libraries.architecture.animation.getDefaultTransitionHandler
+import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
@@ -76,7 +76,7 @@ class NotLoggedInFlowNode(
             navModel = backstack,
             modifier = modifier,
             // Animate navigation to login screen
-            transitionHandler = getDefaultTransitionHandler(),
+            transitionHandler = rememberDefaultTransitionHandler(),
         )
     }
 }

@@ -27,7 +27,7 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import io.element.android.features.login.changeserver.ChangeServerNode
 import io.element.android.features.login.root.LoginRootNode
-import io.element.android.libraries.architecture.animation.getDefaultTransitionHandler
+import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import kotlinx.parcelize.Parcelize
 
@@ -69,7 +69,7 @@ class LoginFlowNode(
             navModel = backstack,
             modifier = modifier,
             // Animate transition to change server screen
-            transitionHandler = getDefaultTransitionHandler(),
+            transitionHandler = rememberDefaultTransitionHandler(),
         )
     }
 }
