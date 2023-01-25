@@ -36,7 +36,7 @@ import io.element.android.libraries.di.AppScope
 class LoginRootNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: LoginRootPresenter,
+    presenter: LoginRootPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
     private val presenterConnector = presenterConnector(presenter)
@@ -60,6 +60,7 @@ class LoginRootNode @AssistedInject constructor(
         }
         LoginRootScreen(
             state = state,
+            modifier = modifier,
             onChangeServer = this::onChangeHomeServer,
         )
     }
