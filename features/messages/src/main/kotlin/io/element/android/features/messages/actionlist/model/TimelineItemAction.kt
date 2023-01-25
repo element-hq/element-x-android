@@ -25,9 +25,9 @@ sealed class TimelineItemAction(
     @DrawableRes val icon: Int,
     val destructive: Boolean = false
 ) {
-    object Forward : TimelineItemAction("Forward", io.element.android.libraries.designsystem.VectorIcons.ArrowForward)
-    object Copy : TimelineItemAction("Copy", io.element.android.libraries.designsystem.VectorIcons.Copy)
-    object Redact : TimelineItemAction("Redact", io.element.android.libraries.designsystem.VectorIcons.Delete, destructive = true)
-    object Reply : TimelineItemAction("Reply", io.element.android.libraries.designsystem.VectorIcons.Reply)
-    object Edit : TimelineItemAction("Edit", io.element.android.libraries.designsystem.VectorIcons.Edit)
+    object Forward : TimelineItemAction("Forward", VectorIcons.ArrowForward)
+    object Copy : TimelineItemAction("Copy", VectorIcons.Copy)
+    object Redact : TimelineItemAction("Redact", VectorIcons.Delete, destructive = true)
+    object Reply : TimelineItemAction("Reply", VectorIcons.Reply)
+    object Edit : TimelineItemAction("Edit", VectorIcons.Edit)
 }
