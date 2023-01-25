@@ -30,13 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.timeline.model.MessagesItemGroupPosition
-import io.element.android.libraries.designsystem.LocalIsDarkTheme
-import io.element.android.libraries.designsystem.MessageHighlightDark
-import io.element.android.libraries.designsystem.MessageHighlightLight
-import io.element.android.libraries.designsystem.SystemGrey5Dark
-import io.element.android.libraries.designsystem.SystemGrey5Light
-import io.element.android.libraries.designsystem.SystemGrey6Dark
-import io.element.android.libraries.designsystem.SystemGrey6Light
+import io.element.android.libraries.designsystem.LocalExtendedColors
 
 private val BUBBLE_RADIUS = 16.dp
 
@@ -88,24 +82,12 @@ fun MessageEventBubble(
     }
 
     val backgroundBubbleColor = if (isHighlighted) {
-        if (LocalIsDarkTheme.current) {
-            MessageHighlightDark
-        } else {
-            MessageHighlightLight
-        }
+        LocalExtendedColors.current.messageHighlightedBackground
     } else {
         if (isMine) {
-            if (LocalIsDarkTheme.current) {
-                SystemGrey5Dark
-            } else {
-                SystemGrey5Light
-            }
+            LocalExtendedColors.current.messageFromMeBackground
         } else {
-            if (LocalIsDarkTheme.current) {
-                SystemGrey6Dark
-            } else {
-                SystemGrey6Light
-            }
+            LocalExtendedColors.current.messageFromOtherBackground
         }
     }
     val bubbleShape = bubbleShape()

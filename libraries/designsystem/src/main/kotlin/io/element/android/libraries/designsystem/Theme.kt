@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -64,8 +65,17 @@ private val LightColorScheme = lightColorScheme(
     onSurface = Color(0xFF1C1B1F),
      */
 )
+
 @Suppress("CompositionLocalAllowlist")
 val LocalIsDarkTheme = compositionLocalOf<Boolean> { error("Not defined") }
+
+val LocalExtendedColors = staticCompositionLocalOf {
+    ExtendedColors(
+        messageFromMeBackground = Color.Unspecified,
+        messageFromOtherBackground = Color.Unspecified,
+        messageHighlightedBackground = Color.Unspecified,
+    )
+}
 
 @Composable
 fun ElementXTheme(
@@ -95,7 +105,12 @@ fun ElementXTheme(
         )
     }
 
-    CompositionLocalProvider(LocalIsDarkTheme provides darkTheme) {
+    val extendedColors = if (darkTheme) extendedColorsDark else extendedColorsLight
+
+    CompositionLocalProvider(
+        LocalIsDarkTheme provides darkTheme,
+        LocalExtendedColors provides extendedColors,
+    ) {
         MaterialTheme(
             colorScheme = colorScheme,
             typography = Typography,
