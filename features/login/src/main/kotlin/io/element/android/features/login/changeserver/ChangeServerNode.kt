@@ -33,7 +33,7 @@ import io.element.android.libraries.di.AppScope
 class ChangeServerNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: ChangeServerPresenter,
+    presenter: ChangeServerPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
     private val presenterConnector = presenterConnector(presenter)
@@ -47,6 +47,7 @@ class ChangeServerNode @AssistedInject constructor(
         val state by presenterConnector.stateFlow.collectAsState()
         ChangeServerView(
             state = state,
+            modifier = modifier,
             onChangeServerSuccess = this::onSuccess,
         )
     }

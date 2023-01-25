@@ -34,7 +34,7 @@ import io.element.android.libraries.di.SessionScope
 class PreferencesRootNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: PreferencesRootPresenter,
+    presenter: PreferencesRootPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
     interface Callback : Plugin {
@@ -52,6 +52,7 @@ class PreferencesRootNode @AssistedInject constructor(
         val state by presenterConnector.stateFlow.collectAsState()
         PreferencesRootView(
             state = state,
+            modifier = modifier,
             onBackPressed = this::navigateUp,
             onOpenRageShake = this::onOpenBugReport
         )

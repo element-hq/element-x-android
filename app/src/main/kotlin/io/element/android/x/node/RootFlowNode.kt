@@ -36,10 +36,11 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
+import io.element.android.features.rageshake.bugreport.BugReportNode
+import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.presenterConnector
 import io.element.android.libraries.di.DaggerComponentOwner
-import io.element.android.features.rageshake.bugreport.BugReportNode
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.core.SessionId
@@ -60,7 +61,7 @@ class RootFlowNode(
     ),
     private val appComponentOwner: DaggerComponentOwner,
     private val authenticationService: MatrixAuthenticationService,
-    rootPresenter: RootPresenter
+    presenter: RootPresenter
 ) :
     ParentNode<RootFlowNode.NavTarget>(
         navModel = backstack,
@@ -70,7 +71,7 @@ class RootFlowNode(
     DaggerComponentOwner by appComponentOwner {
 
     private val matrixClientsHolder = ConcurrentHashMap<SessionId, MatrixClient>()
-    private val presenterConnector = presenterConnector(rootPresenter)
+    private val presenterConnector = presenterConnector(presenter)
 
     override fun onBuilt() {
         super.onBuilt()
@@ -107,9 +108,14 @@ class RootFlowNode(
         val state by presenterConnector.stateFlow.collectAsState()
         RootView(
             state = state,
+            modifier = modifier,
             onOpenBugReport = this::onOpenBugReport,
         ) {
-            Children(navModel = backstack)
+            Children(
+                navModel = backstack,
+                // Animate opening the bug report screen
+                transitionHandler = rememberDefaultTransitionHandler(),
+            )
         }
     }
 

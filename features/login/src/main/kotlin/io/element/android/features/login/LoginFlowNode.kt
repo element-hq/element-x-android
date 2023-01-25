@@ -25,9 +25,10 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
-import io.element.android.libraries.architecture.createNode
 import io.element.android.features.login.changeserver.ChangeServerNode
 import io.element.android.features.login.root.LoginRootNode
+import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
+import io.element.android.libraries.architecture.createNode
 import kotlinx.parcelize.Parcelize
 
 class LoginFlowNode(
@@ -64,6 +65,11 @@ class LoginFlowNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(navModel = backstack)
+        Children(
+            navModel = backstack,
+            modifier = modifier,
+            // Animate transition to change server screen
+            transitionHandler = rememberDefaultTransitionHandler(),
+        )
     }
 }
