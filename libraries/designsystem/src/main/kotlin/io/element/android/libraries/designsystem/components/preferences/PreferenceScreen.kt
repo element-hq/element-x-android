@@ -42,6 +42,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import io.element.android.libraries.designsystem.theme.components.ElementScaffold
+import io.element.android.libraries.designsystem.theme.components.ElementTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,7 +53,7 @@ fun PreferenceView(
     onBackPressed: () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Scaffold(
+    ElementScaffold(
         modifier = modifier
             .fillMaxSize()
             .systemBarsPadding()
@@ -85,7 +87,7 @@ fun PreferenceTopAppBar(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
 ) {
-    TopAppBar(
+    ElementTopAppBar(
         modifier = modifier,
         navigationIcon = {
             IconButton(onClick = onBackPressed) {

@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Announcement
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,6 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
+import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.components.ElementCheckbox
 import io.element.android.libraries.designsystem.toEnabledColor
 
 @Composable
@@ -61,11 +62,11 @@ fun PreferenceSwitch(
             )
             Text(
                 modifier = Modifier.weight(1f),
-                style = MaterialTheme.typography.bodyLarge,
+                style = ElementTheme.typography.bodyLarge,
                 color = enabled.toEnabledColor(),
                 text = title
             )
-            Checkbox(
+            ElementCheckbox(
                 modifier = Modifier.padding(end = preferencePaddingEnd),
                 checked = isChecked,
                 enabled = enabled,

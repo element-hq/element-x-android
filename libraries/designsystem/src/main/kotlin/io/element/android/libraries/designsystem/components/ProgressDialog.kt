@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @Composable
 fun ProgressDialog(
@@ -48,19 +48,19 @@ fun ProgressDialog(
             modifier = modifier
                 .fillMaxWidth()
                 .background(
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = ElementTheme.colors.onBackground,
                     shape = RoundedCornerShape(8.dp)
                 )
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 CircularProgressIndicator(
                     modifier = Modifier.padding(16.dp),
-                    color = MaterialTheme.colorScheme.background
+                    color = ElementTheme.colors.background
                 )
                 if (!text.isNullOrBlank()) {
                     Text(
                         text = text,
-                        color = MaterialTheme.colorScheme.background,
+                        color = ElementTheme.colors.background,
                         modifier = Modifier.padding(16.dp)
                     )
                 }

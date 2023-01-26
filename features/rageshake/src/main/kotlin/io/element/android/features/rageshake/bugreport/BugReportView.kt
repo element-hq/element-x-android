@@ -26,12 +26,9 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -54,6 +51,8 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.LabelledCheckbox
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
+import io.element.android.libraries.designsystem.theme.components.ElementButton
+import io.element.android.libraries.designsystem.theme.components.ElementSurface
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -73,9 +72,8 @@ fun BugReportView(
         }
         return
     }
-    Surface(
+    ElementSurface(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.background,
     ) {
         Box(
             modifier = Modifier
@@ -185,7 +183,7 @@ fun BugReportView(
                     }
                 }
                 // Submit
-                Button(
+                ElementButton(
                     onClick = { eventSink(BugReportEvents.SendBugReport) },
                     enabled = state.submitEnabled,
                     modifier = Modifier

@@ -27,8 +27,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -49,7 +47,9 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
-import io.element.android.libraries.designsystem.components.VectorButton
+import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.components.ElementButton
+import io.element.android.libraries.designsystem.theme.components.ElementSurface
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import kotlinx.coroutines.delay
@@ -67,9 +67,9 @@ fun OnBoardingScreen(
     val carrouselState = remember { SplashCarouselStateFactory().create() }
     val nbOfPages = carrouselState.items.size
     var key by remember { mutableStateOf(false) }
-    Surface(
+    ElementSurface(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.background,
+        color = ElementTheme.colors.background,
     ) {
         Box(
             modifier = Modifier
@@ -109,20 +109,7 @@ fun OnBoardingScreen(
                         .align(CenterHorizontally)
                         .padding(16.dp),
                 )
-                /*
-                VectorButton(
-                    text = "CREATE ACCOUNT",
-                    onClick = {
-                        onSignUp()
-                    },
-                    enabled = true,
-                    modifier = Modifier
-                        .align(CenterHorizontally)
-                        .padding(top = 16.dp)
-                )
-                 */
-                VectorButton(
-                    text = stringResource(id = StringR.string.login_splash_submit),
+                ElementButton(
                     onClick = {
                         onSignIn()
                     },
@@ -131,7 +118,9 @@ fun OnBoardingScreen(
                         .align(CenterHorizontally)
                         .testTag(TestTags.onBoardingSignIn)
                         .padding(top = 16.dp)
-                )
+                ) {
+                    Text(text = stringResource(id = StringR.string.login_splash_submit))
+                }
             }
         }
     }

@@ -42,7 +42,6 @@ import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -79,6 +78,7 @@ import io.element.android.features.messages.timeline.model.content.TimelineItemT
 import io.element.android.features.messages.timeline.model.content.TimelineItemUnknownContent
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.utils.PairCombinedPreviewParameter
 import io.element.android.libraries.matrix.core.EventId
 import kotlinx.collections.immutable.ImmutableList
@@ -267,7 +267,7 @@ private fun MessageSenderInformation(
         }
         Text(
             text = sender,
-            style = MaterialTheme.typography.titleMedium,
+            style = ElementTheme.typography.titleMedium,
             modifier = Modifier
                 .alignBy(LastBaseline)
         )
@@ -326,8 +326,8 @@ internal fun BoxScope.TimelineScrollHelper(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .size(40.dp),
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+            containerColor = ElementTheme.colors.surfaceVariant,
+            contentColor = ElementTheme.colors.onSurfaceVariant
         ) {
             Icon(Icons.Default.ArrowDownward, "")
         }
@@ -345,7 +345,7 @@ internal fun TimelineLoadingMoreIndicator() {
     ) {
         CircularProgressIndicator(
             strokeWidth = 2.dp,
-            color = MaterialTheme.colorScheme.primary
+            color = ElementTheme.colors.primary
         )
     }
 }

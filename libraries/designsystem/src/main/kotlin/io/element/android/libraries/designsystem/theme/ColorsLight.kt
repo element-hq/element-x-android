@@ -1,0 +1,54 @@
+/*
+ * Copyright (c) 2023 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package io.element.android.libraries.designsystem.theme
+
+import androidx.compose.ui.graphics.Color
+import io.element.android.libraries.designsystem.Azure
+import io.element.android.libraries.designsystem.LightGrey
+import io.element.android.libraries.designsystem.SystemGrey5Light
+import io.element.android.libraries.designsystem.SystemGrey6Light
+
+fun elementColorsLight() = ElementColors(
+    primary = Color.Black,
+    onPrimary = Color.White,
+    secondary = LightGrey,
+    text = Color.Black,
+    background = Color.White,
+    onBackground = Color.Black,
+    surfaceVariant = SystemGrey5Light,
+    onSurfaceVariant = Color.Black,
+    messageFromMeBackground = SystemGrey5Light,
+    messageFromOtherBackground = SystemGrey6Light,
+    messageHighlightedBackground = Azure,
+    success = Color.Green,
+    error = Color.Red,
+    isLight = true,
+)
+
+/*
+private val LightColorScheme = lightColorScheme(
+    primary = Color.Black,
+    secondary = LightGrey,
+    tertiary = Color.Black,
+    background = Color.White,
+    onBackground = Color.Black,
+    surface = Color.White,
+    surfaceVariant = SystemGrey5Light,
+    onSurface = Color.Black,
+    onSurfaceVariant = Color.Black,
+
+ */

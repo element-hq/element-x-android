@@ -31,7 +31,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -54,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.placeholder.material.placeholder
 import io.element.android.features.roomlist.model.RoomListRoomSummary
 import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.theme.ElementTheme
 
 private val minHeight = 72.dp
 
@@ -117,7 +117,7 @@ internal fun DefaultRoomSummaryRow(
             Text(
                 modifier = Modifier.placeholder(room.isPlaceholder, shape = TextPlaceholderShape),
                 text = room.lastMessage?.toString().orEmpty(),
-                color = MaterialTheme.colorScheme.secondary,
+                color = ElementTheme.colors.secondary,
                 fontSize = 14.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -132,11 +132,11 @@ internal fun DefaultRoomSummaryRow(
                 modifier = Modifier.placeholder(room.isPlaceholder, shape = TextPlaceholderShape),
                 fontSize = 12.sp,
                 text = room.timestamp ?: "",
-                color = MaterialTheme.colorScheme.secondary,
+                color = ElementTheme.colors.secondary,
             )
             Spacer(Modifier.size(4.dp))
             val unreadIndicatorColor =
-                if (room.hasUnread) MaterialTheme.colorScheme.primary else Color.Transparent
+                if (room.hasUnread) ElementTheme.colors.primary else Color.Transparent
             Box(
                 modifier = Modifier
                     .size(12.dp)

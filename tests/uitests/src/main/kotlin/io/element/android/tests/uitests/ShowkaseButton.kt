@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.theme.components.ElementButton
 
 @Composable
 fun ShowkaseButton(
@@ -41,7 +42,7 @@ fun ShowkaseButton(
     var isShowkaseButtonVisible by remember { mutableStateOf(BuildConfig.DEBUG) }
 
     if (isShowkaseButtonVisible) {
-        Button(
+        ElementButton(
             modifier = modifier
                 .padding(top = 32.dp),
             onClick = onClick

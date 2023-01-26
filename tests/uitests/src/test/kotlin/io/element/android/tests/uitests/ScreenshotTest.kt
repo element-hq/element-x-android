@@ -24,7 +24,6 @@ import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -36,7 +35,7 @@ import app.cash.paparazzi.Paparazzi
 import com.airbnb.android.showkase.models.Showkase
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
-import io.element.android.libraries.designsystem.ElementXTheme
+import io.element.android.libraries.designsystem.theme.ElementTheme
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -101,8 +100,8 @@ class ScreenshotTest {
                     override fun getOnBackPressedDispatcher() = OnBackPressedDispatcher()
                 }
             ) {
-                ElementXTheme(darkTheme = (theme == "dark")) {
-                    Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+                ElementTheme(darkTheme = (theme == "dark")) {
+                    Box(modifier = Modifier.background(ElementTheme.colors.background)) {
                         componentTestPreview.Content()
                     }
                 }

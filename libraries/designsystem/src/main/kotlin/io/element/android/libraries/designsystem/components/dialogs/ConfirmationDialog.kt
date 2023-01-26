@@ -22,13 +22,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
+import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.theme.components.ElementButton
+import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
@@ -43,6 +48,12 @@ fun ConfirmationDialog(
     onCancelClicked: () -> Unit = {},
     onThirdButtonClicked: () -> Unit = {},
     onDismiss: () -> Unit = {},
+    shape: Shape = AlertDialogDefaults.shape,
+    containerColor: Color = ElementTheme.colors.surfaceVariant,
+    iconContentColor: Color = ElementTheme.colors.onSurfaceVariant,
+    titleContentColor: Color = ElementTheme.colors.onSurfaceVariant,
+    textContentColor: Color = ElementTheme.colors.onSurfaceVariant,
+    tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
 ) {
     AlertDialog(
         modifier = modifier,
@@ -59,7 +70,7 @@ fun ConfirmationDialog(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Column {
-                    Button(
+                    ElementButton(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
                             onCancelClicked()
@@ -67,7 +78,7 @@ fun ConfirmationDialog(
                         Text(cancelText)
                     }
                     if (thirdButtonText != null) {
-                        Button(
+                        ElementButton(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = {
                                 onThirdButtonClicked()
@@ -83,7 +94,7 @@ fun ConfirmationDialog(
                 modifier = Modifier.padding(all = 8.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
-                Button(
+                ElementButton(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
                         onSubmitClicked()
@@ -93,6 +104,12 @@ fun ConfirmationDialog(
                 }
             }
         },
+        shape = shape,
+        containerColor = containerColor,
+        iconContentColor = iconContentColor,
+        titleContentColor = titleContentColor,
+        textContentColor = textContentColor,
+        tonalElevation = tonalElevation,
     )
 }
 
