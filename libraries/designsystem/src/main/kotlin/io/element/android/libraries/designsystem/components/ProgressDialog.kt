@@ -48,19 +48,19 @@ fun ProgressDialog(
             modifier = modifier
                 .fillMaxWidth()
                 .background(
-                    color = ElementTheme.colors.onBackground,
+                    color = ElementTheme.colors.surfaceVariant,
                     shape = RoundedCornerShape(8.dp)
                 )
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 CircularProgressIndicator(
                     modifier = Modifier.padding(16.dp),
-                    color = ElementTheme.colors.background
+                    color = ElementTheme.colors.onSurfaceVariant
                 )
                 if (!text.isNullOrBlank()) {
                     Text(
                         text = text,
-                        color = ElementTheme.colors.background,
+                        color = ElementTheme.colors.onSurfaceVariant,
                         modifier = Modifier.padding(16.dp)
                     )
                 }
