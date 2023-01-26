@@ -14,17 +14,29 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem
+package io.element.android.libraries.designsystem.components.color
 
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.takeOrElse
+import io.element.android.libraries.designsystem.theme.ElementColors
 import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @Composable
-fun Boolean.toEnabledColor(): Color {
-    return if (this) {
-        ElementTheme.colors.primary
-    } else {
-        ElementTheme.colors.secondary
+@ReadOnlyComposable
+fun elementContentColorFor(backgroundColor: Color): Color {
+    return ElementTheme.colors.elementContentColorFor(backgroundColor).takeOrElse {
+        LocalContentColor.current
+    }
+}
+
+fun ElementColors.elementContentColorFor(backgroundColor: Color): Color {
+    return when (backgroundColor) {
+        primary -> onPrimary
+        surfaceVariant -> onSurfaceVariant
+        background -> onBackground
+        else -> Color.Unspecified
     }
 }

@@ -33,12 +33,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -57,6 +54,9 @@ import io.element.android.features.login.error.changeServerError
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.VectorIcon
 import io.element.android.libraries.designsystem.components.form.textFieldState
+import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.components.ElementButton
+import io.element.android.libraries.designsystem.theme.components.ElementSurface
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 
@@ -66,9 +66,8 @@ fun ChangeServerView(
     modifier: Modifier = Modifier,
     onChangeServerSuccess: () -> Unit = {},
 ) {
-    Surface(
+    ElementSurface(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.background,
     ) {
         val eventSink = state.eventSink
         val scrollState = rememberScrollState()
@@ -92,7 +91,7 @@ fun ChangeServerView(
                         .size(width = 81.dp, height = 73.dp)
                         .align(Alignment.CenterHorizontally)
                         .background(
-                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            color = ElementTheme.colors.surfaceVariant,
                             shape = RoundedCornerShape(32.dp)
                         )
                 ) {
@@ -124,7 +123,7 @@ fun ChangeServerView(
                         .padding(top = 16.dp),
                     textAlign = TextAlign.Center,
                     fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.secondary
+                    color = ElementTheme.colors.secondary
                 )
                 var homeserverFieldState by textFieldState(stateValue = state.homeserver)
                 OutlinedTextField(
@@ -155,12 +154,12 @@ fun ChangeServerView(
                             state.homeserver,
                             state.changeServerAction.error
                         ),
-                        color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodySmall,
+                        color = ElementTheme.colors.error,
+                        style = ElementTheme.typography.bodySmall,
                         modifier = Modifier.padding(start = 16.dp)
                     )
                 }
-                Button(
+                ElementButton(
                     onClick = { eventSink(ChangeServerEvents.Submit) },
                     enabled = state.submitEnabled,
                     modifier = Modifier

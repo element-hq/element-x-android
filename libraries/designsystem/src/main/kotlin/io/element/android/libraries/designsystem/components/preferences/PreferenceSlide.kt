@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
+import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.components.ElementSlider
 import io.element.android.libraries.designsystem.toEnabledColor
 
 @Composable
@@ -61,19 +62,19 @@ fun PreferenceSlide(
             ) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = ElementTheme.typography.bodyLarge,
                     color = enabled.toEnabledColor(),
                     text = title
                 )
                 summary?.let {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = ElementTheme.typography.bodyMedium,
                         color = enabled.toEnabledColor(),
                         text = summary
                     )
                 }
-                Slider(
+                ElementSlider(
                     value = value,
                     steps = steps,
                     onValueChange = onValueChange,

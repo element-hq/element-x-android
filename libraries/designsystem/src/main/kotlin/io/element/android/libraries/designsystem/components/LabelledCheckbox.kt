@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.theme.components.ElementCheckbox
 
 @Composable
 fun LabelledCheckbox(
@@ -37,7 +38,7 @@ fun LabelledCheckbox(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Checkbox(
+        ElementCheckbox(
             checked = checked,
             onCheckedChange = onCheckedChange,
             enabled = enabled,

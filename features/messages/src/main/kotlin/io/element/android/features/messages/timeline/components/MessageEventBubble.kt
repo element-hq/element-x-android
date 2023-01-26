@@ -23,14 +23,14 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.timeline.model.MessagesItemGroupPosition
-import io.element.android.libraries.designsystem.LocalExtendedColors
+import io.element.android.libraries.designsystem.theme.components.ElementSurface
+import io.element.android.libraries.designsystem.theme.ElementTheme
 
 private val BUBBLE_RADIUS = 16.dp
 
@@ -82,16 +82,16 @@ fun MessageEventBubble(
     }
 
     val backgroundBubbleColor = if (isHighlighted) {
-        LocalExtendedColors.current.messageHighlightedBackground
+        ElementTheme.colors.messageHighlightedBackground
     } else {
         if (isMine) {
-            LocalExtendedColors.current.messageFromMeBackground
+            ElementTheme.colors.messageFromMeBackground
         } else {
-            LocalExtendedColors.current.messageFromOtherBackground
+            ElementTheme.colors.messageFromOtherBackground
         }
     }
     val bubbleShape = bubbleShape()
-    Surface(
+    ElementSurface(
         modifier = modifier
             .widthIn(min = 80.dp)
             .offsetForItem()

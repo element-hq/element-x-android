@@ -22,7 +22,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -34,6 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import io.element.android.features.messages.timeline.model.content.TimelineItemImageContent
+import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @Composable
 fun TimelineItemImageView(
@@ -60,7 +60,7 @@ fun TimelineItemImageView(
         AsyncImage(
             model = model,
             contentDescription = null,
-            placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceVariant),
+            placeholder = ColorPainter(ElementTheme.colors.surfaceVariant),
             contentScale = ContentScale.Crop,
             onSuccess = { isLoading.value = false },
         )

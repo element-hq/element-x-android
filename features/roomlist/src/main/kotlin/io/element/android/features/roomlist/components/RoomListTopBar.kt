@@ -29,7 +29,6 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -54,6 +53,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.form.textFieldState
+import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.components.ElementMediumAppBar
+import io.element.android.libraries.designsystem.theme.components.ElementTopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.element.android.libraries.ui.strings.R as StringR
@@ -64,7 +66,8 @@ fun RoomListTopBar(
     filter: String,
     onFilterChanged: (String) -> Unit,
     onOpenSettings: () -> Unit,
-    scrollBehavior: TopAppBarScrollBehavior
+    scrollBehavior: TopAppBarScrollBehavior,
+    modifier: Modifier = Modifier,
 ) {
     LogCompositions(
         tag = "RoomListScreen",
@@ -87,6 +90,7 @@ fun RoomListTopBar(
             onFilterChanged = onFilterChanged,
             onCloseClicked = ::closeFilter,
             scrollBehavior = scrollBehavior,
+            modifier = modifier,
         )
     } else {
         DefaultRoomListTopBar(
@@ -96,6 +100,7 @@ fun RoomListTopBar(
                 searchWidgetStateIsOpened = true
             },
             scrollBehavior = scrollBehavior,
+            modifier = modifier,
         )
     }
 }
@@ -110,7 +115,7 @@ fun SearchRoomListTopBar(
 ) {
     var filterState by textFieldState(stateValue = text)
     val focusRequester = remember { FocusRequester() }
-    TopAppBar(
+    ElementTopAppBar(
         modifier = modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         title = {
@@ -129,7 +134,7 @@ fun SearchRoomListTopBar(
                 placeholder = {
                     Text(
                         text = "Search",
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = ContentAlpha.medium)
+                        color = ElementTheme.colors.onBackground.copy(alpha = ContentAlpha.medium)
                     )
                 },
                 singleLine = true,
@@ -143,15 +148,15 @@ fun SearchRoomListTopBar(
                             Icon(
                                 imageVector = Icons.Default.Close,
                                 contentDescription = "clear",
-                                tint = MaterialTheme.colorScheme.onBackground
+                                tint = ElementTheme.colors.onBackground
                             )
                         }
                     }
                 },
                 colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colorScheme.onBackground,
+                    textColor = ElementTheme.colors.onBackground,
                     containerColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ContentAlpha.medium),
+                    cursorColor = ElementTheme.colors.onBackground.copy(alpha = ContentAlpha.medium),
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent
@@ -167,7 +172,7 @@ fun SearchRoomListTopBar(
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "close",
-                    tint = MaterialTheme.colorScheme.onBackground
+                    tint = ElementTheme.colors.onBackground
                 )
             }
         },
@@ -182,10 +187,11 @@ private fun DefaultRoomListTopBar(
     matrixUser: MatrixUser?,
     onOpenSettings: () -> Unit,
     onSearchClicked: () -> Unit,
-    scrollBehavior: TopAppBarScrollBehavior
+    scrollBehavior: TopAppBarScrollBehavior,
+    modifier: Modifier = Modifier,
 ) {
-    MediumTopAppBar(
-        modifier = Modifier
+    ElementMediumAppBar(
+        modifier = modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         title = {
             Text(

@@ -24,7 +24,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -43,6 +42,7 @@ import io.element.android.features.roomlist.model.RoomListRoomSummary
 import io.element.android.features.roomlist.model.RoomListState
 import io.element.android.features.roomlist.model.stubbedRoomSummaries
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.theme.components.ElementScaffold
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.core.RoomId
 import io.element.android.libraries.matrix.core.UserId
@@ -117,7 +117,7 @@ fun RoomListView(
         }
     }
 
-    Scaffold(
+    ElementScaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             RoomListTopBar(
@@ -125,11 +125,15 @@ fun RoomListView(
                 filter = filter,
                 onFilterChanged = onFilterChanged,
                 onOpenSettings = onOpenSettings,
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                modifier = Modifier,
             )
         },
         content = { padding ->
-            Column(modifier = Modifier.padding(padding)) {
+            Column(
+                modifier = Modifier
+                    .padding(padding)
+            ) {
                 LazyColumn(
                     modifier = Modifier
                         .weight(1f)

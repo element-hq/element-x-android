@@ -32,14 +32,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -60,6 +57,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.login.error.loginError
 import io.element.android.libraries.designsystem.components.form.textFieldState
+import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.components.ElementButton
+import io.element.android.libraries.designsystem.theme.components.ElementSurface
 import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
@@ -74,9 +74,8 @@ fun LoginRootScreen(
     onLoginWithSuccess: (SessionId) -> Unit = {},
 ) {
     val eventSink = state.eventSink
-    Surface(
+    ElementSurface(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.background,
     ) {
         Box(
             modifier = Modifier
@@ -125,7 +124,7 @@ fun LoginRootScreen(
                                 keyboardType = KeyboardType.Uri,
                             ),
                         )
-                        Button(
+                        ElementButton(
                             onClick = onChangeServer,
                             modifier = Modifier
                                 .align(Alignment.CenterEnd)
@@ -195,14 +194,14 @@ fun LoginRootScreen(
                     if (state.loggedInState is LoggedInState.ErrorLoggingIn) {
                         Text(
                             text = loginError(state.formState, state.loggedInState.failure),
-                            color = MaterialTheme.colorScheme.error,
-                            style = MaterialTheme.typography.bodySmall,
+                            color = ElementTheme.colors.error,
+                            style = ElementTheme.typography.bodySmall,
                             modifier = Modifier.padding(start = 16.dp)
                         )
                     }
                 }
                 // Submit
-                Button(
+                ElementButton(
                     onClick = { eventSink(LoginRootEvents.Submit) },
                     enabled = state.submitEnabled,
                     modifier = Modifier

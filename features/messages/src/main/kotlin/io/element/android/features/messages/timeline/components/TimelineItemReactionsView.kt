@@ -23,8 +23,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,6 +32,8 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
 import io.element.android.features.messages.timeline.model.AggregatedReaction
 import io.element.android.features.messages.timeline.model.TimelineItemReactions
+import io.element.android.libraries.designsystem.theme.components.ElementSurface
+import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @Composable
 fun TimelineItemReactionsView(
@@ -54,10 +54,10 @@ fun TimelineItemReactionsView(
 
 @Composable
 fun MessagesReactionButton(reaction: AggregatedReaction, modifier: Modifier = Modifier) {
-    Surface(
+    ElementSurface(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        border = BorderStroke(2.dp, MaterialTheme.colorScheme.background),
+        color = ElementTheme.colors.surfaceVariant,
+        border = BorderStroke(2.dp, ElementTheme.colors.background),
         shape = RoundedCornerShape(corner = CornerSize(12.dp)),
     ) {
         Row(
@@ -66,7 +66,7 @@ fun MessagesReactionButton(reaction: AggregatedReaction, modifier: Modifier = Mo
         ) {
             Text(text = reaction.key, fontSize = 12.sp)
             Spacer(modifier = Modifier.width(4.dp))
-            Text(text = reaction.count, color = MaterialTheme.colorScheme.secondary, fontSize = 12.sp)
+            Text(text = reaction.count, color = ElementTheme.colors.secondary, fontSize = 12.sp)
         }
     }
 }
