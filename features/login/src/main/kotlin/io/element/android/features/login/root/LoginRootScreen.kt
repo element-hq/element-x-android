@@ -32,11 +32,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -59,13 +57,14 @@ import io.element.android.features.login.error.loginError
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.ElementButton
+import io.element.android.libraries.designsystem.theme.components.ElementCircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementOutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.ElementSurface
 import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.R as StringR
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginRootScreen(
     state: LoginRootState,
@@ -112,7 +111,7 @@ fun LoginRootScreen(
                     Box(
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        OutlinedTextField(
+                        ElementOutlinedTextField(
                             value = state.homeserver,
                             modifier = Modifier.fillMaxWidth(),
                             onValueChange = { /* no op */ },
@@ -135,7 +134,7 @@ fun LoginRootScreen(
                             }
                         )
                     }
-                    OutlinedTextField(
+                    ElementOutlinedTextField(
                         value = loginFieldState,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -158,7 +157,7 @@ fun LoginRootScreen(
                         // Ensure password is hidden when user submits the form
                         passwordVisible = false
                     }
-                    OutlinedTextField(
+                    ElementOutlinedTextField(
                         value = passwordFieldState,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -217,7 +216,7 @@ fun LoginRootScreen(
                 }
             }
             if (state.loggedInState is LoggedInState.LoggingIn) {
-                CircularProgressIndicator(
+                ElementCircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
             }

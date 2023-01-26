@@ -26,9 +26,6 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -52,11 +49,12 @@ import io.element.android.libraries.designsystem.components.LabelledCheckbox
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.theme.components.ElementButton
+import io.element.android.libraries.designsystem.theme.components.ElementCircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementOutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.ElementSurface
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.ui.strings.R as StringR
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BugReportView(
     state: BugReportState,
@@ -115,7 +113,7 @@ fun BugReportView(
                 Column(
                     // modifier = Modifier.weight(1f),
                 ) {
-                    OutlinedTextField(
+                    ElementOutlinedTextField(
                         value = descriptionFieldState,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -195,7 +193,7 @@ fun BugReportView(
             }
             when (state.sending) {
                 is Async.Loading -> {
-                    CircularProgressIndicator(
+                    ElementCircularProgressIndicator(
                         progress = state.sendingProgress,
                         modifier = Modifier.align(Alignment.Center)
                     )
