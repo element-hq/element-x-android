@@ -18,6 +18,7 @@ package io.element.android.x
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -25,7 +26,6 @@ import androidx.core.view.WindowCompat
 import com.bumble.appyx.core.integration.NodeHost
 import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
 import io.element.android.libraries.architecture.bindings
-import io.element.android.libraries.designsystem.theme.components.ElementSurface
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.x.di.AppBindings
@@ -41,7 +41,7 @@ class MainActivity : NodeComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             ElementTheme {
-                ElementSurface(
+                Box(
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     NodeHost(integrationPoint = appyxIntegrationPoint) {

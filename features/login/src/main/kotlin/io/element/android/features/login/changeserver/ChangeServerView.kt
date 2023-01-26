@@ -33,9 +33,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -58,7 +56,6 @@ import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.ElementButton
 import io.element.android.libraries.designsystem.theme.components.ElementCircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.ElementOutlinedTextField
-import io.element.android.libraries.designsystem.theme.components.ElementSurface
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 
@@ -68,118 +65,114 @@ fun ChangeServerView(
     modifier: Modifier = Modifier,
     onChangeServerSuccess: () -> Unit = {},
 ) {
-    ElementSurface(
-        modifier = modifier,
+    val eventSink = state.eventSink
+    val scrollState = rememberScrollState()
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .systemBarsPadding()
+            .imePadding()
     ) {
-        val eventSink = state.eventSink
-        val scrollState = rememberScrollState()
-        Box(
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .systemBarsPadding()
-                .imePadding()
+                .verticalScroll(
+                    state = scrollState,
+                )
+                .padding(horizontal = 16.dp)
         ) {
-            Column(
+            val isError = state.changeServerAction is Async.Failure
+            Box(
                 modifier = Modifier
-                    .verticalScroll(
-                        state = scrollState,
+                    .padding(top = 99.dp)
+                    .size(width = 81.dp, height = 73.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .background(
+                        color = ElementTheme.colors.surfaceVariant,
+                        shape = RoundedCornerShape(32.dp)
                     )
-                    .padding(horizontal = 16.dp)
             ) {
-                val isError = state.changeServerAction is Async.Failure
-                Box(
+                VectorIcon(
                     modifier = Modifier
-                        .padding(top = 99.dp)
-                        .size(width = 81.dp, height = 73.dp)
-                        .align(Alignment.CenterHorizontally)
-                        .background(
-                            color = ElementTheme.colors.surfaceVariant,
-                            shape = RoundedCornerShape(32.dp)
-                        )
-                ) {
-                    VectorIcon(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .size(width = 48.dp, height = 48.dp),
-                        // TODO Update with design input
-                        resourceId = R.drawable.ic_baseline_dataset_24,
-                    )
-                }
-                Text(
-                    text = "Your server",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .defaultMinSize(minHeight = 56.dp)
-                        .align(Alignment.CenterHorizontally)
-                        .padding(top = 38.dp),
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp,
+                        .align(Alignment.Center)
+                        .size(width = 48.dp, height = 48.dp),
+                    // TODO Update with design input
+                    resourceId = R.drawable.ic_baseline_dataset_24,
                 )
-                Text(
-                    text = "A server is a home for all your data.\n" +
-                        "You choose your server and it’s easy to make one.", // TODO "Learn more.",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally)
-                        .padding(top = 16.dp),
-                    textAlign = TextAlign.Center,
-                    fontSize = 16.sp,
-                    color = ElementTheme.colors.secondary
+            }
+            Text(
+                text = "Your server",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .defaultMinSize(minHeight = 56.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 38.dp),
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+            )
+            Text(
+                text = "A server is a home for all your data.\n" +
+                    "You choose your server and it’s easy to make one.", // TODO "Learn more.",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 16.dp),
+                textAlign = TextAlign.Center,
+                fontSize = 16.sp,
+                color = ElementTheme.colors.secondary
+            )
+            var homeserverFieldState by textFieldState(stateValue = state.homeserver)
+            ElementOutlinedTextField(
+                value = homeserverFieldState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(TestTags.changeServerServer)
+                    .padding(top = 200.dp),
+                onValueChange = {
+                    homeserverFieldState = it
+                    eventSink(ChangeServerEvents.SetServer(it))
+                },
+                label = {
+                    Text(text = "Server")
+                },
+                isError = isError,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done,
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = { eventSink(ChangeServerEvents.Submit) }
                 )
-                var homeserverFieldState by textFieldState(stateValue = state.homeserver)
-                ElementOutlinedTextField(
-                    value = homeserverFieldState,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag(TestTags.changeServerServer)
-                        .padding(top = 200.dp),
-                    onValueChange = {
-                        homeserverFieldState = it
-                        eventSink(ChangeServerEvents.SetServer(it))
-                    },
-                    label = {
-                        Text(text = "Server")
-                    },
-                    isError = isError,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Password,
-                        imeAction = ImeAction.Done,
+            )
+            if (state.changeServerAction is Async.Failure) {
+                Text(
+                    text = changeServerError(
+                        state.homeserver,
+                        state.changeServerAction.error
                     ),
-                    keyboardActions = KeyboardActions(
-                        onDone = { eventSink(ChangeServerEvents.Submit) }
-                    )
-                )
-                if (state.changeServerAction is Async.Failure) {
-                    Text(
-                        text = changeServerError(
-                            state.homeserver,
-                            state.changeServerAction.error
-                        ),
-                        color = ElementTheme.colors.error,
-                        style = ElementTheme.typography.bodySmall,
-                        modifier = Modifier.padding(start = 16.dp)
-                    )
-                }
-                ElementButton(
-                    onClick = { eventSink(ChangeServerEvents.Submit) },
-                    enabled = state.submitEnabled,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag(TestTags.changeServerContinue)
-                        .padding(top = 44.dp)
-                ) {
-                    Text(text = "Continue")
-                }
-                if (state.changeServerAction is Async.Success) {
-                    onChangeServerSuccess()
-                }
-            }
-            if (state.changeServerAction is Async.Loading) {
-                ElementCircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
+                    color = ElementTheme.colors.error,
+                    style = ElementTheme.typography.bodySmall,
+                    modifier = Modifier.padding(start = 16.dp)
                 )
             }
+            ElementButton(
+                onClick = { eventSink(ChangeServerEvents.Submit) },
+                enabled = state.submitEnabled,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(TestTags.changeServerContinue)
+                    .padding(top = 44.dp)
+            ) {
+                Text(text = "Continue")
+            }
+            if (state.changeServerAction is Async.Success) {
+                onChangeServerSuccess()
+            }
+        }
+        if (state.changeServerAction is Async.Loading) {
+            ElementCircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
         }
     }
 }

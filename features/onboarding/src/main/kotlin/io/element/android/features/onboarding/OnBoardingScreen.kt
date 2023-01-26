@@ -47,9 +47,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
-import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.ElementButton
-import io.element.android.libraries.designsystem.theme.components.ElementSurface
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import kotlinx.coroutines.delay
@@ -67,60 +65,55 @@ fun OnBoardingScreen(
     val carrouselState = remember { SplashCarouselStateFactory().create() }
     val nbOfPages = carrouselState.items.size
     var key by remember { mutableStateOf(false) }
-    ElementSurface(
-        modifier = modifier,
-        color = ElementTheme.colors.background,
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .systemBarsPadding()
+            .padding(vertical = 16.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .systemBarsPadding()
-                .padding(vertical = 16.dp)
+        Column(
+            modifier = Modifier.fillMaxSize(),
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
+            val pagerState = rememberPagerState()
+            LaunchedEffect(key) {
+                launch {
+                    delay(3_000)
+                    pagerState.animateScrollToPage((pagerState.currentPage + 1) % nbOfPages)
+                    // https://stackoverflow.com/questions/73714228/accompanist-pager-animatescrolltopage-doesnt-scroll-to-next-page-correctly
+                    key = !key
+                }
+            }
+            LaunchedEffect(pagerState) {
+                // Collect from the pager state a snapshotFlow reading the currentPage
+                snapshotFlow { pagerState.currentPage }.collect { page ->
+                    onPageChanged(page)
+                }
+            }
+            HorizontalPager(
+                modifier = Modifier.weight(1f),
+                count = nbOfPages,
+                state = pagerState,
+            ) { page ->
+                // Our page content
+                OnBoardingPage(carrouselState.items[page])
+            }
+            HorizontalPagerIndicator(
+                pagerState = pagerState,
+                modifier = Modifier
+                    .align(CenterHorizontally)
+                    .padding(16.dp),
+            )
+            ElementButton(
+                onClick = {
+                    onSignIn()
+                },
+                enabled = true,
+                modifier = Modifier
+                    .align(CenterHorizontally)
+                    .testTag(TestTags.onBoardingSignIn)
+                    .padding(top = 16.dp)
             ) {
-                val pagerState = rememberPagerState()
-                LaunchedEffect(key) {
-                    launch {
-                        delay(3_000)
-                        pagerState.animateScrollToPage((pagerState.currentPage + 1) % nbOfPages)
-                        // https://stackoverflow.com/questions/73714228/accompanist-pager-animatescrolltopage-doesnt-scroll-to-next-page-correctly
-                        key = !key
-                    }
-                }
-                LaunchedEffect(pagerState) {
-                    // Collect from the pager state a snapshotFlow reading the currentPage
-                    snapshotFlow { pagerState.currentPage }.collect { page ->
-                        onPageChanged(page)
-                    }
-                }
-                HorizontalPager(
-                    modifier = Modifier.weight(1f),
-                    count = nbOfPages,
-                    state = pagerState,
-                ) { page ->
-                    // Our page content
-                    OnBoardingPage(carrouselState.items[page])
-                }
-                HorizontalPagerIndicator(
-                    pagerState = pagerState,
-                    modifier = Modifier
-                        .align(CenterHorizontally)
-                        .padding(16.dp),
-                )
-                ElementButton(
-                    onClick = {
-                        onSignIn()
-                    },
-                    enabled = true,
-                    modifier = Modifier
-                        .align(CenterHorizontally)
-                        .testTag(TestTags.onBoardingSignIn)
-                        .padding(top = 16.dp)
-                ) {
-                    Text(text = stringResource(id = StringR.string.login_splash_submit))
-                }
+                Text(text = stringResource(id = StringR.string.login_splash_submit))
             }
         }
     }

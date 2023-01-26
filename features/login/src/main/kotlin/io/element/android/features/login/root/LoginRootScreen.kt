@@ -18,6 +18,7 @@
 
 package io.element.android.features.login.root
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -59,7 +60,6 @@ import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.ElementButton
 import io.element.android.libraries.designsystem.theme.components.ElementCircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.ElementOutlinedTextField
-import io.element.android.libraries.designsystem.theme.components.ElementSurface
 import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
@@ -73,153 +73,149 @@ fun LoginRootScreen(
     onLoginWithSuccess: (SessionId) -> Unit = {},
 ) {
     val eventSink = state.eventSink
-    ElementSurface(
-        modifier = modifier,
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .systemBarsPadding()
+            .imePadding()
     ) {
-        Box(
+        val scrollState = rememberScrollState()
+        var loginFieldState by textFieldState(stateValue = state.formState.login)
+        var passwordFieldState by textFieldState(stateValue = state.formState.password)
+
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .systemBarsPadding()
-                .imePadding()
+                .verticalScroll(
+                    state = scrollState,
+                )
+                .padding(horizontal = 16.dp),
         ) {
-            val scrollState = rememberScrollState()
-            var loginFieldState by textFieldState(stateValue = state.formState.login)
-            var passwordFieldState by textFieldState(stateValue = state.formState.password)
-
-            Column(
+            val isError = state.loggedInState is LoggedInState.ErrorLoggingIn
+            // Title
+            Text(
+                text = stringResource(id = StringR.string.ftue_auth_welcome_back_title),
                 modifier = Modifier
-                    .verticalScroll(
-                        state = scrollState,
-                    )
-                    .padding(horizontal = 16.dp),
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 48.dp),
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+            )
+            // Form
+            Column(
+                // modifier = Modifier.weight(1f),
             ) {
-                val isError = state.loggedInState is LoggedInState.ErrorLoggingIn
-                // Title
-                Text(
-                    text = stringResource(id = StringR.string.ftue_auth_welcome_back_title),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 48.dp),
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp,
-                )
-                // Form
-                Column(
-                    // modifier = Modifier.weight(1f),
+                Box(
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Box(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        ElementOutlinedTextField(
-                            value = state.homeserver,
-                            modifier = Modifier.fillMaxWidth(),
-                            onValueChange = { /* no op */ },
-                            enabled = false,
-                            label = {
-                                Text(text = "Server")
-                            },
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Uri,
-                            ),
-                        )
-                        ElementButton(
-                            onClick = onChangeServer,
-                            modifier = Modifier
-                                .align(Alignment.CenterEnd)
-                                .testTag(TestTags.loginChangeServer)
-                                .padding(top = 8.dp, end = 8.dp),
-                            content = {
-                                Text(text = "Change")
-                            }
-                        )
-                    }
                     ElementOutlinedTextField(
-                        value = loginFieldState,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .testTag(TestTags.loginEmailUsername)
-                            .padding(top = 60.dp),
+                        value = state.homeserver,
+                        modifier = Modifier.fillMaxWidth(),
+                        onValueChange = { /* no op */ },
+                        enabled = false,
                         label = {
-                            Text(text = stringResource(id = StringR.string.login_signin_username_hint))
-                        },
-                        onValueChange = {
-                            loginFieldState = it
-                            eventSink(LoginRootEvents.SetLogin(it))
+                            Text(text = "Server")
                         },
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Email,
-                            imeAction = ImeAction.Next
+                            keyboardType = KeyboardType.Uri,
                         ),
                     )
-                    var passwordVisible by remember { mutableStateOf(false) }
-                    if (state.loggedInState is LoggedInState.LoggingIn) {
-                        // Ensure password is hidden when user submits the form
-                        passwordVisible = false
-                    }
-                    ElementOutlinedTextField(
-                        value = passwordFieldState,
+                    ElementButton(
+                        onClick = onChangeServer,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .testTag(TestTags.loginPassword)
-                            .padding(top = 24.dp),
-                        onValueChange = {
-                            passwordFieldState = it
-                            eventSink(LoginRootEvents.SetPassword(it))
-                        },
-                        label = {
-                            Text(text = "Password")
-                        },
-                        isError = isError,
-                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                        trailingIcon = {
-                            val image =
-                                if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                            val description =
-                                if (passwordVisible) "Hide password" else "Show password"
+                            .align(Alignment.CenterEnd)
+                            .testTag(TestTags.loginChangeServer)
+                            .padding(top = 8.dp, end = 8.dp),
+                        content = {
+                            Text(text = "Change")
+                        }
+                    )
+                }
+                ElementOutlinedTextField(
+                    value = loginFieldState,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TestTags.loginEmailUsername)
+                        .padding(top = 60.dp),
+                    label = {
+                        Text(text = stringResource(id = StringR.string.login_signin_username_hint))
+                    },
+                    onValueChange = {
+                        loginFieldState = it
+                        eventSink(LoginRootEvents.SetLogin(it))
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    ),
+                )
+                var passwordVisible by remember { mutableStateOf(false) }
+                if (state.loggedInState is LoggedInState.LoggingIn) {
+                    // Ensure password is hidden when user submits the form
+                    passwordVisible = false
+                }
+                ElementOutlinedTextField(
+                    value = passwordFieldState,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TestTags.loginPassword)
+                        .padding(top = 24.dp),
+                    onValueChange = {
+                        passwordFieldState = it
+                        eventSink(LoginRootEvents.SetPassword(it))
+                    },
+                    label = {
+                        Text(text = "Password")
+                    },
+                    isError = isError,
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    trailingIcon = {
+                        val image =
+                            if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                        val description =
+                            if (passwordVisible) "Hide password" else "Show password"
 
-                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                                Icon(imageVector = image, description)
-                            }
-                        },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Done,
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onDone = { eventSink(LoginRootEvents.Submit) }
-                        ),
-                    )
-                    if (state.loggedInState is LoggedInState.ErrorLoggingIn) {
-                        Text(
-                            text = loginError(state.formState, state.loggedInState.failure),
-                            color = ElementTheme.colors.error,
-                            style = ElementTheme.typography.bodySmall,
-                            modifier = Modifier.padding(start = 16.dp)
-                        )
-                    }
-                }
-                // Submit
-                ElementButton(
-                    onClick = { eventSink(LoginRootEvents.Submit) },
-                    enabled = state.submitEnabled,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag(TestTags.loginContinue)
-                        .padding(vertical = 32.dp)
-                ) {
-                    Text(text = "Continue")
-                }
-                when (val loggedInState = state.loggedInState) {
-                    is LoggedInState.LoggedIn -> onLoginWithSuccess(loggedInState.sessionId)
-                    else -> Unit
-                }
-            }
-            if (state.loggedInState is LoggedInState.LoggingIn) {
-                ElementCircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
+                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                            Icon(imageVector = image, description)
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { eventSink(LoginRootEvents.Submit) }
+                    ),
                 )
+                if (state.loggedInState is LoggedInState.ErrorLoggingIn) {
+                    Text(
+                        text = loginError(state.formState, state.loggedInState.failure),
+                        color = ElementTheme.colors.error,
+                        style = ElementTheme.typography.bodySmall,
+                        modifier = Modifier.padding(start = 16.dp)
+                    )
+                }
             }
+            // Submit
+            ElementButton(
+                onClick = { eventSink(LoginRootEvents.Submit) },
+                enabled = state.submitEnabled,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(TestTags.loginContinue)
+                    .padding(vertical = 32.dp)
+            ) {
+                Text(text = "Continue")
+            }
+            when (val loggedInState = state.loggedInState) {
+                is LoggedInState.LoggedIn -> onLoginWithSuccess(loggedInState.sessionId)
+                else -> Unit
+            }
+        }
+        if (state.loggedInState is LoggedInState.LoggingIn) {
+            ElementCircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
         }
     }
 }

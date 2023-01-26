@@ -51,7 +51,6 @@ import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.theme.components.ElementButton
 import io.element.android.libraries.designsystem.theme.components.ElementCircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.ElementOutlinedTextField
-import io.element.android.libraries.designsystem.theme.components.ElementSurface
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -70,139 +69,135 @@ fun BugReportView(
         }
         return
     }
-    ElementSurface(
-        modifier = modifier,
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .systemBarsPadding()
+            .imePadding()
     ) {
-        Box(
+        val scrollState = rememberScrollState()
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .systemBarsPadding()
-                .imePadding()
+                .verticalScroll(
+                    state = scrollState,
+                )
+                .padding(horizontal = 16.dp),
         ) {
-            val scrollState = rememberScrollState()
-            Column(
+            val isError = state.sending is Async.Failure
+            val isFormEnabled = state.sending !is Async.Loading
+            // Title
+            Text(
+                text = stringResource(id = StringR.string.send_bug_report),
                 modifier = Modifier
-                    .verticalScroll(
-                        state = scrollState,
-                    )
-                    .padding(horizontal = 16.dp),
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+            )
+            // Form
+            Text(
+                text = stringResource(id = StringR.string.send_bug_report_description),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                fontSize = 16.sp,
+            )
+            var descriptionFieldState by textFieldState(
+                stateValue = state.formState.description
+            )
+            Column(
+                // modifier = Modifier.weight(1f),
             ) {
-                val isError = state.sending is Async.Failure
-                val isFormEnabled = state.sending !is Async.Loading
-                // Title
-                Text(
-                    text = stringResource(id = StringR.string.send_bug_report),
+                ElementOutlinedTextField(
+                    value = descriptionFieldState,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 16.dp),
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp,
-                )
-                // Form
-                Text(
-                    text = stringResource(id = StringR.string.send_bug_report_description),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 16.dp),
-                    fontSize = 16.sp,
-                )
-                var descriptionFieldState by textFieldState(
-                    stateValue = state.formState.description
-                )
-                Column(
-                    // modifier = Modifier.weight(1f),
-                ) {
-                    ElementOutlinedTextField(
-                        value = descriptionFieldState,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp),
-                        enabled = isFormEnabled,
-                        label = {
-                            Text(text = stringResource(id = StringR.string.send_bug_report_placeholder))
-                        },
-                        supportingText = {
-                            Text(text = stringResource(id = StringR.string.send_bug_report_description_in_english))
-                        },
-                        onValueChange = {
-                            descriptionFieldState = it
-                            eventSink(BugReportEvents.SetDescription(it))
-                        },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Next
-                        ),
-                        // TODO Error text too short
-                    )
-                }
-                LabelledCheckbox(
-                    checked = state.formState.sendLogs,
-                    onCheckedChange = { eventSink(BugReportEvents.SetSendLog(it)) },
+                        .padding(top = 16.dp),
                     enabled = isFormEnabled,
-                    text = stringResource(id = StringR.string.send_bug_report_include_logs)
+                    label = {
+                        Text(text = stringResource(id = StringR.string.send_bug_report_placeholder))
+                    },
+                    supportingText = {
+                        Text(text = stringResource(id = StringR.string.send_bug_report_description_in_english))
+                    },
+                    onValueChange = {
+                        descriptionFieldState = it
+                        eventSink(BugReportEvents.SetDescription(it))
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    // TODO Error text too short
                 )
-                if (state.hasCrashLogs) {
-                    LabelledCheckbox(
-                        checked = state.formState.sendCrashLogs,
-                        onCheckedChange = { eventSink(BugReportEvents.SetSendCrashLog(it)) },
-                        enabled = isFormEnabled,
-                        text = stringResource(id = StringR.string.send_bug_report_include_crash_logs)
-                    )
-                }
+            }
+            LabelledCheckbox(
+                checked = state.formState.sendLogs,
+                onCheckedChange = { eventSink(BugReportEvents.SetSendLog(it)) },
+                enabled = isFormEnabled,
+                text = stringResource(id = StringR.string.send_bug_report_include_logs)
+            )
+            if (state.hasCrashLogs) {
                 LabelledCheckbox(
-                    checked = state.formState.canContact,
-                    onCheckedChange = { eventSink(BugReportEvents.SetCanContact(it)) },
+                    checked = state.formState.sendCrashLogs,
+                    onCheckedChange = { eventSink(BugReportEvents.SetSendCrashLog(it)) },
                     enabled = isFormEnabled,
-                    text = stringResource(id = StringR.string.you_may_contact_me)
+                    text = stringResource(id = StringR.string.send_bug_report_include_crash_logs)
                 )
-                if (state.screenshotUri != null) {
-                    LabelledCheckbox(
-                        checked = state.formState.sendScreenshot,
-                        onCheckedChange = { eventSink(BugReportEvents.SetSendScreenshot(it)) },
-                        enabled = isFormEnabled,
-                        text = stringResource(id = StringR.string.send_bug_report_include_screenshot)
-                    )
-                    if (state.formState.sendScreenshot) {
-                        Box(
-                            modifier = Modifier.fillMaxWidth(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            val context = LocalContext.current
-                            val model = ImageRequest.Builder(context)
-                                .data(state.screenshotUri)
-                                .build()
-                            AsyncImage(
-                                modifier = Modifier.fillMaxWidth(fraction = 0.5f),
-                                model = model,
-                                contentDescription = null
-                            )
-                        }
+            }
+            LabelledCheckbox(
+                checked = state.formState.canContact,
+                onCheckedChange = { eventSink(BugReportEvents.SetCanContact(it)) },
+                enabled = isFormEnabled,
+                text = stringResource(id = StringR.string.you_may_contact_me)
+            )
+            if (state.screenshotUri != null) {
+                LabelledCheckbox(
+                    checked = state.formState.sendScreenshot,
+                    onCheckedChange = { eventSink(BugReportEvents.SetSendScreenshot(it)) },
+                    enabled = isFormEnabled,
+                    text = stringResource(id = StringR.string.send_bug_report_include_screenshot)
+                )
+                if (state.formState.sendScreenshot) {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        val context = LocalContext.current
+                        val model = ImageRequest.Builder(context)
+                            .data(state.screenshotUri)
+                            .build()
+                        AsyncImage(
+                            modifier = Modifier.fillMaxWidth(fraction = 0.5f),
+                            model = model,
+                            contentDescription = null
+                        )
                     }
                 }
-                // Submit
-                ElementButton(
-                    onClick = { eventSink(BugReportEvents.SendBugReport) },
-                    enabled = state.submitEnabled,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 32.dp)
-                ) {
-                    Text(text = stringResource(id = StringR.string.action_send))
-                }
             }
-            when (state.sending) {
-                is Async.Loading -> {
-                    ElementCircularProgressIndicator(
-                        progress = state.sendingProgress,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-                is Async.Failure -> ErrorDialog(
-                    content = state.sending.error.toString(),
+            // Submit
+            ElementButton(
+                onClick = { eventSink(BugReportEvents.SendBugReport) },
+                enabled = state.submitEnabled,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 32.dp)
+            ) {
+                Text(text = stringResource(id = StringR.string.action_send))
+            }
+        }
+        when (state.sending) {
+            is Async.Loading -> {
+                ElementCircularProgressIndicator(
+                    progress = state.sendingProgress,
+                    modifier = Modifier.align(Alignment.Center)
                 )
-                else -> Unit
             }
+            is Async.Failure -> ErrorDialog(
+                content = state.sending.error.toString(),
+            )
+            else -> Unit
         }
     }
 }
