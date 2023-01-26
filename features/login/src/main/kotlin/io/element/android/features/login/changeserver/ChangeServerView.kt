@@ -56,6 +56,8 @@ import io.element.android.libraries.designsystem.components.VectorIcon
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.ElementButton
+import io.element.android.libraries.designsystem.theme.components.ElementCircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementOutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.ElementSurface
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
@@ -126,7 +128,7 @@ fun ChangeServerView(
                     color = ElementTheme.colors.secondary
                 )
                 var homeserverFieldState by textFieldState(stateValue = state.homeserver)
-                OutlinedTextField(
+                ElementOutlinedTextField(
                     value = homeserverFieldState,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -174,7 +176,7 @@ fun ChangeServerView(
                 }
             }
             if (state.changeServerAction is Async.Loading) {
-                CircularProgressIndicator(
+                ElementCircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
             }

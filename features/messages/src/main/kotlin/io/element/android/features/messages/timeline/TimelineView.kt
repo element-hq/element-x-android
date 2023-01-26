@@ -79,6 +79,7 @@ import io.element.android.features.messages.timeline.model.content.TimelineItemU
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.components.ElementCircularProgressIndicator
 import io.element.android.libraries.designsystem.utils.PairCombinedPreviewParameter
 import io.element.android.libraries.matrix.core.EventId
 import kotlinx.collections.immutable.ImmutableList
@@ -343,7 +344,7 @@ internal fun TimelineLoadingMoreIndicator() {
             .padding(8.dp),
         contentAlignment = Alignment.Center,
     ) {
-        CircularProgressIndicator(
+        ElementCircularProgressIndicator(
             strokeWidth = 2.dp,
             color = ElementTheme.colors.primary
         )

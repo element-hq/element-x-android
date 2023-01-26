@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.components.ElementCircularProgressIndicator
 
 @Composable
 fun ProgressDialog(
@@ -53,7 +54,7 @@ fun ProgressDialog(
                 )
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                CircularProgressIndicator(
+                ElementCircularProgressIndicator(
                     modifier = Modifier.padding(16.dp),
                     color = ElementTheme.colors.onSurfaceVariant
                 )
