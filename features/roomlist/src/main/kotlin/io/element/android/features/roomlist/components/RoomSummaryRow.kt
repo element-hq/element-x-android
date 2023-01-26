@@ -54,6 +54,11 @@ import com.google.accompanist.placeholder.material.placeholder
 import io.element.android.features.roomlist.model.RoomListRoomSummary
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.roomListPlaceHolder
+import io.element.android.libraries.designsystem.theme.roomListRoomMessage
+import io.element.android.libraries.designsystem.theme.roomListRoomMessageDate
+import io.element.android.libraries.designsystem.theme.roomListRoomName
+import io.element.android.libraries.designsystem.theme.roomListUnreadIndicator
 
 private val minHeight = 72.dp
 
@@ -95,7 +100,11 @@ internal fun DefaultRoomSummaryRow(
     ) {
         Avatar(
             room.avatarData,
-            modifier = Modifier.placeholder(room.isPlaceholder, shape = CircleShape)
+            modifier = Modifier.placeholder(
+                visible = room.isPlaceholder,
+                shape = CircleShape,
+                color = ElementTheme.colors.roomListPlaceHolder,
+            )
         )
         Column(
             modifier = Modifier
@@ -105,19 +114,27 @@ internal fun DefaultRoomSummaryRow(
         ) {
             // Name
             Text(
-                modifier = Modifier
-                    .placeholder(room.isPlaceholder, shape = TextPlaceholderShape),
+                modifier = Modifier.placeholder(
+                        visible = room.isPlaceholder,
+                        shape = TextPlaceholderShape,
+                        color = ElementTheme.colors.roomListPlaceHolder,
+                    ),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
                 text = room.name,
+                color = ElementTheme.colors.roomListRoomName,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
             // Last Message
             Text(
-                modifier = Modifier.placeholder(room.isPlaceholder, shape = TextPlaceholderShape),
+                modifier = Modifier.placeholder(
+                    visible = room.isPlaceholder,
+                    shape = TextPlaceholderShape,
+                    color = ElementTheme.colors.roomListPlaceHolder,
+                ),
                 text = room.lastMessage?.toString().orEmpty(),
-                color = ElementTheme.colors.secondary,
+                color = ElementTheme.colors.roomListRoomMessage,
                 fontSize = 14.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -132,11 +149,11 @@ internal fun DefaultRoomSummaryRow(
                 modifier = Modifier.placeholder(room.isPlaceholder, shape = TextPlaceholderShape),
                 fontSize = 12.sp,
                 text = room.timestamp ?: "",
-                color = ElementTheme.colors.secondary,
+                color = ElementTheme.colors.roomListRoomMessageDate,
             )
             Spacer(Modifier.size(4.dp))
             val unreadIndicatorColor =
-                if (room.hasUnread) ElementTheme.colors.primary else Color.Transparent
+                if (room.hasUnread) ElementTheme.colors.roomListUnreadIndicator else Color.Transparent
             Box(
                 modifier = Modifier
                     .size(12.dp)
