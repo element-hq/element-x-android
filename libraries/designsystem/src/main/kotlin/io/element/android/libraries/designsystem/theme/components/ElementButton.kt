@@ -16,16 +16,21 @@
 
 package io.element.android.libraries.designsystem.theme.components
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.color.elementContentColorFor
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @Composable
@@ -63,4 +68,24 @@ fun ElementButton(
             }
         }
     )
+}
+
+@Preview
+@Composable
+fun ElementButtonsLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun ElementButtonsDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
+    Column {
+        ElementButton(onClick = {}, enabled = true) {
+            Text(text = "Click me! - Enabled")
+        }
+        ElementButton(onClick = {}, enabled = false) {
+            Text(text = "Click me! - Disabled")
+        }
+    }
 }

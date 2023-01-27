@@ -17,6 +17,7 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxColors
 import androidx.compose.material3.CheckboxDefaults
@@ -24,6 +25,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @Composable
@@ -52,4 +56,22 @@ fun ElementCheckbox(
         colors = colors,
         interactionSource = interactionSource,
     )
+}
+
+@Preview
+@Composable
+fun ElementCheckboxesLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun ElementCheckboxesDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
+    Column {
+        ElementCheckbox(onCheckedChange = {}, enabled = true, checked = true)
+        ElementCheckbox(onCheckedChange = {}, enabled = true, checked = false)
+        ElementCheckbox(onCheckedChange = {}, enabled = false, checked = true)
+        ElementCheckbox(onCheckedChange = {}, enabled = false, checked = false)
+    }
 }
