@@ -32,8 +32,8 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
 import io.element.android.features.messages.timeline.model.AggregatedReaction
 import io.element.android.features.messages.timeline.model.TimelineItemReactions
-import io.element.android.libraries.designsystem.theme.components.ElementSurface
 import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.components.ElementSurface
 
 @Composable
 fun TimelineItemReactionsView(
