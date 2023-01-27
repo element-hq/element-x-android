@@ -46,9 +46,9 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
 import io.element.android.libraries.designsystem.LinkColor
 import io.element.android.libraries.designsystem.components.ClickableLinkText
-import io.element.android.libraries.designsystem.theme.components.ElementSurface
 import io.element.android.libraries.designsystem.theme.ElementColors
 import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.components.ElementSurface
 import io.element.android.libraries.matrix.permalink.PermalinkData
 import io.element.android.libraries.matrix.permalink.PermalinkParser
 import kotlinx.collections.immutable.persistentMapOf

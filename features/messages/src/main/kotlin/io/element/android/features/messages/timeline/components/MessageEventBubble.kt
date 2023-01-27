@@ -29,8 +29,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.timeline.model.MessagesItemGroupPosition
-import io.element.android.libraries.designsystem.theme.components.ElementSurface
 import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.components.ElementSurface
 
 private val BUBBLE_RADIUS = 16.dp
 
