@@ -115,10 +115,10 @@ internal fun DefaultRoomSummaryRow(
             // Name
             Text(
                 modifier = Modifier.placeholder(
-                        visible = room.isPlaceholder,
-                        shape = TextPlaceholderShape,
-                        color = ElementTheme.colors.roomListPlaceHolder,
-                    ),
+                    visible = room.isPlaceholder,
+                    shape = TextPlaceholderShape,
+                    color = ElementTheme.colors.roomListPlaceHolder,
+                ),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
                 text = room.name,
@@ -146,7 +146,11 @@ internal fun DefaultRoomSummaryRow(
                 .alignByBaseline(),
         ) {
             Text(
-                modifier = Modifier.placeholder(room.isPlaceholder, shape = TextPlaceholderShape),
+                modifier = Modifier.placeholder(
+                    visible = room.isPlaceholder,
+                    shape = TextPlaceholderShape,
+                    color = ElementTheme.colors.roomListPlaceHolder,
+                ),
                 fontSize = 12.sp,
                 text = room.timestamp ?: "",
                 color = ElementTheme.colors.roomListRoomMessageDate,

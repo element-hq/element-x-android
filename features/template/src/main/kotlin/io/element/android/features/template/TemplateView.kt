@@ -22,6 +22,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @Composable
 fun TemplateView(
@@ -29,13 +32,23 @@ fun TemplateView(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier, contentAlignment = Alignment.Center) {
-        Text("Template feature view")
+        Text(
+            "Template feature view",
+            color = ElementTheme.colors.primary,
+        )
     }
 }
 
-@Composable
 @Preview
-fun TemplateViewPreview() {
+@Composable
+fun TemplateViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun TemplateViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     TemplateView(
         state = TemplateState(),
     )

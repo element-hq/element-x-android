@@ -42,6 +42,8 @@ import io.element.android.features.roomlist.model.RoomListRoomSummary
 import io.element.android.features.roomlist.model.RoomListState
 import io.element.android.features.roomlist.model.stubbedRoomSummaries
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.ElementScaffold
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.core.RoomId
@@ -156,7 +158,14 @@ private fun RoomListRoomSummary.contentType() = isPlaceholder
 
 @Preview
 @Composable
-fun RoomListViewPreview() {
+fun RoomListViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun RoomListViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     RoomListView(
         roomSummaries = stubbedRoomSummaries(),
         matrixUser = MatrixUser(id = UserId("@id"), username = "User#1", avatarData = AvatarData("U")),

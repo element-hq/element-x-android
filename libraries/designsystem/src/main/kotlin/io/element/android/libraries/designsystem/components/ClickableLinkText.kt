@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
+import io.element.android.libraries.designsystem.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 
@@ -83,6 +84,7 @@ fun ClickableLinkText(
         onTextLayout = {
             layoutResult.value = it
         },
-        inlineContent = inlineContent
+        inlineContent = inlineContent,
+        color = ElementTheme.colors.primary,
     )
 }

@@ -35,6 +35,7 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.matrix)
+    implementation(projects.libraries.designsystem)
     implementation(libs.wysiwyg)
     implementation(libs.androidx.constraintlayout)
     implementation("com.google.android.material:material:1.7.0")

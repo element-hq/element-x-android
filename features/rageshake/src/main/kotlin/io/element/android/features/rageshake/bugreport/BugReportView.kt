@@ -48,6 +48,9 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.LabelledCheckbox
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.ElementButton
 import io.element.android.libraries.designsystem.theme.components.ElementCircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.ElementOutlinedTextField
@@ -94,6 +97,7 @@ fun BugReportView(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
+                color = ElementTheme.colors.primary,
             )
             // Form
             Text(
@@ -102,7 +106,8 @@ fun BugReportView(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 16.dp),
                 fontSize = 16.sp,
-            )
+                color = ElementTheme.colors.primary,
+                )
             var descriptionFieldState by textFieldState(
                 stateValue = state.formState.description
             )
@@ -202,9 +207,16 @@ fun BugReportView(
     }
 }
 
-@Composable
 @Preview
-fun BugReportContentPreview() {
+@Composable
+fun BugReportViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun BugReportViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     BugReportView(
         state = BugReportState(),
     )

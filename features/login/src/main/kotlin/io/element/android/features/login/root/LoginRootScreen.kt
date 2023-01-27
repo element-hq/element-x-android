@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.features.login.root
 
 import androidx.compose.foundation.layout.Box
@@ -55,6 +53,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.login.error.loginError
 import io.element.android.libraries.designsystem.components.form.textFieldState
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.ElementButton
 import io.element.android.libraries.designsystem.theme.components.ElementCircularProgressIndicator
@@ -99,6 +99,7 @@ fun LoginRootScreen(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
+                color = ElementTheme.colors.primary,
             )
             // Form
             Column(
@@ -219,9 +220,16 @@ fun LoginRootScreen(
     }
 }
 
-@Composable
 @Preview
-fun LoginContentPreview() {
+@Composable
+fun LoginRootScreenLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun LoginRootScreenDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     LoginRootScreen(
         state = LoginRootState(
             homeserver = "matrix.org",
