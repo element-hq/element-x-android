@@ -34,6 +34,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import io.element.android.libraries.designsystem.AvatarGradientEnd
 import io.element.android.libraries.designsystem.AvatarGradientStart
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import timber.log.Timber
 
 @Composable
@@ -97,6 +99,13 @@ private fun InitialsAvatar(
 
 @Preview
 @Composable
-fun InitialsAvatarPreview() {
+fun AvatarLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun AvatarDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     Avatar(AvatarData(name = "A"))
 }

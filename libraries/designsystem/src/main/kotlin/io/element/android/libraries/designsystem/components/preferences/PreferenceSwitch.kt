@@ -31,6 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.ElementCheckbox
 import io.element.android.libraries.designsystem.toEnabledColor
@@ -75,12 +77,20 @@ fun PreferenceSwitch(
     }
 }
 
-@Composable
 @Preview
-fun PreferenceSwitchPreview() {
+@Composable
+fun PreferenceSwitchLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun PreferenceSwitchDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     PreferenceSwitch(
         title = "Switch",
         icon = Icons.Default.Announcement,
+        enabled = true,
         isChecked = true
     )
 }

@@ -30,6 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.ElementCircularProgressIndicator
 
@@ -69,8 +71,15 @@ fun ProgressDialog(
     }
 }
 
-@Composable
 @Preview
-fun ProgressDialogPreview() {
+@Composable
+fun ProgressDialogLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun ProgressDialogDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     ProgressDialog(text = "test dialog content")
 }

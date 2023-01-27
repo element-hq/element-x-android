@@ -34,6 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.matrix.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
@@ -68,7 +70,8 @@ fun MatrixUserRow(
                 fontWeight = FontWeight.SemiBold,
                 text = matrixUser.getBestName(),
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                color = ElementTheme.colors.primary,
             )
             // Id
             if (matrixUser.username.isNullOrEmpty().not()) {
@@ -86,7 +89,14 @@ fun MatrixUserRow(
 
 @Preview
 @Composable
-fun MatrixUserRowPreview() {
+fun MatrixUserRowLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun MatrixUserRowDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     MatrixUserRow(
         MatrixUser(
             id = UserId("@alice:server.org"),

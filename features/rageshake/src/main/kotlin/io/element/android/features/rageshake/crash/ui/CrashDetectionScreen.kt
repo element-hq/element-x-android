@@ -20,6 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -67,7 +69,14 @@ fun CrashDetectionContent(
 
 @Preview
 @Composable
-fun CrashDetectionContentPreview() {
+fun CrashDetectionContentLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun CrashDetectionContentDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     CrashDetectionContent(
         state = CrashDetectionState()
     )

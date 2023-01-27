@@ -31,6 +31,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.ElementButton
 
 @Composable
@@ -59,8 +61,15 @@ fun ShowkaseButton(
     }
 }
 
-@Preview(group = "Buttons", name = "Showkase button")
+@Preview
 @Composable
-fun ShowkaseButtonPreview() {
+fun ShowkaseButtonLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun ShowkaseButtonDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     ShowkaseButton()
 }

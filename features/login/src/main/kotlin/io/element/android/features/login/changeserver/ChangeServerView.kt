@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.features.login.changeserver
 
 import androidx.compose.foundation.background
@@ -52,6 +50,8 @@ import io.element.android.features.login.error.changeServerError
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.VectorIcon
 import io.element.android.libraries.designsystem.components.form.textFieldState
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.ElementButton
 import io.element.android.libraries.designsystem.theme.components.ElementCircularProgressIndicator
@@ -109,6 +109,7 @@ fun ChangeServerView(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
+                color = ElementTheme.colors.primary,
             )
             Text(
                 text = "A server is a home for all your data.\n" +
@@ -119,7 +120,7 @@ fun ChangeServerView(
                     .padding(top = 16.dp),
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
-                color = ElementTheme.colors.secondary
+                color = ElementTheme.colors.secondary,
             )
             var homeserverFieldState by textFieldState(stateValue = state.homeserver)
             ElementOutlinedTextField(
@@ -177,9 +178,16 @@ fun ChangeServerView(
     }
 }
 
-@Composable
 @Preview
-fun ChangeServerContentPreview() {
+@Composable
+fun ChangeServerViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun ChangeServerViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     ChangeServerView(
         state = ChangeServerState(homeserver = "matrix.org"),
     )

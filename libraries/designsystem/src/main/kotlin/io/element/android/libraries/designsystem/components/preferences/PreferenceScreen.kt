@@ -28,7 +28,9 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Announcement
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,6 +42,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.ElementScaffold
 import io.element.android.libraries.designsystem.theme.components.ElementTopAppBar
 
@@ -110,12 +114,36 @@ fun PreferenceTopAppBar(
     )
 }
 
-@Composable
 @Preview
-fun PreferenceScreenPreview() {
+@Composable
+fun PreferenceViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun PreferenceViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     PreferenceView(
         title = "Preference screen"
     ) {
-        PreferenceCategoryPreview()
+        PreferenceCategory(
+            title = "Category title",
+        ) {
+            PreferenceText(
+                title = "Title",
+                icon = Icons.Default.BugReport,
+            )
+            PreferenceSwitch(
+                title = "Switch",
+                icon = Icons.Default.Announcement,
+                isChecked = true
+            )
+            PreferenceSlide(
+                title = "Slide",
+                summary = "Summary",
+                value = 0.75F
+            )
+        }
     }
 }

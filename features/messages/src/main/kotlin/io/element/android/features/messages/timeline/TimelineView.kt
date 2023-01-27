@@ -77,6 +77,8 @@ import io.element.android.features.messages.timeline.model.content.TimelineItemT
 import io.element.android.features.messages.timeline.model.content.TimelineItemUnknownContent
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.ElementCircularProgressIndicator
 import io.element.android.libraries.designsystem.utils.PairCombinedPreviewParameter
@@ -355,13 +357,20 @@ class MessagesItemGroupPositionToMessagesTimelineItemContentProvider :
         TimelineItemGroupPositionProvider() to MessagesTimelineItemContentProvider()
     )
 
-@Suppress("PreviewPublic")
 @Preview
 @Composable
-fun TimelineItemsPreview(
-    @PreviewParameter(MessagesTimelineItemContentProvider::class)
-    content: TimelineItemContent
-) {
+fun LoginRootScreenLightPreview(
+    @PreviewParameter(MessagesTimelineItemContentProvider::class) content: TimelineItemContent
+) = ElementPreviewLight { ContentToPreview(content) }
+
+@Preview
+@Composable
+fun LoginRootScreenDarkPreview(
+    @PreviewParameter(MessagesTimelineItemContentProvider::class) content: TimelineItemContent
+) = ElementPreviewDark { ContentToPreview(content) }
+
+@Composable
+private fun ContentToPreview(content: TimelineItemContent) {
     val timelineItems = persistentListOf(
         // 3 items (First Middle Last) with isMine = false
         createMessageEvent(
