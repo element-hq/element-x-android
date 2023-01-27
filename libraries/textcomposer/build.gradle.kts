@@ -38,6 +38,6 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(libs.wysiwyg)
     implementation(libs.androidx.constraintlayout)
-    implementation("com.google.android.material:material:1.7.0")
+    implementation(libs.androidx.material)
     ksp(libs.showkase.processor)
 }
