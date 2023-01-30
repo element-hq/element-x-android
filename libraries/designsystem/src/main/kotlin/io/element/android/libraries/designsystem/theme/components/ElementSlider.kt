@@ -18,7 +18,6 @@ package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderColors
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.Composable
@@ -53,7 +52,7 @@ fun ElementSlider(
     ),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
-    Slider(
+    androidx.compose.material3.Slider(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,

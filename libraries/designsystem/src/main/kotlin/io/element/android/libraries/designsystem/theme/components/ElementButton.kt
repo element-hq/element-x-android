@@ -20,18 +20,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.ProvideTextStyle
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.components.color.elementContentColorFor
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.elementContentColorFor
 
 @Composable
 fun ElementButton(
@@ -41,7 +39,7 @@ fun ElementButton(
     containerColor: Color = ElementTheme.colors.primary,
     content: @Composable RowScope.() -> Unit
 ) {
-    Button(
+    androidx.compose.material3.Button(
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
             contentColor = elementContentColorFor(backgroundColor = containerColor),

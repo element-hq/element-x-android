@@ -14,27 +14,23 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.theme
+package io.element.android.libraries.designsystem.theme.components
 
-import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.DividerDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.takeOrElse
+import androidx.compose.ui.unit.Dp
 
 @Composable
-@ReadOnlyComposable
-fun elementContentColorFor(backgroundColor: Color): Color {
-    return ElementTheme.colors.elementContentColorFor(backgroundColor).takeOrElse {
-        LocalContentColor.current
-    }
-}
-
-fun ElementColors.elementContentColorFor(backgroundColor: Color): Color {
-    return when (backgroundColor) {
-        primary -> onPrimary
-        surfaceVariant -> onSurfaceVariant
-        background -> onBackground
-        else -> Color.Unspecified
-    }
+fun Divider(
+    modifier: Modifier = Modifier,
+    thickness: Dp = DividerDefaults.Thickness,
+    color: Color = DividerDefaults.color,
+) {
+    androidx.compose.material3.Divider(
+        modifier = modifier,
+        thickness = thickness,
+        color = color,
+    )
 }

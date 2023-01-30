@@ -16,37 +16,39 @@
 
 package io.element.android.libraries.designsystem.theme.components
 
-import androidx.compose.material3.ProgressIndicatorDefaults
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.Dp
-import io.element.android.libraries.designsystem.theme.ElementTheme
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.vector.ImageVector
 
 @Composable
-fun ElementCircularProgressIndicator(
-    progress: Float,
+fun Icon(
+    imageVector: ImageVector,
+    contentDescription: String?,
     modifier: Modifier = Modifier,
-    color: Color = ProgressIndicatorDefaults.circularColor,
-    strokeWidth: Dp = ProgressIndicatorDefaults.CircularStrokeWidth
+    tint: Color = LocalContentColor.current
 ) {
-    androidx.compose.material3.CircularProgressIndicator(
+    androidx.compose.material3.Icon(
+        imageVector = imageVector,
+        contentDescription = contentDescription,
         modifier = modifier,
-        progress = progress,
-        color = color,
-        strokeWidth = strokeWidth,
+        tint = tint,
     )
 }
 
 @Composable
-fun ElementCircularProgressIndicator(
+fun Icon(
+    bitmap: ImageBitmap,
+    contentDescription: String?,
     modifier: Modifier = Modifier,
-    color: Color = ElementTheme.colors.primary,
-    strokeWidth: Dp = ProgressIndicatorDefaults.CircularStrokeWidth,
+    tint: Color = LocalContentColor.current
 ) {
-    androidx.compose.material3.CircularProgressIndicator(
+    androidx.compose.material3.Icon(
+        bitmap = bitmap,
+        contentDescription = contentDescription,
         modifier = modifier,
-        color = color,
-        strokeWidth = strokeWidth,
+        tint = tint,
     )
 }

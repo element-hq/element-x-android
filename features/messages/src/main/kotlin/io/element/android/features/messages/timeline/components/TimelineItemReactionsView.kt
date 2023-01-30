@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +33,7 @@ import io.element.android.features.messages.timeline.model.AggregatedReaction
 import io.element.android.features.messages.timeline.model.TimelineItemReactions
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.ElementSurface
+import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
 fun TimelineItemReactionsView(

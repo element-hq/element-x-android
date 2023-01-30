@@ -16,36 +16,35 @@
 
 package io.element.android.libraries.designsystem.theme.components
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.FloatingActionButtonElevation
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.theme.elementContentColorFor
-import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @Composable
-fun ElementSurface(
+fun FloatingActionButton(
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    shape: Shape = RectangleShape,
-    color: Color = ElementTheme.colors.surfaceVariant,
-    contentColor: Color = elementContentColorFor(color),
-    tonalElevation: Dp = 0.dp,
-    shadowElevation: Dp = 0.dp,
-    border: BorderStroke? = null,
-    content: @Composable () -> Unit
+    shape: Shape = FloatingActionButtonDefaults.shape,
+    containerColor: Color = FloatingActionButtonDefaults.containerColor,
+    contentColor: Color = contentColorFor(containerColor),
+    elevation: FloatingActionButtonElevation = FloatingActionButtonDefaults.elevation(),
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    content: @Composable () -> Unit,
 ) {
-    androidx.compose.material3.Surface(
+    androidx.compose.material3.FloatingActionButton(
+        onClick = onClick,
         modifier = modifier,
         shape = shape,
-        color = color,
+        containerColor = containerColor,
         contentColor = contentColor,
-        tonalElevation = tonalElevation,
-        shadowElevation = shadowElevation,
-        border = border,
+        elevation = elevation,
+        interactionSource = interactionSource,
         content = content,
     )
 }

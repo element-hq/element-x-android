@@ -23,8 +23,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -61,41 +59,8 @@ fun ElementOutlinedTextField(
     maxLines: Int = Int.MAX_VALUE,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = TextFieldDefaults.outlinedShape,
-    colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(
-        textColor = ElementTheme.colors.primary,
-        disabledTextColor = ElementTheme.colors.primary.copy(alpha = 0.38f),
-        containerColor = Color.Transparent,
-        cursorColor = ElementTheme.colors.primary,
-        errorCursorColor = ElementTheme.colors.error,
-        selectionColors = TextSelectionColors(
-            handleColor = ElementGreen,
-            backgroundColor = ElementGreen.copy(alpha = 0.4f)
-        ),
-        focusedBorderColor = ElementTheme.colors.primary,
-        unfocusedBorderColor = ElementTheme.colors.secondary,
-        disabledBorderColor = ElementTheme.colors.secondary.copy(alpha = 0.12f),
-        errorBorderColor = ElementTheme.colors.error,
-        focusedLeadingIconColor = ElementTheme.colors.primary,
-        unfocusedLeadingIconColor = ElementTheme.colors.secondary,
-        disabledLeadingIconColor = ElementTheme.colors.secondary.copy(0.12f),
-        errorLeadingIconColor = ElementTheme.colors.error,
-        focusedTrailingIconColor = ElementTheme.colors.primary,
-        unfocusedTrailingIconColor = ElementTheme.colors.secondary,
-        disabledTrailingIconColor = ElementTheme.colors.secondary.copy(alpha = 0.12f),
-        errorTrailingIconColor = ElementTheme.colors.error,
-        focusedLabelColor = ElementTheme.colors.primary,
-        unfocusedLabelColor = ElementTheme.colors.secondary,
-        disabledLabelColor = ElementTheme.colors.secondary.copy(alpha = 0.12f),
-        errorLabelColor = ElementTheme.colors.error,
-        placeholderColor = ElementTheme.colors.secondary,
-        disabledPlaceholderColor = ElementTheme.colors.secondary.copy(alpha = 0.12f),
-        focusedSupportingTextColor = ElementTheme.colors.primary,
-        unfocusedSupportingTextColor = ElementTheme.colors.secondary,
-        disabledSupportingTextColor = ElementTheme.colors.primary.copy(alpha = 0.12f),
-        errorSupportingTextColor = ElementTheme.colors.error,
-    )
 ) {
-    OutlinedTextField(
+    androidx.compose.material3.OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
@@ -115,7 +80,39 @@ fun ElementOutlinedTextField(
         maxLines = maxLines,
         interactionSource = interactionSource,
         shape = shape,
-        colors = colors,
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            textColor = ElementTheme.colors.primary,
+            disabledTextColor = ElementTheme.colors.primary.copy(alpha = 0.38f),
+            containerColor = Color.Transparent,
+            cursorColor = ElementTheme.colors.primary,
+            errorCursorColor = ElementTheme.colors.error,
+            selectionColors = TextSelectionColors(
+                handleColor = ElementGreen,
+                backgroundColor = ElementGreen.copy(alpha = 0.4f)
+            ),
+            focusedBorderColor = ElementTheme.colors.primary,
+            unfocusedBorderColor = ElementTheme.colors.secondary,
+            disabledBorderColor = ElementTheme.colors.secondary.copy(alpha = 0.12f),
+            errorBorderColor = ElementTheme.colors.error,
+            focusedLeadingIconColor = ElementTheme.colors.primary,
+            unfocusedLeadingIconColor = ElementTheme.colors.secondary,
+            disabledLeadingIconColor = ElementTheme.colors.secondary.copy(0.12f),
+            errorLeadingIconColor = ElementTheme.colors.error,
+            focusedTrailingIconColor = ElementTheme.colors.primary,
+            unfocusedTrailingIconColor = ElementTheme.colors.secondary,
+            disabledTrailingIconColor = ElementTheme.colors.secondary.copy(alpha = 0.12f),
+            errorTrailingIconColor = ElementTheme.colors.error,
+            focusedLabelColor = ElementTheme.colors.primary,
+            unfocusedLabelColor = ElementTheme.colors.secondary,
+            disabledLabelColor = ElementTheme.colors.secondary.copy(alpha = 0.12f),
+            errorLabelColor = ElementTheme.colors.error,
+            placeholderColor = ElementTheme.colors.secondary,
+            disabledPlaceholderColor = ElementTheme.colors.secondary.copy(alpha = 0.12f),
+            focusedSupportingTextColor = ElementTheme.colors.primary,
+            unfocusedSupportingTextColor = ElementTheme.colors.secondary,
+            disabledSupportingTextColor = ElementTheme.colors.primary.copy(alpha = 0.12f),
+            errorSupportingTextColor = ElementTheme.colors.error,
+        ),
     )
 }
 
