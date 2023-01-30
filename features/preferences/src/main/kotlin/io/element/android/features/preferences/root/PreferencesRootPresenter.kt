@@ -17,10 +17,10 @@
 package io.element.android.features.preferences.root
 
 import androidx.compose.runtime.Composable
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.architecture.Presenter
 import io.element.android.features.logout.LogoutPreferencePresenter
 import io.element.android.features.rageshake.preferences.RageshakePreferencesPresenter
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 
 class PreferencesRootPresenter @Inject constructor(

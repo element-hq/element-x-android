@@ -18,20 +18,14 @@ package io.element.android.features.rageshake.reporter
 
 import android.content.Context
 import android.os.Build
-import io.element.android.libraries.core.extensions.toOnOff
-import io.element.android.libraries.androidutils.file.compressFile
-import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.features.rageshake.R
 import io.element.android.features.rageshake.crash.CrashDataStore
 import io.element.android.features.rageshake.logs.VectorFileLogger
 import io.element.android.features.rageshake.screenshot.ScreenshotHolder
-import java.io.File
-import java.io.IOException
-import java.io.OutputStreamWriter
-import java.net.HttpURLConnection
-import java.util.Locale
-import javax.inject.Inject
+import io.element.android.libraries.androidutils.file.compressFile
+import io.element.android.libraries.core.extensions.toOnOff
+import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -46,6 +40,12 @@ import okhttp3.Response
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
+import java.io.File
+import java.io.IOException
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.util.Locale
+import javax.inject.Inject
 
 /**
  * BugReporter creates and sends the bug reports.

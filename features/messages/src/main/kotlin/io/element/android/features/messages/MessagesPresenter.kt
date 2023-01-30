@@ -24,9 +24,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.features.messages.actionlist.ActionListPresenter
 import io.element.android.features.messages.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.textcomposer.MessageComposerEvents
@@ -36,6 +33,9 @@ import io.element.android.features.messages.timeline.TimelineEvents
 import io.element.android.features.messages.timeline.TimelinePresenter
 import io.element.android.features.messages.timeline.model.TimelineItem
 import io.element.android.features.messages.timeline.model.content.TimelineItemTextBasedContent
+import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.room.MatrixRoom
 import io.element.android.libraries.matrix.ui.MatrixItemHelper

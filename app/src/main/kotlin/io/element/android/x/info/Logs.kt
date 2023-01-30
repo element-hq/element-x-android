@@ -19,7 +19,8 @@ package io.element.android.x.info
 import io.element.android.x.BuildConfig
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 fun logApplicationInfo() {
     val appVersion = buildString {

@@ -18,8 +18,8 @@ package io.element.android.features.login.error
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import io.element.android.libraries.core.uri.isValidUrl
 import io.element.android.features.login.root.LoginFormState
+import io.element.android.libraries.core.uri.isValidUrl
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
