@@ -30,7 +30,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.timeline.model.MessagesItemGroupPosition
 import io.element.android.libraries.designsystem.theme.ElementTheme
-import io.element.android.libraries.designsystem.theme.components.ElementSurface
+import io.element.android.libraries.designsystem.theme.components.Surface
 
 private val BUBBLE_RADIUS = 16.dp
 
@@ -91,7 +91,7 @@ fun MessageEventBubble(
         }
     }
     val bubbleShape = bubbleShape()
-    ElementSurface(
+    Surface(
         modifier = modifier
             .widthIn(min = 80.dp)
             .offsetForItem()

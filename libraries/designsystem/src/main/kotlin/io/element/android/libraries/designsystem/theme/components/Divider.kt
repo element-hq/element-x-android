@@ -20,17 +20,34 @@ import androidx.compose.material3.DividerDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @Composable
 fun Divider(
     modifier: Modifier = Modifier,
     thickness: Dp = DividerDefaults.Thickness,
-    color: Color = DividerDefaults.color,
+    color: Color = ElementTheme.colors.onBackground,
 ) {
     androidx.compose.material3.Divider(
         modifier = modifier,
         thickness = thickness,
         color = color,
     )
+}
+
+@Preview
+@Composable
+fun DividerLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun DividerDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
+    Divider()
 }

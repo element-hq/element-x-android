@@ -30,7 +30,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @Composable
-fun ElementCheckbox(
+fun Checkbox(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
     modifier: Modifier = Modifier,
@@ -59,18 +59,18 @@ fun ElementCheckbox(
 
 @Preview
 @Composable
-fun ElementCheckboxesLightPreview() = ElementPreviewLight { ContentToPreview() }
+fun CheckboxesLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun ElementCheckboxesDarkPreview() = ElementPreviewDark { ContentToPreview() }
+fun CheckboxesDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
     Column {
-        ElementCheckbox(onCheckedChange = {}, enabled = true, checked = true)
-        ElementCheckbox(onCheckedChange = {}, enabled = true, checked = false)
-        ElementCheckbox(onCheckedChange = {}, enabled = false, checked = true)
-        ElementCheckbox(onCheckedChange = {}, enabled = false, checked = false)
+        Checkbox(onCheckedChange = {}, enabled = true, checked = true)
+        Checkbox(onCheckedChange = {}, enabled = true, checked = false)
+        Checkbox(onCheckedChange = {}, enabled = false, checked = true)
+        Checkbox(onCheckedChange = {}, enabled = false, checked = false)
     }
 }

@@ -35,7 +35,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import io.element.android.features.rageshake.bugreport.BugReportNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.designsystem.theme.components.ElementCircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.core.SessionId
@@ -182,7 +182,7 @@ class RootFlowNode(
 
     private fun splashNode(buildContext: BuildContext) = node(buildContext) {
         Box(modifier = it.fillMaxSize(), contentAlignment = Alignment.Center) {
-            ElementCircularProgressIndicator()
+            CircularProgressIndicator()
         }
     }
 }

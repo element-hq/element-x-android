@@ -32,7 +32,7 @@ import com.google.accompanist.flowlayout.FlowRow
 import io.element.android.features.messages.timeline.model.AggregatedReaction
 import io.element.android.features.messages.timeline.model.TimelineItemReactions
 import io.element.android.libraries.designsystem.theme.ElementTheme
-import io.element.android.libraries.designsystem.theme.components.ElementSurface
+import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
@@ -54,7 +54,7 @@ fun TimelineItemReactionsView(
 
 @Composable
 fun MessagesReactionButton(reaction: AggregatedReaction, modifier: Modifier = Modifier) {
-    ElementSurface(
+    Surface(
         modifier = modifier,
         color = ElementTheme.colors.surfaceVariant,
         border = BorderStroke(2.dp, ElementTheme.colors.background),

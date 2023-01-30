@@ -29,7 +29,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @Composable
-fun ElementSlider(
+fun Slider(
     value: Float,
     onValueChange: (Float) -> Unit,
     modifier: Modifier = Modifier,
@@ -67,16 +67,16 @@ fun ElementSlider(
 
 @Preview
 @Composable
-fun ElementSlidersLightPreview() = ElementPreviewLight { ContentToPreview() }
+fun SlidersLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun ElementSlidersDarkPreview() = ElementPreviewDark { ContentToPreview() }
+fun SlidersDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
     Column {
-        ElementSlider(onValueChange = {}, value = 0.33f, enabled = true)
-        ElementSlider(onValueChange = {}, value = 0.33f, enabled = false)
+        Slider(onValueChange = {}, value = 0.33f, enabled = true)
+        Slider(onValueChange = {}, value = 0.33f, enabled = false)
     }
 }

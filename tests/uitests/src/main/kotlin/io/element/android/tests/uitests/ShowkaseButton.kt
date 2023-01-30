@@ -30,7 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.ElementButton
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -43,7 +43,7 @@ fun ShowkaseButton(
     var isShowkaseButtonVisible by remember { mutableStateOf(BuildConfig.DEBUG) }
 
     if (isShowkaseButtonVisible) {
-        ElementButton(
+        Button(
             modifier = modifier
                 .padding(top = 32.dp),
             onClick = onClick

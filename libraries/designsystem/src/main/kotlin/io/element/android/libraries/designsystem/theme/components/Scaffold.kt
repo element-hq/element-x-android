@@ -24,12 +24,12 @@ import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import io.element.android.libraries.designsystem.theme.elementContentColorFor
 import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.elementContentColorFor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ElementScaffold(
+fun Scaffold(
     modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},

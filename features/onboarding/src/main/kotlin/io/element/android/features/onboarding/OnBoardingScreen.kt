@@ -43,7 +43,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
-import io.element.android.libraries.designsystem.theme.components.ElementButton
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
@@ -100,7 +100,7 @@ fun OnBoardingScreen(
                     .align(CenterHorizontally)
                     .padding(16.dp),
             )
-            ElementButton(
+            Button(
                 onClick = {
                     onSignIn()
                 },

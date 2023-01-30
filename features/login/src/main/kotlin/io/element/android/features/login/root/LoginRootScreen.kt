@@ -52,11 +52,11 @@ import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
-import io.element.android.libraries.designsystem.theme.components.ElementButton
-import io.element.android.libraries.designsystem.theme.components.ElementCircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.ElementOutlinedTextField
+import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
+import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.testtags.TestTags
@@ -107,7 +107,7 @@ fun LoginRootScreen(
                 Box(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    ElementOutlinedTextField(
+                    OutlinedTextField(
                         value = state.homeserver,
                         modifier = Modifier.fillMaxWidth(),
                         onValueChange = { /* no op */ },
@@ -119,7 +119,7 @@ fun LoginRootScreen(
                             keyboardType = KeyboardType.Uri,
                         ),
                     )
-                    ElementButton(
+                    Button(
                         onClick = onChangeServer,
                         modifier = Modifier
                             .align(Alignment.CenterEnd)
@@ -130,7 +130,7 @@ fun LoginRootScreen(
                         }
                     )
                 }
-                ElementOutlinedTextField(
+                OutlinedTextField(
                     value = loginFieldState,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -153,7 +153,7 @@ fun LoginRootScreen(
                     // Ensure password is hidden when user submits the form
                     passwordVisible = false
                 }
-                ElementOutlinedTextField(
+                OutlinedTextField(
                     value = passwordFieldState,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -196,7 +196,7 @@ fun LoginRootScreen(
                 }
             }
             // Submit
-            ElementButton(
+            Button(
                 onClick = { eventSink(LoginRootEvents.Submit) },
                 enabled = state.submitEnabled,
                 modifier = Modifier
@@ -212,7 +212,7 @@ fun LoginRootScreen(
             }
         }
         if (state.loggedInState is LoggedInState.LoggingIn) {
-            ElementCircularProgressIndicator(
+            CircularProgressIndicator(
                 modifier = Modifier.align(Alignment.Center)
             )
         }

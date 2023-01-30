@@ -42,7 +42,7 @@ import io.element.android.features.roomlist.model.stubbedRoomSummaries
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.ElementScaffold
+import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.core.RoomId
 import io.element.android.libraries.matrix.core.UserId
@@ -118,7 +118,7 @@ fun RoomListView(
         }
     }
 
-    ElementScaffold(
+    Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             RoomListTopBar(

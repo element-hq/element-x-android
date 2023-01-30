@@ -59,11 +59,11 @@ import io.element.android.features.messages.timeline.TimelineView
 import io.element.android.features.messages.timeline.model.TimelineItem
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.theme.components.ElementScaffold
-import io.element.android.libraries.designsystem.theme.components.ElementTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
+import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -101,7 +101,7 @@ fun MessagesView(
         state.eventSink(MessagesEvents.HandleAction(action, messageEvent))
     }
 
-    ElementScaffold(
+    Scaffold(
         modifier = modifier,
         contentWindowInsets = WindowInsets.statusBars,
         topBar = {
@@ -172,7 +172,7 @@ fun MessagesViewTopBar(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
 ) {
-    ElementTopAppBar(
+    TopAppBar(
         modifier = modifier,
         navigationIcon = {
             IconButton(onClick = onBackPressed) {

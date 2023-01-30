@@ -16,36 +16,37 @@
 
 package io.element.android.libraries.designsystem.theme.components
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.theme.elementContentColorFor
 import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @Composable
-fun ElementSurface(
+fun CircularProgressIndicator(
+    progress: Float,
     modifier: Modifier = Modifier,
-    shape: Shape = RectangleShape,
-    color: Color = ElementTheme.colors.surfaceVariant,
-    contentColor: Color = elementContentColorFor(color),
-    tonalElevation: Dp = 0.dp,
-    shadowElevation: Dp = 0.dp,
-    border: BorderStroke? = null,
-    content: @Composable () -> Unit
+    color: Color = ProgressIndicatorDefaults.circularColor,
+    strokeWidth: Dp = ProgressIndicatorDefaults.CircularStrokeWidth
 ) {
-    androidx.compose.material3.Surface(
+    androidx.compose.material3.CircularProgressIndicator(
         modifier = modifier,
-        shape = shape,
+        progress = progress,
         color = color,
-        contentColor = contentColor,
-        tonalElevation = tonalElevation,
-        shadowElevation = shadowElevation,
-        border = border,
-        content = content,
+        strokeWidth = strokeWidth,
+    )
+}
+
+@Composable
+fun CircularProgressIndicator(
+    modifier: Modifier = Modifier,
+    color: Color = ElementTheme.colors.primary,
+    strokeWidth: Dp = ProgressIndicatorDefaults.CircularStrokeWidth,
+) {
+    androidx.compose.material3.CircularProgressIndicator(
+        modifier = modifier,
+        color = color,
+        strokeWidth = strokeWidth,
     )
 }

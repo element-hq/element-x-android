@@ -39,7 +39,7 @@ import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ElementOutlinedTextField(
+fun OutlinedTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -118,22 +118,22 @@ fun ElementOutlinedTextField(
 
 @Preview
 @Composable
-fun ElementOutlinedTextFieldsLightPreview() = ElementPreviewLight { ContentToPreview() }
+fun OutlinedTextFieldsLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun ElementOutlinedTextFieldsDarkPreview() = ElementPreviewDark { ContentToPreview() }
+fun OutlinedTextFieldsDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
     Column {
-        ElementOutlinedTextField(onValueChange = {}, value = "Content", isError = false, enabled = true, readOnly = true)
-        ElementOutlinedTextField(onValueChange = {}, value = "Content", isError = false, enabled = true, readOnly = false)
-        ElementOutlinedTextField(onValueChange = {}, value = "Content", isError = false, enabled = false, readOnly = true)
-        ElementOutlinedTextField(onValueChange = {}, value = "Content", isError = false, enabled = false, readOnly = false)
-        ElementOutlinedTextField(onValueChange = {}, value = "Content", isError = true, enabled = true, readOnly = true)
-        ElementOutlinedTextField(onValueChange = {}, value = "Content", isError = true, enabled = true, readOnly = false)
-        ElementOutlinedTextField(onValueChange = {}, value = "Content", isError = true, enabled = false, readOnly = true)
-        ElementOutlinedTextField(onValueChange = {}, value = "Content", isError = true, enabled = false, readOnly = false)
+        OutlinedTextField(onValueChange = {}, value = "Content", isError = false, enabled = true, readOnly = true)
+        OutlinedTextField(onValueChange = {}, value = "Content", isError = false, enabled = true, readOnly = false)
+        OutlinedTextField(onValueChange = {}, value = "Content", isError = false, enabled = false, readOnly = true)
+        OutlinedTextField(onValueChange = {}, value = "Content", isError = false, enabled = false, readOnly = false)
+        OutlinedTextField(onValueChange = {}, value = "Content", isError = true, enabled = true, readOnly = true)
+        OutlinedTextField(onValueChange = {}, value = "Content", isError = true, enabled = true, readOnly = false)
+        OutlinedTextField(onValueChange = {}, value = "Content", isError = true, enabled = false, readOnly = true)
+        OutlinedTextField(onValueChange = {}, value = "Content", isError = true, enabled = false, readOnly = false)
     }
 }

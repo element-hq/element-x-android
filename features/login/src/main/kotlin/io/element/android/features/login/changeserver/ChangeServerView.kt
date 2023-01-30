@@ -51,9 +51,9 @@ import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
-import io.element.android.libraries.designsystem.theme.components.ElementButton
-import io.element.android.libraries.designsystem.theme.components.ElementCircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.ElementOutlinedTextField
+import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
@@ -122,7 +122,7 @@ fun ChangeServerView(
                 color = ElementTheme.colors.secondary,
             )
             var homeserverFieldState by textFieldState(stateValue = state.homeserver)
-            ElementOutlinedTextField(
+            OutlinedTextField(
                 value = homeserverFieldState,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -155,7 +155,7 @@ fun ChangeServerView(
                     modifier = Modifier.padding(start = 16.dp)
                 )
             }
-            ElementButton(
+            Button(
                 onClick = { eventSink(ChangeServerEvents.Submit) },
                 enabled = state.submitEnabled,
                 modifier = Modifier
@@ -170,7 +170,7 @@ fun ChangeServerView(
             }
         }
         if (state.changeServerAction is Async.Loading) {
-            ElementCircularProgressIndicator(
+            CircularProgressIndicator(
                 modifier = Modifier.align(Alignment.Center)
             )
         }

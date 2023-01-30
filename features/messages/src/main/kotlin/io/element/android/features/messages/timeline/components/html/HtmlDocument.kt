@@ -47,7 +47,7 @@ import io.element.android.libraries.designsystem.LinkColor
 import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.theme.ElementColors
 import io.element.android.libraries.designsystem.theme.ElementTheme
-import io.element.android.libraries.designsystem.theme.components.ElementSurface
+import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.permalink.PermalinkData
 import io.element.android.libraries.matrix.permalink.PermalinkParser
@@ -340,7 +340,7 @@ private fun HtmlMxReply(
 ) {
     val blockquote = mxReply.childNodes().firstOrNull() ?: return
     val shape = RoundedCornerShape(12.dp)
-    ElementSurface(
+    Surface(
         modifier = modifier
             .padding(bottom = 4.dp)
             .offset(x = -(8.dp)),
