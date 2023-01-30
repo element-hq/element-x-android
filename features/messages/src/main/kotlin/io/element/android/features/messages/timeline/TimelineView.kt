@@ -77,7 +77,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
-import io.element.android.libraries.designsystem.theme.components.ElementCircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -345,7 +345,7 @@ internal fun TimelineLoadingMoreIndicator() {
             .padding(8.dp),
         contentAlignment = Alignment.Center,
     ) {
-        ElementCircularProgressIndicator(
+        CircularProgressIndicator(
             strokeWidth = 2.dp,
             color = ElementTheme.colors.primary
         )

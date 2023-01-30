@@ -28,13 +28,13 @@ import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ElementTopAppBar(
+fun MediumTopAppBar(
     title: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
-    colors: TopAppBarColors = TopAppBarDefaults.smallTopAppBarColors(
+    colors: TopAppBarColors = TopAppBarDefaults.mediumTopAppBarColors(
         containerColor = ElementTheme.colors.background,
         scrolledContainerColor = ElementTheme.colors.background,
         navigationIconContentColor = ElementTheme.colors.onBackground,
@@ -43,7 +43,7 @@ fun ElementTopAppBar(
     ),
     scrollBehavior: TopAppBarScrollBehavior? = null
 ) {
-    androidx.compose.material3.TopAppBar(
+    androidx.compose.material3.MediumTopAppBar(
         title = title,
         modifier = modifier,
         navigationIcon = navigationIcon,

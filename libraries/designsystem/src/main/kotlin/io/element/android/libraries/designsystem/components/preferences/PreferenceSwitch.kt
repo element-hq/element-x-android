@@ -33,7 +33,7 @@ import io.element.android.libraries.designsystem.components.preferences.componen
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
-import io.element.android.libraries.designsystem.theme.components.ElementCheckbox
+import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.toEnabledColor
 
@@ -67,7 +67,7 @@ fun PreferenceSwitch(
                 color = enabled.toEnabledColor(),
                 text = title
             )
-            ElementCheckbox(
+            Checkbox(
                 modifier = Modifier.padding(end = preferencePaddingEnd),
                 checked = isChecked,
                 enabled = enabled,

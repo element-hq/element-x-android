@@ -32,7 +32,7 @@ import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.elementContentColorFor
 
 @Composable
-fun ElementButton(
+fun Button(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -70,19 +70,19 @@ fun ElementButton(
 
 @Preview
 @Composable
-fun ElementButtonsLightPreview() = ElementPreviewLight { ContentToPreview() }
+fun ButtonsLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun ElementButtonsDarkPreview() = ElementPreviewDark { ContentToPreview() }
+fun ButtonsDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
     Column {
-        ElementButton(onClick = {}, enabled = true) {
+        Button(onClick = {}, enabled = true) {
             Text(text = "Click me! - Enabled")
         }
-        ElementButton(onClick = {}, enabled = false) {
+        Button(onClick = {}, enabled = false) {
             Text(text = "Click me! - Disabled")
         }
     }

@@ -32,7 +32,7 @@ import io.element.android.libraries.designsystem.components.preferences.componen
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
-import io.element.android.libraries.designsystem.theme.components.ElementSlider
+import io.element.android.libraries.designsystem.theme.components.Slider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.toEnabledColor
 
@@ -75,7 +75,7 @@ fun PreferenceSlide(
                         text = summary
                     )
                 }
-                ElementSlider(
+                Slider(
                     value = value,
                     steps = steps,
                     onValueChange = onValueChange,

@@ -23,7 +23,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.theme.components.ElementButton
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -36,7 +36,7 @@ internal fun ShowkaseButton(
     modifier: Modifier = Modifier,
 ) {
     if (isVisible) {
-        ElementButton(
+        Button(
             modifier = modifier
                 .padding(top = 32.dp, start = 16.dp),
             onClick = onClick

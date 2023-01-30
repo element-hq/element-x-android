@@ -50,9 +50,9 @@ import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
-import io.element.android.libraries.designsystem.theme.components.ElementButton
-import io.element.android.libraries.designsystem.theme.components.ElementCircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.ElementOutlinedTextField
+import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.ui.strings.R as StringR
@@ -114,7 +114,7 @@ fun BugReportView(
             Column(
                 // modifier = Modifier.weight(1f),
             ) {
-                ElementOutlinedTextField(
+                OutlinedTextField(
                     value = descriptionFieldState,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -182,7 +182,7 @@ fun BugReportView(
                 }
             }
             // Submit
-            ElementButton(
+            Button(
                 onClick = { eventSink(BugReportEvents.SendBugReport) },
                 enabled = state.submitEnabled,
                 modifier = Modifier
@@ -194,7 +194,7 @@ fun BugReportView(
         }
         when (state.sending) {
             is Async.Loading -> {
-                ElementCircularProgressIndicator(
+                CircularProgressIndicator(
                     progress = state.sendingProgress,
                     modifier = Modifier.align(Alignment.Center)
                 )

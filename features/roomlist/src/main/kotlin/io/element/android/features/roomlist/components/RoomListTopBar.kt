@@ -38,7 +38,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -47,12 +46,12 @@ import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.theme.ElementTheme
-import io.element.android.libraries.designsystem.theme.components.ElementMediumAppBar
-import io.element.android.libraries.designsystem.theme.components.ElementTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
+import io.element.android.libraries.designsystem.theme.components.MediumTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.element.android.libraries.ui.strings.R as StringR
@@ -112,7 +111,7 @@ fun SearchRoomListTopBar(
 ) {
     var filterState by textFieldState(stateValue = text)
     val focusRequester = remember { FocusRequester() }
-    ElementTopAppBar(
+    TopAppBar(
         modifier = modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         title = {
@@ -179,7 +178,7 @@ private fun DefaultRoomListTopBar(
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
 ) {
-    ElementMediumAppBar(
+    MediumTopAppBar(
         modifier = modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         title = {

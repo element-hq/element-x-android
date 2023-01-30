@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
-import io.element.android.libraries.designsystem.theme.components.ElementButton
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -72,7 +72,7 @@ fun ConfirmationDialog(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Column {
-                    ElementButton(
+                    Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
                             onCancelClicked()
@@ -80,7 +80,7 @@ fun ConfirmationDialog(
                         Text(cancelText)
                     }
                     if (thirdButtonText != null) {
-                        ElementButton(
+                        Button(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = {
                                 onThirdButtonClicked()
@@ -96,7 +96,7 @@ fun ConfirmationDialog(
                 modifier = Modifier.padding(all = 8.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
-                ElementButton(
+                Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
                         onSubmitClicked()

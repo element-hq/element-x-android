@@ -25,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
-import io.element.android.libraries.designsystem.theme.components.ElementCheckbox
+import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
@@ -40,7 +40,7 @@ fun LabelledCheckbox(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        ElementCheckbox(
+        Checkbox(
             checked = checked,
             onCheckedChange = onCheckedChange,
             enabled = enabled,

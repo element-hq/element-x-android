@@ -43,7 +43,7 @@ import io.element.android.features.messages.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.timeline.model.TimelineItem
 import io.element.android.libraries.designsystem.components.VectorIcon
 import io.element.android.libraries.designsystem.theme.ElementTheme
-import io.element.android.libraries.designsystem.theme.components.ElementModalBottomSheetLayout
+import io.element.android.libraries.designsystem.theme.components.ModalBottomSheetLayout
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
@@ -73,7 +73,7 @@ fun ActionListView(
         }
     }
 
-    ElementModalBottomSheetLayout(
+    ModalBottomSheetLayout(
         modifier = modifier,
         sheetState = modalBottomSheetState,
         sheetContent = {
