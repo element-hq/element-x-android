@@ -26,7 +26,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -49,6 +48,7 @@ import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.theme.ElementColors
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.ElementSurface
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.permalink.PermalinkData
 import io.element.android.libraries.matrix.permalink.PermalinkParser
 import kotlinx.collections.immutable.persistentMapOf

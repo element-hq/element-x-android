@@ -19,11 +19,11 @@ package io.element.android.libraries.designsystem.components.preferences.compone
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.toEnabledColor
 
 @Composable

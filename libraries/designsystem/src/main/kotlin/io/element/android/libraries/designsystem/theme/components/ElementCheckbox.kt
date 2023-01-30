@@ -18,7 +18,6 @@ package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxColors
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.runtime.Composable
@@ -48,7 +47,7 @@ fun ElementCheckbox(
     ),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
-    Checkbox(
+    androidx.compose.material3.Checkbox(
         checked = checked,
         onCheckedChange = onCheckedChange,
         modifier = modifier,

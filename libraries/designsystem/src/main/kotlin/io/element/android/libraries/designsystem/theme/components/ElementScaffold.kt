@@ -20,12 +20,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import io.element.android.libraries.designsystem.components.color.elementContentColorFor
+import io.element.android.libraries.designsystem.theme.elementContentColorFor
 import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,7 +41,7 @@ fun ElementScaffold(
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
     content: @Composable (PaddingValues) -> Unit
 ) {
-    Scaffold(
+    androidx.compose.material3.Scaffold(
         modifier = modifier,
         topBar = topBar,
         bottomBar = bottomBar,

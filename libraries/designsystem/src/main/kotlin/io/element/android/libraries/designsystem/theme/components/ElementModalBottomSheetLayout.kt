@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
-import io.element.android.libraries.designsystem.components.color.elementContentColorFor
+import io.element.android.libraries.designsystem.theme.elementContentColorFor
 import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @OptIn(ExperimentalMaterialApi::class)

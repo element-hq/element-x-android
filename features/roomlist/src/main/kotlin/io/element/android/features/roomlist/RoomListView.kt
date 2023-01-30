@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.features.roomlist
 
 import androidx.compose.foundation.layout.Column
@@ -78,6 +76,7 @@ fun RoomListView(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoomListView(
     roomSummaries: ImmutableList<RoomListRoomSummary>,
