@@ -26,8 +26,8 @@ import androidx.core.view.WindowCompat
 import com.bumble.appyx.core.integration.NodeHost
 import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
 import io.element.android.libraries.architecture.bindings
-import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.designsystem.ElementXTheme
+import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.x.di.AppBindings
 import io.element.android.x.node.RootFlowNode
 

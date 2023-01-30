@@ -24,12 +24,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import io.element.android.x.component.ShowkaseButton
 import io.element.android.features.rageshake.crash.ui.CrashDetectionEvents
 import io.element.android.features.rageshake.crash.ui.CrashDetectionView
 import io.element.android.features.rageshake.detection.RageshakeDetectionEvents
 import io.element.android.features.rageshake.detection.RageshakeDetectionView
 import io.element.android.tests.uitests.openShowkase
+import io.element.android.x.component.ShowkaseButton
 
 @Composable
 fun RootView(

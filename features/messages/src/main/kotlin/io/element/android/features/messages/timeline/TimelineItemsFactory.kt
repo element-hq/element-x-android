@@ -17,7 +17,6 @@
 package io.element.android.features.messages.timeline
 
 import androidx.recyclerview.widget.DiffUtil
-import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.features.messages.timeline.diff.CacheInvalidator
 import io.element.android.features.messages.timeline.diff.MatrixTimelineItemsDiffCallback
 import io.element.android.features.messages.timeline.model.AggregatedReaction
@@ -33,6 +32,7 @@ import io.element.android.features.messages.timeline.model.content.TimelineItemR
 import io.element.android.features.messages.timeline.model.content.TimelineItemTextContent
 import io.element.android.features.messages.timeline.model.content.TimelineItemUnknownContent
 import io.element.android.features.messages.timeline.util.invalidateLast
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.core.EventId
 import io.element.android.libraries.matrix.media.MediaResolver
 import io.element.android.libraries.matrix.room.MatrixRoom

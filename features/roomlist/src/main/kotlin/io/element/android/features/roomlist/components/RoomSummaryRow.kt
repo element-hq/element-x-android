@@ -52,8 +52,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.placeholder.material.placeholder
-import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.features.roomlist.model.RoomListRoomSummary
+import io.element.android.libraries.designsystem.components.avatar.Avatar
 
 private val minHeight = 72.dp
 

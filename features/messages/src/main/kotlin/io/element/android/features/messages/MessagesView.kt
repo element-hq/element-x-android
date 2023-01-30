@@ -56,14 +56,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.features.messages.actionlist.ActionListEvents
 import io.element.android.features.messages.actionlist.ActionListView
 import io.element.android.features.messages.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.timeline.model.TimelineItem
 import io.element.android.features.messages.textcomposer.MessageComposerView
 import io.element.android.features.messages.timeline.TimelineView
+import io.element.android.features.messages.timeline.model.TimelineItem
+import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import kotlinx.coroutines.launch
 import timber.log.Timber
