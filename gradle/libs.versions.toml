@@ -143,3 +143,4 @@ dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencyc
 stem = { id = "com.likethesalad.stem", version.ref = "stem" }
 stemlibrary = { id = "com.likethesalad.stem-library", version.ref = "stem" }
 paparazzi = "app.cash.paparazzi:1.2.0"
+sonarqube = "org.sonarqube:3.5.0.2730"

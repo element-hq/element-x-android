@@ -29,6 +29,7 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.dependencygraph)
+    alias(libs.plugins.sonarqube)
 }
 
 tasks.register<Delete>("clean").configure {
@@ -106,5 +107,30 @@ allprojects {
     // Dependency check
     apply {
         plugin("org.owasp.dependencycheck")
+    }
+}
+
+// To run a sonar analysis:
+// Run './gradlew sonar -Dsonar.login=<SONAR_LOGIN>'
+// The SONAR_LOGIN is stored in passbolt as Token Sonar Cloud Bma
+sonar {
+    properties {
+        property("sonar.projectName", "element-x-android")
+        property("sonar.projectKey", "vector-im_element-x-android")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.projectVersion", "1.0") // TODO project(":app").android.defaultConfig.versionName)
+        property("sonar.sourceEncoding", "UTF-8")
+        property("sonar.links.homepage", "https://github.com/vector-im/element-x-android/")
+        property("sonar.links.ci", "https://github.com/vector-im/element-x-android/actions")
+        property("sonar.links.scm", "https://github.com/vector-im/element-x-android/")
+        property("sonar.links.issue", "https://github.com/vector-im/element-x-android/issues")
+        property("sonar.organization", "new_vector_ltd_organization")
+        // property("sonar.java.coveragePlugin", "jacoco")
+        // property("sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/generateCoverageReport/generateCoverageReport.xml")
+        property("sonar.login", if (project.hasProperty("SONAR_LOGIN")) project.property("SONAR_LOGIN")!! else "invalid")
+
+        // exclude source code from analyses separated by a colon (:)
+        // Exclude Java source
+        property("sonar.exclusions", "**/BugReporterMultipartBody.java")
     }
 }
