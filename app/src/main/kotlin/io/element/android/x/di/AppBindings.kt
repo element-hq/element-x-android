@@ -24,7 +24,7 @@ import kotlinx.coroutines.CoroutineScope
 
 @ContributesTo(AppScope::class)
 interface AppBindings {
-    fun coroutineScope(): CoroutineScope
     fun rootPresenter(): RootPresenter
     fun authenticationService(): MatrixAuthenticationService
+    fun matrixClientsHolder(): MatrixClientsHolder
 }

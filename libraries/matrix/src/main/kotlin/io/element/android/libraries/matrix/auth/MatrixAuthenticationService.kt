@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.Flow
 interface MatrixAuthenticationService {
     fun isLoggedIn(): Flow<Boolean>
     suspend fun getLatestSessionId(): SessionId?
-    suspend fun restoreSession(): MatrixClient?
+    suspend fun restoreSession(sessionId: SessionId): MatrixClient?
     fun getHomeserver(): String?
     fun getHomeserverOrDefault(): String
     suspend fun setHomeserver(homeserver: String)
