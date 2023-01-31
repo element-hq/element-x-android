@@ -32,6 +32,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.testtags)
+    implementation(projects.libraries.androidutils)
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pagerindicator)
     testImplementation(libs.test.junit)
