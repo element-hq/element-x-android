@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.session
+package io.element.android.x.node
 
-import io.element.android.libraries.matrix.core.SessionId
-import kotlinx.coroutines.flow.Flow
-import org.matrix.rustcomponents.sdk.Session
+import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.NewRoot
 
-interface SessionStore {
-    fun isLoggedIn(): Flow<Boolean>
-    suspend fun storeData(session: Session)
-    suspend fun getSession(sessionId: SessionId): Session?
-    suspend fun getLatestSession(): Session?
-    suspend fun reset()
+/**
+ * Don't process NewRoot if the nav target already exists in the stack.
+ */
+fun <T : Any> BackStack<T>.safeRoot(element: T) {
+    val containsRoot = elements.value.any {
+        it.key.navTarget == element
+    }
+    if (containsRoot) return
+    accept(NewRoot(element))
 }

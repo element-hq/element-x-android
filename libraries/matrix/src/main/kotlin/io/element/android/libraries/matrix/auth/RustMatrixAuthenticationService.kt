@@ -52,8 +52,8 @@ class RustMatrixAuthenticationService @Inject constructor(
         sessionStore.getLatestSession()?.sessionId()
     }
 
-    override suspend fun restoreSession() = withContext(coroutineDispatchers.io) {
-        sessionStore.getLatestSession()
+    override suspend fun restoreSession(sessionId: SessionId) = withContext(coroutineDispatchers.io) {
+        sessionStore.getSession(sessionId)
             ?.let { session ->
                 try {
                     ClientBuilder()
