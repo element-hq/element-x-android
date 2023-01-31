@@ -37,7 +37,7 @@ datetime = "0.4.0"
 serialization_json = "1.4.1"
 showkase = "1.0.0-beta14"
 jsoup = "1.15.3"
-appyx = "1.0.1"
+appyx = "1.0.3"
 dependencycheck = "7.4.4"
 stem = "2.2.3"
 
