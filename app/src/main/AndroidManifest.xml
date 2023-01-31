@@ -31,6 +31,7 @@
         tools:targetApi="33">
         <activity
             android:name=".MainActivity"
+            android:theme="@style/Theme.ElementX.Splash"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"
