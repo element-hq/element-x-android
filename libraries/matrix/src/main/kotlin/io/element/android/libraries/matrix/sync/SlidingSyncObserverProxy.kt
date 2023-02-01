@@ -38,7 +38,7 @@ class SlidingSyncObserverProxy(
     override fun didReceiveSyncUpdate(summary: UpdateSummary) {
         if (summary.rooms.isEmpty()) return
         coroutineScope.launch {
-            updateSummaryMutableFlow.tryEmit(summary)
+            updateSummaryMutableFlow.emit(summary)
         }
     }
 }
