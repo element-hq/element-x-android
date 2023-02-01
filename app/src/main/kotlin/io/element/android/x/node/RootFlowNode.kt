@@ -21,8 +21,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
@@ -38,7 +36,6 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import io.element.android.features.rageshake.bugreport.BugReportNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.architecture.presenterConnector
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.core.SessionId
@@ -60,7 +57,7 @@ class RootFlowNode(
     private val appComponentOwner: DaggerComponentOwner,
     private val authenticationService: MatrixAuthenticationService,
     private val matrixClientsHolder: MatrixClientsHolder,
-    presenter: RootPresenter
+    private val presenter: RootPresenter
 ) :
     ParentNode<RootFlowNode.NavTarget>(
         navModel = backstack,
@@ -68,8 +65,6 @@ class RootFlowNode(
     ),
 
     DaggerComponentOwner by appComponentOwner {
-
-    private val presenterConnector = presenterConnector(presenter)
 
     override fun onBuilt() {
         super.onBuilt()
@@ -131,7 +126,7 @@ class RootFlowNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        val state by presenterConnector.stateFlow.collectAsState()
+        val state = presenter.present()
         RootView(
             state = state,
             modifier = modifier,
