@@ -18,6 +18,7 @@ package io.element.android.features.rageshake.logs
 
 import android.content.Context
 import android.util.Log
+import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.data.tryOrNull
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -82,7 +83,7 @@ class VectorFileLogger(
 
         for (i in 0..15) {
             val file = File(cacheDirectory, "elementLogs.${i}.txt")
-            tryOrNull { file.delete() }
+            file.safeDelete()
         }
 
         fileHandler = tryOrNull(
@@ -101,7 +102,7 @@ class VectorFileLogger(
     fun reset() {
         // Delete all files
         getLogFiles().map {
-            tryOrNull { it.delete() }
+            it.safeDelete()
         }
     }
 
