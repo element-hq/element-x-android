@@ -87,7 +87,7 @@ internal class RustMatrixClient internal constructor(
         .addView(slidingSyncView)
         .build()
 
-    private val slidingSyncObserverProxy = SlidingSyncObserverProxy(coroutineScope, dispatchers)
+    private val slidingSyncObserverProxy = SlidingSyncObserverProxy(coroutineScope)
     private val roomSummaryDataSource: RustRoomSummaryDataSource =
         RustRoomSummaryDataSource(
             slidingSyncObserverProxy.updateSummaryFlow,
