@@ -28,10 +28,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.core.text.util.LinkifyCompat
-import io.element.android.libraries.designsystem.LinkColor
-import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.features.messages.timeline.components.html.HtmlDocument
 import io.element.android.features.messages.timeline.model.content.TimelineItemTextBasedContent
+import io.element.android.libraries.designsystem.LinkColor
+import io.element.android.libraries.designsystem.components.ClickableLinkText
 
 @Composable
 fun TimelineItemTextView(

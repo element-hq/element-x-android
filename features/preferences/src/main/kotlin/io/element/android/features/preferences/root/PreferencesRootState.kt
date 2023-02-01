@@ -16,9 +16,9 @@
 
 package io.element.android.features.preferences.root
 
-import io.element.android.libraries.architecture.Async
 import io.element.android.features.logout.LogoutPreferenceState
 import io.element.android.features.rageshake.preferences.RageshakePreferencesState
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 
 data class PreferencesRootState(

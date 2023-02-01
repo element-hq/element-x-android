@@ -20,12 +20,12 @@ import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.core.RoomId
 import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.matrix.core.UserId
-import io.element.android.libraries.matrixtest.media.FakeMediaResolver
 import io.element.android.libraries.matrix.media.MediaResolver
-import io.element.android.libraries.matrixtest.room.FakeMatrixRoom
-import io.element.android.libraries.matrixtest.room.InMemoryRoomSummaryDataSource
 import io.element.android.libraries.matrix.room.MatrixRoom
 import io.element.android.libraries.matrix.room.RoomSummaryDataSource
+import io.element.android.libraries.matrixtest.media.FakeMediaResolver
+import io.element.android.libraries.matrixtest.room.FakeMatrixRoom
+import io.element.android.libraries.matrixtest.room.InMemoryRoomSummaryDataSource
 import org.matrix.rustcomponents.sdk.MediaSource
 
 class FakeMatrixClient(override val sessionId: SessionId) : MatrixClient {

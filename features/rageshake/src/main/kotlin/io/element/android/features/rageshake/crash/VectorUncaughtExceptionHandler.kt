@@ -19,9 +19,9 @@ package io.element.android.features.rageshake.crash
 import android.content.Context
 import android.os.Build
 import io.element.android.libraries.core.data.tryOrNull
+import timber.log.Timber
 import java.io.PrintWriter
 import java.io.StringWriter
-import timber.log.Timber
 
 class VectorUncaughtExceptionHandler(
     context: Context
