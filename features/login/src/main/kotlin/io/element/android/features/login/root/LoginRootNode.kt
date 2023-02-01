@@ -17,8 +17,6 @@
 package io.element.android.features.login.root
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import com.bumble.appyx.core.modality.BuildContext
@@ -28,7 +26,6 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.architecture.presenterConnector
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.di.AppScope
 
@@ -36,10 +33,8 @@ import io.element.android.libraries.di.AppScope
 class LoginRootNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    presenter: LoginRootPresenter,
+    private val presenter: LoginRootPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
-    private val presenterConnector = presenterConnector(presenter)
 
     interface Callback : Plugin {
         fun onChangeHomeServer()
@@ -51,7 +46,7 @@ class LoginRootNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        val state by presenterConnector.stateFlow.collectAsState()
+        val state = presenter.present()
         OnLifecycleEvent { _, event ->
             when (event) {
                 Lifecycle.Event.ON_RESUME -> state.eventSink(LoginRootEvents.RefreshHomeServer)

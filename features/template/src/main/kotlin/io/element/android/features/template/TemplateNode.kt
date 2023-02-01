@@ -17,15 +17,12 @@
 package io.element.android.features.template
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import io.element.android.libraries.architecture.presenterConnector
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.AppScope
 
@@ -34,14 +31,12 @@ import io.element.android.libraries.di.AppScope
 class TemplateNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    presenter: TemplatePresenter,
+    private val presenter: TemplatePresenter,
 ) : Node(buildContext, plugins = plugins) {
-
-    private val presenterConnector = presenterConnector(presenter)
 
     @Composable
     override fun View(modifier: Modifier) {
-        val state by presenterConnector.stateFlow.collectAsState()
+        val state = presenter.present()
         TemplateView(
             state = state,
             modifier = modifier
