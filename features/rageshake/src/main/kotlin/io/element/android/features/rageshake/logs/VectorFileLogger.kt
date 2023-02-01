@@ -20,6 +20,7 @@ import android.content.Context
 import android.util.Log
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.data.tryOrNull
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -38,6 +39,7 @@ import java.util.logging.Logger
 class VectorFileLogger(
     context: Context,
     // private val vectorPreferences: VectorPreferences
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : Timber.Tree() {
 
     companion object {
@@ -109,7 +111,7 @@ class VectorFileLogger(
     @OptIn(DelicateCoroutinesApi::class)
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         fileHandler ?: return
-        GlobalScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(dispatcher) {
             if (skipLog(priority)) return@launch
             if (t != null) {
                 logToFile(t)
