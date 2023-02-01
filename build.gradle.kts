@@ -113,6 +113,7 @@ allprojects {
 // To run a sonar analysis:
 // Run './gradlew sonar -Dsonar.login=<SONAR_LOGIN>'
 // The SONAR_LOGIN is stored in passbolt as Token Sonar Cloud Bma
+// Sonar result can be found here: https://sonarcloud.io/project/overview?id=vector-im_element-x-android
 sonar {
     properties {
         property("sonar.projectName", "element-x-android")
@@ -132,5 +133,21 @@ sonar {
         // exclude source code from analyses separated by a colon (:)
         // Exclude Java source
         property("sonar.exclusions", "**/BugReporterMultipartBody.java")
+    }
+}
+
+allprojects {
+    val projectDir = projectDir.toString()
+    sonar {
+        properties {
+            // Note: folders `kotlin` are not supported (yet), I asked on their side: https://community.sonarsource.com/t/82824
+            // As a workaround provide the path in `sonar.sources` property.
+            if (File("$projectDir/src/main/kotlin").exists()) {
+                property("sonar.sources", "src/main/kotlin")
+            }
+            if (File("$projectDir/src/test/kotlin").exists()) {
+                property("sonar.tests", "src/test/kotlin")
+            }
+        }
     }
 }
