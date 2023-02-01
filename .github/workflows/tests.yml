@@ -50,3 +50,10 @@ jobs:
           ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
         if: ${{ always() && env.SONAR_TOKEN != '' && env.ORG_GRADLE_PROJECT_SONAR_LOGIN != '' }}
         run: ./gradlew sonar $CI_GRADLE_ARG_PROPERTIES
+
+      # https://github.com/codecov/codecov-action
+      - name: Upload coverage reports to codecov
+        if: always()
+        uses: codecov/codecov-action@v3
+        # with:
+        #  files: build/reports/kover/merged/xml/report.xml
