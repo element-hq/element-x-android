@@ -32,7 +32,7 @@ fun compressFile(file: File): File? {
     val dstFile = file.resolveSibling(file.name + ".gz")
 
     if (dstFile.exists()) {
-        dstFile.delete()
+        dstFile.safeDelete()
     }
 
     return try {

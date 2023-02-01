@@ -23,6 +23,7 @@ import io.element.android.features.rageshake.crash.CrashDataStore
 import io.element.android.features.rageshake.logs.VectorFileLogger
 import io.element.android.features.rageshake.screenshot.ScreenshotHolder
 import io.element.android.libraries.androidutils.file.compressFile
+import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.extensions.toOnOff
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.ApplicationContext
@@ -423,7 +424,7 @@ class BugReporter @Inject constructor(
 
                 // delete when the bug report has been successfully sent
                 for (file in mBugReportFiles) {
-                    file.delete()
+                    file.safeDelete()
                 }
 
                 if (null != listener) {
@@ -498,7 +499,7 @@ class BugReporter @Inject constructor(
         val logCatErrFile = File(context.cacheDir.absolutePath, if (isErrorLogcat) LOG_CAT_ERROR_FILENAME else LOG_CAT_FILENAME)
 
         if (logCatErrFile.exists()) {
-            logCatErrFile.delete()
+            logCatErrFile.safeDelete()
         }
 
         try {

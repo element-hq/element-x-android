@@ -19,6 +19,7 @@ package io.element.android.features.rageshake.screenshot
 import android.content.Context
 import android.graphics.Bitmap
 import io.element.android.libraries.androidutils.bitmap.writeBitmap
+import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
@@ -38,6 +39,6 @@ class ScreenshotHolder @Inject constructor(
     fun getFile() = file.takeIf { it.exists() && it.length() > 0 }
 
     fun reset() {
-        file.delete()
+        file.safeDelete()
     }
 }
