@@ -24,11 +24,11 @@ import io.element.android.features.rageshake.logs.VectorFileLogger
 import io.element.android.features.rageshake.screenshot.ScreenshotHolder
 import io.element.android.libraries.androidutils.file.compressFile
 import io.element.android.libraries.androidutils.file.safeDelete
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.toOnOff
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -55,6 +55,7 @@ class BugReporter @Inject constructor(
     @ApplicationContext private val context: Context,
     private val screenshotHolder: ScreenshotHolder,
     private val crashDataStore: CrashDataStore,
+    private val coroutineDispatchers: CoroutineDispatchers,
     /*
     private val activeSessionHolder: ActiveSessionHolder,
     private val versionProvider: VersionProvider,
@@ -169,7 +170,7 @@ class BugReporter @Inject constructor(
         coroutineScope.launch {
             var serverError: String? = null
             var reportURL: String? = null
-            withContext(Dispatchers.IO) {
+            withContext(coroutineDispatchers.io) {
                 var bugDescription = theBugDescription
                 val crashCallStack = crashDataStore.crashInfo().first()
 
@@ -419,7 +420,7 @@ class BugReporter @Inject constructor(
                 }
             }
 
-            withContext(Dispatchers.Main) {
+            withContext(coroutineDispatchers.main) {
                 mBugReportCall = null
 
                 // delete when the bug report has been successfully sent
