@@ -30,6 +30,7 @@ plugins {
     alias(libs.plugins.ktlint)
     alias(libs.plugins.dependencygraph)
     alias(libs.plugins.sonarqube)
+    alias(libs.plugins.kover)
 }
 
 tasks.register<Delete>("clean").configure {
@@ -148,6 +149,31 @@ allprojects {
             if (File("$projectDir/src/test/kotlin").exists()) {
                 property("sonar.tests", "src/test/kotlin")
             }
+        }
+    }
+}
+
+allprojects {
+    apply(plugin = "kover")
+}
+
+// Run `./gradlew koverMergedHtmlReport` to get report at ./build/reports/kover
+// Run `./gradlew koverMergedReport` to also get XML report
+koverMerged {
+    enable()
+
+    filters {
+        classes {
+            excludes.addAll(
+                listOf(
+                    /*
+                    "*Fragment",
+                    "*Fragment\$*",
+                    "*Activity",
+                    "*Activity\$*",
+                     */
+                )
+            )
         }
     }
 }
