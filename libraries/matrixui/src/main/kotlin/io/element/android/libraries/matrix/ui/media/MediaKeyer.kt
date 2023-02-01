@@ -23,12 +23,14 @@ import io.element.android.libraries.matrix.media.MediaResolver
 
 internal class AvatarKeyer : Keyer<AvatarData> {
     override fun key(data: AvatarData, options: Options): String? {
-        return MediaKeyer().key(data.toMetadata(), options)
+        return data.toMetadata().toKey()
     }
 }
 
 internal class MediaKeyer : Keyer<MediaResolver.Meta> {
     override fun key(data: MediaResolver.Meta, options: Options): String? {
-        return "${data.source?.url()}_${data.kind}"
+        return data.toKey()
     }
 }
+
+private fun MediaResolver.Meta.toKey() = "${source?.url()}_${kind}"
