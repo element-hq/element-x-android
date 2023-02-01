@@ -20,6 +20,7 @@ import coil.ImageLoader
 import coil.fetch.FetchResult
 import coil.fetch.Fetcher
 import coil.request.Options
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.media.MediaResolver
 import java.nio.ByteBuffer
@@ -37,7 +38,7 @@ internal class MediaFetcher(
         return imageLoader.components.newFetcher(byteBuffer, options, imageLoader)?.first?.fetch()
     }
 
-    class Factory(private val client: MatrixClient) :
+    class MetaFactory(private val client: MatrixClient) :
         Fetcher.Factory<MediaResolver.Meta> {
         override fun create(
             data: MediaResolver.Meta,
@@ -47,6 +48,22 @@ internal class MediaFetcher(
             return MediaFetcher(
                 mediaResolver = client.mediaResolver(),
                 meta = data,
+                options = options,
+                imageLoader = imageLoader
+            )
+        }
+    }
+
+    class AvatarFactory(private val client: MatrixClient) :
+        Fetcher.Factory<AvatarData> {
+        override fun create(
+            data: AvatarData,
+            options: Options,
+            imageLoader: ImageLoader
+        ): Fetcher {
+            return MediaFetcher(
+                mediaResolver = client.mediaResolver(),
+                meta = data.toMetadata(),
                 options = options,
                 imageLoader = imageLoader
             )

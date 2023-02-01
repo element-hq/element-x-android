@@ -87,7 +87,6 @@ fun MatrixUserHeaderPreview() {
         MatrixUser(
             id = UserId("@alice:server.org"),
             username = "Alice",
-            avatarUrl = null,
             avatarData = AvatarData("Alice")
         )
     )
@@ -100,7 +99,6 @@ fun MatrixUserHeaderNoUsernamePreview() {
         MatrixUser(
             id = UserId("@alice:server.org"),
             username = null,
-            avatarUrl = null,
             avatarData = AvatarData("Alice")
         )
     )

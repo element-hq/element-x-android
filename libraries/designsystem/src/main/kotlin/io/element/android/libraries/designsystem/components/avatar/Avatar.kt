@@ -41,7 +41,7 @@ fun Avatar(avatarData: AvatarData, modifier: Modifier = Modifier) {
     val commonModifier = modifier
         .size(avatarData.size.dp)
         .clip(CircleShape)
-    if (avatarData.model == null) {
+    if (avatarData.url == null) {
         InitialsAvatar(
             avatarData = avatarData,
             modifier = commonModifier,
@@ -60,7 +60,7 @@ private fun ImageAvatar(
     modifier: Modifier = Modifier,
 ) {
     AsyncImage(
-        model = avatarData.model,
+        model = avatarData,
         onError = {
             Timber.e("TAG", "Error $it\n${it.result}", it.result.throwable)
         },

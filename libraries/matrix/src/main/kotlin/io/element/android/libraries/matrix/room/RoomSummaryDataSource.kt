@@ -29,6 +29,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
@@ -43,7 +44,7 @@ import org.matrix.rustcomponents.sdk.UpdateSummary
 import timber.log.Timber
 
 interface RoomSummaryDataSource {
-    fun roomSummaries(): Flow<List<RoomSummary>>
+    fun roomSummaries(): StateFlow<List<RoomSummary>>
     fun setSlidingSyncRange(range: IntRange)
 }
 
@@ -98,9 +99,9 @@ internal class RustRoomSummaryDataSource(
         coroutineScope.cancel()
     }
 
-    @OptIn(FlowPreview::class)
-    override fun roomSummaries(): Flow<List<RoomSummary>> {
-        return roomSummaries.sample(50)
+    //@OptIn(FlowPreview::class)
+    override fun roomSummaries(): StateFlow<List<RoomSummary>> {
+        return roomSummaries
     }
 
     override fun setSlidingSyncRange(range: IntRange) {
