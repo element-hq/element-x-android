@@ -91,7 +91,6 @@ fun MatrixUserRowPreview() {
         MatrixUser(
             id = UserId("@alice:server.org"),
             username = "Alice",
-            avatarUrl = null,
             avatarData = AvatarData("Alice")
         )
     )

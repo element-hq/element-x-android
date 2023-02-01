@@ -18,13 +18,13 @@ package io.element.android.libraries.matrixtest.room
 
 import io.element.android.libraries.matrix.room.RoomSummary
 import io.element.android.libraries.matrix.room.RoomSummaryDataSource
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class InMemoryRoomSummaryDataSource : RoomSummaryDataSource {
 
-    override fun roomSummaries(): Flow<List<RoomSummary>> {
-        return emptyFlow()
+    override fun roomSummaries(): StateFlow<List<RoomSummary>> {
+        return MutableStateFlow(emptyList())
     }
 
     override fun setSlidingSyncRange(range: IntRange) = Unit

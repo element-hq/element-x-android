@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,11 @@
 
 package io.element.android.libraries.matrix.ui.media
 
-import coil.key.Keyer
-import coil.request.Options
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.media.MediaResolver
+import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
 
-internal class AvatarKeyer : Keyer<AvatarData> {
-    override fun key(data: AvatarData, options: Options): String? {
-        return MediaKeyer().key(data.toMetadata(), options)
-    }
-}
-
-internal class MediaKeyer : Keyer<MediaResolver.Meta> {
-    override fun key(data: MediaResolver.Meta, options: Options): String? {
-        return "${data.source?.url()}_${data.kind}"
-    }
+fun AvatarData.toMetadata(): MediaResolver.Meta {
+    val mediaSource = url?.let { mediaSourceFromUrl(it) }
+    return MediaResolver.Meta(source = mediaSource, kind = MediaResolver.Kind.Thumbnail(size.value))
 }

@@ -24,7 +24,6 @@ import io.element.android.libraries.matrix.core.UserId
 data class MatrixUser(
     val id: UserId,
     val username: String? = null,
-    val avatarUrl: String? = null,
     val avatarData: AvatarData = AvatarData(),
 )
 
