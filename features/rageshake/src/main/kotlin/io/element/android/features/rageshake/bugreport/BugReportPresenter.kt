@@ -24,13 +24,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.core.net.toUri
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.architecture.Presenter
 import io.element.android.features.rageshake.crash.CrashDataStore
 import io.element.android.features.rageshake.logs.VectorFileLogger
 import io.element.android.features.rageshake.reporter.BugReporter
 import io.element.android.features.rageshake.reporter.ReportType
 import io.element.android.features.rageshake.screenshot.ScreenshotHolder
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject

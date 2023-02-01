@@ -26,9 +26,9 @@ import androidx.lifecycle.Lifecycle
 import io.element.android.features.rageshake.screenshot.ImageResult
 import io.element.android.features.rageshake.screenshot.screenshot
 import io.element.android.libraries.androidutils.hardware.vibrate
-import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.utils.LogCompositions
+import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable

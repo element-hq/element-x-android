@@ -19,9 +19,6 @@ package io.element.android.libraries.matrix.room
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.sync.roomListDiff
 import io.element.android.libraries.matrix.sync.state
-import java.io.Closeable
-import java.util.Collections
-import java.util.UUID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.SupervisorJob
@@ -42,6 +39,9 @@ import org.matrix.rustcomponents.sdk.SlidingSyncView
 import org.matrix.rustcomponents.sdk.SlidingSyncViewRoomsListDiff
 import org.matrix.rustcomponents.sdk.UpdateSummary
 import timber.log.Timber
+import java.io.Closeable
+import java.util.Collections
+import java.util.UUID
 
 interface RoomSummaryDataSource {
     fun roomSummaries(): StateFlow<List<RoomSummary>>

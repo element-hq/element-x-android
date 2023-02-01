@@ -20,10 +20,8 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrixtest.FakeMatrixClient
 import io.element.android.libraries.matrix.core.SessionId
-import io.element.android.features.roomlist.LastMessageFormatter
-import io.element.android.features.roomlist.RoomListPresenter
+import io.element.android.libraries.matrixtest.FakeMatrixClient
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 

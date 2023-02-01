@@ -17,10 +17,10 @@
 package io.element.android.features.messages
 
 import androidx.compose.runtime.Immutable
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.features.messages.actionlist.ActionListState
 import io.element.android.features.messages.textcomposer.MessageComposerState
 import io.element.android.features.messages.timeline.TimelineState
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.core.RoomId
 
 @Immutable

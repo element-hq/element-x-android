@@ -19,8 +19,8 @@ package io.element.android.features.rageshake.crash.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
-import io.element.android.libraries.architecture.Presenter
 import io.element.android.features.rageshake.crash.CrashDataStore
+import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
