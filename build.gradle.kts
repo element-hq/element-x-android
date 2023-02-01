@@ -127,8 +127,6 @@ sonar {
         property("sonar.links.scm", "https://github.com/vector-im/element-x-android/")
         property("sonar.links.issue", "https://github.com/vector-im/element-x-android/issues")
         property("sonar.organization", "new_vector_ltd_organization")
-        // property("sonar.java.coveragePlugin", "jacoco")
-        // property("sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/generateCoverageReport/generateCoverageReport.xml")
         property("sonar.login", if (project.hasProperty("SONAR_LOGIN")) project.property("SONAR_LOGIN")!! else "invalid")
 
         // exclude source code from analyses separated by a colon (:)
