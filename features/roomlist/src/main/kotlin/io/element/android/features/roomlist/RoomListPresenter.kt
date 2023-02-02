@@ -34,7 +34,6 @@ import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.MatrixClient
-import io.element.android.libraries.matrix.media.MediaResolver
 import io.element.android.libraries.matrix.room.RoomSummary
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
@@ -42,6 +41,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 private const val extendedRangeSize = 40
@@ -61,7 +61,9 @@ class RoomListPresenter @Inject constructor(
         val roomSummaries by client
             .roomSummaryDataSource()
             .roomSummaries()
-            .collectAsState(initial = null)
+            .collectAsState()
+
+        Timber.v("RoomSummaries size = ${roomSummaries.size}")
 
         val filteredRoomSummaries: MutableState<ImmutableList<RoomListRoomSummary>> = remember {
             mutableStateOf(persistentListOf())
@@ -105,15 +107,14 @@ class RoomListPresenter @Inject constructor(
         val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
         val userDisplayName = client.loadUserDisplayName().getOrNull()
         val avatarData =
-            loadAvatarData(
-                userDisplayName ?: client.userId().value,
-                userAvatarUrl,
-                AvatarSize.SMALL
+            AvatarData(
+                name = userDisplayName ?: client.userId().value,
+                url = userAvatarUrl,
+                size = AvatarSize.SMALL
             )
         matrixUser.value = MatrixUser(
             id = client.userId(),
             username = userDisplayName ?: client.userId().value,
-            avatarUrl = userAvatarUrl,
             avatarData = avatarData,
         )
     }
@@ -135,9 +136,9 @@ class RoomListPresenter @Inject constructor(
             when (roomSummary) {
                 is RoomSummary.Empty -> RoomListRoomSummaryPlaceholders.create(roomSummary.identifier)
                 is RoomSummary.Filled -> {
-                    val avatarData = loadAvatarData(
-                        roomSummary.details.name,
-                        roomSummary.details.avatarURLString
+                    val avatarData = AvatarData(
+                        name = roomSummary.details.name,
+                        url = roomSummary.details.avatarURLString
                     )
                     RoomListRoomSummary(
                         id = roomSummary.identifier(),
@@ -150,15 +151,5 @@ class RoomListPresenter @Inject constructor(
                 }
             }
         }
-    }
-
-    private suspend fun loadAvatarData(
-        name: String,
-        url: String?,
-        size: AvatarSize = AvatarSize.MEDIUM
-    ): AvatarData {
-        val model = client.mediaResolver()
-            .resolve(url, kind = MediaResolver.Kind.Thumbnail(size.value))
-        return AvatarData(name, model, size)
     }
 }

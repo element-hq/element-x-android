@@ -37,7 +37,7 @@ datetime = "0.4.0"
 serialization_json = "1.4.1"
 showkase = "1.0.0-beta14"
 jsoup = "1.15.3"
-appyx = "1.0.1"
+appyx = "1.0.3"
 dependencycheck = "7.4.4"
 stem = "2.2.3"
 
@@ -66,6 +66,7 @@ androidx_recyclerview = { module = "androidx.recyclerview:recyclerview", version
 androidx_lifecycle_runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx_lifecycle_compose = { module = "androidx.lifecycle:compose", version.ref = "lifecycle" }
 androidx_lifecycle_process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
+androidx_splash = "androidx.core:core-splashscreen:1.0.0"
 
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity_compose" }
 androidx_startup = { module = "androidx.startup:startup-runtime", version.ref = "startup" }

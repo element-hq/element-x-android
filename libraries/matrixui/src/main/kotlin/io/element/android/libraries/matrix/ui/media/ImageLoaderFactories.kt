@@ -31,8 +31,10 @@ class LoggedInImageLoaderFactory @Inject constructor(
         return ImageLoader
             .Builder(context)
             .components {
+                add(AvatarKeyer())
                 add(MediaKeyer())
-                add(MediaFetcher.Factory(matrixClient))
+                add(MediaFetcher.AvatarFactory(matrixClient))
+                add(MediaFetcher.MetaFactory(matrixClient))
             }
             .build()
     }

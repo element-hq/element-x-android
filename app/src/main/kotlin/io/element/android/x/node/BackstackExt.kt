@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
-plugins {
-    id("io.element.android-compose-library")
-}
+package io.element.android.x.node
 
-android {
-    namespace = "io.element.android.libraries.architecture"
-}
+import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.NewRoot
 
-dependencies {
-    api(projects.libraries.di)
-    api(libs.dagger)
-    api(libs.appyx.core)
-    api(libs.androidx.lifecycle.runtime)
+/**
+ * Don't process NewRoot if the nav target already exists in the stack.
+ */
+fun <T : Any> BackStack<T>.safeRoot(element: T) {
+    val containsRoot = elements.value.any {
+        it.key.navTarget == element
+    }
+    if (containsRoot) return
+    accept(NewRoot(element))
 }

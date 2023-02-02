@@ -14,19 +14,13 @@
  * limitations under the License.
  */
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
-plugins {
-    id("io.element.android-compose-library")
-}
+package io.element.android.libraries.matrix.ui.media
 
-android {
-    namespace = "io.element.android.libraries.architecture"
-}
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.matrix.media.MediaResolver
+import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
 
-dependencies {
-    api(projects.libraries.di)
-    api(libs.dagger)
-    api(libs.appyx.core)
-    api(libs.androidx.lifecycle.runtime)
+fun AvatarData.toMetadata(): MediaResolver.Meta {
+    val mediaSource = url?.let { mediaSourceFromUrl(it) }
+    return MediaResolver.Meta(source = mediaSource, kind = MediaResolver.Kind.Thumbnail(size.value))
 }

@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.data.StableCharSequence
@@ -40,7 +41,7 @@ class MessageComposerPresenter @Inject constructor(
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
         }
-        val text: MutableState<StableCharSequence> = rememberSaveable {
+        val text: MutableState<StableCharSequence> = remember {
             mutableStateOf(StableCharSequence(""))
         }
         val composerMode: MutableState<MessageComposerMode> = rememberSaveable {
