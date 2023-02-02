@@ -29,6 +29,8 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.dependencygraph)
+    alias(libs.plugins.sonarqube)
+    alias(libs.plugins.kover)
 }
 
 tasks.register<Delete>("clean").configure {
@@ -106,5 +108,70 @@ allprojects {
     // Dependency check
     apply {
         plugin("org.owasp.dependencycheck")
+    }
+}
+
+// To run a sonar analysis:
+// Run './gradlew sonar -Dsonar.login=<SONAR_LOGIN>'
+// The SONAR_LOGIN is stored in passbolt as Token Sonar Cloud Bma
+// Sonar result can be found here: https://sonarcloud.io/project/overview?id=vector-im_element-x-android
+sonar {
+    properties {
+        property("sonar.projectName", "element-x-android")
+        property("sonar.projectKey", "vector-im_element-x-android")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.projectVersion", "1.0") // TODO project(":app").android.defaultConfig.versionName)
+        property("sonar.sourceEncoding", "UTF-8")
+        property("sonar.links.homepage", "https://github.com/vector-im/element-x-android/")
+        property("sonar.links.ci", "https://github.com/vector-im/element-x-android/actions")
+        property("sonar.links.scm", "https://github.com/vector-im/element-x-android/")
+        property("sonar.links.issue", "https://github.com/vector-im/element-x-android/issues")
+        property("sonar.organization", "new_vector_ltd_organization")
+        property("sonar.login", if (project.hasProperty("SONAR_LOGIN")) project.property("SONAR_LOGIN")!! else "invalid")
+
+        // exclude source code from analyses separated by a colon (:)
+        // Exclude Java source
+        property("sonar.exclusions", "**/BugReporterMultipartBody.java")
+    }
+}
+
+allprojects {
+    val projectDir = projectDir.toString()
+    sonar {
+        properties {
+            // Note: folders `kotlin` are not supported (yet), I asked on their side: https://community.sonarsource.com/t/82824
+            // As a workaround provide the path in `sonar.sources` property.
+            if (File("$projectDir/src/main/kotlin").exists()) {
+                property("sonar.sources", "src/main/kotlin")
+            }
+            if (File("$projectDir/src/test/kotlin").exists()) {
+                property("sonar.tests", "src/test/kotlin")
+            }
+        }
+    }
+}
+
+allprojects {
+    apply(plugin = "kover")
+}
+
+// Run `./gradlew koverMergedHtmlReport` to get report at ./build/reports/kover
+// Run `./gradlew koverMergedReport` to also get XML report
+koverMerged {
+    enable()
+
+    filters {
+        classes {
+            excludes.addAll(
+                listOf(
+                    /*
+                    "*Fragment",
+                    "*Fragment\$*",
+                    "*Activity",
+                    "*Activity\$*",
+                     */
+                )
+            )
+        }
     }
 }

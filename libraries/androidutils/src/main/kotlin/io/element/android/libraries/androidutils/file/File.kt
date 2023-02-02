@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2023 New Vector Ltd
  *
@@ -15,16 +14,21 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.libraries.androidutils.file
 
-android {
-    namespace = "io.element.android.libraries.androidutils"
-}
+import io.element.android.libraries.core.data.tryOrNull
+import timber.log.Timber
+import java.io.File
 
-dependencies {
-    implementation(libs.timber)
-    implementation(libs.androidx.corektx)
-    implementation(projects.libraries.core)
+fun File.safeDelete() {
+    tryOrNull(
+        onError = {
+            Timber.e(it, "Error, unable to delete file $path")
+        },
+        operation = {
+            if (delete().not()) {
+                Timber.w("Warning, unable to delete file $path")
+            }
+        }
+    )
 }
