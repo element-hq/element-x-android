@@ -26,6 +26,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.matrix.core.SessionId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
@@ -92,6 +93,11 @@ class PreferencesSessionStore @Inject constructor(
                 userId = sessionData.userId
             )
         }
+    }
+
+    override suspend fun getSession(sessionId: SessionId): Session? {
+        //TODO we should have a proper session management
+        return getLatestSession()
     }
 
     override suspend fun reset() {

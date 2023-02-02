@@ -36,9 +36,7 @@ import io.element.android.features.messages.timeline.model.content.TimelineItemT
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.room.MatrixRoom
-import io.element.android.libraries.matrix.ui.MatrixItemHelper
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -46,14 +44,11 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class MessagesPresenter @Inject constructor(
-    private val matrixClient: MatrixClient,
     private val room: MatrixRoom,
     private val composerPresenter: MessageComposerPresenter,
     private val timelinePresenter: TimelinePresenter,
     private val actionListPresenter: ActionListPresenter,
 ) : Presenter<MessagesState> {
-
-    private val matrixItemHelper = MatrixItemHelper(matrixClient)
 
     @Composable
     override fun present(): MessagesState {
@@ -71,8 +66,9 @@ class MessagesPresenter @Inject constructor(
         }
         LaunchedEffect(syncUpdateFlow) {
             roomAvatar.value =
-                matrixItemHelper.loadAvatarData(
-                    room = room,
+                AvatarData(
+                    name = room.bestName,
+                    url = room.avatarUrl,
                     size = AvatarSize.SMALL
                 )
             roomName.value = room.name

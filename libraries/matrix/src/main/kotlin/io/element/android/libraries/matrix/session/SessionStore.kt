@@ -16,12 +16,14 @@
 
 package io.element.android.libraries.matrix.session
 
+import io.element.android.libraries.matrix.core.SessionId
 import kotlinx.coroutines.flow.Flow
 import org.matrix.rustcomponents.sdk.Session
 
 interface SessionStore {
     fun isLoggedIn(): Flow<Boolean>
     suspend fun storeData(session: Session)
+    suspend fun getSession(sessionId: SessionId): Session?
     suspend fun getLatestSession(): Session?
     suspend fun reset()
 }

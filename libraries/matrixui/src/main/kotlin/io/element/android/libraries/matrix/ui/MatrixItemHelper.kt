@@ -19,9 +19,6 @@ package io.element.android.libraries.matrix.ui
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.MatrixClient
-import io.element.android.libraries.matrix.media.MediaResolver
-import io.element.android.libraries.matrix.room.MatrixRoom
-import io.element.android.libraries.matrix.room.RoomSummary
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -40,7 +37,7 @@ class MatrixItemHelper @Inject constructor(
             val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
             val userDisplayName = client.loadUserDisplayName().getOrNull()
             val avatarData =
-                loadAvatarData(
+                AvatarData(
                     userDisplayName ?: client.userId().value,
                     userAvatarUrl,
                     avatarSize
@@ -48,35 +45,8 @@ class MatrixItemHelper @Inject constructor(
             MatrixUser(
                 id = client.userId(),
                 username = userDisplayName,
-                avatarUrl = userAvatarUrl,
                 avatarData = avatarData,
             )
         }.asFlow()
-    }
-
-    suspend fun loadAvatarData(room: MatrixRoom, size: AvatarSize): AvatarData {
-        return loadAvatarData(
-            name = room.bestName,
-            url = room.avatarUrl,
-            size = size
-        )
-    }
-
-    suspend fun loadAvatarData(roomSummary: RoomSummary.Filled, size: AvatarSize): AvatarData {
-        return loadAvatarData(
-            name = roomSummary.details.name,
-            url = roomSummary.details.avatarURLString,
-            size = size
-        )
-    }
-
-    suspend fun loadAvatarData(
-        name: String,
-        url: String?,
-        size: AvatarSize
-    ): AvatarData {
-        val model = client.mediaResolver()
-            .resolve(url, kind = MediaResolver.Kind.Thumbnail(size.value))
-        return AvatarData(name, model, size)
     }
 }

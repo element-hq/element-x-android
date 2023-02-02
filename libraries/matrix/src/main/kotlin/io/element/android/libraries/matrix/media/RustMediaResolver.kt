@@ -28,6 +28,7 @@ internal class RustMediaResolver(private val client: MatrixClient) : MediaResolv
     }
 
     override suspend fun resolve(meta: MediaResolver.Meta): ByteArray? {
+        if (meta.source == null) return null
         return when (meta.kind) {
             is MediaResolver.Kind.Content -> client.loadMediaContentForSource(meta.source)
             is MediaResolver.Kind.Thumbnail -> client.loadMediaThumbnailForSource(

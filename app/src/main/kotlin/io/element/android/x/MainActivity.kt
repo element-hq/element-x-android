@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.bumble.appyx.core.integration.NodeHost
 import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
@@ -34,8 +35,10 @@ import io.element.android.x.node.RootFlowNode
 class MainActivity : NodeComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         val appBindings = bindings<AppBindings>()
+        appBindings.matrixClientsHolder().restore(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             ElementXTheme {
@@ -48,11 +51,17 @@ class MainActivity : NodeComponentActivity() {
                             buildContext = it,
                             appComponentOwner = applicationContext as DaggerComponentOwner,
                             authenticationService = appBindings.authenticationService(),
-                            presenter = appBindings.rootPresenter()
+                            presenter = appBindings.rootPresenter(),
+                            matrixClientsHolder = appBindings.matrixClientsHolder()
                         )
                     }
                 }
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        bindings<AppBindings>().matrixClientsHolder().onSaveInstanceState(outState)
     }
 }

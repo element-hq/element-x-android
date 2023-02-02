@@ -29,7 +29,7 @@ interface MediaResolver {
     }
 
     data class Meta(
-        val source: MediaSource,
+        val source: MediaSource?,
         val kind: Kind
     )
 
