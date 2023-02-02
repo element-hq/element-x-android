@@ -18,6 +18,7 @@ package io.element.android.features.messages.actionlist.model
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.designsystem.VectorIcons
 
 @Immutable
 sealed class TimelineItemAction(
