@@ -23,6 +23,17 @@ jobs:
       - uses: actions/checkout@v3
       - name: Run tests
         run: ./gradlew test $CI_GRADLE_ARG_PROPERTIES
+      - name: Generate kover report
+        if: always()
+        run: ./gradlew koverMergedReport $CI_GRADLE_ARG_PROPERTIES
+
+      - name: Archive kover report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: kover-results
+          path: |
+            **/build/reports/kover/merged
 
       - name: Archive test results on error
         if: failure()
@@ -32,3 +43,17 @@ jobs:
           path: |
             **/out/failures/
             **/build/reports/tests/*UnitTest/
+
+      - name: Publish results to Sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
+        if: ${{ always() && env.SONAR_TOKEN != '' && env.ORG_GRADLE_PROJECT_SONAR_LOGIN != '' }}
+        run: ./gradlew sonar $CI_GRADLE_ARG_PROPERTIES
+
+      # https://github.com/codecov/codecov-action
+      - name: Upload coverage reports to codecov
+        if: always()
+        uses: codecov/codecov-action@v3
+        # with:
+        #  files: build/reports/kover/merged/xml/report.xml

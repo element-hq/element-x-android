@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.sync
 
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -30,7 +29,6 @@ private const val BUFFER_SIZE = 64
 
 class SlidingSyncObserverProxy(
     private val coroutineScope: CoroutineScope,
-    private val coroutineDispatchers: CoroutineDispatchers
 ) : SlidingSyncObserver {
 
     private val updateSummaryMutableFlow =
@@ -39,7 +37,7 @@ class SlidingSyncObserverProxy(
 
     override fun didReceiveSyncUpdate(summary: UpdateSummary) {
         if (summary.rooms.isEmpty()) return
-        coroutineScope.launch(coroutineDispatchers.io) {
+        coroutineScope.launch {
             updateSummaryMutableFlow.emit(summary)
         }
     }
