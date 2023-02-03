@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages
+package io.element.android.features.messages.timeline.util
 
-import io.element.android.features.messages.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.timeline.model.TimelineItem
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.matrix.rustcomponents.sdk.FormattedBody
+import org.matrix.rustcomponents.sdk.MessageFormat
 
-sealed interface MessagesEvents {
-    data class HandleAction(val action: TimelineItemAction, val event: TimelineItem.Event) : MessagesEvents
+fun FormattedBody.toHtmlDocument(): Document? {
+    return takeIf { it.format == MessageFormat.HTML }?.body?.let { formattedBody ->
+        Jsoup.parse(formattedBody)
+    }
 }

@@ -158,6 +158,12 @@ internal class RustRoomSummaryDataSource(
                 clear()
                 addAll(diff.values.map { buildSummaryForRoomListEntry(it) })
             }
+            SlidingSyncViewRoomsListDiff.Pop -> {
+                removeLastOrNull()
+            }
+            SlidingSyncViewRoomsListDiff.Clear -> {
+                clear()
+            }
         }
     }
 

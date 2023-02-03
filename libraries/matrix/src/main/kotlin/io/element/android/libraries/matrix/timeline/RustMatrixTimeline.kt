@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.timeline
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.core.EventId
 import io.element.android.libraries.matrix.room.RustMatrixRoom
+import io.element.android.libraries.matrix.util.StoppableSpawnBag
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -26,14 +27,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.PaginationOutcome
+import org.matrix.rustcomponents.sdk.PaginationOptions
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 import org.matrix.rustcomponents.sdk.TimelineChange
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineListener
 import timber.log.Timber
-import java.util.Collections
+import java.util.*
 
 class RustMatrixTimeline(
     private val matrixRoom: RustMatrixRoom,
@@ -45,19 +46,15 @@ class RustMatrixTimeline(
 
     override var callback: MatrixTimeline.Callback? = null
 
-    private val paginationOutcome = MutableStateFlow(PaginationOutcome(true))
     private val timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
         MutableStateFlow(emptyList())
+
+    private val listenerTokens = StoppableSpawnBag()
 
     @OptIn(FlowPreview::class)
     override fun timelineItems(): Flow<List<MatrixTimelineItem>> {
         return timelineItems.sample(50)
     }
-
-    override val hasMoreToLoad: Boolean
-        get() {
-            return paginationOutcome.value.moreMessages
-        }
 
     private fun MutableList<MatrixTimelineItem>.applyDiff(diff: TimelineDiff) {
         when (diff.change()) {
@@ -107,12 +104,13 @@ class RustMatrixTimeline(
         }
     }
 
-    override suspend fun paginateBackwards(count: Int): Result<Unit> = withContext(coroutineDispatchers.io) {
-        if (!paginationOutcome.value.moreMessages) {
-            return@withContext Result.failure(IllegalStateException("no more message"))
-        }
+    override suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {
-            paginationOutcome.value = room.paginateBackwards(count.toUShort())
+            val paginationOptions = PaginationOptions.UntilNumItems(
+                eventLimit = requestSize.toUShort(),
+                items = untilNumberOfItems.toUShort()
+            )
+            room.paginateBackwards(paginationOptions)
         }
     }
 
@@ -124,7 +122,7 @@ class RustMatrixTimeline(
         }
 
     override fun addListener(timelineListener: TimelineListener) {
-        slidingSyncRoom.addTimelineListener(timelineListener)
+        listenerTokens += slidingSyncRoom.subscribeAndAddTimelineListener(timelineListener, settings = null)
     }
 
     override fun initialize() {
@@ -132,7 +130,7 @@ class RustMatrixTimeline(
     }
 
     override fun dispose() {
-        slidingSyncRoom.removeTimeline()
+        listenerTokens.dispose()
     }
 
     /**

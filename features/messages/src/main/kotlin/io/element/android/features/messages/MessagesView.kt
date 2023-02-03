@@ -84,21 +84,21 @@ fun MessagesView(
 
     LogCompositions(tag = "MessagesScreen", msg = "Content")
 
-    fun onMessageClicked(messageEvent: TimelineItem.MessageEvent) {
-        Timber.v("OnMessageClicked= ${messageEvent.id}")
+    fun onMessageClicked(event: TimelineItem.Event) {
+        Timber.v("OnMessageClicked= ${event.id}")
     }
 
-    fun onMessageLongClicked(messageEvent: TimelineItem.MessageEvent) {
-        Timber.v("OnMessageLongClicked= ${messageEvent.id}")
+    fun onMessageLongClicked(event: TimelineItem.Event) {
+        Timber.v("OnMessageLongClicked= ${event.id}")
         focusManager.clearFocus(force = true)
-        state.actionListState.eventSink(ActionListEvents.ComputeForMessage(messageEvent))
+        state.actionListState.eventSink(ActionListEvents.ComputeForMessage(event))
         coroutineScope.launch {
             itemActionsBottomSheetState.show()
         }
     }
 
-    fun onActionSelected(action: TimelineItemAction, messageEvent: TimelineItem.MessageEvent) {
-        state.eventSink(MessagesEvents.HandleAction(action, messageEvent))
+    fun onActionSelected(action: TimelineItemAction, event: TimelineItem.Event) {
+        state.eventSink(MessagesEvents.HandleAction(action, event))
     }
 
     Scaffold(
@@ -138,8 +138,8 @@ fun MessagesView(
 fun MessagesViewContent(
     state: MessagesState,
     modifier: Modifier = Modifier,
-    onMessageClicked: (TimelineItem.MessageEvent) -> Unit = {},
-    onMessageLongClicked: (TimelineItem.MessageEvent) -> Unit = {},
+    onMessageClicked: (TimelineItem.Event) -> Unit = {},
+    onMessageLongClicked: (TimelineItem.Event) -> Unit = {},
 ) {
     Column(
         modifier = modifier

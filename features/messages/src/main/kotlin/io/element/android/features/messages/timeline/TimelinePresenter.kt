@@ -24,14 +24,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import io.element.android.features.messages.timeline.factories.TimelineItemsFactory
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.core.EventId
 import io.element.android.libraries.matrix.room.MatrixRoom
 import io.element.android.libraries.matrix.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
-import io.element.android.libraries.matrix.ui.MatrixItemHelper
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
@@ -39,18 +37,15 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val PAGINATION_COUNT = 50
+private const val backPaginationEventLimit = 20
+private const val backPaginationPageSize = 50
 
 class TimelinePresenter @Inject constructor(
-    coroutineDispatchers: CoroutineDispatchers,
-    client: MatrixClient,
+    private val timelineItemsFactory: TimelineItemsFactory,
     room: MatrixRoom,
 ) : Presenter<TimelineState> {
 
     private val timeline = room.timeline()
-    private val matrixItemHelper = MatrixItemHelper(client)
-    private val timelineItemsFactory =
-        TimelineItemsFactory(matrixItemHelper, room, coroutineDispatchers.computation)
 
     private class TimelineCallback(
         private val coroutineScope: CoroutineScope,
@@ -66,9 +61,6 @@ class TimelinePresenter @Inject constructor(
     @Composable
     override fun present(): TimelineState {
         val localCoroutineScope = rememberCoroutineScope()
-        val hasMoreToLoad = rememberSaveable {
-            mutableStateOf(timeline.hasMoreToLoad)
-        }
         val highlightedEventId: MutableState<EventId?> = rememberSaveable {
             mutableStateOf(null)
         }
@@ -78,7 +70,7 @@ class TimelinePresenter @Inject constructor(
 
         fun handleEvents(event: TimelineEvents) {
             when (event) {
-                TimelineEvents.LoadMore -> localCoroutineScope.loadMore(hasMoreToLoad)
+                TimelineEvents.LoadMore -> localCoroutineScope.loadMore()
                 is TimelineEvents.SetHighlightedEvent -> highlightedEventId.value = event.eventId
             }
         }
@@ -102,13 +94,11 @@ class TimelinePresenter @Inject constructor(
         return TimelineState(
             highlightedEventId = highlightedEventId.value,
             timelineItems = timelineItems.value.toImmutableList(),
-            hasMoreToLoad = hasMoreToLoad.value,
             eventSink = ::handleEvents
         )
     }
 
-    private fun CoroutineScope.loadMore(hasMoreToLoad: MutableState<Boolean>) = launch {
-        timeline.paginateBackwards(PAGINATION_COUNT)
-        hasMoreToLoad.value = timeline.hasMoreToLoad
+    private fun CoroutineScope.loadMore() = launch {
+        timeline.paginateBackwards(backPaginationEventLimit, backPaginationPageSize)
     }
 }

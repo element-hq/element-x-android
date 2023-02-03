@@ -14,11 +14,21 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages
+package io.element.android.features.messages.timeline.factories
 
-import io.element.android.features.messages.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.timeline.model.TimelineItem
+import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
+import javax.inject.Inject
 
-sealed interface MessagesEvents {
-    data class HandleAction(val action: TimelineItemAction, val event: TimelineItem.Event) : MessagesEvents
+class TimelineItemVirtualFactory @Inject constructor() {
+
+    suspend fun create(
+        currentTimelineItem: MatrixTimelineItem.Virtual,
+        index: Int,
+        timelineItems: List<MatrixTimelineItem>,
+    ): TimelineItem.Virtual {
+        return TimelineItem.Virtual(
+            id = "virtual_item_$index"
+        )
+    }
 }

@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages
+package io.element.android.features.messages.timeline.factories
 
-import io.element.android.features.messages.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.timeline.model.TimelineItem
+import io.element.android.features.messages.timeline.model.content.TimelineItemContent
+import io.element.android.features.messages.timeline.model.content.TimelineItemUnknownContent
+import org.matrix.rustcomponents.sdk.TimelineItemContentKind
+import javax.inject.Inject
 
-sealed interface MessagesEvents {
-    data class HandleAction(val action: TimelineItemAction, val event: TimelineItem.Event) : MessagesEvents
+class TimelineItemContentStickerFactory @Inject constructor() {
+
+    fun create(kind: TimelineItemContentKind.Sticker): TimelineItemContent {
+        return TimelineItemUnknownContent
+    }
 }

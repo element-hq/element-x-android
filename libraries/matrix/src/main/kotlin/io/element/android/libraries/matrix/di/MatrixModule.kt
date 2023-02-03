@@ -31,6 +31,6 @@ object MatrixModule {
     @Provides
     @SingleIn(AppScope::class)
     fun providesRustAuthenticationService(baseDirectory: File): AuthenticationService {
-        return AuthenticationService(baseDirectory.absolutePath)
+        return AuthenticationService(baseDirectory.absolutePath, null)
     }
 }

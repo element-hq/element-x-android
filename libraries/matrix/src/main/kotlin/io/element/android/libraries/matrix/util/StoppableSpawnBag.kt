@@ -14,11 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages
+package io.element.android.libraries.matrix.util
 
-import io.element.android.features.messages.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.timeline.model.TimelineItem
+import org.matrix.rustcomponents.sdk.StoppableSpawn
+import java.util.concurrent.CopyOnWriteArraySet
 
-sealed interface MessagesEvents {
-    data class HandleAction(val action: TimelineItemAction, val event: TimelineItem.Event) : MessagesEvents
+class StoppableSpawnBag(private val tokens: MutableSet<StoppableSpawn> = CopyOnWriteArraySet()) : Set<StoppableSpawn> by tokens {
+
+    operator fun plusAssign(stoppableSpawn: StoppableSpawn?) {
+        if (stoppableSpawn == null) return
+        tokens += stoppableSpawn
+    }
+
+    fun dispose() {
+        tokens.forEach { it.cancel() }
+        tokens.clear()
+    }
 }
