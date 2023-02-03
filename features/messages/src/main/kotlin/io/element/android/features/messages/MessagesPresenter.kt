@@ -78,7 +78,7 @@ class MessagesPresenter @Inject constructor(
         }
         fun handleEvents(event: MessagesEvents) {
             when (event) {
-                is MessagesEvents.HandleAction -> localCoroutineScope.handleTimelineAction(event.action, event.messageEvent, composerState)
+                is MessagesEvents.HandleAction -> localCoroutineScope.handleTimelineAction(event.action, event.event, composerState)
             }
         }
         return MessagesState(
@@ -94,7 +94,7 @@ class MessagesPresenter @Inject constructor(
 
     fun CoroutineScope.handleTimelineAction(
         action: TimelineItemAction,
-        targetEvent: TimelineItem.MessageEvent,
+        targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
     ) = launch {
         when (action) {
@@ -110,11 +110,11 @@ class MessagesPresenter @Inject constructor(
         Timber.v("NotImplementedYet")
     }
 
-    private suspend fun handleActionRedact(event: TimelineItem.MessageEvent) {
+    private suspend fun handleActionRedact(event: TimelineItem.Event) {
         room.redactEvent(event.id)
     }
 
-    private fun handleActionEdit(targetEvent: TimelineItem.MessageEvent, composerState: MessageComposerState) {
+    private fun handleActionEdit(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
         val composerMode = MessageComposerMode.Edit(
             targetEvent.id,
             (targetEvent.content as? TimelineItemTextBasedContent)?.body.orEmpty()
@@ -124,7 +124,7 @@ class MessagesPresenter @Inject constructor(
         )
     }
 
-    private fun handleActionReply(targetEvent: TimelineItem.MessageEvent, composerState: MessageComposerState) {
+    private fun handleActionReply(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
         val composerMode = MessageComposerMode.Reply(targetEvent.safeSenderName, targetEvent.id, "")
         composerState.eventSink(
             MessageComposerEvents.SetMode(composerMode)

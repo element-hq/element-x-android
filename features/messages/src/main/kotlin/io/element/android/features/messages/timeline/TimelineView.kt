@@ -90,8 +90,8 @@ import kotlinx.coroutines.launch
 fun TimelineView(
     state: TimelineState,
     modifier: Modifier = Modifier,
-    onMessageClicked: (TimelineItem.MessageEvent) -> Unit = {},
-    onMessageLongClicked: (TimelineItem.MessageEvent) -> Unit = {},
+    onMessageClicked: (TimelineItem.Event) -> Unit = {},
+    onMessageLongClicked: (TimelineItem.Event) -> Unit = {},
 ) {
     val lazyListState = rememberLazyListState()
     Box(modifier = modifier) {
@@ -114,11 +114,14 @@ fun TimelineView(
                     onLongClick = onMessageLongClicked
                 )
             }
+            /*
             if (state.hasMoreToLoad) {
                 item {
                     TimelineLoadingMoreIndicator()
                 }
             }
+
+             */
         }
 
         fun onReachedLoadMore() {
@@ -135,14 +138,14 @@ fun TimelineView(
 
 private fun TimelineItem.key(): String {
     return when (this) {
-        is TimelineItem.MessageEvent -> id.value
+        is TimelineItem.Event -> id.value
         is TimelineItem.Virtual -> id
     }
 }
 
 private fun TimelineItem.contentType(): Int {
     return when (this) {
-        is TimelineItem.MessageEvent -> 0
+        is TimelineItem.Event -> 0
         is TimelineItem.Virtual -> 1
     }
 }
@@ -151,13 +154,13 @@ private fun TimelineItem.contentType(): Int {
 fun TimelineItemRow(
     timelineItem: TimelineItem,
     isHighlighted: Boolean,
-    onClick: (TimelineItem.MessageEvent) -> Unit,
-    onLongClick: (TimelineItem.MessageEvent) -> Unit,
+    onClick: (TimelineItem.Event) -> Unit,
+    onLongClick: (TimelineItem.Event) -> Unit,
 ) {
     when (timelineItem) {
         is TimelineItem.Virtual -> return
-        is TimelineItem.MessageEvent -> MessageEventRow(
-            messageEvent = timelineItem,
+        is TimelineItem.Event -> MessageEventRow(
+            event = timelineItem,
             isHighlighted = isHighlighted,
             onClick = { onClick(timelineItem) },
             onLongClick = { onLongClick(timelineItem) }
@@ -167,14 +170,14 @@ fun TimelineItemRow(
 
 @Composable
 fun MessageEventRow(
-    messageEvent: TimelineItem.MessageEvent,
+    event: TimelineItem.Event,
     isHighlighted: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val (parentAlignment, contentAlignment) = if (messageEvent.isMine) {
+    val (parentAlignment, contentAlignment) = if (event.isMine) {
         Pair(Alignment.CenterEnd, Alignment.End)
     } else {
         Pair(Alignment.CenterStart, Alignment.Start)
@@ -186,20 +189,20 @@ fun MessageEventRow(
         contentAlignment = parentAlignment
     ) {
         Row {
-            if (!messageEvent.isMine) {
+            if (!event.isMine) {
                 Spacer(modifier = Modifier.width(16.dp))
             }
             Column(horizontalAlignment = contentAlignment) {
-                if (messageEvent.showSenderInformation) {
+                if (event.showSenderInformation) {
                     MessageSenderInformation(
-                        messageEvent.safeSenderName,
-                        messageEvent.senderAvatar,
+                        event.safeSenderName,
+                        event.senderAvatar,
                         Modifier.zIndex(1f)
                     )
                 }
                 MessageEventBubble(
-                    groupPosition = messageEvent.groupPosition,
-                    isMine = messageEvent.isMine,
+                    groupPosition = event.groupPosition,
+                    isMine = event.isMine,
                     interactionSource = interactionSource,
                     isHighlighted = isHighlighted,
                     onClick = onClick,
@@ -209,45 +212,45 @@ fun MessageEventRow(
                         .widthIn(max = 320.dp)
                 ) {
                     val contentModifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
-                    when (messageEvent.content) {
+                    when (event.content) {
                         is TimelineItemEncryptedContent -> TimelineItemEncryptedView(
-                            content = messageEvent.content,
+                            content = event.content,
                             modifier = contentModifier
                         )
                         is TimelineItemRedactedContent -> TimelineItemRedactedView(
-                            content = messageEvent.content,
+                            content = event.content,
                             modifier = contentModifier
                         )
                         is TimelineItemTextBasedContent -> TimelineItemTextView(
-                            content = messageEvent.content,
+                            content = event.content,
                             interactionSource = interactionSource,
                             modifier = contentModifier,
                             onTextClicked = onClick,
                             onTextLongClicked = onLongClick
                         )
                         is TimelineItemUnknownContent -> TimelineItemUnknownView(
-                            content = messageEvent.content,
+                            content = event.content,
                             modifier = contentModifier
                         )
                         is TimelineItemImageContent -> TimelineItemImageView(
-                            content = messageEvent.content,
+                            content = event.content,
                             modifier = contentModifier
                         )
                     }
                 }
                 TimelineItemReactionsView(
-                    reactionsState = messageEvent.reactionsState,
+                    reactionsState = event.reactionsState,
                     modifier = Modifier
                         .zIndex(1f)
-                        .offset(x = if (messageEvent.isMine) 0.dp else 20.dp, y = -(16.dp))
+                        .offset(x = if (event.isMine) 0.dp else 20.dp, y = -(16.dp))
                 )
             }
-            if (messageEvent.isMine) {
+            if (event.isMine) {
                 Spacer(modifier = Modifier.width(16.dp))
             }
         }
     }
-    if (messageEvent.groupPosition.isNew()) {
+    if (event.groupPosition.isNew()) {
         Spacer(modifier = modifier.height(8.dp))
     } else {
         Spacer(modifier = modifier.height(2.dp))
@@ -399,7 +402,6 @@ fun TimelineItemsPreview(
     TimelineView(
         state = TimelineState(
             timelineItems = timelineItems,
-            hasMoreToLoad = true,
             highlightedEventId = null,
             eventSink = {}
         )
@@ -411,7 +413,7 @@ private fun createMessageEvent(
     content: TimelineItemContent,
     groupPosition: MessagesItemGroupPosition
 ): TimelineItem {
-    return TimelineItem.MessageEvent(
+    return TimelineItem.Event(
         id = EventId(Math.random().toString()),
         senderId = "senderId",
         senderAvatar = AvatarData("sender"),

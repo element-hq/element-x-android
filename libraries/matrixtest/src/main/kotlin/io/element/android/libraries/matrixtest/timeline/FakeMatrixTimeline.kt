@@ -29,14 +29,11 @@ class FakeMatrixTimeline : MatrixTimeline {
         get() = null
         set(value) {}
 
-    override val hasMoreToLoad: Boolean
-        get() = true
-
     override fun timelineItems(): Flow<List<MatrixTimelineItem>> {
         return emptyFlow()
     }
 
-    override suspend fun paginateBackwards(count: Int): Result<Unit> {
+    override suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit> {
         return Result.success(Unit)
     }
 

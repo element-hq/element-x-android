@@ -22,7 +22,6 @@ import org.matrix.rustcomponents.sdk.TimelineListener
 
 interface MatrixTimeline {
     var callback: Callback?
-    val hasMoreToLoad: Boolean
 
     interface Callback {
         fun onUpdatedTimelineItem(timelineItem: MatrixTimelineItem) = Unit
@@ -30,7 +29,7 @@ interface MatrixTimeline {
     }
 
     fun timelineItems(): Flow<List<MatrixTimelineItem>>
-    suspend fun paginateBackwards(count: Int): Result<Unit>
+    suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit>
     fun addListener(timelineListener: TimelineListener)
     fun initialize()
     fun dispose()

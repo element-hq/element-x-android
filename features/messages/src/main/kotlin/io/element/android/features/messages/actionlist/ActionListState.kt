@@ -29,9 +29,9 @@ data class ActionListState(
 
     sealed interface Target {
         object None : Target
-        data class Loading(val messageEvent: TimelineItem.MessageEvent) : Target
+        data class Loading(val event: TimelineItem.Event) : Target
         data class Success(
-            val messageEvent: TimelineItem.MessageEvent,
+            val event: TimelineItem.Event,
             val actions: ImmutableList<TimelineItemAction>,
         ) : Target
     }

@@ -24,7 +24,6 @@ import kotlinx.collections.immutable.ImmutableList
 @Immutable
 data class TimelineState(
     val timelineItems: ImmutableList<TimelineItem>,
-    val hasMoreToLoad: Boolean,
     val highlightedEventId: EventId?,
     val eventSink: (TimelineEvents) -> Unit
 )

@@ -27,7 +27,7 @@ sealed interface TimelineItem {
         val id: String
     ) : TimelineItem
 
-    data class MessageEvent(
+    data class Event(
         val id: EventId,
         val senderId: String,
         val senderDisplayName: String?,
