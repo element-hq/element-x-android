@@ -17,11 +17,14 @@
 package io.element.android.libraries.designsystem.theme
 
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.Azure
 import io.element.android.libraries.designsystem.LightGrey
 import io.element.android.libraries.designsystem.SystemGrey5Light
 import io.element.android.libraries.designsystem.SystemGrey6Light
+import io.element.android.libraries.designsystem.theme.previews.ColorsSchemePreview
 
 fun elementColorsLight() = ElementColors(
     messageFromMeBackground = SystemGrey5Light,
@@ -61,4 +64,12 @@ val materialColorSchemeLight = lightColorScheme(
     // TODO outline = ColorLightTokens.Outline,
     // TODO outlineVariant = ColorLightTokens.OutlineVariant,
     // TODO scrim = ColorLightTokens.Scrim,
+)
+
+@Preview
+@Composable
+fun ColorsSchemePreviewLight() = ColorsSchemePreview(
+    Color.Black,
+    Color.White,
+    materialColorSchemeLight,
 )

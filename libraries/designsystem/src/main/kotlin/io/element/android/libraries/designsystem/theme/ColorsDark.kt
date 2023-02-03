@@ -17,11 +17,14 @@
 package io.element.android.libraries.designsystem.theme
 
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.Azure
 import io.element.android.libraries.designsystem.DarkGrey
 import io.element.android.libraries.designsystem.SystemGrey5Dark
 import io.element.android.libraries.designsystem.SystemGrey6Dark
+import io.element.android.libraries.designsystem.theme.previews.ColorsSchemePreview
 
 fun elementColorsDark() = ElementColors(
     messageFromMeBackground = SystemGrey5Dark,
@@ -61,4 +64,12 @@ val materialColorSchemeDark = darkColorScheme(
     // TODO outline = ColorDarkTokens.Outline,
     // TODO outlineVariant = ColorDarkTokens.OutlineVariant,
     // TODO scrim = ColorDarkTokens.Scrim,
+)
+
+@Preview
+@Composable
+fun ColorsSchemePreviewDark() = ColorsSchemePreview(
+    Color.White,
+    Color.Black,
+    materialColorSchemeDark,
 )
