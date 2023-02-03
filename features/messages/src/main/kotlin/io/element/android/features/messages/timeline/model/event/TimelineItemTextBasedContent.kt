@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.model.content
+package io.element.android.features.messages.timeline.model.event
 
-import org.matrix.rustcomponents.sdk.EncryptedMessage
+import org.jsoup.nodes.Document
 
-data class TimelineItemEncryptedContent(
-    val encryptedMessage: EncryptedMessage
-) : TimelineItemContent
+sealed interface TimelineItemTextBasedContent : TimelineItemEventContent {
+    val body: String
+    val htmlDocument: Document?
+}

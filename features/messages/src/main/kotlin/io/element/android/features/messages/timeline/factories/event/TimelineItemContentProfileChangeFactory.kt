@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.factories
+package io.element.android.features.messages.timeline.factories.event
 
-import io.element.android.features.messages.timeline.model.TimelineItem
-import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
+import io.element.android.features.messages.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemUnknownContent
+import org.matrix.rustcomponents.sdk.TimelineItemContentKind
 import javax.inject.Inject
 
-class TimelineItemVirtualFactory @Inject constructor() {
+class TimelineItemContentProfileChangeFactory @Inject constructor() {
 
-    suspend fun create(
-        currentTimelineItem: MatrixTimelineItem.Virtual,
-        index: Int,
-        timelineItems: List<MatrixTimelineItem>,
-    ): TimelineItem.Virtual {
-        return TimelineItem.Virtual(
-            id = "virtual_item_$index"
-        )
+    fun create(kind: TimelineItemContentKind.ProfileChange): TimelineItemEventContent {
+        return TimelineItemUnknownContent
     }
 }

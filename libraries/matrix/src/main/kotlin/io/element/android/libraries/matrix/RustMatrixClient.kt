@@ -36,6 +36,7 @@ import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.MediaSource
 import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.SlidingSyncMode
+import org.matrix.rustcomponents.sdk.SlidingSyncRequestListFilters
 import org.matrix.rustcomponents.sdk.SlidingSyncViewBuilder
 import org.matrix.rustcomponents.sdk.StoppableSpawn
 import timber.log.Timber
@@ -66,7 +67,22 @@ internal class RustMatrixClient internal constructor(
         }
     }
 
-    private val slidingSyncView = SlidingSyncViewBuilder()
+    private val slidingSyncFilters by lazy {
+        SlidingSyncRequestListFilters(
+            isDm = null,
+            spaces = emptyList(),
+            isEncrypted = null,
+            isInvite = false,
+            isTombstoned = false,
+            roomTypes = emptyList(),
+            notRoomTypes = listOf("m.space"),
+            roomNameLike = null,
+            tags = emptyList(),
+            notTags = emptyList()
+        )
+    }
+
+    private val visibleRoomsView = SlidingSyncViewBuilder()
         .timelineLimit(limit = 10u)
         .requiredState(
             requiredState = listOf(
@@ -74,17 +90,19 @@ internal class RustMatrixClient internal constructor(
                 RequiredState(key = "m.room.encryption", value = ""),
             )
         )
-        .name(name = "HomeScreenView")
+        .filters(slidingSyncFilters)
+        .name(name = "CurrentlyVisibleRooms")
+        .sendUpdatesForItems(true)
         .syncMode(mode = SlidingSyncMode.SELECTIVE)
-        .addRange(0u, 30u)
+        .addRange(0u, 20u)
         .build()
 
     private val slidingSync = client
         .slidingSync()
-        .homeserver("https://slidingsync.lab.element.dev")
+        .homeserver("https://slidingsync.lab.matrix.org")
         .withCommonExtensions()
-        // .coldCache("ElementX")
-        .addView(slidingSyncView)
+        .coldCache("ElementX")
+        .addView(visibleRoomsView)
         .build()
 
     private val slidingSyncObserverProxy = SlidingSyncObserverProxy(coroutineScope)
@@ -92,7 +110,7 @@ internal class RustMatrixClient internal constructor(
         RustRoomSummaryDataSource(
             slidingSyncObserverProxy.updateSummaryFlow,
             slidingSync,
-            slidingSyncView,
+            visibleRoomsView,
             dispatchers,
             ::onRestartSync
         )

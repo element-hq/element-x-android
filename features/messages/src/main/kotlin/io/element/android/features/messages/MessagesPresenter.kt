@@ -32,7 +32,7 @@ import io.element.android.features.messages.textcomposer.MessageComposerState
 import io.element.android.features.messages.timeline.TimelineEvents
 import io.element.android.features.messages.timeline.TimelinePresenter
 import io.element.android.features.messages.timeline.model.TimelineItem
-import io.element.android.features.messages.timeline.model.content.TimelineItemTextBasedContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.factories
+package io.element.android.features.messages.timeline.factories.event
 
-import io.element.android.features.messages.timeline.model.content.TimelineItemContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemEventContent
 import org.matrix.rustcomponents.sdk.TimelineItemContentKind
 import javax.inject.Inject
 
@@ -34,7 +34,7 @@ class TimelineItemContentFactory @Inject constructor(
     private val failedToParseStateFactory: TimelineItemContentFailedToParseStateFactory
 ) {
 
-    fun create(itemContent: RustTimelineItemContent): TimelineItemContent {
+    fun create(itemContent: RustTimelineItemContent): TimelineItemEventContent {
         return when (val kind = itemContent.kind()) {
             is TimelineItemContentKind.Message -> messageFactory.create(itemContent.asMessage())
             is TimelineItemContentKind.RedactedMessage -> redactedMessageFactory.create(kind)

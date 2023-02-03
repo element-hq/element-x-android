@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.factories
+package io.element.android.features.messages.timeline.factories.virtual
 
-import io.element.android.features.messages.timeline.model.content.TimelineItemContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemUnknownContent
-import org.matrix.rustcomponents.sdk.TimelineItemContentKind
+import io.element.android.features.messages.timeline.model.virtual.TimelineItemDaySeparatorModel
+import io.element.android.features.messages.timeline.model.virtual.TimelineItemVirtualModel
+import org.matrix.rustcomponents.sdk.VirtualTimelineItem
 import javax.inject.Inject
 
-class TimelineItemContentStateFactory @Inject constructor() {
+class TimelineItemDaySeparatorFactory @Inject constructor() {
 
-    fun create(kind: TimelineItemContentKind.State): TimelineItemContent {
-        return TimelineItemUnknownContent
+    fun create(virtualItem: VirtualTimelineItem.DayDivider): TimelineItemVirtualModel {
+        return TimelineItemDaySeparatorModel(
+            day = "${virtualItem.ts}"
+        )
     }
 }

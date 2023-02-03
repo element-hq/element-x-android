@@ -33,7 +33,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import io.element.android.features.messages.timeline.model.content.TimelineItemImageContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemImageContent
 
 @Composable
 fun TimelineItemImageView(

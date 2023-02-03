@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.factories
+package io.element.android.features.messages.timeline.factories.event
 
-import io.element.android.features.messages.timeline.model.content.TimelineItemContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemRedactedContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemUnknownContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemRedactedContent
 import org.matrix.rustcomponents.sdk.TimelineItemContentKind
 import javax.inject.Inject
 
-class TimelineItemContentProfileChangeFactory @Inject constructor() {
+class TimelineItemContentRedactedFactory @Inject constructor() {
 
-    fun create(kind: TimelineItemContentKind.ProfileChange): TimelineItemContent {
-        return TimelineItemUnknownContent
+    fun create(kind: TimelineItemContentKind.RedactedMessage): TimelineItemEventContent {
+        return TimelineItemRedactedContent
     }
 }

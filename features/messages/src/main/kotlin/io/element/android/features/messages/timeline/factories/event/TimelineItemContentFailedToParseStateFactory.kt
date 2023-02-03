@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.components
+package io.element.android.features.messages.timeline.factories.event
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import io.element.android.features.messages.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.timeline.model.event.TimelineItemUnknownContent
+import org.matrix.rustcomponents.sdk.TimelineItemContentKind
+import javax.inject.Inject
 
-@Composable
-fun TimelineItemUnknownView(
-    content: TimelineItemUnknownContent,
-    modifier: Modifier = Modifier
-) {
-    TimelineItemInformativeView(
-        text = "Event not handled by EAX",
-        iconDescription = "Info",
-        icon = Icons.Default.Info,
-        modifier = modifier
-    )
+class TimelineItemContentFailedToParseStateFactory @Inject constructor() {
+
+    fun create(kind: TimelineItemContentKind.FailedToParseState): TimelineItemEventContent {
+        return TimelineItemUnknownContent
+    }
 }

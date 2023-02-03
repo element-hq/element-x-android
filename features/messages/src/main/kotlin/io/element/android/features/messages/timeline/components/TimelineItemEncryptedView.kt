@@ -20,7 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import io.element.android.features.messages.timeline.model.content.TimelineItemEncryptedContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemEncryptedContent
 
 @Composable
 fun TimelineItemEncryptedView(

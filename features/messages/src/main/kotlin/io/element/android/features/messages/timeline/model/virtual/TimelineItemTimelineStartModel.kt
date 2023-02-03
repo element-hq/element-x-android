@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.model.content
+package io.element.android.features.messages.timeline.model.virtual
 
-import io.element.android.libraries.matrix.media.MediaResolver
-
-data class TimelineItemImageContent(
-    val body: String,
-    val imageMeta: MediaResolver.Meta,
-    val blurhash: String?,
-    val aspectRatio: Float
-) : TimelineItemContent
+object TimelineItemTimelineStartModel : TimelineItemVirtualModel

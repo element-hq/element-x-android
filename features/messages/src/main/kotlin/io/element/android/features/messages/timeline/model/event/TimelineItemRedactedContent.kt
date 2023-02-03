@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.model.content
+package io.element.android.features.messages.timeline.model.event
 
-object TimelineItemRedactedContent : TimelineItemContent
+object TimelineItemRedactedContent : TimelineItemEventContent

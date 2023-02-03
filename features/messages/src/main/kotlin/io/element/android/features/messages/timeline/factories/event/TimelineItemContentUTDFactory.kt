@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.factories
+package io.element.android.features.messages.timeline.factories.event
 
-import io.element.android.features.messages.timeline.model.content.TimelineItemContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemUnknownContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemEncryptedContent
 import org.matrix.rustcomponents.sdk.TimelineItemContentKind
 import javax.inject.Inject
 
-class TimelineItemContentStickerFactory @Inject constructor() {
+class TimelineItemContentUTDFactory @Inject constructor() {
 
-    fun create(kind: TimelineItemContentKind.Sticker): TimelineItemContent {
-        return TimelineItemUnknownContent
+    fun create(kind: TimelineItemContentKind.UnableToDecrypt): TimelineItemEventContent {
+        return TimelineItemEncryptedContent(kind.msg)
     }
 }

@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.model.content
+package io.element.android.features.messages.timeline.model.event
 
-import org.jsoup.nodes.Document
+import io.element.android.libraries.matrix.media.MediaResolver
 
-data class TimelineItemTextContent(
-    override val body: String,
-    override val htmlDocument: Document?
-) : TimelineItemTextBasedContent
+data class TimelineItemImageContent(
+    val body: String,
+    val imageMeta: MediaResolver.Meta,
+    val blurhash: String?,
+    val aspectRatio: Float
+) : TimelineItemEventContent
