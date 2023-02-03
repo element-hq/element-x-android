@@ -14,6 +14,7 @@ The application is a total rewrite of [Element-Android](https://github.com/vecto
 
 <!--- TOC -->
 
+* [Screenshots](#screenshots)
 * [Rust SDK](#rust-sdk)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
@@ -22,6 +23,14 @@ The application is a total rewrite of [Element-Android](https://github.com/vecto
 * [Copyright & License](#copyright-&-license)
 
 <!--- END -->
+
+## Screenshots
+
+Here are some early screenshots the application:
+
+|-|-|-|-|
+|<img src=./docs/images/screen1.png width=280 />|<img src=./docs/images/screen2.png width=280 />|<img src=./docs/images/screen3.png width=280 />|<img src=./docs/images/screen4.png width=280 />|
+|-|-|-|-|
 
 ## Rust SDK
 
