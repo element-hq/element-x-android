@@ -26,9 +26,8 @@ The application is a total rewrite of [Element-Android](https://github.com/vecto
 
 ## Screenshots
 
-Here are some early screenshots the application:
+Here are some early screenshots of the application:
 
-|-|-|-|-|
 |<img src=./docs/images/screen1.png width=280 />|<img src=./docs/images/screen2.png width=280 />|<img src=./docs/images/screen3.png width=280 />|<img src=./docs/images/screen4.png width=280 />|
 |-|-|-|-|
 
