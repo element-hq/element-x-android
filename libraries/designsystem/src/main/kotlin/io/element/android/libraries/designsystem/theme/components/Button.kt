@@ -16,55 +16,46 @@
 
 package io.element.android.libraries.designsystem.theme.components
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.ProvideTextStyle
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
-import io.element.android.libraries.designsystem.theme.elementContentColorFor
 
 @Composable
 fun Button(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    containerColor: Color = ElementTheme.colors.primary,
+    shape: Shape = ButtonDefaults.shape,
+    colors: ButtonColors = ButtonDefaults.buttonColors(),
+    elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
+    border: BorderStroke? = null,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     content: @Composable RowScope.() -> Unit
 ) {
     androidx.compose.material3.Button(
-        colors = ButtonDefaults.buttonColors(
-            containerColor = containerColor,
-            contentColor = elementContentColorFor(backgroundColor = containerColor),
-            disabledContainerColor = containerColor
-                .copy(alpha = 0.12f)
-                .compositeOver(containerColor),
-            disabledContentColor = elementContentColorFor(backgroundColor = containerColor)
-                .copy(alpha = ContentAlpha.disabled)
-        ),
-        // TODO shape = ButtonShape,
-        // TODO elevation = ButtonDefaults.elevation(
-        //     defaultElevation = ElementTheme.elevation.default,
-        //     pressedElevation = ElementTheme.elevation.pressed
-        //     /* disabledElevation = 0.dp */
-        // ),
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        content = {
-            ProvideTextStyle(
-                value = ElementTheme.typography.body1
-            ) {
-                content()
-            }
-        }
+        shape = shape,
+        colors = colors,
+        elevation = elevation,
+        border = border,
+        contentPadding = contentPadding,
+        interactionSource = interactionSource,
+        content = content,
     )
 }
 

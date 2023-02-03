@@ -24,13 +24,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @Composable
 fun Divider(
     modifier: Modifier = Modifier,
     thickness: Dp = DividerDefaults.Thickness,
-    color: Color = ElementTheme.colors.onBackground,
+    color: Color = DividerDefaults.color,
 ) {
     androidx.compose.material3.Divider(
         modifier = modifier,

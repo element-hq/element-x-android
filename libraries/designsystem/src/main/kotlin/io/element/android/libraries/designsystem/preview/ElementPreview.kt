@@ -18,6 +18,7 @@ package io.element.android.libraries.designsystem.preview
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import io.element.android.libraries.designsystem.theme.ElementTheme
@@ -54,7 +55,7 @@ private fun ElementPreview(
 ) {
     ElementTheme(darkTheme = darkTheme) {
         if (showBackground) {
-            Box(modifier = Modifier.background(ElementTheme.colors.background)) {
+            Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                 content()
             }
         } else {

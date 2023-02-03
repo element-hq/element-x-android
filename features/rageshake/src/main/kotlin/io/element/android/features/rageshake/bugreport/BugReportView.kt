@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -49,7 +50,6 @@ import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
@@ -97,7 +97,7 @@ fun BugReportView(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
-                color = ElementTheme.colors.primary,
+                color = MaterialTheme.colorScheme.primary,
             )
             // Form
             Text(
@@ -106,7 +106,7 @@ fun BugReportView(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 16.dp),
                 fontSize = 16.sp,
-                color = ElementTheme.colors.primary,
+                color = MaterialTheme.colorScheme.primary,
                 )
             var descriptionFieldState by textFieldState(
                 stateValue = state.formState.description

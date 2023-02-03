@@ -16,14 +16,25 @@
 
 package io.element.android.libraries.designsystem.theme
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import io.element.android.libraries.designsystem.SystemGrey4Dark
 import io.element.android.libraries.designsystem.SystemGrey6Light
 
 /**
  * Room list
  */
-val ElementColors.roomListRoomName get() = primary
-val ElementColors.roomListRoomMessage get() = secondary
-val ElementColors.roomListRoomMessageDate get() = secondary
-val ElementColors.roomListUnreadIndicator get() = primary
-val ElementColors.roomListPlaceHolder get() = if (isLight) SystemGrey6Light else SystemGrey4Dark
+@Composable
+fun MaterialTheme.roomListRoomName() = colorScheme.primary
+
+@Composable
+fun MaterialTheme.roomListRoomMessage() = colorScheme.secondary
+
+@Composable
+fun MaterialTheme.roomListRoomMessageDate() = colorScheme.secondary
+
+@Composable
+fun MaterialTheme.roomListUnreadIndicator() = colorScheme.primary
+
+@Composable
+fun ElementColors.roomListPlaceHolder() = if (isLight) SystemGrey6Light else SystemGrey4Dark

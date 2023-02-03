@@ -16,15 +16,15 @@
 
 package io.element.android.libraries.designsystem
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @Composable
 fun Boolean.toEnabledColor(): Color {
     return if (this) {
-        ElementTheme.colors.primary
+        MaterialTheme.colorScheme.primary
     } else {
-        ElementTheme.colors.primary.copy(alpha = 0.40f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.40f)
     }
 }

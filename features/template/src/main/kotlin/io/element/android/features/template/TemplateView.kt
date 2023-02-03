@@ -17,13 +17,14 @@
 package io.element.android.features.template
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
 fun TemplateView(
@@ -33,7 +34,7 @@ fun TemplateView(
     Box(modifier, contentAlignment = Alignment.Center) {
         Text(
             "Template feature view",
-            color = ElementTheme.colors.primary,
+            color = MaterialTheme.colorScheme.primary,
         )
     }
 }

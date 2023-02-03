@@ -22,14 +22,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetDefaults
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.contentColorFor
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
-import io.element.android.libraries.designsystem.theme.ElementTheme
-import io.element.android.libraries.designsystem.theme.elementContentColorFor
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -39,9 +38,9 @@ fun ModalBottomSheetLayout(
     sheetState: ModalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden),
     sheetShape: Shape = MaterialTheme.shapes.large,
     sheetElevation: Dp = ModalBottomSheetDefaults.Elevation,
-    sheetBackgroundColor: Color = ElementTheme.colors.surfaceVariant,
-    sheetContentColor: Color = elementContentColorFor(sheetBackgroundColor),
-    scrimColor: Color = ElementTheme.colors.onSurfaceVariant.copy(alpha = 0.32f),
+    sheetBackgroundColor: Color = MaterialTheme.colors.surface,
+    sheetContentColor: Color = contentColorFor(sheetBackgroundColor),
+    scrimColor: Color = ModalBottomSheetDefaults.scrimColor,
     content: @Composable () -> Unit = {}
 ) {
     androidx.compose.material.ModalBottomSheetLayout(

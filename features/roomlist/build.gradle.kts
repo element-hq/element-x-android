@@ -54,7 +54,4 @@ dependencies {
     androidTestImplementation(libs.test.junitext)
 
     ksp(libs.showkase.processor)
-
-    // Not for components, but other classes.
-    implementation("androidx.compose.material3:material3")
 }

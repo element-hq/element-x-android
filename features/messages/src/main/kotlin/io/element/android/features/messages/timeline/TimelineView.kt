@@ -39,6 +39,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -269,7 +270,7 @@ private fun MessageSenderInformation(
         }
         Text(
             text = sender,
-            style = ElementTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .alignBy(LastBaseline)
         )
@@ -328,8 +329,8 @@ internal fun BoxScope.TimelineScrollHelper(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .size(40.dp),
-            containerColor = ElementTheme.colors.surfaceVariant,
-            contentColor = ElementTheme.colors.onSurfaceVariant
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
         ) {
             Icon(Icons.Default.ArrowDownward, "")
         }
@@ -347,7 +348,7 @@ internal fun TimelineLoadingMoreIndicator() {
     ) {
         CircularProgressIndicator(
             strokeWidth = 2.dp,
-            color = ElementTheme.colors.primary
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }

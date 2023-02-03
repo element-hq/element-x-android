@@ -23,11 +23,9 @@ import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @Composable
 fun Checkbox(
@@ -35,16 +33,7 @@ fun Checkbox(
     onCheckedChange: ((Boolean) -> Unit)?,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    colors: CheckboxColors = CheckboxDefaults.colors(
-        checkedColor = ElementTheme.colors.primary,
-        uncheckedColor = Color.Gray, // TODO ElementTheme.colors.
-        checkmarkColor = Color.Gray, // TODO ElementTheme.colors.
-        disabledCheckedColor = Color.Gray // TODO ElementTheme.colors.
-            .copy(alpha = 0.2F),
-        disabledUncheckedColor = Color.Gray // TODO ElementTheme.colors.
-            .copy(alpha = 0.2F),
-        disabledIndeterminateColor = Color.Gray // TODO ElementTheme.colors.
-    ),
+    colors: CheckboxColors = CheckboxDefaults.colors(),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     androidx.compose.material3.Checkbox(

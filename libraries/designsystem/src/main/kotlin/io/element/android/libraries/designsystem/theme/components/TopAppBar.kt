@@ -24,7 +24,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,13 +33,7 @@ fun TopAppBar(
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
-    colors: TopAppBarColors = TopAppBarDefaults.smallTopAppBarColors(
-        containerColor = ElementTheme.colors.background,
-        scrolledContainerColor = ElementTheme.colors.background,
-        navigationIconContentColor = ElementTheme.colors.onBackground,
-        titleContentColor = ElementTheme.colors.onBackground,
-        actionIconContentColor = ElementTheme.colors.onBackground,
-    ),
+    colors: TopAppBarColors = TopAppBarDefaults.smallTopAppBarColors(),
     scrollBehavior: TopAppBarScrollBehavior? = null
 ) {
     androidx.compose.material3.TopAppBar(

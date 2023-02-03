@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,7 +34,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.R as StringR
@@ -51,10 +51,10 @@ fun ConfirmationDialog(
     onThirdButtonClicked: () -> Unit = {},
     onDismiss: () -> Unit = {},
     shape: Shape = AlertDialogDefaults.shape,
-    containerColor: Color = ElementTheme.colors.surfaceVariant,
-    iconContentColor: Color = ElementTheme.colors.onSurfaceVariant,
-    titleContentColor: Color = ElementTheme.colors.onSurfaceVariant,
-    textContentColor: Color = ElementTheme.colors.onSurfaceVariant,
+    containerColor: Color = MaterialTheme.colorScheme.surfaceVariant,
+    iconContentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    titleContentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    textContentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
 ) {
     AlertDialog(

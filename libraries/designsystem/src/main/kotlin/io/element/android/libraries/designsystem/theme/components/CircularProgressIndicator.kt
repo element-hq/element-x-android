@@ -21,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
-import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @Composable
 fun CircularProgressIndicator(
@@ -41,7 +40,7 @@ fun CircularProgressIndicator(
 @Composable
 fun CircularProgressIndicator(
     modifier: Modifier = Modifier,
-    color: Color = ElementTheme.colors.primary,
+    color: Color = ProgressIndicatorDefaults.circularColor,
     strokeWidth: Dp = ProgressIndicatorDefaults.CircularStrokeWidth,
 ) {
     androidx.compose.material3.CircularProgressIndicator(
