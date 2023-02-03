@@ -23,20 +23,14 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.timeline.model.MessagesItemGroupPosition
-import io.element.android.libraries.designsystem.LocalIsDarkTheme
-import io.element.android.libraries.designsystem.MessageHighlightDark
-import io.element.android.libraries.designsystem.MessageHighlightLight
-import io.element.android.libraries.designsystem.SystemGrey5Dark
-import io.element.android.libraries.designsystem.SystemGrey5Light
-import io.element.android.libraries.designsystem.SystemGrey6Dark
-import io.element.android.libraries.designsystem.SystemGrey6Light
+import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.components.Surface
 
 private val BUBBLE_RADIUS = 16.dp
 
@@ -88,24 +82,12 @@ fun MessageEventBubble(
     }
 
     val backgroundBubbleColor = if (isHighlighted) {
-        if (LocalIsDarkTheme.current) {
-            MessageHighlightDark
-        } else {
-            MessageHighlightLight
-        }
+        ElementTheme.colors.messageHighlightedBackground
     } else {
         if (isMine) {
-            if (LocalIsDarkTheme.current) {
-                SystemGrey5Dark
-            } else {
-                SystemGrey5Light
-            }
+            ElementTheme.colors.messageFromMeBackground
         } else {
-            if (LocalIsDarkTheme.current) {
-                SystemGrey6Dark
-            } else {
-                SystemGrey6Light
-            }
+            ElementTheme.colors.messageFromOtherBackground
         }
     }
     val bubbleShape = bubbleShape()

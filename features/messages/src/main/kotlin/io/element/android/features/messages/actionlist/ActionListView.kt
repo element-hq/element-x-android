@@ -29,11 +29,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ListItem
 import androidx.compose.material.LocalContentColor
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -44,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.timeline.model.TimelineItem
 import io.element.android.libraries.designsystem.components.VectorIcon
+import io.element.android.libraries.designsystem.theme.components.ModalBottomSheetLayout
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
@@ -85,7 +85,7 @@ fun ActionListView(
                     .imePadding()
             )
         }
-    ) {}
+    )
 }
 
 @Composable
@@ -115,13 +115,13 @@ private fun SheetContent(
                         text = {
                             Text(
                                 text = action.title,
-                                color = if (action.destructive) MaterialTheme.colors.error else Color.Unspecified,
+                                color = if (action.destructive) MaterialTheme.colorScheme.error else Color.Unspecified,
                             )
                         },
                         icon = {
                             VectorIcon(
                                 resourceId = action.icon,
-                                tint = if (action.destructive) MaterialTheme.colors.error else LocalContentColor.current,
+                                tint = if (action.destructive) MaterialTheme.colorScheme.error else LocalContentColor.current,
                             )
                         }
                     )

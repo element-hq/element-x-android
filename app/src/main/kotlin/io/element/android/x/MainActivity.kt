@@ -18,16 +18,15 @@ package io.element.android.x
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.bumble.appyx.core.integration.NodeHost
 import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
 import io.element.android.libraries.architecture.bindings
-import io.element.android.libraries.designsystem.ElementXTheme
+import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.x.di.AppBindings
 import io.element.android.x.node.RootFlowNode
@@ -41,10 +40,9 @@ class MainActivity : NodeComponentActivity() {
         appBindings.matrixClientsHolder().restore(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            ElementXTheme {
-                Surface(
+            ElementTheme {
+                Box(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
                 ) {
                     NodeHost(integrationPoint = appyxIntegrationPoint) {
                         RootFlowNode(

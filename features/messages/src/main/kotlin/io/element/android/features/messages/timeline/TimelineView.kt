@@ -39,11 +39,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -79,6 +75,12 @@ import io.element.android.features.messages.timeline.model.content.TimelineItemT
 import io.element.android.features.messages.timeline.model.content.TimelineItemUnknownContent
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.PairCombinedPreviewParameter
 import io.element.android.libraries.matrix.core.EventId
 import kotlinx.collections.immutable.ImmutableList
@@ -355,19 +357,26 @@ class MessagesItemGroupPositionToMessagesTimelineItemContentProvider :
         TimelineItemGroupPositionProvider() to MessagesTimelineItemContentProvider()
     )
 
-@Suppress("PreviewPublic")
 @Preview
 @Composable
-fun TimelineItemsPreview(
-    @PreviewParameter(MessagesTimelineItemContentProvider::class)
-    content: TimelineItemContent
-) {
+fun LoginRootScreenLightPreview(
+    @PreviewParameter(MessagesTimelineItemContentProvider::class) content: TimelineItemContent
+) = ElementPreviewLight { ContentToPreview(content) }
+
+@Preview
+@Composable
+fun LoginRootScreenDarkPreview(
+    @PreviewParameter(MessagesTimelineItemContentProvider::class) content: TimelineItemContent
+) = ElementPreviewDark { ContentToPreview(content) }
+
+@Composable
+private fun ContentToPreview(content: TimelineItemContent) {
     val timelineItems = persistentListOf(
         // 3 items (First Middle Last) with isMine = false
         createMessageEvent(
             isMine = false,
             content = content,
-            groupPosition = MessagesItemGroupPosition.First
+            groupPosition = MessagesItemGroupPosition.Last
         ),
         createMessageEvent(
             isMine = false,
@@ -377,13 +386,13 @@ fun TimelineItemsPreview(
         createMessageEvent(
             isMine = false,
             content = content,
-            groupPosition = MessagesItemGroupPosition.Last
+            groupPosition = MessagesItemGroupPosition.First
         ),
         // 3 items (First Middle Last) with isMine = true
         createMessageEvent(
             isMine = true,
             content = content,
-            groupPosition = MessagesItemGroupPosition.First
+            groupPosition = MessagesItemGroupPosition.Last
         ),
         createMessageEvent(
             isMine = true,
@@ -393,7 +402,7 @@ fun TimelineItemsPreview(
         createMessageEvent(
             isMine = true,
             content = content,
-            groupPosition = MessagesItemGroupPosition.Last
+            groupPosition = MessagesItemGroupPosition.First
         ),
     )
     TimelineView(
