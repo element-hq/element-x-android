@@ -107,7 +107,7 @@ TwitterCompose:
   CompositionLocalAllowlist:
     active: true
     # You can optionally define a list of CompositionLocals that are allowed here
-    # allowedCompositionLocals: LocalSomething,LocalSomethingElse
+    allowedCompositionLocals: LocalColors
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:
@@ -137,7 +137,7 @@ TwitterCompose:
   PreviewNaming:
     active: true
   PreviewPublic:
-    active: true
+    active: false
     # You can optionally disable that only previews with @PreviewParameter are flagged
     previewPublicOnlyIfParams: false
   RememberMissing:

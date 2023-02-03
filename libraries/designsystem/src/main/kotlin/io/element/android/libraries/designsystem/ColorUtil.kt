@@ -25,6 +25,6 @@ fun Boolean.toEnabledColor(): Color {
     return if (this) {
         MaterialTheme.colorScheme.primary
     } else {
-        MaterialTheme.colorScheme.secondary
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.40f)
     }
 }

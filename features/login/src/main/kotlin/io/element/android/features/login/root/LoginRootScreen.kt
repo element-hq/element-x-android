@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.features.login.root
 
 import androidx.compose.foundation.layout.Box
@@ -32,15 +30,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -60,12 +50,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.login.error.loginError
 import io.element.android.libraries.designsystem.components.form.textFieldState
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
+import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.R as StringR
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginRootScreen(
     state: LoginRootState,
@@ -74,161 +71,164 @@ fun LoginRootScreen(
     onLoginWithSuccess: (SessionId) -> Unit = {},
 ) {
     val eventSink = state.eventSink
-    Surface(
-        modifier = modifier,
-        color = MaterialTheme.colorScheme.background,
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .systemBarsPadding()
+            .imePadding()
     ) {
-        Box(
+        val scrollState = rememberScrollState()
+        var loginFieldState by textFieldState(stateValue = state.formState.login)
+        var passwordFieldState by textFieldState(stateValue = state.formState.password)
+
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .systemBarsPadding()
-                .imePadding()
+                .verticalScroll(
+                    state = scrollState,
+                )
+                .padding(horizontal = 16.dp),
         ) {
-            val scrollState = rememberScrollState()
-            var loginFieldState by textFieldState(stateValue = state.formState.login)
-            var passwordFieldState by textFieldState(stateValue = state.formState.password)
-
-            Column(
+            val isError = state.loggedInState is LoggedInState.ErrorLoggingIn
+            // Title
+            Text(
+                text = stringResource(id = StringR.string.ftue_auth_welcome_back_title),
                 modifier = Modifier
-                    .verticalScroll(
-                        state = scrollState,
-                    )
-                    .padding(horizontal = 16.dp),
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 48.dp),
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            // Form
+            Column(
+                // modifier = Modifier.weight(1f),
             ) {
-                val isError = state.loggedInState is LoggedInState.ErrorLoggingIn
-                // Title
-                Text(
-                    text = stringResource(id = StringR.string.ftue_auth_welcome_back_title),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 48.dp),
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp,
-                )
-                // Form
-                Column(
-                    // modifier = Modifier.weight(1f),
+                Box(
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Box(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        OutlinedTextField(
-                            value = state.homeserver,
-                            modifier = Modifier.fillMaxWidth(),
-                            onValueChange = { /* no op */ },
-                            enabled = false,
-                            label = {
-                                Text(text = "Server")
-                            },
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Uri,
-                            ),
-                        )
-                        Button(
-                            onClick = onChangeServer,
-                            modifier = Modifier
-                                .align(Alignment.CenterEnd)
-                                .testTag(TestTags.loginChangeServer)
-                                .padding(top = 8.dp, end = 8.dp),
-                            content = {
-                                Text(text = "Change")
-                            }
-                        )
-                    }
                     OutlinedTextField(
-                        value = loginFieldState,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .testTag(TestTags.loginEmailUsername)
-                            .padding(top = 60.dp),
+                        value = state.homeserver,
+                        modifier = Modifier.fillMaxWidth(),
+                        onValueChange = { /* no op */ },
+                        enabled = false,
                         label = {
-                            Text(text = stringResource(id = StringR.string.login_signin_username_hint))
-                        },
-                        onValueChange = {
-                            loginFieldState = it
-                            eventSink(LoginRootEvents.SetLogin(it))
+                            Text(text = "Server")
                         },
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Email,
-                            imeAction = ImeAction.Next
+                            keyboardType = KeyboardType.Uri,
                         ),
                     )
-                    var passwordVisible by remember { mutableStateOf(false) }
-                    if (state.loggedInState is LoggedInState.LoggingIn) {
-                        // Ensure password is hidden when user submits the form
-                        passwordVisible = false
-                    }
-                    OutlinedTextField(
-                        value = passwordFieldState,
+                    Button(
+                        onClick = onChangeServer,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .testTag(TestTags.loginPassword)
-                            .padding(top = 24.dp),
-                        onValueChange = {
-                            passwordFieldState = it
-                            eventSink(LoginRootEvents.SetPassword(it))
-                        },
-                        label = {
-                            Text(text = "Password")
-                        },
-                        isError = isError,
-                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                        trailingIcon = {
-                            val image =
-                                if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                            val description =
-                                if (passwordVisible) "Hide password" else "Show password"
+                            .align(Alignment.CenterEnd)
+                            .testTag(TestTags.loginChangeServer)
+                            .padding(top = 8.dp, end = 8.dp),
+                        content = {
+                            Text(text = "Change")
+                        }
+                    )
+                }
+                OutlinedTextField(
+                    value = loginFieldState,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TestTags.loginEmailUsername)
+                        .padding(top = 60.dp),
+                    label = {
+                        Text(text = stringResource(id = StringR.string.login_signin_username_hint))
+                    },
+                    onValueChange = {
+                        loginFieldState = it
+                        eventSink(LoginRootEvents.SetLogin(it))
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    ),
+                )
+                var passwordVisible by remember { mutableStateOf(false) }
+                if (state.loggedInState is LoggedInState.LoggingIn) {
+                    // Ensure password is hidden when user submits the form
+                    passwordVisible = false
+                }
+                OutlinedTextField(
+                    value = passwordFieldState,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TestTags.loginPassword)
+                        .padding(top = 24.dp),
+                    onValueChange = {
+                        passwordFieldState = it
+                        eventSink(LoginRootEvents.SetPassword(it))
+                    },
+                    label = {
+                        Text(text = "Password")
+                    },
+                    isError = isError,
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    trailingIcon = {
+                        val image =
+                            if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                        val description =
+                            if (passwordVisible) "Hide password" else "Show password"
 
-                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                                Icon(imageVector = image, description)
-                            }
-                        },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Done,
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onDone = { eventSink(LoginRootEvents.Submit) }
-                        ),
-                    )
-                    if (state.loggedInState is LoggedInState.ErrorLoggingIn) {
-                        Text(
-                            text = loginError(state.formState, state.loggedInState.failure),
-                            color = MaterialTheme.colorScheme.error,
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.padding(start = 16.dp)
-                        )
-                    }
-                }
-                // Submit
-                Button(
-                    onClick = { eventSink(LoginRootEvents.Submit) },
-                    enabled = state.submitEnabled,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag(TestTags.loginContinue)
-                        .padding(vertical = 32.dp)
-                ) {
-                    Text(text = "Continue")
-                }
-                when (val loggedInState = state.loggedInState) {
-                    is LoggedInState.LoggedIn -> onLoginWithSuccess(loggedInState.sessionId)
-                    else -> Unit
-                }
-            }
-            if (state.loggedInState is LoggedInState.LoggingIn) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
+                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                            Icon(imageVector = image, description)
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { eventSink(LoginRootEvents.Submit) }
+                    ),
                 )
+                if (state.loggedInState is LoggedInState.ErrorLoggingIn) {
+                    Text(
+                        text = loginError(state.formState, state.loggedInState.failure),
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(start = 16.dp)
+                    )
+                }
             }
+            // Submit
+            Button(
+                onClick = { eventSink(LoginRootEvents.Submit) },
+                enabled = state.submitEnabled,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(TestTags.loginContinue)
+                    .padding(vertical = 32.dp)
+            ) {
+                Text(text = "Continue")
+            }
+            when (val loggedInState = state.loggedInState) {
+                is LoggedInState.LoggedIn -> onLoginWithSuccess(loggedInState.sessionId)
+                else -> Unit
+            }
+        }
+        if (state.loggedInState is LoggedInState.LoggingIn) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
         }
     }
 }
 
-@Composable
 @Preview
-fun LoginContentPreview() {
+@Composable
+fun LoginRootScreenLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun LoginRootScreenDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     LoginRootScreen(
         state = LoginRootState(
             homeserver = "matrix.org",

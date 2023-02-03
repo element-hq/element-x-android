@@ -20,13 +20,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Divider
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Announcement
+import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
 fun PreferenceCategory(
@@ -46,20 +51,39 @@ fun PreferenceCategory(
         Text(
             modifier = Modifier.padding(top = 8.dp, start = 56.dp),
             style = MaterialTheme.typography.titleSmall,
-            text = title
+            color = MaterialTheme.colorScheme.primary,
+            text = title,
         )
         content()
     }
 }
 
-@Composable
 @Preview
-fun PreferenceCategoryPreview() {
+@Composable
+fun PreferenceCategoryLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun PreferenceCategoryDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     PreferenceCategory(
         title = "Category title",
     ) {
-        PreferenceTextPreview()
-        PreferenceSwitchPreview()
-        PreferenceSlidePreview()
+        PreferenceText(
+            title = "Title",
+            icon = Icons.Default.BugReport,
+        )
+        PreferenceSwitch(
+            title = "Switch",
+            icon = Icons.Default.Announcement,
+            isChecked = true
+        )
+        PreferenceSlide(
+            title = "Slide",
+            summary = "Summary",
+            value = 0.75F
+        )
     }
 }

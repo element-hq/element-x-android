@@ -36,7 +36,7 @@ import app.cash.paparazzi.Paparazzi
 import com.airbnb.android.showkase.models.Showkase
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
-import io.element.android.libraries.designsystem.ElementXTheme
+import io.element.android.libraries.designsystem.theme.ElementTheme
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -75,7 +75,6 @@ class ScreenshotTest {
         @TestParameter(valuesProvider = PreviewProvider::class) componentTestPreview: TestPreview,
         @TestParameter baseDeviceConfig: BaseDeviceConfig,
         @TestParameter(value = ["1.0"/*, "1.5"*/]) fontScale: Float,
-        @TestParameter(value = ["light", "dark"]) theme: String,
         @TestParameter(value = ["en" /*"fr", "de", "ru"*/]) localeStr: String,
     ) {
         paparazzi.unsafeUpdateConfig(
@@ -101,7 +100,7 @@ class ScreenshotTest {
                     override fun getOnBackPressedDispatcher() = OnBackPressedDispatcher()
                 }
             ) {
-                ElementXTheme(darkTheme = (theme == "dark")) {
+                ElementTheme {
                     Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                         componentTestPreview.Content()
                     }
