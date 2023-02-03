@@ -77,7 +77,6 @@ import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -377,7 +376,7 @@ private fun ContentToPreview(content: TimelineItemContent) {
         createMessageEvent(
             isMine = false,
             content = content,
-            groupPosition = MessagesItemGroupPosition.First
+            groupPosition = MessagesItemGroupPosition.Last
         ),
         createMessageEvent(
             isMine = false,
@@ -387,13 +386,13 @@ private fun ContentToPreview(content: TimelineItemContent) {
         createMessageEvent(
             isMine = false,
             content = content,
-            groupPosition = MessagesItemGroupPosition.Last
+            groupPosition = MessagesItemGroupPosition.First
         ),
         // 3 items (First Middle Last) with isMine = true
         createMessageEvent(
             isMine = true,
             content = content,
-            groupPosition = MessagesItemGroupPosition.First
+            groupPosition = MessagesItemGroupPosition.Last
         ),
         createMessageEvent(
             isMine = true,
@@ -403,7 +402,7 @@ private fun ContentToPreview(content: TimelineItemContent) {
         createMessageEvent(
             isMine = true,
             content = content,
-            groupPosition = MessagesItemGroupPosition.Last
+            groupPosition = MessagesItemGroupPosition.First
         ),
     )
     TimelineView(

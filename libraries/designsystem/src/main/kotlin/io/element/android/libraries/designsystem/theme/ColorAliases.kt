@@ -22,7 +22,7 @@ import io.element.android.libraries.designsystem.SystemGrey4Dark
 import io.element.android.libraries.designsystem.SystemGrey6Light
 
 /**
- * Room list
+ * Room list.
  */
 @Composable
 fun MaterialTheme.roomListRoomName() = colorScheme.primary
