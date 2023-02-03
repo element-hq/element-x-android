@@ -32,6 +32,9 @@ dependencyResolutionManagement {
         }
     }
 }
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "ElementX"
 include(":app")
 include(":libraries:core")
@@ -41,6 +44,7 @@ include(":libraries:matrixui")
 include(":libraries:textcomposer")
 include(":libraries:elementresources")
 include(":libraries:ui-strings")
+include(":libraries:testtags")
 include(":features:onboarding")
 include(":features:login")
 include(":features:logout")
@@ -55,3 +59,5 @@ include(":anvilannotations")
 include(":anvilcodegen")
 include(":libraries:architecture")
 include(":libraries:matrixtest")
+include(":features:template")
+include(":libraries:androidutils")

@@ -26,9 +26,10 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.navmodel.backstack.BackStack
-import com.bumble.appyx.navmodel.backstack.operation.replace
-import io.element.android.x.features.login.LoginFlowNode
-import io.element.android.x.features.onboarding.OnBoardingScreen
+import com.bumble.appyx.navmodel.backstack.operation.push
+import io.element.android.features.login.LoginFlowNode
+import io.element.android.features.onboarding.OnBoardingScreen
+import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
@@ -62,7 +63,7 @@ class NotLoggedInFlowNode(
         return when (navTarget) {
             NavTarget.OnBoarding -> node(buildContext) {
                 OnBoardingScreen(
-                    onSignIn = { backstack.replace(NavTarget.LoginFlow) }
+                    onSignIn = { backstack.push(NavTarget.LoginFlow) }
                 )
             }
             NavTarget.LoginFlow -> LoginFlowNode(buildContext)
@@ -71,6 +72,11 @@ class NotLoggedInFlowNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(navModel = backstack)
+        Children(
+            navModel = backstack,
+            modifier = modifier,
+            // Animate navigation to login screen
+            transitionHandler = rememberDefaultTransitionHandler(),
+        )
     }
 }

@@ -22,18 +22,19 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.features.onboarding"
+    namespace = "io.element.android.features.onboarding"
 }
 
 dependencies {
-    implementation(project(":libraries:core"))
-    implementation(project(":libraries:elementresources"))
-    implementation(project(":libraries:ui-strings"))
-    implementation(project(":libraries:designsystem"))
-    implementation(project(":libraries:architecture"))
+    implementation(projects.libraries.core)
+    implementation(projects.libraries.elementresources)
+    implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.architecture)
+    implementation(projects.libraries.testtags)
+    implementation(projects.libraries.androidutils)
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pagerindicator)
-    implementation(libs.appyx.core)
     testImplementation(libs.test.junit)
     androidTestImplementation(libs.test.junitext)
     ksp(libs.showkase.processor)

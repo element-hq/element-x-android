@@ -23,7 +23,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.features.messages"
+    namespace = "io.element.android.features.messages"
 }
 
 anvil {
@@ -31,16 +31,14 @@ anvil {
 }
 
 dependencies {
-    implementation(project(":anvilannotations"))
-    anvil(project(":anvilcodegen"))
-    implementation(project(":libraries:di"))
-    implementation(project(":libraries:core"))
-    implementation(project(":libraries:architecture"))
-    implementation(project(":libraries:matrix"))
-    implementation(project(":libraries:matrixui"))
-    implementation(project(":libraries:designsystem"))
-    implementation(project(":libraries:textcomposer"))
-    implementation(libs.appyx.core)
+    implementation(projects.anvilannotations)
+    anvil(projects.anvilcodegen)
+    implementation(projects.libraries.core)
+    implementation(projects.libraries.architecture)
+    implementation(projects.libraries.matrix)
+    implementation(projects.libraries.matrixui)
+    implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.textcomposer)
     implementation(libs.coil.compose)
     implementation(libs.datetime)
     implementation(libs.accompanist.flowlayout)

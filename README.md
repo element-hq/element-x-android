@@ -1,3 +1,11 @@
+[![Latest build](https://github.com/vector-im/element-x-android/actions/workflows/build.yml/badge.svg?query=branch%3Adevelop)](https://github.com/vector-im/element-x-android/actions/workflows/build.yml?query=branch%3Adevelop)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=vector-im_element-x-android&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=vector-im_element-x-android)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=vector-im_element-x-android&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=vector-im_element-x-android)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=vector-im_element-x-android&metric=bugs)](https://sonarcloud.io/summary/new_code?id=vector-im_element-x-android)
+[![codecov](https://codecov.io/github/vector-im/element-x-android/branch/develop/graph/badge.svg?token=ecwvia7amV)](https://codecov.io/github/vector-im/element-x-android)
+[![Element Android Matrix room #element-android:matrix.org](https://img.shields.io/matrix/element-android:matrix.org.svg?label=%23element-android:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-android:matrix.org)
+[![Weblate](https://translate.element.io/widgets/element-android/-/svg-badge.svg)](https://translate.element.io/engage/element-android/?utm_source=widget)
+
 # element-x-android
 
 ElementX Android is a [Matrix](https://matrix.org/) Android Client provided by [Element](https://element.io/).

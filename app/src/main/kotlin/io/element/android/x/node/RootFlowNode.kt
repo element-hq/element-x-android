@@ -21,13 +21,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.composable.Children
-import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
@@ -36,13 +33,13 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
-import io.element.android.x.architecture.createNode
-import io.element.android.x.architecture.presenterConnector
-import io.element.android.x.di.DaggerComponentOwner
-import io.element.android.x.features.rageshake.bugreport.BugReportNode
-import io.element.android.x.matrix.MatrixClient
-import io.element.android.x.matrix.auth.MatrixAuthenticationService
-import io.element.android.x.matrix.core.SessionId
+import io.element.android.features.rageshake.bugreport.BugReportNode
+import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
+import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.di.DaggerComponentOwner
+import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.core.SessionId
+import io.element.android.x.di.MatrixClientsHolder
 import io.element.android.x.root.RootPresenter
 import io.element.android.x.root.RootView
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -50,52 +47,77 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
-import java.util.concurrent.ConcurrentHashMap
 
 class RootFlowNode(
-    buildContext: BuildContext,
+    private val buildContext: BuildContext,
     private val backstack: BackStack<NavTarget> = BackStack(
         initialElement = NavTarget.SplashScreen,
         savedStateMap = buildContext.savedStateMap,
     ),
     private val appComponentOwner: DaggerComponentOwner,
     private val authenticationService: MatrixAuthenticationService,
-    rootPresenter: RootPresenter
+    private val matrixClientsHolder: MatrixClientsHolder,
+    private val presenter: RootPresenter
 ) :
     ParentNode<RootFlowNode.NavTarget>(
         navModel = backstack,
-        buildContext = buildContext,
+        buildContext = buildContext
     ),
 
     DaggerComponentOwner by appComponentOwner {
 
-    private val matrixClientsHolder = ConcurrentHashMap<SessionId, MatrixClient>()
-    private val presenterConnector = presenterConnector(rootPresenter)
-
     override fun onBuilt() {
         super.onBuilt()
-        whenChildAttached(LoggedInFlowNode::class) { _, child ->
-            child.lifecycle.subscribe(
-                onDestroy = { matrixClientsHolder.remove(child.sessionId) }
-            )
-        }
+        observeLoggedInState()
+    }
+
+    private fun observeLoggedInState() {
         authenticationService.isLoggedIn()
             .distinctUntilChanged()
             .onEach { isLoggedIn ->
                 Timber.v("isLoggedIn=$isLoggedIn")
                 if (isLoggedIn) {
-                    val matrixClient = authenticationService.restoreSession()
-                    if (matrixClient == null) {
-                        backstack.newRoot(NavTarget.NotLoggedInFlow)
-                    } else {
-                        matrixClientsHolder[matrixClient.sessionId] = matrixClient
-                        backstack.newRoot(NavTarget.LoggedInFlow(matrixClient.sessionId))
-                    }
+                    tryToRestoreLatestSession(
+                        onSuccess = { switchToLoggedInFlow(it) },
+                        onFailure = { switchToLogoutFlow() }
+                    )
                 } else {
-                    backstack.newRoot(NavTarget.NotLoggedInFlow)
+                    switchToLogoutFlow()
                 }
             }
             .launchIn(lifecycleScope)
+    }
+
+    private fun switchToLoggedInFlow(sessionId: SessionId) {
+        backstack.safeRoot(NavTarget.LoggedInFlow(sessionId = sessionId))
+    }
+
+    private fun switchToLogoutFlow() {
+        matrixClientsHolder.removeAll()
+        backstack.safeRoot(NavTarget.NotLoggedInFlow)
+    }
+
+    private suspend fun tryToRestoreLatestSession(
+        onSuccess: (SessionId) -> Unit = {},
+        onFailure: () -> Unit = {}
+    ) {
+        val latestKnownSessionId = authenticationService.getLatestSessionId()
+        if (latestKnownSessionId == null) {
+            onFailure()
+            return
+        }
+        if (matrixClientsHolder.knowSession(latestKnownSessionId)) {
+            onSuccess(latestKnownSessionId)
+            return
+        }
+        val matrixClient = authenticationService.restoreSession(latestKnownSessionId)
+        if (matrixClient == null) {
+            Timber.v("Failed to restore session...")
+            onFailure()
+        } else {
+            matrixClientsHolder.add(matrixClient)
+            onSuccess(matrixClient.sessionId)
+        }
     }
 
     private fun onOpenBugReport() {
@@ -104,12 +126,17 @@ class RootFlowNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        val state by presenterConnector.stateFlow.collectAsState()
+        val state = presenter.present()
         RootView(
             state = state,
+            modifier = modifier,
             onOpenBugReport = this::onOpenBugReport,
         ) {
-            Children(navModel = backstack)
+            Children(
+                navModel = backstack,
+                // Animate opening the bug report screen
+                transitionHandler = rememberDefaultTransitionHandler(),
+            )
         }
     }
 
@@ -136,8 +163,10 @@ class RootFlowNode(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             is NavTarget.LoggedInFlow -> {
-                val matrixClient =
-                    matrixClientsHolder[navTarget.sessionId] ?: throw IllegalStateException("Makes sure to give a matrixClient with the given sessionId")
+                val matrixClient = matrixClientsHolder.getOrNull(navTarget.sessionId) ?: return splashNode(buildContext).also {
+                    Timber.w("Couldn't find any session, go through SplashScreen")
+                    backstack.newRoot(NavTarget.SplashScreen)
+                }
                 LoggedInFlowNode(
                     buildContext = buildContext,
                     sessionId = navTarget.sessionId,
@@ -146,12 +175,14 @@ class RootFlowNode(
                 )
             }
             NavTarget.NotLoggedInFlow -> NotLoggedInFlowNode(buildContext)
-            NavTarget.SplashScreen -> node(buildContext) {
-                Box(modifier = it.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            }
+            NavTarget.SplashScreen -> splashNode(buildContext)
             NavTarget.BugReport -> createNode<BugReportNode>(buildContext, plugins = listOf(bugReportNodeCallback))
+        }
+    }
+
+    private fun splashNode(buildContext: BuildContext) = node(buildContext) {
+        Box(modifier = it.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
         }
     }
 }
