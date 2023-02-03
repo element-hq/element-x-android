@@ -18,8 +18,13 @@ package io.element.android.libraries.designsystem.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.SystemGrey4Dark
 import io.element.android.libraries.designsystem.SystemGrey6Light
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.previews.ColorListPreview
 
 /**
  * Room list.
@@ -38,3 +43,26 @@ fun MaterialTheme.roomListUnreadIndicator() = colorScheme.primary
 
 @Composable
 fun ElementColors.roomListPlaceHolder() = if (isLight) SystemGrey6Light else SystemGrey4Dark
+
+@Preview
+@Composable
+fun ColorAliasesLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun ColorAliasesDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
+    ColorListPreview(
+        backgroundColor = Color.Black,
+        foregroundColor = Color.White,
+        colors = mapOf(
+            "roomListRoomName" to MaterialTheme.roomListRoomName(),
+            "roomListRoomMessage" to MaterialTheme.roomListRoomMessage(),
+            "roomListRoomMessageDate" to MaterialTheme.roomListRoomMessageDate(),
+            "roomListUnreadIndicator" to MaterialTheme.roomListUnreadIndicator(),
+            "roomListPlaceHolder" to ElementTheme.colors.roomListPlaceHolder(),
+        )
+    )
+}
