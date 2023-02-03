@@ -25,7 +25,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -45,8 +47,6 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
 import io.element.android.libraries.designsystem.LinkColor
 import io.element.android.libraries.designsystem.components.ClickableLinkText
-import io.element.android.libraries.designsystem.theme.ElementColors
-import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.permalink.PermalinkData
@@ -214,7 +214,7 @@ private fun HtmlInline(
 ) {
     Box(modifier) {
         val styledText = buildAnnotatedString {
-            appendInlineElement(element, ElementTheme.colors)
+            appendInlineElement(element, MaterialTheme.colorScheme)
         }
         HtmlText(
             text = styledText,
@@ -232,7 +232,7 @@ private fun HtmlPreformatted(
 ) {
     val isCode = pre.firstElementChild()?.normalName() == "code"
     val backgroundColor =
-        if (isCode) ElementTheme.colors.codeBackground() else Color.Unspecified
+        if (isCode) MaterialTheme.colorScheme.codeBackground() else Color.Unspecified
     Box(
         modifier
             .background(color = backgroundColor)
@@ -255,7 +255,7 @@ private fun HtmlParagraph(
 ) {
     Box(modifier) {
         val styledText = buildAnnotatedString {
-            appendInlineChildrenElements(paragraph.childNodes(), ElementTheme.colors)
+            appendInlineChildrenElements(paragraph.childNodes(), MaterialTheme.colorScheme)
         }
         HtmlText(
             text = styledText, onClick = onTextClicked,
@@ -272,7 +272,7 @@ private fun HtmlBlockquote(
     onTextClicked: () -> Unit = {},
     onTextLongClicked: () -> Unit = {},
 ) {
-    val color = ElementTheme.colors.onBackground
+    val color = MaterialTheme.colorScheme.onBackground
     Box(
         modifier = modifier
             .drawBehind {
@@ -287,7 +287,7 @@ private fun HtmlBlockquote(
     ) {
         val text = buildAnnotatedString {
             withStyle(style = SpanStyle(fontStyle = FontStyle.Italic)) {
-                appendInlineChildrenElements(blockquote.childNodes(), ElementTheme.colors)
+                appendInlineChildrenElements(blockquote.childNodes(), MaterialTheme.colorScheme)
             }
         }
         HtmlText(
@@ -306,19 +306,19 @@ private fun HtmlHeading(
     onTextLongClicked: () -> Unit = {},
 ) {
     val style = when (heading.normalName()) {
-        "h1" -> ElementTheme.typography.headlineLarge.copy(fontSize = 30.sp)
-        "h2" -> ElementTheme.typography.headlineLarge.copy(fontSize = 26.sp)
-        "h3" -> ElementTheme.typography.headlineMedium.copy(fontSize = 22.sp)
-        "h4" -> ElementTheme.typography.headlineMedium.copy(fontSize = 18.sp)
-        "h5" -> ElementTheme.typography.headlineSmall.copy(fontSize = 14.sp)
-        "h6" -> ElementTheme.typography.headlineSmall.copy(fontSize = 12.sp)
+        "h1" -> MaterialTheme.typography.headlineLarge.copy(fontSize = 30.sp)
+        "h2" -> MaterialTheme.typography.headlineLarge.copy(fontSize = 26.sp)
+        "h3" -> MaterialTheme.typography.headlineMedium.copy(fontSize = 22.sp)
+        "h4" -> MaterialTheme.typography.headlineMedium.copy(fontSize = 18.sp)
+        "h5" -> MaterialTheme.typography.headlineSmall.copy(fontSize = 14.sp)
+        "h6" -> MaterialTheme.typography.headlineSmall.copy(fontSize = 12.sp)
         else -> {
             return
         }
     }
     Box(modifier) {
         val text = buildAnnotatedString {
-            appendInlineChildrenElements(heading.childNodes(), ElementTheme.colors)
+            appendInlineChildrenElements(heading.childNodes(), MaterialTheme.colorScheme)
         }
         HtmlText(
             text = text,
@@ -344,7 +344,7 @@ private fun HtmlMxReply(
         modifier = modifier
             .padding(bottom = 4.dp)
             .offset(x = -(8.dp)),
-        color = ElementTheme.colors.background,
+        color = MaterialTheme.colorScheme.background,
         shape = shape,
     ) {
         val text = buildAnnotatedString {
@@ -354,7 +354,7 @@ private fun HtmlMxReply(
                         withStyle(
                             style = SpanStyle(
                                 fontSize = 12.sp,
-                                color = ElementTheme.colors.secondary
+                                color = MaterialTheme.colorScheme.secondary
                             )
                         ) {
                             append(blockquoteNode.text())
@@ -462,13 +462,13 @@ private fun HtmlListItems(
     }
 }
 
-private fun ElementColors.codeBackground(): Color {
+private fun ColorScheme.codeBackground(): Color {
     return background.copy(alpha = 0.3f)
 }
 
 private fun AnnotatedString.Builder.appendInlineChildrenElements(
     childNodes: List<Node>,
-    colors: ElementColors
+    colors: ColorScheme
 ) {
     for (node in childNodes) {
         when (node) {
@@ -482,7 +482,7 @@ private fun AnnotatedString.Builder.appendInlineChildrenElements(
     }
 }
 
-private fun AnnotatedString.Builder.appendInlineElement(element: Element, colors: ElementColors) {
+private fun AnnotatedString.Builder.appendInlineElement(element: Element, colors: ColorScheme) {
     when (element.normalName()) {
         "br" -> {
             append('\n')

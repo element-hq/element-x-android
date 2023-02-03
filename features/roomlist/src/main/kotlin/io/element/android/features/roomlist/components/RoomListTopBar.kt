@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,7 +46,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.form.textFieldState
-import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.MediumTopAppBar
@@ -130,7 +130,7 @@ fun SearchRoomListTopBar(
                 placeholder = {
                     Text(
                         text = "Search",
-                        color = ElementTheme.colors.onBackground.copy(alpha = ContentAlpha.medium)
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = ContentAlpha.medium)
                     )
                 },
                 singleLine = true,
@@ -144,7 +144,7 @@ fun SearchRoomListTopBar(
                             Icon(
                                 imageVector = Icons.Default.Close,
                                 contentDescription = "clear",
-                                tint = ElementTheme.colors.onBackground
+                                tint = MaterialTheme.colorScheme.onBackground
                             )
                         }
                     }
@@ -160,7 +160,7 @@ fun SearchRoomListTopBar(
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "close",
-                    tint = ElementTheme.colors.onBackground
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         },

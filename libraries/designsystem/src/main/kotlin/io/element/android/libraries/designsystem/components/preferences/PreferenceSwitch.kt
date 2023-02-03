@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Announcement
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,7 +64,7 @@ fun PreferenceSwitch(
             )
             Text(
                 modifier = Modifier.weight(1f),
-                style = ElementTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyLarge,
                 color = enabled.toEnabledColor(),
                 text = title
             )

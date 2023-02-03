@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.designsystem.theme
 
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.ui.graphics.Color
 import io.element.android.libraries.designsystem.Azure
 import io.element.android.libraries.designsystem.DarkGrey
@@ -23,24 +24,13 @@ import io.element.android.libraries.designsystem.SystemGrey5Dark
 import io.element.android.libraries.designsystem.SystemGrey6Dark
 
 fun elementColorsDark() = ElementColors(
-    primary = Color.White,
-    onPrimary = Color.Black,
-    secondary = DarkGrey,
-    text = Color.White,
-    background = Color.Black,
-    onBackground = Color.White,
-    surfaceVariant = SystemGrey5Dark,
-    onSurfaceVariant = Color.White,
     messageFromMeBackground = SystemGrey5Dark,
     messageFromOtherBackground = SystemGrey6Dark,
     messageHighlightedBackground = Azure,
-    success = Color.Green,
-    error = Color.Red,
     isLight = false,
 )
 
-/*
-private val DarkColorScheme = darkColorScheme(
+val materialColorSchemeDark = darkColorScheme(
     primary = Color.White,
     secondary = DarkGrey,
     tertiary = Color.White,
@@ -50,4 +40,3 @@ private val DarkColorScheme = darkColorScheme(
     surfaceVariant = SystemGrey5Dark,
     onSurface = Color.White,
 )
- */

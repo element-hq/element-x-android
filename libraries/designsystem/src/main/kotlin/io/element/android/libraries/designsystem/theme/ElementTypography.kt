@@ -22,6 +22,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.airbnb.android.showkase.annotation.ShowkaseTypography
 
+/**
+ * TODO Provide the typo to Material3 theme.
+ */
 @ShowkaseTypography(name = "H1", group = "Element")
 val h1Default: TextStyle = TextStyle(
     fontFamily = FontFamily.SansSerif,
@@ -104,15 +107,3 @@ val titleMediumDefault: TextStyle = TextStyle(
     letterSpacing = 0.5.sp
 )
 
-data class ElementTypography(
-    val h1: TextStyle = h1Default,
-    val body1: TextStyle = body1Default,
-    val bodySmall: TextStyle = bodySmallDefault,
-    val bodyMedium: TextStyle = bodyMediumDefault,
-    val bodyLarge: TextStyle = bodyLargeDefault,
-    val headlineSmall: TextStyle = headlineSmallDefault,
-    val headlineMedium: TextStyle = headlineMediumDefault,
-    val headlineLarge: TextStyle = headlineLargeDefault,
-    val titleSmall: TextStyle = titleSmallDefault,
-    val titleMedium: TextStyle = titleMediumDefault,
-)

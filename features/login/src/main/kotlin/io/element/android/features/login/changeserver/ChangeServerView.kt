@@ -31,6 +31,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -50,7 +51,6 @@ import io.element.android.libraries.designsystem.components.VectorIcon
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
@@ -86,7 +86,7 @@ fun ChangeServerView(
                     .size(width = 81.dp, height = 73.dp)
                     .align(Alignment.CenterHorizontally)
                     .background(
-                        color = ElementTheme.colors.surfaceVariant,
+                        color = MaterialTheme.colorScheme.surfaceVariant,
                         shape = RoundedCornerShape(32.dp)
                     )
             ) {
@@ -108,7 +108,7 @@ fun ChangeServerView(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
-                color = ElementTheme.colors.primary,
+                color = MaterialTheme.colorScheme.primary,
             )
             Text(
                 text = "A server is a home for all your data.\n" +
@@ -119,7 +119,7 @@ fun ChangeServerView(
                     .padding(top = 16.dp),
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
-                color = ElementTheme.colors.secondary,
+                color = MaterialTheme.colorScheme.secondary,
             )
             var homeserverFieldState by textFieldState(stateValue = state.homeserver)
             OutlinedTextField(
@@ -150,8 +150,8 @@ fun ChangeServerView(
                         state.homeserver,
                         state.changeServerAction.error
                     ),
-                    color = ElementTheme.colors.error,
-                    style = ElementTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(start = 16.dp)
                 )
             }

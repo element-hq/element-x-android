@@ -23,13 +23,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Announcement
 import androidx.compose.material.icons.filled.BugReport
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Text
 
@@ -45,12 +45,12 @@ fun PreferenceCategory(
     ) {
         Divider(
             modifier = Modifier.padding(horizontal = 16.dp),
-            color = ElementTheme.colors.secondary,
+            color = MaterialTheme.colorScheme.secondary,
             thickness = 1.dp
         )
         Text(
             modifier = Modifier.padding(top = 8.dp, start = 56.dp),
-            style = ElementTheme.typography.titleSmall,
+            style = MaterialTheme.typography.titleSmall,
             text = title
         )
         content()

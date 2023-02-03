@@ -18,6 +18,7 @@ package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SliderColors
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.Composable
@@ -26,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
 
 @Composable
 fun Slider(
@@ -38,18 +38,7 @@ fun Slider(
     /*@IntRange(from = 0)*/
     steps: Int = 0,
     onValueChangeFinished: (() -> Unit)? = null,
-    colors: SliderColors = SliderDefaults.colors(
-        thumbColor = ElementTheme.colors.primary,
-        activeTrackColor = ElementTheme.colors.primary,
-        activeTickColor = ElementTheme.colors.primary,
-        inactiveTrackColor = ElementTheme.colors.primary,
-        inactiveTickColor = ElementTheme.colors.primary,
-        disabledThumbColor = ElementTheme.colors.primary.copy(alpha = 0.40f),
-        disabledActiveTrackColor = ElementTheme.colors.primary.copy(alpha = 0.40f),
-        disabledActiveTickColor = ElementTheme.colors.primary.copy(alpha = 0.40f),
-        disabledInactiveTrackColor = ElementTheme.colors.primary.copy(alpha = 0.40f),
-        disabledInactiveTickColor = ElementTheme.colors.primary.copy(alpha = 0.40f),
-    ),
+    colors: SliderColors = SliderDefaults.colors(),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     androidx.compose.material3.Slider(

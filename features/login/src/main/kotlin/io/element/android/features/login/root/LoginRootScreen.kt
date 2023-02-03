@@ -30,6 +30,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -98,7 +99,7 @@ fun LoginRootScreen(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
-                color = ElementTheme.colors.primary,
+                color = MaterialTheme.colorScheme.primary,
             )
             // Form
             Column(
@@ -189,8 +190,8 @@ fun LoginRootScreen(
                 if (state.loggedInState is LoggedInState.ErrorLoggingIn) {
                     Text(
                         text = loginError(state.formState, state.loggedInState.failure),
-                        color = ElementTheme.colors.error,
-                        style = ElementTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.padding(start = 16.dp)
                     )
                 }

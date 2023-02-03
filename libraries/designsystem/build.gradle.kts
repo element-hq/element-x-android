@@ -31,8 +31,5 @@ android {
         implementation(projects.libraries.elementresources)
         implementation(projects.libraries.uiStrings)
         ksp(libs.showkase.processor)
-
-        // This is the only module to have a (temporary) dependence to material3.
-        implementation("androidx.compose.material3:material3")
     }
 }

@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.designsystem.theme
 
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 import io.element.android.libraries.designsystem.Azure
 import io.element.android.libraries.designsystem.LightGrey
@@ -23,24 +24,13 @@ import io.element.android.libraries.designsystem.SystemGrey5Light
 import io.element.android.libraries.designsystem.SystemGrey6Light
 
 fun elementColorsLight() = ElementColors(
-    primary = Color.Black,
-    onPrimary = Color.White,
-    secondary = LightGrey,
-    text = Color.Black,
-    background = Color.White,
-    onBackground = Color.Black,
-    surfaceVariant = SystemGrey5Light,
-    onSurfaceVariant = Color.Black,
     messageFromMeBackground = SystemGrey5Light,
     messageFromOtherBackground = SystemGrey6Light,
     messageHighlightedBackground = Azure,
-    success = Color.Green,
-    error = Color.Red,
     isLight = true,
 )
 
-/*
-private val LightColorScheme = lightColorScheme(
+val materialColorSchemeLight = lightColorScheme(
     primary = Color.Black,
     secondary = LightGrey,
     tertiary = Color.Black,
@@ -50,5 +40,4 @@ private val LightColorScheme = lightColorScheme(
     surfaceVariant = SystemGrey5Light,
     onSurface = Color.Black,
     onSurfaceVariant = Color.Black,
-
- */
+)

@@ -24,6 +24,7 @@ import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -74,7 +75,6 @@ class ScreenshotTest {
         @TestParameter(valuesProvider = PreviewProvider::class) componentTestPreview: TestPreview,
         @TestParameter baseDeviceConfig: BaseDeviceConfig,
         @TestParameter(value = ["1.0"/*, "1.5"*/]) fontScale: Float,
-        @TestParameter(value = ["light", "dark"]) theme: String,
         @TestParameter(value = ["en" /*"fr", "de", "ru"*/]) localeStr: String,
     ) {
         paparazzi.unsafeUpdateConfig(
@@ -100,8 +100,8 @@ class ScreenshotTest {
                     override fun getOnBackPressedDispatcher() = OnBackPressedDispatcher()
                 }
             ) {
-                ElementTheme(darkTheme = (theme == "dark")) {
-                    Box(modifier = Modifier.background(ElementTheme.colors.background)) {
+                ElementTheme {
+                    Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                         componentTestPreview.Content()
                     }
                 }

@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -103,7 +104,7 @@ internal fun DefaultRoomSummaryRow(
             modifier = Modifier.placeholder(
                 visible = room.isPlaceholder,
                 shape = CircleShape,
-                color = ElementTheme.colors.roomListPlaceHolder,
+                color = ElementTheme.colors.roomListPlaceHolder(),
             )
         )
         Column(
@@ -117,12 +118,12 @@ internal fun DefaultRoomSummaryRow(
                 modifier = Modifier.placeholder(
                     visible = room.isPlaceholder,
                     shape = TextPlaceholderShape,
-                    color = ElementTheme.colors.roomListPlaceHolder,
+                    color = ElementTheme.colors.roomListPlaceHolder(),
                 ),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
                 text = room.name,
-                color = ElementTheme.colors.roomListRoomName,
+                color = MaterialTheme.roomListRoomName(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -131,10 +132,10 @@ internal fun DefaultRoomSummaryRow(
                 modifier = Modifier.placeholder(
                     visible = room.isPlaceholder,
                     shape = TextPlaceholderShape,
-                    color = ElementTheme.colors.roomListPlaceHolder,
+                    color = ElementTheme.colors.roomListPlaceHolder(),
                 ),
                 text = room.lastMessage?.toString().orEmpty(),
-                color = ElementTheme.colors.roomListRoomMessage,
+                color = MaterialTheme.roomListRoomMessage(),
                 fontSize = 14.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -149,15 +150,15 @@ internal fun DefaultRoomSummaryRow(
                 modifier = Modifier.placeholder(
                     visible = room.isPlaceholder,
                     shape = TextPlaceholderShape,
-                    color = ElementTheme.colors.roomListPlaceHolder,
+                    color = ElementTheme.colors.roomListPlaceHolder(),
                 ),
                 fontSize = 12.sp,
                 text = room.timestamp ?: "",
-                color = ElementTheme.colors.roomListRoomMessageDate,
+                color = MaterialTheme.roomListRoomMessageDate(),
             )
             Spacer(Modifier.size(4.dp))
             val unreadIndicatorColor =
-                if (room.hasUnread) ElementTheme.colors.roomListUnreadIndicator else Color.Transparent
+                if (room.hasUnread) MaterialTheme.roomListUnreadIndicator() else Color.Transparent
             Box(
                 modifier = Modifier
                     .size(12.dp)

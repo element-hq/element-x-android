@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BugReport
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +33,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
@@ -58,9 +58,9 @@ fun PreferenceText(
                 modifier = Modifier
                     .weight(1f)
                     .padding(end = preferencePaddingEnd),
-                style = ElementTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyLarge,
                 text = title,
-                color = ElementTheme.colors.primary,
+                color = MaterialTheme.colorScheme.primary,
             )
         }
     }
