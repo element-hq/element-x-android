@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.model.content
+package io.element.android.features.messages.timeline.model.event
 
-object TimelineItemUnknownContent : TimelineItemContent
+import org.matrix.rustcomponents.sdk.EncryptedMessage
+
+data class TimelineItemEncryptedContent(
+    val encryptedMessage: EncryptedMessage
+) : TimelineItemEventContent

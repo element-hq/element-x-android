@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.model.content
+package io.element.android.features.messages.timeline.model.event
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import org.matrix.rustcomponents.sdk.EncryptedMessage
 
-sealed interface TimelineItemContent
+sealed interface TimelineItemEventContent
 
-class MessagesTimelineItemContentProvider : PreviewParameterProvider<TimelineItemContent> {
+class MessagesTimelineItemContentProvider : PreviewParameterProvider<TimelineItemEventContent> {
     override val values = sequenceOf(
         TimelineItemEmoteContent(
             body = "Emote",

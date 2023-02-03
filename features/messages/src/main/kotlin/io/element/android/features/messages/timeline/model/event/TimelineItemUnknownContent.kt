@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.model.content
+package io.element.android.features.messages.timeline.model.event
 
-import org.jsoup.nodes.Document
-
-sealed interface TimelineItemTextBasedContent : TimelineItemContent {
-    val body: String
-    val htmlDocument: Document?
-}
+object TimelineItemUnknownContent : TimelineItemEventContent

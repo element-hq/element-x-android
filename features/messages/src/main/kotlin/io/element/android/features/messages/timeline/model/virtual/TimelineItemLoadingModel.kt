@@ -14,16 +14,6 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.factories
+package io.element.android.features.messages.timeline.model.virtual
 
-import io.element.android.features.messages.timeline.model.content.TimelineItemContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemEncryptedContent
-import org.matrix.rustcomponents.sdk.TimelineItemContentKind
-import javax.inject.Inject
-
-class TimelineItemContentUTDFactory @Inject constructor() {
-
-    fun create(kind: TimelineItemContentKind.UnableToDecrypt): TimelineItemContent {
-        return TimelineItemEncryptedContent(kind.msg)
-    }
-}
+object TimelineItemLoadingModel : TimelineItemVirtualModel

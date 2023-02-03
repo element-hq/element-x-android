@@ -19,11 +19,12 @@ package io.element.android.features.messages.timeline.factories
 import androidx.recyclerview.widget.DiffUtil
 import io.element.android.features.messages.timeline.diff.CacheInvalidator
 import io.element.android.features.messages.timeline.diff.MatrixTimelineItemsDiffCallback
+import io.element.android.features.messages.timeline.factories.event.TimelineItemEventFactory
+import io.element.android.features.messages.timeline.factories.virtual.TimelineItemVirtualFactory
 import io.element.android.features.messages.timeline.model.TimelineItem
 import io.element.android.features.messages.timeline.util.invalidateLast
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

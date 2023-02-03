@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.factories
+package io.element.android.features.messages.timeline.factories.event
 
 import io.element.android.features.messages.timeline.model.AggregatedReaction
 import io.element.android.features.messages.timeline.model.MessagesItemGroupPosition

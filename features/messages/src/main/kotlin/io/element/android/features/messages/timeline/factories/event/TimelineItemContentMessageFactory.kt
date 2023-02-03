@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.factories
+package io.element.android.features.messages.timeline.factories.event
 
-import io.element.android.features.messages.timeline.model.content.TimelineItemContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemEmoteContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemImageContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemNoticeContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemTextContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemUnknownContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemEmoteContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemImageContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemNoticeContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemTextContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.timeline.util.toHtmlDocument
 import io.element.android.libraries.matrix.media.MediaResolver
 import org.matrix.rustcomponents.sdk.Message
@@ -30,7 +30,7 @@ import javax.inject.Inject
 
 class TimelineItemContentMessageFactory @Inject constructor() {
 
-    fun create(contentAsMessage: Message?): TimelineItemContent {
+    fun create(contentAsMessage: Message?): TimelineItemEventContent {
         return when (val messageType = contentAsMessage?.msgtype()) {
             is MessageType.Emote -> TimelineItemEmoteContent(
                 body = messageType.content.body,

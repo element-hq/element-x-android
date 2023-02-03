@@ -70,13 +70,14 @@ import io.element.android.features.messages.timeline.model.MessagesItemGroupPosi
 import io.element.android.features.messages.timeline.model.TimelineItem
 import io.element.android.features.messages.timeline.model.TimelineItemGroupPositionProvider
 import io.element.android.features.messages.timeline.model.TimelineItemReactions
-import io.element.android.features.messages.timeline.model.content.MessagesTimelineItemContentProvider
-import io.element.android.features.messages.timeline.model.content.TimelineItemContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemEncryptedContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemImageContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemRedactedContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemTextBasedContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemUnknownContent
+import io.element.android.features.messages.timeline.model.event.MessagesTimelineItemContentProvider
+import io.element.android.features.messages.timeline.model.event.TimelineItemEncryptedContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemImageContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemRedactedContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemTextBasedContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemUnknownContent
+import io.element.android.features.messages.timeline.model.virtual.TimelineItemLoadingModel
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.utils.PairCombinedPreviewParameter
@@ -158,8 +159,10 @@ fun TimelineItemRow(
     onLongClick: (TimelineItem.Event) -> Unit,
 ) {
     when (timelineItem) {
-        is TimelineItem.Virtual -> return
-        is TimelineItem.Event -> MessageEventRow(
+        is TimelineItem.Virtual -> TimelineItemVirtualRow(
+            virtual = timelineItem
+        )
+        is TimelineItem.Event -> TimelineItemEventRow(
             event = timelineItem,
             isHighlighted = isHighlighted,
             onClick = { onClick(timelineItem) },
@@ -169,7 +172,18 @@ fun TimelineItemRow(
 }
 
 @Composable
-fun MessageEventRow(
+fun TimelineItemVirtualRow(
+    virtual: TimelineItem.Virtual,
+    modifier: Modifier = Modifier
+) {
+    when (virtual.model) {
+        is TimelineItemLoadingModel -> TimelineLoadingMoreIndicator(modifier)
+        else -> return
+    }
+}
+
+@Composable
+fun TimelineItemEventRow(
     event: TimelineItem.Event,
     isHighlighted: Boolean,
     onClick: () -> Unit,
@@ -338,9 +352,9 @@ internal fun BoxScope.TimelineScrollHelper(
 }
 
 @Composable
-internal fun TimelineLoadingMoreIndicator() {
+internal fun TimelineLoadingMoreIndicator(modifier: Modifier) {
     Box(
-        Modifier
+        modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(8.dp),
@@ -354,7 +368,7 @@ internal fun TimelineLoadingMoreIndicator() {
 }
 
 class MessagesItemGroupPositionToMessagesTimelineItemContentProvider :
-    PairCombinedPreviewParameter<MessagesItemGroupPosition, TimelineItemContent>(
+    PairCombinedPreviewParameter<MessagesItemGroupPosition, TimelineItemEventContent>(
         TimelineItemGroupPositionProvider() to MessagesTimelineItemContentProvider()
     )
 
@@ -363,7 +377,7 @@ class MessagesItemGroupPositionToMessagesTimelineItemContentProvider :
 @Composable
 fun TimelineItemsPreview(
     @PreviewParameter(MessagesTimelineItemContentProvider::class)
-    content: TimelineItemContent
+    content: TimelineItemEventContent
 ) {
     val timelineItems = persistentListOf(
         // 3 items (First Middle Last) with isMine = false
@@ -410,7 +424,7 @@ fun TimelineItemsPreview(
 
 private fun createMessageEvent(
     isMine: Boolean,
-    content: TimelineItemContent,
+    content: TimelineItemEventContent,
     groupPosition: MessagesItemGroupPosition
 ): TimelineItem {
     return TimelineItem.Event(
