@@ -24,7 +24,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.features.rageshake"
+    namespace = "io.element.android.features.rageshake"
 }
 
 anvil {
@@ -32,14 +32,14 @@ anvil {
 }
 
 dependencies {
-    implementation(project(":libraries:core"))
-    anvil(project(":anvilcodegen"))
-    implementation(project(":libraries:di"))
-    implementation(project(":libraries:architecture"))
-    implementation(project(":anvilannotations"))
-    implementation(project(":libraries:designsystem"))
-    implementation(project(":libraries:elementresources"))
-    implementation(project(":libraries:ui-strings"))
+    anvil(projects.anvilcodegen)
+    implementation(projects.anvilannotations)
+    implementation(projects.libraries.androidutils)
+    implementation(projects.libraries.core)
+    implementation(projects.libraries.architecture)
+    implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.elementresources)
+    implementation(projects.libraries.uiStrings)
     implementation(libs.squareup.seismic)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.coil)

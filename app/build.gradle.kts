@@ -1,5 +1,3 @@
-
-
 /*
  * Copyright (c) 2022 New Vector Ltd
  *
@@ -164,14 +162,14 @@ knit {
 dependencies {
     allLibraries()
     allFeatures()
-    implementation(project(":tests:uitests"))
-    implementation(project(":anvilannotations"))
-    anvil(project(":anvilcodegen"))
+    implementation(projects.tests.uitests)
+    implementation(projects.anvilannotations)
+    anvil(projects.anvilcodegen)
 
     // https://developer.android.com/studio/write/java8-support#library-desugaring-versions
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.2")
     implementation(libs.appyx.core)
-
+    implementation(libs.androidx.splash)
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.activity.compose)

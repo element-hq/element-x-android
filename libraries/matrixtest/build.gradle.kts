@@ -21,10 +21,10 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.libraries.matrix.test"
+    namespace = "io.element.android.libraries.matrix.test"
 }
 
 dependencies {
-    api(project(":libraries:matrix"))
+    api(projects.libraries.matrix)
     api(libs.coroutines.core)
 }

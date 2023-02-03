@@ -23,17 +23,18 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.x.textcomposer"
+    namespace = "io.element.android.libraries.textcomposer"
     buildFeatures {
         viewBinding = true
     }
 }
 
 dependencies {
-    implementation(project(":libraries:elementresources"))
-    implementation(project(":libraries:ui-strings"))
-    implementation(project(":libraries:core"))
-    implementation(project(":libraries:matrix"))
+    implementation(projects.libraries.elementresources)
+    implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.androidutils)
+    implementation(projects.libraries.core)
+    implementation(projects.libraries.matrix)
     implementation(libs.wysiwyg)
     implementation(libs.androidx.constraintlayout)
     implementation("com.google.android.material:material:1.7.0")

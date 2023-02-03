@@ -22,7 +22,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":anvilannotations"))
+    implementation(projects.anvilannotations)
     api(libs.anvil.compiler.api)
     implementation(libs.anvil.compiler.utils)
     implementation("com.squareup:kotlinpoet:1.12.0")

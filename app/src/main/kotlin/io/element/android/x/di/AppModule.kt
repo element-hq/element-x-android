@@ -20,7 +20,10 @@ import android.content.Context
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
-import io.element.android.x.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.SingleIn
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

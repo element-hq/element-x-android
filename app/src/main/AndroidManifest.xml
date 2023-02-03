@@ -31,7 +31,8 @@
         tools:targetApi="33">
         <activity
             android:name=".MainActivity"
-            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:theme="@style/Theme.ElementX.Splash"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"
             tools:ignore="LockedOrientationActivity">
