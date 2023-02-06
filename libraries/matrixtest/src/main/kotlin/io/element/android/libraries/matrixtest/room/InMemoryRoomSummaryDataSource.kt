@@ -23,8 +23,14 @@ import kotlinx.coroutines.flow.StateFlow
 
 class InMemoryRoomSummaryDataSource : RoomSummaryDataSource {
 
+    private val roomSummariesFlow = MutableStateFlow<List<RoomSummary>>(emptyList())
+
+    suspend fun postRoomSummary(roomSummaries: List<RoomSummary>) {
+        roomSummariesFlow.emit(roomSummaries)
+    }
+
     override fun roomSummaries(): StateFlow<List<RoomSummary>> {
-        return MutableStateFlow(emptyList())
+        return roomSummariesFlow
     }
 
     override fun setSlidingSyncRange(range: IntRange) = Unit
