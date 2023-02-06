@@ -33,5 +33,9 @@ class InMemoryRoomSummaryDataSource : RoomSummaryDataSource {
         return roomSummariesFlow
     }
 
-    override fun setSlidingSyncRange(range: IntRange) = Unit
+    var latestSlidingSyncRange: IntRange? = null
+
+    override fun setSlidingSyncRange(range: IntRange) {
+        latestSlidingSyncRange = range
+    }
 }
