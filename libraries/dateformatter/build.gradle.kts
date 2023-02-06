@@ -36,5 +36,8 @@ android {
         implementation(projects.anvilannotations)
         implementation(libs.datetime)
         ksp(libs.showkase.processor)
+
+        testImplementation(libs.test.junit)
+        testImplementation(libs.test.truth)
     }
 }
