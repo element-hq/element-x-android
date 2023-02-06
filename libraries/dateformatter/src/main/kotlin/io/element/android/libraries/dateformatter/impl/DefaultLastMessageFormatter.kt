@@ -36,13 +36,10 @@ import javax.inject.Inject
 import kotlin.math.absoluteValue
 
 @ContributesBinding(AppScope::class)
-class DefaultLastMessageFormatter @Inject constructor() : LastMessageFormatter {
-
-    // TODO Inject in constructor
-    private val clock: Clock = Clock.System
-    // TODO Inject in constructor
-    private val locale: Locale = Locale.getDefault()
-
+class DefaultLastMessageFormatter @Inject constructor(
+    private val clock: Clock,
+    private val locale: Locale,
+) : LastMessageFormatter {
     private val onlyTimeFormatter: DateTimeFormatter by lazy {
         val pattern = DateFormat.getBestDateTimePattern(locale, "HH:mm")
         DateTimeFormatter.ofPattern(pattern)

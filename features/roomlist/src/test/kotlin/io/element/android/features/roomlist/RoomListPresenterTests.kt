@@ -24,7 +24,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roomlist.model.RoomListEvents
 import io.element.android.features.roomlist.model.RoomListRoomSummary
-import io.element.android.libraries.dateformatter.impl.DefaultLastMessageFormatter
+import io.element.android.libraries.dateformatter.LastMessageFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.matrixtest.FakeMatrixClient
@@ -46,7 +46,7 @@ class RoomListPresenterTests {
             FakeMatrixClient(
                 SessionId("sessionId")
             ),
-            DefaultLastMessageFormatter()
+            createDateFormatter()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -64,7 +64,7 @@ class RoomListPresenterTests {
             FakeMatrixClient(
                 SessionId("sessionId")
             ),
-            DefaultLastMessageFormatter()
+            createDateFormatter()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -86,7 +86,7 @@ class RoomListPresenterTests {
                 sessionId = SessionId("sessionId"),
                 roomSummaryDataSource = roomSummaryDataSource
             ),
-            DefaultLastMessageFormatter()
+            createDateFormatter()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -112,7 +112,7 @@ class RoomListPresenterTests {
                 sessionId = SessionId("sessionId"),
                 roomSummaryDataSource = roomSummaryDataSource
             ),
-            DefaultLastMessageFormatter()
+            createDateFormatter()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -143,7 +143,7 @@ class RoomListPresenterTests {
                 sessionId = SessionId("sessionId"),
                 roomSummaryDataSource = roomSummaryDataSource
             ),
-            DefaultLastMessageFormatter()
+            createDateFormatter()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -171,14 +171,22 @@ class RoomListPresenterTests {
             assertThat(roomSummaryDataSource.latestSlidingSyncRange).isEqualTo(IntRange(129, 279))
         }
     }
+
+    private fun createDateFormatter(): LastMessageFormatter {
+        return FakeLastMessageFormatter().apply {
+            givenFormat(A_FORMATTED_DATE)
+        }
+    }
 }
+
+private const val A_FORMATTED_DATE = "formatted_date"
 
 private val aRoomListRoomSummary = RoomListRoomSummary(
     id = A_ROOM_ID_VALUE,
     roomId = A_ROOM_ID,
     name = A_ROOM_NAME,
     hasUnread = true,
-    timestamp = "",
+    timestamp = A_FORMATTED_DATE,
     lastMessage = A_LAST_MESSAGE,
     avatarData = AvatarData(name = A_ROOM_NAME),
     isPlaceholder = false,
