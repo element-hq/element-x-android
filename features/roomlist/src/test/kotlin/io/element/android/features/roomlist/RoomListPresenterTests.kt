@@ -36,7 +36,6 @@ import io.element.android.libraries.matrixtest.room.aRoomSummaryFilled
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import timber.log.Timber
 
 class RoomListPresenterTests {
 
@@ -96,25 +95,53 @@ class RoomListPresenterTests {
             // Room list is loaded with 16 placeholders
             assertThat(withUserState.roomList.size).isEqualTo(16)
             assertThat(withUserState.roomList.all { it.isPlaceholder }).isTrue()
-            val roomSummary = aRoomSummaryFilled()
-            roomSummaryDataSource.postRoomSummary(
-                listOf(roomSummary)
-            )
+            roomSummaryDataSource.postRoomSummary(listOf(aRoomSummaryFilled()))
             skipItems(1)
             val withRoomState = awaitItem()
             assertThat(withRoomState.roomList.size).isEqualTo(1)
-            assertThat(withRoomState.roomList.first()).isEqualTo(
-                RoomListRoomSummary(
-                    id = A_ROOM_ID_VALUE,
-                    roomId = A_ROOM_ID,
-                    name = A_ROOM_NAME,
-                    hasUnread = true,
-                    timestamp = "",
-                    lastMessage = A_LAST_MESSAGE,
-                    avatarData = AvatarData(name = A_ROOM_NAME),
-                    isPlaceholder = false,
-                )
-            )
+            assertThat(withRoomState.roomList.first()).isEqualTo(aRoomListRoomSummary)
+        }
+    }
+
+    @Test
+    fun `present - load 1 room with success and filter rooms`() = runTest {
+        val roomSummaryDataSource = InMemoryRoomSummaryDataSource()
+        val presenter = RoomListPresenter(
+            FakeMatrixClient(
+                sessionId = SessionId("sessionId"),
+                roomSummaryDataSource = roomSummaryDataSource
+            ),
+            LastMessageFormatter()
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            roomSummaryDataSource.postRoomSummary(listOf(aRoomSummaryFilled()))
+            skipItems(3)
+            val loadedState = awaitItem()
+            // Test filtering with result
+            loadedState.eventSink.invoke(RoomListEvents.UpdateFilter(A_ROOM_NAME.substring(0, 3)))
+            val withNotFilteredRoomState = awaitItem()
+            assertThat(withNotFilteredRoomState.filter).isEqualTo(A_ROOM_NAME.substring(0, 3))
+            assertThat(withNotFilteredRoomState.roomList.size).isEqualTo(1)
+            assertThat(withNotFilteredRoomState.roomList.first()).isEqualTo(aRoomListRoomSummary)
+            // Test filtering without result
+            withNotFilteredRoomState.eventSink.invoke(RoomListEvents.UpdateFilter("tada"))
+            skipItems(1) // Filter update
+            val withFilteredRoomState = awaitItem()
+            assertThat(withFilteredRoomState.filter).isEqualTo("tada")
+            assertThat(withFilteredRoomState.roomList.size).isEqualTo(0)
         }
     }
 }
+
+private val aRoomListRoomSummary = RoomListRoomSummary(
+    id = A_ROOM_ID_VALUE,
+    roomId = A_ROOM_ID,
+    name = A_ROOM_NAME,
+    hasUnread = true,
+    timestamp = "",
+    lastMessage = A_LAST_MESSAGE,
+    avatarData = AvatarData(name = A_ROOM_NAME),
+    isPlaceholder = false,
+)
