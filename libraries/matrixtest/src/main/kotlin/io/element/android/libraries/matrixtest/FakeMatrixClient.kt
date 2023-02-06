@@ -28,7 +28,10 @@ import io.element.android.libraries.matrixtest.room.FakeMatrixRoom
 import io.element.android.libraries.matrixtest.room.InMemoryRoomSummaryDataSource
 import org.matrix.rustcomponents.sdk.MediaSource
 
-class FakeMatrixClient(override val sessionId: SessionId) : MatrixClient {
+class FakeMatrixClient(
+    override val sessionId: SessionId,
+    val roomSummaryDataSource: RoomSummaryDataSource = InMemoryRoomSummaryDataSource()
+) : MatrixClient {
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
         return FakeMatrixRoom(roomId)
@@ -39,7 +42,7 @@ class FakeMatrixClient(override val sessionId: SessionId) : MatrixClient {
     override fun stopSync() = Unit
 
     override fun roomSummaryDataSource(): RoomSummaryDataSource {
-        return InMemoryRoomSummaryDataSource()
+        return roomSummaryDataSource
     }
 
     override fun mediaResolver(): MediaResolver {

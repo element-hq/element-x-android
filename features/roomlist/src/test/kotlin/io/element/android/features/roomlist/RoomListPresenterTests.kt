@@ -23,11 +23,20 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roomlist.model.RoomListEvents
+import io.element.android.features.roomlist.model.RoomListRoomSummary
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.matrixtest.FakeMatrixClient
+import io.element.android.libraries.matrixtest.core.A_ROOM_ID
+import io.element.android.libraries.matrixtest.core.A_ROOM_ID_VALUE
+import io.element.android.libraries.matrixtest.room.A_LAST_MESSAGE
+import io.element.android.libraries.matrixtest.room.A_ROOM_NAME
+import io.element.android.libraries.matrixtest.room.InMemoryRoomSummaryDataSource
+import io.element.android.libraries.matrixtest.room.aRoomSummaryFilled
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import timber.log.Timber
 
 class RoomListPresenterTests {
 
@@ -60,12 +69,52 @@ class RoomListPresenterTests {
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
-            var initialState = awaitItem()
+            skipItems(1)
             val withUserState = awaitItem()
             assertThat(withUserState.filter).isEqualTo("")
             withUserState.eventSink.invoke(RoomListEvents.UpdateFilter("t"))
             val withFilterState = awaitItem()
             assertThat(withFilterState.filter).isEqualTo("t")
+        }
+    }
+
+    @Test
+    fun `present - load 1 room with success`() = runTest {
+        val roomSummaryDataSource = InMemoryRoomSummaryDataSource()
+        val presenter = RoomListPresenter(
+            FakeMatrixClient(
+                sessionId = SessionId("sessionId"),
+                roomSummaryDataSource = roomSummaryDataSource
+            ),
+            LastMessageFormatter()
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val withUserState = awaitItem()
+            // Room list is loaded with 16 placeholders
+            assertThat(withUserState.roomList.size).isEqualTo(16)
+            assertThat(withUserState.roomList.all { it.isPlaceholder }).isTrue()
+            val roomSummary = aRoomSummaryFilled()
+            roomSummaryDataSource.postRoomSummary(
+                listOf(roomSummary)
+            )
+            skipItems(1)
+            val withRoomState = awaitItem()
+            assertThat(withRoomState.roomList.size).isEqualTo(1)
+            assertThat(withRoomState.roomList.first()).isEqualTo(
+                RoomListRoomSummary(
+                    id = A_ROOM_ID_VALUE,
+                    roomId = A_ROOM_ID,
+                    name = A_ROOM_NAME,
+                    hasUnread = true,
+                    timestamp = "",
+                    lastMessage = A_LAST_MESSAGE,
+                    avatarData = AvatarData(name = A_ROOM_NAME),
+                    isPlaceholder = false,
+                )
+            )
         }
     }
 }
