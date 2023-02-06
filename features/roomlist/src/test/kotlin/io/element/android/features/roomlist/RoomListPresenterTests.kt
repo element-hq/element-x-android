@@ -133,6 +133,43 @@ class RoomListPresenterTests {
             assertThat(withFilteredRoomState.roomList.size).isEqualTo(0)
         }
     }
+
+    @Test
+    fun `present - update visible range`() = runTest {
+        val roomSummaryDataSource = InMemoryRoomSummaryDataSource()
+        val presenter = RoomListPresenter(
+            FakeMatrixClient(
+                sessionId = SessionId("sessionId"),
+                roomSummaryDataSource = roomSummaryDataSource
+            ),
+            LastMessageFormatter()
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            roomSummaryDataSource.postRoomSummary(listOf(aRoomSummaryFilled()))
+            skipItems(3)
+            val loadedState = awaitItem()
+            // check initial value
+            assertThat(roomSummaryDataSource.latestSlidingSyncRange).isNull()
+            // Test empty range
+            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(1, 0)))
+            assertThat(roomSummaryDataSource.latestSlidingSyncRange).isNull()
+            // Update visible range and check that range is transmitted to the SDK after computation
+            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(0, 0)))
+            assertThat(roomSummaryDataSource.latestSlidingSyncRange).isEqualTo(IntRange(0, 20))
+            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(0, 1)))
+            assertThat(roomSummaryDataSource.latestSlidingSyncRange).isEqualTo(IntRange(0, 21))
+            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(19, 29)))
+            assertThat(roomSummaryDataSource.latestSlidingSyncRange).isEqualTo(IntRange(0, 49))
+            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(49, 59)))
+            assertThat(roomSummaryDataSource.latestSlidingSyncRange).isEqualTo(IntRange(29, 79))
+            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(149, 159)))
+            assertThat(roomSummaryDataSource.latestSlidingSyncRange).isEqualTo(IntRange(129, 179))
+            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(149, 259)))
+            assertThat(roomSummaryDataSource.latestSlidingSyncRange).isEqualTo(IntRange(129, 279))
+        }
+    }
 }
 
 private val aRoomListRoomSummary = RoomListRoomSummary(
