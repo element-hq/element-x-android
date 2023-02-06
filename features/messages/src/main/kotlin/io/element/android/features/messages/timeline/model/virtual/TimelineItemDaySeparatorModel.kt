@@ -17,5 +17,5 @@
 package io.element.android.features.messages.timeline.model.virtual
 
 data class TimelineItemDaySeparatorModel(
-    val day: String
+    val formattedDate: String
 ) : TimelineItemVirtualModel

@@ -39,7 +39,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -65,6 +64,8 @@ import io.element.android.features.messages.timeline.components.TimelineItemReac
 import io.element.android.features.messages.timeline.components.TimelineItemRedactedView
 import io.element.android.features.messages.timeline.components.TimelineItemTextView
 import io.element.android.features.messages.timeline.components.TimelineItemUnknownView
+import io.element.android.features.messages.timeline.components.virtual.TimelineItemDaySeparatorView
+import io.element.android.features.messages.timeline.components.virtual.TimelineLoadingMoreIndicator
 import io.element.android.features.messages.timeline.model.AggregatedReaction
 import io.element.android.features.messages.timeline.model.MessagesItemGroupPosition
 import io.element.android.features.messages.timeline.model.TimelineItem
@@ -77,6 +78,7 @@ import io.element.android.features.messages.timeline.model.event.TimelineItemIma
 import io.element.android.features.messages.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.timeline.model.event.TimelineItemUnknownContent
+import io.element.android.features.messages.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.features.messages.timeline.model.virtual.TimelineItemLoadingModel
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -178,6 +180,7 @@ fun TimelineItemVirtualRow(
 ) {
     when (virtual.model) {
         is TimelineItemLoadingModel -> TimelineLoadingMoreIndicator(modifier)
+        is TimelineItemDaySeparatorModel -> TimelineItemDaySeparatorView(virtual.model, modifier)
         else -> return
     }
 }
@@ -348,22 +351,6 @@ internal fun BoxScope.TimelineScrollHelper(
         ) {
             Icon(Icons.Default.ArrowDownward, "")
         }
-    }
-}
-
-@Composable
-internal fun TimelineLoadingMoreIndicator(modifier: Modifier) {
-    Box(
-        modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(8.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        CircularProgressIndicator(
-            strokeWidth = 2.dp,
-            color = MaterialTheme.colorScheme.primary
-        )
     }
 }
 
