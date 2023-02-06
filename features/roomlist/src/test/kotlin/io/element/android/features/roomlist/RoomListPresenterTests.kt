@@ -43,7 +43,7 @@ class RoomListPresenterTests {
             val initialState = awaitItem()
             assertThat(initialState.matrixUser).isNull()
             val withUserState = awaitItem()
-            assertThat(withUserState).isNotNull()
+            assertThat(withUserState.matrixUser).isNotNull()
         }
     }
 }
