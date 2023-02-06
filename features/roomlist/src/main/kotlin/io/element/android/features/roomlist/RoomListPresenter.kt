@@ -57,7 +57,6 @@ class RoomListPresenter @Inject constructor(
             mutableStateOf(null)
         }
         var filter by rememberSaveable { mutableStateOf("") }
-        val isLoginOut = rememberSaveable { mutableStateOf(false) }
         val roomSummaries by client
             .roomSummaryDataSource()
             .roomSummaries()
@@ -86,7 +85,6 @@ class RoomListPresenter @Inject constructor(
             matrixUser = matrixUser.value,
             roomList = filteredRoomSummaries.value,
             filter = filter,
-            isLoginOut = isLoginOut.value,
             eventSink = ::handleEvents
         )
     }

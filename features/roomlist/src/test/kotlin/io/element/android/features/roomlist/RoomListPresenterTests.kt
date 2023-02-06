@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package io.element.android.features.roomlist
 
 import app.cash.molecule.RecompositionClock
@@ -22,6 +24,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.matrixtest.FakeMatrixClient
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -29,7 +32,6 @@ class RoomListPresenterTests {
 
     @Test
     fun `present - should start with no user and then load user with success`() = runTest {
-
         val presenter = RoomListPresenter(
             FakeMatrixClient(
                 SessionId("sessionId")
