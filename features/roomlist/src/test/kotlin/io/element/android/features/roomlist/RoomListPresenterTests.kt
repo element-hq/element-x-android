@@ -24,6 +24,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roomlist.model.RoomListEvents
 import io.element.android.features.roomlist.model.RoomListRoomSummary
+import io.element.android.libraries.dateformatter.impl.DefaultLastMessageFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.matrixtest.FakeMatrixClient
@@ -45,7 +46,7 @@ class RoomListPresenterTests {
             FakeMatrixClient(
                 SessionId("sessionId")
             ),
-            LastMessageFormatter()
+            DefaultLastMessageFormatter()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -63,7 +64,7 @@ class RoomListPresenterTests {
             FakeMatrixClient(
                 SessionId("sessionId")
             ),
-            LastMessageFormatter()
+            DefaultLastMessageFormatter()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -85,7 +86,7 @@ class RoomListPresenterTests {
                 sessionId = SessionId("sessionId"),
                 roomSummaryDataSource = roomSummaryDataSource
             ),
-            LastMessageFormatter()
+            DefaultLastMessageFormatter()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -111,7 +112,7 @@ class RoomListPresenterTests {
                 sessionId = SessionId("sessionId"),
                 roomSummaryDataSource = roomSummaryDataSource
             ),
-            LastMessageFormatter()
+            DefaultLastMessageFormatter()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -142,7 +143,7 @@ class RoomListPresenterTests {
                 sessionId = SessionId("sessionId"),
                 roomSummaryDataSource = roomSummaryDataSource
             ),
-            LastMessageFormatter()
+            DefaultLastMessageFormatter()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
