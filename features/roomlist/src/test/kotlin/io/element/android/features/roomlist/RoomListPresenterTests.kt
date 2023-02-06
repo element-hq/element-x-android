@@ -22,6 +22,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.roomlist.model.RoomListEvents
 import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.matrixtest.FakeMatrixClient
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,7 +36,8 @@ class RoomListPresenterTests {
         val presenter = RoomListPresenter(
             FakeMatrixClient(
                 SessionId("sessionId")
-            ), LastMessageFormatter()
+            ),
+            LastMessageFormatter()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -44,6 +46,26 @@ class RoomListPresenterTests {
             assertThat(initialState.matrixUser).isNull()
             val withUserState = awaitItem()
             assertThat(withUserState.matrixUser).isNotNull()
+        }
+    }
+
+    @Test
+    fun `present - should filter room with success`() = runTest {
+        val presenter = RoomListPresenter(
+            FakeMatrixClient(
+                SessionId("sessionId")
+            ),
+            LastMessageFormatter()
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            var initialState = awaitItem()
+            val withUserState = awaitItem()
+            assertThat(withUserState.filter).isEqualTo("")
+            withUserState.eventSink.invoke(RoomListEvents.UpdateFilter("t"))
+            val withFilterState = awaitItem()
+            assertThat(withFilterState.filter).isEqualTo("t")
         }
     }
 }
