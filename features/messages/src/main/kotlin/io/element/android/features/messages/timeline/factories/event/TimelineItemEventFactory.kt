@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.core.EventId
 import io.element.android.libraries.matrix.room.MatrixRoom
 import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
 import kotlinx.collections.immutable.toImmutableList
+import org.matrix.rustcomponents.sdk.ProfileTimelineDetails
 import javax.inject.Inject
 
 class TimelineItemEventFactory @Inject constructor(
@@ -41,8 +42,22 @@ class TimelineItemEventFactory @Inject constructor(
         val currentSender = currentTimelineItem.event.sender()
         val groupPosition =
             computeGroupPosition(currentTimelineItem, timelineItems, index)
-        val senderDisplayName = room.userDisplayName(currentSender).getOrNull()
-        val senderAvatarUrl = room.userAvatarUrl(currentSender).getOrNull()
+        val senderDisplayName: String?
+        val senderAvatarUrl: String?
+
+        when (val senderProfile = currentTimelineItem.event.senderProfile()) {
+            ProfileTimelineDetails.Unavailable,
+            ProfileTimelineDetails.Pending,
+            is ProfileTimelineDetails.Error -> {
+                senderDisplayName = null
+                senderAvatarUrl = null
+            }
+            is ProfileTimelineDetails.Ready -> {
+                senderDisplayName = senderProfile.displayName
+                senderAvatarUrl = senderProfile.avatarUrl
+            }
+        }
+
         val senderAvatarData = AvatarData(
             name = senderDisplayName ?: currentSender,
             url = senderAvatarUrl,
