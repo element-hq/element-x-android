@@ -41,17 +41,17 @@ class DefaultLastMessageFormatter @Inject constructor(
     private val locale: Locale,
 ) : LastMessageFormatter {
     private val onlyTimeFormatter: DateTimeFormatter by lazy {
-        val pattern = DateFormat.getBestDateTimePattern(locale, "HH:mm")
+        val pattern = DateFormat.getBestDateTimePattern(locale, "HH:mm") ?: "HH:mm"
         DateTimeFormatter.ofPattern(pattern)
     }
 
     private val dateWithMonthFormatter: DateTimeFormatter by lazy {
-        val pattern = DateFormat.getBestDateTimePattern(locale, "d MMM")
+        val pattern = DateFormat.getBestDateTimePattern(locale, "d MMM") ?: "d MMM"
         DateTimeFormatter.ofPattern(pattern)
     }
 
     private val dateWithYearFormatter: DateTimeFormatter by lazy {
-        val pattern = DateFormat.getBestDateTimePattern(locale, "dd.MM.yyyy")
+        val pattern = DateFormat.getBestDateTimePattern(locale, "dd.MM.yyyy") ?: "dd.MM.yyyy"
         DateTimeFormatter.ofPattern(pattern)
     }
 
@@ -100,6 +100,6 @@ class DefaultLastMessageFormatter @Inject constructor(
             clock.now().toEpochMilliseconds(),
             DateUtils.DAY_IN_MILLIS,
             DateUtils.FORMAT_SHOW_WEEKDAY
-        ).toString()
+        )?.toString() ?: ""
     }
 }
