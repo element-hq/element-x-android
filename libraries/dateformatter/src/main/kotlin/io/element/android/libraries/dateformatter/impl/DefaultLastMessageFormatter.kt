@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist
+package io.element.android.libraries.dateformatter.impl
 
 import android.text.format.DateFormat
 import android.text.format.DateUtils
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.dateformatter.LastMessageFormatter
+import io.element.android.libraries.di.AppScope
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
@@ -32,9 +35,12 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.absoluteValue
 
-class LastMessageFormatter @Inject constructor() {
+@ContributesBinding(AppScope::class)
+class DefaultLastMessageFormatter @Inject constructor() : LastMessageFormatter {
 
+    // TODO Inject in constructor
     private val clock: Clock = Clock.System
+    // TODO Inject in constructor
     private val locale: Locale = Locale.getDefault()
 
     private val onlyTimeFormatter: DateTimeFormatter by lazy {
@@ -52,7 +58,7 @@ class LastMessageFormatter @Inject constructor() {
         DateTimeFormatter.ofPattern(pattern)
     }
 
-    fun format(timestamp: Long?): String {
+    override fun format(timestamp: Long?): String {
         if (timestamp == null) return ""
         val now: Instant = clock.now()
         val tsInstant = Instant.fromEpochMilliseconds(timestamp)
