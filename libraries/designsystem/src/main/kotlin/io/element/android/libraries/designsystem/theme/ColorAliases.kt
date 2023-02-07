@@ -25,6 +25,7 @@ import io.element.android.libraries.designsystem.SystemGrey6Light
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.previews.ColorListPreview
+import kotlinx.collections.immutable.persistentMapOf
 
 /**
  * Room list.
@@ -57,7 +58,7 @@ private fun ContentToPreview() {
     ColorListPreview(
         backgroundColor = Color.Black,
         foregroundColor = Color.White,
-        colors = mapOf(
+        colors = persistentMapOf(
             "roomListRoomName" to MaterialTheme.roomListRoomName(),
             "roomListRoomMessage" to MaterialTheme.roomListRoomMessage(),
             "roomListRoomMessageDate" to MaterialTheme.roomListRoomMessageDate(),
