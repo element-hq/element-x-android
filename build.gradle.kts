@@ -174,4 +174,35 @@ koverMerged {
             )
         }
     }
+
+    // Run ./gradlew koverMergedVerify to check the rules.
+    verify {
+        // Does not seems to work, so also run the task manually on the workflow.
+        onCheck.set(true)
+        // General rule: minimum code coverage.
+        rule {
+            name = "Global minimum code coverage."
+            target = kotlinx.kover.api.VerificationTarget.ALL
+            bound {
+                minValue = 35
+                // Setting a max value, so that if coverage is bigger, it means that we have to change minValue.
+                maxValue = 40
+                counter = kotlinx.kover.api.CounterType.LINE
+                valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
+            }
+        }
+        // Rule to ensure that coverage of Presenters is sufficient.
+        rule {
+            name = "Check code coverage of presenters"
+            target = kotlinx.kover.api.VerificationTarget.CLASS
+            overrideClassFilter {
+                includes += "*Presenter"
+            }
+            bound {
+                minValue = 80
+                counter = kotlinx.kover.api.CounterType.LINE
+                valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
+            }
+        }
+    }
 }
