@@ -37,7 +37,7 @@ jobs:
         with:
           name: kover-report
           path: |
-            */build/reports/kover/merged/verification/errors.txt
+            **/kover/merged/verification/errors.txt
       - name: Prepare Danger
         if: always()
         run: |
