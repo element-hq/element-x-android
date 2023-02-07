@@ -22,7 +22,6 @@ import io.element.android.features.messages.timeline.model.TimelineItem
 import io.element.android.features.messages.timeline.model.TimelineItemReactions
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.matrix.core.EventId
 import io.element.android.libraries.matrix.room.MatrixRoom
 import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
 import kotlinx.collections.immutable.toImmutableList
@@ -64,7 +63,8 @@ class TimelineItemEventFactory @Inject constructor(
             size = AvatarSize.SMALL
         )
         return TimelineItem.Event(
-            id = EventId(currentTimelineItem.uniqueId),
+            id = currentTimelineItem.uniqueId,
+            eventId = currentTimelineItem.eventId,
             senderId = currentSender,
             senderDisplayName = senderDisplayName,
             senderAvatar = senderAvatarData,

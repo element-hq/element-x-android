@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.timeline
 
+import io.element.android.libraries.matrix.core.EventId
 import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.TimelineItem
 import org.matrix.rustcomponents.sdk.VirtualTimelineItem
@@ -23,6 +24,7 @@ import org.matrix.rustcomponents.sdk.VirtualTimelineItem
 sealed interface MatrixTimelineItem {
     data class Event(val event: EventTimelineItem) : MatrixTimelineItem {
         val uniqueId: String = event.uniqueIdentifier()
+        val eventId: EventId? = event.eventId()?.let { EventId(it) }
     }
 
     data class Virtual(val virtual: VirtualTimelineItem) : MatrixTimelineItem

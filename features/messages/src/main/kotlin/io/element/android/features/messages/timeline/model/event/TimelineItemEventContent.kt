@@ -16,9 +16,11 @@
 
 package io.element.android.features.messages.timeline.model.event
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import org.matrix.rustcomponents.sdk.EncryptedMessage
 
+@Immutable
 sealed interface TimelineItemEventContent
 
 class MessagesTimelineItemContentProvider : PreviewParameterProvider<TimelineItemEventContent> {

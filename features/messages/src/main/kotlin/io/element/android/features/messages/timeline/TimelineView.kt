@@ -141,12 +141,13 @@ fun TimelineView(
 
 private fun TimelineItem.key(): String {
     return when (this) {
-        is TimelineItem.Event -> id.value
+        is TimelineItem.Event -> id
         is TimelineItem.Virtual -> id
     }
 }
 
 private fun TimelineItem.contentType(): Int {
+    // Todo optimize for each subtype
     return when (this) {
         is TimelineItem.Event -> 0
         is TimelineItem.Virtual -> 1
@@ -415,7 +416,7 @@ private fun createMessageEvent(
     groupPosition: MessagesItemGroupPosition
 ): TimelineItem {
     return TimelineItem.Event(
-        id = EventId(Math.random().toString()),
+        id = Math.random().toString(),
         senderId = "senderId",
         senderAvatar = AvatarData("sender"),
         content = content,

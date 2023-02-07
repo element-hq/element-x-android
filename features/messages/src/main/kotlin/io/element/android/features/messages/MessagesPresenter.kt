@@ -111,12 +111,14 @@ class MessagesPresenter @Inject constructor(
     }
 
     private suspend fun handleActionRedact(event: TimelineItem.Event) {
-        room.redactEvent(event.id)
+        if (event.eventId == null) return
+        room.redactEvent(event.eventId)
     }
 
     private fun handleActionEdit(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
+        if (targetEvent.eventId == null) return
         val composerMode = MessageComposerMode.Edit(
-            targetEvent.id,
+            targetEvent.eventId,
             (targetEvent.content as? TimelineItemTextBasedContent)?.body.orEmpty()
         )
         composerState.eventSink(
@@ -125,7 +127,8 @@ class MessagesPresenter @Inject constructor(
     }
 
     private fun handleActionReply(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
-        val composerMode = MessageComposerMode.Reply(targetEvent.safeSenderName, targetEvent.id, "")
+        if (targetEvent.eventId == null) return
+        val composerMode = MessageComposerMode.Reply(targetEvent.safeSenderName, targetEvent.eventId, "")
         composerState.eventSink(
             MessageComposerEvents.SetMode(composerMode)
         )
