@@ -19,6 +19,7 @@ package io.element.android.libraries.dateformatter.impl
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.dateformatter.LastMessageFormatter
 import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
 import org.junit.Test
 import java.util.Locale
 
@@ -43,7 +44,7 @@ class DefaultLastMessageFormatterTest {
         val now = "1980-04-06T18:35:24.00Z"
         val dat = "1980-04-06T18:35:24.00Z"
         val formatter = createFormatter(now)
-        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("20:35")
+        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("18:35")
     }
 
     @Test
@@ -51,7 +52,7 @@ class DefaultLastMessageFormatterTest {
         val now = "1980-04-06T18:35:24.00Z"
         val dat = "1980-04-06T18:35:23.00Z"
         val formatter = createFormatter(now)
-        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("20:35")
+        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("18:35")
     }
 
     @Test
@@ -59,7 +60,7 @@ class DefaultLastMessageFormatterTest {
         val now = "1980-04-06T18:35:24.00Z"
         val dat = "1980-04-06T18:34:24.00Z"
         val formatter = createFormatter(now)
-        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("20:34")
+        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("18:34")
     }
 
     @Test
@@ -67,7 +68,7 @@ class DefaultLastMessageFormatterTest {
         val now = "1980-04-06T18:35:24.00Z"
         val dat = "1980-04-06T17:35:24.00Z"
         val formatter = createFormatter(now)
-        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("19:35")
+        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("17:35")
     }
 
     @Test
@@ -100,6 +101,6 @@ class DefaultLastMessageFormatterTest {
      */
     private fun createFormatter(@Suppress("SameParameterValue") currentDate: String): LastMessageFormatter {
         val clock = FakeClock().also { it.givenInstant(Instant.parse(currentDate)) }
-        return DefaultLastMessageFormatter(clock, Locale.US)
+        return DefaultLastMessageFormatter(clock, Locale.US, TimeZone.UTC)
     }
 }

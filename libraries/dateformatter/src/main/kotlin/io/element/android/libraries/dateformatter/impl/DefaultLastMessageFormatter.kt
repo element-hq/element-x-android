@@ -39,6 +39,7 @@ import kotlin.math.absoluteValue
 class DefaultLastMessageFormatter @Inject constructor(
     private val clock: Clock,
     private val locale: Locale,
+    private val timezone: TimeZone,
 ) : LastMessageFormatter {
     private val onlyTimeFormatter: DateTimeFormatter by lazy {
         val pattern = DateFormat.getBestDateTimePattern(locale, "HH:mm") ?: "HH:mm"
@@ -59,8 +60,8 @@ class DefaultLastMessageFormatter @Inject constructor(
         if (timestamp == null) return ""
         val now: Instant = clock.now()
         val tsInstant = Instant.fromEpochMilliseconds(timestamp)
-        val nowDateTime = now.toLocalDateTime(TimeZone.currentSystemDefault())
-        val tsDateTime = tsInstant.toLocalDateTime(TimeZone.currentSystemDefault())
+        val nowDateTime = now.toLocalDateTime(timezone)
+        val tsDateTime = tsInstant.toLocalDateTime(timezone)
         val isSameDay = nowDateTime.date == tsDateTime.date
         return when {
             isSameDay -> {
@@ -80,7 +81,7 @@ class DefaultLastMessageFormatter @Inject constructor(
         return if (period.years.absoluteValue >= 1) {
             formatDateWithYear(date)
         } else if (period.days.absoluteValue < 2 && period.months.absoluteValue < 1) {
-            getRelativeDay(date.toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds())
+            getRelativeDay(date.toInstant(timezone).toEpochMilliseconds())
         } else {
             formatDateWithMonth(date)
         }
