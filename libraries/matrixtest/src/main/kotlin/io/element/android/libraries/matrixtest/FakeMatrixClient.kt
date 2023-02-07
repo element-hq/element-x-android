@@ -26,12 +26,15 @@ import io.element.android.libraries.matrix.room.RoomSummaryDataSource
 import io.element.android.libraries.matrixtest.media.FakeMediaResolver
 import io.element.android.libraries.matrixtest.room.FakeMatrixRoom
 import io.element.android.libraries.matrixtest.room.FakeRoomSummaryDataSource
+import kotlinx.coroutines.delay
 import org.matrix.rustcomponents.sdk.MediaSource
 
 class FakeMatrixClient(
     override val sessionId: SessionId,
     val roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource()
 ) : MatrixClient {
+
+    private var logoutFailure: Throwable? = null
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
         return FakeMatrixRoom(roomId)
@@ -49,7 +52,14 @@ class FakeMatrixClient(
         return FakeMediaResolver()
     }
 
-    override suspend fun logout() = Unit
+    fun givenLogoutError(failure: Throwable) {
+        logoutFailure = failure
+    }
+
+    override suspend fun logout() {
+        delay(100)
+        logoutFailure?.let { throw it }
+    }
 
     override fun userId(): UserId = UserId("")
 
