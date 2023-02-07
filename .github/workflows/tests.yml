@@ -36,7 +36,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: screenshot-results
+          name: tests-and-screenshot-tests-results
           path: |
             **/out/failures/
             **/build/reports/tests/*UnitTest/
