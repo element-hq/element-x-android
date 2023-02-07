@@ -14,19 +14,28 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package io.element.android.features.messages
 
-import org.junit.Assert.assertEquals
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class ExampleUnitTest {
+class MessagePresenterTest {
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun `present - initial state`() = runTest {
+        /*
+        TO BE COMPLETED
+        val presenter = MessagesPresenter(
+            FakeMatrixClient(SessionId("sessionId")),
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.logoutAction).isEqualTo(Async.Uninitialized)
+        }
+         */
     }
 }
