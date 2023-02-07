@@ -21,6 +21,7 @@ import dagger.Module
 import dagger.Provides
 import io.element.android.libraries.di.AppScope
 import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
 import java.util.*
 
 @Module
@@ -31,4 +32,7 @@ object DateFormatterModule {
 
     @Provides
     fun providesLocale(): Locale = Locale.getDefault()
+
+    @Provides
+    fun providesTimezone(): TimeZone = TimeZone.currentSystemDefault()
 }
