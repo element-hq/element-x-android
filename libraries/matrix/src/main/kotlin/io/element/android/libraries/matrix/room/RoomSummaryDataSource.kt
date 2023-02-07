@@ -20,16 +20,13 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.sync.roomListDiff
 import io.element.android.libraries.matrix.sync.state
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.RoomListEntry
@@ -62,7 +59,7 @@ internal class RustRoomSummaryDataSource(
     private val roomSummaries = MutableStateFlow<List<RoomSummary>>(emptyList())
     private val state = MutableStateFlow(SlidingSyncState.COLD)
 
-    fun startSync() {
+    fun init() {
         coroutineScope.launch {
             updateRoomSummaries {
                 addAll(
@@ -89,10 +86,6 @@ internal class RustRoomSummaryDataSource(
                 Timber.v("New sliding sync state: $slidingSyncState")
                 state.value = slidingSyncState
             }.launchIn(coroutineScope)
-    }
-
-    fun stopSync() {
-        coroutineScope.coroutineContext.cancelChildren()
     }
 
     override fun close() {
