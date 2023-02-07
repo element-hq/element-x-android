@@ -155,6 +155,7 @@ allprojects {
     apply(plugin = "kover")
 }
 
+// https://kotlin.github.io/kotlinx-kover/
 // Run `./gradlew koverMergedHtmlReport` to get report at ./build/reports/kover
 // Run `./gradlew koverMergedReport` to also get XML report
 koverMerged {
