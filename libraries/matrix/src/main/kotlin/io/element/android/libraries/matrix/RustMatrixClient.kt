@@ -83,7 +83,7 @@ internal class RustMatrixClient internal constructor(
     }
 
     private val visibleRoomsView = SlidingSyncViewBuilder()
-        .timelineLimit(limit = 10u)
+        .timelineLimit(limit = 1u)
         .requiredState(
             requiredState = listOf(
                 RequiredState(key = "m.room.avatar", value = ""),
@@ -121,10 +121,13 @@ internal class RustMatrixClient internal constructor(
 
     init {
         client.setDelegate(clientDelegate)
+        roomSummaryDataSource.init()
+        slidingSync.setObserver(slidingSyncObserverProxy)
     }
 
     private fun onRestartSync() {
-        slidingSyncObserverToken = slidingSync.sync()
+        stopSync()
+        startSync()
     }
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
@@ -139,28 +142,26 @@ internal class RustMatrixClient internal constructor(
         )
     }
 
+    override fun roomSummaryDataSource(): RoomSummaryDataSource = roomSummaryDataSource
+
+    override fun mediaResolver(): MediaResolver = mediaResolver
+
     override fun startSync() {
+        if (client.isSoftLogout()) return
         if (isSyncing.compareAndSet(false, true)) {
-            roomSummaryDataSource.startSync()
-            slidingSync.setObserver(slidingSyncObserverProxy)
             slidingSyncObserverToken = slidingSync.sync()
         }
     }
 
     override fun stopSync() {
         if (isSyncing.compareAndSet(true, false)) {
-            roomSummaryDataSource.stopSync()
-            slidingSync.setObserver(null)
             slidingSyncObserverToken?.cancel()
         }
     }
 
-    override fun roomSummaryDataSource(): RoomSummaryDataSource = roomSummaryDataSource
-
-    override fun mediaResolver(): MediaResolver = mediaResolver
-
     override fun close() {
         stopSync()
+        slidingSync.setObserver(null)
         roomSummaryDataSource.close()
         client.setDelegate(null)
     }
