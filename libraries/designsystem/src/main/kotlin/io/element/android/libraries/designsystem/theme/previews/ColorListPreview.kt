@@ -25,12 +25,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import kotlinx.collections.immutable.ImmutableMap
 
 @Composable
 internal fun ColorListPreview(
     backgroundColor: Color,
     foregroundColor: Color,
-    colors: Map<String, Color>,
+    colors: ImmutableMap<String, Color>,
     modifier: Modifier = Modifier,
 ) {
     Column(

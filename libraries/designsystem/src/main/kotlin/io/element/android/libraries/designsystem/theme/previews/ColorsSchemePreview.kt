@@ -20,6 +20,7 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import kotlinx.collections.immutable.persistentMapOf
 
 @Composable
 internal fun ColorsSchemePreview(
@@ -28,7 +29,7 @@ internal fun ColorsSchemePreview(
     colorScheme: ColorScheme,
     modifier: Modifier = Modifier,
 ) {
-    val colors = mapOf(
+    val colors = persistentMapOf(
         "primary" to colorScheme.primary,
         "onPrimary" to colorScheme.onPrimary,
         "primaryContainer" to colorScheme.primaryContainer,
