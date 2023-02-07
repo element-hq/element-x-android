@@ -30,7 +30,8 @@ class FakeMatrixRoom(
     override val bestName: String = "",
     override val displayName: String = "",
     override val topic: String? = null,
-    override val avatarUrl: String? = null
+    override val avatarUrl: String? = null,
+    private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
 ) : MatrixRoom {
 
     override fun syncUpdateFlow(): Flow<Long> {
@@ -38,7 +39,7 @@ class FakeMatrixRoom(
     }
 
     override fun timeline(): MatrixTimeline {
-        return FakeMatrixTimeline()
+        return matrixTimeline
     }
 
     override suspend fun userDisplayName(userId: String): Result<String?> {
