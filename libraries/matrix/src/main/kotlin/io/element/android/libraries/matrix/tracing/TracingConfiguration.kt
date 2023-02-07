@@ -16,32 +16,41 @@
 
 package io.element.android.libraries.matrix.tracing
 
+import timber.log.Timber
+
 data class TracingConfiguration(
     val overrides: Map<Target, LogLevel> = emptyMap()
 ) {
 
-    private val targets = mapOf(
-        Target.Common to LogLevel.Warn,
-        Target.Hyper to LogLevel.Warn,
-        Target.Sled to LogLevel.Warn,
-        Target.MatrixSdk.Sled to LogLevel.Warn,
+    // Order should matters
+    private val targets = mutableMapOf(
         Target.MatrixSdk.HttpClient to LogLevel.Trace,
         Target.MatrixSdk.SlidingSync to LogLevel.Trace,
-        Target.MatrixSdk.BaseSlidingSync to LogLevel.Trace
+        Target.MatrixSdk.BaseSlidingSync to LogLevel.Trace,
+        Target.MatrixSdk.Root to LogLevel.Warn,
+        Target.MatrixSdk.Sled to LogLevel.Warn,
+        Target.Hyper to LogLevel.Warn,
+        Target.Sled to LogLevel.Warn,
+        Target.Common to LogLevel.Warn,
     )
 
     val filter: String
         get() {
-            val newTargets = HashMap(targets)
             overrides.forEach { (target, logLevel) ->
-                newTargets[target] = logLevel
+                targets[target] = logLevel
             }
-            return newTargets.map { "${it.key.filter}=${it.value.filter}" }.joinToString(separator = ",")
+            return targets.map {
+                if (it.key.filter.isEmpty()) {
+                    it.value.filter
+                } else {
+                    "${it.key.filter}=${it.value.filter}"
+                }
+            }.joinToString(separator = ",")
         }
 }
 
 sealed class Target(open val filter: String) {
-    object Common : Target("common")
+    object Common : Target("")
     object Hyper : Target("hyper")
     object Sled : Target("sled")
     sealed class MatrixSdk(override val filter: String) : Target(filter) {
@@ -64,7 +73,9 @@ sealed class LogLevel(val filter: String) {
 }
 
 fun setupTracing(tracingConfiguration: TracingConfiguration) {
-    org.matrix.rustcomponents.sdk.setupTracing(tracingConfiguration.filter)
+    val filter = tracingConfiguration.filter
+    Timber.v("Tracing config filter = $filter")
+    org.matrix.rustcomponents.sdk.setupTracing(filter)
 }
 
 object TracingConfigurations {
