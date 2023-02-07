@@ -21,7 +21,7 @@ import io.element.android.libraries.matrix.room.RoomSummaryDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class InMemoryRoomSummaryDataSource : RoomSummaryDataSource {
+class FakeRoomSummaryDataSource : RoomSummaryDataSource {
 
     private val roomSummariesFlow = MutableStateFlow<List<RoomSummary>>(emptyList())
 
@@ -34,6 +34,7 @@ class InMemoryRoomSummaryDataSource : RoomSummaryDataSource {
     }
 
     var latestSlidingSyncRange: IntRange? = null
+        private set
 
     override fun setSlidingSyncRange(range: IntRange) {
         latestSlidingSyncRange = range
