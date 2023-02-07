@@ -32,7 +32,7 @@ import io.element.android.libraries.matrixtest.core.A_ROOM_ID
 import io.element.android.libraries.matrixtest.core.A_ROOM_ID_VALUE
 import io.element.android.libraries.matrixtest.room.A_LAST_MESSAGE
 import io.element.android.libraries.matrixtest.room.A_ROOM_NAME
-import io.element.android.libraries.matrixtest.room.InMemoryRoomSummaryDataSource
+import io.element.android.libraries.matrixtest.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrixtest.room.aRoomSummaryFilled
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -80,7 +80,7 @@ class RoomListPresenterTests {
 
     @Test
     fun `present - load 1 room with success`() = runTest {
-        val roomSummaryDataSource = InMemoryRoomSummaryDataSource()
+        val roomSummaryDataSource = FakeRoomSummaryDataSource()
         val presenter = RoomListPresenter(
             FakeMatrixClient(
                 sessionId = SessionId("sessionId"),
@@ -106,7 +106,7 @@ class RoomListPresenterTests {
 
     @Test
     fun `present - load 1 room with success and filter rooms`() = runTest {
-        val roomSummaryDataSource = InMemoryRoomSummaryDataSource()
+        val roomSummaryDataSource = FakeRoomSummaryDataSource()
         val presenter = RoomListPresenter(
             FakeMatrixClient(
                 sessionId = SessionId("sessionId"),
@@ -137,7 +137,7 @@ class RoomListPresenterTests {
 
     @Test
     fun `present - update visible range`() = runTest {
-        val roomSummaryDataSource = InMemoryRoomSummaryDataSource()
+        val roomSummaryDataSource = FakeRoomSummaryDataSource()
         val presenter = RoomListPresenter(
             FakeMatrixClient(
                 sessionId = SessionId("sessionId"),
