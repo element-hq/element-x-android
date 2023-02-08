@@ -23,7 +23,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.core.net.toUri
 import io.element.android.features.rageshake.crash.CrashDataStore
 import io.element.android.features.rageshake.logs.VectorFileLogger
 import io.element.android.features.rageshake.reporter.BugReporter
@@ -73,7 +72,7 @@ class BugReportPresenter @Inject constructor(
     override fun present(): BugReportState {
         val screenshotUri = rememberSaveable {
             mutableStateOf(
-                screenshotHolder.getFile()?.toUri()?.toString()
+                screenshotHolder.getFileUri()
             )
         }
         val crashInfo: String by crashDataStore
@@ -150,6 +149,6 @@ class BugReportPresenter @Inject constructor(
     private fun CoroutineScope.resetAll() = launch {
         screenshotHolder.reset()
         crashDataStore.reset()
-        VectorFileLogger.getFromTimber().reset()
+        VectorFileLogger.getFromTimber()?.reset()
     }
 }

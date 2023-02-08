@@ -18,6 +18,8 @@ package io.element.android.features.rageshake.reporter
 
 import android.content.Context
 import android.os.Build
+import androidx.core.net.toFile
+import androidx.core.net.toUri
 import io.element.android.features.rageshake.R
 import io.element.android.features.rageshake.crash.CrashDataStore
 import io.element.android.features.rageshake.logs.VectorFileLogger
@@ -153,7 +155,7 @@ class DefaultBugReporter @Inject constructor(
                 val gzippedFiles = ArrayList<File>()
 
                 val vectorFileLogger = VectorFileLogger.getFromTimber()
-                if (withDevicesLogs) {
+                if (withDevicesLogs && vectorFileLogger != null) {
                     val files = vectorFileLogger.getLogFiles()
                     files.mapNotNullTo(gzippedFiles) { f ->
                         if (!mIsCancelled) {
@@ -254,7 +256,10 @@ class DefaultBugReporter @Inject constructor(
                     mBugReportFiles.addAll(gzippedFiles)
 
                     if (withScreenshot) {
-                        screenshotHolder.getFile()?.let { screenshotFile ->
+                        screenshotHolder.getFileUri()
+                            ?.toUri()
+                            ?.toFile()
+                            ?.let { screenshotFile ->
                             try {
                                 builder.addFormDataPart(
                                     "file",

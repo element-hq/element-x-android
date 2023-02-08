@@ -43,8 +43,8 @@ class VectorFileLogger(
 ) : Timber.Tree() {
 
     companion object {
-        fun getFromTimber(): VectorFileLogger {
-            return Timber.forest().filterIsInstance<VectorFileLogger>().first()
+        fun getFromTimber(): VectorFileLogger? {
+            return Timber.forest().filterIsInstance<VectorFileLogger>().firstOrNull()
         }
 
         private const val SIZE_20MB = 20 * 1024 * 1024

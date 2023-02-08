@@ -18,6 +18,7 @@ package io.element.android.features.rageshake.screenshot
 
 import android.content.Context
 import android.graphics.Bitmap
+import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.androidutils.bitmap.writeBitmap
 import io.element.android.libraries.androidutils.file.safeDelete
@@ -38,7 +39,12 @@ class DefaultScreenshotHolder @Inject constructor(
         file.writeBitmap(data, Bitmap.CompressFormat.PNG, 85)
     }
 
-    override fun getFile() = file.takeIf { it.exists() && it.length() > 0 }
+    override fun getFileUri(): String? {
+        return file
+            .takeIf { it.exists() && it.length() > 0 }
+            ?.toUri()
+            ?.toString()
+    }
 
     override fun reset() {
         file.safeDelete()
