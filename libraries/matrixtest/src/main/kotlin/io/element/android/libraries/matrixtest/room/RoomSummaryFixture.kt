@@ -22,14 +22,14 @@ import io.element.android.libraries.matrix.room.RoomSummaryDetails
 import io.element.android.libraries.matrixtest.core.A_ROOM_ID
 
 const val A_ROOM_NAME = "aRoomName"
-const val A_LAST_MESSAGE = "Last message"
+const val A_MESSAGE = "Hello world!"
 
 fun aRoomSummaryFilled(
     roomId: RoomId = A_ROOM_ID,
     name: String = A_ROOM_NAME,
     isDirect: Boolean = false,
     avatarURLString: String? = null,
-    lastMessage: CharSequence? = A_LAST_MESSAGE,
+    lastMessage: CharSequence? = A_MESSAGE,
     lastMessageTimestamp: Long? = null,
     unreadNotificationCount: Int = 2,
 ) = RoomSummary.Filled(
@@ -49,7 +49,7 @@ fun aRoomSummaryDetail(
     name: String = A_ROOM_NAME,
     isDirect: Boolean = false,
     avatarURLString: String? = null,
-    lastMessage: CharSequence? = A_LAST_MESSAGE,
+    lastMessage: CharSequence? = A_MESSAGE,
     lastMessageTimestamp: Long? = null,
     unreadNotificationCount: Int = 2,
 ) = RoomSummaryDetails(

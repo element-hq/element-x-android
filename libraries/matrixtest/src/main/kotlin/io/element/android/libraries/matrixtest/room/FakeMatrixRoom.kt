@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.core.RoomId
 import io.element.android.libraries.matrix.room.MatrixRoom
 import io.element.android.libraries.matrix.timeline.MatrixTimeline
 import io.element.android.libraries.matrixtest.timeline.FakeMatrixTimeline
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
@@ -51,7 +52,8 @@ class FakeMatrixRoom(
     }
 
     override suspend fun sendMessage(message: String): Result<Unit> {
-        TODO("Not yet implemented")
+        delay(100)
+        return Result.success(Unit)
     }
 
     override suspend fun editMessage(originalEventId: EventId, message: String): Result<Unit> {
