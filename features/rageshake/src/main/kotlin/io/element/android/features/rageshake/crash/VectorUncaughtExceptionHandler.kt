@@ -26,7 +26,7 @@ import java.io.StringWriter
 class VectorUncaughtExceptionHandler(
     context: Context
 ) : Thread.UncaughtExceptionHandler {
-    private val crashDataStore = CrashDataStore(context)
+    private val crashDataStore = PreferencesCrashDataStore(context)
     private var previousHandler: Thread.UncaughtExceptionHandler? = null
 
     /**
