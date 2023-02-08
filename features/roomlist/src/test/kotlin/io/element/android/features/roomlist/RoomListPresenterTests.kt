@@ -30,7 +30,7 @@ import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.matrixtest.FakeMatrixClient
 import io.element.android.libraries.matrixtest.core.A_ROOM_ID
 import io.element.android.libraries.matrixtest.core.A_ROOM_ID_VALUE
-import io.element.android.libraries.matrixtest.room.A_LAST_MESSAGE
+import io.element.android.libraries.matrixtest.room.A_MESSAGE
 import io.element.android.libraries.matrixtest.room.A_ROOM_NAME
 import io.element.android.libraries.matrixtest.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrixtest.room.aRoomSummaryFilled
@@ -187,7 +187,7 @@ private val aRoomListRoomSummary = RoomListRoomSummary(
     name = A_ROOM_NAME,
     hasUnread = true,
     timestamp = A_FORMATTED_DATE,
-    lastMessage = A_LAST_MESSAGE,
+    lastMessage = A_MESSAGE,
     avatarData = AvatarData(name = A_ROOM_NAME),
     isPlaceholder = false,
 )
