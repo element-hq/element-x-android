@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,27 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login
+package io.element.android.features.rageshake.preferences
 
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import io.element.android.features.rageshake.rageshake.RageShake
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class ExampleUnitTest {
-    @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+const val A_SENSITIVITY = 1f
+
+class FakeRageShake(
+    private var isAvailableValue: Boolean = true
+) : RageShake {
+
+    override fun isAvailable() = isAvailableValue
+
+    override fun start(sensitivity: Float) {
+    }
+
+    override fun stop() {
+    }
+
+    override fun setSensitivity(sensitivity: Float) {
+    }
+
+    override fun setInterceptor(interceptor: (() -> Unit)?) {
     }
 }
