@@ -27,6 +27,7 @@ import androidx.core.net.toUri
 import io.element.android.features.rageshake.crash.CrashDataStore
 import io.element.android.features.rageshake.logs.VectorFileLogger
 import io.element.android.features.rageshake.reporter.BugReporter
+import io.element.android.features.rageshake.reporter.BugReporterListener
 import io.element.android.features.rageshake.reporter.ReportType
 import io.element.android.features.rageshake.screenshot.ScreenshotHolder
 import io.element.android.libraries.architecture.Async
@@ -45,7 +46,7 @@ class BugReportPresenter @Inject constructor(
     private class BugReporterUploadListener(
         private val sendingProgress: MutableState<Float>,
         private val sendingAction: MutableState<Async<Unit>>
-    ) : BugReporter.IMXBugReportListener {
+    ) : BugReporterListener {
 
         override fun onUploadCancelled() {
             sendingProgress.value = 0f
@@ -126,7 +127,11 @@ class BugReportPresenter @Inject constructor(
         formState.value = operation(formState.value)
     }
 
-    private fun CoroutineScope.sendBugReport(formState: BugReportFormState, hasCrashLogs: Boolean, listener: BugReporter.IMXBugReportListener) = launch {
+    private fun CoroutineScope.sendBugReport(
+        formState: BugReportFormState,
+        hasCrashLogs: Boolean,
+        listener: BugReporterListener,
+    ) = launch {
         bugReporter.sendBugReport(
             coroutineScope = this,
             reportType = ReportType.BUG_REPORT,

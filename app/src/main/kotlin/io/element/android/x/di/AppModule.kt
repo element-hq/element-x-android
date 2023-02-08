@@ -20,6 +20,10 @@ import android.content.Context
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import io.element.android.features.rageshake.crash.CrashDataStore
+import io.element.android.features.rageshake.reporter.BugReporter
+import io.element.android.features.rageshake.reporter.DefaultBugReporter
+import io.element.android.features.rageshake.screenshot.ScreenshotHolder
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
@@ -56,6 +60,21 @@ object AppModule {
             computation = Dispatchers.Default,
             main = Dispatchers.Main,
             diffUpdateDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+        )
+    }
+
+    @Provides
+    fun provideBugReporter(
+        @ApplicationContext context: Context,
+        screenshotHolder: ScreenshotHolder,
+        crashDataStore: CrashDataStore,
+        coroutineDispatchers: CoroutineDispatchers,
+    ): BugReporter {
+        return DefaultBugReporter(
+            context = context,
+            screenshotHolder = screenshotHolder,
+            crashDataStore = crashDataStore,
+            coroutineDispatchers = coroutineDispatchers,
         )
     }
 }
