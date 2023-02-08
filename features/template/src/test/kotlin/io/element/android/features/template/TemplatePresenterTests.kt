@@ -21,7 +21,7 @@ package io.element.android.features.template
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -29,15 +29,24 @@ import org.junit.Test
 class TemplatePresenterTests {
 
     @Test
-    fun `present - `() = runTest {
-
+    fun `present - initial state`() = runTest {
         val presenter = TemplatePresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState)
+            assertThat(initialState)
         }
+    }
 
+    @Test
+    fun `present - send event`() = runTest {
+        val presenter = TemplatePresenter()
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(TemplateEvents.MyEvent)
+        }
     }
 }
