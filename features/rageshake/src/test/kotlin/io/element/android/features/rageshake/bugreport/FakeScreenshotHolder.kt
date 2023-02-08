@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.features.rageshake.screenshot
+package io.element.android.features.rageshake.bugreport
 
 import android.graphics.Bitmap
+import io.element.android.features.rageshake.screenshot.ScreenshotHolder
 
-interface ScreenshotHolder {
-    fun writeBitmap(data: Bitmap)
-    fun getFileUri(): String?
-    fun reset()
+const val A_SCREENSHOT_URI = "file://content/uri"
+
+class FakeScreenshotHolder(private val screenshotUri: String? = null) : ScreenshotHolder {
+    override fun writeBitmap(data: Bitmap) = Unit
+
+    override fun getFileUri() = screenshotUri
+
+    override fun reset() = Unit
 }
