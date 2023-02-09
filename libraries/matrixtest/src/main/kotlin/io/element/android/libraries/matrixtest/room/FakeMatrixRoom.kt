@@ -56,12 +56,22 @@ class FakeMatrixRoom(
         return Result.success(Unit)
     }
 
+    var editMessageParameter: String? = null
+        private set
+
     override suspend fun editMessage(originalEventId: EventId, message: String): Result<Unit> {
-        TODO("Not yet implemented")
+        editMessageParameter = message
+        delay(100)
+        return Result.success(Unit)
     }
 
+    var replyMessageParameter: String? = null
+        private set
+
     override suspend fun replyMessage(eventId: EventId, message: String): Result<Unit> {
-        TODO("Not yet implemented")
+        replyMessageParameter = message
+        delay(100)
+        return Result.success(Unit)
     }
 
     override suspend fun redactEvent(eventId: EventId, reason: String?): Result<Unit> {

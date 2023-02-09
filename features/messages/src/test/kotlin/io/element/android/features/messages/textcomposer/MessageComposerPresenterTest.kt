@@ -25,7 +25,9 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.matrixtest.core.A_ROOM_ID
+import io.element.android.libraries.matrixtest.room.ANOTHER_MESSAGE
 import io.element.android.libraries.matrixtest.room.A_MESSAGE
+import io.element.android.libraries.matrixtest.room.A_REPLY
 import io.element.android.libraries.matrixtest.room.FakeMatrixRoom
 import io.element.android.libraries.matrixtest.timeline.AN_EVENT_ID
 import io.element.android.libraries.matrixtest.timeline.A_SENDER_NAME
@@ -183,6 +185,67 @@ class MessageComposerPresenterTest {
         }
     }
 
+    @Test
+    fun `present - edit message`() = runTest {
+        val fakeMatrixRoom = FakeMatrixRoom(A_ROOM_ID)
+        val presenter = MessageComposerPresenter(
+            this,
+            fakeMatrixRoom
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.text).isEqualTo(StableCharSequence(""))
+            val mode = anEditMode()
+            initialState.eventSink.invoke(MessageComposerEvents.SetMode(mode))
+            skipItems(1)
+            val withMessageState = awaitItem()
+            assertThat(withMessageState.mode).isEqualTo(mode)
+            assertThat(withMessageState.text).isEqualTo(StableCharSequence(A_MESSAGE))
+            assertThat(withMessageState.isSendButtonVisible).isTrue()
+            withMessageState.eventSink.invoke(MessageComposerEvents.UpdateText(ANOTHER_MESSAGE))
+            val withEditedMessageState = awaitItem()
+            assertThat(withEditedMessageState.text).isEqualTo(StableCharSequence(ANOTHER_MESSAGE))
+            withEditedMessageState.eventSink.invoke(MessageComposerEvents.SendMessage(ANOTHER_MESSAGE))
+            skipItems(1)
+            val messageSentState = awaitItem()
+            assertThat(messageSentState.text).isEqualTo(StableCharSequence(""))
+            assertThat(messageSentState.isSendButtonVisible).isFalse()
+            assertThat(fakeMatrixRoom.editMessageParameter).isEqualTo(ANOTHER_MESSAGE)
+        }
+    }
+
+    @Test
+    fun `present - reply message`() = runTest {
+        val fakeMatrixRoom = FakeMatrixRoom(A_ROOM_ID)
+        val presenter = MessageComposerPresenter(
+            this,
+            fakeMatrixRoom
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.text).isEqualTo(StableCharSequence(""))
+            val mode = aReplyMode()
+            initialState.eventSink.invoke(MessageComposerEvents.SetMode(mode))
+            var state = awaitItem()
+            assertThat(state.mode).isEqualTo(mode)
+            assertThat(state.text).isEqualTo(StableCharSequence(""))
+            assertThat(state.isSendButtonVisible).isFalse()
+            initialState.eventSink.invoke(MessageComposerEvents.UpdateText(A_REPLY))
+            val withMessageState = awaitItem()
+            assertThat(withMessageState.text).isEqualTo(StableCharSequence(A_REPLY))
+            assertThat(withMessageState.isSendButtonVisible).isTrue()
+            withMessageState.eventSink.invoke(MessageComposerEvents.SendMessage(A_REPLY))
+            skipItems(1)
+            val messageSentState = awaitItem()
+            assertThat(messageSentState.text).isEqualTo(StableCharSequence(""))
+            assertThat(messageSentState.isSendButtonVisible).isFalse()
+            assertThat(fakeMatrixRoom.replyMessageParameter).isEqualTo(A_REPLY)
+        }
+    }
 }
 
 fun anEditMode() = MessageComposerMode.Edit(AN_EVENT_ID, A_MESSAGE)

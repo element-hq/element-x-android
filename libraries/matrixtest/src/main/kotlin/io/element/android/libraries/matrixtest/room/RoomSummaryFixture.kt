@@ -23,6 +23,8 @@ import io.element.android.libraries.matrixtest.core.A_ROOM_ID
 
 const val A_ROOM_NAME = "aRoomName"
 const val A_MESSAGE = "Hello world!"
+const val A_REPLY = "OK, I'll be there!"
+const val ANOTHER_MESSAGE = "Hello universe!"
 
 fun aRoomSummaryFilled(
     roomId: RoomId = A_ROOM_ID,
