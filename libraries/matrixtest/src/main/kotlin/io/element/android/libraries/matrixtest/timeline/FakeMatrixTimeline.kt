@@ -30,10 +30,7 @@ const val AN_EVENT_ID_VALUE = "!anEventId"
 val AN_EVENT_ID = EventId(AN_EVENT_ID_VALUE)
 
 class FakeMatrixTimeline : MatrixTimeline {
-
-    override var callback: MatrixTimeline.Callback?
-        get() = null
-        set(value) {}
+    override var callback: MatrixTimeline.Callback? = null
 
     private var hasMoreToLoadValue: Boolean = true
 
