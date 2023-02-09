@@ -148,7 +148,7 @@ private fun MessageComposerView.setup(isDarkMode: Boolean, composerMode: Message
 
 @PreviewDefaults
 @Composable
-fun TextComposerPreview() = ElementPreview {
+internal fun TextComposerPreview() = ElementPreview {
     TextComposer(
         onSendMessage = {},
         fullscreen = false,

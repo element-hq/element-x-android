@@ -208,7 +208,7 @@ fun BugReportView(
 
 @PreviewDefaults
 @Composable
-fun BugReportViewPreview() {
+internal fun BugReportViewPreview() {
     ElementPreview {
         BugReportView(
             state = BugReportState(),

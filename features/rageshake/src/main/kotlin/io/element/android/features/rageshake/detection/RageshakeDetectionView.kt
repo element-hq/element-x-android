@@ -100,6 +100,6 @@ fun RageshakeDialogContent(
 
 @PreviewDefaults
 @Composable
-fun RageshakeDialogContentPreview() = ElementPreview {
+internal fun RageshakeDialogContentPreview() = ElementPreview {
     RageshakeDialogContent()
 }

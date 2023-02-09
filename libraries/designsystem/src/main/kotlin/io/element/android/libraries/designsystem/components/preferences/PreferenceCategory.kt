@@ -59,7 +59,7 @@ fun PreferenceCategory(
 
 @PreviewDefaults
 @Composable
-fun PreferenceCategoryPreview() = ElementPreview {
+internal fun PreferenceCategoryPreview() = ElementPreview {
     PreferenceCategory(
         title = "Category title",
     ) {

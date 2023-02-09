@@ -60,7 +60,7 @@ fun Button(
 
 @PreviewDefaults
 @Composable
-fun ButtonsPreview() = ElementPreview {
+internal fun ButtonsPreview() = ElementPreview {
     Column {
         Button(onClick = {}, enabled = true) {
             Text(text = "Click me! - Enabled")

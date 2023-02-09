@@ -88,7 +88,7 @@ fun MatrixUserRow(
 
 @PreviewDefaults
 @Composable
-fun MatrixUserRowPreview() = ElementPreview {
+internal fun MatrixUserRowPreview() = ElementPreview {
     MatrixUserRow(
         MatrixUser(
             id = UserId("@alice:server.org"),

@@ -83,7 +83,7 @@ fun OutlinedTextField(
 
 @PreviewDefaults
 @Composable
-fun OutlinedTextFieldsPreview() = ElementPreview {
+internal fun OutlinedTextFieldsPreview() = ElementPreview {
     Column {
         OutlinedTextField(onValueChange = {}, value = "Content", isError = false, enabled = true, readOnly = true)
         OutlinedTextField(onValueChange = {}, value = "Content", isError = false, enabled = true, readOnly = false)

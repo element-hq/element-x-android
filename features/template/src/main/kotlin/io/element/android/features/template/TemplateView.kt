@@ -40,7 +40,7 @@ fun TemplateView(
 
 @PreviewDefaults
 @Composable
-fun TemplateViewPreview() = ElementPreview {
+internal fun TemplateViewPreview() = ElementPreview {
     TemplateView(
         state = TemplateState(),
     )

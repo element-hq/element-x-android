@@ -57,7 +57,7 @@ fun PreferencesRootView(
 
 @PreviewDefaults
 @Composable
-fun PreferencesRootViewPreview() = ElementPreview {
+internal fun PreferencesRootViewPreview() = ElementPreview {
     val state = PreferencesRootState(
         logoutState = LogoutPreferenceState(),
         rageshakeState = RageshakePreferencesState(),

@@ -67,7 +67,7 @@ fun PreferenceText(
 
 @PreviewDefaults
 @Composable
-fun PreferenceTextPreview() = ElementPreview {
+internal fun PreferenceTextPreview() = ElementPreview {
     PreferenceText(
         title = "Title",
         icon = Icons.Default.BugReport,

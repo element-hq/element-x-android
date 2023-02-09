@@ -131,7 +131,7 @@ fun Text(
 
 @PreviewDefaults
 @Composable
-fun TextsPreview() = ElementPreview {
+internal fun TextsPreview() = ElementPreview {
     val colors = mapOf(
         "primary" to MaterialTheme.colorScheme.primary,
         "secondary" to MaterialTheme.colorScheme.secondary,

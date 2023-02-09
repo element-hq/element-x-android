@@ -115,7 +115,7 @@ fun PreferenceTopAppBar(
 
 @PreviewDefaults
 @Composable
-fun PreferenceViewPreview() = ElementPreview {
+internal fun PreferenceViewPreview() = ElementPreview {
     PreferenceView(
         title = "Preference screen"
     ) {

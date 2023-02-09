@@ -78,7 +78,7 @@ fun PreferenceSwitch(
 
 @PreviewDefaults
 @Composable
-fun PreferenceSwitchPreview() = ElementPreview {
+internal fun PreferenceSwitchPreview() = ElementPreview {
     PreferenceSwitch(
         title = "Switch",
         icon = Icons.Default.Announcement,

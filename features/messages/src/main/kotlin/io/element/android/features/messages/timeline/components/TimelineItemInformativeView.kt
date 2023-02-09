@@ -64,7 +64,7 @@ fun TimelineItemInformativeView(
 
 @PreviewDefaults
 @Composable
-fun TimelineItemInformativeViewPreview() = ElementPreview {
+internal fun TimelineItemInformativeViewPreview() = ElementPreview {
     TimelineItemInformativeView(
         text = "Info",
         iconDescription = "",

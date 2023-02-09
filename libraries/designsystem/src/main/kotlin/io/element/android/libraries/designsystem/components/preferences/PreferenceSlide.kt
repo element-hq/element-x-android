@@ -87,7 +87,7 @@ fun PreferenceSlide(
 
 @PreviewDefaults
 @Composable
-fun PreferenceSlidePreview() = ElementPreview {
+internal fun PreferenceSlidePreview() = ElementPreview {
     PreferenceSlide(
         title = "Slide",
         summary = "Summary",

@@ -47,7 +47,7 @@ fun Checkbox(
 
 @PreviewDefaults
 @Composable
-fun CheckboxesPreview() = ElementPreview {
+internal fun CheckboxesPreview() = ElementPreview {
     Column {
         Checkbox(onCheckedChange = {}, enabled = true, checked = true)
         Checkbox(onCheckedChange = {}, enabled = true, checked = false)

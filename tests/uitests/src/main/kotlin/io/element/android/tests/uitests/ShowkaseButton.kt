@@ -62,6 +62,6 @@ fun ShowkaseButton(
 
 @PreviewDefaults
 @Composable
-fun ShowkaseButtonPreview() = ElementPreview {
+internal fun ShowkaseButtonPreview() = ElementPreview {
     ShowkaseButton()
 }

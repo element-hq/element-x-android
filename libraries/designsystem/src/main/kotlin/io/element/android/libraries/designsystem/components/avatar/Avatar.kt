@@ -98,6 +98,6 @@ private fun InitialsAvatar(
 
 @PreviewDefaults
 @Composable
-fun AvatarPreview() = ElementPreview {
+internal fun AvatarPreview() = ElementPreview {
     Avatar(AvatarData(name = "A"))
 }

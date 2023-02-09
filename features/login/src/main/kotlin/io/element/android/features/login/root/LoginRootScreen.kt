@@ -220,7 +220,7 @@ fun LoginRootScreen(
 
 @PreviewDefaults
 @Composable
-fun LoginRootScreenPreview() = ElementPreview {
+internal fun LoginRootScreenPreview() = ElementPreview {
     LoginRootScreen(
         state = LoginRootState(
             homeserver = "matrix.org",

@@ -68,7 +68,7 @@ fun CrashDetectionContent(
 
 @PreviewDefaults
 @Composable
-fun CrashDetectionContentPreview() = ElementPreview {
+internal fun CrashDetectionContentPreview() = ElementPreview {
     CrashDetectionContent(
         state = CrashDetectionState()
     )

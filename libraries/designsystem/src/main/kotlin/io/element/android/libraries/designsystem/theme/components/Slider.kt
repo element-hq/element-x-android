@@ -54,7 +54,7 @@ fun Slider(
 
 @PreviewDefaults
 @Composable
-fun SlidersPreview() = ElementPreview {
+internal fun SlidersPreview() = ElementPreview {
     Column {
         Slider(onValueChange = {}, value = 0.33f, enabled = true)
         Slider(onValueChange = {}, value = 0.33f, enabled = false)

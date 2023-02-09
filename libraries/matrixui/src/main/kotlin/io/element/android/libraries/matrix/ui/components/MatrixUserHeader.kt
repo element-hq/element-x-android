@@ -84,7 +84,7 @@ fun MatrixUserHeader(
 
 @PreviewDefaults
 @Composable
-fun MatrixUserHeaderPreview() = ElementPreview {
+internal fun MatrixUserHeaderPreview() = ElementPreview {
     MatrixUserHeader(
         MatrixUser(
             id = UserId("@alice:server.org"),
@@ -96,7 +96,7 @@ fun MatrixUserHeaderPreview() = ElementPreview {
 
 @PreviewDefaults
 @Composable
-fun MatrixUserHeaderNoUsernamePreview() = ElementPreview {
+internal fun MatrixUserHeaderNoUsernamePreview() = ElementPreview {
     MatrixUserHeader(
         MatrixUser(
             id = UserId("@alice:server.org"),

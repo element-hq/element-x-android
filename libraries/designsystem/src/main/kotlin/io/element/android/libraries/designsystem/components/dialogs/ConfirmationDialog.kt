@@ -116,7 +116,7 @@ fun ConfirmationDialog(
 
 @PreviewDefaults
 @Composable
-fun ConfirmationDialogPreview() = ElementPreview {
+internal fun ConfirmationDialogPreview() = ElementPreview {
     ConfirmationDialog(
         title = "Title",
         content = "Content",

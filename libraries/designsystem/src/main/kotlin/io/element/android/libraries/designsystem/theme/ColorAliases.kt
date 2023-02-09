@@ -46,7 +46,7 @@ fun ElementColors.roomListPlaceHolder() = if (isLight) SystemGrey6Light else Sys
 
 @PreviewDefaults
 @Composable
-fun ColorAliasesPreview() = ElementPreview {
+internal fun ColorAliasesPreview() = ElementPreview {
     ColorListDebugView(
         backgroundColor = Color.Black,
         foregroundColor = Color.White,

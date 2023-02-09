@@ -156,7 +156,7 @@ private fun RoomListRoomSummary.contentType() = isPlaceholder
 
 @PreviewDefaults
 @Composable
-fun RoomListViewPreview() = ElementPreview {
+internal fun RoomListViewPreview() = ElementPreview {
     RoomListView(
         roomSummaries = stubbedRoomSummaries(),
         matrixUser = MatrixUser(id = UserId("@id"), username = "User#1", avatarData = AvatarData("U")),

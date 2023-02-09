@@ -358,7 +358,7 @@ class MessagesItemGroupPositionToMessagesTimelineItemContentProvider :
 
 @PreviewDefaults
 @Composable
-fun TimelineViewPreview(
+internal fun TimelineViewPreview(
     @PreviewParameter(MessagesTimelineItemContentProvider::class) content: TimelineItemContent
 ) = ElementPreview {
     val timelineItems = persistentListOf(

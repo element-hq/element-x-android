@@ -85,7 +85,7 @@ fun ErrorDialog(
 
 @PreviewDefaults
 @Composable
-fun ErrorDialogPreview() = ElementPreview {
+internal fun ErrorDialogPreview() = ElementPreview {
     ErrorDialog(
         content = "Content",
     )

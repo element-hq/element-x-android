@@ -72,6 +72,6 @@ fun ProgressDialog(
 
 @PreviewDefaults
 @Composable
-fun ProgressDialogPreview() = ElementPreview {
+internal fun ProgressDialogPreview() = ElementPreview {
     ProgressDialog(text = "test dialog content")
 }

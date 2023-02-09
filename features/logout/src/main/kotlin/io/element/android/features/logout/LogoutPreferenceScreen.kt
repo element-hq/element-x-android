@@ -91,6 +91,6 @@ fun LogoutPreferenceContent(
 
 @PreviewDefaults
 @Composable
-fun LogoutPreferenceViewPreview() = ElementPreview {
+internal fun LogoutPreferenceViewPreview() = ElementPreview {
     LogoutPreferenceView(LogoutPreferenceState())
 }

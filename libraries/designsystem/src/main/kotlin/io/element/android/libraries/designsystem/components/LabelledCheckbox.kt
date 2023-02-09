@@ -53,7 +53,7 @@ fun LabelledCheckbox(
 
 @PreviewDefaults
 @Composable
-fun LabelledCheckboxPreview() = ElementPreview {
+internal fun LabelledCheckboxPreview() = ElementPreview {
     LabelledCheckbox(
         checked = true,
         text = "Some text",

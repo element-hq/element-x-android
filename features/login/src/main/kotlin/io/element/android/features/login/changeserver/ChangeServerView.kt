@@ -178,7 +178,7 @@ fun ChangeServerView(
 
 @PreviewDefaults
 @Composable
-fun ChangeServerViewPreview() = ElementPreview {
+internal fun ChangeServerViewPreview() = ElementPreview {
     ChangeServerView(
         state = ChangeServerState(homeserver = "matrix.org"),
     )

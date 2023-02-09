@@ -39,6 +39,6 @@ fun Divider(
 
 @PreviewDefaults
 @Composable
-fun DividerPreview() = ElementPreview {
+internal fun DividerPreview() = ElementPreview {
     Divider()
 }
