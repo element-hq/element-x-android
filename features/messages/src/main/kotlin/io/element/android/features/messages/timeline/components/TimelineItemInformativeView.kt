@@ -16,7 +16,6 @@
 
 package io.element.android.features.messages.timeline.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
@@ -29,10 +28,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewDefaults
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 
@@ -63,8 +62,7 @@ fun TimelineItemInformativeView(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@PreviewDefaults
 @Composable
 fun TimelineItemInformativeViewPreview() = ElementPreview {
     TimelineItemInformativeView(

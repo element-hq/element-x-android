@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.ui.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -30,13 +29,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewDefaults
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
@@ -83,8 +82,7 @@ fun MatrixUserHeader(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@PreviewDefaults
 @Composable
 fun MatrixUserHeaderPreview() = ElementPreview {
     MatrixUserHeader(
@@ -96,8 +94,7 @@ fun MatrixUserHeaderPreview() = ElementPreview {
     )
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@PreviewDefaults
 @Composable
 fun MatrixUserHeaderNoUsernamePreview() = ElementPreview {
     MatrixUserHeader(

@@ -16,7 +16,6 @@
 
 package io.element.android.features.logout
 
-import android.content.res.Configuration
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.runtime.Composable
@@ -24,13 +23,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewDefaults
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
@@ -90,8 +89,7 @@ fun LogoutPreferenceContent(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@PreviewDefaults
 @Composable
 fun LogoutPreferenceViewPreview() = ElementPreview {
     LogoutPreferenceView(LogoutPreferenceState())

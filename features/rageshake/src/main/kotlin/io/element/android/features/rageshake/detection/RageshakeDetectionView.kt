@@ -16,19 +16,18 @@
 
 package io.element.android.features.rageshake.detection
 
-import android.content.res.Configuration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import io.element.android.features.rageshake.screenshot.ImageResult
 import io.element.android.features.rageshake.screenshot.screenshot
 import io.element.android.libraries.androidutils.hardware.vibrate
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewDefaults
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.ui.strings.R as StringR
@@ -99,8 +98,7 @@ fun RageshakeDialogContent(
     )
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@PreviewDefaults
 @Composable
 fun RageshakeDialogContentPreview() = ElementPreview {
     RageshakeDialogContent()

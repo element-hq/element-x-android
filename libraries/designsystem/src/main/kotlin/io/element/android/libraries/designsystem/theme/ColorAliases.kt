@@ -16,14 +16,13 @@
 
 package io.element.android.libraries.designsystem.theme
 
-import android.content.res.Configuration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.SystemGrey4Dark
 import io.element.android.libraries.designsystem.SystemGrey6Light
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewDefaults
 import io.element.android.libraries.designsystem.theme.previews.ColorListDebugView
 import kotlinx.collections.immutable.persistentMapOf
 
@@ -45,8 +44,7 @@ fun MaterialTheme.roomListUnreadIndicator() = colorScheme.primary
 @Composable
 fun ElementColors.roomListPlaceHolder() = if (isLight) SystemGrey6Light else SystemGrey4Dark
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@PreviewDefaults
 @Composable
 fun ColorAliasesPreview() = ElementPreview {
     ColorListDebugView(

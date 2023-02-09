@@ -16,7 +16,6 @@
 
 package io.element.android.features.messages.timeline
 
-import android.content.res.Configuration
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -51,7 +50,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.LastBaseline
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -77,6 +75,7 @@ import io.element.android.features.messages.timeline.model.content.TimelineItemU
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewDefaults
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -357,8 +356,7 @@ class MessagesItemGroupPositionToMessagesTimelineItemContentProvider :
         TimelineItemGroupPositionProvider() to MessagesTimelineItemContentProvider()
     )
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@PreviewDefaults
 @Composable
 fun TimelineViewPreview(
     @PreviewParameter(MessagesTimelineItemContentProvider::class) content: TimelineItemContent

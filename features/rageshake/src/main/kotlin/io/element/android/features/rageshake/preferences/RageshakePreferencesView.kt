@@ -16,19 +16,18 @@
 
 package io.element.android.features.rageshake.preferences
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSlide
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewDefaults
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
@@ -75,15 +74,13 @@ fun RageshakePreferencesView(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@PreviewDefaults
 @Composable
 fun RageshakePreferencesViewPreview() = ElementPreview {
     RageshakePreferencesView(RageshakePreferencesState(isEnabled = true, isSupported = true, sensitivity = 0.5f))
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@PreviewDefaults
 @Composable
 fun RageshakePreferencesViewNotSupportedToPreview() = ElementPreview {
     RageshakePreferencesView(RageshakePreferencesState(isEnabled = true, isSupported = false, sensitivity = 0.5f))

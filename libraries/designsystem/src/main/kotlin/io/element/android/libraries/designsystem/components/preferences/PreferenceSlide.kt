@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.designsystem.components.preferences
 
-import android.content.res.Configuration
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,9 +28,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewDefaults
 import io.element.android.libraries.designsystem.theme.components.Slider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.toEnabledColor
@@ -86,8 +85,7 @@ fun PreferenceSlide(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@PreviewDefaults
 @Composable
 fun PreferenceSlidePreview() = ElementPreview {
     PreferenceSlide(

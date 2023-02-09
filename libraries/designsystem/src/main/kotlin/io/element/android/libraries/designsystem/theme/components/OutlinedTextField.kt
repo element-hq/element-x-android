@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.designsystem.theme.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.KeyboardActions
@@ -31,8 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewDefaults
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,8 +81,7 @@ fun OutlinedTextField(
     )
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@PreviewDefaults
 @Composable
 fun OutlinedTextFieldsPreview() = ElementPreview {
     Column {
