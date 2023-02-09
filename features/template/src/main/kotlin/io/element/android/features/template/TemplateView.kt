@@ -16,14 +16,14 @@
 
 package io.element.android.features.template
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
@@ -39,16 +39,10 @@ fun TemplateView(
     }
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun TemplateViewLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-fun TemplateViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+fun TemplateViewPreview() = ElementPreview {
     TemplateView(
         state = TemplateState(),
     )

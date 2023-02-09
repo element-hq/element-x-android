@@ -16,6 +16,8 @@
 
 package io.element.android.features.rageshake.bugreport
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,8 +50,7 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.LabelledCheckbox
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
@@ -107,7 +108,7 @@ fun BugReportView(
                     .padding(horizontal = 16.dp, vertical = 16.dp),
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.primary,
-                )
+            )
             var descriptionFieldState by textFieldState(
                 stateValue = state.formState.description
             )
@@ -207,17 +208,13 @@ fun BugReportView(
     }
 }
 
-@Preview
+@Preview(uiMode = UI_MODE_NIGHT_NO)
+@Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
-fun BugReportViewLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-fun BugReportViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
-    BugReportView(
-        state = BugReportState(),
-    )
+fun BugReportViewPreview() {
+    ElementPreview {
+        BugReportView(
+            state = BugReportState(),
+        )
+    }
 }

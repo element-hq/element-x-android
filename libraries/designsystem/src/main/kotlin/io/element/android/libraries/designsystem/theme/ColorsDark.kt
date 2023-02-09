@@ -24,7 +24,7 @@ import io.element.android.libraries.designsystem.Azure
 import io.element.android.libraries.designsystem.DarkGrey
 import io.element.android.libraries.designsystem.SystemGrey5Dark
 import io.element.android.libraries.designsystem.SystemGrey6Dark
-import io.element.android.libraries.designsystem.theme.previews.ColorsSchemePreview
+import io.element.android.libraries.designsystem.theme.previews.ColorsSchemeDebugView
 
 fun elementColorsDark() = ElementColors(
     messageFromMeBackground = SystemGrey5Dark,
@@ -68,7 +68,7 @@ val materialColorSchemeDark = darkColorScheme(
 
 @Preview
 @Composable
-fun ColorsSchemePreviewDark() = ColorsSchemePreview(
+fun ColorsSchemeDarkPreview() = ColorsSchemeDebugView(
     Color.White,
     Color.Black,
     materialColorSchemeDark,

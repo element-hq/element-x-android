@@ -17,32 +17,48 @@
 package io.element.android.libraries.designsystem.theme.previews
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import kotlinx.collections.immutable.ImmutableMap
+import androidx.compose.ui.unit.sp
+import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.toHrf
 
 @Composable
-internal fun ColorListPreview(
+internal fun ColorDebugView(
     backgroundColor: Color,
     foregroundColor: Color,
-    colors: ImmutableMap<String, Color>,
+    name: String, color: Color,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .background(color = backgroundColor)
-            .fillMaxWidth()
-    ) {
-        colors.keys.forEach { name ->
-            val color = colors[name]!!
-            ColorPreview(backgroundColor = backgroundColor, foregroundColor = foregroundColor, name = name, color = color)
+    Column(modifier = modifier.fillMaxWidth()) {
+        Text(text = name + " " + color.toHrf(), fontSize = 6.sp, color = foregroundColor)
+        val backgroundBrush = Brush.linearGradient(
+            listOf(
+                backgroundColor,
+                foregroundColor,
+            )
+        )
+        Row(
+            modifier = Modifier.background(backgroundBrush)
+        ) {
+            repeat(2) {
+                Box(
+                    modifier = Modifier
+                        .padding(1.dp)
+                        .background(color = color)
+                        .height(10.dp)
+                        .weight(1f)
+                )
+            }
         }
-        Spacer(modifier = Modifier.height(2.dp))
     }
 }

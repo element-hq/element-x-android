@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import kotlinx.collections.immutable.persistentMapOf
 
 @Composable
-internal fun ColorsSchemePreview(
+internal fun ColorsSchemeDebugView(
     backgroundColor: Color,
     foregroundColor: Color,
     colorScheme: ColorScheme,
@@ -60,7 +60,7 @@ internal fun ColorsSchemePreview(
         "outlineVariant" to colorScheme.outlineVariant,
         "scrim" to colorScheme.scrim,
     )
-    ColorListPreview(
+    ColorListDebugView(
         backgroundColor = backgroundColor,
         foregroundColor = foregroundColor,
         colors = colors,

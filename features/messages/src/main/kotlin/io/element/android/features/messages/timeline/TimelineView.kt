@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.timeline
 
+import android.content.res.Configuration
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -75,8 +76,7 @@ import io.element.android.features.messages.timeline.model.content.TimelineItemT
 import io.element.android.features.messages.timeline.model.content.TimelineItemUnknownContent
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -357,20 +357,12 @@ class MessagesItemGroupPositionToMessagesTimelineItemContentProvider :
         TimelineItemGroupPositionProvider() to MessagesTimelineItemContentProvider()
     )
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun LoginRootScreenLightPreview(
+fun TimelineViewPreview(
     @PreviewParameter(MessagesTimelineItemContentProvider::class) content: TimelineItemContent
-) = ElementPreviewLight { ContentToPreview(content) }
-
-@Preview
-@Composable
-fun LoginRootScreenDarkPreview(
-    @PreviewParameter(MessagesTimelineItemContentProvider::class) content: TimelineItemContent
-) = ElementPreviewDark { ContentToPreview(content) }
-
-@Composable
-private fun ContentToPreview(content: TimelineItemContent) {
+) = ElementPreview {
     val timelineItems = persistentListOf(
         // 3 items (First Middle Last) with isMine = false
         createMessageEvent(

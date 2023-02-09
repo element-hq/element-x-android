@@ -16,14 +16,14 @@
 
 package io.element.android.libraries.designsystem.theme.components
 
+import android.content.res.Configuration
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 
 @Composable
 fun Divider(
@@ -38,15 +38,9 @@ fun Divider(
     )
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun DividerLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-fun DividerDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+fun DividerPreview() = ElementPreview {
     Divider()
 }

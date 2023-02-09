@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.designsystem.components.avatar
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -33,8 +34,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import io.element.android.libraries.designsystem.AvatarGradientEnd
 import io.element.android.libraries.designsystem.AvatarGradientStart
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Text
 import timber.log.Timber
 
@@ -97,15 +97,9 @@ private fun InitialsAvatar(
     }
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun AvatarLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-fun AvatarDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+fun AvatarPreview() = ElementPreview {
     Avatar(AvatarData(name = "A"))
 }

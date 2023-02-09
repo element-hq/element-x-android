@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.designsystem.theme.components
 
+import android.content.res.Configuration
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.SliderColors
@@ -24,8 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 
 @Composable
 fun Slider(
@@ -53,16 +53,10 @@ fun Slider(
     )
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun SlidersLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-fun SlidersDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+fun SlidersPreview() = ElementPreview {
     Column {
         Slider(onValueChange = {}, value = 0.33f, enabled = true)
         Slider(onValueChange = {}, value = 0.33f, enabled = false)

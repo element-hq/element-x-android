@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.ui.components
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -35,8 +36,7 @@ import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
@@ -68,7 +68,7 @@ fun MatrixUserHeader(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             color = MaterialTheme.colorScheme.primary,
-            )
+        )
         // Id
         if (matrixUser.username.isNullOrEmpty().not()) {
             Spacer(modifier = Modifier.height(4.dp))
@@ -83,16 +83,10 @@ fun MatrixUserHeader(
     }
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun MatrixUserHeaderLightPreview() = ElementPreviewLight { ContentToPreview1() }
-
-@Preview
-@Composable
-fun MatrixUserHeaderDarkPreview() = ElementPreviewDark { ContentToPreview1() }
-
-@Composable
-private fun ContentToPreview1() {
+fun MatrixUserHeaderPreview() = ElementPreview {
     MatrixUserHeader(
         MatrixUser(
             id = UserId("@alice:server.org"),
@@ -102,16 +96,10 @@ private fun ContentToPreview1() {
     )
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun MatrixUserHeaderNoUserNameLightPreview() = ElementPreviewLight { ContentToPreview2() }
-
-@Preview
-@Composable
-fun MatrixUserHeaderNoUserNameDarkPreview() = ElementPreviewDark { ContentToPreview2() }
-
-@Composable
-private fun ContentToPreview2() {
+fun MatrixUserHeaderNoUsernamePreview() = ElementPreview {
     MatrixUserHeader(
         MatrixUser(
             id = UserId("@alice:server.org"),

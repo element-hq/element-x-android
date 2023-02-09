@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.designsystem.theme.components
 
+import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -29,8 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 
 @Composable
 fun Button(
@@ -59,16 +59,10 @@ fun Button(
     )
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun ButtonsLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-fun ButtonsDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+fun ButtonsPreview() = ElementPreview {
     Column {
         Button(onClick = {}, enabled = true) {
             Text(text = "Click me! - Enabled")

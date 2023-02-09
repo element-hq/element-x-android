@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.textcomposer
 
+import android.content.res.Configuration
 import android.graphics.Color
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
@@ -33,8 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -147,16 +147,10 @@ private fun MessageComposerView.setup(isDarkMode: Boolean, composerMode: Message
     renderComposerMode(composerMode)
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun TextComposerLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-fun TextComposerDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+fun TextComposerPreview() = ElementPreview {
     TextComposer(
         onSendMessage = {},
         fullscreen = false,

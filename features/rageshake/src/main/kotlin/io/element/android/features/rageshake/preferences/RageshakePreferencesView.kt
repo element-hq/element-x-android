@@ -16,6 +16,7 @@
 
 package io.element.android.features.rageshake.preferences
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BugReport
@@ -27,8 +28,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSlide
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
@@ -75,28 +75,16 @@ fun RageshakePreferencesView(
     }
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun RageshakePreferencesViewLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-fun RageshakePreferencesViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+fun RageshakePreferencesViewPreview() = ElementPreview {
     RageshakePreferencesView(RageshakePreferencesState(isEnabled = true, isSupported = true, sensitivity = 0.5f))
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun RageshakePreferencesViewNotSupportedLightPreview() = ElementPreviewLight { ContentNotSupportedToPreview() }
-
-@Preview
-@Composable
-fun RageshakePreferencesViewNotSupportedDarkPreview() = ElementPreviewDark { ContentNotSupportedToPreview() }
-
-@Composable
-private fun ContentNotSupportedToPreview() {
+fun RageshakePreferencesViewNotSupportedToPreview() = ElementPreview {
     RageshakePreferencesView(RageshakePreferencesState(isEnabled = true, isSupported = false, sensitivity = 0.5f))
 }
