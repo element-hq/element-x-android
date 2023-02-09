@@ -171,12 +171,17 @@ koverMerged {
                     "anvil.hint.merge.*",
                     "anvil.module.*",
                     "com.airbnb.android.showkase*",
-                    "*_Factory*",
-                    "*_Module*",
+                    "*_Factory",
+                    "*_Factory$*",
+                    "*_Module",
+                    "*_Module$*",
                     "*ComposableSingletons$*",
                     "*_AssistedFactory_Impl*",
                     "*BuildConfig",
                     // Other
+                    // We do not cover Nodes (normally covered by maestro, but code coverage is not computed with maestro)
+                    "*Node",
+                    "*Node$*",
                 )
             )
         }
