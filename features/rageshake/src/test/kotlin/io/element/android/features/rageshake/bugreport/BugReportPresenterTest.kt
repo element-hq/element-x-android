@@ -190,6 +190,7 @@ class BugReportPresenterTest {
             val progressState = awaitItem()
             assertThat(progressState.sending).isEqualTo(Async.Loading(null))
             assertThat(progressState.sendingProgress).isEqualTo(0f)
+            assertThat(progressState.submitEnabled).isFalse()
             assertThat(awaitItem().sendingProgress).isEqualTo(0.5f)
             assertThat(awaitItem().sendingProgress).isEqualTo(1f)
             skipItems(1)
