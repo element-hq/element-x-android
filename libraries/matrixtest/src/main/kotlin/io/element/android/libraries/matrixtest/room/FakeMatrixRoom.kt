@@ -74,7 +74,12 @@ class FakeMatrixRoom(
         return Result.success(Unit)
     }
 
+    var redactEventEventIdParam: EventId? = null
+        private set
+
     override suspend fun redactEvent(eventId: EventId, reason: String?): Result<Unit> {
-        TODO("Not yet implemented")
+        redactEventEventIdParam = eventId
+        delay(100)
+        return Result.success(Unit)
     }
 }
