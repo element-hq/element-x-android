@@ -25,6 +25,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.rageshake.crash.ui.A_CRASH_DATA
 import io.element.android.features.rageshake.crash.ui.FakeCrashDataStore
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrixtest.A_FAILURE_REASON
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -218,7 +219,7 @@ class BugReportPresenterTest {
             assertThat(awaitItem().sendingProgress).isEqualTo(0.5f)
             // Failure
             assertThat(awaitItem().sendingProgress).isEqualTo(0f)
-            assertThat((awaitItem().sending as Async.Failure).error.message).isEqualTo(A_REASON)
+            assertThat((awaitItem().sending as Async.Failure).error.message).isEqualTo(A_FAILURE_REASON)
         }
     }
 

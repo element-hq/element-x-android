@@ -28,6 +28,7 @@ import io.element.android.libraries.dateformatter.LastMessageFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.matrixtest.AN_AVATAR_URL
+import io.element.android.libraries.matrixtest.AN_EXCEPTION
 import io.element.android.libraries.matrixtest.A_MESSAGE
 import io.element.android.libraries.matrixtest.A_ROOM_ID
 import io.element.android.libraries.matrixtest.A_ROOM_NAME
@@ -69,8 +70,8 @@ class RoomListPresenterTests {
         val presenter = RoomListPresenter(
             FakeMatrixClient(
                 SessionId("sessionId"),
-                userDisplayName = Result.failure(Exception("Error")),
-                userAvatarURLString = Result.failure(Exception("Error")),
+                userDisplayName = Result.failure(AN_EXCEPTION),
+                userAvatarURLString = Result.failure(AN_EXCEPTION),
             ),
             createDateFormatter()
         )

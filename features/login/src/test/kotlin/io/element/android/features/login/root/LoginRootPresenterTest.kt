@@ -23,11 +23,11 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.core.SessionId
-import io.element.android.libraries.matrixtest.A_FAILURE
 import io.element.android.libraries.matrixtest.A_HOMESERVER
 import io.element.android.libraries.matrixtest.A_HOMESERVER_2
 import io.element.android.libraries.matrixtest.A_PASSWORD
 import io.element.android.libraries.matrixtest.A_SESSION_ID
+import io.element.android.libraries.matrixtest.A_THROWABLE
 import io.element.android.libraries.matrixtest.A_USER_NAME
 import io.element.android.libraries.matrixtest.auth.FakeAuthenticationService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -106,12 +106,12 @@ class LoginRootPresenterTest {
             initialState.eventSink.invoke(LoginRootEvents.SetPassword(A_PASSWORD))
             skipItems(1)
             val loginAndPasswordState = awaitItem()
-            authenticationService.givenLoginError(A_FAILURE)
+            authenticationService.givenLoginError(A_THROWABLE)
             loginAndPasswordState.eventSink.invoke(LoginRootEvents.Submit)
             val submitState = awaitItem()
             assertThat(submitState.loggedInState).isEqualTo(LoggedInState.LoggingIn)
             val loggedInState = awaitItem()
-            assertThat(loggedInState.loggedInState).isEqualTo(LoggedInState.ErrorLoggingIn(A_FAILURE))
+            assertThat(loggedInState.loggedInState).isEqualTo(LoggedInState.ErrorLoggingIn(A_THROWABLE))
         }
     }
 
