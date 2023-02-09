@@ -33,13 +33,13 @@ import io.element.android.features.messages.timeline.model.content.TimelineItemT
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.room.MatrixRoom
+import io.element.android.libraries.matrixtest.AN_EVENT_ID
+import io.element.android.libraries.matrixtest.A_MESSAGE
+import io.element.android.libraries.matrixtest.A_ROOM_ID
+import io.element.android.libraries.matrixtest.A_USER_ID
+import io.element.android.libraries.matrixtest.A_USER_NAME
 import io.element.android.libraries.matrixtest.FakeMatrixClient
-import io.element.android.libraries.matrixtest.core.A_ROOM_ID
-import io.element.android.libraries.matrixtest.room.A_MESSAGE
 import io.element.android.libraries.matrixtest.room.FakeMatrixRoom
-import io.element.android.libraries.matrixtest.timeline.AN_EVENT_ID
-import io.element.android.libraries.matrixtest.timeline.A_SENDER_ID
-import io.element.android.libraries.matrixtest.timeline.A_SENDER_NAME
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -119,7 +119,7 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action redact`() = runTest {
-        val matrixRoom = FakeMatrixRoom(A_ROOM_ID)
+        val matrixRoom = FakeMatrixRoom()
         val presenter = createMessagePresenter(matrixRoom)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -132,7 +132,7 @@ class MessagesPresenterTest {
     }
 
     private fun TestScope.createMessagePresenter(
-        matrixRoom: MatrixRoom = FakeMatrixRoom(A_ROOM_ID)
+        matrixRoom: MatrixRoom = FakeMatrixRoom()
     ): MessagesPresenter {
         val matrixClient = FakeMatrixClient()
         val messageComposerPresenter = MessageComposerPresenter(
@@ -168,8 +168,8 @@ private fun aMessageEvent(
     content: TimelineItemContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null),
 ) = TimelineItem.MessageEvent(
     id = AN_EVENT_ID,
-    senderId = A_SENDER_ID,
-    senderDisplayName = A_SENDER_NAME,
+    senderId = A_USER_ID.value,
+    senderDisplayName = A_USER_NAME,
     senderAvatar = AvatarData(),
     content = content,
     sentTime = "",

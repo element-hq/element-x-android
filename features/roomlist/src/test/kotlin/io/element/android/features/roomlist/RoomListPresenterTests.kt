@@ -27,11 +27,13 @@ import io.element.android.features.roomlist.model.RoomListRoomSummary
 import io.element.android.libraries.dateformatter.LastMessageFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.core.SessionId
+import io.element.android.libraries.matrixtest.AN_AVATAR_URL
+import io.element.android.libraries.matrixtest.A_MESSAGE
+import io.element.android.libraries.matrixtest.A_ROOM_ID
+import io.element.android.libraries.matrixtest.A_ROOM_NAME
+import io.element.android.libraries.matrixtest.A_USER_ID
+import io.element.android.libraries.matrixtest.A_USER_NAME
 import io.element.android.libraries.matrixtest.FakeMatrixClient
-import io.element.android.libraries.matrixtest.core.A_ROOM_ID
-import io.element.android.libraries.matrixtest.core.A_ROOM_ID_VALUE
-import io.element.android.libraries.matrixtest.room.A_MESSAGE
-import io.element.android.libraries.matrixtest.room.A_ROOM_NAME
 import io.element.android.libraries.matrixtest.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrixtest.room.aRoomSummaryFilled
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -55,6 +57,32 @@ class RoomListPresenterTests {
             assertThat(initialState.matrixUser).isNull()
             val withUserState = awaitItem()
             assertThat(withUserState.matrixUser).isNotNull()
+            assertThat(withUserState.matrixUser!!.id).isEqualTo(A_USER_ID)
+            assertThat(withUserState.matrixUser!!.username).isEqualTo(A_USER_NAME)
+            assertThat(withUserState.matrixUser!!.avatarData.name).isEqualTo(A_USER_NAME)
+            assertThat(withUserState.matrixUser!!.avatarData.url).isEqualTo(AN_AVATAR_URL)
+        }
+    }
+
+    @Test
+    fun `present - should start with no user and then load user with error`() = runTest {
+        val presenter = RoomListPresenter(
+            FakeMatrixClient(
+                SessionId("sessionId"),
+                userDisplayName = Result.failure(Exception("Error")),
+                userAvatarURLString = Result.failure(Exception("Error")),
+            ),
+            createDateFormatter()
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.matrixUser).isNull()
+            val withUserState = awaitItem()
+            assertThat(withUserState.matrixUser).isNotNull()
+            // username fallback to user id value
+            assertThat(withUserState.matrixUser!!.username).isEqualTo(A_USER_ID.value)
         }
     }
 
@@ -182,7 +210,7 @@ class RoomListPresenterTests {
 private const val A_FORMATTED_DATE = "formatted_date"
 
 private val aRoomListRoomSummary = RoomListRoomSummary(
-    id = A_ROOM_ID_VALUE,
+    id = A_ROOM_ID.value,
     roomId = A_ROOM_ID,
     name = A_ROOM_NAME,
     hasUnread = true,

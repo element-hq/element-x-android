@@ -19,16 +19,11 @@ package io.element.android.libraries.matrixtest.auth
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.core.SessionId
+import io.element.android.libraries.matrixtest.A_HOMESERVER
+import io.element.android.libraries.matrixtest.A_SESSION_ID
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-
-const val A_HOMESERVER = "matrix.org"
-const val A_HOMESERVER_2 = "matrix-client.org"
-const val A_SESSION_ID = "sessionId"
-const val A_LOGIN = "login"
-const val A_PASSWORD = "password"
-val A_FAILURE = Throwable("error")
 
 class FakeAuthenticationService : MatrixAuthenticationService {
     private var homeserver: String = A_HOMESERVER

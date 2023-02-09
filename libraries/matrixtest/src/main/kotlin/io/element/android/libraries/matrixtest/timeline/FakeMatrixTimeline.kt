@@ -24,11 +24,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import org.matrix.rustcomponents.sdk.TimelineListener
 
-const val A_SENDER_NAME = "Alice"
-const val A_SENDER_ID = "@alice:server.org"
-const val AN_EVENT_ID_VALUE = "!anEventId"
-val AN_EVENT_ID = EventId(AN_EVENT_ID_VALUE)
-
 class FakeMatrixTimeline : MatrixTimeline {
     override var callback: MatrixTimeline.Callback? = null
 

@@ -29,10 +29,10 @@ import io.element.android.features.messages.timeline.model.content.TimelineItemC
 import io.element.android.features.messages.timeline.model.content.TimelineItemRedactedContent
 import io.element.android.features.messages.timeline.model.content.TimelineItemTextContent
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrixtest.room.A_MESSAGE
-import io.element.android.libraries.matrixtest.timeline.AN_EVENT_ID
-import io.element.android.libraries.matrixtest.timeline.A_SENDER_ID
-import io.element.android.libraries.matrixtest.timeline.A_SENDER_NAME
+import io.element.android.libraries.matrixtest.AN_EVENT_ID
+import io.element.android.libraries.matrixtest.A_MESSAGE
+import io.element.android.libraries.matrixtest.A_USER_ID
+import io.element.android.libraries.matrixtest.A_USER_NAME
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -166,8 +166,8 @@ private fun aMessageEvent(
     content: TimelineItemContent,
 ) = TimelineItem.MessageEvent(
     id = AN_EVENT_ID,
-    senderId = A_SENDER_ID,
-    senderDisplayName = A_SENDER_NAME,
+    senderId = A_USER_ID.value,
+    senderDisplayName = A_USER_NAME,
     senderAvatar = AvatarData(),
     content = content,
     sentTime = "",

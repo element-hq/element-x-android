@@ -20,13 +20,14 @@ import io.element.android.libraries.matrix.core.EventId
 import io.element.android.libraries.matrix.core.RoomId
 import io.element.android.libraries.matrix.room.MatrixRoom
 import io.element.android.libraries.matrix.timeline.MatrixTimeline
+import io.element.android.libraries.matrixtest.A_ROOM_ID
 import io.element.android.libraries.matrixtest.timeline.FakeMatrixTimeline
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
 class FakeMatrixRoom(
-    override val roomId: RoomId,
+    override val roomId: RoomId = A_ROOM_ID,
     override val name: String? = null,
     override val bestName: String = "",
     override val displayName: String = "",

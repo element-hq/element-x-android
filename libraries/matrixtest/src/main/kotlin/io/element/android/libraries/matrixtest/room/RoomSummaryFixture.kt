@@ -19,12 +19,9 @@ package io.element.android.libraries.matrixtest.room
 import io.element.android.libraries.matrix.core.RoomId
 import io.element.android.libraries.matrix.room.RoomSummary
 import io.element.android.libraries.matrix.room.RoomSummaryDetails
-import io.element.android.libraries.matrixtest.core.A_ROOM_ID
-
-const val A_ROOM_NAME = "aRoomName"
-const val A_MESSAGE = "Hello world!"
-const val A_REPLY = "OK, I'll be there!"
-const val ANOTHER_MESSAGE = "Hello universe!"
+import io.element.android.libraries.matrixtest.A_MESSAGE
+import io.element.android.libraries.matrixtest.A_ROOM_ID
+import io.element.android.libraries.matrixtest.A_ROOM_NAME
 
 fun aRoomSummaryFilled(
     roomId: RoomId = A_ROOM_ID,

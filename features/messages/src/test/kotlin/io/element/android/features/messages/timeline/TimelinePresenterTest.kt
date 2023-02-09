@@ -24,10 +24,9 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.timeline.model.TimelineItem
 import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrixtest.AN_EVENT_ID
 import io.element.android.libraries.matrixtest.FakeMatrixClient
-import io.element.android.libraries.matrixtest.core.A_ROOM_ID
 import io.element.android.libraries.matrixtest.room.FakeMatrixRoom
-import io.element.android.libraries.matrixtest.timeline.AN_EVENT_ID
 import io.element.android.libraries.matrixtest.timeline.FakeMatrixTimeline
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -39,7 +38,7 @@ class TimelinePresenterTest {
         val presenter = TimelinePresenter(
             testCoroutineDispatchers(),
             FakeMatrixClient(),
-            FakeMatrixRoom(A_ROOM_ID)
+            FakeMatrixRoom()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -52,7 +51,7 @@ class TimelinePresenterTest {
     @Test
     fun `present - load more`() = runTest {
         val matrixTimeline = FakeMatrixTimeline()
-        val matrixRoom = FakeMatrixRoom(A_ROOM_ID, matrixTimeline = matrixTimeline)
+        val matrixRoom = FakeMatrixRoom(matrixTimeline = matrixTimeline)
         val presenter = TimelinePresenter(
             testCoroutineDispatchers(),
             FakeMatrixClient(),
@@ -73,7 +72,7 @@ class TimelinePresenterTest {
     @Test
     fun `present - set highlighted event`() = runTest {
         val matrixTimeline = FakeMatrixTimeline()
-        val matrixRoom = FakeMatrixRoom(A_ROOM_ID, matrixTimeline = matrixTimeline)
+        val matrixRoom = FakeMatrixRoom(matrixTimeline = matrixTimeline)
         val presenter = TimelinePresenter(
             testCoroutineDispatchers(),
             FakeMatrixClient(),
@@ -96,7 +95,7 @@ class TimelinePresenterTest {
     @Test
     fun `present - test callback`() = runTest {
         val matrixTimeline = FakeMatrixTimeline()
-        val matrixRoom = FakeMatrixRoom(A_ROOM_ID, matrixTimeline = matrixTimeline)
+        val matrixRoom = FakeMatrixRoom(matrixTimeline = matrixTimeline)
         val presenter = TimelinePresenter(
             testCoroutineDispatchers(),
             FakeMatrixClient(),

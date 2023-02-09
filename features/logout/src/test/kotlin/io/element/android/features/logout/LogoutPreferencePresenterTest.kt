@@ -24,8 +24,8 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.core.SessionId
+import io.element.android.libraries.matrixtest.A_FAILURE
 import io.element.android.libraries.matrixtest.FakeMatrixClient
-import io.element.android.libraries.matrixtest.auth.A_FAILURE
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test

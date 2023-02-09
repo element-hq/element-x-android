@@ -23,12 +23,12 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.core.SessionId
-import io.element.android.libraries.matrixtest.auth.A_FAILURE
-import io.element.android.libraries.matrixtest.auth.A_HOMESERVER
-import io.element.android.libraries.matrixtest.auth.A_HOMESERVER_2
-import io.element.android.libraries.matrixtest.auth.A_LOGIN
-import io.element.android.libraries.matrixtest.auth.A_PASSWORD
-import io.element.android.libraries.matrixtest.auth.A_SESSION_ID
+import io.element.android.libraries.matrixtest.A_FAILURE
+import io.element.android.libraries.matrixtest.A_HOMESERVER
+import io.element.android.libraries.matrixtest.A_HOMESERVER_2
+import io.element.android.libraries.matrixtest.A_PASSWORD
+import io.element.android.libraries.matrixtest.A_SESSION_ID
+import io.element.android.libraries.matrixtest.A_USER_NAME
 import io.element.android.libraries.matrixtest.auth.FakeAuthenticationService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -60,13 +60,13 @@ class LoginRootPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(LoginRootEvents.SetLogin(A_LOGIN))
+            initialState.eventSink.invoke(LoginRootEvents.SetLogin(A_USER_NAME))
             val loginState = awaitItem()
-            assertThat(loginState.formState).isEqualTo(LoginFormState(login = A_LOGIN, password = ""))
+            assertThat(loginState.formState).isEqualTo(LoginFormState(login = A_USER_NAME, password = ""))
             assertThat(loginState.submitEnabled).isFalse()
             initialState.eventSink.invoke(LoginRootEvents.SetPassword(A_PASSWORD))
             val loginAndPasswordState = awaitItem()
-            assertThat(loginAndPasswordState.formState).isEqualTo(LoginFormState(login = A_LOGIN, password = A_PASSWORD))
+            assertThat(loginAndPasswordState.formState).isEqualTo(LoginFormState(login = A_USER_NAME, password = A_PASSWORD))
             assertThat(loginAndPasswordState.submitEnabled).isTrue()
         }
     }
@@ -80,7 +80,7 @@ class LoginRootPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(LoginRootEvents.SetLogin(A_LOGIN))
+            initialState.eventSink.invoke(LoginRootEvents.SetLogin(A_USER_NAME))
             initialState.eventSink.invoke(LoginRootEvents.SetPassword(A_PASSWORD))
             skipItems(1)
             val loginAndPasswordState = awaitItem()
@@ -102,7 +102,7 @@ class LoginRootPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(LoginRootEvents.SetLogin(A_LOGIN))
+            initialState.eventSink.invoke(LoginRootEvents.SetLogin(A_USER_NAME))
             initialState.eventSink.invoke(LoginRootEvents.SetPassword(A_PASSWORD))
             skipItems(1)
             val loginAndPasswordState = awaitItem()

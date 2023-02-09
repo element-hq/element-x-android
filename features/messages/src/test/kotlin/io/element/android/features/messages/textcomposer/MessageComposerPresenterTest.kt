@@ -24,13 +24,12 @@ import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.data.StableCharSequence
-import io.element.android.libraries.matrixtest.core.A_ROOM_ID
-import io.element.android.libraries.matrixtest.room.ANOTHER_MESSAGE
-import io.element.android.libraries.matrixtest.room.A_MESSAGE
-import io.element.android.libraries.matrixtest.room.A_REPLY
+import io.element.android.libraries.matrixtest.ANOTHER_MESSAGE
+import io.element.android.libraries.matrixtest.AN_EVENT_ID
+import io.element.android.libraries.matrixtest.A_MESSAGE
+import io.element.android.libraries.matrixtest.A_REPLY
+import io.element.android.libraries.matrixtest.A_USER_NAME
 import io.element.android.libraries.matrixtest.room.FakeMatrixRoom
-import io.element.android.libraries.matrixtest.timeline.AN_EVENT_ID
-import io.element.android.libraries.matrixtest.timeline.A_SENDER_NAME
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -41,7 +40,7 @@ class MessageComposerPresenterTest {
     fun `present - initial state`() = runTest {
         val presenter = MessageComposerPresenter(
             this,
-            FakeMatrixRoom(A_ROOM_ID)
+            FakeMatrixRoom()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -58,7 +57,7 @@ class MessageComposerPresenterTest {
     fun `present - toggle fullscreen`() = runTest {
         val presenter = MessageComposerPresenter(
             this,
-            FakeMatrixRoom(A_ROOM_ID)
+            FakeMatrixRoom()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -77,7 +76,7 @@ class MessageComposerPresenterTest {
     fun `present - change message`() = runTest {
         val presenter = MessageComposerPresenter(
             this,
-            FakeMatrixRoom(A_ROOM_ID)
+            FakeMatrixRoom()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -98,7 +97,7 @@ class MessageComposerPresenterTest {
     fun `present - change mode to edit`() = runTest {
         val presenter = MessageComposerPresenter(
             this,
-            FakeMatrixRoom(A_ROOM_ID)
+            FakeMatrixRoom()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -128,7 +127,7 @@ class MessageComposerPresenterTest {
     fun `present - change mode to reply`() = runTest {
         val presenter = MessageComposerPresenter(
             this,
-            FakeMatrixRoom(A_ROOM_ID)
+            FakeMatrixRoom()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -148,7 +147,7 @@ class MessageComposerPresenterTest {
     fun `present - change mode to quote`() = runTest {
         val presenter = MessageComposerPresenter(
             this,
-            FakeMatrixRoom(A_ROOM_ID)
+            FakeMatrixRoom()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -168,7 +167,7 @@ class MessageComposerPresenterTest {
     fun `present - send message`() = runTest {
         val presenter = MessageComposerPresenter(
             this,
-            FakeMatrixRoom(A_ROOM_ID)
+            FakeMatrixRoom()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -187,7 +186,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - edit message`() = runTest {
-        val fakeMatrixRoom = FakeMatrixRoom(A_ROOM_ID)
+        val fakeMatrixRoom = FakeMatrixRoom()
         val presenter = MessageComposerPresenter(
             this,
             fakeMatrixRoom
@@ -218,7 +217,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - reply message`() = runTest {
-        val fakeMatrixRoom = FakeMatrixRoom(A_ROOM_ID)
+        val fakeMatrixRoom = FakeMatrixRoom()
         val presenter = MessageComposerPresenter(
             this,
             fakeMatrixRoom
@@ -230,7 +229,7 @@ class MessageComposerPresenterTest {
             assertThat(initialState.text).isEqualTo(StableCharSequence(""))
             val mode = aReplyMode()
             initialState.eventSink.invoke(MessageComposerEvents.SetMode(mode))
-            var state = awaitItem()
+            val state = awaitItem()
             assertThat(state.mode).isEqualTo(mode)
             assertThat(state.text).isEqualTo(StableCharSequence(""))
             assertThat(state.isSendButtonVisible).isFalse()
@@ -249,5 +248,5 @@ class MessageComposerPresenterTest {
 }
 
 fun anEditMode() = MessageComposerMode.Edit(AN_EVENT_ID, A_MESSAGE)
-fun aReplyMode() = MessageComposerMode.Reply(A_SENDER_NAME, AN_EVENT_ID, A_MESSAGE)
+fun aReplyMode() = MessageComposerMode.Reply(A_USER_NAME, AN_EVENT_ID, A_MESSAGE)
 fun aQuoteMode() = MessageComposerMode.Quote(AN_EVENT_ID, A_MESSAGE)

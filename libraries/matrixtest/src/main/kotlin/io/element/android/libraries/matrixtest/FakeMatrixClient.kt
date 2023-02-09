@@ -23,7 +23,6 @@ import io.element.android.libraries.matrix.core.UserId
 import io.element.android.libraries.matrix.media.MediaResolver
 import io.element.android.libraries.matrix.room.MatrixRoom
 import io.element.android.libraries.matrix.room.RoomSummaryDataSource
-import io.element.android.libraries.matrixtest.auth.A_SESSION_ID
 import io.element.android.libraries.matrixtest.media.FakeMediaResolver
 import io.element.android.libraries.matrixtest.room.FakeMatrixRoom
 import io.element.android.libraries.matrixtest.room.FakeRoomSummaryDataSource
@@ -32,6 +31,8 @@ import org.matrix.rustcomponents.sdk.MediaSource
 
 class FakeMatrixClient(
     override val sessionId: SessionId = SessionId(A_SESSION_ID),
+    private val userDisplayName: Result<String> = Result.success(A_USER_NAME),
+    private val userAvatarURLString: Result<String> = Result.success(AN_AVATAR_URL),
     val roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource()
 ) : MatrixClient {
 
@@ -62,14 +63,14 @@ class FakeMatrixClient(
         logoutFailure?.let { throw it }
     }
 
-    override fun userId(): UserId = UserId("")
+    override fun userId(): UserId = A_USER_ID
 
     override suspend fun loadUserDisplayName(): Result<String> {
-        return Result.success("")
+        return userDisplayName
     }
 
     override suspend fun loadUserAvatarURLString(): Result<String> {
-        return Result.success("")
+        return userAvatarURLString
     }
 
     override suspend fun loadMediaContentForSource(source: MediaSource): Result<ByteArray> {

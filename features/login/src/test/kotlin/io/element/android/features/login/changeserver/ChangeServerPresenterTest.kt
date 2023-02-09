@@ -23,7 +23,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrixtest.auth.A_HOMESERVER
+import io.element.android.libraries.matrixtest.A_HOMESERVER
 import io.element.android.libraries.matrixtest.auth.FakeAuthenticationService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
