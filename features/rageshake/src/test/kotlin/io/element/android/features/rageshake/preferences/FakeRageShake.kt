@@ -24,6 +24,8 @@ class FakeRageShake(
     private var isAvailableValue: Boolean = true
 ) : RageShake {
 
+    private var interceptor: (() -> Unit)? = null
+
     override fun isAvailable() = isAvailableValue
 
     override fun start(sensitivity: Float) {
@@ -36,5 +38,8 @@ class FakeRageShake(
     }
 
     override fun setInterceptor(interceptor: (() -> Unit)?) {
+        this.interceptor = interceptor
     }
+
+    fun triggerPhoneRageshake() = interceptor?.invoke()
 }
