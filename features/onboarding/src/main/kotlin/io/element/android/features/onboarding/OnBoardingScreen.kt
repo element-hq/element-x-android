@@ -59,8 +59,8 @@ fun OnBoardingScreen(
     onSignUp: () -> Unit = {},
     onSignIn: () -> Unit = {},
 ) {
-    val carrouselState = remember { SplashCarouselStateFactory().create() }
-    val nbOfPages = carrouselState.items.size
+    val carrouselData = remember { SplashCarouselDataFactory().create() }
+    val nbOfPages = carrouselData.items.size
     var key by remember { mutableStateOf(false) }
     Box(
         modifier = modifier
@@ -92,7 +92,7 @@ fun OnBoardingScreen(
                 state = pagerState,
             ) { page ->
                 // Our page content
-                OnBoardingPage(carrouselState.items[page])
+                OnBoardingPage(carrouselData.items[page])
             }
             HorizontalPagerIndicator(
                 pagerState = pagerState,
@@ -118,7 +118,7 @@ fun OnBoardingScreen(
 
 @Composable
 fun OnBoardingPage(
-    item: SplashCarouselState.Item,
+    item: SplashCarouselData.Item,
     modifier: Modifier = Modifier,
 ) {
     Box(

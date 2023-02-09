@@ -19,8 +19,8 @@ package io.element.android.features.onboarding
 import androidx.annotation.DrawableRes
 import io.element.android.libraries.ui.strings.R as StringR
 
-class SplashCarouselStateFactory {
-    fun create(): SplashCarouselState {
+class SplashCarouselDataFactory {
+    fun create(): SplashCarouselData {
         val lightTheme = true
 
         fun background(@DrawableRes lightDrawable: Int) =
@@ -29,9 +29,9 @@ class SplashCarouselStateFactory {
         fun hero(@DrawableRes lightDrawable: Int, @DrawableRes darkDrawable: Int) =
             if (lightTheme) lightDrawable else darkDrawable
 
-        return SplashCarouselState(
+        return SplashCarouselData(
             listOf(
-                SplashCarouselState.Item(
+                SplashCarouselData.Item(
                     StringR.string.ftue_auth_carousel_secure_title,
                     StringR.string.ftue_auth_carousel_secure_body,
                     hero(
@@ -40,19 +40,19 @@ class SplashCarouselStateFactory {
                     ),
                     background(R.drawable.bg_carousel_page_1)
                 ),
-                SplashCarouselState.Item(
+                SplashCarouselData.Item(
                     StringR.string.ftue_auth_carousel_control_title,
                     StringR.string.ftue_auth_carousel_control_body,
                     hero(R.drawable.ic_splash_control, R.drawable.ic_splash_control_dark),
                     background(R.drawable.bg_carousel_page_2)
                 ),
-                SplashCarouselState.Item(
+                SplashCarouselData.Item(
                     StringR.string.ftue_auth_carousel_encrypted_title,
                     StringR.string.ftue_auth_carousel_encrypted_body,
                     hero(R.drawable.ic_splash_secure, R.drawable.ic_splash_secure_dark),
                     background(R.drawable.bg_carousel_page_3)
                 ),
-                SplashCarouselState.Item(
+                SplashCarouselData.Item(
                     collaborationTitle(),
                     StringR.string.ftue_auth_carousel_workplace_body,
                     hero(
