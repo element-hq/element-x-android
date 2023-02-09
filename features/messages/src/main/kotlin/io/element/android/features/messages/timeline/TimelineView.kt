@@ -352,11 +352,6 @@ internal fun TimelineLoadingMoreIndicator() {
     }
 }
 
-class MessagesItemGroupPositionToMessagesTimelineItemContentProvider :
-    PairCombinedPreviewParameter<MessagesItemGroupPosition, TimelineItemContent>(
-        TimelineItemGroupPositionProvider() to MessagesTimelineItemContentProvider()
-    )
-
 @Preview
 @Composable
 fun LoginRootScreenLightPreview(
