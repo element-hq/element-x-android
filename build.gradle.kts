@@ -165,12 +165,18 @@ koverMerged {
         classes {
             excludes.addAll(
                 listOf(
-                    /*
-                    "*Fragment",
-                    "*Fragment\$*",
-                    "*Activity",
-                    "*Activity\$*",
-                     */
+                    // Exclude generated classes.
+                    "*_ModuleKt",
+                    "anvil.hint.binding.io.element.*",
+                    "anvil.hint.merge.*",
+                    "anvil.module.*",
+                    "com.airbnb.android.showkase*",
+                    "*_Factory*",
+                    "*_Module*",
+                    "*ComposableSingletons$*",
+                    "*_AssistedFactory_Impl*",
+                    "*BuildConfig",
+                    // Other
                 )
             )
         }
