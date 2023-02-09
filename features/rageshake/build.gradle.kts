@@ -40,7 +40,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
-    implementation(libs.squareup.seismic)
+    api(libs.squareup.seismic)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.coil)
     implementation(libs.coil.compose)

@@ -34,7 +34,7 @@ android {
         implementation(libs.dagger)
         implementation(projects.libraries.di)
         implementation(projects.anvilannotations)
-        implementation(libs.datetime)
+        api(libs.datetime)
         ksp(libs.showkase.processor)
 
         testImplementation(libs.test.junit)
