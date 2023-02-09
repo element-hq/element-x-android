@@ -18,6 +18,7 @@
 
 package io.element.android.features.rageshake.detection
 
+import android.graphics.Bitmap
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
@@ -27,6 +28,7 @@ import io.element.android.features.rageshake.preferences.FakeRageShake
 import io.element.android.features.rageshake.preferences.FakeRageshakeDataStore
 import io.element.android.features.rageshake.preferences.RageshakePreferencesPresenter
 import io.element.android.features.rageshake.screenshot.ImageResult
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -83,7 +85,41 @@ class RageshakeDetectionPresenterTest {
     }
 
     @Test
-    fun `present - screenshot then dismiss`() = runTest {
+    fun `present - screenshot with success then dismiss`() = runTest {
+        val screenshotHolder = FakeScreenshotHolder(screenshotUri = null)
+        val rageshake = FakeRageShake(isAvailableValue = true)
+        val rageshakeDataStore = FakeRageshakeDataStore(isEnabled = true)
+        val presenter = RageshakeDetectionPresenter(
+            screenshotHolder = screenshotHolder,
+            rageShake = rageshake,
+            preferencesPresenter = RageshakePreferencesPresenter(
+                rageshake = rageshake,
+                rageshakeDataStore = rageshakeDataStore,
+            )
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.isStarted).isFalse()
+            initialState.eventSink.invoke(RageshakeDetectionEvents.StartDetection)
+            assertThat(awaitItem().isStarted).isTrue()
+            rageshake.triggerPhoneRageshake()
+            assertThat(awaitItem().takeScreenshot).isTrue()
+            initialState.eventSink.invoke(
+                RageshakeDetectionEvents.ProcessScreenshot(ImageResult.Success(aBitmap()))
+            )
+            assertThat(awaitItem().showDialog).isTrue()
+            initialState.eventSink.invoke(RageshakeDetectionEvents.Dismiss)
+            val finalState = awaitItem()
+            assertThat(finalState.showDialog).isFalse()
+            assertThat(rageshakeDataStore.isEnabled().first()).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - screenshot with error then dismiss`() = runTest {
         val screenshotHolder = FakeScreenshotHolder(screenshotUri = null)
         val rageshake = FakeRageShake(isAvailableValue = true)
         val rageshakeDataStore = FakeRageshakeDataStore(isEnabled = true)
@@ -140,7 +176,7 @@ class RageshakeDetectionPresenterTest {
             rageshake.triggerPhoneRageshake()
             assertThat(awaitItem().takeScreenshot).isTrue()
             initialState.eventSink.invoke(
-                RageshakeDetectionEvents.ProcessScreenshot(ImageResult.Error(Exception("Error")))
+                RageshakeDetectionEvents.ProcessScreenshot(ImageResult.Success(aBitmap()))
             )
             assertThat(awaitItem().showDialog).isTrue()
             initialState.eventSink.invoke(RageshakeDetectionEvents.Disable)
@@ -150,3 +186,6 @@ class RageshakeDetectionPresenterTest {
         }
     }
 }
+
+private fun aBitmap(): Bitmap = mockk()
+
