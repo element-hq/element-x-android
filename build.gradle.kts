@@ -185,9 +185,9 @@ koverMerged {
             name = "Global minimum code coverage."
             target = kotlinx.kover.api.VerificationTarget.ALL
             bound {
-                minValue = 35
+                minValue = 40
                 // Setting a max value, so that if coverage is bigger, it means that we have to change minValue.
-                maxValue = 40
+                maxValue = 45
                 counter = kotlinx.kover.api.CounterType.LINE
                 valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
             }
@@ -198,10 +198,11 @@ koverMerged {
             target = kotlinx.kover.api.VerificationTarget.CLASS
             overrideClassFilter {
                 includes += "*Presenter"
+                excludes += "*TemplatePresenter"
             }
             bound {
-                minValue = 80
-                counter = kotlinx.kover.api.CounterType.LINE
+                minValue = 90
+                counter = kotlinx.kover.api.CounterType.INSTRUCTION
                 valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
             }
         }
