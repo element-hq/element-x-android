@@ -19,11 +19,10 @@ package io.element.android.x.root
 import io.element.android.features.rageshake.reporter.BugReporter
 import io.element.android.features.rageshake.reporter.BugReporterListener
 import io.element.android.features.rageshake.reporter.ReportType
+import io.element.android.libraries.matrixtest.A_FAILURE_REASON
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
-const val A_REASON = "There has been a failure"
 
 // TODO Remove this duplicated class when we will rework modules.
 class FakeBugReporter(val mode: FakeBugReporterMode = FakeBugReporterMode.Success) : BugReporter {
@@ -49,7 +48,7 @@ class FakeBugReporter(val mode: FakeBugReporterMode = FakeBugReporterMode.Succes
             when (mode) {
                 FakeBugReporterMode.Success -> Unit
                 FakeBugReporterMode.Failure -> {
-                    listener?.onUploadFailed(A_REASON)
+                    listener?.onUploadFailed(A_FAILURE_REASON)
                     return@launch
                 }
                 FakeBugReporterMode.Cancel -> {

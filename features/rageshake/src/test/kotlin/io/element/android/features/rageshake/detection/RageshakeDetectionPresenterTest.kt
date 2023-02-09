@@ -28,6 +28,7 @@ import io.element.android.features.rageshake.preferences.FakeRageShake
 import io.element.android.features.rageshake.preferences.FakeRageshakeDataStore
 import io.element.android.features.rageshake.preferences.RageshakePreferencesPresenter
 import io.element.android.features.rageshake.screenshot.ImageResult
+import io.element.android.libraries.matrixtest.AN_EXCEPTION
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -142,7 +143,7 @@ class RageshakeDetectionPresenterTest {
             rageshake.triggerPhoneRageshake()
             assertThat(awaitItem().takeScreenshot).isTrue()
             initialState.eventSink.invoke(
-                RageshakeDetectionEvents.ProcessScreenshot(ImageResult.Error(Exception("Error")))
+                RageshakeDetectionEvents.ProcessScreenshot(ImageResult.Error(AN_EXCEPTION))
             )
             assertThat(awaitItem().showDialog).isTrue()
             initialState.eventSink.invoke(RageshakeDetectionEvents.Dismiss)
