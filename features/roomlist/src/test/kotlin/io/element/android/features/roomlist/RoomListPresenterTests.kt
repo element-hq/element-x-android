@@ -131,7 +131,7 @@ class RoomListPresenterTests {
             skipItems(1) // Filter update
             val withFilteredRoomState = awaitItem()
             assertThat(withFilteredRoomState.filter).isEqualTo("tada")
-            assertThat(withFilteredRoomState.roomList.size).isEqualTo(0)
+            assertThat(withFilteredRoomState.roomList).isEmpty()
         }
     }
 
