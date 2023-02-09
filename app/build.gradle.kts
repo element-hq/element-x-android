@@ -175,8 +175,6 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.startup)
     implementation(libs.coil)
-    implementation(libs.datetime)
-    implementation(libs.squareup.seismic)
 
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
