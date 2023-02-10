@@ -24,10 +24,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.rageshake.crash.ui.CrashDetectionEvents
 import io.element.android.features.rageshake.crash.ui.CrashDetectionView
+import io.element.android.features.rageshake.crash.ui.aCrashDetectionState
 import io.element.android.features.rageshake.detection.RageshakeDetectionEvents
 import io.element.android.features.rageshake.detection.RageshakeDetectionView
+import io.element.android.features.rageshake.detection.aRageshakeDetectionState
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.BooleanPreviewParameter
 import io.element.android.tests.uitests.openShowkase
 import io.element.android.x.component.ShowkaseButton
 
@@ -66,5 +74,26 @@ fun RootView(
             state = state.crashDetectionState,
             onOpenBugReport = ::onOpenBugReport,
         )
+    }
+}
+
+@Preview
+@Composable
+fun RootLightPreview(@PreviewParameter(BooleanPreviewParameter::class) dialogType: Boolean) = ElementPreviewLight { ContentToPreview(dialogType) }
+
+@Preview
+@Composable
+fun RootDarkPreview(@PreviewParameter(BooleanPreviewParameter::class) dialogType: Boolean) = ElementPreviewDark { ContentToPreview(dialogType) }
+
+@Composable
+private fun ContentToPreview(dialogType: Boolean) {
+    RootView(
+        aRootState().copy(
+            isShowkaseButtonVisible = true,
+            rageshakeDetectionState = aRageshakeDetectionState().copy(showDialog = dialogType),
+            crashDetectionState = aCrashDetectionState().copy(crashDetected = !dialogType),
+        )
+    ) {
+        Text("Children")
     }
 }

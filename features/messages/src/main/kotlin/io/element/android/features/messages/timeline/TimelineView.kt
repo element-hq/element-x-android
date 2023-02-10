@@ -64,7 +64,6 @@ import io.element.android.features.messages.timeline.components.TimelineItemUnkn
 import io.element.android.features.messages.timeline.model.AggregatedReaction
 import io.element.android.features.messages.timeline.model.MessagesItemGroupPosition
 import io.element.android.features.messages.timeline.model.TimelineItem
-import io.element.android.features.messages.timeline.model.TimelineItemGroupPositionProvider
 import io.element.android.features.messages.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.timeline.model.content.MessagesTimelineItemContentProvider
 import io.element.android.features.messages.timeline.model.content.TimelineItemContent
@@ -72,6 +71,7 @@ import io.element.android.features.messages.timeline.model.content.TimelineItemE
 import io.element.android.features.messages.timeline.model.content.TimelineItemImageContent
 import io.element.android.features.messages.timeline.model.content.TimelineItemRedactedContent
 import io.element.android.features.messages.timeline.model.content.TimelineItemTextBasedContent
+import io.element.android.features.messages.timeline.model.content.TimelineItemTextContent
 import io.element.android.features.messages.timeline.model.content.TimelineItemUnknownContent
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -81,7 +81,6 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.PairCombinedPreviewParameter
 import io.element.android.libraries.matrix.core.EventId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -366,7 +365,17 @@ fun LoginRootScreenDarkPreview(
 
 @Composable
 private fun ContentToPreview(content: TimelineItemContent) {
-    val timelineItems = persistentListOf(
+    val timelineItems = createTimelineItems(content)
+    TimelineView(
+        state = aTimelineState().copy(
+            timelineItems = timelineItems,
+            hasMoreToLoad = true,
+        )
+    )
+}
+
+internal fun createTimelineItems(content: TimelineItemContent): ImmutableList<TimelineItem> {
+    return persistentListOf(
         // 3 items (First Middle Last) with isMine = false
         createMessageEvent(
             isMine = false,
@@ -400,21 +409,13 @@ private fun ContentToPreview(content: TimelineItemContent) {
             groupPosition = MessagesItemGroupPosition.First
         ),
     )
-    TimelineView(
-        state = TimelineState(
-            timelineItems = timelineItems,
-            hasMoreToLoad = true,
-            highlightedEventId = null,
-            eventSink = {}
-        )
-    )
 }
 
-private fun createMessageEvent(
-    isMine: Boolean,
-    content: TimelineItemContent,
-    groupPosition: MessagesItemGroupPosition
-): TimelineItem {
+internal fun createMessageEvent(
+    isMine: Boolean = false,
+    content: TimelineItemContent = createTimelineItemContent(),
+    groupPosition: MessagesItemGroupPosition = MessagesItemGroupPosition.First
+): TimelineItem.MessageEvent {
     return TimelineItem.MessageEvent(
         id = EventId(Math.random().toString()),
         senderId = "senderId",
@@ -428,5 +429,12 @@ private fun createMessageEvent(
         isMine = isMine,
         senderDisplayName = "sender",
         groupPosition = groupPosition,
+    )
+}
+
+internal fun createTimelineItemContent(): TimelineItemContent {
+    return TimelineItemTextContent(
+        body = "Text",
+        htmlDocument = null
     )
 }

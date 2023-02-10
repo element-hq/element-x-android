@@ -36,3 +36,8 @@ data class ActionListState(
         ) : Target
     }
 }
+
+fun anActionListState() = ActionListState(
+    target = ActionListState.Target.None,
+    eventSink = {}
+)
