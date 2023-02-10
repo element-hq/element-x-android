@@ -218,6 +218,6 @@ fun BugReportViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
 @Composable
 private fun ContentToPreview() {
     BugReportView(
-        state = BugReportState(),
+        state = aBugReportState(),
     )
 }

@@ -20,12 +20,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.features.logout.LogoutPreferenceState
 import io.element.android.features.logout.LogoutPreferenceView
 import io.element.android.features.preferences.user.UserPreferences
-import io.element.android.features.rageshake.preferences.RageshakePreferencesState
 import io.element.android.features.rageshake.preferences.RageshakePreferencesView
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.preferences.PreferenceView
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -66,10 +63,5 @@ fun PreferencesRootViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
-    val state = PreferencesRootState(
-        logoutState = LogoutPreferenceState(),
-        rageshakeState = RageshakePreferencesState(),
-        myUser = Async.Uninitialized
-    )
-    PreferencesRootView(state)
+    PreferencesRootView(aPreferencesRootState())
 }

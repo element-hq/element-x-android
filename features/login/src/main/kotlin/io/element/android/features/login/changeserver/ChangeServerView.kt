@@ -188,6 +188,6 @@ fun ChangeServerViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
 @Composable
 private fun ContentToPreview() {
     ChangeServerView(
-        state = ChangeServerState(homeserver = "matrix.org"),
+        state = aChangeServerState().copy(homeserver = "matrix.org"),
     )
 }

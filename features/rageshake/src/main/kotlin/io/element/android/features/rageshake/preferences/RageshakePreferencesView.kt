@@ -85,7 +85,7 @@ fun RageshakePreferencesViewDarkPreview() = ElementPreviewDark { ContentToPrevie
 
 @Composable
 private fun ContentToPreview() {
-    RageshakePreferencesView(RageshakePreferencesState(isEnabled = true, isSupported = true, sensitivity = 0.5f))
+    RageshakePreferencesView(aRageshakePreferencesState().copy(isEnabled = true, isSupported = true, sensitivity = 0.5f))
 }
 
 @Preview
@@ -98,5 +98,5 @@ fun RageshakePreferencesViewNotSupportedDarkPreview() = ElementPreviewDark { Con
 
 @Composable
 private fun ContentNotSupportedToPreview() {
-    RageshakePreferencesView(RageshakePreferencesState(isEnabled = true, isSupported = false, sensitivity = 0.5f))
+    RageshakePreferencesView(aRageshakePreferencesState().copy(isEnabled = true, isSupported = false, sensitivity = 0.5f))
 }

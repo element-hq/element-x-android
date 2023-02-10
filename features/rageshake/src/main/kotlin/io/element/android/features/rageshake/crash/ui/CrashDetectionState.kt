@@ -17,6 +17,11 @@
 package io.element.android.features.rageshake.crash.ui
 
 data class CrashDetectionState(
-    val crashDetected: Boolean = false,
-    val eventSink: (CrashDetectionEvents) -> Unit = {}
+    val crashDetected: Boolean,
+    val eventSink: (CrashDetectionEvents) -> Unit
+)
+
+fun aCrashDetectionState() = CrashDetectionState(
+    crashDetected = false,
+    eventSink = {}
 )

@@ -18,12 +18,21 @@ package io.element.android.features.rageshake.detection
 
 import androidx.compose.runtime.Stable
 import io.element.android.features.rageshake.preferences.RageshakePreferencesState
+import io.element.android.features.rageshake.preferences.aRageshakePreferencesState
 
 @Stable
 data class RageshakeDetectionState(
-    val takeScreenshot: Boolean = false,
-    val showDialog: Boolean = false,
-    val isStarted: Boolean = false,
-    val preferenceState: RageshakePreferencesState = RageshakePreferencesState(),
-    val eventSink: (RageshakeDetectionEvents) -> Unit = {}
+    val takeScreenshot: Boolean,
+    val showDialog: Boolean,
+    val isStarted: Boolean,
+    val preferenceState: RageshakePreferencesState,
+    val eventSink: (RageshakeDetectionEvents) -> Unit
+)
+
+fun aRageshakeDetectionState() = RageshakeDetectionState(
+    takeScreenshot = false,
+    showDialog = false,
+    isStarted = false,
+    preferenceState = aRageshakePreferencesState(),
+    eventSink = {}
 )

@@ -50,6 +50,6 @@ fun TemplateViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
 @Composable
 private fun ContentToPreview() {
     TemplateView(
-        state = TemplateState(),
+        state = aTemplateState(),
     )
 }
