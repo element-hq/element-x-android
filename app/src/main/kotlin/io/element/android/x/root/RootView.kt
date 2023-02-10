@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.rageshake.crash.ui.CrashDetectionEvents
 import io.element.android.features.rageshake.crash.ui.CrashDetectionView
 import io.element.android.features.rageshake.crash.ui.aCrashDetectionState
@@ -35,7 +36,6 @@ import io.element.android.features.rageshake.detection.aRageshakeDetectionState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.BooleanPreviewParameter
 import io.element.android.tests.uitests.openShowkase
 import io.element.android.x.component.ShowkaseButton
 
@@ -77,23 +77,33 @@ fun RootView(
     }
 }
 
-@Preview
-@Composable
-fun RootLightPreview(@PreviewParameter(BooleanPreviewParameter::class) dialogType: Boolean) = ElementPreviewLight { ContentToPreview(dialogType) }
-
-@Preview
-@Composable
-fun RootDarkPreview(@PreviewParameter(BooleanPreviewParameter::class) dialogType: Boolean) = ElementPreviewDark { ContentToPreview(dialogType) }
-
-@Composable
-private fun ContentToPreview(dialogType: Boolean) {
-    RootView(
-        aRootState().copy(
-            isShowkaseButtonVisible = true,
-            rageshakeDetectionState = aRageshakeDetectionState().copy(showDialog = dialogType),
-            crashDetectionState = aCrashDetectionState().copy(crashDetected = !dialogType),
+open class RootStatePreviewParameter : PreviewParameterProvider<RootState> {
+    override val values: Sequence<RootState>
+        get() = sequenceOf(
+            aRootState().copy(
+                isShowkaseButtonVisible = true,
+                rageshakeDetectionState = aRageshakeDetectionState().copy(showDialog = false),
+                crashDetectionState = aCrashDetectionState().copy(crashDetected = true),
+            ),
+            aRootState().copy(
+                isShowkaseButtonVisible = true,
+                rageshakeDetectionState = aRageshakeDetectionState().copy(showDialog = true),
+                crashDetectionState = aCrashDetectionState().copy(crashDetected = false),
+            )
         )
-    ) {
+}
+
+@Preview
+@Composable
+fun RootLightPreview(@PreviewParameter(RootStatePreviewParameter::class) rootState: RootState) = ElementPreviewLight { ContentToPreview(rootState) }
+
+@Preview
+@Composable
+fun RootDarkPreview(@PreviewParameter(RootStatePreviewParameter::class) rootState: RootState) = ElementPreviewDark { ContentToPreview(rootState) }
+
+@Composable
+private fun ContentToPreview(rootState: RootState) {
+    RootView(rootState) {
         Text("Children")
     }
 }
