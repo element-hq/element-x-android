@@ -64,7 +64,7 @@ fun RoomListView(
         state.eventSink(RoomListEvents.UpdateVisibleRange(range))
     }
 
-    RoomListView(
+    RoomListContent(
         roomSummaries = state.roomList,
         matrixUser = state.matrixUser,
         filter = state.filter,
@@ -78,7 +78,7 @@ fun RoomListView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoomListView(
+fun RoomListContent(
     roomSummaries: ImmutableList<RoomListRoomSummary>,
     matrixUser: MatrixUser?,
     filter: String,
@@ -165,7 +165,7 @@ fun RoomListViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
-    RoomListView(
+    RoomListContent(
         roomSummaries = stubbedRoomSummaries(),
         matrixUser = MatrixUser(id = UserId("@id"), username = "User#1", avatarData = AvatarData("U")),
         onRoomClicked = {},
