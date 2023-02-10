@@ -77,7 +77,7 @@ fun RootView(
     }
 }
 
-open class RootStatePreviewParameter : PreviewParameterProvider<RootState> {
+open class RootStatePreviewParameterProvider : PreviewParameterProvider<RootState> {
     override val values: Sequence<RootState>
         get() = sequenceOf(
             aRootState().copy(
@@ -95,11 +95,11 @@ open class RootStatePreviewParameter : PreviewParameterProvider<RootState> {
 
 @Preview
 @Composable
-fun RootLightPreview(@PreviewParameter(RootStatePreviewParameter::class) rootState: RootState) = ElementPreviewLight { ContentToPreview(rootState) }
+fun RootLightPreview(@PreviewParameter(RootStatePreviewParameterProvider::class) rootState: RootState) = ElementPreviewLight { ContentToPreview(rootState) }
 
 @Preview
 @Composable
-fun RootDarkPreview(@PreviewParameter(RootStatePreviewParameter::class) rootState: RootState) = ElementPreviewDark { ContentToPreview(rootState) }
+fun RootDarkPreview(@PreviewParameter(RootStatePreviewParameterProvider::class) rootState: RootState) = ElementPreviewDark { ContentToPreview(rootState) }
 
 @Composable
 private fun ContentToPreview(rootState: RootState) {

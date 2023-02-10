@@ -23,6 +23,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSlide
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
@@ -75,28 +77,25 @@ fun RageshakePreferencesView(
     }
 }
 
-@Preview
-@Composable
-fun RageshakePreferencesViewLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-fun RageshakePreferencesViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
-    RageshakePreferencesView(aRageshakePreferencesState().copy(isEnabled = true, isSupported = true, sensitivity = 0.5f))
+open class RageshakePreferencesStatePreviewParameterProvider : PreviewParameterProvider<RageshakePreferencesState> {
+    override val values: Sequence<RageshakePreferencesState>
+        get() = sequenceOf(
+            aRageshakePreferencesState().copy(isEnabled = true, isSupported = true, sensitivity = 0.5f),
+            aRageshakePreferencesState().copy(isEnabled = true, isSupported = false, sensitivity = 0.5f),
+        )
 }
 
 @Preview
 @Composable
-fun RageshakePreferencesViewNotSupportedLightPreview() = ElementPreviewLight { ContentNotSupportedToPreview() }
+fun RageshakePreferencesViewLightPreview(@PreviewParameter(RageshakePreferencesStatePreviewParameterProvider::class) state: RageshakePreferencesState) =
+    ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun RageshakePreferencesViewNotSupportedDarkPreview() = ElementPreviewDark { ContentNotSupportedToPreview() }
+fun RageshakePreferencesViewDarkPreview(@PreviewParameter(RageshakePreferencesStatePreviewParameterProvider::class) state: RageshakePreferencesState) =
+    ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
-private fun ContentNotSupportedToPreview() {
-    RageshakePreferencesView(aRageshakePreferencesState().copy(isEnabled = true, isSupported = false, sensitivity = 0.5f))
+private fun ContentToPreview(state: RageshakePreferencesState) {
+    RageshakePreferencesView(state)
 }
