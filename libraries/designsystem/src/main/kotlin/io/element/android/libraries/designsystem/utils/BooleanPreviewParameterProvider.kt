@@ -18,7 +18,7 @@ package io.element.android.libraries.designsystem.utils
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
-open class BooleanPreviewParameter : PreviewParameterProvider<Boolean> {
+open class BooleanPreviewParameterProvider : PreviewParameterProvider<Boolean> {
     override val values: Sequence<Boolean>
         get() = sequenceOf(false, true)
 }
