@@ -29,3 +29,10 @@ data class MessageComposerState(
 ) {
     val isSendButtonVisible: Boolean = text?.charSequence.isNullOrEmpty().not()
 }
+
+fun aMessageComposerState() = MessageComposerState(
+    text = StableCharSequence(""),
+    isFullScreen = false,
+    mode = MessageComposerMode.Normal(content = ""),
+    eventSink = {}
+)

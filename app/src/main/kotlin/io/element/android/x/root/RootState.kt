@@ -18,7 +18,9 @@ package io.element.android.x.root
 
 import androidx.compose.runtime.Stable
 import io.element.android.features.rageshake.crash.ui.CrashDetectionState
+import io.element.android.features.rageshake.crash.ui.aCrashDetectionState
 import io.element.android.features.rageshake.detection.RageshakeDetectionState
+import io.element.android.features.rageshake.detection.aRageshakeDetectionState
 
 @Stable
 data class RootState(
@@ -26,4 +28,11 @@ data class RootState(
     val rageshakeDetectionState: RageshakeDetectionState,
     val crashDetectionState: CrashDetectionState,
     val eventSink: (RootEvents) -> Unit
+)
+
+fun aRootState() = RootState(
+    isShowkaseButtonVisible = false,
+    rageshakeDetectionState = aRageshakeDetectionState(),
+    crashDetectionState = aCrashDetectionState(),
+    eventSink = {}
 )

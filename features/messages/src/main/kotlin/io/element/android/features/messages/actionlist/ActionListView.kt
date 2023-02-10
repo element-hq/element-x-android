@@ -28,7 +28,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ListItem
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
@@ -38,12 +37,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.timeline.createMessageEvent
 import io.element.android.features.messages.timeline.model.TimelineItem
 import io.element.android.libraries.designsystem.components.VectorIcon
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheetLayout
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
@@ -115,13 +118,13 @@ private fun SheetContent(
                         text = {
                             Text(
                                 text = action.title,
-                                color = if (action.destructive) MaterialTheme.colorScheme.error else Color.Unspecified,
+                                color = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
                             )
                         },
                         icon = {
                             VectorIcon(
                                 resourceId = action.icon,
-                                tint = if (action.destructive) MaterialTheme.colorScheme.error else LocalContentColor.current,
+                                tint = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
                             )
                         }
                     )
@@ -129,4 +132,58 @@ private fun SheetContent(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun SheetContentNoneLightPreview() = ElementPreviewLight { ContentNoneToPreview() }
+
+@Preview
+@Composable
+fun SheetContentNoneDarkPreview() = ElementPreviewDark { ContentNoneToPreview() }
+
+@Composable
+private fun ContentNoneToPreview() {
+    SheetContent(anActionListState())
+}
+
+@Preview
+@Composable
+fun SheetContentLoadingLightPreview() = ElementPreviewLight { ContentLoadingToPreview() }
+
+@Preview
+@Composable
+fun SheetContentLoadingDarkPreview() = ElementPreviewDark { ContentLoadingToPreview() }
+
+@Composable
+private fun ContentLoadingToPreview() {
+    SheetContent(
+        anActionListState().copy(target = ActionListState.Target.Loading(createMessageEvent()))
+    )
+}
+
+@Preview
+@Composable
+fun SheetContentSuccessLightPreview() = ElementPreviewLight { ContentSuccessToPreview() }
+
+@Preview
+@Composable
+fun SheetContentSuccessDarkPreview() = ElementPreviewDark { ContentSuccessToPreview() }
+
+@Composable
+private fun ContentSuccessToPreview() {
+    SheetContent(
+        anActionListState().copy(
+            target = ActionListState.Target.Success(
+                messageEvent = createMessageEvent(),
+                actions = persistentListOf(
+                    TimelineItemAction.Reply,
+                    TimelineItemAction.Forward,
+                    TimelineItemAction.Copy,
+                    TimelineItemAction.Edit,
+                    TimelineItemAction.Redact,
+                )
+            )
+        )
+    )
 }

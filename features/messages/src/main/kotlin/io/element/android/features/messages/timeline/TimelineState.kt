@@ -20,6 +20,7 @@ import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.timeline.model.TimelineItem
 import io.element.android.libraries.matrix.core.EventId
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 data class TimelineState(
@@ -27,4 +28,11 @@ data class TimelineState(
     val hasMoreToLoad: Boolean,
     val highlightedEventId: EventId?,
     val eventSink: (TimelineEvents) -> Unit
+)
+
+fun aTimelineState() = TimelineState(
+    timelineItems = persistentListOf(),
+    hasMoreToLoad = false,
+    highlightedEventId = null,
+    eventSink = {}
 )

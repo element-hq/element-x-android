@@ -14,24 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist.model
+package io.element.android.libraries.designsystem.utils
 
-import androidx.compose.runtime.Immutable
-import io.element.android.libraries.matrix.ui.model.MatrixUser
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
-@Immutable
-data class RoomListState(
-    val matrixUser: MatrixUser?,
-    val roomList: ImmutableList<RoomListRoomSummary>,
-    val filter: String,
-    val eventSink: (RoomListEvents) -> Unit
-)
-
-fun aRoomListState() = RoomListState(
-    matrixUser = null,
-    roomList = persistentListOf(),
-    filter = "",
-    eventSink = {}
-)
+open class BooleanPreviewParameter : PreviewParameterProvider<Boolean> {
+    override val values: Sequence<Boolean>
+        get() = sequenceOf(false, true)
+}
