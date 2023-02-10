@@ -21,12 +21,12 @@ import io.element.android.libraries.architecture.Async
 import kotlinx.parcelize.Parcelize
 
 data class BugReportState(
-    val formState: BugReportFormState = BugReportFormState.Default,
-    val hasCrashLogs: Boolean = false,
-    val screenshotUri: String? = null,
-    val sendingProgress: Float = 0F,
-    val sending: Async<Unit> = Async.Uninitialized,
-    val eventSink: (BugReportEvents) -> Unit = {}
+    val formState: BugReportFormState,
+    val hasCrashLogs: Boolean,
+    val screenshotUri: String?,
+    val sendingProgress: Float,
+    val sending: Async<Unit>,
+    val eventSink: (BugReportEvents) -> Unit
 ) {
     val submitEnabled =
         formState.description.length > 10 && sending !is Async.Loading
@@ -50,3 +50,12 @@ data class BugReportFormState(
         )
     }
 }
+
+fun aBugReportState() = BugReportState(
+    formState = BugReportFormState.Default,
+    hasCrashLogs = false,
+    screenshotUri = null,
+    sendingProgress = 0F,
+    sending = Async.Uninitialized,
+    eventSink = {}
+)

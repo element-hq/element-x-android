@@ -17,6 +17,11 @@
 package io.element.android.features.template
 
 // TODO add your ui models. Remove the eventSink if you don't have events.
+// Do not use default value, so no member get forgotten in the presenters.
 data class TemplateState(
-    val eventSink: (TemplateEvents) -> Unit = {}
+    val eventSink: (TemplateEvents) -> Unit
+)
+
+fun aTemplateState() = TemplateState(
+    eventSink = {}
 )

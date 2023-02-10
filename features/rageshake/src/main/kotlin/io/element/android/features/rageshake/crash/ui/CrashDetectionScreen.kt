@@ -78,6 +78,6 @@ fun CrashDetectionContentDarkPreview() = ElementPreviewDark { ContentToPreview()
 @Composable
 private fun ContentToPreview() {
     CrashDetectionContent(
-        state = CrashDetectionState()
+        state = aCrashDetectionState()
     )
 }

@@ -19,6 +19,11 @@ package io.element.android.features.logout
 import io.element.android.libraries.architecture.Async
 
 data class LogoutPreferenceState(
-    val logoutAction: Async<Unit> = Async.Uninitialized,
-    val eventSink: (LogoutPreferenceEvents) -> Unit = {},
+    val logoutAction: Async<Unit>,
+    val eventSink: (LogoutPreferenceEvents) -> Unit,
+)
+
+fun aLogoutPreferenceState() = LogoutPreferenceState(
+    logoutAction = Async.Uninitialized,
+    eventSink = {}
 )

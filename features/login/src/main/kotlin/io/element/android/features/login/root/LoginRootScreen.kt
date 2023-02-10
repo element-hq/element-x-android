@@ -230,7 +230,7 @@ fun LoginRootScreenDarkPreview() = ElementPreviewDark { ContentToPreview() }
 @Composable
 private fun ContentToPreview() {
     LoginRootScreen(
-        state = LoginRootState(
+        state = aLoginRootState().copy(
             homeserver = "matrix.org",
         ),
     )
