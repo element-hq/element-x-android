@@ -19,6 +19,7 @@
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -38,4 +39,6 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.core)
     implementation(libs.coil.compose)
+
+    ksp(libs.showkase.processor)
 }

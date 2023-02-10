@@ -30,17 +30,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getBestName
 
+// FIXME Row are not the same height if there is a name or not.
 @Composable
 fun MatrixUserRow(
     matrixUser: MatrixUser,
@@ -89,19 +89,15 @@ fun MatrixUserRow(
 
 @Preview
 @Composable
-fun MatrixUserRowLightPreview() = ElementPreviewLight { ContentToPreview() }
+fun MatrixUserRowLightPreview(@PreviewParameter(MatrixUserPreviewParameterProvider::class) matrixUser: MatrixUser) =
+    ElementPreviewLight { ContentToPreview(matrixUser) }
 
 @Preview
 @Composable
-fun MatrixUserRowDarkPreview() = ElementPreviewDark { ContentToPreview() }
+fun MatrixUserRowDarkPreview(@PreviewParameter(MatrixUserPreviewParameterProvider::class) matrixUser: MatrixUser) =
+    ElementPreviewDark { ContentToPreview(matrixUser) }
 
 @Composable
-private fun ContentToPreview() {
-    MatrixUserRow(
-        MatrixUser(
-            id = UserId("@alice:server.org"),
-            username = "Alice",
-            avatarData = AvatarData("Alice")
-        )
-    )
+private fun ContentToPreview(matrixUser: MatrixUser) {
+    MatrixUserRow(matrixUser)
 }

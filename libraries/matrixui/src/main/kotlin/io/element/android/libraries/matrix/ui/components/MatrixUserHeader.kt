@@ -31,16 +31,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getBestName
 
@@ -83,22 +80,6 @@ fun MatrixUserHeader(
             )
         }
     }
-}
-
-open class MatrixUserPreviewParameterProvider : PreviewParameterProvider<MatrixUser> {
-    override val values: Sequence<MatrixUser>
-        get() = sequenceOf(
-            MatrixUser(
-                id = UserId("@alice:server.org"),
-                username = "Alice",
-                avatarData = AvatarData("Alice")
-            ),
-            MatrixUser(
-                id = UserId("@alice:server.org"),
-                username = null,
-                avatarData = AvatarData("Alice")
-            ),
-        )
 }
 
 @Preview
