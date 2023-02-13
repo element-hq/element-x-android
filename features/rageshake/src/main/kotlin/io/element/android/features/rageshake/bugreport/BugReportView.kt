@@ -40,6 +40,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -107,7 +108,7 @@ fun BugReportView(
                     .padding(horizontal = 16.dp, vertical = 16.dp),
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.primary,
-                )
+            )
             var descriptionFieldState by textFieldState(
                 stateValue = state.formState.description
             )
@@ -209,15 +210,13 @@ fun BugReportView(
 
 @Preview
 @Composable
-fun BugReportViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+fun BugReportViewLightPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun BugReportViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
+fun BugReportViewDarkPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
-private fun ContentToPreview() {
-    BugReportView(
-        state = aBugReportState(),
-    )
+private fun ContentToPreview(state: BugReportState) {
+    BugReportView(state = state)
 }
