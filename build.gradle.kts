@@ -217,7 +217,7 @@ koverMerged {
                 valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
             }
         }
-        // Rule to ensure that coverage of State is sufficient.
+        // Rule to ensure that coverage of States is sufficient.
         rule {
             name = "Check code coverage of states"
             target = kotlinx.kover.api.VerificationTarget.CLASS
