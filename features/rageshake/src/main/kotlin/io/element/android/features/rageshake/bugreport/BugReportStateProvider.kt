@@ -16,7 +16,18 @@
 
 package io.element.android.features.rageshake.bugreport
 
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.Async
+
+open class BugReportStateProvider : PreviewParameterProvider<BugReportState> {
+    override val values: Sequence<BugReportState>
+        get() = sequenceOf(
+            aBugReportState(),
+            aBugReportState().copy(formState = BugReportFormState.Default.copy(description = "A long enough description"), hasCrashLogs = true),
+            aBugReportState().copy(sending = Async.Loading()),
+            aBugReportState().copy(sending = Async.Success(Unit)),
+        )
+}
 
 fun aBugReportState() = BugReportState(
     formState = BugReportFormState.Default,
