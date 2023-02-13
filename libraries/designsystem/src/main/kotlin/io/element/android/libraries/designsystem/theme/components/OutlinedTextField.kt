@@ -84,11 +84,11 @@ fun OutlinedTextField(
 
 @Preview
 @Composable
-fun OutlinedTextFieldsLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun OutlinedTextFieldsLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun OutlinedTextFieldsDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun OutlinedTextFieldsDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

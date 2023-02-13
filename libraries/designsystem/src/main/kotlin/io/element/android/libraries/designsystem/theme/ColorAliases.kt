@@ -47,11 +47,11 @@ fun ElementColors.roomListPlaceHolder() = if (isLight) SystemGrey6Light else Sys
 
 @Preview
 @Composable
-fun ColorAliasesLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun ColorAliasesLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun ColorAliasesDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun ColorAliasesDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

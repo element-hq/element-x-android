@@ -198,11 +198,11 @@ fun MessagesViewTopBar(
 
 @Preview
 @Composable
-fun MessagesViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun MessagesViewLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun MessagesViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun MessagesViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

@@ -174,11 +174,11 @@ fun SearchRoomListTopBar(
 
 @Preview
 @Composable
-fun SearchRoomListTopBarLightPreview() = ElementPreviewLight { SearchRoomListTopBarPreview() }
+internal fun SearchRoomListTopBarLightPreview() = ElementPreviewLight { SearchRoomListTopBarPreview() }
 
 @Preview
 @Composable
-fun SearchRoomListTopBarDarkPreview() = ElementPreviewDark { SearchRoomListTopBarPreview() }
+internal fun SearchRoomListTopBarDarkPreview() = ElementPreviewDark { SearchRoomListTopBarPreview() }
 
 @Composable
 private fun SearchRoomListTopBarPreview() {
@@ -230,11 +230,11 @@ private fun DefaultRoomListTopBar(
 
 @Preview
 @Composable
-fun DefaultRoomListTopBarLightPreview() = ElementPreviewLight { DefaultRoomListTopBarPreview() }
+internal fun DefaultRoomListTopBarLightPreview() = ElementPreviewLight { DefaultRoomListTopBarPreview() }
 
 @Preview
 @Composable
-fun DefaultRoomListTopBarDarkPreview() = ElementPreviewDark { DefaultRoomListTopBarPreview() }
+internal fun DefaultRoomListTopBarDarkPreview() = ElementPreviewDark { DefaultRoomListTopBarPreview() }
 
 @Composable
 private fun DefaultRoomListTopBarPreview() {

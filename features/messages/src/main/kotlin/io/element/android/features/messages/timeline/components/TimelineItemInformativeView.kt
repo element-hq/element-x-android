@@ -65,11 +65,11 @@ fun TimelineItemInformativeView(
 
 @Preview
 @Composable
-fun MatrixUserRowLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun MatrixUserRowLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun MatrixUserRowDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun MatrixUserRowDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
