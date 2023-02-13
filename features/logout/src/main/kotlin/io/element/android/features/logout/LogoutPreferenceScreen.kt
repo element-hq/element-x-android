@@ -92,11 +92,11 @@ fun LogoutPreferenceContent(
 
 @Preview
 @Composable
-fun LogoutPreferenceViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun LogoutPreferenceViewLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun LogoutPreferenceViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun LogoutPreferenceViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

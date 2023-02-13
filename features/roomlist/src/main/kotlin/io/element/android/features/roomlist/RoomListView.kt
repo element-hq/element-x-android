@@ -158,11 +158,11 @@ private fun RoomListRoomSummary.contentType() = isPlaceholder
 
 @Preview
 @Composable
-fun RoomListViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun RoomListViewLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun RoomListViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun RoomListViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

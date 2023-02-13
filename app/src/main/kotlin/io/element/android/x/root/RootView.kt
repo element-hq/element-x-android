@@ -76,11 +76,11 @@ fun RootView(
 
 @Preview
 @Composable
-fun RootLightPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) = ElementPreviewLight { ContentToPreview(rootState) }
+internal fun RootLightPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) = ElementPreviewLight { ContentToPreview(rootState) }
 
 @Preview
 @Composable
-fun RootDarkPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) = ElementPreviewDark { ContentToPreview(rootState) }
+internal fun RootDarkPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) = ElementPreviewDark { ContentToPreview(rootState) }
 
 @Composable
 private fun ContentToPreview(rootState: RootState) {

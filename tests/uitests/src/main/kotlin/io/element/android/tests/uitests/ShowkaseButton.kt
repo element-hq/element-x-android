@@ -63,11 +63,11 @@ fun ShowkaseButton(
 
 @Preview
 @Composable
-fun ShowkaseButtonLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun ShowkaseButtonLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun ShowkaseButtonDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun ShowkaseButtonDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
