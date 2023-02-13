@@ -23,6 +23,7 @@ open class AvatarDataProvider : PreviewParameterProvider<AvatarData> {
         get() = sequenceOf(
             anAvatarData(),
             anAvatarData().copy(name = null),
+            anAvatarData().copy(url = "aUrl"),
         )
 }
 
