@@ -51,6 +51,7 @@ import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
@@ -177,7 +178,8 @@ fun BugReportView(
                         AsyncImage(
                             modifier = Modifier.fillMaxWidth(fraction = 0.5f),
                             model = model,
-                            contentDescription = null
+                            contentDescription = null,
+                            placeholder = debugPlaceholderBackground(),
                         )
                     }
                 }

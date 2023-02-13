@@ -36,6 +36,7 @@ import io.element.android.libraries.designsystem.AvatarGradientEnd
 import io.element.android.libraries.designsystem.AvatarGradientStart
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.debugPlaceholderAvatar
 import io.element.android.libraries.designsystem.theme.components.Text
 import timber.log.Timber
 
@@ -69,6 +70,7 @@ private fun ImageAvatar(
         },
         contentDescription = null,
         contentScale = ContentScale.Crop,
+        placeholder = debugPlaceholderAvatar(),
         modifier = modifier
     )
 }
