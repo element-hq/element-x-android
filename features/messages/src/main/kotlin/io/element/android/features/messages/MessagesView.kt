@@ -21,18 +21,7 @@
 
 package io.element.android.features.messages
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
@@ -68,11 +57,7 @@ import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.IconButton
-import io.element.android.libraries.designsystem.theme.components.Scaffold
-import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.theme.components.*
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.core.RoomId
 import io.element.android.libraries.textcomposer.MessageComposerMode
@@ -223,9 +208,9 @@ fun MessagesViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
 private fun ContentToPreview() {
     MessagesView(
         MessagesState(
-            roomId = RoomId(""),
+            roomId = RoomId("!id"),
             roomName = "Room name",
-            roomAvatar = AvatarData("Room name"),
+            roomAvatar = AvatarData("!id", "Room name"),
             composerState = aMessageComposerState().copy(
                 text = StableCharSequence("Hello"),
                 isFullScreen = false,

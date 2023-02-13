@@ -17,22 +17,24 @@
 package io.element.android.libraries.matrix.ui.components
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.matrix.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 
 open class MatrixUserPreviewParameterProvider : PreviewParameterProvider<MatrixUser> {
     override val values: Sequence<MatrixUser>
         get() = sequenceOf(
+            aMatrixUser(),
             MatrixUser(
-                id = UserId("@alice:server.org"),
-                username = "Alice",
-                avatarData = AvatarData("Alice")
-            ),
-            MatrixUser(
-                id = UserId("@alice:server.org"),
+                id = UserId("@id_of_alice:server.org"),
                 username = null,
-                avatarData = AvatarData("Alice")
+                avatarData = anAvatarData().copy(name = null)
             ),
         )
 }
+
+fun aMatrixUser() = MatrixUser(
+    id = UserId("@id_of_alice:server.org"),
+    username = "Alice",
+    avatarData = anAvatarData()
+)

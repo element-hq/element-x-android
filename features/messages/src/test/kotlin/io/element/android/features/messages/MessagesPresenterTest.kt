@@ -170,7 +170,7 @@ private fun aMessageEvent(
     id = AN_EVENT_ID,
     senderId = A_USER_ID.value,
     senderDisplayName = A_USER_NAME,
-    senderAvatar = AvatarData(),
+    senderAvatar = AvatarData(A_USER_ID.value, A_USER_NAME),
     content = content,
     sentTime = "",
     isMine = isMine,

@@ -27,7 +27,7 @@ internal fun stubbedRoomSummaries(): ImmutableList<RoomListRoomSummary> {
             hasUnread = true,
             timestamp = "14:18",
             lastMessage = "A very very very very long message which suites on two lines",
-            avatarData = AvatarData("R"),
+            avatarData = AvatarData("!id", "R"),
             id = "roomId"
         ),
         RoomListRoomSummary(
@@ -35,7 +35,7 @@ internal fun stubbedRoomSummaries(): ImmutableList<RoomListRoomSummary> {
             hasUnread = false,
             timestamp = "14:16",
             lastMessage = "A short message",
-            avatarData = AvatarData("Z"),
+            avatarData = AvatarData("!id", "Z"),
             id = "roomId2"
         ),
         RoomListRoomSummaryPlaceholders.create("roomId2")

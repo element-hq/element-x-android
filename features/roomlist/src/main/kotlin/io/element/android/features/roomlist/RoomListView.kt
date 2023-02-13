@@ -168,7 +168,7 @@ fun RoomListViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
 private fun ContentToPreview() {
     RoomListView(
         aRoomListState().copy(
-            matrixUser = MatrixUser(id = UserId("@id"), username = "User#1", avatarData = AvatarData("U")),
+            matrixUser = MatrixUser(id = UserId("@id"), username = "User#1", avatarData = AvatarData("@id", "U")),
             roomList = stubbedRoomSummaries(),
             filter = "filter",
         )

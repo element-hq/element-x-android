@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import io.element.android.libraries.designsystem.AvatarGradientEnd
@@ -90,7 +91,7 @@ private fun InitialsAvatar(
     ) {
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = avatarData.name.first().uppercase(),
+            text = avatarData.getInitial(),
             fontSize = (avatarData.size.value / 2).sp,
             color = Color.White,
         )
@@ -99,13 +100,15 @@ private fun InitialsAvatar(
 
 @Preview
 @Composable
-fun AvatarLightPreview() = ElementPreviewLight { ContentToPreview() }
+fun AvatarLightPreview(@PreviewParameter(AvatarDataPreviewParameterProvider::class) avatarData: AvatarData) =
+    ElementPreviewLight { ContentToPreview(avatarData) }
 
 @Preview
 @Composable
-fun AvatarDarkPreview() = ElementPreviewDark { ContentToPreview() }
+fun AvatarDarkPreview(@PreviewParameter(AvatarDataPreviewParameterProvider::class) avatarData: AvatarData) =
+    ElementPreviewDark { ContentToPreview(avatarData) }
 
 @Composable
-private fun ContentToPreview() {
-    Avatar(AvatarData(name = "A"))
+private fun ContentToPreview(avatarData: AvatarData) {
+    Avatar(avatarData)
 }

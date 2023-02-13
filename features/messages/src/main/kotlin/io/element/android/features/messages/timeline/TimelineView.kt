@@ -418,8 +418,8 @@ internal fun createMessageEvent(
 ): TimelineItem.MessageEvent {
     return TimelineItem.MessageEvent(
         id = EventId(Math.random().toString()),
-        senderId = "senderId",
-        senderAvatar = AvatarData("sender"),
+        senderId = "@senderId",
+        senderAvatar = AvatarData("@senderId", "sender"),
         content = content,
         reactionsState = TimelineItemReactions(
             persistentListOf(
