@@ -239,7 +239,7 @@ fun DefaultRoomListTopBarDarkPreview() = ElementPreviewDark { DefaultRoomListTop
 @Composable
 private fun DefaultRoomListTopBarPreview() {
     DefaultRoomListTopBar(
-        matrixUser = MatrixUser(UserId("id"), "Alice", AvatarData("Alice")),
+        matrixUser = MatrixUser(UserId("@id"), "Alice", AvatarData("@id", "Alice")),
         scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState()),
     )
 }

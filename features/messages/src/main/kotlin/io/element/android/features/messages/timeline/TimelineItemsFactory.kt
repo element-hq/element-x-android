@@ -156,7 +156,8 @@ class TimelineItemsFactory @Inject constructor(
         val senderDisplayName = room.userDisplayName(currentSender).getOrNull()
         val senderAvatarUrl = room.userAvatarUrl(currentSender).getOrNull()
         val senderAvatarData = AvatarData(
-            name = senderDisplayName ?: currentSender,
+            id = currentSender,
+            name = senderDisplayName,
             url = senderAvatarUrl,
             size = AvatarSize.SMALL
         )

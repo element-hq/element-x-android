@@ -16,15 +16,8 @@
 
 package io.element.android.features.roomlist
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import io.element.android.features.roomlist.model.RoomListEvents
 import io.element.android.features.roomlist.model.RoomListRoomSummary
 import io.element.android.features.roomlist.model.RoomListRoomSummaryPlaceholders
@@ -107,7 +100,8 @@ class RoomListPresenter @Inject constructor(
         val userDisplayName = client.loadUserDisplayName().getOrNull()
         val avatarData =
             AvatarData(
-                name = userDisplayName ?: client.userId().value,
+                id = client.userId().value,
+                name = userDisplayName,
                 url = userAvatarUrl,
                 size = AvatarSize.SMALL
             )
@@ -136,6 +130,7 @@ class RoomListPresenter @Inject constructor(
                 is RoomSummary.Empty -> RoomListRoomSummaryPlaceholders.create(roomSummary.identifier)
                 is RoomSummary.Filled -> {
                     val avatarData = AvatarData(
+                        id = roomSummary.identifier(),
                         name = roomSummary.details.name,
                         url = roomSummary.details.avatarURLString
                     )
