@@ -42,6 +42,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.login.R
@@ -179,15 +180,15 @@ fun ChangeServerView(
 
 @Preview
 @Composable
-fun ChangeServerViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+fun ChangeServerViewLightPreview(@PreviewParameter(ChangeServerStateProvider::class) state: ChangeServerState) =
+    ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun ChangeServerViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
+fun ChangeServerViewDarkPreview(@PreviewParameter(ChangeServerStateProvider::class) state: ChangeServerState) =
+    ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
-private fun ContentToPreview() {
-    ChangeServerView(
-        state = aChangeServerState().copy(homeserver = "matrix.org"),
-    )
+private fun ContentToPreview(state: ChangeServerState) {
+    ChangeServerView(state = state)
 }

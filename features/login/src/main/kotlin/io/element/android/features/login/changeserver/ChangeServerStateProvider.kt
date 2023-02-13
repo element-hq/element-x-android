@@ -16,7 +16,19 @@
 
 package io.element.android.features.login.changeserver
 
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.Async
+
+open class ChangeServerStateProvider : PreviewParameterProvider<ChangeServerState> {
+    override val values: Sequence<ChangeServerState>
+        get() = sequenceOf(
+            aChangeServerState(),
+            aChangeServerState().copy(homeserver = "matrix.org"),
+            aChangeServerState().copy(homeserver = "matrix.org", changeServerAction = Async.Loading()),
+            aChangeServerState().copy(homeserver = "invalid.org", changeServerAction = Async.Failure(Throwable("An error"))),
+            aChangeServerState().copy(homeserver = "matrix.org", changeServerAction = Async.Success(Unit)),
+        )
+}
 
 fun aChangeServerState() = ChangeServerState(
     homeserver = "",
