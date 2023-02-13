@@ -18,7 +18,13 @@ package io.element.android.libraries.designsystem.utils
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
-open class StringPreviewParameterProvider(val strings: List<String>) : PreviewParameterProvider<String> {
-    override val values: Sequence<String>
-        get() = strings.asSequence()
+open class PairCombinedProvider<T1, T2>(
+    private val provider: Pair<PreviewParameterProvider<T1>, PreviewParameterProvider<T2>>
+) : PreviewParameterProvider<Pair<T1, T2>> {
+    override val values: Sequence<Pair<T1, T2>>
+        get() = provider.first.values.flatMap { first ->
+            provider.second.values.map { second ->
+                first to second
+            }
+        }
 }

@@ -100,12 +100,12 @@ private fun InitialsAvatar(
 
 @Preview
 @Composable
-fun AvatarLightPreview(@PreviewParameter(AvatarDataPreviewParameterProvider::class) avatarData: AvatarData) =
+fun AvatarLightPreview(@PreviewParameter(AvatarDataProvider::class) avatarData: AvatarData) =
     ElementPreviewLight { ContentToPreview(avatarData) }
 
 @Preview
 @Composable
-fun AvatarDarkPreview(@PreviewParameter(AvatarDataPreviewParameterProvider::class) avatarData: AvatarData) =
+fun AvatarDarkPreview(@PreviewParameter(AvatarDataProvider::class) avatarData: AvatarData) =
     ElementPreviewDark { ContentToPreview(avatarData) }
 
 @Composable

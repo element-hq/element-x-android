@@ -19,7 +19,6 @@ package io.element.android.features.roomlist.model
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 data class RoomListState(
@@ -27,11 +26,4 @@ data class RoomListState(
     val roomList: ImmutableList<RoomListRoomSummary>,
     val filter: String,
     val eventSink: (RoomListEvents) -> Unit
-)
-
-fun aRoomListState() = RoomListState(
-    matrixUser = null,
-    roomList = persistentListOf(),
-    filter = "",
-    eventSink = {}
 )

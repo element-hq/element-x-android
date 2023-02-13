@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.model.content
+package io.element.android.features.logout
 
-sealed interface TimelineItemContent
+import io.element.android.libraries.architecture.Async
+
+fun aLogoutPreferenceState() = LogoutPreferenceState(
+    logoutAction = Async.Uninitialized,
+    eventSink = {}
+)

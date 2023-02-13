@@ -14,6 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.model.content
+package io.element.android.features.rageshake.bugreport
 
-sealed interface TimelineItemContent
+import io.element.android.libraries.architecture.Async
+
+fun aBugReportState() = BugReportState(
+    formState = BugReportFormState.Default,
+    hasCrashLogs = false,
+    screenshotUri = null,
+    sendingProgress = 0F,
+    sending = Async.Uninitialized,
+    eventSink = {}
+)

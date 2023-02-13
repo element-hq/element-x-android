@@ -47,10 +47,3 @@ data class LoginFormState(
         val Default = LoginFormState("", "")
     }
 }
-
-fun aLoginRootState() = LoginRootState(
-    homeserver = "",
-    loggedInState = LoggedInState.NotLoggedIn,
-    formState = LoginFormState.Default,
-    eventSink = {}
-)

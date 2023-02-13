@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.model.content
+package io.element.android.features.rageshake.detection
 
-sealed interface TimelineItemContent
+import io.element.android.features.rageshake.preferences.aRageshakePreferencesState
+
+fun aRageshakeDetectionState() = RageshakeDetectionState(
+    takeScreenshot = false,
+    showDialog = false,
+    isStarted = false,
+    preferenceState = aRageshakePreferencesState(),
+    eventSink = {}
+)

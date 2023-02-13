@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.model.content
+package io.element.android.features.login.changeserver
 
-sealed interface TimelineItemContent
+import io.element.android.libraries.architecture.Async
+
+fun aChangeServerState() = ChangeServerState(
+    homeserver = "",
+    changeServerAction = Async.Uninitialized,
+    eventSink = {}
+)

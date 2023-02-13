@@ -26,7 +26,6 @@ data class ActionListState(
     val target: Target,
     val eventSink: (ActionListEvents) -> Unit,
 ) {
-
     sealed interface Target {
         object None : Target
         data class Loading(val messageEvent: TimelineItem.MessageEvent) : Target
@@ -36,8 +35,3 @@ data class ActionListState(
         ) : Target
     }
 }
-
-fun anActionListState() = ActionListState(
-    target = ActionListState.Target.None,
-    eventSink = {}
-)

@@ -17,7 +17,6 @@
 package io.element.android.libraries.designsystem.components.avatar
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
 @Immutable
 data class AvatarData(
@@ -31,17 +30,3 @@ data class AvatarData(
         return firstChar.uppercase()
     }
 }
-
-open class AvatarDataPreviewParameterProvider : PreviewParameterProvider<AvatarData> {
-    override val values: Sequence<AvatarData>
-        get() = sequenceOf(
-            anAvatarData(),
-            anAvatarData().copy(name = null),
-        )
-}
-
-fun anAvatarData() = AvatarData(
-    // Let's the id not start with a 'a'.
-    id = "@id_of_alice:server.org",
-    name = "Alice",
-)

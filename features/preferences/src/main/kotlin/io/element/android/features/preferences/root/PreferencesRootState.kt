@@ -17,9 +17,7 @@
 package io.element.android.features.preferences.root
 
 import io.element.android.features.logout.LogoutPreferenceState
-import io.element.android.features.logout.aLogoutPreferenceState
 import io.element.android.features.rageshake.preferences.RageshakePreferencesState
-import io.element.android.features.rageshake.preferences.aRageshakePreferencesState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 
@@ -27,10 +25,4 @@ data class PreferencesRootState(
     val logoutState: LogoutPreferenceState,
     val rageshakeState: RageshakePreferencesState,
     val myUser: Async<MatrixUser>,
-)
-
-fun aPreferencesRootState() = PreferencesRootState(
-    logoutState = aLogoutPreferenceState(),
-    rageshakeState = aRageshakePreferencesState(),
-    myUser = Async.Uninitialized
 )

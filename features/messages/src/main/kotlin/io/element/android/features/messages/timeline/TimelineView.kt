@@ -61,17 +61,13 @@ import io.element.android.features.messages.timeline.components.TimelineItemReac
 import io.element.android.features.messages.timeline.components.TimelineItemRedactedView
 import io.element.android.features.messages.timeline.components.TimelineItemTextView
 import io.element.android.features.messages.timeline.components.TimelineItemUnknownView
-import io.element.android.features.messages.timeline.model.AggregatedReaction
-import io.element.android.features.messages.timeline.model.MessagesItemGroupPosition
 import io.element.android.features.messages.timeline.model.TimelineItem
-import io.element.android.features.messages.timeline.model.TimelineItemReactions
-import io.element.android.features.messages.timeline.model.content.MessagesTimelineItemContentProvider
+import io.element.android.features.messages.timeline.model.content.TimelineItemContentProvider
 import io.element.android.features.messages.timeline.model.content.TimelineItemContent
 import io.element.android.features.messages.timeline.model.content.TimelineItemEncryptedContent
 import io.element.android.features.messages.timeline.model.content.TimelineItemImageContent
 import io.element.android.features.messages.timeline.model.content.TimelineItemRedactedContent
 import io.element.android.features.messages.timeline.model.content.TimelineItemTextBasedContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemTextContent
 import io.element.android.features.messages.timeline.model.content.TimelineItemUnknownContent
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -81,9 +77,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.core.EventId
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
@@ -354,87 +348,22 @@ internal fun TimelineLoadingMoreIndicator() {
 @Preview
 @Composable
 fun LoginRootScreenLightPreview(
-    @PreviewParameter(MessagesTimelineItemContentProvider::class) content: TimelineItemContent
+    @PreviewParameter(TimelineItemContentProvider::class) content: TimelineItemContent
 ) = ElementPreviewLight { ContentToPreview(content) }
 
 @Preview
 @Composable
 fun LoginRootScreenDarkPreview(
-    @PreviewParameter(MessagesTimelineItemContentProvider::class) content: TimelineItemContent
+    @PreviewParameter(TimelineItemContentProvider::class) content: TimelineItemContent
 ) = ElementPreviewDark { ContentToPreview(content) }
 
 @Composable
 private fun ContentToPreview(content: TimelineItemContent) {
-    val timelineItems = createTimelineItems(content)
+    val timelineItems = aTimelineItemList(content)
     TimelineView(
         state = aTimelineState().copy(
             timelineItems = timelineItems,
             hasMoreToLoad = true,
         )
-    )
-}
-
-internal fun createTimelineItems(content: TimelineItemContent): ImmutableList<TimelineItem> {
-    return persistentListOf(
-        // 3 items (First Middle Last) with isMine = false
-        createMessageEvent(
-            isMine = false,
-            content = content,
-            groupPosition = MessagesItemGroupPosition.Last
-        ),
-        createMessageEvent(
-            isMine = false,
-            content = content,
-            groupPosition = MessagesItemGroupPosition.Middle
-        ),
-        createMessageEvent(
-            isMine = false,
-            content = content,
-            groupPosition = MessagesItemGroupPosition.First
-        ),
-        // 3 items (First Middle Last) with isMine = true
-        createMessageEvent(
-            isMine = true,
-            content = content,
-            groupPosition = MessagesItemGroupPosition.Last
-        ),
-        createMessageEvent(
-            isMine = true,
-            content = content,
-            groupPosition = MessagesItemGroupPosition.Middle
-        ),
-        createMessageEvent(
-            isMine = true,
-            content = content,
-            groupPosition = MessagesItemGroupPosition.First
-        ),
-    )
-}
-
-internal fun createMessageEvent(
-    isMine: Boolean = false,
-    content: TimelineItemContent = createTimelineItemContent(),
-    groupPosition: MessagesItemGroupPosition = MessagesItemGroupPosition.First
-): TimelineItem.MessageEvent {
-    return TimelineItem.MessageEvent(
-        id = EventId(Math.random().toString()),
-        senderId = "@senderId",
-        senderAvatar = AvatarData("@senderId", "sender"),
-        content = content,
-        reactionsState = TimelineItemReactions(
-            persistentListOf(
-                AggregatedReaction("👍", "1")
-            )
-        ),
-        isMine = isMine,
-        senderDisplayName = "sender",
-        groupPosition = groupPosition,
-    )
-}
-
-internal fun createTimelineItemContent(): TimelineItemContent {
-    return TimelineItemTextContent(
-        body = "Text",
-        htmlDocument = null
     )
 }

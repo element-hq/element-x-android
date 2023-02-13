@@ -49,8 +49,8 @@ import io.element.android.features.messages.textcomposer.MessageComposerView
 import io.element.android.features.messages.textcomposer.aMessageComposerState
 import io.element.android.features.messages.timeline.TimelineView
 import io.element.android.features.messages.timeline.aTimelineState
-import io.element.android.features.messages.timeline.createTimelineItemContent
-import io.element.android.features.messages.timeline.createTimelineItems
+import io.element.android.features.messages.timeline.aTimelineItemContent
+import io.element.android.features.messages.timeline.aTimelineItemList
 import io.element.android.features.messages.timeline.model.TimelineItem
 import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -217,7 +217,7 @@ private fun ContentToPreview() {
                 mode = MessageComposerMode.Normal("Hello"),
             ),
             timelineState = aTimelineState().copy(
-                timelineItems = createTimelineItems(createTimelineItemContent()),
+                timelineItems = aTimelineItemList(aTimelineItemContent()),
                 hasMoreToLoad = false,
             ),
             actionListState = anActionListState(),
