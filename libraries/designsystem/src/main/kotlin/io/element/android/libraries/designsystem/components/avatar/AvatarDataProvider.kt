@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.model.content
+package io.element.android.libraries.designsystem.components.avatar
 
-sealed interface TimelineItemContent
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+
+open class AvatarDataProvider : PreviewParameterProvider<AvatarData> {
+    override val values: Sequence<AvatarData>
+        get() = sequenceOf(
+            anAvatarData(),
+            anAvatarData().copy(name = null),
+        )
+}
+
+fun anAvatarData() = AvatarData(
+    // Let's the id not start with a 'a'.
+    id = "@id_of_alice:server.org",
+    name = "Alice",
+)

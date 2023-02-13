@@ -23,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -41,22 +40,14 @@ fun TemplateView(
     }
 }
 
-open class TemplateStatePreviewParameter : PreviewParameterProvider<TemplateState> {
-    override val values: Sequence<TemplateState>
-        get() = sequenceOf(
-            aTemplateState(),
-            // Add other state here
-        )
-}
-
 @Preview
 @Composable
-fun TemplateViewLightPreview(@PreviewParameter(TemplateStatePreviewParameter::class) state: TemplateState) =
+fun TemplateViewLightPreview(@PreviewParameter(TemplateStateProvider::class) state: TemplateState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun TemplateViewDarkPreview(@PreviewParameter(TemplateStatePreviewParameter::class) state: TemplateState) =
+fun TemplateViewDarkPreview(@PreviewParameter(TemplateStateProvider::class) state: TemplateState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

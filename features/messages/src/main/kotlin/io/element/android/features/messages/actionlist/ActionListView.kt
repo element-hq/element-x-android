@@ -39,16 +39,13 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.timeline.createMessageEvent
 import io.element.android.features.messages.timeline.model.TimelineItem
 import io.element.android.libraries.designsystem.components.VectorIcon
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheetLayout
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
@@ -136,34 +133,14 @@ private fun SheetContent(
     }
 }
 
-open class ActionListStatePreviewParameterProvider : PreviewParameterProvider<ActionListState> {
-    override val values: Sequence<ActionListState>
-        get() = sequenceOf(
-            anActionListState(),
-            anActionListState().copy(target = ActionListState.Target.Loading(createMessageEvent())),
-            anActionListState().copy(
-                target = ActionListState.Target.Success(
-                    messageEvent = createMessageEvent(),
-                    actions = persistentListOf(
-                        TimelineItemAction.Reply,
-                        TimelineItemAction.Forward,
-                        TimelineItemAction.Copy,
-                        TimelineItemAction.Edit,
-                        TimelineItemAction.Redact,
-                    )
-                )
-            )
-        )
-}
-
 @Preview
 @Composable
-fun SheetContentLightPreview(@PreviewParameter(ActionListStatePreviewParameterProvider::class) state: ActionListState) =
+fun SheetContentLightPreview(@PreviewParameter(ActionListStateProvider::class) state: ActionListState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun SheetContentDarkPreview(@PreviewParameter(ActionListStatePreviewParameterProvider::class) state: ActionListState) =
+fun SheetContentDarkPreview(@PreviewParameter(ActionListStateProvider::class) state: ActionListState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

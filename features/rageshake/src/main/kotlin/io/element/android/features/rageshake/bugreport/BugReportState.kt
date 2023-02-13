@@ -50,12 +50,3 @@ data class BugReportFormState(
         )
     }
 }
-
-fun aBugReportState() = BugReportState(
-    formState = BugReportFormState.Default,
-    hasCrashLogs = false,
-    screenshotUri = null,
-    sendingProgress = 0F,
-    sending = Async.Uninitialized,
-    eventSink = {}
-)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.model.content
+package io.element.android.features.template
 
-sealed interface TimelineItemContent
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+
+open class TemplateStateProvider : PreviewParameterProvider<TemplateState> {
+    override val values: Sequence<TemplateState>
+        get() = sequenceOf(
+            aTemplateState(),
+            // Add other state here
+        )
+}
+
+fun aTemplateState() = TemplateState(
+    eventSink = {}
+)

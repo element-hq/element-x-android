@@ -21,7 +21,7 @@ import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.matrix.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 
-open class MatrixUserPreviewParameterProvider : PreviewParameterProvider<MatrixUser> {
+open class MatrixUserProvider : PreviewParameterProvider<MatrixUser> {
     override val values: Sequence<MatrixUser>
         get() = sequenceOf(
             aMatrixUser(),

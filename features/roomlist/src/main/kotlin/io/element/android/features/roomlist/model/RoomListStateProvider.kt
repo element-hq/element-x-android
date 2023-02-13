@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.utils
+package io.element.android.features.roomlist.model
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import kotlinx.collections.immutable.persistentListOf
 
-open class PairCombinedPreviewParameterProvider<T1, T2>(
-    private val provider: Pair<PreviewParameterProvider<T1>, PreviewParameterProvider<T2>>
-) : PreviewParameterProvider<Pair<T1, T2>> {
-    override val values: Sequence<Pair<T1, T2>>
-        get() = provider.first.values.flatMap { first ->
-            provider.second.values.map { second ->
-                first to second
-            }
-        }
-}
+fun aRoomListState() = RoomListState(
+    matrixUser = null,
+    roomList = persistentListOf(),
+    filter = "",
+    eventSink = {}
+)

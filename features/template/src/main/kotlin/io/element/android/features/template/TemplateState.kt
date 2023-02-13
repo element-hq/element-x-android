@@ -21,7 +21,3 @@ package io.element.android.features.template
 data class TemplateState(
     val eventSink: (TemplateEvents) -> Unit
 )
-
-fun aTemplateState() = TemplateState(
-    eventSink = {}
-)

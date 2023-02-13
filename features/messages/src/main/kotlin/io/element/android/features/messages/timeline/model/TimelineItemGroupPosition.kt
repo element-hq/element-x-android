@@ -17,7 +17,6 @@
 package io.element.android.features.messages.timeline.model
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
 @Immutable
 sealed interface MessagesItemGroupPosition {
@@ -32,11 +31,3 @@ sealed interface MessagesItemGroupPosition {
     }
 }
 
-internal class TimelineItemGroupPositionProvider : PreviewParameterProvider<MessagesItemGroupPosition> {
-    override val values = sequenceOf(
-        MessagesItemGroupPosition.First,
-        MessagesItemGroupPosition.Middle,
-        MessagesItemGroupPosition.Last,
-        MessagesItemGroupPosition.None,
-    )
-}

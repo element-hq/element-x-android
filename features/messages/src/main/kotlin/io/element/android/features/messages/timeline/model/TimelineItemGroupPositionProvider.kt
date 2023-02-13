@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.model.content
+package io.element.android.features.messages.timeline.model
 
-sealed interface TimelineItemContent
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+
+internal class TimelineItemGroupPositionProvider : PreviewParameterProvider<MessagesItemGroupPosition> {
+    override val values = sequenceOf(
+        MessagesItemGroupPosition.First,
+        MessagesItemGroupPosition.Middle,
+        MessagesItemGroupPosition.Last,
+        MessagesItemGroupPosition.None,
+    )
+}

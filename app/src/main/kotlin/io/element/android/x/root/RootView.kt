@@ -26,13 +26,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.rageshake.crash.ui.CrashDetectionEvents
 import io.element.android.features.rageshake.crash.ui.CrashDetectionView
-import io.element.android.features.rageshake.crash.ui.aCrashDetectionState
 import io.element.android.features.rageshake.detection.RageshakeDetectionEvents
 import io.element.android.features.rageshake.detection.RageshakeDetectionView
-import io.element.android.features.rageshake.detection.aRageshakeDetectionState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -77,29 +74,13 @@ fun RootView(
     }
 }
 
-open class RootStatePreviewParameterProvider : PreviewParameterProvider<RootState> {
-    override val values: Sequence<RootState>
-        get() = sequenceOf(
-            aRootState().copy(
-                isShowkaseButtonVisible = true,
-                rageshakeDetectionState = aRageshakeDetectionState().copy(showDialog = false),
-                crashDetectionState = aCrashDetectionState().copy(crashDetected = true),
-            ),
-            aRootState().copy(
-                isShowkaseButtonVisible = true,
-                rageshakeDetectionState = aRageshakeDetectionState().copy(showDialog = true),
-                crashDetectionState = aCrashDetectionState().copy(crashDetected = false),
-            )
-        )
-}
+@Preview
+@Composable
+fun RootLightPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) = ElementPreviewLight { ContentToPreview(rootState) }
 
 @Preview
 @Composable
-fun RootLightPreview(@PreviewParameter(RootStatePreviewParameterProvider::class) rootState: RootState) = ElementPreviewLight { ContentToPreview(rootState) }
-
-@Preview
-@Composable
-fun RootDarkPreview(@PreviewParameter(RootStatePreviewParameterProvider::class) rootState: RootState) = ElementPreviewDark { ContentToPreview(rootState) }
+fun RootDarkPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) = ElementPreviewDark { ContentToPreview(rootState) }
 
 @Composable
 private fun ContentToPreview(rootState: RootState) {

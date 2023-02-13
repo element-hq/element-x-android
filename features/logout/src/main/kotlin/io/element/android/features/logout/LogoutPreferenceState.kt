@@ -22,8 +22,3 @@ data class LogoutPreferenceState(
     val logoutAction: Async<Unit>,
     val eventSink: (LogoutPreferenceEvents) -> Unit,
 )
-
-fun aLogoutPreferenceState() = LogoutPreferenceState(
-    logoutAction = Async.Uninitialized,
-    eventSink = {}
-)
