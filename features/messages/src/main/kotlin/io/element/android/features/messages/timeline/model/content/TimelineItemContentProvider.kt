@@ -17,27 +17,51 @@
 package io.element.android.features.messages.timeline.model.content
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import org.jsoup.Jsoup
 import org.matrix.rustcomponents.sdk.EncryptedMessage
 
 class TimelineItemContentProvider : PreviewParameterProvider<TimelineItemContent> {
     override val values = sequenceOf(
-        TimelineItemEmoteContent(
-            body = "Emote",
-            htmlDocument = null
-        ),
-        TimelineItemEncryptedContent(
-            encryptedMessage = EncryptedMessage.Unknown
-        ),
+        aTimelineItemEmoteContent(),
+        aTimelineItemEncryptedContent(),
         // TODO MessagesTimelineItemImageContent(),
-        TimelineItemNoticeContent(
-            body = "Notice",
-            htmlDocument = null
-        ),
-        TimelineItemRedactedContent,
-        TimelineItemTextContent(
-            body = "Text",
-            htmlDocument = null
-        ),
-        TimelineItemUnknownContent,
+        aTimelineItemNoticeContent(),
+        aTimelineItemRedactedContent(),
+        aTimelineItemTextContent(),
+        aTimelineItemUnknownContent(),
     )
 }
+
+class TimelineItemTextBasedContentProvider : PreviewParameterProvider<TimelineItemTextBasedContent> {
+    override val values = sequenceOf(
+        aTimelineItemEmoteContent(),
+        aTimelineItemEmoteContent().copy(htmlDocument = Jsoup.parse("Emote")),
+        aTimelineItemNoticeContent(),
+        aTimelineItemNoticeContent().copy(htmlDocument = Jsoup.parse("Notice")),
+        aTimelineItemTextContent(),
+        aTimelineItemTextContent().copy(htmlDocument = Jsoup.parse("Text")),
+    )
+}
+
+fun aTimelineItemEmoteContent() = TimelineItemEmoteContent(
+    body = "Emote",
+    htmlDocument = null
+)
+
+fun aTimelineItemEncryptedContent() = TimelineItemEncryptedContent(
+    encryptedMessage = EncryptedMessage.Unknown
+)
+
+fun aTimelineItemNoticeContent() = TimelineItemNoticeContent(
+    body = "Notice",
+    htmlDocument = null
+)
+
+fun aTimelineItemRedactedContent() = TimelineItemRedactedContent
+
+fun aTimelineItemTextContent() = TimelineItemTextContent(
+    body = "Text",
+    htmlDocument = null
+)
+
+fun aTimelineItemUnknownContent() = TimelineItemUnknownContent
