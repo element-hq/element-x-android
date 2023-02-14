@@ -39,28 +39,21 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.actionlist.ActionListEvents
 import io.element.android.features.messages.actionlist.ActionListView
-import io.element.android.features.messages.actionlist.anActionListState
 import io.element.android.features.messages.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.textcomposer.MessageComposerView
-import io.element.android.features.messages.textcomposer.aMessageComposerState
 import io.element.android.features.messages.timeline.TimelineView
-import io.element.android.features.messages.timeline.aTimelineState
-import io.element.android.features.messages.timeline.aTimelineItemContent
-import io.element.android.features.messages.timeline.aTimelineItemList
 import io.element.android.features.messages.timeline.model.TimelineItem
-import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.*
 import io.element.android.libraries.designsystem.utils.LogCompositions
-import io.element.android.libraries.matrix.core.RoomId
-import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -198,30 +191,15 @@ fun MessagesViewTopBar(
 
 @Preview
 @Composable
-internal fun MessagesViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun MessagesViewLightPreview(@PreviewParameter(MessagesStateProvider::class) state: MessagesState) =
+    ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-internal fun MessagesViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun MessagesViewDarkPreview(@PreviewParameter(MessagesStateProvider::class) state: MessagesState) =
+    ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
-private fun ContentToPreview() {
-    MessagesView(
-        MessagesState(
-            roomId = RoomId("!id"),
-            roomName = "Room name",
-            roomAvatar = AvatarData("!id", "Room name"),
-            composerState = aMessageComposerState().copy(
-                text = StableCharSequence("Hello"),
-                isFullScreen = false,
-                mode = MessageComposerMode.Normal("Hello"),
-            ),
-            timelineState = aTimelineState().copy(
-                timelineItems = aTimelineItemList(aTimelineItemContent()),
-                hasMoreToLoad = false,
-            ),
-            actionListState = anActionListState(),
-            eventSink = {}
-        )
-    )
+private fun ContentToPreview(state: MessagesState) {
+    MessagesView(state)
 }
