@@ -15,7 +15,7 @@
  */
 
 /**
- * This will generate the plugin "io.element.android-compose-application", used only in the module `app`.
+ * This will generate the plugin "io.element.android-compose-application" to use by app and samples modules
  */
 import extension.androidConfig
 import extension.commonDependencies

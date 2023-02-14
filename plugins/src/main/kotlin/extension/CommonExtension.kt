@@ -18,6 +18,7 @@ package extension
 
 import Versions
 import com.android.build.api.dsl.CommonExtension
+import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import java.io.File
 
@@ -30,6 +31,8 @@ fun CommonExtension<*, *, *, *>.androidConfig(project: Project) {
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     testOptions {
