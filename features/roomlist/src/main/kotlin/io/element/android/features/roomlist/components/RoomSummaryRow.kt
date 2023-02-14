@@ -46,13 +46,18 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.placeholder.material.placeholder
 import io.element.android.features.roomlist.model.RoomListRoomSummary
+import io.element.android.features.roomlist.model.RoomListRoomSummaryProvider
 import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.roomListPlaceHolder
@@ -191,4 +196,19 @@ class PercentRectangleSizeShape(private val percent: Float) : Shape {
         }
         return Outline.Generic(path)
     }
+}
+
+@Preview
+@Composable
+internal fun RoomSummaryRowLightPreview(@PreviewParameter(RoomListRoomSummaryProvider::class) data: RoomListRoomSummary) =
+    ElementPreviewLight { ContentToPreview(data) }
+
+@Preview
+@Composable
+internal fun RoomSummaryRowDarkPreview(@PreviewParameter(RoomListRoomSummaryProvider::class) data: RoomListRoomSummary) =
+    ElementPreviewDark { ContentToPreview(data) }
+
+@Composable
+private fun ContentToPreview(data: RoomListRoomSummary) {
+    RoomSummaryRow(data)
 }
