@@ -38,9 +38,9 @@ android {
 
     defaultConfig {
         applicationId = "io.element.android.x"
-        targetSdk = 33 // TODO Use Versions.targetSdk
-        versionCode = 1
-        versionName = "1.0"
+        targetSdk = Versions.targetSdk
+        versionCode = Versions.versionCode
+        versionName = Versions.versionName
 
         vectorDrawables {
             useSupportLibrary = true
@@ -109,25 +109,9 @@ android {
             }
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.0"
-    }
-    packagingOptions {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-
     // Waiting for https://github.com/google/ksp/issues/37
     applicationVariants.all {
         kotlin.sourceSets {
