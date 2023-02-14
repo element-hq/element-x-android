@@ -21,11 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
-import io.element.android.features.messages.timeline.model.AggregatedReactionProvider
 import io.element.android.features.messages.timeline.model.TimelineItemReactions
+import io.element.android.features.messages.timeline.model.aTimelineItemReactions
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun TimelineItemReactionsView(
@@ -57,9 +56,6 @@ internal fun TimelineItemReactionsViewDarkPreview() =
 @Composable
 private fun ContentToPreview() {
     TimelineItemReactionsView(
-        reactionsState = TimelineItemReactions(
-            // Use values from AggregatedReactionProvider
-            reactions = AggregatedReactionProvider().values.toPersistentList()
-        )
+        reactionsState = aTimelineItemReactions()
     )
 }
