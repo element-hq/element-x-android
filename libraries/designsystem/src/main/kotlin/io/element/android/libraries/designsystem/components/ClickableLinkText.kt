@@ -30,8 +30,12 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
@@ -86,5 +90,26 @@ fun ClickableLinkText(
         },
         inlineContent = inlineContent,
         color = MaterialTheme.colorScheme.primary,
+    )
+}
+
+@Preview
+@Composable
+internal fun ClickableLinkTextLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+internal fun ClickableLinkTextDarkPreview() =
+    ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
+    ClickableLinkText(
+        text = AnnotatedString("Hello", ParagraphStyle()),
+        linkAnnotationTag = "",
+        onClick = {},
+        onLongClick = {},
+        interactionSource = MutableInteractionSource(),
     )
 }
