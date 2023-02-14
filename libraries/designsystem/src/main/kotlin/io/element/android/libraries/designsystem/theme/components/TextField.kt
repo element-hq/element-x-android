@@ -29,6 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,4 +79,19 @@ fun TextField(
         shape = shape,
         colors = colors,
     )
+}
+
+@Preview
+@Composable
+internal fun TextFieldLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+internal fun TextFieldDarkPreview() =
+    ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
+    TextField(value = "Hello", onValueChange = {})
 }

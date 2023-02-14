@@ -16,12 +16,17 @@
 
 package io.element.android.libraries.designsystem.theme.components
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 @Composable
 fun Icon(
@@ -51,4 +56,19 @@ fun Icon(
         modifier = modifier,
         tint = tint,
     )
+}
+
+@Preview
+@Composable
+internal fun IconImageVectorLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+internal fun IconImageVectorDarkPreview() =
+    ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
+    Icon(imageVector = Icons.Filled.Close, contentDescription = "")
 }
