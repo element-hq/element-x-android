@@ -24,11 +24,19 @@ import io.element.android.libraries.matrix.core.EventId
 
 @Immutable
 sealed interface TimelineItem {
+
+    fun identifier(): String = when(this){
+        is Event -> id
+        is Virtual -> id
+    }
+
+    @Immutable
     data class Virtual(
         val id: String,
         val model: TimelineItemVirtualModel
     ) : TimelineItem
 
+    @Immutable
     data class Event(
         val id: String,
         val eventId: EventId? = null,

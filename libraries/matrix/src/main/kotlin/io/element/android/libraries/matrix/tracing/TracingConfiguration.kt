@@ -23,15 +23,16 @@ data class TracingConfiguration(
 ) {
 
     // Order should matters
-    private val targets = mutableMapOf(
-        Target.MatrixSdk.HttpClient to LogLevel.Trace,
-        Target.MatrixSdk.SlidingSync to LogLevel.Trace,
-        Target.MatrixSdk.BaseSlidingSync to LogLevel.Trace,
-        Target.MatrixSdk.Root to LogLevel.Warn,
-        Target.MatrixSdk.Sled to LogLevel.Warn,
+    private val targets: MutableMap<Target, LogLevel> = mutableMapOf(
+        Target.Common to LogLevel.Warn,
         Target.Hyper to LogLevel.Warn,
         Target.Sled to LogLevel.Warn,
-        Target.Common to LogLevel.Warn,
+        Target.MatrixSdk.Root to LogLevel.Warn,
+        Target.MatrixSdk.Sled to LogLevel.Warn,
+        Target.MatrixSdk.Crypto to LogLevel.Debug,
+        Target.MatrixSdk.HttpClient to LogLevel.Debug,
+        Target.MatrixSdk.SlidingSync to LogLevel.Trace,
+        Target.MatrixSdk.BaseSlidingSync to LogLevel.Trace,
     )
 
     val filter: String
@@ -56,6 +57,7 @@ sealed class Target(open val filter: String) {
     sealed class MatrixSdk(override val filter: String) : Target(filter) {
         object Root : MatrixSdk("matrix_sdk")
         object Sled : MatrixSdk("matrix_sdk_sled")
+        object Crypto: MatrixSdk("matrix_sdk_crypto")
         object FFI : MatrixSdk("matrix_sdk_ffi")
         object HttpClient : MatrixSdk("matrix_sdk::http_client")
         object UniffiAPI : MatrixSdk("matrix_sdk_ffi::uniffi_api")

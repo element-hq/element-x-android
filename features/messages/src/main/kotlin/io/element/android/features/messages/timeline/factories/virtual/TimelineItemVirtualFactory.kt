@@ -29,7 +29,7 @@ class TimelineItemVirtualFactory @Inject constructor(
     private val daySeparatorFactory: TimelineItemDaySeparatorFactory,
 ) {
 
-    suspend fun create(
+    fun create(
         currentTimelineItem: MatrixTimelineItem.Virtual,
         index: Int,
         timelineItems: List<MatrixTimelineItem>,

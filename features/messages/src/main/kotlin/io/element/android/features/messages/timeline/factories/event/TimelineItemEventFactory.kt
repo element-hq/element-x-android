@@ -33,7 +33,7 @@ class TimelineItemEventFactory @Inject constructor(
     private val contentFactory: TimelineItemContentFactory,
 ) {
 
-    suspend fun create(
+    fun create(
         currentTimelineItem: MatrixTimelineItem.Event,
         index: Int,
         timelineItems: List<MatrixTimelineItem>,
