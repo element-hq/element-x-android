@@ -95,12 +95,12 @@ class RageshakeDetectionPresenter @Inject constructor(
     private fun handleRageShake(start: Boolean, state: RageshakeDetectionState, takeScreenshot: MutableState<Boolean>) {
         if (start) {
             rageShake.start(state.preferenceState.sensitivity)
-            rageShake.interceptor = {
+            rageShake.setInterceptor {
                 takeScreenshot.value = true
             }
         } else {
             rageShake.stop()
-            rageShake.interceptor = null
+            rageShake.setInterceptor(null)
         }
     }
 

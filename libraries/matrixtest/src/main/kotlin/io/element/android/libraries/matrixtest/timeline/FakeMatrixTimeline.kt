@@ -19,24 +19,29 @@ package io.element.android.libraries.matrixtest.timeline
 import io.element.android.libraries.matrix.core.EventId
 import io.element.android.libraries.matrix.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import org.matrix.rustcomponents.sdk.TimelineListener
 
 class FakeMatrixTimeline : MatrixTimeline {
+    override var callback: MatrixTimeline.Callback? = null
 
-    override var callback: MatrixTimeline.Callback?
-        get() = null
-        set(value) {}
+    private var hasMoreToLoadValue: Boolean = true
+
+    fun givenHasMoreToLoad(hasMoreToLoad: Boolean) {
+        this.hasMoreToLoadValue = hasMoreToLoad
+    }
 
     override val hasMoreToLoad: Boolean
-        get() = true
+        get() = hasMoreToLoadValue
 
     override fun timelineItems(): Flow<List<MatrixTimelineItem>> {
         return emptyFlow()
     }
 
     override suspend fun paginateBackwards(count: Int): Result<Unit> {
+        delay(100)
         return Result.success(Unit)
     }
 

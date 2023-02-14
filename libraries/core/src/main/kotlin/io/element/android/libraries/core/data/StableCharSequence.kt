@@ -24,6 +24,8 @@ class StableCharSequence(val charSequence: CharSequence) {
 
     override fun hashCode() = hash
     override fun equals(other: Any?) = other is StableCharSequence && other.hash == hash
+
+    override fun toString(): String = "StableCharSequence(\"$charSequence\")"
 }
 
 fun CharSequence.toStableCharSequence() = StableCharSequence(this)

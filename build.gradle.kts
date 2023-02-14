@@ -155,6 +155,7 @@ allprojects {
     apply(plugin = "kover")
 }
 
+// https://kotlin.github.io/kotlinx-kover/
 // Run `./gradlew koverMergedHtmlReport` to get report at ./build/reports/kover
 // Run `./gradlew koverMergedReport` to also get XML report
 koverMerged {
@@ -164,14 +165,70 @@ koverMerged {
         classes {
             excludes.addAll(
                 listOf(
-                    /*
-                    "*Fragment",
-                    "*Fragment\$*",
-                    "*Activity",
-                    "*Activity\$*",
-                     */
+                    // Exclude generated classes.
+                    "*_ModuleKt",
+                    "anvil.hint.binding.io.element.*",
+                    "anvil.hint.merge.*",
+                    "anvil.module.*",
+                    "com.airbnb.android.showkase*",
+                    "*_Factory",
+                    "*_Factory$*",
+                    "*_Module",
+                    "*_Module$*",
+                    "*ComposableSingletons$*",
+                    "*_AssistedFactory_Impl*",
+                    "*BuildConfig",
+                    // Other
+                    // We do not cover Nodes (normally covered by maestro, but code coverage is not computed with maestro)
+                    "*Node",
+                    "*Node$*",
                 )
             )
+        }
+    }
+
+    // Run ./gradlew koverMergedVerify to check the rules.
+    verify {
+        // Does not seems to work, so also run the task manually on the workflow.
+        onCheck.set(true)
+        // General rule: minimum code coverage.
+        rule {
+            name = "Global minimum code coverage."
+            target = kotlinx.kover.api.VerificationTarget.ALL
+            bound {
+                minValue = 45
+                // Setting a max value, so that if coverage is bigger, it means that we have to change minValue.
+                maxValue = 50
+                counter = kotlinx.kover.api.CounterType.LINE
+                valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
+            }
+        }
+        // Rule to ensure that coverage of Presenters is sufficient.
+        rule {
+            name = "Check code coverage of presenters"
+            target = kotlinx.kover.api.VerificationTarget.CLASS
+            overrideClassFilter {
+                includes += "*Presenter"
+                excludes += "*TemplatePresenter"
+            }
+            bound {
+                minValue = 90
+                counter = kotlinx.kover.api.CounterType.INSTRUCTION
+                valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
+            }
+        }
+        // Rule to ensure that coverage of State is sufficient.
+        rule {
+            name = "Check code coverage of states"
+            target = kotlinx.kover.api.VerificationTarget.CLASS
+            overrideClassFilter {
+                includes += "*State"
+            }
+            bound {
+                minValue = 90
+                counter = kotlinx.kover.api.CounterType.INSTRUCTION
+                valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
+            }
         }
     }
 }

@@ -19,7 +19,7 @@ package io.element.android.features.onboarding
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 
-data class SplashCarouselState(
+data class SplashCarouselData(
     val items: List<Item>
 ) {
     data class Item(
