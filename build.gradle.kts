@@ -204,9 +204,9 @@ koverMerged {
             name = "Global minimum code coverage."
             target = kotlinx.kover.api.VerificationTarget.ALL
             bound {
-                minValue = 45
+                minValue = 50
                 // Setting a max value, so that if coverage is bigger, it means that we have to change minValue.
-                maxValue = 50
+                maxValue = 55
                 counter = kotlinx.kover.api.CounterType.INSTRUCTION
                 valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
             }
