@@ -21,14 +21,14 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 open class AggregatedReactionProvider : PreviewParameterProvider<AggregatedReaction> {
     override val values: Sequence<AggregatedReaction>
         get() = sequenceOf(
-            aAggregatedReaction(),
-            aAggregatedReaction().copy(count = "88"),
-            aAggregatedReaction().copy(isHighlighted = true),
-            aAggregatedReaction().copy(count = "88", isHighlighted = true),
+            anAggregatedReaction(),
+            anAggregatedReaction().copy(count = "88"),
+            anAggregatedReaction().copy(isHighlighted = true),
+            anAggregatedReaction().copy(count = "88", isHighlighted = true),
         )
 }
 
-fun aAggregatedReaction() = AggregatedReaction(
+fun anAggregatedReaction() = AggregatedReaction(
     key = "👍",
     count = "1", // TODO Why is it a String?
     isHighlighted = false,
