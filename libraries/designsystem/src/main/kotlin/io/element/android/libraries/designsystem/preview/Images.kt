@@ -18,6 +18,7 @@ package io.element.android.libraries.designsystem.preview
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import io.element.android.libraries.designsystem.R
@@ -27,14 +28,21 @@ import io.element.android.libraries.designsystem.R
  * but it does not render in preview. In the meantime, you can use this trick to have image.
  */
 @Composable
-fun debugPlaceholder(@DrawableRes debugPreview: Int) = if (LocalInspectionMode.current) {
+fun debugPlaceholder(
+    @DrawableRes debugPreview: Int,
+    nonDebugPainter: Painter? = null,
+) = if (LocalInspectionMode.current) {
     painterResource(id = debugPreview)
 } else {
-    null
+    nonDebugPainter
 }
 
 @Composable
-fun debugPlaceholderBackground() = debugPlaceholder(debugPreview = R.drawable.sample_background)
+fun debugPlaceholderBackground(nonDebugPainter: Painter? = null): Painter? {
+    return debugPlaceholder(debugPreview = R.drawable.sample_background, nonDebugPainter)
+}
 
 @Composable
-fun debugPlaceholderAvatar() = debugPlaceholder(debugPreview = R.drawable.sample_avatar)
+fun debugPlaceholderAvatar(nonDebugPainter: Painter? = null): Painter? {
+    return debugPlaceholder(debugPreview = R.drawable.sample_avatar, nonDebugPainter)
+}
