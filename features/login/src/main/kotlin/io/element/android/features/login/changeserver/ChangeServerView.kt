@@ -48,12 +48,12 @@ import androidx.compose.ui.unit.sp
 import io.element.android.features.login.R
 import io.element.android.features.login.error.changeServerError
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.components.VectorIcon
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
@@ -91,12 +91,13 @@ fun ChangeServerView(
                         shape = RoundedCornerShape(32.dp)
                     )
             ) {
-                VectorIcon(
+                Icon(
                     modifier = Modifier
                         .align(Alignment.Center)
                         .size(width = 48.dp, height = 48.dp),
                     // TODO Update with design input
                     resourceId = R.drawable.ic_baseline_dataset_24,
+                    contentDescription = "",
                 )
             }
             Text(

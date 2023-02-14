@@ -42,9 +42,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.timeline.model.TimelineItem
-import io.element.android.libraries.designsystem.components.VectorIcon
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheetLayout
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
@@ -121,8 +121,9 @@ private fun SheetContent(
                             )
                         },
                         icon = {
-                            VectorIcon(
+                            Icon(
                                 resourceId = action.icon,
+                                contentDescription = "",
                                 tint = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
                             )
                         }
