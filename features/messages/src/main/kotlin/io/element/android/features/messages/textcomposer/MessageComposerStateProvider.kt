@@ -16,16 +16,20 @@
 
 package io.element.android.features.messages.textcomposer
 
-import androidx.compose.runtime.Immutable
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.textcomposer.MessageComposerMode
 
-@Immutable
-data class MessageComposerState(
-    val text: StableCharSequence?,
-    val isFullScreen: Boolean,
-    val mode: MessageComposerMode,
-    val eventSink: (MessageComposerEvents) -> Unit
-) {
-    val isSendButtonVisible: Boolean = text?.charSequence.isNullOrEmpty().not()
+open class MessageComposerStateProvider : PreviewParameterProvider<MessageComposerState> {
+    override val values: Sequence<MessageComposerState>
+        get() = sequenceOf(
+            aMessageComposerState(),
+        )
 }
+
+fun aMessageComposerState() = MessageComposerState(
+    text = StableCharSequence(""),
+    isFullScreen = false,
+    mode = MessageComposerMode.Normal(content = ""),
+    eventSink = {}
+)

@@ -18,6 +18,10 @@ package io.element.android.features.messages.textcomposer
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.textcomposer.TextComposer
 
@@ -54,4 +58,19 @@ fun MessageComposerView(
         isInDarkMode = !ElementTheme.colors.isLight,
         modifier = modifier
     )
+}
+
+@Preview
+@Composable
+internal fun MessageComposerViewLightPreview(@PreviewParameter(MessageComposerStateProvider::class) state: MessageComposerState) =
+    ElementPreviewLight { ContentToPreview(state) }
+
+@Preview
+@Composable
+internal fun MessageComposerViewDarkPreview(@PreviewParameter(MessageComposerStateProvider::class) state: MessageComposerState) =
+    ElementPreviewDark { ContentToPreview(state) }
+
+@Composable
+private fun ContentToPreview(state: MessageComposerState) {
+    MessageComposerView(state)
 }
