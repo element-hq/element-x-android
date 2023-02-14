@@ -238,5 +238,19 @@ koverMerged {
                 valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
             }
         }
+        // Rule to ensure that coverage of Views is sufficient (deactivated for now).
+        rule {
+            name = "Check code coverage of views"
+            target = kotlinx.kover.api.VerificationTarget.CLASS
+            overrideClassFilter {
+                includes += "*ViewKt"
+            }
+            bound {
+                // TODO Update this value, for now there are too many missing tests.
+                minValue = 0
+                counter = kotlinx.kover.api.CounterType.INSTRUCTION
+                valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
+            }
+        }
     }
 }
