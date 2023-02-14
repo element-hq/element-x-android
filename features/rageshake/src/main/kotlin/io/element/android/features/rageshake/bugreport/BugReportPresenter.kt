@@ -23,10 +23,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.core.net.toUri
 import io.element.android.features.rageshake.crash.CrashDataStore
 import io.element.android.features.rageshake.logs.VectorFileLogger
 import io.element.android.features.rageshake.reporter.BugReporter
+import io.element.android.features.rageshake.reporter.BugReporterListener
 import io.element.android.features.rageshake.reporter.ReportType
 import io.element.android.features.rageshake.screenshot.ScreenshotHolder
 import io.element.android.libraries.architecture.Async
@@ -45,7 +45,7 @@ class BugReportPresenter @Inject constructor(
     private class BugReporterUploadListener(
         private val sendingProgress: MutableState<Float>,
         private val sendingAction: MutableState<Async<Unit>>
-    ) : BugReporter.IMXBugReportListener {
+    ) : BugReporterListener {
 
         override fun onUploadCancelled() {
             sendingProgress.value = 0f
@@ -72,7 +72,7 @@ class BugReportPresenter @Inject constructor(
     override fun present(): BugReportState {
         val screenshotUri = rememberSaveable {
             mutableStateOf(
-                screenshotHolder.getFile()?.toUri()?.toString()
+                screenshotHolder.getFileUri()
             )
         }
         val crashInfo: String by crashDataStore
@@ -126,7 +126,11 @@ class BugReportPresenter @Inject constructor(
         formState.value = operation(formState.value)
     }
 
-    private fun CoroutineScope.sendBugReport(formState: BugReportFormState, hasCrashLogs: Boolean, listener: BugReporter.IMXBugReportListener) = launch {
+    private fun CoroutineScope.sendBugReport(
+        formState: BugReportFormState,
+        hasCrashLogs: Boolean,
+        listener: BugReporterListener,
+    ) = launch {
         bugReporter.sendBugReport(
             coroutineScope = this,
             reportType = ReportType.BUG_REPORT,
@@ -145,6 +149,6 @@ class BugReportPresenter @Inject constructor(
     private fun CoroutineScope.resetAll() = launch {
         screenshotHolder.reset()
         crashDataStore.reset()
-        VectorFileLogger.getFromTimber().reset()
+        VectorFileLogger.getFromTimber()?.reset()
     }
 }

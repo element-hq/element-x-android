@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist
+package io.element.android.libraries.dateformatter.impl
 
 import android.text.format.DateFormat
 import android.text.format.DateUtils
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.dateformatter.LastMessageFormatter
+import io.element.android.libraries.di.AppScope
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
@@ -32,32 +35,33 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.absoluteValue
 
-class LastMessageFormatter @Inject constructor() {
-
-    private val clock: Clock = Clock.System
-    private val locale: Locale = Locale.getDefault()
-
+@ContributesBinding(AppScope::class)
+class DefaultLastMessageFormatter @Inject constructor(
+    private val clock: Clock,
+    private val locale: Locale,
+    private val timezone: TimeZone,
+) : LastMessageFormatter {
     private val onlyTimeFormatter: DateTimeFormatter by lazy {
-        val pattern = DateFormat.getBestDateTimePattern(locale, "HH:mm")
+        val pattern = DateFormat.getBestDateTimePattern(locale, "HH:mm") ?: "HH:mm"
         DateTimeFormatter.ofPattern(pattern)
     }
 
     private val dateWithMonthFormatter: DateTimeFormatter by lazy {
-        val pattern = DateFormat.getBestDateTimePattern(locale, "d MMM")
+        val pattern = DateFormat.getBestDateTimePattern(locale, "d MMM") ?: "d MMM"
         DateTimeFormatter.ofPattern(pattern)
     }
 
     private val dateWithYearFormatter: DateTimeFormatter by lazy {
-        val pattern = DateFormat.getBestDateTimePattern(locale, "dd.MM.yyyy")
+        val pattern = DateFormat.getBestDateTimePattern(locale, "dd.MM.yyyy") ?: "dd.MM.yyyy"
         DateTimeFormatter.ofPattern(pattern)
     }
 
-    fun format(timestamp: Long?): String {
+    override fun format(timestamp: Long?): String {
         if (timestamp == null) return ""
         val now: Instant = clock.now()
         val tsInstant = Instant.fromEpochMilliseconds(timestamp)
-        val nowDateTime = now.toLocalDateTime(TimeZone.currentSystemDefault())
-        val tsDateTime = tsInstant.toLocalDateTime(TimeZone.currentSystemDefault())
+        val nowDateTime = now.toLocalDateTime(timezone)
+        val tsDateTime = tsInstant.toLocalDateTime(timezone)
         val isSameDay = nowDateTime.date == tsDateTime.date
         return when {
             isSameDay -> {
@@ -77,7 +81,7 @@ class LastMessageFormatter @Inject constructor() {
         return if (period.years.absoluteValue >= 1) {
             formatDateWithYear(date)
         } else if (period.days.absoluteValue < 2 && period.months.absoluteValue < 1) {
-            getRelativeDay(date.toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds())
+            getRelativeDay(date.toInstant(timezone).toEpochMilliseconds())
         } else {
             formatDateWithMonth(date)
         }
@@ -97,6 +101,6 @@ class LastMessageFormatter @Inject constructor() {
             clock.now().toEpochMilliseconds(),
             DateUtils.DAY_IN_MILLIS,
             DateUtils.FORMAT_SHOW_WEEKDAY
-        ).toString()
+        )?.toString() ?: ""
     }
 }

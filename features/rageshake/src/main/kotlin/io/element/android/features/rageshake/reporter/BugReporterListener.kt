@@ -14,18 +14,33 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrixtest.room
+package io.element.android.features.rageshake.reporter
 
-import io.element.android.libraries.matrix.room.RoomSummary
-import io.element.android.libraries.matrix.room.RoomSummaryDataSource
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+/**
+ * Bug report upload listener.
+ */
+interface BugReporterListener {
+    /**
+     * The bug report has been cancelled.
+     */
+    fun onUploadCancelled()
 
-class InMemoryRoomSummaryDataSource : RoomSummaryDataSource {
+    /**
+     * The bug report upload failed.
+     *
+     * @param reason the failure reason
+     */
+    fun onUploadFailed(reason: String?)
 
-    override fun roomSummaries(): StateFlow<List<RoomSummary>> {
-        return MutableStateFlow(emptyList())
-    }
+    /**
+     * The upload progress (in percent).
+     *
+     * @param progress the upload progress
+     */
+    fun onProgress(progress: Int)
 
-    override fun setSlidingSyncRange(range: IntRange) = Unit
+    /**
+     * The bug report upload succeeded.
+     */
+    fun onUploadSucceed(reportUrl: String?)
 }

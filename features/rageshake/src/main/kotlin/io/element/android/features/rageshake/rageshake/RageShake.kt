@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,57 +16,21 @@
 
 package io.element.android.features.rageshake.rageshake
 
-import android.content.Context
-import android.hardware.Sensor
-import android.hardware.SensorManager
-import androidx.core.content.getSystemService
-import com.squareup.seismic.ShakeDetector
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.di.SingleIn
-import javax.inject.Inject
-
-@SingleIn(AppScope::class)
-class RageShake @Inject constructor(
-    @ApplicationContext context: Context,
-) : ShakeDetector.Listener {
-
-    private var sensorManager = context.getSystemService<SensorManager>()
-    private var shakeDetector: ShakeDetector? = null
-
-    var interceptor: (() -> Unit)? = null
-
+interface RageShake {
     /**
      * Check if the feature is available on this device.
      */
-    fun isAvailable(): Boolean {
-        return sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null
-    }
+    fun isAvailable(): Boolean
 
-    fun start(sensitivity: Float) {
-        sensorManager?.let {
-            shakeDetector = ShakeDetector(this).apply {
-                start(it, SensorManager.SENSOR_DELAY_GAME)
-            }
-            setSensitivity(sensitivity)
-        }
-    }
+    fun start(sensitivity: Float)
 
-    fun stop() {
-        shakeDetector?.stop()
-    }
+    fun stop()
 
     /**
      * sensitivity will be {0, O.25, 0.5, 0.75, 1} and converted to
      * [ShakeDetector.SENSITIVITY_LIGHT (=11), ShakeDetector.SENSITIVITY_HARD (=15)].
      */
-    fun setSensitivity(sensitivity: Float) {
-        shakeDetector?.setSensitivity(
-            ShakeDetector.SENSITIVITY_LIGHT + (sensitivity * 4).toInt()
-        )
-    }
+    fun setSensitivity(sensitivity: Float)
 
-    override fun hearShake() {
-        interceptor?.invoke()
-    }
+    fun setInterceptor(interceptor: (() -> Unit)?)
 }

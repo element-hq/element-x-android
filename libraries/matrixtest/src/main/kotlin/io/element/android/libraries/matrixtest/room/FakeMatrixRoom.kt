@@ -20,17 +20,20 @@ import io.element.android.libraries.matrix.core.EventId
 import io.element.android.libraries.matrix.core.RoomId
 import io.element.android.libraries.matrix.room.MatrixRoom
 import io.element.android.libraries.matrix.timeline.MatrixTimeline
+import io.element.android.libraries.matrixtest.A_ROOM_ID
 import io.element.android.libraries.matrixtest.timeline.FakeMatrixTimeline
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
 class FakeMatrixRoom(
-    override val roomId: RoomId,
+    override val roomId: RoomId = A_ROOM_ID,
     override val name: String? = null,
     override val bestName: String = "",
     override val displayName: String = "",
     override val topic: String? = null,
-    override val avatarUrl: String? = null
+    override val avatarUrl: String? = null,
+    private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
 ) : MatrixRoom {
 
     override fun syncUpdateFlow(): Flow<Long> {
@@ -38,7 +41,7 @@ class FakeMatrixRoom(
     }
 
     override fun timeline(): MatrixTimeline {
-        return FakeMatrixTimeline()
+        return matrixTimeline
     }
 
     override suspend fun userDisplayName(userId: String): Result<String?> {
@@ -50,18 +53,34 @@ class FakeMatrixRoom(
     }
 
     override suspend fun sendMessage(message: String): Result<Unit> {
-        TODO("Not yet implemented")
+        delay(100)
+        return Result.success(Unit)
     }
+
+    var editMessageParameter: String? = null
+        private set
 
     override suspend fun editMessage(originalEventId: EventId, message: String): Result<Unit> {
-        TODO("Not yet implemented")
+        editMessageParameter = message
+        delay(100)
+        return Result.success(Unit)
     }
+
+    var replyMessageParameter: String? = null
+        private set
 
     override suspend fun replyMessage(eventId: EventId, message: String): Result<Unit> {
-        TODO("Not yet implemented")
+        replyMessageParameter = message
+        delay(100)
+        return Result.success(Unit)
     }
 
+    var redactEventEventIdParam: EventId? = null
+        private set
+
     override suspend fun redactEvent(eventId: EventId, reason: String?): Result<Unit> {
-        TODO("Not yet implemented")
+        redactEventEventIdParam = eventId
+        delay(100)
+        return Result.success(Unit)
     }
 }

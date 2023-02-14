@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login
+package io.element.android.libraries.dateformatter.impl
 
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class ExampleUnitTest {
-    @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+class FakeClock : Clock {
+    private var instant: Instant = Instant.fromEpochMilliseconds(0)
+
+    fun givenInstant(instant: Instant) {
+        this.instant = instant
     }
+
+    override fun now(): Instant = instant
 }

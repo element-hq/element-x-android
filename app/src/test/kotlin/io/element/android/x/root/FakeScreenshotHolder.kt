@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages
+package io.element.android.x.root
 
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import android.graphics.Bitmap
+import io.element.android.features.rageshake.screenshot.ScreenshotHolder
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class ExampleUnitTest {
-    @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
-    }
+const val A_SCREENSHOT_URI = "file://content/uri"
+
+// TODO Remove this duplicated class when we will rework modules.
+class FakeScreenshotHolder(private val screenshotUri: String? = null) : ScreenshotHolder {
+    override fun writeBitmap(data: Bitmap) = Unit
+
+    override fun getFileUri() = screenshotUri
+
+    override fun reset() = Unit
 }

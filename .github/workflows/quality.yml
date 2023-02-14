@@ -29,6 +29,15 @@ jobs:
           name: linting-report
           path: |
             */build/reports/**/*.*
+      - name: Check Kover rules
+        run: ./gradlew koverMergedVerify $CI_GRADLE_ARG_PROPERTIES
+      - name: Upload reports
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: kover-report
+          path: |
+            **/kover/merged/verification/errors.txt
       - name: Prepare Danger
         if: always()
         run: |
