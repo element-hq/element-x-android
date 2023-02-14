@@ -207,7 +207,7 @@ koverMerged {
                 minValue = 45
                 // Setting a max value, so that if coverage is bigger, it means that we have to change minValue.
                 maxValue = 50
-                counter = kotlinx.kover.api.CounterType.LINE
+                counter = kotlinx.kover.api.CounterType.INSTRUCTION
                 valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
             }
         }
