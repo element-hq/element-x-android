@@ -25,8 +25,7 @@ open class MatrixUserProvider : PreviewParameterProvider<MatrixUser> {
     override val values: Sequence<MatrixUser>
         get() = sequenceOf(
             aMatrixUser(),
-            MatrixUser(
-                id = UserId("@id_of_alice:server.org"),
+            aMatrixUser().copy(
                 username = null,
                 avatarData = anAvatarData().copy(name = null)
             ),
@@ -38,3 +37,15 @@ fun aMatrixUser() = MatrixUser(
     username = "Alice",
     avatarData = anAvatarData()
 )
+
+open class MatrixUserWithNullProvider : PreviewParameterProvider<MatrixUser?> {
+    override val values: Sequence<MatrixUser?>
+        get() = sequenceOf(
+            aMatrixUser(),
+            aMatrixUser().copy(
+                username = null,
+                avatarData = anAvatarData().copy(name = null)
+            ),
+            null,
+        )
+}
