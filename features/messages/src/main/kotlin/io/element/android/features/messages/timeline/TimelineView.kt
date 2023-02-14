@@ -83,11 +83,11 @@ import io.element.android.features.messages.timeline.model.virtual.TimelineItemL
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.utils.PairCombinedPreviewParameter
-import io.element.android.libraries.matrix.core.EventId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun TimelineView(
@@ -117,14 +117,6 @@ fun TimelineView(
                     onLongClick = onMessageLongClicked
                 )
             }
-            /*
-            if (state.hasMoreToLoad) {
-                item {
-                    TimelineLoadingMoreIndicator()
-                }
-            }
-
-             */
         }
 
         fun onReachedLoadMore() {
@@ -165,12 +157,23 @@ fun TimelineItemRow(
         is TimelineItem.Virtual -> TimelineItemVirtualRow(
             virtual = timelineItem
         )
-        is TimelineItem.Event -> TimelineItemEventRow(
-            event = timelineItem,
-            isHighlighted = isHighlighted,
-            onClick = { onClick(timelineItem) },
-            onLongClick = { onLongClick(timelineItem) }
-        )
+        is TimelineItem.Event -> {
+
+            fun onClick() {
+                onClick(timelineItem)
+            }
+
+            fun onLongClick() {
+                onLongClick(timelineItem)
+            }
+
+            TimelineItemEventRow(
+                event = timelineItem,
+                isHighlighted = isHighlighted,
+                onClick = ::onClick,
+                onLongClick = ::onLongClick
+            )
+        }
     }
 }
 

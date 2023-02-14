@@ -54,7 +54,8 @@ class PreferencesSessionStore @Inject constructor(
         val homeserverUrl: String,
         val isSoftLogout: Boolean,
         val refreshToken: String?,
-        val userId: String
+        val userId: String,
+        val slidingSyncProxy: String?
     )
 
     private val store = context.dataStore
@@ -73,7 +74,8 @@ class PreferencesSessionStore @Inject constructor(
                 homeserverUrl = session.homeserverUrl,
                 isSoftLogout = session.isSoftLogout,
                 refreshToken = session.refreshToken,
-                userId = session.userId
+                userId = session.userId,
+                slidingSyncProxy = session.slidingSyncProxy
             )
             val encodedSession = Json.encodeToString(sessionData)
             prefs[sessionKey] = encodedSession
@@ -90,7 +92,8 @@ class PreferencesSessionStore @Inject constructor(
                 homeserverUrl = sessionData.homeserverUrl,
                 isSoftLogout = sessionData.isSoftLogout,
                 refreshToken = sessionData.refreshToken,
-                userId = sessionData.userId
+                userId = sessionData.userId,
+                slidingSyncProxy = sessionData.slidingSyncProxy
             )
         }
     }

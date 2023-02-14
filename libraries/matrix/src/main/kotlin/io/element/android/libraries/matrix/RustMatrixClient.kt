@@ -43,7 +43,7 @@ import timber.log.Timber
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 
-internal class RustMatrixClient internal constructor(
+class RustMatrixClient constructor(
     private val client: Client,
     private val sessionStore: SessionStore,
     private val coroutineScope: CoroutineScope,
@@ -132,11 +132,11 @@ internal class RustMatrixClient internal constructor(
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
         val slidingSyncRoom = slidingSync.getRoom(roomId.value) ?: return null
-        val room = slidingSyncRoom.fullRoom() ?: return null
+        val fullRoom = slidingSyncRoom.fullRoom() ?: return null
         return RustMatrixRoom(
             slidingSyncUpdateFlow = slidingSyncObserverProxy.updateSummaryFlow,
             slidingSyncRoom = slidingSyncRoom,
-            room = room,
+            innerRoom = fullRoom,
             coroutineScope = coroutineScope,
             coroutineDispatchers = dispatchers
         )
