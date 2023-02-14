@@ -27,6 +27,8 @@ import io.element.android.features.rageshake.preferences.RageshakePreferencesSta
 import io.element.android.features.rageshake.preferences.RageshakePreferencesView
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.preferences.PreferenceView
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
@@ -56,7 +58,14 @@ fun PreferencesRootView(
 
 @Preview
 @Composable
-fun PreferencesContentPreview() {
+fun PreferencesRootViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun PreferencesRootViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     val state = PreferencesRootState(
         logoutState = LogoutPreferenceState(),
         rageshakeState = RageshakePreferencesState(),

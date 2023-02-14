@@ -28,8 +28,6 @@ import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -49,6 +47,8 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
 import io.element.android.libraries.designsystem.LinkColor
 import io.element.android.libraries.designsystem.components.ClickableLinkText
+import io.element.android.libraries.designsystem.theme.components.Surface
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.permalink.PermalinkData
 import io.element.android.libraries.matrix.permalink.PermalinkParser
 import kotlinx.collections.immutable.persistentMapOf

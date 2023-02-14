@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.designsystem.components
 
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -29,7 +28,7 @@ fun VectorIcon(
     modifier: Modifier = Modifier,
     tint: Color = LocalContentColor.current,
 ) {
-    Icon(
+    androidx.compose.material3.Icon(
         painter = painterResource(id = resourceId),
         contentDescription = null,
         modifier = modifier,

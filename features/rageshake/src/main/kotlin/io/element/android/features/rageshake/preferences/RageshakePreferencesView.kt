@@ -27,6 +27,8 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSlide
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
@@ -73,14 +75,28 @@ fun RageshakePreferencesView(
     }
 }
 
-@Composable
 @Preview
-fun RageshakePreferencesViewPreview() {
+@Composable
+fun RageshakePreferencesViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun RageshakePreferencesViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     RageshakePreferencesView(RageshakePreferencesState(isEnabled = true, isSupported = true, sensitivity = 0.5f))
 }
 
-@Composable
 @Preview
-fun RageshakePreferenceNotSupportedPreview() {
+@Composable
+fun RageshakePreferencesViewNotSupportedLightPreview() = ElementPreviewLight { ContentNotSupportedToPreview() }
+
+@Preview
+@Composable
+fun RageshakePreferencesViewNotSupportedDarkPreview() = ElementPreviewDark { ContentNotSupportedToPreview() }
+
+@Composable
+private fun ContentNotSupportedToPreview() {
     RageshakePreferencesView(RageshakePreferencesState(isEnabled = true, isSupported = false, sensitivity = 0.5f))
 }

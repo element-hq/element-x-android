@@ -59,7 +59,10 @@ class MessageComposerPresenter @Inject constructor(
             when (event) {
                 MessageComposerEvents.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
                 is MessageComposerEvents.UpdateText -> text.value = event.text.toStableCharSequence()
-                MessageComposerEvents.CloseSpecialMode -> composerMode.setToNormal()
+                MessageComposerEvents.CloseSpecialMode -> {
+                    text.value = "".toStableCharSequence()
+                    composerMode.setToNormal()
+                }
                 is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(event.message, composerMode, text)
                 is MessageComposerEvents.SetMode -> composerMode.value = event.composerMode
             }

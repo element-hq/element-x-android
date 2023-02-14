@@ -39,10 +39,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -69,7 +66,6 @@ import io.element.android.features.messages.timeline.components.virtual.Timeline
 import io.element.android.features.messages.timeline.model.AggregatedReaction
 import io.element.android.features.messages.timeline.model.MessagesItemGroupPosition
 import io.element.android.features.messages.timeline.model.TimelineItem
-import io.element.android.features.messages.timeline.model.TimelineItemGroupPositionProvider
 import io.element.android.features.messages.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.timeline.model.event.MessagesTimelineItemContentProvider
 import io.element.android.features.messages.timeline.model.event.TimelineItemEncryptedContent
@@ -82,12 +78,15 @@ import io.element.android.features.messages.timeline.model.virtual.TimelineItemD
 import io.element.android.features.messages.timeline.model.virtual.TimelineItemLoadingModel
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.utils.PairCombinedPreviewParameter
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @Composable
 fun TimelineView(
@@ -358,24 +357,26 @@ internal fun BoxScope.TimelineScrollHelper(
     }
 }
 
-class MessagesItemGroupPositionToMessagesTimelineItemContentProvider :
-    PairCombinedPreviewParameter<MessagesItemGroupPosition, TimelineItemEventContent>(
-        TimelineItemGroupPositionProvider() to MessagesTimelineItemContentProvider()
-    )
-
-@Suppress("PreviewPublic")
 @Preview
 @Composable
-fun TimelineItemsPreview(
-    @PreviewParameter(MessagesTimelineItemContentProvider::class)
-    content: TimelineItemEventContent
-) {
+fun LoginRootScreenLightPreview(
+    @PreviewParameter(MessagesTimelineItemContentProvider::class) content: TimelineItemEventContent
+) = ElementPreviewLight { ContentToPreview(content) }
+
+@Preview
+@Composable
+fun LoginRootScreenDarkPreview(
+    @PreviewParameter(MessagesTimelineItemContentProvider::class) content: TimelineItemEventContent
+) = ElementPreviewDark { ContentToPreview(content) }
+
+@Composable
+private fun ContentToPreview(content: TimelineItemEventContent) {
     val timelineItems = persistentListOf(
         // 3 items (First Middle Last) with isMine = false
         createMessageEvent(
             isMine = false,
             content = content,
-            groupPosition = MessagesItemGroupPosition.First
+            groupPosition = MessagesItemGroupPosition.Last
         ),
         createMessageEvent(
             isMine = false,
@@ -385,13 +386,13 @@ fun TimelineItemsPreview(
         createMessageEvent(
             isMine = false,
             content = content,
-            groupPosition = MessagesItemGroupPosition.Last
+            groupPosition = MessagesItemGroupPosition.First
         ),
         // 3 items (First Middle Last) with isMine = true
         createMessageEvent(
             isMine = true,
             content = content,
-            groupPosition = MessagesItemGroupPosition.First
+            groupPosition = MessagesItemGroupPosition.Last
         ),
         createMessageEvent(
             isMine = true,
@@ -401,7 +402,7 @@ fun TimelineItemsPreview(
         createMessageEvent(
             isMine = true,
             content = content,
-            groupPosition = MessagesItemGroupPosition.Last
+            groupPosition = MessagesItemGroupPosition.First
         ),
     )
     TimelineView(

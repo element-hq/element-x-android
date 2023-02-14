@@ -25,10 +25,18 @@ import io.element.android.libraries.matrix.room.MatrixRoom
 import io.element.android.libraries.matrix.room.RoomSummaryDataSource
 import io.element.android.libraries.matrixtest.media.FakeMediaResolver
 import io.element.android.libraries.matrixtest.room.FakeMatrixRoom
-import io.element.android.libraries.matrixtest.room.InMemoryRoomSummaryDataSource
+import io.element.android.libraries.matrixtest.room.FakeRoomSummaryDataSource
+import kotlinx.coroutines.delay
 import org.matrix.rustcomponents.sdk.MediaSource
 
-class FakeMatrixClient(override val sessionId: SessionId) : MatrixClient {
+class FakeMatrixClient(
+    override val sessionId: SessionId = SessionId(A_SESSION_ID),
+    private val userDisplayName: Result<String> = Result.success(A_USER_NAME),
+    private val userAvatarURLString: Result<String> = Result.success(AN_AVATAR_URL),
+    val roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource()
+) : MatrixClient {
+
+    private var logoutFailure: Throwable? = null
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
         return FakeMatrixRoom(roomId)
@@ -39,23 +47,30 @@ class FakeMatrixClient(override val sessionId: SessionId) : MatrixClient {
     override fun stopSync() = Unit
 
     override fun roomSummaryDataSource(): RoomSummaryDataSource {
-        return InMemoryRoomSummaryDataSource()
+        return roomSummaryDataSource
     }
 
     override fun mediaResolver(): MediaResolver {
         return FakeMediaResolver()
     }
 
-    override suspend fun logout() = Unit
+    fun givenLogoutError(failure: Throwable) {
+        logoutFailure = failure
+    }
 
-    override fun userId(): UserId = UserId("")
+    override suspend fun logout() {
+        delay(100)
+        logoutFailure?.let { throw it }
+    }
+
+    override fun userId(): UserId = A_USER_ID
 
     override suspend fun loadUserDisplayName(): Result<String> {
-        return Result.success("")
+        return userDisplayName
     }
 
     override suspend fun loadUserAvatarURLString(): Result<String> {
-        return Result.success("")
+        return userAvatarURLString
     }
 
     override suspend fun loadMediaContentForSource(source: MediaSource): Result<ByteArray> {
