@@ -16,8 +16,8 @@
 
 package io.element.android.features.messages.timeline.model
 
-import kotlinx.collections.immutable.ImmutableList
-
-data class TimelineItemReactions(
-    val reactions: ImmutableList<AggregatedReaction>
+data class AggregatedReaction(
+    val key: String,
+    val count: String,
+    val isHighlighted: Boolean = false
 )
