@@ -42,11 +42,15 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
 import io.element.android.libraries.designsystem.LinkColor
 import io.element.android.libraries.designsystem.components.ClickableLinkText
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.permalink.PermalinkData
@@ -99,7 +103,10 @@ private fun HtmlBody(
             when (val node = nodes.next()) {
                 is TextNode -> {
                     if (!node.isBlank) {
-                        Text(text = node.text())
+                        Text(
+                            text = node.text(),
+                            color = MaterialTheme.colorScheme.primary,
+                        )
                     }
                 }
                 is Element -> {
@@ -241,6 +248,7 @@ private fun HtmlPreformatted(
         Text(
             text = pre.wholeText(),
             style = TextStyle(fontFamily = FontFamily.Monospace),
+            color = MaterialTheme.colorScheme.primary,
         )
     }
 }
@@ -566,4 +574,19 @@ private fun HtmlText(
         onClick = onClick,
         onLongClick = onLongClick
     )
+}
+
+@Preview
+@Composable
+internal fun HtmlDocumentLightPreview(@PreviewParameter(DocumentProvider::class) document: Document) =
+    ElementPreviewLight { ContentToPreview(document) }
+
+@Preview
+@Composable
+internal fun HtmlDocumentDarkPreview(@PreviewParameter(DocumentProvider::class) document: Document) =
+    ElementPreviewDark { ContentToPreview(document) }
+
+@Composable
+private fun ContentToPreview(document: Document) {
+    HtmlDocument(document, MutableInteractionSource())
 }
