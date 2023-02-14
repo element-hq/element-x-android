@@ -40,11 +40,19 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
-    implementation(libs.squareup.seismic)
+    api(libs.squareup.seismic)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.coil)
     implementation(libs.coil.compose)
     ksp(libs.showkase.processor)
+
     testImplementation(libs.test.junit)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.molecule.runtime)
+    testImplementation(libs.test.truth)
+    testImplementation(libs.test.turbine)
+    testImplementation(projects.libraries.matrixtest)
+    testImplementation(libs.test.mockk)
+
     androidTestImplementation(libs.test.junitext)
 }

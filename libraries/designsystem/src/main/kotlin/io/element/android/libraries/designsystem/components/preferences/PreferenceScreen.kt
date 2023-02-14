@@ -28,13 +28,10 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Announcement
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +39,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
+import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -110,12 +114,36 @@ fun PreferenceTopAppBar(
     )
 }
 
-@Composable
 @Preview
-fun PreferenceScreenPreview() {
+@Composable
+fun PreferenceViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun PreferenceViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     PreferenceView(
         title = "Preference screen"
     ) {
-        PreferenceCategoryPreview()
+        PreferenceCategory(
+            title = "Category title",
+        ) {
+            PreferenceText(
+                title = "Title",
+                icon = Icons.Default.BugReport,
+            )
+            PreferenceSwitch(
+                title = "Switch",
+                icon = Icons.Default.Announcement,
+                isChecked = true
+            )
+            PreferenceSlide(
+                title = "Slide",
+                summary = "Summary",
+                value = 0.75F
+            )
+        }
     }
 }

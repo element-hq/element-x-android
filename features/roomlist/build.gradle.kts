@@ -41,7 +41,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
-    implementation(libs.datetime)
+    implementation(projects.libraries.dateformatter)
     implementation(libs.accompanist.placeholder)
 
     testImplementation(libs.test.junit)
@@ -50,6 +50,8 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrixtest)
+
+    testImplementation(testFixtures(projects.libraries.matrix))
 
     androidTestImplementation(libs.test.junitext)
 

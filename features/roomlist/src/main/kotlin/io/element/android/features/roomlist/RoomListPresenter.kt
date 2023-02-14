@@ -31,6 +31,7 @@ import io.element.android.features.roomlist.model.RoomListRoomSummaryPlaceholder
 import io.element.android.features.roomlist.model.RoomListState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.parallelMap
+import io.element.android.libraries.dateformatter.LastMessageFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.MatrixClient
@@ -57,7 +58,6 @@ class RoomListPresenter @Inject constructor(
             mutableStateOf(null)
         }
         var filter by rememberSaveable { mutableStateOf("") }
-        val isLoginOut = rememberSaveable { mutableStateOf(false) }
         val roomSummaries by client
             .roomSummaryDataSource()
             .roomSummaries()
@@ -86,7 +86,6 @@ class RoomListPresenter @Inject constructor(
             matrixUser = matrixUser.value,
             roomList = filteredRoomSummaries.value,
             filter = filter,
-            isLoginOut = isLoginOut.value,
             eventSink = ::handleEvents
         )
     }

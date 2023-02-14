@@ -21,13 +21,20 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
@@ -37,6 +44,12 @@ fun ErrorDialog(
     title: String = stringResource(id = StringR.string.dialog_title_error),
     submitText: String = stringResource(id = StringR.string.ok),
     onDismiss: () -> Unit = {},
+    shape: Shape = AlertDialogDefaults.shape,
+    containerColor: Color = MaterialTheme.colorScheme.surfaceVariant,
+    iconContentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    titleContentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    textContentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
 ) {
     AlertDialog(
         modifier = modifier,
@@ -62,12 +75,25 @@ fun ErrorDialog(
                 }
             }
         },
+        shape = shape,
+        containerColor = containerColor,
+        iconContentColor = iconContentColor,
+        titleContentColor = titleContentColor,
+        textContentColor = textContentColor,
+        tonalElevation = tonalElevation,
     )
 }
 
-@Composable
 @Preview
-fun ErrorDialogPreview() {
+@Composable
+fun ErrorDialogLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun ErrorDialogDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     ErrorDialog(
         content = "Content",
     )

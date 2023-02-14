@@ -44,7 +44,14 @@ dependencies {
     implementation(libs.accompanist.flowlayout)
     implementation(libs.androidx.recyclerview)
     implementation(libs.jsoup)
+
     testImplementation(libs.test.junit)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.molecule.runtime)
+    testImplementation(libs.test.truth)
+    testImplementation(libs.test.turbine)
+    testImplementation(projects.libraries.matrixtest)
+
     androidTestImplementation(libs.test.junitext)
     ksp(libs.showkase.processor)
 }

@@ -21,7 +21,7 @@ import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +33,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
@@ -123,7 +126,8 @@ private fun FakeComposer(
                 .align(Alignment.Center),
             textAlign = TextAlign.Center,
             text = "Composer Preview",
-            fontSize = 20.sp
+            fontSize = 20.sp,
+            color = MaterialTheme.colorScheme.secondary,
         )
     }
 }
@@ -145,7 +149,14 @@ private fun MessageComposerView.setup(isDarkMode: Boolean, composerMode: Message
 
 @Preview
 @Composable
-fun TextComposerPreview() {
+fun TextComposerLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun TextComposerDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     TextComposer(
         onSendMessage = {},
         fullscreen = false,

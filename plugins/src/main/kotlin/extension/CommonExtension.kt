@@ -43,6 +43,7 @@ fun CommonExtension<*, *, *, *>.androidConfig(project: Project) {
         lintConfig = File("${project.rootDir}/tools/lint/lint.xml")
         checkDependencies = true
         abortOnError = true
+        ignoreTestFixturesSources = true
     }
 }
 
@@ -67,6 +68,7 @@ fun CommonExtension<*, *, *, *>.composeConfig() {
         // Disabled until lint stops inspecting generated ksp files...
         // error.add("ComposableLambdaParameterNaming")
         error.add("ComposableLambdaParameterPosition")
+        ignoreTestFixturesSources = true
     }
 }
 

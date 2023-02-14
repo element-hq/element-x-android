@@ -54,6 +54,7 @@ fun DependencyHandlerScope.allLibraries() {
     implementation(project(":libraries:matrixui"))
     implementation(project(":libraries:core"))
     implementation(project(":libraries:architecture"))
+    implementation(project(":libraries:dateformatter"))
     implementation(project(":libraries:di"))
 }
 

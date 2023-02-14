@@ -20,6 +20,8 @@ import android.content.Context
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import io.element.android.features.rageshake.reporter.BugReporter
+import io.element.android.features.rageshake.reporter.DefaultBugReporter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
@@ -58,4 +60,7 @@ object AppModule {
             diffUpdateDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
         )
     }
+
+    @Provides
+    fun providesBugReporter(bugReporter: DefaultBugReporter): BugReporter = bugReporter
 }

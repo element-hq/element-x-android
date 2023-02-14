@@ -21,10 +21,7 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
-      - name: Run tests
-        run: ./gradlew test $CI_GRADLE_ARG_PROPERTIES
-      - name: Generate kover report
-        if: always()
+      - name: Run tests and generate kover report
         run: ./gradlew koverMergedReport $CI_GRADLE_ARG_PROPERTIES
 
       - name: Archive kover report
@@ -39,7 +36,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: screenshot-results
+          name: tests-and-screenshot-tests-results
           path: |
             **/out/failures/
             **/build/reports/tests/*UnitTest/

@@ -29,6 +29,8 @@ import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
@@ -88,8 +90,15 @@ fun LogoutPreferenceContent(
     }
 }
 
-@Composable
 @Preview
-fun LogoutContentPreview() {
+@Composable
+fun LogoutPreferenceViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+fun LogoutPreferenceViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
     LogoutPreferenceView(LogoutPreferenceState())
 }
