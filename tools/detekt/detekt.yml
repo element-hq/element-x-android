@@ -25,6 +25,8 @@ style:
     active: false
   UseCheckOrError:
     active: false
+  WildcardImport:
+    active: false
 
 empty-blocks:
   EmptyFunctionBlock:
