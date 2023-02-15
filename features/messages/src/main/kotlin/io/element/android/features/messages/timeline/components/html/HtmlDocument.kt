@@ -146,7 +146,7 @@ private fun HtmlBody(
 }
 
 private fun Element.isInline(): Boolean {
-    return when (normalName()) {
+    return when (tagName().lowercase()) {
         "del" -> true
         "mx-reply" -> false
         else -> !isBlock
@@ -163,7 +163,7 @@ private fun HtmlBlock(
 ) {
     val blockModifier = modifier
         .padding(top = 4.dp)
-    when (element.normalName()) {
+    when (element.tagName().lowercase()) {
         "p" -> HtmlParagraph(
             paragraph = element,
             modifier = blockModifier,
@@ -237,7 +237,7 @@ private fun HtmlPreformatted(
     pre: Element,
     modifier: Modifier = Modifier
 ) {
-    val isCode = pre.firstElementChild()?.normalName() == "code"
+    val isCode = pre.firstElementChild()?.tagName()?.lowercase() == "code"
     val backgroundColor =
         if (isCode) MaterialTheme.colorScheme.codeBackground() else Color.Unspecified
     Box(
@@ -313,7 +313,7 @@ private fun HtmlHeading(
     onTextClicked: () -> Unit = {},
     onTextLongClicked: () -> Unit = {},
 ) {
-    val style = when (heading.normalName()) {
+    val style = when (heading.tagName().lowercase()) {
         "h1" -> MaterialTheme.typography.headlineLarge.copy(fontSize = 30.sp)
         "h2" -> MaterialTheme.typography.headlineLarge.copy(fontSize = 26.sp)
         "h3" -> MaterialTheme.typography.headlineMedium.copy(fontSize = 22.sp)
@@ -369,7 +369,7 @@ private fun HtmlMxReply(
                         }
                     }
                     is Element -> {
-                        when (blockquoteNode.normalName()) {
+                        when (blockquoteNode.tagName().lowercase()) {
                             "br" -> {
                                 append('\n')
                             }
@@ -491,7 +491,7 @@ private fun AnnotatedString.Builder.appendInlineChildrenElements(
 }
 
 private fun AnnotatedString.Builder.appendInlineElement(element: Element, colors: ColorScheme) {
-    when (element.normalName()) {
+    when (element.tagName().lowercase()) {
         "br" -> {
             append('\n')
         }
@@ -510,6 +510,7 @@ private fun AnnotatedString.Builder.appendInlineElement(element: Element, colors
                 appendInlineChildrenElements(element.childNodes(), colors)
             }
         }
+        "i",
         "em" -> {
             withStyle(style = SpanStyle(fontStyle = FontStyle.Italic)) {
                 appendInlineChildrenElements(element.childNodes(), colors)
