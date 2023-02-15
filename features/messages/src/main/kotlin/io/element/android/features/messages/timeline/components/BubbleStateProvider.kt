@@ -22,33 +22,18 @@ import io.element.android.features.messages.timeline.model.TimelineItemGroupPosi
 open class BubbleStateProvider : PreviewParameterProvider<BubbleState> {
     override val values: Sequence<BubbleState>
         get() = sequenceOf(
-            BubbleState(TimelineItemGroupPosition.First, isMine = false, isHighlighted = false),
-            BubbleState(TimelineItemGroupPosition.First, isMine = false, isHighlighted = true),
-            BubbleState(TimelineItemGroupPosition.First, isMine = false, isHighlighted = false),
-            BubbleState(TimelineItemGroupPosition.First, isMine = false, isHighlighted = true),
-            BubbleState(TimelineItemGroupPosition.First, isMine = true, isHighlighted = false),
-            BubbleState(TimelineItemGroupPosition.First, isMine = true, isHighlighted = true),
-            BubbleState(TimelineItemGroupPosition.First, isMine = true, isHighlighted = false),
-            BubbleState(TimelineItemGroupPosition.First, isMine = true, isHighlighted = true),
-
-            BubbleState(TimelineItemGroupPosition.Middle, isMine = false, isHighlighted = false),
-            BubbleState(TimelineItemGroupPosition.Middle, isMine = false, isHighlighted = true),
-            BubbleState(TimelineItemGroupPosition.Middle, isMine = false, isHighlighted = false),
-            BubbleState(TimelineItemGroupPosition.Middle, isMine = false, isHighlighted = true),
-            BubbleState(TimelineItemGroupPosition.Middle, isMine = true, isHighlighted = false),
-            BubbleState(TimelineItemGroupPosition.Middle, isMine = true, isHighlighted = true),
-            BubbleState(TimelineItemGroupPosition.Middle, isMine = true, isHighlighted = false),
-            BubbleState(TimelineItemGroupPosition.Middle, isMine = true, isHighlighted = true),
-
-            BubbleState(TimelineItemGroupPosition.Last, isMine = false, isHighlighted = false),
-            BubbleState(TimelineItemGroupPosition.Last, isMine = false, isHighlighted = true),
-            BubbleState(TimelineItemGroupPosition.Last, isMine = false, isHighlighted = false),
-            BubbleState(TimelineItemGroupPosition.Last, isMine = false, isHighlighted = true),
-            BubbleState(TimelineItemGroupPosition.Last, isMine = true, isHighlighted = false),
-            BubbleState(TimelineItemGroupPosition.Last, isMine = true, isHighlighted = true),
-            BubbleState(TimelineItemGroupPosition.Last, isMine = true, isHighlighted = false),
-            BubbleState(TimelineItemGroupPosition.Last, isMine = true, isHighlighted = true),
-        )
+            TimelineItemGroupPosition.First,
+            TimelineItemGroupPosition.Middle,
+            TimelineItemGroupPosition.Last,
+        ).map { groupPosition ->
+            sequenceOf(false, true).map { isMine ->
+                sequenceOf(false, true).map { isHighlighted ->
+                    BubbleState(groupPosition, isMine = isMine, isHighlighted = isHighlighted)
+                }
+            }
+                .flatten()
+        }
+            .flatten()
 }
 
 fun aBubbleState() = BubbleState(
