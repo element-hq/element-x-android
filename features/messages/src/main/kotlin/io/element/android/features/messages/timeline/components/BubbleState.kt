@@ -17,11 +17,11 @@
 package io.element.android.features.messages.timeline.components
 
 import androidx.compose.runtime.Stable
-import io.element.android.features.messages.timeline.model.MessagesItemGroupPosition
+import io.element.android.features.messages.timeline.model.TimelineItemGroupPosition
 
 @Stable
 data class BubbleState(
-    val groupPosition: MessagesItemGroupPosition,
+    val groupPosition: TimelineItemGroupPosition,
     val isMine: Boolean,
     val isHighlighted: Boolean,
 )

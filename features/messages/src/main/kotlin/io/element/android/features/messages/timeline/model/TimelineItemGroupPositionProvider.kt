@@ -18,11 +18,11 @@ package io.element.android.features.messages.timeline.model
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
-internal class TimelineItemGroupPositionProvider : PreviewParameterProvider<MessagesItemGroupPosition> {
+internal class TimelineItemGroupPositionProvider : PreviewParameterProvider<TimelineItemGroupPosition> {
     override val values = sequenceOf(
-        MessagesItemGroupPosition.First,
-        MessagesItemGroupPosition.Middle,
-        MessagesItemGroupPosition.Last,
-        MessagesItemGroupPosition.None,
+        TimelineItemGroupPosition.First,
+        TimelineItemGroupPosition.Middle,
+        TimelineItemGroupPosition.Last,
+        TimelineItemGroupPosition.None,
     )
 }
