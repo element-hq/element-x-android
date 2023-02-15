@@ -35,7 +35,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.features.messages.timeline.model.MessagesItemGroupPosition
+import io.element.android.features.messages.timeline.model.TimelineItemGroupPosition
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
@@ -55,22 +55,22 @@ fun MessageEventBubble(
 ) {
     fun bubbleShape(): Shape {
         return when (state.groupPosition) {
-            MessagesItemGroupPosition.First -> if (state.isMine) {
+            TimelineItemGroupPosition.First -> if (state.isMine) {
                 RoundedCornerShape(BUBBLE_RADIUS, BUBBLE_RADIUS, 0.dp, BUBBLE_RADIUS)
             } else {
                 RoundedCornerShape(BUBBLE_RADIUS, BUBBLE_RADIUS, BUBBLE_RADIUS, 0.dp)
             }
-            MessagesItemGroupPosition.Middle -> if (state.isMine) {
+            TimelineItemGroupPosition.Middle -> if (state.isMine) {
                 RoundedCornerShape(BUBBLE_RADIUS, 0.dp, 0.dp, BUBBLE_RADIUS)
             } else {
                 RoundedCornerShape(0.dp, BUBBLE_RADIUS, BUBBLE_RADIUS, 0.dp)
             }
-            MessagesItemGroupPosition.Last -> if (state.isMine) {
+            TimelineItemGroupPosition.Last -> if (state.isMine) {
                 RoundedCornerShape(BUBBLE_RADIUS, 0.dp, BUBBLE_RADIUS, BUBBLE_RADIUS)
             } else {
                 RoundedCornerShape(0.dp, BUBBLE_RADIUS, BUBBLE_RADIUS, BUBBLE_RADIUS)
             }
-            MessagesItemGroupPosition.None ->
+            TimelineItemGroupPosition.None ->
                 RoundedCornerShape(
                     BUBBLE_RADIUS,
                     BUBBLE_RADIUS,

@@ -17,7 +17,7 @@
 package io.element.android.features.messages.timeline
 
 import io.element.android.features.messages.timeline.model.AggregatedReaction
-import io.element.android.features.messages.timeline.model.MessagesItemGroupPosition
+import io.element.android.features.messages.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.timeline.model.TimelineItem
 import io.element.android.features.messages.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.timeline.model.content.TimelineItemContent
@@ -40,33 +40,33 @@ internal fun aTimelineItemList(content: TimelineItemContent): ImmutableList<Time
         aMessageEvent(
             isMine = false,
             content = content,
-            groupPosition = MessagesItemGroupPosition.Last
+            groupPosition = TimelineItemGroupPosition.Last
         ),
         aMessageEvent(
             isMine = false,
             content = content,
-            groupPosition = MessagesItemGroupPosition.Middle
+            groupPosition = TimelineItemGroupPosition.Middle
         ),
         aMessageEvent(
             isMine = false,
             content = content,
-            groupPosition = MessagesItemGroupPosition.First
+            groupPosition = TimelineItemGroupPosition.First
         ),
         // 3 items (First Middle Last) with isMine = true
         aMessageEvent(
             isMine = true,
             content = content,
-            groupPosition = MessagesItemGroupPosition.Last
+            groupPosition = TimelineItemGroupPosition.Last
         ),
         aMessageEvent(
             isMine = true,
             content = content,
-            groupPosition = MessagesItemGroupPosition.Middle
+            groupPosition = TimelineItemGroupPosition.Middle
         ),
         aMessageEvent(
             isMine = true,
             content = content,
-            groupPosition = MessagesItemGroupPosition.First
+            groupPosition = TimelineItemGroupPosition.First
         ),
     )
 }
@@ -74,7 +74,7 @@ internal fun aTimelineItemList(content: TimelineItemContent): ImmutableList<Time
 internal fun aMessageEvent(
     isMine: Boolean = false,
     content: TimelineItemContent = aTimelineItemContent(),
-    groupPosition: MessagesItemGroupPosition = MessagesItemGroupPosition.First
+    groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.First
 ): TimelineItem.MessageEvent {
     return TimelineItem.MessageEvent(
         id = EventId(Math.random().toString()),
