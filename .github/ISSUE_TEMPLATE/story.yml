@@ -1,0 +1,32 @@
+name: User story issue
+description: Second-level planning issue template. A story should take about a week or a sprint to finish.
+title: "[Story] <title>"
+labels: [T-Story]
+
+body:
+- type: textarea
+  attributes:
+    label: A story should take roughly a week or a sprint to finish. Each story is usually made up of a number of tasks that take half to a full day.
+    value: |
+      As a user…
+      I want to…
+      so that I can…
+      
+      ## Scope
+      <!-- These should be a list of technical tasks which take ½-1 day to complete -->
+      ```[tasklist]
+      ### Tasklist
+      - [ ] Task 1
+      - [ ] QA signoff on completion
+      - [ ] Design signoff on completion
+      - [ ] Product signoff on completion
+      ```
+      
+      ##  Stretch goals
+      None at this time
+      <!-- or add a tasklist -->
+      
+      ## Out of scope
+      - 
+  validations:
+    required: false
