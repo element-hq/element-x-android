@@ -13,7 +13,7 @@ body:
       so that I can…
       
       ## Scope
-      *These should be a list of technical tasks which take ½-1 day to complete*
+      <!-- These should be a list of technical tasks which take ½-1 day to complete -->
       ```[tasklist]
       ### Tasklist
       - [ ] Task 1
@@ -24,7 +24,7 @@ body:
       
       ##  Stretch goals
       None at this time
-      <or add a tasklist>
+      <!-- or add a tasklist -->
       
       ## Out of scope
       - 
