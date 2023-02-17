@@ -20,7 +20,13 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class AvatarData(
-    val name: String = "",
+    val id: String,
+    val name: String?,
     val url: String? = null,
     val size: AvatarSize = AvatarSize.MEDIUM
-)
+) {
+    fun getInitial(): String {
+        val firstChar = name?.firstOrNull() ?: id.getOrNull(1) ?: '?'
+        return firstChar.uppercase()
+    }
+}

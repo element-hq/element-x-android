@@ -86,11 +86,11 @@ fun ErrorDialog(
 
 @Preview
 @Composable
-fun ErrorDialogLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun ErrorDialogLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun ErrorDialogDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun ErrorDialogDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

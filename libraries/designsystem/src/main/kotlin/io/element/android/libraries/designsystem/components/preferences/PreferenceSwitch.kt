@@ -79,11 +79,11 @@ fun PreferenceSwitch(
 
 @Preview
 @Composable
-fun PreferenceSwitchLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun PreferenceSwitchLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun PreferenceSwitchDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun PreferenceSwitchDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

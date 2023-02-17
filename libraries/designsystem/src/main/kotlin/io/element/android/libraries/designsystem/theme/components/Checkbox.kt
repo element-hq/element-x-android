@@ -48,11 +48,11 @@ fun Checkbox(
 
 @Preview
 @Composable
-fun CheckboxesLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun CheckboxesLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun CheckboxesDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun CheckboxesDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

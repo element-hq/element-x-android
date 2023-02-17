@@ -116,11 +116,11 @@ fun PreferenceTopAppBar(
 
 @Preview
 @Composable
-fun PreferenceViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun PreferenceViewLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun PreferenceViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun PreferenceViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

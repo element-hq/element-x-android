@@ -101,11 +101,11 @@ fun RageshakeDialogContent(
 
 @Preview
 @Composable
-fun RageshakeDialogContentLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun RageshakeDialogContentLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun RageshakeDialogContentDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun RageshakeDialogContentDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

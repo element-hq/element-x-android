@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.DiffUtil
 import io.element.android.features.messages.timeline.diff.CacheInvalidator
 import io.element.android.features.messages.timeline.diff.MatrixTimelineItemsDiffCallback
 import io.element.android.features.messages.timeline.model.AggregatedReaction
-import io.element.android.features.messages.timeline.model.MessagesItemGroupPosition
+import io.element.android.features.messages.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.timeline.model.TimelineItem
 import io.element.android.features.messages.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.timeline.model.content.TimelineItemContent
@@ -156,7 +156,8 @@ class TimelineItemsFactory @Inject constructor(
         val senderDisplayName = room.userDisplayName(currentSender).getOrNull()
         val senderAvatarUrl = room.userAvatarUrl(currentSender).getOrNull()
         val senderAvatarData = AvatarData(
-            name = senderDisplayName ?: currentSender,
+            id = currentSender,
+            name = senderDisplayName,
             url = senderAvatarUrl,
             size = AvatarSize.SMALL
         )
@@ -233,7 +234,7 @@ class TimelineItemsFactory @Inject constructor(
         currentTimelineItem: MatrixTimelineItem.Event,
         timelineItems: List<MatrixTimelineItem>,
         index: Int
-    ): MessagesItemGroupPosition {
+    ): TimelineItemGroupPosition {
         val prevTimelineItem =
             timelineItems.getOrNull(index - 1) as? MatrixTimelineItem.Event
         val nextTimelineItem =
@@ -243,10 +244,10 @@ class TimelineItemsFactory @Inject constructor(
         val nextSender = nextTimelineItem?.event?.sender()
 
         return when {
-            previousSender != currentSender && nextSender == currentSender -> MessagesItemGroupPosition.First
-            previousSender == currentSender && nextSender == currentSender -> MessagesItemGroupPosition.Middle
-            previousSender == currentSender && nextSender != currentSender -> MessagesItemGroupPosition.Last
-            else -> MessagesItemGroupPosition.None
+            previousSender != currentSender && nextSender == currentSender -> TimelineItemGroupPosition.First
+            previousSender == currentSender && nextSender == currentSender -> TimelineItemGroupPosition.Middle
+            previousSender == currentSender && nextSender != currentSender -> TimelineItemGroupPosition.Last
+            else -> TimelineItemGroupPosition.None
         }
     }
 }

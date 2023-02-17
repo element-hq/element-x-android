@@ -88,11 +88,11 @@ fun PreferenceSlide(
 
 @Preview
 @Composable
-fun PreferenceSlideLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun PreferenceSlideLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun PreferenceSlideDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun PreferenceSlideDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

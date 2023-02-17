@@ -20,7 +20,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.features.messages.timeline.model.content.TimelineItemEncryptedContent
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import org.matrix.rustcomponents.sdk.EncryptedMessage
 
 @Composable
 fun TimelineItemEncryptedView(
@@ -32,5 +36,24 @@ fun TimelineItemEncryptedView(
         iconDescription = "Warning",
         icon = Icons.Default.Warning,
         modifier = modifier
+    )
+}
+
+@Preview
+@Composable
+internal fun TimelineItemEncryptedViewLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+internal fun TimelineItemEncryptedViewDarkPreview() =
+    ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
+    TimelineItemEncryptedView(
+        content = TimelineItemEncryptedContent(
+            encryptedMessage = EncryptedMessage.Unknown,
+        )
     )
 }

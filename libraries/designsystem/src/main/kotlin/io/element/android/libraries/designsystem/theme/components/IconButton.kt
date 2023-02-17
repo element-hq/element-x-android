@@ -17,10 +17,15 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 @Composable
 fun IconButton(
@@ -38,4 +43,21 @@ fun IconButton(
         interactionSource = interactionSource,
         content = content,
     )
+}
+
+@Preview
+@Composable
+internal fun IconButtonLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+internal fun IconButtonDarkPreview() =
+    ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
+    IconButton(onClick = {}) {
+        Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+    }
 }
