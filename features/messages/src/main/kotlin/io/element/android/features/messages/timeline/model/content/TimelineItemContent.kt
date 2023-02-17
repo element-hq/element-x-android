@@ -16,30 +16,4 @@
 
 package io.element.android.features.messages.timeline.model.content
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import org.matrix.rustcomponents.sdk.EncryptedMessage
-
 sealed interface TimelineItemContent
-
-class MessagesTimelineItemContentProvider : PreviewParameterProvider<TimelineItemContent> {
-    override val values = sequenceOf(
-        TimelineItemEmoteContent(
-            body = "Emote",
-            htmlDocument = null
-        ),
-        TimelineItemEncryptedContent(
-            encryptedMessage = EncryptedMessage.Unknown
-        ),
-        // TODO MessagesTimelineItemImageContent(),
-        TimelineItemNoticeContent(
-            body = "Notice",
-            htmlDocument = null
-        ),
-        TimelineItemRedactedContent,
-        TimelineItemTextContent(
-            body = "Text",
-            htmlDocument = null
-        ),
-        TimelineItemUnknownContent,
-    )
-}

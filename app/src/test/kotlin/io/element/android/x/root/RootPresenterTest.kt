@@ -22,12 +22,10 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.rageshake.bugreport.BugReportPresenter
 import io.element.android.features.rageshake.crash.ui.CrashDetectionPresenter
 import io.element.android.features.rageshake.detection.RageshakeDetectionPresenter
 import io.element.android.features.rageshake.preferences.RageshakePreferencesPresenter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -58,17 +56,11 @@ class RootPresenterTest {
         }
     }
 
-    private fun TestScope.createPresenter(): RootPresenter {
+    private fun createPresenter(): RootPresenter {
         val crashDataStore = FakeCrashDataStore()
         val rageshakeDataStore = FakeRageshakeDataStore()
         val rageshake = FakeRageShake()
         val screenshotHolder = FakeScreenshotHolder()
-        val bugReportPresenter = BugReportPresenter(
-            bugReporter = FakeBugReporter(),
-            crashDataStore = crashDataStore,
-            screenshotHolder = screenshotHolder,
-            appCoroutineScope = this,
-        )
         val crashDetectionPresenter = CrashDetectionPresenter(
             crashDataStore = crashDataStore
         )
@@ -81,7 +73,6 @@ class RootPresenterTest {
             )
         )
         return RootPresenter(
-            bugReportPresenter = bugReportPresenter,
             crashDetectionPresenter = crashDetectionPresenter,
             rageshakeDetectionPresenter = rageshakeDetectionPresenter,
         )

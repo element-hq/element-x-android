@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialApi::class)
+
 package io.element.android.libraries.designsystem.theme.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -28,7 +31,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -54,4 +60,26 @@ fun ModalBottomSheetLayout(
         scrimColor = scrimColor,
         content = content,
     )
+}
+
+@Preview
+@Composable
+internal fun ModalBottomSheetLayoutLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+internal fun ModalBottomSheetLayoutDarkPreview() =
+    ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
+    ModalBottomSheetLayout(
+        sheetState = ModalBottomSheetState(ModalBottomSheetValue.Expanded),
+        sheetContent = {
+            Text(text = "Sheet Content", modifier = Modifier.background(color = Color.Green))
+        }
+    ) {
+        Text(text = "Content", modifier = Modifier.background(color = Color.Red))
+    }
 }

@@ -132,11 +132,11 @@ fun Text(
 
 @Preview
 @Composable
-fun TextLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun TextLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun TextDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun TextDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
