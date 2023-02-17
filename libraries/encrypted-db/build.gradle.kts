@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-import org.gradle.api.JavaVersion
-import org.gradle.jvm.toolchain.JavaLanguageVersion
+plugins {
+    id("io.element.android-library")
+}
 
-object Versions {
-    const val versionCode = 100100
-    const val versionName = "0.1.0"
+android {
+    namespace = "io.element.android.libraries.encrypteddb"
+}
 
-    const val compileSdk = 33
-    const val targetSdk = 33
-    const val minSdk = 23
-    val javaCompileVersion = JavaVersion.VERSION_11
-    val javaLanguageVersion: JavaLanguageVersion = JavaLanguageVersion.of(11)
+dependencies {
+    implementation(libs.sqldelight.driver)
+    implementation(libs.sqlcipher)
+    implementation(libs.sqlite)
+    implementation(libs.androidx.security.crypto)
 }

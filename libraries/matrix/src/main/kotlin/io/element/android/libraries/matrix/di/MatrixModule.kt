@@ -16,11 +16,16 @@
 
 package io.element.android.libraries.matrix.di
 
+import android.content.Context
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.matrix.Database
+import io.element.encrypteddb.SqlCipherDriverFactory
+import io.element.encrypteddb.passphrase.RandomSecretPassphraseProvider
 import org.matrix.rustcomponents.sdk.AuthenticationService
 import java.io.File
 
@@ -32,5 +37,15 @@ object MatrixModule {
     @SingleIn(AppScope::class)
     fun providesRustAuthenticationService(baseDirectory: File): AuthenticationService {
         return AuthenticationService(baseDirectory.absolutePath)
+    }
+
+    @Provides
+    @SingleIn(AppScope::class)
+    fun provideMatrixDatabase(@ApplicationContext context: Context): Database {
+        val name = "matrix_database"
+        val secretFile = context.getDatabasePath("$name.key")
+        val passphraseProvider = RandomSecretPassphraseProvider(secretFile, context, name)
+        val driver = SqlCipherDriverFactory(passphraseProvider).create(Database.Schema, "$name.db", context)
+        return Database(driver)
     }
 }

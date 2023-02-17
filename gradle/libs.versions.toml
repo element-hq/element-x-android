@@ -41,6 +41,7 @@ jsoup = "1.15.3"
 appyx = "1.0.3"
 dependencycheck = "7.4.4"
 stem = "2.2.3"
+sqldelight = "1.5.5"
 
 # DI
 dagger = "2.44.2"
@@ -68,6 +69,7 @@ androidx_lifecycle_runtime = { module = "androidx.lifecycle:lifecycle-runtime-kt
 androidx_lifecycle_compose = { module = "androidx.lifecycle:compose", version.ref = "lifecycle" }
 androidx_lifecycle_process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
 androidx_splash = "androidx.core:core-splashscreen:1.0.0"
+androidx_security_crypto = { module = "androidx.security:security-crypto", version.strictly = "1.0.0" }
 
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity_compose" }
 androidx_startup = { module = "androidx.startup:startup-runtime", version.ref = "startup" }
@@ -117,6 +119,10 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
 timber = "com.jakewharton.timber:timber:5.0.1"
+sqldelight-driver = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
+sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
+sqlcipher = { module = "net.zetetic:android-database-sqlcipher", version.strictly = "4.5.3" }
+sqlite = { module = "androidx.sqlite:sqlite", version.strictly = "2.3.0" }
 
 # Di
 inject = "javax.inject:javax.inject:1"
@@ -147,3 +153,4 @@ stemlibrary = { id = "com.likethesalad.stem-library", version.ref = "stem" }
 paparazzi = "app.cash.paparazzi:1.2.0"
 sonarqube = "org.sonarqube:3.5.0.2730"
 kover = "org.jetbrains.kotlinx.kover:0.6.1"
+sqldelight = { id = "com.squareup.sqldelight", version.ref = "sqldelight" }
