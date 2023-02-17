@@ -37,5 +37,5 @@ jobs:
             app/build/outputs/apk/debug/app-debug.apk
       - name: Compile release sources
         run: ./gradlew compileReleaseSources $CI_GRADLE_ARG_PROPERTIES
-      - name: Compile nighlty sources
+      - name: Compile nightly sources
         run: ./gradlew compileNightlySources $CI_GRADLE_ARG_PROPERTIES
