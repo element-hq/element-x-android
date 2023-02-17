@@ -3,10 +3,10 @@
 
 [versions]
 # Project
-android_gradle_plugin = "7.3.1"
-firebase_gradle_plugin = "3.0.2"
-kotlin = "1.8.0"
-ksp = "1.8.0-1.0.8"
+android_gradle_plugin = "7.4.1"
+firebase_gradle_plugin = "3.2.0"
+kotlin = "1.8.10"
+ksp = "1.8.10-1.0.9"
 molecule = "0.7.0"
 
 # AndroidX
@@ -21,6 +21,7 @@ startup = "1.1.1"
 
 # Compose
 compose_bom = "2023.01.00"
+composecompiler = "1.4.2"
 
 # Coroutines
 coroutines = "1.6.4"
