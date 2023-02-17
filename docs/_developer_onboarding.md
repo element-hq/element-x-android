@@ -258,6 +258,6 @@ Rageshake can be very useful to get logs from a release version of the applicati
 
 The team is here to support you, feel free to ask anything to other developers.
 
-Also please feel to update this documentation, if incomplete/wrong/obsolete/etc.
+Also please feel free to update this documentation, if incomplete/wrong/obsolete/etc.
 
 **Thanks!**
