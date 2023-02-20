@@ -40,14 +40,14 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.core.RoomId
-import io.element.android.libraries.matrix.core.SessionId
+import io.element.android.libraries.matrix.core.UserId
 import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
 import io.element.android.x.di.SessionComponent
 import kotlinx.parcelize.Parcelize
 
 class LoggedInFlowNode(
     buildContext: BuildContext,
-    val sessionId: SessionId,
+    val userId: UserId,
     private val matrixClient: MatrixClient,
     private val onOpenBugReport: () -> Unit,
     private val backstack: BackStack<NavTarget> = BackStack(

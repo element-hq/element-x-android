@@ -34,7 +34,6 @@ const val ANOTHER_MESSAGE = "Hello universe!"
 
 const val A_HOMESERVER = "matrix.org"
 const val A_HOMESERVER_2 = "matrix-client.org"
-const val A_SESSION_ID = "sessionId"
 
 const val AN_AVATAR_URL = "mxc://data"
 

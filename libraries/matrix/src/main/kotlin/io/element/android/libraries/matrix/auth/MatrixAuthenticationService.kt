@@ -17,15 +17,15 @@
 package io.element.android.libraries.matrix.auth
 
 import io.element.android.libraries.matrix.MatrixClient
-import io.element.android.libraries.matrix.core.SessionId
+import io.element.android.libraries.matrix.core.UserId
 import kotlinx.coroutines.flow.Flow
 
 interface MatrixAuthenticationService {
     fun isLoggedIn(): Flow<Boolean>
-    suspend fun getLatestSessionId(): SessionId?
-    suspend fun restoreSession(sessionId: SessionId): MatrixClient?
+    suspend fun getLatestUserId(): UserId?
+    suspend fun restoreSession(userId: UserId): MatrixClient?
     fun getHomeserver(): String?
     fun getHomeserverOrDefault(): String
     suspend fun setHomeserver(homeserver: String)
-    suspend fun login(username: String, password: String): SessionId
+    suspend fun login(username: String, password: String): UserId
 }

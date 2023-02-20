@@ -18,9 +18,9 @@ package io.element.android.libraries.matrixtest.auth
 
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
-import io.element.android.libraries.matrix.core.SessionId
+import io.element.android.libraries.matrix.core.UserId
 import io.element.android.libraries.matrixtest.A_HOMESERVER
-import io.element.android.libraries.matrixtest.A_SESSION_ID
+import io.element.android.libraries.matrixtest.A_USER_ID
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -33,11 +33,11 @@ class FakeAuthenticationService : MatrixAuthenticationService {
         return flowOf(false)
     }
 
-    override suspend fun getLatestSessionId(): SessionId? {
+    override suspend fun getLatestUserId(): UserId? {
         return null
     }
 
-    override suspend fun restoreSession(sessionId: SessionId): MatrixClient? {
+    override suspend fun restoreSession(userId: UserId): MatrixClient? {
         return null
     }
 
@@ -57,10 +57,10 @@ class FakeAuthenticationService : MatrixAuthenticationService {
         delay(100)
     }
 
-    override suspend fun login(username: String, password: String): SessionId {
+    override suspend fun login(username: String, password: String): UserId {
         delay(100)
         loginError?.let { throw it }
-        return SessionId(A_SESSION_ID)
+        return A_USER_ID
     }
 
     fun givenLoginError(throwable: Throwable?) {

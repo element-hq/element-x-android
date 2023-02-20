@@ -21,9 +21,8 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.RustMatrixClient
-import io.element.android.libraries.matrix.core.SessionId
+import io.element.android.libraries.matrix.core.UserId
 import io.element.android.libraries.matrix.session.SessionStore
-import io.element.android.libraries.matrix.session.sessionId
 import io.element.android.libraries.matrix.util.logError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -48,12 +47,12 @@ class RustMatrixAuthenticationService @Inject constructor(
         return sessionStore.isLoggedIn()
     }
 
-    override suspend fun getLatestSessionId(): SessionId? = withContext(coroutineDispatchers.io) {
-        sessionStore.getLatestSession()?.sessionId()
+    override suspend fun getLatestUserId(): UserId? = withContext(coroutineDispatchers.io) {
+        sessionStore.getLatestSession()?.userId?.let { UserId(it) }
     }
 
-    override suspend fun restoreSession(sessionId: SessionId) = withContext(coroutineDispatchers.io) {
-        sessionStore.getSession(sessionId)
+    override suspend fun restoreSession(userId: UserId) = withContext(coroutineDispatchers.io) {
+        sessionStore.getSession(userId)
             ?.let { session ->
                 try {
                     ClientBuilder()
@@ -81,7 +80,7 @@ class RustMatrixAuthenticationService @Inject constructor(
         }
     }
 
-    override suspend fun login(username: String, password: String): SessionId =
+    override suspend fun login(username: String, password: String): UserId =
         withContext(coroutineDispatchers.io) {
             val client = try {
                 authService.login(username, password, "ElementX Android", null)
@@ -91,7 +90,7 @@ class RustMatrixAuthenticationService @Inject constructor(
             }
             val session = client.session()
             sessionStore.storeData(session)
-            session.sessionId()
+            UserId(session.userId)
         }
 
     private fun createMatrixClient(client: Client): MatrixClient {

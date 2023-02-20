@@ -43,17 +43,17 @@ class DefaultLastMessageFormatter @Inject constructor(
 ) : LastMessageFormatter {
     private val onlyTimeFormatter: DateTimeFormatter by lazy {
         val pattern = DateFormat.getBestDateTimePattern(locale, "HH:mm") ?: "HH:mm"
-        DateTimeFormatter.ofPattern(pattern)
+        DateTimeFormatter.ofPattern(pattern, locale)
     }
 
     private val dateWithMonthFormatter: DateTimeFormatter by lazy {
         val pattern = DateFormat.getBestDateTimePattern(locale, "d MMM") ?: "d MMM"
-        DateTimeFormatter.ofPattern(pattern)
+        DateTimeFormatter.ofPattern(pattern, locale)
     }
 
     private val dateWithYearFormatter: DateTimeFormatter by lazy {
         val pattern = DateFormat.getBestDateTimePattern(locale, "dd.MM.yyyy") ?: "dd.MM.yyyy"
-        DateTimeFormatter.ofPattern(pattern)
+        DateTimeFormatter.ofPattern(pattern, locale)
     }
 
     override fun format(timestamp: Long?): String {

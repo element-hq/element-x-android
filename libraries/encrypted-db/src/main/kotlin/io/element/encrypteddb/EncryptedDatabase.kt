@@ -22,9 +22,19 @@ import com.squareup.sqldelight.db.SqlDriver
 import io.element.encrypteddb.passphrase.PassphraseProvider
 import net.sqlcipher.database.SupportFactory
 
+/**
+ * Creates an encrypted version of the [SqlDriver] using SQLCipher's [SupportFactory].
+ * @param passphraseProvider Provides the passphrase needed to use the SQLite database with SQLCipher.
+ */
 class SqlCipherDriverFactory(
     private val passphraseProvider: PassphraseProvider,
 ) {
+    /**
+     * Returns a valid [SqlDriver] with SQLCipher support.
+     * @param schema The SQLite DB schema.
+     * @param name The name of the database to create.
+     * @param context Android [Context], used to instantiate the driver.
+     */
     fun create(schema: SqlDriver.Schema, name: String, context: Context): SqlDriver {
         val passphrase = passphraseProvider.getPassphrase()
         val factory = SupportFactory(passphrase)

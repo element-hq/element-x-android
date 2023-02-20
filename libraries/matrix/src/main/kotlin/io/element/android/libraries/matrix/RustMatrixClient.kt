@@ -18,7 +18,6 @@ package io.element.android.libraries.matrix
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.core.RoomId
-import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.matrix.core.UserId
 import io.element.android.libraries.matrix.media.MediaResolver
 import io.element.android.libraries.matrix.media.RustMediaResolver
@@ -27,7 +26,6 @@ import io.element.android.libraries.matrix.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.room.RustMatrixRoom
 import io.element.android.libraries.matrix.room.RustRoomSummaryDataSource
 import io.element.android.libraries.matrix.session.SessionStore
-import io.element.android.libraries.matrix.session.sessionId
 import io.element.android.libraries.matrix.sync.SlidingSyncObserverProxy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
@@ -50,7 +48,7 @@ internal class RustMatrixClient internal constructor(
     private val baseDirectory: File,
 ) : MatrixClient {
 
-    override val sessionId: SessionId = client.session().sessionId()
+    override val userId: UserId = UserId(client.userId())
 
     private val clientDelegate = object : ClientDelegate {
         override fun didReceiveAuthError(isSoftLogout: Boolean) {
@@ -157,8 +155,6 @@ internal class RustMatrixClient internal constructor(
         baseDirectory.deleteSessionDirectory(userID = client.userId())
         sessionStore.reset()
     }
-
-    override fun userId(): UserId = UserId(client.userId())
 
     override suspend fun loadUserDisplayName(): Result<String> = withContext(dispatchers.io) {
         runCatching {

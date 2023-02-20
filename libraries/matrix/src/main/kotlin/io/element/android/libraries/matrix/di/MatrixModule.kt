@@ -44,7 +44,7 @@ object MatrixModule {
     fun provideMatrixDatabase(@ApplicationContext context: Context): Database {
         val name = "matrix_database"
         val secretFile = context.getDatabasePath("$name.key")
-        val passphraseProvider = RandomSecretPassphraseProvider(secretFile, context, name)
+        val passphraseProvider = RandomSecretPassphraseProvider(context, secretFile, name)
         val driver = SqlCipherDriverFactory(passphraseProvider).create(Database.Schema, "$name.db", context)
         return Database(driver)
     }

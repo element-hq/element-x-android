@@ -38,13 +38,13 @@ class MatrixItemHelper @Inject constructor(
             val userDisplayName = client.loadUserDisplayName().getOrNull()
             val avatarData =
                 AvatarData(
-                    client.userId().value,
+                    client.userId.value,
                     userDisplayName,
                     userAvatarUrl,
                     avatarSize
                 )
             MatrixUser(
-                id = client.userId(),
+                id = client.userId,
                 username = userDisplayName,
                 avatarData = avatarData,
             )

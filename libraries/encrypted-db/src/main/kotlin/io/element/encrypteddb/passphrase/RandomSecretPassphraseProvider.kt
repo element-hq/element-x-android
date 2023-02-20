@@ -21,10 +21,18 @@ import androidx.security.crypto.EncryptedFile
 import java.io.File
 import java.security.SecureRandom
 
+/**
+ * Provides a secure passphrase for SQLCipher by generating a random secret and storing it into an [EncryptedFile].
+ * @param secretSize Length of the generated secret.
+ * @param file Destination file where the key will be stored.
+ * @param context Android [Context], used by [EncryptedFile] for cryptographic operations.
+ * @param alias Alias of the key used to encrypt & decrypt the [EncryptedFile]'s contents.
+ */
 class RandomSecretPassphraseProvider(
-    private val file: File,
     private val context: Context,
+    private val file: File,
     private val alias: String,
+    private val secretSize: Int = 256,
 ) : PassphraseProvider {
 
     override fun getPassphrase(): ByteArray {
@@ -35,16 +43,16 @@ class RandomSecretPassphraseProvider(
             EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB
         ).build()
         return if (!file.exists()) {
-            val key = generateKey()
-            encryptedFile.openFileOutput().use { it.write(key) }
-            key
+            val secret = generateSecret()
+            encryptedFile.openFileOutput().use { it.write(secret) }
+            secret
         } else {
             encryptedFile.openFileInput().use { it.readBytes() }
         }
     }
 
-    private fun generateKey(): ByteArray {
-        val buffer = ByteArray(size = 256)
+    private fun generateSecret(): ByteArray {
+        val buffer = ByteArray(size = secretSize)
         SecureRandom().nextBytes(buffer)
         return buffer
     }

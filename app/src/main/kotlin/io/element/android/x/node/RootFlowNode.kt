@@ -38,7 +38,7 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
-import io.element.android.libraries.matrix.core.SessionId
+import io.element.android.libraries.matrix.core.UserId
 import io.element.android.x.di.MatrixClientsHolder
 import io.element.android.x.root.RootPresenter
 import io.element.android.x.root.RootView
@@ -88,8 +88,8 @@ class RootFlowNode(
             .launchIn(lifecycleScope)
     }
 
-    private fun switchToLoggedInFlow(sessionId: SessionId) {
-        backstack.safeRoot(NavTarget.LoggedInFlow(sessionId = sessionId))
+    private fun switchToLoggedInFlow(userId: UserId) {
+        backstack.safeRoot(NavTarget.LoggedInFlow(userId = userId))
     }
 
     private fun switchToLogoutFlow() {
@@ -98,25 +98,25 @@ class RootFlowNode(
     }
 
     private suspend fun tryToRestoreLatestSession(
-        onSuccess: (SessionId) -> Unit = {},
+        onSuccess: (UserId) -> Unit = {},
         onFailure: () -> Unit = {}
     ) {
-        val latestKnownSessionId = authenticationService.getLatestSessionId()
-        if (latestKnownSessionId == null) {
+        val latestKnownUserId = authenticationService.getLatestUserId()
+        if (latestKnownUserId == null) {
             onFailure()
             return
         }
-        if (matrixClientsHolder.knowSession(latestKnownSessionId)) {
-            onSuccess(latestKnownSessionId)
+        if (matrixClientsHolder.knowSession(latestKnownUserId)) {
+            onSuccess(latestKnownUserId)
             return
         }
-        val matrixClient = authenticationService.restoreSession(latestKnownSessionId)
+        val matrixClient = authenticationService.restoreSession(UserId(latestKnownUserId.value))
         if (matrixClient == null) {
             Timber.v("Failed to restore session...")
             onFailure()
         } else {
             matrixClientsHolder.add(matrixClient)
-            onSuccess(matrixClient.sessionId)
+            onSuccess(matrixClient.userId)
         }
     }
 
@@ -154,7 +154,7 @@ class RootFlowNode(
         object NotLoggedInFlow : NavTarget
 
         @Parcelize
-        data class LoggedInFlow(val sessionId: SessionId) : NavTarget
+        data class LoggedInFlow(val userId: UserId) : NavTarget
 
         @Parcelize
         object BugReport : NavTarget
@@ -163,13 +163,13 @@ class RootFlowNode(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             is NavTarget.LoggedInFlow -> {
-                val matrixClient = matrixClientsHolder.getOrNull(navTarget.sessionId) ?: return splashNode(buildContext).also {
+                val matrixClient = matrixClientsHolder.getOrNull(navTarget.userId) ?: return splashNode(buildContext).also {
                     Timber.w("Couldn't find any session, go through SplashScreen")
                     backstack.newRoot(NavTarget.SplashScreen)
                 }
                 LoggedInFlowNode(
                     buildContext = buildContext,
-                    sessionId = navTarget.sessionId,
+                    userId = navTarget.userId,
                     matrixClient = matrixClient,
                     onOpenBugReport = this::onOpenBugReport
                 )

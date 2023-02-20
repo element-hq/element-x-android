@@ -107,14 +107,14 @@ class RoomListPresenter @Inject constructor(
         val userDisplayName = client.loadUserDisplayName().getOrNull()
         val avatarData =
             AvatarData(
-                id = client.userId().value,
+                id = client.userId.value,
                 name = userDisplayName,
                 url = userAvatarUrl,
                 size = AvatarSize.SMALL
             )
         matrixUser.value = MatrixUser(
-            id = client.userId(),
-            username = userDisplayName ?: client.userId().value,
+            id = client.userId,
+            username = userDisplayName ?: client.userId.value,
             avatarData = avatarData,
         )
     }

@@ -21,7 +21,7 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
-import io.element.android.libraries.matrix.core.SessionId
+import io.element.android.libraries.matrix.core.UserId
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
@@ -32,38 +32,38 @@ private const val SAVE_INSTANCE_KEY = "io.element.android.x.di.MatrixClientsHold
 @SingleIn(AppScope::class)
 class MatrixClientsHolder @Inject constructor(private val authenticationService: MatrixAuthenticationService) {
 
-    private val sessionIdsToMatrixClient = ConcurrentHashMap<SessionId, MatrixClient>()
+    private val userIdsToMatrixClient = ConcurrentHashMap<UserId, MatrixClient>()
 
     fun add(matrixClient: MatrixClient) {
-        sessionIdsToMatrixClient[matrixClient.sessionId] = matrixClient
+        userIdsToMatrixClient[matrixClient.userId] = matrixClient
     }
 
     fun removeAll() {
-        sessionIdsToMatrixClient.clear()
+        userIdsToMatrixClient.clear()
     }
 
-    fun remove(sessionId: SessionId) {
-        sessionIdsToMatrixClient.remove(sessionId)
+    fun remove(userId: UserId) {
+        userIdsToMatrixClient.remove(userId)
     }
 
-    fun isEmpty(): Boolean = sessionIdsToMatrixClient.isEmpty()
+    fun isEmpty(): Boolean = userIdsToMatrixClient.isEmpty()
 
-    fun knowSession(sessionId: SessionId): Boolean = sessionIdsToMatrixClient.containsKey(sessionId)
+    fun knowSession(userId: UserId): Boolean = userIdsToMatrixClient.containsKey(userId)
 
-    fun getOrNull(sessionId: SessionId): MatrixClient? {
-        return sessionIdsToMatrixClient[sessionId]
+    fun getOrNull(userId: UserId): MatrixClient? {
+        return userIdsToMatrixClient[userId]
     }
 
     @Suppress("DEPRECATION")
     fun restore(savedInstanceState: Bundle?) {
-        if (savedInstanceState == null || sessionIdsToMatrixClient.isNotEmpty()) return
-        val sessionIds = savedInstanceState.getSerializable(SAVE_INSTANCE_KEY) as? Array<SessionId>
-        if (sessionIds.isNullOrEmpty()) return
+        if (savedInstanceState == null || userIdsToMatrixClient.isNotEmpty()) return
+        val userIds = savedInstanceState.getSerializable(SAVE_INSTANCE_KEY) as? Array<UserId>
+        if (userIds.isNullOrEmpty()) return
         // Not ideal but should only happens in case of process recreation. This ensure we restore all the active sessions before restoring the node graphs.
         runBlocking {
-            sessionIds.forEach { sessionId ->
-                Timber.v("Restore matrix session: $sessionId")
-                val matrixClient = authenticationService.restoreSession(sessionId)
+            userIds.forEach { userId ->
+                Timber.v("Restore matrix session: $userId")
+                val matrixClient = authenticationService.restoreSession(userId)
                 if (matrixClient != null) {
                     add(matrixClient)
                 }
@@ -72,7 +72,7 @@ class MatrixClientsHolder @Inject constructor(private val authenticationService:
     }
 
     fun onSaveInstanceState(outState: Bundle) {
-        val sessionKeys = sessionIdsToMatrixClient.keys.toTypedArray()
+        val sessionKeys = userIdsToMatrixClient.keys.toTypedArray()
         Timber.v("Save matrix session keys = $sessionKeys")
         outState.putSerializable(SAVE_INSTANCE_KEY, sessionKeys)
     }

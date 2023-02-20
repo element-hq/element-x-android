@@ -22,7 +22,7 @@ import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.Database
-import io.element.android.libraries.matrix.core.SessionId
+import io.element.android.libraries.matrix.core.UserId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.matrix.rustcomponents.sdk.Session
@@ -52,24 +52,26 @@ class PreferencesSessionStore @Inject constructor(
 
     override suspend fun getLatestSession(): Session? {
         return database.sessionDataQueries.selectFirst()
-            .executeAsOneOrNull()?.let { sessionData ->
-                Session(
-                    accessToken = sessionData.accessToken,
-                    deviceId = sessionData.deviceId,
-                    homeserverUrl = sessionData.homeserverUrl,
-                    isSoftLogout = sessionData.isSoftLogout,
-                    refreshToken = sessionData.refreshToken,
-                    userId = sessionData.userId
-                )
-        }
+            .executeAsOneOrNull()
+            ?.toSession()
     }
 
-    override suspend fun getSession(sessionId: SessionId): Session? {
-        //TODO we should have a proper session management
-        return getLatestSession()
+    override suspend fun getSession(userId: UserId): Session? {
+        return database.sessionDataQueries.selectByUserId(userId.value)
+            .executeAsOneOrNull()
+            ?.toSession()
     }
 
     override suspend fun reset() {
         database.sessionDataQueries.removeAll()
     }
 }
+
+private fun SessionData.toSession() = Session(
+    accessToken = accessToken,
+    deviceId = deviceId,
+    homeserverUrl = homeserverUrl,
+    isSoftLogout = isSoftLogout,
+    refreshToken = refreshToken,
+    userId = userId,
+)

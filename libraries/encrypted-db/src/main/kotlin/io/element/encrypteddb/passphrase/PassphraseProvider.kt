@@ -16,6 +16,12 @@
 
 package io.element.encrypteddb.passphrase
 
+/**
+ * An abstraction to implement secure providers for SQLCipher passphrases.
+ */
 interface PassphraseProvider {
+    /**
+     * Returns a passphrase for SQLCipher in [ByteArray] format.
+     */
     fun getPassphrase(): ByteArray
 }
