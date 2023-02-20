@@ -41,4 +41,10 @@ dependencies {
     implementation(libs.serialization.json)
     implementation(projects.libraries.encryptedDb)
     implementation(libs.sqldelight.coroutines)
+
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.truth)
+    testImplementation(libs.test.turbine)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.sqldelight.driver.jvm)
 }
