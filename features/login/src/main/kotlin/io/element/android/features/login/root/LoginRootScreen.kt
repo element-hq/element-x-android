@@ -147,6 +147,7 @@ fun LoginRootScreen(
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(14.dp))
                     .background(MaterialTheme.colorScheme.primaryContainer) // TODO: should be 'system light'
+                    .testTag(TestTags.loginChangeServer)
                     .clickable {
                         if (interactionEnabled) {
                             onChangeServer()

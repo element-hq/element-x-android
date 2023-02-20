@@ -5,17 +5,19 @@ appId: ${APP_ID}
 - takeScreenshot: build/maestro/100-SignIn
 - runFlow: changeServer.yaml
 - runFlow: ../assertions/assertLoginDisplayed.yaml
-- tapOn: "Username or email"
+#- tapOn: "Username or email"
 # ios
-# - tapOn:
-#     id: "usernameTextField"
+- tapOn:
+    id: "login-email_username"
 #     index: 0
 - inputText: ${USERNAME}
+- pressKey: Enter
 - tapOn: "Password"
 # iOS
-#- tapOn:
-#    id: "passwordTextField"
+- tapOn:
+    id: "login-password"
 #    index: 0
 - inputText: ${PASSWORD}
+- pressKey: Enter
 - tapOn: "Continue"
 - runFlow: ../assertions/assertHomeDisplayed.yaml
