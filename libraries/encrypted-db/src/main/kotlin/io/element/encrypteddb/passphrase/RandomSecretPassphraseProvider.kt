@@ -23,10 +23,10 @@ import java.security.SecureRandom
 
 /**
  * Provides a secure passphrase for SQLCipher by generating a random secret and storing it into an [EncryptedFile].
- * @param secretSize Length of the generated secret.
- * @param file Destination file where the key will be stored.
  * @param context Android [Context], used by [EncryptedFile] for cryptographic operations.
+ * @param file Destination file where the key will be stored.
  * @param alias Alias of the key used to encrypt & decrypt the [EncryptedFile]'s contents.
+ * @param secretSize Length of the generated secret.
  */
 class RandomSecretPassphraseProvider(
     private val context: Context,
