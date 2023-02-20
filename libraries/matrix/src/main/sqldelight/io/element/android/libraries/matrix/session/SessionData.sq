@@ -1,10 +1,10 @@
 CREATE TABLE SessionData (
-    accessToken TEXT NOT NULL,
-    homeserverUrl TEXT NOT NULL,
+    userId TEXT NOT NULL PRIMARY KEY,
     deviceId TEXT NOT NULL,
-    isSoftLogout INTEGER AS Boolean NOT NULL DEFAULT 0,
+    accessToken TEXT NOT NULL,
     refreshToken TEXT,
-    userId TEXT NOT NULL
+    homeserverUrl TEXT NOT NULL,
+    isSoftLogout INTEGER AS Boolean NOT NULL DEFAULT 0
 );
 
 selectFirst:
@@ -14,7 +14,7 @@ selectByUserId:
 SELECT * FROM SessionData WHERE userId = ?;
 
 insertSessionData:
-INSERT INTO SessionData(accessToken, homeserverUrl, deviceId, isSoftLogout, refreshToken, userId) VALUES ?;
+INSERT INTO SessionData(userId, deviceId, accessToken, refreshToken, homeserverUrl, isSoftLogout) VALUES ?;
 
 removeAll:
 DELETE FROM SessionData;
