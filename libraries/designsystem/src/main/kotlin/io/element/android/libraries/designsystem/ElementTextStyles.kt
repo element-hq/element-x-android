@@ -25,6 +25,14 @@ import androidx.compose.ui.unit.sp
 // TODO Remove
 object ElementTextStyles {
 
+    val Button = TextStyle(
+        fontSize = 17.sp,
+        fontWeight = FontWeight.Bold,
+        lineHeight = 22.sp,
+        fontStyle = FontStyle.Normal,
+        textAlign = TextAlign.Center,
+    )
+
     object Bold {
         val largeTitle = TextStyle(
             fontSize = 34.sp,

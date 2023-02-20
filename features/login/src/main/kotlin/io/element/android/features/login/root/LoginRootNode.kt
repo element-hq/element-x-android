@@ -57,6 +57,7 @@ class LoginRootNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onChangeServer = this::onChangeHomeServer,
+            onBackPressed = this::navigateUp
         )
     }
 }

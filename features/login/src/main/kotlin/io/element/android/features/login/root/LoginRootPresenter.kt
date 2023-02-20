@@ -34,6 +34,9 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
     @Composable
     override fun present(): LoginRootState {
         val localCoroutineScope = rememberCoroutineScope()
+        val defaultHomeServer = rememberSaveable {
+            mutableStateOf(authenticationService.getDefaultHomeserver())
+        }
         val homeserver = rememberSaveable {
             mutableStateOf(authenticationService.getHomeserverOrDefault())
         }
@@ -58,6 +61,7 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
         }
 
         return LoginRootState(
+            defaultHomeServer = defaultHomeServer.value,
             homeserver = homeserver.value,
             loggedInState = loggedInState.value,
             formState = formState.value,

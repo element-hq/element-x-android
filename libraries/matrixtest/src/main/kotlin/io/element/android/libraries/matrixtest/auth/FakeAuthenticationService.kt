@@ -45,6 +45,10 @@ class FakeAuthenticationService : MatrixAuthenticationService {
         return null
     }
 
+    override fun getDefaultHomeserver(): String {
+        return A_HOMESERVER
+    }
+
     fun givenHomeserver(homeserver: String) {
         this.homeserver = homeserver
     }

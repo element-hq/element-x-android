@@ -46,6 +46,7 @@ class ChangeServerPresenter @Inject constructor(private val authenticationServic
             when (event) {
                 is ChangeServerEvents.SetServer -> homeserver.value = event.server
                 ChangeServerEvents.Submit -> localCoroutineScope.submit(homeserver.value, changeServerAction)
+                ChangeServerEvents.ClearError -> changeServerAction.value = Async.Uninitialized
             }
         }
 

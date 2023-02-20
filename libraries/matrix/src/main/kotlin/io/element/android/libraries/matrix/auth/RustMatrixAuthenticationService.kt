@@ -72,8 +72,8 @@ class RustMatrixAuthenticationService @Inject constructor(
     }
 
     override fun getHomeserver(): String? = authService.homeserverDetails()?.url()
-
-    override fun getHomeserverOrDefault(): String = getHomeserver() ?: "matrix.org"
+    override fun getDefaultHomeserver(): String = "https://matrix-client.matrix.org/"
+    override fun getHomeserverOrDefault(): String = getHomeserver() ?: getDefaultHomeserver()
 
     override suspend fun setHomeserver(homeserver: String) {
         withContext(coroutineDispatchers.io) {

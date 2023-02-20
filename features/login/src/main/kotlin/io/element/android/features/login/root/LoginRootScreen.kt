@@ -16,39 +16,51 @@
 
 package io.element.android.features.login.root
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForwardIos
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.features.login.error.loginError
+import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -57,85 +69,117 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
+import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.R as StringR
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginRootScreen(
     state: LoginRootState,
     modifier: Modifier = Modifier,
     onChangeServer: () -> Unit = {},
     onLoginWithSuccess: (SessionId) -> Unit = {},
+    onBackPressed: () -> Unit,
 ) {
     val eventSink = state.eventSink
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .systemBarsPadding()
-            .imePadding()
-    ) {
-        val scrollState = rememberScrollState()
-        var loginFieldState by textFieldState(stateValue = state.formState.login)
-        var passwordFieldState by textFieldState(stateValue = state.formState.password)
-
-        Column(
-            modifier = Modifier
-                .verticalScroll(
-                    state = scrollState,
-                )
-                .padding(horizontal = 16.dp),
-        ) {
-            val isError = state.loggedInState is LoggedInState.ErrorLoggingIn
-            // Title
-            Text(
-                text = stringResource(id = StringR.string.ftue_auth_welcome_back_title),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 48.dp),
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp,
-                color = MaterialTheme.colorScheme.primary,
-            )
-            // Form
-            Column(
-                // modifier = Modifier.weight(1f),
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    OutlinedTextField(
-                        value = state.homeserver,
-                        modifier = Modifier.fillMaxWidth(),
-                        onValueChange = { /* no op */ },
-                        enabled = false,
-                        label = {
-                            Text(text = "Server")
+    val interactionEnabled by remember(state.loggedInState) {
+        derivedStateOf {
+            state.loggedInState != LoggedInState.LoggingIn
+        }
+    }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {},
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            onBackPressed()
                         },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Uri,
-                        ),
-                    )
-                    Button(
-                        onClick = onChangeServer,
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .testTag(TestTags.loginChangeServer)
-                            .padding(top = 8.dp, end = 8.dp),
-                        content = {
-                            Text(text = "Change")
-                        }
-                    )
+                        enabled = interactionEnabled,
+                    ) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                    }
                 }
+            )
+        }
+    ) { padding ->
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .imePadding()
+                .padding(padding)
+        ) {
+            val scrollState = rememberScrollState()
+            var loginFieldState by textFieldState(stateValue = state.formState.login)
+            var passwordFieldState by textFieldState(stateValue = state.formState.password)
+
+            val focusManager = LocalFocusManager.current
+
+            Column(
+                modifier = Modifier
+                    .verticalScroll(state = scrollState)
+                    .padding(horizontal = 16.dp),
+            ) {
+                val isError = state.loggedInState is LoggedInState.ErrorLoggingIn
+                // Title
+                Text(
+                    text = stringResource(id = StringR.string.ftue_auth_welcome_back_title),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 32.dp),
+                    style = ElementTextStyles.Bold.title1,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                // Form
+                Text(
+                    modifier = Modifier.padding(start = 16.dp, bottom = 8.dp),
+                    text = stringResource(id = StringR.string.ftue_auth_sign_in_choose_server_header),
+                    style = ElementTextStyles.Regular.footnote,
+                )
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(14.dp))
+                    .background(MaterialTheme.colorScheme.primaryContainer) // TODO: should be 'system light'
+                    .clickable {
+                        if (interactionEnabled) {
+                            onChangeServer()
+                        }
+                    },
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(Modifier.padding(horizontal = 16.dp, vertical = 10.dp).weight(1f)) {
+                        if (state.homeserver.isNullOrEmpty().not() && state.homeserver == state.defaultHomeServer) {
+                            // TODO: proper detection of matrix.org url
+                            Text(text = "Matrix.org", style = ElementTextStyles.Bold.body)
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(text = "The world's largest free server", style = ElementTextStyles.Regular.footnote) // TODO: use actual string resources
+                        } else {
+                            Text(text = state.homeserver)
+                        }
+                    }
+                    IconButton(modifier = Modifier.align(Alignment.CenterVertically), onClick = {
+                        if (interactionEnabled) { onChangeServer() }
+                    }) {
+                        Icon(imageVector = Icons.Default.ArrowForwardIos, contentDescription = null)
+                    }
+                }
+                Spacer(modifier = Modifier.height(32.dp))
+                Text(text = "Enter your details", modifier = Modifier.padding(start = 16.dp), style = ElementTextStyles.Regular.footnote) // TODO: use actual string resources
                 OutlinedTextField(
                     value = loginFieldState,
+                    readOnly = !interactionEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag(TestTags.loginEmailUsername)
-                        .padding(top = 60.dp),
+                        .onTabOrEnterKeyFocusNext(focusManager),
                     label = {
                         Text(text = stringResource(id = StringR.string.login_signin_username_hint))
                     },
@@ -147,18 +191,31 @@ fun LoginRootScreen(
                         keyboardType = KeyboardType.Email,
                         imeAction = ImeAction.Next
                     ),
+                    singleLine = true,
+                    maxLines = 1,
+                    trailingIcon = if (loginFieldState.isNotEmpty()) {
+                        {
+                            IconButton(onClick = {
+                                loginFieldState = ""
+                            }) {
+                                Icon(imageVector = Icons.Filled.Close, contentDescription = "Clear")
+                            }
+                        }
+                    } else null,
                 )
                 var passwordVisible by remember { mutableStateOf(false) }
                 if (state.loggedInState is LoggedInState.LoggingIn) {
                     // Ensure password is hidden when user submits the form
                     passwordVisible = false
                 }
+                Spacer(Modifier.height(20.dp))
                 OutlinedTextField(
                     value = passwordFieldState,
+                    readOnly = !interactionEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag(TestTags.loginPassword)
-                        .padding(top = 24.dp),
+                        .onTabOrEnterKeyFocusNext(focusManager),
                     onValueChange = {
                         passwordFieldState = it
                         eventSink(LoginRootEvents.SetPassword(it))
@@ -185,6 +242,8 @@ fun LoginRootScreen(
                     keyboardActions = KeyboardActions(
                         onDone = { eventSink(LoginRootEvents.Submit) }
                     ),
+                    singleLine = true,
+                    maxLines = 1,
                 )
                 if (state.loggedInState is LoggedInState.ErrorLoggingIn) {
                     Text(
@@ -194,44 +253,44 @@ fun LoginRootScreen(
                         modifier = Modifier.padding(start = 16.dp)
                     )
                 }
-            }
-            // Submit
-            Button(
-                onClick = { eventSink(LoginRootEvents.Submit) },
-                enabled = state.submitEnabled,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag(TestTags.loginContinue)
-                    .padding(vertical = 32.dp)
-            ) {
-                Text(text = "Continue")
+                Spacer(Modifier.height(28.dp))
+                // Submit
+                Button(
+                    onClick = { eventSink(LoginRootEvents.Submit) },
+                    enabled = interactionEnabled && state.submitEnabled,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TestTags.loginContinue)
+                ) {
+                    Text(text = "Continue", style = ElementTextStyles.Button)
+                }
             }
             when (val loggedInState = state.loggedInState) {
                 is LoggedInState.LoggedIn -> onLoginWithSuccess(loggedInState.sessionId)
                 else -> Unit
             }
-        }
-        if (state.loggedInState is LoggedInState.LoggingIn) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
+
+            if (state.loggedInState is LoggedInState.LoggingIn) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
         }
     }
 }
 
 @Preview
 @Composable
-internal fun LoginRootScreenLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun LoginRootScreenLightPreview(@PreviewParameter(LoginRootStateProvider::class) state: LoginRootState) = ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-internal fun LoginRootScreenDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun LoginRootScreenDarkPreview(@PreviewParameter(LoginRootStateProvider::class) state: LoginRootState) = ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
-private fun ContentToPreview() {
+private fun ContentToPreview(state: LoginRootState) {
     LoginRootScreen(
-        state = aLoginRootState().copy(
-            homeserver = "matrix.org",
-        ),
+        state = state,
+        onBackPressed = {}
     )
 }

@@ -25,6 +25,7 @@ interface MatrixAuthenticationService {
     suspend fun getLatestSessionId(): SessionId?
     suspend fun restoreSession(sessionId: SessionId): MatrixClient?
     fun getHomeserver(): String?
+    fun getDefaultHomeserver(): String
     fun getHomeserverOrDefault(): String
     suspend fun setHomeserver(homeserver: String)
     suspend fun login(username: String, password: String): SessionId

@@ -19,164 +19,234 @@ package io.element.android.features.login.changeserver
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.features.login.R
-import io.element.android.features.login.error.changeServerError
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
+import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.ui.strings.R as StringR
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChangeServerView(
     state: ChangeServerState,
     modifier: Modifier = Modifier,
     onChangeServerSuccess: () -> Unit = {},
+    onLearnMoreClicked: () -> Unit,
+    onBackPressed: () -> Unit,
 ) {
     val eventSink = state.eventSink
     val scrollState = rememberScrollState()
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .systemBarsPadding()
-            .imePadding()
-    ) {
-        Column(
-            modifier = Modifier
-                .verticalScroll(
-                    state = scrollState,
-                )
-                .padding(horizontal = 16.dp)
-        ) {
-            val isError = state.changeServerAction is Async.Failure
-            Box(
-                modifier = Modifier
-                    .padding(top = 99.dp)
-                    .size(width = 81.dp, height = 73.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .background(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        shape = RoundedCornerShape(32.dp)
-                    )
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .size(width = 48.dp, height = 48.dp),
-                    // TODO Update with design input
-                    resourceId = R.drawable.ic_baseline_dataset_24,
-                    contentDescription = "",
-                )
-            }
-            Text(
-                text = "Your server",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .defaultMinSize(minHeight = 56.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = 38.dp),
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp,
-                color = MaterialTheme.colorScheme.primary,
-            )
-            Text(
-                text = "A server is a home for all your data.\n" +
-                    "You choose your server and it’s easy to make one.", // TODO "Learn more.",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = 16.dp),
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.secondary,
-            )
-            var homeserverFieldState by textFieldState(stateValue = state.homeserver)
-            OutlinedTextField(
-                value = homeserverFieldState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag(TestTags.changeServerServer)
-                    .padding(top = 200.dp),
-                onValueChange = {
-                    homeserverFieldState = it
-                    eventSink(ChangeServerEvents.SetServer(it))
-                },
-                label = {
-                    Text(text = "Server")
-                },
-                isError = isError,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Done,
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = { eventSink(ChangeServerEvents.Submit) }
-                )
-            )
-            if (state.changeServerAction is Async.Failure) {
-                Text(
-                    text = changeServerError(
-                        state.homeserver,
-                        state.changeServerAction.error
-                    ),
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(start = 16.dp)
-                )
-            }
-            Button(
-                onClick = { eventSink(ChangeServerEvents.Submit) },
-                enabled = state.submitEnabled,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag(TestTags.changeServerContinue)
-                    .padding(top = 44.dp)
-            ) {
-                Text(text = "Continue")
-            }
-            if (state.changeServerAction is Async.Success) {
-                onChangeServerSuccess()
-            }
-        }
-        if (state.changeServerAction is Async.Loading) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
+    val interactionEnabled by remember(state.changeServerAction) {
+        derivedStateOf {
+            state.changeServerAction !is Async.Loading
         }
     }
+    val focusManager = LocalFocusManager.current
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {},
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            onBackPressed()
+                        },
+                        enabled = interactionEnabled,
+                    ) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                    }
+                }
+            )
+        }
+    ) { padding ->
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .imePadding()
+                .padding(padding)
+        ) {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(
+                        state = scrollState,
+                    )
+                    .padding(horizontal = 16.dp)
+            ) {
+                val isError = state.changeServerAction is Async.Failure
+                Spacer(Modifier.height(42.dp))
+                Box(
+                    modifier = Modifier
+                        .size(width = 70.dp, height = 70.dp)
+                        .align(Alignment.CenterHorizontally)
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            shape = RoundedCornerShape(14.dp)
+                        )
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .size(width = 32.dp, height = 32.dp),
+                        // TODO Update with design input
+                        resourceId = R.drawable.ic_baseline_dataset_24,
+                        contentDescription = "",
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = stringResource(id = StringR.string.ftue_auth_choose_server_title),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.CenterHorizontally),
+                    textAlign = TextAlign.Center,
+                    style = ElementTextStyles.Bold.title2,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = stringResource(id = StringR.string.ftue_auth_choose_server_subtitle),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    textAlign = TextAlign.Center,
+                    style = ElementTextStyles.Regular.subheadline,
+                    color = MaterialTheme.colorScheme.secondary,
+                )
+                Spacer(Modifier.height(32.dp))
+                var homeserverFieldState by textFieldState(stateValue = state.homeserver)
+                OutlinedTextField(
+                    value = homeserverFieldState,
+                    readOnly = !interactionEnabled,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TestTags.changeServerServer)
+                        .onTabOrEnterKeyFocusNext(focusManager),
+                    onValueChange = {
+                        homeserverFieldState = it
+                        eventSink(ChangeServerEvents.SetServer(it))
+                    },
+                    label = {
+                        Text(text = stringResource(StringR.string.ftue_auth_choose_server_entry_hint))
+                    },
+                    isError = isError,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { eventSink(ChangeServerEvents.Submit) }
+                    ),
+                    singleLine = true,
+                    maxLines = 1,
+                    trailingIcon = if (homeserverFieldState.isNotEmpty()) {
+                        {
+                            IconButton(onClick = {
+                                homeserverFieldState = ""
+                            }, enabled = interactionEnabled) {
+                                Icon(imageVector = Icons.Filled.Close, contentDescription = "Clear")
+                            }
+                        }
+                    } else null,
+                )
+                if (state.changeServerAction is Async.Failure) {
+                    ServerNotSupportedDialog(onLearnMoreClicked = {
+                        onLearnMoreClicked()
+                        eventSink(ChangeServerEvents.ClearError)
+                    }, onDismissRequest = {
+                        eventSink(ChangeServerEvents.ClearError)
+                    })
+                }
+                Spacer(Modifier.height(8.dp))
+                // TODO: replace with actual string resources
+                val message = "You can only connect to an existing server that supports sliding sync. Your homeserver admin will need to configure it. Learn more"
+                Text(message, modifier = Modifier.padding(start = 16.dp), style = ElementTextStyles.Regular.caption1, textAlign = TextAlign.Start)
+                Spacer(Modifier.height(12.dp))
+                Button(
+                    onClick = { eventSink(ChangeServerEvents.Submit) },
+                    enabled = interactionEnabled && state.submitEnabled,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TestTags.changeServerContinue)
+                ) {
+                    Text(text = stringResource(id = StringR.string.login_continue), style = ElementTextStyles.Button)
+                }
+                if (state.changeServerAction is Async.Success) {
+                    onChangeServerSuccess()
+                }
+            }
+            if (state.changeServerAction is Async.Loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+internal fun ServerNotSupportedDialog(onLearnMoreClicked: () -> Unit, onDismissRequest: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = {  onDismissRequest() },
+        confirmButton = {
+            TextButton(onClick = onLearnMoreClicked) {
+                Text("Learn more")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text("Cancel")
+            }
+        },
+        title = { Text(text = "Server not supported") },
+        text = { Text(text = "This server currently doesn’t support sliding sync.") },
+    )
 }
 
 @Preview
@@ -191,5 +261,5 @@ internal fun ChangeServerViewDarkPreview(@PreviewParameter(ChangeServerStateProv
 
 @Composable
 private fun ContentToPreview(state: ChangeServerState) {
-    ChangeServerView(state = state)
+    ChangeServerView(state = state, onBackPressed = {}, onLearnMoreClicked = {})
 }
