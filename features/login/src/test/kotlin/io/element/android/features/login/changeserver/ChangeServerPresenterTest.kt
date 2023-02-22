@@ -24,6 +24,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrixtest.A_HOMESERVER
+import io.element.android.libraries.matrixtest.A_THROWABLE
 import io.element.android.libraries.matrixtest.auth.FakeAuthenticationService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -76,6 +77,32 @@ class ChangeServerPresenterTest {
             val successState = awaitItem()
             assertThat(successState.submitEnabled).isTrue()
             assertThat(successState.changeServerAction).isInstanceOf(Async.Success::class.java)
+        }
+    }
+
+    @Test
+    fun `present - clear error`() = runTest {
+        val authenticationService = FakeAuthenticationService()
+        val presenter = ChangeServerPresenter(
+            authenticationService,
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+
+            // Submit will return an error
+            authenticationService.givenChangeServerError(A_THROWABLE)
+            initialState.eventSink(ChangeServerEvents.Submit)
+
+            // Check an error was returned
+            val submittedState = awaitItem()
+            assertThat(submittedState.changeServerAction).isEqualTo(Async.Failure<Unit>(A_THROWABLE))
+
+            // Assert the error is then cleared
+            submittedState.eventSink(ChangeServerEvents.ClearError)
+            val clearedState = awaitItem()
+            assertThat(clearedState.changeServerAction).isEqualTo(Async.Uninitialized)
         }
     }
 }

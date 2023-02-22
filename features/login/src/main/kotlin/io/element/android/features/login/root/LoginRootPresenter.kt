@@ -18,10 +18,12 @@ package io.element.android.features.login.root
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
@@ -57,6 +59,7 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
                     copy(password = event.password)
                 }
                 LoginRootEvents.Submit -> localCoroutineScope.submit(homeserver.value, formState.value, loggedInState)
+                LoginRootEvents.ClearError -> loggedInState.value = LoggedInState.NotLoggedIn
             }
         }
 

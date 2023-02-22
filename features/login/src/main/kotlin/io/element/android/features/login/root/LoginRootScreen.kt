@@ -39,8 +39,10 @@ import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -59,7 +61,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.features.login.error.loginError
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -156,7 +157,10 @@ fun LoginRootScreen(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Column(Modifier.padding(horizontal = 16.dp, vertical = 10.dp).weight(1f)) {
+                    Column(
+                        Modifier
+                            .padding(horizontal = 16.dp, vertical = 10.dp)
+                            .weight(1f)) {
                         if (state.homeserver.isNullOrEmpty().not() && state.homeserver == state.defaultHomeServer) {
                             // TODO: proper detection of matrix.org url
                             Text(text = "Matrix.org", style = ElementTextStyles.Bold.body)
@@ -247,12 +251,9 @@ fun LoginRootScreen(
                     maxLines = 1,
                 )
                 if (state.loggedInState is LoggedInState.ErrorLoggingIn) {
-                    Text(
-                        text = loginError(state.formState, state.loggedInState.failure),
-                        color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(start = 16.dp)
-                    )
+                    LoginErrorDialog(throwable = state.loggedInState.failure, cancellableCallback = {
+                        eventSink(LoginRootEvents.ClearError)
+                    })
                 }
                 Spacer(Modifier.height(28.dp))
                 // Submit
@@ -278,6 +279,22 @@ fun LoginRootScreen(
             }
         }
     }
+}
+
+@Composable
+fun LoginErrorDialog(throwable: Throwable, cancellableCallback: () -> Unit) {
+    AlertDialog(
+        text = {
+            val message = throwable.message ?: "Unknown error happened"
+            Text(message)
+        },
+        onDismissRequest = cancellableCallback,
+        confirmButton = {
+            TextButton(onClick = cancellableCallback) {
+                Text(stringResource(id = StringR.string.action_accept))
+            }
+        }
+    )
 }
 
 @Preview

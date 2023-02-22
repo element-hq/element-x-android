@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.flowOf
 class FakeAuthenticationService : MatrixAuthenticationService {
     private var homeserver: String = A_HOMESERVER
     private var loginError: Throwable? = null
+    private var changeServerError: Throwable? = null
 
     override fun isLoggedIn(): Flow<Boolean> {
         return flowOf(false)
@@ -58,6 +59,7 @@ class FakeAuthenticationService : MatrixAuthenticationService {
     }
 
     override suspend fun setHomeserver(homeserver: String) {
+        changeServerError?.let { throw it }
         delay(100)
     }
 
@@ -69,5 +71,9 @@ class FakeAuthenticationService : MatrixAuthenticationService {
 
     fun givenLoginError(throwable: Throwable?) {
         loginError = throwable
+    }
+
+    fun givenChangeServerError(throwable: Throwable?) {
+        changeServerError = throwable
     }
 }

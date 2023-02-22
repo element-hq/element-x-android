@@ -132,4 +132,31 @@ class LoginRootPresenterTest {
             assertThat(refreshedState.homeserver).isEqualTo(A_HOMESERVER_2)
         }
     }
+
+    @Test
+    fun `present - clear error`() = runTest {
+        val authenticationService = FakeAuthenticationService()
+        val presenter = LoginRootPresenter(
+            authenticationService,
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+
+            // Submit will return an error
+            authenticationService.givenLoginError(A_THROWABLE)
+            initialState.eventSink(LoginRootEvents.Submit)
+            awaitItem() // Skip LoggingIn state
+
+            // Check an error was returned
+            val submittedState = awaitItem()
+            assertThat(submittedState.loggedInState).isEqualTo(LoggedInState.ErrorLoggingIn(A_THROWABLE))
+
+            // Assert the error is then cleared
+            submittedState.eventSink(LoginRootEvents.ClearError)
+            val clearedState = awaitItem()
+            assertThat(clearedState.loggedInState).isEqualTo(LoggedInState.NotLoggedIn)
+        }
+    }
 }
