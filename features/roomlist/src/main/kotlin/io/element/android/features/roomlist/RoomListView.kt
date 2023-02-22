@@ -16,6 +16,8 @@
 
 package io.element.android.features.roomlist
 
+import android.Manifest
+import android.os.Build
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,6 +27,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -34,6 +37,11 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Velocity
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.PermissionStatus
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import io.element.android.features.roomlist.components.RoomListTopBar
 import io.element.android.features.roomlist.components.RoomSummaryRow
 import io.element.android.features.roomlist.model.RoomListEvents
@@ -75,7 +83,14 @@ fun RoomListView(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalPermissionsApi::class)
+object PermissionStateNotAvailable : PermissionState {
+    override val permission: String = "Unavailable permission"
+    override val status: PermissionStatus = PermissionStatus.Granted
+    override fun launchPermissionRequest() = Unit
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun RoomListContent(
     roomSummaries: ImmutableList<RoomListRoomSummary>,
@@ -93,6 +108,19 @@ fun RoomListContent(
 
     val appBarState = rememberTopAppBarState()
     val lazyListState = rememberLazyListState()
+
+    val notificationPermissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
+    } else {
+        PermissionStateNotAvailable
+    }
+
+    LaunchedEffect(notificationPermissionState.status) {
+        // Since it's not user-initiated we won't display a rationale, but it allows as to know if the user actively denied the permission
+        if (notificationPermissionState.status is PermissionStatus.Denied && !notificationPermissionState.status.shouldShowRationale) {
+            notificationPermissionState.launchPermissionRequest()
+        }
+    }
 
     val visibleRange by remember {
         derivedStateOf {

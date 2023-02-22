@@ -43,6 +43,7 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.dateformatter)
     implementation(libs.accompanist.placeholder)
+    implementation(libs.accompanist.permission)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
