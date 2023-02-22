@@ -108,29 +108,6 @@ fun Modifier.onTabOrEnterKeyFocusNext(focusManager: FocusManager): Modifier = on
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
-fun Modifier.onTabKeyFocusNext(focusManager: FocusManager): Modifier = onPreviewKeyEvent { event ->
-    if (event.type == KeyEventType.KeyUp && event.key == Key.Tab) {
-        focusManager.moveFocus(FocusDirection.Down)
-        true
-    } else {
-        false
-    }
-}
-
-@OptIn(ExperimentalComposeUiApi::class)
-fun Modifier.onEnterKeyFocusNext(focusManager: FocusManager): Modifier = onPreviewKeyEvent { event ->
-    if (event.type == KeyEventType.KeyUp && event.key == Key.Enter) {
-        focusManager.moveFocus(FocusDirection.Down)
-        true
-    } else {
-        false
-    }
-}
-
-@OptIn(ExperimentalComposeUiApi::class)
-fun Modifier.noPreviewKeyEvent(): Modifier = onPreviewKeyEvent { false }
-
 @Preview
 @Composable
 internal fun OutlinedTextFieldsLightPreview() = ElementPreviewLight { ContentToPreview() }
