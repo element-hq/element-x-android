@@ -147,7 +147,7 @@ fun LoginRootScreen(
                 Row(modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(14.dp))
-                    .background(MaterialTheme.colorScheme.primaryContainer) // TODO: should be 'system light'
+                    .background(MaterialTheme.colorScheme.primaryContainer) // TODO should be 'system light'
                     .testTag(TestTags.loginChangeServer)
                     .clickable {
                         if (interactionEnabled) {
@@ -162,10 +162,13 @@ fun LoginRootScreen(
                             .padding(horizontal = 16.dp, vertical = 10.dp)
                             .weight(1f)) {
                         if (state.homeserver.isNullOrEmpty().not() && state.homeserver == state.defaultHomeServer) {
-                            // TODO: proper detection of matrix.org url
-                            Text(text = "Matrix.org", style = ElementTextStyles.Bold.body)
+                            // TODO proper detection of matrix.org url
+                            Text(text = stringResource(StringR.string.server_selection_matrix_org_title), style = ElementTextStyles.Bold.body)
                             Spacer(modifier = Modifier.height(2.dp))
-                            Text(text = "The world's largest free server", style = ElementTextStyles.Regular.footnote) // TODO: use actual string resources
+                            Text(
+                                text = stringResource(StringR.string.server_selection_matrix_org_message),
+                                style = ElementTextStyles.Regular.footnote
+                            )
                         } else {
                             Text(text = state.homeserver)
                         }
@@ -177,7 +180,11 @@ fun LoginRootScreen(
                     }
                 }
                 Spacer(modifier = Modifier.height(32.dp))
-                Text(text = "Enter your details", modifier = Modifier.padding(start = 16.dp), style = ElementTextStyles.Regular.footnote) // TODO: use actual string resources
+                Text(
+                    text = stringResource(StringR.string.login_form_title),
+                    modifier = Modifier.padding(start = 16.dp),
+                    style = ElementTextStyles.Regular.footnote
+                )
                 OutlinedTextField(
                     value = loginFieldState,
                     readOnly = !interactionEnabled,
@@ -203,7 +210,7 @@ fun LoginRootScreen(
                             IconButton(onClick = {
                                 loginFieldState = ""
                             }) {
-                                Icon(imageVector = Icons.Filled.Close, contentDescription = "Clear")
+                                Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(StringR.string.action_clear))
                             }
                         }
                     } else null,
@@ -226,7 +233,7 @@ fun LoginRootScreen(
                         eventSink(LoginRootEvents.SetPassword(it))
                     },
                     label = {
-                        Text(text = "Password")
+                        Text(text = stringResource(StringR.string.login_signup_password_hint))
                     },
                     isError = isError,
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -234,7 +241,7 @@ fun LoginRootScreen(
                         val image =
                             if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                         val description =
-                            if (passwordVisible) "Hide password" else "Show password"
+                            if (passwordVisible) stringResource(StringR.string.login_hide_password) else stringResource(StringR.string.login_show_password)
 
                         IconButton(onClick = { passwordVisible = !passwordVisible }) {
                             Icon(imageVector = image, description)
@@ -264,7 +271,7 @@ fun LoginRootScreen(
                         .fillMaxWidth()
                         .testTag(TestTags.loginContinue)
                 ) {
-                    Text(text = "Continue", style = ElementTextStyles.Button)
+                    Text(text = stringResource(StringR.string.login_continue), style = ElementTextStyles.Button)
                 }
             }
             when (val loggedInState = state.loggedInState) {
@@ -299,11 +306,13 @@ fun LoginErrorDialog(throwable: Throwable, cancellableCallback: () -> Unit) {
 
 @Preview
 @Composable
-internal fun LoginRootScreenLightPreview(@PreviewParameter(LoginRootStateProvider::class) state: LoginRootState) = ElementPreviewLight { ContentToPreview(state) }
+internal fun LoginRootScreenLightPreview(@PreviewParameter(LoginRootStateProvider::class) state: LoginRootState) =
+    ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-internal fun LoginRootScreenDarkPreview(@PreviewParameter(LoginRootStateProvider::class) state: LoginRootState) = ElementPreviewDark { ContentToPreview(state) }
+internal fun LoginRootScreenDarkPreview(@PreviewParameter(LoginRootStateProvider::class) state: LoginRootState) =
+    ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
 private fun ContentToPreview(state: LoginRootState) {

@@ -76,10 +76,10 @@ import io.element.android.libraries.ui.strings.R as StringR
 @Composable
 fun ChangeServerView(
     state: ChangeServerState,
-    modifier: Modifier = Modifier,
-    onChangeServerSuccess: () -> Unit = {},
     onLearnMoreClicked: () -> Unit,
     onBackPressed: () -> Unit,
+    modifier: Modifier = Modifier,
+    onChangeServerSuccess: () -> Unit = {},
 ) {
     val eventSink = state.eventSink
     val scrollState = rememberScrollState()
@@ -100,7 +100,7 @@ fun ChangeServerView(
                         },
                         enabled = interactionEnabled,
                     ) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = stringResource(StringR.string.action_back))
                     }
                 }
             )
@@ -134,7 +134,6 @@ fun ChangeServerView(
                         modifier = Modifier
                             .align(Alignment.Center)
                             .size(width = 32.dp, height = 32.dp),
-                        // TODO Update with design input
                         resourceId = R.drawable.ic_baseline_dataset_24,
                         contentDescription = "",
                     )
@@ -190,7 +189,7 @@ fun ChangeServerView(
                             IconButton(onClick = {
                                 homeserverFieldState = ""
                             }, enabled = interactionEnabled) {
-                                Icon(imageVector = Icons.Filled.Close, contentDescription = "Clear")
+                                Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(StringR.string.action_clear))
                             }
                         }
                     } else null,
@@ -204,8 +203,7 @@ fun ChangeServerView(
                     })
                 }
                 Spacer(Modifier.height(8.dp))
-                // TODO: replace with actual string resources
-                val message = "You can only connect to an existing server that supports sliding sync. Your homeserver admin will need to configure it. Learn more"
+                val message = stringResource(StringR.string.server_selection_server_footer)
                 Text(message, modifier = Modifier.padding(start = 16.dp), style = ElementTextStyles.Regular.caption1, textAlign = TextAlign.Start)
                 Spacer(Modifier.height(12.dp))
                 Button(
@@ -236,16 +234,16 @@ internal fun ServerNotSupportedDialog(onLearnMoreClicked: () -> Unit, onDismissR
         onDismissRequest = {  onDismissRequest() },
         confirmButton = {
             TextButton(onClick = onLearnMoreClicked) {
-                Text("Learn more")
+                Text(stringResource(StringR.string.action_learn_more))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text("Cancel")
+                Text(stringResource(StringR.string.action_cancel))
             }
         },
-        title = { Text(text = "Server not supported") },
-        text = { Text(text = "This server currently doesn’t support sliding sync.") },
+        title = { Text(text = stringResource(StringR.string.server_selection_sliding_sync_alert_title)) },
+        text = { Text(text = stringResource(StringR.string.server_selection_sliding_sync_alert_message)) },
     )
 }
 
