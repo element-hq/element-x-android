@@ -20,15 +20,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.features.logout.LogoutPreferenceState
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.logout.LogoutPreferenceView
 import io.element.android.features.preferences.user.UserPreferences
-import io.element.android.features.rageshake.preferences.RageshakePreferencesState
 import io.element.android.features.rageshake.preferences.RageshakePreferencesView
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.preferences.PreferenceView
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.matrix.ui.components.MatrixUserProvider
+import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
@@ -58,18 +59,15 @@ fun PreferencesRootView(
 
 @Preview
 @Composable
-fun PreferencesRootViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+fun PreferencesRootViewLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
+    ElementPreviewLight { ContentToPreview(matrixUser) }
 
 @Preview
 @Composable
-fun PreferencesRootViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
+fun PreferencesRootViewDarkPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
+    ElementPreviewDark { ContentToPreview(matrixUser) }
 
 @Composable
-private fun ContentToPreview() {
-    val state = PreferencesRootState(
-        logoutState = LogoutPreferenceState(),
-        rageshakeState = RageshakePreferencesState(),
-        myUser = Async.Uninitialized
-    )
-    PreferencesRootView(state)
+private fun ContentToPreview(matrixUser: MatrixUser) {
+    PreferencesRootView(aPreferencesRootState().copy(myUser = Async.Success(matrixUser)))
 }

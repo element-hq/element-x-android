@@ -20,7 +20,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.features.messages.timeline.model.event.TimelineItemUnknownContent
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 @Composable
 fun TimelineItemUnknownView(
@@ -33,4 +36,19 @@ fun TimelineItemUnknownView(
         icon = Icons.Default.Info,
         modifier = modifier
     )
+}
+
+@Preview
+@Composable
+internal fun TimelineItemUnknownViewLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+internal fun TimelineItemUnknownViewDarkPreview() =
+    ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
+    TimelineItemUnknownView(TimelineItemUnknownContent)
 }

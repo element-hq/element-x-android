@@ -73,11 +73,11 @@ fun ProgressDialog(
 
 @Preview
 @Composable
-fun ProgressDialogLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun ProgressDialogLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun ProgressDialogDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun ProgressDialogDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

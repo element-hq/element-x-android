@@ -24,10 +24,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.rageshake.crash.ui.CrashDetectionEvents
 import io.element.android.features.rageshake.crash.ui.CrashDetectionView
 import io.element.android.features.rageshake.detection.RageshakeDetectionEvents
 import io.element.android.features.rageshake.detection.RageshakeDetectionView
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.tests.uitests.openShowkase
 import io.element.android.x.component.ShowkaseButton
 
@@ -66,5 +71,20 @@ fun RootView(
             state = state.crashDetectionState,
             onOpenBugReport = ::onOpenBugReport,
         )
+    }
+}
+
+@Preview
+@Composable
+internal fun RootLightPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) = ElementPreviewLight { ContentToPreview(rootState) }
+
+@Preview
+@Composable
+internal fun RootDarkPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) = ElementPreviewDark { ContentToPreview(rootState) }
+
+@Composable
+private fun ContentToPreview(rootState: RootState) {
+    RootView(rootState) {
+        Text("Children")
     }
 }

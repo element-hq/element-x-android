@@ -17,11 +17,12 @@
 package io.element.android.features.messages.timeline.factories.event
 
 import io.element.android.features.messages.timeline.model.AggregatedReaction
-import io.element.android.features.messages.timeline.model.MessagesItemGroupPosition
 import io.element.android.features.messages.timeline.model.TimelineItem
+import io.element.android.features.messages.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.timeline.model.TimelineItemReactions
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.core.EventId
 import io.element.android.libraries.matrix.room.MatrixRoom
 import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
 import kotlinx.collections.immutable.toImmutableList
@@ -58,12 +59,13 @@ class TimelineItemEventFactory @Inject constructor(
         }
 
         val senderAvatarData = AvatarData(
+            id = currentSender,
             name = senderDisplayName ?: currentSender,
             url = senderAvatarUrl,
             size = AvatarSize.SMALL
         )
         return TimelineItem.Event(
-            id = currentTimelineItem.uniqueId,
+            id = EventId(currentTimelineItem.uniqueId),
             eventId = currentTimelineItem.eventId,
             senderId = currentSender,
             senderDisplayName = senderDisplayName,
@@ -82,11 +84,11 @@ class TimelineItemEventFactory @Inject constructor(
         return TimelineItemReactions(aggregatedReactions.toImmutableList())
     }
 
-    private fun computeGroupPosition(
+        private fun computeGroupPosition(
         currentTimelineItem: MatrixTimelineItem.Event,
         timelineItems: List<MatrixTimelineItem>,
         index: Int
-    ): MessagesItemGroupPosition {
+    ): TimelineItemGroupPosition {
         val prevTimelineItem =
             timelineItems.getOrNull(index - 1) as? MatrixTimelineItem.Event
         val nextTimelineItem =
@@ -96,10 +98,10 @@ class TimelineItemEventFactory @Inject constructor(
         val nextSender = nextTimelineItem?.event?.sender()
 
         return when {
-            previousSender != currentSender && nextSender == currentSender -> MessagesItemGroupPosition.First
-            previousSender == currentSender && nextSender == currentSender -> MessagesItemGroupPosition.Middle
-            previousSender == currentSender && nextSender != currentSender -> MessagesItemGroupPosition.Last
-            else -> MessagesItemGroupPosition.None
+            previousSender != currentSender && nextSender == currentSender -> TimelineItemGroupPosition.First
+            previousSender == currentSender && nextSender == currentSender -> TimelineItemGroupPosition.Middle
+            previousSender == currentSender && nextSender != currentSender -> TimelineItemGroupPosition.Last
+            else -> TimelineItemGroupPosition.None
         }
     }
 }

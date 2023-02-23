@@ -28,6 +28,6 @@ data class RoomListRoomSummary(
     val hasUnread: Boolean = false,
     val timestamp: String? = null,
     val lastMessage: CharSequence? = null,
-    val avatarData: AvatarData = AvatarData(),
+    val avatarData: AvatarData = AvatarData(id, name),
     val isPlaceholder: Boolean = false,
 )

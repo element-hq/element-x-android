@@ -26,7 +26,7 @@ import io.element.android.libraries.matrix.core.EventId
 sealed interface TimelineItem {
 
     fun identifier(): String = when(this){
-        is Event -> id
+        is Event -> id.value
         is Virtual -> id
     }
 
@@ -38,7 +38,7 @@ sealed interface TimelineItem {
 
     @Immutable
     data class Event(
-        val id: String,
+        val id: EventId,
         val eventId: EventId? = null,
         val senderId: String,
         val senderDisplayName: String?,
@@ -46,7 +46,7 @@ sealed interface TimelineItem {
         val content: TimelineItemEventContent,
         val sentTime: String = "",
         val isMine: Boolean = false,
-        val groupPosition: MessagesItemGroupPosition = MessagesItemGroupPosition.None,
+        val groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
         val reactionsState: TimelineItemReactions
     ) : TimelineItem {
 

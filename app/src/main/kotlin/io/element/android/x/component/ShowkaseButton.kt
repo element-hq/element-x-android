@@ -22,7 +22,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
@@ -31,14 +34,14 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 internal fun ShowkaseButton(
     isVisible: Boolean,
-    onClick: () -> Unit,
-    onCloseClicked: () -> Unit,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    onCloseClicked: () -> Unit = {},
 ) {
     if (isVisible) {
         Button(
             modifier = modifier
-                .padding(top = 32.dp, start = 16.dp),
+                .padding(top = 32.dp),
             onClick = onClick
         ) {
             Text(text = "Showkase Browser")
@@ -52,4 +55,17 @@ internal fun ShowkaseButton(
             }
         }
     }
+}
+
+@Preview
+@Composable
+internal fun ShowkaseButtonLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+internal fun ShowkaseButtonDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
+    ShowkaseButton(isVisible = true)
 }

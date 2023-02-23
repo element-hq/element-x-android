@@ -149,11 +149,11 @@ private fun MessageComposerView.setup(isDarkMode: Boolean, composerMode: Message
 
 @Preview
 @Composable
-fun TextComposerLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun TextComposerLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun TextComposerDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun TextComposerDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

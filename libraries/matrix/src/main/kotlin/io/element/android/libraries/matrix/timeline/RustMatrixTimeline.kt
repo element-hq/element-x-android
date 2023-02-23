@@ -68,40 +68,50 @@ class RustMatrixTimeline(
 
     private fun MutableList<MatrixTimelineItem>.applyDiff(diff: TimelineDiff) {
         when (diff.change()) {
-            TimelineChange.PUSH -> {
-                val item = diff.push()?.asMatrixTimelineItem() ?: return
+            TimelineChange.PUSH_FRONT -> {
+                val item = diff.pushFront()?.asMatrixTimelineItem() ?: return
+                callback?.onPushedTimelineItem(item)
+                add(0, item)
+            }
+            TimelineChange.PUSH_BACK -> {
+                val item = diff.pushBack()?.asMatrixTimelineItem() ?: return
                 callback?.onPushedTimelineItem(item)
                 add(item)
             }
-            TimelineChange.UPDATE_AT -> {
-                val updateAtData = diff.updateAt() ?: return
+            TimelineChange.INSERT -> {
+                val insertAtData = diff.insert() ?: return
+                val item = insertAtData.item.asMatrixTimelineItem()
+                val insertAt = insertAtData.index.toInt()
+                add(insertAt, item)
+            }
+            TimelineChange.APPEND -> {
+                val appendData = diff.append()?.map { it.asMatrixTimelineItem()} ?: return
+                addAll(appendData)
+            }
+            TimelineChange.SET -> {
+                val updateAtData = diff.set() ?: return
                 val item = updateAtData.item.asMatrixTimelineItem()
                 callback?.onUpdatedTimelineItem(item)
-                set(updateAtData.index.toInt(), item)
+                val updateAt = updateAtData.index.toInt()
+                set(updateAt, item)
             }
-            TimelineChange.INSERT_AT -> {
-                val insertAtData = diff.insertAt() ?: return
-                val item = insertAtData.item.asMatrixTimelineItem()
-                add(insertAtData.index.toInt(), item)
+            TimelineChange.POP_FRONT -> {
+                removeFirst()
             }
-            TimelineChange.MOVE -> {
-                val moveData = diff.move() ?: return
-                Collections.swap(this, moveData.oldIndex.toInt(), moveData.newIndex.toInt())
-            }
-            TimelineChange.REMOVE_AT -> {
-                val removeAtData = diff.removeAt() ?: return
-                removeAt(removeAtData.toInt())
-            }
-            TimelineChange.REPLACE -> {
-                clear()
-                val items = diff.replace()?.map { it.asMatrixTimelineItem() } ?: return
-                addAll(items)
-            }
-            TimelineChange.POP -> {
+            TimelineChange.POP_BACK -> {
                 removeLast()
+            }
+            TimelineChange.REMOVE -> {
+                val removeAtData = diff.remove() ?: return
+                removeAt(removeAtData.toInt())
             }
             TimelineChange.CLEAR -> {
                 clear()
+            }
+            TimelineChange.RESET -> {
+                clear()
+                val items = diff.reset()?.map { it.asMatrixTimelineItem() } ?: return
+                addAll(items)
             }
         }
     }
@@ -129,7 +139,9 @@ class RustMatrixTimeline(
         }
 
     override fun addListener(timelineListener: TimelineListener) {
-        listenerTokens += slidingSyncRoom.subscribeAndAddTimelineListener(timelineListener, null)
+        val subscription = slidingSyncRoom.subscribeAndAddTimelineListener(timelineListener, null)
+        timelineItems.value = subscription.items.map { it.asMatrixTimelineItem() }
+        listenerTokens += subscription.taskHandle
     }
 
     override fun initialize() {

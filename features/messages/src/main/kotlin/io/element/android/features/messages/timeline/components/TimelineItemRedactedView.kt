@@ -21,6 +21,9 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import io.element.android.features.messages.timeline.model.event.TimelineItemRedactedContent
+import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 @Composable
 fun TimelineItemRedactedView(
@@ -33,4 +36,19 @@ fun TimelineItemRedactedView(
         icon = Icons.Default.Delete,
         modifier = modifier
     )
+}
+
+@Preview
+@Composable
+internal fun TimelineItemRedactedViewLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+internal fun TimelineItemRedactedViewDarkPreview() =
+    ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
+    TimelineItemRedactedView(TimelineItemRedactedContent)
 }

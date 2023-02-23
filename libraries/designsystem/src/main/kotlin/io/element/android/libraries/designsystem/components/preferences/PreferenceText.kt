@@ -68,11 +68,11 @@ fun PreferenceText(
 
 @Preview
 @Composable
-fun PreferenceTextLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun PreferenceTextLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun PreferenceTextDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun PreferenceTextDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

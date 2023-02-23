@@ -117,11 +117,11 @@ fun ConfirmationDialog(
 
 @Preview
 @Composable
-fun ConfirmationDialogLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun ConfirmationDialogLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun ConfirmationDialogDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun ConfirmationDialogDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

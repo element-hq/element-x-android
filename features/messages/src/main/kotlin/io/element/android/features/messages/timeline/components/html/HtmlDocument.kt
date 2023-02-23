@@ -42,11 +42,15 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
 import io.element.android.libraries.designsystem.LinkColor
 import io.element.android.libraries.designsystem.components.ClickableLinkText
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.permalink.PermalinkData
@@ -99,7 +103,10 @@ private fun HtmlBody(
             when (val node = nodes.next()) {
                 is TextNode -> {
                     if (!node.isBlank) {
-                        Text(text = node.text())
+                        Text(
+                            text = node.text(),
+                            color = MaterialTheme.colorScheme.primary,
+                        )
                     }
                 }
                 is Element -> {
@@ -139,7 +146,7 @@ private fun HtmlBody(
 }
 
 private fun Element.isInline(): Boolean {
-    return when (normalName()) {
+    return when (tagName().lowercase()) {
         "del" -> true
         "mx-reply" -> false
         else -> !isBlock
@@ -156,7 +163,7 @@ private fun HtmlBlock(
 ) {
     val blockModifier = modifier
         .padding(top = 4.dp)
-    when (element.normalName()) {
+    when (element.tagName().lowercase()) {
         "p" -> HtmlParagraph(
             paragraph = element,
             modifier = blockModifier,
@@ -230,7 +237,7 @@ private fun HtmlPreformatted(
     pre: Element,
     modifier: Modifier = Modifier
 ) {
-    val isCode = pre.firstElementChild()?.normalName() == "code"
+    val isCode = pre.firstElementChild()?.tagName()?.lowercase() == "code"
     val backgroundColor =
         if (isCode) MaterialTheme.colorScheme.codeBackground() else Color.Unspecified
     Box(
@@ -241,6 +248,7 @@ private fun HtmlPreformatted(
         Text(
             text = pre.wholeText(),
             style = TextStyle(fontFamily = FontFamily.Monospace),
+            color = MaterialTheme.colorScheme.primary,
         )
     }
 }
@@ -305,7 +313,7 @@ private fun HtmlHeading(
     onTextClicked: () -> Unit = {},
     onTextLongClicked: () -> Unit = {},
 ) {
-    val style = when (heading.normalName()) {
+    val style = when (heading.tagName().lowercase()) {
         "h1" -> MaterialTheme.typography.headlineLarge.copy(fontSize = 30.sp)
         "h2" -> MaterialTheme.typography.headlineLarge.copy(fontSize = 26.sp)
         "h3" -> MaterialTheme.typography.headlineMedium.copy(fontSize = 22.sp)
@@ -361,7 +369,7 @@ private fun HtmlMxReply(
                         }
                     }
                     is Element -> {
-                        when (blockquoteNode.normalName()) {
+                        when (blockquoteNode.tagName().lowercase()) {
                             "br" -> {
                                 append('\n')
                             }
@@ -483,7 +491,7 @@ private fun AnnotatedString.Builder.appendInlineChildrenElements(
 }
 
 private fun AnnotatedString.Builder.appendInlineElement(element: Element, colors: ColorScheme) {
-    when (element.normalName()) {
+    when (element.tagName().lowercase()) {
         "br" -> {
             append('\n')
         }
@@ -502,6 +510,7 @@ private fun AnnotatedString.Builder.appendInlineElement(element: Element, colors
                 appendInlineChildrenElements(element.childNodes(), colors)
             }
         }
+        "i",
         "em" -> {
             withStyle(style = SpanStyle(fontStyle = FontStyle.Italic)) {
                 appendInlineChildrenElements(element.childNodes(), colors)
@@ -566,4 +575,19 @@ private fun HtmlText(
         onClick = onClick,
         onLongClick = onLongClick
     )
+}
+
+@Preview
+@Composable
+internal fun HtmlDocumentLightPreview(@PreviewParameter(DocumentProvider::class) document: Document) =
+    ElementPreviewLight { ContentToPreview(document) }
+
+@Preview
+@Composable
+internal fun HtmlDocumentDarkPreview(@PreviewParameter(DocumentProvider::class) document: Document) =
+    ElementPreviewDark { ContentToPreview(document) }
+
+@Composable
+private fun ContentToPreview(document: Document) {
+    HtmlDocument(document, MutableInteractionSource())
 }

@@ -36,7 +36,7 @@ fun elementColorsLight() = ElementColors(
 // TODO Lots of colors are missing
 val materialColorSchemeLight = lightColorScheme(
     primary = Color.Black,
-    // TODO onPrimary = ColorLightTokens.OnPrimary,
+    onPrimary = Color.White,
     // TODO primaryContainer = ColorLightTokens.PrimaryContainer,
     // TODO onPrimaryContainer = ColorLightTokens.OnPrimaryContainer,
     // TODO inversePrimary = ColorLightTokens.InversePrimary,

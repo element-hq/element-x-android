@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,32 +16,4 @@
 
 package io.element.android.features.messages.timeline.model.event
 
-import androidx.compose.runtime.Immutable
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import org.matrix.rustcomponents.sdk.EncryptedMessage
-
-@Immutable
 sealed interface TimelineItemEventContent
-
-class MessagesTimelineItemContentProvider : PreviewParameterProvider<TimelineItemEventContent> {
-    override val values = sequenceOf(
-        TimelineItemEmoteContent(
-            body = "Emote",
-            htmlDocument = null
-        ),
-        TimelineItemEncryptedContent(
-            encryptedMessage = EncryptedMessage.Unknown
-        ),
-        // TODO MessagesTimelineItemImageContent(),
-        TimelineItemNoticeContent(
-            body = "Notice",
-            htmlDocument = null
-        ),
-        TimelineItemRedactedContent,
-        TimelineItemTextContent(
-            body = "Text",
-            htmlDocument = null
-        ),
-        TimelineItemUnknownContent,
-    )
-}

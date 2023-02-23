@@ -30,6 +30,8 @@ import io.element.android.features.messages.timeline.model.TimelineItem
 import io.element.android.features.messages.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.timeline.model.content.TimelineItemContent
 import io.element.android.features.messages.timeline.model.content.TimelineItemTextContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemTextContent
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.room.MatrixRoom
@@ -47,6 +49,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import org.matrix.rustcomponents.sdk.TimelineItemContent
 
 class MessagesPresenterTest {
     @Test
@@ -165,12 +168,12 @@ fun testCoroutineDispatchers() = CoroutineDispatchers(
 // TODO Move to common module to reuse and remove this duplication
 private fun aMessageEvent(
     isMine: Boolean = true,
-    content: TimelineItemContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null),
-) = TimelineItem.MessageEvent(
+    content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null),
+) = TimelineItem.Event(
     id = AN_EVENT_ID,
     senderId = A_USER_ID.value,
     senderDisplayName = A_USER_NAME,
-    senderAvatar = AvatarData(),
+    senderAvatar = AvatarData(A_USER_ID.value, A_USER_NAME),
     content = content,
     sentTime = "",
     isMine = isMine,

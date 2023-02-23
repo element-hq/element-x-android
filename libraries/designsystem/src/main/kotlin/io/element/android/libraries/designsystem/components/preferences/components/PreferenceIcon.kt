@@ -22,7 +22,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.toEnabledColor
 
@@ -44,4 +48,19 @@ fun PreferenceIcon(
     } else {
         Spacer(modifier = modifier.width(56.dp))
     }
+}
+
+@Preview
+@Composable
+internal fun PreferenceIconLightPreview(@PreviewParameter(ImageVectorProvider::class) content: ImageVector?) =
+    ElementPreviewLight { ContentToPreview(content) }
+
+@Preview
+@Composable
+internal fun PreferenceIconDarkPreview(@PreviewParameter(ImageVectorProvider::class) content: ImageVector?) =
+    ElementPreviewDark { ContentToPreview(content) }
+
+@Composable
+private fun ContentToPreview(content: ImageVector?) {
+    PreferenceIcon(content)
 }

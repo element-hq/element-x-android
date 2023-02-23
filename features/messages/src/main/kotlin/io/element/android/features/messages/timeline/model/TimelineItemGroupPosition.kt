@@ -17,14 +17,13 @@
 package io.element.android.features.messages.timeline.model
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
 @Immutable
-sealed interface MessagesItemGroupPosition {
-    object First : MessagesItemGroupPosition
-    object Middle : MessagesItemGroupPosition
-    object Last : MessagesItemGroupPosition
-    object None : MessagesItemGroupPosition
+sealed interface TimelineItemGroupPosition {
+    object First : TimelineItemGroupPosition
+    object Middle : TimelineItemGroupPosition
+    object Last : TimelineItemGroupPosition
+    object None : TimelineItemGroupPosition
 
     fun isNew(): Boolean = when (this) {
         First, None -> true
@@ -32,11 +31,3 @@ sealed interface MessagesItemGroupPosition {
     }
 }
 
-internal class TimelineItemGroupPositionProvider : PreviewParameterProvider<MessagesItemGroupPosition> {
-    override val values = sequenceOf(
-        MessagesItemGroupPosition.First,
-        MessagesItemGroupPosition.Middle,
-        MessagesItemGroupPosition.Last,
-        MessagesItemGroupPosition.None,
-    )
-}

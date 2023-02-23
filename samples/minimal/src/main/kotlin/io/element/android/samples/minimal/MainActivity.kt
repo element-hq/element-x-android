@@ -28,7 +28,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
-import io.element.android.libraries.designsystem.ElementXTheme
+import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.auth.RustMatrixAuthenticationService
 import io.element.android.libraries.matrix.session.PreferencesSessionStore
@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            ElementXTheme {
+            ElementTheme {
                 val isLoggedIn by matrixAuthenticationService.isLoggedIn().collectAsState(initial = false)
                 Content(isLoggedIn = isLoggedIn, modifier = Modifier.fillMaxSize())
             }
