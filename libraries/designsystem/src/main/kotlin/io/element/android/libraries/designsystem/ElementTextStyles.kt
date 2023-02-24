@@ -188,6 +188,14 @@ object ElementTextStyles {
             textAlign = TextAlign.Center
         )
 
+        val formHeader = TextStyle(
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Normal,
+            fontStyle = FontStyle.Normal,
+            lineHeight = 20.sp,
+            textAlign = TextAlign.Start
+        )
+
         val footnote = TextStyle(
             fontSize = 13.sp,
             fontWeight = FontWeight.Normal,

@@ -13,7 +13,7 @@
     <string name="server_selection_sliding_sync_alert_title">Server not supported</string>
     <string name="server_selection_sliding_sync_alert_message">This server currently doesn\'t support sliding sync.</string>
 
-    <string name="server_selection_matrix_org_title">Matrix.org</string>
+    <string name="server_selection_matrix_org_title">matrix.org</string>
     <string name="server_selection_matrix_org_message">The world\'s largest free server</string>
 
 </resources>

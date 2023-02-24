@@ -146,7 +146,7 @@ fun LoginRootScreen(
                 Text(
                     modifier = Modifier.padding(start = 16.dp, bottom = 8.dp),
                     text = stringResource(id = StringR.string.ftue_auth_sign_in_choose_server_header),
-                    style = ElementTextStyles.Regular.footnote,
+                    style = ElementTextStyles.Regular.formHeader,
                 )
                 Row(modifier = Modifier
                     .fillMaxWidth()
@@ -193,7 +193,7 @@ fun LoginRootScreen(
                 Text(
                     text = stringResource(StringR.string.login_form_title),
                     modifier = Modifier.padding(start = 16.dp),
-                    style = ElementTextStyles.Regular.footnote
+                    style = ElementTextStyles.Regular.formHeader
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 TextField(

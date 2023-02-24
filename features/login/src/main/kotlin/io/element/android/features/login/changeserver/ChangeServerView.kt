@@ -163,7 +163,7 @@ fun ChangeServerView(
                 Spacer(Modifier.height(24.dp))
                 Text(
                     stringResource(StringR.string.hs_url),
-                    style = ElementTextStyles.Regular.footnote,
+                    style = ElementTextStyles.Regular.formHeader,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
                 var homeserverFieldState by textFieldState(stateValue = state.homeserver)

@@ -18,8 +18,18 @@ package io.element.android.libraries.designsystem.theme.compound
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
-import io.element.android.libraries.designsystem.SystemDark
-import io.element.android.libraries.designsystem.SystemLight
+import io.element.android.libraries.designsystem.Black_800
+import io.element.android.libraries.designsystem.Black_900
+import io.element.android.libraries.designsystem.Black_950
+import io.element.android.libraries.designsystem.Gray_100
+import io.element.android.libraries.designsystem.Gray_150
+import io.element.android.libraries.designsystem.Gray_200
+import io.element.android.libraries.designsystem.Gray_25
+import io.element.android.libraries.designsystem.Gray_250
+import io.element.android.libraries.designsystem.Gray_300
+import io.element.android.libraries.designsystem.Gray_400
+import io.element.android.libraries.designsystem.Gray_450
+import io.element.android.libraries.designsystem.Gray_50
 
 interface CompoundColorPalette {
     interface Content {
@@ -33,33 +43,36 @@ interface CompoundColorPalette {
     val content: Content
 
     val system: Color
+    val background: Color
 
     object Light : CompoundColorPalette {
         object LightContent: Content {
-            override val primary: Color = Color(0xFF17191C)
-            override val secondary: Color = Color(0xFF737D8C)
-            override val tertiary: Color = Color(0xFF8D97A5)
-            override val quaternary: Color = Color(0xFFC1C6CD)
-            override val quinary: Color = Color(0xFFE3E8F0)
+            override val primary: Color = Black_900
+            override val secondary: Color = Gray_200
+            override val tertiary: Color = Gray_150
+            override val quaternary: Color = Gray_100
+            override val quinary: Color = Gray_50
         }
 
         override val content: Content = LightContent
 
-        override val system: Color = SystemLight
+        override val system: Color = Gray_25
+        override val background: Color = Color.White
     }
 
     object Dark : CompoundColorPalette {
         object DarkContent: Content {
-            override val primary: Color = Color(0xFFFFFFFF)
-            override val secondary: Color = Color(0xFFA9B2BC)
-            override val tertiary: Color = Color(0xFF8E99A4)
-            override val quaternary: Color = Color(0xFF6F7882)
-            override val quinary: Color = Color(0xFF394049)
+            override val primary: Color = Color.White
+            override val secondary: Color = Gray_250
+            override val tertiary: Color = Gray_300
+            override val quaternary: Color = Gray_400
+            override val quinary: Color = Gray_450
         }
 
         override val content: Content = DarkContent
 
-        override val system: Color = SystemDark
+        override val system: Color = Black_950
+        override val background: Color = Black_800
     }
 }
 

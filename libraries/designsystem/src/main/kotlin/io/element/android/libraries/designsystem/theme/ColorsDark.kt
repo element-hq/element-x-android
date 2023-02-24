@@ -22,9 +22,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.Azure
 import io.element.android.libraries.designsystem.DarkGrey
-import io.element.android.libraries.designsystem.SystemDark
 import io.element.android.libraries.designsystem.SystemGrey5Dark
 import io.element.android.libraries.designsystem.SystemGrey6Dark
+import io.element.android.libraries.designsystem.theme.compound.CompoundColorPalette
 import io.element.android.libraries.designsystem.theme.previews.ColorsSchemePreview
 
 fun elementColorsDark() = ElementColors(
@@ -49,12 +49,12 @@ val materialColorSchemeDark = darkColorScheme(
     // TODO onTertiary = ColorDarkTokens.OnTertiary,
     // TODO tertiaryContainer = ColorDarkTokens.TertiaryContainer,
     // TODO onTertiaryContainer = ColorDarkTokens.OnTertiaryContainer,
-    background = Color.Black,
+    background = CompoundColorPalette.Dark.background,
     onBackground = Color.White,
-    surface = Color.Black,
+    surface = CompoundColorPalette.Dark.background,
     onSurface = Color.White,
-    surfaceVariant = SystemDark,
-    // TODO onSurfaceVariant = ColorDarkTokens.OnSurfaceVariant,
+    surfaceVariant = CompoundColorPalette.Dark.system,
+    onSurfaceVariant = CompoundColorPalette.Dark.content.tertiary,
     // TODO surfaceTint = primary,
     // TODO inverseSurface = ColorDarkTokens.InverseSurface,
     // TODO inverseOnSurface = ColorDarkTokens.InverseOnSurface,

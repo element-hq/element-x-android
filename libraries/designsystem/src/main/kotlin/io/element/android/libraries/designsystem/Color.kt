@@ -41,8 +41,21 @@ val SystemGrey5Dark = Color(0xFF2C2C2E)
 val SystemGrey6Light = Color(0xFFF2F2F7)
 val SystemGrey6Dark = Color(0xFF1C1C1E)
 
-val SystemLight = Color(0xFFF4F6FA)
-val SystemDark = Color(0xFF21262C)
+// For light themes
+val Gray_25 = Color(0xFFF4F6FA)
+val Gray_50 = Color(0xFFE3E8F0)
+val Gray_100 = Color(0xFFC1C6CD)
+val Gray_150 = Color(0xFF8D97A5)
+val Gray_200 = Color(0xFF737D8C)
+val Black_900 = Color(0xFF17191C)
+
+// For dark themes
+val Gray_250 = Color(0xFFA9B2BC)
+val Gray_300 = Color(0xFF8E99A4)
+val Gray_400 = Color(0xFF6F7882)
+val Gray_450 = Color(0xFF394049)
+val Black_800 = Color(0xFF15191E)
+val Black_950 = Color(0xFF21262C)
 
 val Azure = Color(0xFF368BD6)
 val Kiwi = Color(0xFF74D12C)
