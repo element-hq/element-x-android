@@ -16,15 +16,38 @@
 
 plugins {
     id("io.element.android-library")
+    alias(libs.plugins.anvil)
+    alias(libs.plugins.sqldelight)
 }
 
 android {
-    namespace = "io.element.android.libraries.encrypteddb"
+    namespace = "io.element.android.libraries.sessionstorage"
+
+    sourceSets["main"].java.srcDirs("build/generated/sqldelight/code/")
+}
+
+anvil {
+    generateDaggerFactories.set(true)
 }
 
 dependencies {
+    implementation(libs.dagger)
+    implementation(projects.libraries.core)
+    implementation(projects.libraries.encryptedDb)
     implementation(libs.sqldelight.driver.android)
     implementation(libs.sqlcipher)
     implementation(libs.sqlite)
     implementation(libs.androidx.security.crypto)
+    implementation(projects.libraries.di)
+    implementation(libs.sqldelight.coroutines)
+
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.truth)
+    testImplementation(libs.test.turbine)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.sqldelight.driver.jvm)
+}
+
+sqldelight {
+    database("SessionDatabase") {}
 }

@@ -22,14 +22,17 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.RustMatrixClient
 import io.element.android.libraries.matrix.core.UserId
-import io.element.android.libraries.matrix.session.SessionStore
+import io.element.android.libraries.matrix.session.SessionData
+import io.element.android.libraries.sessionstorage.SessionStore
 import io.element.android.libraries.matrix.util.logError
+import io.element.android.libraries.sessionstorage.SessionId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.AuthenticationService
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
+import org.matrix.rustcomponents.sdk.Session
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -52,14 +55,14 @@ class RustMatrixAuthenticationService @Inject constructor(
     }
 
     override suspend fun restoreSession(userId: UserId) = withContext(coroutineDispatchers.io) {
-        sessionStore.getSession(userId)
-            ?.let { session ->
+        sessionStore.getSession(userId.toSessionId())
+            ?.let { sessionData ->
                 try {
                     ClientBuilder()
                         .basePath(baseDirectory.absolutePath)
-                        .username(session.userId)
+                        .username(sessionData.userId)
                         .build().apply {
-                            restoreSession(session)
+                            restoreSession(sessionData.toSession())
                         }
                 } catch (throwable: Throwable) {
                     logError(throwable)
@@ -89,7 +92,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                 throw failure
             }
             val session = client.session()
-            sessionStore.storeData(session)
+            sessionStore.storeData(session.toSessionData())
             UserId(session.userId)
         }
 
@@ -103,3 +106,8 @@ class RustMatrixAuthenticationService @Inject constructor(
         )
     }
 }
+
+fun UserId.toSessionId() = SessionId(value)
+fun SessionData.toSession() = Session(accessToken, refreshToken, userId, deviceId, homeserverUrl, isSoftLogout)
+
+fun Session.toSessionData() = SessionData(userId, deviceId, accessToken, refreshToken, homeserverUrl, isSoftLogout)

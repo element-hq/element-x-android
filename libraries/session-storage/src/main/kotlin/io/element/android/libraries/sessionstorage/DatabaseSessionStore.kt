@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,64 +14,43 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.session
+package io.element.android.libraries.sessionstorage
 
 import com.squareup.anvil.annotations.ContributesBinding
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
-import io.element.android.libraries.matrix.Database
-import io.element.android.libraries.matrix.core.UserId
+import io.element.android.libraries.matrix.session.SessionData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.matrix.rustcomponents.sdk.Session
 import javax.inject.Inject
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class PreferencesSessionStore @Inject constructor(
-    private val database: Database,
+class DatabaseSessionStore @Inject constructor(
+    private val database: SessionDatabase,
 ) : SessionStore {
 
     override fun isLoggedIn(): Flow<Boolean> {
         return database.sessionDataQueries.selectFirst().asFlow().mapToOneOrNull().map { it != null }
     }
 
-    override suspend fun storeData(session: Session) {
-        val sessionData = SessionData(
-            accessToken = session.accessToken,
-            deviceId = session.deviceId,
-            homeserverUrl = session.homeserverUrl,
-            isSoftLogout = session.isSoftLogout,
-            refreshToken = session.refreshToken,
-            userId = session.userId
-        )
+    override suspend fun storeData(sessionData: SessionData) {
         database.sessionDataQueries.insertSessionData(sessionData)
     }
 
-    override suspend fun getLatestSession(): Session? {
+    override suspend fun getLatestSession(): SessionData? {
         return database.sessionDataQueries.selectFirst()
             .executeAsOneOrNull()
-            ?.toSession()
     }
 
-    override suspend fun getSession(userId: UserId): Session? {
-        return database.sessionDataQueries.selectByUserId(userId.value)
+    override suspend fun getSession(sessionId: SessionId): SessionData? {
+        return database.sessionDataQueries.selectByUserId(sessionId.value)
             .executeAsOneOrNull()
-            ?.toSession()
     }
 
     override suspend fun reset() {
         database.sessionDataQueries.removeAll()
     }
 }
-
-private fun SessionData.toSession() = Session(
-    accessToken = accessToken,
-    deviceId = deviceId,
-    homeserverUrl = homeserverUrl,
-    isSoftLogout = isSoftLogout,
-    refreshToken = refreshToken,
-    userId = userId,
-)

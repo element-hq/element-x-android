@@ -20,7 +20,6 @@ plugins {
     id("io.element.android-library")
     alias(libs.plugins.anvil)
     kotlin("plugin.serialization") version "1.8.10"
-    alias(libs.plugins.sqldelight)
 }
 
 android {
@@ -37,14 +36,7 @@ dependencies {
     implementation(libs.dagger)
     implementation(projects.libraries.core)
     implementation("net.java.dev.jna:jna:5.13.0@aar")
-    implementation(libs.androidx.datastore.preferences)
     implementation(libs.serialization.json)
-    implementation(projects.libraries.encryptedDb)
-    implementation(libs.sqldelight.coroutines)
-
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.sqldelight.driver.jvm)
+    api(projects.libraries.sessionStorage)
+    implementation(libs.coroutines.core)
 }

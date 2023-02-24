@@ -14,52 +14,47 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.session
+package io.element.android.libraries.sessionstorage
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
-import io.element.android.libraries.matrix.Database
-import io.element.android.libraries.matrix.core.UserId
+import io.element.android.libraries.matrix.session.SessionData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import org.matrix.rustcomponents.sdk.Session
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class PreferenceSessionStoreTests {
+class DatabaseSessionStoreTests {
 
-    private lateinit var database: Database
-    private lateinit var preferencesSessionStore: PreferencesSessionStore
+    private lateinit var database: SessionDatabase
+    private lateinit var databaseSessionStore: DatabaseSessionStore
 
-    private val session = Session("accessToken", "refreshToken", "userId", "deviceId", "homeserverUrl", false)
-    private val sessionData = with(session) {
-        SessionData(userId, deviceId, accessToken, refreshToken, homeserverUrl, isSoftLogout)
-    }
+    private val sessionData = SessionData("userId", "deviceId", "accessToken", "refreshToken", "homeserverUrl", false)
 
     @Before
     fun setup() {
         // Initialise in memory SQLite driver
         val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
-        Database.Schema.create(driver)
+        SessionDatabase.Schema.create(driver)
 
-        database = Database(driver)
-        preferencesSessionStore = PreferencesSessionStore(database)
+        database = SessionDatabase(driver)
+        databaseSessionStore = DatabaseSessionStore(database)
     }
 
     @Test
     fun `storeData persists the SessionData into the DB`() = runTest {
         assertThat(database.sessionDataQueries.selectFirst().executeAsOneOrNull()).isNull()
 
-        preferencesSessionStore.storeData(session)
+        databaseSessionStore.storeData(sessionData)
 
         assertThat(database.sessionDataQueries.selectFirst().executeAsOneOrNull()).isEqualTo(sessionData)
     }
 
     @Test
     fun `isLoggedIn emits true while there are sessions in the DB`() = runTest {
-        preferencesSessionStore.isLoggedIn().test {
+        databaseSessionStore.isLoggedIn().test {
             assertThat(awaitItem()).isFalse()
             database.sessionDataQueries.insertSessionData(sessionData)
             assertThat(awaitItem()).isTrue()
@@ -73,9 +68,9 @@ class PreferenceSessionStoreTests {
         database.sessionDataQueries.insertSessionData(sessionData)
         database.sessionDataQueries.insertSessionData(sessionData.copy(userId = "otherUserId"))
 
-        val latestSession = preferencesSessionStore.getLatestSession()
+        val latestSession = databaseSessionStore.getLatestSession()
 
-        assertThat(latestSession).isEqualTo(session)
+        assertThat(latestSession).isEqualTo(sessionData)
     }
 
     @Test
@@ -83,16 +78,16 @@ class PreferenceSessionStoreTests {
         database.sessionDataQueries.insertSessionData(sessionData)
         database.sessionDataQueries.insertSessionData(sessionData.copy(userId = "otherUserId"))
 
-        val foundSession = preferencesSessionStore.getSession(UserId(sessionData.userId))
+        val foundSession = databaseSessionStore.getSession(SessionId(sessionData.userId))
 
-        assertThat(foundSession).isEqualTo(session)
+        assertThat(foundSession).isEqualTo(sessionData)
     }
 
     @Test
     fun `getSession returns null if a no matching session exists in DB`() = runTest {
         database.sessionDataQueries.insertSessionData(sessionData.copy(userId = "otherUserId"))
 
-        val foundSession = preferencesSessionStore.getSession(UserId(sessionData.userId))
+        val foundSession = databaseSessionStore.getSession(SessionId(sessionData.userId))
 
         assertThat(foundSession).isNull()
     }
@@ -102,7 +97,7 @@ class PreferenceSessionStoreTests {
         database.sessionDataQueries.insertSessionData(sessionData)
         database.sessionDataQueries.insertSessionData(sessionData.copy(userId = "otherUserId"))
 
-        preferencesSessionStore.reset()
+        databaseSessionStore.reset()
 
         assertThat(database.sessionDataQueries.selectFirst().executeAsOneOrNull()).isNull()
     }

@@ -14,23 +14,30 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.di
+package io.element.android.libraries.sessionstorage.di
 
+import android.content.Context
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
-import org.matrix.rustcomponents.sdk.AuthenticationService
-import java.io.File
+import io.element.android.libraries.sessionstorage.SessionDatabase
+import io.element.encrypteddb.SqlCipherDriverFactory
+import io.element.encrypteddb.passphrase.RandomSecretPassphraseProvider
 
 @Module
 @ContributesTo(AppScope::class)
-object MatrixModule {
-
+object SessionStorageModule {
     @Provides
     @SingleIn(AppScope::class)
-    fun providesRustAuthenticationService(baseDirectory: File): AuthenticationService {
-        return AuthenticationService(baseDirectory.absolutePath)
+    fun provideMatrixDatabase(@ApplicationContext context: Context): SessionDatabase {
+        val name = "session_database"
+        val secretFile = context.getDatabasePath("$name.key")
+        val passphraseProvider = RandomSecretPassphraseProvider(context, secretFile, name)
+        val driver = SqlCipherDriverFactory(passphraseProvider)
+            .create(SessionDatabase.Schema, "$name.db", context)
+        return SessionDatabase(driver)
     }
 }

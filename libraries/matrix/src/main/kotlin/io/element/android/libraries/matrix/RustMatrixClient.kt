@@ -25,8 +25,8 @@ import io.element.android.libraries.matrix.room.MatrixRoom
 import io.element.android.libraries.matrix.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.room.RustMatrixRoom
 import io.element.android.libraries.matrix.room.RustRoomSummaryDataSource
-import io.element.android.libraries.matrix.session.SessionStore
 import io.element.android.libraries.matrix.sync.SlidingSyncObserverProxy
+import io.element.android.libraries.sessionstorage.SessionStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client

@@ -14,16 +14,6 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.session
+package io.element.android.libraries.sessionstorage
 
-import io.element.android.libraries.matrix.core.UserId
-import kotlinx.coroutines.flow.Flow
-import org.matrix.rustcomponents.sdk.Session
-
-interface SessionStore {
-    fun isLoggedIn(): Flow<Boolean>
-    suspend fun storeData(session: Session)
-    suspend fun getSession(userId: UserId): Session?
-    suspend fun getLatestSession(): Session?
-    suspend fun reset()
-}
+inline class SessionId(val value: String)

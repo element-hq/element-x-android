@@ -14,23 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.di
+package io.element.android.libraries.sessionstorage
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
-import org.matrix.rustcomponents.sdk.AuthenticationService
-import java.io.File
+import io.element.android.libraries.matrix.session.SessionData
+import kotlinx.coroutines.flow.Flow
 
-@Module
-@ContributesTo(AppScope::class)
-object MatrixModule {
-
-    @Provides
-    @SingleIn(AppScope::class)
-    fun providesRustAuthenticationService(baseDirectory: File): AuthenticationService {
-        return AuthenticationService(baseDirectory.absolutePath)
-    }
+interface SessionStore {
+    fun isLoggedIn(): Flow<Boolean>
+    suspend fun storeData(session: SessionData)
+    suspend fun getSession(sessionId: SessionId): SessionData?
+    suspend fun getLatestSession(): SessionData?
+    suspend fun reset()
 }
