@@ -24,6 +24,7 @@ import io.element.android.libraries.designsystem.Azure
 import io.element.android.libraries.designsystem.LightGrey
 import io.element.android.libraries.designsystem.SystemGrey5Light
 import io.element.android.libraries.designsystem.SystemGrey6Light
+import io.element.android.libraries.designsystem.SystemLight
 import io.element.android.libraries.designsystem.theme.previews.ColorsSchemePreview
 
 fun elementColorsLight() = ElementColors(
@@ -52,7 +53,7 @@ val materialColorSchemeLight = lightColorScheme(
     onBackground = Color.Black,
     surface = Color.White,
     onSurface = Color.Black,
-    surfaceVariant = SystemGrey5Light,
+    surfaceVariant = SystemLight,
     onSurfaceVariant = Color.Black,
     // TODO surfaceTint = primary,
     // TODO inverseSurface = ColorLightTokens.InverseSurface,

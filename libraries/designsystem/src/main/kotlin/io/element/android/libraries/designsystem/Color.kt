@@ -41,6 +41,9 @@ val SystemGrey5Dark = Color(0xFF2C2C2E)
 val SystemGrey6Light = Color(0xFFF2F2F7)
 val SystemGrey6Dark = Color(0xFF1C1C1E)
 
+val SystemLight = Color(0xFFF4F6FA)
+val SystemDark = Color(0xFF21262C)
+
 val Azure = Color(0xFF368BD6)
 val Kiwi = Color(0xFF74D12C)
 val Grape = Color(0xFFAC3BA8)

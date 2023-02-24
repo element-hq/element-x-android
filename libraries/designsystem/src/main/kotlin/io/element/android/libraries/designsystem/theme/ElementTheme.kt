@@ -31,6 +31,11 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import io.element.android.libraries.designsystem.theme.compound.CompoundColorPalette
+import io.element.android.libraries.designsystem.theme.compound.CompoundColors
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 
 /**
  * Inspired from https://medium.com/@lucasyujideveloper/54cbcbde1ace
@@ -66,6 +71,8 @@ fun ElementTheme(
         darkTheme -> materialDarkColors
         else -> materialLightColors
     }
+    var compoundColorPalette: CompoundColorPalette by remember { mutableStateOf(CompoundColorPalette.Light) }
+    compoundColorPalette = if (darkTheme) CompoundColorPalette.Dark else CompoundColorPalette.Light
     SideEffect {
         systemUiController.setStatusBarColor(
             color = colorScheme.background
@@ -78,6 +85,7 @@ fun ElementTheme(
     val rememberedColors = remember { currentColor.copy() }.apply { updateColorsFrom(currentColor) }
     CompositionLocalProvider(
         LocalColors provides rememberedColors,
+        CompoundColors provides compoundColorPalette,
     ) {
         MaterialTheme(
             colorScheme = colorScheme,

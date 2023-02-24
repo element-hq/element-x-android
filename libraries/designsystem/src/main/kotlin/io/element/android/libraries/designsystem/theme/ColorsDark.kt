@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.Azure
 import io.element.android.libraries.designsystem.DarkGrey
+import io.element.android.libraries.designsystem.SystemDark
 import io.element.android.libraries.designsystem.SystemGrey5Dark
 import io.element.android.libraries.designsystem.SystemGrey6Dark
 import io.element.android.libraries.designsystem.theme.previews.ColorsSchemePreview
@@ -52,7 +53,7 @@ val materialColorSchemeDark = darkColorScheme(
     onBackground = Color.White,
     surface = Color.Black,
     onSurface = Color.White,
-    surfaceVariant = SystemGrey5Dark,
+    surfaceVariant = SystemDark,
     // TODO onSurfaceVariant = ColorDarkTokens.OnSurfaceVariant,
     // TODO surfaceTint = primary,
     // TODO inverseSurface = ColorDarkTokens.InverseSurface,
