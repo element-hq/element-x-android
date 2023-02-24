@@ -69,7 +69,7 @@ androidx_lifecycle_runtime = { module = "androidx.lifecycle:lifecycle-runtime-kt
 androidx_lifecycle_compose = { module = "androidx.lifecycle:compose", version.ref = "lifecycle" }
 androidx_lifecycle_process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
 androidx_splash = "androidx.core:core-splashscreen:1.0.0"
-androidx_security_crypto = { module = "androidx.security:security-crypto", version.strictly = "1.0.0" }
+androidx_security_crypto = "androidx.security:security-crypto:1.0.0"
 
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity_compose" }
 androidx_startup = { module = "androidx.startup:startup-runtime", version.ref = "startup" }
@@ -122,8 +122,8 @@ timber = "com.jakewharton.timber:timber:5.0.1"
 sqldelight-driver-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-sqlcipher = { module = "net.zetetic:android-database-sqlcipher", version.strictly = "4.5.3" }
-sqlite = { module = "androidx.sqlite:sqlite", version.strictly = "2.3.0" }
+sqlcipher = "net.zetetic:android-database-sqlcipher:4.5.3"
+sqlite = "androidx.sqlite:sqlite:2.3.0"
 
 # Di
 inject = "javax.inject:javax.inject:1"
