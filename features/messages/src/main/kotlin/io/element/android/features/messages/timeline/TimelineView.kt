@@ -34,7 +34,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -54,26 +54,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import io.element.android.features.messages.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.timeline.components.MessageEventBubble
-import io.element.android.features.messages.timeline.components.TimelineItemEncryptedView
-import io.element.android.features.messages.timeline.components.TimelineItemImageView
 import io.element.android.features.messages.timeline.components.TimelineItemReactionsView
-import io.element.android.features.messages.timeline.components.TimelineItemRedactedView
-import io.element.android.features.messages.timeline.components.TimelineItemTextView
-import io.element.android.features.messages.timeline.components.TimelineItemUnknownView
+import io.element.android.features.messages.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.timeline.components.virtual.TimelineItemDaySeparatorView
 import io.element.android.features.messages.timeline.components.virtual.TimelineLoadingMoreIndicator
 import io.element.android.features.messages.timeline.model.TimelineItem
-import io.element.android.features.messages.timeline.model.event.TimelineItemEncryptedContent
+import io.element.android.features.messages.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.timeline.model.event.TimelineItemEventContent
-import io.element.android.features.messages.timeline.model.event.TimelineItemImageContent
-import io.element.android.features.messages.timeline.model.event.TimelineItemRedactedContent
-import io.element.android.features.messages.timeline.model.event.TimelineItemTextBasedContent
-import io.element.android.features.messages.timeline.model.event.TimelineItemUnknownContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemEventContentProvider
 import io.element.android.features.messages.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.features.messages.timeline.model.virtual.TimelineItemLoadingModel
-import io.element.android.features.messages.timeline.model.event.TimelineItemEventContentProvider
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -92,6 +83,11 @@ fun TimelineView(
     onMessageClicked: (TimelineItem.Event) -> Unit = {},
     onMessageLongClicked: (TimelineItem.Event) -> Unit = {},
 ) {
+
+    fun onReachedLoadMore() {
+        state.eventSink(TimelineEvents.LoadMore)
+    }
+
     val lazyListState = rememberLazyListState()
     Box(modifier = modifier) {
         LazyColumn(
@@ -101,22 +97,21 @@ fun TimelineView(
             verticalArrangement = Arrangement.Bottom,
             reverseLayout = true
         ) {
-            items(
+            itemsIndexed(
                 items = state.timelineItems,
-                contentType = { timelineItem -> timelineItem.contentType() },
-                key = { timelineItem -> timelineItem.key() },
-            ) { timelineItem ->
+                contentType = { _, timelineItem -> timelineItem.contentType() },
+                key = { _, timelineItem -> timelineItem.key() },
+            ) { index, timelineItem ->
                 TimelineItemRow(
                     timelineItem = timelineItem,
                     isHighlighted = timelineItem.key() == state.highlightedEventId?.value,
                     onClick = onMessageClicked,
                     onLongClick = onMessageLongClicked
                 )
+                if (index == state.timelineItems.lastIndex) {
+                    onReachedLoadMore()
+                }
             }
-        }
-
-        fun onReachedLoadMore() {
-            state.eventSink(TimelineEvents.LoadMore)
         }
 
         TimelineScrollHelper(
@@ -231,31 +226,7 @@ fun TimelineItemEventRow(
                         .widthIn(max = 320.dp)
                 ) {
                     val contentModifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
-                    when (event.content) {
-                        is TimelineItemEncryptedContent -> TimelineItemEncryptedView(
-                            content = event.content,
-                            modifier = contentModifier
-                        )
-                        is TimelineItemRedactedContent -> TimelineItemRedactedView(
-                            content = event.content,
-                            modifier = contentModifier
-                        )
-                        is TimelineItemTextBasedContent -> TimelineItemTextView(
-                            content = event.content,
-                            interactionSource = interactionSource,
-                            modifier = contentModifier,
-                            onTextClicked = onClick,
-                            onTextLongClicked = onLongClick
-                        )
-                        is TimelineItemUnknownContent -> TimelineItemUnknownView(
-                            content = event.content,
-                            modifier = contentModifier
-                        )
-                        is TimelineItemImageContent -> TimelineItemImageView(
-                            content = event.content,
-                            modifier = contentModifier
-                        )
-                    }
+                    TimelineItemEventContentView(event.content, interactionSource, onClick, onLongClick, contentModifier)
                 }
                 TimelineItemReactionsView(
                     reactionsState = event.reactionsState,

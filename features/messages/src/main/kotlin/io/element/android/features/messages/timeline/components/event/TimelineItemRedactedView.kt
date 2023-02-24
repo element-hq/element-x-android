@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,41 +14,41 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.components
+package io.element.android.features.messages.timeline.components.event
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.features.messages.timeline.model.event.TimelineItemUnknownContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 @Composable
-fun TimelineItemUnknownView(
-    content: TimelineItemUnknownContent,
+fun TimelineItemRedactedView(
+    content: TimelineItemRedactedContent,
     modifier: Modifier = Modifier
 ) {
     TimelineItemInformativeView(
-        text = "Event not handled by EAX",
-        iconDescription = "Info",
-        icon = Icons.Default.Info,
+        text = "This message has been deleted",
+        iconDescription = "Delete",
+        icon = Icons.Default.Delete,
         modifier = modifier
     )
 }
 
 @Preview
 @Composable
-internal fun TimelineItemUnknownViewLightPreview() =
+internal fun TimelineItemRedactedViewLightPreview() =
     ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-internal fun TimelineItemUnknownViewDarkPreview() =
+internal fun TimelineItemRedactedViewDarkPreview() =
     ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
-    TimelineItemUnknownView(TimelineItemUnknownContent)
+    TimelineItemRedactedView(TimelineItemRedactedContent)
 }

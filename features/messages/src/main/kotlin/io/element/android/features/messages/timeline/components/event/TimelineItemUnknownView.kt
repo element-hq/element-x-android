@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,46 +14,41 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.components
+package io.element.android.features.messages.timeline.components.event
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.features.messages.timeline.model.event.TimelineItemEncryptedContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import org.matrix.rustcomponents.sdk.EncryptedMessage
 
 @Composable
-fun TimelineItemEncryptedView(
-    content: TimelineItemEncryptedContent,
+fun TimelineItemUnknownView(
+    content: TimelineItemUnknownContent,
     modifier: Modifier = Modifier
 ) {
     TimelineItemInformativeView(
-        text = "Decryption error",
-        iconDescription = "Warning",
-        icon = Icons.Default.Warning,
+        text = "Event not handled by EAX",
+        iconDescription = "Info",
+        icon = Icons.Default.Info,
         modifier = modifier
     )
 }
 
 @Preview
 @Composable
-internal fun TimelineItemEncryptedViewLightPreview() =
+internal fun TimelineItemUnknownViewLightPreview() =
     ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-internal fun TimelineItemEncryptedViewDarkPreview() =
+internal fun TimelineItemUnknownViewDarkPreview() =
     ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
-    TimelineItemEncryptedView(
-        content = TimelineItemEncryptedContent(
-            encryptedMessage = EncryptedMessage.Unknown,
-        )
-    )
+    TimelineItemUnknownView(TimelineItemUnknownContent)
 }
