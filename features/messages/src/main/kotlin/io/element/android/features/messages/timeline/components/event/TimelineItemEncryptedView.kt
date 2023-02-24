@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,41 +14,46 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.components
+package io.element.android.features.messages.timeline.components.event
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.features.messages.timeline.model.event.TimelineItemRedactedContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import org.matrix.rustcomponents.sdk.EncryptedMessage
 
 @Composable
-fun TimelineItemRedactedView(
-    content: TimelineItemRedactedContent,
+fun TimelineItemEncryptedView(
+    content: TimelineItemEncryptedContent,
     modifier: Modifier = Modifier
 ) {
     TimelineItemInformativeView(
-        text = "This message has been deleted",
-        iconDescription = "Delete",
-        icon = Icons.Default.Delete,
+        text = "Decryption error",
+        iconDescription = "Warning",
+        icon = Icons.Default.Warning,
         modifier = modifier
     )
 }
 
 @Preview
 @Composable
-internal fun TimelineItemRedactedViewLightPreview() =
+internal fun TimelineItemEncryptedViewLightPreview() =
     ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-internal fun TimelineItemRedactedViewDarkPreview() =
+internal fun TimelineItemEncryptedViewDarkPreview() =
     ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
-    TimelineItemRedactedView(TimelineItemRedactedContent)
+    TimelineItemEncryptedView(
+        content = TimelineItemEncryptedContent(
+            encryptedMessage = EncryptedMessage.Unknown,
+        )
+    )
 }

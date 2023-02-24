@@ -21,11 +21,19 @@ import io.element.android.libraries.matrix.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emptyFlow
-import org.matrix.rustcomponents.sdk.TimelineListener
 
 class FakeMatrixTimeline : MatrixTimeline {
-    override var callback: MatrixTimeline.Callback? = null
+
+    private val paginationState = MutableStateFlow(
+        MatrixTimeline.PaginationState(canBackPaginate = true, isBackPaginating = false)
+    )
+
+    override fun paginationState(): StateFlow<MatrixTimeline.PaginationState> {
+        return paginationState
+    }
 
     override fun timelineItems(): Flow<List<MatrixTimelineItem>> {
         return emptyFlow()
@@ -35,8 +43,6 @@ class FakeMatrixTimeline : MatrixTimeline {
         delay(100)
         return Result.success(Unit)
     }
-
-    override fun addListener(timelineListener: TimelineListener) = Unit
 
     override fun initialize() = Unit
 
