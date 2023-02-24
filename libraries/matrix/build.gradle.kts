@@ -31,7 +31,7 @@ anvil {
 }
 
 dependencies {
-    //api(projects.libraries.rustsdk)
+    // api(projects.libraries.rustsdk)
     api(libs.matrix.sdk)
     implementation(projects.libraries.di)
     implementation(libs.dagger)
