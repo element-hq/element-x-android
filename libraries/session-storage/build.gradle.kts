@@ -22,8 +22,6 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.sessionstorage"
-
-    sourceSets["main"].java.srcDirs("build/generated/sqldelight/code/")
 }
 
 anvil {
