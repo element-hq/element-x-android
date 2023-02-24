@@ -6,6 +6,7 @@
     <string name="action_clear">Clear</string>
 
     <string name="login_form_title">Enter your details</string>
+    <string name="login_username_hint">Email or username</string>
     <string name="login_show_password">Show password</string>
     <string name="login_hide_password">Hide password</string>
 

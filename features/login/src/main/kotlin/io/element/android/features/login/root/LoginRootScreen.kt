@@ -133,15 +133,16 @@ fun LoginRootScreen(
                     .padding(horizontal = 16.dp),
             ) {
                 val isError = state.loggedInState is LoggedInState.ErrorLoggingIn
+                Spacer(Modifier.height(16.dp))
                 // Title
                 Text(
                     text = stringResource(id = StringR.string.ftue_auth_welcome_back_title),
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 32.dp),
+                        .fillMaxWidth(),
                     style = ElementTextStyles.Bold.title1,
                     color = MaterialTheme.colorScheme.primary,
                 )
+                Spacer(Modifier.height(32.dp))
                 // Form
                 Text(
                     modifier = Modifier.padding(start = 16.dp, bottom = 8.dp),
@@ -168,7 +169,7 @@ fun LoginRootScreen(
                         if (state.homeserver.isNullOrEmpty().not() && state.homeserver == state.defaultHomeServer) {
                             // TODO proper detection of matrix.org url
                             Text(text = stringResource(StringR.string.server_selection_matrix_org_title), style = ElementTextStyles.Bold.body)
-                            Spacer(modifier = Modifier.height(2.dp))
+                            Spacer(modifier = Modifier.height(4.dp))
                             Text(
                                 text = stringResource(StringR.string.server_selection_matrix_org_message),
                                 style = ElementTextStyles.Regular.footnote
@@ -204,7 +205,7 @@ fun LoginRootScreen(
                         .testTag(TestTags.loginEmailUsername)
                         .onTabOrEnterKeyFocusNext(focusManager),
                     label = {
-                        Text(text = stringResource(id = StringR.string.login_signin_username_hint))
+                        Text(text = stringResource(id = StringR.string.login_username_hint))
                     },
                     onValueChange = {
                         loginFieldState = it
