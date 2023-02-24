@@ -16,14 +16,14 @@
 
 package io.element.android.libraries.matrix.util
 
-import org.matrix.rustcomponents.sdk.StoppableSpawn
+import org.matrix.rustcomponents.sdk.TaskHandle
 import java.util.concurrent.CopyOnWriteArraySet
 
-class StoppableSpawnBag(private val tokens: MutableSet<StoppableSpawn> = CopyOnWriteArraySet()) : Set<StoppableSpawn> by tokens {
+class TaskHandleBag(private val tokens: MutableSet<TaskHandle> = CopyOnWriteArraySet()) : Set<TaskHandle> by tokens {
 
-    operator fun plusAssign(stoppableSpawn: StoppableSpawn?) {
-        if (stoppableSpawn == null) return
-        tokens += stoppableSpawn
+    operator fun plusAssign(taskHandle: TaskHandle?) {
+        if (taskHandle == null) return
+        tokens += taskHandle
     }
 
     fun dispose() {

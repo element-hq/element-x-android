@@ -18,16 +18,23 @@ package io.element.android.samples.minimal
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import io.element.android.features.roomlist.LastMessageFormatter
 import io.element.android.features.roomlist.RoomListPresenter
 import io.element.android.features.roomlist.RoomListView
+import io.element.android.libraries.dateformatter.impl.DefaultLastMessageFormatter
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.core.RoomId
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import java.util.Locale
 
 class RoomListScreen(private val matrixClient: MatrixClient) {
+
+    private val clock = Clock.System
+    private val locale = Locale.getDefault()
+    private val timeZone = TimeZone.currentSystemDefault()
+    private val presenter = RoomListPresenter(matrixClient, DefaultLastMessageFormatter(clock, locale, timeZone))
 
     @Composable
     fun Content(modifier: Modifier = Modifier) {
@@ -43,9 +50,6 @@ class RoomListScreen(private val matrixClient: MatrixClient) {
             }
         }
 
-        val presenter = remember {
-            RoomListPresenter(matrixClient, LastMessageFormatter())
-        }
         val state = presenter.present()
         RoomListView(
             state = state,
