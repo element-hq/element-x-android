@@ -63,11 +63,12 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
-import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
+import io.element.android.libraries.designsystem.theme.compound.CompoundColors
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.R as StringR
@@ -126,7 +127,7 @@ fun ChangeServerView(
                         .size(width = 70.dp, height = 70.dp)
                         .align(Alignment.CenterHorizontally)
                         .background(
-                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            color = CompoundColors.current.content.quinary,
                             shape = RoundedCornerShape(14.dp)
                         )
                 ) {
@@ -134,7 +135,8 @@ fun ChangeServerView(
                         modifier = Modifier
                             .align(Alignment.Center)
                             .size(width = 32.dp, height = 32.dp),
-                        resourceId = R.drawable.ic_baseline_dataset_24,
+                        tint = CompoundColors.current.content.secondary,
+                        resourceId = R.drawable.ic_homeserver,
                         contentDescription = "",
                     )
                 }
@@ -158,9 +160,14 @@ fun ChangeServerView(
                     style = ElementTextStyles.Regular.subheadline,
                     color = MaterialTheme.colorScheme.secondary,
                 )
-                Spacer(Modifier.height(32.dp))
+                Spacer(Modifier.height(24.dp))
+                Text(
+                    stringResource(StringR.string.hs_url),
+                    style = ElementTextStyles.Regular.footnote,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
                 var homeserverFieldState by textFieldState(stateValue = state.homeserver)
-                OutlinedTextField(
+                TextField(
                     value = homeserverFieldState,
                     readOnly = !interactionEnabled,
                     modifier = Modifier
@@ -170,9 +177,6 @@ fun ChangeServerView(
                     onValueChange = {
                         homeserverFieldState = it
                         eventSink(ChangeServerEvents.SetServer(it))
-                    },
-                    label = {
-                        Text(text = stringResource(StringR.string.ftue_auth_choose_server_entry_hint))
                     },
                     isError = isError,
                     keyboardOptions = KeyboardOptions(
@@ -203,9 +207,14 @@ fun ChangeServerView(
                     })
                 }
                 Spacer(Modifier.height(8.dp))
-                val message = stringResource(StringR.string.server_selection_server_footer)
-                Text(message, modifier = Modifier.padding(start = 16.dp), style = ElementTextStyles.Regular.caption1, textAlign = TextAlign.Start)
-                Spacer(Modifier.height(12.dp))
+                Text(
+                    text = stringResource(StringR.string.server_selection_server_footer),
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    style = ElementTextStyles.Regular.caption1,
+                    textAlign = TextAlign.Start,
+                    color = CompoundColors.current.content.tertiary,
+                )
+                Spacer(Modifier.height(32.dp))
                 Button(
                     onClick = { eventSink(ChangeServerEvents.Submit) },
                     enabled = interactionEnabled && state.submitEnabled,

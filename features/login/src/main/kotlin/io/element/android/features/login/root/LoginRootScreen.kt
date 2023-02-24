@@ -28,6 +28,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -35,7 +37,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForwardIos
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -52,6 +54,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -69,11 +72,12 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
-import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
+import io.element.android.libraries.designsystem.theme.compound.CompoundColors
 import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
@@ -147,7 +151,7 @@ fun LoginRootScreen(
                 Row(modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(14.dp))
-                    .background(MaterialTheme.colorScheme.primaryContainer) // TODO should be 'system light'
+                    .background(CompoundColors.current.system)
                     .testTag(TestTags.loginChangeServer)
                     .clickable {
                         if (interactionEnabled) {
@@ -159,7 +163,7 @@ fun LoginRootScreen(
                 ) {
                     Column(
                         Modifier
-                            .padding(horizontal = 16.dp, vertical = 10.dp)
+                            .padding(horizontal = 16.dp, vertical = 16.dp)
                             .weight(1f)) {
                         if (state.homeserver.isNullOrEmpty().not() && state.homeserver == state.defaultHomeServer) {
                             // TODO proper detection of matrix.org url
@@ -173,11 +177,17 @@ fun LoginRootScreen(
                             Text(text = state.homeserver)
                         }
                     }
-                    IconButton(modifier = Modifier.align(Alignment.CenterVertically), onClick = {
-                        if (interactionEnabled) { onChangeServer() }
-                    }) {
-                        Icon(imageVector = Icons.Default.ArrowForwardIos, contentDescription = null)
+                    IconButton(
+                        modifier = Modifier
+                            .size(24.dp)
+                            .align(Alignment.CenterVertically),
+                        onClick = {
+                            if (interactionEnabled) { onChangeServer() }
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Default.ChevronRight, contentDescription = null, tint = CompoundColors.current.content.tertiary)
                     }
+                    Spacer(Modifier.width(8.dp))
                 }
                 Spacer(modifier = Modifier.height(32.dp))
                 Text(
@@ -185,7 +195,8 @@ fun LoginRootScreen(
                     modifier = Modifier.padding(start = 16.dp),
                     style = ElementTextStyles.Regular.footnote
                 )
-                OutlinedTextField(
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
                     value = loginFieldState,
                     readOnly = !interactionEnabled,
                     modifier = Modifier
@@ -203,6 +214,9 @@ fun LoginRootScreen(
                         keyboardType = KeyboardType.Email,
                         imeAction = ImeAction.Next
                     ),
+                    keyboardActions = KeyboardActions(onNext = {
+                        focusManager.moveFocus(FocusDirection.Down)
+                    }),
                     singleLine = true,
                     maxLines = 1,
                     trailingIcon = if (loginFieldState.isNotEmpty()) {
@@ -221,7 +235,7 @@ fun LoginRootScreen(
                     passwordVisible = false
                 }
                 Spacer(Modifier.height(20.dp))
-                OutlinedTextField(
+                TextField(
                     value = passwordFieldState,
                     readOnly = !interactionEnabled,
                     modifier = Modifier
