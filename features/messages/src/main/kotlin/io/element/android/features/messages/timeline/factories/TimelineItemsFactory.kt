@@ -22,7 +22,6 @@ import io.element.android.features.messages.timeline.diff.MatrixTimelineItemsDif
 import io.element.android.features.messages.timeline.factories.event.TimelineItemEventFactory
 import io.element.android.features.messages.timeline.factories.virtual.TimelineItemVirtualFactory
 import io.element.android.features.messages.timeline.model.TimelineItem
-import io.element.android.features.messages.timeline.util.invalidateLast
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -58,18 +57,6 @@ class TimelineItemsFactory @Inject constructor(
         lock.withLock {
             calculateAndApplyDiff(timelineItems)
             buildAndEmitTimelineItemStates(timelineItems)
-        }
-    }
-
-    suspend fun pushItem(
-        timelineItem: MatrixTimelineItem,
-    ) = withContext(dispatchers.computation) {
-        lock.withLock {
-            // Makes sure to invalidate last as we need to recompute some data (like groupPosition)
-            timelineItemsCache.invalidateLast()
-            timelineItemsCache.add(null)
-            matrixTimelineItems = matrixTimelineItems + timelineItem
-            buildAndEmitTimelineItemStates(matrixTimelineItems)
         }
     }
 

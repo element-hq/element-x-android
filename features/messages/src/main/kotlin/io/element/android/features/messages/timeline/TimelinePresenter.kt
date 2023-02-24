@@ -28,8 +28,6 @@ import io.element.android.features.messages.timeline.factories.TimelineItemsFact
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.core.EventId
 import io.element.android.libraries.matrix.room.MatrixRoom
-import io.element.android.libraries.matrix.timeline.MatrixTimeline
-import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
@@ -46,17 +44,6 @@ class TimelinePresenter @Inject constructor(
 ) : Presenter<TimelineState> {
 
     private val timeline = room.timeline()
-
-    private class TimelineCallback(
-        private val coroutineScope: CoroutineScope,
-        private val timelineItemsFactory: TimelineItemsFactory,
-    ) : MatrixTimeline.Callback {
-        override fun onPushedTimelineItem(timelineItem: MatrixTimelineItem) {
-            coroutineScope.launch {
-                timelineItemsFactory.pushItem(timelineItem)
-            }
-        }
-    }
 
     @Composable
     override fun present(): TimelineState {
@@ -83,10 +70,8 @@ class TimelinePresenter @Inject constructor(
         }
 
         DisposableEffect(Unit) {
-            timeline.callback = TimelineCallback(localCoroutineScope, timelineItemsFactory)
             timeline.initialize()
             onDispose {
-                timeline.callback = null
                 timeline.dispose()
             }
         }

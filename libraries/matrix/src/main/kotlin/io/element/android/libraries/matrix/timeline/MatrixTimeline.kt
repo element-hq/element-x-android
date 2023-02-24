@@ -21,16 +21,9 @@ import kotlinx.coroutines.flow.Flow
 import org.matrix.rustcomponents.sdk.TimelineListener
 
 interface MatrixTimeline {
-    var callback: Callback?
-
-    interface Callback {
-        fun onUpdatedTimelineItem(timelineItem: MatrixTimelineItem) = Unit
-        fun onPushedTimelineItem(timelineItem: MatrixTimelineItem) = Unit
-    }
 
     fun timelineItems(): Flow<List<MatrixTimelineItem>>
     suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit>
-    fun addListener(timelineListener: TimelineListener)
     fun initialize()
     fun dispose()
 

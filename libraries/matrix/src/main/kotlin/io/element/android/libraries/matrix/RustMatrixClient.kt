@@ -38,7 +38,7 @@ import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.SlidingSyncMode
 import org.matrix.rustcomponents.sdk.SlidingSyncRequestListFilters
 import org.matrix.rustcomponents.sdk.SlidingSyncViewBuilder
-import org.matrix.rustcomponents.sdk.StoppableSpawn
+import org.matrix.rustcomponents.sdk.TaskHandle
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
@@ -114,7 +114,7 @@ class RustMatrixClient constructor(
             dispatchers,
             ::onRestartSync
         )
-    private var slidingSyncObserverToken: StoppableSpawn? = null
+    private var slidingSyncObserverToken: TaskHandle? = null
 
     private val mediaResolver = RustMediaResolver(this)
     private val isSyncing = AtomicBoolean(false)

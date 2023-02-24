@@ -19,7 +19,7 @@ package io.element.android.libraries.matrix.timeline
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.core.EventId
 import io.element.android.libraries.matrix.room.RustMatrixRoom
-import io.element.android.libraries.matrix.util.StoppableSpawnBag
+import io.element.android.libraries.matrix.util.TaskHandleBag
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -32,9 +32,9 @@ import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 import org.matrix.rustcomponents.sdk.TimelineChange
 import org.matrix.rustcomponents.sdk.TimelineDiff
+import org.matrix.rustcomponents.sdk.TimelineItem
 import org.matrix.rustcomponents.sdk.TimelineListener
 import timber.log.Timber
-import java.util.Collections
 
 class RustMatrixTimeline(
     private val matrixRoom: RustMatrixRoom,
@@ -54,12 +54,10 @@ class RustMatrixTimeline(
         }
     }
 
-    override var callback: MatrixTimeline.Callback? = null
-
     private val timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
         MutableStateFlow(emptyList())
 
-    private val listenerTokens = StoppableSpawnBag()
+    private val listenerTokens = TaskHandleBag()
 
     @OptIn(FlowPreview::class)
     override fun timelineItems(): Flow<List<MatrixTimelineItem>> {
@@ -68,37 +66,42 @@ class RustMatrixTimeline(
 
     private fun MutableList<MatrixTimelineItem>.applyDiff(diff: TimelineDiff) {
         when (diff.change()) {
-            TimelineChange.PUSH -> {
-                val item = diff.push()?.asMatrixTimelineItem() ?: return
-                callback?.onPushedTimelineItem(item)
+            TimelineChange.APPEND -> {
+                val items = diff.append()?.map { it.asMatrixTimelineItem() } ?: return
+                addAll(items)
+            }
+            TimelineChange.PUSH_BACK -> {
+                val item = diff.pushBack()?.asMatrixTimelineItem() ?: return
                 add(item)
             }
-            TimelineChange.UPDATE_AT -> {
-                val updateAtData = diff.updateAt() ?: return
+            TimelineChange.PUSH_FRONT -> {
+                val item = diff.pushFront()?.asMatrixTimelineItem() ?: return
+                add(0, item)
+            }
+            TimelineChange.SET -> {
+                val updateAtData = diff.set() ?: return
                 val item = updateAtData.item.asMatrixTimelineItem()
-                callback?.onUpdatedTimelineItem(item)
                 set(updateAtData.index.toInt(), item)
             }
-            TimelineChange.INSERT_AT -> {
-                val insertAtData = diff.insertAt() ?: return
+            TimelineChange.INSERT -> {
+                val insertAtData = diff.insert() ?: return
                 val item = insertAtData.item.asMatrixTimelineItem()
                 add(insertAtData.index.toInt(), item)
             }
-            TimelineChange.MOVE -> {
-                val moveData = diff.move() ?: return
-                Collections.swap(this, moveData.oldIndex.toInt(), moveData.newIndex.toInt())
-            }
-            TimelineChange.REMOVE_AT -> {
-                val removeAtData = diff.removeAt() ?: return
+            TimelineChange.REMOVE -> {
+                val removeAtData = diff.remove() ?: return
                 removeAt(removeAtData.toInt())
             }
-            TimelineChange.REPLACE -> {
+            TimelineChange.RESET -> {
                 clear()
-                val items = diff.replace()?.map { it.asMatrixTimelineItem() } ?: return
+                val items = diff.reset()?.map { it.asMatrixTimelineItem() } ?: return
                 addAll(items)
             }
-            TimelineChange.POP -> {
-                removeLast()
+            TimelineChange.POP_FRONT -> {
+                removeFirstOrNull()
+            }
+            TimelineChange.POP_BACK -> {
+                removeLastOrNull()
             }
             TimelineChange.CLEAR -> {
                 clear()
@@ -128,8 +131,12 @@ class RustMatrixTimeline(
             timelineItems.value = mutableTimelineItems
         }
 
-    override fun addListener(timelineListener: TimelineListener) {
-        listenerTokens += slidingSyncRoom.subscribeAndAddTimelineListener(timelineListener, null)
+    private suspend fun addListener(timelineListener: TimelineListener): Result<List<TimelineItem>> = withContext(coroutineDispatchers.computation) {
+        runCatching {
+            val result = slidingSyncRoom.subscribeAndAddTimelineListener(timelineListener, null)
+            listenerTokens += result.taskHandle
+            result.items
+        }
     }
 
     override fun initialize() {
@@ -142,7 +149,17 @@ class RustMatrixTimeline(
                     Timber.v("Success fetching members for room ${slidingSyncRoom.roomId()}")
                 }
         }
-        addListener(innerTimelineListener)
+        coroutineScope.launch {
+            val result = addListener(innerTimelineListener)
+            result
+                .onSuccess { timelineItems ->
+                    val matrixTimelineItems = timelineItems.map { it.asMatrixTimelineItem() }
+                    updateTimelineItems { addAll(matrixTimelineItems) }
+                }
+                .onFailure {
+                    Timber.e("Failed adding timeline listener on room with identifier: ${slidingSyncRoom.roomId()})")
+                }
+        }
     }
 
     override fun dispose() {
