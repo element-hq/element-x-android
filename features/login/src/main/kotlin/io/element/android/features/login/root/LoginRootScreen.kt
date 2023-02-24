@@ -77,7 +77,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
-import io.element.android.libraries.designsystem.theme.compound.CompoundColors
+import io.element.android.libraries.designsystem.theme.compound.LocalCompoundColors
 import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
@@ -151,7 +151,7 @@ fun LoginRootScreen(
                 Row(modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(14.dp))
-                    .background(CompoundColors.current.system)
+                    .background(LocalCompoundColors.current.system)
                     .testTag(TestTags.loginChangeServer)
                     .clickable {
                         if (interactionEnabled) {
@@ -185,7 +185,7 @@ fun LoginRootScreen(
                             if (interactionEnabled) { onChangeServer() }
                         }
                     ) {
-                        Icon(imageVector = Icons.Default.ChevronRight, contentDescription = null, tint = CompoundColors.current.content.tertiary)
+                        Icon(imageVector = Icons.Default.ChevronRight, contentDescription = null, tint = LocalCompoundColors.current.content.tertiary)
                     }
                     Spacer(Modifier.width(8.dp))
                 }

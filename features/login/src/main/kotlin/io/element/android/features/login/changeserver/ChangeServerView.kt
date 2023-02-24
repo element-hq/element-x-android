@@ -68,7 +68,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
-import io.element.android.libraries.designsystem.theme.compound.CompoundColors
+import io.element.android.libraries.designsystem.theme.compound.LocalCompoundColors
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.R as StringR
@@ -127,7 +127,7 @@ fun ChangeServerView(
                         .size(width = 70.dp, height = 70.dp)
                         .align(Alignment.CenterHorizontally)
                         .background(
-                            color = CompoundColors.current.content.quinary,
+                            color = LocalCompoundColors.current.content.quinary,
                             shape = RoundedCornerShape(14.dp)
                         )
                 ) {
@@ -135,7 +135,7 @@ fun ChangeServerView(
                         modifier = Modifier
                             .align(Alignment.Center)
                             .size(width = 32.dp, height = 32.dp),
-                        tint = CompoundColors.current.content.secondary,
+                        tint = LocalCompoundColors.current.content.secondary,
                         resourceId = R.drawable.ic_homeserver,
                         contentDescription = "",
                     )
@@ -212,7 +212,7 @@ fun ChangeServerView(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     style = ElementTextStyles.Regular.caption1,
                     textAlign = TextAlign.Start,
-                    color = CompoundColors.current.content.tertiary,
+                    color = LocalCompoundColors.current.content.tertiary,
                 )
                 Spacer(Modifier.height(32.dp))
                 Button(

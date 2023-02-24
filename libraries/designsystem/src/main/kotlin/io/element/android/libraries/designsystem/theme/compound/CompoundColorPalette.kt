@@ -63,4 +63,5 @@ interface CompoundColorPalette {
     }
 }
 
-val CompoundColors = staticCompositionLocalOf<CompoundColorPalette> { CompoundColorPalette.Light }
+
+val LocalCompoundColors = staticCompositionLocalOf<CompoundColorPalette> { CompoundColorPalette.Light }

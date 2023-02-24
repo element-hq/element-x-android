@@ -32,7 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import io.element.android.libraries.designsystem.theme.compound.CompoundColorPalette
-import io.element.android.libraries.designsystem.theme.compound.CompoundColors
+import io.element.android.libraries.designsystem.theme.compound.LocalCompoundColors
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -85,7 +85,7 @@ fun ElementTheme(
     val rememberedColors = remember { currentColor.copy() }.apply { updateColorsFrom(currentColor) }
     CompositionLocalProvider(
         LocalColors provides rememberedColors,
-        CompoundColors provides compoundColorPalette,
+        LocalCompoundColors provides compoundColorPalette,
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
