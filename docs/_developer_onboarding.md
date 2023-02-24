@@ -12,10 +12,11 @@
   * [Application](#application)
     * [Jetpack Compose](#jetpack-compose)
     * [Global architecture](#global-architecture)
-    * [Template](#template)
+    * [Template and naming](#template-and-naming)
   * [Push](#push)
   * [Dependencies management](#dependencies-management)
   * [Test](#test)
+  * [Code coverage](#code-coverage)
   * [Other points](#other-points)
     * [Logging](#logging)
     * [Rageshake](#rageshake)
@@ -130,7 +131,7 @@ About Preview
 
 Main libraries and frameworks used in this application:
 
-- Navigation state with [Appyx](https://bumble-tech.github.io/appyx/)
+- Navigation state with [Appyx](https://bumble-tech.github.io/appyx/). Please watch [this video](https://www.droidcon.com/2022/11/15/model-driven-navigation-with-appyx-from-zero-to-hero/) to learn more about Appyx!
 - DI: [Dagger](https://dagger.dev/) and [Anvil](https://github.com/square/anvil)
 - Reactive State management with Compose runtime and [Molecule](https://github.com/cashapp/molecule)
 
@@ -143,14 +144,17 @@ Here are the main points:
 3. Presenters are also compose first, and have a single `present(): State` method. It's using the power of compose-runtime/compiler. 
 4. The point of connection between a `View` and a `Presenter` is a `Node`.
 5. A `Node` is also responsible for managing Dagger components if any.
-6. A `ParentNode` has some child `Node` and only know about them. 
+6. A `ParentNode` has some children `Node` and only know about them. 
 7. This is a single activity full compose application. The `MainActivity` is responsible for holding and configuring the `RootNode`.
 8. There is no more needs for Android Architecture Component ViewModel as configuration change should be handled by Composable if needed.
 
-#### Template
+#### Template and naming
 
-(TODO: This is coming)
-There is a template module to easily start a new feature. When creating a new module, you can just copy paste the template.
+There is a template module to easily start a new feature. When creating a new module, you can just copy paste the template. It is located [here](../features/template).
+
+For the naming rules, please follow what is being currently used in the template module.
+
+Note that naming of files and classes is important, since those names are used to set up code coverage rules. For instance, presenters MUST have a suffix `Presenter`,states MUST have a suffix `State`, etc. Also we want to have a common naming along all the modules.
 
 ### Push
 
@@ -172,17 +176,41 @@ All the dependencies (including android artifact, gradle plugin, etc.) should be
 Some dependency, mainly because they are not shared can be declared in `build.gradle.kts` files.
 
 [Dependabot](https://github.com/dependabot) is set up on the project. This tool will automatically create Pull Request to upgrade our dependencies one by one.
-**Note** Dependabot does not support yet Gradle verrsion catalog. This is tracked by [this issue](https://github.com/dependabot/dependabot-core/issues/3121).
+**Note** Dependabot does not support yet Gradle version catalog. This is tracked by [this issue](https://github.com/dependabot/dependabot-core/issues/3121).
 
 ### Test
 
-We have 3 tests frameworks in place:
+We have 3 tests frameworks in place, and this should be sufficient to guarantee a good code coverage and limit regressions hopefully:
 
 - Maestro to test the global usage of the application. See the related [documentation](../.maestro/README.md).
-- Combination of [Showkase](https://github.com/airbnb/Showkase) and [Paparazzi](https://github.com/cashapp/paparazzi), to test UI pixel perfect. To add test, just add `@Preview` for the composable you are adding. See the related [documentation](screenshot_testing.md).
-- Tests on presenter with Molecule and [Turbine](https://github.com/cashapp/turbine) (TODO this is coming)
+- Combination of [Showkase](https://github.com/airbnb/Showkase) and [Paparazzi](https://github.com/cashapp/paparazzi), to test UI pixel perfect. To add test, just add `@Preview` for the composable you are adding. See the related [documentation](screenshot_testing.md) and see in the template the file [TemplateView.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateView.kt). We create PreviewProvider to provide different states. See for instance the file [TemplateStateProvider.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateStateProvider.kt)
+  - Tests on presenter with [Molecule](https://github.com/cashapp/molecule) and [Turbine](https://github.com/cashapp/turbine). See in the template the class [TemplatePresenterTests](../features/template/src/test/kotlin/io/element/android/features/template/TemplatePresenterTests.kt).
 
-**Note** For now we want to avoid using mock (such as *mockk*), because this should be note necessary.
+**Note** For now we want to avoid using class mocking (with library such as *mockk*), because this should be not necessary. We prefer to create Fake implementation of our interfaces. Mocking can be used to mock Android framework classes though, such as `Bitmap` for instance.
+
+### Code coverage
+
+[kover](https://github.com/Kotlin/kotlinx-kover) is used to compute code coverage. Only have unit tests can produce code coverage result. Running Maestro does not participate to the code coverage results.
+
+Kover configuration is defined in the main [build.gradle.kts](../build.gradle.kts) file.
+
+To compute the code coverage, run:
+
+```bash
+./gradlew koverMergedReport
+```
+
+and open the Html report: [../build/reports/kover/merged/html/index.html](../build/reports/kover/merged/html/index.html) 
+
+To ensure that the code coverage threshold are OK, you can run 
+
+```bash
+./gradlew koverMergedVerify
+```
+
+Note that the CI performs this check on every pull requests.
+
+Also, if the rule `Global minimum code coverage.` is in error because code coverage is `> maxValue`, `minValue` and `maxValue` can be updated for this rule in the file [build.gradle.kts](../build.gradle.kts) (you will see further instructions there).
 
 ### Other points
 
@@ -230,6 +258,6 @@ Rageshake can be very useful to get logs from a release version of the applicati
 
 The team is here to support you, feel free to ask anything to other developers.
 
-Also please feel to update this documentation, if incomplete/wrong/obsolete/etc.
+Also please feel free to update this documentation, if incomplete/wrong/obsolete/etc.
 
 **Thanks!**

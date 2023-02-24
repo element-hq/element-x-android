@@ -32,3 +32,9 @@ jobs:
           ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD: ${{ secrets.ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD }}
           ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD: ${{ secrets.ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD }}
           FIREBASE_TOKEN: ${{ secrets.ELEMENT_ANDROID_NIGHTLY_FIREBASE_TOKEN }}
+      - name: Additionally upload Nightly APK to browserstack for testing
+        continue-on-error: true # don't block anything by this upload failing (for now)
+        run: curl -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_PASSWORD" -X POST "https://api-cloud.browserstack.com/app-automate/upload" -F "file=@app/build/outputs/apk/nightly/app-nightly.apk" -F "custom_id=element-x-android-nightly"
+        env:
+          BROWSERSTACK_USERNAME: ${{ secrets.ELEMENT_ANDROID_BROWSERSTACK_USERNAME }}
+          BROWSERSTACK_PASSWORD: ${{ secrets.ELEMENT_ANDROID_BROWSERSTACK_ACCESS_KEY }}

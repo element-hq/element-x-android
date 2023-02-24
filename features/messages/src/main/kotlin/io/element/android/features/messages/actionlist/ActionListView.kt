@@ -28,7 +28,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ListItem
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
@@ -38,11 +37,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.timeline.model.TimelineItem
-import io.element.android.libraries.designsystem.components.VectorIcon
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheetLayout
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
@@ -115,13 +117,14 @@ private fun SheetContent(
                         text = {
                             Text(
                                 text = action.title,
-                                color = if (action.destructive) MaterialTheme.colorScheme.error else Color.Unspecified,
+                                color = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
                             )
                         },
                         icon = {
-                            VectorIcon(
+                            Icon(
                                 resourceId = action.icon,
-                                tint = if (action.destructive) MaterialTheme.colorScheme.error else LocalContentColor.current,
+                                contentDescription = "",
+                                tint = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
                             )
                         }
                     )
@@ -129,4 +132,19 @@ private fun SheetContent(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun SheetContentLightPreview(@PreviewParameter(ActionListStateProvider::class) state: ActionListState) =
+    ElementPreviewLight { ContentToPreview(state) }
+
+@Preview
+@Composable
+fun SheetContentDarkPreview(@PreviewParameter(ActionListStateProvider::class) state: ActionListState) =
+    ElementPreviewDark { ContentToPreview(state) }
+
+@Composable
+private fun ContentToPreview(state: ActionListState) {
+    SheetContent(state)
 }

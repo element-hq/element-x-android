@@ -18,6 +18,9 @@ package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,8 +34,11 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.utils.allBooleans
+import io.element.android.libraries.designsystem.utils.asInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,22 +90,29 @@ fun OutlinedTextField(
 
 @Preview
 @Composable
-fun OutlinedTextFieldsLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun OutlinedTextFieldsLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun OutlinedTextFieldsDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun OutlinedTextFieldsDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
-    Column {
-        OutlinedTextField(onValueChange = {}, value = "Content", isError = false, enabled = true, readOnly = true)
-        OutlinedTextField(onValueChange = {}, value = "Content", isError = false, enabled = true, readOnly = false)
-        OutlinedTextField(onValueChange = {}, value = "Content", isError = false, enabled = false, readOnly = true)
-        OutlinedTextField(onValueChange = {}, value = "Content", isError = false, enabled = false, readOnly = false)
-        OutlinedTextField(onValueChange = {}, value = "Content", isError = true, enabled = true, readOnly = true)
-        OutlinedTextField(onValueChange = {}, value = "Content", isError = true, enabled = true, readOnly = false)
-        OutlinedTextField(onValueChange = {}, value = "Content", isError = true, enabled = false, readOnly = true)
-        OutlinedTextField(onValueChange = {}, value = "Content", isError = true, enabled = false, readOnly = false)
+    Column(modifier = Modifier.padding(4.dp)) {
+        allBooleans.forEach { isError ->
+            allBooleans.forEach { enabled ->
+                allBooleans.forEach { readonly ->
+                    OutlinedTextField(
+                        onValueChange = {},
+                        label = { Text(text = "label") },
+                        value = "Hello er=${isError.asInt()}, en=${enabled.asInt()}, ro=${readonly.asInt()}",
+                        isError = isError,
+                        enabled = enabled,
+                        readOnly = readonly,
+                    )
+                    Spacer(modifier = Modifier.height(2.dp))
+                }
+            }
+        }
     }
 }

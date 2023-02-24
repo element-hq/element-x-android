@@ -29,12 +29,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import io.element.android.libraries.designsystem.AvatarGradientEnd
 import io.element.android.libraries.designsystem.AvatarGradientStart
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.debugPlaceholderAvatar
 import io.element.android.libraries.designsystem.theme.components.Text
 import timber.log.Timber
 
@@ -68,6 +70,7 @@ private fun ImageAvatar(
         },
         contentDescription = null,
         contentScale = ContentScale.Crop,
+        placeholder = debugPlaceholderAvatar(),
         modifier = modifier
     )
 }
@@ -90,7 +93,7 @@ private fun InitialsAvatar(
     ) {
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = avatarData.name.first().uppercase(),
+            text = avatarData.getInitial(),
             fontSize = (avatarData.size.value / 2).sp,
             color = Color.White,
         )
@@ -99,13 +102,15 @@ private fun InitialsAvatar(
 
 @Preview
 @Composable
-fun AvatarLightPreview() = ElementPreviewLight { ContentToPreview() }
+fun AvatarLightPreview(@PreviewParameter(AvatarDataProvider::class) avatarData: AvatarData) =
+    ElementPreviewLight { ContentToPreview(avatarData) }
 
 @Preview
 @Composable
-fun AvatarDarkPreview() = ElementPreviewDark { ContentToPreview() }
+fun AvatarDarkPreview(@PreviewParameter(AvatarDataProvider::class) avatarData: AvatarData) =
+    ElementPreviewDark { ContentToPreview(avatarData) }
 
 @Composable
-private fun ContentToPreview() {
-    Avatar(AvatarData(name = "A"))
+private fun ContentToPreview(avatarData: AvatarData) {
+    Avatar(avatarData)
 }

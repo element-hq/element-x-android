@@ -17,6 +17,10 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.FloatingActionButtonElevation
 import androidx.compose.material3.contentColorFor
@@ -25,6 +29,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 @Composable
 fun FloatingActionButton(
@@ -47,4 +55,23 @@ fun FloatingActionButton(
         interactionSource = interactionSource,
         content = content,
     )
+}
+
+@Preview
+@Composable
+internal fun FloatingActionButtonLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+internal fun FloatingActionButtonDarkPreview() =
+    ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
+    Box(modifier = Modifier.padding(8.dp)) {
+        FloatingActionButton(onClick = {}) {
+            Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+        }
+    }
 }

@@ -42,17 +42,18 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.login.R
 import io.element.android.features.login.error.changeServerError
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.components.VectorIcon
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
@@ -90,12 +91,13 @@ fun ChangeServerView(
                         shape = RoundedCornerShape(32.dp)
                     )
             ) {
-                VectorIcon(
+                Icon(
                     modifier = Modifier
                         .align(Alignment.Center)
                         .size(width = 48.dp, height = 48.dp),
                     // TODO Update with design input
                     resourceId = R.drawable.ic_baseline_dataset_24,
+                    contentDescription = "",
                 )
             }
             Text(
@@ -179,15 +181,15 @@ fun ChangeServerView(
 
 @Preview
 @Composable
-fun ChangeServerViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun ChangeServerViewLightPreview(@PreviewParameter(ChangeServerStateProvider::class) state: ChangeServerState) =
+    ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun ChangeServerViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun ChangeServerViewDarkPreview(@PreviewParameter(ChangeServerStateProvider::class) state: ChangeServerState) =
+    ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
-private fun ContentToPreview() {
-    ChangeServerView(
-        state = ChangeServerState(homeserver = "matrix.org"),
-    )
+private fun ContentToPreview(state: ChangeServerState) {
+    ChangeServerView(state = state)
 }

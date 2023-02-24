@@ -20,9 +20,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.matrix.ui.components.MatrixUserHeader
+import io.element.android.libraries.matrix.ui.components.MatrixUserWithNullProvider
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 
 @Composable
@@ -36,5 +41,24 @@ fun UserPreferences(
             modifier = modifier,
             matrixUser = userData
         )
+    }
+}
+
+@Preview
+@Composable
+internal fun UserPreferencesLightPreview(@PreviewParameter(MatrixUserWithNullProvider::class) matrixUser: MatrixUser?) =
+    ElementPreviewLight { ContentToPreview(matrixUser) }
+
+@Preview
+@Composable
+internal fun UserPreferencesDarkPreview(@PreviewParameter(MatrixUserWithNullProvider::class) matrixUser: MatrixUser?) =
+    ElementPreviewDark { ContentToPreview(matrixUser) }
+
+@Composable
+private fun ContentToPreview(matrixUser: MatrixUser?) {
+    if (matrixUser == null) {
+        UserPreferences(Async.Uninitialized)
+    } else {
+        UserPreferences(Async.Success(matrixUser))
     }
 }

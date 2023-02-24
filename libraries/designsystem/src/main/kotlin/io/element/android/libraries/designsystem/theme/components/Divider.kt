@@ -40,11 +40,11 @@ fun Divider(
 
 @Preview
 @Composable
-fun DividerLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun DividerLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun DividerDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun DividerDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

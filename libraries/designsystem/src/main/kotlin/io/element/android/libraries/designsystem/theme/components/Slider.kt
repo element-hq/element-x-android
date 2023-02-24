@@ -55,11 +55,11 @@ fun Slider(
 
 @Preview
 @Composable
-fun SlidersLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun SlidersLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun SlidersDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun SlidersDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

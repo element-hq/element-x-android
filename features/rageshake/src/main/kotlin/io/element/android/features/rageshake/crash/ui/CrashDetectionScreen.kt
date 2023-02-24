@@ -41,7 +41,6 @@ fun CrashDetectionView(
 
     if (state.crashDetected) {
         CrashDetectionContent(
-            state,
             onYesClicked = onOpenBugReport,
             onNoClicked = ::onPopupDismissed,
             onDismiss = ::onPopupDismissed,
@@ -51,7 +50,6 @@ fun CrashDetectionView(
 
 @Composable
 fun CrashDetectionContent(
-    state: CrashDetectionState,
     onNoClicked: () -> Unit = { },
     onYesClicked: () -> Unit = { },
     onDismiss: () -> Unit = { },
@@ -69,15 +67,15 @@ fun CrashDetectionContent(
 
 @Preview
 @Composable
-fun CrashDetectionContentLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun CrashDetectionViewLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun CrashDetectionContentDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun CrashDetectionViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
-    CrashDetectionContent(
-        state = CrashDetectionState()
+    CrashDetectionView(
+        state = aCrashDetectionState().copy(crashDetected = true)
     )
 }
