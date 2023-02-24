@@ -36,7 +36,7 @@ fun elementColorsDark() = ElementColors(
 // TODO Lots of colors are missing
 val materialColorSchemeDark = darkColorScheme(
     primary = Color.White,
-    // TODO onPrimary = ColorDarkTokens.OnPrimary,
+    onPrimary = Color.Black,
     // TODO primaryContainer = ColorDarkTokens.PrimaryContainer,
     // TODO onPrimaryContainer = ColorDarkTokens.OnPrimaryContainer,
     // TODO inversePrimary = ColorDarkTokens.InversePrimary,

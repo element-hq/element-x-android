@@ -46,7 +46,7 @@ sealed interface TimelineItem {
         val content: TimelineItemEventContent,
         val sentTime: String = "",
         val isMine: Boolean = false,
-        val groupPosition: MessagesItemGroupPosition = MessagesItemGroupPosition.None,
+        val groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
         val reactionsState: TimelineItemReactions
     ) : TimelineItem {
 

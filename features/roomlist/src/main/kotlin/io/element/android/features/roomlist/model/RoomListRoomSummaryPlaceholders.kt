@@ -27,7 +27,7 @@ object RoomListRoomSummaryPlaceholders {
             name = "Short name",
             timestamp = "hh:mm",
             lastMessage = "Last message for placeholder",
-            avatarData = AvatarData("S")
+            avatarData = AvatarData(id, "S")
         )
     }
 

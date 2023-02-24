@@ -60,11 +60,11 @@ fun PreferenceCategory(
 
 @Preview
 @Composable
-fun PreferenceCategoryLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun PreferenceCategoryLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun PreferenceCategoryDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun PreferenceCategoryDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

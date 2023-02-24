@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.layout.RowScope
@@ -24,6 +26,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,4 +50,19 @@ fun MediumTopAppBar(
         colors = colors,
         scrollBehavior = scrollBehavior,
     )
+}
+
+@Preview
+@Composable
+internal fun MediumTopAppBarLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+internal fun MediumTopAppBarDarkPreview() =
+    ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
+    MediumTopAppBar(title = { Text(text = "Title") })
 }

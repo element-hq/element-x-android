@@ -17,8 +17,8 @@
 package io.element.android.features.rageshake.preferences
 
 data class RageshakePreferencesState(
-    val isEnabled: Boolean = false,
-    val isSupported: Boolean = true,
-    val sensitivity: Float = 0.3f,
-    val eventSink: (RageshakePreferencesEvents) -> Unit = {},
+    val isEnabled: Boolean,
+    val isSupported: Boolean,
+    val sensitivity: Float,
+    val eventSink: (RageshakePreferencesEvents) -> Unit,
 )

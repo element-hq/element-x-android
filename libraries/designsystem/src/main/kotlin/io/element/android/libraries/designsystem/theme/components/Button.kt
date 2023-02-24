@@ -61,11 +61,11 @@ fun Button(
 
 @Preview
 @Composable
-fun ButtonsLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun ButtonsLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun ButtonsDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun ButtonsDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

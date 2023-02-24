@@ -28,9 +28,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import io.element.android.features.messages.timeline.model.event.TimelineItemImageContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemImageContentProvider
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
 
 @Composable
 fun TimelineItemImageView(
@@ -48,7 +54,7 @@ fun TimelineItemImageView(
             .aspectRatio(content.aspectRatio),
         contentAlignment = Alignment.Center,
     ) {
-        var isLoading = rememberSaveable(content.imageMeta) { mutableStateOf(true) }
+        val isLoading = rememberSaveable(content.imageMeta) { mutableStateOf(true) }
         val context = LocalContext.current
         val model = ImageRequest.Builder(context)
             .data(content.imageMeta)
@@ -57,9 +63,24 @@ fun TimelineItemImageView(
         AsyncImage(
             model = model,
             contentDescription = null,
-            placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceVariant),
+            placeholder = debugPlaceholderBackground(ColorPainter(MaterialTheme.colorScheme.surfaceVariant)),
             contentScale = ContentScale.Crop,
             onSuccess = { isLoading.value = false },
         )
     }
+}
+
+@Preview
+@Composable
+internal fun TimelineItemImageViewLightPreview(@PreviewParameter(TimelineItemImageContentProvider::class) content: TimelineItemImageContent) =
+    ElementPreviewLight { ContentToPreview(content) }
+
+@Preview
+@Composable
+internal fun TimelineItemImageViewDarkPreview(@PreviewParameter(TimelineItemImageContentProvider::class) content: TimelineItemImageContent) =
+    ElementPreviewDark { ContentToPreview(content) }
+
+@Composable
+private fun ContentToPreview(content: TimelineItemImageContent) {
+    TimelineItemImageView(content)
 }

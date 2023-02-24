@@ -67,7 +67,8 @@ class MessagesPresenter @Inject constructor(
         LaunchedEffect(syncUpdateFlow) {
             roomAvatar.value =
                 AvatarData(
-                    name = room.bestName,
+                    id = room.roomId.value,
+                    name = room.name,
                     url = room.avatarUrl,
                     size = AvatarSize.SMALL
                 )

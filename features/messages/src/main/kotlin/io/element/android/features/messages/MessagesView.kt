@@ -49,6 +49,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.actionlist.ActionListEvents
@@ -59,6 +61,8 @@ import io.element.android.features.messages.timeline.TimelineView
 import io.element.android.features.messages.timeline.model.TimelineItem
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -72,7 +76,7 @@ import timber.log.Timber
 fun MessagesView(
     state: MessagesState,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit,
+    onBackPressed: () -> Unit = {},
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
     val itemActionsBottomSheetState = rememberModalBottomSheetState(
@@ -197,6 +201,20 @@ fun MessagesViewTopBar(
                 )
             }
         }
-
     )
+}
+
+@Preview
+@Composable
+internal fun MessagesViewLightPreview(@PreviewParameter(MessagesStateProvider::class) state: MessagesState) =
+    ElementPreviewLight { ContentToPreview(state) }
+
+@Preview
+@Composable
+internal fun MessagesViewDarkPreview(@PreviewParameter(MessagesStateProvider::class) state: MessagesState) =
+    ElementPreviewDark { ContentToPreview(state) }
+
+@Composable
+private fun ContentToPreview(state: MessagesState) {
+    MessagesView(state)
 }

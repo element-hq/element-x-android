@@ -32,20 +32,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Velocity
 import io.element.android.features.roomlist.components.RoomListTopBar
 import io.element.android.features.roomlist.components.RoomSummaryRow
 import io.element.android.features.roomlist.model.RoomListEvents
 import io.element.android.features.roomlist.model.RoomListRoomSummary
 import io.element.android.features.roomlist.model.RoomListState
-import io.element.android.features.roomlist.model.stubbedRoomSummaries
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.features.roomlist.model.RoomListStateProvider
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.core.RoomId
-import io.element.android.libraries.matrix.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
@@ -64,7 +63,7 @@ fun RoomListView(
         state.eventSink(RoomListEvents.UpdateVisibleRange(range))
     }
 
-    RoomListView(
+    RoomListContent(
         roomSummaries = state.roomList,
         matrixUser = state.matrixUser,
         filter = state.filter,
@@ -78,7 +77,7 @@ fun RoomListView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoomListView(
+fun RoomListContent(
     roomSummaries: ImmutableList<RoomListRoomSummary>,
     matrixUser: MatrixUser?,
     filter: String,
@@ -157,20 +156,15 @@ private fun RoomListRoomSummary.contentType() = isPlaceholder
 
 @Preview
 @Composable
-fun RoomListViewLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun RoomListViewLightPreview(@PreviewParameter(RoomListStateProvider::class) state: RoomListState) =
+    ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun RoomListViewDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun RoomListViewDarkPreview(@PreviewParameter(RoomListStateProvider::class) state: RoomListState) =
+    ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
-private fun ContentToPreview() {
-    RoomListView(
-        roomSummaries = stubbedRoomSummaries(),
-        matrixUser = MatrixUser(id = UserId("@id"), username = "User#1", avatarData = AvatarData("U")),
-        onRoomClicked = {},
-        filter = "filter",
-        onFilterChanged = {},
-        onScrollOver = {}
-    )
+private fun ContentToPreview(state: RoomListState) {
+    RoomListView(state)
 }

@@ -107,7 +107,8 @@ class RoomListPresenter @Inject constructor(
         val userDisplayName = client.loadUserDisplayName().getOrNull()
         val avatarData =
             AvatarData(
-                name = userDisplayName ?: client.userId().value,
+                id = client.userId().value,
+                name = userDisplayName,
                 url = userAvatarUrl,
                 size = AvatarSize.SMALL
             )
@@ -136,6 +137,7 @@ class RoomListPresenter @Inject constructor(
                 is RoomSummary.Empty -> RoomListRoomSummaryPlaceholders.create(roomSummary.identifier)
                 is RoomSummary.Filled -> {
                     val avatarData = AvatarData(
+                        id = roomSummary.identifier(),
                         name = roomSummary.details.name,
                         url = roomSummary.details.avatarURLString
                     )

@@ -24,7 +24,7 @@ import io.element.android.libraries.matrix.core.UserId
 data class MatrixUser(
     val id: UserId,
     val username: String? = null,
-    val avatarData: AvatarData = AvatarData(),
+    val avatarData: AvatarData = AvatarData(id.value, username),
 )
 
 fun MatrixUser.getBestName(): String {
