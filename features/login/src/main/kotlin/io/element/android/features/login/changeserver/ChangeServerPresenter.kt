@@ -36,7 +36,7 @@ class ChangeServerPresenter @Inject constructor(private val authenticationServic
     override fun present(): ChangeServerState {
         val localCoroutineScope = rememberCoroutineScope()
         val homeserver = rememberSaveable {
-            mutableStateOf(authenticationService.getHomeserverOrDefault())
+            mutableStateOf(authenticationService.getHomeserverOrDefaultDisplayValue())
         }
         val changeServerAction: MutableState<Async<Unit>> = remember {
             mutableStateOf(Async.Uninitialized)

@@ -21,7 +21,7 @@ import io.element.android.libraries.matrix.core.SessionId
 import kotlinx.parcelize.Parcelize
 
 data class LoginRootState(
-    val defaultHomeServer: String,
+    val isDefaultHomeServer: Boolean,
     val homeserver: String,
     val loggedInState: LoggedInState,
     val formState: LoginFormState,

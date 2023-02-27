@@ -18,12 +18,10 @@ package io.element.android.features.login.root
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
@@ -36,11 +34,9 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
     @Composable
     override fun present(): LoginRootState {
         val localCoroutineScope = rememberCoroutineScope()
-        val defaultHomeServer = rememberSaveable {
-            mutableStateOf(authenticationService.getDefaultHomeserver())
-        }
+        val defaultHomeServer = MatrixAuthenticationService.DEFAULT_HOMESERVER
         val homeserver = rememberSaveable {
-            mutableStateOf(authenticationService.getHomeserverOrDefault())
+            mutableStateOf(authenticationService.getHomeserverOrDefaultDisplayValue())
         }
         val loggedInState: MutableState<LoggedInState> = remember {
             mutableStateOf(LoggedInState.NotLoggedIn)
@@ -64,7 +60,7 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
         }
 
         return LoginRootState(
-            defaultHomeServer = defaultHomeServer.value,
+            isDefaultHomeServer = defaultHomeServer == homeserver.value,
             homeserver = homeserver.value,
             loggedInState = loggedInState.value,
             formState = formState.value,
@@ -91,6 +87,6 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
     }
 
     private fun refreshHomeServer(homeserver: MutableState<String>) {
-        homeserver.value = authenticationService.getHomeserverOrDefault()
+        homeserver.value = authenticationService.getHomeserverOrDefaultDisplayValue()
     }
 }

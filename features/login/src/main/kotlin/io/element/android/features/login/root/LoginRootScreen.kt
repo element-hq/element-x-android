@@ -166,7 +166,7 @@ fun LoginRootScreen(
                         Modifier
                             .padding(horizontal = 16.dp, vertical = 16.dp)
                             .weight(1f)) {
-                        if (state.homeserver.isNullOrEmpty().not() && state.homeserver == state.defaultHomeServer) {
+                        if (state.isDefaultHomeServer) {
                             // TODO proper detection of matrix.org url
                             Text(text = stringResource(StringR.string.server_selection_matrix_org_title), style = ElementTextStyles.Bold.body)
                             Spacer(modifier = Modifier.height(4.dp))

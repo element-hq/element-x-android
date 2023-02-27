@@ -16,11 +16,14 @@
 
 package io.element.android.libraries.matrix.auth
 
+import android.net.Uri
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.RustMatrixClient
+import io.element.android.libraries.matrix.auth.MatrixAuthenticationService.Companion.DEFAULT_HOMESERVER
 import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.matrix.session.SessionStore
 import io.element.android.libraries.matrix.session.sessionId
@@ -72,8 +75,13 @@ class RustMatrixAuthenticationService @Inject constructor(
     }
 
     override fun getHomeserver(): String? = authService.homeserverDetails()?.url()
-    override fun getDefaultHomeserver(): String = "https://matrix-client.matrix.org/"
-    override fun getHomeserverOrDefault(): String = getHomeserver() ?: getDefaultHomeserver()
+
+    override fun getHomeserverOrDefaultDisplayValue(): String {
+        return tryOrNull {
+            val uri = getHomeserver()?.let { Uri.parse(it) }
+            uri?.host
+        } ?: DEFAULT_HOMESERVER
+    }
 
     override suspend fun setHomeserver(homeserver: String) {
         withContext(coroutineDispatchers.io) {

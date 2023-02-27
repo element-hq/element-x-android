@@ -23,7 +23,7 @@ open class LoginRootStateProvider : PreviewParameterProvider<LoginRootState> {
     override val values: Sequence<LoginRootState>
         get() = sequenceOf(
             aLoginRootState(),
-            aLoginRootState().copy(homeserver = "some-custom-server.com"),
+            aLoginRootState().copy(homeserver = "some-custom-server.com", isDefaultHomeServer = false),
             aLoginRootState().copy(formState = LoginFormState("user", "pass")),
             aLoginRootState().copy(formState = LoginFormState("user", "pass"), loggedInState = LoggedInState.LoggingIn),
             aLoginRootState().copy(formState = LoginFormState("user", "pass"), loggedInState = LoggedInState.ErrorLoggingIn(Throwable())),
@@ -32,7 +32,7 @@ open class LoginRootStateProvider : PreviewParameterProvider<LoginRootState> {
 }
 
 fun aLoginRootState() = LoginRootState(
-    defaultHomeServer = "matrix.org",
+    isDefaultHomeServer = true,
     homeserver = "matrix.org",
     loggedInState = LoggedInState.NotLoggedIn,
     formState = LoginFormState.Default,
