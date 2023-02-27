@@ -55,7 +55,7 @@ class TimelinePresenter @Inject constructor(
         }
         val timelineItems = timelineItemsFactory
             .flow()
-            .collectAsState(emptyList())
+            .collectAsState()
 
         val paginationState = timeline
             .paginationState()
