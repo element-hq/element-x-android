@@ -21,6 +21,9 @@ import extension.androidConfig
 import extension.commonDependencies
 import extension.composeConfig
 import extension.composeDependencies
+import org.gradle.accessors.dm.LibrariesForLibs
+
+val libs = the<LibrariesForLibs>()
 
 plugins {
     id("com.android.application")
@@ -29,10 +32,10 @@ plugins {
 
 android {
     androidConfig(project)
-    composeConfig()
+    composeConfig(libs)
 }
 
 dependencies {
     commonDependencies()
-    composeDependencies()
+    composeDependencies(libs)
 }
