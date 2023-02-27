@@ -22,5 +22,5 @@
         <item name="postSplashScreenTheme">@style/Theme.ElementX</item>
     </style>
 
-    <style name="Theme.ElementX" parent="Theme.ElementAndroid.Dark" />
+    <style name="Theme.ElementX" parent="Theme.ElementAndroid" />
 </resources>
