@@ -112,6 +112,7 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
     // Waiting for https://github.com/google/ksp/issues/37
     applicationVariants.all {
         kotlin.sourceSets {
@@ -151,7 +152,7 @@ dependencies {
     anvil(projects.anvilcodegen)
 
     // https://developer.android.com/studio/write/java8-support#library-desugaring-versions
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.2")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
     implementation(libs.appyx.core)
     implementation(libs.androidx.splash)
     implementation(libs.androidx.corektx)
