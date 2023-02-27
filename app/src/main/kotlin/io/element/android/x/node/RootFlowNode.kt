@@ -38,6 +38,7 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.matrix.core.UserId
 import io.element.android.x.di.MatrixClientsHolder
 import io.element.android.x.root.RootPresenter
@@ -88,8 +89,8 @@ class RootFlowNode(
             .launchIn(lifecycleScope)
     }
 
-    private fun switchToLoggedInFlow(userId: UserId) {
-        backstack.safeRoot(NavTarget.LoggedInFlow(userId = userId))
+    private fun switchToLoggedInFlow(sessionId: SessionId) {
+        backstack.safeRoot(NavTarget.LoggedInFlow(sessionId))
     }
 
     private fun switchToLogoutFlow() {
@@ -101,7 +102,7 @@ class RootFlowNode(
         onSuccess: (UserId) -> Unit = {},
         onFailure: () -> Unit = {}
     ) {
-        val latestKnownUserId = authenticationService.getLatestUserId()
+        val latestKnownUserId = authenticationService.getLatestSessionId()
         if (latestKnownUserId == null) {
             onFailure()
             return
@@ -116,7 +117,7 @@ class RootFlowNode(
             onFailure()
         } else {
             matrixClientsHolder.add(matrixClient)
-            onSuccess(matrixClient.userId)
+            onSuccess(matrixClient.sessionId)
         }
     }
 
@@ -154,7 +155,7 @@ class RootFlowNode(
         object NotLoggedInFlow : NavTarget
 
         @Parcelize
-        data class LoggedInFlow(val userId: UserId) : NavTarget
+        data class LoggedInFlow(val sessionId: SessionId) : NavTarget
 
         @Parcelize
         object BugReport : NavTarget
@@ -163,13 +164,13 @@ class RootFlowNode(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             is NavTarget.LoggedInFlow -> {
-                val matrixClient = matrixClientsHolder.getOrNull(navTarget.userId) ?: return splashNode(buildContext).also {
+                val matrixClient = matrixClientsHolder.getOrNull(navTarget.sessionId) ?: return splashNode(buildContext).also {
                     Timber.w("Couldn't find any session, go through SplashScreen")
                     backstack.newRoot(NavTarget.SplashScreen)
                 }
                 LoggedInFlowNode(
                     buildContext = buildContext,
-                    userId = navTarget.userId,
+                    sessionId = navTarget.sessionId,
                     matrixClient = matrixClient,
                     onOpenBugReport = this::onOpenBugReport
                 )

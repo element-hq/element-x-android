@@ -207,7 +207,7 @@ fun LoginRootScreen(
                 Text(text = "Continue")
             }
             when (val loggedInState = state.loggedInState) {
-                is LoggedInState.LoggedIn -> onLoginWithSuccess(loggedInState.userId)
+                is LoggedInState.LoggedIn -> onLoginWithSuccess(loggedInState.sessionId)
                 else -> Unit
             }
         }

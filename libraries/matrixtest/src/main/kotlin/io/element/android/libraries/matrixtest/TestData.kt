@@ -24,6 +24,7 @@ const val A_USER_NAME = "alice"
 const val A_PASSWORD = "password"
 
 val A_USER_ID = UserId("@alice:server.org")
+val A_SESSION_ID = SessionId(A_USER_ID.value)
 val A_ROOM_ID = RoomId("!aRoomId")
 val AN_EVENT_ID = EventId("\$anEventId")
 

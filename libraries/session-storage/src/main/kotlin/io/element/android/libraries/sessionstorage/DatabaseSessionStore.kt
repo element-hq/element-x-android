@@ -45,12 +45,12 @@ class DatabaseSessionStore @Inject constructor(
             .executeAsOneOrNull()
     }
 
-    override suspend fun getSession(sessionId: SessionId): SessionData? {
-        return database.sessionDataQueries.selectByUserId(sessionId.value)
+    override suspend fun getSession(sessionId: String): SessionData? {
+        return database.sessionDataQueries.selectByUserId(sessionId)
             .executeAsOneOrNull()
     }
 
-    override suspend fun reset() {
-        database.sessionDataQueries.removeAll()
+    override suspend fun removeSession(sessionId: String) {
+        database.sessionDataQueries.removeSession(sessionId)
     }
 }

@@ -48,7 +48,7 @@ internal class RustMatrixClient internal constructor(
     private val baseDirectory: File,
 ) : MatrixClient {
 
-    override val userId: UserId = UserId(client.userId())
+    override val sessionId: UserId = UserId(client.userId())
 
     private val clientDelegate = object : ClientDelegate {
         override fun didReceiveAuthError(isSoftLogout: Boolean) {
@@ -153,7 +153,7 @@ internal class RustMatrixClient internal constructor(
             Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
         }
         baseDirectory.deleteSessionDirectory(userID = client.userId())
-        sessionStore.reset()
+        sessionStore.removeSession(client.userId())
     }
 
     override suspend fun loadUserDisplayName(): Result<String> = withContext(dispatchers.io) {

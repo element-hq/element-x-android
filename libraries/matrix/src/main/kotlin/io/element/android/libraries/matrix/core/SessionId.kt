@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.sessionstorage
+package io.element.android.libraries.matrix.core
 
-inline class SessionId(val value: String)
+typealias SessionId = UserId

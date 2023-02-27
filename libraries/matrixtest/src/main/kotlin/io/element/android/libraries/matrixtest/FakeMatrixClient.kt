@@ -18,7 +18,6 @@ package io.element.android.libraries.matrixtest
 
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.core.RoomId
-import io.element.android.libraries.matrix.core.UserId
 import io.element.android.libraries.matrix.media.MediaResolver
 import io.element.android.libraries.matrix.room.MatrixRoom
 import io.element.android.libraries.matrix.room.RoomSummaryDataSource
@@ -29,7 +28,7 @@ import kotlinx.coroutines.delay
 import org.matrix.rustcomponents.sdk.MediaSource
 
 class FakeMatrixClient(
-    override val userId: UserId = A_USER_ID,
+    override val sessionId: SessionId = A_SESSION_ID,
     private val userDisplayName: Result<String> = Result.success(A_USER_NAME),
     private val userAvatarURLString: Result<String> = Result.success(AN_AVATAR_URL),
     val roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource()

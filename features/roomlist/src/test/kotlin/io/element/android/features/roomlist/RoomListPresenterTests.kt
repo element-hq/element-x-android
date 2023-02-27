@@ -31,6 +31,7 @@ import io.element.android.libraries.matrixtest.AN_EXCEPTION
 import io.element.android.libraries.matrixtest.A_MESSAGE
 import io.element.android.libraries.matrixtest.A_ROOM_ID
 import io.element.android.libraries.matrixtest.A_ROOM_NAME
+import io.element.android.libraries.matrixtest.A_SESSION_ID
 import io.element.android.libraries.matrixtest.A_USER_ID
 import io.element.android.libraries.matrixtest.A_USER_NAME
 import io.element.android.libraries.matrixtest.FakeMatrixClient
@@ -45,7 +46,7 @@ class RoomListPresenterTests {
     @Test
     fun `present - should start with no user and then load user with success`() = runTest {
         val presenter = RoomListPresenter(
-            FakeMatrixClient(A_USER_ID),
+            FakeMatrixClient(A_SESSION_ID),
             createDateFormatter()
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -66,7 +67,7 @@ class RoomListPresenterTests {
     fun `present - should start with no user and then load user with error`() = runTest {
         val presenter = RoomListPresenter(
             FakeMatrixClient(
-                A_USER_ID,
+                A_SESSION_ID,
                 userDisplayName = Result.failure(AN_EXCEPTION),
                 userAvatarURLString = Result.failure(AN_EXCEPTION),
             ),
@@ -87,7 +88,7 @@ class RoomListPresenterTests {
     @Test
     fun `present - should filter room with success`() = runTest {
         val presenter = RoomListPresenter(
-            FakeMatrixClient(A_USER_ID),
+            FakeMatrixClient(A_SESSION_ID),
             createDateFormatter()
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -107,7 +108,7 @@ class RoomListPresenterTests {
         val roomSummaryDataSource = FakeRoomSummaryDataSource()
         val presenter = RoomListPresenter(
             FakeMatrixClient(
-                userId = A_USER_ID,
+                sessionId = A_SESSION_ID,
                 roomSummaryDataSource = roomSummaryDataSource
             ),
             createDateFormatter()
@@ -133,7 +134,7 @@ class RoomListPresenterTests {
         val roomSummaryDataSource = FakeRoomSummaryDataSource()
         val presenter = RoomListPresenter(
             FakeMatrixClient(
-                userId = A_USER_ID,
+                sessionId = A_SESSION_ID,
                 roomSummaryDataSource = roomSummaryDataSource
             ),
             createDateFormatter()
@@ -164,7 +165,7 @@ class RoomListPresenterTests {
         val roomSummaryDataSource = FakeRoomSummaryDataSource()
         val presenter = RoomListPresenter(
             FakeMatrixClient(
-                userId = A_USER_ID,
+                sessionId = A_SESSION_ID,
                 roomSummaryDataSource = roomSummaryDataSource
             ),
             createDateFormatter()

@@ -17,7 +17,7 @@
 package io.element.android.features.login.root
 
 import android.os.Parcelable
-import io.element.android.libraries.matrix.core.UserId
+import io.element.android.libraries.matrix.core.SessionId
 import kotlinx.parcelize.Parcelize
 
 data class LoginRootState(
@@ -34,7 +34,7 @@ sealed interface LoggedInState {
     object NotLoggedIn : LoggedInState
     object LoggingIn : LoggedInState
     data class ErrorLoggingIn(val failure: Throwable) : LoggedInState
-    data class LoggedIn(val userId: UserId) : LoggedInState
+    data class LoggedIn(val sessionId: SessionId) : LoggedInState
 }
 
 @Parcelize

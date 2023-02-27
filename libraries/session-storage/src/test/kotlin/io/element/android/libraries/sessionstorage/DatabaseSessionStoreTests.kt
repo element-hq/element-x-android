@@ -31,7 +31,7 @@ class DatabaseSessionStoreTests {
     private lateinit var database: SessionDatabase
     private lateinit var databaseSessionStore: DatabaseSessionStore
 
-    private val sessionData = SessionData("userId", "deviceId", "accessToken", "refreshToken", "homeserverUrl", false)
+    private val aSessionData = SessionData("userId", "deviceId", "accessToken", "refreshToken", "homeserverUrl", false)
 
     @Before
     fun setup() {
@@ -47,59 +47,58 @@ class DatabaseSessionStoreTests {
     fun `storeData persists the SessionData into the DB`() = runTest {
         assertThat(database.sessionDataQueries.selectFirst().executeAsOneOrNull()).isNull()
 
-        databaseSessionStore.storeData(sessionData)
+        databaseSessionStore.storeData(aSessionData)
 
-        assertThat(database.sessionDataQueries.selectFirst().executeAsOneOrNull()).isEqualTo(sessionData)
+        assertThat(database.sessionDataQueries.selectFirst().executeAsOneOrNull()).isEqualTo(aSessionData)
     }
 
     @Test
     fun `isLoggedIn emits true while there are sessions in the DB`() = runTest {
         databaseSessionStore.isLoggedIn().test {
             assertThat(awaitItem()).isFalse()
-            database.sessionDataQueries.insertSessionData(sessionData)
+            database.sessionDataQueries.insertSessionData(aSessionData)
             assertThat(awaitItem()).isTrue()
-            database.sessionDataQueries.removeAll()
+            database.sessionDataQueries.removeSession(aSessionData.userId)
             assertThat(awaitItem()).isFalse()
         }
     }
 
     @Test
     fun `getLatestSession gets the first session in the DB`() = runTest {
-        database.sessionDataQueries.insertSessionData(sessionData)
-        database.sessionDataQueries.insertSessionData(sessionData.copy(userId = "otherUserId"))
+        database.sessionDataQueries.insertSessionData(aSessionData)
+        database.sessionDataQueries.insertSessionData(aSessionData.copy(userId = "otherUserId"))
 
         val latestSession = databaseSessionStore.getLatestSession()
 
-        assertThat(latestSession).isEqualTo(sessionData)
+        assertThat(latestSession).isEqualTo(aSessionData)
     }
 
     @Test
     fun `getSession returns a matching session in DB if exists`() = runTest {
-        database.sessionDataQueries.insertSessionData(sessionData)
-        database.sessionDataQueries.insertSessionData(sessionData.copy(userId = "otherUserId"))
+        database.sessionDataQueries.insertSessionData(aSessionData)
+        database.sessionDataQueries.insertSessionData(aSessionData.copy(userId = "otherUserId"))
 
-        val foundSession = databaseSessionStore.getSession(SessionId(sessionData.userId))
+        val foundSession = databaseSessionStore.getSession(aSessionData.userId)
 
-        assertThat(foundSession).isEqualTo(sessionData)
+        assertThat(foundSession).isEqualTo(aSessionData)
     }
 
     @Test
     fun `getSession returns null if a no matching session exists in DB`() = runTest {
-        database.sessionDataQueries.insertSessionData(sessionData.copy(userId = "otherUserId"))
+        database.sessionDataQueries.insertSessionData(aSessionData.copy(userId = "otherUserId"))
 
-        val foundSession = databaseSessionStore.getSession(SessionId(sessionData.userId))
+        val foundSession = databaseSessionStore.getSession(aSessionData.userId)
 
         assertThat(foundSession).isNull()
     }
 
     @Test
-    fun `reset removes all sessions in DB`() = runTest {
-        database.sessionDataQueries.insertSessionData(sessionData)
-        database.sessionDataQueries.insertSessionData(sessionData.copy(userId = "otherUserId"))
+    fun `removeSession removes the associated session in DB`() = runTest {
+        database.sessionDataQueries.insertSessionData(aSessionData)
 
-        databaseSessionStore.reset()
+        databaseSessionStore.removeSession(aSessionData.userId)
 
-        assertThat(database.sessionDataQueries.selectFirst().executeAsOneOrNull()).isNull()
+        assertThat(database.sessionDataQueries.selectByUserId(aSessionData.userId).executeAsOneOrNull()).isNull()
     }
 
 }

@@ -21,11 +21,11 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.RustMatrixClient
+import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.matrix.core.UserId
 import io.element.android.libraries.matrix.session.SessionData
 import io.element.android.libraries.sessionstorage.SessionStore
 import io.element.android.libraries.matrix.util.logError
-import io.element.android.libraries.sessionstorage.SessionId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -50,12 +50,12 @@ class RustMatrixAuthenticationService @Inject constructor(
         return sessionStore.isLoggedIn()
     }
 
-    override suspend fun getLatestUserId(): UserId? = withContext(coroutineDispatchers.io) {
+    override suspend fun getLatestSessionId(): SessionId? = withContext(coroutineDispatchers.io) {
         sessionStore.getLatestSession()?.userId?.let { UserId(it) }
     }
 
-    override suspend fun restoreSession(userId: UserId) = withContext(coroutineDispatchers.io) {
-        sessionStore.getSession(userId.toSessionId())
+    override suspend fun restoreSession(sessionId: SessionId) = withContext(coroutineDispatchers.io) {
+        sessionStore.getSession(sessionId.value)
             ?.let { sessionData ->
                 try {
                     ClientBuilder()
@@ -83,7 +83,7 @@ class RustMatrixAuthenticationService @Inject constructor(
         }
     }
 
-    override suspend fun login(username: String, password: String): UserId =
+    override suspend fun login(username: String, password: String): SessionId =
         withContext(coroutineDispatchers.io) {
             val client = try {
                 authService.login(username, password, "ElementX Android", null)
@@ -93,7 +93,7 @@ class RustMatrixAuthenticationService @Inject constructor(
             }
             val session = client.session()
             sessionStore.storeData(session.toSessionData())
-            UserId(session.userId)
+            SessionId(session.userId)
         }
 
     private fun createMatrixClient(client: Client): MatrixClient {
@@ -107,7 +107,6 @@ class RustMatrixAuthenticationService @Inject constructor(
     }
 }
 
-fun UserId.toSessionId() = SessionId(value)
 fun SessionData.toSession() = Session(accessToken, refreshToken, userId, deviceId, homeserverUrl, isSoftLogout)
 
 fun Session.toSessionData() = SessionData(userId, deviceId, accessToken, refreshToken, homeserverUrl, isSoftLogout)

@@ -68,8 +68,8 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
         loggedInState.value = LoggedInState.LoggingIn
         try {
             authenticationService.setHomeserver(homeserver)
-            val userId = authenticationService.login(formState.login.trim(), formState.password.trim())
-            loggedInState.value = LoggedInState.LoggedIn(userId)
+            val sessionId = authenticationService.login(formState.login.trim(), formState.password.trim())
+            loggedInState.value = LoggedInState.LoggedIn(sessionId)
         } catch (failure: Throwable) {
             loggedInState.value = LoggedInState.ErrorLoggingIn(failure)
         }

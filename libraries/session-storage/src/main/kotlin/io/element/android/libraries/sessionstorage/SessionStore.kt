@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.Flow
 interface SessionStore {
     fun isLoggedIn(): Flow<Boolean>
     suspend fun storeData(session: SessionData)
-    suspend fun getSession(sessionId: SessionId): SessionData?
+    suspend fun getSession(sessionId: String): SessionData?
     suspend fun getLatestSession(): SessionData?
-    suspend fun reset()
+    suspend fun removeSession(sessionId: String)
 }

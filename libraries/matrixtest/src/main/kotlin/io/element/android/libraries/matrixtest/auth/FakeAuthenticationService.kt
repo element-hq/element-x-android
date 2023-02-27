@@ -33,7 +33,7 @@ class FakeAuthenticationService : MatrixAuthenticationService {
         return flowOf(false)
     }
 
-    override suspend fun getLatestUserId(): UserId? {
+    override suspend fun getLatestSessionId(): UserId? {
         return null
     }
 

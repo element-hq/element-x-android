@@ -16,5 +16,5 @@ SELECT * FROM SessionData WHERE userId = ?;
 insertSessionData:
 INSERT INTO SessionData(userId, deviceId, accessToken, refreshToken, homeserverUrl, isSoftLogout) VALUES ?;
 
-removeAll:
-DELETE FROM SessionData;
+removeSession:
+DELETE FROM SessionData WHERE userId = ?;
