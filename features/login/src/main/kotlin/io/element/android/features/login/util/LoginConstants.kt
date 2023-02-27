@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.di
+package io.element.android.features.login.util
 
-import javax.inject.Qualifier
+object LoginConstants {
 
-@Qualifier annotation class SlidingSyncLearnMoreUrl
+    const val slidingSyncLearnMoreUrl = "https://github.com/matrix-org/sliding-sync/blob/main/docs/Landing.md"
+
+}

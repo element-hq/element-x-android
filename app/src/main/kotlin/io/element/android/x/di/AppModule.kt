@@ -26,7 +26,6 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
-import io.element.android.features.login.di.SlidingSyncLearnMoreUrl
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -64,8 +63,4 @@ object AppModule {
 
     @Provides
     fun providesBugReporter(bugReporter: DefaultBugReporter): BugReporter = bugReporter
-
-    @Provides
-    @SlidingSyncLearnMoreUrl
-    fun providesSlidingSyncLearnMoreUrl() = "https://github.com/matrix-org/sliding-sync/blob/main/docs/Landing.md"
 }
