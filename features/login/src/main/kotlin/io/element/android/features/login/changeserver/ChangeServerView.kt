@@ -120,7 +120,6 @@ fun ChangeServerView(
                     )
                     .padding(horizontal = 16.dp)
             ) {
-                val isError = state.changeServerAction is Async.Failure
                 Spacer(Modifier.height(42.dp))
                 Box(
                     modifier = Modifier
@@ -152,7 +151,7 @@ fun ChangeServerView(
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    text = stringResource(id = StringR.string.ftue_auth_choose_server_subtitle),
+                    text = stringResource(id = StringR.string.ex_choose_server_subtitle),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
@@ -178,7 +177,6 @@ fun ChangeServerView(
                         homeserverFieldState = it
                         eventSink(ChangeServerEvents.SetServer(it))
                     },
-                    isError = isError,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password,
                         imeAction = ImeAction.Done,

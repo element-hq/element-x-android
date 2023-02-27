@@ -109,7 +109,7 @@ fun LoginRootScreen(
                         },
                         enabled = interactionEnabled,
                     ) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = stringResource(StringR.string.action_back))
                     }
                 }
             )
@@ -132,7 +132,6 @@ fun LoginRootScreen(
                     .verticalScroll(state = scrollState)
                     .padding(horizontal = 16.dp),
             ) {
-                val isError = state.loggedInState is LoggedInState.ErrorLoggingIn
                 Spacer(Modifier.height(16.dp))
                 // Title
                 Text(
@@ -143,6 +142,7 @@ fun LoginRootScreen(
                     color = MaterialTheme.colorScheme.primary,
                 )
                 Spacer(Modifier.height(32.dp))
+
                 // Form
                 Text(
                     modifier = Modifier.padding(start = 16.dp, bottom = 8.dp),
@@ -190,12 +190,14 @@ fun LoginRootScreen(
                     }
                     Spacer(Modifier.width(8.dp))
                 }
+
                 Spacer(modifier = Modifier.height(32.dp))
                 Text(
                     text = stringResource(StringR.string.login_form_title),
                     modifier = Modifier.padding(start = 16.dp),
                     style = ElementTextStyles.Regular.formHeader
                 )
+
                 Spacer(modifier = Modifier.height(8.dp))
                 TextField(
                     value = loginFieldState,
@@ -205,7 +207,7 @@ fun LoginRootScreen(
                         .testTag(TestTags.loginEmailUsername)
                         .onTabOrEnterKeyFocusNext(focusManager),
                     label = {
-                        Text(text = stringResource(id = StringR.string.login_username_hint))
+                        Text(text = stringResource(StringR.string.ex_login_username_hint))
                     },
                     onValueChange = {
                         loginFieldState = it
@@ -230,6 +232,7 @@ fun LoginRootScreen(
                         }
                     } else null,
                 )
+
                 var passwordVisible by remember { mutableStateOf(false) }
                 if (state.loggedInState is LoggedInState.LoggingIn) {
                     // Ensure password is hidden when user submits the form
@@ -250,7 +253,6 @@ fun LoginRootScreen(
                     label = {
                         Text(text = stringResource(StringR.string.login_signup_password_hint))
                     },
-                    isError = isError,
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
                         val image =
@@ -272,12 +274,14 @@ fun LoginRootScreen(
                     singleLine = true,
                     maxLines = 1,
                 )
+
                 if (state.loggedInState is LoggedInState.ErrorLoggingIn) {
                     LoginErrorDialog(throwable = state.loggedInState.failure, cancellableCallback = {
                         eventSink(LoginRootEvents.ClearError)
                     })
                 }
                 Spacer(Modifier.height(28.dp))
+
                 // Submit
                 Button(
                     onClick = { eventSink(LoginRootEvents.Submit) },
@@ -307,7 +311,7 @@ fun LoginRootScreen(
 fun LoginErrorDialog(throwable: Throwable, cancellableCallback: () -> Unit) {
     AlertDialog(
         text = {
-            val message = throwable.message ?: "Unknown error happened"
+            val message = throwable.message ?: stringResource(StringR.string.unknown_error)
             Text(message)
         },
         onDismissRequest = cancellableCallback,
