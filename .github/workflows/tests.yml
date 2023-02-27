@@ -1,6 +1,7 @@
 name: Test
 
 on:
+  workflow_dispatch:
   pull_request: { }
   push:
     branches: [ main, develop ]
@@ -21,6 +22,10 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
+
+      - name: Run screenshot tests
+        run: ./gradlew :tests:uitests:verifyPaparazzi -PrunPaparazzi $CI_GRADLE_ARG_PROPERTIES
+
       - name: Run tests and generate kover report
         run: ./gradlew koverMergedReport $CI_GRADLE_ARG_PROPERTIES
 
