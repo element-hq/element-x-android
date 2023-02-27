@@ -25,6 +25,9 @@ jobs:
         with:
           lfs: 'true'
 
+      - name: List screenshots
+        run: ls -l tests/uitests/src/test/snapshots/images/
+
       - name: Run screenshot tests
         run: ./gradlew :tests:uitests:verifyPaparazziDebug -PrunPaparazzi $CI_GRADLE_ARG_PROPERTIES
 
