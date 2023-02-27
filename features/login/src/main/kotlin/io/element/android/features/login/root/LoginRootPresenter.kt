@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -66,8 +67,11 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
 
     private fun CoroutineScope.submit(homeserver: String, formState: LoginFormState, loggedInState: MutableState<LoggedInState>) = launch {
         loggedInState.value = LoggedInState.LoggingIn
-        try {
+        //TODO rework the setHomeserver flow
+        tryOrNull {
             authenticationService.setHomeserver(homeserver)
+        }
+        try {
             val sessionId = authenticationService.login(formState.login.trim(), formState.password.trim())
             loggedInState.value = LoggedInState.LoggedIn(sessionId)
         } catch (failure: Throwable) {
