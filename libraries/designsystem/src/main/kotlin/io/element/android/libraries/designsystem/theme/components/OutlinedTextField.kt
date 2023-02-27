@@ -73,7 +73,6 @@ fun OutlinedTextField(
     shape: Shape = TextFieldDefaults.outlinedShape,
     colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors()
 ) {
-    val focusManager = LocalFocusManager.current
     androidx.compose.material3.OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
