@@ -42,6 +42,8 @@ class TimelinePresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.timelineItems).isEmpty()
+            val loadedNoTimelineState = awaitItem()
+            assertThat(loadedNoTimelineState.timelineItems).isEmpty()
         }
     }
 
@@ -58,11 +60,14 @@ class TimelinePresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.paginationState.canBackPaginate).isTrue()
-            matrixTimeline.updatePaginationState {
-                copy(canBackPaginate = false)
-            }
-            val loadedState = awaitItem()
-            assertThat(loadedState.paginationState.canBackPaginate).isFalse()
+            assertThat(initialState.paginationState.isBackPaginating).isFalse()
+            initialState.eventSink.invoke(TimelineEvents.LoadMore)
+            val inPaginationState = awaitItem()
+            assertThat(inPaginationState.paginationState.isBackPaginating).isTrue()
+            assertThat(inPaginationState.paginationState.canBackPaginate).isTrue()
+            val postPaginationState = awaitItem()
+            assertThat(postPaginationState.paginationState.canBackPaginate).isTrue()
+            assertThat(postPaginationState.paginationState.isBackPaginating).isFalse()
         }
     }
 
@@ -78,6 +83,7 @@ class TimelinePresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            skipItems(1)
             assertThat(initialState.highlightedEventId).isNull()
             initialState.eventSink.invoke(TimelineEvents.SetHighlightedEvent(AN_EVENT_ID))
             val withHighlightedState = awaitItem()
