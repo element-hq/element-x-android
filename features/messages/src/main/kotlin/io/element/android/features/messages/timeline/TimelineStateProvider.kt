@@ -24,11 +24,13 @@ import io.element.android.features.messages.timeline.model.event.TimelineItemEve
 import io.element.android.features.messages.timeline.model.event.TimelineItemTextContent
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.core.EventId
+import io.element.android.libraries.matrix.timeline.MatrixTimeline
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 fun aTimelineState() = TimelineState(
     timelineItems = persistentListOf(),
+    paginationState = MatrixTimeline.PaginationState(isBackPaginating = false, canBackPaginate = true),
     highlightedEventId = null,
     eventSink = {}
 )

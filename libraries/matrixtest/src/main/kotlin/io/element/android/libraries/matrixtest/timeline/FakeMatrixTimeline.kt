@@ -31,6 +31,10 @@ class FakeMatrixTimeline : MatrixTimeline {
         MatrixTimeline.PaginationState(canBackPaginate = true, isBackPaginating = false)
     )
 
+    fun updatePaginationState(update: (MatrixTimeline.PaginationState.() -> MatrixTimeline.PaginationState)) {
+        paginationState.value = update(paginationState.value)
+    }
+
     override fun paginationState(): StateFlow<MatrixTimeline.PaginationState> {
         return paginationState
     }

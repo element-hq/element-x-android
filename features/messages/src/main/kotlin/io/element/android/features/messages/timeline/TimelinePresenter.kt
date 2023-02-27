@@ -89,6 +89,7 @@ class TimelinePresenter @Inject constructor(
 
         return TimelineState(
             highlightedEventId = highlightedEventId.value,
+            paginationState = paginationState.value,
             timelineItems = timelineItems.value.toImmutableList(),
             eventSink = ::handleEvents
         )
