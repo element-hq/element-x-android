@@ -25,11 +25,23 @@ jobs:
         with:
           lfs: 'true'
 
-      - name: List screenshots
-        run: ls -l tests/uitests/src/test/snapshots/images/
-
       - name: Run screenshot tests
         run: ./gradlew :tests:uitests:verifyPaparazziDebug -PrunPaparazzi $CI_GRADLE_ARG_PROPERTIES
+
+      - name: Upload Screenshot Test Report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: reports
+          path: tests/uitests/build/reports/tests/testDebugUnitTest/
+          retention-days: 1
+      - name: Upload Screenshot Failure Differences
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: reports
+          path: tests/uitests/out/failures/
+          retention-days: 1
 
       - name: Run tests and generate kover report
         run: ./gradlew koverMergedReport $CI_GRADLE_ARG_PROPERTIES
