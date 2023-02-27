@@ -22,10 +22,8 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.messages.timeline.model.TimelineItem
-import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
+import io.element.android.features.messages.fixtures.aTimelineItemsFactory
 import io.element.android.libraries.matrixtest.AN_EVENT_ID
-import io.element.android.libraries.matrixtest.FakeMatrixClient
 import io.element.android.libraries.matrixtest.room.FakeMatrixRoom
 import io.element.android.libraries.matrixtest.timeline.FakeMatrixTimeline
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -36,9 +34,8 @@ class TimelinePresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = TimelinePresenter(
-            testCoroutineDispatchers(),
-            FakeMatrixClient(),
-            FakeMatrixRoom()
+            timelineItemsFactory = aTimelineItemsFactory(),
+            room = FakeMatrixRoom(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -53,19 +50,19 @@ class TimelinePresenterTest {
         val matrixTimeline = FakeMatrixTimeline()
         val matrixRoom = FakeMatrixRoom(matrixTimeline = matrixTimeline)
         val presenter = TimelinePresenter(
-            testCoroutineDispatchers(),
-            FakeMatrixClient(),
-            matrixRoom
+            timelineItemsFactory = aTimelineItemsFactory(),
+            room = matrixRoom,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.hasMoreToLoad).isTrue()
-            matrixTimeline.givenHasMoreToLoad(false)
-            initialState.eventSink.invoke(TimelineEvents.LoadMore)
+            assertThat(initialState.paginationState.canBackPaginate).isTrue()
+            matrixTimeline.updatePaginationState {
+                copy(canBackPaginate = false)
+            }
             val loadedState = awaitItem()
-            assertThat(loadedState.hasMoreToLoad).isFalse()
+            assertThat(loadedState.paginationState.canBackPaginate).isFalse()
         }
     }
 
@@ -74,9 +71,8 @@ class TimelinePresenterTest {
         val matrixTimeline = FakeMatrixTimeline()
         val matrixRoom = FakeMatrixRoom(matrixTimeline = matrixTimeline)
         val presenter = TimelinePresenter(
-            testCoroutineDispatchers(),
-            FakeMatrixClient(),
-            matrixRoom
+            timelineItemsFactory = aTimelineItemsFactory(),
+            room = matrixRoom,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -89,28 +85,6 @@ class TimelinePresenterTest {
             initialState.eventSink.invoke(TimelineEvents.SetHighlightedEvent(null))
             val withoutHighlightedState = awaitItem()
             assertThat(withoutHighlightedState.highlightedEventId).isNull()
-        }
-    }
-
-    @Test
-    fun `present - test callback`() = runTest {
-        val matrixTimeline = FakeMatrixTimeline()
-        val matrixRoom = FakeMatrixRoom(matrixTimeline = matrixTimeline)
-        val presenter = TimelinePresenter(
-            testCoroutineDispatchers(),
-            FakeMatrixClient(),
-            matrixRoom
-        )
-        moleculeFlow(RecompositionClock.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            assertThat(initialState.timelineItems).isEmpty()
-            // Simulate callback from the SDK
-            matrixTimeline.callback?.onPushedTimelineItem(MatrixTimelineItem.Virtual)
-            val nonEmptyState = awaitItem()
-            assertThat(nonEmptyState.timelineItems).isNotEmpty()
-            assertThat(nonEmptyState.timelineItems[0]).isEqualTo(TimelineItem.Virtual("virtual_item_0"))
         }
     }
 }
