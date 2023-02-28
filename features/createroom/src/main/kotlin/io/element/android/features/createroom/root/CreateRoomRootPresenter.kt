@@ -14,10 +14,25 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom
+package io.element.android.features.createroom.root
 
-// TODO add your ui models. Remove the eventSink if you don't have events.
-// Do not use default value, so no member get forgotten in the presenters.
-data class CreateRoomState(
-    val eventSink: (CreateRoomEvents) -> Unit
-)
+import androidx.compose.runtime.Composable
+import io.element.android.libraries.architecture.Presenter
+import javax.inject.Inject
+
+class CreateRoomRootPresenter @Inject constructor() : Presenter<CreateRoomRootState> {
+
+    @Composable
+    override fun present(): CreateRoomRootState {
+
+        fun handleEvents(event: CreateRoomRootEvents) {
+            when (event) {
+                CreateRoomRootEvents.MyEvent -> Unit
+            }
+        }
+
+        return CreateRoomRootState(
+            eventSink = ::handleEvents
+        )
+    }
+}

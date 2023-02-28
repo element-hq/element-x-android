@@ -14,25 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom
+package io.element.android.features.createroom.root
 
-import androidx.compose.runtime.Composable
-import io.element.android.libraries.architecture.Presenter
-import javax.inject.Inject
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
-class CreateRoomPresenter @Inject constructor() : Presenter<CreateRoomState> {
-
-    @Composable
-    override fun present(): CreateRoomState {
-
-        fun handleEvents(event: CreateRoomEvents) {
-            when (event) {
-                CreateRoomEvents.MyEvent -> Unit
-            }
-        }
-
-        return CreateRoomState(
-            eventSink = ::handleEvents
+open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRootState> {
+    override val values: Sequence<CreateRoomRootState>
+        get() = sequenceOf(
+            aCreateRoomRootState(),
+            // Add other state here
         )
-    }
 }
+
+fun aCreateRoomRootState() = CreateRoomRootState(
+    eventSink = {}
+)

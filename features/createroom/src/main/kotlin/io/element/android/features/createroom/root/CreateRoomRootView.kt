@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom
+package io.element.android.features.createroom.root
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.MaterialTheme
@@ -28,8 +28,8 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
-fun CreateRoomView(
-    state: CreateRoomState,
+fun CreateRoomRootView(
+    state: CreateRoomRootState,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier, contentAlignment = Alignment.Center) {
@@ -42,17 +42,17 @@ fun CreateRoomView(
 
 @Preview
 @Composable
-fun CreateRoomViewLightPreview(@PreviewParameter(CreateRoomStateProvider::class) state: CreateRoomState) =
+fun CreateRoomRootViewLightPreview(@PreviewParameter(CreateRoomRootStateProvider::class) state: CreateRoomRootState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun CreateRoomViewDarkPreview(@PreviewParameter(CreateRoomStateProvider::class) state: CreateRoomState) =
+fun CreateRoomRootViewDarkPreview(@PreviewParameter(CreateRoomRootStateProvider::class) state: CreateRoomRootState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
-private fun ContentToPreview(state: CreateRoomState) {
-    CreateRoomView(
+private fun ContentToPreview(state: CreateRoomRootState) {
+    CreateRoomRootView(
         state = state,
     )
 }

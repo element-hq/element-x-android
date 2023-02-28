@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom
+package io.element.android.features.createroom.root
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-
-open class CreateRoomStateProvider : PreviewParameterProvider<CreateRoomState> {
-    override val values: Sequence<CreateRoomState>
-        get() = sequenceOf(
-            aCreateRoomState(),
-            // Add other state here
-        )
-}
-
-fun aCreateRoomState() = CreateRoomState(
-    eventSink = {}
+// TODO add your ui models. Remove the eventSink if you don't have events.
+// Do not use default value, so no member get forgotten in the presenters.
+data class CreateRoomRootState(
+    val eventSink: (CreateRoomRootEvents) -> Unit
 )
