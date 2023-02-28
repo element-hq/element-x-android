@@ -74,7 +74,7 @@ class MainActivity : ComponentActivity() {
                 val sessionId = matrixAuthenticationService.getLatestSessionId()!!
                 matrixAuthenticationService.restoreSession(sessionId)
             }
-            RoomListScreen(matrixClient = matrixClient!!).Content(modifier)
+            RoomListScreen(context = applicationContext, matrixClient = matrixClient!!).Content(modifier)
         }
     }
 }
