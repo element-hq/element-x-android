@@ -38,6 +38,7 @@ class RoomListNode @AssistedInject constructor(
     interface Callback : Plugin {
         fun onRoomClicked(roomId: RoomId)
         fun onSettingsClicked()
+        fun onCreateRoomClicked()
     }
 
     private fun onRoomClicked(roomId: RoomId) {
@@ -48,6 +49,10 @@ class RoomListNode @AssistedInject constructor(
         plugins<Callback>().forEach { it.onSettingsClicked() }
     }
 
+    private fun onCreateRoomClicked() {
+        plugins<Callback>().forEach { it.onCreateRoomClicked() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -55,7 +60,8 @@ class RoomListNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onRoomClicked = this::onRoomClicked,
-            onOpenSettings = this::onOpenSettings
+            onOpenSettings = this::onOpenSettings,
+            onCreateRoomClicked = this::onCreateRoomClicked,
         )
     }
 }

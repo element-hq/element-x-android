@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -42,6 +43,7 @@ import io.element.android.features.roomlist.model.RoomListState
 import io.element.android.features.roomlist.model.RoomListStateProvider
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -54,6 +56,7 @@ fun RoomListView(
     modifier: Modifier = Modifier,
     onRoomClicked: (RoomId) -> Unit = {},
     onOpenSettings: () -> Unit = {},
+    onCreateRoomClicked: () -> Unit = {},
 ) {
     fun onFilterChanged(filter: String) {
         state.eventSink(RoomListEvents.UpdateFilter(filter))
@@ -72,6 +75,7 @@ fun RoomListView(
         onFilterChanged = ::onFilterChanged,
         onOpenSettings = onOpenSettings,
         onScrollOver = ::onVisibleRangedChanged,
+        onCreateRoomClicked = onCreateRoomClicked,
     )
 }
 
@@ -86,6 +90,7 @@ fun RoomListContent(
     onFilterChanged: (String) -> Unit = {},
     onOpenSettings: () -> Unit = {},
     onScrollOver: (IntRange) -> Unit = {},
+    onCreateRoomClicked: () -> Unit = {},
 ) {
     fun onRoomClicked(room: RoomListRoomSummary) {
         onRoomClicked(room.roomId)
@@ -148,7 +153,12 @@ fun RoomListContent(
                     }
                 }
             }
-        }
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = onCreateRoomClicked) {
+                
+            }
+        },
     )
 }
 
