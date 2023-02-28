@@ -16,7 +16,7 @@
 
 @file:OptIn(ExperimentalCoroutinesApi::class)
 
-package io.element.android.features.createroom
+package io.element.android.features.createroom.root
 
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
@@ -26,11 +26,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class CreateRoomPresenterTests {
+class CreateRoomRootPresenterTests {
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = CreateRoomPresenter()
+        val presenter = CreateRoomRootPresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -41,12 +41,12 @@ class CreateRoomPresenterTests {
 
     @Test
     fun `present - send event`() = runTest {
-        val presenter = CreateRoomPresenter()
+        val presenter = CreateRoomRootPresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(CreateRoomEvents.MyEvent)
+            initialState.eventSink.invoke(CreateRoomRootEvents.MyEvent)
         }
     }
 }

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom
+package io.element.android.features.createroom.root
 
 // TODO Add your events or remove the file completely if no events
-sealed interface CreateRoomEvents {
-    object MyEvent : CreateRoomEvents
+sealed interface CreateRoomRootEvents {
+    object MyEvent : CreateRoomRootEvents
 }
