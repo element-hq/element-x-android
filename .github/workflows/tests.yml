@@ -34,15 +34,15 @@ jobs:
         with:
           name: reports
           path: tests/uitests/build/reports/tests/testDebugUnitTest/
-          retention-days: 1
+          retention-days: 5
 
       - name: Upload Screenshot Failure Differences
         uses: actions/upload-artifact@v3
         if: failure()
         with:
-          name: reports
+          name: failures
           path: tests/uitests/out/failures/
-          retention-days: 1
+          retention-days: 5
 
       - name: Archive kover report
         if: always()
