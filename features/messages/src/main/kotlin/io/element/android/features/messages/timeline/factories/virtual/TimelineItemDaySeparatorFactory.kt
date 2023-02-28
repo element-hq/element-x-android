@@ -18,30 +18,16 @@ package io.element.android.features.messages.timeline.factories.virtual
 
 import io.element.android.features.messages.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.features.messages.timeline.model.virtual.TimelineItemVirtualModel
-import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toJavaLocalDateTime
-import kotlinx.datetime.toLocalDateTime
+import io.element.android.libraries.dateformatter.DaySeparatorFormatter
 import org.matrix.rustcomponents.sdk.VirtualTimelineItem
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 import javax.inject.Inject
 
-class TimelineItemDaySeparatorFactory @Inject constructor() {
-
-    //TODO use proper formatter
-    private val locale: Locale = Locale.getDefault()
-
-    private val dateWithYearFormatter: DateTimeFormatter by lazy {
-        val pattern = android.text.format.DateFormat.getBestDateTimePattern(locale, "dd.MM.yyyy")
-        DateTimeFormatter.ofPattern(pattern)
-    }
+class TimelineItemDaySeparatorFactory @Inject constructor(private val daySeparatorFormatter: DaySeparatorFormatter) {
 
     fun create(virtualItem: VirtualTimelineItem.DayDivider): TimelineItemVirtualModel {
-        val tsInstant = Instant.fromEpochMilliseconds(virtualItem.ts.toLong())
-        val tsDateTime = tsInstant.toLocalDateTime(TimeZone.currentSystemDefault())
+        val formattedDate = daySeparatorFormatter.format(virtualItem.ts.toLong())
         return TimelineItemDaySeparatorModel(
-            formattedDate = dateWithYearFormatter.format(tsDateTime.toJavaLocalDateTime())
+            formattedDate = formattedDate
         )
     }
 }

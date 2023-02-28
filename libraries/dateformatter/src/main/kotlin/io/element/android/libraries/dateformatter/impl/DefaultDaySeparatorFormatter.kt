@@ -17,32 +17,18 @@
 package io.element.android.libraries.dateformatter.impl
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.dateformatter.LastMessageFormatter
+import io.element.android.libraries.dateformatter.DaySeparatorFormatter
 import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultLastMessageFormatter @Inject constructor(
+class DefaultDaySeparatorFormatter @Inject constructor(
     private val localDateTimeProvider: LocalDateTimeProvider,
     private val dateFormatters: DateFormatters,
-) : LastMessageFormatter {
+) : DaySeparatorFormatter {
 
-    override fun format(timestamp: Long?): String {
-        if (timestamp == null) return ""
-        val currentDate = localDateTimeProvider.providesNow()
+    override fun format(timestamp: Long): String {
         val dateToFormat = localDateTimeProvider.providesFromTimestamp(timestamp)
-        val isSameDay = currentDate.date == dateToFormat.date
-        return when {
-            isSameDay -> {
-                dateFormatters.formatHour(dateToFormat)
-            }
-            else -> {
-                dateFormatters.formatDate(
-                    dateToFormat = dateToFormat,
-                    currentDate = currentDate,
-                    useRelative = true
-                )
-            }
-        }
+        return dateFormatters.formatDateWithYear(dateToFormat)
     }
 }
