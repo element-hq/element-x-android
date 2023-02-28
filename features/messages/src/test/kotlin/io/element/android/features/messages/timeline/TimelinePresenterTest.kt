@@ -48,12 +48,27 @@ class TimelinePresenterTest {
     }
 
     @Test
-    fun `present - load more`() = runTest {
-        val matrixTimeline = FakeMatrixTimeline()
-        val matrixRoom = FakeMatrixRoom(matrixTimeline = matrixTimeline)
+    fun `present - makes sure timeline is initialized and disposed`() = runTest {
+        val fakeTimeline = FakeMatrixTimeline()
         val presenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
-            room = matrixRoom,
+            room = FakeMatrixRoom(matrixTimeline = fakeTimeline),
+        )
+        assertThat(fakeTimeline.isInitialized).isFalse()
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(2)
+            assertThat(fakeTimeline.isInitialized).isTrue()
+        }
+        assertThat(fakeTimeline.isInitialized).isFalse()
+    }
+
+    @Test
+    fun `present - load more`() = runTest {
+        val presenter = TimelinePresenter(
+            timelineItemsFactory = aTimelineItemsFactory(),
+            room = FakeMatrixRoom(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -73,11 +88,9 @@ class TimelinePresenterTest {
 
     @Test
     fun `present - set highlighted event`() = runTest {
-        val matrixTimeline = FakeMatrixTimeline()
-        val matrixRoom = FakeMatrixRoom(matrixTimeline = matrixTimeline)
         val presenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
-            room = matrixRoom,
+            room = FakeMatrixRoom(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
