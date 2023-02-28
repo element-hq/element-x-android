@@ -39,6 +39,7 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.textcomposer)
+    implementation(projects.libraries.dateformatter)
     implementation(libs.coil.compose)
     implementation(libs.datetime)
     implementation(libs.accompanist.flowlayout)
