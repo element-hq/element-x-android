@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.fixtures
 
+import io.element.android.features.messages.fakes.FakeDaySeparatorFormatter
 import io.element.android.features.messages.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.timeline.factories.event.TimelineItemContentFactory
 import io.element.android.features.messages.timeline.factories.event.TimelineItemContentFailedToParseMessageFactory
@@ -47,6 +48,8 @@ internal fun aTimelineItemsFactory() = TimelineItemsFactory(
         )
     ),
     virtualItemFactory = TimelineItemVirtualFactory(
-        daySeparatorFactory = TimelineItemDaySeparatorFactory(),
+        daySeparatorFactory = TimelineItemDaySeparatorFactory(
+            FakeDaySeparatorFormatter()
+        ),
     )
 )
