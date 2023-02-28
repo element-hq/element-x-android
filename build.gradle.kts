@@ -1,3 +1,5 @@
+import kotlinx.kover.api.KoverTaskExtension
+
 /*
  * Copyright (c) 2022 New Vector Ltd
  *
@@ -253,6 +255,27 @@ koverMerged {
                 minValue = 0
                 counter = kotlinx.kover.api.CounterType.INSTRUCTION
                 valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
+            }
+        }
+    }
+}
+
+// Make Kover depend on Paparazzi
+tasks.whenTaskAdded {
+    if (name.startsWith("koverMerged")) {
+        dependsOn(":tests:uitests:verifyPaparazziDebug")
+    }
+}
+
+// Only run debug unit tests when building on the CI
+if (project.hasProperty("ci-build")) {
+    allprojects {
+        afterEvaluate {
+            tasks.withType<Test>().configureEach {
+                extensions.configure<KoverTaskExtension> {
+                    val enabled = name.contains("Debug", ignoreCase = true)
+                    isDisabled.set(!enabled)
+                }
             }
         }
     }
