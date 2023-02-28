@@ -67,4 +67,5 @@ fun DependencyHandlerScope.allFeatures() {
     implementation(project(":features:messages"))
     implementation(project(":features:rageshake"))
     implementation(project(":features:preferences"))
+    implementation(project(":features:createroom"))
 }
