@@ -18,6 +18,7 @@ package io.element.android.libraries.matrixtest
 
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.core.RoomId
+import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.matrix.media.MediaResolver
 import io.element.android.libraries.matrix.room.MatrixRoom
 import io.element.android.libraries.matrix.room.RoomSummaryDataSource

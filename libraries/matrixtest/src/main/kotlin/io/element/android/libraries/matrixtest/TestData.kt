@@ -18,6 +18,7 @@ package io.element.android.libraries.matrixtest
 
 import io.element.android.libraries.matrix.core.EventId
 import io.element.android.libraries.matrix.core.RoomId
+import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.matrix.core.UserId
 
 const val A_USER_NAME = "alice"

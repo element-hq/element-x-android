@@ -21,6 +21,9 @@ import extension.androidConfig
 import extension.commonDependencies
 import extension.composeConfig
 import extension.composeDependencies
+import org.gradle.accessors.dm.LibrariesForLibs
+
+val libs = the<LibrariesForLibs>()
 
 plugins {
     id("com.android.library")
@@ -29,7 +32,7 @@ plugins {
 
 android {
     androidConfig(project)
-    composeConfig()
+    composeConfig(libs)
     // Waiting for https://github.com/google/ksp/issues/37
     libraryVariants.all {
         kotlin.sourceSets {
@@ -42,5 +45,5 @@ android {
 
 dependencies {
     commonDependencies()
-    composeDependencies()
+    composeDependencies(libs)
 }

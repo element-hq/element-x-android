@@ -18,8 +18,10 @@ package extension
 
 import Versions
 import com.android.build.api.dsl.CommonExtension
+import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import java.io.File
+import org.gradle.accessors.dm.LibrariesForLibs
 
 fun CommonExtension<*, *, *, *>.androidConfig(project: Project) {
     defaultConfig {
@@ -30,6 +32,8 @@ fun CommonExtension<*, *, *, *>.androidConfig(project: Project) {
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     testOptions {
@@ -44,13 +48,14 @@ fun CommonExtension<*, *, *, *>.androidConfig(project: Project) {
     }
 }
 
-fun CommonExtension<*, *, *, *>.composeConfig() {
+fun CommonExtension<*, *, *, *>.composeConfig(libs: LibrariesForLibs) {
+
     buildFeatures {
         compose = true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.0"
+        kotlinCompilerExtensionVersion = libs.versions.composecompiler.get()
     }
 
     packagingOptions {

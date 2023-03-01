@@ -31,7 +31,15 @@ class DatabaseSessionStoreTests {
     private lateinit var database: SessionDatabase
     private lateinit var databaseSessionStore: DatabaseSessionStore
 
-    private val aSessionData = SessionData("userId", "deviceId", "accessToken", "refreshToken", "homeserverUrl", false)
+    private val aSessionData = SessionData(
+        "userId",
+        "deviceId",
+        "accessToken",
+        "refreshToken",
+        "homeserverUrl",
+        false,
+        null
+    )
 
     @Before
     fun setup() {

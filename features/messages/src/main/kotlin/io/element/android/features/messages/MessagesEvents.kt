@@ -20,5 +20,5 @@ import io.element.android.features.messages.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.timeline.model.TimelineItem
 
 sealed interface MessagesEvents {
-    data class HandleAction(val action: TimelineItemAction, val messageEvent: TimelineItem.MessageEvent) : MessagesEvents
+    data class HandleAction(val action: TimelineItemAction, val event: TimelineItem.Event) : MessagesEvents
 }

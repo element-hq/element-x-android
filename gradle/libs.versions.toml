@@ -3,10 +3,10 @@
 
 [versions]
 # Project
-android_gradle_plugin = "7.3.1"
-firebase_gradle_plugin = "3.0.2"
-kotlin = "1.8.0"
-ksp = "1.8.0-1.0.8"
+android_gradle_plugin = "7.4.1"
+firebase_gradle_plugin = "3.2.0"
+kotlin = "1.8.10"
+ksp = "1.8.10-1.0.9"
 molecule = "0.7.0"
 
 # AndroidX
@@ -21,6 +21,7 @@ startup = "1.1.1"
 
 # Compose
 compose_bom = "2023.01.00"
+composecompiler = "1.4.2"
 
 # Coroutines
 coroutines = "1.6.4"
@@ -119,6 +120,7 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
 timber = "com.jakewharton.timber:timber:5.0.1"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.2"
 sqldelight-driver-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }

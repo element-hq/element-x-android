@@ -38,9 +38,9 @@ android {
 
     defaultConfig {
         applicationId = "io.element.android.x"
-        targetSdk = 33 // TODO Use Versions.targetSdk
-        versionCode = 1
-        versionName = "1.0"
+        targetSdk = Versions.targetSdk
+        versionCode = Versions.versionCode
+        versionName = Versions.versionName
 
         vectorDrawables {
             useSupportLibrary = true
@@ -109,23 +109,8 @@ android {
             }
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.0"
-    }
-    packagingOptions {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
     }
 
     // Waiting for https://github.com/google/ksp/issues/37
@@ -167,7 +152,7 @@ dependencies {
     anvil(projects.anvilcodegen)
 
     // https://developer.android.com/studio/write/java8-support#library-desugaring-versions
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.2")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
     implementation(libs.appyx.core)
     implementation(libs.androidx.splash)
     implementation(libs.androidx.corektx)

@@ -16,7 +16,6 @@ The application is a total rewrite of [Element-Android](https://github.com/vecto
 
 * [Screenshots](#screenshots)
 * [Rust SDK](#rust-sdk)
-* [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [Build instructions](#build-instructions)
 * [Support](#support)
@@ -37,10 +36,6 @@ ElementX leverages the [Matrix Rust SDK](https://github.com/matrix-org/matrix-ru
 
 We're doing this as a way to share code between platforms and while we've seen promising results it's still in the experimental stage and bound to change.
 
-## Roadmap
-
-We are aiming to have a fast and fully functional personal messaging application by the end of year 2023.
-
 ## Contributing
 
 Please see our [contribution guide](CONTRIBUTING.md).
@@ -50,6 +45,7 @@ Come chat with the community in the dedicated Matrix [room](https://matrix.to/#/
 ## Build instructions
 
 Just clone the project and open it in Android Studio.
+Makes sure to select the `app` configuration when building (as we also have sample apps in the project).
 
 ## Support
 

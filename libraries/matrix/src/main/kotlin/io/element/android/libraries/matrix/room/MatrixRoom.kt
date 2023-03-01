@@ -33,6 +33,8 @@ interface MatrixRoom {
 
     fun timeline(): MatrixTimeline
 
+    suspend fun fetchMembers(): Result<Unit>
+
     suspend fun userDisplayName(userId: String): Result<String?>
 
     suspend fun userAvatarUrl(userId: String): Result<String?>
@@ -44,4 +46,5 @@ interface MatrixRoom {
     suspend fun replyMessage(eventId: EventId, message: String): Result<Unit>
 
     suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>
+
 }

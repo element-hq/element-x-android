@@ -21,35 +21,55 @@ import io.element.android.libraries.matrix.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
-import org.matrix.rustcomponents.sdk.TimelineListener
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
-class FakeMatrixTimeline : MatrixTimeline {
-    override var callback: MatrixTimeline.Callback? = null
+class FakeMatrixTimeline(
+    initialTimelineItems: List<MatrixTimelineItem> = emptyList(),
+    initialPaginationState: MatrixTimeline.PaginationState = MatrixTimeline.PaginationState(canBackPaginate = true, isBackPaginating = false)
+) : MatrixTimeline {
 
-    private var hasMoreToLoadValue: Boolean = true
+    private val paginationState: MutableStateFlow<MatrixTimeline.PaginationState> = MutableStateFlow(initialPaginationState)
+    private val timelineItems: MutableStateFlow<List<MatrixTimelineItem>> = MutableStateFlow(initialTimelineItems)
+    var isInitialized = false
 
-    fun givenHasMoreToLoad(hasMoreToLoad: Boolean) {
-        this.hasMoreToLoadValue = hasMoreToLoad
+    fun updatePaginationState(update: (MatrixTimeline.PaginationState.() -> MatrixTimeline.PaginationState)) {
+        paginationState.value = update(paginationState.value)
     }
 
-    override val hasMoreToLoad: Boolean
-        get() = hasMoreToLoadValue
+    fun updateTimelineItems(update: (items: List<MatrixTimelineItem>) -> List<MatrixTimelineItem>) {
+        timelineItems.value = update(timelineItems.value)
+    }
+
+    override fun paginationState(): StateFlow<MatrixTimeline.PaginationState> {
+        return paginationState
+    }
 
     override fun timelineItems(): Flow<List<MatrixTimelineItem>> {
-        return emptyFlow()
+        return timelineItems
     }
 
-    override suspend fun paginateBackwards(count: Int): Result<Unit> {
+    override suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit> {
+        updatePaginationState {
+            copy(isBackPaginating = true)
+        }
         delay(100)
+        updatePaginationState {
+            copy(isBackPaginating = false)
+        }
+        updateTimelineItems { timelineItems ->
+            timelineItems
+        }
         return Result.success(Unit)
     }
 
-    override fun addListener(timelineListener: TimelineListener) = Unit
+    override fun initialize() {
+        isInitialized = true
+    }
 
-    override fun initialize() = Unit
-
-    override fun dispose() = Unit
+    override fun dispose() {
+        isInitialized = false
+    }
 
     override suspend fun sendMessage(message: String): Result<Unit> {
         return Result.success(Unit)
