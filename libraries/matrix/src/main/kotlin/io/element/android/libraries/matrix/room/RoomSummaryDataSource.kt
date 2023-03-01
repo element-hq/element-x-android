@@ -22,7 +22,6 @@ import io.element.android.libraries.matrix.sync.state
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,7 +37,6 @@ import org.matrix.rustcomponents.sdk.SlidingSyncViewRoomsListDiff
 import org.matrix.rustcomponents.sdk.UpdateSummary
 import timber.log.Timber
 import java.io.Closeable
-import java.util.Collections
 import java.util.UUID
 
 interface RoomSummaryDataSource {
@@ -60,7 +58,7 @@ internal class RustRoomSummaryDataSource(
     private val roomSummaries = MutableStateFlow<List<RoomSummary>>(emptyList())
     private val state = MutableStateFlow(SlidingSyncState.COLD)
 
-    fun startSync() {
+    fun init() {
         coroutineScope.launch {
             updateRoomSummaries {
                 addAll(
@@ -87,10 +85,6 @@ internal class RustRoomSummaryDataSource(
                 Timber.v("New sliding sync state: $slidingSyncState")
                 state.value = slidingSyncState
             }.launchIn(coroutineScope)
-    }
-
-    fun stopSync() {
-        coroutineScope.coroutineContext.cancelChildren()
     }
 
     override fun close() {
@@ -133,28 +127,44 @@ internal class RustRoomSummaryDataSource(
         }
         Timber.v("ApplyDiff: $diff for list with size: $size")
         when (diff) {
-            is SlidingSyncViewRoomsListDiff.Push -> {
+            is SlidingSyncViewRoomsListDiff.Append -> {
+                val roomSummaries = diff.values.map {
+                    buildSummaryForRoomListEntry(it)
+                }
+                addAll(roomSummaries)
+            }
+            is SlidingSyncViewRoomsListDiff.PushBack -> {
                 val roomSummary = buildSummaryForRoomListEntry(diff.value)
                 add(roomSummary)
             }
-            is SlidingSyncViewRoomsListDiff.UpdateAt -> {
+            is SlidingSyncViewRoomsListDiff.PushFront -> {
+                val roomSummary = buildSummaryForRoomListEntry(diff.value)
+                add(0, roomSummary)
+            }
+            is SlidingSyncViewRoomsListDiff.Set -> {
                 fillUntil(diff.index.toInt())
                 val roomSummary = buildSummaryForRoomListEntry(diff.value)
                 set(diff.index.toInt(), roomSummary)
             }
-            is SlidingSyncViewRoomsListDiff.InsertAt -> {
+            is SlidingSyncViewRoomsListDiff.Insert -> {
                 val roomSummary = buildSummaryForRoomListEntry(diff.value)
                 add(diff.index.toInt(), roomSummary)
             }
-            is SlidingSyncViewRoomsListDiff.Move -> {
-                Collections.swap(this, diff.oldIndex.toInt(), diff.newIndex.toInt())
-            }
-            is SlidingSyncViewRoomsListDiff.RemoveAt -> {
+            is SlidingSyncViewRoomsListDiff.Remove -> {
                 removeAt(diff.index.toInt())
             }
-            is SlidingSyncViewRoomsListDiff.Replace -> {
+            is SlidingSyncViewRoomsListDiff.Reset -> {
                 clear()
                 addAll(diff.values.map { buildSummaryForRoomListEntry(it) })
+            }
+            SlidingSyncViewRoomsListDiff.PopBack -> {
+                removeFirstOrNull()
+            }
+            SlidingSyncViewRoomsListDiff.PopFront -> {
+                removeLastOrNull()
+            }
+            SlidingSyncViewRoomsListDiff.Clear -> {
+                clear()
             }
         }
     }
@@ -184,13 +194,4 @@ internal class RustRoomSummaryDataSource(
             block(mutableRoomSummaries)
             roomSummaries.value = mutableRoomSummaries
         }
-
-    fun SlidingSyncViewRoomsListDiff.isInvalidation(): Boolean {
-        return when (this) {
-            is SlidingSyncViewRoomsListDiff.InsertAt -> this.value is RoomListEntry.Invalidated
-            is SlidingSyncViewRoomsListDiff.UpdateAt -> this.value is RoomListEntry.Invalidated
-            is SlidingSyncViewRoomsListDiff.Push -> this.value is RoomListEntry.Invalidated
-            else -> false
-        }
-    }
 }

@@ -16,49 +16,73 @@
 
 package io.element.android.libraries.matrix.tracing
 
+import timber.log.Timber
+
 data class TracingConfiguration(
-    val common: LogLevel = LogLevel.Warn,
-    val targets: Map<Target, LogLevel> = emptyMap()
+    val overrides: Map<Target, LogLevel> = emptyMap()
 ) {
 
-    val filter = "$common,${
-        targets.map { "${it.key.filter}=${it.value.filter}" }.joinToString(separator = ",")
-    }"
+    // Order should matters
+    private val targets: MutableMap<Target, LogLevel> = mutableMapOf(
+        Target.Common to LogLevel.Warn,
+        Target.Hyper to LogLevel.Warn,
+        Target.Sled to LogLevel.Warn,
+        Target.MatrixSdk.Root to LogLevel.Warn,
+        Target.MatrixSdk.Sled to LogLevel.Warn,
+        Target.MatrixSdk.Crypto to LogLevel.Debug,
+        Target.MatrixSdk.HttpClient to LogLevel.Debug,
+        Target.MatrixSdk.SlidingSync to LogLevel.Trace,
+        Target.MatrixSdk.BaseSlidingSync to LogLevel.Trace,
+    )
 
-    sealed class Target(open val filter: String) {
-        object Hyper : Target("hyper")
-        object Sled : Target("sled")
-        sealed class MatrixSdk(override val filter: String) : Target(filter) {
-            object Root : MatrixSdk("matrix_sdk")
-            object Sled : MatrixSdk("matrix_sdk_sled")
-            object FFI : MatrixSdk("matrix_sdk_ffi")
-            object HttpClient : MatrixSdk("matrix_sdk::http_client")
-            object UniffiAPI : MatrixSdk("matrix_sdk_ffi::uniffi_api")
-            object SlidingSync : MatrixSdk("matrix_sdk::sliding_sync")
-            object BaseSlidingSync : MatrixSdk("matrix_sdk_base::sliding_sync")
+    val filter: String
+        get() {
+            overrides.forEach { (target, logLevel) ->
+                targets[target] = logLevel
+            }
+            return targets.map {
+                if (it.key.filter.isEmpty()) {
+                    it.value.filter
+                } else {
+                    "${it.key.filter}=${it.value.filter}"
+                }
+            }.joinToString(separator = ",")
         }
-    }
+}
 
-    sealed class LogLevel(val filter: String) {
-        object Warn : LogLevel("warn")
-        object Trace : LogLevel("trace")
-        object Info : LogLevel("info")
-        object Debug : LogLevel("debug")
-        object Error : LogLevel("error")
+sealed class Target(open val filter: String) {
+    object Common : Target("")
+    object Hyper : Target("hyper")
+    object Sled : Target("sled")
+    sealed class MatrixSdk(override val filter: String) : Target(filter) {
+        object Root : MatrixSdk("matrix_sdk")
+        object Sled : MatrixSdk("matrix_sdk_sled")
+        object Crypto: MatrixSdk("matrix_sdk_crypto")
+        object FFI : MatrixSdk("matrix_sdk_ffi")
+        object HttpClient : MatrixSdk("matrix_sdk::http_client")
+        object UniffiAPI : MatrixSdk("matrix_sdk_ffi::uniffi_api")
+        object SlidingSync : MatrixSdk("matrix_sdk::sliding_sync")
+        object BaseSlidingSync : MatrixSdk("matrix_sdk_base::sliding_sync")
     }
+}
+
+sealed class LogLevel(val filter: String) {
+    object Warn : LogLevel("warn")
+    object Trace : LogLevel("trace")
+    object Info : LogLevel("info")
+    object Debug : LogLevel("debug")
+    object Error : LogLevel("error")
 }
 
 fun setupTracing(tracingConfiguration: TracingConfiguration) {
-    org.matrix.rustcomponents.sdk.setupTracing(tracingConfiguration.filter)
+    val filter = tracingConfiguration.filter
+    Timber.v("Tracing config filter = $filter")
+    org.matrix.rustcomponents.sdk.setupTracing(filter)
 }
 
 object TracingConfigurations {
-    val release = TracingConfiguration(common = TracingConfiguration.LogLevel.Info)
-    val debug = TracingConfiguration()
-    val full = TracingConfiguration(
-        common = TracingConfiguration.LogLevel.Info,
-        targets = mapOf(
-            TracingConfiguration.Target.Sled to TracingConfiguration.LogLevel.Warn
-        )
-    )
+    val release = TracingConfiguration(overrides = mapOf(Target.Common to LogLevel.Info))
+    val debug = TracingConfiguration(overrides = mapOf(Target.Common to LogLevel.Info))
+
+    fun custom(overrides: Map<Target, LogLevel>) = TracingConfiguration(overrides)
 }

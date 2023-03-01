@@ -36,13 +36,14 @@ import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.MediaSource
 import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.SlidingSyncMode
+import org.matrix.rustcomponents.sdk.SlidingSyncRequestListFilters
 import org.matrix.rustcomponents.sdk.SlidingSyncViewBuilder
-import org.matrix.rustcomponents.sdk.StoppableSpawn
+import org.matrix.rustcomponents.sdk.TaskHandle
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 
-internal class RustMatrixClient internal constructor(
+class RustMatrixClient constructor(
     private val client: Client,
     private val sessionStore: SessionStore,
     private val coroutineScope: CoroutineScope,
@@ -66,25 +67,42 @@ internal class RustMatrixClient internal constructor(
         }
     }
 
-    private val slidingSyncView = SlidingSyncViewBuilder()
-        .timelineLimit(limit = 10u)
+    private val slidingSyncFilters by lazy {
+        SlidingSyncRequestListFilters(
+            isDm = null,
+            spaces = emptyList(),
+            isEncrypted = null,
+            isInvite = false,
+            isTombstoned = false,
+            roomTypes = emptyList(),
+            notRoomTypes = listOf("m.space"),
+            roomNameLike = null,
+            tags = emptyList(),
+            notTags = emptyList()
+        )
+    }
+
+    private val visibleRoomsView = SlidingSyncViewBuilder()
+        .timelineLimit(limit = 1u)
         .requiredState(
             requiredState = listOf(
                 RequiredState(key = "m.room.avatar", value = ""),
                 RequiredState(key = "m.room.encryption", value = ""),
             )
         )
-        .name(name = "HomeScreenView")
+        .filters(slidingSyncFilters)
+        .name(name = "CurrentlyVisibleRooms")
+        .sendUpdatesForItems(true)
         .syncMode(mode = SlidingSyncMode.SELECTIVE)
-        .addRange(0u, 30u)
+        .addRange(0u, 20u)
         .build()
 
     private val slidingSync = client
         .slidingSync()
-        .homeserver("https://slidingsync.lab.element.dev")
+        .homeserver("https://slidingsync.lab.matrix.org")
         .withCommonExtensions()
-        // .coldCache("ElementX")
-        .addView(slidingSyncView)
+        .coldCache("ElementX")
+        .addView(visibleRoomsView)
         .build()
 
     private val slidingSyncObserverProxy = SlidingSyncObserverProxy(coroutineScope)
@@ -92,57 +110,58 @@ internal class RustMatrixClient internal constructor(
         RustRoomSummaryDataSource(
             slidingSyncObserverProxy.updateSummaryFlow,
             slidingSync,
-            slidingSyncView,
+            visibleRoomsView,
             dispatchers,
             ::onRestartSync
         )
-    private var slidingSyncObserverToken: StoppableSpawn? = null
+    private var slidingSyncObserverToken: TaskHandle? = null
 
     private val mediaResolver = RustMediaResolver(this)
     private val isSyncing = AtomicBoolean(false)
 
     init {
         client.setDelegate(clientDelegate)
+        roomSummaryDataSource.init()
+        slidingSync.setObserver(slidingSyncObserverProxy)
     }
 
     private fun onRestartSync() {
-        slidingSyncObserverToken = slidingSync.sync()
+        stopSync()
+        startSync()
     }
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
         val slidingSyncRoom = slidingSync.getRoom(roomId.value) ?: return null
-        val room = slidingSyncRoom.fullRoom() ?: return null
+        val fullRoom = slidingSyncRoom.fullRoom() ?: return null
         return RustMatrixRoom(
             slidingSyncUpdateFlow = slidingSyncObserverProxy.updateSummaryFlow,
             slidingSyncRoom = slidingSyncRoom,
-            room = room,
+            innerRoom = fullRoom,
             coroutineScope = coroutineScope,
             coroutineDispatchers = dispatchers
         )
-    }
-
-    override fun startSync() {
-        if (isSyncing.compareAndSet(false, true)) {
-            roomSummaryDataSource.startSync()
-            slidingSync.setObserver(slidingSyncObserverProxy)
-            slidingSyncObserverToken = slidingSync.sync()
-        }
-    }
-
-    override fun stopSync() {
-        if (isSyncing.compareAndSet(true, false)) {
-            roomSummaryDataSource.stopSync()
-            slidingSync.setObserver(null)
-            slidingSyncObserverToken?.cancel()
-        }
     }
 
     override fun roomSummaryDataSource(): RoomSummaryDataSource = roomSummaryDataSource
 
     override fun mediaResolver(): MediaResolver = mediaResolver
 
+    override fun startSync() {
+        if (client.isSoftLogout()) return
+        if (isSyncing.compareAndSet(false, true)) {
+            slidingSyncObserverToken = slidingSync.sync()
+        }
+    }
+
+    override fun stopSync() {
+        if (isSyncing.compareAndSet(true, false)) {
+            slidingSyncObserverToken?.cancel()
+        }
+    }
+
     override fun close() {
         stopSync()
+        slidingSync.setObserver(null)
         roomSummaryDataSource.close()
         client.setDelegate(null)
     }

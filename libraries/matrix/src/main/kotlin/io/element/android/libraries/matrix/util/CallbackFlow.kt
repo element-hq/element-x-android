@@ -19,12 +19,13 @@ package io.element.android.libraries.matrix.util
 import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
-import org.matrix.rustcomponents.sdk.StoppableSpawn
+import org.matrix.rustcomponents.sdk.TaskHandle
 
-internal fun <T> mxCallbackFlow(block: suspend ProducerScope<T>.() -> StoppableSpawn) =
+internal fun <T> mxCallbackFlow(block: suspend ProducerScope<T>.() -> TaskHandle) =
     callbackFlow {
-        val token: StoppableSpawn = block(this)
+        val token: TaskHandle = block(this)
         awaitClose {
             token.cancel()
+            token.destroy()
         }
     }

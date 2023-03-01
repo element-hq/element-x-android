@@ -45,7 +45,6 @@ fun aMessagesState() = MessagesState(
     ),
     timelineState = aTimelineState().copy(
         timelineItems = aTimelineItemList(aTimelineItemContent()),
-        hasMoreToLoad = false,
     ),
     actionListState = anActionListState(),
     eventSink = {}

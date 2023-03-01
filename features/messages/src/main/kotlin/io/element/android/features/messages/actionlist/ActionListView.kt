@@ -53,7 +53,7 @@ import kotlinx.coroutines.launch
 fun ActionListView(
     state: ActionListState,
     modalBottomSheetState: ModalBottomSheetState,
-    onActionSelected: (action: TimelineItemAction, TimelineItem.MessageEvent) -> Unit,
+    onActionSelected: (action: TimelineItemAction, TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -67,7 +67,7 @@ fun ActionListView(
 
     fun onItemActionClicked(
         itemAction: TimelineItemAction,
-        targetItem: TimelineItem.MessageEvent
+        targetItem: TimelineItem.Event
     ) {
         onActionSelected(itemAction, targetItem)
         coroutineScope.launch {
@@ -94,7 +94,7 @@ fun ActionListView(
 private fun SheetContent(
     state: ActionListState,
     modifier: Modifier = Modifier,
-    onActionClicked: (TimelineItemAction, TimelineItem.MessageEvent) -> Unit = { _, _ -> },
+    onActionClicked: (TimelineItemAction, TimelineItem.Event) -> Unit = { _, _ -> },
 ) {
     when (val target = state.target) {
         is ActionListState.Target.Loading,
@@ -112,7 +112,7 @@ private fun SheetContent(
                 ) { action ->
                     ListItem(
                         modifier = Modifier.clickable {
-                            onActionClicked(action, target.messageEvent)
+                            onActionClicked(action, target.event)
                         },
                         text = {
                             Text(

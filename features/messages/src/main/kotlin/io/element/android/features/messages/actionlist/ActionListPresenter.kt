@@ -23,7 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.messages.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.timeline.model.TimelineItem
-import io.element.android.features.messages.timeline.model.content.TimelineItemRedactedContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -43,7 +43,7 @@ class ActionListPresenter @Inject constructor() : Presenter<ActionListState> {
         fun handleEvents(event: ActionListEvents) {
             when (event) {
                 ActionListEvents.Clear -> target.value = ActionListState.Target.None
-                is ActionListEvents.ComputeForMessage -> localCoroutineScope.computeForMessage(event.messageEvent, target)
+                is ActionListEvents.ComputeForMessage -> localCoroutineScope.computeForMessage(event.event, target)
             }
         }
 
@@ -53,7 +53,7 @@ class ActionListPresenter @Inject constructor() : Presenter<ActionListState> {
         )
     }
 
-    fun CoroutineScope.computeForMessage(timelineItem: TimelineItem.MessageEvent, target: MutableState<ActionListState.Target>) = launch {
+    fun CoroutineScope.computeForMessage(timelineItem: TimelineItem.Event, target: MutableState<ActionListState.Target>) = launch {
         target.value = ActionListState.Target.Loading(timelineItem)
         val actions =
             if (timelineItem.content is TimelineItemRedactedContent) {

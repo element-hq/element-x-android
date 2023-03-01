@@ -17,22 +17,33 @@
 package io.element.android.features.messages.timeline.model
 
 import androidx.compose.runtime.Immutable
-import io.element.android.features.messages.timeline.model.content.TimelineItemContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.timeline.model.virtual.TimelineItemVirtualModel
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.core.EventId
 
 @Immutable
 sealed interface TimelineItem {
+
+    fun identifier(): String = when(this){
+        is Event -> id
+        is Virtual -> id
+    }
+
+    @Immutable
     data class Virtual(
-        val id: String
+        val id: String,
+        val model: TimelineItemVirtualModel
     ) : TimelineItem
 
-    data class MessageEvent(
-        val id: EventId,
+    @Immutable
+    data class Event(
+        val id: String,
+        val eventId: EventId? = null,
         val senderId: String,
         val senderDisplayName: String?,
         val senderAvatar: AvatarData,
-        val content: TimelineItemContent,
+        val content: TimelineItemEventContent,
         val sentTime: String = "",
         val isMine: Boolean = false,
         val groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,

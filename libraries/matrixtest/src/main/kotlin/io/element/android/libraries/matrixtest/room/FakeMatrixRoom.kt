@@ -44,6 +44,10 @@ class FakeMatrixRoom(
         return matrixTimeline
     }
 
+    override suspend fun fetchMembers(): Result<Unit> {
+        return Result.success(Unit)
+    }
+
     override suspend fun userDisplayName(userId: String): Result<String?> {
         return Result.success("")
     }

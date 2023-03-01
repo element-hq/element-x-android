@@ -18,121 +18,83 @@ package io.element.android.libraries.matrix.timeline
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.core.EventId
-import io.element.android.libraries.matrix.room.RustMatrixRoom
+import io.element.android.libraries.matrix.room.MatrixRoom
+import io.element.android.libraries.matrix.util.TaskHandleBag
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.PaginationOutcome
+import org.matrix.rustcomponents.sdk.PaginationOptions
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.SlidingSyncRoom
-import org.matrix.rustcomponents.sdk.TimelineChange
-import org.matrix.rustcomponents.sdk.TimelineDiff
+import org.matrix.rustcomponents.sdk.TimelineItem
 import org.matrix.rustcomponents.sdk.TimelineListener
 import timber.log.Timber
-import java.util.Collections
 
 class RustMatrixTimeline(
-    private val matrixRoom: RustMatrixRoom,
-    private val room: Room,
+    private val matrixRoom: MatrixRoom,
+    private val innerRoom: Room,
     private val slidingSyncRoom: SlidingSyncRoom,
     private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
-) : TimelineListener, MatrixTimeline {
+) : MatrixTimeline {
 
-    override var callback: MatrixTimeline.Callback? = null
-
-    private val paginationOutcome = MutableStateFlow(PaginationOutcome(true))
     private val timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
         MutableStateFlow(emptyList())
+
+    private val paginationState = MutableStateFlow(
+        MatrixTimeline.PaginationState(canBackPaginate = true, isBackPaginating = false)
+    )
+
+    private val innerTimelineListener = MatrixTimelineDiffProcessor(
+        paginationState = paginationState,
+        timelineItems = timelineItems,
+        coroutineScope = coroutineScope,
+        diffDispatcher = coroutineDispatchers.diffUpdateDispatcher
+    )
+
+    private val listenerTokens = TaskHandleBag()
+    override fun paginationState(): StateFlow<MatrixTimeline.PaginationState> {
+        return paginationState
+    }
 
     @OptIn(FlowPreview::class)
     override fun timelineItems(): Flow<List<MatrixTimelineItem>> {
         return timelineItems.sample(50)
     }
 
-    override val hasMoreToLoad: Boolean
-        get() {
-            return paginationOutcome.value.moreMessages
-        }
-
-    private fun MutableList<MatrixTimelineItem>.applyDiff(diff: TimelineDiff) {
-        when (diff.change()) {
-            TimelineChange.PUSH -> {
-                Timber.v("Apply push on list with size: $size")
-                val item = diff.push()?.asMatrixTimelineItem() ?: return
-                callback?.onPushedTimelineItem(item)
-                add(item)
-            }
-            TimelineChange.UPDATE_AT -> {
-                val updateAtData = diff.updateAt() ?: return
-                Timber.v("Apply $updateAtData on list with size: $size")
-                val item = updateAtData.item.asMatrixTimelineItem()
-                callback?.onUpdatedTimelineItem(item)
-                set(updateAtData.index.toInt(), item)
-            }
-            TimelineChange.INSERT_AT -> {
-                val insertAtData = diff.insertAt() ?: return
-                Timber.v("Apply $insertAtData on list with size: $size")
-                val item = insertAtData.item.asMatrixTimelineItem()
-                add(insertAtData.index.toInt(), item)
-            }
-            TimelineChange.MOVE -> {
-                val moveData = diff.move() ?: return
-                Timber.v("Apply $moveData on list with size: $size")
-                Collections.swap(this, moveData.oldIndex.toInt(), moveData.newIndex.toInt())
-            }
-            TimelineChange.REMOVE_AT -> {
-                val removeAtData = diff.removeAt() ?: return
-                Timber.v("Apply $removeAtData on list with size: $size")
-                removeAt(removeAtData.toInt())
-            }
-            TimelineChange.REPLACE -> {
-                Timber.v("Apply REPLACE on list with size: $size")
-                clear()
-                val items = diff.replace()?.map { it.asMatrixTimelineItem() } ?: return
-                addAll(items)
-            }
-            TimelineChange.POP -> {
-                Timber.v("Apply POP on list with size: $size")
-                removeLast()
-            }
-            TimelineChange.CLEAR -> {
-                Timber.v("Apply CLEAR on list with size: $size")
-                clear()
-            }
-        }
-    }
-
-    override suspend fun paginateBackwards(count: Int): Result<Unit> = withContext(coroutineDispatchers.io) {
-        if (!paginationOutcome.value.moreMessages) {
-            return@withContext Result.failure(IllegalStateException("no more message"))
-        }
-        runCatching {
-            paginationOutcome.value = room.paginateBackwards(count.toUShort())
-        }
-    }
-
-    private suspend fun updateTimelineItems(block: MutableList<MatrixTimelineItem>.() -> Unit) =
-        withContext(coroutineDispatchers.diffUpdateDispatcher) {
-            val mutableTimelineItems = timelineItems.value.toMutableList()
-            block(mutableTimelineItems)
-            timelineItems.value = mutableTimelineItems
-        }
-
-    override fun addListener(timelineListener: TimelineListener) {
-        slidingSyncRoom.addTimelineListener(timelineListener)
-    }
-
     override fun initialize() {
-        addListener(this)
+        Timber.v("Init timeline for room ${matrixRoom.roomId}")
+        coroutineScope.launch {
+            matrixRoom.fetchMembers()
+                .onFailure {
+                    Timber.e(it, "Fail to fetch members for room ${matrixRoom.roomId}")
+                }.onSuccess {
+                    Timber.v("Success fetching members for room ${matrixRoom.roomId}")
+                }
+        }
+        coroutineScope.launch {
+            val result = addListener(innerTimelineListener)
+            result
+                .onSuccess { timelineItems ->
+                    val matrixTimelineItems = timelineItems.map { it.asMatrixTimelineItem() }
+                    withContext(coroutineDispatchers.diffUpdateDispatcher) {
+                        this@RustMatrixTimeline.timelineItems.value = matrixTimelineItems
+                    }
+                }
+                .onFailure {
+                    Timber.e("Failed adding timeline listener on room with identifier: ${matrixRoom.roomId})")
+                }
+        }
     }
 
     override fun dispose() {
-        slidingSyncRoom.removeTimeline()
+        Timber.v("Dispose timeline for room ${matrixRoom.roomId}")
+        listenerTokens.dispose()
     }
 
     /**
@@ -150,11 +112,26 @@ class RustMatrixTimeline(
         return matrixRoom.replyMessage(inReplyToEventId, message)
     }
 
-    override fun onUpdate(update: TimelineDiff) {
-        coroutineScope.launch {
-            updateTimelineItems {
-                applyDiff(update)
-            }
+    override suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            Timber.v("Start back paginating for room ${matrixRoom.roomId} ")
+            val paginationOptions = PaginationOptions.UntilNumItems(
+                eventLimit = requestSize.toUShort(),
+                items = untilNumberOfItems.toUShort()
+            )
+            innerRoom.paginateBackwards(paginationOptions)
+        }.onFailure {
+            Timber.e(it, "Fail to paginate for room ${matrixRoom.roomId}")
+        }.onSuccess {
+            Timber.v("Success back paginating for room ${matrixRoom.roomId}")
+        }
+    }
+
+    private suspend fun addListener(timelineListener: TimelineListener): Result<List<TimelineItem>> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            val result = slidingSyncRoom.subscribeAndAddTimelineListener(timelineListener, null)
+            listenerTokens += result.taskHandle
+            result.items
         }
     }
 }
