@@ -29,13 +29,13 @@ import io.element.android.libraries.architecture.animation.rememberDefaultTransi
 import io.element.android.libraries.architecture.createNode
 import kotlinx.parcelize.Parcelize
 
-class CreateRoomNode(
+class CreateRoomFlowNode(
     buildContext: BuildContext,
     private val backstack: BackStack<NavTarget> = BackStack(
         initialElement = NavTarget.Root,
         savedStateMap = buildContext.savedStateMap,
     ),
-) : ParentNode<CreateRoomNode.NavTarget>(
+) : ParentNode<CreateRoomFlowNode.NavTarget>(
     navModel = backstack,
     buildContext = buildContext
 ) {
