@@ -34,7 +34,7 @@ jobs:
         with:
           name: elementx-debug
           path: |
-            app/build/outputs/apk/debug/app-debug.apk
+            app/build/outputs/apk/debug/*.apk
       - uses: rnkdsh/action-upload-diawi@v1.3.1
         id: diawi
         with:
