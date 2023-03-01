@@ -16,7 +16,6 @@
 
 package io.element.android.samples.minimal
 
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
@@ -33,7 +32,6 @@ import kotlinx.datetime.TimeZone
 import java.util.Locale
 
 class RoomListScreen(
-    private val context: Context,
     private val matrixClient: MatrixClient
 ) {
 
@@ -41,7 +39,7 @@ class RoomListScreen(
     private val locale = Locale.getDefault()
     private val timeZone = TimeZone.currentSystemDefault()
     private val dateTimeProvider = LocalDateTimeProvider(clock, timeZone)
-    private val dateFormatters = DateFormatters(context, locale, clock, timeZone)
+    private val dateFormatters = DateFormatters(locale, clock, timeZone)
     private val presenter = RoomListPresenter(matrixClient, DefaultLastMessageFormatter(dateTimeProvider, dateFormatters))
 
     @Composable

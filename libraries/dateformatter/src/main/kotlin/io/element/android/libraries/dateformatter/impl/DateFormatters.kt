@@ -16,10 +16,8 @@
 
 package io.element.android.libraries.dateformatter.impl
 
-import android.content.Context
 import android.text.format.DateFormat
 import android.text.format.DateUtils
-import io.element.android.libraries.di.ApplicationContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -32,46 +30,30 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.absoluteValue
 
+// TODO rework this date formatting
 class DateFormatters @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val locale: Locale,
     private val clock: Clock,
     private val timeZone: TimeZone,
 ) {
 
-    private val hourFormatter by lazy {
-        if (DateFormat.is24HourFormat(context)) {
-            DateTimeFormatter.ofPattern("HH:mm", locale)
-        } else {
-            DateTimeFormatter.ofPattern("h:mm a", locale)
-        }
-    }
-
-    private val fullDateFormatter by lazy {
-        val pattern = if (DateFormat.is24HourFormat(context)) {
-            DateFormat.getBestDateTimePattern(locale, "EEE, d MMM yyyy HH:mm")
-        } else {
-            DateFormat.getBestDateTimePattern(locale, "EEE, d MMM yyyy h:mm a")
-        }
-        DateTimeFormatter.ofPattern(pattern, locale)
+    private val onlyTimeFormatter: DateTimeFormatter by lazy {
+        val pattern = DateFormat.getBestDateTimePattern(locale, "HH:mm") ?: "HH:mm"
+        DateTimeFormatter.ofPattern(pattern)
     }
 
     private val dateWithMonthFormatter: DateTimeFormatter by lazy {
-        val pattern = DateFormat.getBestDateTimePattern(locale, "d MMM")
+        val pattern = DateFormat.getBestDateTimePattern(locale, "d MMM") ?: "d MMM"
         DateTimeFormatter.ofPattern(pattern)
     }
 
     private val dateWithYearFormatter: DateTimeFormatter by lazy {
-        val pattern = DateFormat.getBestDateTimePattern(locale, "d MMM y")
+        val pattern = DateFormat.getBestDateTimePattern(locale, "dd.MM.yyyy") ?: "dd.MM.yyyy"
         DateTimeFormatter.ofPattern(pattern)
     }
 
-    internal fun formatFullDate(localDateTime: LocalDateTime): String {
-        return fullDateFormatter.format(localDateTime.toJavaLocalDateTime())
-    }
-
-    internal fun formatHour(localDateTime: LocalDateTime): String {
-        return hourFormatter.format(localDateTime.toJavaLocalDateTime())
+    internal fun formatTime(localDateTime: LocalDateTime): String {
+        return onlyTimeFormatter.format(localDateTime.toJavaLocalDateTime())
     }
 
     internal fun formatDateWithMonth(localDateTime: LocalDateTime): String {
@@ -103,6 +85,6 @@ class DateFormatters @Inject constructor(
             clock.now().toEpochMilliseconds(),
             DateUtils.DAY_IN_MILLIS,
             DateUtils.FORMAT_SHOW_WEEKDAY
-        ).toString()
+        )?.toString() ?: ""
     }
 }
