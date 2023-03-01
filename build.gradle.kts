@@ -1,4 +1,5 @@
 import kotlinx.kover.api.KoverTaskExtension
+import org.jetbrains.kotlin.cli.common.toBooleanLenient
 
 /*
  * Copyright (c) 2022 New Vector Ltd
@@ -267,13 +268,18 @@ tasks.whenTaskAdded {
     }
 }
 
-// Only run debug unit tests when building on the CI
-if (project.hasProperty("ci-build")) {
+// When running on the CI, run only debug test variants
+val ciBuildProperty = "ci-build"
+val isCiBuild = if (project.hasProperty(ciBuildProperty)) {
+    val raw = project.property(ciBuildProperty) as? String
+    raw?.toBooleanLenient() == true || raw?.toIntOrNull() == 1
+} else false
+if (isCiBuild) {
     allprojects {
         afterEvaluate {
             tasks.withType<Test>().configureEach {
                 extensions.configure<KoverTaskExtension> {
-                    val enabled = name.contains("Debug", ignoreCase = true)
+                    val enabled = name.contains("debug", ignoreCase = true)
                     isDisabled.set(!enabled)
                 }
             }

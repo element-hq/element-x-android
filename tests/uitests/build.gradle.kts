@@ -42,7 +42,3 @@ dependencies {
     allLibraries()
     allFeatures()
 }
-
-tasks.withType<Test> {
-    enabled = project.hasProperty("runPaparazzi")
-}
