@@ -31,7 +31,7 @@ import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
-import io.element.android.features.createroom.CreateRoomNode
+import io.element.android.features.createroom.CreateRoomFlowNode
 import io.element.android.features.preferences.PreferencesFlowNode
 import io.element.android.features.roomlist.RoomListNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -129,7 +129,7 @@ class LoggedInFlowNode(
                 PreferencesFlowNode(buildContext, onOpenBugReport)
             }
             NavTarget.CreateRoom -> {
-                CreateRoomNode(buildContext)
+                CreateRoomFlowNode(buildContext)
             }
         }
     }
