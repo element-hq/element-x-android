@@ -16,11 +16,13 @@
 
 package io.element.android.libraries.designsystem.theme
 
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 
+@Stable
 class ElementColors(
     messageFromMeBackground: Color,
     messageFromOtherBackground: Color,

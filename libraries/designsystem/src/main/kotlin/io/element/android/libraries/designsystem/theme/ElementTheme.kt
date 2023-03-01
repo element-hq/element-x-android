@@ -56,7 +56,7 @@ fun ElementTheme(
 ) {
     val systemUiController = rememberSystemUiController()
     val useDarkIcons = !darkTheme
-    val currentColor = remember {
+    val currentColor = remember(darkTheme) {
         colors.copy()
     }.apply { updateColorsFrom(colors) }
     val colorScheme = when {
