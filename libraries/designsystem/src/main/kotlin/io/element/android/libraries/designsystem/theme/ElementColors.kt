@@ -25,6 +25,8 @@ class ElementColors(
     messageFromMeBackground: Color,
     messageFromOtherBackground: Color,
     messageHighlightedBackground: Color,
+    quaternary: Color,
+    quinary: Color,
     isLight: Boolean,
 ) {
     var messageFromMeBackground by mutableStateOf(messageFromMeBackground)
@@ -34,6 +36,12 @@ class ElementColors(
     var messageHighlightedBackground by mutableStateOf(messageHighlightedBackground)
         private set
 
+    var quaternary by mutableStateOf(quaternary)
+        private set
+
+    var quinary by mutableStateOf(quinary)
+        private set
+
     var isLight by mutableStateOf(isLight)
         private set
 
@@ -41,11 +49,15 @@ class ElementColors(
         messageFromMeBackground: Color = this.messageFromMeBackground,
         messageFromOtherBackground: Color = this.messageFromOtherBackground,
         messageHighlightedBackground: Color = this.messageHighlightedBackground,
+        quaternary: Color = this.quaternary,
+        quinary: Color = this.quinary,
         isLight: Boolean = this.isLight,
     ) = ElementColors(
         messageFromMeBackground = messageFromMeBackground,
         messageFromOtherBackground = messageFromOtherBackground,
         messageHighlightedBackground = messageHighlightedBackground,
+        quaternary = quaternary,
+        quinary = quinary,
         isLight = isLight,
     )
 
@@ -53,6 +65,8 @@ class ElementColors(
         messageFromMeBackground = other.messageFromMeBackground
         messageFromOtherBackground = other.messageFromOtherBackground
         messageHighlightedBackground = other.messageHighlightedBackground
+        quaternary = other.quaternary
+        quinary = other.quinary
         isLight = other.isLight
     }
 }

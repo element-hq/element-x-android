@@ -33,7 +33,8 @@ class LoginScreen(private val authenticationService: MatrixAuthenticationService
         val state = presenter.present()
         LoginRootScreen(
             state = state,
-            modifier = modifier
+            modifier = modifier,
+            onBackPressed = {},
         )
     }
 }

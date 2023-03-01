@@ -59,6 +59,7 @@ import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -68,7 +69,6 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
-import io.element.android.libraries.designsystem.theme.compound.LocalCompoundColors
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.R as StringR
@@ -126,7 +126,7 @@ fun ChangeServerView(
                         .size(width = 70.dp, height = 70.dp)
                         .align(Alignment.CenterHorizontally)
                         .background(
-                            color = LocalCompoundColors.current.content.quinary,
+                            color = LocalColors.current.quinary,
                             shape = RoundedCornerShape(14.dp)
                         )
                 ) {
@@ -134,7 +134,7 @@ fun ChangeServerView(
                         modifier = Modifier
                             .align(Alignment.Center)
                             .size(width = 32.dp, height = 32.dp),
-                        tint = LocalCompoundColors.current.content.secondary,
+                        tint = MaterialTheme.colorScheme.secondary,
                         resourceId = R.drawable.ic_homeserver,
                         contentDescription = "",
                     )
@@ -210,7 +210,7 @@ fun ChangeServerView(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     style = ElementTextStyles.Regular.caption1,
                     textAlign = TextAlign.Start,
-                    color = LocalCompoundColors.current.content.tertiary,
+                    color = MaterialTheme.colorScheme.tertiary,
                 )
                 Spacer(Modifier.height(32.dp))
                 Button(

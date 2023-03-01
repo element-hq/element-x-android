@@ -31,11 +31,6 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import io.element.android.libraries.designsystem.theme.compound.CompoundColorPalette
-import io.element.android.libraries.designsystem.theme.compound.LocalCompoundColors
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 
 /**
  * Inspired from https://medium.com/@lucasyujideveloper/54cbcbde1ace
@@ -54,15 +49,16 @@ val LocalColors = staticCompositionLocalOf { elementColorsLight() }
 fun ElementTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false, /* true to enable MaterialYou */
-    lightColors: ElementColors = elementColorsLight(),
-    darkColors: ElementColors = elementColorsDark(),
+    colors: ElementColors = if (darkTheme) elementColorsDark() else elementColorsLight(),
     materialLightColors: ColorScheme = materialColorSchemeLight,
     materialDarkColors: ColorScheme = materialColorSchemeDark,
     content: @Composable () -> Unit,
 ) {
     val systemUiController = rememberSystemUiController()
     val useDarkIcons = !darkTheme
-    val currentColor = remember { if (darkTheme) darkColors else lightColors }
+    val currentColor = remember {
+        colors.copy()
+    }.apply { updateColorsFrom(colors) }
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
@@ -71,8 +67,6 @@ fun ElementTheme(
         darkTheme -> materialDarkColors
         else -> materialLightColors
     }
-    var compoundColorPalette: CompoundColorPalette by remember { mutableStateOf(CompoundColorPalette.Light) }
-    compoundColorPalette = if (darkTheme) CompoundColorPalette.Dark else CompoundColorPalette.Light
     SideEffect {
         systemUiController.setStatusBarColor(
             color = colorScheme.background
@@ -82,10 +76,8 @@ fun ElementTheme(
             darkIcons = useDarkIcons
         )
     }
-    val rememberedColors = remember { currentColor.copy() }.apply { updateColorsFrom(currentColor) }
     CompositionLocalProvider(
-        LocalColors provides rememberedColors,
-        LocalCompoundColors provides compoundColorPalette,
+        LocalColors provides currentColor,
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
