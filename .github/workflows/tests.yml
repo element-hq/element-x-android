@@ -21,14 +21,26 @@ jobs:
       group: ${{ github.ref == 'refs/heads/main' && format('unit-tests-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('unit-tests-develop-{0}', github.sha) || format('unit-tests-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v3
+      - name: ⏬ Checkout with LFS
+        uses: actions/checkout@v3
         with:
           lfs: 'true'
 
-      - name: Run tests and generate kover report
+      - name: ⚙️ Run unit & screenshot tests, generate kover report
         run: ./gradlew koverMergedReport $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
 
-      - name: Upload Screenshot Test Report
+      - name: 📈 Verify coverage
+        run: ./gradlew koverMergedVerify $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
+
+      - name: 📈‼️ Upload kover failed coverage reports
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: kover-error-report
+          path: |
+            **/kover/merged/verification/errors.txt
+
+      - name: 📸📄 Upload Screenshot Test Report
         uses: actions/upload-artifact@v3
         if: always()
         with:
@@ -36,7 +48,7 @@ jobs:
           path: tests/uitests/build/reports/tests/testDebugUnitTest/
           retention-days: 5
 
-      - name: Upload Screenshot Failure Differences
+      - name: 📸‼️ Upload Screenshot Failure Differences
         uses: actions/upload-artifact@v3
         if: failure()
         with:
@@ -44,7 +56,7 @@ jobs:
           path: tests/uitests/out/failures/
           retention-days: 5
 
-      - name: Archive kover report
+      - name: ✅📄 Archive kover report
         if: always()
         uses: actions/upload-artifact@v3
         with:
@@ -52,7 +64,7 @@ jobs:
           path: |
             **/build/reports/kover/merged
 
-      - name: Archive test results on error
+      - name: ⚙️‼️ Archive test results on error
         if: failure()
         uses: actions/upload-artifact@v3
         with:
@@ -61,7 +73,7 @@ jobs:
             **/out/failures/
             **/build/reports/tests/*UnitTest/
 
-      - name: Publish results to Sonar
+      - name: 🔊 Publish results to Sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
@@ -69,7 +81,7 @@ jobs:
         run: ./gradlew sonar $CI_GRADLE_ARG_PROPERTIES
 
       # https://github.com/codecov/codecov-action
-      - name: Upload coverage reports to codecov
+      - name: ☂️ Upload coverage reports to codecov
         if: always()
         uses: codecov/codecov-action@v3
         # with:

@@ -286,3 +286,13 @@ if (isCiBuild) {
         }
     }
 }
+
+tasks.register("runQualityChecks") {
+    project.subprojects {
+        val lintTaskPath = "$path:lint"
+        if (tasks.findByPath(lintTaskPath) != null) {
+            dependsOn(lintTaskPath)
+        }
+    }
+    dependsOn("ktlintCheck", "detekt", ":app:knitCheck")
+}
