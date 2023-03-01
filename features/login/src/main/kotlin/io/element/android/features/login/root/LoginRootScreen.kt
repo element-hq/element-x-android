@@ -166,17 +166,7 @@ fun LoginRootScreen(
                         Modifier
                             .padding(horizontal = 16.dp, vertical = 16.dp)
                             .weight(1f)) {
-                        if (state.isDefaultHomeServer) {
-                            // TODO proper detection of matrix.org url
-                            Text(text = stringResource(StringR.string.server_selection_matrix_org_title), style = ElementTextStyles.Bold.body)
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = stringResource(StringR.string.server_selection_matrix_org_message),
-                                style = ElementTextStyles.Regular.footnote
-                            )
-                        } else {
-                            Text(text = state.homeserver)
-                        }
+                        Text(text = state.homeserver, style = ElementTextStyles.Bold.body)
                     }
                     IconButton(
                         modifier = Modifier

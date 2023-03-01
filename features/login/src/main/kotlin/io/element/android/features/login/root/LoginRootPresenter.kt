@@ -34,9 +34,8 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
     @Composable
     override fun present(): LoginRootState {
         val localCoroutineScope = rememberCoroutineScope()
-        val defaultHomeServer = MatrixAuthenticationService.DEFAULT_HOMESERVER
         val homeserver = rememberSaveable {
-            mutableStateOf(authenticationService.getHomeserverOrDefaultDisplayValue())
+            mutableStateOf(authenticationService.getHomeserverDisplayValue())
         }
         val loggedInState: MutableState<LoggedInState> = remember {
             mutableStateOf(LoggedInState.NotLoggedIn)
@@ -47,7 +46,6 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
 
         fun handleEvents(event: LoginRootEvents) {
             when (event) {
-                LoginRootEvents.RefreshHomeServer -> refreshHomeServer(homeserver)
                 is LoginRootEvents.SetLogin -> updateFormState(formState) {
                     copy(login = event.login)
                 }
@@ -60,7 +58,6 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
         }
 
         return LoginRootState(
-            isDefaultHomeServer = defaultHomeServer == homeserver.value,
             homeserver = homeserver.value,
             loggedInState = loggedInState.value,
             formState = formState.value,
@@ -87,6 +84,6 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
     }
 
     private fun refreshHomeServer(homeserver: MutableState<String>) {
-        homeserver.value = authenticationService.getHomeserverOrDefaultDisplayValue()
+        homeserver.value = authenticationService.getHomeserverDisplayValue()
     }
 }

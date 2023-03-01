@@ -116,24 +116,6 @@ class LoginRootPresenterTest {
     }
 
     @Test
-    fun `present - refresh server`() = runTest {
-        val authenticationService = FakeAuthenticationService()
-        val presenter = LoginRootPresenter(
-            authenticationService,
-        )
-        moleculeFlow(RecompositionClock.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            assertThat(initialState.homeserver).isEqualTo(A_HOMESERVER)
-            authenticationService.givenHomeserver(A_HOMESERVER_2)
-            initialState.eventSink.invoke(LoginRootEvents.RefreshHomeServer)
-            val refreshedState = awaitItem()
-            assertThat(refreshedState.homeserver).isEqualTo(A_HOMESERVER_2)
-        }
-    }
-
-    @Test
     fun `present - clear error`() = runTest {
         val authenticationService = FakeAuthenticationService()
         val presenter = LoginRootPresenter(

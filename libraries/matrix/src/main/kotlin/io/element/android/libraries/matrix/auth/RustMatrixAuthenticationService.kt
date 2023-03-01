@@ -47,6 +47,8 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val authService: AuthenticationService,
 ) : MatrixAuthenticationService {
 
+    private var currentHomeserver = DEFAULT_HOMESERVER
+
     override fun isLoggedIn(): Flow<Boolean> {
         return sessionStore.isLoggedIn()
     }
@@ -74,11 +76,11 @@ class RustMatrixAuthenticationService @Inject constructor(
             }
     }
 
-    override fun getHomeserver(): String? = authService.homeserverDetails()?.url()
+    override fun getHomeserver(): String = currentHomeserver
 
-    override fun getHomeserverOrDefaultDisplayValue(): String {
+    override fun getHomeserverDisplayValue(): String {
         return tryOrNull {
-            val uri = getHomeserver()?.let { Uri.parse(it) }
+            val uri = Uri.parse(getHomeserver())
             uri?.host
         } ?: DEFAULT_HOMESERVER
     }
@@ -86,6 +88,7 @@ class RustMatrixAuthenticationService @Inject constructor(
     override suspend fun setHomeserver(homeserver: String) {
         withContext(coroutineDispatchers.io) {
             authService.configureHomeserver(homeserver)
+            currentHomeserver = homeserver
         }
     }
 

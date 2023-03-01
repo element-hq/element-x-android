@@ -36,7 +36,7 @@ class ChangeServerPresenter @Inject constructor(private val authenticationServic
     override fun present(): ChangeServerState {
         val localCoroutineScope = rememberCoroutineScope()
         val homeserver = rememberSaveable {
-            mutableStateOf(authenticationService.getHomeserverOrDefaultDisplayValue())
+            mutableStateOf(authenticationService.getHomeserverDisplayValue())
         }
         val changeServerAction: MutableState<Async<Unit>> = remember {
             mutableStateOf(Async.Uninitialized)
@@ -45,7 +45,9 @@ class ChangeServerPresenter @Inject constructor(private val authenticationServic
         fun handleEvents(event: ChangeServerEvents) {
             when (event) {
                 is ChangeServerEvents.SetServer -> homeserver.value = event.server
-                ChangeServerEvents.Submit -> localCoroutineScope.submit(homeserver.value, changeServerAction)
+                ChangeServerEvents.Submit -> {
+                    localCoroutineScope.submit(homeserver, changeServerAction)
+                }
                 ChangeServerEvents.ClearError -> changeServerAction.value = Async.Uninitialized
             }
         }
@@ -57,9 +59,9 @@ class ChangeServerPresenter @Inject constructor(private val authenticationServic
         )
     }
 
-    private fun CoroutineScope.submit(homeserver: String, changeServerAction: MutableState<Async<Unit>>) = launch {
+    private fun CoroutineScope.submit(homeserver: MutableState<String>, changeServerAction: MutableState<Async<Unit>>) = launch {
         suspend {
-            authenticationService.setHomeserver(homeserver)
+            authenticationService.setHomeserver(homeserver.value)
         }.execute(changeServerAction)
     }
 }

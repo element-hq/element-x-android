@@ -50,7 +50,7 @@ class FakeAuthenticationService : MatrixAuthenticationService {
         this.homeserver = homeserver
     }
 
-    override fun getHomeserverOrDefaultDisplayValue(): String {
+    override fun getHomeserverDisplayValue(): String {
         return homeserver
     }
 
