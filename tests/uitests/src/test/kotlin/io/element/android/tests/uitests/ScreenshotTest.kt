@@ -67,7 +67,7 @@ class ScreenshotTest {
 
     @get:Rule
     val paparazzi = Paparazzi(
-        maxPercentDifference = 0.1,
+        maxPercentDifference = 0.01,
     )
 
     @Test
