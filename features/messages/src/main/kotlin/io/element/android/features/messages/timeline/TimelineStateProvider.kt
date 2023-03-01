@@ -17,53 +17,54 @@
 package io.element.android.features.messages.timeline
 
 import io.element.android.features.messages.timeline.model.AggregatedReaction
-import io.element.android.features.messages.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.timeline.model.TimelineItem
+import io.element.android.features.messages.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.timeline.model.TimelineItemReactions
-import io.element.android.features.messages.timeline.model.content.TimelineItemContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemTextContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemTextContent
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.core.EventId
+import io.element.android.libraries.matrix.timeline.MatrixTimeline
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 fun aTimelineState() = TimelineState(
     timelineItems = persistentListOf(),
-    hasMoreToLoad = false,
+    paginationState = MatrixTimeline.PaginationState(isBackPaginating = false, canBackPaginate = true),
     highlightedEventId = null,
     eventSink = {}
 )
 
-internal fun aTimelineItemList(content: TimelineItemContent): ImmutableList<TimelineItem> {
+internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList<TimelineItem> {
     return persistentListOf(
         // 3 items (First Middle Last) with isMine = false
-        aMessageEvent(
+        aTimelineItemEvent(
             isMine = false,
             content = content,
             groupPosition = TimelineItemGroupPosition.Last
         ),
-        aMessageEvent(
+        aTimelineItemEvent(
             isMine = false,
             content = content,
             groupPosition = TimelineItemGroupPosition.Middle
         ),
-        aMessageEvent(
+        aTimelineItemEvent(
             isMine = false,
             content = content,
             groupPosition = TimelineItemGroupPosition.First
         ),
         // 3 items (First Middle Last) with isMine = true
-        aMessageEvent(
+        aTimelineItemEvent(
             isMine = true,
             content = content,
             groupPosition = TimelineItemGroupPosition.Last
         ),
-        aMessageEvent(
+        aTimelineItemEvent(
             isMine = true,
             content = content,
             groupPosition = TimelineItemGroupPosition.Middle
         ),
-        aMessageEvent(
+        aTimelineItemEvent(
             isMine = true,
             content = content,
             groupPosition = TimelineItemGroupPosition.First
@@ -71,13 +72,15 @@ internal fun aTimelineItemList(content: TimelineItemContent): ImmutableList<Time
     )
 }
 
-internal fun aMessageEvent(
+internal fun aTimelineItemEvent(
     isMine: Boolean = false,
-    content: TimelineItemContent = aTimelineItemContent(),
+    content: TimelineItemEventContent = aTimelineItemContent(),
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.First
-): TimelineItem.MessageEvent {
-    return TimelineItem.MessageEvent(
-        id = EventId(Math.random().toString()),
+): TimelineItem.Event {
+    val randomId = Math.random().toString()
+    return TimelineItem.Event(
+        id = randomId,
+        eventId = EventId(randomId),
         senderId = "@senderId",
         senderAvatar = AvatarData("@senderId", "sender"),
         content = content,
@@ -92,7 +95,7 @@ internal fun aMessageEvent(
     )
 }
 
-internal fun aTimelineItemContent(): TimelineItemContent {
+internal fun aTimelineItemContent(): TimelineItemEventContent {
     return TimelineItemTextContent(
         body = "Text",
         htmlDocument = null

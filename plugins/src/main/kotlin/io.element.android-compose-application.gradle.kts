@@ -15,12 +15,15 @@
  */
 
 /**
- * This will generate the plugin "io.element.android-compose-application", used only in the module `app`.
+ * This will generate the plugin "io.element.android-compose-application" to use by app and samples modules
  */
 import extension.androidConfig
 import extension.commonDependencies
 import extension.composeConfig
 import extension.composeDependencies
+import org.gradle.accessors.dm.LibrariesForLibs
+
+val libs = the<LibrariesForLibs>()
 
 plugins {
     id("com.android.application")
@@ -29,10 +32,10 @@ plugins {
 
 android {
     androidConfig(project)
-    composeConfig()
+    composeConfig(libs)
 }
 
 dependencies {
     commonDependencies()
-    composeDependencies()
+    composeDependencies(libs)
 }

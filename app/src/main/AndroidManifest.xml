@@ -34,8 +34,7 @@
             android:theme="@style/Theme.ElementX.Splash"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"
-            tools:ignore="LockedOrientationActivity">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

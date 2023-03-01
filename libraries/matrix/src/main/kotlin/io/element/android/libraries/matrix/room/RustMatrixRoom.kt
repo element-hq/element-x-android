@@ -32,11 +32,12 @@ import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 import org.matrix.rustcomponents.sdk.UpdateSummary
 import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
+import timber.log.Timber
 
 class RustMatrixRoom(
     private val slidingSyncUpdateFlow: Flow<UpdateSummary>,
     private val slidingSyncRoom: SlidingSyncRoom,
-    private val room: Room,
+    private val innerRoom: Room,
     private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : MatrixRoom {
@@ -44,7 +45,7 @@ class RustMatrixRoom(
     override fun syncUpdateFlow(): Flow<Long> {
         return slidingSyncUpdateFlow
             .filter {
-                it.rooms.contains(room.id())
+                it.rooms.contains(innerRoom.id())
             }
             .map {
                 System.currentTimeMillis()
@@ -55,14 +56,14 @@ class RustMatrixRoom(
     override fun timeline(): MatrixTimeline {
         return RustMatrixTimeline(
             matrixRoom = this,
-            room = room,
+            innerRoom = innerRoom,
             slidingSyncRoom = slidingSyncRoom,
             coroutineScope = coroutineScope,
             coroutineDispatchers = coroutineDispatchers
         )
     }
 
-    override val roomId = RoomId(room.id())
+    override val roomId = RoomId(innerRoom.id())
 
     override val name: String?
         get() {
@@ -71,35 +72,41 @@ class RustMatrixRoom(
 
     override val bestName: String
         get() {
-            return name?.takeIf { it.isNotEmpty() } ?: room.id()
+            return name?.takeIf { it.isNotEmpty() } ?: innerRoom.id()
         }
 
     override val displayName: String
         get() {
-            return room.displayName()
+            return innerRoom.displayName()
         }
 
     override val topic: String?
         get() {
-            return room.topic()
+            return innerRoom.topic()
         }
 
     override val avatarUrl: String?
         get() {
-            return room.avatarUrl()
+            return innerRoom.avatarUrl()
         }
+
+    override suspend fun fetchMembers(): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            innerRoom.fetchMembers()
+        }
+    }
 
     override suspend fun userDisplayName(userId: String): Result<String?> =
         withContext(coroutineDispatchers.io) {
             runCatching {
-                room.memberDisplayName(userId)
+                innerRoom.memberDisplayName(userId)
             }
         }
 
     override suspend fun userAvatarUrl(userId: String): Result<String?> =
         withContext(coroutineDispatchers.io) {
             runCatching {
-                room.memberAvatarUrl(userId)
+                innerRoom.memberAvatarUrl(userId)
             }
         }
 
@@ -107,7 +114,7 @@ class RustMatrixRoom(
         val transactionId = genTransactionId()
         val content = messageEventContentFromMarkdown(message)
         runCatching {
-            room.send(content, transactionId)
+            innerRoom.send(content, transactionId)
         }
     }
 
@@ -115,7 +122,7 @@ class RustMatrixRoom(
         val transactionId = genTransactionId()
         // val content = messageEventContentFromMarkdown(message)
         runCatching {
-            room.edit(/* TODO use content */ message, originalEventId.value, transactionId)
+            innerRoom.edit(/* TODO use content */ message, originalEventId.value, transactionId)
         }
     }
 
@@ -123,14 +130,14 @@ class RustMatrixRoom(
         val transactionId = genTransactionId()
         // val content = messageEventContentFromMarkdown(message)
         runCatching {
-            room.sendReply(/* TODO use content */ message, eventId.value, transactionId)
+            innerRoom.sendReply(/* TODO use content */ message, eventId.value, transactionId)
         }
     }
 
     override suspend fun redactEvent(eventId: EventId, reason: String?) = withContext(coroutineDispatchers.io) {
         val transactionId = genTransactionId()
         runCatching {
-            room.redact(eventId.value, reason, transactionId)
+            innerRoom.redact(eventId.value, reason, transactionId)
         }
     }
 }

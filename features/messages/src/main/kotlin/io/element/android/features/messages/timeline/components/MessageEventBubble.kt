@@ -36,6 +36,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.timeline.model.TimelineItemGroupPosition
+import io.element.android.features.messages.timeline.model.bubble.BubbleState
+import io.element.android.features.messages.timeline.model.bubble.BubbleStateProvider
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme

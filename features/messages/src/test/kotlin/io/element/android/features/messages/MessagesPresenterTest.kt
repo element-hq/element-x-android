@@ -24,12 +24,14 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.actionlist.ActionListPresenter
 import io.element.android.features.messages.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.fixtures.aMessageEvent
+import io.element.android.features.messages.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.textcomposer.MessageComposerPresenter
 import io.element.android.features.messages.timeline.TimelinePresenter
 import io.element.android.features.messages.timeline.model.TimelineItem
 import io.element.android.features.messages.timeline.model.TimelineItemReactions
-import io.element.android.features.messages.timeline.model.content.TimelineItemContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemTextContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemTextContent
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.room.MatrixRoom
@@ -38,7 +40,6 @@ import io.element.android.libraries.matrixtest.A_MESSAGE
 import io.element.android.libraries.matrixtest.A_ROOM_ID
 import io.element.android.libraries.matrixtest.A_USER_ID
 import io.element.android.libraries.matrixtest.A_USER_NAME
-import io.element.android.libraries.matrixtest.FakeMatrixClient
 import io.element.android.libraries.matrixtest.room.FakeMatrixRoom
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.collections.immutable.persistentListOf
@@ -134,14 +135,13 @@ class MessagesPresenterTest {
     private fun TestScope.createMessagePresenter(
         matrixRoom: MatrixRoom = FakeMatrixRoom()
     ): MessagesPresenter {
-        val matrixClient = FakeMatrixClient()
         val messageComposerPresenter = MessageComposerPresenter(
             appCoroutineScope = this,
             room = matrixRoom
         )
+
         val timelinePresenter = TimelinePresenter(
-            coroutineDispatchers = testCoroutineDispatchers(),
-            client = matrixClient,
+            timelineItemsFactory = aTimelineItemsFactory(),
             room = matrixRoom,
         )
         val actionListPresenter = ActionListPresenter()
@@ -154,25 +154,3 @@ class MessagesPresenterTest {
     }
 }
 
-// TODO Move to common module to reuse
-fun testCoroutineDispatchers() = CoroutineDispatchers(
-    io = UnconfinedTestDispatcher(),
-    computation = UnconfinedTestDispatcher(),
-    main = UnconfinedTestDispatcher(),
-    diffUpdateDispatcher = UnconfinedTestDispatcher(),
-)
-
-// TODO Move to common module to reuse and remove this duplication
-private fun aMessageEvent(
-    isMine: Boolean = true,
-    content: TimelineItemContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null),
-) = TimelineItem.MessageEvent(
-    id = AN_EVENT_ID,
-    senderId = A_USER_ID.value,
-    senderDisplayName = A_USER_NAME,
-    senderAvatar = AvatarData(A_USER_ID.value, A_USER_NAME),
-    content = content,
-    sentTime = "",
-    isMine = isMine,
-    reactionsState = TimelineItemReactions(persistentListOf())
-)
