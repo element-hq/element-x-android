@@ -19,6 +19,7 @@ package extension
 import gradle.kotlin.dsl.accessors._c662f48c4c26c34521d1054f12b949ab.androidTestImplementation
 import gradle.kotlin.dsl.accessors._c662f48c4c26c34521d1054f12b949ab.debugImplementation
 import gradle.kotlin.dsl.accessors._c662f48c4c26c34521d1054f12b949ab.implementation
+import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.project
 
@@ -32,9 +33,8 @@ fun DependencyHandlerScope.commonDependencies() {
 /**
  * Dependencies used by all the modules with composable items
  */
-fun DependencyHandlerScope.composeDependencies() {
-    // TODO Find a way to use androidx_compose_bom
-    val composeBom = platform("androidx.compose:compose-bom:2023.01.00")
+fun DependencyHandlerScope.composeDependencies(libs: LibrariesForLibs) {
+    val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
     androidTestImplementation(composeBom)
     implementation("androidx.compose.ui:ui")

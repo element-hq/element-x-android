@@ -18,17 +18,17 @@ package io.element.android.features.messages.actionlist
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.timeline.aMessageEvent
+import io.element.android.features.messages.timeline.aTimelineItemEvent
 import kotlinx.collections.immutable.persistentListOf
 
 open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
     override val values: Sequence<ActionListState>
         get() = sequenceOf(
             anActionListState(),
-            anActionListState().copy(target = ActionListState.Target.Loading(aMessageEvent())),
+            anActionListState().copy(target = ActionListState.Target.Loading(aTimelineItemEvent())),
             anActionListState().copy(
                 target = ActionListState.Target.Success(
-                    messageEvent = aMessageEvent(),
+                    event = aTimelineItemEvent(),
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,

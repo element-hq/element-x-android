@@ -26,7 +26,7 @@ maestro test \
     -e USERNAME=user \
     -e PASSWORD=123 \
     -e ROOM_NAME="my room" \
-    .maestro/allTest.yaml
+    .maestro/allTests.yaml
 ```
 
 ### Output

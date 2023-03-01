@@ -16,20 +16,18 @@
 
 package io.element.android.libraries.matrix.timeline
 
+import io.element.android.libraries.matrix.core.EventId
 import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.TimelineItem
-import org.matrix.rustcomponents.sdk.TimelineKey
+import org.matrix.rustcomponents.sdk.VirtualTimelineItem
 
 sealed interface MatrixTimelineItem {
     data class Event(val event: EventTimelineItem) : MatrixTimelineItem {
-        val uniqueId: String
-            get() = when (val eventKey = event.key()) {
-                is TimelineKey.TransactionId -> eventKey.txnId
-                is TimelineKey.EventId -> eventKey.eventId
-            }
+        val uniqueId: String = event.uniqueIdentifier()
+        val eventId: EventId? = event.eventId()?.let { EventId(it) }
     }
 
-    object Virtual : MatrixTimelineItem
+    data class Virtual(val virtual: VirtualTimelineItem) : MatrixTimelineItem
     object Other : MatrixTimelineItem
 }
 
@@ -40,7 +38,7 @@ fun TimelineItem.asMatrixTimelineItem(): MatrixTimelineItem {
     }
     val asVirtual = asVirtual()
     if (asVirtual != null) {
-        return MatrixTimelineItem.Virtual
+        return MatrixTimelineItem.Virtual(asVirtual)
     }
     return MatrixTimelineItem.Other
 }

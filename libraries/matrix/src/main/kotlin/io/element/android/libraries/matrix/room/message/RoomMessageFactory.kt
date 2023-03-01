@@ -27,7 +27,7 @@ class RoomMessageFactory {
             eventId = EventId(eventTimelineItem.eventId() ?: ""),
             body = eventTimelineItem.content().asMessage()?.body() ?: "",
             sender = UserId(eventTimelineItem.sender()),
-            originServerTs = eventTimelineItem.originServerTs()?.toLong() ?: 0L
+            originServerTs = eventTimelineItem.timestamp().toLong()
         )
     }
 }

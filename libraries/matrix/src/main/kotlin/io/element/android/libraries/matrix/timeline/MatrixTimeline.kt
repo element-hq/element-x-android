@@ -18,20 +18,19 @@ package io.element.android.libraries.matrix.timeline
 
 import io.element.android.libraries.matrix.core.EventId
 import kotlinx.coroutines.flow.Flow
-import org.matrix.rustcomponents.sdk.TimelineListener
+import kotlinx.coroutines.flow.StateFlow
 
 interface MatrixTimeline {
-    var callback: Callback?
-    val hasMoreToLoad: Boolean
 
-    interface Callback {
-        fun onUpdatedTimelineItem(timelineItem: MatrixTimelineItem) = Unit
-        fun onPushedTimelineItem(timelineItem: MatrixTimelineItem) = Unit
-    }
+    data class PaginationState(
+        val isBackPaginating: Boolean,
+        val canBackPaginate: Boolean
+    )
+
+    fun paginationState(): StateFlow<PaginationState>
 
     fun timelineItems(): Flow<List<MatrixTimelineItem>>
-    suspend fun paginateBackwards(count: Int): Result<Unit>
-    fun addListener(timelineListener: TimelineListener)
+    suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit>
     fun initialize()
     fun dispose()
 

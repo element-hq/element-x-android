@@ -25,9 +25,9 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.timeline.model.TimelineItem
 import io.element.android.features.messages.timeline.model.TimelineItemReactions
-import io.element.android.features.messages.timeline.model.content.TimelineItemContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemRedactedContent
-import io.element.android.features.messages.timeline.model.content.TimelineItemTextContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemRedactedContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemTextContent
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrixtest.AN_EVENT_ID
 import io.element.android.libraries.matrixtest.A_MESSAGE
@@ -37,6 +37,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import org.matrix.rustcomponents.sdk.TimelineItemContent
 
 class ActionListPresenterTest {
     @Test
@@ -163,9 +164,10 @@ class ActionListPresenterTest {
 
 private fun aMessageEvent(
     isMine: Boolean,
-    content: TimelineItemContent,
-) = TimelineItem.MessageEvent(
-    id = AN_EVENT_ID,
+    content: TimelineItemEventContent,
+) = TimelineItem.Event(
+    id = AN_EVENT_ID.value,
+    eventId = AN_EVENT_ID,
     senderId = A_USER_ID.value,
     senderDisplayName = A_USER_NAME,
     senderAvatar = AvatarData(A_USER_ID.value, A_USER_NAME),

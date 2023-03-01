@@ -32,7 +32,7 @@ import io.element.android.features.messages.textcomposer.MessageComposerState
 import io.element.android.features.messages.timeline.TimelineEvents
 import io.element.android.features.messages.timeline.TimelinePresenter
 import io.element.android.features.messages.timeline.model.TimelineItem
-import io.element.android.features.messages.timeline.model.content.TimelineItemTextBasedContent
+import io.element.android.features.messages.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -79,7 +79,7 @@ class MessagesPresenter @Inject constructor(
         }
         fun handleEvents(event: MessagesEvents) {
             when (event) {
-                is MessagesEvents.HandleAction -> localCoroutineScope.handleTimelineAction(event.action, event.messageEvent, composerState)
+                is MessagesEvents.HandleAction -> localCoroutineScope.handleTimelineAction(event.action, event.event, composerState)
             }
         }
         return MessagesState(
@@ -95,7 +95,7 @@ class MessagesPresenter @Inject constructor(
 
     fun CoroutineScope.handleTimelineAction(
         action: TimelineItemAction,
-        targetEvent: TimelineItem.MessageEvent,
+        targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
     ) = launch {
         when (action) {
@@ -111,13 +111,15 @@ class MessagesPresenter @Inject constructor(
         Timber.v("NotImplementedYet")
     }
 
-    private suspend fun handleActionRedact(event: TimelineItem.MessageEvent) {
-        room.redactEvent(event.id)
+    private suspend fun handleActionRedact(event: TimelineItem.Event) {
+        if (event.eventId == null) return
+        room.redactEvent(event.eventId)
     }
 
-    private fun handleActionEdit(targetEvent: TimelineItem.MessageEvent, composerState: MessageComposerState) {
+    private fun handleActionEdit(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
+        if (targetEvent.eventId == null) return
         val composerMode = MessageComposerMode.Edit(
-            targetEvent.id,
+            targetEvent.eventId,
             (targetEvent.content as? TimelineItemTextBasedContent)?.body.orEmpty()
         )
         composerState.eventSink(
@@ -125,8 +127,9 @@ class MessagesPresenter @Inject constructor(
         )
     }
 
-    private fun handleActionReply(targetEvent: TimelineItem.MessageEvent, composerState: MessageComposerState) {
-        val composerMode = MessageComposerMode.Reply(targetEvent.safeSenderName, targetEvent.id, "")
+    private fun handleActionReply(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
+        if (targetEvent.eventId == null) return
+        val composerMode = MessageComposerMode.Reply(targetEvent.safeSenderName, targetEvent.eventId, "")
         composerState.eventSink(
             MessageComposerEvents.SetMode(composerMode)
         )
