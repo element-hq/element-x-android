@@ -34,7 +34,7 @@ class DefaultLastMessageFormatter @Inject constructor(
         val isSameDay = currentDate.date == dateToFormat.date
         return when {
             isSameDay -> {
-                dateFormatters.formatHour(dateToFormat)
+                dateFormatters.formatTime(dateToFormat)
             }
             else -> {
                 dateFormatters.formatDate(
