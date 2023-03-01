@@ -20,12 +20,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.timeline.model.virtual.TimelineItemDaySeparatorModel
+import io.element.android.features.messages.timeline.model.virtual.TimelineItemDaySeparatorModelProvider
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
 internal fun TimelineItemDaySeparatorView(
@@ -40,7 +46,25 @@ internal fun TimelineItemDaySeparatorView(
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = model.formattedDate
+            text = model.formattedDate,
+            color = MaterialTheme.colorScheme.secondary,
         )
     }
+}
+
+@Preview
+@Composable
+internal fun TimelineItemDaySeparatorViewLightPreview(@PreviewParameter(TimelineItemDaySeparatorModelProvider::class) model: TimelineItemDaySeparatorModel) =
+    ElementPreviewLight { ContentToPreview(model) }
+
+@Preview
+@Composable
+internal fun TimelineItemDaySeparatorViewDarkPreview(@PreviewParameter(TimelineItemDaySeparatorModelProvider::class) model: TimelineItemDaySeparatorModel) =
+    ElementPreviewDark { ContentToPreview(model) }
+
+@Composable
+private fun ContentToPreview(model: TimelineItemDaySeparatorModel) {
+    TimelineItemDaySeparatorView(
+        model = model,
+    )
 }
