@@ -287,12 +287,13 @@ if (isCiBuild) {
     }
 }
 
+// Register quality check tasks.
 tasks.register("runQualityChecks") {
     project.subprojects {
-        val lintTaskPath = "$path:lint"
-        if (tasks.findByPath(lintTaskPath) != null) {
-            dependsOn(lintTaskPath)
-        }
+        // For some reason `findByName("lint")` doesn't work
+        tasks.findByPath("$path:lint")?.let { dependsOn(it) }
+        tasks.findByName("detekt")?.let { dependsOn(it) }
+        tasks.findByName("ktlintCheck")?.let { dependsOn(it) }
     }
-    dependsOn("ktlintCheck", "detekt", ":app:knitCheck")
+    dependsOn(":app:knitCheck")
 }

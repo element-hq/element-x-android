@@ -9,7 +9,7 @@ on:
 # Enrich gradle.properties for CI/CD
 env:
   GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
-  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 4 --no-daemon
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 4
 
 jobs:
   tests:
@@ -32,7 +32,7 @@ jobs:
       - name: 📈 Verify coverage
         run: ./gradlew koverMergedVerify $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
 
-      - name: 📈‼️ Upload kover failed coverage reports
+      - name: 🚫 Upload kover failed coverage reports
         if: failure()
         uses: actions/upload-artifact@v3
         with:
@@ -40,7 +40,7 @@ jobs:
           path: |
             **/kover/merged/verification/errors.txt
 
-      - name: 📸📄 Upload Screenshot Test Report
+      - name: 📸 Upload Screenshot test report
         uses: actions/upload-artifact@v3
         if: always()
         with:
@@ -48,7 +48,7 @@ jobs:
           path: tests/uitests/build/reports/tests/testDebugUnitTest/
           retention-days: 5
 
-      - name: 📸‼️ Upload Screenshot Failure Differences
+      - name: 🚫 Upload Screenshot failure differences on error
         uses: actions/upload-artifact@v3
         if: failure()
         with:
@@ -56,7 +56,7 @@ jobs:
           path: tests/uitests/out/failures/
           retention-days: 5
 
-      - name: ✅📄 Archive kover report
+      - name: ✅ Upload kover report
         if: always()
         uses: actions/upload-artifact@v3
         with:
@@ -64,7 +64,7 @@ jobs:
           path: |
             **/build/reports/kover/merged
 
-      - name: ⚙️‼️ Archive test results on error
+      - name: 🚫 Upload test results on error
         if: failure()
         uses: actions/upload-artifact@v3
         with:
