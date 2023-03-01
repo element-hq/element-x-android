@@ -35,6 +35,22 @@ jobs:
           name: elementx-debug
           path: |
             app/build/outputs/apk/debug/app-debug.apk
+      - uses: rnkdsh/action-upload-diawi@v1.3.1
+        id: diawi
+        with:
+          token: ${{ secrets.DIAWI_TOKEN }}
+          file: app/build/outputs/apk/debug/app-arm64-v8a-debug.apk
+      - name: Add or update PR comment with QR Code to download APK.
+        uses: NejcZdovc/comment-pr@v1
+        with:
+          message: |
+            :iphone: Scan the QR code below to install the build (arm64 only) for this PR.
+            ![QR code](${{ steps.diawi.outputs['qrcode'] }})
+            If you can't scan the QR code you can install the build via this link: ${{ steps.diawi.outputs['url'] }}
+          # Enables to identify and update existing Ad-hoc release message on new commit in the PR
+          identifier: "GITHUB_COMMENT_QR_CODE"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Compile release sources
         run: ./gradlew compileReleaseSources $CI_GRADLE_ARG_PROPERTIES
       - name: Compile nightly sources
