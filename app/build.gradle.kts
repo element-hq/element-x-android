@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+@file:Suppress("UnstableApiUsage")
+
+import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
 import extension.allFeatures
 import extension.allLibraries
 
@@ -44,6 +47,28 @@ android {
 
         vectorDrawables {
             useSupportLibrary = true
+        }
+
+        // Keep abiFilter for the universalApk
+        ndk {
+            abiFilters += listOf("armeabi-v7a", "x86", "arm64-v8a", "x86_64")
+        }
+
+        // Ref: https://developer.android.com/studio/build/configure-apk-splits.html#configure-abi-split
+        splits {
+            // Configures multiple APKs based on ABI.
+            abi {
+                // Enables building multiple APKs per ABI.
+                isEnable = true
+                // By default all ABIs are included, so use reset() and include to specify that we only
+                // want APKs for armeabi-v7a, x86, arm64-v8a and x86_64.
+                // Resets the list of ABIs that Gradle should create APKs for to none.
+                reset()
+                // Specifies a list of ABIs that Gradle should create APKs for.
+                include("armeabi-v7a", "x86", "arm64-v8a", "x86_64")
+                // Generate a universal APK that includes all ABIs, so user who installs from CI tool can use this one by default.
+                isUniversalApk = true
+            }
         }
     }
 
@@ -119,6 +144,32 @@ android {
             getByName(name) {
                 kotlin.srcDir("build/generated/ksp/$name/kotlin")
             }
+        }
+    }
+}
+
+androidComponents {
+    // map for the version codes last digit
+    // x86 must have greater values than arm
+    // 64 bits have greater value than 32 bits
+    val abiVersionCodes = mapOf(
+        "armeabi-v7a" to 1,
+        "arm64-v8a" to 2,
+        "x86" to 3,
+        "x86_64" to 4,
+    )
+
+    onVariants { variant ->
+        // Assigns a different version code for each output APK
+        // other than the universal APK.
+        variant.outputs.forEach { output ->
+            val name = output.filters.find { it.filterType == ABI }?.identifier
+
+            // Stores the value of abiCodes that is associated with the ABI for this variant.
+            val abiCode = abiVersionCodes[name] ?: 0
+            // Assigns the new version code to output.versionCode, which changes the version code
+            // for only the output APK, not for the variant itself.
+            output.versionCode.set((output.versionCode.get() ?: 0) * 10 + abiCode)
         }
     }
 }
