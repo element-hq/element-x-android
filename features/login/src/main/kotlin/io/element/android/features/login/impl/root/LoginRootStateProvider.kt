@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.implementation.changeserver
+package io.element.android.features.login.impl.root
 
-sealed interface ChangeServerEvents {
-    data class SetServer(val server: String) : ChangeServerEvents
-    object Submit : ChangeServerEvents
-}
+fun aLoginRootState() = LoginRootState(
+    homeserver = "",
+    loggedInState = LoggedInState.NotLoggedIn,
+    formState = LoginFormState.Default,
+    eventSink = {}
+)

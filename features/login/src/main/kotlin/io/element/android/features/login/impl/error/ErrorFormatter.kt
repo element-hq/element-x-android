@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.implementation.error
+package io.element.android.features.login.impl.error
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import io.element.android.features.login.implementation.root.LoginFormState
+import io.element.android.features.login.impl.root.LoginFormState
 import io.element.android.libraries.core.uri.isValidUrl
 import io.element.android.libraries.ui.strings.R as StringR
 

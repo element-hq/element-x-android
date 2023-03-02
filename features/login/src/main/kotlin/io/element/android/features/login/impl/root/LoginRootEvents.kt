@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.onboarding.implementation
+package io.element.android.features.login.impl.root
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
-
-data class SplashCarouselData(
-    val items: List<Item>
-) {
-    data class Item(
-        @StringRes val title: Int,
-        @StringRes val body: Int,
-        @DrawableRes val image: Int,
-        @DrawableRes val pageBackground: Int
-    )
+sealed interface LoginRootEvents {
+    object RefreshHomeServer : LoginRootEvents
+    data class SetLogin(val login: String) : LoginRootEvents
+    data class SetPassword(val password: String) : LoginRootEvents
+    object Submit : LoginRootEvents
 }

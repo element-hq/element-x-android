@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.implementation.changeserver
+package io.element.android.features.login.impl.changeserver
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -46,7 +46,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.login.R
-import io.element.android.features.login.implementation.error.changeServerError
+import io.element.android.features.login.impl.error.changeServerError
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark

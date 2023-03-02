@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.implementation
+package io.element.android.features.login.impl
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
@@ -29,8 +29,8 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.login.implementation.changeserver.ChangeServerNode
-import io.element.android.features.login.implementation.root.LoginRootNode
+import io.element.android.features.login.impl.changeserver.ChangeServerNode
+import io.element.android.features.login.impl.root.LoginRootNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope

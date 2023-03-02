@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.implementation.changeserver
+package io.element.android.features.login.impl.changeserver
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.Async

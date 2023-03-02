@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.onboarding.implementation
+package io.element.android.features.onboarding.impl
 
 import androidx.annotation.DrawableRes
 import io.element.android.features.onboarding.R

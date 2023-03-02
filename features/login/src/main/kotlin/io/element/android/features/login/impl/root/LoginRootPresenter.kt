@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.implementation.root
+package io.element.android.features.login.impl.root
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState

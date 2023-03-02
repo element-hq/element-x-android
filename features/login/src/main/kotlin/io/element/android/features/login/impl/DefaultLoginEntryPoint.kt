@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.features.onboarding.implementation
+package io.element.android.features.login.impl
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.onboarding.api.OnBoardingEntryPoint
+import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultOnBoardingEntryPoint @Inject constructor() : OnBoardingEntryPoint {
+class DefaultLoginEntryPoint @Inject constructor() : LoginEntryPoint {
     override fun node(parentNode: Node, buildContext: BuildContext, plugins: List<Plugin>): Node {
-        return parentNode.createNode<OnBoardingNode>(buildContext, plugins)
+        return parentNode.createNode<LoginFlowNode>(buildContext, plugins)
     }
 }
