@@ -18,8 +18,8 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.ksp)
     alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
 }
 
 android {

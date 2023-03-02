@@ -23,7 +23,6 @@ import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
@@ -32,38 +31,26 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.onboarding.api.OnBoardingEntryPoint
+import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.di.AppScope
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
 @ContributesNode(AppScope::class)
-class NotLoggedInFlowNode private constructor(
-    buildContext: BuildContext,
-    plugins: List<Plugin>,
+class NotLoggedInFlowNode @AssistedInject constructor(
+    @Assisted buildContext: BuildContext,
+    @Assisted plugins: List<Plugin>,
     private val onBoardingEntryPoint: OnBoardingEntryPoint,
     private val loginEntryPoint: LoginEntryPoint,
-    private val backstack: BackStack<NavTarget>,
-) : ParentNode<NotLoggedInFlowNode.NavTarget>(
-    navModel = backstack,
+) : BackstackNode<NotLoggedInFlowNode.NavTarget>(
+    backstack = BackStack(
+        initialElement = NavTarget.OnBoarding,
+        savedStateMap = buildContext.savedStateMap
+    ),
     buildContext = buildContext,
     plugins = plugins,
 ) {
-    @AssistedInject
-    constructor(
-        @Assisted buildContext: BuildContext,
-        @Assisted plugins: List<Plugin>,
-        onBoardingEntryPoint: OnBoardingEntryPoint,
-        loginEntryPoint: LoginEntryPoint,
-    )
-        : this(
-        buildContext = buildContext,
-        plugins = plugins,
-        onBoardingEntryPoint = onBoardingEntryPoint,
-        loginEntryPoint = loginEntryPoint,
-        backstack = BackStack(initialElement = NavTarget.OnBoarding, savedStateMap = buildContext.savedStateMap),
-    )
-
     init {
         lifecycle.subscribe(
             onCreate = { Timber.v("OnCreate") },

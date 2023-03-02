@@ -27,7 +27,6 @@ import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
@@ -38,6 +37,7 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
+import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.bindings
@@ -54,34 +54,19 @@ import io.element.android.x.di.SessionComponent
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
-class LoggedInFlowNode(
-    buildContext: BuildContext,
-    plugins: List<Plugin>,
-    private val backstack: BackStack<NavTarget>,
+class LoggedInFlowNode @AssistedInject constructor(
+    @Assisted buildContext: BuildContext,
+    @Assisted plugins: List<Plugin>,
     private val roomListEntryPoint: RoomListEntryPoint,
     private val preferencesEntryPoint: PreferencesEntryPoint,
-) : ParentNode<LoggedInFlowNode.NavTarget>(
-    navModel = backstack,
+) : BackstackNode<LoggedInFlowNode.NavTarget>(
+    backstack = BackStack(
+        initialElement = NavTarget.RoomList,
+        savedStateMap = buildContext.savedStateMap,
+    ),
     buildContext = buildContext,
     plugins = plugins
 ), DaggerComponentOwner {
-
-    @AssistedInject
-    constructor(
-        @Assisted buildContext: BuildContext,
-        @Assisted plugins: List<Plugin>,
-        roomListEntryPoint: RoomListEntryPoint,
-        preferencesEntryPoint: PreferencesEntryPoint,
-    ) : this(
-        buildContext = buildContext,
-        plugins = plugins,
-        roomListEntryPoint = roomListEntryPoint,
-        preferencesEntryPoint = preferencesEntryPoint,
-        backstack = BackStack(
-            initialElement = NavTarget.RoomList,
-            savedStateMap = buildContext.savedStateMap,
-        )
-    )
 
     interface Callback : Plugin {
         fun onOpenBugReport()
