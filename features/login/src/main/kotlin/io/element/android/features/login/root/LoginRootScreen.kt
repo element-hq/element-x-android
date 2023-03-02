@@ -58,7 +58,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.core.SessionId
+import io.element.android.libraries.matrix.core.UserId
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.R as StringR
@@ -68,7 +68,7 @@ fun LoginRootScreen(
     state: LoginRootState,
     modifier: Modifier = Modifier,
     onChangeServer: () -> Unit = {},
-    onLoginWithSuccess: (SessionId) -> Unit = {},
+    onLoginWithSuccess: (UserId) -> Unit = {},
 ) {
     val eventSink = state.eventSink
     Box(

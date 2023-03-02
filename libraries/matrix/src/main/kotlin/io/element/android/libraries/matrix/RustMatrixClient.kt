@@ -18,7 +18,6 @@ package io.element.android.libraries.matrix
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.core.RoomId
-import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.matrix.core.UserId
 import io.element.android.libraries.matrix.media.MediaResolver
 import io.element.android.libraries.matrix.media.RustMediaResolver
@@ -26,9 +25,8 @@ import io.element.android.libraries.matrix.room.MatrixRoom
 import io.element.android.libraries.matrix.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.room.RustMatrixRoom
 import io.element.android.libraries.matrix.room.RustRoomSummaryDataSource
-import io.element.android.libraries.matrix.session.SessionStore
-import io.element.android.libraries.matrix.session.sessionId
 import io.element.android.libraries.matrix.sync.SlidingSyncObserverProxy
+import io.element.android.libraries.sessionstorage.SessionStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
@@ -51,7 +49,7 @@ class RustMatrixClient constructor(
     private val baseDirectory: File,
 ) : MatrixClient {
 
-    override val sessionId: SessionId = client.session().sessionId()
+    override val sessionId: UserId = UserId(client.userId())
 
     private val clientDelegate = object : ClientDelegate {
         override fun didReceiveAuthError(isSoftLogout: Boolean) {
@@ -174,10 +172,8 @@ class RustMatrixClient constructor(
             Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
         }
         baseDirectory.deleteSessionDirectory(userID = client.userId())
-        sessionStore.reset()
+        sessionStore.removeSession(client.userId())
     }
-
-    override fun userId(): UserId = UserId(client.userId())
 
     override suspend fun loadUserDisplayName(): Result<String> = withContext(dispatchers.io) {
         runCatching {

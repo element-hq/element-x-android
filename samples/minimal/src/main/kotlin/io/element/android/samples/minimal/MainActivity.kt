@@ -31,7 +31,6 @@ import androidx.core.view.WindowCompat
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.auth.RustMatrixAuthenticationService
-import io.element.android.libraries.matrix.session.PreferencesSessionStore
 import kotlinx.coroutines.runBlocking
 import org.matrix.rustcomponents.sdk.AuthenticationService
 import java.io.File
@@ -45,7 +44,7 @@ class MainActivity : ComponentActivity() {
             baseDirectory = baseDirectory,
             coroutineScope = Singleton.appScope,
             coroutineDispatchers = Singleton.coroutineDispatchers,
-            sessionStore = PreferencesSessionStore(applicationContext),
+            sessionStore = InMemorySessionStore(),
             authService = AuthenticationService(baseDirectory.absolutePath, null, null),
         )
     }

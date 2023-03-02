@@ -18,7 +18,6 @@ package io.element.android.libraries.matrix
 
 import io.element.android.libraries.matrix.core.RoomId
 import io.element.android.libraries.matrix.core.SessionId
-import io.element.android.libraries.matrix.core.UserId
 import io.element.android.libraries.matrix.media.MediaResolver
 import io.element.android.libraries.matrix.room.MatrixRoom
 import io.element.android.libraries.matrix.room.RoomSummaryDataSource
@@ -33,7 +32,6 @@ interface MatrixClient : Closeable {
     fun roomSummaryDataSource(): RoomSummaryDataSource
     fun mediaResolver(): MediaResolver
     suspend fun logout()
-    fun userId(): UserId
     suspend fun loadUserDisplayName(): Result<String>
     suspend fun loadUserAvatarURLString(): Result<String>
     suspend fun loadMediaContentForSource(source: MediaSource): Result<ByteArray>

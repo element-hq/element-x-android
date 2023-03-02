@@ -16,7 +16,4 @@
 
 package io.element.android.libraries.matrix.core
 
-import java.io.Serializable
-
-@JvmInline
-value class SessionId(val value: String) : Serializable
+typealias SessionId = UserId

@@ -18,12 +18,14 @@ package io.element.android.libraries.matrixtest
 
 import io.element.android.libraries.matrix.core.EventId
 import io.element.android.libraries.matrix.core.RoomId
+import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.matrix.core.UserId
 
 const val A_USER_NAME = "alice"
 const val A_PASSWORD = "password"
 
 val A_USER_ID = UserId("@alice:server.org")
+val A_SESSION_ID = SessionId(A_USER_ID.value)
 val A_ROOM_ID = RoomId("!aRoomId")
 val AN_EVENT_ID = EventId("\$anEventId")
 
@@ -34,7 +36,6 @@ const val ANOTHER_MESSAGE = "Hello universe!"
 
 const val A_HOMESERVER = "matrix.org"
 const val A_HOMESERVER_2 = "matrix-client.org"
-const val A_SESSION_ID = "sessionId"
 
 const val AN_AVATAR_URL = "mxc://data"
 

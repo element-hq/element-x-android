@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.session
+package io.element.encrypteddb.passphrase
 
-import io.element.android.libraries.matrix.core.SessionId
-import org.matrix.rustcomponents.sdk.Session
-
-fun Session.sessionId() = SessionId("${userId}_${deviceId}")
+/**
+ * An abstraction to implement secure providers for SQLCipher passphrases.
+ */
+interface PassphraseProvider {
+    /**
+     * Returns a passphrase for SQLCipher in [ByteArray] format.
+     */
+    fun getPassphrase(): ByteArray
+}
