@@ -18,8 +18,8 @@ package io.element.android.features.messages.timeline
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.timeline.model.TimelineItem
-import io.element.android.libraries.matrix.core.EventId
-import io.element.android.libraries.matrix.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable

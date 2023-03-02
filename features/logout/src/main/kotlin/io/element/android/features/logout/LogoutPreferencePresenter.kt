@@ -24,7 +24,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.execute
-import io.element.android.libraries.matrix.MatrixClient
+import io.element.android.libraries.matrix.api.MatrixClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject

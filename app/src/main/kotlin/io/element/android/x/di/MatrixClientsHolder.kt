@@ -19,10 +19,10 @@ package io.element.android.x.di
 import android.os.Bundle
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
-import io.element.android.libraries.matrix.MatrixClient
-import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
-import io.element.android.libraries.matrix.core.SessionId
-import io.element.android.libraries.matrix.core.UserId
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap

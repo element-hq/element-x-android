@@ -18,7 +18,7 @@ package io.element.android.features.roomlist.model
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomId
 
 open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSummary> {
     override val values: Sequence<RoomListRoomSummary>

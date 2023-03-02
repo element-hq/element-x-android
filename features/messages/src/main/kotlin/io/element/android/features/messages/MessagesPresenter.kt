@@ -36,7 +36,7 @@ import io.element.android.features.messages.timeline.model.event.TimelineItemTex
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.matrix.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

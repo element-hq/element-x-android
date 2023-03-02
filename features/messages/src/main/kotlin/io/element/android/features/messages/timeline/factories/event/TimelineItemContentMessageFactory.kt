@@ -23,7 +23,7 @@ import io.element.android.features.messages.timeline.model.event.TimelineItemNot
 import io.element.android.features.messages.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.timeline.util.toHtmlDocument
-import io.element.android.libraries.matrix.media.MediaResolver
+import io.element.android.libraries.matrix.api.media.MediaResolver
 import org.matrix.rustcomponents.sdk.Message
 import org.matrix.rustcomponents.sdk.MessageType
 import javax.inject.Inject

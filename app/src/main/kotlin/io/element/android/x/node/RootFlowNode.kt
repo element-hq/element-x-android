@@ -37,9 +37,9 @@ import io.element.android.libraries.architecture.animation.rememberDefaultTransi
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.DaggerComponentOwner
-import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
-import io.element.android.libraries.matrix.core.SessionId
-import io.element.android.libraries.matrix.core.UserId
+import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.x.di.MatrixClientsHolder
 import io.element.android.x.root.RootPresenter
 import io.element.android.x.root.RootView

@@ -44,7 +44,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.utils.LogCompositions
-import io.element.android.libraries.matrix.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 

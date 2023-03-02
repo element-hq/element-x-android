@@ -22,7 +22,7 @@ import io.element.android.features.messages.timeline.model.TimelineItemGroupPosi
 import io.element.android.features.messages.timeline.model.TimelineItemReactions
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import kotlinx.collections.immutable.toImmutableList
 import org.matrix.rustcomponents.sdk.ProfileTimelineDetails
 import javax.inject.Inject
