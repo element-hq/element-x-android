@@ -18,19 +18,13 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("io.element.android-library")
-    alias(libs.plugins.anvil)
-    kotlin("plugin.serialization") version "1.8.10"
 }
 
 android {
     namespace = "io.element.android.libraries.matrix.test"
 }
 
-anvil {
-    generateDaggerFactories.set(true)
-}
-
 dependencies {
-    implementation(projects.libraries.di)
-    implementation(projects.libraries.matrix.api)
+    api(projects.libraries.matrix.api)
+    api(libs.coroutines.core)
 }

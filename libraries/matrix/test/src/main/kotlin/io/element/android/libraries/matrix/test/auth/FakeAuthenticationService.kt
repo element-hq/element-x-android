@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrixtest.auth
+package io.element.android.libraries.matrix.test.auth
 
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.core.UserId
-import io.element.android.libraries.matrixtest.A_HOMESERVER
-import io.element.android.libraries.matrixtest.A_USER_ID
+import io.element.android.libraries.matrix.test.A_HOMESERVER
+import io.element.android.libraries.matrix.test.A_USER_ID
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf

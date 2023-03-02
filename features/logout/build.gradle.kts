@@ -46,7 +46,7 @@ dependencies {
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
-    testImplementation(projects.libraries.matrixtest)
+    testImplementation(projects.libraries.matrix.test)
 
     androidTestImplementation(libs.test.junitext)
 }

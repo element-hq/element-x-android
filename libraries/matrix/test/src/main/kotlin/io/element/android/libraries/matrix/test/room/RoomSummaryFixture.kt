@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrixtest.room
+package io.element.android.libraries.matrix.test.room
 
 import io.element.android.libraries.matrix.core.RoomId
 import io.element.android.libraries.matrix.room.RoomSummary
 import io.element.android.libraries.matrix.room.RoomSummaryDetails
-import io.element.android.libraries.matrixtest.A_MESSAGE
-import io.element.android.libraries.matrixtest.A_ROOM_ID
-import io.element.android.libraries.matrixtest.A_ROOM_NAME
+import io.element.android.libraries.matrix.test.A_MESSAGE
+import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_ROOM_NAME
 
 fun aRoomSummaryFilled(
     roomId: RoomId = A_ROOM_ID,
