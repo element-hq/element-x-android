@@ -17,10 +17,10 @@
 package io.element.android.features.roomlist.api
 
 import com.bumble.appyx.core.plugin.Plugin
-import io.element.android.libraries.architecture.EntryPoint
+import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.matrix.core.RoomId
 
-interface RoomListEntryPoint : EntryPoint {
+interface RoomListEntryPoint : FeatureEntryPoint {
     interface Callback : Plugin {
         fun onRoomClicked(roomId: RoomId)
         fun onSettingsClicked()

@@ -42,7 +42,7 @@ import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
-class RoomFlowNode(
+class RoomFlowNode private constructor(
     buildContext: BuildContext,
     plugins: List<Plugin>,
     private val backstack: BackStack<NavTarget>,

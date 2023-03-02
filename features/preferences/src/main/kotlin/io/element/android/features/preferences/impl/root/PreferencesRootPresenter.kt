@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.root
+package io.element.android.features.preferences.impl.root
 
 import androidx.compose.runtime.Composable
 import io.element.android.features.logout.LogoutPreferencePresenter

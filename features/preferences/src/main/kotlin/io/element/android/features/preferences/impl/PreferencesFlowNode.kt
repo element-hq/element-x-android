@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences
+package io.element.android.features.preferences.impl
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
@@ -29,7 +29,8 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.preferences.root.PreferencesRootNode
+import io.element.android.features.preferences.api.PreferencesEntryPoint
+import io.element.android.features.preferences.impl.root.PreferencesRootNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
@@ -56,16 +57,6 @@ class PreferencesFlowNode(
         )
     )
 
-    interface Callback : Plugin {
-        fun onOpenBugReport()
-    }
-
-    private val preferencesRootNodeCallback = object : PreferencesRootNode.Callback {
-        override fun onOpenBugReport() {
-            plugins<Callback>().forEach { it.onOpenBugReport() }
-        }
-    }
-
     sealed interface NavTarget : Parcelable {
         @Parcelize
         object Root : NavTarget
@@ -73,7 +64,14 @@ class PreferencesFlowNode(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Root -> createNode<PreferencesRootNode>(buildContext, plugins = listOf(preferencesRootNodeCallback))
+            NavTarget.Root -> {
+                val callback = object : PreferencesRootNode.Callback {
+                    override fun onOpenBugReport() {
+                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onOpenBugReport() }
+                    }
+                }
+                createNode<PreferencesRootNode>(buildContext, plugins = listOf(callback))
+            }
         }
     }
 

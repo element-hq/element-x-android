@@ -36,7 +36,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.preferences.PreferencesFlowNode
+import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -59,6 +59,7 @@ class LoggedInFlowNode(
     plugins: List<Plugin>,
     private val backstack: BackStack<NavTarget>,
     private val roomListEntryPoint: RoomListEntryPoint,
+    private val preferencesEntryPoint: PreferencesEntryPoint,
 ) : ParentNode<LoggedInFlowNode.NavTarget>(
     navModel = backstack,
     buildContext = buildContext,
@@ -70,10 +71,12 @@ class LoggedInFlowNode(
         @Assisted buildContext: BuildContext,
         @Assisted plugins: List<Plugin>,
         roomListEntryPoint: RoomListEntryPoint,
+        preferencesEntryPoint: PreferencesEntryPoint,
     ) : this(
         buildContext = buildContext,
         plugins = plugins,
         roomListEntryPoint = roomListEntryPoint,
+        preferencesEntryPoint = preferencesEntryPoint,
         backstack = BackStack(
             initialElement = NavTarget.RoomList,
             savedStateMap = buildContext.savedStateMap,
@@ -149,12 +152,12 @@ class LoggedInFlowNode(
                 }
             }
             NavTarget.Settings -> {
-                val callback = object : PreferencesFlowNode.Callback {
+                val callback = object : PreferencesEntryPoint.Callback {
                     override fun onOpenBugReport() {
                         plugins<Callback>().forEach { it.onOpenBugReport() }
                     }
                 }
-                createNode<PreferencesFlowNode>(buildContext, plugins = listOf(callback))
+                preferencesEntryPoint.node(this, buildContext, plugins = listOf(callback))
             }
         }
     }

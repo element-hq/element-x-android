@@ -17,9 +17,9 @@
 package io.element.android.features.onboarding.api
 
 import com.bumble.appyx.core.plugin.Plugin
-import io.element.android.libraries.architecture.EntryPoint
+import io.element.android.libraries.architecture.FeatureEntryPoint
 
-interface OnBoardingEntryPoint : EntryPoint {
+interface OnBoardingEntryPoint : FeatureEntryPoint {
     interface Callback : Plugin {
         fun onSignUp()
         fun onSignIn()
