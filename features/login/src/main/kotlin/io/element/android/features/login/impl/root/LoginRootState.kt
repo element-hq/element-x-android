@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.implementation.root
+package io.element.android.features.login.impl.root
 
 import android.os.Parcelable
 import io.element.android.libraries.matrix.core.SessionId

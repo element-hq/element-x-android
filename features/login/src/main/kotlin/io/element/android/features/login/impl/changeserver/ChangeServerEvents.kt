@@ -14,14 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.implementation.changeserver
+package io.element.android.features.login.impl.changeserver
 
-import io.element.android.libraries.architecture.Async
-
-data class ChangeServerState(
-    val homeserver: String,
-    val changeServerAction: Async<Unit>,
-    val eventSink: (ChangeServerEvents) -> Unit,
-) {
-    val submitEnabled = homeserver.isNotEmpty() && changeServerAction !is Async.Loading
+sealed interface ChangeServerEvents {
+    data class SetServer(val server: String) : ChangeServerEvents
+    object Submit : ChangeServerEvents
 }

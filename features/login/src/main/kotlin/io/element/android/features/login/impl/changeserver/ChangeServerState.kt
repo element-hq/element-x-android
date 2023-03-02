@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.implementation.root
+package io.element.android.features.login.impl.changeserver
 
-sealed interface LoginRootEvents {
-    object RefreshHomeServer : LoginRootEvents
-    data class SetLogin(val login: String) : LoginRootEvents
-    data class SetPassword(val password: String) : LoginRootEvents
-    object Submit : LoginRootEvents
+import io.element.android.libraries.architecture.Async
+
+data class ChangeServerState(
+    val homeserver: String,
+    val changeServerAction: Async<Unit>,
+    val eventSink: (ChangeServerEvents) -> Unit,
+) {
+    val submitEnabled = homeserver.isNotEmpty() && changeServerAction !is Async.Loading
 }

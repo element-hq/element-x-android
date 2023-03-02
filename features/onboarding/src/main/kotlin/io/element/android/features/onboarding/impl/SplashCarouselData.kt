@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.implementation.root
+package io.element.android.features.onboarding.impl
 
-fun aLoginRootState() = LoginRootState(
-    homeserver = "",
-    loggedInState = LoggedInState.NotLoggedIn,
-    formState = LoginFormState.Default,
-    eventSink = {}
-)
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+
+data class SplashCarouselData(
+    val items: List<Item>
+) {
+    data class Item(
+        @StringRes val title: Int,
+        @StringRes val body: Int,
+        @DrawableRes val image: Int,
+        @DrawableRes val pageBackground: Int
+    )
+}

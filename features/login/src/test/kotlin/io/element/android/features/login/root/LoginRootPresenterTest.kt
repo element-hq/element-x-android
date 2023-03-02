@@ -22,10 +22,10 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.login.implementation.root.LoggedInState
-import io.element.android.features.login.implementation.root.LoginFormState
-import io.element.android.features.login.implementation.root.LoginRootEvents
-import io.element.android.features.login.implementation.root.LoginRootPresenter
+import io.element.android.features.login.impl.root.LoggedInState
+import io.element.android.features.login.impl.root.LoginFormState
+import io.element.android.features.login.impl.root.LoginRootEvents
+import io.element.android.features.login.impl.root.LoginRootPresenter
 import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.matrixtest.A_HOMESERVER
 import io.element.android.libraries.matrixtest.A_HOMESERVER_2
