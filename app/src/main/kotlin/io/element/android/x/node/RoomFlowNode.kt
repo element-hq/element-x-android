@@ -28,11 +28,10 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.messages.MessagesNode
+import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.bindings
-import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.nodeInputs
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.di.SessionScope
@@ -45,6 +44,7 @@ import timber.log.Timber
 class RoomFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val messagesEntryPoint: MessagesEntryPoint,
 ) : BackstackNode<RoomFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Messages,
@@ -73,7 +73,9 @@ class RoomFlowNode @AssistedInject constructor(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Messages -> createNode<MessagesNode>(buildContext)
+            NavTarget.Messages -> {
+                messagesEntryPoint.node(this, buildContext)
+            }
         }
     }
 
