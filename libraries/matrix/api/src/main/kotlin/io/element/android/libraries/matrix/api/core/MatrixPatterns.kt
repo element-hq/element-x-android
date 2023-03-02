@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.core
+package io.element.android.libraries.matrix.api.core
 
 import io.element.android.libraries.matrix.api.BuildConfig
 import timber.log.Timber

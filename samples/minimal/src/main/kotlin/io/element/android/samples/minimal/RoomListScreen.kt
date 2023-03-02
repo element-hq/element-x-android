@@ -24,8 +24,8 @@ import io.element.android.features.roomlist.RoomListView
 import io.element.android.libraries.dateformatter.impl.DateFormatters
 import io.element.android.libraries.dateformatter.impl.DefaultLastMessageFormatter
 import io.element.android.libraries.dateformatter.impl.LocalDateTimeProvider
-import io.element.android.libraries.matrix.MatrixClient
-import io.element.android.libraries.matrix.core.RoomId
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone

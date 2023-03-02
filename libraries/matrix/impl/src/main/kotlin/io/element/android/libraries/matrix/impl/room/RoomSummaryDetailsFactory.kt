@@ -17,8 +17,8 @@
 package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.matrix.impl.room.message.RoomMessageFactory
-import io.element.android.libraries.matrix.core.RoomId
-import io.element.android.libraries.matrix.room.RoomSummaryDetails
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 

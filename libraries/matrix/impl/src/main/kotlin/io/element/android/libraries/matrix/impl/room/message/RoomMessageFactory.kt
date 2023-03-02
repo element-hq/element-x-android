@@ -16,9 +16,9 @@
 
 package io.element.android.libraries.matrix.impl.room.message
 
-import io.element.android.libraries.matrix.core.EventId
-import io.element.android.libraries.matrix.core.UserId
-import io.element.android.libraries.matrix.room.message.RoomMessage
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import org.matrix.rustcomponents.sdk.EventTimelineItem
 
 class RoomMessageFactory {

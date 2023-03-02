@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.room
+package io.element.android.libraries.matrix.api.room.message
 
-import kotlinx.coroutines.flow.StateFlow
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
 
-interface RoomSummaryDataSource {
-    fun roomSummaries(): StateFlow<List<RoomSummary>>
-    fun setSlidingSyncRange(range: IntRange)
-}
+data class RoomMessage(
+    val eventId: EventId,
+    val body: String,
+    val sender: UserId,
+    val originServerTs: Long,
+)

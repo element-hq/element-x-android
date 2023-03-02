@@ -19,8 +19,8 @@ package io.element.android.libraries.matrix.impl.room
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.impl.sync.roomListDiff
 import io.element.android.libraries.matrix.impl.sync.state
-import io.element.android.libraries.matrix.room.RoomSummary
-import io.element.android.libraries.matrix.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.room.RoomSummary
+import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel

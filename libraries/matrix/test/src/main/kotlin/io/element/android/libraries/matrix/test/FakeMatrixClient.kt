@@ -16,12 +16,12 @@
 
 package io.element.android.libraries.matrix.test
 
-import io.element.android.libraries.matrix.MatrixClient
-import io.element.android.libraries.matrix.core.RoomId
-import io.element.android.libraries.matrix.core.SessionId
-import io.element.android.libraries.matrix.media.MediaResolver
-import io.element.android.libraries.matrix.room.MatrixRoom
-import io.element.android.libraries.matrix.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.media.MediaResolver
+import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.test.media.FakeMediaResolver
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource

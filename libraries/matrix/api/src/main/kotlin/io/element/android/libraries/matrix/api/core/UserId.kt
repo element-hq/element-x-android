@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.core
+package io.element.android.libraries.matrix.api.core
 
 import java.io.Serializable
 
 @JvmInline
-value class RoomId(val value: String) : Serializable
+value class UserId(val value: String) : Serializable

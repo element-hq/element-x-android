@@ -18,7 +18,7 @@ package io.element.android.features.roomlist.model
 
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomId
 
 @Immutable
 data class RoomListRoomSummary(

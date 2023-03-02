@@ -18,7 +18,7 @@ package io.element.android.libraries.matrix.ui.model
 
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.core.UserId
+import io.element.android.libraries.matrix.api.core.UserId
 
 @Immutable
 data class MatrixUser(

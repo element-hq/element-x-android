@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.permalink
+package io.element.android.libraries.matrix.api.permalink
 
 import android.net.Uri
 

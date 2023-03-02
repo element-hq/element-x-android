@@ -20,7 +20,7 @@ import android.content.Context
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.matrix.MatrixClient
+import io.element.android.libraries.matrix.api.MatrixClient
 import javax.inject.Inject
 
 class LoggedInImageLoaderFactory @Inject constructor(

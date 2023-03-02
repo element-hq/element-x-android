@@ -28,7 +28,7 @@ import io.element.android.features.messages.fixtures.aMessageEvent
 import io.element.android.features.messages.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.textcomposer.MessageComposerPresenter
 import io.element.android.features.messages.timeline.TimelinePresenter
-import io.element.android.libraries.matrix.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom

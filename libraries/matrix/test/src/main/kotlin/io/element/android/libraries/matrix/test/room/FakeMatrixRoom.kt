@@ -16,12 +16,12 @@
 
 package io.element.android.libraries.matrix.test.room
 
-import io.element.android.libraries.matrix.core.EventId
-import io.element.android.libraries.matrix.core.RoomId
-import io.element.android.libraries.matrix.room.MatrixRoom
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
-import io.element.android.libraries.matrix.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow

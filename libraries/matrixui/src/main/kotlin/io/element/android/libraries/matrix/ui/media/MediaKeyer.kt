@@ -19,7 +19,7 @@ package io.element.android.libraries.matrix.ui.media
 import coil.key.Keyer
 import coil.request.Options
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.media.MediaResolver
+import io.element.android.libraries.matrix.api.media.MediaResolver
 
 internal class AvatarKeyer : Keyer<AvatarData> {
     override fun key(data: AvatarData, options: Options): String? {

@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.permalink
+package io.element.android.libraries.matrix.api.permalink
 
 import android.net.Uri
 import android.net.UrlQuerySanitizer
-import io.element.android.libraries.matrix.core.MatrixPatterns
+import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import timber.log.Timber
 import java.net.URLDecoder
 

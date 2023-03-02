@@ -18,10 +18,10 @@ package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
-import io.element.android.libraries.matrix.core.EventId
-import io.element.android.libraries.matrix.core.RoomId
-import io.element.android.libraries.matrix.room.MatrixRoom
-import io.element.android.libraries.matrix.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter

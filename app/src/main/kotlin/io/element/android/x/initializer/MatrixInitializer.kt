@@ -19,7 +19,7 @@ package io.element.android.x.initializer
 import android.content.Context
 import androidx.startup.Initializer
 import io.element.android.libraries.matrix.impl.tracing.setupTracing
-import io.element.android.libraries.matrix.tracing.TracingConfigurations
+import io.element.android.libraries.matrix.api.tracing.TracingConfigurations
 import io.element.android.x.BuildConfig
 
 class MatrixInitializer : Initializer<Unit> {
