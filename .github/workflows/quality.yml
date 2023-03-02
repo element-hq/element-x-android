@@ -1,6 +1,7 @@
 name: Code Quality Checks
 
 on:
+  workflow_dispatch:
   pull_request: { }
   push:
     branches: [ main, develop ]
@@ -21,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run code quality check suite
-        run: ./gradlew check $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew runQualityChecks $CI_GRADLE_ARG_PROPERTIES
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v3
@@ -29,15 +30,6 @@ jobs:
           name: linting-report
           path: |
             */build/reports/**/*.*
-      - name: Check Kover rules
-        run: ./gradlew koverMergedVerify $CI_GRADLE_ARG_PROPERTIES
-      - name: Upload reports
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: kover-report
-          path: |
-            **/kover/merged/verification/errors.txt
       - name: Prepare Danger
         if: always()
         run: |
