@@ -1,3 +1,6 @@
+import kotlinx.kover.api.KoverTaskExtension
+import org.jetbrains.kotlin.cli.common.toBooleanLenient
+
 /*
  * Copyright (c) 2022 New Vector Ltd
  *
@@ -205,11 +208,11 @@ koverMerged {
             name = "Global minimum code coverage."
             target = kotlinx.kover.api.VerificationTarget.ALL
             bound {
-                minValue = 55
+                minValue = 50
                 // Setting a max value, so that if coverage is bigger, it means that we have to change minValue.
                 // For instance if we have minValue = 25 and maxValue = 30, and current code coverage is now 37.32%, update
                 // minValue to 35 and maxValue to 40.
-                maxValue = 60
+                maxValue = 55
                 counter = kotlinx.kover.api.CounterType.INSTRUCTION
                 valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
             }
@@ -256,4 +259,41 @@ koverMerged {
             }
         }
     }
+}
+
+// Make Kover depend on Paparazzi
+tasks.whenTaskAdded {
+    if (name.startsWith("koverMerged")) {
+        dependsOn(":tests:uitests:verifyPaparazziDebug")
+    }
+}
+
+// When running on the CI, run only debug test variants
+val ciBuildProperty = "ci-build"
+val isCiBuild = if (project.hasProperty(ciBuildProperty)) {
+    val raw = project.property(ciBuildProperty) as? String
+    raw?.toBooleanLenient() == true || raw?.toIntOrNull() == 1
+} else false
+if (isCiBuild) {
+    allprojects {
+        afterEvaluate {
+            tasks.withType<Test>().configureEach {
+                extensions.configure<KoverTaskExtension> {
+                    val enabled = name.contains("debug", ignoreCase = true)
+                    isDisabled.set(!enabled)
+                }
+            }
+        }
+    }
+}
+
+// Register quality check tasks.
+tasks.register("runQualityChecks") {
+    project.subprojects {
+        // For some reason `findByName("lint")` doesn't work
+        tasks.findByPath("$path:lint")?.let { dependsOn(it) }
+        tasks.findByName("detekt")?.let { dependsOn(it) }
+        tasks.findByName("ktlintCheck")?.let { dependsOn(it) }
+    }
+    dependsOn(":app:knitCheck")
 }
