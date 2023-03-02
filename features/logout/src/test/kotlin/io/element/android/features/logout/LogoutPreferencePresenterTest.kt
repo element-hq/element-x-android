@@ -23,10 +23,9 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrixtest.A_SESSION_ID
-import io.element.android.libraries.matrixtest.A_THROWABLE
-import io.element.android.libraries.matrixtest.A_USER_ID
-import io.element.android.libraries.matrixtest.FakeMatrixClient
+import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_THROWABLE
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test

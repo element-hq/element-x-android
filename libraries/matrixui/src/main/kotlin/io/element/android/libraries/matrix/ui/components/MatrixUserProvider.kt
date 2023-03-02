@@ -18,7 +18,7 @@ package io.element.android.libraries.matrix.ui.components
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
-import io.element.android.libraries.matrix.core.UserId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 
 open class MatrixUserProvider : PreviewParameterProvider<MatrixUser> {

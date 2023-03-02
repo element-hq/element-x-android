@@ -34,9 +34,9 @@ import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.dateformatter.LastMessageFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.matrix.MatrixClient
-import io.element.android.libraries.matrix.core.UserId
-import io.element.android.libraries.matrix.room.RoomSummary
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.RoomSummary
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf

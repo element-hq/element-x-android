@@ -26,9 +26,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.features.messages.timeline.factories.TimelineItemsFactory
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.core.EventId
-import io.element.android.libraries.matrix.room.MatrixRoom
-import io.element.android.libraries.matrix.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn

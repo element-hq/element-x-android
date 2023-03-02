@@ -21,10 +21,10 @@ import io.element.android.features.messages.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.timeline.model.event.TimelineItemTextContent
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrixtest.AN_EVENT_ID
-import io.element.android.libraries.matrixtest.A_MESSAGE
-import io.element.android.libraries.matrixtest.A_USER_ID
-import io.element.android.libraries.matrixtest.A_USER_NAME
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.A_MESSAGE
+import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.A_USER_NAME
 import kotlinx.collections.immutable.persistentListOf
 
 internal fun aMessageEvent(
