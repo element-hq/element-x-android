@@ -107,6 +107,22 @@ class RustMatrixAuthenticationService @Inject constructor(
     }
 }
 
-fun SessionData.toSession() = Session(accessToken, refreshToken, userId, deviceId, homeserverUrl, isSoftLogout, slidingSyncProxy)
+private fun SessionData.toSession() = Session(
+    accessToken = accessToken,
+    refreshToken = refreshToken,
+    userId = userId,
+    deviceId = deviceId,
+    homeserverUrl = homeserverUrl,
+    isSoftLogout = isSoftLogout,
+    slidingSyncProxy = slidingSyncProxy,
+)
 
-fun Session.toSessionData() = SessionData(userId, deviceId, accessToken, refreshToken, homeserverUrl, isSoftLogout, slidingSyncProxy)
+private fun Session.toSessionData() = SessionData(
+    userId = userId,
+    deviceId = deviceId,
+    accessToken = accessToken,
+    refreshToken = refreshToken,
+    homeserverUrl = homeserverUrl,
+    isSoftLogout = isSoftLogout,
+    slidingSyncProxy = slidingSyncProxy,
+)

@@ -32,13 +32,13 @@ class DatabaseSessionStoreTests {
     private lateinit var databaseSessionStore: DatabaseSessionStore
 
     private val aSessionData = SessionData(
-        "userId",
-        "deviceId",
-        "accessToken",
-        "refreshToken",
-        "homeserverUrl",
-        false,
-        null
+        userId = "userId",
+        deviceId = "deviceId",
+        accessToken = "accessToken",
+        refreshToken = "refreshToken",
+        homeserverUrl = "homeserverUrl",
+        isSoftLogout = false,
+        slidingSyncProxy = null
     )
 
     @Before
