@@ -1,6 +1,7 @@
 name: APK Build
 
 on:
+  workflow_dispatch:
   pull_request: { }
   push:
     branches: [ main, develop ]
@@ -37,10 +38,12 @@ jobs:
             app/build/outputs/apk/debug/*.apk
       - uses: rnkdsh/action-upload-diawi@v1.3.1
         id: diawi
+        if: ${{ github.event_name == 'pull_request' }}
         with:
           token: ${{ secrets.DIAWI_TOKEN }}
           file: app/build/outputs/apk/debug/app-arm64-v8a-debug.apk
       - name: Add or update PR comment with QR Code to download APK.
+        if: ${{ github.event_name == 'pull_request' }}
         uses: NejcZdovc/comment-pr@v1
         with:
           message: |
