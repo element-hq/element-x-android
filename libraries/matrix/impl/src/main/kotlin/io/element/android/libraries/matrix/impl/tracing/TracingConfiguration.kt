@@ -16,7 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.tracing
 
-import io.element.android.libraries.matrix.tracing.TracingConfiguration
+import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
 import timber.log.Timber
 
 fun setupTracing(tracingConfiguration: TracingConfiguration) {

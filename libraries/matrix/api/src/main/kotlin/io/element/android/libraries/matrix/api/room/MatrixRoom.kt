@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.room
+package io.element.android.libraries.matrix.api.room
 
-import io.element.android.libraries.matrix.core.EventId
-import io.element.android.libraries.matrix.core.RoomId
-import io.element.android.libraries.matrix.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import kotlinx.coroutines.flow.Flow
 
 interface MatrixRoom {

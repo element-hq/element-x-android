@@ -24,7 +24,7 @@ import io.element.android.features.messages.timeline.aTimelineItemList
 import io.element.android.features.messages.timeline.aTimelineState
 import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.textcomposer.MessageComposerMode
 
 open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {

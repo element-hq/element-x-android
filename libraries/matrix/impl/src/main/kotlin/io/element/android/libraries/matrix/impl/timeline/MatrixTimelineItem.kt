@@ -16,7 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.timeline
 
-import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import org.matrix.rustcomponents.sdk.TimelineItem
 
 fun TimelineItem.asMatrixTimelineItem(): MatrixTimelineItem {

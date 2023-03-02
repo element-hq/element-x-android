@@ -21,7 +21,7 @@ import io.element.android.features.messages.timeline.model.virtual.TimelineItemL
 import io.element.android.features.messages.timeline.model.virtual.TimelineItemReadMarkerModel
 import io.element.android.features.messages.timeline.model.virtual.TimelineItemUnknownVirtualModel
 import io.element.android.features.messages.timeline.model.virtual.TimelineItemVirtualModel
-import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import org.matrix.rustcomponents.sdk.VirtualTimelineItem
 import javax.inject.Inject
 

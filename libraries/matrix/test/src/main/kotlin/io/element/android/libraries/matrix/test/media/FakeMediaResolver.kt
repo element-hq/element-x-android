@@ -16,7 +16,7 @@
 
 package io.element.android.libraries.matrix.test.media
 
-import io.element.android.libraries.matrix.media.MediaResolver
+import io.element.android.libraries.matrix.api.media.MediaResolver
 
 class FakeMediaResolver : MediaResolver {
     override suspend fun resolve(url: String?, kind: MediaResolver.Kind): ByteArray? {

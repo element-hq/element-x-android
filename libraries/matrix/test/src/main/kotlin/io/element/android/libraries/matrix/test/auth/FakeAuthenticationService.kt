@@ -16,9 +16,9 @@
 
 package io.element.android.libraries.matrix.test.auth
 
-import io.element.android.libraries.matrix.MatrixClient
-import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
-import io.element.android.libraries.matrix.core.UserId
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.A_HOMESERVER
 import io.element.android.libraries.matrix.test.A_USER_ID
 import kotlinx.coroutines.delay

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.media
+package io.element.android.libraries.matrix.api.media
 
 import org.matrix.rustcomponents.sdk.MediaSource
 

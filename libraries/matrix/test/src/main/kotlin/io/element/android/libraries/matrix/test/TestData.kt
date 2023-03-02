@@ -16,10 +16,10 @@
 
 package io.element.android.libraries.matrix.test
 
-import io.element.android.libraries.matrix.core.EventId
-import io.element.android.libraries.matrix.core.RoomId
-import io.element.android.libraries.matrix.core.SessionId
-import io.element.android.libraries.matrix.core.UserId
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 
 const val A_USER_NAME = "alice"
 const val A_PASSWORD = "password"

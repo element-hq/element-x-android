@@ -16,9 +16,9 @@
 
 package io.element.android.libraries.matrix.test.room
 
-import io.element.android.libraries.matrix.core.RoomId
-import io.element.android.libraries.matrix.room.RoomSummary
-import io.element.android.libraries.matrix.room.RoomSummaryDetails
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.RoomSummary
+import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME

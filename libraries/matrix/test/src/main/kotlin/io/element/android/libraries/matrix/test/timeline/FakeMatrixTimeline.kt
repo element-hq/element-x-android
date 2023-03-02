@@ -16,9 +16,9 @@
 
 package io.element.android.libraries.matrix.test.timeline
 
-import io.element.android.libraries.matrix.core.EventId
-import io.element.android.libraries.matrix.timeline.MatrixTimeline
-import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

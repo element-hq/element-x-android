@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix
+package io.element.android.libraries.matrix.api
 
-import io.element.android.libraries.matrix.core.RoomId
-import io.element.android.libraries.matrix.core.SessionId
-import io.element.android.libraries.matrix.media.MediaResolver
-import io.element.android.libraries.matrix.room.MatrixRoom
-import io.element.android.libraries.matrix.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.media.MediaResolver
+import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import org.matrix.rustcomponents.sdk.MediaSource
 import java.io.Closeable
 

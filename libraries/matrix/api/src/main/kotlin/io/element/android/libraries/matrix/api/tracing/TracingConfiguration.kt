@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.tracing
-
-import timber.log.Timber
+package io.element.android.libraries.matrix.api.tracing
 
 data class TracingConfiguration(
     val overrides: Map<Target, LogLevel> = emptyMap()

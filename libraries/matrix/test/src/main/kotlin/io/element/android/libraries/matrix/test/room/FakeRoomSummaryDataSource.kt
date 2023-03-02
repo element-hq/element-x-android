@@ -16,8 +16,8 @@
 
 package io.element.android.libraries.matrix.test.room
 
-import io.element.android.libraries.matrix.room.RoomSummary
-import io.element.android.libraries.matrix.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.room.RoomSummary
+import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

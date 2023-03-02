@@ -29,7 +29,7 @@ import io.element.android.features.messages.MessagesNode
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.DaggerComponentOwner
-import io.element.android.libraries.matrix.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.x.di.RoomComponent
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber

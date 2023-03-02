@@ -16,8 +16,8 @@
 
 package io.element.android.libraries.matrix.impl.media
 
-import io.element.android.libraries.matrix.MatrixClient
-import io.element.android.libraries.matrix.media.MediaResolver
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.media.MediaResolver
 import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
 
 internal class RustMediaResolver(private val client: MatrixClient) : MediaResolver {

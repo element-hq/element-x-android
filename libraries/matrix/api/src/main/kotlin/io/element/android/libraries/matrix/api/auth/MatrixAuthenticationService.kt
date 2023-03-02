@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.auth
+package io.element.android.libraries.matrix.api.auth
 
-import io.element.android.libraries.matrix.MatrixClient
-import io.element.android.libraries.matrix.core.SessionId
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.Flow
 
 interface MatrixAuthenticationService {

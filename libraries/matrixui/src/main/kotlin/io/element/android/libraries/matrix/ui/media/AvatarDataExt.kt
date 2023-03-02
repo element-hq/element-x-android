@@ -17,7 +17,7 @@
 package io.element.android.libraries.matrix.ui.media
 
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.media.MediaResolver
+import io.element.android.libraries.matrix.api.media.MediaResolver
 import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
 
 fun AvatarData.toMetadata(): MediaResolver.Meta {

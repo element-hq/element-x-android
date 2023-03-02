@@ -18,7 +18,7 @@ package io.element.android.x.di
 
 import com.squareup.anvil.annotations.ContributesTo
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.x.root.RootPresenter
 
 @ContributesTo(AppScope::class)

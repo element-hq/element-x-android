@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.core
+package io.element.android.libraries.matrix.api.core
 
-typealias SessionId = UserId
+import java.io.Serializable
+
+@JvmInline
+value class EventId(val value: String) : Serializable

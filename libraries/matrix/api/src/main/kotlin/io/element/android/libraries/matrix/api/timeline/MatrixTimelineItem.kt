@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.timeline
+package io.element.android.libraries.matrix.api.timeline
 
-import io.element.android.libraries.matrix.core.EventId
+import io.element.android.libraries.matrix.api.core.EventId
 import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.VirtualTimelineItem
 
