@@ -16,35 +16,17 @@
 
 package io.element.android.features.rageshake.bugreport
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import io.element.android.anvilannotations.ContributesNode
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
+import javax.inject.Inject
 
-@ContributesNode(AppScope::class)
-class BugReportNode @AssistedInject constructor(
-    @Assisted buildContext: BuildContext,
-    @Assisted plugins: List<Plugin>,
-    private val presenter: BugReportPresenter,
-) : Node(buildContext, plugins = plugins) {
-
-    @Composable
-    override fun View(modifier: Modifier) {
-        val state = presenter.present()
-        BugReportView(
-            state = state,
-            modifier = modifier,
-            onDone = this::onDone
-        )
-    }
-
-    private fun onDone() {
-        plugins<BugReportEntryPoint.Callback>().forEach { it.onBugReportSent() }
+@ContributesBinding(AppScope::class)
+class DefaultBugReportEntryPoint @Inject constructor() : BugReportEntryPoint {
+    override fun node(parentNode: Node, buildContext: BuildContext, plugins: List<Plugin>): Node {
+        return parentNode.createNode<BugReportNode>(buildContext, plugins)
     }
 }

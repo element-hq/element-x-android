@@ -24,25 +24,45 @@ import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
-import com.bumble.appyx.core.node.node
+import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
-import io.element.android.features.login.LoginFlowNode
-import io.element.android.features.onboarding.OnBoardingScreen
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.login.api.LoginEntryPoint
+import io.element.android.features.onboarding.api.OnBoardingEntryPoint
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
+import io.element.android.libraries.di.AppScope
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
-class NotLoggedInFlowNode(
+@ContributesNode(AppScope::class)
+class NotLoggedInFlowNode private constructor(
     buildContext: BuildContext,
-    private val backstack: BackStack<NavTarget> = BackStack(
-        initialElement = NavTarget.OnBoarding,
-        savedStateMap = buildContext.savedStateMap,
-    ),
+    plugins: List<Plugin>,
+    private val onBoardingEntryPoint: OnBoardingEntryPoint,
+    private val loginEntryPoint: LoginEntryPoint,
+    private val backstack: BackStack<NavTarget>,
 ) : ParentNode<NotLoggedInFlowNode.NavTarget>(
     navModel = backstack,
-    buildContext = buildContext
+    buildContext = buildContext,
+    plugins = plugins,
 ) {
+    @AssistedInject
+    constructor(
+        @Assisted buildContext: BuildContext,
+        @Assisted plugins: List<Plugin>,
+        onBoardingEntryPoint: OnBoardingEntryPoint,
+        loginEntryPoint: LoginEntryPoint,
+    )
+        : this(
+        buildContext = buildContext,
+        plugins = plugins,
+        onBoardingEntryPoint = onBoardingEntryPoint,
+        loginEntryPoint = loginEntryPoint,
+        backstack = BackStack(initialElement = NavTarget.OnBoarding, savedStateMap = buildContext.savedStateMap),
+    )
 
     init {
         lifecycle.subscribe(
@@ -61,12 +81,21 @@ class NotLoggedInFlowNode(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.OnBoarding -> node(buildContext) {
-                OnBoardingScreen(
-                    onSignIn = { backstack.push(NavTarget.LoginFlow) }
-                )
+            NavTarget.OnBoarding -> {
+                val callback = object : OnBoardingEntryPoint.Callback {
+                    override fun onSignUp() {
+                        //NOOP
+                    }
+
+                    override fun onSignIn() {
+                        backstack.push(NavTarget.LoginFlow)
+                    }
+                }
+                onBoardingEntryPoint.node(this, buildContext, plugins = listOf(callback))
             }
-            NavTarget.LoginFlow -> LoginFlowNode(buildContext)
+            NavTarget.LoginFlow -> {
+                loginEntryPoint.node(this, buildContext)
+            }
         }
     }
 

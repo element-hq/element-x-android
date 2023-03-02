@@ -24,30 +24,52 @@ import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
+import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.MessagesNode
+import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.architecture.nodeInputs
 import io.element.android.libraries.di.DaggerComponentOwner
+import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.room.MatrixRoom
 import io.element.android.x.di.RoomComponent
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
+@ContributesNode(SessionScope::class)
 class RoomFlowNode(
     buildContext: BuildContext,
-    private val room: MatrixRoom,
-    private val backstack: BackStack<NavTarget> = BackStack(
-        initialElement = NavTarget.Messages,
-        savedStateMap = buildContext.savedStateMap,
-    ),
+    plugins: List<Plugin>,
+    private val backstack: BackStack<NavTarget>,
 ) : ParentNode<RoomFlowNode.NavTarget>(
     navModel = backstack,
-    buildContext = buildContext
+    buildContext = buildContext,
+    plugins = plugins,
 ), DaggerComponentOwner {
 
+    data class Inputs(
+        val room: MatrixRoom,
+    ) : NodeInputs
+
+    @AssistedInject
+    constructor(@Assisted buildContext: BuildContext, @Assisted plugins: List<Plugin>) : this(
+        buildContext = buildContext,
+        plugins = plugins,
+        backstack = BackStack(
+            initialElement = NavTarget.Messages,
+            savedStateMap = buildContext.savedStateMap,
+        ),
+    )
+
+    private val inputs: Inputs by nodeInputs()
+
     override val daggerComponent: Any by lazy {
-        parent!!.bindings<RoomComponent.ParentBindings>().roomComponentBuilder().room(room).build()
+        parent!!.bindings<RoomComponent.ParentBindings>().roomComponentBuilder().room(inputs.room).build()
     }
 
     init {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences
+package io.element.android.features.login.implementation
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
@@ -24,26 +24,27 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.preferences.root.PreferencesRootNode
+import io.element.android.features.login.implementation.changeserver.ChangeServerNode
+import io.element.android.features.login.implementation.root.LoginRootNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.AppScope
 import kotlinx.parcelize.Parcelize
 
-@ContributesNode(SessionScope::class)
-class PreferencesFlowNode(
+@ContributesNode(AppScope::class)
+class LoginFlowNode(
     buildContext: BuildContext,
     plugins: List<Plugin>,
     private val backstack: BackStack<NavTarget>,
-) : ParentNode<PreferencesFlowNode.NavTarget>(
+) : ParentNode<LoginFlowNode.NavTarget>(
     navModel = backstack,
     buildContext = buildContext,
-    plugins = plugins
+    plugins = plugins,
 ) {
 
     @AssistedInject
@@ -53,27 +54,28 @@ class PreferencesFlowNode(
         backstack = BackStack(
             initialElement = NavTarget.Root,
             savedStateMap = buildContext.savedStateMap,
-        )
+        ),
     )
-
-    interface Callback : Plugin {
-        fun onOpenBugReport()
-    }
-
-    private val preferencesRootNodeCallback = object : PreferencesRootNode.Callback {
-        override fun onOpenBugReport() {
-            plugins<Callback>().forEach { it.onOpenBugReport() }
-        }
-    }
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
         object Root : NavTarget
+
+        @Parcelize
+        object ChangeServer : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Root -> createNode<PreferencesRootNode>(buildContext, plugins = listOf(preferencesRootNodeCallback))
+            NavTarget.Root -> {
+                val callback = object : LoginRootNode.Callback {
+                    override fun onChangeHomeServer() {
+                        backstack.push(NavTarget.ChangeServer)
+                    }
+                }
+                createNode<LoginRootNode>(buildContext, plugins = listOf(callback))
+            }
+            NavTarget.ChangeServer -> createNode<ChangeServerNode>(buildContext)
         }
     }
 
@@ -82,7 +84,8 @@ class PreferencesFlowNode(
         Children(
             navModel = backstack,
             modifier = modifier,
-            transitionHandler = rememberDefaultTransitionHandler()
+            // Animate transition to change server screen
+            transitionHandler = rememberDefaultTransitionHandler(),
         )
     }
 }

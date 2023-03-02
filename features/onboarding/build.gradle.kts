@@ -19,15 +19,23 @@
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.ksp)
+    alias(libs.plugins.anvil)
 }
 
 android {
     namespace = "io.element.android.features.onboarding"
 }
 
+anvil {
+    generateDaggerFactories.set(true)
+}
+
+
 dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.elementresources)
+    implementation(projects.anvilannotations)
+    anvil(projects.anvilcodegen)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.architecture)

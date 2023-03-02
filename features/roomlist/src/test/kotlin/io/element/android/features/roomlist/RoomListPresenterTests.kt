@@ -22,8 +22,9 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.roomlist.model.RoomListEvents
-import io.element.android.features.roomlist.model.RoomListRoomSummary
+import io.element.android.features.roomlist.impl.RoomListPresenter
+import io.element.android.features.roomlist.impl.RoomListEvents
+import io.element.android.features.roomlist.impl.RoomListRoomSummary
 import io.element.android.libraries.dateformatter.LastMessageFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.core.SessionId

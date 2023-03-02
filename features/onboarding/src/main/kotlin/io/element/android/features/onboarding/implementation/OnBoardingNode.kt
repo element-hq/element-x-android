@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.rageshake.bugreport
+package io.element.android.features.onboarding.implementation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,26 +25,32 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.onboarding.api.OnBoardingEntryPoint
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
-class BugReportNode @AssistedInject constructor(
+class OnBoardingNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: BugReportPresenter,
-) : Node(buildContext, plugins = plugins) {
+) : Node(
+    buildContext = buildContext,
+    plugins = plugins
+) {
+
+    private fun onSignIn() {
+        plugins<OnBoardingEntryPoint.Callback>().forEach { it.onSignIn() }
+    }
+
+    private fun onSignUp() {
+        plugins<OnBoardingEntryPoint.Callback>().forEach { it.onSignUp() }
+    }
 
     @Composable
     override fun View(modifier: Modifier) {
-        val state = presenter.present()
-        BugReportView(
-            state = state,
+        OnBoardingScreen(
             modifier = modifier,
-            onDone = this::onDone
+            onSignIn = this::onSignIn,
+            onSignUp = this::onSignUp
         )
-    }
-
-    private fun onDone() {
-        plugins<BugReportEntryPoint.Callback>().forEach { it.onBugReportSent() }
     }
 }

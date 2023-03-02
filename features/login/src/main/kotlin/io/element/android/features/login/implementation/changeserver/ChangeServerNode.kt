@@ -14,37 +14,36 @@
  * limitations under the License.
  */
 
-package io.element.android.features.rageshake.bugreport
+package io.element.android.features.login.implementation.changeserver
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
-class BugReportNode @AssistedInject constructor(
+class ChangeServerNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: BugReportPresenter,
+    private val presenter: ChangeServerPresenter,
 ) : Node(buildContext, plugins = plugins) {
+
+    private fun onSuccess() {
+        navigateUp()
+    }
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        BugReportView(
+        ChangeServerView(
             state = state,
             modifier = modifier,
-            onDone = this::onDone
+            onChangeServerSuccess = this::onSuccess,
         )
-    }
-
-    private fun onDone() {
-        plugins<BugReportEntryPoint.Callback>().forEach { it.onBugReportSent() }
     }
 }

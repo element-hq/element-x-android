@@ -57,7 +57,7 @@ fun ElementTheme(
 ) {
     val systemUiController = rememberSystemUiController()
     val useDarkIcons = !darkTheme
-    val currentColor = remember { if (darkTheme) darkColors else lightColors }
+    val currentColor = remember(darkTheme) { if (darkTheme) darkColors else lightColors }
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current

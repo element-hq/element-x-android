@@ -19,8 +19,8 @@ package io.element.android.samples.minimal
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import io.element.android.features.login.root.LoginRootPresenter
-import io.element.android.features.login.root.LoginRootScreen
+import io.element.android.features.login.implementation.root.LoginRootPresenter
+import io.element.android.features.login.implementation.root.LoginRootScreen
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
 
 class LoginScreen(private val authenticationService: MatrixAuthenticationService) {

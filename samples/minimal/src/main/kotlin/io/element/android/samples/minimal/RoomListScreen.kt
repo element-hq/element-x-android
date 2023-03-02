@@ -19,8 +19,8 @@ package io.element.android.samples.minimal
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
-import io.element.android.features.roomlist.RoomListPresenter
-import io.element.android.features.roomlist.RoomListView
+import io.element.android.features.roomlist.impl.RoomListPresenter
+import io.element.android.features.roomlist.impl.RoomListView
 import io.element.android.libraries.dateformatter.impl.DateFormatters
 import io.element.android.libraries.dateformatter.impl.DefaultLastMessageFormatter
 import io.element.android.libraries.dateformatter.impl.LocalDateTimeProvider
