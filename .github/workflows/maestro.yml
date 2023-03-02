@@ -28,7 +28,7 @@ jobs:
       - uses: mobile-dev-inc/action-maestro-cloud@v1.3.1
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
-          app-file: app/build/outputs/apk/debug/app-debug.apk
+          app-file: app/build/outputs/apk/debug/app-universal-debug.apk
           env: |
             USERNAME=maestroelement
             PASSWORD=${{ secrets.MATRIX_MAESTRO_ACCOUNT_PASSWORD }}
