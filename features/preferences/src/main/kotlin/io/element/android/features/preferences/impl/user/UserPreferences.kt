@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.user
+package io.element.android.features.preferences.impl.user
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height

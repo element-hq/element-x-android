@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.architecture
+package io.element.android.features.preferences.impl.root
 
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.plugin.Plugin
+import io.element.android.features.logout.LogoutPreferenceState
+import io.element.android.features.rageshake.preferences.RageshakePreferencesState
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.ui.model.MatrixUser
 
-interface EntryPoint {
-    fun node(parentNode: Node, buildContext: BuildContext, plugins: List<Plugin> = emptyList()): Node
-}
+data class PreferencesRootState(
+    val logoutState: LogoutPreferenceState,
+    val rageshakeState: RageshakePreferencesState,
+    val myUser: Async<MatrixUser>,
+)

@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.root
+package io.element.android.features.preferences.api
 
-import io.element.android.features.logout.LogoutPreferenceState
-import io.element.android.features.rageshake.preferences.RageshakePreferencesState
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import com.bumble.appyx.core.plugin.Plugin
+import io.element.android.libraries.architecture.FeatureEntryPoint
 
-data class PreferencesRootState(
-    val logoutState: LogoutPreferenceState,
-    val rageshakeState: RageshakePreferencesState,
-    val myUser: Async<MatrixUser>,
-)
+interface PreferencesEntryPoint: FeatureEntryPoint {
+    interface Callback : Plugin {
+        fun onOpenBugReport()
+    }
+}

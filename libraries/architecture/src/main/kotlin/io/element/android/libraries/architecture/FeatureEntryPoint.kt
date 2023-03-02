@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.rageshake.bugreport
+package io.element.android.libraries.architecture
 
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import io.element.android.libraries.architecture.FeatureEntryPoint
 
-interface BugReportEntryPoint : FeatureEntryPoint {
-    interface Callback : Plugin {
-        fun onBugReportSent()
-    }
+interface FeatureEntryPoint {
+    fun node(parentNode: Node, buildContext: BuildContext, plugins: List<Plugin> = emptyList()): Node
 }

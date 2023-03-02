@@ -23,6 +23,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.logout.LogoutPreferencePresenter
+import io.element.android.features.preferences.impl.root.PreferencesRootPresenter
 import io.element.android.features.rageshake.preferences.RageshakePreferencesPresenter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrixtest.FakeMatrixClient
