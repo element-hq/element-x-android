@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.rageshake.bugreport
+package io.element.android.features.roomlist.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,26 +25,33 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.di.AppScope
+import io.element.android.features.roomlist.api.RoomListEntryPoint
+import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.core.RoomId
 
-@ContributesNode(AppScope::class)
-class BugReportNode @AssistedInject constructor(
+@ContributesNode(SessionScope::class)
+class RoomListNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: BugReportPresenter,
+    private val presenter: RoomListPresenter,
 ) : Node(buildContext, plugins = plugins) {
+
+    private fun onRoomClicked(roomId: RoomId) {
+        plugins<RoomListEntryPoint.Callback>().forEach { it.onRoomClicked(roomId) }
+    }
+
+    private fun onOpenSettings() {
+        plugins<RoomListEntryPoint.Callback>().forEach { it.onSettingsClicked() }
+    }
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        BugReportView(
+        RoomListView(
             state = state,
             modifier = modifier,
-            onDone = this::onDone
+            onRoomClicked = this::onRoomClicked,
+            onOpenSettings = this::onOpenSettings
         )
-    }
-
-    private fun onDone() {
-        plugins<BugReportEntryPoint.Callback>().forEach { it.onBugReportSent() }
     }
 }

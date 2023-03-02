@@ -16,6 +16,7 @@
 
 package io.element.android.x.node
 
+import android.content.Context
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,14 +29,21 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.node.node
+import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
-import io.element.android.features.rageshake.bugreport.BugReportNode
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.rageshake.bugreport.BugReportEntryPoint
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.architecture.nodeInputsProvider
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.core.SessionId
@@ -48,7 +56,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
-class RootFlowNode(
+@ContributesNode(AppScope::class)
+class RootFlowNode private constructor(
     private val buildContext: BuildContext,
     private val backstack: BackStack<NavTarget> = BackStack(
         initialElement = NavTarget.SplashScreen,
@@ -57,7 +66,8 @@ class RootFlowNode(
     private val appComponentOwner: DaggerComponentOwner,
     private val authenticationService: MatrixAuthenticationService,
     private val matrixClientsHolder: MatrixClientsHolder,
-    private val presenter: RootPresenter
+    private val presenter: RootPresenter,
+    private val bugReportEntryPoint: BugReportEntryPoint,
 ) :
     ParentNode<RootFlowNode.NavTarget>(
         navModel = backstack,
@@ -65,6 +75,28 @@ class RootFlowNode(
     ),
 
     DaggerComponentOwner by appComponentOwner {
+
+    @AssistedInject
+    constructor(
+        @Assisted buildContext: BuildContext,
+        @Assisted plugins: List<Plugin>,
+        @ApplicationContext context: Context,
+        authenticationService: MatrixAuthenticationService,
+        matrixClientsHolder: MatrixClientsHolder,
+        presenter: RootPresenter,
+        bugReportEntryPoint: BugReportEntryPoint,
+    ) : this(
+        buildContext = buildContext,
+        backstack = BackStack(
+            initialElement = NavTarget.SplashScreen,
+            savedStateMap = buildContext.savedStateMap,
+        ),
+        appComponentOwner = context.applicationContext as DaggerComponentOwner,
+        authenticationService = authenticationService,
+        matrixClientsHolder = matrixClientsHolder,
+        presenter = presenter,
+        bugReportEntryPoint = bugReportEntryPoint,
+    )
 
     override fun onBuilt() {
         super.onBuilt()
@@ -140,12 +172,6 @@ class RootFlowNode(
         }
     }
 
-    private val bugReportNodeCallback = object : BugReportNode.Callback {
-        override fun onBugReportSent() {
-            backstack.pop()
-        }
-    }
-
     sealed interface NavTarget : Parcelable {
         @Parcelize
         object SplashScreen : NavTarget
@@ -167,16 +193,24 @@ class RootFlowNode(
                     Timber.w("Couldn't find any session, go through SplashScreen")
                     backstack.newRoot(NavTarget.SplashScreen)
                 }
-                LoggedInFlowNode(
-                    buildContext = buildContext,
-                    sessionId = navTarget.sessionId,
-                    matrixClient = matrixClient,
-                    onOpenBugReport = this::onOpenBugReport
-                )
+                val inputsProvider = nodeInputsProvider(LoggedInFlowNode.Inputs(matrixClient))
+                val callback = object : LoggedInFlowNode.Callback {
+                    override fun onOpenBugReport() {
+                        backstack.push(NavTarget.BugReport)
+                    }
+                }
+                createNode<LoggedInFlowNode>(buildContext, plugins = listOf(inputsProvider, callback))
             }
-            NavTarget.NotLoggedInFlow -> NotLoggedInFlowNode(buildContext)
+            NavTarget.NotLoggedInFlow -> createNode<NotLoggedInFlowNode>(buildContext)
             NavTarget.SplashScreen -> splashNode(buildContext)
-            NavTarget.BugReport -> createNode<BugReportNode>(buildContext, plugins = listOf(bugReportNodeCallback))
+            NavTarget.BugReport -> {
+                val callback = object : BugReportEntryPoint.Callback {
+                    override fun onBugReportSent() {
+                        backstack.pop()
+                    }
+                }
+                bugReportEntryPoint.node(this, buildContext, plugins = listOf(callback))
+            }
         }
     }
 

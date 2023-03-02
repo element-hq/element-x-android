@@ -29,38 +29,69 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.node.node
+import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.preferences.PreferencesFlowNode
-import io.element.android.features.roomlist.RoomListNode
+import io.element.android.features.roomlist.api.RoomListEntryPoint
+import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.architecture.nodeInputs
+import io.element.android.libraries.architecture.nodeInputsProvider
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.core.RoomId
-import io.element.android.libraries.matrix.core.SessionId
 import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
 import io.element.android.x.di.SessionComponent
 import kotlinx.parcelize.Parcelize
 
+@ContributesNode(AppScope::class)
 class LoggedInFlowNode(
     buildContext: BuildContext,
-    val sessionId: SessionId,
-    private val matrixClient: MatrixClient,
-    private val onOpenBugReport: () -> Unit,
-    private val backstack: BackStack<NavTarget> = BackStack(
-        initialElement = NavTarget.RoomList,
-        savedStateMap = buildContext.savedStateMap,
-    ),
+    plugins: List<Plugin>,
+    private val backstack: BackStack<NavTarget>,
+    private val roomListEntryPoint: RoomListEntryPoint,
 ) : ParentNode<LoggedInFlowNode.NavTarget>(
     navModel = backstack,
-    buildContext = buildContext
+    buildContext = buildContext,
+    plugins = plugins
 ), DaggerComponentOwner {
 
+    @AssistedInject
+    constructor(
+        @Assisted buildContext: BuildContext,
+        @Assisted plugins: List<Plugin>,
+        roomListEntryPoint: RoomListEntryPoint,
+    ) : this(
+        buildContext = buildContext,
+        plugins = plugins,
+        roomListEntryPoint = roomListEntryPoint,
+        backstack = BackStack(
+            initialElement = NavTarget.RoomList,
+            savedStateMap = buildContext.savedStateMap,
+        )
+    )
+
+    interface Callback : Plugin {
+        fun onOpenBugReport()
+    }
+
+    data class Inputs(
+        val matrixClient: MatrixClient
+    ) : NodeInputs
+
+    private val inputs: Inputs by nodeInputs()
+
     override val daggerComponent: Any by lazy {
-        parent!!.bindings<SessionComponent.ParentBindings>().sessionComponentBuilder().client(matrixClient).build()
+        parent!!.bindings<SessionComponent.ParentBindings>().sessionComponentBuilder().client(inputs.matrixClient).build()
     }
 
     override fun onBuilt() {
@@ -69,23 +100,13 @@ class LoggedInFlowNode(
             onCreate = {
                 val imageLoaderFactory = bindings<MatrixUIBindings>().loggedInImageLoaderFactory()
                 Coil.setImageLoader(imageLoaderFactory)
-                matrixClient.startSync()
+                inputs.matrixClient.startSync()
             },
             onDestroy = {
                 val imageLoaderFactory = bindings<MatrixUIBindings>().notLoggedInImageLoaderFactory()
                 Coil.setImageLoader(imageLoaderFactory)
             }
         )
-    }
-
-    private val roomListCallback = object : RoomListNode.Callback {
-        override fun onRoomClicked(roomId: RoomId) {
-            backstack.push(NavTarget.Room(roomId))
-        }
-
-        override fun onSettingsClicked() {
-            backstack.push(NavTarget.Settings)
-        }
     }
 
     sealed interface NavTarget : Parcelable {
@@ -102,10 +123,19 @@ class LoggedInFlowNode(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.RoomList -> {
-                createNode<RoomListNode>(buildContext, plugins = listOf(roomListCallback))
+                val callback = object : RoomListEntryPoint.Callback {
+                    override fun onRoomClicked(roomId: RoomId) {
+                        backstack.push(NavTarget.Room(roomId))
+                    }
+
+                    override fun onSettingsClicked() {
+                        backstack.push(NavTarget.Settings)
+                    }
+                }
+                roomListEntryPoint.node(this, buildContext, plugins = listOf(callback))
             }
             is NavTarget.Room -> {
-                val room = matrixClient.getRoom(roomId = navTarget.roomId)
+                val room = inputs.matrixClient.getRoom(roomId = navTarget.roomId)
                 if (room == null) {
                     // TODO CREATE UNKNOWN ROOM NODE
                     node(buildContext) {
@@ -114,11 +144,17 @@ class LoggedInFlowNode(
                         }
                     }
                 } else {
-                    RoomFlowNode(buildContext, room)
+                    val inputsProvider = nodeInputsProvider(RoomFlowNode.Inputs(room))
+                    createNode<RoomFlowNode>(buildContext, plugins = listOf(inputsProvider))
                 }
             }
             NavTarget.Settings -> {
-                PreferencesFlowNode(buildContext, onOpenBugReport)
+                val callback = object : PreferencesFlowNode.Callback {
+                    override fun onOpenBugReport() {
+                        plugins<Callback>().forEach { it.onOpenBugReport() }
+                    }
+                }
+                createNode<PreferencesFlowNode>(buildContext, plugins = listOf(callback))
             }
         }
     }

@@ -16,14 +16,24 @@
 
 package io.element.android.libraries.architecture
 
+import android.content.Context
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 
 inline fun <reified NODE : Node> Node.createNode(context: BuildContext, plugins: List<Plugin> = emptyList()): NODE {
-    val nodeClass = NODE::class.java
     val bindings: NodeFactoriesBindings = bindings()
-    val nodeFactoryMap = bindings.nodeFactories()
+    return bindings.createNode(context, plugins)
+}
+
+inline fun <reified NODE : Node> Context.createNode(context: BuildContext, plugins: List<Plugin> = emptyList()): NODE {
+    val bindings: NodeFactoriesBindings = bindings()
+    return bindings.createNode(context, plugins)
+}
+
+inline fun <reified NODE : Node> NodeFactoriesBindings.createNode(context: BuildContext, plugins: List<Plugin> = emptyList()): NODE {
+    val nodeClass = NODE::class.java
+    val nodeFactoryMap = nodeFactories()
     val nodeFactory = nodeFactoryMap[nodeClass] ?: error("Cannot find NodeFactory for ${nodeClass.name}.")
 
     @Suppress("UNCHECKED_CAST")
