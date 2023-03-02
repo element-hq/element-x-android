@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrixtest.room
+package io.element.android.libraries.matrix.test.room
 
 import io.element.android.libraries.matrix.room.RoomSummary
 import io.element.android.libraries.matrix.room.RoomSummaryDataSource

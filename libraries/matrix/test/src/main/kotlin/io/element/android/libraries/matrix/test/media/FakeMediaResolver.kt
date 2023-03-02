@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.libraries.matrix.test.media
 
-android {
-    namespace = "io.element.android.libraries.matrix.test"
-}
+import io.element.android.libraries.matrix.media.MediaResolver
 
-dependencies {
-    api(projects.libraries.matrix.api)
-    api(libs.coroutines.core)
+class FakeMediaResolver : MediaResolver {
+    override suspend fun resolve(url: String?, kind: MediaResolver.Kind): ByteArray? {
+        return null
+    }
+
+    override suspend fun resolve(meta: MediaResolver.Meta): ByteArray? {
+        return null
+    }
 }

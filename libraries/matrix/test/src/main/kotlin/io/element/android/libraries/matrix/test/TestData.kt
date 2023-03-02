@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrixtest
+package io.element.android.libraries.matrix.test
 
 import io.element.android.libraries.matrix.core.EventId
 import io.element.android.libraries.matrix.core.RoomId
