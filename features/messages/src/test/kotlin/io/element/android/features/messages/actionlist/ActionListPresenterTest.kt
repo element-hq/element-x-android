@@ -22,12 +22,15 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.messages.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.timeline.model.TimelineItem
-import io.element.android.features.messages.timeline.model.TimelineItemReactions
-import io.element.android.features.messages.timeline.model.event.TimelineItemEventContent
-import io.element.android.features.messages.timeline.model.event.TimelineItemRedactedContent
-import io.element.android.features.messages.timeline.model.event.TimelineItemTextContent
+import io.element.android.features.messages.impl.actionlist.ActionListEvents
+import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.actionlist.ActionListPresenter
+import io.element.android.features.messages.impl.actionlist.ActionListState
+import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrixtest.AN_EVENT_ID
 import io.element.android.libraries.matrixtest.A_MESSAGE
@@ -37,7 +40,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.matrix.rustcomponents.sdk.TimelineItemContent
 
 class ActionListPresenterTest {
     @Test

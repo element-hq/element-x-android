@@ -23,6 +23,9 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.messages.impl.textcomposer.MessageComposerEvents
+import io.element.android.features.messages.impl.textcomposer.MessageComposerPresenter
+import io.element.android.features.messages.impl.textcomposer.MessageComposerState
 import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.matrixtest.ANOTHER_MESSAGE
 import io.element.android.libraries.matrixtest.AN_EVENT_ID

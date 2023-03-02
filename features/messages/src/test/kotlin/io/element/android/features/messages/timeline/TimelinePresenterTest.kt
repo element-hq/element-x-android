@@ -23,6 +23,8 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.fixtures.aTimelineItemsFactory
+import io.element.android.features.messages.impl.timeline.TimelineEvents
+import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.libraries.matrixtest.AN_EVENT_ID
 import io.element.android.libraries.matrixtest.room.FakeMatrixRoom
 import io.element.android.libraries.matrixtest.timeline.FakeMatrixTimeline

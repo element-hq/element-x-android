@@ -17,20 +17,20 @@
 package io.element.android.features.messages.fixtures
 
 import io.element.android.features.messages.fakes.FakeDaySeparatorFormatter
-import io.element.android.features.messages.timeline.factories.TimelineItemsFactory
-import io.element.android.features.messages.timeline.factories.event.TimelineItemContentFactory
-import io.element.android.features.messages.timeline.factories.event.TimelineItemContentFailedToParseMessageFactory
-import io.element.android.features.messages.timeline.factories.event.TimelineItemContentFailedToParseStateFactory
-import io.element.android.features.messages.timeline.factories.event.TimelineItemContentMessageFactory
-import io.element.android.features.messages.timeline.factories.event.TimelineItemContentProfileChangeFactory
-import io.element.android.features.messages.timeline.factories.event.TimelineItemContentRedactedFactory
-import io.element.android.features.messages.timeline.factories.event.TimelineItemContentRoomMembershipFactory
-import io.element.android.features.messages.timeline.factories.event.TimelineItemContentStateFactory
-import io.element.android.features.messages.timeline.factories.event.TimelineItemContentStickerFactory
-import io.element.android.features.messages.timeline.factories.event.TimelineItemContentUTDFactory
-import io.element.android.features.messages.timeline.factories.event.TimelineItemEventFactory
-import io.element.android.features.messages.timeline.factories.virtual.TimelineItemDaySeparatorFactory
-import io.element.android.features.messages.timeline.factories.virtual.TimelineItemVirtualFactory
+import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
+import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFactory
+import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFailedToParseMessageFactory
+import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFailedToParseStateFactory
+import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentMessageFactory
+import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentProfileChangeFactory
+import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentRedactedFactory
+import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentRoomMembershipFactory
+import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentStateFactory
+import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentStickerFactory
+import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentUTDFactory
+import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemEventFactory
+import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemDaySeparatorFactory
+import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
 
 internal fun aTimelineItemsFactory() = TimelineItemsFactory(
     dispatchers = testCoroutineDispatchers(),

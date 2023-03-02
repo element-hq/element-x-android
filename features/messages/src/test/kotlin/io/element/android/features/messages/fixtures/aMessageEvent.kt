@@ -16,10 +16,10 @@
 
 package io.element.android.features.messages.fixtures
 
-import io.element.android.features.messages.timeline.model.TimelineItem
-import io.element.android.features.messages.timeline.model.TimelineItemReactions
-import io.element.android.features.messages.timeline.model.event.TimelineItemEventContent
-import io.element.android.features.messages.timeline.model.event.TimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrixtest.AN_EVENT_ID
 import io.element.android.libraries.matrixtest.A_MESSAGE
