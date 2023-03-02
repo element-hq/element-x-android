@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.libraries.matrix.impl.util
 
-android {
-    namespace = "io.element.android.libraries.matrix.test"
-}
+import org.matrix.rustcomponents.sdk.TaskHandle
+import java.util.concurrent.CopyOnWriteArraySet
 
-dependencies {
-    api(projects.libraries.matrix.api)
-    api(libs.coroutines.core)
+class TaskHandleBag(private val tokens: MutableSet<TaskHandle> = CopyOnWriteArraySet()) : Set<TaskHandle> by tokens {
+
+    operator fun plusAssign(taskHandle: TaskHandle?) {
+        if (taskHandle == null) return
+        tokens += taskHandle
+    }
+
+    fun dispose() {
+        tokens.forEach { it.cancel() }
+        tokens.clear()
+    }
 }

@@ -35,7 +35,7 @@ dependencies {
     anvil(projects.anvilcodegen)
     implementation(projects.libraries.di)
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix)
+    implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.core)
     implementation(libs.coil.compose)

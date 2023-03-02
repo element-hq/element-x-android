@@ -51,7 +51,7 @@ fun DependencyHandlerScope.composeDependencies(libs: LibrariesForLibs) {
 
 fun DependencyHandlerScope.allLibraries() {
     implementation(project(":libraries:designsystem"))
-    implementation(project(":libraries:matrix"))
+    implementation(project(":libraries:matrix:api"))
     implementation(project(":libraries:matrixui"))
     implementation(project(":libraries:core"))
     implementation(project(":libraries:architecture"))

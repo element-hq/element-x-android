@@ -17,8 +17,8 @@
 package io.element.android.samples.minimal
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.impl.tracing.setupTracing
 import io.element.android.libraries.matrix.tracing.TracingConfigurations
-import io.element.android.libraries.matrix.tracing.setupTracing
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope

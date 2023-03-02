@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.libraries.matrix.impl.timeline
 
-android {
-    namespace = "io.element.android.libraries.matrix.test"
-}
+import io.element.android.libraries.matrix.timeline.MatrixTimelineItem
+import org.matrix.rustcomponents.sdk.TimelineItem
 
-dependencies {
-    api(projects.libraries.matrix.api)
-    api(libs.coroutines.core)
+fun TimelineItem.asMatrixTimelineItem(): MatrixTimelineItem {
+    val asEvent = asEvent()
+    if (asEvent != null) {
+        return MatrixTimelineItem.Event(asEvent)
+    }
+    val asVirtual = asVirtual()
+    if (asVirtual != null) {
+        return MatrixTimelineItem.Virtual(asVirtual)
+    }
+    return MatrixTimelineItem.Other
 }
