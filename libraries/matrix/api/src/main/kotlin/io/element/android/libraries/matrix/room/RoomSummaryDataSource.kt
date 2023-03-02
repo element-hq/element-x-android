@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.libraries.matrix.room
 
-android {
-    namespace = "io.element.android.libraries.matrix.test"
-}
+import kotlinx.coroutines.flow.StateFlow
 
-dependencies {
-    api(projects.libraries.matrix.api)
-    api(libs.coroutines.core)
+interface RoomSummaryDataSource {
+    fun roomSummaries(): StateFlow<List<RoomSummary>>
+    fun setSlidingSyncRange(range: IntRange)
 }

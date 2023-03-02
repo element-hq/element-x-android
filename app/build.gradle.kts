@@ -198,6 +198,7 @@ knit {
 dependencies {
     allLibraries()
     allFeatures()
+    implementation(projects.libraries.matrix.impl)
     implementation(projects.tests.uitests)
     implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)

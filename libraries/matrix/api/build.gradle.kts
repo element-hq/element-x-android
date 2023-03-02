@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,26 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("io.element.android-library")
+    alias(libs.plugins.anvil)
+    kotlin("plugin.serialization") version "1.8.10"
 }
 
 android {
-    namespace = "io.element.android.libraries.matrix.test"
+    namespace = "io.element.android.libraries.matrix.api"
+}
+
+anvil {
+    generateDaggerFactories.set(true)
 }
 
 dependencies {
-    api(projects.libraries.matrix.api)
-    api(libs.coroutines.core)
+    // api(projects.libraries.rustsdk)
+    api(libs.matrix.sdk)
+    implementation(projects.libraries.di)
+    implementation(libs.dagger)
+    implementation(projects.libraries.core)
+    implementation("net.java.dev.jna:jna:5.13.0@aar")
+    implementation(libs.serialization.json)
+    api(projects.libraries.sessionStorage)
+    implementation(libs.coroutines.core)
 }

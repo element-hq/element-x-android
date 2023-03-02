@@ -17,14 +17,13 @@
 // TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("io.element.android-compose-library")
-    alias(libs.plugins.ksp)
+    id("io.element.android-library")
     alias(libs.plugins.anvil)
-    id("kotlin-parcelize")
+    kotlin("plugin.serialization") version "1.8.10"
 }
 
 android {
-    namespace = "io.element.android.features.login"
+    namespace = "io.element.android.libraries.matrix.impl"
 }
 
 anvil {
@@ -32,23 +31,13 @@ anvil {
 }
 
 dependencies {
-    implementation(projects.anvilannotations)
-    anvil(projects.anvilcodegen)
-    implementation(projects.libraries.core)
-    implementation(projects.libraries.architecture)
+    // api(projects.libraries.rustsdk)
+    api(libs.matrix.sdk)
+    implementation(projects.libraries.di)
     implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.elementresources)
-    implementation(projects.libraries.testtags)
-    implementation(projects.libraries.uiStrings)
-    ksp(libs.showkase.processor)
-
-    testImplementation(libs.test.junit)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.molecule.runtime)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
-    testImplementation(projects.libraries.matrixtest)
-
-    androidTestImplementation(libs.test.junitext)
+    implementation(libs.dagger)
+    implementation(projects.libraries.core)
+    implementation("net.java.dev.jna:jna:5.13.0@aar")
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.serialization.json)
 }

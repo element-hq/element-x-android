@@ -36,7 +36,7 @@ dependencies {
 
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix)
+    implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
@@ -51,7 +51,7 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrixtest)
 
-    testImplementation(testFixtures(projects.libraries.matrix))
+    //testImplementation(testFixtures(projects.libraries.matrix))
 
     androidTestImplementation(libs.test.junitext)
 

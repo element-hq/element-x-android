@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.libraries.matrix.impl.di
 
-android {
-    namespace = "io.element.android.libraries.matrix.test"
-}
+import com.squareup.anvil.annotations.ContributesTo
+import dagger.Module
+import dagger.Provides
+import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.SingleIn
+import org.matrix.rustcomponents.sdk.AuthenticationService
+import java.io.File
 
-dependencies {
-    api(projects.libraries.matrix.api)
-    api(libs.coroutines.core)
+@Module
+@ContributesTo(AppScope::class)
+object MatrixModule {
+
+    @Provides
+    @SingleIn(AppScope::class)
+    fun providesRustAuthenticationService(baseDirectory: File): AuthenticationService {
+        return AuthenticationService(baseDirectory.absolutePath, null, null)
+    }
 }

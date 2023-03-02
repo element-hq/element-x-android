@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.libraries.matrix.impl.util
 
-android {
-    namespace = "io.element.android.libraries.matrix.test"
-}
+import kotlinx.coroutines.channels.ProducerScope
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
+import org.matrix.rustcomponents.sdk.TaskHandle
 
-dependencies {
-    api(projects.libraries.matrix.api)
-    api(libs.coroutines.core)
-}
+internal fun <T> mxCallbackFlow(block: suspend ProducerScope<T>.() -> TaskHandle) =
+    callbackFlow {
+        val token: TaskHandle = block(this)
+        awaitClose {
+            token.cancel()
+            token.destroy()
+        }
+    }

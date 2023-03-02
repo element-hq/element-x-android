@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.libraries.matrix.impl.util
 
-android {
-    namespace = "io.element.android.libraries.matrix.test"
-}
+import org.matrix.rustcomponents.sdk.ClientException
+import timber.log.Timber
 
-dependencies {
-    api(projects.libraries.matrix.api)
-    api(libs.coroutines.core)
+fun logError(throwable: Throwable) {
+    when (throwable) {
+        is ClientException.Generic -> {
+            Timber.e("Error ${throwable.msg}", throwable)
+        }
+        else -> {
+            Timber.e("Error", throwable)
+        }
+    }
 }
