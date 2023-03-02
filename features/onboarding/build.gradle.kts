@@ -30,7 +30,6 @@ anvil {
     generateDaggerFactories.set(true)
 }
 
-
 dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.elementresources)

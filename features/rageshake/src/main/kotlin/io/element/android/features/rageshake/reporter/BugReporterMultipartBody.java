@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ public class BugReporterMultipartBody extends RequestBody {
         /**
          * Upload listener
          *
-         * @param totalWritten total written bytes
+         * @param totalWritten  total written bytes
          * @param contentLength content length
          */
         void onWrite(long totalWritten, long contentLength);
@@ -132,24 +132,24 @@ public class BugReporterMultipartBody extends RequestBody {
             if (headers != null) {
                 for (int h = 0, headerCount = headers.size(); h < headerCount; h++) {
                     sink.writeUtf8(headers.name(h))
-                            .write(COLONSPACE)
-                            .writeUtf8(headers.value(h))
-                            .write(CRLF);
+                        .write(COLONSPACE)
+                        .writeUtf8(headers.value(h))
+                        .write(CRLF);
                 }
             }
 
             MediaType contentType = body.contentType();
             if (contentType != null) {
                 sink.writeUtf8("Content-Type: ")
-                        .writeUtf8(contentType.toString())
-                        .write(CRLF);
+                    .writeUtf8(contentType.toString())
+                    .write(CRLF);
             }
 
             int contentLength = (int) body.contentLength();
             if (contentLength != -1) {
                 sink.writeUtf8("Content-Length: ")
-                        .writeUtf8(contentLength + "")
-                        .write(CRLF);
+                    .writeUtf8(contentLength + "")
+                    .write(CRLF);
             } else if (countBytes) {
                 // We can't measure the body's size without the sizes of its components.
                 byteCountBuffer.clear();
