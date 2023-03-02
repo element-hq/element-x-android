@@ -1,0 +1,4 @@
+Changes to CI:
+- Run Paparazzi tests just once when `koverMergedReport` is used.
+- Make sure a Paparazzi failure breaks the test flow and blocks merging.
+- Change `./gradlew check` call in `quality.yml` to custom `runQualityChecks` task.
