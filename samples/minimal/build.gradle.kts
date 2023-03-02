@@ -54,5 +54,6 @@ dependencies {
     implementation(projects.libraries.dateformatter)
     implementation(projects.features.roomlist)
     implementation(projects.features.login)
+    implementation(libs.coroutines.core)
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
 }

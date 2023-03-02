@@ -16,6 +16,5 @@
   -->
 
 <resources>
-
     <style name="Theme.ElementX" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>

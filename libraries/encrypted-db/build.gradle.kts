@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.session
+plugins {
+    id("io.element.android-library")
+}
 
-import io.element.android.libraries.matrix.core.SessionId
-import kotlinx.coroutines.flow.Flow
-import org.matrix.rustcomponents.sdk.Session
+android {
+    namespace = "io.element.android.libraries.encrypteddb"
+}
 
-interface SessionStore {
-    fun isLoggedIn(): Flow<Boolean>
-    suspend fun storeData(session: Session)
-    suspend fun getSession(sessionId: SessionId): Session?
-    suspend fun getLatestSession(): Session?
-    suspend fun reset()
+dependencies {
+    implementation(libs.sqldelight.driver.android)
+    implementation(libs.sqlcipher)
+    implementation(libs.sqlite)
+    implementation(libs.androidx.security.crypto)
 }

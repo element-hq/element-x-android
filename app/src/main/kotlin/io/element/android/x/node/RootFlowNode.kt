@@ -39,6 +39,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.core.SessionId
+import io.element.android.libraries.matrix.core.UserId
 import io.element.android.x.di.MatrixClientsHolder
 import io.element.android.x.root.RootPresenter
 import io.element.android.x.root.RootView
@@ -89,7 +90,7 @@ class RootFlowNode(
     }
 
     private fun switchToLoggedInFlow(sessionId: SessionId) {
-        backstack.safeRoot(NavTarget.LoggedInFlow(sessionId = sessionId))
+        backstack.safeRoot(NavTarget.LoggedInFlow(sessionId))
     }
 
     private fun switchToLogoutFlow() {
@@ -98,19 +99,19 @@ class RootFlowNode(
     }
 
     private suspend fun tryToRestoreLatestSession(
-        onSuccess: (SessionId) -> Unit = {},
+        onSuccess: (UserId) -> Unit = {},
         onFailure: () -> Unit = {}
     ) {
-        val latestKnownSessionId = authenticationService.getLatestSessionId()
-        if (latestKnownSessionId == null) {
+        val latestKnownUserId = authenticationService.getLatestSessionId()
+        if (latestKnownUserId == null) {
             onFailure()
             return
         }
-        if (matrixClientsHolder.knowSession(latestKnownSessionId)) {
-            onSuccess(latestKnownSessionId)
+        if (matrixClientsHolder.knowSession(latestKnownUserId)) {
+            onSuccess(latestKnownUserId)
             return
         }
-        val matrixClient = authenticationService.restoreSession(latestKnownSessionId)
+        val matrixClient = authenticationService.restoreSession(UserId(latestKnownUserId.value))
         if (matrixClient == null) {
             Timber.v("Failed to restore session...")
             onFailure()
