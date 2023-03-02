@@ -260,15 +260,15 @@ class DefaultBugReporter @Inject constructor(
                             ?.toUri()
                             ?.toFile()
                             ?.let { screenshotFile ->
-                            try {
-                                builder.addFormDataPart(
-                                    "file",
-                                    screenshotFile.name, screenshotFile.asRequestBody(MimeTypes.OctetStream.toMediaTypeOrNull())
-                                )
-                            } catch (e: Exception) {
-                                Timber.e(e, "## sendBugReport() : fail to write screenshot")
+                                try {
+                                    builder.addFormDataPart(
+                                        "file",
+                                        screenshotFile.name, screenshotFile.asRequestBody(MimeTypes.OctetStream.toMediaTypeOrNull())
+                                    )
+                                } catch (e: Exception) {
+                                    Timber.e(e, "## sendBugReport() : fail to write screenshot")
+                                }
                             }
-                        }
                     }
 
                     // add some github labels
