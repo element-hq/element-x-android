@@ -56,8 +56,7 @@ class CreateRoomFlowNode(
         Children(
             navModel = backstack,
             modifier = modifier,
-            // Animate transition to change server screen
-            transitionHandler = rememberDefaultTransitionHandler(),
+            transitionHandler = rememberDefaultTransitionHandler()
         )
     }
 }
