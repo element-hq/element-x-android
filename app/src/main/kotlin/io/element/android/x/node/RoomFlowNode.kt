@@ -23,13 +23,13 @@ import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.MessagesNode
+import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
@@ -42,12 +42,14 @@ import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
-class RoomFlowNode private constructor(
-    buildContext: BuildContext,
-    plugins: List<Plugin>,
-    private val backstack: BackStack<NavTarget>,
-) : ParentNode<RoomFlowNode.NavTarget>(
-    navModel = backstack,
+class RoomFlowNode @AssistedInject constructor(
+    @Assisted buildContext: BuildContext,
+    @Assisted plugins: List<Plugin>,
+) : BackstackNode<RoomFlowNode.NavTarget>(
+    backstack = BackStack(
+        initialElement = NavTarget.Messages,
+        savedStateMap = buildContext.savedStateMap,
+    ),
     buildContext = buildContext,
     plugins = plugins,
 ), DaggerComponentOwner {
@@ -55,16 +57,6 @@ class RoomFlowNode private constructor(
     data class Inputs(
         val room: MatrixRoom,
     ) : NodeInputs
-
-    @AssistedInject
-    constructor(@Assisted buildContext: BuildContext, @Assisted plugins: List<Plugin>) : this(
-        buildContext = buildContext,
-        plugins = plugins,
-        backstack = BackStack(
-            initialElement = NavTarget.Messages,
-            savedStateMap = buildContext.savedStateMap,
-        ),
-    )
 
     private val inputs: Inputs by nodeInputs()
 

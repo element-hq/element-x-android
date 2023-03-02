@@ -31,31 +31,24 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.login.impl.changeserver.ChangeServerNode
 import io.element.android.features.login.impl.root.LoginRootNode
+import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
-class LoginFlowNode(
-    buildContext: BuildContext,
-    plugins: List<Plugin>,
-    private val backstack: BackStack<NavTarget>,
-) : ParentNode<LoginFlowNode.NavTarget>(
-    navModel = backstack,
+class LoginFlowNode @AssistedInject constructor(
+    @Assisted buildContext: BuildContext,
+    @Assisted plugins: List<Plugin>,
+) : BackstackNode<LoginFlowNode.NavTarget>(
+    backstack = BackStack(
+        initialElement = NavTarget.Root,
+        savedStateMap = buildContext.savedStateMap,
+    ),
     buildContext = buildContext,
     plugins = plugins,
 ) {
-
-    @AssistedInject
-    constructor(@Assisted buildContext: BuildContext, @Assisted plugins: List<Plugin>) : this(
-        buildContext = buildContext,
-        plugins = plugins,
-        backstack = BackStack(
-            initialElement = NavTarget.Root,
-            savedStateMap = buildContext.savedStateMap,
-        ),
-    )
 
     sealed interface NavTarget : Parcelable {
         @Parcelize

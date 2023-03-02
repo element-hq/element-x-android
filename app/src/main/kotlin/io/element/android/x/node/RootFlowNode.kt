@@ -27,7 +27,6 @@ import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
@@ -38,6 +37,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.rageshake.bugreport.BugReportEntryPoint
+import io.element.android.features.rageshake.bugreport.BugReportNode
+import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.nodeInputsProvider
@@ -57,46 +58,25 @@ import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
 @ContributesNode(AppScope::class)
-class RootFlowNode private constructor(
-    private val buildContext: BuildContext,
-    private val backstack: BackStack<NavTarget> = BackStack(
-        initialElement = NavTarget.SplashScreen,
-        savedStateMap = buildContext.savedStateMap,
-    ),
-    private val appComponentOwner: DaggerComponentOwner,
+class RootFlowNode @AssistedInject constructor(
+    @Assisted buildContext: BuildContext,
+    @Assisted plugins: List<Plugin>,
+    @ApplicationContext context: Context,
     private val authenticationService: MatrixAuthenticationService,
     private val matrixClientsHolder: MatrixClientsHolder,
     private val presenter: RootPresenter,
     private val bugReportEntryPoint: BugReportEntryPoint,
 ) :
-    ParentNode<RootFlowNode.NavTarget>(
-        navModel = backstack,
-        buildContext = buildContext
-    ),
-
-    DaggerComponentOwner by appComponentOwner {
-
-    @AssistedInject
-    constructor(
-        @Assisted buildContext: BuildContext,
-        @Assisted plugins: List<Plugin>,
-        @ApplicationContext context: Context,
-        authenticationService: MatrixAuthenticationService,
-        matrixClientsHolder: MatrixClientsHolder,
-        presenter: RootPresenter,
-        bugReportEntryPoint: BugReportEntryPoint,
-    ) : this(
-        buildContext = buildContext,
+    BackstackNode<RootFlowNode.NavTarget>(
         backstack = BackStack(
             initialElement = NavTarget.SplashScreen,
             savedStateMap = buildContext.savedStateMap,
         ),
-        appComponentOwner = context.applicationContext as DaggerComponentOwner,
-        authenticationService = authenticationService,
-        matrixClientsHolder = matrixClientsHolder,
-        presenter = presenter,
-        bugReportEntryPoint = bugReportEntryPoint,
-    )
+        buildContext = buildContext,
+        plugins = plugins
+    ),
+
+    DaggerComponentOwner by (context as DaggerComponentOwner) {
 
     override fun onBuilt() {
         super.onBuilt()
