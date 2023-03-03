@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -158,7 +159,11 @@ fun RoomListContent(
             }
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onCreateRoomClicked) {
+            FloatingActionButton(
+                // FIXME align on Design system theme
+                containerColor = MaterialTheme.colorScheme.primary,
+                onClick = onCreateRoomClicked
+            ) {
                 Icon(resourceId = DrawableR.drawable.ic_edit_square, contentDescription = stringResource(id = StringR.string.a11y_create_message))
             }
         },
