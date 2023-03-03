@@ -14,11 +14,21 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.util
+package io.element.android.libraries.matrix.api.auth
 
-object LoginConstants {
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import org.matrix.rustcomponents.sdk.HomeserverLoginDetails
 
-    const val DEFAULT_HOMESERVER_URL = "matrix.org"
-    const val SLIDING_SYNC_READ_MORE_URL = "https://github.com/matrix-org/sliding-sync/blob/main/docs/Landing.md"
-
+@Parcelize
+data class MatrixHomeServerDetails(
+    val url: String,
+    val supportsPasswordLogin: Boolean,
+    val authenticationIssuer: String?
+): Parcelable {
+    constructor(homeserverLoginDetails: HomeserverLoginDetails) : this(
+        homeserverLoginDetails.url(),
+        homeserverLoginDetails.supportsPasswordLogin(),
+        homeserverLoginDetails.authenticationIssuer()
+    )
 }

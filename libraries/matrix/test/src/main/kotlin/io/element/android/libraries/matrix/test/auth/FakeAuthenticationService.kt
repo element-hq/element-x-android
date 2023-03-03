@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.test.auth
 
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_HOMESERVER
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -26,7 +27,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 class FakeAuthenticationService : MatrixAuthenticationService {
-    private var homeserver: String = A_HOMESERVER
+    private var homeserver: MatrixHomeServerDetails = A_HOMESERVER
     private var loginError: Throwable? = null
     private var changeServerError: Throwable? = null
 
@@ -42,16 +43,12 @@ class FakeAuthenticationService : MatrixAuthenticationService {
         return null
     }
 
-    override fun getHomeserver(): String? {
+    override fun getHomeserver(): MatrixHomeServerDetails? {
         return null
     }
 
-    fun givenHomeserver(homeserver: String) {
+    fun givenHomeserver(homeserver: MatrixHomeServerDetails) {
         this.homeserver = homeserver
-    }
-
-    override fun getHomeserverDisplayValue(): String {
-        return homeserver
     }
 
     override suspend fun setHomeserver(homeserver: String) {

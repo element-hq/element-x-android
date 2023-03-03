@@ -16,15 +16,18 @@
 
 package io.element.android.features.login.changeserver
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import io.element.android.features.login.util.LoginConstants
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.execute
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -35,8 +38,9 @@ class ChangeServerPresenter @Inject constructor(private val authenticationServic
     @Composable
     override fun present(): ChangeServerState {
         val localCoroutineScope = rememberCoroutineScope()
+
         val homeserver = rememberSaveable {
-            mutableStateOf(authenticationService.getHomeserverDisplayValue())
+            mutableStateOf(authenticationService.getHomeserver()?.url ?: LoginConstants.DEFAULT_HOMESERVER_URL)
         }
         val changeServerAction: MutableState<Async<Unit>> = remember {
             mutableStateOf(Async.Uninitialized)
@@ -46,7 +50,7 @@ class ChangeServerPresenter @Inject constructor(private val authenticationServic
             when (event) {
                 is ChangeServerEvents.SetServer -> homeserver.value = event.server
                 ChangeServerEvents.Submit -> {
-                    localCoroutineScope.submit(homeserver, changeServerAction)
+                    localCoroutineScope.submit(homeserver.value, changeServerAction)
                 }
                 ChangeServerEvents.ClearError -> changeServerAction.value = Async.Uninitialized
             }
@@ -59,9 +63,13 @@ class ChangeServerPresenter @Inject constructor(private val authenticationServic
         )
     }
 
-    private fun CoroutineScope.submit(homeserver: MutableState<String>, changeServerAction: MutableState<Async<Unit>>) = launch {
+    private fun CoroutineScope.submit(homeserverUrl: String, changeServerAction: MutableState<Async<Unit>>) = launch {
         suspend {
-            authenticationService.setHomeserver(homeserver.value)
+            val domain = tryOrNull {
+                val uri = Uri.parse(homeserverUrl)
+                uri?.host
+            } ?: homeserverUrl
+            authenticationService.setHomeserver(domain)
         }.execute(changeServerAction)
     }
 }

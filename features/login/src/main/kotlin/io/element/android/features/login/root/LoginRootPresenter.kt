@@ -22,9 +22,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import io.element.android.features.login.util.LoginConstants
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -35,7 +37,9 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
     override fun present(): LoginRootState {
         val localCoroutineScope = rememberCoroutineScope()
         val homeserver = rememberSaveable {
-            mutableStateOf(authenticationService.getHomeserverDisplayValue())
+            val homeserver = authenticationService.getHomeserver()
+                ?: MatrixHomeServerDetails(LoginConstants.DEFAULT_HOMESERVER_URL, true, null)
+            mutableStateOf(homeserver)
         }
         val loggedInState: MutableState<LoggedInState> = remember {
             mutableStateOf(LoggedInState.NotLoggedIn)
@@ -52,7 +56,7 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
                 is LoginRootEvents.SetPassword -> updateFormState(formState) {
                     copy(password = event.password)
                 }
-                LoginRootEvents.Submit -> localCoroutineScope.submit(homeserver.value, formState.value, loggedInState)
+                LoginRootEvents.Submit -> localCoroutineScope.submit(homeserver.value.url, formState.value, loggedInState)
                 LoginRootEvents.ClearError -> loggedInState.value = LoggedInState.NotLoggedIn
             }
         }

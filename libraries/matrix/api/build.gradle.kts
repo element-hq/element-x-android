@@ -18,6 +18,7 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("io.element.android-library")
+    id("kotlin-parcelize")
     alias(libs.plugins.anvil)
     kotlin("plugin.serialization") version "1.8.10"
 }

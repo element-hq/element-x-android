@@ -43,7 +43,7 @@ class ChangeServerNode @AssistedInject constructor(
     }
 
     private fun openLearnMorePage(context: Context) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(LoginConstants.slidingSyncLearnMoreUrl))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(LoginConstants.SLIDING_SYNC_READ_MORE_URL))
         tryOrNull { context.startActivity(intent) }
     }
 

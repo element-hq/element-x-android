@@ -21,15 +21,10 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.Flow
 
 interface MatrixAuthenticationService {
-    companion object {
-        const val DEFAULT_HOMESERVER = "matrix.org"
-    }
-
     fun isLoggedIn(): Flow<Boolean>
     suspend fun getLatestSessionId(): SessionId?
     suspend fun restoreSession(sessionId: SessionId): MatrixClient?
-    fun getHomeserver(): String?
-    fun getHomeserverDisplayValue(): String
+    fun getHomeserver(): MatrixHomeServerDetails?
     suspend fun setHomeserver(homeserver: String)
     suspend fun login(username: String, password: String): SessionId
 }

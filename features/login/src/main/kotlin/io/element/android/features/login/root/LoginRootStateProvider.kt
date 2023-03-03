@@ -17,13 +17,14 @@
 package io.element.android.features.login.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.core.SessionId
 
 open class LoginRootStateProvider : PreviewParameterProvider<LoginRootState> {
     override val values: Sequence<LoginRootState>
         get() = sequenceOf(
             aLoginRootState(),
-            aLoginRootState().copy(homeserver = "some-custom-server.com"),
+            aLoginRootState().copy(homeserver = MatrixHomeServerDetails("some-custom-server.com", true, null)),
             aLoginRootState().copy(formState = LoginFormState("user", "pass")),
             aLoginRootState().copy(formState = LoginFormState("user", "pass"), loggedInState = LoggedInState.LoggingIn),
             aLoginRootState().copy(formState = LoginFormState("user", "pass"), loggedInState = LoggedInState.ErrorLoggingIn(Throwable())),
@@ -32,7 +33,7 @@ open class LoginRootStateProvider : PreviewParameterProvider<LoginRootState> {
 }
 
 fun aLoginRootState() = LoginRootState(
-    homeserver = "matrix.org",
+    homeserver = MatrixHomeServerDetails("matrix.org", true, null),
     loggedInState = LoggedInState.NotLoggedIn,
     formState = LoginFormState.Default,
     eventSink = {}
