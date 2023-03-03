@@ -16,46 +16,64 @@
 
 package io.element.android.features.createroom.root
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.sp
+import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
+import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.R.drawable as DrawableR
 import io.element.android.libraries.ui.strings.R.string as StringR
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateRoomRootScreen(
     state: CreateRoomRootState,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {}
+    onClosePressed: () -> Unit = {}
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .displayCutoutPadding(),
-    ) {
-        Text(
-            text = stringResource(id = StringR.create_chat),
-            modifier = Modifier.align(Alignment.Center)
-        )
-        IconButton(
-            modifier = Modifier
-                .align(Alignment.CenterEnd),
-            onClick = onBackPressed,
-        ) {
-            Icon(resourceId = DrawableR.ic_close, contentDescription = stringResource(id = StringR.action_close))
+    Scaffold(
+        modifier = modifier.fillMaxWidth(),
+        // TODO to test
+        //.displayCutoutPadding()
+        topBar = {
+            CreateRoomViewTopBar(onClosePressed = onClosePressed)
         }
+    ) {
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CreateRoomViewTopBar(
+    modifier: Modifier = Modifier,
+    onClosePressed: () -> Unit = {},
+) {
+    CenterAlignedTopAppBar(
+        modifier = modifier,
+        title = {
+            Text(
+                text = stringResource(id = StringR.start_chat),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+            )
+        },
+        actions = {
+            IconButton(onClick = onClosePressed) {
+                Icon(resourceId = R.drawable.ic_close, contentDescription = stringResource(id = StringR.action_close))
+            }
+        }
+    )
 }
 
 @Preview
