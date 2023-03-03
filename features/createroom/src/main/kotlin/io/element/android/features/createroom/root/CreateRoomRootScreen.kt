@@ -17,26 +17,44 @@
 package io.element.android.features.createroom.root
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.displayCutoutPadding
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.R.drawable as DrawableR
+import io.element.android.libraries.ui.strings.R.string as StringR
 
 @Composable
-fun CreateRoomRootView(
+fun CreateRoomRootScreen(
     state: CreateRoomRootState,
     modifier: Modifier = Modifier,
+    onBackPressed: () -> Unit = {}
 ) {
-    Box(modifier, contentAlignment = Alignment.Center) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .displayCutoutPadding(),
+    ) {
         Text(
-            "CreateRoom feature view",
-            color = MaterialTheme.colorScheme.primary,
+            text = stringResource(id = StringR.create_chat),
+            modifier = Modifier.align(Alignment.Center)
         )
+        IconButton(
+            modifier = Modifier
+                .align(Alignment.CenterEnd),
+            onClick = onBackPressed,
+        ) {
+            Icon(resourceId = DrawableR.ic_close, contentDescription = stringResource(id = StringR.action_close))
+        }
     }
 }
 
@@ -52,7 +70,7 @@ fun CreateRoomRootViewDarkPreview(@PreviewParameter(CreateRoomRootStateProvider:
 
 @Composable
 private fun ContentToPreview(state: CreateRoomRootState) {
-    CreateRoomRootView(
+    CreateRoomRootScreen(
         state = state,
     )
 }
