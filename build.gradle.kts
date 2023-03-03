@@ -297,3 +297,15 @@ tasks.register("runQualityChecks") {
     }
     dependsOn(":app:knitCheck")
 }
+
+// Make sure to delete old screenshots before recording new ones
+subprojects {
+    val snapshotsDir = File("${project.path}/src/test/snapshots")
+    val removeOldScreenshotsTask = tasks.register("removeOldSnapshots") {
+        onlyIf { snapshotsDir.exists() }
+        doFirst {
+            snapshotsDir.deleteRecursively()
+        }
+    }
+    tasks.findByName("recordPaparazzi")?.dependsOn(removeOldScreenshotsTask)
+}
