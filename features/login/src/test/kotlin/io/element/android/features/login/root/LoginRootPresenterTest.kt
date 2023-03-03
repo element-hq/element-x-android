@@ -42,7 +42,7 @@ class LoginRootPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.homeserver).isEqualTo(A_HOMESERVER)
+            assertThat(initialState.homeserverDetails).isEqualTo(A_HOMESERVER)
             assertThat(initialState.loggedInState).isEqualTo(LoggedInState.NotLoggedIn)
             assertThat(initialState.formState).isEqualTo(LoginFormState.Default)
             assertThat(initialState.submitEnabled).isFalse()

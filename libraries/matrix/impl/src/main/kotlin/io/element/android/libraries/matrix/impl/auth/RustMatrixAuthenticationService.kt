@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.impl.auth
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
@@ -30,6 +31,8 @@ import io.element.android.libraries.matrix.session.SessionData
 import io.element.android.libraries.sessionstorage.SessionStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.AuthenticationService
 import org.matrix.rustcomponents.sdk.Client
@@ -40,6 +43,7 @@ import java.io.File
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
+@SingleIn(AppScope::class)
 class RustMatrixAuthenticationService @Inject constructor(
     private val baseDirectory: File,
     private val coroutineScope: CoroutineScope,
@@ -48,7 +52,7 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val authService: AuthenticationService,
 ) : MatrixAuthenticationService {
 
-    private var currentHomeserver: MatrixHomeServerDetails? = null
+    private var currentHomeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
 
     override fun isLoggedIn(): Flow<Boolean> {
         return sessionStore.isLoggedIn()
@@ -77,14 +81,14 @@ class RustMatrixAuthenticationService @Inject constructor(
             }
     }
 
-    override fun getHomeserver(): MatrixHomeServerDetails? = currentHomeserver
+    override fun getHomeserverDetails(): StateFlow<MatrixHomeServerDetails?> = currentHomeserver
 
     override suspend fun setHomeserver(homeserver: String) {
         withContext(coroutineDispatchers.io) {
             authService.configureHomeserver(homeserver)
             val homeServerDetails = authService.homeserverDetails()?.use { MatrixHomeServerDetails(it) }
             if (homeServerDetails != null) {
-                currentHomeserver = homeServerDetails.copy(url = homeserver)
+                currentHomeserver.value = homeServerDetails.copy(url = homeserver)
             }
         }
     }

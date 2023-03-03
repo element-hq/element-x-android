@@ -24,10 +24,12 @@ import io.element.android.libraries.matrix.test.A_HOMESERVER
 import io.element.android.libraries.matrix.test.A_USER_ID
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOf
 
 class FakeAuthenticationService : MatrixAuthenticationService {
-    private var homeserver: MatrixHomeServerDetails = A_HOMESERVER
+    private var homeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
     private var loginError: Throwable? = null
     private var changeServerError: Throwable? = null
 
@@ -43,12 +45,12 @@ class FakeAuthenticationService : MatrixAuthenticationService {
         return null
     }
 
-    override fun getHomeserver(): MatrixHomeServerDetails? {
-        return null
+    override fun getHomeserverDetails(): StateFlow<MatrixHomeServerDetails?> {
+        return homeserver
     }
 
     fun givenHomeserver(homeserver: MatrixHomeServerDetails) {
-        this.homeserver = homeserver
+        this.homeserver.value = homeserver
     }
 
     override suspend fun setHomeserver(homeserver: String) {

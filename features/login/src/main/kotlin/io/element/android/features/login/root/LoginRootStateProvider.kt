@@ -24,7 +24,7 @@ open class LoginRootStateProvider : PreviewParameterProvider<LoginRootState> {
     override val values: Sequence<LoginRootState>
         get() = sequenceOf(
             aLoginRootState(),
-            aLoginRootState().copy(homeserver = MatrixHomeServerDetails("some-custom-server.com", true, null)),
+            aLoginRootState().copy(homeserverDetails = MatrixHomeServerDetails("some-custom-server.com", true, null)),
             aLoginRootState().copy(formState = LoginFormState("user", "pass")),
             aLoginRootState().copy(formState = LoginFormState("user", "pass"), loggedInState = LoggedInState.LoggingIn),
             aLoginRootState().copy(formState = LoginFormState("user", "pass"), loggedInState = LoggedInState.ErrorLoggingIn(Throwable())),
@@ -33,7 +33,7 @@ open class LoginRootStateProvider : PreviewParameterProvider<LoginRootState> {
 }
 
 fun aLoginRootState() = LoginRootState(
-    homeserver = MatrixHomeServerDetails("matrix.org", true, null),
+    homeserverDetails = MatrixHomeServerDetails("matrix.org", true, null),
     loggedInState = LoggedInState.NotLoggedIn,
     formState = LoginFormState.Default,
     eventSink = {}

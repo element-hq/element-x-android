@@ -130,7 +130,7 @@ fun LoginRootScreen(
 
                 ChangeServerSection(
                     interactionEnabled = interactionEnabled,
-                    homeserver = state.homeserver.url,
+                    homeserver = state.homeserverDetails.url,
                     onChangeServer = onChangeServer
                 )
 

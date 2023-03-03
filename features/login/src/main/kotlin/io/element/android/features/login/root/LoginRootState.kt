@@ -22,7 +22,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.parcelize.Parcelize
 
 data class LoginRootState(
-    val homeserver: MatrixHomeServerDetails,
+    val homeserverDetails: MatrixHomeServerDetails,
     val loggedInState: LoggedInState,
     val formState: LoginFormState,
     val eventSink: (LoginRootEvents) -> Unit
