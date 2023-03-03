@@ -23,9 +23,9 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.core.SessionId
-import io.element.android.libraries.matrixtest.A_THROWABLE
-import io.element.android.libraries.matrixtest.FakeMatrixClient
+import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_THROWABLE
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -34,7 +34,7 @@ class LogoutPreferencePresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = LogoutPreferencePresenter(
-            FakeMatrixClient(SessionId("sessionId")),
+            FakeMatrixClient(A_SESSION_ID),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -47,7 +47,7 @@ class LogoutPreferencePresenterTest {
     @Test
     fun `present - logout`() = runTest {
         val presenter = LogoutPreferencePresenter(
-            FakeMatrixClient(SessionId("sessionId")),
+            FakeMatrixClient(A_SESSION_ID),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -63,7 +63,7 @@ class LogoutPreferencePresenterTest {
 
     @Test
     fun `present - logout with error`() = runTest {
-        val matrixClient = FakeMatrixClient(SessionId("sessionId"))
+        val matrixClient = FakeMatrixClient(A_SESSION_ID)
         val presenter = LogoutPreferencePresenter(
             matrixClient,
         )

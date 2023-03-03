@@ -53,8 +53,8 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.permalink.PermalinkData
-import io.element.android.libraries.matrix.permalink.PermalinkParser
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import kotlinx.collections.immutable.persistentMapOf
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element

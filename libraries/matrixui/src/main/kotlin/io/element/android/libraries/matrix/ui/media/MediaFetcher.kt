@@ -21,8 +21,8 @@ import coil.fetch.FetchResult
 import coil.fetch.Fetcher
 import coil.request.Options
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.MatrixClient
-import io.element.android.libraries.matrix.media.MediaResolver
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.media.MediaResolver
 import java.nio.ByteBuffer
 
 internal class MediaFetcher(

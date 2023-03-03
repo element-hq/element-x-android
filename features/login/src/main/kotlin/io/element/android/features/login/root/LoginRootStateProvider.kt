@@ -17,7 +17,7 @@
 package io.element.android.features.login.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.matrix.core.SessionId
+import io.element.android.libraries.matrix.api.core.SessionId
 
 open class LoginRootStateProvider : PreviewParameterProvider<LoginRootState> {
     override val values: Sequence<LoginRootState>

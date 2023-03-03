@@ -21,7 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import io.element.android.features.login.root.LoginRootPresenter
 import io.element.android.features.login.root.LoginRootScreen
-import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 
 class LoginScreen(private val authenticationService: MatrixAuthenticationService) {
 

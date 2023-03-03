@@ -22,14 +22,13 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.core.SessionId
-import io.element.android.libraries.matrixtest.A_HOMESERVER
-import io.element.android.libraries.matrixtest.A_HOMESERVER_2
-import io.element.android.libraries.matrixtest.A_PASSWORD
-import io.element.android.libraries.matrixtest.A_SESSION_ID
-import io.element.android.libraries.matrixtest.A_THROWABLE
-import io.element.android.libraries.matrixtest.A_USER_NAME
-import io.element.android.libraries.matrixtest.auth.FakeAuthenticationService
+import io.element.android.libraries.matrix.test.A_HOMESERVER
+import io.element.android.libraries.matrix.test.A_HOMESERVER_2
+import io.element.android.libraries.matrix.test.A_PASSWORD
+import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_THROWABLE
+import io.element.android.libraries.matrix.test.A_USER_NAME
+import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -88,7 +87,7 @@ class LoginRootPresenterTest {
             val submitState = awaitItem()
             assertThat(submitState.loggedInState).isEqualTo(LoggedInState.LoggingIn)
             val loggedInState = awaitItem()
-            assertThat(loggedInState.loggedInState).isEqualTo(LoggedInState.LoggedIn(SessionId(A_SESSION_ID)))
+            assertThat(loggedInState.loggedInState).isEqualTo(LoggedInState.LoggedIn(A_SESSION_ID))
         }
     }
 

@@ -17,7 +17,7 @@
 package io.element.android.features.messages.timeline.model.event
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.matrix.media.MediaResolver
+import io.element.android.libraries.matrix.api.media.MediaResolver
 
 open class TimelineItemImageContentProvider : PreviewParameterProvider<TimelineItemImageContent> {
     override val values: Sequence<TimelineItemImageContent>

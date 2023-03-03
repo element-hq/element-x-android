@@ -39,17 +39,17 @@ class DateFormatters @Inject constructor(
 
     private val onlyTimeFormatter: DateTimeFormatter by lazy {
         val pattern = DateFormat.getBestDateTimePattern(locale, "HH:mm") ?: "HH:mm"
-        DateTimeFormatter.ofPattern(pattern)
+        DateTimeFormatter.ofPattern(pattern, locale)
     }
 
     private val dateWithMonthFormatter: DateTimeFormatter by lazy {
         val pattern = DateFormat.getBestDateTimePattern(locale, "d MMM") ?: "d MMM"
-        DateTimeFormatter.ofPattern(pattern)
+        DateTimeFormatter.ofPattern(pattern, locale)
     }
 
     private val dateWithYearFormatter: DateTimeFormatter by lazy {
         val pattern = DateFormat.getBestDateTimePattern(locale, "dd.MM.yyyy") ?: "dd.MM.yyyy"
-        DateTimeFormatter.ofPattern(pattern)
+        DateTimeFormatter.ofPattern(pattern, locale)
     }
 
     internal fun formatTime(localDateTime: LocalDateTime): String {

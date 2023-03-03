@@ -19,9 +19,10 @@ package io.element.android.x.di
 import android.os.Bundle
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
-import io.element.android.libraries.matrix.MatrixClient
-import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
-import io.element.android.libraries.matrix.core.SessionId
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
@@ -57,13 +58,13 @@ class MatrixClientsHolder @Inject constructor(private val authenticationService:
     @Suppress("DEPRECATION")
     fun restore(savedInstanceState: Bundle?) {
         if (savedInstanceState == null || sessionIdsToMatrixClient.isNotEmpty()) return
-        val sessionIds = savedInstanceState.getSerializable(SAVE_INSTANCE_KEY) as? Array<SessionId>
-        if (sessionIds.isNullOrEmpty()) return
+        val userIds = savedInstanceState.getSerializable(SAVE_INSTANCE_KEY) as? Array<UserId>
+        if (userIds.isNullOrEmpty()) return
         // Not ideal but should only happens in case of process recreation. This ensure we restore all the active sessions before restoring the node graphs.
         runBlocking {
-            sessionIds.forEach { sessionId ->
-                Timber.v("Restore matrix session: $sessionId")
-                val matrixClient = authenticationService.restoreSession(sessionId)
+            userIds.forEach { userId ->
+                Timber.v("Restore matrix session: $userId")
+                val matrixClient = authenticationService.restoreSession(userId)
                 if (matrixClient != null) {
                     add(matrixClient)
                 }
