@@ -14,6 +14,5 @@
     <string name="server_selection_server_footer">You can only connect to an existing server that supports sliding sync. Your homeserver admin will need to configure it.</string>
     <string name="server_selection_sliding_sync_alert_title">Server not supported</string>
     <string name="server_selection_sliding_sync_alert_message">This server currently doesn\'t support sliding sync.</string>
-    <string name="create_chat">Create chat</string>
 
 </resources>
