@@ -302,7 +302,7 @@ internal fun LoginForm(
         )
 
         if (state.loggedInState is LoggedInState.ErrorLoggingIn) {
-            LoginErrorDialog(throwable = state.loggedInState.failure, cancellableCallback = {
+            ErrorDialog(error = state.loggedInState.failure, onDismissRequest = {
                 eventSink(LoginRootEvents.ClearError)
             })
         }
@@ -322,18 +322,15 @@ internal fun LoginForm(
 }
 
 @Composable
-fun LoginErrorDialog(throwable: Throwable, cancellableCallback: () -> Unit) {
+internal fun ErrorDialog(error: Throwable, onDismissRequest: () -> Unit) {
     AlertDialog(
-        text = {
-            val message = throwable.message ?: stringResource(StringR.string.unknown_error)
-            Text(message)
-        },
-        onDismissRequest = cancellableCallback,
+        onDismissRequest = onDismissRequest,
         confirmButton = {
-            TextButton(onClick = cancellableCallback) {
-                Text(stringResource(id = StringR.string.action_accept))
+            TextButton(onClick = onDismissRequest) {
+                Text(stringResource(id = StringR.string.ok))
             }
-        }
+        },
+        text = { Text(error.localizedMessage ?: stringResource(id = StringR.string.unknown_error)) }
     )
 }
 

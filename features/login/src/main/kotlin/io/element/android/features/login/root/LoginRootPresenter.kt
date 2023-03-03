@@ -83,7 +83,4 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
         formState.value = updateLambda(formState.value)
     }
 
-    private fun refreshHomeServer(homeserver: MutableState<String>) {
-        homeserver.value = authenticationService.getHomeserverDisplayValue()
-    }
 }

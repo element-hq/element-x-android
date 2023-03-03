@@ -71,6 +71,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import org.matrix.rustcomponents.sdk.AuthenticationException
 import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -188,12 +189,21 @@ fun ChangeServerView(
                     } else null,
                 )
                 if (state.changeServerAction is Async.Failure) {
-                    ServerNotSupportedDialog(onLearnMoreClicked = {
-                        onLearnMoreClicked()
-                        eventSink(ChangeServerEvents.ClearError)
-                    }, onDismissRequest = {
-                        eventSink(ChangeServerEvents.ClearError)
-                    })
+                    if (state.changeServerAction.error is AuthenticationException.SlidingSyncNotAvailable) {
+                        SlidingSyncNotSupportedDialog(onLearnMoreClicked = {
+                            onLearnMoreClicked()
+                            eventSink(ChangeServerEvents.ClearError)
+                        }, onDismissRequest = {
+                            eventSink(ChangeServerEvents.ClearError)
+                        })
+                    } else {
+                        ErrorDialog(
+                            error = state.changeServerAction.error,
+                            onDismissRequest = {
+                                eventSink(ChangeServerEvents.ClearError)
+                            }
+                        )
+                    }
                 }
                 Spacer(Modifier.height(8.dp))
                 Text(
@@ -227,9 +237,22 @@ fun ChangeServerView(
 }
 
 @Composable
-internal fun ServerNotSupportedDialog(onLearnMoreClicked: () -> Unit, onDismissRequest: () -> Unit) {
+internal fun ErrorDialog(error: Throwable, onDismissRequest: () -> Unit) {
     AlertDialog(
-        onDismissRequest = {  onDismissRequest() },
+        onDismissRequest = onDismissRequest,
+        confirmButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text(stringResource(id = StringR.string.ok))
+            }
+        },
+        text = { Text(error.localizedMessage ?: stringResource(id = StringR.string.unknown_error)) }
+    )
+}
+
+@Composable
+internal fun SlidingSyncNotSupportedDialog(onLearnMoreClicked: () -> Unit, onDismissRequest: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
         confirmButton = {
             TextButton(onClick = onLearnMoreClicked) {
                 Text(stringResource(StringR.string.action_learn_more))
