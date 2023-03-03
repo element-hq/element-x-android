@@ -9,6 +9,10 @@
 -keep class com.sun.jna.** { *; }
 -keep class * implements com.sun.jna.** { *; }
 
+# Prevent the sqlcipher library from being obfuscated/optimised when building in
+# release mode, as it causes the library to raise exceptions.
+-keep class net.sqlcipher.** { *; }
+
 # kotlinx.serialization
 
 # Kotlin serialization looks up the generated serializer classes through a function on companion
