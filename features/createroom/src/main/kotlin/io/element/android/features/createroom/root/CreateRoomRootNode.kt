@@ -45,7 +45,8 @@ class CreateRoomRootNode @AssistedInject constructor(
         val state = presenter.present()
         CreateRoomRootScreen(
             state = state,
-            modifier = modifier
+            modifier = modifier,
+            onClosePressed = this::navigateUp,
         )
     }
 }
