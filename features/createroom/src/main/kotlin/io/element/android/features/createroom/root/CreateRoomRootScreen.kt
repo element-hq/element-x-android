@@ -45,7 +45,7 @@ fun CreateRoomRootScreen(
     Scaffold(
         modifier = modifier.fillMaxWidth(),
         topBar = {
-            CreateRoomViewTopBar(onClosePressed = onClosePressed)
+            CreateRoomRootViewTopBar(onClosePressed = onClosePressed)
         }
     ) {
     }
@@ -53,7 +53,7 @@ fun CreateRoomRootScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateRoomViewTopBar(
+fun CreateRoomRootViewTopBar(
     modifier: Modifier = Modifier,
     onClosePressed: () -> Unit = {},
 ) {
