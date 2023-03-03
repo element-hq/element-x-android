@@ -17,7 +17,6 @@
 package io.element.android.libraries.architecture
 
 import androidx.compose.runtime.Stable
-import com.bumble.appyx.Appyx
 import com.bumble.appyx.core.children.ChildEntry
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.ParentNode
@@ -28,7 +27,7 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 abstract class BackstackNode<NavTarget : Any>(
     val backstack: BackStack<NavTarget>,
     buildContext: BuildContext,
-    childKeepMode: ChildEntry.KeepMode = Appyx.defaultChildKeepMode,
+    childKeepMode: ChildEntry.KeepMode = ChildEntry.KeepMode.KEEP,
     plugins: List<Plugin>
 ) : ParentNode<NavTarget>(
     navModel = backstack,

@@ -1,6 +1,12 @@
 import kotlinx.kover.api.KoverTaskExtension
 import org.jetbrains.kotlin.cli.common.toBooleanLenient
 
+buildscript {
+    dependencies {
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0")
+    }
+}
+
 /*
  * Copyright (c) 2022 New Vector Ltd
  *

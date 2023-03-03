@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,18 +20,11 @@ import android.content.Context
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
-import io.element.android.features.rageshake.reporter.BugReporter
-import io.element.android.features.rageshake.reporter.DefaultBugReporter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.asCoroutineDispatcher
-import kotlinx.coroutines.plus
+import kotlinx.coroutines.*
 import java.io.File
 import java.util.concurrent.Executors
 
@@ -61,6 +54,4 @@ object AppModule {
         )
     }
 
-    @Provides
-    fun providesBugReporter(bugReporter: DefaultBugReporter): BugReporter = bugReporter
 }

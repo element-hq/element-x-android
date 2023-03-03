@@ -20,6 +20,7 @@ import android.content.Context
 import android.os.Build
 import androidx.core.net.toFile
 import androidx.core.net.toUri
+import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.rageshake.R
 import io.element.android.features.rageshake.crash.CrashDataStore
 import io.element.android.features.rageshake.logs.VectorFileLogger
@@ -29,6 +30,7 @@ import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.toOnOff
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
@@ -53,6 +55,7 @@ import javax.inject.Inject
 /**
  * BugReporter creates and sends the bug reports.
  */
+@ContributesBinding(AppScope::class)
 class DefaultBugReporter @Inject constructor(
     @ApplicationContext private val context: Context,
     private val screenshotHolder: ScreenshotHolder,
