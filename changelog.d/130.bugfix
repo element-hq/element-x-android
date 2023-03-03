@@ -1,0 +1,1 @@
+Prevent a crash on startup related to sqlcipher when the app was built in release mode.
