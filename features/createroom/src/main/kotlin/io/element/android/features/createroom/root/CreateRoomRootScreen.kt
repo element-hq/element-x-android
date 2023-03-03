@@ -44,8 +44,6 @@ fun CreateRoomRootScreen(
 ) {
     Scaffold(
         modifier = modifier.fillMaxWidth(),
-        // TODO to test
-        //.displayCutoutPadding()
         topBar = {
             CreateRoomViewTopBar(onClosePressed = onClosePressed)
         }
