@@ -28,6 +28,7 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.x.di.RoomComponent
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
@@ -36,7 +37,6 @@ import io.element.android.libraries.architecture.nodeInputs
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.room.MatrixRoom
-import io.element.android.x.di.RoomComponent
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 

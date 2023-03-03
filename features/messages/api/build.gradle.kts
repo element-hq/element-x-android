@@ -18,33 +18,16 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.anvil)
-    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "io.element.android.features.messages"
-}
-
-anvil {
-    generateDaggerFactories.set(true)
+    namespace = "io.element.android.features.messages.api"
 }
 
 dependencies {
-    implementation(projects.anvilannotations)
-    anvil(projects.anvilcodegen)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix)
-    implementation(projects.libraries.matrixui)
-    implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.textcomposer)
-    implementation(projects.libraries.dateformatter)
-    implementation(libs.coil.compose)
-    implementation(libs.datetime)
-    implementation(libs.accompanist.flowlayout)
-    implementation(libs.androidx.recyclerview)
-    implementation(libs.jsoup)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
@@ -54,5 +37,4 @@ dependencies {
     testImplementation(projects.libraries.matrixtest)
 
     androidTestImplementation(libs.test.junitext)
-    ksp(libs.showkase.processor)
 }

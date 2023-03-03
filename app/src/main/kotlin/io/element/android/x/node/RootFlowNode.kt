@@ -36,8 +36,8 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.x.root.MatrixClientsHolder
 import io.element.android.features.rageshake.bugreport.BugReportEntryPoint
-import io.element.android.features.rageshake.bugreport.BugReportNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
@@ -48,7 +48,6 @@ import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.core.SessionId
-import io.element.android.x.di.MatrixClientsHolder
 import io.element.android.x.root.RootPresenter
 import io.element.android.x.root.RootView
 import kotlinx.coroutines.flow.distinctUntilChanged

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,8 @@ package io.element.android.x.di
 
 import com.squareup.anvil.annotations.ContributesTo
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
-import io.element.android.x.root.RootPresenter
 
 @ContributesTo(AppScope::class)
 interface AppBindings {
-    fun rootPresenter(): RootPresenter
-    fun authenticationService(): MatrixAuthenticationService
     fun matrixClientsHolder(): MatrixClientsHolder
 }
