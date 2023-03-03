@@ -33,10 +33,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -55,6 +53,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.login.R
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -193,13 +193,13 @@ fun ChangeServerView(
                         SlidingSyncNotSupportedDialog(onLearnMoreClicked = {
                             onLearnMoreClicked()
                             eventSink(ChangeServerEvents.ClearError)
-                        }, onDismissRequest = {
+                        }, onDismiss = {
                             eventSink(ChangeServerEvents.ClearError)
                         })
                     } else {
-                        ErrorDialog(
+                        ChangeServerErrorDialog(
                             error = state.changeServerAction.error,
-                            onDismissRequest = {
+                            onDismiss = {
                                 eventSink(ChangeServerEvents.ClearError)
                             }
                         )
@@ -237,34 +237,21 @@ fun ChangeServerView(
 }
 
 @Composable
-internal fun ErrorDialog(error: Throwable, onDismissRequest: () -> Unit) {
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        confirmButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text(stringResource(id = StringR.string.ok))
-            }
-        },
-        text = { Text(error.localizedMessage ?: stringResource(id = StringR.string.unknown_error)) }
+internal fun ChangeServerErrorDialog(error: Throwable, onDismiss: () -> Unit) {
+    ErrorDialog(
+        content = error.localizedMessage ?: stringResource(id = StringR.string.unknown_error),
+        onDismiss = onDismiss
     )
 }
 
 @Composable
-internal fun SlidingSyncNotSupportedDialog(onLearnMoreClicked: () -> Unit, onDismissRequest: () -> Unit) {
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        confirmButton = {
-            TextButton(onClick = onLearnMoreClicked) {
-                Text(stringResource(StringR.string.action_learn_more))
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text(stringResource(StringR.string.action_cancel))
-            }
-        },
-        title = { Text(text = stringResource(StringR.string.server_selection_sliding_sync_alert_title)) },
-        text = { Text(text = stringResource(StringR.string.server_selection_sliding_sync_alert_message)) },
+internal fun SlidingSyncNotSupportedDialog(onLearnMoreClicked: () -> Unit, onDismiss: () -> Unit) {
+    ConfirmationDialog(
+        onDismiss = onDismiss,
+        submitText = stringResource(StringR.string.action_learn_more),
+        onSubmitClicked = onLearnMoreClicked,
+        title = stringResource(StringR.string.server_selection_sliding_sync_alert_title),
+        content = stringResource(StringR.string.server_selection_sliding_sync_alert_message),
     )
 }
 

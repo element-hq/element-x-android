@@ -40,10 +40,8 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -65,6 +63,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -75,10 +74,10 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.R as StringR
@@ -302,7 +301,7 @@ internal fun LoginForm(
         )
 
         if (state.loggedInState is LoggedInState.ErrorLoggingIn) {
-            ErrorDialog(error = state.loggedInState.failure, onDismissRequest = {
+            LoginErrorDialog(error = state.loggedInState.failure, onDismiss = {
                 eventSink(LoginRootEvents.ClearError)
             })
         }
@@ -322,15 +321,10 @@ internal fun LoginForm(
 }
 
 @Composable
-internal fun ErrorDialog(error: Throwable, onDismissRequest: () -> Unit) {
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        confirmButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text(stringResource(id = StringR.string.ok))
-            }
-        },
-        text = { Text(error.localizedMessage ?: stringResource(id = StringR.string.unknown_error)) }
+internal fun LoginErrorDialog(error: Throwable, onDismiss: () -> Unit) {
+    ErrorDialog(
+        content = error.localizedMessage ?: stringResource(id = StringR.string.unknown_error),
+        onDismiss = onDismiss
     )
 }
 

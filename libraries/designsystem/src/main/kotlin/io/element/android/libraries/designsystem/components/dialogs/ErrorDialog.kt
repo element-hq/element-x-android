@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -55,24 +56,14 @@ fun ErrorDialog(
         modifier = modifier,
         onDismissRequest = onDismiss,
         title = {
-            Text(text = title)
+            Text(title)
         },
         text = {
             Text(content)
         },
         confirmButton = {
-            Row(
-                modifier = Modifier.padding(all = 8.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        onDismiss()
-                    }
-                ) {
-                    Text(submitText)
-                }
+            TextButton(onClick = onDismiss) {
+                Text(submitText)
             }
         },
         shape = shape,
