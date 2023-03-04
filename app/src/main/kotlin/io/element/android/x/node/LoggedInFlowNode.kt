@@ -46,11 +46,9 @@ import io.element.android.libraries.architecture.nodeInputs
 import io.element.android.libraries.architecture.nodeInputsProvider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.core.RoomId
 import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
-import io.element.android.x.di.SessionComponent
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
@@ -66,10 +64,16 @@ class LoggedInFlowNode @AssistedInject constructor(
     ),
     buildContext = buildContext,
     plugins = plugins
-), DaggerComponentOwner {
+) {
 
     interface Callback : Plugin {
-        fun onOpenBugReport()
+        fun onOpenBugReport() = Unit
+    }
+
+    interface LifecycleCallback : NodeLifecycleCallback {
+        fun onFlowCreated(client: MatrixClient) = Unit
+
+        fun onFlowReleased(client: MatrixClient) = Unit
     }
 
     data class Inputs(
@@ -78,19 +82,17 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     private val inputs: Inputs by nodeInputs()
 
-    override val daggerComponent: Any by lazy {
-        parent!!.bindings<SessionComponent.ParentBindings>().sessionComponentBuilder().client(inputs.matrixClient).build()
-    }
-
     override fun onBuilt() {
         super.onBuilt()
         lifecycle.subscribe(
             onCreate = {
+                plugins<LifecycleCallback>().forEach { it.onFlowCreated(inputs.matrixClient) }
                 val imageLoaderFactory = bindings<MatrixUIBindings>().loggedInImageLoaderFactory()
                 Coil.setImageLoader(imageLoaderFactory)
                 inputs.matrixClient.startSync()
             },
             onDestroy = {
+                plugins<LifecycleCallback>().forEach { it.onFlowReleased(inputs.matrixClient) }
                 val imageLoaderFactory = bindings<MatrixUIBindings>().notLoggedInImageLoaderFactory()
                 Coil.setImageLoader(imageLoaderFactory)
             }
@@ -132,8 +134,9 @@ class LoggedInFlowNode @AssistedInject constructor(
                         }
                     }
                 } else {
+                    val nodeLifecycleCallbacks = plugins<NodeLifecycleCallback>()
                     val inputsProvider = nodeInputsProvider(RoomFlowNode.Inputs(room))
-                    createNode<RoomFlowNode>(buildContext, plugins = listOf(inputsProvider))
+                    createNode<RoomFlowNode>(buildContext, plugins = listOf(inputsProvider) + nodeLifecycleCallbacks)
                 }
             }
             NavTarget.Settings -> {

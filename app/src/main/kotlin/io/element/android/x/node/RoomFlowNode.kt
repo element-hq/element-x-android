@@ -24,17 +24,15 @@ import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.x.di.RoomComponent
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
-import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.nodeInputs
-import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.room.MatrixRoom
 import kotlinx.parcelize.Parcelize
@@ -52,7 +50,12 @@ class RoomFlowNode @AssistedInject constructor(
     ),
     buildContext = buildContext,
     plugins = plugins,
-), DaggerComponentOwner {
+) {
+
+    interface LifecycleCallback : NodeLifecycleCallback {
+        fun onFlowCreated(room: MatrixRoom) = Unit
+        fun onFlowReleased(room: MatrixRoom) = Unit
+    }
 
     data class Inputs(
         val room: MatrixRoom,
@@ -60,14 +63,16 @@ class RoomFlowNode @AssistedInject constructor(
 
     private val inputs: Inputs by nodeInputs()
 
-    override val daggerComponent: Any by lazy {
-        parent!!.bindings<RoomComponent.ParentBindings>().roomComponentBuilder().room(inputs.room).build()
-    }
-
     init {
         lifecycle.subscribe(
-            onCreate = { Timber.v("OnCreate") },
-            onDestroy = { Timber.v("OnDestroy") }
+            onCreate = {
+                Timber.v("OnCreate")
+                plugins<LifecycleCallback>().forEach { it.onFlowCreated(inputs.room) }
+            },
+            onDestroy = {
+                Timber.v("OnDestroy")
+                plugins<LifecycleCallback>().forEach { it.onFlowReleased(inputs.room) }
+            }
         )
     }
 
