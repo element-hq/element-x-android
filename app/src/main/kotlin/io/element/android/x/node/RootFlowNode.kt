@@ -16,7 +16,6 @@
 
 package io.element.android.x.node
 
-import android.content.Context
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,6 +28,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.pop
@@ -36,7 +36,6 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.x.root.MatrixClientsHolder
 import io.element.android.features.rageshake.bugreport.BugReportEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -44,10 +43,9 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.nodeInputsProvider
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.core.SessionId
+import io.element.android.x.root.MatrixClientsHolder
 import io.element.android.x.root.RootPresenter
 import io.element.android.x.root.RootView
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -60,7 +58,6 @@ import timber.log.Timber
 class RootFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    @ApplicationContext context: Context,
     private val authenticationService: MatrixAuthenticationService,
     private val matrixClientsHolder: MatrixClientsHolder,
     private val presenter: RootPresenter,
@@ -73,9 +70,7 @@ class RootFlowNode @AssistedInject constructor(
         ),
         buildContext = buildContext,
         plugins = plugins
-    ),
-
-    DaggerComponentOwner by (context as DaggerComponentOwner) {
+    ) {
 
     override fun onBuilt() {
         super.onBuilt()
@@ -178,7 +173,8 @@ class RootFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.BugReport)
                     }
                 }
-                createNode<LoggedInFlowNode>(buildContext, plugins = listOf(inputsProvider, callback))
+                val nodeLifecycleCallbacks = plugins<NodeLifecycleCallback>()
+                createNode<LoggedInFlowNode>(buildContext, plugins = listOf(inputsProvider, callback) + nodeLifecycleCallbacks)
             }
             NavTarget.NotLoggedInFlow -> createNode<NotLoggedInFlowNode>(buildContext)
             NavTarget.SplashScreen -> splashNode(buildContext)

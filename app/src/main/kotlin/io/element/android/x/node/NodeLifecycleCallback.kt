@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.x.di
+package io.element.android.x.node
 
-import com.squareup.anvil.annotations.ContributesTo
-import io.element.android.libraries.di.AppScope
+import com.bumble.appyx.core.plugin.Plugin
 
-@ContributesTo(AppScope::class)
-interface AppBindings {
-    fun matrixClientsHolder(): MatrixClientsHolder
-    fun mainDaggerComponentOwner(): MainDaggerComponentOwner
-}
+interface NodeLifecycleCallback : Plugin
