@@ -31,7 +31,7 @@ import io.element.android.features.roomlist.model.RoomListRoomSummaryPlaceholder
 import io.element.android.features.roomlist.model.RoomListState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.parallelMap
-import io.element.android.libraries.dateformatter.LastMessageFormatter
+import io.element.android.libraries.dateformatter.api.LastMessageFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient

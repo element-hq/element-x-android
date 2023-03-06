@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist
+package io.element.android.libraries.dateformatter.test
 
-import io.element.android.libraries.dateformatter.api.LastMessageFormatter
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 
-class FakeLastMessageFormatter : LastMessageFormatter {
-    private var format = ""
-    fun givenFormat(format: String) {
-        this.format = format
+class FakeClock : Clock {
+    private var instant: Instant = Instant.fromEpochMilliseconds(0)
+
+    fun givenInstant(instant: Instant) {
+        this.instant = instant
     }
 
-    override fun format(timestamp: Long?): String {
-        return format
-    }
+    override fun now(): Instant = instant
 }
