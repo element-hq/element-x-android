@@ -16,35 +16,35 @@
 
 package io.element.android.samples.minimal
 
-import io.element.android.libraries.matrix.session.SessionData
-import io.element.android.libraries.sessionstorage.SessionStore
+import io.element.android.libraries.sessionstorage.api.SessionData
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 
 class InMemorySessionStore : SessionStore {
 
-    private var sessionData = MutableStateFlow<SessionData?>(null)
+    private var sessionDataFlow = MutableStateFlow<SessionData?>(null)
 
     override fun isLoggedIn(): Flow<Boolean> {
-        return sessionData.map { it != null }
+        return sessionDataFlow.map { it != null }
     }
 
-    override suspend fun storeData(session: SessionData) {
-        sessionData.value = session
+    override suspend fun storeData(sessionData: SessionData) {
+        sessionDataFlow.value = sessionData
     }
 
     override suspend fun getSession(sessionId: String): SessionData? {
-        return sessionData.value.takeIf { it?.userId == sessionId }
+        return sessionDataFlow.value.takeIf { it?.userId == sessionId }
     }
 
     override suspend fun getLatestSession(): SessionData? {
-        return sessionData.value
+        return sessionDataFlow.value
     }
 
     override suspend fun removeSession(sessionId: String) {
-        if (sessionData.value?.userId == sessionId) {
-            sessionData.value = null
+        if (sessionDataFlow.value?.userId == sessionId) {
+            sessionDataFlow.value = null
         }
     }
 }

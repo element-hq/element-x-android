@@ -27,8 +27,8 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.impl.RustMatrixClient
 import io.element.android.libraries.matrix.impl.util.logError
-import io.element.android.libraries.matrix.session.SessionData
-import io.element.android.libraries.sessionstorage.SessionStore
+import io.element.android.libraries.sessionstorage.api.SessionData
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

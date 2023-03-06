@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.sessionstorage
+package io.element.android.libraries.sessionstorage.impl
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -55,7 +55,7 @@ class DatabaseSessionStoreTests {
     fun `storeData persists the SessionData into the DB`() = runTest {
         assertThat(database.sessionDataQueries.selectFirst().executeAsOneOrNull()).isNull()
 
-        databaseSessionStore.storeData(aSessionData)
+        databaseSessionStore.storeData(aSessionData.toApiModel())
 
         assertThat(database.sessionDataQueries.selectFirst().executeAsOneOrNull()).isEqualTo(aSessionData)
     }
@@ -76,7 +76,7 @@ class DatabaseSessionStoreTests {
         database.sessionDataQueries.insertSessionData(aSessionData)
         database.sessionDataQueries.insertSessionData(aSessionData.copy(userId = "otherUserId"))
 
-        val latestSession = databaseSessionStore.getLatestSession()
+        val latestSession = databaseSessionStore.getLatestSession()?.toDbModel()
 
         assertThat(latestSession).isEqualTo(aSessionData)
     }
@@ -86,7 +86,7 @@ class DatabaseSessionStoreTests {
         database.sessionDataQueries.insertSessionData(aSessionData)
         database.sessionDataQueries.insertSessionData(aSessionData.copy(userId = "otherUserId"))
 
-        val foundSession = databaseSessionStore.getSession(aSessionData.userId)
+        val foundSession = databaseSessionStore.getSession(aSessionData.userId)?.toDbModel()
 
         assertThat(foundSession).isEqualTo(aSessionData)
     }

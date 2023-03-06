@@ -21,7 +21,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.libraries.sessionstorage"
+    namespace = "io.element.android.libraries.sessionstorage.impl"
 }
 
 anvil {
@@ -32,6 +32,7 @@ dependencies {
     implementation(libs.dagger)
     implementation(projects.libraries.core)
     implementation(projects.libraries.encryptedDb)
+    implementation(projects.libraries.sessionStorage.api)
     implementation(libs.sqldelight.driver.android)
     implementation(libs.sqlcipher)
     implementation(libs.sqlite)
