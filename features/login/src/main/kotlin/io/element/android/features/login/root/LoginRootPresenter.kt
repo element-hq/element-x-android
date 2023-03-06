@@ -18,25 +18,30 @@ package io.element.android.features.login.root
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import io.element.android.features.login.util.LoginConstants
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LoginRootPresenter @Inject constructor(private val authenticationService: MatrixAuthenticationService) : Presenter<LoginRootState> {
 
+    private val defaultHomeserver = MatrixHomeServerDetails(LoginConstants.DEFAULT_HOMESERVER_URL, true, null)
+
     @Composable
     override fun present(): LoginRootState {
         val localCoroutineScope = rememberCoroutineScope()
-        val homeserver = rememberSaveable {
-            mutableStateOf(authenticationService.getHomeserverOrDefault())
-        }
+        val homeserver = authenticationService.getHomeserverDetails().collectAsState().value ?: defaultHomeserver
         val loggedInState: MutableState<LoggedInState> = remember {
             mutableStateOf(LoggedInState.NotLoggedIn)
         }
@@ -46,19 +51,19 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
 
         fun handleEvents(event: LoginRootEvents) {
             when (event) {
-                LoginRootEvents.RefreshHomeServer -> refreshHomeServer(homeserver)
                 is LoginRootEvents.SetLogin -> updateFormState(formState) {
                     copy(login = event.login)
                 }
                 is LoginRootEvents.SetPassword -> updateFormState(formState) {
                     copy(password = event.password)
                 }
-                LoginRootEvents.Submit -> localCoroutineScope.submit(homeserver.value, formState.value, loggedInState)
+                LoginRootEvents.Submit -> localCoroutineScope.submit(homeserver.url, formState.value, loggedInState)
+                LoginRootEvents.ClearError -> loggedInState.value = LoggedInState.NotLoggedIn
             }
         }
 
         return LoginRootState(
-            homeserver = homeserver.value,
+            homeserverDetails = homeserver,
             loggedInState = loggedInState.value,
             formState = formState.value,
             eventSink = ::handleEvents
@@ -83,7 +88,4 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
         formState.value = updateLambda(formState.value)
     }
 
-    private fun refreshHomeServer(homeserver: MutableState<String>) {
-        homeserver.value = authenticationService.getHomeserverOrDefault()
-    }
 }

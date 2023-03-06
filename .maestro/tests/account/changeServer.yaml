@@ -1,5 +1,6 @@
 appId: ${APP_ID}
 ---
-- tapOn: "Change"
+- tapOn:
+    id: "login-change_server"
 - takeScreenshot: build/maestro/200-ChangeServer
 - tapOn: "Continue"

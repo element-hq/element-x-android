@@ -19,4 +19,5 @@ package io.element.android.features.login.changeserver
 sealed interface ChangeServerEvents {
     data class SetServer(val server: String) : ChangeServerEvents
     object Submit : ChangeServerEvents
+    object ClearError : ChangeServerEvents
 }
