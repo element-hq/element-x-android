@@ -16,22 +16,22 @@
 
 package io.element.android.features.createroom.root
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
+import io.element.android.libraries.designsystem.theme.components.DockedSearchBar
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -54,22 +55,22 @@ fun CreateRoomRootScreen(
     modifier: Modifier = Modifier,
     onClosePressed: () -> Unit = {}
 ) {
+    val isSearchActive = rememberSaveable { mutableStateOf(false) }
     Scaffold(
         modifier = modifier.fillMaxWidth(),
         topBar = {
-            CreateRoomRootViewTopBar(onClosePressed = onClosePressed)
+            if (!isSearchActive.value) {
+                CreateRoomRootViewTopBar(onClosePressed = onClosePressed)
+            }
         }
     ) {
         Column(
             modifier = Modifier.padding(it)
         ) {
-            SearchBar(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                // TODO use resource string
-                placeHolderTitle = "Search for someone",
-                // TODO implement click behavior
-                onClickDescription = "",
-                onClick = {}
+            CreateRoomSearchBar(
+                modifier = Modifier.fillMaxWidth(),
+                placeHolderTitle = stringResource(StringR.string.search_for_someone),
+                active = isSearchActive,
             )
         }
     }
@@ -98,47 +99,62 @@ fun CreateRoomRootViewTopBar(
     )
 }
 
-// TODO export into design system package
-// TODO comment that SearchBar is not yet implemented in Material3 compose
-//  and that TextField cannot be used since contentPadding cannot be changed
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar(
-    modifier: Modifier = Modifier,
+fun CreateRoomSearchBar(
     placeHolderTitle: String,
-    onClickDescription: String = "",
-    onClick: () -> Unit = {},
+    active: MutableState<Boolean>,
+    modifier: Modifier = Modifier,
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            .background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = RoundedCornerShape(28.dp),
-            )
-            .clickable(
-                role = Role.Button,
-                onClickLabel = onClickDescription,
-                onClick = onClick,
-            ),
-    ) {
-        Text(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .align(Alignment.CenterVertically)
-                .weight(1f)
-                .alpha(0.4f),
-            text = placeHolderTitle,
-        )
-        Icon(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .align(Alignment.CenterVertically)
-                .alpha(0.4f),
-            resourceId = DrawableR.drawable.ic_search,
-            contentDescription = stringResource(id = StringR.string.search)
-        )
+    var text by rememberSaveable { mutableStateOf("") }
+    val focusManager = LocalFocusManager.current
+
+    fun closeSearchBar() {
+        focusManager.clearFocus()
+        active.value = false
     }
+
+    DockedSearchBar(
+        query = text,
+        onQueryChange = { text = it },
+        onSearch = { closeSearchBar() },
+        active = active.value,
+        onActiveChange = {
+            active.value = it
+            if (!active.value) focusManager.clearFocus()
+        },
+        modifier = modifier
+            .padding(horizontal = if (!active.value) 16.dp else 0.dp),
+        placeholder = {
+            Text(
+                text = placeHolderTitle,
+                modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
+            )
+        },
+        leadingIcon = if (active.value) {
+            {
+                IconButton(onClick = { closeSearchBar() }) {
+                    Icon(DrawableR.drawable.ic_arrow_back, stringResource(StringR.string.a11y_back))
+                }
+            }
+        } else null,
+        trailingIcon = {
+            if (active.value) {
+                IconButton(onClick = { text = "" }) {
+                    Icon(DrawableR.drawable.ic_close, stringResource(StringR.string.a11y_clear))
+                }
+            } else {
+                Icon(
+                    resourceId = DrawableR.drawable.ic_search,
+                    contentDescription = stringResource(StringR.string.search),
+                    modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
+                )
+            }
+        },
+        shape = if (!active.value) SearchBarDefaults.dockedShape else SearchBarDefaults.fullScreenShape,
+        colors = if (!active.value) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
+        content = {},
+    )
 }
 
 @Preview
