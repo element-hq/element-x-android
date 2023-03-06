@@ -16,6 +16,7 @@
 
 package io.element.android.features.verifysession
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -61,7 +62,18 @@ import io.element.android.libraries.ui.strings.R.string as StringR
 fun VerifySelfSessionScreen(
     state: VerifySelfSessionState,
     modifier: Modifier = Modifier,
+    goBack: () -> Unit,
 ) {
+    BackHandler {
+        if (state.verificationState == VerificationState.Initial || state.verificationState == VerificationState.Canceled) {
+            goBack()
+        } else {
+            state.eventSink(VerifySelfSessionEvents.Cancel)
+        }
+    }
+    val buttonsVisible by remember(state.verificationState) {
+        derivedStateOf { state.verificationState != VerificationState.AwaitingOtherDeviceResponse && state.verificationState != VerificationState.Completed }
+    }
     Column(modifier = modifier.fillMaxWidth()) {
         Column(modifier = Modifier
             .fillMaxWidth()
@@ -69,10 +81,12 @@ fun VerifySelfSessionScreen(
             .weight(1f)
             .verticalScroll(rememberScrollState())
         ) {
-            HeaderContent(verificationState = state.state)
-            Content(verificationState = state.state, modifier = Modifier.weight(1f))
+            HeaderContent(verificationState = state.verificationState)
+            Content(verificationState = state.verificationState, modifier = Modifier.weight(1f))
         }
-        BottomMenu(screenState = state)
+        if (buttonsVisible) {
+            BottomMenu(screenState = state, goBack = goBack)
+        }
     }
 }
 
@@ -177,71 +191,74 @@ internal fun ContentVerifying(verificationState: VerificationState.Verifying, mo
 }
 
 @Composable
-internal fun BottomMenu(screenState: VerifySelfSessionState) {
-    val verificationState = screenState.state
+internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit) {
+    val verificationState = screenState.verificationState
     val eventSink = screenState.eventSink
 
-    val buttonsVisible by remember { derivedStateOf { verificationState != VerificationState.AwaitingOtherDeviceResponse } }
-
-    if (buttonsVisible) {
-        val isVerifying = (verificationState as? VerificationState.Verifying)?.state is Async.Loading<Boolean>
-        val positiveButtonTitle = when (verificationState) {
-            VerificationState.Initial -> StringR.verification_positive_button_initial
-            VerificationState.Canceled -> StringR.verification_positive_button_canceled
-            is VerificationState.Verifying -> {
-                if (isVerifying) {
-                    StringR.verification_positive_button_verifying_ongoing
-                } else {
-                    StringR.verification_positive_button_verifying_start
-                }
+    val isVerifying = (verificationState as? VerificationState.Verifying)?.state is Async.Loading<Boolean>
+    val positiveButtonTitle = when (verificationState) {
+        VerificationState.Initial -> StringR.verification_positive_button_initial
+        VerificationState.Canceled -> StringR.verification_positive_button_canceled
+        is VerificationState.Verifying -> {
+            if (isVerifying) {
+                StringR.verification_positive_button_verifying_ongoing
+            } else {
+                StringR.verification_positive_button_verifying_start
             }
-            else -> 0
         }
-        val negativeButtonTitle = when (verificationState) {
-            VerificationState.Initial -> StringR.verification_negative_button_initial
-            VerificationState.Canceled -> StringR.verification_negative_button_canceled
-            is VerificationState.Verifying -> StringR.verification_negative_button_verifying
-            else -> 0
-        }
-        val negativeButtonEnabled = !isVerifying
+        else -> null
+    }
+    val negativeButtonTitle = when (verificationState) {
+        VerificationState.Initial -> StringR.verification_negative_button_initial
+        VerificationState.Canceled -> StringR.verification_negative_button_canceled
+        is VerificationState.Verifying -> StringR.verification_negative_button_verifying
+        else -> null
+    }
+    val negativeButtonEnabled = !isVerifying
 
-        val positiveButtonEvent = when (verificationState) {
-            VerificationState.Initial -> VerifySelfSessionEvents.StartVerification
-            is VerificationState.Verifying -> if (!isVerifying) VerifySelfSessionEvents.ConfirmVerification else null
-            else -> null
-        }
+    val positiveButtonEvent = when (verificationState) {
+        VerificationState.Initial -> VerifySelfSessionEvents.StartVerification
+        is VerificationState.Verifying -> if (!isVerifying) VerifySelfSessionEvents.ConfirmVerification else null
+        VerificationState.Canceled -> VerifySelfSessionEvents.StartVerification
+        else -> null
+    }
 
-        val negativeButtonEvent = when (verificationState) {
-            VerificationState.Initial, VerificationState.Canceled, is VerificationState.Verifying -> VerifySelfSessionEvents.Cancel
-            else -> null
-        }
+    val negativeButtonEvent = when (verificationState) {
+        VerificationState.Initial, VerificationState.Canceled, is VerificationState.Verifying -> VerifySelfSessionEvents.Cancel
+        else -> null
+    }
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = { positiveButtonEvent?.let { eventSink(it) } }
         ) {
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { positiveButtonEvent?.let { eventSink(it) } }
-            ) {
-                if (isVerifying) {
-                    CircularProgressIndicator(modifier = Modifier.size(18.dp))
-                    Spacer(Modifier.width(10.dp))
-                }
-                Text(stringResource(positiveButtonTitle))
+            if (isVerifying) {
+                CircularProgressIndicator(modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(10.dp))
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            TextButton(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { negativeButtonEvent?.let { eventSink(it) } },
-                enabled = negativeButtonEnabled,
-            ) {
-                Text(stringResource(negativeButtonTitle))
-            }
-            Spacer(Modifier.height(50.dp))
+            positiveButtonTitle?.let { Text(stringResource(it)) }
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        TextButton(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+                if (verificationState == VerificationState.Initial || verificationState == VerificationState.Canceled) {
+                    goBack()
+                } else {
+                    negativeButtonEvent?.let { eventSink(it) }
+                }
+            },
+            enabled = negativeButtonEnabled,
+        ) {
+            negativeButtonTitle?.let { Text(stringResource(it)) }
+        }
+        Spacer(Modifier.height(50.dp))
     }
 }
 
@@ -259,5 +276,6 @@ fun TemplateViewDarkPreview(@PreviewParameter(VerifySelfSessionStateProvider::cl
 private fun ContentToPreview(state: VerifySelfSessionState) {
     VerifySelfSessionScreen(
         state = state,
+        goBack = {},
     )
 }

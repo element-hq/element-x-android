@@ -17,22 +17,51 @@
 package io.element.android.features.verifysession
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.matrix.api.verification.VerificationAttemptState
 import javax.inject.Inject
 
-class VerifySelfSessionPresenter @Inject constructor() : Presenter<VerifySelfSessionState> {
+class VerifySelfSessionPresenter @Inject constructor(
+    private val sessionVerificationService: SessionVerificationService,
+) : Presenter<VerifySelfSessionState> {
 
     @Composable
     override fun present(): VerifySelfSessionState {
+        val verificationAttemptState by sessionVerificationService.verificationAttemptStatus.collectAsState()
+        val state = when (verificationAttemptState) {
+            VerificationAttemptState.Initial -> { VerificationState.Initial }
+            VerificationAttemptState.RequestingVerification,
+            VerificationAttemptState.StartingSasVerification,
+            VerificationAttemptState.SasVerificationStarted,
+            VerificationAttemptState.VerificationRequestAccepted -> { VerificationState.AwaitingOtherDeviceResponse }
+            VerificationAttemptState.Failed, VerificationAttemptState.Canceled -> { VerificationState.Canceled }
+            is VerificationAttemptState.Verifying -> {
+                val emojis = (verificationAttemptState as VerificationAttemptState.Verifying).emojis.map {
+                    EmojiEntry(it.symbol(), it.description())
+                }
+                val async = when (verificationAttemptState) {
+                    is VerificationAttemptState.Verifying.Replying -> Async.Loading()
+                    else -> Async.Uninitialized
+                }
+                VerificationState.Verifying(emojis, async)
+            }
+            VerificationAttemptState.Completed -> { VerificationState.Completed }
+        }
 
         fun handleEvents(event: VerifySelfSessionEvents) {
-//            when (event) {
-//                VerifySelfSessionEvents.MyEvent -> Unit
-//            }
+            when (event) {
+                VerifySelfSessionEvents.StartVerification -> sessionVerificationService.requestVerification()
+                VerifySelfSessionEvents.ConfirmVerification -> sessionVerificationService.approveVerification()
+                VerifySelfSessionEvents.Cancel -> sessionVerificationService.cancelVerification()
+            }
         }
 
         return VerifySelfSessionState(
-            state = VerificationState.Initial,
+            verificationState = state,
             eventSink = ::handleEvents,
         )
     }

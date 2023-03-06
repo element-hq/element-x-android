@@ -23,16 +23,16 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
     override val values: Sequence<VerifySelfSessionState>
         get() = sequenceOf(
             aTemplateState(),
-            aTemplateState().copy(state = VerificationState.AwaitingOtherDeviceResponse),
-            aTemplateState().copy(state = VerificationState.Verifying(aEmojiEntryList(),  Async.Uninitialized)),
-            aTemplateState().copy(state = VerificationState.Verifying(aEmojiEntryList(),  Async.Loading())),
-            aTemplateState().copy(state = VerificationState.Canceled),
+            aTemplateState().copy(verificationState = VerificationState.AwaitingOtherDeviceResponse),
+            aTemplateState().copy(verificationState = VerificationState.Verifying(aEmojiEntryList(),  Async.Uninitialized)),
+            aTemplateState().copy(verificationState = VerificationState.Verifying(aEmojiEntryList(),  Async.Loading())),
+            aTemplateState().copy(verificationState = VerificationState.Canceled),
             // Add other state here
         )
 }
 
 fun aTemplateState() = VerifySelfSessionState(
-    state = VerificationState.Initial,
+    verificationState = VerificationState.Initial,
     eventSink = {},
 )
 

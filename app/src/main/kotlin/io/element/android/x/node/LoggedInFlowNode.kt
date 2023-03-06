@@ -34,6 +34,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import io.element.android.features.createroom.CreateRoomFlowNode
 import io.element.android.features.preferences.PreferencesFlowNode
 import io.element.android.features.roomlist.RoomListNode
+import io.element.android.features.verifysession.VerifySelfSessionNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
@@ -91,6 +92,10 @@ class LoggedInFlowNode(
         override fun onCreateRoomClicked() {
             backstack.push(NavTarget.CreateRoom)
         }
+
+        override fun onSessionVerificationClicked() {
+            backstack.push(NavTarget.VerifySession)
+        }
     }
 
     sealed interface NavTarget : Parcelable {
@@ -105,6 +110,9 @@ class LoggedInFlowNode(
 
         @Parcelize
         object CreateRoom : NavTarget
+
+        @Parcelize
+        object VerifySession : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -130,6 +138,9 @@ class LoggedInFlowNode(
             }
             NavTarget.CreateRoom -> {
                 CreateRoomFlowNode(buildContext)
+            }
+            NavTarget.VerifySession -> {
+                createNode<VerifySelfSessionNode>(buildContext, emptyList())
             }
         }
     }

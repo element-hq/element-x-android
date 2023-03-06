@@ -19,4 +19,23 @@
     <string name="search_for_someone">Search for someone</string>
     <string name="new_room">New room</string>
 
+    <string name="verification_title_initial">Open an existing session</string>
+    <string name="verification_title_waiting">Waiting to accept request</string>
+    <string name="verification_title_canceled">Verification cancelled</string>
+    <string name="verification_title_verifying">Compare emojis</string>
+
+    <string name="verification_subtitle_initial">Prove it\'s you in order to access your encrypted message history.</string>
+    <string name="verification_subtitle_waiting">Accept the request to start the verification process in your other session to continue.</string>
+    <string name="verification_subtitle_canceled">Something doesn\'t seem right. Either the request timed out or the request was denied.</string>
+    <string name="verification_subtitle_verifying">Confirm that the emojis below match those shown on your other session.</string>
+
+    <string name="verification_positive_button_initial">I am ready</string>
+    <string name="verification_positive_button_canceled">Retry verification</string>
+    <string name="verification_positive_button_verifying_start">They match</string>
+    <string name="verification_positive_button_verifying_ongoing">Waiting to match</string>
+
+    <string name="verification_negative_button_initial">@string/action_cancel</string>
+    <string name="verification_negative_button_canceled">@string/action_cancel</string>
+    <string name="verification_negative_button_verifying">They don\'t match</string>
+
 </resources>

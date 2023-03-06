@@ -34,6 +34,7 @@ import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.MediaSource
 import org.matrix.rustcomponents.sdk.RequiredState
+import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SlidingSyncMode
 import org.matrix.rustcomponents.sdk.SlidingSyncRequestListFilters
 import org.matrix.rustcomponents.sdk.SlidingSyncViewBuilder
@@ -144,6 +145,8 @@ class RustMatrixClient constructor(
     override fun roomSummaryDataSource(): RoomSummaryDataSource = roomSummaryDataSource
 
     override fun mediaResolver(): MediaResolver = mediaResolver
+
+    override fun sessionVerificationController(): SessionVerificationController = client.getSessionVerificationController()
 
     override fun startSync() {
         if (client.isSoftLogout()) return

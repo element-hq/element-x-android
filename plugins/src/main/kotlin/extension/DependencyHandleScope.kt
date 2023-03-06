@@ -70,4 +70,5 @@ fun DependencyHandlerScope.allFeatures() {
     implementation(project(":features:rageshake"))
     implementation(project(":features:preferences"))
     implementation(project(":features:createroom"))
+    implementation(project(":features:verify-session"))
 }

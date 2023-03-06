@@ -16,6 +16,7 @@
 
 package io.element.android.features.roomlist
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,6 +24,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -47,6 +49,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
@@ -60,6 +63,7 @@ fun RoomListView(
     modifier: Modifier = Modifier,
     onRoomClicked: (RoomId) -> Unit = {},
     onOpenSettings: () -> Unit = {},
+    onVerifyClicked: () -> Unit = {},
     onCreateRoomClicked: () -> Unit = {},
 ) {
     fun onFilterChanged(filter: String) {
@@ -79,11 +83,12 @@ fun RoomListView(
         onFilterChanged = ::onFilterChanged,
         onOpenSettings = onOpenSettings,
         onScrollOver = ::onVisibleRangedChanged,
+        onVerifyClicked = onVerifyClicked,
         onCreateRoomClicked = onCreateRoomClicked,
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun RoomListContent(
     roomSummaries: ImmutableList<RoomListRoomSummary>,
@@ -94,6 +99,7 @@ fun RoomListContent(
     onFilterChanged: (String) -> Unit = {},
     onOpenSettings: () -> Unit = {},
     onScrollOver: (IntRange) -> Unit = {},
+    onVerifyClicked: () -> Unit,
     onCreateRoomClicked: () -> Unit = {},
 ) {
     fun onRoomClicked(room: RoomListRoomSummary) {
@@ -149,6 +155,11 @@ fun RoomListContent(
                         .nestedScroll(nestedScrollConnection),
                     state = lazyListState,
                 ) {
+                    stickyHeader {
+                        TextButton(onClick = onVerifyClicked) {
+                            Text("Verify")
+                        }
+                    }
                     items(
                         items = roomSummaries,
                         contentType = { room -> room.contentType() },

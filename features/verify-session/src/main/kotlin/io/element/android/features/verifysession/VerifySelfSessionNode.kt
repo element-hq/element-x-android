@@ -25,9 +25,10 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.SessionScope
 
 // TODO Change to use the right Scope for your feature. For now it can be AppScope, SessionScope or RoomScope
-@ContributesNode(AppScope::class)
+@ContributesNode(SessionScope::class)
 class VerifySelfSessionNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
@@ -39,7 +40,8 @@ class VerifySelfSessionNode @AssistedInject constructor(
         val state = presenter.present()
         VerifySelfSessionScreen(
             state = state,
-            modifier = modifier
+            modifier = modifier,
+            goBack = { navigateUp() }
         )
     }
 }

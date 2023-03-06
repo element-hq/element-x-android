@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.media.MediaResolver
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import org.matrix.rustcomponents.sdk.MediaSource
+import org.matrix.rustcomponents.sdk.SessionVerificationController
 import java.io.Closeable
 
 interface MatrixClient : Closeable {
@@ -31,6 +32,7 @@ interface MatrixClient : Closeable {
     fun stopSync()
     fun roomSummaryDataSource(): RoomSummaryDataSource
     fun mediaResolver(): MediaResolver
+    fun sessionVerificationController(): SessionVerificationController
     suspend fun logout()
     suspend fun loadUserDisplayName(): Result<String>
     suspend fun loadUserAvatarURLString(): Result<String>

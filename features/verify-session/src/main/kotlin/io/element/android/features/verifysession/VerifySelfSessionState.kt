@@ -16,13 +16,17 @@
 
 package io.element.android.features.verifysession
 
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import io.element.android.libraries.architecture.Async
 
+@Immutable
 data class VerifySelfSessionState(
-    val state: VerificationState,
+    val verificationState: VerificationState,
     val eventSink: (VerifySelfSessionEvents) -> Unit,
 )
 
+@Stable
 sealed interface VerificationState {
     object Initial : VerificationState
     object Canceled : VerificationState
