@@ -17,11 +17,12 @@
 package io.element.android.features.login.root
 
 import android.os.Parcelable
+import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.parcelize.Parcelize
 
 data class LoginRootState(
-    val homeserver: String,
+    val homeserverDetails: MatrixHomeServerDetails,
     val loggedInState: LoggedInState,
     val formState: LoginFormState,
     val eventSink: (LoginRootEvents) -> Unit

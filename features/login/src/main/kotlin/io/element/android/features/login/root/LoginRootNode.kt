@@ -47,16 +47,11 @@ class LoginRootNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        OnLifecycleEvent { _, event ->
-            when (event) {
-                Lifecycle.Event.ON_RESUME -> state.eventSink(LoginRootEvents.RefreshHomeServer)
-                else -> Unit
-            }
-        }
         LoginRootScreen(
             state = state,
             modifier = modifier,
             onChangeServer = this::onChangeHomeServer,
+            onBackPressed = this::navigateUp
         )
     }
 }

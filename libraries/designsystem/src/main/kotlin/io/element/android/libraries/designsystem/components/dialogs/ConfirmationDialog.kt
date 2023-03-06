@@ -17,13 +17,12 @@
 package io.element.android.libraries.designsystem.components.dialogs
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,10 +30,8 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -67,43 +64,24 @@ fun ConfirmationDialog(
             Text(content)
         },
         dismissButton = {
-            Row(
-                modifier = Modifier.padding(all = 8.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Column {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = {
-                            onCancelClicked()
-                        }) {
-                        Text(cancelText)
-                    }
-                    if (thirdButtonText != null) {
-                        Button(
-                            modifier = Modifier.fillMaxWidth(),
-                            onClick = {
-                                onThirdButtonClicked()
-                            }) {
-                            Text(thirdButtonText)
-                        }
+            if (thirdButtonText != null) {
+                    // If there is a 3rd item it should be at the end of the dialog
+                    // Having this 3rd action is discouraged, see https://m3.material.io/components/dialogs/guidelines#e13b68f5-e367-4275-ad6f-c552ee8e358f
+                    TextButton(onClick = onThirdButtonClicked) {
+                        Text(thirdButtonText)
                     }
                 }
+            TextButton(onClick = onCancelClicked) {
+                Text(cancelText)
             }
         },
         confirmButton = {
-            Row(
-                modifier = Modifier.padding(all = 8.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        onSubmitClicked()
-                    }
-                ) {
-                    Text(submitText)
+            TextButton(
+                onClick = {
+                    onSubmitClicked()
                 }
+            ) {
+                Text(submitText)
             }
         },
         shape = shape,

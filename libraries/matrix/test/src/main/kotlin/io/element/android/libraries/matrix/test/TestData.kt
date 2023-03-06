@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.test
 
+import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -34,8 +35,10 @@ const val A_MESSAGE = "Hello world!"
 const val A_REPLY = "OK, I'll be there!"
 const val ANOTHER_MESSAGE = "Hello universe!"
 
-const val A_HOMESERVER = "matrix.org"
-const val A_HOMESERVER_2 = "matrix-client.org"
+const val A_HOMESERVER_URL = "matrix.org"
+const val A_HOMESERVER_URL_2 = "matrix-client.org"
+
+val A_HOMESERVER = MatrixHomeServerDetails(A_HOMESERVER_URL, true, null)
 
 const val AN_AVATAR_URL = "mxc://data"
 

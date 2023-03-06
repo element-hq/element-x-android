@@ -18,46 +18,47 @@ package io.element.android.libraries.matrix.test.auth
 
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
-import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_HOMESERVER
 import io.element.android.libraries.matrix.test.A_USER_ID
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOf
 
 class FakeAuthenticationService : MatrixAuthenticationService {
-    private var homeserver: String = A_HOMESERVER
+    private var homeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
     private var loginError: Throwable? = null
+    private var changeServerError: Throwable? = null
 
     override fun isLoggedIn(): Flow<Boolean> {
         return flowOf(false)
     }
 
-    override suspend fun getLatestSessionId(): UserId? {
+    override suspend fun getLatestSessionId(): SessionId? {
         return null
     }
 
-    override suspend fun restoreSession(userId: UserId): MatrixClient? {
+    override suspend fun restoreSession(sessionId: SessionId): MatrixClient? {
         return null
     }
 
-    override fun getHomeserver(): String? {
-        return null
-    }
-
-    fun givenHomeserver(homeserver: String) {
-        this.homeserver = homeserver
-    }
-
-    override fun getHomeserverOrDefault(): String {
+    override fun getHomeserverDetails(): StateFlow<MatrixHomeServerDetails?> {
         return homeserver
     }
 
+    fun givenHomeserver(homeserver: MatrixHomeServerDetails) {
+        this.homeserver.value = homeserver
+    }
+
     override suspend fun setHomeserver(homeserver: String) {
+        changeServerError?.let { throw it }
         delay(100)
     }
 
-    override suspend fun login(username: String, password: String): UserId {
+    override suspend fun login(username: String, password: String): SessionId {
         delay(100)
         loginError?.let { throw it }
         return A_USER_ID
@@ -65,5 +66,9 @@ class FakeAuthenticationService : MatrixAuthenticationService {
 
     fun givenLoginError(throwable: Throwable?) {
         loginError = throwable
+    }
+
+    fun givenChangeServerError(throwable: Throwable?) {
+        changeServerError = throwable
     }
 }
