@@ -1,0 +1,3 @@
+Add consumer proguard rules for SQLCipher. 
+
+Thanks @anoadragon453 for reporting and the tentative fix!

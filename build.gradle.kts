@@ -54,7 +54,7 @@ allprojects {
         config = files("$rootDir/tools/detekt/detekt.yml")
     }
     dependencies {
-        detektPlugins("com.twitter.compose.rules:detekt:0.0.26")
+        detektPlugins("io.nlopez.compose.rules:detekt:0.1.2")
     }
 
     // KtLint
