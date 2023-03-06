@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.sessionstorage
+package io.element.android.libraries.sessionstorage.impl
 
 import com.squareup.anvil.annotations.ContributesBinding
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
-import io.element.android.libraries.matrix.session.SessionData
+import io.element.android.libraries.sessionstorage.api.SessionData
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -37,17 +38,19 @@ class DatabaseSessionStore @Inject constructor(
     }
 
     override suspend fun storeData(sessionData: SessionData) {
-        database.sessionDataQueries.insertSessionData(sessionData)
+        database.sessionDataQueries.insertSessionData(sessionData.toDbModel())
     }
 
     override suspend fun getLatestSession(): SessionData? {
         return database.sessionDataQueries.selectFirst()
             .executeAsOneOrNull()
+            ?.toApiModel()
     }
 
     override suspend fun getSession(sessionId: String): SessionData? {
         return database.sessionDataQueries.selectByUserId(sessionId)
             .executeAsOneOrNull()
+            ?.toApiModel()
     }
 
     override suspend fun removeSession(sessionId: String) {

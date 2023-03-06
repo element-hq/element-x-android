@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.sessionstorage.di
+package io.element.android.libraries.sessionstorage.impl.di
 
 import android.content.Context
 import com.squareup.anvil.annotations.ContributesTo
@@ -23,7 +23,7 @@ import dagger.Provides
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
-import io.element.android.libraries.sessionstorage.SessionDatabase
+import io.element.android.libraries.sessionstorage.impl.SessionDatabase
 import io.element.encrypteddb.SqlCipherDriverFactory
 import io.element.encrypteddb.passphrase.RandomSecretPassphraseProvider
 

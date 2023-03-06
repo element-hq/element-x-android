@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.sessionstorage
+package io.element.android.libraries.sessionstorage.api
 
-import io.element.android.libraries.matrix.session.SessionData
-import kotlinx.coroutines.flow.Flow
-
-interface SessionStore {
-    fun isLoggedIn(): Flow<Boolean>
-    suspend fun storeData(session: SessionData)
-    suspend fun getSession(sessionId: String): SessionData?
-    suspend fun getLatestSession(): SessionData?
-    suspend fun removeSession(sessionId: String)
-}
+data class SessionData(
+    val userId: String,
+    val deviceId: String,
+    val accessToken: String,
+    val refreshToken: String?,
+    val homeserverUrl: String,
+    val isSoftLogout: Boolean,
+    val slidingSyncProxy: String?
+)
