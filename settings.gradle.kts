@@ -37,6 +37,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "ElementX"
 include(":app")
+include(":appnav")
 include(":libraries:core")
 include(":libraries:rustsdk")
 include(":libraries:matrix")
@@ -65,4 +66,3 @@ include(":libraries:androidutils")
 include(":samples:minimal")
 include(":features:messages:api")
 include(":features:messages:impl")
-include(":appnav")

@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.x.di
+package io.element.android.appnav
 
-import com.squareup.anvil.annotations.ContributesTo
-import io.element.android.appnav.MatrixClientsHolder
-import io.element.android.libraries.di.AppScope
+import android.graphics.Bitmap
+import io.element.android.features.rageshake.screenshot.ScreenshotHolder
 
-@ContributesTo(AppScope::class)
-interface AppBindings {
-    fun matrixClientsHolder(): MatrixClientsHolder
-    fun mainDaggerComponentOwner(): MainDaggerComponentsOwner
+const val A_SCREENSHOT_URI = "file://content/uri"
+
+// TODO Remove this duplicated class when we will rework modules.
+class FakeScreenshotHolder(private val screenshotUri: String? = null) : ScreenshotHolder {
+    override fun writeBitmap(data: Bitmap) = Unit
+
+    override fun getFileUri() = screenshotUri
+
+    override fun reset() = Unit
 }

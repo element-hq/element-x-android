@@ -16,6 +16,7 @@
 
 package io.element.android.x
 
+import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.composable.Children
@@ -23,25 +24,26 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.navigation.model.permanent.PermanentNavModel
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
+import io.element.android.appnav.LoggedInFlowNode
+import io.element.android.appnav.RoomFlowNode
+import io.element.android.appnav.RootFlowNode
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.matrix.MatrixClient
 import io.element.android.libraries.matrix.room.MatrixRoom
-import io.element.android.x.di.MainDaggerComponentOwner
+import io.element.android.x.di.MainDaggerComponentsOwner
 import io.element.android.x.di.RoomComponent
 import io.element.android.x.di.SessionComponent
-import io.element.android.x.node.LoggedInFlowNode
-import io.element.android.x.node.RoomFlowNode
-import io.element.android.x.node.RootFlowNode
+import kotlinx.parcelize.Parcelize
 
 class MainNode(
     buildContext: BuildContext,
-    private val mainDaggerComponentOwner: MainDaggerComponentOwner,
+    private val mainDaggerComponentOwner: MainDaggerComponentsOwner,
 ) :
-    ParentNode<MainNode.NavTarget>(
+    ParentNode<MainNode.RootNavTarget>(
         navModel = PermanentNavModel(
-            navTargets = setOf(NavTarget),
+            navTargets = setOf(RootNavTarget),
             savedStateMap = buildContext.savedStateMap,
         ),
         buildContext = buildContext,
@@ -70,7 +72,7 @@ class MainNode(
         }
     }
 
-    override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
+    override fun resolve(navTarget: RootNavTarget, buildContext: BuildContext): Node {
         return createNode<RootFlowNode>(buildContext, plugins = listOf(loggedInFlowNodeCallback, roomFlowNodeCallback))
     }
 
@@ -79,5 +81,6 @@ class MainNode(
         Children(navModel = navModel)
     }
 
-    object NavTarget
+    @Parcelize
+    object RootNavTarget : Parcelable
 }

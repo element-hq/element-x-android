@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.x.di
+package io.element.android.appnav.root
 
-import com.squareup.anvil.annotations.ContributesTo
-import io.element.android.appnav.MatrixClientsHolder
-import io.element.android.libraries.di.AppScope
+import androidx.compose.runtime.Stable
+import io.element.android.appnav.root.RootEvents
+import io.element.android.features.rageshake.crash.ui.CrashDetectionState
+import io.element.android.features.rageshake.detection.RageshakeDetectionState
 
-@ContributesTo(AppScope::class)
-interface AppBindings {
-    fun matrixClientsHolder(): MatrixClientsHolder
-    fun mainDaggerComponentOwner(): MainDaggerComponentsOwner
-}
+@Stable
+data class RootState(
+    val isShowkaseButtonVisible: Boolean,
+    val rageshakeDetectionState: RageshakeDetectionState,
+    val crashDetectionState: CrashDetectionState,
+    val eventSink: (RootEvents) -> Unit
+)

@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.x.di
+package io.element.android.appnav
 
-import com.squareup.anvil.annotations.ContributesTo
-import io.element.android.appnav.MatrixClientsHolder
-import io.element.android.libraries.di.AppScope
+import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.NewRoot
 
-@ContributesTo(AppScope::class)
-interface AppBindings {
-    fun matrixClientsHolder(): MatrixClientsHolder
-    fun mainDaggerComponentOwner(): MainDaggerComponentsOwner
+/**
+ * Don't process NewRoot if the nav target already exists in the stack.
+ */
+fun <T : Any> BackStack<T>.safeRoot(element: T) {
+    val containsRoot = elements.value.any {
+        it.key.navTarget == element
+    }
+    if (containsRoot) return
+    accept(NewRoot(element))
 }

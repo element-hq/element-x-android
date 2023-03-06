@@ -14,14 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.x.di
+package io.element.android.appnav.root
 
-import com.squareup.anvil.annotations.ContributesTo
-import io.element.android.appnav.MatrixClientsHolder
-import io.element.android.libraries.di.AppScope
-
-@ContributesTo(AppScope::class)
-interface AppBindings {
-    fun matrixClientsHolder(): MatrixClientsHolder
-    fun mainDaggerComponentOwner(): MainDaggerComponentsOwner
+sealed interface RootEvents {
+    object HideShowkaseButton : RootEvents
 }
