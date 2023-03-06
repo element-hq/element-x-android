@@ -16,5 +16,6 @@
     <string name="server_selection_sliding_sync_alert_message">This server currently doesn\'t support sliding sync.</string>
     <!-- Create room -->
     <string name="search_for_someone">Search for someone</string>
+    <string name="new_room">New room</string>
 
 </resources>
