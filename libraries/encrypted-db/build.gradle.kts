@@ -20,6 +20,13 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.encrypteddb"
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            consumerProguardFiles("consumer-proguard-rules.pro")
+        }
+    }
 }
 
 dependencies {
