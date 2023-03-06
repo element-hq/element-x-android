@@ -20,4 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# Prevent ProGuard from renaming internal SQLCipher classes, which breaks the library.
+# From https://github.com/sqlcipher/android-database-sqlcipher#proguard
 -keep class net.sqlcipher.** { *; }
