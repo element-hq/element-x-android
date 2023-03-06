@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist
+// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
+@Suppress("DSL_SCOPE_VIOLATION")
+plugins {
+    id("io.element.android-library")
+}
 
-import io.element.android.libraries.dateformatter.api.LastMessageFormatter
-
-class FakeLastMessageFormatter : LastMessageFormatter {
-    private var format = ""
-    fun givenFormat(format: String) {
-        this.format = format
-    }
-
-    override fun format(timestamp: Long?): String {
-        return format
-    }
+android {
+    namespace = "io.element.android.libraries.dateformatter.api"
 }

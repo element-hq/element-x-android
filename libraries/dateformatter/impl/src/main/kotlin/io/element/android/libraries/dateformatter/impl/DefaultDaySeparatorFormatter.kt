@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline.factories.virtual
+package io.element.android.libraries.dateformatter.impl
 
-import io.element.android.features.messages.timeline.model.virtual.TimelineItemDaySeparatorModel
-import io.element.android.features.messages.timeline.model.virtual.TimelineItemVirtualModel
+import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.dateformatter.api.DaySeparatorFormatter
-import org.matrix.rustcomponents.sdk.VirtualTimelineItem
+import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
-class TimelineItemDaySeparatorFactory @Inject constructor(private val daySeparatorFormatter: DaySeparatorFormatter) {
+@ContributesBinding(AppScope::class)
+class DefaultDaySeparatorFormatter @Inject constructor(
+    private val localDateTimeProvider: LocalDateTimeProvider,
+    private val dateFormatters: DateFormatters,
+) : DaySeparatorFormatter {
 
-    fun create(virtualItem: VirtualTimelineItem.DayDivider): TimelineItemVirtualModel {
-        val formattedDate = daySeparatorFormatter.format(virtualItem.ts.toLong())
-        return TimelineItemDaySeparatorModel(
-            formattedDate = formattedDate
-        )
+    override fun format(timestamp: Long): String {
+        val dateToFormat = localDateTimeProvider.providesFromTimestamp(timestamp)
+        return dateFormatters.formatDateWithYear(dateToFormat)
     }
 }

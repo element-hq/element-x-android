@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist
+package io.element.android.libraries.dateformatter.test
 
-import io.element.android.libraries.dateformatter.api.LastMessageFormatter
+import io.element.android.libraries.dateformatter.api.DaySeparatorFormatter
 
-class FakeLastMessageFormatter : LastMessageFormatter {
+class FakeDaySeparatorFormatter : DaySeparatorFormatter {
+
     private var format = ""
+
     fun givenFormat(format: String) {
         this.format = format
     }
 
-    override fun format(timestamp: Long?): String {
+    override fun format(timestamp: Long): String {
         return format
     }
 }

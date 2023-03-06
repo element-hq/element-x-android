@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist
+package io.element.android.libraries.dateformatter.impl.di
 
-import io.element.android.libraries.dateformatter.api.LastMessageFormatter
+import com.squareup.anvil.annotations.ContributesTo
+import dagger.Module
+import dagger.Provides
+import io.element.android.libraries.di.AppScope
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import java.util.*
 
-class FakeLastMessageFormatter : LastMessageFormatter {
-    private var format = ""
-    fun givenFormat(format: String) {
-        this.format = format
-    }
+@Module
+@ContributesTo(AppScope::class)
+object DateFormatterModule {
+    @Provides
+    fun providesClock(): Clock = Clock.System
 
-    override fun format(timestamp: Long?): String {
-        return format
-    }
+    @Provides
+    fun providesLocale(): Locale = Locale.getDefault()
+
+    @Provides
+    fun providesTimezone(): TimeZone = TimeZone.currentSystemDefault()
 }
