@@ -104,7 +104,7 @@ fun ChangeServerView(
         topBar = {
             TopAppBar(
                 title = {},
-                navigationIcon = { BackButton(action = onBackPressed, enabled = interactionEnabled) }
+                navigationIcon = { BackButton(onClick = onBackPressed, enabled = interactionEnabled) }
             )
         }
     ) { padding ->
@@ -192,7 +192,7 @@ fun ChangeServerView(
                             IconButton(onClick = {
                                 homeserverFieldState = ""
                             }, enabled = interactionEnabled) {
-                                Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(StringR.string.action_clear))
+                                Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(StringR.string.a11y_clear))
                             }
                         }
                     } else null,

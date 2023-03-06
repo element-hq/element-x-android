@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.BackButton
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
 import io.element.android.libraries.designsystem.theme.components.DockedSearchBar
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -133,9 +134,7 @@ fun CreateRoomSearchBar(
         },
         leadingIcon = if (active.value) {
             {
-                IconButton(onClick = { closeSearchBar() }) {
-                    Icon(DrawableR.drawable.ic_arrow_back, stringResource(StringR.string.a11y_back))
-                }
+                BackButton(onClick = { closeSearchBar() })
             }
         } else null,
         trailingIcon = {

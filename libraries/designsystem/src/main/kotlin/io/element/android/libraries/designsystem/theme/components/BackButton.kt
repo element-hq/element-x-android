@@ -16,32 +16,31 @@
 
 package io.element.android.libraries.designsystem.theme.components
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.ui.strings.R.string as StringR
+import io.element.android.libraries.designsystem.R as DrawableR
+import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun BackButton(
-    action: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    icon: ImageVector = Icons.Default.ArrowBack,
-    contentDescription: String = stringResource(StringR.action_back),
+    @DrawableRes icon: Int = DrawableR.drawable.ic_arrow_back,
+    contentDescription: String = stringResource(StringR.string.a11y_back),
     enabled: Boolean = true
 ) {
     IconButton(
         modifier = modifier,
-        onClick = action,
+        onClick = onClick,
         enabled = enabled,
     ) {
-        Icon(imageVector = icon, contentDescription = contentDescription)
+        Icon(resourceId = icon, contentDescription = contentDescription)
     }
 }
 
@@ -56,7 +55,7 @@ internal fun BackButtonPreviewDark() = ElementPreviewDark { ContentToPreview() }
 @Composable
 private fun ContentToPreview() {
     Column {
-        BackButton(action = { }, enabled = true, contentDescription = "Back")
-        BackButton(action = { }, enabled = false, contentDescription = "Back")
+        BackButton(onClick = { }, enabled = true, contentDescription = "Back")
+        BackButton(onClick = { }, enabled = false, contentDescription = "Back")
     }
 }
