@@ -101,7 +101,7 @@ fun LoginRootScreen(
         topBar = {
             TopAppBar(
                 title = {},
-                navigationIcon = { BackButton(action = onBackPressed, enabled = interactionEnabled) },
+                navigationIcon = { BackButton(onClick = onBackPressed, enabled = interactionEnabled) },
             )
         }
     ) { padding ->
@@ -267,7 +267,7 @@ internal fun LoginForm(
                     IconButton(onClick = {
                         loginFieldState = ""
                     }) {
-                        Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(StringR.string.action_clear))
+                        Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(StringR.string.a11y_clear))
                     }
                 }
             } else null,
