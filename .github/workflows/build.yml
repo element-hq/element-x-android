@@ -44,7 +44,7 @@ jobs:
           file: app/build/outputs/apk/debug/app-arm64-v8a-debug.apk
       - name: Add or update PR comment with QR Code to download APK.
         if: ${{ github.event_name == 'pull_request' }}
-        uses: NejcZdovc/comment-pr@v1
+        uses: NejcZdovc/comment-pr@v2
         with:
           message: |
             :iphone: Scan the QR code below to install the build (arm64 only) for this PR.
