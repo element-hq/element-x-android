@@ -200,6 +200,7 @@ dependencies {
     allFeatures()
     implementation(projects.tests.uitests)
     implementation(projects.anvilannotations)
+    implementation(projects.appnav)
     anvil(projects.anvilcodegen)
 
     // https://developer.android.com/studio/write/java8-support#library-desugaring-versions
