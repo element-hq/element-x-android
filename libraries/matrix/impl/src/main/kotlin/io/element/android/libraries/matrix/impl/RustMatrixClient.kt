@@ -24,7 +24,7 @@ import io.element.android.libraries.matrix.impl.media.RustMediaResolver
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.sync.SlidingSyncObserverProxy
-import io.element.android.libraries.sessionstorage.SessionStore
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.matrix.api.media.MediaResolver
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource

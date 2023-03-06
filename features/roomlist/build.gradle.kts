@@ -41,7 +41,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
-    implementation(projects.libraries.dateformatter)
+    implementation(projects.libraries.dateformatter.api)
     implementation(libs.accompanist.placeholder)
 
     testImplementation(libs.test.junit)
