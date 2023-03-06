@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.samples.minimal
+package io.element.android.libraries.sessionstorage.impl.memory
 
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
