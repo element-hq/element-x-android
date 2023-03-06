@@ -39,7 +39,7 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.textcomposer)
-    implementation(projects.libraries.dateformatter)
+    implementation(projects.libraries.dateformatter.api)
     implementation(libs.coil.compose)
     implementation(libs.datetime)
     implementation(libs.accompanist.flowlayout)
@@ -52,6 +52,7 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.dateformatter.test)
 
     androidTestImplementation(libs.test.junitext)
     ksp(libs.showkase.processor)

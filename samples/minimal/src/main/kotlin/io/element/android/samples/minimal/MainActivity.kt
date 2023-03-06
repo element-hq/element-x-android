@@ -31,6 +31,7 @@ import androidx.core.view.WindowCompat
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.impl.auth.RustMatrixAuthenticationService
+import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
 import kotlinx.coroutines.runBlocking
 import org.matrix.rustcomponents.sdk.AuthenticationService
 import java.io.File

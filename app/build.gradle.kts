@@ -199,6 +199,8 @@ dependencies {
     allLibraries()
     allFeatures()
     implementation(projects.libraries.matrix.impl)
+    implementation(projects.libraries.dateformatter.impl)
+    implementation(projects.libraries.sessionStorage.impl)
     implementation(projects.tests.uitests)
     implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
