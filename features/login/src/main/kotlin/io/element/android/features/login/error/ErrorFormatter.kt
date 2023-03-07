@@ -16,34 +16,28 @@
 
 package io.element.android.features.login.error
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
-import io.element.android.features.login.root.LoginFormState
-import io.element.android.libraries.core.uri.isValidUrl
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.matrix.api.auth.AuthErrorCode
+import io.element.android.libraries.matrix.api.auth.errorCode
+import org.matrix.rustcomponents.sdk.AuthenticationException
+import io.element.android.libraries.ui.strings.R.string as StringR
 
-@Composable
 fun loginError(
-    data: LoginFormState,
-    throwable: Throwable?
-): String {
-    return when {
-        data.login.isEmpty() -> "Please enter a login"
-        data.password.isEmpty() -> "Please enter a password"
-        throwable != null -> stringResource(id = StringR.string.auth_invalid_login_param)
-        else -> "No error provided"
+    throwable: Throwable
+): Int {
+    val authException = throwable as? AuthenticationException ?: return StringR.unknown_error
+    return when (authException.errorCode) {
+        AuthErrorCode.FORBIDDEN -> StringR.auth_invalid_login_param
+        AuthErrorCode.USER_DEACTIVATED -> StringR.auth_invalid_login_deactivated_account
+        AuthErrorCode.UNKNOWN -> StringR.unknown_error
     }
 }
 
-@Composable
 fun changeServerError(
-    data: String,
-    throwable: Throwable?
-): String {
-    return when {
-        data.isEmpty() -> "Please enter a server URL"
-        !data.isValidUrl() -> stringResource(id = StringR.string.login_error_invalid_home_server)
-        throwable != null -> "That server doesn’t seem right. Please check the address."
-        else -> "No error provided"
+    throwable: Throwable
+): Int {
+    val authException = throwable as? AuthenticationException ?: return StringR.unknown_error
+    return when (authException) {
+        is AuthenticationException.InvalidServerName -> StringR.login_error_homeserver_not_found
+        else -> StringR.unknown_error
     }
 }

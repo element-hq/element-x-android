@@ -51,6 +51,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.R
+import io.element.android.features.login.error.changeServerError
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
@@ -239,7 +240,7 @@ fun ChangeServerView(
 @Composable
 internal fun ChangeServerErrorDialog(error: Throwable, onDismiss: () -> Unit) {
     ErrorDialog(
-        content = error.localizedMessage ?: stringResource(id = StringR.string.unknown_error),
+        content = stringResource(changeServerError(error)),
         onDismiss = onDismiss
     )
 }
