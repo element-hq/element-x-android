@@ -41,4 +41,7 @@ dependencies {
     implementation(libs.serialization.json)
     api(projects.libraries.sessionStorage.api)
     implementation(libs.coroutines.core)
+
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.truth)
 }

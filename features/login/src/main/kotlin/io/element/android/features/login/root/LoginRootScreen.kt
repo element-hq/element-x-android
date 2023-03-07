@@ -62,6 +62,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.login.error.loginError
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
@@ -152,6 +153,12 @@ fun LoginRootScreen(
                 )
             }
         }
+    }
+
+    if (state.loggedInState is LoggedInState.ErrorLoggingIn) {
+        LoginErrorDialog(error = state.loggedInState.failure, onDismiss = {
+            state.eventSink(LoginRootEvents.ClearError)
+        })
     }
 }
 
@@ -299,12 +306,6 @@ internal fun LoginForm(
             singleLine = true,
             maxLines = 1,
         )
-
-        if (state.loggedInState is LoggedInState.ErrorLoggingIn) {
-            LoginErrorDialog(error = state.loggedInState.failure, onDismiss = {
-                eventSink(LoginRootEvents.ClearError)
-            })
-        }
         Spacer(Modifier.height(28.dp))
 
         // Submit
@@ -323,7 +324,7 @@ internal fun LoginForm(
 @Composable
 internal fun LoginErrorDialog(error: Throwable, onDismiss: () -> Unit) {
     ErrorDialog(
-        content = error.localizedMessage ?: stringResource(id = StringR.string.unknown_error),
+        content = stringResource(loginError(error)),
         onDismiss = onDismiss
     )
 }
