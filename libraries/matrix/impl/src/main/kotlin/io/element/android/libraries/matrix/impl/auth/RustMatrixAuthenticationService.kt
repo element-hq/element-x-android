@@ -68,6 +68,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                 try {
                     ClientBuilder()
                         .basePath(baseDirectory.absolutePath)
+                        .homeserverUrl(sessionData.homeserverUrl)
                         .username(sessionData.userId)
                         .build().apply {
                             restoreSession(sessionData.toSession())
