@@ -40,10 +40,10 @@ fun ErrorDialog(
     submitText: String = stringResource(id = StringR.string.ok),
     onDismiss: () -> Unit = {},
     shape: Shape = AlertDialogDefaults.shape,
-    containerColor: Color = MaterialTheme.colorScheme.surface,
-    iconContentColor: Color = MaterialTheme.colorScheme.onSurface,
-    titleContentColor: Color = MaterialTheme.colorScheme.onSurface,
-    textContentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    containerColor: Color = AlertDialogDefaults.containerColor,
+    iconContentColor: Color = AlertDialogDefaults.iconContentColor,
+    titleContentColor: Color = AlertDialogDefaults.titleContentColor,
+    textContentColor: Color = AlertDialogDefaults.textContentColor,
     tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
 ) {
     AlertDialog(
