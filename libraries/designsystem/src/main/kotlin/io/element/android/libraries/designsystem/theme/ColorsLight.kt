@@ -21,7 +21,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.Azure
-import io.element.android.libraries.designsystem.LightGrey
+import io.element.android.libraries.designsystem.Black_900
+import io.element.android.libraries.designsystem.Gray_100
+import io.element.android.libraries.designsystem.Gray_150
+import io.element.android.libraries.designsystem.Gray_200
+import io.element.android.libraries.designsystem.Gray_25
+import io.element.android.libraries.designsystem.Gray_50
 import io.element.android.libraries.designsystem.SystemGrey5Light
 import io.element.android.libraries.designsystem.SystemGrey6Light
 import io.element.android.libraries.designsystem.theme.previews.ColorsSchemePreview
@@ -30,21 +35,23 @@ fun elementColorsLight() = ElementColors(
     messageFromMeBackground = SystemGrey5Light,
     messageFromOtherBackground = SystemGrey6Light,
     messageHighlightedBackground = Azure,
+    quaternary = Gray_100,
+    quinary = Gray_50,
     isLight = true,
 )
 
 // TODO Lots of colors are missing
 val materialColorSchemeLight = lightColorScheme(
-    primary = Color.Black,
+    primary = Black_900,
     onPrimary = Color.White,
     // TODO primaryContainer = ColorLightTokens.PrimaryContainer,
     // TODO onPrimaryContainer = ColorLightTokens.OnPrimaryContainer,
     // TODO inversePrimary = ColorLightTokens.InversePrimary,
-    secondary = LightGrey,
+    secondary = Gray_200,
     // TODO onSecondary = ColorLightTokens.OnSecondary,
     // TODO secondaryContainer = ColorLightTokens.SecondaryContainer,
     // TODO onSecondaryContainer = ColorLightTokens.OnSecondaryContainer,
-    tertiary = Color.Black,
+    tertiary = Gray_150,
     // TODO onTertiary = ColorLightTokens.OnTertiary,
     // TODO tertiaryContainer = ColorLightTokens.TertiaryContainer,
     // TODO onTertiaryContainer = ColorLightTokens.OnTertiaryContainer,
@@ -52,8 +59,8 @@ val materialColorSchemeLight = lightColorScheme(
     onBackground = Color.Black,
     surface = Color.White,
     onSurface = Color.Black,
-    surfaceVariant = SystemGrey5Light,
-    onSurfaceVariant = Color.Black,
+    surfaceVariant = Gray_25,
+    onSurfaceVariant = Gray_150,
     // TODO surfaceTint = primary,
     // TODO inverseSurface = ColorLightTokens.InverseSurface,
     // TODO inverseOnSurface = ColorLightTokens.InverseOnSurface,

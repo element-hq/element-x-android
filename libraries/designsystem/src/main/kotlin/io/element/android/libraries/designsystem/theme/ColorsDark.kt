@@ -21,7 +21,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.Azure
+import io.element.android.libraries.designsystem.Black_800
+import io.element.android.libraries.designsystem.Black_950
 import io.element.android.libraries.designsystem.DarkGrey
+import io.element.android.libraries.designsystem.Gray_400
+import io.element.android.libraries.designsystem.Gray_450
 import io.element.android.libraries.designsystem.SystemGrey5Dark
 import io.element.android.libraries.designsystem.SystemGrey6Dark
 import io.element.android.libraries.designsystem.theme.previews.ColorsSchemePreview
@@ -30,6 +34,8 @@ fun elementColorsDark() = ElementColors(
     messageFromMeBackground = SystemGrey5Dark,
     messageFromOtherBackground = SystemGrey6Dark,
     messageHighlightedBackground = Azure,
+    quaternary = Gray_400,
+    quinary = Gray_450,
     isLight = false,
 )
 
@@ -48,12 +54,12 @@ val materialColorSchemeDark = darkColorScheme(
     // TODO onTertiary = ColorDarkTokens.OnTertiary,
     // TODO tertiaryContainer = ColorDarkTokens.TertiaryContainer,
     // TODO onTertiaryContainer = ColorDarkTokens.OnTertiaryContainer,
-    background = Color.Black,
+    background = Black_800,
     onBackground = Color.White,
-    surface = Color.Black,
+    surface = Black_800,
     onSurface = Color.White,
-    surfaceVariant = SystemGrey5Dark,
-    // TODO onSurfaceVariant = ColorDarkTokens.OnSurfaceVariant,
+    surfaceVariant = Black_950,
+    onSurfaceVariant = Color.White,
     // TODO surfaceTint = primary,
     // TODO inverseSurface = ColorDarkTokens.InverseSurface,
     // TODO inverseOnSurface = ColorDarkTokens.InverseOnSurface,

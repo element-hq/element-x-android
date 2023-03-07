@@ -17,7 +17,7 @@
 package io.element.android.libraries.textcomposer
 
 import android.os.Parcelable
-import io.element.android.libraries.matrix.core.EventId
+import io.element.android.libraries.matrix.api.core.EventId
 import kotlinx.parcelize.Parcelize
 
 sealed interface MessageComposerMode : Parcelable {

@@ -36,7 +36,7 @@ dependencies {
     anvil(projects.anvilcodegen)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix)
+    implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.testtags)
@@ -48,7 +48,7 @@ dependencies {
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
-    testImplementation(projects.libraries.matrixtest)
+    testImplementation(projects.libraries.matrix.test)
 
     androidTestImplementation(libs.test.junitext)
 }

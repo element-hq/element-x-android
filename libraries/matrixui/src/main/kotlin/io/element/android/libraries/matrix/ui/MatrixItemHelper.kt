@@ -18,7 +18,7 @@ package io.element.android.libraries.matrix.ui
 
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.matrix.MatrixClient
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -38,13 +38,13 @@ class MatrixItemHelper @Inject constructor(
             val userDisplayName = client.loadUserDisplayName().getOrNull()
             val avatarData =
                 AvatarData(
-                    client.userId().value,
+                    client.sessionId.value,
                     userDisplayName,
                     userAvatarUrl,
                     avatarSize
                 )
             MatrixUser(
-                id = client.userId(),
+                id = client.sessionId,
                 username = userDisplayName,
                 avatarData = avatarData,
             )

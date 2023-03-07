@@ -26,7 +26,7 @@ import io.element.android.features.logout.LogoutPreferencePresenter
 import io.element.android.features.preferences.impl.root.PreferencesRootPresenter
 import io.element.android.features.rageshake.preferences.RageshakePreferencesPresenter
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrixtest.FakeMatrixClient
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test

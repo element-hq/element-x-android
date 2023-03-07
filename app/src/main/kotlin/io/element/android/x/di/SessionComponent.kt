@@ -24,7 +24,7 @@ import io.element.android.libraries.architecture.NodeFactoriesBindings
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
-import io.element.android.libraries.matrix.MatrixClient
+import io.element.android.libraries.matrix.api.MatrixClient
 
 @SingleIn(SessionScope::class)
 @MergeSubcomponent(SessionScope::class)

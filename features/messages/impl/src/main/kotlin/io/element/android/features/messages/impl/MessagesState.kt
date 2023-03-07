@@ -21,7 +21,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.textcomposer.MessageComposerState
 import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomId
 
 @Immutable
 data class MessagesState(

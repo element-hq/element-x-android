@@ -16,7 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline
 
-import io.element.android.libraries.matrix.core.EventId
+import io.element.android.libraries.matrix.api.core.EventId
 
 sealed interface TimelineEvents {
     object LoadMore : TimelineEvents

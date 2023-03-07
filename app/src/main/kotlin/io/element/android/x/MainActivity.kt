@@ -18,8 +18,10 @@ package io.element.android.x
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
@@ -40,7 +42,7 @@ class MainActivity : NodeComponentActivity() {
         setContent {
             ElementTheme {
                 Box(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
                 ) {
                     NodeHost(integrationPoint = appyxIntegrationPoint) {
                         MainNode(it, appBindings.mainDaggerComponentOwner())

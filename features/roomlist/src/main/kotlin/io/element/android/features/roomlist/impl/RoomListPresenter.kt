@@ -27,11 +27,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.parallelMap
-import io.element.android.libraries.dateformatter.LastMessageFormatter
+import io.element.android.libraries.dateformatter.api.LastMessageFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.matrix.MatrixClient
-import io.element.android.libraries.matrix.room.RoomSummary
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.RoomSummary
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -103,14 +104,14 @@ class RoomListPresenter @Inject constructor(
         val userDisplayName = client.loadUserDisplayName().getOrNull()
         val avatarData =
             AvatarData(
-                id = client.userId().value,
+                id = client.sessionId.value,
                 name = userDisplayName,
                 url = userAvatarUrl,
                 size = AvatarSize.SMALL
             )
         matrixUser.value = MatrixUser(
-            id = client.userId(),
-            username = userDisplayName ?: client.userId().value,
+            id = UserId(client.sessionId.value),
+            username = userDisplayName ?: client.sessionId.value,
             avatarData = avatarData,
         )
     }

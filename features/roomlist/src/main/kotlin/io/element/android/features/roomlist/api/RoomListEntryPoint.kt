@@ -18,7 +18,7 @@ package io.element.android.features.roomlist.api
 
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
-import io.element.android.libraries.matrix.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomId
 
 interface RoomListEntryPoint : FeatureEntryPoint {
     interface Callback : Plugin {

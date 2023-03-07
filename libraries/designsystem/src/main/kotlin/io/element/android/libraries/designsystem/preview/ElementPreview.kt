@@ -16,12 +16,9 @@
 
 package io.element.android.libraries.designsystem.preview
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.components.Surface
 
 @Composable
 fun ElementPreviewLight(
@@ -55,9 +52,8 @@ private fun ElementPreview(
 ) {
     ElementTheme(darkTheme = darkTheme) {
         if (showBackground) {
-            Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
-                content()
-            }
+            // If we have a proper contentColor applied we need a Surface instead of a Box
+            Surface { content() }
         } else {
             content()
         }
