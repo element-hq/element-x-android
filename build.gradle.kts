@@ -60,7 +60,7 @@ allprojects {
         config = files("$rootDir/tools/detekt/detekt.yml")
     }
     dependencies {
-        detektPlugins("com.twitter.compose.rules:detekt:0.0.26")
+        detektPlugins("io.nlopez.compose.rules:detekt:0.1.2")
     }
 
     // KtLint
@@ -214,11 +214,11 @@ koverMerged {
             name = "Global minimum code coverage."
             target = kotlinx.kover.api.VerificationTarget.ALL
             bound {
-                minValue = 50
+                minValue = 55
                 // Setting a max value, so that if coverage is bigger, it means that we have to change minValue.
                 // For instance if we have minValue = 25 and maxValue = 30, and current code coverage is now 37.32%, update
                 // minValue to 35 and maxValue to 40.
-                maxValue = 55
+                maxValue = 60
                 counter = kotlinx.kover.api.CounterType.INSTRUCTION
                 valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
             }
@@ -302,4 +302,16 @@ tasks.register("runQualityChecks") {
         tasks.findByName("ktlintCheck")?.let { dependsOn(it) }
     }
     dependsOn(":app:knitCheck")
+}
+
+// Make sure to delete old screenshots before recording new ones
+subprojects {
+    val snapshotsDir = File("${project.path}/src/test/snapshots")
+    val removeOldScreenshotsTask = tasks.register("removeOldSnapshots") {
+        onlyIf { snapshotsDir.exists() }
+        doFirst {
+            snapshotsDir.deleteRecursively()
+        }
+    }
+    tasks.findByName("recordPaparazzi")?.dependsOn(removeOldScreenshotsTask)
 }

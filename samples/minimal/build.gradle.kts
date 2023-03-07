@@ -47,12 +47,16 @@ android {
 
 dependencies {
     implementation(libs.androidx.activity.compose)
-    implementation(projects.libraries.matrix)
+    implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.matrix.impl)
+    implementation(projects.libraries.sessionStorage.implMemory)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
-    implementation(projects.libraries.dateformatter)
+    implementation(projects.libraries.dateformatter.api)
+    implementation(projects.libraries.dateformatter.impl)
     implementation(projects.features.roomlist)
     implementation(projects.features.login)
+    implementation(libs.coroutines.core)
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
 }

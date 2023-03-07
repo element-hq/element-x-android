@@ -28,7 +28,7 @@ import io.element.android.features.rageshake.preferences.FakeRageShake
 import io.element.android.features.rageshake.preferences.FakeRageshakeDataStore
 import io.element.android.features.rageshake.preferences.RageshakePreferencesPresenter
 import io.element.android.features.rageshake.screenshot.ImageResult
-import io.element.android.libraries.matrixtest.AN_EXCEPTION
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first

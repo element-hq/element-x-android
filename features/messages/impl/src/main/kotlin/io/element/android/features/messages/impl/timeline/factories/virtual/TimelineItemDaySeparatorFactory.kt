@@ -18,7 +18,7 @@ package io.element.android.features.messages.impl.timeline.factories.virtual
 
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemVirtualModel
-import io.element.android.libraries.dateformatter.DaySeparatorFormatter
+import io.element.android.libraries.dateformatter.api.DaySeparatorFormatter
 import org.matrix.rustcomponents.sdk.VirtualTimelineItem
 import javax.inject.Inject
 

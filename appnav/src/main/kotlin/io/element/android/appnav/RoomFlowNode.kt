@@ -34,7 +34,7 @@ import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.nodeInputs
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 

@@ -23,8 +23,8 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemReac
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.core.EventId
-import io.element.android.libraries.matrix.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 

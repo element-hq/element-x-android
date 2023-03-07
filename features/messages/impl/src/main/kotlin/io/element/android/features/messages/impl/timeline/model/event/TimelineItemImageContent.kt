@@ -16,7 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
-import io.element.android.libraries.matrix.media.MediaResolver
+import io.element.android.libraries.matrix.api.media.MediaResolver
 
 data class TimelineItemImageContent(
     val body: String,

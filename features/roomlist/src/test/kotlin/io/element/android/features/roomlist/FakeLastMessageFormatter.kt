@@ -16,7 +16,7 @@
 
 package io.element.android.features.roomlist
 
-import io.element.android.libraries.dateformatter.LastMessageFormatter
+import io.element.android.libraries.dateformatter.api.LastMessageFormatter
 
 class FakeLastMessageFormatter : LastMessageFormatter {
     private var format = ""

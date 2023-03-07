@@ -16,14 +16,20 @@
 
 package io.element.android.features.login.impl.changeserver
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.login.util.LoginConstants
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
@@ -32,18 +38,25 @@ class ChangeServerNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: ChangeServerPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     private fun onSuccess() {
         navigateUp()
+    }
+
+    private fun openLearnMorePage(context: Context) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(LoginConstants.SLIDING_SYNC_READ_MORE_URL))
+        tryOrNull { context.startActivity(intent) }
     }
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
+        val context = LocalContext.current
         ChangeServerView(
             state = state,
             modifier = modifier,
             onChangeServerSuccess = this::onSuccess,
+            onBackPressed = { navigateUp() },
+            onLearnMoreClicked = { openLearnMorePage(context) },
         )
     }
 }

@@ -49,8 +49,9 @@ import io.element.android.libraries.architecture.nodeInputsProvider
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
-import io.element.android.libraries.matrix.core.SessionId
+import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.tests.uitests.openShowkase
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
@@ -100,7 +101,7 @@ class RootFlowNode @AssistedInject constructor(
     }
 
     private fun switchToLoggedInFlow(sessionId: SessionId) {
-        backstack.safeRoot(NavTarget.LoggedInFlow(sessionId = sessionId))
+        backstack.safeRoot(NavTarget.LoggedInFlow(sessionId))
     }
 
     private fun switchToLogoutFlow() {
@@ -109,19 +110,19 @@ class RootFlowNode @AssistedInject constructor(
     }
 
     private suspend fun tryToRestoreLatestSession(
-        onSuccess: (SessionId) -> Unit = {},
+        onSuccess: (UserId) -> Unit = {},
         onFailure: () -> Unit = {}
     ) {
-        val latestKnownSessionId = authenticationService.getLatestSessionId()
-        if (latestKnownSessionId == null) {
+        val latestKnownUserId = authenticationService.getLatestSessionId()
+        if (latestKnownUserId == null) {
             onFailure()
             return
         }
-        if (matrixClientsHolder.knowSession(latestKnownSessionId)) {
-            onSuccess(latestKnownSessionId)
+        if (matrixClientsHolder.knowSession(latestKnownUserId)) {
+            onSuccess(latestKnownUserId)
             return
         }
-        val matrixClient = authenticationService.restoreSession(latestKnownSessionId)
+        val matrixClient = authenticationService.restoreSession(UserId(latestKnownUserId.value))
         if (matrixClient == null) {
             Timber.v("Failed to restore session...")
             onFailure()
@@ -141,6 +142,7 @@ class RootFlowNode @AssistedInject constructor(
         fun openShowkase() {
             openShowkase(activity)
         }
+
         val state = presenter.present()
         RootView(
             state = state,

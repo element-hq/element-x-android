@@ -36,12 +36,12 @@ dependencies {
 
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix)
+    implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
-    implementation(projects.libraries.dateformatter)
+    implementation(projects.libraries.dateformatter.api)
     implementation(libs.accompanist.placeholder)
 
     testImplementation(libs.test.junit)
@@ -49,9 +49,8 @@ dependencies {
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
-    testImplementation(projects.libraries.matrixtest)
-
-    testImplementation(testFixtures(projects.libraries.matrix))
+    testImplementation(projects.libraries.matrix.test)
+    implementation(projects.libraries.dateformatter.test)
 
     androidTestImplementation(libs.test.junitext)
 

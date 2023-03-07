@@ -16,14 +16,14 @@
 
 package io.element.android.features.messages.impl.timeline.factories.event
 
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEmoteContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemNoticeContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.util.toHtmlDocument
-import io.element.android.libraries.matrix.media.MediaResolver
+import io.element.android.libraries.matrix.api.media.MediaResolver
 import org.matrix.rustcomponents.sdk.Message
 import org.matrix.rustcomponents.sdk.MessageType
 import javax.inject.Inject

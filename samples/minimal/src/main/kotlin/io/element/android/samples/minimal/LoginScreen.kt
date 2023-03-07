@@ -21,7 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import io.element.android.features.login.impl.root.LoginRootPresenter
 import io.element.android.features.login.impl.root.LoginRootScreen
-import io.element.android.libraries.matrix.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 
 class LoginScreen(private val authenticationService: MatrixAuthenticationService) {
 
@@ -33,7 +33,8 @@ class LoginScreen(private val authenticationService: MatrixAuthenticationService
         val state = presenter.present()
         LoginRootScreen(
             state = state,
-            modifier = modifier
+            modifier = modifier,
+            onBackPressed = {},
         )
     }
 }

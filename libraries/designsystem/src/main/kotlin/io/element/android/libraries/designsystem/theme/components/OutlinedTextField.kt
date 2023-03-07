@@ -29,8 +29,17 @@ import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,7 +49,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.utils.allBooleans
 import io.element.android.libraries.designsystem.utils.asInt
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun OutlinedTextField(
     value: String,
@@ -86,6 +95,16 @@ fun OutlinedTextField(
         shape = shape,
         colors = colors,
     )
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+fun Modifier.onTabOrEnterKeyFocusNext(focusManager: FocusManager): Modifier = onPreviewKeyEvent { event ->
+    if (event.type == KeyEventType.KeyUp && (event.key == Key.Tab || event.key == Key.Enter)) {
+        focusManager.moveFocus(FocusDirection.Down)
+        true
+    } else {
+        false
+    }
 }
 
 @Preview

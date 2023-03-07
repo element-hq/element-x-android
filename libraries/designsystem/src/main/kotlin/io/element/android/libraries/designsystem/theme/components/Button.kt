@@ -29,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
@@ -37,11 +38,11 @@ fun Button(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    shape: Shape = ButtonDefaults.shape,
-    colors: ButtonColors = ButtonDefaults.buttonColors(),
-    elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
+    shape: Shape = ElementButtonDefaults.shape,
+    colors: ButtonColors = ElementButtonDefaults.buttonColors(),
+    elevation: ButtonElevation? = ElementButtonDefaults.buttonElevation(),
     border: BorderStroke? = null,
-    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    contentPadding: PaddingValues = ElementButtonDefaults.ContentPadding,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     content: @Composable RowScope.() -> Unit
 ) {
@@ -57,6 +58,17 @@ fun Button(
         interactionSource = interactionSource,
         content = content,
     )
+}
+
+object ElementButtonDefaults {
+    val ContentPadding = PaddingValues(horizontal = 24.dp, vertical = 14.dp)
+    val shape: Shape @Composable get() = ButtonDefaults.shape
+    @Composable
+    fun buttonElevation(): ButtonElevation = ButtonDefaults.buttonElevation()
+
+    @Composable
+    fun buttonColors(): ButtonColors = ButtonDefaults.buttonColors()
+
 }
 
 @Preview

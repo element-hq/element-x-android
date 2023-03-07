@@ -26,14 +26,12 @@ import io.element.android.features.login.impl.root.LoggedInState
 import io.element.android.features.login.impl.root.LoginFormState
 import io.element.android.features.login.impl.root.LoginRootEvents
 import io.element.android.features.login.impl.root.LoginRootPresenter
-import io.element.android.libraries.matrix.core.SessionId
-import io.element.android.libraries.matrixtest.A_HOMESERVER
-import io.element.android.libraries.matrixtest.A_HOMESERVER_2
-import io.element.android.libraries.matrixtest.A_PASSWORD
-import io.element.android.libraries.matrixtest.A_SESSION_ID
-import io.element.android.libraries.matrixtest.A_THROWABLE
-import io.element.android.libraries.matrixtest.A_USER_NAME
-import io.element.android.libraries.matrixtest.auth.FakeAuthenticationService
+import io.element.android.libraries.matrix.test.A_HOMESERVER
+import io.element.android.libraries.matrix.test.A_PASSWORD
+import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_THROWABLE
+import io.element.android.libraries.matrix.test.A_USER_NAME
+import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -48,7 +46,7 @@ class LoginRootPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.homeserver).isEqualTo(A_HOMESERVER)
+            assertThat(initialState.homeserverDetails).isEqualTo(A_HOMESERVER)
             assertThat(initialState.loggedInState).isEqualTo(LoggedInState.NotLoggedIn)
             assertThat(initialState.formState).isEqualTo(LoginFormState.Default)
             assertThat(initialState.submitEnabled).isFalse()
@@ -92,7 +90,7 @@ class LoginRootPresenterTest {
             val submitState = awaitItem()
             assertThat(submitState.loggedInState).isEqualTo(LoggedInState.LoggingIn)
             val loggedInState = awaitItem()
-            assertThat(loggedInState.loggedInState).isEqualTo(LoggedInState.LoggedIn(SessionId(A_SESSION_ID)))
+            assertThat(loggedInState.loggedInState).isEqualTo(LoggedInState.LoggedIn(A_SESSION_ID))
         }
     }
 
@@ -120,7 +118,7 @@ class LoginRootPresenterTest {
     }
 
     @Test
-    fun `present - refresh server`() = runTest {
+    fun `present - clear error`() = runTest {
         val authenticationService = FakeAuthenticationService()
         val presenter = LoginRootPresenter(
             authenticationService,
@@ -129,11 +127,20 @@ class LoginRootPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.homeserver).isEqualTo(A_HOMESERVER)
-            authenticationService.givenHomeserver(A_HOMESERVER_2)
-            initialState.eventSink.invoke(LoginRootEvents.RefreshHomeServer)
-            val refreshedState = awaitItem()
-            assertThat(refreshedState.homeserver).isEqualTo(A_HOMESERVER_2)
+
+            // Submit will return an error
+            authenticationService.givenLoginError(A_THROWABLE)
+            initialState.eventSink(LoginRootEvents.Submit)
+            awaitItem() // Skip LoggingIn state
+
+            // Check an error was returned
+            val submittedState = awaitItem()
+            assertThat(submittedState.loggedInState).isEqualTo(LoggedInState.ErrorLoggingIn(A_THROWABLE))
+
+            // Assert the error is then cleared
+            submittedState.eventSink(LoginRootEvents.ClearError)
+            val clearedState = awaitItem()
+            assertThat(clearedState.loggedInState).isEqualTo(LoggedInState.NotLoggedIn)
         }
     }
 }

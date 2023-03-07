@@ -19,7 +19,7 @@ package io.element.android.appnav
 import io.element.android.features.rageshake.reporter.BugReporter
 import io.element.android.features.rageshake.reporter.BugReporterListener
 import io.element.android.features.rageshake.reporter.ReportType
-import io.element.android.libraries.matrixtest.A_FAILURE_REASON
+import io.element.android.libraries.matrix.test.A_FAILURE_REASON
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

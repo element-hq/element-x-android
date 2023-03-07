@@ -46,8 +46,8 @@ import io.element.android.libraries.architecture.nodeInputs
 import io.element.android.libraries.architecture.nodeInputsProvider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.matrix.MatrixClient
-import io.element.android.libraries.matrix.core.RoomId
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
 import kotlinx.parcelize.Parcelize
 

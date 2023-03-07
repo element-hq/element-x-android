@@ -198,6 +198,9 @@ knit {
 dependencies {
     allLibraries()
     allFeatures()
+    implementation(projects.libraries.matrix.impl)
+    implementation(projects.libraries.dateformatter.impl)
+    implementation(projects.libraries.sessionStorage.impl)
     implementation(projects.tests.uitests)
     implementation(projects.anvilannotations)
     implementation(projects.appnav)
@@ -221,5 +224,5 @@ dependencies {
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
-    testImplementation(projects.libraries.matrixtest)
+    testImplementation(projects.libraries.matrix.test)
 }

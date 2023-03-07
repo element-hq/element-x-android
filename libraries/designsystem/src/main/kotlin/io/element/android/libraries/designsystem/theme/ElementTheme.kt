@@ -49,15 +49,16 @@ val LocalColors = staticCompositionLocalOf { elementColorsLight() }
 fun ElementTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false, /* true to enable MaterialYou */
-    lightColors: ElementColors = elementColorsLight(),
-    darkColors: ElementColors = elementColorsDark(),
+    colors: ElementColors = if (darkTheme) elementColorsDark() else elementColorsLight(),
     materialLightColors: ColorScheme = materialColorSchemeLight,
     materialDarkColors: ColorScheme = materialColorSchemeDark,
     content: @Composable () -> Unit,
 ) {
     val systemUiController = rememberSystemUiController()
     val useDarkIcons = !darkTheme
-    val currentColor = remember(darkTheme) { if (darkTheme) darkColors else lightColors }
+    val currentColor = remember(darkTheme) {
+        colors.copy()
+    }.apply { updateColorsFrom(colors) }
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
@@ -75,9 +76,8 @@ fun ElementTheme(
             darkIcons = useDarkIcons
         )
     }
-    val rememberedColors = remember { currentColor.copy() }.apply { updateColorsFrom(currentColor) }
     CompositionLocalProvider(
-        LocalColors provides rememberedColors,
+        LocalColors provides currentColor,
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
