@@ -40,7 +40,7 @@ serialization_json = "1.4.1"
 showkase = "1.0.0-beta17"
 jsoup = "1.15.4"
 appyx = "1.0.5"
-dependencycheck = "7.4.4"
+dependencycheck = "8.1.2"
 stem = "2.3.0"
 sqldelight = "1.5.5"
 
