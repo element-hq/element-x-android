@@ -81,7 +81,7 @@ fun CreateRoomRootScreen(
 
             if (!isSearchActive.value) {
                 TextIconButton(
-                    modifier = Modifier.padding(horizontal = 8.dp),
+                    modifier = Modifier.padding(start = 8.dp, top = 16.dp, end = 8.dp),
                     imageVector = ImageVector.vectorResource(DrawableR.drawable.ic_group),
                     text = stringResource(id = StringR.string.new_room),
                     onClick = onNewRoomClicked,
