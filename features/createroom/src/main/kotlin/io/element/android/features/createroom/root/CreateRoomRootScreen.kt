@@ -78,7 +78,8 @@ fun CreateRoomRootScreen(
             if (!isSearchActive.value) {
                 TextButton(
                     modifier = Modifier.padding(start = 8.dp, top = 16.dp, end = 8.dp),
-                    onClick = { }) {
+                    onClick = { },
+                ) {
                     Icon(
                         modifier = Modifier
                             .padding(end = 16.dp),
@@ -90,7 +91,7 @@ fun CreateRoomRootScreen(
 
                 TextButton(
                     modifier = Modifier.padding(horizontal = 8.dp),
-                    onClick = { }
+                    onClick = { },
                 ) {
                     Icon(
                         modifier = Modifier
