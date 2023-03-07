@@ -9,9 +9,15 @@ appId: ${APP_ID}
     id: "login-email_username"
 - inputText: ${USERNAME}
 - pressKey: Enter
-- tapOn: "Password"
 - tapOn:
     id: "login-password"
+- inputText: "wrong-password"
+- pressKey: Enter
+- tapOn: "Continue"
+- tapOn: "OK"
+- tapOn:
+    id: "login-password"
+- eraseText: 20
 - inputText: ${PASSWORD}
 - pressKey: Enter
 - tapOn: "Continue"
