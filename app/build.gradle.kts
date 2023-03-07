@@ -29,7 +29,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.anvil)
     alias(libs.plugins.kapt)
-    id("com.google.firebase.appdistribution") version "3.0.2"
+    id("com.google.firebase.appdistribution") version "3.2.0"
     id("org.jetbrains.kotlinx.knit") version "0.4.0"
     id("kotlin-parcelize")
 }
