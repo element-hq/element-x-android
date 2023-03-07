@@ -16,9 +16,11 @@
 
 package io.element.android.features.createroom.root
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.TextButton
@@ -31,8 +33,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -55,7 +60,9 @@ import io.element.android.libraries.ui.strings.R as StringR
 fun CreateRoomRootScreen(
     state: CreateRoomRootState,
     modifier: Modifier = Modifier,
-    onClosePressed: () -> Unit = {}
+    onClosePressed: () -> Unit = {},
+    onNewRoomClicked: () -> Unit = {},
+    onInvitePeopleClicked: () -> Unit = {},
 ) {
     val isSearchActive = rememberSaveable { mutableStateOf(false) }
     Scaffold(
@@ -76,31 +83,19 @@ fun CreateRoomRootScreen(
             )
 
             if (!isSearchActive.value) {
-                TextButton(
-                    modifier = Modifier.padding(start = 8.dp, top = 16.dp, end = 8.dp),
-                    onClick = { },
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .padding(end = 16.dp),
-                        resourceId = DrawableR.drawable.ic_group, // TODO ask design for squared icon
-                        contentDescription = ""
-                    )
-                    Text(text = stringResource(id = StringR.string.new_room))
-                }
-
-                TextButton(
+                CreateRoomButton(
                     modifier = Modifier.padding(horizontal = 8.dp),
-                    onClick = { },
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .padding(end = 16.dp),
-                        resourceId = DrawableR.drawable.ic_share,
-                        contentDescription = ""
-                    )
-                    Text(text = stringResource(id = StringR.string.invite_people_menu))
-                }
+                    imageVector = ImageVector.vectorResource(DrawableR.drawable.ic_group),
+                    text = stringResource(id = StringR.string.new_room),
+                    onClick = onNewRoomClicked,
+                )
+
+                CreateRoomButton(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    imageVector = ImageVector.vectorResource(DrawableR.drawable.ic_share),
+                    text = stringResource(id = StringR.string.invite_people_menu),
+                    onClick = onInvitePeopleClicked,
+                )
             }
         }
     }
@@ -183,6 +178,30 @@ fun CreateRoomSearchBar(
         colors = if (!active.value) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
         content = {},
     )
+}
+
+@Composable
+fun CreateRoomButton(
+    imageVector: ImageVector,
+    text: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+) {
+    TextButton(
+        modifier = modifier,
+        onClick = onClick
+    ) {
+        Image(
+            imageVector = imageVector,
+            contentDescription = "",
+            modifier = Modifier.size(24.dp),
+            contentScale = ContentScale.Inside,
+        )
+        Text(
+            modifier = Modifier.padding(horizontal = 8.dp),
+            text = text
+        )
+    }
 }
 
 @Preview
