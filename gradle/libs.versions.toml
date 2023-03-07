@@ -50,7 +50,7 @@ anvil = "2.4.4"
 
 # quality
 detekt = "1.22.0"
-ktlint = "11.0.0"
+ktlint = "11.3.1"
 dependencygraph = "0.10"
 
 [libraries]
