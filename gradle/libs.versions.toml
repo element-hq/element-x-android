@@ -41,7 +41,7 @@ showkase = "1.0.0-beta17"
 jsoup = "1.15.3"
 appyx = "1.0.3"
 dependencycheck = "7.4.4"
-stem = "2.2.3"
+stem = "2.3.0"
 sqldelight = "1.5.5"
 
 # DI
