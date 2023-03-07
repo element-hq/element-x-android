@@ -19,7 +19,6 @@ package io.element.android.features.createroom.root
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.TextButton
@@ -76,29 +75,31 @@ fun CreateRoomRootScreen(
                 active = isSearchActive,
             )
 
-            TextButton(
-                modifier = Modifier.padding(start = 8.dp, top = 16.dp, end = 8.dp),
-                onClick = { }) {
-                Icon(
-                    modifier = Modifier
-                        .padding(end = 16.dp),
-                    resourceId = DrawableR.drawable.ic_group, // TODO ask design for squared icon
-                    contentDescription = ""
-                )
-                Text(text = stringResource(id = StringR.string.new_room))
-            }
+            if (!isSearchActive.value) {
+                TextButton(
+                    modifier = Modifier.padding(start = 8.dp, top = 16.dp, end = 8.dp),
+                    onClick = { }) {
+                    Icon(
+                        modifier = Modifier
+                            .padding(end = 16.dp),
+                        resourceId = DrawableR.drawable.ic_group, // TODO ask design for squared icon
+                        contentDescription = ""
+                    )
+                    Text(text = stringResource(id = StringR.string.new_room))
+                }
 
-            TextButton(
-                modifier = Modifier.padding(horizontal = 8.dp),
-                onClick = { }
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .padding(end = 16.dp),
-                    resourceId = DrawableR.drawable.ic_share,
-                    contentDescription = ""
-                )
-                Text(text = stringResource(id = StringR.string.invite_people_menu))
+                TextButton(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    onClick = { }
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .padding(end = 16.dp),
+                        resourceId = DrawableR.drawable.ic_share,
+                        contentDescription = ""
+                    )
+                    Text(text = stringResource(id = StringR.string.invite_people_menu))
+                }
             }
         }
     }
