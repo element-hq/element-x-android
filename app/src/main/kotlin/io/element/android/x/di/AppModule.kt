@@ -24,7 +24,12 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.plus
 import java.io.File
 import java.util.concurrent.Executors
 
@@ -53,5 +58,4 @@ object AppModule {
             diffUpdateDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
         )
     }
-
 }
