@@ -35,7 +35,7 @@ test_core = "1.4.0"
 #other
 coil = "2.2.2"
 datetime = "0.4.0"
-serialization_json = "1.4.1"
+serialization_json = "1.5.0"
 # Warning, also hard-coded in composeDependencies()
 showkase = "1.0.0-beta17"
 jsoup = "1.15.4"
