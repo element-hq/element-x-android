@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -61,25 +60,29 @@ fun CreateRoomRootScreen(
     onNewRoomClicked: () -> Unit = {},
     onInvitePeopleClicked: () -> Unit = {},
 ) {
-    val isSearchActive = rememberSaveable { mutableStateOf(false) }
+    var searchText by rememberSaveable { mutableStateOf("") }
+    var isSearchActive by rememberSaveable { mutableStateOf(false) }
     Scaffold(
         modifier = modifier.fillMaxWidth(),
         topBar = {
-            if (!isSearchActive.value) {
+            if (!isSearchActive) {
                 CreateRoomRootViewTopBar(onClosePressed = onClosePressed)
             }
         }
-    ) {
+    ) { paddingValues ->
         Column(
-            modifier = Modifier.padding(it)
+            modifier = Modifier.padding(paddingValues)
         ) {
             CreateRoomSearchBar(
                 modifier = Modifier.fillMaxWidth(),
+                text = searchText,
                 placeHolderTitle = stringResource(StringR.string.search_for_someone),
                 active = isSearchActive,
+                onActiveChanged = { isSearchActive = it },
+                onTextChanged = { searchText = it },
             )
 
-            if (!isSearchActive.value) {
+            if (!isSearchActive) {
                 TextIconButton(
                     modifier = Modifier.padding(start = 8.dp, top = 16.dp, end = 8.dp),
                     imageVector = ImageVector.vectorResource(DrawableR.drawable.ic_group),
@@ -124,43 +127,40 @@ fun CreateRoomRootViewTopBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateRoomSearchBar(
+    text: String,
     placeHolderTitle: String,
-    active: MutableState<Boolean>,
+    active: Boolean,
     modifier: Modifier = Modifier,
+    onActiveChanged: (Boolean) -> Unit = {},
+    onTextChanged: (String) -> Unit = {},
 ) {
-    var text by rememberSaveable { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
 
-    fun closeSearchBar() {
+    if (!active) {
+        onTextChanged("")
         focusManager.clearFocus()
-        active.value = false
     }
 
     DockedSearchBar(
         query = text,
-        onQueryChange = { text = it },
-        onSearch = { closeSearchBar() },
-        active = active.value,
-        onActiveChange = {
-            active.value = it
-            if (!active.value) focusManager.clearFocus()
-        },
+        onQueryChange = onTextChanged,
+        onSearch = { focusManager.clearFocus() },
+        active = active,
+        onActiveChange = onActiveChanged,
         modifier = modifier
-            .padding(horizontal = if (!active.value) 16.dp else 0.dp),
+            .padding(horizontal = if (!active) 16.dp else 0.dp),
         placeholder = {
             Text(
                 text = placeHolderTitle,
                 modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
             )
         },
-        leadingIcon = if (active.value) {
-            {
-                BackButton(onClick = { closeSearchBar() })
-            }
+        leadingIcon = if (active) {
+            { BackButton(onClick = { onActiveChanged(false) }) }
         } else null,
         trailingIcon = {
-            if (active.value) {
-                IconButton(onClick = { text = "" }) {
+            if (active) {
+                IconButton(onClick = { onTextChanged("") }) {
                     Icon(DrawableR.drawable.ic_close, stringResource(StringR.string.a11y_clear))
                 }
             } else {
@@ -171,8 +171,8 @@ fun CreateRoomSearchBar(
                 )
             }
         },
-        shape = if (!active.value) SearchBarDefaults.dockedShape else SearchBarDefaults.fullScreenShape,
-        colors = if (!active.value) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
+        shape = if (!active) SearchBarDefaults.dockedShape else SearchBarDefaults.fullScreenShape,
+        colors = if (!active) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
         content = {},
     )
 }
