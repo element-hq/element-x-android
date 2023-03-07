@@ -324,7 +324,7 @@ internal fun LoginForm(
 @Composable
 internal fun LoginErrorDialog(error: Throwable, onDismiss: () -> Unit) {
     ErrorDialog(
-        content = loginError(error),
+        content = stringResource(loginError(error)),
         onDismiss = onDismiss
     )
 }

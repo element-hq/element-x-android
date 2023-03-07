@@ -1,0 +1,98 @@
+/*
+ * Copyright (c) 2023 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package io.element.android.features.login.error
+
+import com.google.common.truth.Truth.assertThat
+import org.junit.Test
+import io.element.android.libraries.ui.strings.R
+import org.matrix.rustcomponents.sdk.AuthenticationException
+
+class ErrorFormatterTests {
+
+    // region loginError
+    @Test
+    fun `loginError - invalid unknown error returns unknown error message`() {
+        val error = Throwable("Some unknown error")
+        assertThat(loginError(error)).isEqualTo(R.string.unknown_error)
+    }
+
+    @Test
+    fun `loginError - invalid auth error returns unknown error message`() {
+        val error = AuthenticationException.SlidingSyncNotAvailable("Some message. Also contains M_FORBIDDEN, but won't be parsed")
+        assertThat(loginError(error)).isEqualTo(R.string.unknown_error)
+    }
+
+    @Test
+    fun `loginError - unknown error returns unknown error message`() {
+        val error = AuthenticationException.Generic("M_UNKNOWN")
+        assertThat(loginError(error)).isEqualTo(R.string.unknown_error)
+    }
+
+    @Test
+    fun `loginError - forbidden error returns incorrect credentials message`() {
+        val error = AuthenticationException.Generic("M_FORBIDDEN")
+        assertThat(loginError(error)).isEqualTo(R.string.auth_invalid_login_param)
+    }
+
+    @Test
+    fun `loginError - user_deactivated error returns deactivated account message`() {
+        val error = AuthenticationException.Generic("M_USER_DEACTIVATED")
+        assertThat(loginError(error)).isEqualTo(R.string.auth_invalid_login_deactivated_account)
+    }
+
+    // endregion loginError
+
+    // region changeServerError
+
+    @Test
+    fun `changeServerError - invalid unknown error returns unknown error message`() {
+        val error = Throwable("Some unknown error")
+        assertThat(changeServerError(error)).isEqualTo(R.string.unknown_error)
+    }
+
+    @Test
+    fun `changeServerError - invalid auth error returns unknown error message`() {
+        val error = AuthenticationException.SlidingSyncNotAvailable("Some message. Also contains M_FORBIDDEN, but won't be parsed")
+        assertThat(changeServerError(error)).isEqualTo(R.string.unknown_error)
+    }
+
+    @Test
+    fun `changeServerError - unknown error returns unknown error message`() {
+        val error = AuthenticationException.Generic("M_UNKNOWN")
+        assertThat(changeServerError(error)).isEqualTo(R.string.unknown_error)
+    }
+
+    @Test
+    fun `changeServerError - forbidden error returns unknown error message`() {
+        val error = AuthenticationException.Generic("M_FORBIDDEN")
+        assertThat(changeServerError(error)).isEqualTo(R.string.unknown_error)
+    }
+
+    @Test
+    fun `changeServerError - user_deactivated error returns unknown error message`() {
+        val error = AuthenticationException.Generic("M_USER_DEACTIVATED")
+        assertThat(changeServerError(error)).isEqualTo(R.string.unknown_error)
+    }
+
+    @Test
+    fun `changeServerError - invalid server name error returns invalid server name error message`() {
+        val error = AuthenticationException.InvalidServerName("Server is not valid")
+        assertThat(changeServerError(error)).isEqualTo(R.string.login_error_homeserver_not_found)
+    }
+
+    // endregion changeServerError
+}

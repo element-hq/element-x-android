@@ -240,7 +240,7 @@ fun ChangeServerView(
 @Composable
 internal fun ChangeServerErrorDialog(error: Throwable, onDismiss: () -> Unit) {
     ErrorDialog(
-        content = changeServerError(error),
+        content = stringResource(changeServerError(error)),
         onDismiss = onDismiss
     )
 }

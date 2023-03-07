@@ -16,32 +16,28 @@
 
 package io.element.android.features.login.error
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import io.element.android.libraries.matrix.api.auth.AuthErrorCode
 import io.element.android.libraries.matrix.api.auth.errorCode
 import org.matrix.rustcomponents.sdk.AuthenticationException
 import io.element.android.libraries.ui.strings.R.string as StringR
 
-@Composable
 fun loginError(
     throwable: Throwable
-): String {
-    val authException = throwable as? AuthenticationException ?: return stringResource(StringR.unknown_error)
+): Int {
+    val authException = throwable as? AuthenticationException ?: return StringR.unknown_error
     return when (authException.errorCode) {
-        AuthErrorCode.FORBIDDEN -> stringResource(StringR.auth_invalid_login_param)
-        AuthErrorCode.USER_DEACTIVATED -> stringResource(StringR.auth_invalid_login_deactivated_account)
-        AuthErrorCode.UNKNOWN -> stringResource(StringR.unknown_error)
+        AuthErrorCode.FORBIDDEN -> StringR.auth_invalid_login_param
+        AuthErrorCode.USER_DEACTIVATED -> StringR.auth_invalid_login_deactivated_account
+        AuthErrorCode.UNKNOWN -> StringR.unknown_error
     }
 }
 
-@Composable
 fun changeServerError(
     throwable: Throwable
-): String {
-    val authException = throwable as? AuthenticationException ?: return stringResource(StringR.unknown_error)
+): Int {
+    val authException = throwable as? AuthenticationException ?: return StringR.unknown_error
     return when (authException) {
-        is AuthenticationException.InvalidServerName -> stringResource(StringR.login_error_homeserver_not_found)
-        else -> stringResource(StringR.unknown_error)
+        is AuthenticationException.InvalidServerName -> StringR.login_error_homeserver_not_found
+        else -> StringR.unknown_error
     }
 }
