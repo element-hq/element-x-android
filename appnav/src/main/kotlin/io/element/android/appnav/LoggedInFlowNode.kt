@@ -42,8 +42,7 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.architecture.nodeInputs
-import io.element.android.libraries.architecture.nodeInputsProvider
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -80,7 +79,7 @@ class LoggedInFlowNode @AssistedInject constructor(
         val matrixClient: MatrixClient
     ) : NodeInputs
 
-    private val inputs: Inputs by nodeInputs()
+    private val inputs: Inputs = inputs()
 
     override fun onBuilt() {
         super.onBuilt()
@@ -122,7 +121,10 @@ class LoggedInFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.Settings)
                     }
                 }
-                roomListEntryPoint.node(this, buildContext, plugins = listOf(callback))
+                roomListEntryPoint
+                    .nodeBuilder(this, buildContext)
+                    .callback(callback)
+                    .build()
             }
             is NavTarget.Room -> {
                 val room = inputs.matrixClient.getRoom(roomId = navTarget.roomId)
@@ -135,8 +137,8 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
                 } else {
                     val nodeLifecycleCallbacks = plugins<NodeLifecycleCallback>()
-                    val inputsProvider = nodeInputsProvider(RoomFlowNode.Inputs(room))
-                    createNode<RoomFlowNode>(buildContext, plugins = listOf(inputsProvider) + nodeLifecycleCallbacks)
+                    val inputs = RoomFlowNode.Inputs(room)
+                    createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs) + nodeLifecycleCallbacks)
                 }
             }
             NavTarget.Settings -> {
@@ -145,7 +147,9 @@ class LoggedInFlowNode @AssistedInject constructor(
                         plugins<Callback>().forEach { it.onOpenBugReport() }
                     }
                 }
-                preferencesEntryPoint.node(this, buildContext, plugins = listOf(callback))
+                preferencesEntryPoint.nodeBuilder(this, buildContext)
+                    .callback(callback)
+                    .build()
             }
         }
     }

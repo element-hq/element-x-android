@@ -78,10 +78,13 @@ class NotLoggedInFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.LoginFlow)
                     }
                 }
-                onBoardingEntryPoint.node(this, buildContext, plugins = listOf(callback))
+                onBoardingEntryPoint
+                    .nodeBuilder(this, buildContext)
+                    .callback(callback)
+                    .build()
             }
             NavTarget.LoginFlow -> {
-                loginEntryPoint.node(this, buildContext)
+                loginEntryPoint.createNode(this, buildContext)
             }
         }
     }

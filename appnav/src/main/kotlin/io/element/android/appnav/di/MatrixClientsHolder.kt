@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav
+package io.element.android.appnav.di
 
 import android.os.Bundle
 import io.element.android.libraries.di.AppScope

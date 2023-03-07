@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist.impl
+package io.element.android.features.roomlist.impl.model
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.components.avatar.AvatarData

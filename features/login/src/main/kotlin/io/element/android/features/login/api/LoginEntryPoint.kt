@@ -16,6 +16,6 @@
 
 package io.element.android.features.login.api
 
-import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.architecture.SimpleFeatureEntryPoint
 
-interface LoginEntryPoint : FeatureEntryPoint
+interface LoginEntryPoint : SimpleFeatureEntryPoint

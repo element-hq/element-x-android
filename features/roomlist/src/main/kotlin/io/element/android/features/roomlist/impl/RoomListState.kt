@@ -17,6 +17,7 @@
 package io.element.android.features.roomlist.impl
 
 import androidx.compose.runtime.Immutable
+import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 

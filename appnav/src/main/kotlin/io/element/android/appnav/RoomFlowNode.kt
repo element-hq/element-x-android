@@ -32,7 +32,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
-import io.element.android.libraries.architecture.nodeInputs
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import kotlinx.parcelize.Parcelize
@@ -61,7 +61,7 @@ class RoomFlowNode @AssistedInject constructor(
         val room: MatrixRoom,
     ) : NodeInputs
 
-    private val inputs: Inputs by nodeInputs()
+    private val inputs: Inputs = inputs()
 
     init {
         lifecycle.subscribe(
@@ -79,7 +79,7 @@ class RoomFlowNode @AssistedInject constructor(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Messages -> {
-                messagesEntryPoint.node(this, buildContext)
+                messagesEntryPoint.createNode(this, buildContext)
             }
         }
     }

@@ -26,7 +26,19 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultBugReportEntryPoint @Inject constructor() : BugReportEntryPoint {
-    override fun node(parentNode: Node, buildContext: BuildContext, plugins: List<Plugin>): Node {
-        return parentNode.createNode<BugReportNode>(buildContext, plugins)
+    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): BugReportEntryPoint.NodeBuilder {
+
+        val plugins = ArrayList<Plugin>()
+
+        return object : BugReportEntryPoint.NodeBuilder {
+            override fun callback(callback: BugReportEntryPoint.Callback): BugReportEntryPoint.NodeBuilder {
+                plugins += callback
+                return this
+            }
+
+            override fun build(): Node {
+                return parentNode.createNode<BugReportNode>(buildContext)
+            }
+        }
     }
 }

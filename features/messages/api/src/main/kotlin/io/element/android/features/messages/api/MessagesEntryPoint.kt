@@ -16,6 +16,6 @@
 
 package io.element.android.features.messages.api
 
-import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.architecture.SimpleFeatureEntryPoint
 
-interface MessagesEntryPoint : FeatureEntryPoint
+interface MessagesEntryPoint : SimpleFeatureEntryPoint
