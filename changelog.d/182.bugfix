@@ -1,0 +1,1 @@
+Fix the case when a valid homeserver url can't be extracted from the MXID
