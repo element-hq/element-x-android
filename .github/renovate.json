@@ -4,5 +4,6 @@
     "config:base"
   ],
   "labels": ["dependencies"],
-  "reviewers": ["team:element-x-android-reviewers"]
+  "reviewers": ["team:element-x-android-reviewers"],
+  "ignoreDeps": ["string:app_name"]
 }
