@@ -3,25 +3,27 @@
 <!--- TOC -->
 
 * [Introduction](#introduction)
-    * [Quick introduction to Matrix](#quick-introduction-to-matrix)
-        * [Matrix data](#matrix-data)
-            * [Room](#room)
-            * [Event](#event)
-        * [Sync](#sync)
-    * [Rust SDK](#rust-sdk)
-    * [The Android project](#the-android-project)
-    * [Application](#application)
-        * [Jetpack Compose](#jetpack-compose)
-        * [Global architecture](#global-architecture)
-        * [Template and naming](#template-and-naming)
-    * [Push](#push)
-    * [Dependencies management](#dependencies-management)
-    * [Test](#test)
-    * [Code coverage](#code-coverage)
-    * [Other points](#other-points)
-        * [Logging](#logging)
-        * [Rageshake](#rageshake)
-    * [Tips](#tips)
+  * [Quick introduction to Matrix](#quick-introduction-to-matrix)
+    * [Matrix data](#matrix-data)
+      * [Room](#room)
+      * [Event](#event)
+    * [Sync](#sync)
+  * [Rust SDK](#rust-sdk)
+    * [Matrix Rust Component Kotlin](#matrix-rust-component-kotlin)
+    * [Build the SDK locally](#build-the-sdk-locally)
+  * [The Android project](#the-android-project)
+  * [Application](#application)
+    * [Jetpack Compose](#jetpack-compose)
+    * [Global architecture](#global-architecture)
+    * [Template and naming](#template-and-naming)
+  * [Push](#push)
+  * [Dependencies management](#dependencies-management)
+  * [Test](#test)
+  * [Code coverage](#code-coverage)
+  * [Other points](#other-points)
+    * [Logging](#logging)
+    * [Rageshake](#rageshake)
+  * [Tips](#tips)
 * [Happy coding!](#happy-coding)
 
 <!--- END -->
@@ -90,19 +92,29 @@ This is managed by the Rust SDK.
 
 ### Rust SDK
 
-The Rust SDK is hosted here : https://github.com/matrix-org/matrix-rust-sdk
-This repository contains an implementation of a Matrix client-server library in Rust.
-With some bindings we can embed this sdk inside other environments, like Swift or Kotlin, with the help
-of [Uniffi](https://github.com/mozilla/uniffi-rs)
+The Rust SDK is hosted here: https://github.com/matrix-org/matrix-rust-sdk.
+
+This repository contains an implementation of a Matrix client-server library written in Rust.
+
+With some bindings we can embed this sdk inside other environments, like Swift or Kotlin, with the help of [Uniffi](https://github.com/mozilla/uniffi-rs).
 From these kotlin bindings we can generate native libs (.so files) and kotlin classes/interfaces.
 
+#### Matrix Rust Component Kotlin
+
 To use these bindings in an android project, we need to wrap this up into an android library (as the form of an .aar file).  
-This is the goal of https://github.com/matrix-org/matrix-rust-components-kotlin
+This is the goal of https://github.com/matrix-org/matrix-rust-components-kotlin. 
 This repository is used for distributing kotlin releases of the Matrix Rust SDK.
 It'll provide the corresponding aar and also publish them on maven.
 
-Most of the time you want to use the releases made on maven with gradle `implementation("org.matrix.rustcomponents:sdk-android:latest-version")`
+Most of the time you want to use the releases made on maven with gradle:
+
+```groovy
+implementation("org.matrix.rustcomponents:sdk-android:latest-version")
+```
+
 You can also have access to the aars through the [release](https://github.com/matrix-org/matrix-rust-components-kotlin/releases) page.
+
+#### Build the SDK locally
 
 If you need to locally build the sdk-android you can use
 the [build](https://github.com/matrix-org/matrix-rust-components-kotlin/blob/main/scripts/build.sh) script.
@@ -110,30 +122,40 @@ the [build](https://github.com/matrix-org/matrix-rust-components-kotlin/blob/mai
 For this, you first need to ensure to setup :
 
 - rust environment (check https://rust-lang.github.io/rustup/ if needed)
-- cargo-ndk < 2.12.0 `cargo install cargo-ndk --version 2.11.0`
-- android targets `rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android`
-- checkout both matrix-rust-sdk and matrix-rust-components-kotlin repositories
+- cargo-ndk < 2.12.0
+```shell
+cargo install cargo-ndk --version 2.11.0
+```
+- android targets
+```shell
+rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
+```
+- checkout both [matrix-rust-sdk](https://github.com/matrix-org/matrix-rust-sdk) and [matrix-rust-components-kotlin](https://github.com/matrix-org/matrix-rust-components-kotlin) repositories
+```shell
+git clone git@github.com:matrix-org/matrix-rust-sdk.git
+git clone git@github.com:matrix-org/matrix-rust-components-kotlin.git
+```
 
 Then you can launch the build script with the following params:
 
--p Local path to the rust-sdk repository
--o Optional output path with the expected name of the aar file. By default the aar will be located in the corresponding build/outputs/aar directory.
--r Flag to build in release mode
--m Option to select the gradle module to build. Default is sdk.
--t Option to to select an android target to build against. Default will build for all targets.
+- `-p` Local path to the rust-sdk repository
+- `-o` Optional output path with the expected name of the aar file. By default the aar will be located in the corresponding build/outputs/aar directory.
+- `-r` Flag to build in release mode
+- `-m` Option to select the gradle module to build. Default is sdk.
+- `-t` Option to to select an android target to build against. Default will build for all targets.
 
 So for example to build the sdk against aarch64-linux-android target and copy the generated aar to ElementX project:
 
-`./scripts/build.sh -p matrix-rust-sdk-path -t aarch64-linux-android -o element-x-android-path/libraries/rustsdk/matrix-rust-sdk.aar`
+```shell
+./scripts/build.sh -p [YOUR MATRIX RUST SDK PATH] -t aarch64-linux-android -o [YOUR element-x-android PATH]/libraries/rustsdk/matrix-rust-sdk.aar
+```
 
 Finally let the `matrix/impl` module use this aar by switching those lines in the gradle file :
 
-```
+```groovy
 dependencies {
-    
-    api(projects.libraries.rustsdk)
-    // api(libs.matrix.sdk)
-    ...
+    api(projects.libraries.rustsdk) // <- comment this line
+    // api(libs.matrix.sdk) // <- uncomment this line
 }
 ```
 
