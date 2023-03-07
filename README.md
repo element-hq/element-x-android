@@ -36,6 +36,10 @@ ElementX leverages the [Matrix Rust SDK](https://github.com/matrix-org/matrix-ru
 
 We're doing this as a way to share code between platforms and while we've seen promising results it's still in the experimental stage and bound to change.
 
+## Status
+
+This project is in work in progress. The app does not cover yet all functionalities we expect.
+
 ## Contributing
 
 Please see our [contribution guide](CONTRIBUTING.md).
