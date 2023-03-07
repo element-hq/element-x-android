@@ -99,7 +99,7 @@ test_corektx = { module = "androidx.test:core-ktx", version.ref = "test_core" }
 test_junit = "junit:junit:4.13.2"
 test_runner = "androidx.test:runner:1.4.0"
 test_uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
-test_junitext = "androidx.test.ext:junit:1.1.3"
+test_junitext = "androidx.test.ext:junit:1.1.5"
 test_mockk = "io.mockk:mockk:1.13.4"
 test_barista = "com.adevinta.android:barista:4.2.0"
 test_hamcrest = "org.hamcrest:hamcrest:2.2"
