@@ -92,7 +92,7 @@ This is managed by the Rust SDK.
 
 The Rust SDK is hosted here : https://github.com/matrix-org/matrix-rust-sdk
 This repository contains an implementation of a Matrix client-server library in Rust.
-With some bindings we can embedded this sdk inside other environments, like like Swift or Kotlin, with the help
+With some bindings we can embed this sdk inside other environments, like Swift or Kotlin, with the help
 of [Uniffi](https://github.com/mozilla/uniffi-rs)
 From these kotlin bindings we can generate native libs (.so files) and kotlin classes/interfaces.
 
@@ -111,7 +111,7 @@ For this, you first need to ensure to setup :
 
 - rust environment (check https://rust-lang.github.io/rustup/ if needed)
 - cargo-ndk < 2.12.0 `cargo install cargo-ndk --version 2.11.0`
-- android targets `rustup target add \ aarch64-linux-android \ armv7-linux-androideabi \ x86_64-linux-android \ i686-linux-android`
+- android targets `rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android`
 - checkout both matrix-rust-sdk and matrix-rust-components-kotlin repositories
 
 Then you can launch the build script with the following params:
