@@ -7,7 +7,7 @@ android_gradle_plugin = "7.4.1"
 firebase_gradle_plugin = "3.2.0"
 kotlin = "1.8.10"
 ksp = "1.8.10-1.0.9"
-molecule = "0.7.0"
+molecule = "0.7.1"
 
 # AndroidX
 material = "1.8.0"
