@@ -88,7 +88,25 @@ const allowList = [
     "yostyle",
 ]
 
-const requiresSignOff = !allowList.includes(user)
+// We ignore signoff requirements for employees of Element
+// as copyright assignment is covered by our employee contracts.
+
+var memberOfElement
+
+try {
+   github.api.rest.orgs.checkPublicMembership({
+      org: "vector-im",
+      username: user
+   })
+   memberOfElement = true
+} catch (err) {
+   // Raises an error if 404 is returned = not member
+   memberOfElement = false
+}
+
+
+
+const requiresSignOff = !allowList.includes(user) || !memberOfElement
 
 if (requiresSignOff) {
     const hasPRBodySignOff = pr.body.includes(signOff)
