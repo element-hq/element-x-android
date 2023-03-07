@@ -48,9 +48,9 @@ fun ConfirmationDialog(
     onThirdButtonClicked: () -> Unit = {},
     onDismiss: () -> Unit = {},
     shape: Shape = AlertDialogDefaults.shape,
-    containerColor: Color = MaterialTheme.colorScheme.surfaceVariant,
-    iconContentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
-    titleContentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    containerColor: Color = MaterialTheme.colorScheme.surface,
+    iconContentColor: Color = MaterialTheme.colorScheme.onSurface,
+    titleContentColor: Color = MaterialTheme.colorScheme.onSurface,
     textContentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
 ) {

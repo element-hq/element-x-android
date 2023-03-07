@@ -16,10 +16,6 @@
 
 package io.element.android.libraries.designsystem.components.dialogs
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.MaterialTheme
@@ -31,10 +27,8 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -46,9 +40,9 @@ fun ErrorDialog(
     submitText: String = stringResource(id = StringR.string.ok),
     onDismiss: () -> Unit = {},
     shape: Shape = AlertDialogDefaults.shape,
-    containerColor: Color = MaterialTheme.colorScheme.surfaceVariant,
-    iconContentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
-    titleContentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    containerColor: Color = MaterialTheme.colorScheme.surface,
+    iconContentColor: Color = MaterialTheme.colorScheme.onSurface,
+    titleContentColor: Color = MaterialTheme.colorScheme.onSurface,
     textContentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
 ) {
