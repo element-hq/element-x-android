@@ -39,7 +39,7 @@ serialization_json = "1.4.1"
 # Warning, also hard-coded in composeDependencies()
 showkase = "1.0.0-beta17"
 jsoup = "1.15.4"
-appyx = "1.0.3"
+appyx = "1.0.5"
 dependencycheck = "7.4.4"
 stem = "2.2.3"
 sqldelight = "1.5.5"
