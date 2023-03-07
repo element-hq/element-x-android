@@ -47,6 +47,8 @@ class CreateRoomRootNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onClosePressed = this::navigateUp,
+            onNewRoomClicked = { /* TODO Handle new room action */ },
+            onInvitePeopleClicked = { /* TODO Handle invite people action */ },
         )
     }
 }
