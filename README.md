@@ -16,6 +16,7 @@ The application is a total rewrite of [Element-Android](https://github.com/vecto
 
 * [Screenshots](#screenshots)
 * [Rust SDK](#rust-sdk)
+* [Status](#status)
 * [Contributing](#contributing)
 * [Build instructions](#build-instructions)
 * [Support](#support)
