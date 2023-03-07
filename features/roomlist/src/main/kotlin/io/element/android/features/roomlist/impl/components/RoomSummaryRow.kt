@@ -53,8 +53,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.placeholder.material.placeholder
-import io.element.android.features.roomlist.impl.RoomListRoomSummary
-import io.element.android.features.roomlist.impl.RoomListRoomSummaryProvider
+import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvider
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight

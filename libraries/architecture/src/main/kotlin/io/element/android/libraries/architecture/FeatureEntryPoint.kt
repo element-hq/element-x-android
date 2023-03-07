@@ -18,8 +18,9 @@ package io.element.android.libraries.architecture
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.plugin.Plugin
 
-interface FeatureEntryPoint {
-    fun node(parentNode: Node, buildContext: BuildContext, plugins: List<Plugin> = emptyList()): Node
+interface FeatureEntryPoint
+
+interface SimpleFeatureEntryPoint : FeatureEntryPoint {
+    fun createNode(parentNode: Node, buildContext: BuildContext): Node
 }

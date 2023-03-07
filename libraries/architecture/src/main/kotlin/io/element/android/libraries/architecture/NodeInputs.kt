@@ -19,18 +19,9 @@ package io.element.android.libraries.architecture
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
-import kotlin.properties.ReadOnlyProperty
 
-interface NodeInputs
+interface NodeInputs : Plugin
 
-interface NodeInputsProvider<I : NodeInputs> : Plugin {
-    fun inputs(): I
-}
-
-inline fun <reified I : NodeInputs> nodeInputsProvider(inputs: I) = object : NodeInputsProvider<I> {
-    override fun inputs() = inputs
-}
-
-fun <I : NodeInputs> nodeInputs() = ReadOnlyProperty<Node, I> { thisRef, _ ->
-    thisRef.plugins<NodeInputsProvider<I>>().first().inputs()
+inline fun <reified I : NodeInputs> Node.inputs(): I {
+    return plugins<I>().firstOrNull() ?: throw RuntimeException("Make sure to actually pass NodeInputs plugin to your node")
 }

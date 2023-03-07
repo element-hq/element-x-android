@@ -39,13 +39,13 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.appnav.di.MatrixClientsHolder
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.root.RootView
 import io.element.android.features.rageshake.bugreport.BugReportEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.architecture.nodeInputsProvider
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
@@ -179,14 +179,14 @@ class RootFlowNode @AssistedInject constructor(
                     Timber.w("Couldn't find any session, go through SplashScreen")
                     backstack.newRoot(NavTarget.SplashScreen)
                 }
-                val inputsProvider = nodeInputsProvider(LoggedInFlowNode.Inputs(matrixClient))
+                val inputs = LoggedInFlowNode.Inputs(matrixClient)
                 val callback = object : LoggedInFlowNode.Callback {
                     override fun onOpenBugReport() {
                         backstack.push(NavTarget.BugReport)
                     }
                 }
                 val nodeLifecycleCallbacks = plugins<NodeLifecycleCallback>()
-                createNode<LoggedInFlowNode>(buildContext, plugins = listOf(inputsProvider, callback) + nodeLifecycleCallbacks)
+                createNode<LoggedInFlowNode>(buildContext, plugins = listOf(inputs, callback) + nodeLifecycleCallbacks)
             }
             NavTarget.NotLoggedInFlow -> createNode<NotLoggedInFlowNode>(buildContext)
             NavTarget.SplashScreen -> splashNode(buildContext)
@@ -196,7 +196,10 @@ class RootFlowNode @AssistedInject constructor(
                         backstack.pop()
                     }
                 }
-                bugReportEntryPoint.node(this, buildContext, plugins = listOf(callback))
+                bugReportEntryPoint
+                    .nodeBuilder(this, buildContext)
+                    .callback(callback)
+                    .build()
             }
         }
     }

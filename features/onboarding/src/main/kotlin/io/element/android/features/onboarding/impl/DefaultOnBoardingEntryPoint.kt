@@ -27,7 +27,19 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultOnBoardingEntryPoint @Inject constructor() : OnBoardingEntryPoint {
-    override fun node(parentNode: Node, buildContext: BuildContext, plugins: List<Plugin>): Node {
-        return parentNode.createNode<OnBoardingNode>(buildContext, plugins)
+    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): OnBoardingEntryPoint.NodeBuilder {
+        return object : OnBoardingEntryPoint.NodeBuilder {
+
+            val plugins = ArrayList<Plugin>()
+
+            override fun callback(callback: OnBoardingEntryPoint.Callback): OnBoardingEntryPoint.NodeBuilder {
+                plugins += callback
+                return this
+            }
+
+            override fun build(): Node {
+                return parentNode.createNode<OnBoardingNode>(buildContext, plugins)
+            }
+        }
     }
 }

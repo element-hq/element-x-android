@@ -27,7 +27,17 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultPreferencesEntryPoint @Inject constructor() : PreferencesEntryPoint {
-    override fun node(parentNode: Node, buildContext: BuildContext, plugins: List<Plugin>): Node {
-        return parentNode.createNode<PreferencesFlowNode>(buildContext, plugins)
+    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): PreferencesEntryPoint.NodeBuilder {
+        return object : PreferencesEntryPoint.NodeBuilder {
+            val plugins = ArrayList<Plugin>()
+            override fun callback(callback: PreferencesEntryPoint.Callback): PreferencesEntryPoint.NodeBuilder {
+                plugins += callback
+                return this
+            }
+
+            override fun build(): Node {
+                return parentNode.createNode<PreferencesFlowNode>(buildContext)
+            }
+        }
     }
 }
