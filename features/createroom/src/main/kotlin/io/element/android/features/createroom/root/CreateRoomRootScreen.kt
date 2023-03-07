@@ -16,13 +16,10 @@
 
 package io.element.android.features.createroom.root
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -33,9 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -44,16 +39,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.button.TextIconButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
 import io.element.android.libraries.designsystem.theme.components.DockedSearchBar
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.R as DrawableR
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -85,14 +80,14 @@ fun CreateRoomRootScreen(
             )
 
             if (!isSearchActive.value) {
-                CreateRoomButton(
+                TextIconButton(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     imageVector = ImageVector.vectorResource(DrawableR.drawable.ic_group),
                     text = stringResource(id = StringR.string.new_room),
                     onClick = onNewRoomClicked,
                 )
 
-                CreateRoomButton(
+                TextIconButton(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     imageVector = ImageVector.vectorResource(DrawableR.drawable.ic_share),
                     text = stringResource(id = StringR.string.invite_people_menu),
@@ -180,31 +175,6 @@ fun CreateRoomSearchBar(
         colors = if (!active.value) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
         content = {},
     )
-}
-
-@Composable
-fun CreateRoomButton(
-    imageVector: ImageVector,
-    text: String,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
-) {
-    TextButton(
-        modifier = modifier,
-        onClick = onClick
-    ) {
-        Image(
-            imageVector = imageVector,
-            contentDescription = "",
-            modifier = Modifier.size(24.dp),
-            contentScale = ContentScale.Inside,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
-        )
-        Text(
-            modifier = Modifier.padding(horizontal = 8.dp),
-            text = text
-        )
-    }
 }
 
 @Preview
