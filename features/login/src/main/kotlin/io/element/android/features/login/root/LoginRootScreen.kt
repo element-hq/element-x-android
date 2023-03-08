@@ -223,6 +223,14 @@ internal fun LoginForm(
 
     val focusManager = LocalFocusManager.current
     val eventSink = state.eventSink
+
+    fun submit() {
+        // Clear focus to prevent keyboard issues with textfields
+        focusManager.clearFocus(force = true)
+
+        eventSink(LoginRootEvents.Submit)
+    }
+
     Column(modifier) {
         Text(
             text = stringResource(StringR.string.login_form_title),
@@ -301,7 +309,7 @@ internal fun LoginForm(
                 imeAction = ImeAction.Done,
             ),
             keyboardActions = KeyboardActions(
-                onDone = { eventSink(LoginRootEvents.Submit) }
+                onDone = { submit() }
             ),
             singleLine = true,
             maxLines = 1,
@@ -310,7 +318,7 @@ internal fun LoginForm(
 
         // Submit
         Button(
-            onClick = { eventSink(LoginRootEvents.Submit) },
+            onClick = ::submit,
             enabled = interactionEnabled && state.submitEnabled,
             modifier = Modifier
                 .fillMaxWidth()

@@ -92,6 +92,14 @@ fun ChangeServerView(
         }
     }
     val focusManager = LocalFocusManager.current
+
+    fun submit() {
+        // Clear focus to prevent keyboard issues with textfields
+        focusManager.clearFocus(force = true)
+
+        eventSink(ChangeServerEvents.Submit)
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -175,7 +183,7 @@ fun ChangeServerView(
                         imeAction = ImeAction.Done,
                     ),
                     keyboardActions = KeyboardActions(
-                        onDone = { eventSink(ChangeServerEvents.Submit) }
+                        onDone = { submit() }
                     ),
                     singleLine = true,
                     maxLines = 1,
@@ -216,7 +224,7 @@ fun ChangeServerView(
                 )
                 Spacer(Modifier.height(32.dp))
                 Button(
-                    onClick = { eventSink(ChangeServerEvents.Submit) },
+                    onClick = ::submit,
                     enabled = interactionEnabled && state.submitEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
