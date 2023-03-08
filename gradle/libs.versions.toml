@@ -30,7 +30,7 @@ coroutines = "1.6.4"
 accompanist = "0.28.0"
 
 # Test
-test_core = "1.4.0"
+test_core = "1.5.0"
 
 #other
 coil = "2.2.2"
