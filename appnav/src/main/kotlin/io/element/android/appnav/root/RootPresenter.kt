@@ -19,8 +19,8 @@ package io.element.android.appnav.root
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import io.element.android.features.rageshake.crash.ui.CrashDetectionPresenter
-import io.element.android.features.rageshake.detection.RageshakeDetectionPresenter
+import io.element.android.features.rageshake.api.crash.CrashDetectionPresenter
+import io.element.android.features.rageshake.api.detection.RageshakeDetectionPresenter
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 

@@ -60,11 +60,11 @@ fun DependencyHandlerScope.allLibraries() {
 }
 
 fun DependencyHandlerScope.allFeatures() {
-    implementation(project(":features:onboarding"))
-    implementation(project(":features:login"))
-    implementation(project(":features:logout"))
-    implementation(project(":features:roomlist"))
+    implementation(project(":features:onboarding:impl"))
+    implementation(project(":features:login:impl"))
+    implementation(project(":features:logout:impl"))
+    implementation(project(":features:roomlist:impl"))
     implementation(project(":features:messages:impl"))
-    implementation(project(":features:rageshake"))
-    implementation(project(":features:preferences"))
+    implementation(project(":features:rageshake:impl"))
+    implementation(project(":features:preferences:impl"))
 }

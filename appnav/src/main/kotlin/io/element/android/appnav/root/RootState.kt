@@ -16,12 +16,11 @@
 
 package io.element.android.appnav.root
 
-import androidx.compose.runtime.Stable
-import io.element.android.appnav.root.RootEvents
-import io.element.android.features.rageshake.crash.ui.CrashDetectionState
-import io.element.android.features.rageshake.detection.RageshakeDetectionState
+import androidx.compose.runtime.Immutable
+import io.element.android.features.rageshake.api.crash.CrashDetectionState
+import io.element.android.features.rageshake.api.detection.RageshakeDetectionState
 
-@Stable
+@Immutable
 data class RootState(
     val isShowkaseButtonVisible: Boolean,
     val rageshakeDetectionState: RageshakeDetectionState,

@@ -18,7 +18,7 @@ package io.element.android.x.initializer
 
 import android.content.Context
 import androidx.startup.Initializer
-import io.element.android.features.rageshake.logs.VectorFileLogger
+import io.element.android.features.rageshake.impl.logs.VectorFileLogger
 import io.element.android.x.BuildConfig
 import timber.log.Timber
 
