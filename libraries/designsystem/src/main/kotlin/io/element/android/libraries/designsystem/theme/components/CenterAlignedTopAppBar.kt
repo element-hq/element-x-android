@@ -38,8 +38,8 @@ fun CenterAlignedTopAppBar(
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
-    colors: TopAppBarColors = TopAppBarDefaults.smallTopAppBarColors(),
-    scrollBehavior: TopAppBarScrollBehavior? = null
+    colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
+    scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
     androidx.compose.material3.CenterAlignedTopAppBar(
         title = title,
@@ -64,5 +64,5 @@ internal fun CenterAlignedTopAppBarDarkPreview() =
 
 @Composable
 private fun ContentToPreview() {
-    TopAppBar(title = { Text(text = "Title") })
+    CenterAlignedTopAppBar(title = { Text(text = "Title") })
 }
