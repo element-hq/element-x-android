@@ -16,7 +16,7 @@
 
 package io.element.android.features.createroom.root
 
-// TODO Add your events or remove the file completely if no events
 sealed interface CreateRoomRootEvents {
-    object MyEvent : CreateRoomRootEvents
+    object CreateRoom : CreateRoomRootEvents
+    object InvitePeople : CreateRoomRootEvents
 }

@@ -46,7 +46,8 @@ class CreateRoomRootPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(CreateRoomRootEvents.MyEvent)
+            initialState.eventSink(CreateRoomRootEvents.CreateRoom) // Not implemented yet
+            initialState.eventSink(CreateRoomRootEvents.InvitePeople) // Not implemented yet
         }
     }
 }

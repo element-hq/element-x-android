@@ -63,8 +63,6 @@ fun CreateRoomRootScreen(
     state: CreateRoomRootState,
     modifier: Modifier = Modifier,
     onClosePressed: () -> Unit = {},
-    onNewRoomClicked: () -> Unit = {},
-    onInvitePeopleClicked: () -> Unit = {},
 ) {
     var searchText by rememberSaveable { mutableStateOf("") }
     var isSearchActive by rememberSaveable { mutableStateOf(false) }
@@ -91,8 +89,8 @@ fun CreateRoomRootScreen(
 
             if (!isSearchActive) {
                 CreateRoomActionButtonsList(
-                    onNewRoomClicked = onNewRoomClicked,
-                    onInvitePeopleClicked = onInvitePeopleClicked,
+                    onNewRoomClicked = { state.eventSink(CreateRoomRootEvents.CreateRoom) },
+                    onInvitePeopleClicked = { state.eventSink(CreateRoomRootEvents.InvitePeople) },
                 )
             }
         }

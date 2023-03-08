@@ -27,7 +27,8 @@ class CreateRoomRootPresenter @Inject constructor() : Presenter<CreateRoomRootSt
 
         fun handleEvents(event: CreateRoomRootEvents) {
             when (event) {
-                CreateRoomRootEvents.MyEvent -> Unit
+                CreateRoomRootEvents.CreateRoom -> Unit // Todo Handle create room action
+                CreateRoomRootEvents.InvitePeople -> Unit // Todo Handle invite people action
             }
         }
 
