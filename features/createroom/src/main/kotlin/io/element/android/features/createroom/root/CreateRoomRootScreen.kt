@@ -16,8 +16,13 @@
 
 package io.element.android.features.createroom.root
 
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -29,20 +34,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.components.button.TextIconButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
@@ -74,7 +77,8 @@ fun CreateRoomRootScreen(
         }
     ) { paddingValues ->
         Column(
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier.padding(paddingValues),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             CreateRoomSearchBar(
                 modifier = Modifier.fillMaxWidth(),
@@ -86,18 +90,9 @@ fun CreateRoomRootScreen(
             )
 
             if (!isSearchActive) {
-                TextIconButton(
-                    modifier = Modifier.padding(start = 8.dp, top = 16.dp, end = 8.dp),
-                    imageVector = ImageVector.vectorResource(DrawableR.drawable.ic_groups),
-                    text = stringResource(id = StringR.string.new_room),
-                    onClick = onNewRoomClicked,
-                )
-
-                TextIconButton(
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    imageVector = ImageVector.vectorResource(DrawableR.drawable.ic_share),
-                    text = stringResource(id = StringR.string.invite_people_menu),
-                    onClick = onInvitePeopleClicked,
+                CreateRoomActionButtonsList(
+                    onNewRoomClicked = onNewRoomClicked,
+                    onInvitePeopleClicked = onInvitePeopleClicked,
                 )
             }
         }
@@ -178,6 +173,51 @@ fun CreateRoomSearchBar(
         colors = if (!active) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
         content = {},
     )
+}
+
+@Composable
+fun CreateRoomActionButtonsList(
+    modifier: Modifier = Modifier,
+    onNewRoomClicked: () -> Unit = {},
+    onInvitePeopleClicked: () -> Unit = {},
+) {
+    Column(modifier = modifier) {
+        CreateRoomActionButton(
+            iconRes = DrawableR.drawable.ic_groups,
+            text = stringResource(id = StringR.string.new_room),
+            onClick = onNewRoomClicked,
+        )
+        CreateRoomActionButton(
+            iconRes = DrawableR.drawable.ic_share,
+            text = stringResource(id = StringR.string.invite_people_menu),
+            onClick = onInvitePeopleClicked,
+        )
+    }
+}
+
+@Composable
+fun CreateRoomActionButton(
+    @DrawableRes iconRes: Int,
+    text: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .heightIn(min = 56.dp)
+            .clickable { onClick() }
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            modifier = Modifier.alpha(0.5f), // FIXME align on Design system theme (removing alpha should be fine)
+            resourceId = iconRes,
+            contentDescription = null,
+        )
+        Text(text = text)
+    }
 }
 
 @Preview
