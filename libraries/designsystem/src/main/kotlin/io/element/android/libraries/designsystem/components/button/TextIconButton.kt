@@ -75,7 +75,7 @@ private fun ContentToPreview() {
     Column {
         TextIconButton(
             modifier = Modifier.padding(horizontal = 8.dp),
-            imageVector = ImageVector.vectorResource(R.drawable.ic_group),
+            imageVector = ImageVector.vectorResource(R.drawable.ic_groups),
             text = "Click me!",
             onClick = {},
         )

@@ -16,25 +16,25 @@
 
 package io.element.android.libraries.designsystem.components.button
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
-import io.element.android.libraries.designsystem.R as DrawableR
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun BackButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    @DrawableRes icon: Int = DrawableR.drawable.ic_arrow_back,
+    imageVector: ImageVector = Icons.Default.ArrowBack,
     contentDescription: String = stringResource(StringR.string.a11y_back),
     enabled: Boolean = true
 ) {
@@ -43,7 +43,7 @@ fun BackButton(
         onClick = onClick,
         enabled = enabled,
     ) {
-        Icon(resourceId = icon, contentDescription = contentDescription)
+        Icon(imageVector = imageVector, contentDescription = contentDescription)
     }
 }
 
