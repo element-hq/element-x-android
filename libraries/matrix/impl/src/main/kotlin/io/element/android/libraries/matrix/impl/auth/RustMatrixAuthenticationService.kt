@@ -38,6 +38,7 @@ import org.matrix.rustcomponents.sdk.AuthenticationService
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.Session
+import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -63,22 +64,21 @@ class RustMatrixAuthenticationService @Inject constructor(
     }
 
     override suspend fun restoreSession(sessionId: SessionId) = withContext(coroutineDispatchers.io) {
-        sessionStore.getSession(sessionId.value)
-            ?.let { sessionData ->
-                try {
-                    ClientBuilder()
-                        .basePath(baseDirectory.absolutePath)
-                        .username(sessionData.userId)
-                        .build().apply {
-                            restoreSession(sessionData.toSession())
-                        }
-                } catch (throwable: Throwable) {
-                    logError(throwable)
-                    null
-                }
-            }?.let {
-                createMatrixClient(it)
+        val sessionData = sessionStore.getSession(sessionId.value)
+        if (sessionData != null) {
+            try {
+                val client = ClientBuilder()
+                    .basePath(baseDirectory.absolutePath)
+                    .homeserverUrl(sessionData.homeserverUrl)
+                    .username(sessionData.userId)
+                    .use { it.build() }
+                client.restoreSession(sessionData.toSession())
+                createMatrixClient(client)
+            } catch (throwable: Throwable) {
+                logError(throwable)
+                null
             }
+        } else null
     }
 
     override fun getHomeserverDetails(): StateFlow<MatrixHomeServerDetails?> = currentHomeserver
@@ -101,9 +101,9 @@ class RustMatrixAuthenticationService @Inject constructor(
                 Timber.e(failure, "Fail login")
                 throw failure
             }
-            val session = client.session()
-            sessionStore.storeData(session.toSessionData())
-            SessionId(session.userId)
+            val sessionData = client.use { it.session().toSessionData() }
+            sessionStore.storeData(sessionData)
+            SessionId(sessionData.userId)
         }
 
     private fun createMatrixClient(client: Client): MatrixClient {
