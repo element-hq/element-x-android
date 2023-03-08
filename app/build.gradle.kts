@@ -26,8 +26,8 @@ plugins {
     id("io.element.android-compose-application")
     alias(libs.plugins.stem)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.kapt)
     id("com.google.firebase.appdistribution") version "3.0.2"
     id("org.jetbrains.kotlinx.knit") version "0.4.0"

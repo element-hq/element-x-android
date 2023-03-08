@@ -17,8 +17,8 @@
 package io.element.android.appnav.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.rageshake.crash.ui.aCrashDetectionState
-import io.element.android.features.rageshake.detection.aRageshakeDetectionState
+import io.element.android.features.rageshake.api.crash.aCrashDetectionState
+import io.element.android.features.rageshake.api.detection.aRageshakeDetectionState
 
 open class RootStateProvider : PreviewParameterProvider<RootState> {
     override val values: Sequence<RootState>

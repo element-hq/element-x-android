@@ -24,9 +24,13 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appnav.root.RootEvents
 import io.element.android.appnav.root.RootPresenter
-import io.element.android.features.rageshake.crash.ui.CrashDetectionPresenter
-import io.element.android.features.rageshake.detection.RageshakeDetectionPresenter
-import io.element.android.features.rageshake.preferences.RageshakePreferencesPresenter
+import io.element.android.features.rageshake.impl.crash.DefaultCrashDetectionPresenter
+import io.element.android.features.rageshake.impl.detection.DefaultRageshakeDetectionPresenter
+import io.element.android.features.rageshake.impl.preferences.DefaultRageshakePreferencesPresenter
+import io.element.android.features.rageshake.test.crash.FakeCrashDataStore
+import io.element.android.features.rageshake.test.rageshake.FakeRageShake
+import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
+import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -63,13 +67,13 @@ class RootPresenterTest {
         val rageshakeDataStore = FakeRageshakeDataStore()
         val rageshake = FakeRageShake()
         val screenshotHolder = FakeScreenshotHolder()
-        val crashDetectionPresenter = CrashDetectionPresenter(
+        val crashDetectionPresenter = DefaultCrashDetectionPresenter(
             crashDataStore = crashDataStore
         )
-        val rageshakeDetectionPresenter = RageshakeDetectionPresenter(
+        val rageshakeDetectionPresenter = DefaultRageshakeDetectionPresenter(
             screenshotHolder = screenshotHolder,
             rageShake = rageshake,
-            preferencesPresenter = RageshakePreferencesPresenter(
+            preferencesPresenter = DefaultRageshakePreferencesPresenter(
                 rageshake = rageshake,
                 rageshakeDataStore = rageshakeDataStore,
             )

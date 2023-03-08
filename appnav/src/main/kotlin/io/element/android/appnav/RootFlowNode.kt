@@ -17,7 +17,6 @@
 package io.element.android.appnav
 
 import android.app.Activity
-import android.content.Context
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,13 +41,12 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.di.MatrixClientsHolder
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.root.RootView
-import io.element.android.features.rageshake.bugreport.BugReportEntryPoint
+import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -63,7 +61,6 @@ import timber.log.Timber
 class RootFlowNode @AssistedInject constructor(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    @ApplicationContext private val appContext: Context,
     private val authenticationService: MatrixAuthenticationService,
     private val matrixClientsHolder: MatrixClientsHolder,
     private val presenter: RootPresenter,

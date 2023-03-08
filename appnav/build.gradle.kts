@@ -37,12 +37,12 @@ dependencies {
     kapt(libs.dagger.compiler)
 
     implementation(projects.features.messages.api)
-    implementation(projects.features.roomlist)
-    implementation(projects.features.rageshake)
-    implementation(projects.features.login)
-    implementation(projects.features.preferences)
-    implementation(projects.features.logout)
-    implementation(projects.features.onboarding)
+    implementation(projects.features.roomlist.api)
+    implementation(projects.features.rageshake.api)
+    implementation(projects.features.login.api)
+    implementation(projects.features.preferences.api)
+    implementation(projects.features.logout.api)
+    implementation(projects.features.onboarding.api)
 
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
@@ -58,4 +58,6 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.features.rageshake.test)
+    testImplementation(projects.features.rageshake.impl)
 }
