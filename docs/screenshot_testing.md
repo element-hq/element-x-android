@@ -21,22 +21,31 @@
 - Install Git LFS through your package manager of choice (`brew install git-lfs` | `yay -S git-lfs`).
 - Install the Git LFS hooks into the project.
 
-```bash
+```shell
 # with element-android as the current working directory
 git lfs install --local
 ```
 
-- If installed correctly, `git push` and `git pull` will now include LFS content.
+If installed correctly, `git push` and `git pull` will now include LFS content.
 
 ## Recording
 
-- `./gradlew recordPaparazziDebug`
-- Paparazzi will generate images in `:tests:uitests/src/test/snapshots`, which will need to be committed to the repository using Git LFS.
+It's recommended to delete the content of the folder `/snapshots` before recording.
+
+```shell
+rm -rf ./tests/uitests/src/test/snapshots
+./gradlew recordPaparazziDebug
+```
+
+Paparazzi will generate images in `:tests:uitests/src/test/snapshots`, which will need to be committed to the repository using Git LFS.
 
 ## Verifying
 
-- `./gradlew verifyPaparazziDebug`
-- In the case of failure, Paparazzi will generate images in `:tests:uitests/out/failure`. The images will show the expected and actual screenshots along with a delta of the two images.
+```shell
+./gradlew verifyPaparazziDebug
+```
+
+In the case of failure, Paparazzi will generate images in `:tests:uitests/out/failure`. The images will show the expected and actual screenshots along with a delta of the two images.
 
 ## Contributing
 
