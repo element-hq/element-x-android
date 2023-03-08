@@ -19,6 +19,9 @@ package io.element.android.features.createroom.root
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.runtime.Composable
@@ -85,7 +88,7 @@ fun CreateRoomRootScreen(
             if (!isSearchActive) {
                 TextIconButton(
                     modifier = Modifier.padding(start = 8.dp, top = 16.dp, end = 8.dp),
-                    imageVector = ImageVector.vectorResource(DrawableR.drawable.ic_group),
+                    imageVector = ImageVector.vectorResource(DrawableR.drawable.ic_groups),
                     text = stringResource(id = StringR.string.new_room),
                     onClick = onNewRoomClicked,
                 )
@@ -118,7 +121,7 @@ fun CreateRoomRootViewTopBar(
         },
         actions = {
             IconButton(onClick = onClosePressed) {
-                Icon(resourceId = DrawableR.drawable.ic_close, contentDescription = stringResource(id = StringR.string.action_close))
+                Icon(imageVector = Icons.Default.Close, contentDescription = stringResource(id = StringR.string.action_close))
             }
         }
     )
@@ -161,11 +164,11 @@ fun CreateRoomSearchBar(
         trailingIcon = {
             if (active) {
                 IconButton(onClick = { onTextChanged("") }) {
-                    Icon(DrawableR.drawable.ic_close, stringResource(StringR.string.a11y_clear))
+                    Icon(Icons.Default.Close, stringResource(StringR.string.a11y_clear))
                 }
             } else {
                 Icon(
-                    resourceId = DrawableR.drawable.ic_search,
+                    imageVector = Icons.Default.Search,
                     contentDescription = stringResource(StringR.string.search),
                     modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
                 )
