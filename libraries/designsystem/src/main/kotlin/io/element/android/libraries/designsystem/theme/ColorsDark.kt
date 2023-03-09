@@ -24,6 +24,7 @@ import io.element.android.libraries.designsystem.Azure
 import io.element.android.libraries.designsystem.Black_800
 import io.element.android.libraries.designsystem.Black_950
 import io.element.android.libraries.designsystem.DarkGrey
+import io.element.android.libraries.designsystem.Gray_300
 import io.element.android.libraries.designsystem.Gray_400
 import io.element.android.libraries.designsystem.Gray_450
 import io.element.android.libraries.designsystem.SystemGrey5Dark
@@ -59,7 +60,7 @@ val materialColorSchemeDark = darkColorScheme(
     surface = Black_800,
     onSurface = Color.White,
     surfaceVariant = Black_950,
-    onSurfaceVariant = Color.White,
+    onSurfaceVariant = Gray_300,
     // TODO surfaceTint = primary,
     // TODO inverseSurface = ColorDarkTokens.InverseSurface,
     // TODO inverseOnSurface = ColorDarkTokens.InverseOnSurface,
