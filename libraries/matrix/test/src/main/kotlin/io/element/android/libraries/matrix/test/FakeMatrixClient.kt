@@ -22,17 +22,21 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.media.MediaResolver
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.test.media.FakeMediaResolver
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
+import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import kotlinx.coroutines.delay
 import org.matrix.rustcomponents.sdk.MediaSource
+import org.matrix.rustcomponents.sdk.SessionVerificationController
 
 class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
     private val userDisplayName: Result<String> = Result.success(A_USER_NAME),
     private val userAvatarURLString: Result<String> = Result.success(AN_AVATAR_URL),
-    val roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource()
+    val roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
+    private val sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
 ) : MatrixClient {
 
     private var logoutFailure: Throwable? = null
@@ -79,4 +83,6 @@ class FakeMatrixClient(
     }
 
     override fun close() = Unit
+
+    override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService
 }

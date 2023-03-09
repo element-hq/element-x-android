@@ -23,19 +23,19 @@ import org.junit.Test
 class StateMachineTests {
 
     sealed interface Events {
-        data class Start(val string: String): Events
+        data class Start(val string: String) : Events
 
-        object Cancel: Events
+        object Cancel : Events
     }
 
     sealed interface States {
-        object Initial: States
-        data class Final(val string: String): States
+        object Initial : States
+        data class Final(val string: String) : States
     }
 
     @Test
     fun `Test simple state machine`() {
-        val stateMachine = createStateMachine<Events, States> {
+        val stateMachine = createStateMachine {
             addInitialState(States.Initial) {
                 on<Events.Start> { first, _ ->
                     States.Final(first.string)
@@ -58,5 +58,4 @@ class StateMachineTests {
             assertThat(it.message).startsWith("No route found for state")
         }
     }
-
 }

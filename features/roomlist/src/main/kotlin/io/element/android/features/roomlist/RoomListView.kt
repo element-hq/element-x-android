@@ -110,13 +110,13 @@ fun RoomListContent(
     matrixUser: MatrixUser?,
     filter: String,
     displayVerifySessionPrompt: Boolean,
+    onVerifyClicked: () -> Unit,
+    onDismissVerificationPromptClicked: () -> Unit,
     modifier: Modifier = Modifier,
     onRoomClicked: (RoomId) -> Unit = {},
     onFilterChanged: (String) -> Unit = {},
     onOpenSettings: () -> Unit = {},
     onScrollOver: (IntRange) -> Unit = {},
-    onVerifyClicked: () -> Unit,
-    onDismissVerificationPromptClicked: () -> Unit,
     onCreateRoomClicked: () -> Unit = {},
 ) {
     fun onRoomClicked(room: RoomListRoomSummary) {
@@ -200,9 +200,9 @@ fun RoomListContent(
 
 @Composable
 internal fun RequestVerificationHeader(
-    modifier: Modifier = Modifier,
     onVerifyClicked: () -> Unit,
     onDismissClicked: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
         Surface(

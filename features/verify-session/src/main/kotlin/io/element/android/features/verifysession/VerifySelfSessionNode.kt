@@ -24,7 +24,6 @@ import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SessionScope
 
 // TODO Change to use the right Scope for your feature. For now it can be AppScope, SessionScope or RoomScope
@@ -42,7 +41,7 @@ class VerifySelfSessionNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        VerifySelfSessionScreen(
+        VerifySelfSessionView(
             state = state,
             modifier = modifier,
             goBack = { navigateUp() }

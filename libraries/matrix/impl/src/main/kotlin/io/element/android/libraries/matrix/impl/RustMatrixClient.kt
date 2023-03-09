@@ -28,6 +28,8 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.matrix.api.media.MediaResolver
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.matrix.impl.verification.MatrixSessionVerificationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
@@ -116,6 +118,8 @@ class RustMatrixClient constructor(
         )
     private var slidingSyncObserverToken: TaskHandle? = null
 
+    private val sessionVerificationService = MatrixSessionVerificationService(client.getSessionVerificationController())
+
     private val mediaResolver = RustMediaResolver(this)
     private val isSyncing = AtomicBoolean(false)
 
@@ -146,7 +150,7 @@ class RustMatrixClient constructor(
 
     override fun mediaResolver(): MediaResolver = mediaResolver
 
-    override fun sessionVerificationController(): SessionVerificationController = client.getSessionVerificationController()
+    override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService
 
     override fun startSync() {
         if (client.isSoftLogout()) return

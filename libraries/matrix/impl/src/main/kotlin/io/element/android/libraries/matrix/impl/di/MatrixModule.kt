@@ -44,6 +44,6 @@ object MatrixModule {
 object SessionMatrixModule {
     @Provides
     fun providesRustSessionVerificationService(matrixClient: MatrixClient): SessionVerificationService {
-        return MatrixSessionVerificationService(matrixClient.sessionVerificationController())
+        return matrixClient.sessionVerificationService()
     }
 }

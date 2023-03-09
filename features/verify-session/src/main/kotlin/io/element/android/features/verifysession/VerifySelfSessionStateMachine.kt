@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+@file:Suppress("WildcardImport")
 package io.element.android.features.verifysession
 
 import io.element.android.features.verifysession.SessionVerificationEvent.*
@@ -113,59 +114,59 @@ class VerifySelfSessionStateMachine(
     fun process(event: SessionVerificationEvent) = stateMachine.process(event)
 }
 sealed interface SessionVerificationEvent {
-    /** Request verification */
+    /** Request verification. */
     object RequestVerification : SessionVerificationEvent
-    /** The current verification request has been accepted */
+    /** The current verification request has been accepted. */
     object DidAcceptVerificationRequest : SessionVerificationEvent
-    /** Start a SaS verification flow */
+    /** Start a SaS verification flow. */
     object StartSasVerification : SessionVerificationEvent
-    /** Started a SaS verification flow */
+    /** Started a SaS verification flow. */
     object DidStartSasVerification : SessionVerificationEvent
-    /** Has received emojis */
+    /** Has received emojis. */
     data class DidReceiveChallenge(val emojis: List<VerificationEmoji>) : SessionVerificationEvent
-    /** Emojis match */
+    /** Emojis match. */
     object AcceptChallenge : SessionVerificationEvent
-    /** Emojis do not match */
+    /** Emojis do not match. */
     object DeclineChallenge : SessionVerificationEvent
-    /** Remote accepted challenge */
+    /** Remote accepted challenge. */
     object DidAcceptChallenge : SessionVerificationEvent
-    /** Request cancellation */
+    /** Request cancellation. */
     object Cancel : SessionVerificationEvent
-    /** Verification cancelled */
+    /** Verification cancelled. */
     object DidCancel : SessionVerificationEvent
-    /** Request failed */
+    /** Request failed. */
     object DidFail : SessionVerificationEvent
-    /** Restart the verification flow */
+    /** Restart the verification flow. */
     object Restart : SessionVerificationEvent
 }
 
 sealed interface SessionVerificationState {
-    /** The initial state, before verification started */
+    /** The initial state, before verification started. */
     object Initial : SessionVerificationState
 
-    /** Waiting for verification acceptance */
+    /** Waiting for verification acceptance. */
     object RequestingVerification : SessionVerificationState
 
-    /** Verification request accepted. Waiting for start */
+    /** Verification request accepted. Waiting for start. */
     object VerificationRequestAccepted : SessionVerificationState
 
-    /** Waiting for SaS verification start */
+    /** Waiting for SaS verification start. */
     object StartingSasVerification : SessionVerificationState
 
-    /** A SaS verification flow has been started */
+    /** A SaS verification flow has been started. */
     object SasVerificationStarted : SessionVerificationState
 
     sealed class Verifying(open val emojis: List<VerificationEmoji>) : SessionVerificationState {
-        /** Verification accepted and emojis received */
+        /** Verification accepted and emojis received. */
         data class ChallengeReceived(override val emojis: List<VerificationEmoji>) : Verifying(emojis)
 
-        /** Replying to a verification challenge */
+        /** Replying to a verification challenge. */
         data class Replying(override val emojis: List<VerificationEmoji>, val accept: Boolean) : Verifying(emojis)
     }
-    /** The verification is being canceled */
+    /** The verification is being canceled. */
     object Canceling : SessionVerificationState
-    /** The verification has been canceled, remotely or locally */
+    /** The verification has been canceled, remotely or locally. */
     object Canceled : SessionVerificationState
-    /** Verification successful */
+    /** Verification successful. */
     object Completed : SessionVerificationState
 }

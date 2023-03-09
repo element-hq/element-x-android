@@ -61,7 +61,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.R.string as StringR
 
 @Composable
-fun VerifySelfSessionScreen(
+fun VerifySelfSessionView(
     state: VerifySelfSessionState,
     modifier: Modifier = Modifier,
     goBack: () -> Unit,
@@ -164,13 +164,15 @@ internal fun HeaderContent(verificationState: VerificationState, modifier: Modif
 
 @Composable
 internal fun Content(verificationState: VerificationState, modifier: Modifier = Modifier) {
-    Spacer(Modifier.height(56.dp))
-    when (verificationState) {
-        VerificationState.Initial, VerificationState.Canceled, VerificationState.Completed -> Unit
-        VerificationState.AwaitingOtherDeviceResponse -> ContentWaiting(modifier)
-        is VerificationState.Verifying -> ContentVerifying(verificationState, modifier)
+    Column {
+        Spacer(Modifier.height(56.dp))
+        when (verificationState) {
+            VerificationState.Initial, VerificationState.Canceled, VerificationState.Completed -> Unit
+            VerificationState.AwaitingOtherDeviceResponse -> ContentWaiting(modifier)
+            is VerificationState.Verifying -> ContentVerifying(verificationState, modifier)
+        }
+        Spacer(Modifier.height(56.dp))
     }
-    Spacer(Modifier.height(56.dp))
 }
 
 @Composable
@@ -276,7 +278,7 @@ fun TemplateViewDarkPreview(@PreviewParameter(VerifySelfSessionStateProvider::cl
 
 @Composable
 private fun ContentToPreview(state: VerifySelfSessionState) {
-    VerifySelfSessionScreen(
+    VerifySelfSessionView(
         state = state,
         goBack = {},
     )

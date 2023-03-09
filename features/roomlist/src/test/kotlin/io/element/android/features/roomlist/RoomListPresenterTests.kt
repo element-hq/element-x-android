@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
+import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -47,7 +48,8 @@ class RoomListPresenterTests {
     fun `present - should start with no user and then load user with success`() = runTest {
         val presenter = RoomListPresenter(
             FakeMatrixClient(A_SESSION_ID),
-            createDateFormatter()
+            createDateFormatter(),
+            FakeSessionVerificationService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -71,7 +73,8 @@ class RoomListPresenterTests {
                 userDisplayName = Result.failure(AN_EXCEPTION),
                 userAvatarURLString = Result.failure(AN_EXCEPTION),
             ),
-            createDateFormatter()
+            createDateFormatter(),
+            FakeSessionVerificationService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -89,7 +92,8 @@ class RoomListPresenterTests {
     fun `present - should filter room with success`() = runTest {
         val presenter = RoomListPresenter(
             FakeMatrixClient(A_SESSION_ID),
-            createDateFormatter()
+            createDateFormatter(),
+            FakeSessionVerificationService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -111,7 +115,8 @@ class RoomListPresenterTests {
                 sessionId = A_SESSION_ID,
                 roomSummaryDataSource = roomSummaryDataSource
             ),
-            createDateFormatter()
+            createDateFormatter(),
+            FakeSessionVerificationService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -137,7 +142,8 @@ class RoomListPresenterTests {
                 sessionId = A_SESSION_ID,
                 roomSummaryDataSource = roomSummaryDataSource
             ),
-            createDateFormatter()
+            createDateFormatter(),
+            FakeSessionVerificationService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -168,7 +174,8 @@ class RoomListPresenterTests {
                 sessionId = A_SESSION_ID,
                 roomSummaryDataSource = roomSummaryDataSource
             ),
-            createDateFormatter()
+            createDateFormatter(),
+            FakeSessionVerificationService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
