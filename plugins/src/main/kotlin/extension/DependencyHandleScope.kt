@@ -16,9 +16,9 @@
 
 package extension
 
-import gradle.kotlin.dsl.accessors._c662f48c4c26c34521d1054f12b949ab.androidTestImplementation
-import gradle.kotlin.dsl.accessors._c662f48c4c26c34521d1054f12b949ab.debugImplementation
-import gradle.kotlin.dsl.accessors._c662f48c4c26c34521d1054f12b949ab.implementation
+import gradle.kotlin.dsl.accessors._71f190358cebd46a469f2989484fd643.androidTestImplementation
+import gradle.kotlin.dsl.accessors._71f190358cebd46a469f2989484fd643.debugImplementation
+import gradle.kotlin.dsl.accessors._71f190358cebd46a469f2989484fd643.implementation
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.project
