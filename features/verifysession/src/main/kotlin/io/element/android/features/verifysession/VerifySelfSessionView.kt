@@ -164,12 +164,12 @@ internal fun HeaderContent(verificationState: VerificationState, modifier: Modif
 
 @Composable
 internal fun Content(verificationState: VerificationState, modifier: Modifier = Modifier) {
-    Column {
+    Column (modifier){
         Spacer(Modifier.height(56.dp))
         when (verificationState) {
             VerificationState.Initial, VerificationState.Canceled, VerificationState.Completed -> Unit
-            VerificationState.AwaitingOtherDeviceResponse -> ContentWaiting(modifier)
-            is VerificationState.Verifying -> ContentVerifying(verificationState, modifier)
+            VerificationState.AwaitingOtherDeviceResponse -> ContentWaiting()
+            is VerificationState.Verifying -> ContentVerifying(verificationState)
         }
         Spacer(Modifier.height(56.dp))
     }
