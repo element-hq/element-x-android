@@ -16,6 +16,8 @@
 
 @file:Suppress("UnstableApiUsage")
 
+import extension.allFeaturesApi
+
 // TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
@@ -36,14 +38,7 @@ dependencies {
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
 
-    implementation(projects.features.messages.api)
-    implementation(projects.features.roomlist.api)
-    implementation(projects.features.rageshake.api)
-    implementation(projects.features.login.api)
-    implementation(projects.features.preferences.api)
-    implementation(projects.features.logout.api)
-    implementation(projects.features.onboarding.api)
-    implementation(projects.features.createroom.api)
+    allFeaturesApi()
 
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)

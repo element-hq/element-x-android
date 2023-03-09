@@ -17,7 +17,7 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
-import extension.allFeatures
+import extension.allFeaturesImpl
 import extension.allLibraries
 
 // TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
@@ -197,7 +197,7 @@ knit {
 
 dependencies {
     allLibraries()
-    allFeatures()
+    allFeaturesImpl()
     implementation(projects.libraries.matrix.impl)
     implementation(projects.libraries.dateformatter.impl)
     implementation(projects.libraries.sessionStorage.impl)
