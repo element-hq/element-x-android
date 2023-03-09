@@ -19,6 +19,9 @@
  */
 import extension.androidConfig
 import extension.commonDependencies
+import org.gradle.accessors.dm.LibrariesForLibs
+
+val libs = the<LibrariesForLibs>()
 
 plugins {
     id("com.android.library")
@@ -38,5 +41,5 @@ android {
 }
 
 dependencies {
-    commonDependencies()
+    commonDependencies(libs)
 }
