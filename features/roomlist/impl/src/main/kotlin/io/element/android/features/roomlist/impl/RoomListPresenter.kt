@@ -58,7 +58,7 @@ class RoomListPresenter @Inject constructor(
         }
         var filter by rememberSaveable { mutableStateOf("") }
         val roomSummaries by client
-            .roomSummaryDataSource()
+            .roomSummaryDataSource
             .roomSummaries()
             .collectAsState()
 
@@ -125,7 +125,7 @@ class RoomListPresenter @Inject constructor(
         // Safe to give bigger size than room list
         val extendedRangeEnd = range.last + midExtendedRangeSize
         val extendedRange = IntRange(extendedRangeStart, extendedRangeEnd)
-        client.roomSummaryDataSource().setSlidingSyncRange(extendedRange)
+        client.roomSummaryDataSource.setSlidingSyncRange(extendedRange)
     }
 
     private suspend fun mapRoomSummaries(
