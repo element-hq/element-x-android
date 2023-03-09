@@ -8,6 +8,9 @@
       * [Room](#room)
       * [Event](#event)
     * [Sync](#sync)
+  * [Rust SDK](#rust-sdk)
+    * [Matrix Rust Component Kotlin](#matrix-rust-component-kotlin)
+    * [Build the SDK locally](#build-the-sdk-locally)
   * [The Android project](#the-android-project)
   * [Application](#application)
     * [Jetpack Compose](#jetpack-compose)
@@ -32,6 +35,7 @@ This doc is a quick introduction about the project and its architecture.
 It's aim is to help new developers to understand the overall project and where to start developing.
 
 Other useful documentation:
+
 - all the docs in this folder!
 - the [contributing doc](../CONTRIBUTING.md), that you should also read carefully.
 
@@ -39,11 +43,14 @@ Other useful documentation:
 
 Matrix website: [matrix.org](https://matrix.org), [discover page](https://matrix.org/discover).
 *Note*: Matrix.org is also hosting a homeserver ([.well-known file](https://matrix.org/.well-known/matrix/client)).
-The reference homeserver (this is how Matrix servers are called) implementation is [Synapse](https://github.com/matrix-org/synapse/). But other implementations exist. The Matrix specification is here to ensure that any Matrix client, such as Element Android and its SDK can talk to any Matrix server.
+The reference homeserver (this is how Matrix servers are called) implementation is [Synapse](https://github.com/matrix-org/synapse/). But other implementations
+exist. The Matrix specification is here to ensure that any Matrix client, such as Element Android and its SDK can talk to any Matrix server.
 
-Have a quick look to the client-server API documentation: [Client-server documentation](https://spec.matrix.org/v1.3/client-server-api/). Other network API exist, the list is here: (https://spec.matrix.org/latest/)
+Have a quick look to the client-server API documentation: [Client-server documentation](https://spec.matrix.org/v1.3/client-server-api/). Other network API
+exist, the list is here: (https://spec.matrix.org/latest/)
 
-Matrix is an open source protocol. Change are possible and are tracked using [this GitHub repository](https://github.com/matrix-org/matrix-doc/). Changes to the protocol are called MSC: Matrix Spec Change. These are PullRequest to this project.
+Matrix is an open source protocol. Change are possible and are tracked using [this GitHub repository](https://github.com/matrix-org/matrix-doc/). Changes to the
+protocol are called MSC: Matrix Spec Change. These are PullRequest to this project.
 
 Matrix object are Json data. Unstable prefixes must be used for Json keys when the MSC is not merged (i.e. accepted).
 
@@ -53,7 +60,8 @@ There are many object and data in the Matrix worlds. Let's focus on the most imp
 
 ##### Room
 
-`Room` is a place which contains ordered `Event`s. They are identified with their `room_id`. Nearly all the data are stored in rooms, and shared using homeserver to all the Room Member.
+`Room` is a place which contains ordered `Event`s. They are identified with their `room_id`. Nearly all the data are stored in rooms, and shared using
+homeserver to all the Room Member.
 
 *Note*: Spaces are also Rooms with a different `type`.
 
@@ -63,12 +71,14 @@ There are many object and data in the Matrix worlds. Let's focus on the most imp
 
 There are 2 types of Room Event:
 
-- Regular Events: contain useful content for the user (message, image, etc.), but are not necessarily displayed as this in the timeline (reaction, message edition, call signaling).
+- Regular Events: contain useful content for the user (message, image, etc.), but are not necessarily displayed as this in the timeline (reaction, message
+  edition, call signaling).
 - State Events: contain the state of the Room (name, topic, etc.). They have a non null value for the key `state_key`.
 
 Also all the Room Member details are in State Events: one State Event per member. In this case, the `state_key` is the matrixId (= userId).
 
 Important Fields of an Event:
+
 - `event_id`: unique across the Matrix universe;
 - `room_id`: the room the Event belongs to;
 - `type`: describe what the Event contain, especially in the `content` section, and how the SDK should handle this Event;
@@ -80,6 +90,77 @@ So we have a triple `event_id`, `type`, `state_key` which uniquely defines an Ev
 
 This is managed by the Rust SDK.
 
+### Rust SDK
+
+The Rust SDK is hosted here: https://github.com/matrix-org/matrix-rust-sdk.
+
+This repository contains an implementation of a Matrix client-server library written in Rust.
+
+With some bindings we can embed this sdk inside other environments, like Swift or Kotlin, with the help of [Uniffi](https://github.com/mozilla/uniffi-rs).
+From these kotlin bindings we can generate native libs (.so files) and kotlin classes/interfaces.
+
+#### Matrix Rust Component Kotlin
+
+To use these bindings in an android project, we need to wrap this up into an android library (as the form of an .aar file).  
+This is the goal of https://github.com/matrix-org/matrix-rust-components-kotlin. 
+This repository is used for distributing kotlin releases of the Matrix Rust SDK.
+It'll provide the corresponding aar and also publish them on maven.
+
+Most of the time you want to use the releases made on maven with gradle:
+
+```groovy
+implementation("org.matrix.rustcomponents:sdk-android:latest-version")
+```
+
+You can also have access to the aars through the [release](https://github.com/matrix-org/matrix-rust-components-kotlin/releases) page.
+
+#### Build the SDK locally
+
+If you need to locally build the sdk-android you can use
+the [build](https://github.com/matrix-org/matrix-rust-components-kotlin/blob/main/scripts/build.sh) script.
+
+For this, you first need to ensure to setup :
+
+- rust environment (check https://rust-lang.github.io/rustup/ if needed)
+- cargo-ndk < 2.12.0
+```shell
+cargo install cargo-ndk --version 2.11.0
+```
+- android targets
+```shell
+rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
+```
+- checkout both [matrix-rust-sdk](https://github.com/matrix-org/matrix-rust-sdk) and [matrix-rust-components-kotlin](https://github.com/matrix-org/matrix-rust-components-kotlin) repositories
+```shell
+git clone git@github.com:matrix-org/matrix-rust-sdk.git
+git clone git@github.com:matrix-org/matrix-rust-components-kotlin.git
+```
+
+Then you can launch the build script with the following params:
+
+- `-p` Local path to the rust-sdk repository
+- `-o` Optional output path with the expected name of the aar file. By default the aar will be located in the corresponding build/outputs/aar directory.
+- `-r` Flag to build in release mode
+- `-m` Option to select the gradle module to build. Default is sdk.
+- `-t` Option to to select an android target to build against. Default will build for all targets.
+
+So for example to build the sdk against aarch64-linux-android target and copy the generated aar to ElementX project:
+
+```shell
+./scripts/build.sh -p [YOUR MATRIX RUST SDK PATH] -t aarch64-linux-android -o [YOUR element-x-android PATH]/libraries/rustsdk/matrix-rust-sdk.aar
+```
+
+Finally let the `matrix/impl` module use this aar by switching those lines in the gradle file :
+
+```groovy
+dependencies {
+    api(projects.libraries.rustsdk) // <- comment this line
+    // api(libs.matrix.sdk) // <- uncomment this line
+}
+```
+
+You are good to test your local rust development now!
+
 ### The Android project
 
 The project should compile out of the box.
@@ -87,7 +168,7 @@ The project should compile out of the box.
 This Android project is a multi modules project.
 
 - `app` module is the Android application module. Other modules are libraries;
-- `features` modules contain some UI and can be seen as screen or flow of screens of the application; 
+- `features` modules contain some UI and can be seen as screen or flow of screens of the application;
 - `libraries` modules contain classes that can be useful for other modules to work.
 
 A few details about some modules:
@@ -107,7 +188,8 @@ Here is the current module dependency graph:
 
 ### Application
 
-This Android project mainly handle the application layer of the whole software. The communication with the Matrix server, as well as the local storage, the cryptography (encryption and decryption of Event, key management, etc.) is managed by the Rust SDK.
+This Android project mainly handle the application layer of the whole software. The communication with the Matrix server, as well as the local storage, the
+cryptography (encryption and decryption of Event, key management, etc.) is managed by the Rust SDK.
 
 The application is responsible to store the session credentials though.
 
@@ -131,7 +213,8 @@ About Preview
 
 Main libraries and frameworks used in this application:
 
-- Navigation state with [Appyx](https://bumble-tech.github.io/appyx/). Please watch [this video](https://www.droidcon.com/2022/11/15/model-driven-navigation-with-appyx-from-zero-to-hero/) to learn more about Appyx!
+- Navigation state with [Appyx](https://bumble-tech.github.io/appyx/). Please
+  watch [this video](https://www.droidcon.com/2022/11/15/model-driven-navigation-with-appyx-from-zero-to-hero/) to learn more about Appyx!
 - DI: [Dagger](https://dagger.dev/) and [Anvil](https://github.com/square/anvil)
 - Reactive State management with Compose runtime and [Molecule](https://github.com/cashapp/molecule)
 
@@ -141,20 +224,22 @@ Here are the main points:
 
 1. `Presenter` and `View` does not communicate with each other directly, but through `State` and `Event`
 2. Views are compose first
-3. Presenters are also compose first, and have a single `present(): State` method. It's using the power of compose-runtime/compiler. 
+3. Presenters are also compose first, and have a single `present(): State` method. It's using the power of compose-runtime/compiler.
 4. The point of connection between a `View` and a `Presenter` is a `Node`.
 5. A `Node` is also responsible for managing Dagger components if any.
-6. A `ParentNode` has some children `Node` and only know about them. 
+6. A `ParentNode` has some children `Node` and only know about them.
 7. This is a single activity full compose application. The `MainActivity` is responsible for holding and configuring the `RootNode`.
 8. There is no more needs for Android Architecture Component ViewModel as configuration change should be handled by Composable if needed.
 
 #### Template and naming
 
-There is a template module to easily start a new feature. When creating a new module, you can just copy paste the template. It is located [here](../features/template).
+There is a template module to easily start a new feature. When creating a new module, you can just copy paste the template. It is
+located [here](../features/template).
 
 For the naming rules, please follow what is being currently used in the template module.
 
-Note that naming of files and classes is important, since those names are used to set up code coverage rules. For instance, presenters MUST have a suffix `Presenter`,states MUST have a suffix `State`, etc. Also we want to have a common naming along all the modules.
+Note that naming of files and classes is important, since those names are used to set up code coverage rules. For instance, presenters MUST have a
+suffix `Presenter`,states MUST have a suffix `State`, etc. Also we want to have a common naming along all the modules.
 
 ### Push
 
@@ -183,14 +268,21 @@ Some dependency, mainly because they are not shared can be declared in `build.gr
 We have 3 tests frameworks in place, and this should be sufficient to guarantee a good code coverage and limit regressions hopefully:
 
 - Maestro to test the global usage of the application. See the related [documentation](../.maestro/README.md).
-- Combination of [Showkase](https://github.com/airbnb/Showkase) and [Paparazzi](https://github.com/cashapp/paparazzi), to test UI pixel perfect. To add test, just add `@Preview` for the composable you are adding. See the related [documentation](screenshot_testing.md) and see in the template the file [TemplateView.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateView.kt). We create PreviewProvider to provide different states. See for instance the file [TemplateStateProvider.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateStateProvider.kt)
-  - Tests on presenter with [Molecule](https://github.com/cashapp/molecule) and [Turbine](https://github.com/cashapp/turbine). See in the template the class [TemplatePresenterTests](../features/template/src/test/kotlin/io/element/android/features/template/TemplatePresenterTests.kt).
+- Combination of [Showkase](https://github.com/airbnb/Showkase) and [Paparazzi](https://github.com/cashapp/paparazzi), to test UI pixel perfect. To add test,
+  just add `@Preview` for the composable you are adding. See the related [documentation](screenshot_testing.md) and see in the template the
+  file [TemplateView.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateView.kt). We create PreviewProvider to provide
+  different states. See for instance the
+  file [TemplateStateProvider.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateStateProvider.kt)
+    - Tests on presenter with [Molecule](https://github.com/cashapp/molecule) and [Turbine](https://github.com/cashapp/turbine). See in the template the
+      class [TemplatePresenterTests](../features/template/src/test/kotlin/io/element/android/features/template/TemplatePresenterTests.kt).
 
-**Note** For now we want to avoid using class mocking (with library such as *mockk*), because this should be not necessary. We prefer to create Fake implementation of our interfaces. Mocking can be used to mock Android framework classes though, such as `Bitmap` for instance.
+**Note** For now we want to avoid using class mocking (with library such as *mockk*), because this should be not necessary. We prefer to create Fake
+implementation of our interfaces. Mocking can be used to mock Android framework classes though, such as `Bitmap` for instance.
 
 ### Code coverage
 
-[kover](https://github.com/Kotlin/kotlinx-kover) is used to compute code coverage. Only have unit tests can produce code coverage result. Running Maestro does not participate to the code coverage results.
+[kover](https://github.com/Kotlin/kotlinx-kover) is used to compute code coverage. Only have unit tests can produce code coverage result. Running Maestro does
+not participate to the code coverage results.
 
 Kover configuration is defined in the main [build.gradle.kts](../build.gradle.kts) file.
 
@@ -200,9 +292,9 @@ To compute the code coverage, run:
 ./gradlew koverMergedReport
 ```
 
-and open the Html report: [../build/reports/kover/merged/html/index.html](../build/reports/kover/merged/html/index.html) 
+and open the Html report: [../build/reports/kover/merged/html/index.html](../build/reports/kover/merged/html/index.html)
 
-To ensure that the code coverage threshold are OK, you can run 
+To ensure that the code coverage threshold are OK, you can run
 
 ```bash
 ./gradlew koverMergedVerify
@@ -210,13 +302,15 @@ To ensure that the code coverage threshold are OK, you can run
 
 Note that the CI performs this check on every pull requests.
 
-Also, if the rule `Global minimum code coverage.` is in error because code coverage is `> maxValue`, `minValue` and `maxValue` can be updated for this rule in the file [build.gradle.kts](../build.gradle.kts) (you will see further instructions there).
+Also, if the rule `Global minimum code coverage.` is in error because code coverage is `> maxValue`, `minValue` and `maxValue` can be updated for this rule in
+the file [build.gradle.kts](../build.gradle.kts) (you will see further instructions there).
 
 ### Other points
 
 #### Logging
 
-**Important warning: ** NEVER log private user data, or use the flag `LOG_PRIVATE_DATA`. Be very careful when logging `data class`, all the content will be output!
+**Important warning: ** NEVER log private user data, or use the flag `LOG_PRIVATE_DATA`. Be very careful when logging `data class`, all the content will be
+output!
 
 [Timber](https://github.com/JakeWharton/timber) is used to log data to logcat. We do not use directly the `Log` class. If possible please use a tag, as per
 
@@ -247,12 +341,16 @@ Rageshake can be very useful to get logs from a release version of the applicati
 ### Tips
 
 - Element Android has a `developer mode` in the `Settings/Advanced settings`. Other useful options are available here; (TODO Not supported yet!)
-- Show hidden Events can also help to debug feature. When developer mode is enabled, it is possible to view the source (= the Json content) of any Events; (TODO Not supported yet!)
+- Show hidden Events can also help to debug feature. When developer mode is enabled, it is possible to view the source (= the Json content) of any Events; (TODO
+  Not supported yet!)
 - Type `/devtools` in a Room composer to access a developer menu. There are some other entry points. Developer mode has to be enabled; (TODO Not supported yet!)
-- Hidden debug menu: when developer mode is enabled and on debug build, there are some extra screens that can be accessible using the green wheel. In those screens, it will be possible to toggle some feature flags; (TODO Not supported yet!)
-- Using logcat, filtering with `Compositions` can help you to understand what screen are currently displayed on your device. Searching for string displayed on the screen can also help to find the running code in the codebase.
+- Hidden debug menu: when developer mode is enabled and on debug build, there are some extra screens that can be accessible using the green wheel. In those
+  screens, it will be possible to toggle some feature flags; (TODO Not supported yet!)
+- Using logcat, filtering with `Compositions` can help you to understand what screen are currently displayed on your device. Searching for string displayed on
+  the screen can also help to find the running code in the codebase.
 - When this is possible, prefer using `sealed interface` instead of `sealed class`;
-- When writing temporary code, using the string "DO NOT COMMIT" in a comment can help to avoid committing things by mistake. If committed and pushed, the CI will detect this String and will warn the user about it. (TODO Not supported yet!)
+- When writing temporary code, using the string "DO NOT COMMIT" in a comment can help to avoid committing things by mistake. If committed and pushed, the CI
+  will detect this String and will warn the user about it. (TODO Not supported yet!)
 
 ## Happy coding!
 

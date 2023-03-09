@@ -51,6 +51,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
+import io.element.android.features.login.impl.error.changeServerError
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
@@ -91,6 +92,14 @@ fun ChangeServerView(
         }
     }
     val focusManager = LocalFocusManager.current
+
+    fun submit() {
+        // Clear focus to prevent keyboard issues with textfields
+        focusManager.clearFocus(force = true)
+
+        eventSink(ChangeServerEvents.Submit)
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -174,7 +183,7 @@ fun ChangeServerView(
                         imeAction = ImeAction.Done,
                     ),
                     keyboardActions = KeyboardActions(
-                        onDone = { eventSink(ChangeServerEvents.Submit) }
+                        onDone = { submit() }
                     ),
                     singleLine = true,
                     maxLines = 1,
@@ -215,7 +224,7 @@ fun ChangeServerView(
                 )
                 Spacer(Modifier.height(32.dp))
                 Button(
-                    onClick = { eventSink(ChangeServerEvents.Submit) },
+                    onClick = ::submit,
                     enabled = interactionEnabled && state.submitEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -239,7 +248,7 @@ fun ChangeServerView(
 @Composable
 internal fun ChangeServerErrorDialog(error: Throwable, onDismiss: () -> Unit) {
     ErrorDialog(
-        content = error.localizedMessage ?: stringResource(id = StringR.string.unknown_error),
+        content = stringResource(changeServerError(error)),
         onDismiss = onDismiss
     )
 }

@@ -83,6 +83,7 @@ const allowList = [
     "manuroe",
     "mnaturel",
     "onurays",
+    "renovate[bot]",
     "stefanceriu",
     "yostyle",
 ]

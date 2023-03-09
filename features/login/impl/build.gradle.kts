@@ -25,6 +25,12 @@ plugins {
 
 android {
     namespace = "io.element.android.features.login.impl"
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 anvil {
