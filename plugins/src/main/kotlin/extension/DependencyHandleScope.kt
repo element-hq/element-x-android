@@ -26,8 +26,8 @@ import org.gradle.kotlin.dsl.project
 /**
  * Dependencies used by all the modules
  */
-fun DependencyHandlerScope.commonDependencies() {
-    implementation("com.jakewharton.timber:timber:5.0.1")
+fun DependencyHandlerScope.commonDependencies(libs: LibrariesForLibs) {
+    implementation(libs.timber)
 }
 
 /**
@@ -42,10 +42,10 @@ fun DependencyHandlerScope.composeDependencies(libs: LibrariesForLibs) {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.activity:activity-compose:1.6.1")
+    implementation(libs.androidx.activity.compose)
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    implementation("com.airbnb.android:showkase:1.0.0-beta17")
+    implementation(libs.showkase)
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 }
 

@@ -44,6 +44,6 @@ android {
 }
 
 dependencies {
-    commonDependencies()
+    commonDependencies(libs)
     composeDependencies(libs)
 }
