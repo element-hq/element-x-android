@@ -81,5 +81,5 @@ fun DependencyHandlerScope.allFeaturesImpl() {
     implementation(project(":features:rageshake:impl"))
     implementation(project(":features:preferences:impl"))
     implementation(project(":features:createroom:impl"))
-    implementation(project(":features:verify-session"))
+    implementation(project(":features:verifysession"))
 }

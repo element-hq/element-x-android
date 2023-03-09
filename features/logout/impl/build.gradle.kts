@@ -41,7 +41,7 @@ dependencies {
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.dateformatter.api)
-    implementation(projects.features.verifySession)
+    implementation(projects.features.verifysession)
     implementation(libs.accompanist.placeholder)
     api(projects.features.logout.api)
     ksp(libs.showkase.processor)
