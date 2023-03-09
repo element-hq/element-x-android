@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -45,6 +46,7 @@ import io.element.android.libraries.matrix.ui.model.getBestName
 fun MatrixUserRow(
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
+    avatarSize: AvatarSize = matrixUser.avatarData.size,
     onClick: () -> Unit = {},
 ) {
     Row(
@@ -56,13 +58,11 @@ fun MatrixUserRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Avatar(
-            matrixUser.avatarData,
+            matrixUser.avatarData.copy(size = avatarSize),
         )
         Column(
             modifier = Modifier
-                .padding(start = 12.dp, end = 4.dp, top = 12.dp, bottom = 12.dp)
-                .alignByBaseline()
-                .weight(1f)
+                .padding(start = 12.dp, end = 4.dp, top = 12.dp, bottom = 12.dp),
         ) {
             // Name
             Text(

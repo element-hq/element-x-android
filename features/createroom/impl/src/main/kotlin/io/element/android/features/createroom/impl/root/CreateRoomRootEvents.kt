@@ -17,6 +17,7 @@
 package io.element.android.features.createroom.impl.root
 
 sealed interface CreateRoomRootEvents {
+    data class UpdateSearchQuery(val query: String): CreateRoomRootEvents
     object CreateRoom : CreateRoomRootEvents
     object InvitePeople : CreateRoomRootEvents
 }

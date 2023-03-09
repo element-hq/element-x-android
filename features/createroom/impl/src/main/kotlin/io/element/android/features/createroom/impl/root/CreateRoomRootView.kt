@@ -45,6 +45,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -54,6 +55,8 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.ui.components.MatrixUserRow
+import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.element.android.libraries.designsystem.R as DrawableR
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -64,7 +67,6 @@ fun CreateRoomRootView(
     modifier: Modifier = Modifier,
     onClosePressed: () -> Unit = {},
 ) {
-    var searchText by rememberSaveable { mutableStateOf("") }
     var isSearchActive by rememberSaveable { mutableStateOf(false) }
     Scaffold(
         modifier = modifier.fillMaxWidth(),
@@ -80,11 +82,12 @@ fun CreateRoomRootView(
         ) {
             CreateRoomSearchBar(
                 modifier = Modifier.fillMaxWidth(),
-                text = searchText,
+                query = state.searchQuery,
                 placeHolderTitle = stringResource(StringR.string.search_for_someone),
+                results = state.searchResults,
                 active = isSearchActive,
                 onActiveChanged = { isSearchActive = it },
-                onTextChanged = { searchText = it },
+                onTextChanged = { state.eventSink(CreateRoomRootEvents.UpdateSearchQuery(it)) },
             )
 
             if (!isSearchActive) {
@@ -123,8 +126,9 @@ fun CreateRoomRootViewTopBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateRoomSearchBar(
-    text: String,
+    query: String,
     placeHolderTitle: String,
+    results: List<MatrixUser>,
     active: Boolean,
     modifier: Modifier = Modifier,
     onActiveChanged: (Boolean) -> Unit = {},
@@ -138,7 +142,7 @@ fun CreateRoomSearchBar(
     }
 
     DockedSearchBar(
-        query = text,
+        query = query,
         onQueryChange = onTextChanged,
         onSearch = { focusManager.clearFocus() },
         active = active,
@@ -155,7 +159,7 @@ fun CreateRoomSearchBar(
             { BackButton(onClick = { onActiveChanged(false) }) }
         } else null,
         trailingIcon = when {
-            active && text.isNotEmpty() -> {
+            active && query.isNotEmpty() -> {
                 {
                     IconButton(onClick = { onTextChanged("") }) {
                         Icon(Icons.Default.Close, stringResource(StringR.string.a11y_clear))
@@ -175,7 +179,9 @@ fun CreateRoomSearchBar(
         },
         shape = if (!active) SearchBarDefaults.dockedShape else SearchBarDefaults.fullScreenShape,
         colors = if (!active) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
-        content = {},
+        content = {
+            results.forEach { CreateRoomSearchResultItem(matrixUser = it) }
+        },
     )
 }
 
@@ -197,6 +203,18 @@ fun CreateRoomActionButtonsList(
             onClick = onInvitePeopleClicked,
         )
     }
+}
+
+@Composable
+fun CreateRoomSearchResultItem(
+    matrixUser: MatrixUser,
+    modifier: Modifier = Modifier,
+) {
+    MatrixUserRow(
+        modifier = modifier.heightIn(min = 56.dp),
+        matrixUser = matrixUser,
+        avatarSize = AvatarSize.SMALL,
+    )
 }
 
 @Composable

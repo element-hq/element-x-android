@@ -17,7 +17,15 @@
 package io.element.android.features.createroom.impl.root
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import com.bumble.appyx.core.collections.immutableListOf
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.core.MatrixPatterns
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.ui.model.MatrixUser
 import javax.inject.Inject
 
 class CreateRoomRootPresenter @Inject constructor() : Presenter<CreateRoomRootState> {
@@ -25,15 +33,27 @@ class CreateRoomRootPresenter @Inject constructor() : Presenter<CreateRoomRootSt
     @Composable
     override fun present(): CreateRoomRootState {
 
+        var searchQuery by rememberSaveable { mutableStateOf("") }
+        val searchResults = if (MatrixPatterns.isUserId(searchQuery)) {
+            immutableListOf(MatrixUser(UserId(searchQuery)))
+        } else {
+            immutableListOf()
+        }
+
         fun handleEvents(event: CreateRoomRootEvents) {
             when (event) {
                 CreateRoomRootEvents.CreateRoom -> Unit // Todo Handle create room action
                 CreateRoomRootEvents.InvitePeople -> Unit // Todo Handle invite people action
+                is CreateRoomRootEvents.UpdateSearchQuery -> {
+                    searchQuery = event.query
+                }
             }
         }
 
         return CreateRoomRootState(
-            eventSink = ::handleEvents
+            eventSink = ::handleEvents,
+            searchQuery = searchQuery,
+            searchResults = searchResults,
         )
     }
 }
