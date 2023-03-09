@@ -43,7 +43,7 @@ class CreateRoomRootNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        CreateRoomRootScreen(
+        CreateRoomRootView(
             state = state,
             modifier = modifier,
             onClosePressed = this::navigateUp,

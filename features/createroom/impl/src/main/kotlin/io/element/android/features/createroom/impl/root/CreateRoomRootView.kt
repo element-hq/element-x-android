@@ -59,7 +59,7 @@ import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateRoomRootScreen(
+fun CreateRoomRootView(
     state: CreateRoomRootState,
     modifier: Modifier = Modifier,
     onClosePressed: () -> Unit = {},
@@ -230,7 +230,7 @@ fun CreateRoomRootViewDarkPreview(@PreviewParameter(CreateRoomRootStateProvider:
 
 @Composable
 private fun ContentToPreview(state: CreateRoomRootState) {
-    CreateRoomRootScreen(
+    CreateRoomRootView(
         state = state,
     )
 }
