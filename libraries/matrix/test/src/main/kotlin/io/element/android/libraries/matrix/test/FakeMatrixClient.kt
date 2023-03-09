@@ -32,7 +32,7 @@ class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
     private val userDisplayName: Result<String> = Result.success(A_USER_NAME),
     private val userAvatarURLString: Result<String> = Result.success(AN_AVATAR_URL),
-    val roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource()
+    override val roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource()
 ) : MatrixClient {
 
     private var logoutFailure: Throwable? = null
@@ -44,10 +44,6 @@ class FakeMatrixClient(
     override fun startSync() = Unit
 
     override fun stopSync() = Unit
-
-    override fun roomSummaryDataSource(): RoomSummaryDataSource {
-        return roomSummaryDataSource
-    }
 
     override fun mediaResolver(): MediaResolver {
         return FakeMediaResolver()
@@ -77,6 +73,4 @@ class FakeMatrixClient(
     override suspend fun loadMediaThumbnailForSource(source: MediaSource, width: Long, height: Long): Result<ByteArray> {
         return Result.success(ByteArray(0))
     }
-
-    override fun close() = Unit
 }
