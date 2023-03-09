@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.theme.components
+package io.element.android.libraries.designsystem.components.button
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
@@ -26,22 +26,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.ui.strings.R.string as StringR
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
+import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun BackButton(
-    action: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    icon: ImageVector = Icons.Default.ArrowBack,
-    contentDescription: String = stringResource(StringR.action_back),
+    imageVector: ImageVector = Icons.Default.ArrowBack,
+    contentDescription: String = stringResource(StringR.string.a11y_back),
     enabled: Boolean = true
 ) {
     IconButton(
         modifier = modifier,
-        onClick = action,
+        onClick = onClick,
         enabled = enabled,
     ) {
-        Icon(imageVector = icon, contentDescription = contentDescription)
+        Icon(imageVector = imageVector, contentDescription = contentDescription)
     }
 }
 
@@ -56,7 +58,7 @@ internal fun BackButtonPreviewDark() = ElementPreviewDark { ContentToPreview() }
 @Composable
 private fun ContentToPreview() {
     Column {
-        BackButton(action = { }, enabled = true, contentDescription = "Back")
-        BackButton(action = { }, enabled = false, contentDescription = "Back")
+        BackButton(onClick = { }, enabled = true, contentDescription = "Back")
+        BackButton(onClick = { }, enabled = false, contentDescription = "Back")
     }
 }

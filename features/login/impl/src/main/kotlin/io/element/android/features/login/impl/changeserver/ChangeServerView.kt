@@ -60,7 +60,7 @@ import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.LocalColors
-import io.element.android.libraries.designsystem.theme.components.BackButton
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -104,7 +104,7 @@ fun ChangeServerView(
         topBar = {
             TopAppBar(
                 title = {},
-                navigationIcon = { BackButton(action = onBackPressed, enabled = interactionEnabled) }
+                navigationIcon = { BackButton(onClick = onBackPressed, enabled = interactionEnabled) }
             )
         }
     ) { padding ->
@@ -192,7 +192,7 @@ fun ChangeServerView(
                             IconButton(onClick = {
                                 homeserverFieldState = ""
                             }, enabled = interactionEnabled) {
-                                Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(StringR.string.action_clear))
+                                Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(StringR.string.a11y_clear))
                             }
                         }
                     } else null,

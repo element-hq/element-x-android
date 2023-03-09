@@ -32,6 +32,7 @@ interface RoomListEntryPoint : FeatureEntryPoint {
 
     interface Callback : Plugin {
         fun onRoomClicked(roomId: RoomId)
+        fun onCreateRoomClicked()
         fun onSettingsClicked()
     }
 }
