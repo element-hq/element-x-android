@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 
 @SingleIn(SessionScope::class)
 @MergeSubcomponent(SessionScope::class)
-interface SessionComponent : NodeFactoriesBindings, RoomComponent.ParentBindings {
+interface SessionComponent : NodeFactoriesBindings {
 
     @Subcomponent.Builder
     interface Builder {

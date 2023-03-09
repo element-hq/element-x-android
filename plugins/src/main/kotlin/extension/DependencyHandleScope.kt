@@ -61,13 +61,24 @@ fun DependencyHandlerScope.allLibraries() {
     implementation(project(":libraries:di"))
 }
 
-fun DependencyHandlerScope.allFeatures() {
-    implementation(project(":features:onboarding"))
-    implementation(project(":features:login"))
-    implementation(project(":features:logout"))
-    implementation(project(":features:roomlist"))
-    implementation(project(":features:messages"))
-    implementation(project(":features:rageshake"))
-    implementation(project(":features:preferences"))
-    implementation(project(":features:createroom"))
+fun DependencyHandlerScope.allFeaturesApi() {
+    implementation(project(":features:onboarding:api"))
+    implementation(project(":features:login:api"))
+    implementation(project(":features:logout:api"))
+    implementation(project(":features:roomlist:api"))
+    implementation(project(":features:messages:api"))
+    implementation(project(":features:rageshake:api"))
+    implementation(project(":features:preferences:api"))
+    implementation(project(":features:createroom:api"))
+}
+
+fun DependencyHandlerScope.allFeaturesImpl() {
+    implementation(project(":features:onboarding:impl"))
+    implementation(project(":features:login:impl"))
+    implementation(project(":features:logout:impl"))
+    implementation(project(":features:roomlist:impl"))
+    implementation(project(":features:messages:impl"))
+    implementation(project(":features:rageshake:impl"))
+    implementation(project(":features:preferences:impl"))
+    implementation(project(":features:createroom:impl"))
 }
