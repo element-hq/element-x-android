@@ -23,6 +23,11 @@ import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 
+/**
+ * This class is just an helper for configuring a backstack directly in the constructor.
+ * With this we can more easily use constructor injection without having a secondary constructor to create the [BackStack] instance.
+ * Can be used instead of [ParentNode] in flow nodes.
+ */
 @Stable
 abstract class BackstackNode<NavTarget : Any>(
     val backstack: BackStack<NavTarget>,
