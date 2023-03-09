@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -31,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Velocity
@@ -42,11 +44,15 @@ import io.element.android.features.roomlist.model.RoomListState
 import io.element.android.features.roomlist.model.RoomListStateProvider
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
+import io.element.android.libraries.designsystem.R as DrawableR
+import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun RoomListView(
@@ -54,6 +60,7 @@ fun RoomListView(
     modifier: Modifier = Modifier,
     onRoomClicked: (RoomId) -> Unit = {},
     onOpenSettings: () -> Unit = {},
+    onCreateRoomClicked: () -> Unit = {},
 ) {
     fun onFilterChanged(filter: String) {
         state.eventSink(RoomListEvents.UpdateFilter(filter))
@@ -72,6 +79,7 @@ fun RoomListView(
         onFilterChanged = ::onFilterChanged,
         onOpenSettings = onOpenSettings,
         onScrollOver = ::onVisibleRangedChanged,
+        onCreateRoomClicked = onCreateRoomClicked,
     )
 }
 
@@ -86,6 +94,7 @@ fun RoomListContent(
     onFilterChanged: (String) -> Unit = {},
     onOpenSettings: () -> Unit = {},
     onScrollOver: (IntRange) -> Unit = {},
+    onCreateRoomClicked: () -> Unit = {},
 ) {
     fun onRoomClicked(room: RoomListRoomSummary) {
         onRoomClicked(room.roomId)
@@ -148,7 +157,16 @@ fun RoomListContent(
                     }
                 }
             }
-        }
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                // FIXME align on Design system theme
+                containerColor = MaterialTheme.colorScheme.primary,
+                onClick = onCreateRoomClicked
+            ) {
+                Icon(resourceId = DrawableR.drawable.ic_edit_square, contentDescription = stringResource(id = StringR.string.a11y_create_message))
+            }
+        },
     )
 }
 
