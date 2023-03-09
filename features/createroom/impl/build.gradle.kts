@@ -14,44 +14,41 @@
  * limitations under the License.
  */
 
-@file:Suppress("UnstableApiUsage")
-
 // TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.kapt)
     id("kotlin-parcelize")
 }
 
 android {
-    namespace = "io.element.android.appnav"
+    namespace = "io.element.android.features.createroom.impl"
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
+}
+
+anvil {
+    generateDaggerFactories.set(true)
 }
 
 dependencies {
-    implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
-    implementation(libs.dagger)
-    kapt(libs.dagger.compiler)
-
-    implementation(projects.features.messages.api)
-    implementation(projects.features.roomlist.api)
-    implementation(projects.features.rageshake.api)
-    implementation(projects.features.login.api)
-    implementation(projects.features.preferences.api)
-    implementation(projects.features.logout.api)
-    implementation(projects.features.onboarding.api)
-    implementation(projects.features.createroom.api)
+    implementation(projects.anvilannotations)
 
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.designsystem)
     implementation(projects.libraries.matrixui)
-    implementation(projects.tests.uitests)
-    implementation(libs.coil)
+    implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.elementresources)
+    implementation(projects.libraries.uiStrings)
+    api(projects.features.createroom.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
@@ -59,6 +56,8 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.features.rageshake.test)
-    testImplementation(projects.features.rageshake.impl)
+
+    androidTestImplementation(libs.test.junitext)
+
+    ksp(libs.showkase.processor)
 }

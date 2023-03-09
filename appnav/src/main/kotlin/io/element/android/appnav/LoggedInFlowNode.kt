@@ -35,7 +35,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.createroom.CreateRoomFlowNode
+import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
@@ -57,6 +57,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val roomListEntryPoint: RoomListEntryPoint,
     private val preferencesEntryPoint: PreferencesEntryPoint,
+    private val createRoomEntryPoint: CreateRoomEntryPoint,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.RoomList,
@@ -160,7 +161,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .build()
             }
             NavTarget.CreateRoom -> {
-                CreateRoomFlowNode(buildContext)
+                createRoomEntryPoint.createNode(this, buildContext)
             }
         }
     }
