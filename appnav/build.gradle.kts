@@ -43,6 +43,7 @@ dependencies {
     implementation(projects.features.preferences.api)
     implementation(projects.features.logout.api)
     implementation(projects.features.onboarding.api)
+    implementation(projects.features.createroom)
 
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)

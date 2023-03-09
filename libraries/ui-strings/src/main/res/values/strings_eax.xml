@@ -2,17 +2,20 @@
 <resources>
 
     <!-- Add new strings for Element X Android here -->
-    <string name="action_back">Back</string>
-    <string name="action_clear">Clear</string>
-
+    <!-- Common -->
+    <string name="a11y_back">Back</string>
+    <string name="a11y_clear">Clear</string>
+    <!-- Login -->
     <string name="login_form_title">Enter your details</string>
     <string name="ex_login_username_hint">Email or username</string>
     <string name="login_show_password">Show password</string>
     <string name="login_hide_password">Hide password</string>
-
     <string name="ex_choose_server_subtitle">What is the address of your server?</string>
     <string name="server_selection_server_footer">You can only connect to an existing server that supports sliding sync. Your homeserver admin will need to configure it.</string>
     <string name="server_selection_sliding_sync_alert_title">Server not supported</string>
     <string name="server_selection_sliding_sync_alert_message">This server currently doesn\'t support sliding sync.</string>
+    <!-- Create room -->
+    <string name="search_for_someone">Search for someone</string>
+    <string name="new_room">New room</string>
 
 </resources>
