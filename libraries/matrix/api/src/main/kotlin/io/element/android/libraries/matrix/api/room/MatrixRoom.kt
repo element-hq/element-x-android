@@ -20,8 +20,9 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import kotlinx.coroutines.flow.Flow
+import java.io.Closeable
 
-interface MatrixRoom {
+interface MatrixRoom: Closeable {
     val roomId: RoomId
     val name: String?
     val bestName: String
