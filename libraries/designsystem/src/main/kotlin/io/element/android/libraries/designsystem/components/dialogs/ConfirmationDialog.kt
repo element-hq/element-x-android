@@ -16,9 +16,6 @@
 
 package io.element.android.libraries.designsystem.components.dialogs
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +27,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -39,18 +37,20 @@ import io.element.android.libraries.ui.strings.R as StringR
 fun ConfirmationDialog(
     title: String,
     content: String,
+    onSubmitClicked: () -> Unit,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     submitText: String = stringResource(id = StringR.string.ok),
     cancelText: String = stringResource(id = StringR.string.action_cancel),
     thirdButtonText: String? = null,
-    onSubmitClicked: () -> Unit = {},
-    onCancelClicked: () -> Unit = {},
+    emphasizeSubmitButton: Boolean = false,
+    onCancelClicked: () -> Unit = onDismiss,
     onThirdButtonClicked: () -> Unit = {},
-    onDismiss: () -> Unit = {},
     shape: Shape = AlertDialogDefaults.shape,
     containerColor: Color = AlertDialogDefaults.containerColor,
     iconContentColor: Color = AlertDialogDefaults.iconContentColor,
-    titleContentColor: Color = AlertDialogDefaults.titleContentColor,
+    // According to the design team, `primary` should be used here instead of the default `onSurface`
+    titleContentColor: Color = MaterialTheme.colorScheme.primary,
     textContentColor: Color = AlertDialogDefaults.textContentColor,
     tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
 ) {
@@ -79,9 +79,16 @@ fun ConfirmationDialog(
             TextButton(
                 onClick = {
                     onSubmitClicked()
-                }
+                },
             ) {
-                Text(submitText)
+                Text(
+                    submitText,
+                    style = if (emphasizeSubmitButton) {
+                        ElementTextStyles.Bold.subheadline
+                    } else {
+                        MaterialTheme.typography.labelLarge
+                    }
+                )
             }
         },
         shape = shape,
@@ -106,6 +113,9 @@ private fun ContentToPreview() {
     ConfirmationDialog(
         title = "Title",
         content = "Content",
-        thirdButtonText = "Disable"
+        thirdButtonText = "Disable",
+        onSubmitClicked = {},
+        onDismiss = {},
+        emphasizeSubmitButton = true,
     )
 }

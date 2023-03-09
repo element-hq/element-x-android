@@ -17,6 +17,7 @@
 package io.element.android.features.login.changeserver
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -44,16 +45,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.ParagraphStyle
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.UrlAnnotation
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.R
 import io.element.android.features.login.error.changeServerError
+import io.element.android.features.login.util.LoginConstants
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.LinkColor
+import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
@@ -70,12 +81,13 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
+import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import org.matrix.rustcomponents.sdk.AuthenticationException
 import io.element.android.libraries.ui.strings.R as StringR
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalTextApi::class)
 @Composable
 fun ChangeServerView(
     state: ChangeServerState,
@@ -215,12 +227,27 @@ fun ChangeServerView(
                     }
                 }
                 Spacer(Modifier.height(8.dp))
-                Text(
-                    text = stringResource(StringR.string.server_selection_server_footer),
+                val footerMessage = stringResource(StringR.string.server_selection_server_footer)
+                val footerAction = stringResource(StringR.string.server_selection_server_footer_action)
+                val footerText = buildAnnotatedString {
+                    val defaultColor = MaterialTheme.colorScheme.tertiary
+                    withStyle(ParagraphStyle(textAlign = TextAlign.Start)) {
+                        withStyle(SpanStyle(color = defaultColor)) {
+                            append(footerMessage)
+                            append(" ")
+                        }
+                        val start = length
+                        withStyle(SpanStyle(color = LinkColor)) {
+                            append(footerAction)
+                        }
+                        addUrlAnnotation(UrlAnnotation(LoginConstants.SLIDING_SYNC_READ_MORE_URL), start, length)
+                    }
+                }
+                ClickableLinkText(
+                    text = footerText,
+                    interactionSource = MutableInteractionSource(),
                     modifier = Modifier.padding(horizontal = 16.dp),
                     style = ElementTextStyles.Regular.caption1,
-                    textAlign = TextAlign.Start,
-                    color = MaterialTheme.colorScheme.tertiary,
                 )
                 Spacer(Modifier.height(32.dp))
                 Button(
@@ -259,6 +286,8 @@ internal fun SlidingSyncNotSupportedDialog(onLearnMoreClicked: () -> Unit, onDis
         onDismiss = onDismiss,
         submitText = stringResource(StringR.string.action_learn_more),
         onSubmitClicked = onLearnMoreClicked,
+        onCancelClicked = onDismiss,
+        emphasizeSubmitButton = true,
         title = stringResource(StringR.string.server_selection_sliding_sync_alert_title),
         content = stringResource(StringR.string.server_selection_sliding_sync_alert_message),
     )
