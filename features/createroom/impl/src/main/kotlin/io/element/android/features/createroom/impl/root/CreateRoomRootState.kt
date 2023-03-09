@@ -16,8 +16,12 @@
 
 package io.element.android.features.createroom.impl.root
 
-// TODO add your ui models. Remove the eventSink if you don't have events.
+import com.bumble.appyx.core.collections.ImmutableList
+import io.element.android.libraries.matrix.ui.model.MatrixUser
+
 // Do not use default value, so no member get forgotten in the presenters.
 data class CreateRoomRootState(
-    val eventSink: (CreateRoomRootEvents) -> Unit
+    val eventSink: (CreateRoomRootEvents) -> Unit,
+    val searchQuery: String,
+    val searchResults: ImmutableList<MatrixUser>,
 )
