@@ -26,11 +26,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.BooleanProvider
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
@@ -102,20 +104,22 @@ fun ConfirmationDialog(
 
 @Preview
 @Composable
-internal fun ConfirmationDialogLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun ConfirmationDialogLightPreview(@PreviewParameter(BooleanProvider::class) emphasizeSubmitButton: Boolean) =
+    ElementPreviewLight { ContentToPreview(emphasizeSubmitButton) }
 
 @Preview
 @Composable
-internal fun ConfirmationDialogDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun ConfirmationDialogDarkPreview(@PreviewParameter(BooleanProvider::class) emphasizeSubmitButton: Boolean) =
+    ElementPreviewDark { ContentToPreview(emphasizeSubmitButton) }
 
 @Composable
-private fun ContentToPreview() {
+private fun ContentToPreview(emphasizeSubmitButton: Boolean) {
     ConfirmationDialog(
         title = "Title",
         content = "Content",
         thirdButtonText = "Disable",
         onSubmitClicked = {},
         onDismiss = {},
-        emphasizeSubmitButton = true,
+        emphasizeSubmitButton = emphasizeSubmitButton,
     )
 }

@@ -49,7 +49,7 @@ fun ClickableLinkText(
     modifier: Modifier = Modifier,
     linkAnnotationTag: String = "",
     onClick: () -> Unit = {},
-    onLongClick: () -> Unit = onClick,
+    onLongClick: () -> Unit = {},
     style: TextStyle = LocalTextStyle.current,
     inlineContent: ImmutableMap<String, InlineTextContent> = persistentMapOf(),
 ) {
