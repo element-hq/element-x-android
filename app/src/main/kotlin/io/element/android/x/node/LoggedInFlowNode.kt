@@ -29,6 +29,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.node.node
+import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import io.element.android.features.createroom.CreateRoomFlowNode
@@ -56,9 +57,11 @@ class LoggedInFlowNode(
         initialElement = NavTarget.RoomList,
         savedStateMap = buildContext.savedStateMap,
     ),
+    plugins: List<Plugin> = listOf(),
 ) : ParentNode<LoggedInFlowNode.NavTarget>(
     navModel = backstack,
-    buildContext = buildContext
+    buildContext = buildContext,
+    plugins = plugins,
 ), DaggerComponentOwner {
 
     override val daggerComponent: Any by lazy {

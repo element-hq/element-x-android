@@ -16,8 +16,11 @@
 
 package io.element.android.features.verifysession
 
-sealed interface VerifySelfSessionEvents {
-    object StartVerification: VerifySelfSessionEvents
-    object Cancel: VerifySelfSessionEvents
-    object ConfirmVerification: VerifySelfSessionEvents
+sealed interface VerifySelfSessionViewEvents {
+    object RequestVerification: VerifySelfSessionViewEvents
+    object StartSasVerification: VerifySelfSessionViewEvents
+    object Restart: VerifySelfSessionViewEvents
+    object ConfirmVerification: VerifySelfSessionViewEvents
+    object DeclineVerification: VerifySelfSessionViewEvents
+    object CancelAndClose: VerifySelfSessionViewEvents
 }

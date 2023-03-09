@@ -53,8 +53,10 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.ButtonCircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.R.string as StringR
 
@@ -64,28 +66,34 @@ fun VerifySelfSessionScreen(
     modifier: Modifier = Modifier,
     goBack: () -> Unit,
 ) {
+    fun goBackAndCancelIfNeeded() {
+        state.eventSink(VerifySelfSessionViewEvents.CancelAndClose)
+        goBack()
+    }
+    if (state.verificationState is VerificationState.Completed) {
+        goBack()
+    }
     BackHandler {
-        if (state.verificationState == VerificationState.Initial || state.verificationState == VerificationState.Canceled) {
-            goBack()
-        } else {
-            state.eventSink(VerifySelfSessionEvents.Cancel)
-        }
+        goBackAndCancelIfNeeded()
     }
     val buttonsVisible by remember(state.verificationState) {
         derivedStateOf { state.verificationState != VerificationState.AwaitingOtherDeviceResponse && state.verificationState != VerificationState.Completed }
     }
-    Column(modifier = modifier.fillMaxWidth()) {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .weight(1f)
-            .verticalScroll(rememberScrollState())
-        ) {
-            HeaderContent(verificationState = state.verificationState)
-            Content(verificationState = state.verificationState, modifier = Modifier.weight(1f))
-        }
-        if (buttonsVisible) {
-            BottomMenu(screenState = state, goBack = goBack)
+    Surface {
+        Column(modifier = modifier.fillMaxWidth()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                HeaderContent(verificationState = state.verificationState)
+                Content(verificationState = state.verificationState, modifier = Modifier.weight(1f))
+            }
+            if (buttonsVisible) {
+                BottomMenu(screenState = state, goBack = ::goBackAndCancelIfNeeded)
+            }
         }
     }
 }
@@ -217,15 +225,15 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
     val negativeButtonEnabled = !isVerifying
 
     val positiveButtonEvent = when (verificationState) {
-        VerificationState.Initial -> VerifySelfSessionEvents.StartVerification
-        is VerificationState.Verifying -> if (!isVerifying) VerifySelfSessionEvents.ConfirmVerification else null
-        VerificationState.Canceled -> VerifySelfSessionEvents.StartVerification
+        VerificationState.Initial -> VerifySelfSessionViewEvents.RequestVerification
+        is VerificationState.Verifying -> if (!isVerifying) VerifySelfSessionViewEvents.ConfirmVerification else null
+        VerificationState.Canceled -> VerifySelfSessionViewEvents.Restart
         else -> null
     }
 
-    val negativeButtonEvent = when (verificationState) {
-        VerificationState.Initial, VerificationState.Canceled, is VerificationState.Verifying -> VerifySelfSessionEvents.Cancel
-        else -> null
+    val negativeButtonCallback: () -> Unit = when (verificationState) {
+        is VerificationState.Verifying -> { { eventSink(VerifySelfSessionViewEvents.DeclineVerification) } }
+        else -> goBack
     }
 
     Column(
@@ -239,7 +247,7 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
             onClick = { positiveButtonEvent?.let { eventSink(it) } }
         ) {
             if (isVerifying) {
-                CircularProgressIndicator(modifier = Modifier.size(18.dp))
+                ButtonCircularProgressIndicator()
                 Spacer(Modifier.width(10.dp))
             }
             positiveButtonTitle?.let { Text(stringResource(it)) }
@@ -247,13 +255,7 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
         Spacer(modifier = Modifier.height(16.dp))
         TextButton(
             modifier = Modifier.fillMaxWidth(),
-            onClick = {
-                if (verificationState == VerificationState.Initial || verificationState == VerificationState.Canceled) {
-                    goBack()
-                } else {
-                    negativeButtonEvent?.let { eventSink(it) }
-                }
-            },
+            onClick = negativeButtonCallback,
             enabled = negativeButtonEnabled,
         ) {
             negativeButtonTitle?.let { Text(stringResource(it)) }

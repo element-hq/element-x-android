@@ -35,6 +35,10 @@ class VerifySelfSessionNode @AssistedInject constructor(
     private val presenter: VerifySelfSessionPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
+    interface Callback : Plugin {
+        fun openSessionVerification() {}
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()

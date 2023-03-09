@@ -37,11 +37,11 @@ fun aTemplateState() = VerifySelfSessionState(
 )
 
 fun aEmojiEntryList() = listOf(
-    EmojiEntry("🍕", "Pizza"),
-    EmojiEntry("🚀", "Rocket"),
-    EmojiEntry("🚀", "Rocket"),
-    EmojiEntry("🗺️", "Map"),
-    EmojiEntry("🎳", "Bowling"),
-    EmojiEntry("🎳", "Bowling"),
-    EmojiEntry("📌", "Pin"),
+    VerificationEmoji("🍕", "Pizza"),
+    VerificationEmoji("🚀", "Rocket"),
+    VerificationEmoji("🚀", "Rocket"),
+    VerificationEmoji("🗺️", "Map"),
+    VerificationEmoji("🎳", "Bowling"),
+    VerificationEmoji("🎳", "Bowling"),
+    VerificationEmoji("📌", "Pin"),
 )

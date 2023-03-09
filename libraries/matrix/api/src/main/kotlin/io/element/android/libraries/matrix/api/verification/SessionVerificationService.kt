@@ -21,7 +21,7 @@ import org.matrix.rustcomponents.sdk.SessionVerificationEmoji
 
 interface SessionVerificationService {
 
-    val verificationAttemptStatus : StateFlow<VerificationAttemptState>
+    val verificationAttemptStatus : StateFlow<SessionVerificationServiceState>
 
     val isVerified: Boolean
 
@@ -36,28 +36,13 @@ interface SessionVerificationService {
     fun startVerification()
 }
 
-sealed interface VerificationAttemptState {
-    /** The initial state, before verification started */
-    object Initial : VerificationAttemptState
-    /** Waiting for verification acceptance */
-    object RequestingVerification : VerificationAttemptState
-
-    object VerificationRequestAccepted : VerificationAttemptState
-
-    object StartingSasVerification : VerificationAttemptState
-
-    object SasVerificationStarted : VerificationAttemptState
-
-    sealed class Verifying(open val emojis: List<SessionVerificationEmoji>) : VerificationAttemptState {
-        data class ChallengeReceived(override val emojis: List<SessionVerificationEmoji>) : Verifying(emojis)
-
-        data class Replying(override val emojis: List<SessionVerificationEmoji>) : Verifying(emojis)
-    }
-    /** Verification accepted and emojis received */
-    /** The verification has been cancelled, remotely or locally */
-    object Canceled : VerificationAttemptState
-    object Failed : VerificationAttemptState
-    /** Verification successful */
-    object Completed : VerificationAttemptState
-
+sealed interface SessionVerificationServiceState {
+    object Initial : SessionVerificationServiceState
+    object AcceptedVerificationRequest : SessionVerificationServiceState
+    object StartedSasVerification : SessionVerificationServiceState
+    data class ReceivedVerificationData(val emoji: List<SessionVerificationEmoji>) : SessionVerificationServiceState
+    object Finished : SessionVerificationServiceState
+    object Canceled : SessionVerificationServiceState
+    object Failed : SessionVerificationServiceState
 }
+

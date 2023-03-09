@@ -23,7 +23,7 @@ import io.element.android.libraries.architecture.Async
 @Immutable
 data class VerifySelfSessionState(
     val verificationState: VerificationState,
-    val eventSink: (VerifySelfSessionEvents) -> Unit,
+    val eventSink: (VerifySelfSessionViewEvents) -> Unit,
 )
 
 @Stable
@@ -31,11 +31,11 @@ sealed interface VerificationState {
     object Initial : VerificationState
     object Canceled : VerificationState
     object AwaitingOtherDeviceResponse : VerificationState
-    data class Verifying(val emojiList: List<EmojiEntry>, val state: Async<Boolean>) : VerificationState
+    data class Verifying(val emojiList: List<VerificationEmoji>, val state: Async<Boolean>) : VerificationState
     object Completed : VerificationState
 }
 
-data class EmojiEntry(
+data class VerificationEmoji(
     val code: String,
     val name: String,
 )

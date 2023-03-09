@@ -19,10 +19,11 @@ package io.element.android.features.verifysession
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.api.verification.VerificationAttemptState
 import javax.inject.Inject
 
 class VerifySelfSessionPresenter @Inject constructor(
@@ -31,32 +32,46 @@ class VerifySelfSessionPresenter @Inject constructor(
 
     @Composable
     override fun present(): VerifySelfSessionState {
-        val verificationAttemptState by sessionVerificationService.verificationAttemptStatus.collectAsState()
-        val state = when (verificationAttemptState) {
-            VerificationAttemptState.Initial -> { VerificationState.Initial }
-            VerificationAttemptState.RequestingVerification,
-            VerificationAttemptState.StartingSasVerification,
-            VerificationAttemptState.SasVerificationStarted,
-            VerificationAttemptState.VerificationRequestAccepted -> { VerificationState.AwaitingOtherDeviceResponse }
-            VerificationAttemptState.Failed, VerificationAttemptState.Canceled -> { VerificationState.Canceled }
-            is VerificationAttemptState.Verifying -> {
-                val emojis = (verificationAttemptState as VerificationAttemptState.Verifying).emojis.map {
-                    EmojiEntry(it.symbol(), it.description())
-                }
-                val async = when (verificationAttemptState) {
-                    is VerificationAttemptState.Verifying.Replying -> Async.Loading()
+        val coroutineScope = rememberCoroutineScope()
+        val stateMachine = remember { VerifySelfSessionStateMachine(coroutineScope, sessionVerificationService) }
+
+        val stateMachineCurrentState by stateMachine.state.collectAsState()
+        val state = when (stateMachineCurrentState) {
+            SessionVerificationState.Initial -> { VerificationState.Initial }
+            SessionVerificationState.RequestingVerification,
+            SessionVerificationState.StartingSasVerification,
+            SessionVerificationState.SasVerificationStarted,
+            SessionVerificationState.VerificationRequestAccepted, SessionVerificationState.Canceling -> {
+                VerificationState.AwaitingOtherDeviceResponse
+            }
+            SessionVerificationState.Canceled -> { VerificationState.Canceled }
+            is SessionVerificationState.Verifying -> {
+                val emojis = (stateMachineCurrentState as SessionVerificationState.Verifying).emojis
+                val async = when (stateMachineCurrentState) {
+                    is SessionVerificationState.Verifying.Replying -> Async.Loading()
                     else -> Async.Uninitialized
                 }
                 VerificationState.Verifying(emojis, async)
             }
-            VerificationAttemptState.Completed -> { VerificationState.Completed }
+            SessionVerificationState.Completed -> { VerificationState.Completed }
         }
 
-        fun handleEvents(event: VerifySelfSessionEvents) {
+        fun handleEvents(event: VerifySelfSessionViewEvents) {
             when (event) {
-                VerifySelfSessionEvents.StartVerification -> sessionVerificationService.requestVerification()
-                VerifySelfSessionEvents.ConfirmVerification -> sessionVerificationService.approveVerification()
-                VerifySelfSessionEvents.Cancel -> sessionVerificationService.cancelVerification()
+                VerifySelfSessionViewEvents.RequestVerification -> stateMachine.process(SessionVerificationEvent.RequestVerification)
+                VerifySelfSessionViewEvents.StartSasVerification -> stateMachine.process(SessionVerificationEvent.StartSasVerification)
+                VerifySelfSessionViewEvents.Restart -> stateMachine.process(SessionVerificationEvent.Restart)
+                VerifySelfSessionViewEvents.ConfirmVerification -> stateMachine.process(SessionVerificationEvent.AcceptChallenge)
+                VerifySelfSessionViewEvents.DeclineVerification -> stateMachine.process(SessionVerificationEvent.DeclineChallenge)
+                VerifySelfSessionViewEvents.CancelAndClose -> {
+                    if (stateMachineCurrentState !in sequenceOf(
+                            SessionVerificationState.Initial,
+                            SessionVerificationState.Completed,
+                            SessionVerificationState.Canceled)
+                        ) {
+                        stateMachine.process(SessionVerificationEvent.Cancel)
+                    }
+                }
             }
         }
 

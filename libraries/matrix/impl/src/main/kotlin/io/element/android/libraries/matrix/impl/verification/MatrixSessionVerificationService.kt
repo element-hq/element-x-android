@@ -17,7 +17,7 @@
 package io.element.android.libraries.matrix.impl.verification
 
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.api.verification.VerificationAttemptState
+import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.matrix.rustcomponents.sdk.SessionVerificationController
@@ -29,7 +29,7 @@ class MatrixSessionVerificationService @Inject constructor(
     private val verificationController: SessionVerificationController,
 ) : SessionVerificationService, SessionVerificationControllerDelegate {
 
-    private val _verificationAttemptStatus = MutableStateFlow<VerificationAttemptState>(VerificationAttemptState.Initial)
+    private val _verificationAttemptStatus = MutableStateFlow<SessionVerificationServiceState>(SessionVerificationServiceState.Initial)
     override val verificationAttemptStatus = _verificationAttemptStatus.asStateFlow()
 
     init {
@@ -38,31 +38,13 @@ class MatrixSessionVerificationService @Inject constructor(
 
     override val isVerified: Boolean get() = verificationController.isVerified()
 
-    override fun requestVerification() = tryOrFail {
-        _verificationAttemptStatus.value = VerificationAttemptState.RequestingVerification
-        verificationController.requestVerification()
-    }
+    override fun requestVerification() = tryOrFail { verificationController.requestVerification() }
 
-    override fun cancelVerification() = tryOrFail {
-        verificationController.cancelVerification()
-        if (verificationAttemptStatus.value == VerificationAttemptState.RequestingVerification) {
-            _verificationAttemptStatus.value = VerificationAttemptState.Canceled
-        }
-    }
+    override fun cancelVerification() = tryOrFail { verificationController.cancelVerification() }
 
-    override fun approveVerification() = tryOrFail {
-        verificationController.approveVerification()
-        val emojis = (verificationAttemptStatus.value as? VerificationAttemptState.Verifying)?.emojis
-            ?: error("Invalid state: ${_verificationAttemptStatus.value}")
-        _verificationAttemptStatus.value = VerificationAttemptState.Verifying.Replying(emojis)
-    }
+    override fun approveVerification() = tryOrFail { verificationController.approveVerification() }
 
-    override fun declineVerification() = tryOrFail {
-        verificationController.declineVerification()
-        val emojis = (verificationAttemptStatus.value as? VerificationAttemptState.Verifying)?.emojis
-            ?: error("Invalid state: ${_verificationAttemptStatus.value}")
-        _verificationAttemptStatus.value = VerificationAttemptState.Verifying.Replying(emojis)
-    }
+    override fun declineVerification() = tryOrFail { verificationController.declineVerification() }
 
     override fun startVerification() = tryOrFail { verificationController.startSasVerification() }
 
@@ -76,28 +58,28 @@ class MatrixSessionVerificationService @Inject constructor(
 
     // When verification attempt is accepted by the other device
     override fun didAcceptVerificationRequest() {
-        println("Accepted")
+        _verificationAttemptStatus.value = SessionVerificationServiceState.AcceptedVerificationRequest
     }
 
     override fun didCancel() {
-        _verificationAttemptStatus.value = VerificationAttemptState.Canceled
+        _verificationAttemptStatus.value = SessionVerificationServiceState.Canceled
     }
 
     override fun didFail() {
-        _verificationAttemptStatus.value = VerificationAttemptState.Failed
+        _verificationAttemptStatus.value = SessionVerificationServiceState.Failed
     }
 
     override fun didFinish() {
-        _verificationAttemptStatus.value = VerificationAttemptState.Completed
+        _verificationAttemptStatus.value = SessionVerificationServiceState.Finished
     }
 
     override fun didReceiveVerificationData(data: List<SessionVerificationEmoji>) {
-        _verificationAttemptStatus.value = VerificationAttemptState.Verifying.ChallengeReceived(data)
+        _verificationAttemptStatus.value = SessionVerificationServiceState.ReceivedVerificationData(data)
     }
 
     // When the actual SAS verification starts
     override fun didStartSasVerification() {
-        println("Started")
+        _verificationAttemptStatus.value = SessionVerificationServiceState.StartedSasVerification
     }
 
     // end-region
