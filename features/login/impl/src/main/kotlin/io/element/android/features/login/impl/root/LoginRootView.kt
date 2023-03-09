@@ -62,7 +62,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.features.login.error.loginError
+import io.element.android.features.login.impl.error.loginError
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
@@ -85,7 +85,7 @@ import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginRootScreen(
+fun LoginRootView(
     state: LoginRootState,
     modifier: Modifier = Modifier,
     onChangeServer: () -> Unit = {},
@@ -349,7 +349,7 @@ internal fun LoginRootScreenDarkPreview(@PreviewParameter(LoginRootStateProvider
 
 @Composable
 private fun ContentToPreview(state: LoginRootState) {
-    LoginRootScreen(
+    LoginRootView(
         state = state,
         onBackPressed = {}
     )
