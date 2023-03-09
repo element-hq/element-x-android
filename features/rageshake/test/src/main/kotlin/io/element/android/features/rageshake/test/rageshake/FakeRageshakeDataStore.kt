@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 const val A_SENSITIVITY = 1f
 
-// TODO Remove this duplicated class when we will rework modules.
 class FakeRageshakeDataStore(
     isEnabled: Boolean = true,
     sensitivity: Float = A_SENSITIVITY,

@@ -24,6 +24,8 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.rageshake.test.crash.A_CRASH_DATA
 import io.element.android.features.rageshake.test.crash.FakeCrashDataStore
+import io.element.android.features.rageshake.test.screenshot.A_SCREENSHOT_URI
+import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolder
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.test.A_FAILURE_REASON
 import kotlinx.coroutines.ExperimentalCoroutinesApi
