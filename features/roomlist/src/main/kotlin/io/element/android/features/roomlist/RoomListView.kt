@@ -17,14 +17,22 @@
 package io.element.android.features.roomlist
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -35,20 +43,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Velocity
+import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.components.RoomListTopBar
 import io.element.android.features.roomlist.components.RoomSummaryRow
 import io.element.android.features.roomlist.model.RoomListEvents
 import io.element.android.features.roomlist.model.RoomListRoomSummary
 import io.element.android.features.roomlist.model.RoomListState
 import io.element.android.features.roomlist.model.RoomListStateProvider
+import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -80,11 +93,13 @@ fun RoomListView(
         filter = state.filter,
         modifier = modifier,
         onRoomClicked = onRoomClicked,
+        displayVerifySessionPrompt = state.displayVerificationPrompt,
         onFilterChanged = ::onFilterChanged,
         onOpenSettings = onOpenSettings,
         onScrollOver = ::onVisibleRangedChanged,
         onVerifyClicked = onVerifyClicked,
         onCreateRoomClicked = onCreateRoomClicked,
+        onDismissVerificationPromptClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
     )
 }
 
@@ -94,12 +109,14 @@ fun RoomListContent(
     roomSummaries: ImmutableList<RoomListRoomSummary>,
     matrixUser: MatrixUser?,
     filter: String,
+    displayVerifySessionPrompt: Boolean,
     modifier: Modifier = Modifier,
     onRoomClicked: (RoomId) -> Unit = {},
     onFilterChanged: (String) -> Unit = {},
     onOpenSettings: () -> Unit = {},
     onScrollOver: (IntRange) -> Unit = {},
     onVerifyClicked: () -> Unit,
+    onDismissVerificationPromptClicked: () -> Unit,
     onCreateRoomClicked: () -> Unit = {},
 ) {
     fun onRoomClicked(room: RoomListRoomSummary) {
@@ -155,9 +172,9 @@ fun RoomListContent(
                         .nestedScroll(nestedScrollConnection),
                     state = lazyListState,
                 ) {
-                    stickyHeader {
-                        TextButton(onClick = onVerifyClicked) {
-                            Text("Verify")
+                    if (displayVerifySessionPrompt) {
+                        item {
+                            RequestVerificationHeader(onVerifyClicked = onVerifyClicked, onDismissClicked = onDismissVerificationPromptClicked)
                         }
                     }
                     items(
@@ -179,6 +196,68 @@ fun RoomListContent(
             }
         },
     )
+}
+
+@Composable
+internal fun RequestVerificationHeader(
+    modifier: Modifier = Modifier,
+    onVerifyClicked: () -> Unit,
+    onDismissClicked: () -> Unit,
+) {
+    Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+        Surface(
+            modifier.fillMaxWidth(),
+            shape = MaterialTheme.shapes.small,
+            color = MaterialTheme.colorScheme.surfaceVariant
+        ) {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+            ) {
+                Row {
+                    Text(
+                        "Access your message history",
+                        modifier = Modifier.weight(1f),
+                        style = ElementTextStyles.Bold.body,
+                        color = MaterialTheme.colorScheme.primary,
+                        textAlign = TextAlign.Start,
+                    )
+                    Icon(
+                        modifier = Modifier.clickable(onClick = onDismissClicked),
+                        imageVector = Icons.Default.Close,
+                        contentDescription = stringResource(StringR.string.action_close)
+                    )
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                Text("Looks like you’re using a new device. Verify it’s you to access your encrypted messages.", style = ElementTextStyles.Regular.bodyMD)
+                Spacer(modifier = Modifier.height(12.dp))
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 7.dp),
+                    onClick = onVerifyClicked,
+                ) {
+                    Text(stringResource(id = StringR.string._continue), style = ElementTextStyles.Button)
+                }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+internal fun PreviewRequestVerificationHeaderLight() {
+    ElementPreviewLight {
+        RequestVerificationHeader(onVerifyClicked = {}, onDismissClicked = {})
+    }
+}
+
+@Preview
+@Composable
+internal fun PreviewRequestVerificationHeaderDark() {
+    ElementPreviewDark {
+        RequestVerificationHeader(onVerifyClicked = {}, onDismissClicked = {})
+    }
 }
 
 private fun RoomListRoomSummary.contentType() = isPlaceholder

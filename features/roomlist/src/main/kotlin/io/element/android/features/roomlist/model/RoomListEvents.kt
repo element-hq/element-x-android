@@ -19,4 +19,5 @@ package io.element.android.features.roomlist.model
 sealed interface RoomListEvents {
     data class UpdateFilter(val newFilter: String) : RoomListEvents
     data class UpdateVisibleRange(val range: IntRange) : RoomListEvents
+    object DismissRequestVerificationPrompt : RoomListEvents
 }

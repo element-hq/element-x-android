@@ -37,6 +37,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomSummary
+import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -51,6 +52,7 @@ private const val extendedRangeSize = 40
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
     private val lastMessageFormatter: LastMessageFormatter,
+    private val sessionVerificationService: SessionVerificationService,
 ) : Presenter<RoomListState> {
 
     @Composable
@@ -63,6 +65,8 @@ class RoomListPresenter @Inject constructor(
             .roomSummaryDataSource()
             .roomSummaries()
             .collectAsState()
+
+        var displayRequestVerification by rememberSaveable { mutableStateOf(!sessionVerificationService.isVerified) }
 
         Timber.v("RoomSummaries size = ${roomSummaries.size}")
 
@@ -77,6 +81,7 @@ class RoomListPresenter @Inject constructor(
             when (event) {
                 is RoomListEvents.UpdateFilter -> filter = event.newFilter
                 is RoomListEvents.UpdateVisibleRange -> updateVisibleRange(event.range)
+                RoomListEvents.DismissRequestVerificationPrompt -> displayRequestVerification = false
             }
         }
 
@@ -87,6 +92,7 @@ class RoomListPresenter @Inject constructor(
             matrixUser = matrixUser.value,
             roomList = filteredRoomSummaries.value,
             filter = filter,
+            displayVerificationPrompt = displayRequestVerification,
             eventSink = ::handleEvents
         )
     }

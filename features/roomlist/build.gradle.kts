@@ -42,6 +42,7 @@ dependencies {
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.dateformatter.api)
+    implementation(projects.features.verifySession)
     implementation(libs.accompanist.placeholder)
 
     testImplementation(libs.test.junit)
