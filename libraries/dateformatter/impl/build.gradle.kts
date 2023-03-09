@@ -35,7 +35,7 @@ android {
         implementation(projects.libraries.di)
         implementation(projects.anvilannotations)
 
-        implementation(projects.libraries.dateformatter.api)
+        api(projects.libraries.dateformatter.api)
         api(libs.datetime)
 
         testImplementation(libs.test.junit)

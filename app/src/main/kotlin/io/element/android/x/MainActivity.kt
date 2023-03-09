@@ -29,9 +29,7 @@ import com.bumble.appyx.core.integration.NodeHost
 import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.designsystem.theme.ElementTheme
-import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.x.di.AppBindings
-import io.element.android.x.node.RootFlowNode
 
 class MainActivity : NodeComponentActivity() {
 
@@ -47,13 +45,7 @@ class MainActivity : NodeComponentActivity() {
                     modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
                 ) {
                     NodeHost(integrationPoint = appyxIntegrationPoint) {
-                        RootFlowNode(
-                            buildContext = it,
-                            appComponentOwner = applicationContext as DaggerComponentOwner,
-                            authenticationService = appBindings.authenticationService(),
-                            presenter = appBindings.rootPresenter(),
-                            matrixClientsHolder = appBindings.matrixClientsHolder()
-                        )
+                        MainNode(it, appBindings.mainDaggerComponentOwner())
                     }
                 }
             }

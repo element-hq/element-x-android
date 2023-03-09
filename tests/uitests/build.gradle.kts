@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import extension.allFeatures
+import extension.allFeaturesImpl
 import extension.allLibraries
 
 // TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
@@ -40,5 +40,5 @@ dependencies {
     ksp(libs.showkase.processor)
 
     allLibraries()
-    allFeatures()
+    allFeaturesImpl()
 }

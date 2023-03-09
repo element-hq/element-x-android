@@ -16,9 +16,9 @@
 
 package extension
 
-import gradle.kotlin.dsl.accessors._c662f48c4c26c34521d1054f12b949ab.androidTestImplementation
-import gradle.kotlin.dsl.accessors._c662f48c4c26c34521d1054f12b949ab.debugImplementation
-import gradle.kotlin.dsl.accessors._c662f48c4c26c34521d1054f12b949ab.implementation
+import gradle.kotlin.dsl.accessors._71f190358cebd46a469f2989484fd643.androidTestImplementation
+import gradle.kotlin.dsl.accessors._71f190358cebd46a469f2989484fd643.debugImplementation
+import gradle.kotlin.dsl.accessors._71f190358cebd46a469f2989484fd643.implementation
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.project
@@ -61,14 +61,25 @@ fun DependencyHandlerScope.allLibraries() {
     implementation(project(":libraries:di"))
 }
 
-fun DependencyHandlerScope.allFeatures() {
-    implementation(project(":features:onboarding"))
-    implementation(project(":features:login"))
-    implementation(project(":features:logout"))
-    implementation(project(":features:roomlist"))
-    implementation(project(":features:messages"))
-    implementation(project(":features:rageshake"))
-    implementation(project(":features:preferences"))
-    implementation(project(":features:createroom"))
+fun DependencyHandlerScope.allFeaturesApi() {
+    implementation(project(":features:onboarding:api"))
+    implementation(project(":features:login:api"))
+    implementation(project(":features:logout:api"))
+    implementation(project(":features:roomlist:api"))
+    implementation(project(":features:messages:api"))
+    implementation(project(":features:rageshake:api"))
+    implementation(project(":features:preferences:api"))
+    implementation(project(":features:createroom:api"))
+}
+
+fun DependencyHandlerScope.allFeaturesImpl() {
+    implementation(project(":features:onboarding:impl"))
+    implementation(project(":features:login:impl"))
+    implementation(project(":features:logout:impl"))
+    implementation(project(":features:roomlist:impl"))
+    implementation(project(":features:messages:impl"))
+    implementation(project(":features:rageshake:impl"))
+    implementation(project(":features:preferences:impl"))
+    implementation(project(":features:createroom:impl"))
     implementation(project(":features:verify-session"))
 }
