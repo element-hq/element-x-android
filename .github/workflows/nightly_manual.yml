@@ -13,6 +13,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Install towncrier
+        run: |
+          python3 -m pip install towncrier
+      - name: Prepare changelog file
+        run: |
+          mv towncrier.toml towncrier.toml.bak
+          sed 's/CHANGES\.md/CHANGES_NIGHTLY\.md/' towncrier.toml.bak > towncrier.toml
+          rm towncrier.toml.bak
+          yes n | towncrier build --version nightly
       - name: Build and upload Nightly APK
         run: |
           ./gradlew assembleNightly appDistributionUploadNightly $CI_GRADLE_ARG_PROPERTIES
@@ -27,4 +36,3 @@ jobs:
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.ELEMENT_ANDROID_BROWSERSTACK_USERNAME }}
           BROWSERSTACK_PASSWORD: ${{ secrets.ELEMENT_ANDROID_BROWSERSTACK_ACCESS_KEY }}
-
