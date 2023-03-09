@@ -21,7 +21,6 @@ import io.element.android.features.rageshake.api.screenshot.ScreenshotHolder
 
 const val A_SCREENSHOT_URI = "file://content/uri"
 
-// TODO Remove this duplicated class when we will rework modules.
 class FakeScreenshotHolder(private val screenshotUri: String? = null) : ScreenshotHolder {
     override fun writeBitmap(data: Bitmap) = Unit
 
