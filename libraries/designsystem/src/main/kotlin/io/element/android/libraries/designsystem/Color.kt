@@ -68,4 +68,4 @@ val ElementGreen = Color(0xFF0DBD8B)
 val ElementOrange = Color(0xFFD9B072)
 val Vermilion = Color(0xFFFF5B55)
 
-val LinkColor = Color(0xFF054F6E)
+val LinkColor = Color(0xFF0086E6)

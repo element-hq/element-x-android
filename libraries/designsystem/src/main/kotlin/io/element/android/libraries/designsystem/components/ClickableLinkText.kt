@@ -30,6 +30,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
@@ -40,14 +41,15 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun ClickableLinkText(
     text: AnnotatedString,
-    linkAnnotationTag: String,
-    onClick: () -> Unit,
-    onLongClick: () -> Unit,
     interactionSource: MutableInteractionSource,
     modifier: Modifier = Modifier,
+    linkAnnotationTag: String = "",
+    onClick: () -> Unit = {},
+    onLongClick: () -> Unit = {},
     style: TextStyle = LocalTextStyle.current,
     inlineContent: ImmutableMap<String, InlineTextContent> = persistentMapOf(),
 ) {
@@ -71,12 +73,14 @@ fun ClickableLinkText(
         ) { offset ->
             layoutResult.value?.let { layoutResult ->
                 val position = layoutResult.getOffsetForPosition(offset)
-                val linkAnnotations =
+                val linkUrlAnnotations = text.getUrlAnnotations(position, position)
+                    .map { AnnotatedString.Range(it.item.url, it.start, it.end, linkAnnotationTag) }
+                val linkStringAnnotations = linkUrlAnnotations +
                     text.getStringAnnotations(linkAnnotationTag, position, position)
-                if (linkAnnotations.isEmpty()) {
+                if (linkStringAnnotations.isEmpty()) {
                     onClick()
                 } else {
-                    uriHandler.openUri(linkAnnotations.first().item)
+                    uriHandler.openUri(linkStringAnnotations.first().item)
                 }
             }
         }
