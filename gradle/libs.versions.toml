@@ -3,11 +3,11 @@
 
 [versions]
 # Project
-android_gradle_plugin = "7.4.1"
+android_gradle_plugin = "7.4.2"
 firebase_gradle_plugin = "3.2.0"
 kotlin = "1.8.10"
 ksp = "1.8.10-1.0.9"
-molecule = "0.7.0"
+molecule = "0.7.1"
 
 # AndroidX
 material = "1.8.0"
@@ -27,30 +27,30 @@ composecompiler = "1.4.2"
 coroutines = "1.6.4"
 
 # Accompanist
-accompanist = "0.27.0"
+accompanist = "0.28.0"
 
 # Test
-test_core = "1.4.0"
+test_core = "1.5.0"
 
 #other
 coil = "2.2.2"
 datetime = "0.4.0"
-serialization_json = "1.4.1"
+serialization_json = "1.5.0"
 # Warning, also hard-coded in composeDependencies()
 showkase = "1.0.0-beta17"
-jsoup = "1.15.3"
-appyx = "1.0.3"
-dependencycheck = "7.4.4"
-stem = "2.2.3"
+jsoup = "1.15.4"
+appyx = "1.0.5"
+dependencycheck = "8.1.2"
+stem = "2.3.0"
 sqldelight = "1.5.5"
 
 # DI
-dagger = "2.44.2"
+dagger = "2.45"
 anvil = "2.4.4"
 
 # quality
 detekt = "1.22.0"
-ktlint = "11.0.0"
+ktlint = "11.3.1"
 dependencygraph = "0.10"
 
 [libraries]
@@ -67,7 +67,6 @@ androidx_datastore_datastore = { module = "androidx.datastore:datastore", versio
 androidx_constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 androidx_recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 androidx_lifecycle_runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
-androidx_lifecycle_compose = { module = "androidx.lifecycle:compose", version.ref = "lifecycle" }
 androidx_lifecycle_process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
 androidx_splash = "androidx.core:core-splashscreen:1.0.0"
 androidx_security_crypto = "androidx.security:security-crypto:1.0.0"
@@ -98,16 +97,16 @@ squareup_seismic = "com.squareup:seismic:1.0.3"
 test_core = { module = "androidx.test:core", version.ref = "test_core" }
 test_corektx = { module = "androidx.test:core-ktx", version.ref = "test_core" }
 test_junit = "junit:junit:4.13.2"
-test_runner = "androidx.test:runner:1.4.0"
+test_runner = "androidx.test:runner:1.5.2"
 test_uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
-test_junitext = "androidx.test.ext:junit:1.1.3"
+test_junitext = "androidx.test.ext:junit:1.1.5"
 test_mockk = "io.mockk:mockk:1.13.4"
-test_barista = "com.adevinta.android:barista:4.2.0"
+test_barista = "com.adevinta.android:barista:4.3.0"
 test_hamcrest = "org.hamcrest:hamcrest:2.2"
-test_orchestrator = "androidx.test:orchestrator:1.4.1"
+test_orchestrator = "androidx.test:orchestrator:1.4.2"
 test_turbine = "app.cash.turbine:turbine:0.12.1"
 test_truth = "com.google.truth:truth:1.1.3"
-test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.8"
+test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.10"
 
 # Others
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
@@ -135,7 +134,7 @@ anvil_compiler_api = { module = "com.squareup.anvil:compiler-api", version.ref =
 anvil_compiler_utils = { module = "com.squareup.anvil:compiler-utils", version.ref = "anvil" }
 
 # Composer
-wysiwyg = "io.element.android:wysiwyg:0.7.0.1"
+wysiwyg = "io.element.android:wysiwyg:1.1.1"
 
 [bundles]
 
@@ -154,6 +153,6 @@ dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencyc
 stem = { id = "com.likethesalad.stem", version.ref = "stem" }
 stemlibrary = { id = "com.likethesalad.stem-library", version.ref = "stem" }
 paparazzi = "app.cash.paparazzi:1.2.0"
-sonarqube = "org.sonarqube:3.5.0.2730"
+sonarqube = "org.sonarqube:4.0.0.2929"
 kover = "org.jetbrains.kotlinx.kover:0.6.1"
 sqldelight = { id = "com.squareup.sqldelight", version.ref = "sqldelight" }

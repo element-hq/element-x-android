@@ -16,6 +16,7 @@ The application is a total rewrite of [Element-Android](https://github.com/vecto
 
 * [Screenshots](#screenshots)
 * [Rust SDK](#rust-sdk)
+* [Status](#status)
 * [Contributing](#contributing)
 * [Build instructions](#build-instructions)
 * [Support](#support)
@@ -35,6 +36,10 @@ Here are some early screenshots of the application:
 ElementX leverages the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) through an FFI layer that the final client can directly import and use.
 
 We're doing this as a way to share code between platforms and while we've seen promising results it's still in the experimental stage and bound to change.
+
+## Status
+
+This project is in work in progress. The app does not cover yet all functionalities we expect.
 
 ## Contributing
 
