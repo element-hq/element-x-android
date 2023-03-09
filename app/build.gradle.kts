@@ -17,7 +17,7 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
-import extension.allFeatures
+import extension.allFeaturesImpl
 import extension.allLibraries
 
 // TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
@@ -26,8 +26,8 @@ plugins {
     id("io.element.android-compose-application")
     alias(libs.plugins.stem)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.kapt)
     id("com.google.firebase.appdistribution") version "4.0.0"
     id("org.jetbrains.kotlinx.knit") version "0.4.0"
@@ -201,12 +201,13 @@ knit {
 
 dependencies {
     allLibraries()
-    allFeatures()
+    allFeaturesImpl()
     implementation(projects.libraries.matrix.impl)
     implementation(projects.libraries.dateformatter.impl)
     implementation(projects.libraries.sessionStorage.impl)
     implementation(projects.tests.uitests)
     implementation(projects.anvilannotations)
+    implementation(projects.appnav)
     anvil(projects.anvilcodegen)
 
     // https://developer.android.com/studio/write/java8-support#library-desugaring-versions

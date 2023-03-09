@@ -24,7 +24,7 @@ android {
     namespace = "io.element.android.libraries.dateformatter.test"
 
     dependencies {
-        implementation(projects.libraries.dateformatter.api)
+        api(projects.libraries.dateformatter.api)
         api(libs.datetime)
     }
 }
