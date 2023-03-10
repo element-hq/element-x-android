@@ -14,11 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.ui.media
+package io.element.android.libraries.matrix.api.timeline.item.virtual
 
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.api.media.MediaResolver
+sealed interface VirtualTimelineItem {
 
-fun AvatarData.toMetadata(): MediaResolver.Meta {
-    return MediaResolver.Meta(url = url, kind = MediaResolver.Kind.Thumbnail(size.value))
+    data class DayDivider(
+        val timestamp: Long
+    ) : VirtualTimelineItem
+
+    object ReadMarker : VirtualTimelineItem
+
+    object LoadingIndicator : VirtualTimelineItem
+
+    object TimelineStart : VirtualTimelineItem
 }

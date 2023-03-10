@@ -18,23 +18,23 @@ package io.element.android.libraries.matrix.impl.media
 
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.media.MediaResolver
+import org.matrix.rustcomponents.sdk.MediaSource
 import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
 
 internal class RustMediaResolver(private val client: MatrixClient) : MediaResolver {
 
     override suspend fun resolve(url: String?, kind: MediaResolver.Kind): ByteArray? {
         if (url.isNullOrEmpty()) return null
-        val mediaSource = mediaSourceFromUrl(url)
-        return resolve(MediaResolver.Meta(mediaSource, kind))
+        return mediaSourceFromUrl(url).use { mediaSource ->
+            resolve(mediaSource, kind)
+        }
     }
 
-    override suspend fun resolve(meta: MediaResolver.Meta): ByteArray? {
-        val source = meta.source ?: return null
-        val kind = meta.kind
+    private suspend fun resolve(mediaSource: MediaSource, kind: MediaResolver.Kind): ByteArray? {
         return when (kind) {
-            is MediaResolver.Kind.Content -> client.loadMediaContentForSource(source)
+            is MediaResolver.Kind.Content -> client.loadMediaContentForSource(mediaSource)
             is MediaResolver.Kind.Thumbnail -> client.loadMediaThumbnailForSource(
-                source,
+                mediaSource,
                 kind.width.toLong(),
                 kind.height.toLong()
             )

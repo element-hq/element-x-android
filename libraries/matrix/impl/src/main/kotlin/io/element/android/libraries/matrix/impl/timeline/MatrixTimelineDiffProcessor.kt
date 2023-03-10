@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.impl.timeline
 
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,14 +26,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.TimelineChange
 import org.matrix.rustcomponents.sdk.TimelineDiff
+import org.matrix.rustcomponents.sdk.TimelineItem
 import org.matrix.rustcomponents.sdk.TimelineListener
-import org.matrix.rustcomponents.sdk.VirtualTimelineItem
 
 internal class MatrixTimelineDiffProcessor(
     private val paginationState: MutableStateFlow<MatrixTimeline.PaginationState>,
     private val timelineItems: MutableStateFlow<List<MatrixTimelineItem>>,
     private val coroutineScope: CoroutineScope,
     private val diffDispatcher: CoroutineDispatcher,
+    private val timelineItemFactory: MatrixTimelineItemMapper,
 ) : TimelineListener {
 
     override fun onUpdate(update: TimelineDiff) {
@@ -117,4 +119,9 @@ internal class MatrixTimelineDiffProcessor(
             }
         }
     }
+
+    private fun TimelineItem.asMatrixTimelineItem(): MatrixTimelineItem {
+        return timelineItemFactory.map(this)
+    }
+
 }

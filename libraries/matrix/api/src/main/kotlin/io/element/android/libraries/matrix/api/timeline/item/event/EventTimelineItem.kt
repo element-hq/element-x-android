@@ -14,11 +14,22 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.ui.media
+package io.element.android.libraries.matrix.api.timeline.item.event
 
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.api.media.MediaResolver
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
 
-fun AvatarData.toMetadata(): MediaResolver.Meta {
-    return MediaResolver.Meta(url = url, kind = MediaResolver.Kind.Thumbnail(size.value))
-}
+data class EventTimelineItem(
+    val uniqueIdentifier: String,
+    val eventId: EventId?,
+    val isEditable: Boolean,
+    val isLocal: Boolean,
+    val isOwn: Boolean,
+    val isRemote: Boolean,
+    val localSendState: EventSendState?,
+    val reactions: List<EventReaction>,
+    val sender: UserId,
+    val senderProfile: ProfileTimelineDetails,
+    val timestamp: Long,
+    val content: TimelineEventContent
+)

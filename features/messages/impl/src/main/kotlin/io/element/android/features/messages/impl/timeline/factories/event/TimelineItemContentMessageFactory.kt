@@ -47,7 +47,7 @@ class TimelineItemContentMessageFactory @Inject constructor() {
                 TimelineItemImageContent(
                     body = messageType.content.body,
                     imageMeta = MediaResolver.Meta(
-                        source = messageType.content.source,
+                        url = messageType.content.source,
                         kind = MediaResolver.Kind.Content
                     ),
                     blurhash = messageType.content.info?.blurhash,
