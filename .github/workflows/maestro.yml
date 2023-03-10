@@ -1,9 +1,10 @@
 name: Maestro
 
+# Run this flow only on pull request, and only when the pull request has been approved, to limit our usage of maestro cloud.
+# https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#running-a-workflow-when-a-pull-request-is-approved
 on:
-  pull_request: { }
-  push:
-    branches: [ main, develop ]
+  pull_request_review:
+    types: [submitted]
 
 # Enrich gradle.properties for CI/CD
 env:
@@ -14,12 +15,12 @@ jobs:
   maestro-cloud:
     name: Maestro test suite
     runs-on: ubuntu-latest
-    if: github.ref != 'refs/heads/main'
+    if: github.event.review.state == 'approved'
     strategy:
       fail-fast: false
-    # Allow all jobs on develop. Just one per PR.
+    # Allow one per PR.
     concurrency:
-      group: ${{ github.ref == 'refs/heads/develop' && format('maestro-develop-{0}', github.sha) || format('maestro-debug-{0}', github.ref) }}
+      group: ${{ format('maestro-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
