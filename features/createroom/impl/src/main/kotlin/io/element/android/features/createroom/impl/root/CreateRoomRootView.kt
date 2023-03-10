@@ -89,6 +89,7 @@ fun CreateRoomRootView(
                 active = isSearchActive,
                 onActiveChanged = { isSearchActive = it },
                 onTextChanged = { state.eventSink(CreateRoomRootEvents.UpdateSearchQuery(it)) },
+                onResultSelected = { state.eventSink(CreateRoomRootEvents.StartDM(it)) }
             )
 
             if (!isSearchActive) {
@@ -134,6 +135,7 @@ fun CreateRoomSearchBar(
     modifier: Modifier = Modifier,
     onActiveChanged: (Boolean) -> Unit = {},
     onTextChanged: (String) -> Unit = {},
+    onResultSelected: (MatrixUser) -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -181,7 +183,12 @@ fun CreateRoomSearchBar(
         shape = if (!active) SearchBarDefaults.dockedShape else SearchBarDefaults.fullScreenShape,
         colors = if (!active) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
         content = {
-            results.forEach { CreateRoomSearchResultItem(matrixUser = it) }
+            results.forEach {
+                CreateRoomSearchResultItem(
+                    matrixUser = it,
+                    onClick = { onResultSelected(it) }
+                )
+            }
         },
     )
 }
@@ -210,11 +217,13 @@ fun CreateRoomActionButtonsList(
 fun CreateRoomSearchResultItem(
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
 ) {
     MatrixUserRow(
         modifier = modifier.heightIn(min = 56.dp),
         matrixUser = matrixUser,
         avatarSize = AvatarSize.SMALL,
+        onClick = onClick,
     )
 }
 
