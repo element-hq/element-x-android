@@ -64,7 +64,7 @@ class RoomListPresenter @Inject constructor(
             .roomSummaries()
             .collectAsState()
 
-        var displayRequestVerification by rememberSaveable { mutableStateOf(!sessionVerificationService.isVerified) }
+        var displayRequestVerification by rememberSaveable { mutableStateOf(false) }
 
         Timber.v("RoomSummaries size = ${roomSummaries.size}")
 
@@ -73,6 +73,13 @@ class RoomListPresenter @Inject constructor(
         }
         LaunchedEffect(Unit) {
             initialLoad(matrixUser)
+        }
+
+        val sessionVerificationIsReady by sessionVerificationService.isReady.collectAsState()
+        LaunchedEffect(sessionVerificationIsReady) {
+            if (sessionVerificationIsReady) {
+                displayRequestVerification = !sessionVerificationService.isVerified
+            }
         }
 
         fun handleEvents(event: RoomListEvents) {

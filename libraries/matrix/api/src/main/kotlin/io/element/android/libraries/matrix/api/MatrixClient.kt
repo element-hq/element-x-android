@@ -43,4 +43,6 @@ interface MatrixClient : Closeable {
         width: Long,
         height: Long
     ): Result<ByteArray>
+
+    fun onSlidingSyncUpdate()
 }

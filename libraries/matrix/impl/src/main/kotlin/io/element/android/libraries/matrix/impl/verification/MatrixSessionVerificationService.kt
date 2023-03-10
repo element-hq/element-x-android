@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.verification
 
+import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,28 +26,37 @@ import org.matrix.rustcomponents.sdk.SessionVerificationControllerDelegate
 import org.matrix.rustcomponents.sdk.SessionVerificationEmoji
 import javax.inject.Inject
 
-class MatrixSessionVerificationService @Inject constructor(
-    private val verificationController: SessionVerificationController,
-) : SessionVerificationService, SessionVerificationControllerDelegate {
+class MatrixSessionVerificationService @Inject constructor() : SessionVerificationService, SessionVerificationControllerDelegate {
+
+    var verificationController: SessionVerificationController? = null
+        set(value) {
+            field = value
+            _isReady.value = value != null
+        }
 
     private val _verificationAttemptStatus = MutableStateFlow<SessionVerificationServiceState>(SessionVerificationServiceState.Initial)
     override val verificationAttemptStatus = _verificationAttemptStatus.asStateFlow()
 
-    init {
-        verificationController.setDelegate(this)
+    private val _isReady = MutableStateFlow(false)
+    override val isReady = _isReady.asStateFlow()
+
+    override val isVerified: Boolean get() = verificationController?.isVerified().orTrue()
+
+    override fun requestVerification() = tryOrFail {
+        verificationController?.setDelegate(this)
+        verificationController?.requestVerification()
     }
 
-    override val isVerified: Boolean get() = verificationController.isVerified()
+    override fun cancelVerification() = tryOrFail { verificationController?.cancelVerification() }
 
-    override fun requestVerification() = tryOrFail { verificationController.requestVerification() }
+    override fun approveVerification() = tryOrFail { verificationController?.approveVerification() }
 
-    override fun cancelVerification() = tryOrFail { verificationController.cancelVerification() }
+    override fun declineVerification() = tryOrFail { verificationController?.declineVerification() }
 
-    override fun approveVerification() = tryOrFail { verificationController.approveVerification() }
-
-    override fun declineVerification() = tryOrFail { verificationController.declineVerification() }
-
-    override fun startVerification() = tryOrFail { verificationController.startSasVerification() }
+    override fun startVerification() = tryOrFail {
+        verificationController?.setDelegate(this)
+        verificationController?.startSasVerification()
+    }
 
     private fun tryOrFail(block: () -> Unit) {
         runCatching {
@@ -63,14 +73,17 @@ class MatrixSessionVerificationService @Inject constructor(
 
     override fun didCancel() {
         _verificationAttemptStatus.value = SessionVerificationServiceState.Canceled
+        verificationController?.setDelegate(null)
     }
 
     override fun didFail() {
         _verificationAttemptStatus.value = SessionVerificationServiceState.Failed
+        verificationController?.setDelegate(null)
     }
 
     override fun didFinish() {
         _verificationAttemptStatus.value = SessionVerificationServiceState.Finished
+        verificationController?.setDelegate(null)
     }
 
     override fun didReceiveVerificationData(data: List<SessionVerificationEmoji>) {

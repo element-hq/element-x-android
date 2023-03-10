@@ -43,6 +43,7 @@ object MatrixModule {
 @ContributesTo(SessionScope::class)
 object SessionMatrixModule {
     @Provides
+    @SingleIn(SessionScope::class)
     fun providesRustSessionVerificationService(matrixClient: MatrixClient): SessionVerificationService {
         return matrixClient.sessionVerificationService()
     }

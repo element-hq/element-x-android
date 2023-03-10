@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.sync
 
+import io.element.android.libraries.matrix.api.MatrixClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -28,6 +29,7 @@ import org.matrix.rustcomponents.sdk.UpdateSummary
 private const val BUFFER_SIZE = 64
 
 class SlidingSyncObserverProxy(
+    private val matrixClient: MatrixClient,
     private val coroutineScope: CoroutineScope,
 ) : SlidingSyncObserver {
 
@@ -36,6 +38,7 @@ class SlidingSyncObserverProxy(
     val updateSummaryFlow: SharedFlow<UpdateSummary> = updateSummaryMutableFlow.asSharedFlow()
 
     override fun didReceiveSyncUpdate(summary: UpdateSummary) {
+        matrixClient.onSlidingSyncUpdate()
         if (summary.rooms.isEmpty()) return
         coroutineScope.launch {
             updateSummaryMutableFlow.emit(summary)

@@ -85,4 +85,6 @@ class FakeMatrixClient(
     override fun close() = Unit
 
     override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService
+
+    override fun onInitialSyncReceived() {}
 }

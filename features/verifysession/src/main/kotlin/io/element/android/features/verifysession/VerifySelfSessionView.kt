@@ -84,12 +84,12 @@ fun VerifySelfSessionView(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = 20.dp)
                     .weight(1f)
                     .verticalScroll(rememberScrollState())
             ) {
                 HeaderContent(verificationState = state.verificationState)
-                Content(verificationState = state.verificationState, modifier = Modifier.weight(1f))
+                Content(verificationState = state.verificationState)
             }
             if (buttonsVisible) {
                 BottomMenu(screenState = state, goBack = ::goBackAndCancelIfNeeded)
@@ -152,9 +152,7 @@ internal fun HeaderContent(verificationState: VerificationState, modifier: Modif
         Spacer(Modifier.height(8.dp))
         Text(
             text = stringResource(id = subtitleTextId),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = ElementTextStyles.Regular.subheadline,
             color = MaterialTheme.colorScheme.secondary,
@@ -262,7 +260,7 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
         ) {
             negativeButtonTitle?.let { Text(stringResource(it)) }
         }
-        Spacer(Modifier.height(50.dp))
+        Spacer(Modifier.height(40.dp))
     }
 }
 

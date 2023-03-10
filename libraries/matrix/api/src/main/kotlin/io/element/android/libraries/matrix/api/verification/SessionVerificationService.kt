@@ -23,6 +23,12 @@ interface SessionVerificationService {
 
     val verificationAttemptStatus : StateFlow<SessionVerificationServiceState>
 
+    /**
+     * The internal service that checks verification can only run after the initial sync.
+     * This [StateFlow] will notify consumers when the service is ready to be used.
+     */
+    val isReady: StateFlow<Boolean>
+
     val isVerified: Boolean
 
     fun requestVerification()

@@ -22,12 +22,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class FakeSessionVerificationService : SessionVerificationService {
+    private var _isReady = MutableStateFlow(false)
     private var _isVerified = false
     private var _verificationAttemptStatus = MutableStateFlow<SessionVerificationServiceState>(SessionVerificationServiceState.Initial)
 
     override val verificationAttemptStatus: StateFlow<SessionVerificationServiceState>
         get() = _verificationAttemptStatus
     override val isVerified: Boolean get()= _isVerified
+
+    override val isReady: StateFlow<Boolean> = _isReady
 
     override fun requestVerification() = Unit
 
@@ -45,5 +48,9 @@ class FakeSessionVerificationService : SessionVerificationService {
 
     fun givenVerificationAttemptStatus(state: SessionVerificationServiceState) {
         _verificationAttemptStatus.value = state
+    }
+
+    fun givenIsReady(value: Boolean) {
+        _isReady.value = value
     }
 }
