@@ -86,5 +86,5 @@ class FakeMatrixClient(
 
     override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService
 
-    override fun onInitialSyncReceived() {}
+    override fun onSlidingSyncUpdate() {}
 }
