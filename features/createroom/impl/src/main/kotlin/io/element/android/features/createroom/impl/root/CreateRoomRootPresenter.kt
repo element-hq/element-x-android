@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import timber.log.Timber
 import javax.inject.Inject
 
 class CreateRoomRootPresenter @Inject constructor() : Presenter<CreateRoomRootState> {
@@ -44,9 +45,10 @@ class CreateRoomRootPresenter @Inject constructor() : Presenter<CreateRoomRootSt
 
         fun handleEvents(event: CreateRoomRootEvents) {
             when (event) {
+                is CreateRoomRootEvents.UpdateSearchQuery -> searchQuery = event.query
+                is CreateRoomRootEvents.StartDM -> handleStartDM(event.matrixUser)
                 CreateRoomRootEvents.CreateRoom -> Unit // Todo Handle create room action
                 CreateRoomRootEvents.InvitePeople -> Unit // Todo Handle invite people action
-                is CreateRoomRootEvents.UpdateSearchQuery -> searchQuery = event.query
             }
         }
 
@@ -72,10 +74,14 @@ class CreateRoomRootPresenter @Inject constructor() : Presenter<CreateRoomRootSt
         val isMatrixId = MatrixPatterns.isUserId(query)
         val results = mutableListOf<MatrixUser>()// TODO trigger /search request
         if (isMatrixId && results.none { it.id.value == query }) {
-            val getProfileResult: MatrixUser? = null // TODO trigger /profile quest
+            val getProfileResult: MatrixUser? = null // TODO trigger /profile request
             val profile = getProfileResult ?: MatrixUser(UserId(query))
             results.add(0, profile)
         }
         return results.toImmutableList()
+    }
+
+    private fun handleStartDM(matrixUser: MatrixUser) {
+        Timber.d("handleStartDM: $matrixUser") // Todo handle start DM action
     }
 }
