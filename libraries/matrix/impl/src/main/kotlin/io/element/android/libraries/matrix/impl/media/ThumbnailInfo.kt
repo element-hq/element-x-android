@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.ui.media
+package io.element.android.libraries.matrix.impl.media
 
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.api.media.MediaResolver
+import io.element.android.libraries.matrix.api.media.ThumbnailInfo
+import org.matrix.rustcomponents.sdk.ThumbnailInfo as RustThumbnailInfo
 
-fun AvatarData.toMetadata(): MediaResolver.Meta {
-    return MediaResolver.Meta(url = url, kind = MediaResolver.Kind.Thumbnail(size.value))
-}
+fun RustThumbnailInfo.map(): ThumbnailInfo = ThumbnailInfo(
+    height = height?.toLong(),
+    width = width?.toLong(),
+    mimetype = mimetype,
+    size = size?.toLong()
+)

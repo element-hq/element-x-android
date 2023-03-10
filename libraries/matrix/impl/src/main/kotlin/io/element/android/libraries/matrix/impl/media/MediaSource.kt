@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.ui.media
+package io.element.android.libraries.matrix.impl.media
 
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.api.media.MediaResolver
+import org.matrix.rustcomponents.sdk.MediaSource
+import org.matrix.rustcomponents.sdk.use
 
-fun AvatarData.toMetadata(): MediaResolver.Meta {
-    return MediaResolver.Meta(url = url, kind = MediaResolver.Kind.Thumbnail(size.value))
-}
+fun MediaSource.useUrl(): String = use { it.url() }

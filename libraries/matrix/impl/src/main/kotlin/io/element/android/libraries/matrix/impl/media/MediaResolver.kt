@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,23 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.ui.media
+package io.element.android.libraries.matrix.impl.media
 
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.api.media.MediaResolver
+interface MediaResolver {
 
-fun AvatarData.toMetadata(): MediaResolver.Meta {
-    return MediaResolver.Meta(url = url, kind = MediaResolver.Kind.Thumbnail(size.value))
+    sealed interface Kind {
+        data class Thumbnail(val width: Int, val height: Int) : Kind {
+            constructor(size: Int) : this(size, size)
+        }
+
+        object Content : Kind
+    }
+
+    data class Meta(
+        val url: String?,
+        val kind: Kind
+    )
+
+    suspend fun resolve(url: String?, kind: Kind): ByteArray?
+
 }
