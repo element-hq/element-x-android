@@ -57,6 +57,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import kotlinx.collections.immutable.ImmutableList
 import io.element.android.libraries.designsystem.R as DrawableR
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -128,7 +129,7 @@ fun CreateRoomRootViewTopBar(
 fun CreateRoomSearchBar(
     query: String,
     placeHolderTitle: String,
-    results: List<MatrixUser>,
+    results: ImmutableList<MatrixUser>,
     active: Boolean,
     modifier: Modifier = Modifier,
     onActiveChanged: (Boolean) -> Unit = {},

@@ -16,8 +16,8 @@
 
 package io.element.android.features.createroom.impl.root
 
-import com.bumble.appyx.core.collections.ImmutableList
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import kotlinx.collections.immutable.ImmutableList
 
 // Do not use default value, so no member get forgotten in the presenters.
 data class CreateRoomRootState(

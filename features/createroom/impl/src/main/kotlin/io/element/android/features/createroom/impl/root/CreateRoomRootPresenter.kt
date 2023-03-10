@@ -17,43 +17,65 @@
 package io.element.android.features.createroom.impl.root
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import com.bumble.appyx.core.collections.immutableListOf
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
 class CreateRoomRootPresenter @Inject constructor() : Presenter<CreateRoomRootState> {
 
     @Composable
     override fun present(): CreateRoomRootState {
-
         var searchQuery by rememberSaveable { mutableStateOf("") }
-        val searchResults = if (MatrixPatterns.isUserId(searchQuery)) {
-            immutableListOf(MatrixUser(UserId(searchQuery)))
-        } else {
-            immutableListOf()
+        val searchResults: MutableState<ImmutableList<MatrixUser>> = remember {
+            mutableStateOf(persistentListOf())
         }
 
         fun handleEvents(event: CreateRoomRootEvents) {
             when (event) {
                 CreateRoomRootEvents.CreateRoom -> Unit // Todo Handle create room action
                 CreateRoomRootEvents.InvitePeople -> Unit // Todo Handle invite people action
-                is CreateRoomRootEvents.UpdateSearchQuery -> {
-                    searchQuery = event.query
-                }
+                is CreateRoomRootEvents.UpdateSearchQuery -> searchQuery = event.query
+            }
+        }
+
+        LaunchedEffect(searchQuery) {
+            searchResults.value = if (MatrixPatterns.isUserId(searchQuery)) {
+                persistentListOf(MatrixUser(UserId(searchQuery)))
+            } else {
+                persistentListOf()
+            }
+            if (searchQuery.isNotEmpty()) {
+                searchResults.value = performSearch(searchQuery)
             }
         }
 
         return CreateRoomRootState(
             eventSink = ::handleEvents,
             searchQuery = searchQuery,
-            searchResults = searchResults,
+            searchResults = searchResults.value,
         )
+    }
+
+    private fun performSearch(query: String): ImmutableList<MatrixUser> {
+        val isMatrixId = MatrixPatterns.isUserId(query)
+        val results = mutableListOf<MatrixUser>()// TODO trigger /search request
+        if (isMatrixId && results.none { it.id.value == query }) {
+            val getProfileResult: MatrixUser? = null // TODO trigger /profile quest
+            val profile = getProfileResult ?: MatrixUser(UserId(query))
+            results.add(0, profile)
+        }
+        return results.toImmutableList()
     }
 }
