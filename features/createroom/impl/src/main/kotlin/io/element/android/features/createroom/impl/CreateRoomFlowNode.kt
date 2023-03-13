@@ -24,10 +24,12 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.createroom.impl.root.CreateRoomRootNode
+import io.element.android.features.createroom.impl.selectmembers.SelectMembersNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
@@ -50,11 +52,22 @@ class CreateRoomFlowNode @AssistedInject constructor(
     sealed interface NavTarget : Parcelable {
         @Parcelize
         object Root : NavTarget
+
+        @Parcelize
+        object NewRoom : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Root -> createNode<CreateRoomRootNode>(buildContext)
+            NavTarget.Root -> {
+                val callback = object : CreateRoomRootNode.Callback {
+                    override fun onCreateNewRoom() {
+                        backstack.push(NavTarget.NewRoom)
+                    }
+                }
+                createNode<CreateRoomRootNode>(buildContext, plugins = listOf(callback))
+            }
+            NavTarget.NewRoom -> createNode<SelectMembersNode>(buildContext)
         }
     }
 

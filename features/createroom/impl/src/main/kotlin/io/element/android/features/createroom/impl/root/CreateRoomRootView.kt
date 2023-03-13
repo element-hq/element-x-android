@@ -65,6 +65,7 @@ fun CreateRoomRootView(
     state: CreateRoomRootState,
     modifier: Modifier = Modifier,
     onClosePressed: () -> Unit = {},
+    onNewRoomClicked: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier.fillMaxWidth(),
@@ -91,7 +92,7 @@ fun CreateRoomRootView(
 
             if (!state.isSearchActive) {
                 CreateRoomActionButtonsList(
-                    onNewRoomClicked = { state.eventSink(CreateRoomRootEvents.CreateRoom) },
+                    onNewRoomClicked = onNewRoomClicked,
                     onInvitePeopleClicked = { state.eventSink(CreateRoomRootEvents.InvitePeople) },
                 )
             }

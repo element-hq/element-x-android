@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.root
+package io.element.android.features.createroom.impl.selectmembers
 
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import androidx.compose.runtime.Composable
+import io.element.android.libraries.architecture.Presenter
+import javax.inject.Inject
 
-sealed interface CreateRoomRootEvents {
-    data class UpdateSearchQuery(val query: String) : CreateRoomRootEvents
-    data class StartDM(val matrixUser: MatrixUser) : CreateRoomRootEvents
-    object InvitePeople : CreateRoomRootEvents
-    data class OnSearchActiveChanged(val active: Boolean) : CreateRoomRootEvents
+class SelectMembersPresenter @Inject constructor() : Presenter<SelectMembersState> {
+
+    @Composable
+    override fun present(): SelectMembersState {
+
+        fun handleEvents(event: SelectMembersEvents) {
+            // do nothing for now
+        }
+
+        return SelectMembersState(
+            eventSink = ::handleEvents
+        )
+    }
 }
