@@ -17,15 +17,28 @@
 package io.element.android.features.createroom.impl.selectmembers
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.ui.model.MatrixUser
 
 open class SelectMembersStateProvider : PreviewParameterProvider<SelectMembersState> {
     override val values: Sequence<SelectMembersState>
         get() = sequenceOf(
             aSelectMembersState(),
-            aSelectMembersState().copy(selectedUserIds = listOf("someUserId"))
+            aSelectMembersState().copy(
+                selectedUsers = listOf(
+                    aMatrixUser(userName = "User"),
+                    aMatrixUser(userName = "User with long name"),
+                )
+            )
         )
 }
 
 fun aSelectMembersState() = SelectMembersState(
     eventSink = {}
 )
+
+fun aMatrixUser(userName: String): MatrixUser {
+    return MatrixUser(id = UserId("@id"), username = userName, avatarData = AvatarData("@id", "U", size = AvatarSize.BIG))
+}

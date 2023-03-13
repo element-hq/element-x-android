@@ -16,7 +16,9 @@
 
 package io.element.android.features.createroom.impl.selectmembers
 
+import io.element.android.libraries.matrix.ui.model.MatrixUser
+
 data class SelectMembersState(
-    val selectedUserIds: List<String> = emptyList(),
+    val selectedUsers: List<MatrixUser> = emptyList(),
     val eventSink: (SelectMembersEvents) -> Unit,
 )
