@@ -14,49 +14,33 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.root
+package io.element.android.features.createroom.impl.selectmembers
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.di.SessionScope
-import kotlinx.parcelize.Parcelize
+import io.element.android.libraries.di.AppScope
 
-@ContributesNode(SessionScope::class)
-class CreateRoomRootNode @AssistedInject constructor(
+@ContributesNode(AppScope::class)
+class SelectMembersNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: CreateRoomRootPresenter,
+    private val presenter: SelectMembersPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
-    interface Callback : Plugin {
-        fun onCreateNewRoom()
-    }
-
-    private fun onCreateNewRoom() {
-        plugins<Callback>().forEach { it.onCreateNewRoom() }
-    }
-
-    sealed interface NavTarget : Parcelable {
-        @Parcelize
-        object Root : NavTarget
-    }
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        CreateRoomRootView(
+        SelectMembersView(
             state = state,
             modifier = modifier,
-            onClosePressed = this::navigateUp,
-            onNewRoomClicked = this::onCreateNewRoom,
+            onBackPressed = { navigateUp() },
+            onNextPressed = { },
         )
     }
 }

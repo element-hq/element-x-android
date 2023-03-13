@@ -49,7 +49,6 @@ class CreateRoomRootPresenter @Inject constructor() : Presenter<CreateRoomRootSt
                 is CreateRoomRootEvents.OnSearchActiveChanged -> isSearchActive = event.active
                 is CreateRoomRootEvents.UpdateSearchQuery -> searchQuery = event.query
                 is CreateRoomRootEvents.StartDM -> handleStartDM(event.matrixUser)
-                CreateRoomRootEvents.CreateRoom -> Unit // Todo Handle create room action
                 CreateRoomRootEvents.InvitePeople -> Unit // Todo Handle invite people action
             }
         }

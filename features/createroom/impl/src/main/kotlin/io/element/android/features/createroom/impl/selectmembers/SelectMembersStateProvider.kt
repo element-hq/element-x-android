@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.root
+package io.element.android.features.createroom.impl.selectmembers
 
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
-sealed interface CreateRoomRootEvents {
-    data class UpdateSearchQuery(val query: String) : CreateRoomRootEvents
-    data class StartDM(val matrixUser: MatrixUser) : CreateRoomRootEvents
-    object InvitePeople : CreateRoomRootEvents
-    data class OnSearchActiveChanged(val active: Boolean) : CreateRoomRootEvents
+open class SelectMembersStateProvider : PreviewParameterProvider<SelectMembersState> {
+    override val values: Sequence<SelectMembersState>
+        get() = sequenceOf(
+            aSelectMembersState(),
+        )
 }
+
+fun aSelectMembersState() = SelectMembersState(
+    eventSink = {}
+)
