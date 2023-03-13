@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.core.statemachine
 
+import io.element.android.libraries.core.bool.orFalse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -41,15 +42,13 @@ class StateMachine<Event : Any, State : Any>(
 
     init {
         @Suppress("UNCHECKED_CAST")
-        (stateConfigs[initialState::class.java] as? StateConfig<State>)?.onEnter?.invoke(initialState)
+        val initialStateConfig = stateConfigs[initialState::class.java] as StateConfig<State>
+        initialStateConfig.onEnter?.invoke(initialState)
     }
 
     @Suppress("UNCHECKED_CAST")
     fun <E : Event> process(event: E) {
-        val route = routes.firstOrNull { route ->
-            ((route.fromState == null || route.fromState.isInstance(currentState)) && route.eventType.isInstance(event))
-        }  as? StateMachineRoute<E, State, State>
-            ?: error("No route found for state $currentState on event $event")
+        val route = findMatchingRoute(event) ?: error("No route found for state $currentState on event $event")
 
         val lastStateConfig: StateConfig<State>? = stateConfigs[currentState::class.java] as? StateConfig<State>
         lastStateConfig?.onExit?.invoke(currentState)
@@ -60,6 +59,17 @@ class StateMachine<Event : Any, State : Any>(
 
         val currentStateConfig = stateConfigs[nextState::class.java] as? StateConfig<State>
         currentStateConfig?.onEnter?.invoke(nextState)
+    }
+
+    private fun <E: Event> findMatchingRoute(event: E): StateMachineRoute<E, State, State>? {
+        val routesForEvent = routes.filter { it.eventType.isInstance(event) }
+
+        return (routesForEvent.firstOrNull { it.fromState?.isInstance(currentState).orFalse() }
+                ?: routesForEvent.firstOrNull { it.fromState == null }) as? StateMachineRoute<E, State, State>
+    }
+
+    fun restart() {
+        _stateFlow.value = initialState
     }
 }
 
@@ -74,6 +84,12 @@ class StateMachineBuilder<Event : Any, State : Any>(
         val config = StateConfig(S::class.java)
         val registrationBuilder = StateRegistrationBuilder<Event, State, S>(config)
         block(registrationBuilder)
+
+        verifyRoutesAreUnique(S::class.java, routes, registrationBuilder.routes)
+
+        if (stateConfigs.contains(S::class.java)) {
+            error("Duplicate registration for state ${S::class.java.name}")
+        }
         stateConfigs[S::class.java] = config
         routes.addAll(registrationBuilder.routes)
     }
@@ -83,20 +99,44 @@ class StateMachineBuilder<Event : Any, State : Any>(
         addState(block = config)
     }
 
-    inline fun <reified E : Event, reified S : State> on(noinline configuration: (E, State) -> State) {
-        val builder = RouteBuilder<E, S, State>(E::class.java, null)
+    inline fun <reified E : Event, reified S : State> on(noinline configuration: (E, State) -> S) {
+        val builder = RouteBuilder<E, State, S>(E::class.java, null)
         builder.toState = configuration
-        routes.add(builder.build())
+        val newRoute = builder.build()
+        verifyRoutesAreUnique(S::class.java, routes, listOf(newRoute))
+        routes.add(newRoute)
     }
 
     inline fun <reified E : Event> on(newState: State) {
         val builder = RouteBuilder<E, State, State>(E::class.java, null)
         builder.toState = { _, _ -> newState }
-        routes.add(builder.build())
+        val newRoute = builder.build()
+        verifyRoutesAreUnique(null, routes, listOf(newRoute))
+        routes.add(newRoute)
     }
 
     fun build(): StateMachine<Event, State> {
-        return StateMachine(initialState, stateConfigs.toMap(), routes)
+        if (::initialState.isInitialized) {
+            return StateMachine(initialState, stateConfigs.toMap(), routes)
+        } else {
+            error("The state machine has no initial state")
+        }
+    }
+
+    companion object {
+        fun verifyRoutesAreUnique(
+            state: Class<*>?,
+            oldRoutes: List<StateMachineRoute<*, *, *>>,
+            newRoutes: List<StateMachineRoute<*, *, *>>,
+        ) {
+            val oldEvents = oldRoutes.filter { it.fromState == state }.map { it.eventType }
+            val newEvents = newRoutes.filter { it.fromState == state  }.map { it.eventType }
+            val intersection = oldEvents.intersect(newEvents)
+            if (intersection.isNotEmpty()) {
+                val duplicates = intersection.joinToString(", ") { it.name }
+                error("Duplicate registration in state ${state?.name} for events: $duplicates")
+            }
+        }
     }
 }
 
@@ -116,13 +156,17 @@ class StateRegistrationBuilder<Event : Any, BaseState : Any, State : BaseState>(
     inline fun <reified E : Event> on(noinline configuration: (E, State) -> BaseState) {
         val builder = RouteBuilder<E, State, BaseState>(E::class.java, fromState.state)
         builder.toState = configuration
-        routes.add(builder.build())
+        val newRoute = builder.build()
+        StateMachineBuilder.verifyRoutesAreUnique(fromState.state, routes, listOf(newRoute))
+        routes.add(newRoute)
     }
 
-    inline fun <reified E : Event, To : State> on(newState: To) {
-        val builder = RouteBuilder<E, State, To>(E::class.java, fromState.state)
+    inline fun <reified E : Event> on(newState: BaseState) {
+        val builder = RouteBuilder<E, State, BaseState>(E::class.java, fromState.state)
         builder.toState = { _, _ -> newState }
-        routes.add(builder.build())
+        val newRoute = builder.build()
+        StateMachineBuilder.verifyRoutesAreUnique(fromState.state, routes, listOf(newRoute))
+        routes.add(newRoute)
     }
 }
 
