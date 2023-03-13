@@ -154,18 +154,24 @@ fun CreateRoomSearchBar(
         leadingIcon = if (active) {
             { BackButton(onClick = { onActiveChanged(false) }) }
         } else null,
-        trailingIcon = {
-            if (active) {
-                IconButton(onClick = { onTextChanged("") }) {
-                    Icon(Icons.Default.Close, stringResource(StringR.string.a11y_clear))
+        trailingIcon = when {
+            active && text.isNotEmpty() -> {
+                {
+                    IconButton(onClick = { onTextChanged("") }) {
+                        Icon(Icons.Default.Close, stringResource(StringR.string.a11y_clear))
+                    }
                 }
-            } else {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = stringResource(StringR.string.search),
-                    modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
-                )
             }
+            !active -> {
+                {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = stringResource(StringR.string.search),
+                        modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
+                    )
+                }
+            }
+            else -> null
         },
         shape = if (!active) SearchBarDefaults.dockedShape else SearchBarDefaults.fullScreenShape,
         colors = if (!active) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
