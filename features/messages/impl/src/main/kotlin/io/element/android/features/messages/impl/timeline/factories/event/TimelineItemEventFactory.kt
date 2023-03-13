@@ -23,8 +23,8 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemReac
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import kotlinx.collections.immutable.toImmutableList
-import org.matrix.rustcomponents.sdk.ProfileTimelineDetails
 import javax.inject.Inject
 
 class TimelineItemEventFactory @Inject constructor(
@@ -36,13 +36,13 @@ class TimelineItemEventFactory @Inject constructor(
         index: Int,
         timelineItems: List<MatrixTimelineItem>,
     ): TimelineItem.Event {
-        val currentSender = currentTimelineItem.event.sender()
+        val currentSender = currentTimelineItem.event.sender
         val groupPosition =
             computeGroupPosition(currentTimelineItem, timelineItems, index)
         val senderDisplayName: String?
         val senderAvatarUrl: String?
 
-        when (val senderProfile = currentTimelineItem.event.senderProfile()) {
+        when (val senderProfile = currentTimelineItem.event.senderProfile) {
             ProfileTimelineDetails.Unavailable,
             ProfileTimelineDetails.Pending,
             is ProfileTimelineDetails.Error -> {
@@ -56,8 +56,8 @@ class TimelineItemEventFactory @Inject constructor(
         }
 
         val senderAvatarData = AvatarData(
-            id = currentSender,
-            name = senderDisplayName ?: currentSender,
+            id = currentSender.value,
+            name = senderDisplayName ?: currentSender.value,
             url = senderAvatarUrl,
             size = AvatarSize.SMALL
         )
@@ -67,15 +67,15 @@ class TimelineItemEventFactory @Inject constructor(
             senderId = currentSender,
             senderDisplayName = senderDisplayName,
             senderAvatar = senderAvatarData,
-            content = contentFactory.create(currentTimelineItem.event.content()),
-            isMine = currentTimelineItem.event.isOwn(),
+            content = contentFactory.create(currentTimelineItem.event.content),
+            isMine = currentTimelineItem.event.isOwn,
             groupPosition = groupPosition,
             reactionsState = currentTimelineItem.computeReactionsState()
         )
     }
 
     private fun MatrixTimelineItem.Event.computeReactionsState(): TimelineItemReactions {
-        val aggregatedReactions = event.reactions().orEmpty().map {
+        val aggregatedReactions = event.reactions.map {
             AggregatedReaction(key = it.key, count = it.count.toString(), isHighlighted = false)
         }
         return TimelineItemReactions(aggregatedReactions.toImmutableList())
@@ -90,9 +90,9 @@ class TimelineItemEventFactory @Inject constructor(
             timelineItems.getOrNull(index - 1) as? MatrixTimelineItem.Event
         val nextTimelineItem =
             timelineItems.getOrNull(index + 1) as? MatrixTimelineItem.Event
-        val currentSender = currentTimelineItem.event.sender()
-        val previousSender = prevTimelineItem?.event?.sender()
-        val nextSender = nextTimelineItem?.event?.sender()
+        val currentSender = currentTimelineItem.event.sender
+        val previousSender = prevTimelineItem?.event?.sender
+        val nextSender = nextTimelineItem?.event?.sender
 
         return when {
             previousSender != currentSender && nextSender == currentSender -> TimelineItemGroupPosition.First

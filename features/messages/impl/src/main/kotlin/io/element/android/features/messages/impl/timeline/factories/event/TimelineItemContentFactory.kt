@@ -17,10 +17,19 @@
 package io.element.android.features.messages.impl.timeline.factories.event
 
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
-import org.matrix.rustcomponents.sdk.TimelineItemContentKind
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
+import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
+import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
+import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
+import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
+import io.element.android.libraries.matrix.api.timeline.item.event.TimelineEventContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import javax.inject.Inject
-
-typealias RustTimelineItemContent = org.matrix.rustcomponents.sdk.TimelineItemContent
 
 class TimelineItemContentFactory @Inject constructor(
     private val messageFactory: TimelineItemContentMessageFactory,
@@ -34,17 +43,18 @@ class TimelineItemContentFactory @Inject constructor(
     private val failedToParseStateFactory: TimelineItemContentFailedToParseStateFactory
 ) {
 
-    fun create(itemContent: RustTimelineItemContent): TimelineItemEventContent {
-        return when (val kind = itemContent.kind()) {
-            is TimelineItemContentKind.Message -> messageFactory.create(itemContent.asMessage())
-            is TimelineItemContentKind.RedactedMessage -> redactedMessageFactory.create(kind)
-            is TimelineItemContentKind.Sticker -> stickerFactory.create(kind)
-            is TimelineItemContentKind.UnableToDecrypt -> utdFactory.create(kind)
-            is TimelineItemContentKind.RoomMembership -> roomMembershipFactory.create(kind)
-            is TimelineItemContentKind.ProfileChange -> profileChangeFactory.create(kind)
-            is TimelineItemContentKind.State -> stateFactory.create(kind)
-            is TimelineItemContentKind.FailedToParseMessageLike -> failedToParseMessageFactory.create(kind)
-            is TimelineItemContentKind.FailedToParseState -> failedToParseStateFactory.create(kind)
+    fun create(itemContent: TimelineEventContent): TimelineItemEventContent {
+        return when (itemContent) {
+            is FailedToParseMessageLikeContent -> failedToParseMessageFactory.create(itemContent)
+            is FailedToParseStateContent -> failedToParseStateFactory.create(itemContent)
+            is MessageContent -> messageFactory.create(itemContent)
+            is ProfileChangeContent -> profileChangeFactory.create(itemContent)
+            is RedactedContent -> redactedMessageFactory.create(itemContent)
+            is RoomMembershipContent -> roomMembershipFactory.create(itemContent)
+            is StateContent -> stateFactory.create(itemContent)
+            is StickerContent -> stickerFactory.create(itemContent)
+            is UnableToDecryptContent -> utdFactory.create(itemContent)
+            is UnknownContent -> TimelineItemUnknownContent
         }
     }
 }

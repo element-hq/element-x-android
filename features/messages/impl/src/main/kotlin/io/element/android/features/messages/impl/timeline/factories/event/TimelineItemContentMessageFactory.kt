@@ -24,43 +24,46 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.util.toHtmlDocument
 import io.element.android.libraries.matrix.api.media.MediaResolver
-import org.matrix.rustcomponents.sdk.Message
-import org.matrix.rustcomponents.sdk.MessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import javax.inject.Inject
 
 class TimelineItemContentMessageFactory @Inject constructor() {
 
-    fun create(contentAsMessage: Message?): TimelineItemEventContent {
-        return when (val messageType = contentAsMessage?.msgtype()) {
-            is MessageType.Emote -> TimelineItemEmoteContent(
-                body = messageType.content.body,
-                htmlDocument = messageType.content.formatted?.toHtmlDocument()
+    fun create(content: MessageContent): TimelineItemEventContent {
+        return when (val messageType = content.type) {
+            is EmoteMessageType -> TimelineItemEmoteContent(
+                body = messageType.body,
+                htmlDocument = messageType.formatted?.toHtmlDocument()
             )
-            is MessageType.Image -> {
-                val height = messageType.content.info?.height?.toFloat()
-                val width = messageType.content.info?.width?.toFloat()
+            is ImageMessageType -> {
+                val height = messageType.info?.height?.toFloat()
+                val width = messageType.info?.width?.toFloat()
                 val aspectRatio = if (height != null && width != null) {
                     width / height
                 } else {
                     0.7f
                 }
                 TimelineItemImageContent(
-                    body = messageType.content.body,
+                    body = messageType.body,
                     imageMeta = MediaResolver.Meta(
-                        url = messageType.content.source,
+                        url = messageType.url,
                         kind = MediaResolver.Kind.Content
                     ),
-                    blurhash = messageType.content.info?.blurhash,
+                    blurhash = messageType.info?.blurhash,
                     aspectRatio = aspectRatio
                 )
             }
-            is MessageType.Notice -> TimelineItemNoticeContent(
-                body = messageType.content.body,
-                htmlDocument = messageType.content.formatted?.toHtmlDocument()
+            is NoticeMessageType -> TimelineItemNoticeContent(
+                body = messageType.body,
+                htmlDocument = messageType.formatted?.toHtmlDocument()
             )
-            is MessageType.Text -> TimelineItemTextContent(
-                body = messageType.content.body,
-                htmlDocument = messageType.content.formatted?.toHtmlDocument()
+            is TextMessageType -> TimelineItemTextContent(
+                body = messageType.body,
+                htmlDocument = messageType.formatted?.toHtmlDocument()
             )
             else -> TimelineItemUnknownContent
         }

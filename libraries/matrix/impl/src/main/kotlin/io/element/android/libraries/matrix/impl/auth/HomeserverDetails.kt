@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.factories.event
+package io.element.android.libraries.matrix.impl.auth
 
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
-import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
-import javax.inject.Inject
+import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
+import org.matrix.rustcomponents.sdk.HomeserverLoginDetails
 
-class TimelineItemContentStateFactory @Inject constructor() {
-
-    fun create(content: StateContent): TimelineItemEventContent {
-        return TimelineItemUnknownContent
-    }
+fun HomeserverLoginDetails.map(): MatrixHomeServerDetails = use {
+    MatrixHomeServerDetails(
+        url = url(),
+        supportsPasswordLogin = supportsPasswordLogin(),
+        authenticationIssuer = authenticationIssuer()
+    )
 }

@@ -24,11 +24,11 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 
 sealed interface TimelineEventContent
 
-data class TimelineEventMessageContent(
+data class MessageContent(
     val body: String,
     val inReplyTo: UserId?,
     val isEdited: Boolean,
-    val content: MessageContent?
+    val type: MessageType?
 ) : TimelineEventContent
 
 object RedactedContent : TimelineEventContent
@@ -39,45 +39,45 @@ data class StickerContent(
     val url: String
 ) : TimelineEventContent
 
-sealed interface EncryptedMessage {
-    data class OlmV1Curve25519AesSha2(
-        val senderKey: String
-    ) : EncryptedMessage
+data class UnableToDecryptContent(
+    val data: Data
+) : TimelineEventContent {
+    sealed interface Data {
+        data class OlmV1Curve25519AesSha2(
+            val senderKey: String
+        ) : Data
 
-    data class MegolmV1AesSha2(
-        val sessionId: String
-    ) : EncryptedMessage
+        data class MegolmV1AesSha2(
+            val sessionId: String
+        ) : Data
 
-    object Unknown : EncryptedMessage
+        object Unknown : Data
+    }
 }
 
-data class UnableToDecryptContent(
-    val message: EncryptedMessage
-) : TimelineEventContent
-
-data class RoomMembership(
+data class RoomMembershipContent(
     val userId: UserId,
     val change: MembershipChange?
 ) : TimelineEventContent
 
-data class ProfileChange(
+data class ProfileChangeContent(
     val displayName: String?,
     val prevDisplayName: String?,
     val avatarUrl: String?,
     val prevAvatarUrl: String?
 ) : TimelineEventContent
 
-data class State(
+data class StateContent(
     val stateKey: String,
     val content: OtherState
 ) : TimelineEventContent
 
-data class FailedToParseMessageLike(
+data class FailedToParseMessageLikeContent(
     val eventType: String,
     val error: String
 ) : TimelineEventContent
 
-data class FailedToParseState(
+data class FailedToParseStateContent(
     val eventType: String,
     val stateKey: String,
     val error: String
@@ -85,9 +85,9 @@ data class FailedToParseState(
 
 object UnknownContent : TimelineEventContent
 
-sealed interface MessageContent
+sealed interface MessageType
 
-object UnknownMessageContent : MessageContent
+object UnknownMessageType : MessageType
 
 enum class MessageFormat {
     HTML, UNKNOWN
@@ -98,44 +98,44 @@ data class FormattedBody(
     val body: String
 )
 
-data class EmoteMessageContent(
+data class EmoteMessageType(
     val body: String,
     val formatted: FormattedBody?
-) : MessageContent
+) : MessageType
 
-data class ImageMessageContent(
+data class ImageMessageType(
     val body: String,
     val url: String,
     val info: ImageInfo?
-) : MessageContent
+) : MessageType
 
-data class AudioMessageContent(
+data class AudioMessageType(
     var body: String,
     var url: String,
     var info: AudioInfo?
-) : MessageContent
+) : MessageType
 
-data class VideoMessageContent(
+data class VideoMessageType(
     val body: String,
     val url: String,
     val info: VideoInfo?
-) : MessageContent
+) : MessageType
 
-data class FileMessageContent(
+data class FileMessageType(
     val body: String,
     val url: String,
     val info: FileInfo?
-) : MessageContent
+) : MessageType
 
-data class NoticeMessageContent(
+data class NoticeMessageType(
     val body: String,
     val formatted: FormattedBody?
-) : MessageContent
+) : MessageType
 
-data class TextMessageContent(
+data class TextMessageType(
     val body: String,
     val formatted: FormattedBody?
-) : MessageContent
+) : MessageType
 
 enum class MembershipChange {
     NONE,

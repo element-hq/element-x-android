@@ -18,17 +18,10 @@ package io.element.android.libraries.matrix.api.auth
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import org.matrix.rustcomponents.sdk.HomeserverLoginDetails
 
 @Parcelize
 data class MatrixHomeServerDetails(
     val url: String,
     val supportsPasswordLogin: Boolean,
     val authenticationIssuer: String?
-): Parcelable {
-    constructor(homeserverLoginDetails: HomeserverLoginDetails) : this(
-        homeserverLoginDetails.url(),
-        homeserverLoginDetails.supportsPasswordLogin(),
-        homeserverLoginDetails.authenticationIssuer()
-    )
-}
+): Parcelable

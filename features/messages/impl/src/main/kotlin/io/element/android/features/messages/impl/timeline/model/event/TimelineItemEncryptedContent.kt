@@ -16,8 +16,8 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
-import org.matrix.rustcomponents.sdk.EncryptedMessage
+import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 
 data class TimelineItemEncryptedContent(
-    val encryptedMessage: EncryptedMessage
+    val data: UnableToDecryptContent.Data
 ) : TimelineItemEventContent
