@@ -60,8 +60,13 @@ class FakeAuthenticationService : MatrixAuthenticationService {
 
     override suspend fun login(username: String, password: String): Result<SessionId> {
         delay(100)
-        loginError?.let { throw it }
-        return Result.success(A_USER_ID)
+        return loginError.let { loginError ->
+            if (loginError == null) {
+                Result.success(A_USER_ID)
+            } else {
+                Result.failure(loginError)
+            }
+        }
     }
 
     fun givenLoginError(throwable: Throwable?) {
