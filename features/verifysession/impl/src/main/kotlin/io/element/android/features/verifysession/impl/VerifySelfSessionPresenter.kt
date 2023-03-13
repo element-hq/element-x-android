@@ -31,6 +31,11 @@ class VerifySelfSessionPresenter @Inject constructor(
     private val sessionVerificationService: SessionVerificationService,
 ) : Presenter<VerifySelfSessionState> {
 
+    init {
+        // Force reset, just in case the service was left in a broken state
+        sessionVerificationService.reset()
+    }
+
     @Composable
     override fun present(): VerifySelfSessionState {
         val coroutineScope = rememberCoroutineScope()

@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.impl.verification
 
-import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceState
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
@@ -33,6 +32,9 @@ class MatrixSessionVerificationService @Inject constructor() : SessionVerificati
         set(value) {
             field = value
             _isReady.value = value != null
+            if (value != null) {
+                _isVerified.value = value.isVerified()
+            }
         }
 
     private val _verificationAttemptStatus = MutableStateFlow<SessionVerificationServiceState>(SessionVerificationServiceState.Initial)
@@ -41,7 +43,8 @@ class MatrixSessionVerificationService @Inject constructor() : SessionVerificati
     private val _isReady = MutableStateFlow(false)
     override val isReady = _isReady.asStateFlow()
 
-    override val isVerified: Boolean get() = verificationController?.isVerified().orTrue()
+    private val _isVerified = MutableStateFlow(true)
+    override val isVerified = _isVerified.asStateFlow()
 
     override fun requestVerification() = tryOrFail {
         verificationController?.setDelegate(this)
@@ -84,6 +87,8 @@ class MatrixSessionVerificationService @Inject constructor() : SessionVerificati
 
     override fun didFinish() {
         _verificationAttemptStatus.value = SessionVerificationServiceState.Finished
+        // Ideally this should be `= verificationController?.isVerified().orFalse()` but for some reason it always returns false
+        _isVerified.value = true
         verificationController?.setDelegate(null)
     }
 
@@ -100,4 +105,8 @@ class MatrixSessionVerificationService @Inject constructor() : SessionVerificati
     }
 
     // end-region
+
+    override fun reset() {
+        _verificationAttemptStatus.value = SessionVerificationServiceState.Initial
+    }
 }

@@ -38,4 +38,10 @@
     <string name="verification_negative_button_canceled">@string/action_cancel</string>
     <string name="verification_negative_button_verifying">They don\'t match</string>
 
+    <string name="session_verification_banner_title">Access your message history</string>
+    <string name="session_verification_banner_message">Looks like you\'re using a new device. Verify it\'s you to access your encrypted messages.</string>
+    <string name="session_verification_start">Continue</string>
+
+    <string name="verification_conclusion_ok_self_notice_title">Verification complete</string>
+
 </resources>

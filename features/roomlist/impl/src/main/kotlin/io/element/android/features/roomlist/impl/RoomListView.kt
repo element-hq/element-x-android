@@ -33,9 +33,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -90,6 +95,7 @@ fun RoomListView(
         filter = state.filter,
         modifier = modifier,
         onRoomClicked = onRoomClicked,
+        presentVerificationSuccessfulMessage = state.presentVerificationSuccessfulMessage,
         displayVerifySessionPrompt = state.displayVerificationPrompt,
         onFilterChanged = ::onFilterChanged,
         onOpenSettings = onOpenSettings,
@@ -106,6 +112,7 @@ fun RoomListContent(
     roomSummaries: ImmutableList<RoomListRoomSummary>,
     matrixUser: MatrixUser?,
     filter: String,
+    presentVerificationSuccessfulMessage: Boolean,
     displayVerifySessionPrompt: Boolean,
     onVerifyClicked: () -> Unit,
     onDismissVerificationPromptClicked: () -> Unit,
@@ -143,6 +150,17 @@ fun RoomListContent(
                 onScrollOver(visibleRange)
                 return super.onPostFling(consumed, available)
             }
+        }
+    }
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val verificationCompleteMessage = stringResource(StringR.string.verification_conclusion_ok_self_notice_title)
+    LaunchedEffect(presentVerificationSuccessfulMessage) {
+        if (presentVerificationSuccessfulMessage) {
+            snackbarHostState.showSnackbar(
+                message = verificationCompleteMessage,
+                duration = SnackbarDuration.Short
+            )
         }
     }
 
@@ -192,6 +210,15 @@ fun RoomListContent(
                 Icon(resourceId = DrawableR.drawable.ic_edit_square, contentDescription = stringResource(id = StringR.string.a11y_create_message))
             }
         },
+        snackbarHost = {
+           SnackbarHost (snackbarHostState) { data ->
+               Snackbar(
+                   snackbarData = data,
+                   containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                   contentColor = MaterialTheme.colorScheme.primary
+               )
+           }
+        },
     )
 }
 
@@ -214,7 +241,7 @@ internal fun RequestVerificationHeader(
             ) {
                 Row {
                     Text(
-                        "Access your message history",
+                        stringResource(StringR.string.session_verification_banner_title),
                         modifier = Modifier.weight(1f),
                         style = ElementTextStyles.Bold.body,
                         color = MaterialTheme.colorScheme.primary,
@@ -227,14 +254,14 @@ internal fun RequestVerificationHeader(
                     )
                 }
                 Spacer(modifier = Modifier.height(4.dp))
-                Text("Looks like you’re using a new device. Verify it’s you to access your encrypted messages.", style = ElementTextStyles.Regular.bodyMD)
+                Text(stringResource(StringR.string.session_verification_banner_message), style = ElementTextStyles.Regular.bodyMD)
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(horizontal = 20.dp, vertical = 7.dp),
                     onClick = onVerifyClicked,
                 ) {
-                    Text(stringResource(id = StringR.string._continue), style = ElementTextStyles.Button)
+                    Text(stringResource(StringR.string.session_verification_start), style = ElementTextStyles.Button)
                 }
             }
         }

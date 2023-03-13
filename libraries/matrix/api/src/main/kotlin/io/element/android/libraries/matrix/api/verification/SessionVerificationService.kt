@@ -29,7 +29,7 @@ interface SessionVerificationService {
      */
     val isReady: StateFlow<Boolean>
 
-    val isVerified: Boolean
+    val isVerified: StateFlow<Boolean>
 
     fun requestVerification()
 
@@ -40,6 +40,8 @@ interface SessionVerificationService {
     fun declineVerification()
 
     fun startVerification()
+
+    fun reset()
 }
 
 sealed interface SessionVerificationServiceState {

@@ -209,6 +209,31 @@ class RoomListPresenterTests {
         }
     }
 
+    @Test
+    fun `present - handle DismissRequestVerificationPrompt`() = runTest {
+        val roomSummaryDataSource = FakeRoomSummaryDataSource()
+        val presenter = RoomListPresenter(
+            FakeMatrixClient(
+                sessionId = A_SESSION_ID,
+                roomSummaryDataSource = roomSummaryDataSource
+            ),
+            createDateFormatter(),
+            FakeSessionVerificationService().apply {
+                givenIsReady(true)
+                givenIsVerified(false)
+            },
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val eventSink = awaitItem().eventSink
+            Truth.assertThat(awaitItem().displayVerificationPrompt).isTrue()
+
+            eventSink(RoomListEvents.DismissRequestVerificationPrompt)
+            Truth.assertThat(awaitItem().displayVerificationPrompt).isFalse()
+        }
+    }
+
     private fun createDateFormatter(): LastMessageFormatter {
         return FakeLastMessageFormatter().apply {
             givenFormat(A_FORMATTED_DATE)

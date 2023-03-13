@@ -26,6 +26,7 @@ data class RoomListState(
     val matrixUser: MatrixUser?,
     val roomList: ImmutableList<RoomListRoomSummary>,
     val filter: String,
+    val presentVerificationSuccessfulMessage: Boolean,
     val displayVerificationPrompt: Boolean,
     val eventSink: (RoomListEvents) -> Unit
 )

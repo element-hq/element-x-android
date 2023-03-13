@@ -29,6 +29,8 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
     override val values: Sequence<RoomListState>
         get() = sequenceOf(
             aRoomListState(),
+            aRoomListState().copy(displayVerificationPrompt = true),
+            aRoomListState().copy(presentVerificationSuccessfulMessage = true),
         )
 }
 
@@ -37,6 +39,7 @@ internal fun aRoomListState() = RoomListState(
     roomList = aRoomListRoomSummaryList(),
     filter = "filter",
     eventSink = {},
+    presentVerificationSuccessfulMessage = false,
     displayVerificationPrompt = false,
 )
 

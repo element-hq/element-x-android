@@ -36,11 +36,15 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomSummary
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceState
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -64,7 +68,7 @@ class RoomListPresenter @Inject constructor(
             .roomSummaries()
             .collectAsState()
 
-        var displayRequestVerification by rememberSaveable { mutableStateOf(false) }
+        var displayVerificationPrompt by rememberSaveable { mutableStateOf(false) }
 
         Timber.v("RoomSummaries size = ${roomSummaries.size}")
 
@@ -76,28 +80,41 @@ class RoomListPresenter @Inject constructor(
         }
 
         val sessionVerificationIsReady by sessionVerificationService.isReady.collectAsState()
+        var presentVerificationSuccessfulMessage by remember { mutableStateOf(false) }
         LaunchedEffect(sessionVerificationIsReady) {
             if (sessionVerificationIsReady) {
-                displayRequestVerification = !sessionVerificationService.isVerified
+                displayVerificationPrompt = !sessionVerificationService.isVerified.value
             }
+
+            sessionVerificationService.verificationAttemptStatus
+                .map { it == SessionVerificationServiceState.Finished }
+                .onEach {
+                    // Reset verification attempt status as the "verified" message will be presented soon
+                    sessionVerificationService.reset()
+                    // Delay presenting the message a bit animations have time to run
+                    delay(100)
+                }
+                .collect { presentVerificationSuccessfulMessage = it }
         }
 
         fun handleEvents(event: RoomListEvents) {
             when (event) {
                 is RoomListEvents.UpdateFilter -> filter = event.newFilter
                 is RoomListEvents.UpdateVisibleRange -> updateVisibleRange(event.range)
-                RoomListEvents.DismissRequestVerificationPrompt -> displayRequestVerification = false
+                RoomListEvents.DismissRequestVerificationPrompt -> displayVerificationPrompt = false
             }
         }
 
         LaunchedEffect(roomSummaries, filter) {
             filteredRoomSummaries.value = updateFilteredRoomSummaries(roomSummaries, filter)
         }
+
         return RoomListState(
             matrixUser = matrixUser.value,
             roomList = filteredRoomSummaries.value,
             filter = filter,
-            displayVerificationPrompt = displayRequestVerification,
+            presentVerificationSuccessfulMessage = presentVerificationSuccessfulMessage,
+            displayVerificationPrompt = displayVerificationPrompt,
             eventSink = ::handleEvents
         )
     }

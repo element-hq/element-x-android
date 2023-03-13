@@ -23,15 +23,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class FakeSessionVerificationService : SessionVerificationService {
-    private var _isReady = MutableStateFlow(false)
-    private var _isVerified = false
+    private val _isReady = MutableStateFlow(false)
+    private val _isVerified = MutableStateFlow(false)
     private var _verificationAttemptStatus = MutableStateFlow<SessionVerificationServiceState>(SessionVerificationServiceState.Initial)
     private var emojiList = emptyList<VerificationEmoji>()
     var shouldFail = false
 
     override val verificationAttemptStatus: StateFlow<SessionVerificationServiceState>
         get() = _verificationAttemptStatus
-    override val isVerified: Boolean get()= _isVerified
+
+    override val isVerified: StateFlow<Boolean> = _isVerified
 
     override val isReady: StateFlow<Boolean> = _isReady
 
@@ -67,7 +68,7 @@ class FakeSessionVerificationService : SessionVerificationService {
     }
 
     fun givenIsVerified(value: Boolean) {
-        _isVerified = value
+        _isVerified.value = value
     }
 
     fun givenVerificationAttemptStatus(state: SessionVerificationServiceState) {
@@ -80,5 +81,9 @@ class FakeSessionVerificationService : SessionVerificationService {
 
     fun givenEmojiList(emojis: List<VerificationEmoji>) {
         this.emojiList = emojis
+    }
+
+    override fun reset() {
+        _verificationAttemptStatus.value = SessionVerificationServiceState.Initial
     }
 }
