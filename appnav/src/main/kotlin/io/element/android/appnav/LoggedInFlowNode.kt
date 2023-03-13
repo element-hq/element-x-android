@@ -38,7 +38,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
-import io.element.android.features.verifysession.VerifySelfSessionNode
+import io.element.android.features.verifysession.VerifySessionEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -59,6 +59,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val roomListEntryPoint: RoomListEntryPoint,
     private val preferencesEntryPoint: PreferencesEntryPoint,
     private val createRoomEntryPoint: CreateRoomEntryPoint,
+    private val verifySessionEntryPoint: VerifySessionEntryPoint,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.RoomList,
@@ -172,8 +173,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                 createRoomEntryPoint.createNode(this, buildContext)
             }
             NavTarget.VerifySession -> {
-                // TODO use entrypoint
-                createNode<VerifySelfSessionNode>(buildContext, emptyList())
+                verifySessionEntryPoint.createNode(this, buildContext)
             }
         }
     }
