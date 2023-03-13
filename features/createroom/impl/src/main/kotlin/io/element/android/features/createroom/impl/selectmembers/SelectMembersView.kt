@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -33,7 +34,8 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.ui.strings.R
+import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,6 +50,7 @@ fun SelectMembersView(
     Scaffold(
         topBar = {
             SelectMembersViewTopBar(
+                hasSelectedUsers = state.selectedUserIds.isNotEmpty(),
                 onBackPressed = onBackPressed,
                 onNextPressed = onNextPressed,
             )
@@ -58,7 +61,7 @@ fun SelectMembersView(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            Text(text = "Hello!")
+
         }
     }
 }
@@ -66,6 +69,7 @@ fun SelectMembersView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectMembersViewTopBar(
+    hasSelectedUsers: Boolean,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
     onNextPressed: () -> Unit = {},
@@ -74,14 +78,23 @@ fun SelectMembersViewTopBar(
         modifier = modifier,
         title = {
             Text(
-                text = stringResource(id = R.string.add_people),
+                text = stringResource(id = StringR.string.add_people),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
             )
         },
         navigationIcon = { BackButton(onClick = onBackPressed) },
         actions = {
-
+            TextButton(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                onClick = onNextPressed,
+            ) {
+                val textActionResId = if (hasSelectedUsers) StringR.string.action_next else StringR.string.action_skip
+                Text(
+                    text = stringResource(id = textActionResId),
+                    fontSize = 16.sp,
+                )
+            }
         }
     )
 }

@@ -17,5 +17,6 @@
 package io.element.android.features.createroom.impl.selectmembers
 
 data class SelectMembersState(
+    val selectedUserIds: List<String> = emptyList(),
     val eventSink: (SelectMembersEvents) -> Unit,
 )
