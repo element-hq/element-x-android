@@ -16,4 +16,9 @@
 
 package io.element.android.features.createroom.impl.selectmembers
 
-sealed interface SelectMembersEvents
+import io.element.android.libraries.matrix.ui.model.MatrixUser
+
+sealed interface SelectMembersEvents {
+    data class AddToSelection(val matrixUser: MatrixUser) : SelectMembersEvents
+    data class RemoveFromSelection(val matrixUser: MatrixUser) : SelectMembersEvents
+}

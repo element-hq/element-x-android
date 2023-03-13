@@ -79,12 +79,12 @@ fun SelectMembersView(
                 .fillMaxSize()
                 .padding(padding)
         ) {
+            // TODO create a SearchUserView with multi selection option + callbacks
             SelectedMembersList(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 selectedUsers = state.selectedUsers,
+                onUserRemoved = { eventSink(SelectMembersEvents.RemoveFromSelection(it)) }
             )
-            // TODO create ViewEvent to add/remove selected user
-            // TODO create a SearchUserView with multi selection option + callbacks
         }
     }
 }
