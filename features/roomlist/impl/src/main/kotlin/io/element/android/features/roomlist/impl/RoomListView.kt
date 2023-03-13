@@ -102,7 +102,8 @@ fun RoomListView(
         onScrollOver = ::onVisibleRangedChanged,
         onVerifyClicked = onVerifyClicked,
         onCreateRoomClicked = onCreateRoomClicked,
-        onDismissVerificationPromptClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
+        onDismissVerificationPromptClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) },
+        onClearVerifySuccessfulMessage = { state.eventSink(RoomListEvents.ClearSuccessfulVerificationMessage) }
     )
 }
 
@@ -116,6 +117,7 @@ fun RoomListContent(
     displayVerifySessionPrompt: Boolean,
     onVerifyClicked: () -> Unit,
     onDismissVerificationPromptClicked: () -> Unit,
+    onClearVerifySuccessfulMessage: () -> Unit,
     modifier: Modifier = Modifier,
     onRoomClicked: (RoomId) -> Unit = {},
     onFilterChanged: (String) -> Unit = {},
@@ -161,6 +163,7 @@ fun RoomListContent(
                 message = verificationCompleteMessage,
                 duration = SnackbarDuration.Short
             )
+            onClearVerifySuccessfulMessage()
         }
     }
 

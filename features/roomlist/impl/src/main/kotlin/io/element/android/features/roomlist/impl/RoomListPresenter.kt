@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -80,21 +81,15 @@ class RoomListPresenter @Inject constructor(
         }
 
         val sessionVerificationIsReady by sessionVerificationService.isReady.collectAsState()
-        var presentVerificationSuccessfulMessage by remember { mutableStateOf(false) }
+        val verificationState by sessionVerificationService.verificationAttemptStatus.collectAsState()
+        val presentVerificationSuccessfulMessage = remember(verificationState) {
+            derivedStateOf { verificationState == SessionVerificationServiceState.Finished }
+        }
+
         LaunchedEffect(sessionVerificationIsReady) {
             if (sessionVerificationIsReady) {
                 displayVerificationPrompt = !sessionVerificationService.isVerified.value
             }
-
-            sessionVerificationService.verificationAttemptStatus
-                .map { it == SessionVerificationServiceState.Finished }
-                .onEach {
-                    // Reset verification attempt status as the "verified" message will be presented soon
-                    sessionVerificationService.reset()
-                    // Delay presenting the message a bit animations have time to run
-                    delay(100)
-                }
-                .collect { presentVerificationSuccessfulMessage = it }
         }
 
         fun handleEvents(event: RoomListEvents) {
@@ -102,6 +97,7 @@ class RoomListPresenter @Inject constructor(
                 is RoomListEvents.UpdateFilter -> filter = event.newFilter
                 is RoomListEvents.UpdateVisibleRange -> updateVisibleRange(event.range)
                 RoomListEvents.DismissRequestVerificationPrompt -> displayVerificationPrompt = false
+                RoomListEvents.ClearSuccessfulVerificationMessage -> sessionVerificationService.reset()
             }
         }
 
@@ -113,7 +109,7 @@ class RoomListPresenter @Inject constructor(
             matrixUser = matrixUser.value,
             roomList = filteredRoomSummaries.value,
             filter = filter,
-            presentVerificationSuccessfulMessage = presentVerificationSuccessfulMessage,
+            presentVerificationSuccessfulMessage = presentVerificationSuccessfulMessage.value,
             displayVerificationPrompt = displayVerificationPrompt,
             eventSink = ::handleEvents
         )

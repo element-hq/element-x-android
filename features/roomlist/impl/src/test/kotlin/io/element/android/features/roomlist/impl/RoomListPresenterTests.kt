@@ -24,6 +24,7 @@ import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.dateformatter.api.LastMessageFormatter
 import io.element.android.libraries.dateformatter.test.FakeLastMessageFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceState
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_MESSAGE
@@ -231,6 +232,31 @@ class RoomListPresenterTests {
 
             eventSink(RoomListEvents.DismissRequestVerificationPrompt)
             Truth.assertThat(awaitItem().displayVerificationPrompt).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - presentVerificationSuccessfulMessage & ClearVerificationSuccesfulMessage`() = runTest {
+        val roomSummaryDataSource = FakeRoomSummaryDataSource()
+        val presenter = RoomListPresenter(
+            FakeMatrixClient(
+                sessionId = A_SESSION_ID,
+                roomSummaryDataSource = roomSummaryDataSource
+            ),
+            createDateFormatter(),
+            FakeSessionVerificationService().apply {
+                givenIsReady(true)
+                givenVerificationAttemptStatus(SessionVerificationServiceState.Finished)
+            },
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val displayMessageItem = awaitItem()
+            Truth.assertThat(displayMessageItem.presentVerificationSuccessfulMessage).isTrue()
+            displayMessageItem.eventSink(RoomListEvents.ClearSuccessfulVerificationMessage)
+            Truth.assertThat(awaitItem().presentVerificationSuccessfulMessage).isFalse()
         }
     }
 
