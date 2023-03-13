@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.factories.event
+package io.element.android.libraries.matrix.api.auth
 
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
-import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
-import javax.inject.Inject
-
-class TimelineItemContentStateFactory @Inject constructor() {
-
-    fun create(content: StateContent): TimelineItemEventContent {
-        return TimelineItemUnknownContent
-    }
+sealed class AuthenticationException(message: String) : Exception(message) {
+    class ClientMissing(message: String) : AuthenticationException(message)
+    class InvalidServerName(message: String) : AuthenticationException(message)
+    class SlidingSyncNotAvailable(message: String) : AuthenticationException(message)
+    class SessionMissing(message: String) : AuthenticationException(message)
+    class Generic(message: String) : AuthenticationException(message)
 }

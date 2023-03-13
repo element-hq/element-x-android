@@ -17,31 +17,33 @@
 package io.element.android.libraries.matrix.impl.timeline.item.event
 
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLike
-import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseState
+import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
+import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
-import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChange
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
-import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembership
+import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineEventContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.impl.media.map
 import org.matrix.rustcomponents.sdk.TimelineItemContent
 import org.matrix.rustcomponents.sdk.TimelineItemContentKind
+import org.matrix.rustcomponents.sdk.EncryptedMessage as RustEncryptedMessage
 
 class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMapper = EventMessageMapper()) {
 
     fun map(content: TimelineItemContent): TimelineEventContent = content.use {
         when (val kind = content.kind()) {
             is TimelineItemContentKind.FailedToParseMessageLike -> {
-                FailedToParseMessageLike(
+                FailedToParseMessageLikeContent(
                     eventType = kind.eventType,
                     error = kind.error
                 )
             }
             is TimelineItemContentKind.FailedToParseState -> {
-                FailedToParseState(
+                FailedToParseStateContent(
                     eventType = kind.eventType,
                     stateKey = kind.stateKey,
                     error = kind.error
@@ -56,7 +58,7 @@ class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMap
                 }
             }
             is TimelineItemContentKind.ProfileChange -> {
-                ProfileChange(
+                ProfileChangeContent(
                     displayName = kind.displayName,
                     prevDisplayName = kind.prevDisplayName,
                     avatarUrl = kind.avatarUrl,
@@ -67,7 +69,7 @@ class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMap
                 RedactedContent
             }
             is TimelineItemContentKind.RoomMembership -> {
-                RoomMembership(
+                RoomMembershipContent(
                     UserId(kind.userId),
                     MembershipChange.JOINED
                 )
@@ -83,8 +85,18 @@ class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMap
                 )
             }
             is TimelineItemContentKind.UnableToDecrypt -> {
-                UnknownContent
+                UnableToDecryptContent(
+                    data = kind.msg.map()
+                )
             }
         }
+    }
+}
+
+private fun RustEncryptedMessage.map(): UnableToDecryptContent.Data {
+    return when (this) {
+        is RustEncryptedMessage.MegolmV1AesSha2 -> UnableToDecryptContent.Data.MegolmV1AesSha2(sessionId)
+        is RustEncryptedMessage.OlmV1Curve25519AesSha2 -> UnableToDecryptContent.Data.OlmV1Curve25519AesSha2(senderKey)
+        RustEncryptedMessage.Unknown -> UnableToDecryptContent.Data.Unknown
     }
 }

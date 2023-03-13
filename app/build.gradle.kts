@@ -219,6 +219,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.startup)
     implementation(libs.coil)
+    implementation(libs.matrix.sdk)
 
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)

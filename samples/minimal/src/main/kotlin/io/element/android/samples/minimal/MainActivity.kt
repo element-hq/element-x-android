@@ -72,7 +72,7 @@ class MainActivity : ComponentActivity() {
         } else {
             val matrixClient = runBlocking {
                 val sessionId = matrixAuthenticationService.getLatestSessionId()!!
-                matrixAuthenticationService.restoreSession(sessionId)
+                matrixAuthenticationService.restoreSession(sessionId).getOrNull()
             }
             RoomListScreen(matrixClient = matrixClient!!).Content(modifier)
         }

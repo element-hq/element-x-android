@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.factories.event
+package io.element.android.libraries.core.extensions
 
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
-import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
-import javax.inject.Inject
-
-class TimelineItemContentStateFactory @Inject constructor() {
-
-    fun create(content: StateContent): TimelineItemEventContent {
-        return TimelineItemUnknownContent
+/**
+ * Can be used to transform some Throwable into some other
+ */
+inline fun <R, T : R> Result<T>.mapFailure(transform: (exception: Throwable) -> Throwable): Result<R> {
+    return when (val exception = exceptionOrNull()) {
+        null -> this
+        else -> Result.failure(transform(exception))
     }
 }

@@ -17,17 +17,17 @@
 package io.element.android.libraries.matrix.impl.timeline.item.event
 
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageContent
-import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageContent
-import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
-import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
-import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageContent
-import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageContent
-import io.element.android.libraries.matrix.api.timeline.item.event.TimelineEventMessageContent
-import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageContent
-import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.media.useUrl
 import org.matrix.rustcomponents.sdk.Message
@@ -38,40 +38,40 @@ import org.matrix.rustcomponents.sdk.MessageFormat as RustMessageFormat
 
 class EventMessageMapper {
 
-    fun map(message: Message): TimelineEventMessageContent = message.use {
+    fun map(message: Message): MessageContent = message.use {
         val content = message.msgtype().use { type ->
             when (type) {
                 is MessageType.Audio -> {
-                    AudioMessageContent(type.content.body, type.content.source.useUrl(), type.content.info?.map())
+                    AudioMessageType(type.content.body, type.content.source.useUrl(), type.content.info?.map())
                 }
                 is MessageType.File -> {
-                    FileMessageContent(type.content.body, type.content.source.useUrl(), type.content.info?.map())
+                    FileMessageType(type.content.body, type.content.source.useUrl(), type.content.info?.map())
                 }
                 is MessageType.Image -> {
-                    ImageMessageContent(type.content.body, type.content.source.useUrl(), type.content.info?.map())
+                    ImageMessageType(type.content.body, type.content.source.useUrl(), type.content.info?.map())
                 }
                 is MessageType.Notice -> {
-                    NoticeMessageContent(type.content.body, type.content.formatted?.map())
+                    NoticeMessageType(type.content.body, type.content.formatted?.map())
                 }
                 is MessageType.Text -> {
-                    TextMessageContent(type.content.body, type.content.formatted?.map())
+                    TextMessageType(type.content.body, type.content.formatted?.map())
                 }
                 is MessageType.Emote -> {
-                    EmoteMessageContent(type.content.body, type.content.formatted?.map())
+                    EmoteMessageType(type.content.body, type.content.formatted?.map())
                 }
                 is MessageType.Video -> {
-                    VideoMessageContent(type.content.body, type.content.source.useUrl(), type.content.info?.map())
+                    VideoMessageType(type.content.body, type.content.source.useUrl(), type.content.info?.map())
                 }
                 null -> {
-                    UnknownMessageContent
+                    UnknownMessageType
                 }
             }
         }
-        TimelineEventMessageContent(
+        MessageContent(
             body = message.body(),
             inReplyTo = message.inReplyTo()?.let { UserId(it) },
             isEdited = message.isEdited(),
-            content = content
+            type = content
         )
     }
 }

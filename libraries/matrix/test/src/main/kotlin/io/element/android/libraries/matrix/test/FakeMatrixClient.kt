@@ -26,7 +26,6 @@ import io.element.android.libraries.matrix.test.media.FakeMediaResolver
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import kotlinx.coroutines.delay
-import org.matrix.rustcomponents.sdk.MediaSource
 
 class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
@@ -66,11 +65,11 @@ class FakeMatrixClient(
         return userAvatarURLString
     }
 
-    override suspend fun loadMediaContentForSource(source: MediaSource): Result<ByteArray> {
+    override suspend fun loadMediaContent(url: String): Result<ByteArray> {
         return Result.success(ByteArray(0))
     }
 
-    override suspend fun loadMediaThumbnailForSource(source: MediaSource, width: Long, height: Long): Result<ByteArray> {
+    override suspend fun loadMediaThumbnail(url: String, width: Long, height: Long): Result<ByteArray> {
         return Result.success(ByteArray(0))
     }
 }

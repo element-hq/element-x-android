@@ -24,8 +24,8 @@ import kotlinx.coroutines.flow.StateFlow
 interface MatrixAuthenticationService {
     fun isLoggedIn(): Flow<Boolean>
     suspend fun getLatestSessionId(): SessionId?
-    suspend fun restoreSession(sessionId: SessionId): MatrixClient?
+    suspend fun restoreSession(sessionId: SessionId): Result<MatrixClient>
     fun getHomeserverDetails(): StateFlow<MatrixHomeServerDetails?>
-    suspend fun setHomeserver(homeserver: String)
-    suspend fun login(username: String, password: String): SessionId
+    suspend fun setHomeserver(homeserver: String): Result<Unit>
+    suspend fun login(username: String, password: String): Result<SessionId>
 }

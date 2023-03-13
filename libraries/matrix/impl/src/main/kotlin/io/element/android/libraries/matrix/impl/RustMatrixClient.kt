@@ -32,12 +32,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
-import org.matrix.rustcomponents.sdk.MediaSource
 import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.SlidingSyncMode
 import org.matrix.rustcomponents.sdk.SlidingSyncRequestListFilters
 import org.matrix.rustcomponents.sdk.SlidingSyncViewBuilder
 import org.matrix.rustcomponents.sdk.TaskHandle
+import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
@@ -181,9 +181,9 @@ class RustMatrixClient constructor(
         } catch (failure: Throwable) {
             Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
         }
-        client.destroy()
         baseDirectory.deleteSessionDirectory(userID = client.userId())
         sessionStore.removeSession(client.userId())
+        client.destroy()
     }
 
     override suspend fun loadUserDisplayName(): Result<String> = withContext(dispatchers.io) {
@@ -199,23 +199,30 @@ class RustMatrixClient constructor(
     }
 
     @OptIn(ExperimentalUnsignedTypes::class)
-    override suspend fun loadMediaContentForSource(source: MediaSource): Result<ByteArray> =
+    override suspend fun loadMediaContent(url: String): Result<ByteArray> =
         withContext(dispatchers.io) {
             runCatching {
-                client.getMediaContent(source).toUByteArray().toByteArray()
+                mediaSourceFromUrl(url).use { source ->
+                    client.getMediaContent(source).toUByteArray().toByteArray()
+                }
             }
         }
 
     @OptIn(ExperimentalUnsignedTypes::class)
-    override suspend fun loadMediaThumbnailForSource(
-        source: MediaSource,
+    override suspend fun loadMediaThumbnail(
+        url: String,
         width: Long,
         height: Long
     ): Result<ByteArray> =
         withContext(dispatchers.io) {
             runCatching {
-                client.getMediaThumbnail(source, width.toULong(), height.toULong()).toUByteArray()
-                    .toByteArray()
+                mediaSourceFromUrl(url).use { source ->
+                    client.getMediaThumbnail(
+                        source = source,
+                        width = width.toULong(),
+                        height = height.toULong()
+                    ).toUByteArray().toByteArray()
+                }
             }
         }
 
