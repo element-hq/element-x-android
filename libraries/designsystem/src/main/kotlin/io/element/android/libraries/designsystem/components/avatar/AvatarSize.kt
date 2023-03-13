@@ -18,11 +18,15 @@ package io.element.android.libraries.designsystem.components.avatar
 
 import androidx.compose.ui.unit.dp
 
-enum class AvatarSize(val value: Int) {
-    SMALL(32),
-    MEDIUM(40),
-    BIG(48),
-    HUGE(96);
+sealed class AvatarSize(open val value: Int) {
 
-    val dp = value.dp
+    val dp get() = value.dp
+
+    object SMALL : AvatarSize(32)
+    object MEDIUM : AvatarSize(40)
+    object BIG : AvatarSize(48)
+    object HUGE : AvatarSize(96)
+
+    // FIXME maybe remove this field and switch back to an enum (or remove this class) when design system will be integrated
+    data class Custom(override val value: Int) : AvatarSize(value)
 }
