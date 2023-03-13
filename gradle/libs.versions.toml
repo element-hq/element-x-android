@@ -4,7 +4,6 @@
 [versions]
 # Project
 android_gradle_plugin = "7.4.2"
-firebase_gradle_plugin = "3.2.0"
 kotlin = "1.8.10"
 ksp = "1.8.10-1.0.9"
 molecule = "0.8.0"
@@ -55,8 +54,9 @@ dependencygraph = "0.10"
 [libraries]
 # Project
 android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "android_gradle_plugin" }
-firebase_gradle_plugin = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebase_gradle_plugin" }
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+# https://firebase.google.com/docs/android/setup#available-libraries
+google_firebase_bom = "com.google.firebase:firebase-bom:31.2.3"
 
 # AndroidX
 androidx_material = { module = "com.google.android.material:material", version.ref = "material" }
