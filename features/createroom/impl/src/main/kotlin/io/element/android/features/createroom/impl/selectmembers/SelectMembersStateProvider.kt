@@ -22,6 +22,7 @@ open class SelectMembersStateProvider : PreviewParameterProvider<SelectMembersSt
     override val values: Sequence<SelectMembersState>
         get() = sequenceOf(
             aSelectMembersState(),
+            aSelectMembersState().copy(selectedUserIds = listOf("someUserId"))
         )
 }
 
