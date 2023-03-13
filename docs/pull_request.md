@@ -15,7 +15,7 @@
       * [When create split PR?](#when-create-split-pr?)
       * [Avoid fixing other unrelated issue in a big PR](#avoid-fixing-other-unrelated-issue-in-a-big-pr)
     * [Bots](#bots)
-      * [Dependabot](#dependabot)
+      * [Renovate](#renovate)
       * [Gradle wrapper](#gradle-wrapper)
       * [Sync analytics plan](#sync-analytics-plan)
 * [Reviewing PR](#reviewing-pr)
@@ -135,9 +135,9 @@ It's also applicable for code rework (such as renaming for instance), or code fo
 
 Some bots can create PR, but they still have to be reviewed by the team
 
-##### Dependabot
+##### Renovate
 
-Dependabot is a tool which maintain all our external dependencies up to date. A dedicated PR is created for each new available release for one of our external dependency.Dependabot
+Renovate is a tool which maintain all our external dependencies up to date. A dedicated PR is created for each new available release for one of our external dependencies.
 
 To review such PR, you have to
  - **IMPORTANT** check the diff files (as always).
@@ -146,7 +146,7 @@ To review such PR, you have to
  - If the code does not compile (API break for instance), you have to checkout the branch and push new commits
  - Do some smoke test, depending of the library which has been upgraded
 
-For some reason dependabot sometimes does not upgrade some dependencies. In this case, and when detected, the upgrade has to be done manually.
+For some reasons (like for instance a change in package declaration) the tool sometimes does not upgrade some dependencies. In this case, and when detected, the upgrade has to be done manually.
 
 ##### Gradle wrapper
 
