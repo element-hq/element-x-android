@@ -19,6 +19,7 @@ package io.element.android.features.verifysession
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 
 @Immutable
 data class VerifySelfSessionState(
@@ -34,8 +35,3 @@ sealed interface VerificationState {
     data class Verifying(val emojiList: List<VerificationEmoji>, val state: Async<Boolean>) : VerificationState
     object Completed : VerificationState
 }
-
-data class VerificationEmoji(
-    val code: String,
-    val name: String,
-)

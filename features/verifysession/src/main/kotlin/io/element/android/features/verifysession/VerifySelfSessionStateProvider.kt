@@ -18,14 +18,15 @@ package io.element.android.features.verifysession
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 
 open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfSessionState> {
     override val values: Sequence<VerifySelfSessionState>
         get() = sequenceOf(
             aTemplateState(),
             aTemplateState().copy(verificationState = VerificationState.AwaitingOtherDeviceResponse),
-            aTemplateState().copy(verificationState = VerificationState.Verifying(aEmojiEntryList(),  Async.Uninitialized)),
-            aTemplateState().copy(verificationState = VerificationState.Verifying(aEmojiEntryList(),  Async.Loading())),
+            aTemplateState().copy(verificationState = VerificationState.Verifying(aVerificationEmojiList(),  Async.Uninitialized)),
+            aTemplateState().copy(verificationState = VerificationState.Verifying(aVerificationEmojiList(),  Async.Loading())),
             aTemplateState().copy(verificationState = VerificationState.Canceled),
             // Add other state here
         )
@@ -36,7 +37,7 @@ fun aTemplateState() = VerifySelfSessionState(
     eventSink = {},
 )
 
-fun aEmojiEntryList() = listOf(
+fun aVerificationEmojiList() = listOf(
     VerificationEmoji("🍕", "Pizza"),
     VerificationEmoji("🚀", "Rocket"),
     VerificationEmoji("🚀", "Rocket"),

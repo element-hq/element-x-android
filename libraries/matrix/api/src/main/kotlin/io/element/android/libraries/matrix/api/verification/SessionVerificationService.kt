@@ -46,7 +46,7 @@ sealed interface SessionVerificationServiceState {
     object Initial : SessionVerificationServiceState
     object AcceptedVerificationRequest : SessionVerificationServiceState
     object StartedSasVerification : SessionVerificationServiceState
-    data class ReceivedVerificationData(val emoji: List<SessionVerificationEmoji>) : SessionVerificationServiceState
+    data class ReceivedVerificationData(val emoji: List<VerificationEmoji>) : SessionVerificationServiceState
     object Finished : SessionVerificationServiceState
     object Canceled : SessionVerificationServiceState
     object Failed : SessionVerificationServiceState

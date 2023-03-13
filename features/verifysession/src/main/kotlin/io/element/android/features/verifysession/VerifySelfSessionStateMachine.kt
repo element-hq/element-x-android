@@ -22,6 +22,7 @@ import io.element.android.features.verifysession.SessionVerificationState.*
 import io.element.android.libraries.core.statemachine.createStateMachine
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceState
+import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -35,6 +36,7 @@ class VerifySelfSessionStateMachine(
     private val stateMachine = createStateMachine {
         addInitialState(Initial) {
             on<RequestVerification>(RequestingVerification)
+            on<StartSasVerification>(StartingSasVerification)
         }
         addState<RequestingVerification> {
             onEnter { sessionVerificationService.requestVerification() }
@@ -89,10 +91,7 @@ class VerifySelfSessionStateMachine(
                 is SessionVerificationServiceState.ReceivedVerificationData -> {
                     // For some reason we receive this state twice, we need to discard the 2nd one
                     if (stateMachine.currentState == SasVerificationStarted) {
-                        val emojis = verificationAttemptState.emoji.map { emoji ->
-                            emoji.use { VerificationEmoji(it.symbol(), it.description()) }
-                        }
-                        stateMachine.process(DidReceiveChallenge(emojis))
+                        stateMachine.process(DidReceiveChallenge(verificationAttemptState.emoji))
                     }
                 }
                 SessionVerificationServiceState.Finished -> {

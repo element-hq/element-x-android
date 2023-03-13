@@ -19,16 +19,17 @@ package io.element.android.libraries.matrix.impl.verification
 import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceState
+import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerDelegate
+import org.matrix.rustcomponents.sdk.SessionVerificationControllerInterface
 import org.matrix.rustcomponents.sdk.SessionVerificationEmoji
 import javax.inject.Inject
 
 class MatrixSessionVerificationService @Inject constructor() : SessionVerificationService, SessionVerificationControllerDelegate {
 
-    var verificationController: SessionVerificationController? = null
+    var verificationController: SessionVerificationControllerInterface? = null
         set(value) {
             field = value
             _isReady.value = value != null
@@ -87,7 +88,10 @@ class MatrixSessionVerificationService @Inject constructor() : SessionVerificati
     }
 
     override fun didReceiveVerificationData(data: List<SessionVerificationEmoji>) {
-        _verificationAttemptStatus.value = SessionVerificationServiceState.ReceivedVerificationData(data)
+        val emojis = data.map { emoji ->
+            emoji.use { VerificationEmoji(it.symbol(), it.description()) }
+        }
+        _verificationAttemptStatus.value = SessionVerificationServiceState.ReceivedVerificationData(emojis)
     }
 
     // When the actual SAS verification starts
