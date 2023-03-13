@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,13 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.anvil)
 }
 
 android {
-    namespace = "io.element.android.features.logout.impl"
+    // TODO change the namespace (and your classes package)
+    namespace = "io.element.android.features.verifysession.impl"
 }
 
 anvil {
@@ -31,19 +32,18 @@ anvil {
 }
 
 dependencies {
-    implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
+    implementation(projects.anvilannotations)
+
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
-    implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
-    implementation(projects.libraries.dateformatter.api)
-    implementation(libs.accompanist.placeholder)
-    api(projects.features.logout.api)
-    ksp(libs.showkase.processor)
+    implementation(libs.accompanist.flowlayout)
+    api(projects.features.verifysession.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
@@ -52,5 +52,5 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
 
-    androidTestImplementation(libs.test.junitext)
+    ksp(libs.showkase.processor)
 }
