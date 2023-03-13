@@ -5,15 +5,24 @@
     "project_id": "vector-alpha",
     "storage_bucket": "vector-alpha.appspot.com"
   },
+
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:912726360885:android:e17435e0beb0303000427c",
+        "mobilesdk_app_id": "1:912726360885:android:def0a4e454042e9b00427c",
         "android_client_info": {
-          "package_name": "io.element.android.x.nightly"
+          "package_name": "io.element.android.x.debug"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "912726360885-hvgoj23p6plt7hikhtdrakihojghaftv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.element.android.x.debug",
+            "certificate_hash": "41bd63b3b612a15d9ba36a5245c393f2a9b992d1"
+          }
+        },
         {
           "client_id": "912726360885-e87n3jva9uoj4vbidvijq78ebg02asv2.apps.googleusercontent.com",
           "client_type": 3
