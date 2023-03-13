@@ -17,20 +17,33 @@
 package io.element.android.features.createroom.impl.selectmembers
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.ui.model.MatrixUser
 import javax.inject.Inject
 
+// TODO add unit tests
 class SelectMembersPresenter @Inject constructor() : Presenter<SelectMembersState> {
 
     @Composable
     override fun present(): SelectMembersState {
+        val selectedUsers = rememberSaveable { mutableStateOf(emptyList<MatrixUser>()) }
 
         fun handleEvents(event: SelectMembersEvents) {
-            // do nothing for now
+            when (event) {
+                is SelectMembersEvents.AddToSelection -> selectedUsers.value = mutableListOf<MatrixUser>().also {
+                    it.addAll(selectedUsers.value.plus(event.matrixUser))
+                }
+                is SelectMembersEvents.RemoveFromSelection -> selectedUsers.value = mutableListOf<MatrixUser>().also {
+                    it.addAll(selectedUsers.value.minus(event.matrixUser))
+                }
+            }
         }
 
         return SelectMembersState(
-            eventSink = ::handleEvents
+            selectedUsers = selectedUsers.value,
+            eventSink = ::handleEvents,
         )
     }
 }
