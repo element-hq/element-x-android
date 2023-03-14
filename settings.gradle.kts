@@ -1,3 +1,5 @@
+import java.net.URI
+
 /*
  * Copyright (c) 2022 New Vector Ltd
  *
@@ -27,6 +29,14 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url = URI("https://www.jitpack.io")
+            content {
+                includeModule("com.github.UnifiedPush", "android-connector")
+            }
+        }
+        //noinspection JcenterRepositoryObsolete
+        jcenter()
         flatDir {
             dirs("libraries/matrix/libs")
         }
