@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.selectmembers
+package io.element.android.features.createroom.impl.selectusers
 
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 
-sealed interface SelectMembersEvents {
-    data class AddToSelection(val matrixUser: MatrixUser) : SelectMembersEvents
-    data class RemoveFromSelection(val matrixUser: MatrixUser) : SelectMembersEvents
+sealed interface SelectUsersEvents {
+    data class AddToSelection(val matrixUser: MatrixUser) : SelectUsersEvents
+    data class RemoveFromSelection(val matrixUser: MatrixUser) : SelectUsersEvents
 }

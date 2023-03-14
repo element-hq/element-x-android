@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.selectmembers
+package io.element.android.features.createroom.impl.selectusers
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,16 +27,16 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
-class SelectMembersNode @AssistedInject constructor(
+class SelectUsersNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: SelectMembersPresenter,
+    private val presenter: SelectUsersPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        SelectMembersView(
+        SelectUsersView(
             state = state,
             modifier = modifier,
             onBackPressed = { navigateUp() },

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.selectmembers
+package io.element.android.features.createroom.impl.selectusers
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -57,8 +57,8 @@ import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SelectMembersView(
-    state: SelectMembersState,
+fun SelectUsersView(
+    state: SelectUsersState,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
     onNextPressed: () -> Unit = {},
@@ -67,7 +67,7 @@ fun SelectMembersView(
 
     Scaffold(
         topBar = {
-            SelectMembersViewTopBar(
+            SelectUsersViewTopBar(
                 hasSelectedUsers = state.selectedUsers.isNotEmpty(),
                 onBackPressed = onBackPressed,
                 onNextPressed = onNextPressed,
@@ -80,10 +80,10 @@ fun SelectMembersView(
                 .padding(padding)
         ) {
             // TODO create a SearchUserView with multi selection option + callbacks
-            SelectedMembersList(
+            SelectedUsersList(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 selectedUsers = state.selectedUsers,
-                onUserRemoved = { eventSink(SelectMembersEvents.RemoveFromSelection(it)) }
+                onUserRemoved = { eventSink(SelectUsersEvents.RemoveFromSelection(it)) }
             )
         }
     }
@@ -91,7 +91,7 @@ fun SelectMembersView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SelectMembersViewTopBar(
+fun SelectUsersViewTopBar(
     hasSelectedUsers: Boolean,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
@@ -123,7 +123,7 @@ fun SelectMembersViewTopBar(
 }
 
 @Composable
-fun SelectedMembersList(
+fun SelectedUsersList(
     selectedUsers: List<MatrixUser>,
     modifier: Modifier = Modifier,
     onUserRemoved: (MatrixUser) -> Unit = {},
@@ -133,7 +133,7 @@ fun SelectedMembersList(
         horizontalArrangement = Arrangement.spacedBy(24.dp),
     ) {
         items(selectedUsers) { matrixUser ->
-            SelectedMember(
+            SelectedUser(
                 matrixUser = matrixUser,
                 onUserRemoved = onUserRemoved,
             )
@@ -142,7 +142,7 @@ fun SelectedMembersList(
 }
 
 @Composable
-fun SelectedMember(
+fun SelectedUser(
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
     onUserRemoved: (MatrixUser) -> Unit,
@@ -151,7 +151,6 @@ fun SelectedMember(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            // TODO set the size using custom Avatar size set to 56.dp
             Avatar(matrixUser.avatarData)
             Text(
                 text = matrixUser.username.orEmpty(),
@@ -179,15 +178,15 @@ fun SelectedMember(
 
 @Preview
 @Composable
-internal fun ChangeServerViewLightPreview(@PreviewParameter(SelectMembersStateProvider::class) state: SelectMembersState) =
+internal fun ChangeServerViewLightPreview(@PreviewParameter(SelectUsersStateProvider::class) state: SelectUsersState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-internal fun ChangeServerViewDarkPreview(@PreviewParameter(SelectMembersStateProvider::class) state: SelectMembersState) =
+internal fun ChangeServerViewDarkPreview(@PreviewParameter(SelectUsersStateProvider::class) state: SelectUsersState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
-private fun ContentToPreview(state: SelectMembersState) {
-    SelectMembersView(state = state)
+private fun ContentToPreview(state: SelectUsersState) {
+    SelectUsersView(state = state)
 }
