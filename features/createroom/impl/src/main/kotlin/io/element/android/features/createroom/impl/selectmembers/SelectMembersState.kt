@@ -17,8 +17,9 @@
 package io.element.android.features.createroom.impl.selectmembers
 
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import kotlinx.collections.immutable.ImmutableList
 
 data class SelectMembersState(
-    val selectedUsers: List<MatrixUser> = emptyList(),
+    val selectedUsers: ImmutableList<MatrixUser>,
     val eventSink: (SelectMembersEvents) -> Unit,
 )
