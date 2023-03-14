@@ -25,12 +25,35 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
     override val values: Sequence<CreateRoomRootState>
         get() = sequenceOf(
             aCreateRoomRootState(),
-            // Add other state here
+            aCreateRoomRootState().copy(isSearchActive = true),
+            aCreateRoomRootState().copy(isSearchActive = true, searchQuery = "someone"),
+            aCreateRoomRootState().copy(
+                isSearchActive = true,
+                searchQuery = "@someone:matrix.org",
+                searchResults = persistentListOf(
+                    MatrixUser(id = UserId("@someone:matrix.org")),
+                    MatrixUser(id = UserId("@someone:matrix.org"), username = "someone"),
+                    MatrixUser(
+                        id = UserId("@someone_with_a_very_long_matrix_identifier:a_very_long_domain.org"),
+                        username = "hey, I am someone with a very long display name"
+                    ),
+                    MatrixUser(id = UserId("@someone_2:matrix.org"), username = "someone 2"),
+                    MatrixUser(id = UserId("@someone_3:matrix.org"), username = "someone 3"),
+                    MatrixUser(id = UserId("@someone_4:matrix.org"), username = "someone 4"),
+                    MatrixUser(id = UserId("@someone_5:matrix.org"), username = "someone 5"),
+                    MatrixUser(id = UserId("@someone_6:matrix.org"), username = "someone 6"),
+                    MatrixUser(id = UserId("@someone_7:matrix.org"), username = "someone 7"),
+                    MatrixUser(id = UserId("@someone_8:matrix.org"), username = "someone 8"),
+                    MatrixUser(id = UserId("@someone_9:matrix.org"), username = "someone 9"),
+                    MatrixUser(id = UserId("@someone_10:matrix.org"), username = "someone 10"),
+                )
+            ),
         )
 }
 
 fun aCreateRoomRootState() = CreateRoomRootState(
     eventSink = {},
-    searchQuery = "@someone:example.org",
-    searchResults = persistentListOf(MatrixUser(UserId("@someone:example.org"))),
+    isSearchActive = false,
+    searchQuery = "",
+    searchResults = persistentListOf(),
 )
