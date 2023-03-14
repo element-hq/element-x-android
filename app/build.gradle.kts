@@ -214,10 +214,12 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
     implementation(libs.appyx.core)
     implementation(libs.androidx.splash)
+    implementation(libs.androidx.core)
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.startup)
+    implementation(libs.androidx.preference)
     implementation(libs.coil)
 
     implementation(platform(libs.network.okhttp.bom))
