@@ -17,10 +17,10 @@
 package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.impl.sync.roomListDiff
-import io.element.android.libraries.matrix.impl.sync.state
 import io.element.android.libraries.matrix.api.room.RoomSummary
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.impl.sync.roomListDiff
+import io.element.android.libraries.matrix.impl.sync.state
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -179,10 +179,14 @@ internal class RustRoomSummaryDataSource(
     }
 
     private fun buildRoomSummaryForIdentifier(identifier: String): RoomSummary {
-        val room = slidingSync.getRoom(identifier) ?: return RoomSummary.Empty(identifier)
-        return RoomSummary.Filled(
-            details = roomSummaryDetailsFactory.create(room, room.fullRoom())
+        val slidingSyncRoom = slidingSync.getRoom(identifier) ?: return RoomSummary.Empty(identifier)
+        val fullRoom = slidingSyncRoom.fullRoom()
+        val roomSummary = RoomSummary.Filled(
+            details = roomSummaryDetailsFactory.create(slidingSyncRoom, fullRoom)
         )
+        fullRoom?.destroy()
+        slidingSyncRoom.destroy()
+        return roomSummary
     }
 
     private suspend fun updateRoomSummaries(block: MutableList<RoomSummary>.() -> Unit) =

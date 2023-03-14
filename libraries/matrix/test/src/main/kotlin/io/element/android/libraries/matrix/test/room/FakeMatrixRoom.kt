@@ -87,4 +87,6 @@ class FakeMatrixRoom(
         delay(100)
         return Result.success(Unit)
     }
+
+    override fun close() = Unit
 }

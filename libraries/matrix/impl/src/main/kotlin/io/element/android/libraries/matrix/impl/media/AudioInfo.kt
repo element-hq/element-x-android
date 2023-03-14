@@ -14,23 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.impl.di
+package io.element.android.libraries.matrix.impl.media
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
-import org.matrix.rustcomponents.sdk.AuthenticationService
-import java.io.File
+import io.element.android.libraries.matrix.api.media.AudioInfo
+import org.matrix.rustcomponents.sdk.AudioInfo as RustAudioInfo
 
-@Module
-@ContributesTo(AppScope::class)
-object MatrixModule {
-
-    @Provides
-    @SingleIn(AppScope::class)
-    fun providesRustAuthenticationService(baseDirectory: File): AuthenticationService {
-        return AuthenticationService(baseDirectory.absolutePath, null, null)
-    }
-}
+fun RustAudioInfo.map(): AudioInfo = AudioInfo(
+    duration = duration?.toLong(),
+    size = size?.toLong()
+)

@@ -16,8 +16,6 @@
 
 package io.element.android.libraries.matrix.api.auth
 
-import org.matrix.rustcomponents.sdk.AuthenticationException
-
 enum class AuthErrorCode(val value: String) {
     UNKNOWN("M_UNKNOWN"),
     USER_DEACTIVATED("M_USER_DEACTIVATED"),

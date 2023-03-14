@@ -17,8 +17,8 @@
 package io.element.android.features.login.impl.error
 
 import io.element.android.libraries.matrix.api.auth.AuthErrorCode
+import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import io.element.android.libraries.matrix.api.auth.errorCode
-import org.matrix.rustcomponents.sdk.AuthenticationException
 import io.element.android.libraries.ui.strings.R.string as StringR
 
 fun loginError(

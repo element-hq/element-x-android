@@ -30,7 +30,7 @@ open class TimelineItemImageContentProvider : PreviewParameterProvider<TimelineI
 
 fun aTimelineItemImageContent() = TimelineItemImageContent(
     body = "a body",
-    imageMeta = MediaResolver.Meta(source = null, kind = MediaResolver.Kind.Content),
+    imageMeta = MediaResolver.Meta(url = null, kind = MediaResolver.Kind.Content),
     blurhash = null,
     aspectRatio = 0.5f,
 )

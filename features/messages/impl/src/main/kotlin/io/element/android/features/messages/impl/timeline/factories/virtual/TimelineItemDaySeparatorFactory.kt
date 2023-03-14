@@ -19,13 +19,13 @@ package io.element.android.features.messages.impl.timeline.factories.virtual
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemVirtualModel
 import io.element.android.libraries.dateformatter.api.DaySeparatorFormatter
-import org.matrix.rustcomponents.sdk.VirtualTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import javax.inject.Inject
 
 class TimelineItemDaySeparatorFactory @Inject constructor(private val daySeparatorFormatter: DaySeparatorFormatter) {
 
     fun create(virtualItem: VirtualTimelineItem.DayDivider): TimelineItemVirtualModel {
-        val formattedDate = daySeparatorFormatter.format(virtualItem.ts.toLong())
+        val formattedDate = daySeparatorFormatter.format(virtualItem.timestamp)
         return TimelineItemDaySeparatorModel(
             formattedDate = formattedDate
         )

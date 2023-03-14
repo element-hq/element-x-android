@@ -18,12 +18,12 @@ package io.element.android.features.messages.impl.timeline.factories.event
 
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
-import org.matrix.rustcomponents.sdk.TimelineItemContentKind
+import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import javax.inject.Inject
 
 class TimelineItemContentFailedToParseMessageFactory @Inject constructor() {
 
-    fun create(kind: TimelineItemContentKind.FailedToParseMessageLike): TimelineItemEventContent {
+    fun create(failedToParseMessageLike: FailedToParseMessageLikeContent): TimelineItemEventContent {
         return TimelineItemUnknownContent
     }
 }
