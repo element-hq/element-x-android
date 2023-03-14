@@ -17,7 +17,7 @@
 package io.element.android.libraries.core.extensions
 
 /**
- * Can be used to transform some Throwable into some other
+ * Can be used to transform some Throwable into some other.
  */
 inline fun <R, T : R> Result<T>.mapFailure(transform: (exception: Throwable) -> Throwable): Result<R> {
     return when (val exception = exceptionOrNull()) {
