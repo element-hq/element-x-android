@@ -191,7 +191,7 @@ internal fun ContentVerifying(verificationState: VerificationState.Verifying, mo
     ) {
         for (entry in verificationState.emojiList) {
             Column(
-                modifier = Modifier.defaultMinSize(minWidth = 64.dp),
+                modifier = Modifier.defaultMinSize(minWidth = 56.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(entry.code, fontSize = 34.sp)
