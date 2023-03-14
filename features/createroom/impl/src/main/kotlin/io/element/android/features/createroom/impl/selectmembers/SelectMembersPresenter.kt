@@ -17,10 +17,14 @@
 package io.element.android.features.createroom.impl.selectmembers
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
 // TODO add unit tests
@@ -28,16 +32,12 @@ class SelectMembersPresenter @Inject constructor() : Presenter<SelectMembersStat
 
     @Composable
     override fun present(): SelectMembersState {
-        val selectedUsers = rememberSaveable { mutableStateOf(emptyList<MatrixUser>()) }
+        val selectedUsers: MutableState<ImmutableList<MatrixUser>> = remember { mutableStateOf(persistentListOf()) }
 
         fun handleEvents(event: SelectMembersEvents) {
             when (event) {
-                is SelectMembersEvents.AddToSelection -> selectedUsers.value = mutableListOf<MatrixUser>().also {
-                    it.addAll(selectedUsers.value.plus(event.matrixUser))
-                }
-                is SelectMembersEvents.RemoveFromSelection -> selectedUsers.value = mutableListOf<MatrixUser>().also {
-                    it.addAll(selectedUsers.value.minus(event.matrixUser))
-                }
+                is SelectMembersEvents.AddToSelection -> selectedUsers.value = selectedUsers.value.plus(event.matrixUser).toImmutableList()
+                is SelectMembersEvents.RemoveFromSelection -> selectedUsers.value = selectedUsers.value.minus(event.matrixUser).toImmutableList()
             }
         }
 

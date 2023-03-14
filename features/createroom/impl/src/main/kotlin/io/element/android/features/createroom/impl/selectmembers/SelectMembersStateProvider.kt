@@ -18,16 +18,16 @@ package io.element.android.features.createroom.impl.selectmembers
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import kotlinx.collections.immutable.persistentListOf
 
 open class SelectMembersStateProvider : PreviewParameterProvider<SelectMembersState> {
     override val values: Sequence<SelectMembersState>
         get() = sequenceOf(
             aSelectMembersState(),
             aSelectMembersState().copy(
-                selectedUsers = listOf(
+                selectedUsers = persistentListOf(
                     aMatrixUser(userName = "User"),
                     aMatrixUser(userName = "User with long name"),
                 )
@@ -36,9 +36,10 @@ open class SelectMembersStateProvider : PreviewParameterProvider<SelectMembersSt
 }
 
 fun aSelectMembersState() = SelectMembersState(
+    selectedUsers = persistentListOf(),
     eventSink = {}
 )
 
 fun aMatrixUser(userName: String): MatrixUser {
-    return MatrixUser(id = UserId("@id"), username = userName, avatarData = AvatarData("@id", "U", size = AvatarSize.BIG))
+    return MatrixUser(id = UserId("@id"), username = userName, avatarData = AvatarData("@id", "U"))
 }

@@ -151,6 +151,7 @@ fun SelectedMember(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            // TODO set the size using custom Avatar size set to 56.dp
             Avatar(matrixUser.avatarData)
             Text(
                 text = matrixUser.username.orEmpty(),
