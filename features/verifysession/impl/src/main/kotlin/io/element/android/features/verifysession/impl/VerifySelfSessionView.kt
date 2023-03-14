@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -58,7 +59,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.ui.strings.R.string as StringR
+import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun VerifySelfSessionView(
@@ -107,16 +108,16 @@ internal fun HeaderContent(verificationState: VerificationState, modifier: Modif
         is VerificationState.Verifying, VerificationState.Completed -> R.drawable.ic_verification_emoji
     }
     val titleTextId = when (verificationState) {
-        VerificationState.Initial -> StringR.verification_title_initial
-        VerificationState.Canceled -> StringR.verification_title_canceled
-        VerificationState.AwaitingOtherDeviceResponse -> StringR.verification_title_waiting
-        is VerificationState.Verifying, VerificationState.Completed -> StringR.verification_title_verifying
+        VerificationState.Initial -> StringR.string.verification_title_initial
+        VerificationState.Canceled -> StringR.string.verification_title_canceled
+        VerificationState.AwaitingOtherDeviceResponse -> StringR.string.verification_title_waiting
+        is VerificationState.Verifying, VerificationState.Completed -> StringR.string.verification_title_verifying
     }
     val subtitleTextId = when (verificationState) {
-        VerificationState.Initial -> StringR.verification_subtitle_initial
-        VerificationState.Canceled -> StringR.verification_subtitle_canceled
-        VerificationState.AwaitingOtherDeviceResponse -> StringR.verification_subtitle_waiting
-        is VerificationState.Verifying, VerificationState.Completed -> StringR.verification_subtitle_verifying
+        VerificationState.Initial -> StringR.string.verification_subtitle_initial
+        VerificationState.Canceled -> StringR.string.verification_subtitle_canceled
+        VerificationState.AwaitingOtherDeviceResponse -> StringR.string.verification_subtitle_waiting
+        is VerificationState.Verifying, VerificationState.Completed -> StringR.string.verification_subtitle_verifying
     }
     Column(modifier) {
         Spacer(Modifier.height(68.dp))
@@ -189,7 +190,10 @@ internal fun ContentVerifying(verificationState: VerificationState.Verifying, mo
         crossAxisSpacing = 40.dp
     ) {
         for (entry in verificationState.emojiList) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier.defaultMinSize(minWidth = 56.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text(entry.code, fontSize = 34.sp)
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(entry.name, style = ElementTextStyles.Regular.body)
@@ -205,21 +209,21 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
 
     val isVerifying = (verificationState as? VerificationState.Verifying)?.state is Async.Loading<Boolean>
     val positiveButtonTitle = when (verificationState) {
-        VerificationState.Initial -> StringR.verification_positive_button_initial
-        VerificationState.Canceled -> StringR.verification_positive_button_canceled
+        VerificationState.Initial -> StringR.string.verification_positive_button_initial
+        VerificationState.Canceled -> StringR.string.verification_positive_button_canceled
         is VerificationState.Verifying -> {
             if (isVerifying) {
-                StringR.verification_positive_button_verifying_ongoing
+                StringR.string.verification_positive_button_verifying_ongoing
             } else {
-                StringR.verification_positive_button_verifying_start
+                StringR.string.verification_positive_button_verifying_start
             }
         }
         else -> null
     }
     val negativeButtonTitle = when (verificationState) {
-        VerificationState.Initial -> StringR.verification_negative_button_initial
-        VerificationState.Canceled -> StringR.verification_negative_button_canceled
-        is VerificationState.Verifying -> StringR.verification_negative_button_verifying
+        VerificationState.Initial -> StringR.string.verification_negative_button_initial
+        VerificationState.Canceled -> StringR.string.verification_negative_button_canceled
+        is VerificationState.Verifying -> StringR.string.verification_negative_button_verifying
         else -> null
     }
     val negativeButtonEnabled = !isVerifying
