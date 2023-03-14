@@ -22,7 +22,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -220,7 +220,7 @@ fun CreateRoomSearchResultItem(
     onClick: () -> Unit = {},
 ) {
     MatrixUserRow(
-        modifier = modifier.heightIn(min = 56.dp),
+        modifier = modifier,
         matrixUser = matrixUser,
         avatarSize = AvatarSize.Custom(36.dp),
         onClick = onClick,
@@ -237,7 +237,7 @@ fun CreateRoomActionButton(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = 56.dp)
+            .height(56.dp)
             .clickable { onClick() }
             .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
