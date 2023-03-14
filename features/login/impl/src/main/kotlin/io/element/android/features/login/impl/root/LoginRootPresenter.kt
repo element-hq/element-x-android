@@ -71,7 +71,7 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
         loggedInState.value = LoggedInState.LoggingIn
         //TODO rework the setHomeserver flow
         authenticationService.setHomeserver(homeserver)
-        authenticationService.login(formState.login.trim(), formState.password.trim())
+        authenticationService.login(formState.login.trim(), formState.password)
             .onSuccess { sessionId ->
                 loggedInState.value = LoggedInState.LoggedIn(sessionId)
             }
