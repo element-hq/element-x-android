@@ -29,7 +29,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.createroom.impl.root.CreateRoomRootNode
-import io.element.android.features.createroom.impl.selectmembers.SelectMembersNode
+import io.element.android.features.createroom.impl.selectusers.SelectUsersNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
@@ -67,7 +67,7 @@ class CreateRoomFlowNode @AssistedInject constructor(
                 }
                 createNode<CreateRoomRootNode>(buildContext, plugins = listOf(callback))
             }
-            NavTarget.NewRoom -> createNode<SelectMembersNode>(buildContext)
+            NavTarget.NewRoom -> createNode<SelectUsersNode>(buildContext)
         }
     }
 

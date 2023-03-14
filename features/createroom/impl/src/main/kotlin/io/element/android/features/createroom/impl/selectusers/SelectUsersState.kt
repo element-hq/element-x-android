@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.selectmembers
+package io.element.android.features.createroom.impl.selectusers
 
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
-data class SelectMembersState(
+data class SelectUsersState(
     val selectedUsers: ImmutableList<MatrixUser>,
-    val eventSink: (SelectMembersEvents) -> Unit,
+    val eventSink: (SelectUsersEvents) -> Unit,
 )

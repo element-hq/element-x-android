@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.selectmembers
+package io.element.android.features.createroom.impl.selectusers
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -22,11 +22,11 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.persistentListOf
 
-open class SelectMembersStateProvider : PreviewParameterProvider<SelectMembersState> {
-    override val values: Sequence<SelectMembersState>
+open class SelectUsersStateProvider : PreviewParameterProvider<SelectUsersState> {
+    override val values: Sequence<SelectUsersState>
         get() = sequenceOf(
-            aSelectMembersState(),
-            aSelectMembersState().copy(
+            aSelectUsersState(),
+            aSelectUsersState().copy(
                 selectedUsers = persistentListOf(
                     aMatrixUser(userName = "User"),
                     aMatrixUser(userName = "User with long name"),
@@ -35,7 +35,7 @@ open class SelectMembersStateProvider : PreviewParameterProvider<SelectMembersSt
         )
 }
 
-fun aSelectMembersState() = SelectMembersState(
+fun aSelectUsersState() = SelectUsersState(
     selectedUsers = persistentListOf(),
     eventSink = {}
 )

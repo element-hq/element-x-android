@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.selectmembers
+package io.element.android.features.createroom.impl.selectusers
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -28,20 +28,20 @@ import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
 // TODO add unit tests
-class SelectMembersPresenter @Inject constructor() : Presenter<SelectMembersState> {
+class SelectUsersPresenter @Inject constructor() : Presenter<SelectUsersState> {
 
     @Composable
-    override fun present(): SelectMembersState {
+    override fun present(): SelectUsersState {
         val selectedUsers: MutableState<ImmutableList<MatrixUser>> = remember { mutableStateOf(persistentListOf()) }
 
-        fun handleEvents(event: SelectMembersEvents) {
+        fun handleEvents(event: SelectUsersEvents) {
             when (event) {
-                is SelectMembersEvents.AddToSelection -> selectedUsers.value = selectedUsers.value.plus(event.matrixUser).toImmutableList()
-                is SelectMembersEvents.RemoveFromSelection -> selectedUsers.value = selectedUsers.value.minus(event.matrixUser).toImmutableList()
+                is SelectUsersEvents.AddToSelection -> selectedUsers.value = selectedUsers.value.plus(event.matrixUser).toImmutableList()
+                is SelectUsersEvents.RemoveFromSelection -> selectedUsers.value = selectedUsers.value.minus(event.matrixUser).toImmutableList()
             }
         }
 
-        return SelectMembersState(
+        return SelectUsersState(
             selectedUsers = selectedUsers.value,
             eventSink = ::handleEvents,
         )
