@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.selectusers
+package io.element.android.features.selectusers.api
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -37,6 +37,8 @@ open class SelectUsersStateProvider : PreviewParameterProvider<SelectUsersState>
 }
 
 fun aSelectUsersState() = SelectUsersState(
+    searchQuery = "",
+    searchResults = persistentListOf(),
     selectedUsers = persistentListOf(),
     eventSink = {}
 )
