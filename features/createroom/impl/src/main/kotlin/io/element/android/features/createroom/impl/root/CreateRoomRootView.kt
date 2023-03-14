@@ -48,10 +48,10 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
-import io.element.android.libraries.designsystem.theme.components.DockedSearchBar
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.model.MatrixUser
@@ -141,7 +141,7 @@ fun CreateRoomSearchBar(
         focusManager.clearFocus()
     }
 
-    DockedSearchBar(
+    SearchBar(
         query = query,
         onQueryChange = onTextChanged,
         onSearch = { focusManager.clearFocus() },
@@ -157,7 +157,9 @@ fun CreateRoomSearchBar(
         },
         leadingIcon = if (active) {
             { BackButton(onClick = { onActiveChanged(false) }) }
-        } else null,
+        } else {
+            null
+        },
         trailingIcon = when {
             active && query.isNotEmpty() -> {
                 {
@@ -177,7 +179,6 @@ fun CreateRoomSearchBar(
             }
             else -> null
         },
-        shape = if (!active) SearchBarDefaults.dockedShape else SearchBarDefaults.fullScreenShape,
         colors = if (!active) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
         content = {
             LazyColumn {
