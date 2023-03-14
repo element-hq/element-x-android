@@ -43,6 +43,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -151,7 +152,7 @@ fun SelectedUser(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Avatar(matrixUser.avatarData)
+            Avatar(matrixUser.avatarData.copy(size = AvatarSize.Custom(56)))
             Text(
                 text = matrixUser.username.orEmpty(),
                 overflow = TextOverflow.Ellipsis,
