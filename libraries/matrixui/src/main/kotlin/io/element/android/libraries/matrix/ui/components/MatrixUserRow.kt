@@ -41,7 +41,6 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getBestName
 
-// FIXME Row are not the same height if there is a name or not.
 @Composable
 fun MatrixUserRow(
     matrixUser: MatrixUser,
@@ -53,7 +52,7 @@ fun MatrixUserRow(
         modifier = modifier
             .clickable(onClick = onClick)
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
             .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -62,7 +61,7 @@ fun MatrixUserRow(
         )
         Column(
             modifier = Modifier
-                .padding(start = 12.dp, end = 4.dp, top = 12.dp, bottom = 12.dp),
+                .padding(start = 12.dp),
         ) {
             // Name
             Text(
