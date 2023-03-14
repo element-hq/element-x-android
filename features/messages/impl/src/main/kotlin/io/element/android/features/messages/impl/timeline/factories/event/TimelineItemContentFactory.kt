@@ -26,7 +26,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.RedactedConte
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
-import io.element.android.libraries.matrix.api.timeline.item.event.TimelineEventContent
+import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import javax.inject.Inject
@@ -43,7 +43,7 @@ class TimelineItemContentFactory @Inject constructor(
     private val failedToParseStateFactory: TimelineItemContentFailedToParseStateFactory
 ) {
 
-    fun create(itemContent: TimelineEventContent): TimelineItemEventContent {
+    fun create(itemContent: EventContent): TimelineItemEventContent {
         return when (itemContent) {
             is FailedToParseMessageLikeContent -> failedToParseMessageFactory.create(itemContent)
             is FailedToParseStateContent -> failedToParseStateFactory.create(itemContent)

@@ -22,26 +22,26 @@ import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 
-sealed interface TimelineEventContent
+sealed interface EventContent
 
 data class MessageContent(
     val body: String,
     val inReplyTo: UserId?,
     val isEdited: Boolean,
     val type: MessageType?
-) : TimelineEventContent
+) : EventContent
 
-object RedactedContent : TimelineEventContent
+object RedactedContent : EventContent
 
 data class StickerContent(
     val body: String,
     val info: ImageInfo,
     val url: String
-) : TimelineEventContent
+) : EventContent
 
 data class UnableToDecryptContent(
     val data: Data
-) : TimelineEventContent {
+) : EventContent {
     sealed interface Data {
         data class OlmV1Curve25519AesSha2(
             val senderKey: String
@@ -58,32 +58,32 @@ data class UnableToDecryptContent(
 data class RoomMembershipContent(
     val userId: UserId,
     val change: MembershipChange?
-) : TimelineEventContent
+) : EventContent
 
 data class ProfileChangeContent(
     val displayName: String?,
     val prevDisplayName: String?,
     val avatarUrl: String?,
     val prevAvatarUrl: String?
-) : TimelineEventContent
+) : EventContent
 
 data class StateContent(
     val stateKey: String,
     val content: OtherState
-) : TimelineEventContent
+) : EventContent
 
 data class FailedToParseMessageLikeContent(
     val eventType: String,
     val error: String
-) : TimelineEventContent
+) : EventContent
 
 data class FailedToParseStateContent(
     val eventType: String,
     val stateKey: String,
     val error: String
-) : TimelineEventContent
+) : EventContent
 
-object UnknownContent : TimelineEventContent
+object UnknownContent : EventContent
 
 sealed interface MessageType
 
@@ -199,7 +199,7 @@ sealed interface OtherState {
     object RoomTombstone : OtherState
 
     data class RoomTopic(
-        val `topic`: String?
+        val topic: String?
     ) : OtherState
 
     object SpaceChild : OtherState

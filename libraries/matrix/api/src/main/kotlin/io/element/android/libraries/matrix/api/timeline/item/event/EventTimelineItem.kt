@@ -31,5 +31,5 @@ data class EventTimelineItem(
     val sender: UserId,
     val senderProfile: ProfileTimelineDetails,
     val timestamp: Long,
-    val content: TimelineEventContent
+    val content: EventContent
 )

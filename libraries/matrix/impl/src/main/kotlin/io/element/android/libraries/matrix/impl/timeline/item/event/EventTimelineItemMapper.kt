@@ -22,7 +22,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
-import io.element.android.libraries.matrix.api.timeline.item.event.TimelineEventContent
 import org.matrix.rustcomponents.sdk.Reaction
 import org.matrix.rustcomponents.sdk.EventSendState as RustEventSendState
 import org.matrix.rustcomponents.sdk.EventTimelineItem as RustEventTimelineItem
