@@ -60,6 +60,10 @@ class CreateRoomRootPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+
+            initialState.eventSink(CreateRoomRootEvents.OnSearchActiveChanged(true))
+            assertThat(awaitItem().isSearchActive).isTrue()
+
             val matrixIdQuery = "@name:matrix.org"
             initialState.eventSink(CreateRoomRootEvents.UpdateSearchQuery(matrixIdQuery))
             assertThat(awaitItem().searchQuery).isEqualTo(matrixIdQuery)
@@ -69,6 +73,9 @@ class CreateRoomRootPresenterTests {
             initialState.eventSink(CreateRoomRootEvents.UpdateSearchQuery(notMatrixIdQuery))
             assertThat(awaitItem().searchQuery).isEqualTo(notMatrixIdQuery)
             assertThat(awaitItem().searchResults).isEmpty()
+
+            initialState.eventSink(CreateRoomRootEvents.OnSearchActiveChanged(false))
+            assertThat(awaitItem().isSearchActive).isFalse()
         }
     }
 
