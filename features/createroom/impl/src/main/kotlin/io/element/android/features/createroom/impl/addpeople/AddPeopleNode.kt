@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.selectusers
+package io.element.android.features.createroom.impl.addpeople
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,16 +27,16 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
-class SelectUsersNode @AssistedInject constructor(
+class AddPeopleNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: SelectUsersPresenter,
+    private val presenter: AddPeoplePresenter,
 ) : Node(buildContext, plugins = plugins) {
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        SelectUsersView(
+        AddPeopleView(
             state = state,
             modifier = modifier,
             onBackPressed = { navigateUp() },

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.selectusers
+package io.element.android.features.selectusers.api
 
 import io.element.android.libraries.matrix.ui.model.MatrixUser
-import kotlinx.collections.immutable.ImmutableList
 
-data class SelectUsersState(
-    val selectedUsers: ImmutableList<MatrixUser>,
-    val eventSink: (SelectUsersEvents) -> Unit,
-)
+sealed interface SelectUsersEvents {
+    data class UpdateSearchQuery(val query: String) : SelectUsersEvents
+    data class AddToSelection(val matrixUser: MatrixUser) : SelectUsersEvents
+    data class RemoveFromSelection(val matrixUser: MatrixUser) : SelectUsersEvents
+}
