@@ -54,6 +54,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -154,7 +155,7 @@ fun SelectedUser(
         ) {
             Avatar(matrixUser.avatarData.copy(size = AvatarSize.Custom(56)))
             Text(
-                text = matrixUser.username.orEmpty(),
+                text = matrixUser.getBestName(),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = MaterialTheme.typography.bodyLarge,
