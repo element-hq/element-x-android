@@ -23,4 +23,5 @@ sealed interface CreateRoomRootEvents {
     data class StartDM(val matrixUser: MatrixUser) : CreateRoomRootEvents
     object CreateRoom : CreateRoomRootEvents
     object InvitePeople : CreateRoomRootEvents
+    data class OnSearchActiveChanged(val active: Boolean) : CreateRoomRootEvents
 }

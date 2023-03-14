@@ -32,10 +32,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -70,11 +66,10 @@ fun CreateRoomRootView(
     modifier: Modifier = Modifier,
     onClosePressed: () -> Unit = {},
 ) {
-    var isSearchActive by rememberSaveable { mutableStateOf(false) }
     Scaffold(
         modifier = modifier.fillMaxWidth(),
         topBar = {
-            if (!isSearchActive) {
+            if (!state.isSearchActive) {
                 CreateRoomRootViewTopBar(onClosePressed = onClosePressed)
             }
         }
@@ -88,13 +83,13 @@ fun CreateRoomRootView(
                 query = state.searchQuery,
                 placeHolderTitle = stringResource(StringR.string.search_for_someone),
                 results = state.searchResults,
-                active = isSearchActive,
-                onActiveChanged = { isSearchActive = it },
+                active = state.isSearchActive,
+                onActiveChanged = { state.eventSink(CreateRoomRootEvents.OnSearchActiveChanged(it)) },
                 onTextChanged = { state.eventSink(CreateRoomRootEvents.UpdateSearchQuery(it)) },
                 onResultSelected = { state.eventSink(CreateRoomRootEvents.StartDM(it)) }
             )
 
-            if (!isSearchActive) {
+            if (!state.isSearchActive) {
                 CreateRoomActionButtonsList(
                     onNewRoomClicked = { state.eventSink(CreateRoomRootEvents.CreateRoom) },
                     onInvitePeopleClicked = { state.eventSink(CreateRoomRootEvents.InvitePeople) },

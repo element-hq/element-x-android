@@ -22,6 +22,7 @@ import kotlinx.collections.immutable.ImmutableList
 // Do not use default value, so no member get forgotten in the presenters.
 data class CreateRoomRootState(
     val eventSink: (CreateRoomRootEvents) -> Unit,
+    val isSearchActive: Boolean,
     val searchQuery: String,
     val searchResults: ImmutableList<MatrixUser>,
 )

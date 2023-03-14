@@ -38,6 +38,7 @@ class CreateRoomRootPresenter @Inject constructor() : Presenter<CreateRoomRootSt
 
     @Composable
     override fun present(): CreateRoomRootState {
+        var isSearchActive by rememberSaveable { mutableStateOf(false) }
         var searchQuery by rememberSaveable { mutableStateOf("") }
         val searchResults: MutableState<ImmutableList<MatrixUser>> = remember {
             mutableStateOf(persistentListOf())
@@ -45,6 +46,7 @@ class CreateRoomRootPresenter @Inject constructor() : Presenter<CreateRoomRootSt
 
         fun handleEvents(event: CreateRoomRootEvents) {
             when (event) {
+                is CreateRoomRootEvents.OnSearchActiveChanged -> isSearchActive = event.active
                 is CreateRoomRootEvents.UpdateSearchQuery -> searchQuery = event.query
                 is CreateRoomRootEvents.StartDM -> handleStartDM(event.matrixUser)
                 CreateRoomRootEvents.CreateRoom -> Unit // Todo Handle create room action
@@ -65,6 +67,7 @@ class CreateRoomRootPresenter @Inject constructor() : Presenter<CreateRoomRootSt
 
         return CreateRoomRootState(
             eventSink = ::handleEvents,
+            isSearchActive = isSearchActive,
             searchQuery = searchQuery,
             searchResults = searchResults.value,
         )
