@@ -28,6 +28,7 @@ open class SelectUsersStateProvider : PreviewParameterProvider<SelectUsersState>
             aSelectUsersState(),
             aSelectUsersState().copy(
                 selectedUsers = persistentListOf(
+                    aMatrixUser(userName = ""),
                     aMatrixUser(userName = "User"),
                     aMatrixUser(userName = "User with long name"),
                 )
