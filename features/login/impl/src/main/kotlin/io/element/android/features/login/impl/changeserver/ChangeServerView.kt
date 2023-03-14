@@ -58,7 +58,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
-import io.element.android.features.login.impl.error.changeServerError
 import io.element.android.features.login.impl.util.LoginConstants
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.ElementTextStyles
@@ -101,6 +100,8 @@ fun ChangeServerView(
             state.changeServerAction !is Async.Loading
         }
     }
+    val invalidHomeserverError = (state.changeServerAction as? Async.Failure)?.error as? ChangeServerError.Footer
+    val slidingSyncNotSupportedError = (state.changeServerAction as? Async.Failure)?.error as? ChangeServerError.SlidingSyncAlert
     val focusManager = LocalFocusManager.current
 
     fun submit() {
@@ -200,53 +201,50 @@ fun ChangeServerView(
                     trailingIcon = if (homeserverFieldState.isNotEmpty()) {
                         {
                             IconButton(onClick = {
-                                homeserverFieldState = ""
+                                eventSink(ChangeServerEvents.SetServer(""))
                             }, enabled = interactionEnabled) {
                                 Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(StringR.string.a11y_clear))
                             }
                         }
                     } else null,
-                )
-                if (state.changeServerAction is Async.Failure) {
-                    if (state.changeServerAction.error is AuthenticationException.SlidingSyncNotAvailable) {
-                        SlidingSyncNotSupportedDialog(onLearnMoreClicked = {
-                            onLearnMoreClicked()
-                            eventSink(ChangeServerEvents.ClearError)
-                        }, onDismiss = {
-                            eventSink(ChangeServerEvents.ClearError)
-                        })
-                    } else {
-                        ChangeServerErrorDialog(
-                            error = state.changeServerAction.error,
-                            onDismiss = {
-                                eventSink(ChangeServerEvents.ClearError)
+                    isError = invalidHomeserverError != null,
+                    supportingText = {
+                        if (invalidHomeserverError != null) {
+                            Text(invalidHomeserverError.message(), color = MaterialTheme.colorScheme.error)
+                        } else {
+                            val footerMessage = stringResource(StringR.string.server_selection_server_footer)
+                            val footerAction = stringResource(StringR.string.server_selection_server_footer_action)
+                            val footerText = buildAnnotatedString {
+                                val defaultColor = MaterialTheme.colorScheme.tertiary
+                                withStyle(ParagraphStyle(textAlign = TextAlign.Start)) {
+                                    withStyle(SpanStyle(color = defaultColor)) {
+                                        append(footerMessage)
+                                        append(" ")
+                                    }
+                                    val start = length
+                                    withStyle(SpanStyle(color = LinkColor)) {
+                                        append(footerAction)
+                                    }
+                                    addUrlAnnotation(UrlAnnotation(LoginConstants.SLIDING_SYNC_READ_MORE_URL), start, length)
+                                }
                             }
-                        )
-                    }
-                }
-                Spacer(Modifier.height(8.dp))
-                val footerMessage = stringResource(StringR.string.server_selection_server_footer)
-                val footerAction = stringResource(StringR.string.server_selection_server_footer_action)
-                val footerText = buildAnnotatedString {
-                    val defaultColor = MaterialTheme.colorScheme.tertiary
-                    withStyle(ParagraphStyle(textAlign = TextAlign.Start)) {
-                        withStyle(SpanStyle(color = defaultColor)) {
-                            append(footerMessage)
-                            append(" ")
+                            ClickableLinkText(
+                                text = footerText,
+                                interactionSource = MutableInteractionSource(),
+                                style = ElementTextStyles.Regular.caption1,
+                            )
                         }
-                        val start = length
-                        withStyle(SpanStyle(color = LinkColor)) {
-                            append(footerAction)
-                        }
-                        addUrlAnnotation(UrlAnnotation(LoginConstants.SLIDING_SYNC_READ_MORE_URL), start, length)
                     }
-                }
-                ClickableLinkText(
-                    text = footerText,
-                    interactionSource = MutableInteractionSource(),
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    style = ElementTextStyles.Regular.caption1,
+
                 )
+                if (slidingSyncNotSupportedError != null) {
+                    SlidingSyncNotSupportedDialog(onLearnMoreClicked = {
+                        onLearnMoreClicked()
+                        eventSink(ChangeServerEvents.ClearError)
+                    }, onDismiss = {
+                        eventSink(ChangeServerEvents.ClearError)
+                    })
+                }
                 Spacer(Modifier.height(32.dp))
                 Button(
                     onClick = ::submit,
@@ -271,9 +269,10 @@ fun ChangeServerView(
 }
 
 @Composable
-internal fun ChangeServerErrorDialog(error: Throwable, onDismiss: () -> Unit) {
+internal fun ChangeServerErrorDialog(title: String, message: String, onDismiss: () -> Unit) {
     ErrorDialog(
-        content = stringResource(changeServerError(error)),
+        title = title,
+        content = message,
         onDismiss = onDismiss
     )
 }
