@@ -22,11 +22,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -35,10 +36,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -55,9 +52,9 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.DockedSearchBar
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
+import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.model.MatrixUser
@@ -70,13 +67,8 @@ import io.element.android.libraries.ui.strings.R as StringR
 fun SelectUsersView(
     state: SelectUsersState,
     modifier: Modifier = Modifier,
-    onSearchActiveChanged: (Boolean) -> Unit = {},
-    onSelectionChanged: (ImmutableList<MatrixUser>) -> Unit = {},
 ) {
-    var isSearchActive by rememberSaveable { mutableStateOf(false) }
     val eventSink = state.eventSink
-
-    // TODO how to pass back the selection list?
 
     Column(
         modifier = modifier
@@ -86,11 +78,8 @@ fun SelectUsersView(
             modifier = Modifier.fillMaxWidth(),
             query = state.searchQuery,
             results = state.searchResults,
-            active = isSearchActive,
-            onActiveChanged = {
-                isSearchActive = it
-                onSearchActiveChanged(it)
-            },
+            active = state.isSearchActive,
+            onActiveChanged = { eventSink.invoke(SelectUsersEvents.OnSearchActiveChanged(it)) },
             onTextChanged = { state.eventSink(SelectUsersEvents.UpdateSearchQuery(it)) },
             onResultSelected = { state.eventSink(SelectUsersEvents.AddToSelection(it)) }
         )
@@ -133,7 +122,7 @@ fun SelectedUser(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Avatar(matrixUser.avatarData.copy(size = AvatarSize.Custom(56)))
+            Avatar(matrixUser.avatarData.copy(size = AvatarSize.Custom(56.dp)))
             Text(
                 text = matrixUser.getBestName(),
                 overflow = TextOverflow.Ellipsis,
@@ -177,7 +166,7 @@ fun SearchUserBar(
         focusManager.clearFocus()
     }
 
-    DockedSearchBar(
+    SearchBar(
         query = query,
         onQueryChange = onTextChanged,
         onSearch = { focusManager.clearFocus() },
@@ -193,7 +182,9 @@ fun SearchUserBar(
         },
         leadingIcon = if (active) {
             { BackButton(onClick = { onActiveChanged(false) }) }
-        } else null,
+        } else {
+            null
+        },
         trailingIcon = when {
             active && query.isNotEmpty() -> {
                 {
@@ -213,14 +204,15 @@ fun SearchUserBar(
             }
             else -> null
         },
-        shape = if (!active) SearchBarDefaults.dockedShape else SearchBarDefaults.fullScreenShape,
         colors = if (!active) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
         content = {
-            results.forEach {
-                SearchUserResultItem(
-                    matrixUser = it,
-                    onClick = { onResultSelected(it) }
-                )
+            LazyColumn {
+                items(results) {
+                    SearchUserResultItem(
+                        matrixUser = it,
+                        onClick = { onResultSelected(it) }
+                    )
+                }
             }
         },
     )
@@ -233,9 +225,9 @@ fun SearchUserResultItem(
     onClick: () -> Unit = {},
 ) {
     MatrixUserRow(
-        modifier = modifier.heightIn(min = 56.dp),
+        modifier = modifier,
         matrixUser = matrixUser,
-        avatarSize = AvatarSize.Custom(36),
+        avatarSize = AvatarSize.Custom(36.dp),
         onClick = onClick,
     )
 }

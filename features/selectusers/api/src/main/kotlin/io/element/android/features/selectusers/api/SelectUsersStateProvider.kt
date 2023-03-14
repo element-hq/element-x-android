@@ -17,7 +17,6 @@
 package io.element.android.features.selectusers.api
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.persistentListOf
@@ -25,24 +24,38 @@ import kotlinx.collections.immutable.persistentListOf
 open class SelectUsersStateProvider : PreviewParameterProvider<SelectUsersState> {
     override val values: Sequence<SelectUsersState>
         get() = sequenceOf(
+            // TODO add states with selectedUsers
             aSelectUsersState(),
+            aSelectUsersState().copy(isSearchActive = true),
+            aSelectUsersState().copy(isSearchActive = true, searchQuery = "someone"),
             aSelectUsersState().copy(
-                selectedUsers = persistentListOf(
-                    aMatrixUser(userName = ""),
-                    aMatrixUser(userName = "User"),
-                    aMatrixUser(userName = "User with long name"),
+                isSearchActive = true,
+                searchQuery = "@someone:matrix.org",
+                searchResults = persistentListOf(
+                    MatrixUser(id = UserId("@someone:matrix.org")),
+                    MatrixUser(id = UserId("@someone:matrix.org"), username = "someone"),
+                    MatrixUser(
+                        id = UserId("@someone_with_a_very_long_matrix_identifier:a_very_long_domain.org"),
+                        username = "hey, I am someone with a very long display name"
+                    ),
+                    MatrixUser(id = UserId("@someone_2:matrix.org"), username = "someone 2"),
+                    MatrixUser(id = UserId("@someone_3:matrix.org"), username = "someone 3"),
+                    MatrixUser(id = UserId("@someone_4:matrix.org"), username = "someone 4"),
+                    MatrixUser(id = UserId("@someone_5:matrix.org"), username = "someone 5"),
+                    MatrixUser(id = UserId("@someone_6:matrix.org"), username = "someone 6"),
+                    MatrixUser(id = UserId("@someone_7:matrix.org"), username = "someone 7"),
+                    MatrixUser(id = UserId("@someone_8:matrix.org"), username = "someone 8"),
+                    MatrixUser(id = UserId("@someone_9:matrix.org"), username = "someone 9"),
+                    MatrixUser(id = UserId("@someone_10:matrix.org"), username = "someone 10"),
                 )
-            )
+            ),
         )
 }
 
 fun aSelectUsersState() = SelectUsersState(
+    isSearchActive = false,
     searchQuery = "",
     searchResults = persistentListOf(),
     selectedUsers = persistentListOf(),
     eventSink = {}
 )
-
-fun aMatrixUser(userName: String): MatrixUser {
-    return MatrixUser(id = UserId("@id"), username = userName, avatarData = AvatarData("@id", "U"))
-}

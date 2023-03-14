@@ -22,4 +22,5 @@ sealed interface SelectUsersEvents {
     data class UpdateSearchQuery(val query: String) : SelectUsersEvents
     data class AddToSelection(val matrixUser: MatrixUser) : SelectUsersEvents
     data class RemoveFromSelection(val matrixUser: MatrixUser) : SelectUsersEvents
+    data class OnSearchActiveChanged(val active: Boolean) : SelectUsersEvents
 }

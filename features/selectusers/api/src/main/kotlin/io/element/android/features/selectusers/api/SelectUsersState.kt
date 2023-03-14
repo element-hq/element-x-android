@@ -23,5 +23,6 @@ data class SelectUsersState(
     val searchQuery: String,
     val searchResults: ImmutableList<MatrixUser>,
     val selectedUsers: ImmutableList<MatrixUser>,
+    val isSearchActive: Boolean,
     val eventSink: (SelectUsersEvents) -> Unit,
 )
