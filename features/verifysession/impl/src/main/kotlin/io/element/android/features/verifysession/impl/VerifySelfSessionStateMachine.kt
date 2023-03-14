@@ -80,6 +80,7 @@ class VerifySelfSessionStateMachine(
     }
 
     init {
+        // Observe the verification service state, translate it to state machine input events
         sessionVerificationService.verificationAttemptStatus.onEach { verificationAttemptState ->
             when (verificationAttemptState) {
                 SessionVerificationServiceState.AcceptedVerificationRequest -> {

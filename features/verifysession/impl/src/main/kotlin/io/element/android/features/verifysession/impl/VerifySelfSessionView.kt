@@ -191,7 +191,7 @@ internal fun ContentVerifying(verificationState: VerificationState.Verifying, mo
     ) {
         for (entry in verificationState.emojiList) {
             Column(
-                modifier = Modifier.defaultMinSize(minWidth = 56.dp),
+                modifier = Modifier.defaultMinSize(minWidth = 64.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(entry.code, fontSize = 34.sp)
@@ -207,7 +207,7 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
     val verificationState = screenState.verificationState
     val eventSink = screenState.eventSink
 
-    val isVerifying = (verificationState as? VerificationState.Verifying)?.state is Async.Loading<Boolean>
+    val isVerifying = (verificationState as? VerificationState.Verifying)?.state is Async.Loading<Unit>
     val positiveButtonTitle = when (verificationState) {
         VerificationState.Initial -> StringR.string.verification_positive_button_initial
         VerificationState.Canceled -> StringR.string.verification_positive_button_canceled

@@ -32,6 +32,6 @@ sealed interface VerificationState {
     object Initial : VerificationState
     object Canceled : VerificationState
     object AwaitingOtherDeviceResponse : VerificationState
-    data class Verifying(val emojiList: List<VerificationEmoji>, val state: Async<Boolean>) : VerificationState
+    data class Verifying(val emojiList: List<VerificationEmoji>, val state: Async<Unit>) : VerificationState
     object Completed : VerificationState
 }

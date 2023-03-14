@@ -29,28 +29,63 @@ interface SessionVerificationService {
      */
     val isReady: StateFlow<Boolean>
 
+    /**
+     * Exposes whether the current session is verified or not.
+     */
     val isVerified: StateFlow<Boolean>
 
+    /**
+     * Request verification of the current session.
+     */
     fun requestVerification()
 
+    /**
+     * Cancels the current verification attempt.
+     */
     fun cancelVerification()
 
+    /**
+     * Approves the current verification. This must happen on both devices to successfully verify a session.
+     */
     fun approveVerification()
 
+    /**
+     * Declines the verification attempt because the user could not verify or does not trust the other side of the verification.
+     */
     fun declineVerification()
 
+    /**
+     * Starts the verification of the unverified session from another device.
+     */
     fun startVerification()
 
+    /**
+     * Returns the verification service state to the initial step.
+     */
     fun reset()
 }
 
+/** States produced by the [SessionVerificationService]. */
 sealed interface SessionVerificationServiceState {
+    /** Initial state. */
     object Initial : SessionVerificationServiceState
+
+    /** Session verification request was accepted by another device. */
     object AcceptedVerificationRequest : SessionVerificationServiceState
+
+    /** Short Authentication String (SAS) verification started between the 2 devices. */
     object StartedSasVerification : SessionVerificationServiceState
+
+    /** Verification data for the SAS verification (emojis) received. */
     data class ReceivedVerificationData(val emoji: List<VerificationEmoji>) : SessionVerificationServiceState
+
+    /** Verification completed successfully. */
     object Finished : SessionVerificationServiceState
+
+    /** Verification was cancelled by either device. */
     object Canceled : SessionVerificationServiceState
+
+    /** Verification failed with an error. */
     object Failed : SessionVerificationServiceState
 }
 

@@ -41,7 +41,7 @@ class VerifySelfSessionPresenter @Inject constructor(
         val coroutineScope = rememberCoroutineScope()
         val stateMachine = remember { VerifySelfSessionStateMachine(coroutineScope, sessionVerificationService) }
 
-        // Create the new state from the StateMachine state
+        // Create the new view state from the StateMachine state
         val stateMachineCurrentState by stateMachine.state.collectAsState()
         val verificationState by remember {
             derivedStateOf {
