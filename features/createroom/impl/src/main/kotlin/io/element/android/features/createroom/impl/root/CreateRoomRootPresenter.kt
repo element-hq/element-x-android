@@ -55,11 +55,13 @@ class CreateRoomRootPresenter @Inject constructor() : Presenter<CreateRoomRootSt
         }
 
         LaunchedEffect(searchQuery) {
+            // Clear the search results before performing the search, manually add a fake result with the matrixId, if any
             searchResults.value = if (MatrixPatterns.isUserId(searchQuery)) {
                 persistentListOf(MatrixUser(UserId(searchQuery)))
             } else {
                 persistentListOf()
             }
+            // Perform the search asynchronously
             if (searchQuery.isNotEmpty()) {
                 searchResults.value = performSearch(searchQuery)
             }
