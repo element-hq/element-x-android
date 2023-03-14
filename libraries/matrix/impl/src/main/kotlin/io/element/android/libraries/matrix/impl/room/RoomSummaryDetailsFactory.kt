@@ -16,16 +16,16 @@
 
 package io.element.android.libraries.matrix.impl.room
 
-import io.element.android.libraries.matrix.impl.room.message.RoomMessageFactory
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
+import io.element.android.libraries.matrix.impl.room.message.RoomMessageFactory
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 
 class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFactory = RoomMessageFactory()) {
 
     fun create(slidingSyncRoom: SlidingSyncRoom, room: Room?): RoomSummaryDetails {
-        val latestRoomMessage = slidingSyncRoom.latestRoomMessage()?.let {
+        val latestRoomMessage = slidingSyncRoom.latestRoomMessage()?.use {
             roomMessageFactory.create(it)
         }
         val computedLastMessage = when {
@@ -38,7 +38,7 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
             name = slidingSyncRoom.name() ?: slidingSyncRoom.roomId(),
             isDirect = slidingSyncRoom.isDm() ?: false,
             avatarURLString = room?.avatarUrl(),
-            unreadNotificationCount = slidingSyncRoom.unreadNotifications().notificationCount().toInt(),
+            unreadNotificationCount = slidingSyncRoom.unreadNotifications().use { it.notificationCount().toInt() },
             lastMessage = computedLastMessage,
             lastMessageTimestamp = latestRoomMessage?.originServerTs
         )

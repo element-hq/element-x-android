@@ -18,12 +18,12 @@ package io.element.android.features.messages.impl.timeline.factories.event
 
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
-import org.matrix.rustcomponents.sdk.TimelineItemContentKind
+import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import javax.inject.Inject
 
 class TimelineItemContentStateFactory @Inject constructor() {
 
-    fun create(kind: TimelineItemContentKind.State): TimelineItemEventContent {
+    fun create(content: StateContent): TimelineItemEventContent {
         return TimelineItemUnknownContent
     }
 }

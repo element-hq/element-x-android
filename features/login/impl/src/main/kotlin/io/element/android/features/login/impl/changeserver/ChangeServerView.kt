@@ -80,9 +80,9 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
+import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
-import org.matrix.rustcomponents.sdk.AuthenticationException
 import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalTextApi::class)

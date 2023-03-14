@@ -25,7 +25,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.features.login.impl.util.LoginConstants
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import kotlinx.coroutines.CoroutineScope
@@ -71,15 +70,14 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
     private fun CoroutineScope.submit(homeserver: String, formState: LoginFormState, loggedInState: MutableState<LoggedInState>) = launch {
         loggedInState.value = LoggedInState.LoggingIn
         //TODO rework the setHomeserver flow
-        tryOrNull {
-            authenticationService.setHomeserver(homeserver)
-        }
-        try {
-            val sessionId = authenticationService.login(formState.login.trim(), formState.password.trim())
-            loggedInState.value = LoggedInState.LoggedIn(sessionId)
-        } catch (failure: Throwable) {
-            loggedInState.value = LoggedInState.ErrorLoggingIn(failure)
-        }
+        authenticationService.setHomeserver(homeserver)
+        authenticationService.login(formState.login.trim(), formState.password)
+            .onSuccess { sessionId ->
+                loggedInState.value = LoggedInState.LoggedIn(sessionId)
+            }
+            .onFailure { failure ->
+                loggedInState.value = LoggedInState.ErrorLoggingIn(failure)
+            }
     }
 
     private fun updateFormState(formState: MutableState<LoginFormState>, updateLambda: LoginFormState.() -> LoginFormState) {

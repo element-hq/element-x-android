@@ -16,14 +16,14 @@
 
 package io.element.android.features.messages.impl.timeline.factories.event
 
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
-import org.matrix.rustcomponents.sdk.TimelineItemContentKind
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import javax.inject.Inject
 
 class TimelineItemContentUTDFactory @Inject constructor() {
 
-    fun create(kind: TimelineItemContentKind.UnableToDecrypt): TimelineItemEventContent {
-        return TimelineItemEncryptedContent(kind.msg)
+    fun create(content: UnableToDecryptContent): TimelineItemEventContent {
+        return TimelineItemEncryptedContent(content.data)
     }
 }

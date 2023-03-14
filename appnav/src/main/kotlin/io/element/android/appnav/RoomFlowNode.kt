@@ -71,6 +71,7 @@ class RoomFlowNode @AssistedInject constructor(
             },
             onDestroy = {
                 Timber.v("OnDestroy")
+                inputs.room.close()
                 plugins<LifecycleCallback>().forEach { it.onFlowReleased(inputs.room) }
             }
         )
