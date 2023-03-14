@@ -222,7 +222,7 @@ fun CreateRoomSearchResultItem(
     MatrixUserRow(
         modifier = modifier.heightIn(min = 56.dp),
         matrixUser = matrixUser,
-        avatarSize = AvatarSize.Custom(36),
+        avatarSize = AvatarSize.Custom(36.dp),
         onClick = onClick,
     )
 }
