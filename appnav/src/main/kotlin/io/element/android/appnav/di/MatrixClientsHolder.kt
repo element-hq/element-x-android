@@ -64,10 +64,13 @@ class MatrixClientsHolder @Inject constructor(private val authenticationService:
         runBlocking {
             userIds.forEach { userId ->
                 Timber.v("Restore matrix session: $userId")
-                val matrixClient = authenticationService.restoreSession(userId)
-                if (matrixClient != null) {
-                    add(matrixClient)
-                }
+                authenticationService.restoreSession(userId)
+                    .onSuccess { matrixClient ->
+                        add(matrixClient)
+                    }
+                    .onFailure {
+                        Timber.e("Fail to restore session")
+                    }
             }
         }
     }

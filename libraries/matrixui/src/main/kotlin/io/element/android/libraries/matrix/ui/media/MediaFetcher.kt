@@ -33,7 +33,7 @@ internal class MediaFetcher(
 ) : Fetcher {
 
     override suspend fun fetch(): FetchResult? {
-        val byteArray = mediaResolver?.resolve(meta) ?: return null
+        val byteArray = mediaResolver?.resolve(meta.url, meta.kind) ?: return null
         val byteBuffer = ByteBuffer.wrap(byteArray)
         return imageLoader.components.newFetcher(byteBuffer, options, imageLoader)?.first?.fetch()
     }

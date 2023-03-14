@@ -119,14 +119,15 @@ class RootFlowNode @AssistedInject constructor(
             onSuccess(latestKnownUserId)
             return
         }
-        val matrixClient = authenticationService.restoreSession(UserId(latestKnownUserId.value))
-        if (matrixClient == null) {
-            Timber.v("Failed to restore session...")
-            onFailure()
-        } else {
-            matrixClientsHolder.add(matrixClient)
-            onSuccess(matrixClient.sessionId)
-        }
+        authenticationService.restoreSession(UserId(latestKnownUserId.value))
+            .onSuccess { matrixClient ->
+                matrixClientsHolder.add(matrixClient)
+                onSuccess(matrixClient.sessionId)
+            }
+            .onFailure {
+                Timber.v("Failed to restore session...")
+                onFailure()
+            }
     }
 
     private fun onOpenBugReport() {

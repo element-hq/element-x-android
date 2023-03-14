@@ -17,11 +17,11 @@
 package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
@@ -61,6 +61,10 @@ class RustMatrixRoom(
             coroutineScope = coroutineScope,
             coroutineDispatchers = coroutineDispatchers
         )
+    }
+    override fun close() {
+        innerRoom.destroy()
+        slidingSyncRoom.destroy()
     }
 
     override val roomId = RoomId(innerRoom.id())

@@ -22,8 +22,4 @@ class FakeMediaResolver : MediaResolver {
     override suspend fun resolve(url: String?, kind: MediaResolver.Kind): ByteArray? {
         return null
     }
-
-    override suspend fun resolve(meta: MediaResolver.Meta): ByteArray? {
-        return null
-    }
 }

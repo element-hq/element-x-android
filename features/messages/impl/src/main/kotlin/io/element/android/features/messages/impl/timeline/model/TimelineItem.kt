@@ -21,11 +21,12 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemVirtualModel
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
 
 @Immutable
 sealed interface TimelineItem {
 
-    fun identifier(): String = when(this){
+    fun identifier(): String = when (this) {
         is Event -> id
         is Virtual -> id
     }
@@ -40,7 +41,7 @@ sealed interface TimelineItem {
     data class Event(
         val id: String,
         val eventId: EventId? = null,
-        val senderId: String,
+        val senderId: UserId,
         val senderDisplayName: String?,
         val senderAvatar: AvatarData,
         val content: TimelineItemEventContent,
@@ -52,6 +53,6 @@ sealed interface TimelineItem {
 
         val showSenderInformation = groupPosition.isNew() && !isMine
 
-        val safeSenderName: String = senderDisplayName ?: senderId
+        val safeSenderName: String = senderDisplayName ?: senderId.value
     }
 }

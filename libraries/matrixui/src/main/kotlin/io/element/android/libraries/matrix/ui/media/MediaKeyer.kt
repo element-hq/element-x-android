@@ -33,4 +33,4 @@ internal class MediaKeyer : Keyer<MediaResolver.Meta> {
     }
 }
 
-private fun MediaResolver.Meta.toKey() = "${source?.url()}_${kind}"
+private fun MediaResolver.Meta.toKey() = "${url}_${kind}"
