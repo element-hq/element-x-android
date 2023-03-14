@@ -24,6 +24,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -81,7 +82,7 @@ internal fun aTimelineItemEvent(
     return TimelineItem.Event(
         id = randomId,
         eventId = EventId(randomId),
-        senderId = "@senderId",
+        senderId = UserId("@senderId"),
         senderAvatar = AvatarData("@senderId", "sender"),
         content = content,
         reactionsState = TimelineItemReactions(

@@ -17,8 +17,8 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import org.jsoup.Jsoup
-import org.matrix.rustcomponents.sdk.EncryptedMessage
 
 class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEventContent> {
     override val values = sequenceOf(
@@ -49,7 +49,7 @@ fun aTimelineItemEmoteContent() = TimelineItemEmoteContent(
 )
 
 fun aTimelineItemEncryptedContent() = TimelineItemEncryptedContent(
-    encryptedMessage = EncryptedMessage.Unknown
+    data = UnableToDecryptContent.Data.Unknown
 )
 
 fun aTimelineItemNoticeContent() = TimelineItemNoticeContent(

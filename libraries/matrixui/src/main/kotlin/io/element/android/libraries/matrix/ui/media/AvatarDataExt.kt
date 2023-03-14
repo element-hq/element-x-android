@@ -18,9 +18,7 @@ package io.element.android.libraries.matrix.ui.media
 
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.media.MediaResolver
-import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
 
 fun AvatarData.toMetadata(): MediaResolver.Meta {
-    val mediaSource = url?.let { mediaSourceFromUrl(it) }
-    return MediaResolver.Meta(source = mediaSource, kind = MediaResolver.Kind.Thumbnail(size.value))
+    return MediaResolver.Meta(url = url, kind = MediaResolver.Kind.Thumbnail(size.value))
 }

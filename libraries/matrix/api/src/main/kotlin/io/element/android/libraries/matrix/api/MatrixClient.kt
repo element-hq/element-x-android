@@ -21,22 +21,20 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.media.MediaResolver
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
-import org.matrix.rustcomponents.sdk.MediaSource
-import java.io.Closeable
 
-interface MatrixClient : Closeable {
+interface MatrixClient {
     val sessionId: SessionId
+    val roomSummaryDataSource: RoomSummaryDataSource
     fun getRoom(roomId: RoomId): MatrixRoom?
     fun startSync()
     fun stopSync()
-    fun roomSummaryDataSource(): RoomSummaryDataSource
     fun mediaResolver(): MediaResolver
     suspend fun logout()
     suspend fun loadUserDisplayName(): Result<String>
     suspend fun loadUserAvatarURLString(): Result<String>
-    suspend fun loadMediaContentForSource(source: MediaSource): Result<ByteArray>
-    suspend fun loadMediaThumbnailForSource(
-        source: MediaSource,
+    suspend fun loadMediaContent(url: String): Result<ByteArray>
+    suspend fun loadMediaThumbnail(
+        url: String,
         width: Long,
         height: Long
     ): Result<ByteArray>
