@@ -33,7 +33,6 @@ import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.impl.auth.RustMatrixAuthenticationService
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
 import kotlinx.coroutines.runBlocking
-import org.matrix.rustcomponents.sdk.AuthenticationService
 import java.io.File
 
 class MainActivity : ComponentActivity() {
@@ -46,7 +45,6 @@ class MainActivity : ComponentActivity() {
             coroutineScope = Singleton.appScope,
             coroutineDispatchers = Singleton.coroutineDispatchers,
             sessionStore = InMemorySessionStore(),
-            authService = AuthenticationService(baseDirectory.absolutePath, null, null),
         )
     }
 

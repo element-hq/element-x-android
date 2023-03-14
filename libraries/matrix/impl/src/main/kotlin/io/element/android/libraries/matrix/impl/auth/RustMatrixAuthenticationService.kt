@@ -34,13 +34,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.AuthenticationService
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.use
 import java.io.File
 import javax.inject.Inject
+import org.matrix.rustcomponents.sdk.AuthenticationService as RustAuthenticationService
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
@@ -49,9 +49,9 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val sessionStore: SessionStore,
-    private val authService: AuthenticationService,
 ) : MatrixAuthenticationService {
 
+    private val authService: RustAuthenticationService = RustAuthenticationService(baseDirectory.absolutePath, null, null)
     private var currentHomeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
 
     override fun isLoggedIn(): Flow<Boolean> {
