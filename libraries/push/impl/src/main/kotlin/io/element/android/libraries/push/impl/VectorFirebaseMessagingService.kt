@@ -47,7 +47,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
         Timber.tag(loggerTag.value).d("New Firebase token")
         fcmHelper.storeFcmToken(token)
         if (
-            pushDataStore.areNotificationEnabledForDevice() &&
+            // pushDataStore.areNotificationEnabledForDevice() &&
             // TODO EAx activeSessionHolder.hasActiveSession() &&
             unifiedPushHelper.isEmbeddedDistributor()
         ) {
