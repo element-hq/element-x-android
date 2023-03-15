@@ -17,19 +17,19 @@
 package io.element.android.features.createroom.impl.root
 
 import androidx.compose.runtime.Composable
-import io.element.android.features.selectusers.api.SelectUsersPresenter
+import io.element.android.features.selectusers.api.SelectSingleUserPresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import timber.log.Timber
 import javax.inject.Inject
 
 class CreateRoomRootPresenter @Inject constructor(
-    private val selectUsersPresenter: SelectUsersPresenter,
+    private val selectSingleUserPresenter: SelectSingleUserPresenter,
 ) : Presenter<CreateRoomRootState> {
 
     @Composable
     override fun present(): CreateRoomRootState {
-        val selectUsersState = selectUsersPresenter.present()
+        val selectUsersState = selectSingleUserPresenter.present()
 
         fun handleEvents(event: CreateRoomRootEvents) {
             when (event) {

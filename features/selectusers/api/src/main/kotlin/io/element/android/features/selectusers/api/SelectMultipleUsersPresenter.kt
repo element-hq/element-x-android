@@ -18,4 +18,4 @@ package io.element.android.features.selectusers.api
 
 import io.element.android.libraries.architecture.Presenter
 
-interface SelectUsersPresenter : Presenter<SelectUsersState>
+interface SelectMultipleUsersPresenter : Presenter<SelectUsersState>

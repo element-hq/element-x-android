@@ -24,26 +24,26 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.selectusers.api.SelectUsersEvents
-import io.element.android.features.selectusers.api.SelectUsersPresenter
 import io.element.android.features.selectusers.api.SelectUsersState
-import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import javax.inject.Inject
 
-@ContributesBinding(SessionScope::class)
-class DefaultSelectUsersPresenter @Inject constructor() : SelectUsersPresenter {
+interface DefaultSelectUsersPresenter : Presenter<SelectUsersState> {
+
+    val isMultiSelectionEnabled: Boolean
 
     @Composable
     override fun present(): SelectUsersState {
         var isSearchActive by rememberSaveable { mutableStateOf(false) }
-        val selectedUsers: MutableState<ImmutableList<MatrixUser>> = remember { mutableStateOf(persistentListOf()) }
+        val selectedUsers: MutableState<ImmutableList<MatrixUser>> = remember {
+            mutableStateOf(persistentListOf())
+        }
         var searchQuery by rememberSaveable { mutableStateOf("") }
         val searchResults: MutableState<ImmutableList<MatrixUser>> = remember {
             mutableStateOf(persistentListOf())
@@ -76,6 +76,7 @@ class DefaultSelectUsersPresenter @Inject constructor() : SelectUsersPresenter {
             searchResults = searchResults.value,
             selectedUsers = selectedUsers.value,
             isSearchActive = isSearchActive,
+            isMultiSelectionEnabled = isMultiSelectionEnabled,
             eventSink = ::handleEvents,
         )
     }

@@ -17,10 +17,7 @@
 package io.element.android.features.createroom.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.selectusers.api.SelectUsersState
-import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.ui.model.MatrixUser
-import kotlinx.collections.immutable.persistentListOf
+import io.element.android.features.selectusers.api.aSelectUsersState
 
 open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRootState> {
     override val values: Sequence<CreateRoomRootState>
@@ -31,11 +28,5 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
 
 fun aCreateRoomRootState() = CreateRoomRootState(
     eventSink = {},
-    selectUsersState = SelectUsersState(
-        searchQuery = "",
-        searchResults = persistentListOf(),
-        selectedUsers = persistentListOf(),
-        isSearchActive = false,
-        eventSink = {},
-    )
+    selectUsersState =  aSelectUsersState(),
 )

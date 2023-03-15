@@ -28,11 +28,11 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class DefaultSelectUsersPresenterTests {
+class DefaultSelectSingleUserPresenterTests {
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = DefaultSelectUsersPresenter()
+        val presenter = DefaultSelectSingleUserPresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -43,7 +43,7 @@ class DefaultSelectUsersPresenterTests {
 
     @Test
     fun `present - update search query`() = runTest {
-        val presenter = DefaultSelectUsersPresenter()
+        val presenter = DefaultSelectSingleUserPresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
