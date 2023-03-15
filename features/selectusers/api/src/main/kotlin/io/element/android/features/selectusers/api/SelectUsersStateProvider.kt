@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 
 open class SelectUsersStateProvider : PreviewParameterProvider<SelectUsersState> {
     override val values: Sequence<SelectUsersState>
@@ -31,14 +32,14 @@ open class SelectUsersStateProvider : PreviewParameterProvider<SelectUsersState>
             aSelectUsersState().copy(
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
-                selectedUsers = aListOfSelectedUsers(),
+                selectedUsers = aSetOfSelectedUsers(),
                 searchResults = aListOfResults(),
             ),
             aSelectUsersState().copy(
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
                 isMultiSelectionEnabled = true,
-                selectedUsers = aListOfSelectedUsers(),
+                selectedUsers = aSetOfSelectedUsers(),
                 searchResults = aListOfResults(),
             )
         )
@@ -48,12 +49,12 @@ fun aSelectUsersState() = SelectUsersState(
     isSearchActive = false,
     searchQuery = "",
     searchResults = persistentListOf(),
-    selectedUsers = persistentListOf(),
+    selectedUsers = persistentSetOf(),
     isMultiSelectionEnabled = false,
     eventSink = {}
 )
 
-fun aListOfSelectedUsers() = persistentListOf(
+fun aSetOfSelectedUsers() = persistentSetOf(
     MatrixUser(id = UserId("@someone:matrix.org")),
     MatrixUser(id = UserId("@someone:matrix.org"), username = "someone"),
 )

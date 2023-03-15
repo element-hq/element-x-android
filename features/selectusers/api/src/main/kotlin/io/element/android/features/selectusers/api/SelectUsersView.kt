@@ -59,6 +59,7 @@ import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getBestName
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
@@ -99,7 +100,7 @@ fun SelectUsersView(
 fun SearchUserBar(
     query: String,
     results: ImmutableList<MatrixUser>,
-    selectedUsers: ImmutableList<MatrixUser>,
+    selectedUsers: ImmutableSet<MatrixUser>,
     active: Boolean,
     isMultiSelectionEnabled: Boolean,
     modifier: Modifier = Modifier,
@@ -192,7 +193,7 @@ fun SearchUserResultItem(
 
 @Composable
 fun SelectedUsersList(
-    selectedUsers: List<MatrixUser>,
+    selectedUsers: ImmutableSet<MatrixUser>,
     modifier: Modifier = Modifier,
     onUserRemoved: (MatrixUser) -> Unit = {},
 ) {
@@ -200,7 +201,7 @@ fun SelectedUsersList(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(24.dp),
     ) {
-        items(selectedUsers) { matrixUser ->
+        items(selectedUsers.toList()) { matrixUser ->
             SelectedUser(
                 matrixUser = matrixUser,
                 onUserRemoved = onUserRemoved,
