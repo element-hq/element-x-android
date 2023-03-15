@@ -114,6 +114,10 @@ class VectorPushHandler @Inject constructor(
             }
 
             /* TODO EAx
+            - Open session
+            - get the event
+            - display the notif
+
             val session = activeSessionHolder.getOrInitializeSession()
 
             if (session == null) {

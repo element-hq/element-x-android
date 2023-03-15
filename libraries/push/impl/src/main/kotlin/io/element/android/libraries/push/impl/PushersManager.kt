@@ -44,14 +44,14 @@ class PushersManager @Inject constructor(
         )
     }
 
-    fun enqueueRegisterPusherWithFcmKey(pushKey: String): UUID {
+    fun enqueueRegisterPusherWithFcmKey(pushKey: String)/*: UUID*/ {
         return enqueueRegisterPusher(pushKey, PushConfig.pusher_http_url)
     }
 
     fun enqueueRegisterPusher(
         pushKey: String,
         gateway: String
-    ): UUID {
+    ) /*: UUID*/ {
         /*
         val currentSession = activeSessionHolder.getActiveSession()
         val pusher = createHttpPusher(pushKey, gateway)
@@ -59,7 +59,10 @@ class PushersManager @Inject constructor(
 
          */
         // TODO EAx
-        TODO()
+        // TODO()
+        // Get all sessions
+        // Register pusher
+        // Close sessions
     }
 
     private fun createHttpPusher(
