@@ -37,12 +37,12 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
-// TODO add unit tests
 @ContributesBinding(SessionScope::class)
 class DefaultSelectUsersPresenter @Inject constructor() : SelectUsersPresenter {
 
     @Composable
     override fun present(): SelectUsersState {
+        var isSearchActive by rememberSaveable { mutableStateOf(false) }
         val selectedUsers: MutableState<ImmutableList<MatrixUser>> = remember { mutableStateOf(persistentListOf()) }
         var searchQuery by rememberSaveable { mutableStateOf("") }
         val searchResults: MutableState<ImmutableList<MatrixUser>> = remember {
@@ -51,6 +51,7 @@ class DefaultSelectUsersPresenter @Inject constructor() : SelectUsersPresenter {
 
         fun handleEvents(event: SelectUsersEvents) {
             when (event) {
+                is SelectUsersEvents.OnSearchActiveChanged -> isSearchActive = event.active
                 is SelectUsersEvents.UpdateSearchQuery -> searchQuery = event.query
                 is SelectUsersEvents.AddToSelection -> selectedUsers.value = selectedUsers.value.plus(event.matrixUser).toImmutableList()
                 is SelectUsersEvents.RemoveFromSelection -> selectedUsers.value = selectedUsers.value.minus(event.matrixUser).toImmutableList()
@@ -74,6 +75,7 @@ class DefaultSelectUsersPresenter @Inject constructor() : SelectUsersPresenter {
             searchQuery = searchQuery,
             searchResults = searchResults.value,
             selectedUsers = selectedUsers.value,
+            isSearchActive = isSearchActive,
             eventSink = ::handleEvents,
         )
     }
