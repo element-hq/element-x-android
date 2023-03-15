@@ -28,15 +28,13 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import kotlinx.coroutines.delay
-import org.matrix.rustcomponents.sdk.MediaSource
-import org.matrix.rustcomponents.sdk.SessionVerificationController
 
 class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
     private val userDisplayName: Result<String> = Result.success(A_USER_NAME),
     private val userAvatarURLString: Result<String> = Result.success(AN_AVATAR_URL),
-    val roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
-    private val sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
+    override val roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
+    private val sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService()
 ) : MatrixClient {
 
     private var logoutFailure: Throwable? = null
@@ -48,10 +46,6 @@ class FakeMatrixClient(
     override fun startSync() = Unit
 
     override fun stopSync() = Unit
-
-    override fun roomSummaryDataSource(): RoomSummaryDataSource {
-        return roomSummaryDataSource
-    }
 
     override fun mediaResolver(): MediaResolver {
         return FakeMediaResolver()
@@ -74,15 +68,13 @@ class FakeMatrixClient(
         return userAvatarURLString
     }
 
-    override suspend fun loadMediaContentForSource(source: MediaSource): Result<ByteArray> {
+    override suspend fun loadMediaContent(url: String): Result<ByteArray> {
         return Result.success(ByteArray(0))
     }
 
-    override suspend fun loadMediaThumbnailForSource(source: MediaSource, width: Long, height: Long): Result<ByteArray> {
+    override suspend fun loadMediaThumbnail(url: String, width: Long, height: Long): Result<ByteArray> {
         return Result.success(ByteArray(0))
     }
-
-    override fun close() = Unit
 
     override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService
 

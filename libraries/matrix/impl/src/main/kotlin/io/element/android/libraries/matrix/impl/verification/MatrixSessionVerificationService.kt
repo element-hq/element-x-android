@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationS
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerDelegate
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerInterface
 import org.matrix.rustcomponents.sdk.SessionVerificationEmoji
@@ -108,5 +109,11 @@ class MatrixSessionVerificationService @Inject constructor() : SessionVerificati
 
     override fun reset() {
         _verificationAttemptStatus.value = SessionVerificationServiceState.Initial
+    }
+
+    fun destroy() {
+        verificationController?.setDelegate(null)
+        (verificationController as? SessionVerificationController)?.destroy()
+        verificationController = null
     }
 }

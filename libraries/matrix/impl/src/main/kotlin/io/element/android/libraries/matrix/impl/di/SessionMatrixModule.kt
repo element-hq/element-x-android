@@ -19,25 +19,10 @@ package io.element.android.libraries.matrix.impl.di
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.impl.verification.MatrixSessionVerificationService
-import org.matrix.rustcomponents.sdk.AuthenticationService
-import java.io.File
-
-@Module
-@ContributesTo(AppScope::class)
-object MatrixModule {
-
-    @Provides
-    @SingleIn(AppScope::class)
-    fun providesRustAuthenticationService(baseDirectory: File): AuthenticationService {
-        return AuthenticationService(baseDirectory.absolutePath, null, null)
-    }
-}
 
 @Module
 @ContributesTo(SessionScope::class)

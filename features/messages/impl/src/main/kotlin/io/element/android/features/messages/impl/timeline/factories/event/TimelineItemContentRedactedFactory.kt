@@ -18,12 +18,12 @@ package io.element.android.features.messages.impl.timeline.factories.event
 
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
-import org.matrix.rustcomponents.sdk.TimelineItemContentKind
+import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import javax.inject.Inject
 
 class TimelineItemContentRedactedFactory @Inject constructor() {
 
-    fun create(kind: TimelineItemContentKind.RedactedMessage): TimelineItemEventContent {
+    fun create(content: RedactedContent): TimelineItemEventContent {
         return TimelineItemRedactedContent
     }
 }

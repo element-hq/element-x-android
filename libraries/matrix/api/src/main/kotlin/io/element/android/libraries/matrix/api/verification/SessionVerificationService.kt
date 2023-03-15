@@ -17,7 +17,6 @@
 package io.element.android.libraries.matrix.api.verification
 
 import kotlinx.coroutines.flow.StateFlow
-import org.matrix.rustcomponents.sdk.SessionVerificationEmoji
 
 interface SessionVerificationService {
 
