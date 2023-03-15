@@ -1,0 +1,1 @@
+Make sure `Modifier.onTabOrEnterKeyFocusNext` doesn't add line breaks or tabs to TextFields.
