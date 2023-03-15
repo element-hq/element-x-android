@@ -20,7 +20,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -62,7 +61,6 @@ import io.element.android.libraries.matrix.ui.model.getBestName
 import kotlinx.collections.immutable.ImmutableList
 import io.element.android.libraries.ui.strings.R as StringR
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectUsersView(
     state: SelectUsersState,
@@ -71,26 +69,117 @@ fun SelectUsersView(
     val eventSink = state.eventSink
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
+        modifier = modifier,
     ) {
         SearchUserBar(
             modifier = Modifier.fillMaxWidth(),
             query = state.searchQuery,
             results = state.searchResults,
+            selectedUsers = state.selectedUsers,
             active = state.isSearchActive,
+            isMultiSelectionEnabled = state.isMultiSelectionEnabled,
             onActiveChanged = { eventSink.invoke(SelectUsersEvents.OnSearchActiveChanged(it)) },
             onTextChanged = { state.eventSink(SelectUsersEvents.UpdateSearchQuery(it)) },
-            onResultSelected = { state.eventSink(SelectUsersEvents.AddToSelection(it)) }
-        )
-
-        // TODO move into search content
-        SelectedUsersList(
-            modifier = Modifier.padding(16.dp),
-            selectedUsers = state.selectedUsers,
-            onUserRemoved = { eventSink(SelectUsersEvents.RemoveFromSelection(it)) }
+            onResultSelected = { state.eventSink(SelectUsersEvents.AddToSelection(it)) },
+            onUserRemoved = { eventSink(SelectUsersEvents.RemoveFromSelection(it)) },
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchUserBar(
+    query: String,
+    results: ImmutableList<MatrixUser>,
+    selectedUsers: ImmutableList<MatrixUser>,
+    active: Boolean,
+    isMultiSelectionEnabled: Boolean,
+    modifier: Modifier = Modifier,
+    placeHolderTitle: String = stringResource(StringR.string.search_for_someone),
+    onActiveChanged: (Boolean) -> Unit = {},
+    onTextChanged: (String) -> Unit = {},
+    onResultSelected: (MatrixUser) -> Unit = {},
+    onUserRemoved: (MatrixUser) -> Unit = {},
+) {
+    val focusManager = LocalFocusManager.current
+
+    if (!active) {
+        onTextChanged("")
+        focusManager.clearFocus()
+    }
+
+    SearchBar(
+        query = query,
+        onQueryChange = onTextChanged,
+        onSearch = { focusManager.clearFocus() },
+        active = active,
+        onActiveChange = onActiveChanged,
+        modifier = modifier
+            .padding(horizontal = if (!active) 16.dp else 0.dp),
+        placeholder = {
+            Text(
+                text = placeHolderTitle,
+                modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
+            )
+        },
+        leadingIcon = if (active) {
+            { BackButton(onClick = { onActiveChanged(false) }) }
+        } else {
+            null
+        },
+        trailingIcon = when {
+            active && query.isNotEmpty() -> {
+                {
+                    IconButton(onClick = { onTextChanged("") }) {
+                        Icon(Icons.Default.Close, stringResource(StringR.string.a11y_clear))
+                    }
+                }
+            }
+            !active -> {
+                {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = stringResource(StringR.string.search),
+                        modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
+                    )
+                }
+            }
+            else -> null
+        },
+        colors = if (!active) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
+        content = {
+            if (isMultiSelectionEnabled && selectedUsers.isNotEmpty()) {
+                SelectedUsersList(
+                    modifier = Modifier.padding(16.dp),
+                    selectedUsers = selectedUsers,
+                    onUserRemoved = onUserRemoved,
+                )
+            }
+
+            LazyColumn {
+                items(results) {
+                    SearchUserResultItem(
+                        matrixUser = it,
+                        onClick = { onResultSelected(it) }
+                    )
+                }
+            }
+        },
+    )
+}
+
+@Composable
+fun SearchUserResultItem(
+    matrixUser: MatrixUser,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+) {
+    MatrixUserRow(
+        modifier = modifier,
+        matrixUser = matrixUser,
+        avatarSize = AvatarSize.Custom(36.dp),
+        onClick = onClick,
+    )
 }
 
 @Composable
@@ -147,99 +236,14 @@ fun SelectedUser(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SearchUserBar(
-    query: String,
-    results: ImmutableList<MatrixUser>,
-    active: Boolean,
-    modifier: Modifier = Modifier,
-    placeHolderTitle: String = stringResource(StringR.string.search_for_someone),
-    onActiveChanged: (Boolean) -> Unit = {},
-    onTextChanged: (String) -> Unit = {},
-    onResultSelected: (MatrixUser) -> Unit = {},
-) {
-    val focusManager = LocalFocusManager.current
-
-    if (!active) {
-        onTextChanged("")
-        focusManager.clearFocus()
-    }
-
-    SearchBar(
-        query = query,
-        onQueryChange = onTextChanged,
-        onSearch = { focusManager.clearFocus() },
-        active = active,
-        onActiveChange = onActiveChanged,
-        modifier = modifier
-            .padding(horizontal = if (!active) 16.dp else 0.dp),
-        placeholder = {
-            Text(
-                text = placeHolderTitle,
-                modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
-            )
-        },
-        leadingIcon = if (active) {
-            { BackButton(onClick = { onActiveChanged(false) }) }
-        } else {
-            null
-        },
-        trailingIcon = when {
-            active && query.isNotEmpty() -> {
-                {
-                    IconButton(onClick = { onTextChanged("") }) {
-                        Icon(Icons.Default.Close, stringResource(StringR.string.a11y_clear))
-                    }
-                }
-            }
-            !active -> {
-                {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = stringResource(StringR.string.search),
-                        modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
-                    )
-                }
-            }
-            else -> null
-        },
-        colors = if (!active) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
-        content = {
-            LazyColumn {
-                items(results) {
-                    SearchUserResultItem(
-                        matrixUser = it,
-                        onClick = { onResultSelected(it) }
-                    )
-                }
-            }
-        },
-    )
-}
-
-@Composable
-fun SearchUserResultItem(
-    matrixUser: MatrixUser,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
-) {
-    MatrixUserRow(
-        modifier = modifier,
-        matrixUser = matrixUser,
-        avatarSize = AvatarSize.Custom(36.dp),
-        onClick = onClick,
-    )
-}
-
 @Preview
 @Composable
-internal fun ChangeServerViewLightPreview(@PreviewParameter(SelectUsersStateProvider::class) state: SelectUsersState) =
+internal fun SelectUsersViewLightPreview(@PreviewParameter(SelectUsersStateProvider::class) state: SelectUsersState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-internal fun ChangeServerViewDarkPreview(@PreviewParameter(SelectUsersStateProvider::class) state: SelectUsersState) =
+internal fun SelectUsersViewDarkPreview(@PreviewParameter(SelectUsersStateProvider::class) state: SelectUsersState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

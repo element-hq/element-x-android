@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.features.selectusers.api
+package io.element.android.features.selectusers.impl
 
-import io.element.android.libraries.matrix.ui.model.MatrixUser
-import kotlinx.collections.immutable.ImmutableList
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.selectusers.api.SelectMultipleUsersPresenter
+import io.element.android.libraries.di.SessionScope
+import javax.inject.Inject
 
-data class SelectUsersState(
-    val searchQuery: String,
-    val searchResults: ImmutableList<MatrixUser>,
-    val selectedUsers: ImmutableList<MatrixUser>,
-    val isSearchActive: Boolean,
-    val isMultiSelectionEnabled: Boolean,
-    val eventSink: (SelectUsersEvents) -> Unit,
+// TODO add unit tests
+@ContributesBinding(
+    scope = SessionScope::class,
+    boundType = SelectMultipleUsersPresenter::class,
 )
+class DefaultSelectMultipleUsersPresenter @Inject constructor() :
+    DefaultSelectUsersPresenter,
+    SelectMultipleUsersPresenter {
+    override val isMultiSelectionEnabled: Boolean = true
+}

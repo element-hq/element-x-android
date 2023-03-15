@@ -24,31 +24,23 @@ import kotlinx.collections.immutable.persistentListOf
 open class SelectUsersStateProvider : PreviewParameterProvider<SelectUsersState> {
     override val values: Sequence<SelectUsersState>
         get() = sequenceOf(
-            // TODO add states with selectedUsers
             aSelectUsersState(),
             aSelectUsersState().copy(isSearchActive = true),
             aSelectUsersState().copy(isSearchActive = true, searchQuery = "someone"),
+            aSelectUsersState().copy(isSearchActive = true, searchQuery = "someone", isMultiSelectionEnabled = true),
             aSelectUsersState().copy(
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
-                searchResults = persistentListOf(
-                    MatrixUser(id = UserId("@someone:matrix.org")),
-                    MatrixUser(id = UserId("@someone:matrix.org"), username = "someone"),
-                    MatrixUser(
-                        id = UserId("@someone_with_a_very_long_matrix_identifier:a_very_long_domain.org"),
-                        username = "hey, I am someone with a very long display name"
-                    ),
-                    MatrixUser(id = UserId("@someone_2:matrix.org"), username = "someone 2"),
-                    MatrixUser(id = UserId("@someone_3:matrix.org"), username = "someone 3"),
-                    MatrixUser(id = UserId("@someone_4:matrix.org"), username = "someone 4"),
-                    MatrixUser(id = UserId("@someone_5:matrix.org"), username = "someone 5"),
-                    MatrixUser(id = UserId("@someone_6:matrix.org"), username = "someone 6"),
-                    MatrixUser(id = UserId("@someone_7:matrix.org"), username = "someone 7"),
-                    MatrixUser(id = UserId("@someone_8:matrix.org"), username = "someone 8"),
-                    MatrixUser(id = UserId("@someone_9:matrix.org"), username = "someone 9"),
-                    MatrixUser(id = UserId("@someone_10:matrix.org"), username = "someone 10"),
-                )
+                selectedUsers = aListOfSelectedUsers(),
+                searchResults = aListOfResults(),
             ),
+            aSelectUsersState().copy(
+                isSearchActive = true,
+                searchQuery = "@someone:matrix.org",
+                isMultiSelectionEnabled = true,
+                selectedUsers = aListOfSelectedUsers(),
+                searchResults = aListOfResults(),
+            )
         )
 }
 
@@ -57,5 +49,29 @@ fun aSelectUsersState() = SelectUsersState(
     searchQuery = "",
     searchResults = persistentListOf(),
     selectedUsers = persistentListOf(),
+    isMultiSelectionEnabled = false,
     eventSink = {}
+)
+
+fun aListOfSelectedUsers() = persistentListOf(
+    MatrixUser(id = UserId("@someone:matrix.org")),
+    MatrixUser(id = UserId("@someone:matrix.org"), username = "someone"),
+)
+
+fun aListOfResults() = persistentListOf(
+    MatrixUser(id = UserId("@someone:matrix.org")),
+    MatrixUser(id = UserId("@someone:matrix.org"), username = "someone"),
+    MatrixUser(
+        id = UserId("@someone_with_a_very_long_matrix_identifier:a_very_long_domain.org"),
+        username = "hey, I am someone with a very long display name"
+    ),
+    MatrixUser(id = UserId("@someone_2:matrix.org"), username = "someone 2"),
+    MatrixUser(id = UserId("@someone_3:matrix.org"), username = "someone 3"),
+    MatrixUser(id = UserId("@someone_4:matrix.org"), username = "someone 4"),
+    MatrixUser(id = UserId("@someone_5:matrix.org"), username = "someone 5"),
+    MatrixUser(id = UserId("@someone_6:matrix.org"), username = "someone 6"),
+    MatrixUser(id = UserId("@someone_7:matrix.org"), username = "someone 7"),
+    MatrixUser(id = UserId("@someone_8:matrix.org"), username = "someone 8"),
+    MatrixUser(id = UserId("@someone_9:matrix.org"), username = "someone 9"),
+    MatrixUser(id = UserId("@someone_10:matrix.org"), username = "someone 10"),
 )
