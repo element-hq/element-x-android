@@ -16,8 +16,6 @@
 
 package io.element.android.libraries.matrix.api.media
 
-import org.matrix.rustcomponents.sdk.MediaSource
-
 interface MediaResolver {
 
     sealed interface Kind {
@@ -29,11 +27,10 @@ interface MediaResolver {
     }
 
     data class Meta(
-        val source: MediaSource?,
+        val url: String?,
         val kind: Kind
     )
 
     suspend fun resolve(url: String?, kind: Kind): ByteArray?
 
-    suspend fun resolve(meta: Meta): ByteArray?
 }

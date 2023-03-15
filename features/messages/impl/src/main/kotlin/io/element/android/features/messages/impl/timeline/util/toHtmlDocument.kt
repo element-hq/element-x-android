@@ -16,10 +16,10 @@
 
 package io.element.android.features.messages.impl.timeline.util
 
+import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.matrix.rustcomponents.sdk.FormattedBody
-import org.matrix.rustcomponents.sdk.MessageFormat
 
 fun FormattedBody.toHtmlDocument(): Document? {
     return takeIf { it.format == MessageFormat.HTML }?.body?.let { formattedBody ->

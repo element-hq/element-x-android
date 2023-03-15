@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.impl.auth
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -26,7 +27,6 @@ import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.impl.RustMatrixClient
-import io.element.android.libraries.matrix.impl.util.logError
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CoroutineScope
@@ -34,14 +34,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.AuthenticationService
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.use
-import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
+import org.matrix.rustcomponents.sdk.AuthenticationService as RustAuthenticationService
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
@@ -50,9 +49,9 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val sessionStore: SessionStore,
-    private val authService: AuthenticationService,
 ) : MatrixAuthenticationService {
 
+    private val authService: RustAuthenticationService = RustAuthenticationService(baseDirectory.absolutePath, null, null)
     private var currentHomeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
 
     override fun isLoggedIn(): Flow<Boolean> {
@@ -63,10 +62,10 @@ class RustMatrixAuthenticationService @Inject constructor(
         sessionStore.getLatestSession()?.userId?.let { UserId(it) }
     }
 
-    override suspend fun restoreSession(sessionId: SessionId) = withContext(coroutineDispatchers.io) {
-        val sessionData = sessionStore.getSession(sessionId.value)
-        if (sessionData != null) {
-            try {
+    override suspend fun restoreSession(sessionId: SessionId): Result<MatrixClient> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            val sessionData = sessionStore.getSession(sessionId.value)
+            if (sessionData != null) {
                 val client = ClientBuilder()
                     .basePath(baseDirectory.absolutePath)
                     .homeserverUrl(sessionData.homeserverUrl)
@@ -74,36 +73,39 @@ class RustMatrixAuthenticationService @Inject constructor(
                     .use { it.build() }
                 client.restoreSession(sessionData.toSession())
                 createMatrixClient(client)
-            } catch (throwable: Throwable) {
-                logError(throwable)
-                null
+            } else {
+                throw IllegalStateException("No session to restore with id $sessionId")
             }
-        } else null
+        }.mapFailure { failure ->
+            failure.mapAuthenticationException()
+        }
     }
 
     override fun getHomeserverDetails(): StateFlow<MatrixHomeServerDetails?> = currentHomeserver
 
-    override suspend fun setHomeserver(homeserver: String) {
+    override suspend fun setHomeserver(homeserver: String): Result<Unit> =
         withContext(coroutineDispatchers.io) {
-            authService.configureHomeserver(homeserver)
-            val homeServerDetails = authService.homeserverDetails()?.use { MatrixHomeServerDetails(it) }
-            if (homeServerDetails != null) {
-                currentHomeserver.value = homeServerDetails.copy(url = homeserver)
+            runCatching {
+                authService.configureHomeserver(homeserver)
+                val homeServerDetails = authService.homeserverDetails()?.map()
+                if (homeServerDetails != null) {
+                    currentHomeserver.value = homeServerDetails.copy(url = homeserver)
+                }
             }
+        }.mapFailure { failure ->
+            failure.mapAuthenticationException()
         }
-    }
 
-    override suspend fun login(username: String, password: String): SessionId =
+    override suspend fun login(username: String, password: String): Result<SessionId> =
         withContext(coroutineDispatchers.io) {
-            val client = try {
-                authService.login(username, password, "ElementX Android", null)
-            } catch (failure: Throwable) {
-                Timber.e(failure, "Fail login")
-                throw failure
+            runCatching {
+                val client = authService.login(username, password, "ElementX Android", null)
+                val sessionData = client.use { it.session().toSessionData() }
+                sessionStore.storeData(sessionData)
+                SessionId(sessionData.userId)
             }
-            val sessionData = client.use { it.session().toSessionData() }
-            sessionStore.storeData(sessionData)
-            SessionId(sessionData.userId)
+        }.mapFailure { failure ->
+            failure.mapAuthenticationException()
         }
 
     private fun createMatrixClient(client: Client): MatrixClient {

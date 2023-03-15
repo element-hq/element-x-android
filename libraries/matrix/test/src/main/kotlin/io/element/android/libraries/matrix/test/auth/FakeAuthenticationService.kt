@@ -20,7 +20,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.test.A_HOMESERVER
 import io.element.android.libraries.matrix.test.A_USER_ID
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -41,8 +40,8 @@ class FakeAuthenticationService : MatrixAuthenticationService {
         return null
     }
 
-    override suspend fun restoreSession(sessionId: SessionId): MatrixClient? {
-        return null
+    override suspend fun restoreSession(sessionId: SessionId): Result<MatrixClient> {
+        return Result.failure(IllegalStateException())
     }
 
     override fun getHomeserverDetails(): StateFlow<MatrixHomeServerDetails?> {
@@ -53,15 +52,21 @@ class FakeAuthenticationService : MatrixAuthenticationService {
         this.homeserver.value = homeserver
     }
 
-    override suspend fun setHomeserver(homeserver: String) {
+    override suspend fun setHomeserver(homeserver: String): Result<Unit> {
         changeServerError?.let { throw it }
         delay(100)
+        return Result.success(Unit)
     }
 
-    override suspend fun login(username: String, password: String): SessionId {
+    override suspend fun login(username: String, password: String): Result<SessionId> {
         delay(100)
-        loginError?.let { throw it }
-        return A_USER_ID
+        return loginError.let { loginError ->
+            if (loginError == null) {
+                Result.success(A_USER_ID)
+            } else {
+                Result.failure(loginError)
+            }
+        }
     }
 
     fun givenLoginError(throwable: Throwable?) {

@@ -17,11 +17,15 @@
 package io.element.android.libraries.matrix.impl.timeline
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.impl.util.TaskHandleBag
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessageMapper
+import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
+import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
+import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
+import io.element.android.libraries.matrix.impl.util.TaskHandleBag
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -52,11 +56,21 @@ class RustMatrixTimeline(
         MatrixTimeline.PaginationState(canBackPaginate = true, isBackPaginating = false)
     )
 
+    private val timelineItemFactory = MatrixTimelineItemMapper(
+        virtualTimelineItemMapper = VirtualTimelineItemMapper(),
+        eventTimelineItemMapper = EventTimelineItemMapper(
+            contentMapper = TimelineEventContentMapper(
+                eventMessageMapper = EventMessageMapper()
+            )
+        )
+    )
+
     private val innerTimelineListener = MatrixTimelineDiffProcessor(
         paginationState = paginationState,
         timelineItems = timelineItems,
         coroutineScope = coroutineScope,
-        diffDispatcher = coroutineDispatchers.diffUpdateDispatcher
+        diffDispatcher = coroutineDispatchers.diffUpdateDispatcher,
+        timelineItemFactory = timelineItemFactory,
     )
 
     private val listenerTokens = TaskHandleBag()
@@ -83,7 +97,7 @@ class RustMatrixTimeline(
             val result = addListener(innerTimelineListener)
             result
                 .onSuccess { timelineItems ->
-                    val matrixTimelineItems = timelineItems.map { it.asMatrixTimelineItem() }
+                    val matrixTimelineItems = timelineItems.map(timelineItemFactory::map)
                     withContext(coroutineDispatchers.diffUpdateDispatcher) {
                         this@RustMatrixTimeline.timelineItems.value = matrixTimelineItems
                     }

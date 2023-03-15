@@ -170,7 +170,7 @@ private fun aMessageEvent(
 ) = TimelineItem.Event(
     id = AN_EVENT_ID.value,
     eventId = AN_EVENT_ID,
-    senderId = A_USER_ID.value,
+    senderId = A_USER_ID,
     senderDisplayName = A_USER_NAME,
     senderAvatar = AvatarData(A_USER_ID.value, A_USER_NAME),
     content = content,

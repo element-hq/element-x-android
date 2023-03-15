@@ -17,9 +17,9 @@
 package io.element.android.features.login.impl.error
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import io.element.android.libraries.ui.strings.R
 import org.junit.Test
-import org.matrix.rustcomponents.sdk.AuthenticationException
 
 class ErrorFormatterTests {
 
