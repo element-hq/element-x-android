@@ -17,6 +17,7 @@
 package io.element.android.libraries.push.impl
 
 import io.element.android.libraries.push.impl.config.PushConfig
+import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest
 import io.element.android.libraries.toolbox.api.appname.AppNameProvider
 import java.util.UUID
 import javax.inject.Inject
@@ -30,19 +31,17 @@ class PushersManager @Inject constructor(
     // private val localeProvider: LocaleProvider,
     private val appNameProvider: AppNameProvider,
     // private val getDeviceInfoUseCase: GetDeviceInfoUseCase,
+    private val pushGatewayNotifyRequest: PushGatewayNotifyRequest,
 ) {
     suspend fun testPush() {
-        /*
-        val currentSession = activeSessionHolder.getActiveSession()
-
-        currentSession.pushersService().testPush(
-            unifiedPushHelper.getPushGateway() ?: return,
-            PushConfig.pusher_app_id,
-            unifiedPushHelper.getEndpointOrToken().orEmpty(),
-            TEST_EVENT_ID
+        pushGatewayNotifyRequest.execute(
+            PushGatewayNotifyRequest.Params(
+                url = unifiedPushHelper.getPushGateway() ?: return,
+                appId = PushConfig.pusher_app_id,
+                pushKey = unifiedPushHelper.getEndpointOrToken().orEmpty(),
+                eventId = TEST_EVENT_ID
+            )
         )
-
-         */
     }
 
     fun enqueueRegisterPusherWithFcmKey(pushKey: String): UUID {
@@ -106,7 +105,6 @@ class PushersManager @Inject constructor(
         return session.pushersService().getPushers().firstOrNull { it.deviceId == deviceId }
     }
     */
-
 
     suspend fun unregisterEmailPusher(email: String) {
         // val currentSession = activeSessionHolder.getSafeActiveSession() ?: return

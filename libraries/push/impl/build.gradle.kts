@@ -33,6 +33,7 @@ dependencies {
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.lifecycle.process)
+    implementation(libs.network.retrofit)
     implementation(libs.serialization.json)
 
     implementation(projects.libraries.architecture)
@@ -41,15 +42,16 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)
     implementation(projects.libraries.androidutils)
+    implementation(projects.libraries.network)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.push.api)
 
     implementation(projects.services.toolbox.api)
 
-
     api("me.gujun.android:span:1.7") {
         exclude(group = "com.android.support", module = "support-annotations")
     }
+
 
     implementation(platform(libs.google.firebase.bom))
     implementation("com.google.firebase:firebase-messaging-ktx")

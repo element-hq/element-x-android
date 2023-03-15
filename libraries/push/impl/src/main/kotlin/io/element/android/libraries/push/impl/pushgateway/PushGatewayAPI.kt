@@ -13,13 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.element.android.libraries.push.impl.pushgateway
 
-package io.element.android.libraries.push.api
 
-interface PushService {
-    fun setCurrentRoom(roomId: String?)
-    fun setCurrentThread(threadId: String?)
-    fun notificationStyleChanged()
+import retrofit2.http.Body
+import retrofit2.http.POST
 
-    suspend fun testPush()
+internal interface PushGatewayAPI {
+    /**
+     * Ask the Push Gateway to send a push to the current device.
+     *
+     * Ref: https://matrix.org/docs/spec/push_gateway/r0.1.1#post-matrix-push-v1-notify
+     */
+    @POST(PushGatewayConfig.URI_PUSH_GATEWAY_PREFIX_PATH + "notify")
+    suspend fun notify(@Body body: PushGatewayNotifyBody): PushGatewayNotifyResponse
 }
