@@ -17,30 +17,28 @@
 package io.element.android.features.createroom.impl.addpeople
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import io.element.android.features.selectusers.api.MULTI_SELECTION_USERS_VARIANT
+import io.element.android.features.selectusers.api.SelectUsersPresenter
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.ui.model.MatrixUser
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import javax.inject.Inject
+import javax.inject.Named
 
 // TODO add unit tests
-class AddPeoplePresenter @Inject constructor() : Presenter<AddPeopleState> {
+class AddPeoplePresenter @Inject constructor(
+    @Named(MULTI_SELECTION_USERS_VARIANT)
+    private val selectUsersPresenter: SelectUsersPresenter,
+) : Presenter<AddPeopleState> {
 
     @Composable
     override fun present(): AddPeopleState {
-        val selectedUsers: MutableState<ImmutableList<MatrixUser>> = remember { mutableStateOf(persistentListOf(aMatrixUser("test"))) }
+        val selectUsersState = selectUsersPresenter.present()
 
         fun handleEvents(event: AddPeopleEvents) {
-            when (event) {
-                is AddPeopleEvents.UpdateSelection -> selectedUsers.value = event.users
-            }
+            // do nothing for now
         }
 
         return AddPeopleState(
-            selectedUsers = selectedUsers.value,
+            selectUsersState = selectUsersState,
             eventSink = ::handleEvents,
         )
     }

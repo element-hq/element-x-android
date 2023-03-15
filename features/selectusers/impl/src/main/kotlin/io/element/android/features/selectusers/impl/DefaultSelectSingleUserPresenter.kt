@@ -17,16 +17,16 @@
 package io.element.android.features.selectusers.impl
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.selectusers.api.SelectSingleUserPresenter
+import io.element.android.features.selectusers.api.SINGLE_SELECTION_USERS_VARIANT
+import io.element.android.features.selectusers.api.SelectUsersPresenter
 import io.element.android.libraries.di.SessionScope
 import javax.inject.Inject
+import javax.inject.Named
 
 @ContributesBinding(
     scope = SessionScope::class,
-    boundType = SelectSingleUserPresenter::class,
+    boundType = SelectUsersPresenter::class
 )
+@Named(SINGLE_SELECTION_USERS_VARIANT)
 class DefaultSelectSingleUserPresenter @Inject constructor() :
-    DefaultSelectUsersPresenter,
-    SelectSingleUserPresenter {
-    override val isMultiSelectionEnabled: Boolean = false
-}
+    SelectUsersPresenter by DefaultSelectUsersPresenter(isMultiSelectionEnabled = false)

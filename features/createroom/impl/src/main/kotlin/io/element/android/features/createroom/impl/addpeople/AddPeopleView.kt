@@ -18,13 +18,10 @@ package io.element.android.features.createroom.impl.addpeople
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.element.android.features.selectusers.api.SelectUsersView
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -49,13 +47,12 @@ fun AddPeopleView(
     onBackPressed: () -> Unit = {},
     onNextPressed: () -> Unit = {},
 ) {
-    var isSearchActive by rememberSaveable { mutableStateOf(false) }
     val eventSink = state.eventSink
 
     Scaffold(
         topBar = {
             AddPeopleViewTopBar(
-                hasSelectedUsers = state.selectedUsers.isNotEmpty(),
+                hasSelectedUsers = state.selectUsersState.selectedUsers.isNotEmpty(),
                 onBackPressed = onBackPressed,
                 onNextPressed = onNextPressed,
             )
@@ -66,7 +63,10 @@ fun AddPeopleView(
                 .fillMaxSize()
                 .padding(padding),
         ) {
-            // TODO use reusable searchUser bar with multi selection
+            SelectUsersView(
+                modifier = Modifier.fillMaxWidth(),
+                state = state.selectUsersState,
+            )
         }
     }
 }

@@ -16,10 +16,9 @@
 
 package io.element.android.features.createroom.impl.addpeople
 
-import io.element.android.libraries.matrix.ui.model.MatrixUser
-import kotlinx.collections.immutable.ImmutableList
+import io.element.android.features.selectusers.api.SelectUsersState
 
 data class AddPeopleState(
-    val selectedUsers: ImmutableList<MatrixUser>,
+    val selectUsersState: SelectUsersState,
     val eventSink: (AddPeopleEvents) -> Unit,
 )

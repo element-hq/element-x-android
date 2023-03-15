@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.addpeople
+package io.element.android.features.selectusers.api
 
-sealed interface AddPeopleEvents
+import io.element.android.libraries.architecture.Presenter
+
+const val SINGLE_SELECTION_USERS_VARIANT = "single_selection_users"
+const val MULTI_SELECTION_USERS_VARIANT = "multi_selection_users"
+
+interface SelectUsersPresenter : Presenter<SelectUsersState>

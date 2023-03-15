@@ -17,17 +17,18 @@
 package io.element.android.features.selectusers.impl
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.selectusers.api.SelectMultipleUsersPresenter
+import io.element.android.features.selectusers.api.MULTI_SELECTION_USERS_VARIANT
+import io.element.android.features.selectusers.api.SelectUsersPresenter
 import io.element.android.libraries.di.SessionScope
 import javax.inject.Inject
+import javax.inject.Named
 
 // TODO add unit tests
 @ContributesBinding(
     scope = SessionScope::class,
-    boundType = SelectMultipleUsersPresenter::class,
+    boundType = SelectUsersPresenter::class
 )
+@Named(MULTI_SELECTION_USERS_VARIANT)
 class DefaultSelectMultipleUsersPresenter @Inject constructor() :
-    DefaultSelectUsersPresenter,
-    SelectMultipleUsersPresenter {
-    override val isMultiSelectionEnabled: Boolean = true
-}
+    SelectUsersPresenter by DefaultSelectUsersPresenter(isMultiSelectionEnabled = true)
+
