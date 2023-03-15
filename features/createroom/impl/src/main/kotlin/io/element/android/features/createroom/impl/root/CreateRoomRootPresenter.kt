@@ -17,72 +17,31 @@
 package io.element.android.features.createroom.impl.root
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import io.element.android.features.selectusers.api.SelectUsersPresenter
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.api.core.MatrixPatterns
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import timber.log.Timber
 import javax.inject.Inject
 
-class CreateRoomRootPresenter @Inject constructor() : Presenter<CreateRoomRootState> {
+class CreateRoomRootPresenter @Inject constructor(
+    private val selectUsersPresenter: SelectUsersPresenter,
+) : Presenter<CreateRoomRootState> {
 
     @Composable
     override fun present(): CreateRoomRootState {
-        var isSearchActive by rememberSaveable { mutableStateOf(false) }
-        var searchQuery by rememberSaveable { mutableStateOf("") }
-        val searchResults: MutableState<ImmutableList<MatrixUser>> = remember {
-            mutableStateOf(persistentListOf())
-        }
+        val selectUsersState = selectUsersPresenter.present()
 
         fun handleEvents(event: CreateRoomRootEvents) {
             when (event) {
-                is CreateRoomRootEvents.OnSearchActiveChanged -> isSearchActive = event.active
-                is CreateRoomRootEvents.UpdateSearchQuery -> searchQuery = event.query
                 is CreateRoomRootEvents.StartDM -> handleStartDM(event.matrixUser)
                 CreateRoomRootEvents.InvitePeople -> Unit // Todo Handle invite people action
             }
         }
 
-        LaunchedEffect(searchQuery) {
-            // Clear the search results before performing the search, manually add a fake result with the matrixId, if any
-            searchResults.value = if (MatrixPatterns.isUserId(searchQuery)) {
-                persistentListOf(MatrixUser(UserId(searchQuery)))
-            } else {
-                persistentListOf()
-            }
-            // Perform the search asynchronously
-            if (searchQuery.isNotEmpty()) {
-                searchResults.value = performSearch(searchQuery)
-            }
-        }
-
         return CreateRoomRootState(
+            selectUsersState = selectUsersState,
             eventSink = ::handleEvents,
-            isSearchActive = isSearchActive,
-            searchQuery = searchQuery,
-            searchResults = searchResults.value,
         )
-    }
-
-    private fun performSearch(query: String): ImmutableList<MatrixUser> {
-        val isMatrixId = MatrixPatterns.isUserId(query)
-        val results = mutableListOf<MatrixUser>()// TODO trigger /search request
-        if (isMatrixId && results.none { it.id.value == query }) {
-            val getProfileResult: MatrixUser? = null // TODO trigger /profile request
-            val profile = getProfileResult ?: MatrixUser(UserId(query))
-            results.add(0, profile)
-        }
-        return results.toImmutableList()
     }
 
     private fun handleStartDM(matrixUser: MatrixUser) {
