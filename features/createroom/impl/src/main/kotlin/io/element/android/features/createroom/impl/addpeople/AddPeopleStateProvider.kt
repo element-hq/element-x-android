@@ -17,27 +17,31 @@
 package io.element.android.features.createroom.impl.addpeople
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.selectusers.api.aSelectUsersState
+import io.element.android.features.selectusers.api.aSetOfSelectedUsers
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
-import kotlinx.collections.immutable.persistentListOf
 
 open class AddPeopleStateProvider : PreviewParameterProvider<AddPeopleState> {
     override val values: Sequence<AddPeopleState>
         get() = sequenceOf(
             aAddPeopleState(),
             aAddPeopleState().copy(
-                selectedUsers = persistentListOf(
-                    aMatrixUser(userName = ""),
-                    aMatrixUser(userName = "User"),
-                    aMatrixUser(userName = "User with long name"),
-                )
+                selectUsersState = aSelectUsersState().copy(selectedUsers = aSetOfSelectedUsers())
+            ),
+            aAddPeopleState(isSearchActive = true),
+            aAddPeopleState(isSearchActive = true).copy(
+                selectUsersState = aSelectUsersState().copy(selectedUsers = aSetOfSelectedUsers())
             )
         )
 }
 
-fun aAddPeopleState() = AddPeopleState(
-    selectedUsers = persistentListOf(),
+fun aAddPeopleState(isSearchActive: Boolean = false) = AddPeopleState(
+    selectUsersState = aSelectUsersState().copy(
+        isMultiSelectionEnabled = true,
+        isSearchActive = isSearchActive,
+    ),
     eventSink = {}
 )
 

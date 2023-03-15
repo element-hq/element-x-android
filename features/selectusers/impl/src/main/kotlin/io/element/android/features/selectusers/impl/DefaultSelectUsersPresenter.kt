@@ -25,8 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.element.android.features.selectusers.api.SelectUsersEvents
+import io.element.android.features.selectusers.api.SelectUsersPresenter
 import io.element.android.features.selectusers.api.SelectUsersState
-import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
@@ -37,9 +37,7 @@ import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 
-interface DefaultSelectUsersPresenter : Presenter<SelectUsersState> {
-
-    val isMultiSelectionEnabled: Boolean
+class DefaultSelectUsersPresenter(private val isMultiSelectionEnabled: Boolean) : SelectUsersPresenter {
 
     @Composable
     override fun present(): SelectUsersState {
