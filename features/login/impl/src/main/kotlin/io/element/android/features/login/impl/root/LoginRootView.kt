@@ -244,8 +244,8 @@ internal fun LoginForm(
             readOnly = !interactionEnabled,
             modifier = Modifier
                 .fillMaxWidth()
-                .testTag(TestTags.loginEmailUsername)
-                .onTabOrEnterKeyFocusNext(focusManager),
+                .onTabOrEnterKeyFocusNext(focusManager)
+                .testTag(TestTags.loginEmailUsername),
             label = {
                 Text(text = stringResource(StringR.string.ex_login_username_hint))
             },
@@ -284,8 +284,8 @@ internal fun LoginForm(
             readOnly = !interactionEnabled,
             modifier = Modifier
                 .fillMaxWidth()
-                .testTag(TestTags.loginPassword)
-                .onTabOrEnterKeyFocusNext(focusManager),
+                .onTabOrEnterKeyFocusNext(focusManager)
+                .testTag(TestTags.loginPassword),
             onValueChange = {
                 passwordFieldState = it
                 eventSink(LoginRootEvents.SetPassword(it))
