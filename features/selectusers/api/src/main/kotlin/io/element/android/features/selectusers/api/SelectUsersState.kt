@@ -18,11 +18,12 @@ package io.element.android.features.selectusers.api
 
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 
 data class SelectUsersState(
     val searchQuery: String,
     val searchResults: ImmutableList<MatrixUser>,
-    val selectedUsers: ImmutableList<MatrixUser>,
+    val selectedUsers: ImmutableSet<MatrixUser>,
     val isSearchActive: Boolean,
     val isMultiSelectionEnabled: Boolean,
     val eventSink: (SelectUsersEvents) -> Unit,

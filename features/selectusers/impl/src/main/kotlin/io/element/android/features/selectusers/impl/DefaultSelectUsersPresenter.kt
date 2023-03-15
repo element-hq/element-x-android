@@ -31,8 +31,11 @@ import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableSet
 
 interface DefaultSelectUsersPresenter : Presenter<SelectUsersState> {
 
@@ -41,8 +44,8 @@ interface DefaultSelectUsersPresenter : Presenter<SelectUsersState> {
     @Composable
     override fun present(): SelectUsersState {
         var isSearchActive by rememberSaveable { mutableStateOf(false) }
-        val selectedUsers: MutableState<ImmutableList<MatrixUser>> = remember {
-            mutableStateOf(persistentListOf())
+        val selectedUsers: MutableState<ImmutableSet<MatrixUser>> = remember {
+            mutableStateOf(persistentSetOf())
         }
         var searchQuery by rememberSaveable { mutableStateOf("") }
         val searchResults: MutableState<ImmutableList<MatrixUser>> = remember {
@@ -53,8 +56,8 @@ interface DefaultSelectUsersPresenter : Presenter<SelectUsersState> {
             when (event) {
                 is SelectUsersEvents.OnSearchActiveChanged -> isSearchActive = event.active
                 is SelectUsersEvents.UpdateSearchQuery -> searchQuery = event.query
-                is SelectUsersEvents.AddToSelection -> selectedUsers.value = selectedUsers.value.plus(event.matrixUser).toImmutableList()
-                is SelectUsersEvents.RemoveFromSelection -> selectedUsers.value = selectedUsers.value.minus(event.matrixUser).toImmutableList()
+                is SelectUsersEvents.AddToSelection -> selectedUsers.value = selectedUsers.value.plus(event.matrixUser).toImmutableSet()
+                is SelectUsersEvents.RemoveFromSelection -> selectedUsers.value = selectedUsers.value.minus(event.matrixUser).toImmutableSet()
             }
         }
 
