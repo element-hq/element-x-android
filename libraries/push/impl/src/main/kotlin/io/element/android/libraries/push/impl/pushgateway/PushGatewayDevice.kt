@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.api
+package io.element.android.libraries.push.impl.pushgateway
 
-interface PushService {
-    fun setCurrentRoom(roomId: String?)
-    fun setCurrentThread(threadId: String?)
-    fun notificationStyleChanged()
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-    suspend fun testPush()
-}
+@Serializable
+internal data class PushGatewayDevice(
+    /**
+     * Required. The app_id given when the pusher was created.
+     */
+    @SerialName("app_id")
+    val appId: String,
+    /**
+     * Required. The pushkey given when the pusher was created.
+     */
+    @SerialName("pushkey")
+    val pushKey: String
+)

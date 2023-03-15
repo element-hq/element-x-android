@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.api
+package io.element.android.libraries.push.impl.pushgateway
 
-interface PushService {
-    fun setCurrentRoom(roomId: String?)
-    fun setCurrentThread(threadId: String?)
-    fun notificationStyleChanged()
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-    suspend fun testPush()
-}
+@Serializable
+internal data class PushGatewayNotifyResponse(
+    @SerialName("rejected")
+    val rejectedPushKeys: List<String>
+)

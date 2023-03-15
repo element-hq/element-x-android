@@ -25,6 +25,7 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class DefaultPushService @Inject constructor(
     private val notificationDrawerManager: NotificationDrawerManager,
+    private val pusherManager: PushersManager,
 ) : PushService {
     override fun setCurrentRoom(roomId: String?) {
         notificationDrawerManager.setCurrentRoom(roomId)
@@ -36,5 +37,9 @@ class DefaultPushService @Inject constructor(
 
     override fun notificationStyleChanged() {
         notificationDrawerManager.notificationStyleChanged()
+    }
+
+    override suspend fun testPush() {
+        pusherManager.testPush()
     }
 }

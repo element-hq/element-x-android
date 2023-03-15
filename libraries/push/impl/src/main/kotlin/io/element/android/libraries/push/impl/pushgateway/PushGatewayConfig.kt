@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.api
+package io.element.android.libraries.push.impl.pushgateway
 
-interface PushService {
-    fun setCurrentRoom(roomId: String?)
-    fun setCurrentThread(threadId: String?)
-    fun notificationStyleChanged()
-
-    suspend fun testPush()
+object PushGatewayConfig {
+    // Push Gateway
+    const val URI_PUSH_GATEWAY_PREFIX_PATH = "_matrix/push/v1/"
 }

@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.api
+package io.element.android.libraries.push.api.gateway
 
-interface PushService {
-    fun setCurrentRoom(roomId: String?)
-    fun setCurrentThread(threadId: String?)
-    fun notificationStyleChanged()
-
-    suspend fun testPush()
+sealed class PushGatewayFailure : Throwable(cause = null) {
+    object PusherRejected : PushGatewayFailure()
 }

@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.api
+package io.element.android.libraries.push.impl.pushgateway
 
-interface PushService {
-    fun setCurrentRoom(roomId: String?)
-    fun setCurrentThread(threadId: String?)
-    fun notificationStyleChanged()
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-    suspend fun testPush()
-}
+@Serializable
+internal data class PushGatewayNotification(
+    @SerialName("event_id")
+    val eventId: String,
+
+    /**
+     * Required. This is an array of devices that the notification should be sent to.
+     */
+    @SerialName("devices")
+    val devices: List<PushGatewayDevice>
+)
