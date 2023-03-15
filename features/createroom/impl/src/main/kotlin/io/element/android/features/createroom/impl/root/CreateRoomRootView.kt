@@ -71,6 +71,7 @@ fun CreateRoomRootView(
             SelectUsersView(
                 modifier = Modifier.fillMaxWidth(),
                 state = state.selectUsersState,
+                onUserSelected = { state.eventSink.invoke(CreateRoomRootEvents.StartDM(it)) },
             )
 
             if (!state.selectUsersState.isSearchActive) {
