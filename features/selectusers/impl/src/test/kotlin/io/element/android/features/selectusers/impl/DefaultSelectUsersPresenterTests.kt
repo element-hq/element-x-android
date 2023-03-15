@@ -48,6 +48,10 @@ class DefaultSelectUsersPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+
+            initialState.eventSink(SelectUsersEvents.OnSearchActiveChanged(true))
+            assertThat(awaitItem().isSearchActive).isTrue()
+
             val matrixIdQuery = "@name:matrix.org"
             initialState.eventSink(SelectUsersEvents.UpdateSearchQuery(matrixIdQuery))
             assertThat(awaitItem().searchQuery).isEqualTo(matrixIdQuery)
@@ -57,6 +61,9 @@ class DefaultSelectUsersPresenterTests {
             initialState.eventSink(SelectUsersEvents.UpdateSearchQuery(notMatrixIdQuery))
             assertThat(awaitItem().searchQuery).isEqualTo(notMatrixIdQuery)
             assertThat(awaitItem().searchResults).isEmpty()
+
+            initialState.eventSink(SelectUsersEvents.OnSearchActiveChanged(false))
+            assertThat(awaitItem().isSearchActive).isFalse()
         }
     }
 }
