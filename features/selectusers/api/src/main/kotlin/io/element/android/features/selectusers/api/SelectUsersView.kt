@@ -65,6 +65,8 @@ import io.element.android.libraries.ui.strings.R as StringR
 fun SelectUsersView(
     state: SelectUsersState,
     modifier: Modifier = Modifier,
+    onUserSelected: (MatrixUser) -> Unit = {},
+    onUserDeselected: (MatrixUser) -> Unit = {},
 ) {
     val eventSink = state.eventSink
 
@@ -80,8 +82,14 @@ fun SelectUsersView(
             isMultiSelectionEnabled = state.isMultiSelectionEnabled,
             onActiveChanged = { eventSink.invoke(SelectUsersEvents.OnSearchActiveChanged(it)) },
             onTextChanged = { state.eventSink(SelectUsersEvents.UpdateSearchQuery(it)) },
-            onResultSelected = { state.eventSink(SelectUsersEvents.AddToSelection(it)) },
-            onUserRemoved = { eventSink(SelectUsersEvents.RemoveFromSelection(it)) },
+            onUserSelected = {
+                state.eventSink(SelectUsersEvents.AddToSelection(it))
+                onUserSelected(it)
+            },
+            onUserDeselected = {
+                eventSink(SelectUsersEvents.RemoveFromSelection(it))
+                onUserDeselected(it)
+            },
         )
     }
 }
@@ -98,8 +106,8 @@ fun SearchUserBar(
     placeHolderTitle: String = stringResource(StringR.string.search_for_someone),
     onActiveChanged: (Boolean) -> Unit = {},
     onTextChanged: (String) -> Unit = {},
-    onResultSelected: (MatrixUser) -> Unit = {},
-    onUserRemoved: (MatrixUser) -> Unit = {},
+    onUserSelected: (MatrixUser) -> Unit = {},
+    onUserDeselected: (MatrixUser) -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -152,7 +160,7 @@ fun SearchUserBar(
                 SelectedUsersList(
                     modifier = Modifier.padding(16.dp),
                     selectedUsers = selectedUsers,
-                    onUserRemoved = onUserRemoved,
+                    onUserRemoved = onUserDeselected,
                 )
             }
 
@@ -160,7 +168,7 @@ fun SearchUserBar(
                 items(results) {
                     SearchUserResultItem(
                         matrixUser = it,
-                        onClick = { onResultSelected(it) }
+                        onClick = { onUserSelected(it) }
                     )
                 }
             }
