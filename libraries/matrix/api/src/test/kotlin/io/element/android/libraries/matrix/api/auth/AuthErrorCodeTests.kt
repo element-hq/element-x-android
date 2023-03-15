@@ -18,7 +18,6 @@ package io.element.android.libraries.matrix.api.auth
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
-import org.matrix.rustcomponents.sdk.AuthenticationException
 
 class AuthErrorCodeTests {
 

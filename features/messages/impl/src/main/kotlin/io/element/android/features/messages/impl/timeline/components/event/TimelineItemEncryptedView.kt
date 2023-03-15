@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import org.matrix.rustcomponents.sdk.EncryptedMessage
+import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 
 @Composable
 fun TimelineItemEncryptedView(
@@ -53,7 +53,7 @@ internal fun TimelineItemEncryptedViewDarkPreview() =
 private fun ContentToPreview() {
     TimelineItemEncryptedView(
         content = TimelineItemEncryptedContent(
-            encryptedMessage = EncryptedMessage.Unknown,
+            data = UnableToDecryptContent.Data.Unknown
         )
     )
 }

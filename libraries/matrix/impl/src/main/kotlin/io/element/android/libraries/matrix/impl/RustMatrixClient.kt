@@ -20,24 +20,25 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.media.MediaResolver
+import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.media.RustMediaResolver
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.sync.SlidingSyncObserverProxy
 import io.element.android.libraries.sessionstorage.api.SessionStore
-import io.element.android.libraries.matrix.api.media.MediaResolver
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
-import org.matrix.rustcomponents.sdk.MediaSource
 import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.SlidingSyncMode
 import org.matrix.rustcomponents.sdk.SlidingSyncRequestListFilters
 import org.matrix.rustcomponents.sdk.SlidingSyncViewBuilder
 import org.matrix.rustcomponents.sdk.TaskHandle
+import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
+import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
@@ -94,7 +95,9 @@ class RustMatrixClient constructor(
         .sendUpdatesForItems(true)
         .syncMode(mode = SlidingSyncMode.SELECTIVE)
         .addRange(0u, 20u)
-        .build()
+        .use {
+            it.build()
+        }
 
     private val slidingSync = client
         .slidingSync()
@@ -102,10 +105,12 @@ class RustMatrixClient constructor(
         .withCommonExtensions()
         .coldCache("ElementX")
         .addView(visibleRoomsView)
-        .build()
+        .use {
+            it.build()
+        }
 
     private val slidingSyncObserverProxy = SlidingSyncObserverProxy(coroutineScope)
-    private val roomSummaryDataSource: RustRoomSummaryDataSource =
+    private val rustRoomSummaryDataSource: RustRoomSummaryDataSource =
         RustRoomSummaryDataSource(
             slidingSyncObserverProxy.updateSummaryFlow,
             slidingSync,
@@ -113,6 +118,10 @@ class RustMatrixClient constructor(
             dispatchers,
             ::onRestartSync
         )
+
+    override val roomSummaryDataSource: RoomSummaryDataSource
+        get() = rustRoomSummaryDataSource
+
     private var slidingSyncObserverToken: TaskHandle? = null
 
     private val mediaResolver = RustMediaResolver(this)
@@ -120,7 +129,7 @@ class RustMatrixClient constructor(
 
     init {
         client.setDelegate(clientDelegate)
-        roomSummaryDataSource.init()
+        rustRoomSummaryDataSource.init()
         slidingSync.setObserver(slidingSyncObserverProxy)
     }
 
@@ -141,8 +150,6 @@ class RustMatrixClient constructor(
         )
     }
 
-    override fun roomSummaryDataSource(): RoomSummaryDataSource = roomSummaryDataSource
-
     override fun mediaResolver(): MediaResolver = mediaResolver
 
     override fun startSync() {
@@ -154,15 +161,17 @@ class RustMatrixClient constructor(
 
     override fun stopSync() {
         if (isSyncing.compareAndSet(true, false)) {
-            slidingSyncObserverToken?.cancel()
+            slidingSyncObserverToken?.use { it.cancel() }
         }
     }
 
-    override fun close() {
+    private fun close() {
         stopSync()
         slidingSync.setObserver(null)
-        roomSummaryDataSource.close()
+        rustRoomSummaryDataSource.close()
         client.setDelegate(null)
+        visibleRoomsView.destroy()
+        slidingSync.destroy()
     }
 
     override suspend fun logout() = withContext(dispatchers.io) {
@@ -174,6 +183,7 @@ class RustMatrixClient constructor(
         }
         baseDirectory.deleteSessionDirectory(userID = client.userId())
         sessionStore.removeSession(client.userId())
+        client.destroy()
     }
 
     override suspend fun loadUserDisplayName(): Result<String> = withContext(dispatchers.io) {
@@ -189,23 +199,30 @@ class RustMatrixClient constructor(
     }
 
     @OptIn(ExperimentalUnsignedTypes::class)
-    override suspend fun loadMediaContentForSource(source: MediaSource): Result<ByteArray> =
+    override suspend fun loadMediaContent(url: String): Result<ByteArray> =
         withContext(dispatchers.io) {
             runCatching {
-                client.getMediaContent(source).toUByteArray().toByteArray()
+                mediaSourceFromUrl(url).use { source ->
+                    client.getMediaContent(source).toUByteArray().toByteArray()
+                }
             }
         }
 
     @OptIn(ExperimentalUnsignedTypes::class)
-    override suspend fun loadMediaThumbnailForSource(
-        source: MediaSource,
+    override suspend fun loadMediaThumbnail(
+        url: String,
         width: Long,
         height: Long
     ): Result<ByteArray> =
         withContext(dispatchers.io) {
             runCatching {
-                client.getMediaThumbnail(source, width.toULong(), height.toULong()).toUByteArray()
-                    .toByteArray()
+                mediaSourceFromUrl(url).use { source ->
+                    client.getMediaThumbnail(
+                        source = source,
+                        width = width.toULong(),
+                        height = height.toULong()
+                    ).toUByteArray().toByteArray()
+                }
             }
         }
 
