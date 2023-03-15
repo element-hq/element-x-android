@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.verification
 
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceState
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
@@ -78,19 +79,16 @@ class MatrixSessionVerificationService @Inject constructor() : SessionVerificati
 
     override fun didCancel() {
         _verificationAttemptStatus.value = SessionVerificationServiceState.Canceled
-        verificationController?.setDelegate(null)
     }
 
     override fun didFail() {
         _verificationAttemptStatus.value = SessionVerificationServiceState.Failed
-        verificationController?.setDelegate(null)
     }
 
     override fun didFinish() {
         _verificationAttemptStatus.value = SessionVerificationServiceState.Finished
         // Ideally this should be `= verificationController?.isVerified().orFalse()` but for some reason it always returns false
         _isVerified.value = true
-        verificationController?.setDelegate(null)
     }
 
     override fun didReceiveVerificationData(data: List<SessionVerificationEmoji>) {
@@ -108,11 +106,14 @@ class MatrixSessionVerificationService @Inject constructor() : SessionVerificati
     // end-region
 
     override fun reset() {
+        if (isReady.value) {
+            // Cancel any pending verification attempt
+            tryOrNull { verificationController?.cancelVerification() }
+        }
         _verificationAttemptStatus.value = SessionVerificationServiceState.Initial
     }
 
     fun destroy() {
-        verificationController?.setDelegate(null)
         (verificationController as? SessionVerificationController)?.destroy()
         verificationController = null
     }
