@@ -17,62 +17,63 @@
 package io.element.android.libraries.matrix.test.verification
 
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceState
+import io.element.android.libraries.matrix.api.verification.VerificationFlowState
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class FakeSessionVerificationService : SessionVerificationService {
     private val _isReady = MutableStateFlow(false)
-    private val _isVerified = MutableStateFlow(false)
-    private var _verificationAttemptStatus = MutableStateFlow<SessionVerificationServiceState>(SessionVerificationServiceState.Initial)
+    private val _sessionVerifiedStatus = MutableStateFlow<SessionVerifiedStatus>(SessionVerifiedStatus.Unknown)
+    private var _verificationFlowState = MutableStateFlow<VerificationFlowState>(VerificationFlowState.Initial)
     private var emojiList = emptyList<VerificationEmoji>()
     var shouldFail = false
 
-    override val verificationAttemptStatus: StateFlow<SessionVerificationServiceState>
-        get() = _verificationAttemptStatus
+    override val verificationFlowState: StateFlow<VerificationFlowState>
+        get() = _verificationFlowState
 
-    override val isVerified: StateFlow<Boolean> = _isVerified
+    override val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus> = _sessionVerifiedStatus
 
     override val isReady: StateFlow<Boolean> = _isReady
 
     override fun requestVerification() {
-        _verificationAttemptStatus.value = SessionVerificationServiceState.AcceptedVerificationRequest
-        _verificationAttemptStatus.value = SessionVerificationServiceState.StartedSasVerification
-        _verificationAttemptStatus.value = SessionVerificationServiceState.ReceivedVerificationData(emojiList)
+        _verificationFlowState.value = VerificationFlowState.AcceptedVerificationRequest
+        _verificationFlowState.value = VerificationFlowState.StartedSasVerification
+        _verificationFlowState.value = VerificationFlowState.ReceivedVerificationData(emojiList)
     }
 
     override fun cancelVerification() {
-        _verificationAttemptStatus.value = SessionVerificationServiceState.Canceled
+        _verificationFlowState.value = VerificationFlowState.Canceled
     }
 
     override fun approveVerification() {
         if (!shouldFail) {
-            _verificationAttemptStatus.value = SessionVerificationServiceState.Finished
+            _verificationFlowState.value = VerificationFlowState.Finished
         } else {
-            _verificationAttemptStatus.value = SessionVerificationServiceState.Failed
+            _verificationFlowState.value = VerificationFlowState.Failed
         }
     }
 
     override fun declineVerification() {
         if (!shouldFail) {
-            _verificationAttemptStatus.value = SessionVerificationServiceState.Canceled
+            _verificationFlowState.value = VerificationFlowState.Canceled
         } else {
-            _verificationAttemptStatus.value = SessionVerificationServiceState.Failed
+            _verificationFlowState.value = VerificationFlowState.Failed
         }
     }
 
     override fun startVerification() {
-        _verificationAttemptStatus.value = SessionVerificationServiceState.StartedSasVerification
-        _verificationAttemptStatus.value = SessionVerificationServiceState.ReceivedVerificationData(emojiList)
+        _verificationFlowState.value = VerificationFlowState.StartedSasVerification
+        _verificationFlowState.value = VerificationFlowState.ReceivedVerificationData(emojiList)
     }
 
-    fun givenIsVerified(value: Boolean) {
-        _isVerified.value = value
+    fun givenVerifiedStatus(status: SessionVerifiedStatus) {
+        _sessionVerifiedStatus.value = status
     }
 
-    fun givenVerificationAttemptStatus(state: SessionVerificationServiceState) {
-        _verificationAttemptStatus.value = state
+    fun givenVerificationAttemptStatus(state: VerificationFlowState) {
+        _verificationFlowState.value = state
     }
 
     fun givenIsReady(value: Boolean) {
@@ -84,6 +85,6 @@ class FakeSessionVerificationService : SessionVerificationService {
     }
 
     override fun reset() {
-        _verificationAttemptStatus.value = SessionVerificationServiceState.Initial
+        _verificationFlowState.value = VerificationFlowState.Initial
     }
 }

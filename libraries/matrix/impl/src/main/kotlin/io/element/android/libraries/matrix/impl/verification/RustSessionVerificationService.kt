@@ -18,9 +18,11 @@ package io.element.android.libraries.matrix.impl.verification
 
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceState
+import io.element.android.libraries.matrix.api.verification.VerificationFlowState
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerDelegate
@@ -34,19 +36,20 @@ class RustSessionVerificationService @Inject constructor() : SessionVerification
         set(value) {
             field = value
             _isReady.value = value != null
+            // If status was 'Unknown', move it to either 'Verified' or 'NotVerified'
             if (value != null) {
-                _isVerified.value = value.isVerified()
+                updateVerificationStatus(value.isVerified())
             }
         }
 
-    private val _verificationAttemptStatus = MutableStateFlow<SessionVerificationServiceState>(SessionVerificationServiceState.Initial)
-    override val verificationAttemptStatus = _verificationAttemptStatus.asStateFlow()
+    private val _verificationFlowState = MutableStateFlow<VerificationFlowState>(VerificationFlowState.Initial)
+    override val verificationFlowState = _verificationFlowState.asStateFlow()
 
     private val _isReady = MutableStateFlow(false)
     override val isReady = _isReady.asStateFlow()
 
-    private val _isVerified = MutableStateFlow(true)
-    override val isVerified = _isVerified.asStateFlow()
+    private val _sessionVerifiedStatus = MutableStateFlow<SessionVerifiedStatus>(SessionVerifiedStatus.Unknown)
+    override val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus> = _sessionVerifiedStatus.asStateFlow()
 
     override fun requestVerification() = tryOrFail {
         verificationController?.setDelegate(this)
@@ -74,33 +77,33 @@ class RustSessionVerificationService @Inject constructor() : SessionVerification
 
     // When verification attempt is accepted by the other device
     override fun didAcceptVerificationRequest() {
-        _verificationAttemptStatus.value = SessionVerificationServiceState.AcceptedVerificationRequest
+        _verificationFlowState.value = VerificationFlowState.AcceptedVerificationRequest
     }
 
     override fun didCancel() {
-        _verificationAttemptStatus.value = SessionVerificationServiceState.Canceled
+        _verificationFlowState.value = VerificationFlowState.Canceled
     }
 
     override fun didFail() {
-        _verificationAttemptStatus.value = SessionVerificationServiceState.Failed
+        _verificationFlowState.value = VerificationFlowState.Failed
     }
 
     override fun didFinish() {
-        _verificationAttemptStatus.value = SessionVerificationServiceState.Finished
-        // Ideally this should be `= verificationController?.isVerified().orFalse()` but for some reason it always returns false
-        _isVerified.value = true
+        _verificationFlowState.value = VerificationFlowState.Finished
+        // Ideally this should be `verificationController?.isVerified().orFalse()` but for some reason it always returns false
+        updateVerificationStatus(isVerified = true)
     }
 
     override fun didReceiveVerificationData(data: List<SessionVerificationEmoji>) {
         val emojis = data.map { emoji ->
             emoji.use { VerificationEmoji(it.symbol(), it.description()) }
         }
-        _verificationAttemptStatus.value = SessionVerificationServiceState.ReceivedVerificationData(emojis)
+        _verificationFlowState.value = VerificationFlowState.ReceivedVerificationData(emojis)
     }
 
     // When the actual SAS verification starts
     override fun didStartSasVerification() {
-        _verificationAttemptStatus.value = SessionVerificationServiceState.StartedSasVerification
+        _verificationFlowState.value = VerificationFlowState.StartedSasVerification
     }
 
     // end-region
@@ -110,11 +113,20 @@ class RustSessionVerificationService @Inject constructor() : SessionVerification
             // Cancel any pending verification attempt
             tryOrNull { verificationController?.cancelVerification() }
         }
-        _verificationAttemptStatus.value = SessionVerificationServiceState.Initial
+        _verificationFlowState.value = VerificationFlowState.Initial
     }
 
     fun destroy() {
         (verificationController as? SessionVerificationController)?.destroy()
         verificationController = null
+    }
+
+    private fun updateVerificationStatus(isVerified: Boolean) {
+        val newValue = when {
+            !isReady.value -> SessionVerifiedStatus.Unknown
+            !isVerified -> SessionVerifiedStatus.NotVerified
+            else -> SessionVerifiedStatus.Verified
+        }
+        _sessionVerifiedStatus.value = newValue
     }
 }

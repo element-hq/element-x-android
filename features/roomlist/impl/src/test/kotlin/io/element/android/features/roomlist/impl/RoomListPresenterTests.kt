@@ -24,7 +24,8 @@ import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.dateformatter.api.LastMessageFormatter
 import io.element.android.libraries.dateformatter.test.FakeLastMessageFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceState
+import io.element.android.libraries.matrix.api.verification.VerificationFlowState
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_MESSAGE
@@ -221,7 +222,7 @@ class RoomListPresenterTests {
             createDateFormatter(),
             FakeSessionVerificationService().apply {
                 givenIsReady(true)
-                givenIsVerified(false)
+                givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
             },
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -246,7 +247,7 @@ class RoomListPresenterTests {
             createDateFormatter(),
             FakeSessionVerificationService().apply {
                 givenIsReady(true)
-                givenVerificationAttemptStatus(SessionVerificationServiceState.Finished)
+                givenVerificationAttemptStatus(VerificationFlowState.Finished)
             },
         )
         moleculeFlow(RecompositionClock.Immediate) {

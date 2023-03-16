@@ -20,7 +20,10 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface SessionVerificationService {
 
-    val verificationAttemptStatus : StateFlow<SessionVerificationServiceState>
+    /**
+     * State of the current verification flow ([VerificationFlowState.Initial] if not started).
+     */
+    val verificationFlowState : StateFlow<VerificationFlowState>
 
     /**
      * The internal service that checks verification can only run after the initial sync.
@@ -29,9 +32,10 @@ interface SessionVerificationService {
     val isReady: StateFlow<Boolean>
 
     /**
-     * Exposes whether the current session is verified or not.
+     * Returns whether the current verification status is either: [SessionVerifiedStatus.Unknown], [SessionVerifiedStatus.NotVerified]
+     * or [SessionVerifiedStatus.Verified].
      */
-    val isVerified: StateFlow<Boolean>
+    val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus>
 
     /**
      * Request verification of the current session.
@@ -64,27 +68,38 @@ interface SessionVerificationService {
     fun reset()
 }
 
-/** States produced by the [SessionVerificationService]. */
-sealed interface SessionVerificationServiceState {
-    /** Initial state. */
-    object Initial : SessionVerificationServiceState
+/** Verification status of the current session. */
+sealed interface SessionVerifiedStatus {
+    /** Unknown status, we couldn't read the actual value from the SDK. */
+    object Unknown : SessionVerifiedStatus
 
-    /** Session verification request was accepted by another device. */
-    object AcceptedVerificationRequest : SessionVerificationServiceState
+    /** Not verified session status. */
+    object NotVerified : SessionVerifiedStatus
 
-    /** Short Authentication String (SAS) verification started between the 2 devices. */
-    object StartedSasVerification : SessionVerificationServiceState
-
-    /** Verification data for the SAS verification (emojis) received. */
-    data class ReceivedVerificationData(val emoji: List<VerificationEmoji>) : SessionVerificationServiceState
-
-    /** Verification completed successfully. */
-    object Finished : SessionVerificationServiceState
-
-    /** Verification was cancelled by either device. */
-    object Canceled : SessionVerificationServiceState
-
-    /** Verification failed with an error. */
-    object Failed : SessionVerificationServiceState
+    /** Verified session status. */
+    object Verified : SessionVerifiedStatus
 }
 
+/** States produced by the [SessionVerificationService]. */
+sealed interface VerificationFlowState {
+    /** Initial state. */
+    object Initial : VerificationFlowState
+
+    /** Session verification request was accepted by another device. */
+    object AcceptedVerificationRequest : VerificationFlowState
+
+    /** Short Authentication String (SAS) verification started between the 2 devices. */
+    object StartedSasVerification : VerificationFlowState
+
+    /** Verification data for the SAS verification (emojis) received. */
+    data class ReceivedVerificationData(val emoji: List<VerificationEmoji>) : VerificationFlowState
+
+    /** Verification completed successfully. */
+    object Finished : VerificationFlowState
+
+    /** Verification was cancelled by either device. */
+    object Canceled : VerificationFlowState
+
+    /** Verification failed with an error. */
+    object Failed : VerificationFlowState
+}
