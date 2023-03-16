@@ -19,6 +19,7 @@
 import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
 import extension.allFeaturesImpl
 import extension.allLibrariesImpl
+import extension.allServicesImpl
 
 // TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
 @Suppress("DSL_SCOPE_VIOLATION")
@@ -201,14 +202,12 @@ knit {
 
 dependencies {
     allLibrariesImpl()
+    allServicesImpl()
     allFeaturesImpl()
     implementation(projects.tests.uitests)
     implementation(projects.anvilannotations)
     implementation(projects.appnav)
     anvil(projects.anvilcodegen)
-
-    // TODO Create allServiceImpl()
-    implementation(projects.services.appnavstate.impl)
 
     // https://developer.android.com/studio/write/java8-support#library-desugaring-versions
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
