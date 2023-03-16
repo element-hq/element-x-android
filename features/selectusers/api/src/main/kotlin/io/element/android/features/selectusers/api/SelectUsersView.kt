@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -80,6 +81,7 @@ fun SelectUsersView(
             query = state.searchQuery,
             results = state.searchResults,
             selectedUsers = state.selectedUsers,
+            selectedUsersListState = state.selectedUsersListState,
             active = state.isSearchActive,
             isMultiSelectionEnabled = state.isMultiSelectionEnabled,
             onActiveChanged = { eventSink.invoke(SelectUsersEvents.OnSearchActiveChanged(it)) },
@@ -96,6 +98,7 @@ fun SelectUsersView(
 
         if (state.isMultiSelectionEnabled && !state.isSearchActive && state.selectedUsers.isNotEmpty()) {
             SelectedUsersList(
+                listState = state.selectedUsersListState,
                 modifier = Modifier.padding(16.dp),
                 selectedUsers = state.selectedUsers,
                 onUserRemoved = {
@@ -113,6 +116,7 @@ fun SearchUserBar(
     query: String,
     results: ImmutableList<MatrixUser>,
     selectedUsers: ImmutableSet<MatrixUser>,
+    selectedUsersListState: LazyListState,
     active: Boolean,
     isMultiSelectionEnabled: Boolean,
     modifier: Modifier = Modifier,
@@ -171,6 +175,7 @@ fun SearchUserBar(
         content = {
             if (isMultiSelectionEnabled && active && selectedUsers.isNotEmpty()) {
                 SelectedUsersList(
+                    listState = selectedUsersListState,
                     modifier = Modifier.padding(16.dp),
                     selectedUsers = selectedUsers,
                     onUserRemoved = onUserDeselected,
@@ -239,11 +244,13 @@ fun SearchSingleUserResultItem(
 
 @Composable
 fun SelectedUsersList(
+    listState: LazyListState,
     selectedUsers: ImmutableSet<MatrixUser>,
     modifier: Modifier = Modifier,
     onUserRemoved: (MatrixUser) -> Unit = {},
 ) {
     LazyRow(
+        state = listState,
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(24.dp),
     ) {

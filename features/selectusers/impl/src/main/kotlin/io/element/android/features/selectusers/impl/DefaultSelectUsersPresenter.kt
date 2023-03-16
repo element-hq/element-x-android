@@ -16,12 +16,15 @@
 
 package io.element.android.features.selectusers.impl
 
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.element.android.features.selectusers.api.SelectUsersEvents
@@ -36,15 +39,19 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class DefaultSelectUsersPresenter(private val isMultiSelectionEnabled: Boolean) : SelectUsersPresenter {
 
     @Composable
     override fun present(): SelectUsersState {
+        val localCoroutineScope = rememberCoroutineScope()
         var isSearchActive by rememberSaveable { mutableStateOf(false) }
         val selectedUsers: MutableState<ImmutableSet<MatrixUser>> = remember {
             mutableStateOf(persistentSetOf())
         }
+        val selectedUsersListState = rememberLazyListState()
         var searchQuery by rememberSaveable { mutableStateOf("") }
         val searchResults: MutableState<ImmutableList<MatrixUser>> = remember {
             mutableStateOf(persistentListOf())
@@ -54,7 +61,10 @@ class DefaultSelectUsersPresenter(private val isMultiSelectionEnabled: Boolean) 
             when (event) {
                 is SelectUsersEvents.OnSearchActiveChanged -> isSearchActive = event.active
                 is SelectUsersEvents.UpdateSearchQuery -> searchQuery = event.query
-                is SelectUsersEvents.AddToSelection -> selectedUsers.value = selectedUsers.value.plus(event.matrixUser).toImmutableSet()
+                is SelectUsersEvents.AddToSelection -> {
+                    selectedUsers.value = selectedUsers.value.plus(event.matrixUser).toImmutableSet()
+                    localCoroutineScope.scrollToFirstSelectedUser(selectedUsersListState)
+                }
                 is SelectUsersEvents.RemoveFromSelection -> selectedUsers.value = selectedUsers.value.minus(event.matrixUser).toImmutableSet()
             }
         }
@@ -76,6 +86,7 @@ class DefaultSelectUsersPresenter(private val isMultiSelectionEnabled: Boolean) 
             searchQuery = searchQuery,
             searchResults = searchResults.value,
             selectedUsers = selectedUsers.value.reversed().toImmutableSet(),
+            selectedUsersListState = selectedUsersListState,
             isSearchActive = isSearchActive,
             isMultiSelectionEnabled = isMultiSelectionEnabled,
             eventSink = ::handleEvents,
@@ -91,5 +102,9 @@ class DefaultSelectUsersPresenter(private val isMultiSelectionEnabled: Boolean) 
             results.add(0, profile)
         }
         return results.toImmutableList()
+    }
+
+    private fun CoroutineScope.scrollToFirstSelectedUser(listState: LazyListState) = launch {
+        listState.scrollToItem(index = 0)
     }
 }
