@@ -75,7 +75,7 @@ class DefaultSelectUsersPresenter(private val isMultiSelectionEnabled: Boolean) 
         return SelectUsersState(
             searchQuery = searchQuery,
             searchResults = searchResults.value,
-            selectedUsers = selectedUsers.value,
+            selectedUsers = selectedUsers.value.reversed().toImmutableSet(),
             isSearchActive = isSearchActive,
             isMultiSelectionEnabled = isMultiSelectionEnabled,
             eventSink = ::handleEvents,
