@@ -22,7 +22,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.selectusers.impl.DefaultSelectUsersPresenter
+import io.element.android.features.selectusers.impl.DefaultSelectSingleUserPresenter
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,7 +33,7 @@ class CreateRoomRootPresenterTests {
 
     @Test
     fun `present - initial state`() = runTest {
-        val selectUsersPresenter = DefaultSelectUsersPresenter()
+        val selectUsersPresenter = DefaultSelectSingleUserPresenter()
         val presenter = CreateRoomRootPresenter(selectUsersPresenter)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -45,7 +45,7 @@ class CreateRoomRootPresenterTests {
 
     @Test
     fun `present - trigger action buttons`() = runTest {
-        val selectUsersPresenter = DefaultSelectUsersPresenter()
+        val selectUsersPresenter = DefaultSelectSingleUserPresenter()
         val presenter = CreateRoomRootPresenter(selectUsersPresenter)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -57,7 +57,7 @@ class CreateRoomRootPresenterTests {
 
     @Test
     fun `present - trigger start DM action`() = runTest {
-        val selectUsersPresenter = DefaultSelectUsersPresenter()
+        val selectUsersPresenter = DefaultSelectSingleUserPresenter()
         val presenter = CreateRoomRootPresenter(selectUsersPresenter)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
