@@ -65,8 +65,9 @@ fun DependencyHandlerScope.allLibrariesImpl() {
 }
 
 fun DependencyHandlerScope.allServicesImpl() {
-    implementation(project(":services:appnavstate:impl"))
     implementation(project(":services:analytics:noop"))
+    implementation(project(":services:appnavstate:impl"))
+    implementation(project(":services:toolbox:impl"))
 }
 
 fun DependencyHandlerScope.allFeaturesApi() {
