@@ -23,7 +23,6 @@ import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 import javax.inject.Named
 
-// TODO add unit tests
 class AddPeoplePresenter @Inject constructor(
     @Named(MULTI_SELECTION_USERS_VARIANT)
     private val selectUsersPresenter: SelectUsersPresenter,
