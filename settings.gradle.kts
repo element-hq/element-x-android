@@ -70,6 +70,8 @@ include(":services:analytics:api")
 include(":services:analytics:noop")
 include(":services:appnavstate:api")
 include(":services:appnavstate:impl")
+include(":services:toolbox:api")
+include(":services:toolbox:impl")
 
 include(":features:onboarding:api")
 include(":features:onboarding:impl")
