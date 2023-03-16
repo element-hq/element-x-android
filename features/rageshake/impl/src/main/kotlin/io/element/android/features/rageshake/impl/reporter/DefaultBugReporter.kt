@@ -484,9 +484,9 @@ class DefaultBugReporter @Inject constructor(
 
             return compressFile(logCatErrFile)
         } catch (error: OutOfMemoryError) {
-            Timber.e(error, "## saveLogCat() : fail to write logcat$error")
+            Timber.e(error, "## saveLogCat() : fail to write logcat OOM")
         } catch (e: Exception) {
-            Timber.e(e, "## saveLogCat() : fail to write logcat$e")
+            Timber.e(e, "## saveLogCat() : fail to write logcat")
         }
 
         return null
