@@ -16,6 +16,7 @@
 
 package io.element.android.features.selectusers.api
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
@@ -55,6 +56,10 @@ fun aSelectUsersState() = SelectUsersState(
     searchQuery = "",
     searchResults = persistentListOf(),
     selectedUsers = persistentSetOf(),
+    selectedUsersListState = LazyListState(
+        firstVisibleItemIndex = 0,
+        firstVisibleItemScrollOffset = 0,
+    ),
     isMultiSelectionEnabled = false,
     eventSink = {}
 )
