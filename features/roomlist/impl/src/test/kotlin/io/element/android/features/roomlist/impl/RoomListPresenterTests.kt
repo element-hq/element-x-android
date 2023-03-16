@@ -21,8 +21,8 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
-import io.element.android.libraries.dateformatter.api.LastMessageFormatter
-import io.element.android.libraries.dateformatter.test.FakeLastMessageFormatter
+import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
+import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -202,8 +202,8 @@ class RoomListPresenterTests {
         }
     }
 
-    private fun createDateFormatter(): LastMessageFormatter {
-        return FakeLastMessageFormatter().apply {
+    private fun createDateFormatter(): LastMessageTimestampFormatter {
+        return FakeLastMessageTimestampFormatter().apply {
             givenFormat(A_FORMATTED_DATE)
         }
     }

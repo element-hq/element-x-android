@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.room
 
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
 import io.element.android.libraries.matrix.impl.room.message.RoomMessageFactory
@@ -28,19 +29,16 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
         val latestRoomMessage = slidingSyncRoom.latestRoomMessage()?.use {
             roomMessageFactory.create(it)
         }
-        val computedLastMessage = when {
-            latestRoomMessage == null -> null
-            slidingSyncRoom.isDm() == true -> latestRoomMessage.body
-            else -> "${latestRoomMessage.sender.value}: ${latestRoomMessage.body}"
-        }
         return RoomSummaryDetails(
             roomId = RoomId(slidingSyncRoom.roomId()),
             name = slidingSyncRoom.name() ?: slidingSyncRoom.roomId(),
             isDirect = slidingSyncRoom.isDm() ?: false,
             avatarURLString = room?.avatarUrl(),
             unreadNotificationCount = slidingSyncRoom.unreadNotifications().use { it.notificationCount().toInt() },
-            lastMessage = computedLastMessage,
+            lastMessage = latestRoomMessage,
             lastMessageTimestamp = latestRoomMessage?.originServerTs
         )
     }
+
+
 }

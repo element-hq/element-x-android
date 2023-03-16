@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.api.room
 
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.message.RoomMessage
 
 sealed interface RoomSummary {
     data class Empty(val identifier: String) : RoomSummary
@@ -35,7 +36,7 @@ data class RoomSummaryDetails(
     val name: String,
     val isDirect: Boolean,
     val avatarURLString: String?,
-    val lastMessage: CharSequence?,
+    val lastMessage: RoomMessage?,
     val lastMessageTimestamp: Long?,
     val unreadNotificationCount: Int,
 )

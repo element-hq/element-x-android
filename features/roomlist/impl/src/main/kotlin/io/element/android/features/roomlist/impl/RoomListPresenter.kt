@@ -25,16 +25,42 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryPlaceholders
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.parallelMap
-import io.element.android.libraries.dateformatter.api.LastMessageFormatter
+import io.element.android.libraries.core.extensions.orEmpty
+import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomSummary
+import io.element.android.libraries.matrix.api.room.message.RoomMessage
+import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
+import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
+import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
+import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
+import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -48,7 +74,8 @@ private const val extendedRangeSize = 40
 
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
-    private val lastMessageFormatter: LastMessageFormatter,
+    private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
+    private val roomLastMessageFormatter: RoomLastMessageFormatter,
 ) : Presenter<RoomListState> {
 
     @Composable
@@ -144,8 +171,10 @@ class RoomListPresenter @Inject constructor(
                         id = roomSummary.identifier(),
                         name = roomSummary.details.name,
                         hasUnread = roomSummary.details.unreadNotificationCount > 0,
-                        timestamp = lastMessageFormatter.format(roomSummary.details.lastMessageTimestamp),
-                        lastMessage = roomSummary.details.lastMessage,
+                        timestamp = lastMessageTimestampFormatter.format(roomSummary.details.lastMessageTimestamp),
+                        lastMessage = roomSummary.details.lastMessage?.let { message ->
+                            roomLastMessageFormatter.processMessageItem(message, roomSummary.details.isDirect)
+                        }.orEmpty(),
                         avatarData = avatarData,
                     )
                 }

@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import io.element.android.features.roomlist.impl.RoomListPresenter
 import io.element.android.features.roomlist.impl.RoomListView
 import io.element.android.libraries.dateformatter.impl.DateFormatters
-import io.element.android.libraries.dateformatter.impl.DefaultLastMessageFormatter
+import io.element.android.libraries.dateformatter.impl.DefaultLastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.impl.LocalDateTimeProvider
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -40,7 +40,7 @@ class RoomListScreen(
     private val timeZone = TimeZone.currentSystemDefault()
     private val dateTimeProvider = LocalDateTimeProvider(clock, timeZone)
     private val dateFormatters = DateFormatters(locale, clock, timeZone)
-    private val presenter = RoomListPresenter(matrixClient, DefaultLastMessageFormatter(dateTimeProvider, dateFormatters))
+    private val presenter = RoomListPresenter(matrixClient, DefaultLastMessageTimestampFormatter(dateTimeProvider, dateFormatters))
 
     @Composable
     fun Content(modifier: Modifier = Modifier) {
