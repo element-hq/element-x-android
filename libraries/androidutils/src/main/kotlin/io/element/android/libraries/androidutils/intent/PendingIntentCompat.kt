@@ -1,6 +1,5 @@
-
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +14,17 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.libraries.androidutils.intent
 
-android {
-    namespace = "io.element.android.libraries.androidutils"
-}
+import android.app.PendingIntent
+import android.os.Build
 
-dependencies {
-    implementation(libs.timber)
-    implementation(libs.androidx.corektx)
-    implementation(libs.androidx.activity.activity)
-    implementation(projects.libraries.core)
+object PendingIntentCompat {
+    const val FLAG_IMMUTABLE = PendingIntent.FLAG_IMMUTABLE
+
+    val FLAG_MUTABLE = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        PendingIntent.FLAG_MUTABLE
+    } else {
+        0
+    }
 }

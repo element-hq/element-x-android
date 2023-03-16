@@ -1,6 +1,5 @@
-
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +14,18 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.libraries.androidutils.system
 
-android {
-    namespace = "io.element.android.libraries.androidutils"
-}
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import androidx.core.content.getSystemService
 
-dependencies {
-    implementation(libs.timber)
-    implementation(libs.androidx.corektx)
-    implementation(libs.androidx.activity.activity)
-    implementation(projects.libraries.core)
+class CopyToClipboardUseCase(
+    private val context: Context,
+) {
+    fun execute(text: CharSequence) {
+        context.getSystemService<ClipboardManager>()
+            ?.setPrimaryClip(ClipData.newPlainText("", text))
+    }
 }
