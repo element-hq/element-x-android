@@ -72,7 +72,7 @@ class FakeSessionVerificationService : SessionVerificationService {
         _sessionVerifiedStatus.value = status
     }
 
-    fun givenVerificationAttemptStatus(state: VerificationFlowState) {
+    fun givenVerificationFlowState(state: VerificationFlowState) {
         _verificationFlowState.value = state
     }
 

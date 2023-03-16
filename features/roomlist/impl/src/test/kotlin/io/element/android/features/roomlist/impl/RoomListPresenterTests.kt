@@ -247,7 +247,7 @@ class RoomListPresenterTests {
             createDateFormatter(),
             FakeSessionVerificationService().apply {
                 givenIsReady(true)
-                givenVerificationAttemptStatus(VerificationFlowState.Finished)
+                givenVerificationFlowState(VerificationFlowState.Finished)
             },
         )
         moleculeFlow(RecompositionClock.Immediate) {

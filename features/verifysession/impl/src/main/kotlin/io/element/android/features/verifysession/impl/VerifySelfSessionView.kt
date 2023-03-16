@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
+import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep as FlowStep
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -71,14 +72,15 @@ fun VerifySelfSessionView(
         state.eventSink(VerifySelfSessionViewEvents.CancelAndClose)
         goBack()
     }
-    if (state.verificationState is VerificationState.Completed) {
+    if (state.verificationFlowStep is FlowStep.Completed) {
         goBack()
     }
     BackHandler {
         goBackAndCancelIfNeeded()
     }
-    val buttonsVisible by remember(state.verificationState) {
-        derivedStateOf { state.verificationState != VerificationState.AwaitingOtherDeviceResponse && state.verificationState != VerificationState.Completed }
+    val verificationFlowStep = state.verificationFlowStep
+    val buttonsVisible by remember(verificationFlowStep) {
+        derivedStateOf { verificationFlowStep != FlowStep.AwaitingOtherDeviceResponse && verificationFlowStep != FlowStep.Completed }
     }
     Surface {
         Column(modifier = modifier.fillMaxWidth()) {
@@ -89,8 +91,8 @@ fun VerifySelfSessionView(
                     .weight(1f)
                     .verticalScroll(rememberScrollState())
             ) {
-                HeaderContent(verificationState = state.verificationState)
-                Content(verificationState = state.verificationState)
+                HeaderContent(verificationFlowStep = verificationFlowStep)
+                Content(flowState = verificationFlowStep)
             }
             if (buttonsVisible) {
                 BottomMenu(screenState = state, goBack = ::goBackAndCancelIfNeeded)
@@ -100,24 +102,24 @@ fun VerifySelfSessionView(
 }
 
 @Composable
-internal fun HeaderContent(verificationState: VerificationState, modifier: Modifier = Modifier) {
-    val iconResourceId = when (verificationState) {
-        VerificationState.Initial -> R.drawable.ic_verification_devices
-        VerificationState.Canceled -> R.drawable.ic_verification_warning
-        VerificationState.AwaitingOtherDeviceResponse -> R.drawable.ic_verification_waiting
-        is VerificationState.Verifying, VerificationState.Completed -> R.drawable.ic_verification_emoji
+internal fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = Modifier) {
+    val iconResourceId = when (verificationFlowStep) {
+        FlowStep.Initial -> R.drawable.ic_verification_devices
+        FlowStep.Canceled -> R.drawable.ic_verification_warning
+        FlowStep.AwaitingOtherDeviceResponse -> R.drawable.ic_verification_waiting
+        is FlowStep.Verifying, FlowStep.Completed -> R.drawable.ic_verification_emoji
     }
-    val titleTextId = when (verificationState) {
-        VerificationState.Initial -> StringR.string.verification_title_initial
-        VerificationState.Canceled -> StringR.string.verification_title_canceled
-        VerificationState.AwaitingOtherDeviceResponse -> StringR.string.verification_title_waiting
-        is VerificationState.Verifying, VerificationState.Completed -> StringR.string.verification_title_verifying
+    val titleTextId = when (verificationFlowStep) {
+        FlowStep.Initial -> StringR.string.verification_title_initial
+        FlowStep.Canceled -> StringR.string.verification_title_canceled
+        FlowStep.AwaitingOtherDeviceResponse -> StringR.string.verification_title_waiting
+        is FlowStep.Verifying, FlowStep.Completed -> StringR.string.verification_title_verifying
     }
-    val subtitleTextId = when (verificationState) {
-        VerificationState.Initial -> StringR.string.verification_subtitle_initial
-        VerificationState.Canceled -> StringR.string.verification_subtitle_canceled
-        VerificationState.AwaitingOtherDeviceResponse -> StringR.string.verification_subtitle_waiting
-        is VerificationState.Verifying, VerificationState.Completed -> StringR.string.verification_subtitle_verifying
+    val subtitleTextId = when (verificationFlowStep) {
+        FlowStep.Initial -> StringR.string.verification_subtitle_initial
+        FlowStep.Canceled -> StringR.string.verification_subtitle_canceled
+        FlowStep.AwaitingOtherDeviceResponse -> StringR.string.verification_subtitle_waiting
+        is FlowStep.Verifying, FlowStep.Completed -> StringR.string.verification_subtitle_verifying
     }
     Column(modifier) {
         Spacer(Modifier.height(68.dp))
@@ -162,13 +164,13 @@ internal fun HeaderContent(verificationState: VerificationState, modifier: Modif
 }
 
 @Composable
-internal fun Content(verificationState: VerificationState, modifier: Modifier = Modifier) {
+internal fun Content(flowState: FlowStep, modifier: Modifier = Modifier) {
     Column (modifier){
         Spacer(Modifier.height(56.dp))
-        when (verificationState) {
-            VerificationState.Initial, VerificationState.Canceled, VerificationState.Completed -> Unit
-            VerificationState.AwaitingOtherDeviceResponse -> ContentWaiting()
-            is VerificationState.Verifying -> ContentVerifying(verificationState)
+        when (flowState) {
+            FlowStep.Initial, FlowStep.Canceled, FlowStep.Completed -> Unit
+            FlowStep.AwaitingOtherDeviceResponse -> ContentWaiting()
+            is FlowStep.Verifying -> ContentVerifying(flowState)
         }
         Spacer(Modifier.height(56.dp))
     }
@@ -182,14 +184,14 @@ internal fun ContentWaiting(modifier: Modifier = Modifier) {
 }
 
 @Composable
-internal fun ContentVerifying(verificationState: VerificationState.Verifying, modifier: Modifier = Modifier) {
+internal fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier: Modifier = Modifier) {
     FlowRow(
         modifier = modifier.fillMaxWidth(),
         mainAxisAlignment = MainAxisAlignment.Center,
         mainAxisSpacing = 32.dp,
         crossAxisSpacing = 40.dp
     ) {
-        for (entry in verificationState.emojiList) {
+        for (entry in verificationFlowStep.emojiList) {
             Column(
                 modifier = Modifier.defaultMinSize(minWidth = 56.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -204,14 +206,14 @@ internal fun ContentVerifying(verificationState: VerificationState.Verifying, mo
 
 @Composable
 internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit) {
-    val verificationState = screenState.verificationState
+    val verificationViewState = screenState.verificationFlowStep
     val eventSink = screenState.eventSink
 
-    val isVerifying = (verificationState as? VerificationState.Verifying)?.state is Async.Loading<Unit>
-    val positiveButtonTitle = when (verificationState) {
-        VerificationState.Initial -> StringR.string.verification_positive_button_initial
-        VerificationState.Canceled -> StringR.string.verification_positive_button_canceled
-        is VerificationState.Verifying -> {
+    val isVerifying = (verificationViewState as? FlowStep.Verifying)?.state is Async.Loading<Unit>
+    val positiveButtonTitle = when (verificationViewState) {
+        FlowStep.Initial -> StringR.string.verification_positive_button_initial
+        FlowStep.Canceled -> StringR.string.verification_positive_button_canceled
+        is FlowStep.Verifying -> {
             if (isVerifying) {
                 StringR.string.verification_positive_button_verifying_ongoing
             } else {
@@ -220,23 +222,23 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
         }
         else -> null
     }
-    val negativeButtonTitle = when (verificationState) {
-        VerificationState.Initial -> StringR.string.verification_negative_button_initial
-        VerificationState.Canceled -> StringR.string.verification_negative_button_canceled
-        is VerificationState.Verifying -> StringR.string.verification_negative_button_verifying
+    val negativeButtonTitle = when (verificationViewState) {
+        FlowStep.Initial -> StringR.string.verification_negative_button_initial
+        FlowStep.Canceled -> StringR.string.verification_negative_button_canceled
+        is FlowStep.Verifying -> StringR.string.verification_negative_button_verifying
         else -> null
     }
     val negativeButtonEnabled = !isVerifying
 
-    val positiveButtonEvent = when (verificationState) {
-        VerificationState.Initial -> VerifySelfSessionViewEvents.RequestVerification
-        is VerificationState.Verifying -> if (!isVerifying) VerifySelfSessionViewEvents.ConfirmVerification else null
-        VerificationState.Canceled -> VerifySelfSessionViewEvents.Restart
+    val positiveButtonEvent = when (verificationViewState) {
+        FlowStep.Initial -> VerifySelfSessionViewEvents.RequestVerification
+        is FlowStep.Verifying -> if (!isVerifying) VerifySelfSessionViewEvents.ConfirmVerification else null
+        FlowStep.Canceled -> VerifySelfSessionViewEvents.Restart
         else -> null
     }
 
-    val negativeButtonCallback: () -> Unit = when (verificationState) {
-        is VerificationState.Verifying -> { { eventSink(VerifySelfSessionViewEvents.DeclineVerification) } }
+    val negativeButtonCallback: () -> Unit = when (verificationViewState) {
+        is FlowStep.Verifying -> { { eventSink(VerifySelfSessionViewEvents.DeclineVerification) } }
         else -> goBack
     }
 

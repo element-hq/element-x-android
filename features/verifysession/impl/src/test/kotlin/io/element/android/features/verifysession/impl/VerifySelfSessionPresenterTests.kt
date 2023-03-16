@@ -22,8 +22,9 @@ import app.cash.turbine.Event
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep as VerificationStep
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceState
+import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import kotlinx.coroutines.test.runTest
@@ -38,7 +39,7 @@ class VerifySelfSessionPresenterTests {
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
-            assertThat(awaitItem().verificationState).isEqualTo(VerificationState.Initial)
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial)
         }
     }
 
@@ -50,14 +51,14 @@ class VerifySelfSessionPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.verificationState).isEqualTo(VerificationState.Initial)
+            assertThat(initialState.verificationFlowStep).isEqualTo(VerificationStep.Initial)
             val eventSink = initialState.eventSink
             eventSink(VerifySelfSessionViewEvents.RequestVerification)
             // Await for other device response:
-            assertThat(awaitItem().verificationState).isEqualTo(VerificationState.AwaitingOtherDeviceResponse)
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.AwaitingOtherDeviceResponse)
             // Finally, ChallengeReceived:
             val verifyingState = awaitItem()
-            assertThat(verifyingState.verificationState).isInstanceOf(VerificationState.Verifying::class.java)
+            assertThat(verifyingState.verificationFlowStep).isInstanceOf(VerificationStep.Verifying::class.java)
         }
     }
 
@@ -69,14 +70,14 @@ class VerifySelfSessionPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.verificationState).isEqualTo(VerificationState.Initial)
+            assertThat(initialState.verificationFlowStep).isEqualTo(VerificationStep.Initial)
             val eventSink = initialState.eventSink
             eventSink(VerifySelfSessionViewEvents.StartSasVerification)
             // Await for other device response:
-            assertThat(awaitItem().verificationState).isEqualTo(VerificationState.AwaitingOtherDeviceResponse)
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.AwaitingOtherDeviceResponse)
             // ChallengeReceived:
             val verifyingState = awaitItem()
-            assertThat(verifyingState.verificationState).isInstanceOf(VerificationState.Verifying::class.java)
+            assertThat(verifyingState.verificationFlowStep).isInstanceOf(VerificationStep.Verifying::class.java)
         }
     }
 
@@ -88,7 +89,7 @@ class VerifySelfSessionPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.verificationState).isEqualTo(VerificationState.Initial)
+            assertThat(initialState.verificationFlowStep).isEqualTo(VerificationStep.Initial)
             val eventSink = initialState.eventSink
             eventSink(VerifySelfSessionViewEvents.CancelAndClose)
             expectNoEvents()
@@ -103,18 +104,18 @@ class VerifySelfSessionPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.verificationState).isEqualTo(VerificationState.Initial)
+            assertThat(initialState.verificationFlowStep).isEqualTo(VerificationStep.Initial)
             val eventSink = initialState.eventSink
             eventSink(VerifySelfSessionViewEvents.RequestVerification)
 
             val verifyingState = awaitChallengeReceivedState()
-            assertThat(verifyingState.verificationState).isInstanceOf(VerificationState.Verifying::class.java)
+            assertThat(verifyingState.verificationFlowStep).isInstanceOf(VerificationStep.Verifying::class.java)
 
             service.shouldFail = true
             eventSink(VerifySelfSessionViewEvents.ConfirmVerification)
 
             val remainingEvents = cancelAndConsumeRemainingEvents().mapNotNull { (it as? Event.Item<VerifySelfSessionState>)?.value }
-            assertThat(remainingEvents.last().verificationState).isEqualTo(VerificationState.Canceled)
+            assertThat(remainingEvents.last().verificationFlowStep).isEqualTo(VerificationStep.Canceled)
         }
     }
 
@@ -126,17 +127,17 @@ class VerifySelfSessionPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.verificationState).isEqualTo(VerificationState.Initial)
+            assertThat(initialState.verificationFlowStep).isEqualTo(VerificationStep.Initial)
             val eventSink = initialState.eventSink
             eventSink(VerifySelfSessionViewEvents.RequestVerification)
 
             val verifyingState = awaitChallengeReceivedState()
-            assertThat(verifyingState.verificationState).isInstanceOf(VerificationState.Verifying::class.java)
+            assertThat(verifyingState.verificationFlowStep).isInstanceOf(VerificationStep.Verifying::class.java)
 
             eventSink(VerifySelfSessionViewEvents.CancelAndClose)
 
             val remainingEvents = cancelAndConsumeRemainingEvents().mapNotNull { (it as? Event.Item<VerifySelfSessionState>)?.value }
-            assertThat(remainingEvents.last().verificationState).isEqualTo(VerificationState.Canceled)
+            assertThat(remainingEvents.last().verificationFlowStep).isEqualTo(VerificationStep.Canceled)
         }
     }
 
@@ -148,14 +149,14 @@ class VerifySelfSessionPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.verificationState).isEqualTo(VerificationState.Initial)
+            assertThat(initialState.verificationFlowStep).isEqualTo(VerificationStep.Initial)
             val eventSink = initialState.eventSink
             eventSink(VerifySelfSessionViewEvents.RequestVerification)
 
             val verifyingState = awaitChallengeReceivedState()
-            assertThat(verifyingState.verificationState).isInstanceOf(VerificationState.Verifying::class.java)
+            assertThat(verifyingState.verificationFlowStep).isInstanceOf(VerificationStep.Verifying::class.java)
 
-            service.givenVerificationAttemptStatus(SessionVerificationServiceState.ReceivedVerificationData(emptyList()))
+            service.givenVerificationFlowState(VerificationFlowState.ReceivedVerificationData(emptyList()))
 
             ensureAllEventsConsumed()
         }
@@ -169,18 +170,18 @@ class VerifySelfSessionPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.verificationState).isEqualTo(VerificationState.Initial)
+            assertThat(initialState.verificationFlowStep).isEqualTo(VerificationStep.Initial)
             val eventSink = initialState.eventSink
 
             eventSink(VerifySelfSessionViewEvents.RequestVerification)
-            assertThat(awaitChallengeReceivedState().verificationState).isEqualTo(VerificationState.Verifying(emptyList(), Async.Uninitialized))
+            assertThat(awaitChallengeReceivedState().verificationFlowStep).isEqualTo(VerificationStep.Verifying(emptyList(), Async.Uninitialized))
 
-            service.givenVerificationAttemptStatus(SessionVerificationServiceState.Canceled)
-            assertThat(awaitItem().verificationState).isEqualTo(VerificationState.Canceled)
+            service.givenVerificationFlowState(VerificationFlowState.Canceled)
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Canceled)
 
             eventSink(VerifySelfSessionViewEvents.Restart)
             // Went back to requesting verification
-            assertThat(awaitItem().verificationState).isEqualTo(VerificationState.AwaitingOtherDeviceResponse)
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.AwaitingOtherDeviceResponse)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -198,15 +199,15 @@ class VerifySelfSessionPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.verificationState).isEqualTo(VerificationState.Initial)
+            assertThat(initialState.verificationFlowStep).isEqualTo(VerificationStep.Initial)
             val eventSink = initialState.eventSink
 
             eventSink(VerifySelfSessionViewEvents.RequestVerification)
-            assertThat(awaitChallengeReceivedState().verificationState).isEqualTo(VerificationState.Verifying(emojis, Async.Uninitialized))
+            assertThat(awaitChallengeReceivedState().verificationFlowStep).isEqualTo(VerificationStep.Verifying(emojis, Async.Uninitialized))
 
             eventSink(VerifySelfSessionViewEvents.ConfirmVerification)
-            assertThat(awaitItem().verificationState).isEqualTo(VerificationState.Verifying(emojis, Async.Loading()))
-            assertThat(awaitItem().verificationState).isEqualTo(VerificationState.Completed)
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Verifying(emojis, Async.Loading()))
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Completed)
         }
     }
 
@@ -218,16 +219,16 @@ class VerifySelfSessionPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.verificationState).isEqualTo(VerificationState.Initial)
+            assertThat(initialState.verificationFlowStep).isEqualTo(VerificationStep.Initial)
             val eventSink = initialState.eventSink
 
             eventSink(VerifySelfSessionViewEvents.RequestVerification)
 
-            assertThat(awaitChallengeReceivedState().verificationState).isEqualTo(VerificationState.Verifying(emptyList(), Async.Uninitialized))
+            assertThat(awaitChallengeReceivedState().verificationFlowStep).isEqualTo(VerificationStep.Verifying(emptyList(), Async.Uninitialized))
             eventSink(VerifySelfSessionViewEvents.DeclineVerification)
 
-            assertThat(awaitItem().verificationState).isEqualTo(VerificationState.Verifying(emptyList(), Async.Loading()))
-            assertThat(awaitItem().verificationState).isEqualTo(VerificationState.Canceled)
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Verifying(emptyList(), Async.Loading()))
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Canceled)
         }
     }
 

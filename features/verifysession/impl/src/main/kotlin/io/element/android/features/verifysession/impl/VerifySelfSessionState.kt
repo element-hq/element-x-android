@@ -23,15 +23,16 @@ import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 
 @Immutable
 data class VerifySelfSessionState(
-    val verificationState: VerificationState,
+    val verificationFlowStep: VerificationStep,
     val eventSink: (VerifySelfSessionViewEvents) -> Unit,
-)
+) {
 
-@Stable
-sealed interface VerificationState {
-    object Initial : VerificationState
-    object Canceled : VerificationState
-    object AwaitingOtherDeviceResponse : VerificationState
-    data class Verifying(val emojiList: List<VerificationEmoji>, val state: Async<Unit>) : VerificationState
-    object Completed : VerificationState
+    @Stable
+    sealed interface VerificationStep {
+        object Initial : VerificationStep
+        object Canceled : VerificationStep
+        object AwaitingOtherDeviceResponse : VerificationStep
+        data class Verifying(val emojiList: List<VerificationEmoji>, val state: Async<Unit>) : VerificationStep
+        object Completed : VerificationStep
+    }
 }
