@@ -132,7 +132,6 @@ class BugReportPresenter @Inject constructor(
         listener: BugReporterListener,
     ) = launch {
         bugReporter.sendBugReport(
-            coroutineScope = this,
             reportType = ReportType.BUG_REPORT,
             withDevicesLogs = formState.sendLogs,
             withCrashLogs = hasCrashLogs && formState.sendCrashLogs,

@@ -20,13 +20,10 @@ import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.rageshake.api.reporter.BugReporterListener
 import io.element.android.features.rageshake.api.reporter.ReportType
 import io.element.android.libraries.matrix.test.A_FAILURE_REASON
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class FakeBugReporter(val mode: FakeBugReporterMode = FakeBugReporterMode.Success) : BugReporter {
-    override fun sendBugReport(
-        coroutineScope: CoroutineScope,
+    override suspend fun sendBugReport(
         reportType: ReportType,
         withDevicesLogs: Boolean,
         withCrashLogs: Boolean,
@@ -38,27 +35,25 @@ class FakeBugReporter(val mode: FakeBugReporterMode = FakeBugReporterMode.Succes
         customFields: Map<String, String>?,
         listener: BugReporterListener?,
     ) {
-        coroutineScope.launch {
-            delay(100)
-            listener?.onProgress(0)
-            delay(100)
-            listener?.onProgress(50)
-            delay(100)
-            when (mode) {
-                FakeBugReporterMode.Success -> Unit
-                FakeBugReporterMode.Failure -> {
-                    listener?.onUploadFailed(A_FAILURE_REASON)
-                    return@launch
-                }
-                FakeBugReporterMode.Cancel -> {
-                    listener?.onUploadCancelled()
-                    return@launch
-                }
+        delay(100)
+        listener?.onProgress(0)
+        delay(100)
+        listener?.onProgress(50)
+        delay(100)
+        when (mode) {
+            FakeBugReporterMode.Success -> Unit
+            FakeBugReporterMode.Failure -> {
+                listener?.onUploadFailed(A_FAILURE_REASON)
+                return
             }
-            listener?.onProgress(100)
-            delay(100)
-            listener?.onUploadSucceed(null)
+            FakeBugReporterMode.Cancel -> {
+                listener?.onUploadCancelled()
+                return
+            }
         }
+        listener?.onProgress(100)
+        delay(100)
+        listener?.onUploadSucceed(null)
     }
 }
 
