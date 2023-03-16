@@ -23,7 +23,6 @@ import io.element.android.libraries.di.SessionScope
 import javax.inject.Inject
 import javax.inject.Named
 
-// TODO add unit tests
 @ContributesBinding(
     scope = SessionScope::class,
     boundType = SelectUsersPresenter::class

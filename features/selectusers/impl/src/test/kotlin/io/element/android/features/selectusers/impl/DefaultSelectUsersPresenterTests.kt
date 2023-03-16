@@ -22,6 +22,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.selectusers.api.SelectUsersEvents
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -31,19 +32,38 @@ import org.junit.Test
 class DefaultSelectSingleUserPresenterTests {
 
     @Test
-    fun `present - initial state`() = runTest {
-        val presenter = DefaultSelectSingleUserPresenter()
+    fun `present - initial state for single selection`() = runTest {
+        val presenter = DefaultSelectUsersPresenter(isMultiSelectionEnabled = false)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState)
+            assertThat(initialState.searchQuery).isEmpty()
+            assertThat(initialState.isMultiSelectionEnabled).isFalse()
+            assertThat(initialState.isSearchActive).isFalse()
+            assertThat(initialState.selectedUsers).isEmpty()
+            assertThat(initialState.searchResults).isEmpty()
+        }
+    }
+
+    @Test
+    fun `present - initial state for multiple selection`() = runTest {
+        val presenter = DefaultSelectUsersPresenter(isMultiSelectionEnabled = true)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.searchQuery).isEmpty()
+            assertThat(initialState.isMultiSelectionEnabled).isTrue()
+            assertThat(initialState.isSearchActive).isFalse()
+            assertThat(initialState.selectedUsers).isEmpty()
+            assertThat(initialState.searchResults).isEmpty()
         }
     }
 
     @Test
     fun `present - update search query`() = runTest {
-        val presenter = DefaultSelectSingleUserPresenter()
+        val presenter = DefaultSelectUsersPresenter(isMultiSelectionEnabled = false)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -64,6 +84,26 @@ class DefaultSelectSingleUserPresenterTests {
 
             initialState.eventSink(SelectUsersEvents.OnSearchActiveChanged(false))
             assertThat(awaitItem().isSearchActive).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - select a user`() = runTest {
+        val presenter = DefaultSelectUsersPresenter(isMultiSelectionEnabled = false)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+
+            val matrixUser = aMatrixUser()
+            initialState.eventSink(SelectUsersEvents.AddToSelection(matrixUser))
+            val selectionAfterAdd = awaitItem().selectedUsers
+            assertThat(selectionAfterAdd).hasSize(1)
+            assertThat(selectionAfterAdd).contains(matrixUser)
+
+            initialState.eventSink(SelectUsersEvents.RemoveFromSelection(matrixUser))
+            val selectionAfterRemove = awaitItem().selectedUsers
+            assertThat(selectionAfterRemove).isEmpty()
         }
     }
 }
