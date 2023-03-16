@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,28 @@
  * limitations under the License.
  */
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("java-library")
-    alias(libs.plugins.kotlin.jvm)
+    id("io.element.android-library")
+    alias(libs.plugins.anvil)
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+android {
+    namespace = "io.element.android.libraries.network"
+}
+
+anvil {
+    generateDaggerFactories.set(true)
 }
 
 dependencies {
-    implementation(libs.coroutines.core)
+    implementation(libs.dagger)
+    implementation(projects.libraries.core)
+    implementation(projects.libraries.di)
     implementation(platform(libs.network.okhttp.bom))
+    implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
+
+    implementation(libs.network.retrofit)
+    implementation(libs.network.retrofit.converter.serialization)
+    implementation(libs.serialization.json)
 }

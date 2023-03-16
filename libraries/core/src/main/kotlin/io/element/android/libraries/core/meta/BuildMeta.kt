@@ -16,15 +16,18 @@
 
 package io.element.android.libraries.core.meta
 
+import okhttp3.logging.HttpLoggingInterceptor
+
 data class BuildMeta(
-        val isDebug: Boolean,
-        val applicationName: String,
-        val applicationId: String,
-        val lowPrivacyLoggingEnabled: Boolean,
-        val versionName: String,
-        val gitRevision: String,
-        val gitRevisionDate: String,
-        val gitBranchName: String,
-        val flavorDescription: String,
-        val flavorShortDescription: String,
+    val isDebug: Boolean,
+    val applicationName: String,
+    val applicationId: String,
+    val lowPrivacyLoggingEnabled: Boolean,
+    val versionName: String,
+    val gitRevision: String,
+    val gitRevisionDate: String,
+    val gitBranchName: String,
+    val flavorDescription: String,
+    val flavorShortDescription: String,
+    val okHttpLoggingLevel: HttpLoggingInterceptor.Level,
 )
