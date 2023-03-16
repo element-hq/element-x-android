@@ -47,8 +47,10 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
+import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
@@ -58,6 +60,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val roomListEntryPoint: RoomListEntryPoint,
     private val preferencesEntryPoint: PreferencesEntryPoint,
     private val createRoomEntryPoint: CreateRoomEntryPoint,
+    private val appNavigationStateService: AppNavigationStateService,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.RoomList,
@@ -91,11 +94,16 @@ class LoggedInFlowNode @AssistedInject constructor(
                 val imageLoaderFactory = bindings<MatrixUIBindings>().loggedInImageLoaderFactory()
                 Coil.setImageLoader(imageLoaderFactory)
                 inputs.matrixClient.startSync()
+                appNavigationStateService.onNavigateToSession(inputs.matrixClient.sessionId)
+                // TODO We do not support Space yet, so directly navigate to main space
+                appNavigationStateService.onNavigateToSpace(MAIN_SPACE)
             },
             onDestroy = {
                 val imageLoaderFactory = bindings<MatrixUIBindings>().notLoggedInImageLoaderFactory()
                 Coil.setImageLoader(imageLoaderFactory)
                 plugins<LifecycleCallback>().forEach { it.onFlowReleased(inputs.matrixClient) }
+                appNavigationStateService.onLeavingSpace()
+                appNavigationStateService.onLeavingSession()
             }
         )
     }

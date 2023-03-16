@@ -14,48 +14,37 @@
  * limitations under the License.
  */
 
-@file:Suppress("UnstableApiUsage")
-
-import extension.allFeaturesApi
-
 // TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("io.element.android-compose-library")
-    alias(libs.plugins.anvil)
+    id("io.element.android-library")
     alias(libs.plugins.ksp)
-    alias(libs.plugins.kapt)
-    id("kotlin-parcelize")
+    alias(libs.plugins.anvil)
+}
+
+anvil {
+    generateDaggerFactories.set(true)
 }
 
 android {
-    namespace = "io.element.android.appnav"
+    namespace = "io.element.android.services.appnavstate.impl"
 }
 
 dependencies {
-    implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
     implementation(libs.dagger)
-    kapt(libs.dagger.compiler)
-
-    allFeaturesApi()
-
     implementation(projects.libraries.core)
-    implementation(projects.libraries.architecture)
+    implementation(projects.libraries.di)
     implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.matrixui)
-    implementation(projects.tests.uitests)
-    implementation(libs.coil)
+    implementation(projects.anvilannotations)
 
-    implementation(projects.services.appnavstate.api)
+    implementation(libs.coroutines.core)
+    implementation(libs.androidx.corektx)
+
+    api(projects.services.appnavstate.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
-    testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.features.rageshake.test)
-    testImplementation(projects.features.rageshake.impl)
 }
