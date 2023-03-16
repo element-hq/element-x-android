@@ -21,6 +21,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.features.roomlist.test.FakeRoomLastMessageFormatter
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -44,7 +45,8 @@ class RoomListPresenterTests {
     fun `present - should start with no user and then load user with success`() = runTest {
         val presenter = RoomListPresenter(
             FakeMatrixClient(A_SESSION_ID),
-            createDateFormatter()
+            createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -68,7 +70,8 @@ class RoomListPresenterTests {
                 userDisplayName = Result.failure(AN_EXCEPTION),
                 userAvatarURLString = Result.failure(AN_EXCEPTION),
             ),
-            createDateFormatter()
+            createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -86,7 +89,8 @@ class RoomListPresenterTests {
     fun `present - should filter room with success`() = runTest {
         val presenter = RoomListPresenter(
             FakeMatrixClient(A_SESSION_ID),
-            createDateFormatter()
+            createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -108,7 +112,8 @@ class RoomListPresenterTests {
                 sessionId = A_SESSION_ID,
                 roomSummaryDataSource = roomSummaryDataSource
             ),
-            createDateFormatter()
+            createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -135,7 +140,8 @@ class RoomListPresenterTests {
                 sessionId = A_SESSION_ID,
                 roomSummaryDataSource = roomSummaryDataSource
             ),
-            createDateFormatter()
+            createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -167,7 +173,8 @@ class RoomListPresenterTests {
                 sessionId = A_SESSION_ID,
                 roomSummaryDataSource = roomSummaryDataSource
             ),
-            createDateFormatter()
+            createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -217,7 +224,7 @@ private val aRoomListRoomSummary = RoomListRoomSummary(
     name = A_ROOM_NAME,
     hasUnread = true,
     timestamp = A_FORMATTED_DATE,
-    lastMessage = A_MESSAGE,
+    lastMessage = "",
     avatarData = AvatarData(id = A_ROOM_ID.value, name = A_ROOM_NAME),
     isPlaceholder = false,
 )

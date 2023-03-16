@@ -29,6 +29,7 @@ val A_USER_ID = UserId("@alice:server.org")
 val A_SESSION_ID = SessionId(A_USER_ID.value)
 val A_ROOM_ID = RoomId("!aRoomId")
 val AN_EVENT_ID = EventId("\$anEventId")
+const val A_UNIQUE_ID = "aUniqueId"
 
 const val A_ROOM_NAME = "A room name"
 const val A_MESSAGE = "Hello world!"

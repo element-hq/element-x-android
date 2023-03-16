@@ -31,6 +31,7 @@
     <string name="notice_room_knock_denied_by_you">You rejected %1$s\'s request to join</string>
     <string name="notice_room_knock_denied_you">%1$s rejected your request to join</string>
     <string name="notice_room_unknown_membership_change">%1$s made an unknown change to their membership</string>
+    <string name="room_timeline_item_unsupported">Unsupported event</string>
     <string name="unknown_message_content_type_error">Event type not handled by EAX</string>
 
 </resources>
