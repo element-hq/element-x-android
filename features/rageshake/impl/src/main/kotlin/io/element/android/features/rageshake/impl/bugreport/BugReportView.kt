@@ -197,8 +197,8 @@ fun BugReportView(
         }
         when (state.sending) {
             is Async.Loading -> {
+                // Indeterminate indicator, to avoid the freeze effect if the connection takes time to initialize.
                 CircularProgressIndicator(
-                    progress = state.sendingProgress,
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
