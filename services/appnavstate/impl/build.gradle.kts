@@ -18,26 +18,33 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("io.element.android-library")
+    alias(libs.plugins.ksp)
     alias(libs.plugins.anvil)
-    kotlin("plugin.serialization") version "1.8.10"
-}
-
-android {
-    namespace = "io.element.android.libraries.matrix.impl"
 }
 
 anvil {
     generateDaggerFactories.set(true)
 }
 
+android {
+    namespace = "io.element.android.services.appnavstate.impl"
+}
+
 dependencies {
-    // api(projects.libraries.rustsdk)
-    implementation(libs.matrix.sdk)
-    implementation(projects.libraries.di)
-    api(projects.libraries.matrix.api)
+    anvil(projects.anvilcodegen)
     implementation(libs.dagger)
     implementation(projects.libraries.core)
-    implementation("net.java.dev.jna:jna:5.13.0@aar")
-    implementation(libs.androidx.datastore.preferences)
-    implementation(libs.serialization.json)
+    implementation(projects.libraries.di)
+    implementation(projects.libraries.matrix.api)
+    implementation(projects.anvilannotations)
+
+    implementation(libs.coroutines.core)
+    implementation(libs.androidx.corektx)
+
+    api(projects.services.appnavstate.api)
+
+    testImplementation(libs.test.junit)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.test.truth)
+    testImplementation(projects.libraries.matrix.test)
 }

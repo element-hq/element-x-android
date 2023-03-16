@@ -65,6 +65,9 @@ include(":libraries:session-storage:api")
 include(":libraries:session-storage:impl")
 include(":libraries:session-storage:impl-memory")
 
+include(":services:appnavstate:api")
+include(":services:appnavstate:impl")
+
 include(":features:onboarding:api")
 include(":features:onboarding:impl")
 include(":features:logout:api")

@@ -181,10 +181,46 @@ A few details about some modules:
 Most of the time a feature module should not know anything about other feature module.
 The navigation glue is currently done in the `app` module.
 
-Here is the current module dependency graph:
+Here is the current simplified module dependency graph:
 
-<!-- To update this graph, run `./tools/docs/generateModuleGraph.sh` (one day the CI will do it hopefully). -->
-<img src=./images/module_graph.png width=800 />
+<!-- Note: a full graph can be generated using `./tools/docs/generateModuleGraph.sh`. -->
+<!-- Note: doc can be found at https://mermaid.js.org/syntax/flowchart.html#graph -->
+```mermaid
+flowchart TD
+    subgraph Application
+    app([:app])--implementation-->appnav([:appnav])
+    end
+    subgraph Features
+    featureapi([:features:*:api])
+    featureimpl([:features:*:impl])
+    end
+    subgraph Libraries
+        subgraph Matrix
+        matrixapi([:matrix:api])
+        matriximpl([:matrix:impl])
+        end
+    libraryarch([:libraries:architecture])
+    libraryapi([:libraries:*:api])
+    libraryimpl([:libraries:*:impl])
+    end
+    subgraph Matrix RustSdk
+    RustSdk([Rust Sdk])
+    end
+
+    app--implementation-->featureimpl
+    app--implementation-->libraryimpl
+    appnav--implementation-->featureapi
+    appnav--implementation-->libraryarch
+    featureimpl--api-->featureapi
+    featureimpl--implementation-->matrixapi
+    featureimpl--implementation-->libraryapi
+    featureimpl--implementation-->libraryarch
+    matriximpl--implementation-->matrixapi
+    matrixapi--api-->RustSdk
+    matriximpl--api-->RustSdk
+    featureapi--implementation-->libraryarch
+    libraryimpl--api-->libraryapi
+```
 
 ### Application
 

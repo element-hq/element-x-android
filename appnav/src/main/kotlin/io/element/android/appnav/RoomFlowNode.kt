@@ -35,6 +35,7 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
@@ -43,6 +44,7 @@ class RoomFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val messagesEntryPoint: MessagesEntryPoint,
+    private val appNavigationStateService: AppNavigationStateService,
 ) : BackstackNode<RoomFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Messages,
@@ -68,11 +70,13 @@ class RoomFlowNode @AssistedInject constructor(
             onCreate = {
                 Timber.v("OnCreate")
                 plugins<LifecycleCallback>().forEach { it.onFlowCreated(inputs.room) }
+                appNavigationStateService.onNavigateToRoom(inputs.room.roomId)
             },
             onDestroy = {
                 Timber.v("OnDestroy")
                 inputs.room.close()
                 plugins<LifecycleCallback>().forEach { it.onFlowReleased(inputs.room) }
+                appNavigationStateService.onLeavingRoom()
             }
         )
     }

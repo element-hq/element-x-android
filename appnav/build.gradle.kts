@@ -49,6 +49,8 @@ dependencies {
     implementation(projects.tests.uitests)
     implementation(libs.coil)
 
+    implementation(projects.services.appnavstate.api)
+
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)
