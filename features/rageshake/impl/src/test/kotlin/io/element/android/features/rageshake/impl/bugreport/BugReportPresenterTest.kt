@@ -222,6 +222,11 @@ class BugReportPresenterTest {
             // Failure
             assertThat(awaitItem().sendingProgress).isEqualTo(0f)
             assertThat((awaitItem().sending as Async.Failure).error.message).isEqualTo(A_FAILURE_REASON)
+            // Reset failure
+            initialState.eventSink.invoke(BugReportEvents.ClearError)
+            val lastItem = awaitItem()
+            assertThat(lastItem.sendingProgress).isEqualTo(0f)
+            assertThat(lastItem.sending).isInstanceOf(Async.Uninitialized::class.java)
         }
     }
 

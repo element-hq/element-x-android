@@ -204,6 +204,7 @@ fun BugReportView(
             }
             is Async.Failure -> ErrorDialog(
                 content = state.sending.error.toString(),
+                onDismiss = { state.eventSink(BugReportEvents.ClearError) }
             )
             else -> Unit
         }

@@ -109,6 +109,10 @@ class BugReportPresenter @Inject constructor(
                 is BugReportEvents.SetSendScreenshot -> updateFormState(formState) {
                     copy(sendScreenshot = event.sendScreenshot)
                 }
+                BugReportEvents.ClearError -> {
+                    sendingProgress.value = 0f
+                    sendingAction.value = Async.Uninitialized
+                }
             }
         }
 
