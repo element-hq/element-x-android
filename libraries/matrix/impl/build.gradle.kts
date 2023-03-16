@@ -34,7 +34,7 @@ dependencies {
     // api(projects.libraries.rustsdk)
     implementation(libs.matrix.sdk)
     implementation(projects.libraries.di)
-    implementation(projects.libraries.matrix.api)
+    api(projects.libraries.matrix.api)
     implementation(libs.dagger)
     implementation(projects.libraries.core)
     implementation("net.java.dev.jna:jna:5.13.0@aar")
