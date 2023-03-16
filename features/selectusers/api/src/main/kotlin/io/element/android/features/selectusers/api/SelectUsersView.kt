@@ -55,6 +55,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.ui.components.CheckableMatrixUserRow
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getBestName
@@ -177,11 +178,29 @@ fun SearchUserBar(
             }
 
             LazyColumn {
-                items(results) {
-                    SearchUserResultItem(
-                        matrixUser = it,
-                        onClick = { onUserSelected(it) }
-                    )
+                if (isMultiSelectionEnabled) {
+                    items(results) { matrixUser ->
+                        SearchMultipleUsersResultItem(
+                            modifier = Modifier.fillMaxWidth(),
+                            matrixUser = matrixUser,
+                            isUserSelected = selectedUsers.find { it.id == matrixUser.id } != null,
+                            onCheckedChange = { checked ->
+                                if (checked) {
+                                    onUserSelected(matrixUser)
+                                } else {
+                                    onUserDeselected(matrixUser)
+                                }
+                            }
+                        )
+                    }
+                } else {
+                    items(results) { matrixUser ->
+                        SearchSingleUserResultItem(
+                            modifier = Modifier.fillMaxWidth(),
+                            matrixUser = matrixUser,
+                            onClick = { onUserSelected(matrixUser) }
+                        )
+                    }
                 }
             }
         },
@@ -189,7 +208,23 @@ fun SearchUserBar(
 }
 
 @Composable
-fun SearchUserResultItem(
+fun SearchMultipleUsersResultItem(
+    matrixUser: MatrixUser,
+    isUserSelected: Boolean,
+    modifier: Modifier = Modifier,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    CheckableMatrixUserRow(
+        checked = isUserSelected,
+        modifier = modifier,
+        matrixUser = matrixUser,
+        avatarSize = AvatarSize.Custom(36.dp),
+        onCheckedChange = onCheckedChange,
+    )
+}
+
+@Composable
+fun SearchSingleUserResultItem(
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},

@@ -61,12 +61,12 @@ fun aSelectUsersState() = SelectUsersState(
 
 fun aSetOfSelectedUsers() = persistentSetOf(
     MatrixUser(id = UserId("@someone:matrix.org")),
-    MatrixUser(id = UserId("@someone:matrix.org"), username = "someone"),
+    MatrixUser(id = UserId("@other:matrix.org"), username = "other"),
 )
 
 fun aListOfResults() = persistentListOf(
     MatrixUser(id = UserId("@someone:matrix.org")),
-    MatrixUser(id = UserId("@someone:matrix.org"), username = "someone"),
+    MatrixUser(id = UserId("@other:matrix.org"), username = "other"),
     MatrixUser(
         id = UserId("@someone_with_a_very_long_matrix_identifier:a_very_long_domain.org"),
         username = "hey, I am someone with a very long display name"

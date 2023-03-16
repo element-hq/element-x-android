@@ -20,7 +20,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -46,12 +45,12 @@ fun MatrixUserRow(
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
     avatarSize: AvatarSize = matrixUser.avatarData.size,
+    isClickEnabled: Boolean = true,
     onClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier
-            .clickable(onClick = onClick)
-            .fillMaxWidth()
+            .let { if (isClickEnabled) it.clickable(onClick = onClick) else it }
             .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
             .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically
