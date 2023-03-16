@@ -64,6 +64,7 @@ class DefaultBugReporter @Inject constructor(
     private val screenshotHolder: ScreenshotHolder,
     private val crashDataStore: CrashDataStore,
     private val coroutineDispatchers: CoroutineDispatchers,
+    private val okHttpClient: OkHttpClient,
     /*
     private val activeSessionHolder: ActiveSessionHolder,
     private val versionProvider: VersionProvider,
@@ -87,9 +88,6 @@ class DefaultBugReporter @Inject constructor(
 
         private const val BUFFER_SIZE = 1024 * 1024 * 50
     }
-
-    // the http client
-    private val mOkHttpClient = OkHttpClient()
 
     // the pending bug report call
     private var mBugReportCall: Call? = null
@@ -346,7 +344,7 @@ class DefaultBugReporter @Inject constructor(
 
                     // trigger the request
                     try {
-                        mBugReportCall = mOkHttpClient.newCall(request)
+                        mBugReportCall = okHttpClient.newCall(request)
                         response = mBugReportCall!!.execute()
                         responseCode = response.code
                     } catch (e: Exception) {
