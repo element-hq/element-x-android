@@ -51,14 +51,16 @@ fun DependencyHandlerScope.composeDependencies(libs: LibrariesForLibs) {
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 }
 
-fun DependencyHandlerScope.allLibraries() {
+fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:designsystem"))
-    implementation(project(":libraries:matrix:api"))
+    implementation(project(":libraries:matrix:impl"))
     implementation(project(":libraries:matrixui"))
     implementation(project(":libraries:core"))
     implementation(project(":libraries:architecture"))
-    implementation(project(":libraries:dateformatter:api"))
+    implementation(project(":libraries:dateformatter:impl"))
     implementation(project(":libraries:di"))
+    implementation(project(":libraries:session-storage:impl"))
+
 }
 
 fun DependencyHandlerScope.allFeaturesApi() {
