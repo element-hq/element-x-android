@@ -33,6 +33,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.plus
+import okhttp3.logging.HttpLoggingInterceptor
 import java.io.File
 import java.util.concurrent.Executors
 
@@ -64,6 +65,7 @@ object AppModule {
         gitBranchName = "TODO", //  BuildConfig.GIT_BRANCH_NAME,
         flavorDescription = "TODO", //  BuildConfig.FLAVOR_DESCRIPTION,
         flavorShortDescription = "TODO", //  BuildConfig.SHORT_FLAVOR_DESCRIPTION,
+        okHttpLoggingLevel = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.BASIC,
     )
 
     @Provides
