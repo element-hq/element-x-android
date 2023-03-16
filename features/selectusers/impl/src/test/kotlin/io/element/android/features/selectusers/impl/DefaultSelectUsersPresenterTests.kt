@@ -95,15 +95,29 @@ class DefaultSelectSingleUserPresenterTests {
         }.test {
             val initialState = awaitItem()
 
-            val matrixUser = aMatrixUser()
-            initialState.eventSink(SelectUsersEvents.AddToSelection(matrixUser))
-            val selectionAfterAdd = awaitItem().selectedUsers
-            assertThat(selectionAfterAdd).hasSize(1)
-            assertThat(selectionAfterAdd).contains(matrixUser)
+            val userA = aMatrixUser("userA", "A")
+            val userB = aMatrixUser("userB", "B")
+            initialState.eventSink(SelectUsersEvents.AddToSelection(userA))
+            val selectionAfterAddingA = awaitItem().selectedUsers
+            assertThat(selectionAfterAddingA).hasSize(1)
+            assertThat(selectionAfterAddingA).contains(userA)
 
-            initialState.eventSink(SelectUsersEvents.RemoveFromSelection(matrixUser))
-            val selectionAfterRemove = awaitItem().selectedUsers
-            assertThat(selectionAfterRemove).isEmpty()
+            initialState.eventSink(SelectUsersEvents.AddToSelection(userB))
+            val selectionAfterAddingB = awaitItem().selectedUsers
+            assertThat(selectionAfterAddingB).hasSize(2)
+            assertThat(selectionAfterAddingB).contains(userA)
+            assertThat(selectionAfterAddingB).contains(userB)
+            // the last added user should be presented first
+            assertThat(selectionAfterAddingB.first()).isEqualTo(userB)
+
+            initialState.eventSink(SelectUsersEvents.RemoveFromSelection(userB))
+            val selectionAfterRemovingB = awaitItem().selectedUsers
+            assertThat(selectionAfterRemovingB).hasSize(1)
+            assertThat(selectionAfterRemovingB).contains(userA)
+
+            initialState.eventSink(SelectUsersEvents.RemoveFromSelection(userA))
+            val selectionAfterRemovingA = awaitItem().selectedUsers
+            assertThat(selectionAfterRemovingA).isEmpty()
         }
     }
 }
