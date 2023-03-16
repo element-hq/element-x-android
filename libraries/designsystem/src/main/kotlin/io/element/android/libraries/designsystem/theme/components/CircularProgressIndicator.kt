@@ -16,11 +16,17 @@
 
 package io.element.android.libraries.designsystem.theme.components
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 @Composable
 fun CircularProgressIndicator(
@@ -48,4 +54,25 @@ fun CircularProgressIndicator(
         color = color,
         strokeWidth = strokeWidth,
     )
+}
+
+@Preview
+@Composable
+internal fun CircularProgressIndicatorLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+internal fun CircularProgressIndicatorDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        // Indeterminate progress
+        CircularProgressIndicator(
+        )
+        // Fixed progress
+        CircularProgressIndicator(
+            progress = 0.75F
+        )
+    }
 }
