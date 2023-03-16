@@ -19,6 +19,7 @@
 import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
 import extension.allFeaturesImpl
 import extension.allLibrariesImpl
+import extension.allServicesImpl
 
 // TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
 @Suppress("DSL_SCOPE_VIOLATION")
@@ -201,6 +202,7 @@ knit {
 
 dependencies {
     allLibrariesImpl()
+    allServicesImpl()
     allFeaturesImpl()
     implementation(projects.tests.uitests)
     implementation(projects.anvilannotations)
