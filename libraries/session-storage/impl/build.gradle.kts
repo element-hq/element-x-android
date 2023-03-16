@@ -32,7 +32,7 @@ dependencies {
     implementation(libs.dagger)
     implementation(projects.libraries.core)
     implementation(projects.libraries.encryptedDb)
-    implementation(projects.libraries.sessionStorage.api)
+    api(projects.libraries.sessionStorage.api)
     implementation(libs.sqldelight.driver.android)
     implementation(libs.sqlcipher)
     implementation(libs.sqlite)

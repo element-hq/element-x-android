@@ -15,7 +15,7 @@
  */
 
 import extension.allFeaturesImpl
-import extension.allLibraries
+import extension.allLibrariesImpl
 
 // TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
 @Suppress("DSL_SCOPE_VIOLATION")
@@ -39,6 +39,6 @@ dependencies {
     implementation(libs.showkase)
     ksp(libs.showkase.processor)
 
-    allLibraries()
+    allLibrariesImpl()
     allFeaturesImpl()
 }
