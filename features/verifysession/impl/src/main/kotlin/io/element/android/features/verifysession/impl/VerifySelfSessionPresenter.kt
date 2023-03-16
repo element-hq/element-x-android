@@ -17,6 +17,7 @@
 package io.element.android.features.verifysession.impl
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -31,50 +32,20 @@ class VerifySelfSessionPresenter @Inject constructor(
     private val sessionVerificationService: SessionVerificationService,
 ) : Presenter<VerifySelfSessionState> {
 
-    init {
-        // Force reset, just in case the service was left in a broken state
-        sessionVerificationService.reset()
-    }
-
     @Composable
     override fun present(): VerifySelfSessionState {
+        LaunchedEffect(Unit) {
+            // Force reset, just in case the service was left in a broken state
+            sessionVerificationService.reset()
+        }
+
         val coroutineScope = rememberCoroutineScope()
         val stateMachine = remember { VerifySelfSessionStateMachine(coroutineScope, sessionVerificationService) }
 
         // Create the new view state from the StateMachine state
         val stateMachineCurrentState by stateMachine.state.collectAsState()
         val verificationState by remember {
-            derivedStateOf {
-                when (stateMachineCurrentState) {
-                    SessionVerificationState.Initial -> {
-                        VerificationState.Initial
-                    }
-
-                    SessionVerificationState.RequestingVerification,
-                    SessionVerificationState.StartingSasVerification,
-                    SessionVerificationState.SasVerificationStarted,
-                    SessionVerificationState.VerificationRequestAccepted, SessionVerificationState.Canceling -> {
-                        VerificationState.AwaitingOtherDeviceResponse
-                    }
-
-                    SessionVerificationState.Canceled -> {
-                        VerificationState.Canceled
-                    }
-
-                    is SessionVerificationState.Verifying -> {
-                        val emojis = (stateMachineCurrentState as SessionVerificationState.Verifying).emojis
-                        val async = when (stateMachineCurrentState) {
-                            is SessionVerificationState.Verifying.Replying -> Async.Loading()
-                            else -> Async.Uninitialized
-                        }
-                        VerificationState.Verifying(emojis, async)
-                    }
-
-                    SessionVerificationState.Completed -> {
-                        VerificationState.Completed
-                    }
-                }
-            }
+            derivedStateOf { stateMachineStateToViewState(stateMachineCurrentState) }
         }
 
         fun handleEvents(event: VerifySelfSessionViewEvents) {
@@ -90,7 +61,7 @@ class VerifySelfSessionPresenter @Inject constructor(
                             SessionVerificationState.Completed,
                             SessionVerificationState.Canceled
                         )
-                        ) {
+                    ) {
                         stateMachine.process(SessionVerificationEvent.Cancel)
                     }
                 }
@@ -102,4 +73,34 @@ class VerifySelfSessionPresenter @Inject constructor(
             eventSink = ::handleEvents,
         )
     }
+
+    private fun stateMachineStateToViewState(state: SessionVerificationState): VerificationState =
+        when (state) {
+            SessionVerificationState.Initial -> {
+                VerificationState.Initial
+            }
+
+            SessionVerificationState.RequestingVerification,
+            SessionVerificationState.StartingSasVerification,
+            SessionVerificationState.SasVerificationStarted,
+            SessionVerificationState.VerificationRequestAccepted, SessionVerificationState.Canceling -> {
+                VerificationState.AwaitingOtherDeviceResponse
+            }
+
+            SessionVerificationState.Canceled -> {
+                VerificationState.Canceled
+            }
+
+            is SessionVerificationState.Verifying -> {
+                val async = when (state) {
+                    is SessionVerificationState.Verifying.Replying -> Async.Loading()
+                    else -> Async.Uninitialized
+                }
+                VerificationState.Verifying(state.emojis, async)
+            }
+
+            SessionVerificationState.Completed -> {
+                VerificationState.Completed
+            }
+        }
 }

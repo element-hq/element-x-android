@@ -28,7 +28,7 @@ import org.matrix.rustcomponents.sdk.SessionVerificationControllerInterface
 import org.matrix.rustcomponents.sdk.SessionVerificationEmoji
 import javax.inject.Inject
 
-class MatrixSessionVerificationService @Inject constructor() : SessionVerificationService, SessionVerificationControllerDelegate {
+class RustSessionVerificationService @Inject constructor() : SessionVerificationService, SessionVerificationControllerDelegate {
 
     var verificationController: SessionVerificationControllerInterface? = null
         set(value) {

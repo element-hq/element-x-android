@@ -28,13 +28,12 @@ import io.element.android.libraries.matrix.impl.media.RustMediaResolver
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.sync.SlidingSyncObserverProxy
-import io.element.android.libraries.matrix.impl.verification.MatrixSessionVerificationService
+import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
@@ -59,7 +58,7 @@ class RustMatrixClient constructor(
 
     override val sessionId: UserId = UserId(client.userId())
 
-    private val verificationService = MatrixSessionVerificationService()
+    private val verificationService = RustSessionVerificationService()
     private var slidingSyncUpdateJob: Job? = null
 
     private val clientDelegate = object : ClientDelegate {

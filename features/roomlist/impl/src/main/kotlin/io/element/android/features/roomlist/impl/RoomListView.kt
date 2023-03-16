@@ -81,48 +81,24 @@ fun RoomListView(
     onVerifyClicked: () -> Unit = {},
     onCreateRoomClicked: () -> Unit = {},
 ) {
-    fun onFilterChanged(filter: String) {
-        state.eventSink(RoomListEvents.UpdateFilter(filter))
-    }
-
-    fun onVisibleRangedChanged(range: IntRange) {
-        state.eventSink(RoomListEvents.UpdateVisibleRange(range))
-    }
-
     RoomListContent(
-        roomSummaries = state.roomList,
-        matrixUser = state.matrixUser,
-        filter = state.filter,
+        state = state,
         modifier = modifier,
         onRoomClicked = onRoomClicked,
-        presentVerificationSuccessfulMessage = state.presentVerificationSuccessfulMessage,
-        displayVerifySessionPrompt = state.displayVerificationPrompt,
-        onFilterChanged = ::onFilterChanged,
         onOpenSettings = onOpenSettings,
-        onScrollOver = ::onVisibleRangedChanged,
         onVerifyClicked = onVerifyClicked,
         onCreateRoomClicked = onCreateRoomClicked,
-        onDismissVerificationPromptClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) },
-        onClearVerifySuccessfulMessage = { state.eventSink(RoomListEvents.ClearSuccessfulVerificationMessage) }
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun RoomListContent(
-    roomSummaries: ImmutableList<RoomListRoomSummary>,
-    matrixUser: MatrixUser?,
-    filter: String,
-    presentVerificationSuccessfulMessage: Boolean,
-    displayVerifySessionPrompt: Boolean,
-    onVerifyClicked: () -> Unit,
-    onDismissVerificationPromptClicked: () -> Unit,
-    onClearVerifySuccessfulMessage: () -> Unit,
+    state: RoomListState,
     modifier: Modifier = Modifier,
+    onVerifyClicked: () -> Unit = {},
     onRoomClicked: (RoomId) -> Unit = {},
-    onFilterChanged: (String) -> Unit = {},
     onOpenSettings: () -> Unit = {},
-    onScrollOver: (IntRange) -> Unit = {},
     onCreateRoomClicked: () -> Unit = {},
 ) {
     fun onRoomClicked(room: RoomListRoomSummary) {
@@ -149,7 +125,7 @@ fun RoomListContent(
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-                onScrollOver(visibleRange)
+                state.eventSink(RoomListEvents.UpdateVisibleRange(visibleRange))
                 return super.onPostFling(consumed, available)
             }
         }
@@ -157,13 +133,13 @@ fun RoomListContent(
 
     val snackbarHostState = remember { SnackbarHostState() }
     val verificationCompleteMessage = stringResource(StringR.string.verification_conclusion_ok_self_notice_title)
-    LaunchedEffect(presentVerificationSuccessfulMessage) {
-        if (presentVerificationSuccessfulMessage) {
+    LaunchedEffect(state.presentVerificationSuccessfulMessage) {
+        if (state.presentVerificationSuccessfulMessage) {
             snackbarHostState.showSnackbar(
                 message = verificationCompleteMessage,
                 duration = SnackbarDuration.Short
             )
-            onClearVerifySuccessfulMessage()
+            state.eventSink(RoomListEvents.ClearSuccessfulVerificationMessage)
         }
     }
 
@@ -171,9 +147,9 @@ fun RoomListContent(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             RoomListTopBar(
-                matrixUser = matrixUser,
-                filter = filter,
-                onFilterChanged = onFilterChanged,
+                matrixUser = state.matrixUser,
+                filter = state.filter,
+                onFilterChanged = { state.eventSink(RoomListEvents.UpdateFilter(it)) },
                 onOpenSettings = onOpenSettings,
                 scrollBehavior = scrollBehavior,
                 modifier = Modifier,
@@ -190,13 +166,16 @@ fun RoomListContent(
                         .nestedScroll(nestedScrollConnection),
                     state = lazyListState,
                 ) {
-                    if (displayVerifySessionPrompt) {
+                    if (state.displayVerificationPrompt) {
                         item {
-                            RequestVerificationHeader(onVerifyClicked = onVerifyClicked, onDismissClicked = onDismissVerificationPromptClicked)
+                            RequestVerificationHeader(
+                                onVerifyClicked = onVerifyClicked,
+                                onDismissClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
+                            )
                         }
                     }
                     items(
-                        items = roomSummaries,
+                        items = state.roomList,
                         contentType = { room -> room.contentType() },
                     ) { room ->
                         RoomSummaryRow(room = room, onClick = ::onRoomClicked)

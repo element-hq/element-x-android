@@ -79,7 +79,7 @@ class RoomListPresenter @Inject constructor(
 
         val sessionVerificationIsReady by sessionVerificationService.isReady.collectAsState()
         val verificationState by sessionVerificationService.verificationAttemptStatus.collectAsState()
-        val presentVerificationSuccessfulMessage = remember(verificationState) {
+        val presentVerificationSuccessfulMessage = remember {
             derivedStateOf { verificationState == SessionVerificationServiceState.Finished }
         }
 
