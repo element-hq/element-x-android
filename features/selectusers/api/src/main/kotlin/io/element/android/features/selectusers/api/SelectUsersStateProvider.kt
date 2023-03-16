@@ -26,6 +26,11 @@ open class SelectUsersStateProvider : PreviewParameterProvider<SelectUsersState>
     override val values: Sequence<SelectUsersState>
         get() = sequenceOf(
             aSelectUsersState(),
+            aSelectUsersState().copy(
+                isSearchActive = false,
+                selectedUsers = aSetOfSelectedUsers(),
+                isMultiSelectionEnabled = true
+            ),
             aSelectUsersState().copy(isSearchActive = true),
             aSelectUsersState().copy(isSearchActive = true, searchQuery = "someone"),
             aSelectUsersState().copy(isSearchActive = true, searchQuery = "someone", isMultiSelectionEnabled = true),

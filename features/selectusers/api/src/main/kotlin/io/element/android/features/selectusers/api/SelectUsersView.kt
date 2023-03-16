@@ -92,6 +92,17 @@ fun SelectUsersView(
                 onUserDeselected(it)
             },
         )
+
+        if (state.isMultiSelectionEnabled && !state.isSearchActive && state.selectedUsers.isNotEmpty()) {
+            SelectedUsersList(
+                modifier = Modifier.padding(16.dp),
+                selectedUsers = state.selectedUsers,
+                onUserRemoved = {
+                    eventSink(SelectUsersEvents.RemoveFromSelection(it))
+                    onUserDeselected(it)
+                },
+            )
+        }
     }
 }
 
@@ -157,7 +168,7 @@ fun SearchUserBar(
         },
         colors = if (!active) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
         content = {
-            if (isMultiSelectionEnabled && selectedUsers.isNotEmpty()) {
+            if (isMultiSelectionEnabled && active && selectedUsers.isNotEmpty()) {
                 SelectedUsersList(
                     modifier = Modifier.padding(16.dp),
                     selectedUsers = selectedUsers,
