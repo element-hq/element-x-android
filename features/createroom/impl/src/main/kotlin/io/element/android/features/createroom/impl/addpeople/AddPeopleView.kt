@@ -51,11 +51,13 @@ fun AddPeopleView(
 
     Scaffold(
         topBar = {
-            AddPeopleViewTopBar(
-                hasSelectedUsers = state.selectUsersState.selectedUsers.isNotEmpty(),
-                onBackPressed = onBackPressed,
-                onNextPressed = onNextPressed,
-            )
+            if (!state.selectUsersState.isSearchActive) {
+                AddPeopleViewTopBar(
+                    hasSelectedUsers = state.selectUsersState.selectedUsers.isNotEmpty(),
+                    onBackPressed = onBackPressed,
+                    onNextPressed = onNextPressed,
+                )
+            }
         }
     ) { padding ->
         Column(
