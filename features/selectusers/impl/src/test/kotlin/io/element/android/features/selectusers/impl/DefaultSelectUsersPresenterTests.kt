@@ -29,7 +29,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class DefaultSelectSingleUserPresenterTests {
+class DefaultSelectUsersPresenterTests {
 
     @Test
     fun `present - initial state for single selection`() = runTest {
