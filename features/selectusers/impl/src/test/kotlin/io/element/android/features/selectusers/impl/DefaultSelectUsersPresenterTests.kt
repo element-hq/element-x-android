@@ -16,6 +16,7 @@
 
 package io.element.android.features.selectusers.impl
 
+import androidx.compose.foundation.lazy.LazyListState
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
@@ -24,6 +25,8 @@ import io.element.android.features.selectusers.api.SelectUsersEvents
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.mockk.coJustRun
+import io.mockk.mockkConstructor
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -89,6 +92,9 @@ class DefaultSelectUsersPresenterTests {
 
     @Test
     fun `present - select a user`() = runTest {
+        mockkConstructor(LazyListState::class)
+        coJustRun { anyConstructed<LazyListState>().scrollToItem(index = any()) }
+
         val presenter = DefaultSelectUsersPresenter(isMultiSelectionEnabled = false)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
