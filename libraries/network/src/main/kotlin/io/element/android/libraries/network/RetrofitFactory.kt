@@ -17,6 +17,7 @@
 package io.element.android.libraries.network
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import dagger.Lazy
 import io.element.android.libraries.core.uri.ensureTrailingSlash
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -25,14 +26,14 @@ import retrofit2.Retrofit
 import javax.inject.Inject
 
 class RetrofitFactory @Inject constructor(
-    private val okHttpClient: OkHttpClient,
+    private val okHttpClient: Lazy<OkHttpClient>,
 ) {
     fun create(baseUrl: String): Retrofit {
         val contentType = "application/json".toMediaType()
         return Retrofit.Builder()
             .baseUrl(baseUrl.ensureTrailingSlash())
             .addConverterFactory(Json.asConverterFactory(contentType))
-            .client(okHttpClient)
+            .callFactory { request -> okHttpClient.get().newCall(request) }
             .build()
     }
 }
