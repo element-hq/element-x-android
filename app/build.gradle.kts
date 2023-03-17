@@ -219,6 +219,9 @@ dependencies {
     implementation(libs.androidx.startup)
     implementation(libs.coil)
 
+    implementation(platform(libs.network.okhttp.bom))
+    implementation("com.squareup.okhttp3:logging-interceptor")
+
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
 

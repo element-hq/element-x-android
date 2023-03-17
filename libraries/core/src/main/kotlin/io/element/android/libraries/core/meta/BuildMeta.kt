@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
-plugins {
-    id("java-library")
-    alias(libs.plugins.kotlin.jvm)
-}
+package io.element.android.libraries.core.meta
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
+import okhttp3.logging.HttpLoggingInterceptor
 
-dependencies {
-    implementation(libs.coroutines.core)
-    implementation(platform(libs.network.okhttp.bom))
-    implementation("com.squareup.okhttp3:logging-interceptor")
-
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
-}
+data class BuildMeta(
+    val isDebug: Boolean,
+    val applicationName: String,
+    val applicationId: String,
+    val lowPrivacyLoggingEnabled: Boolean,
+    val versionName: String,
+    val gitRevision: String,
+    val gitRevisionDate: String,
+    val gitBranchName: String,
+    val flavorDescription: String,
+    val flavorShortDescription: String,
+    val okHttpLoggingLevel: HttpLoggingInterceptor.Level,
+)

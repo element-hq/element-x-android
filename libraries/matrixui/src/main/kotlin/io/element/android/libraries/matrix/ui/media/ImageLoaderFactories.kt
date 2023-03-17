@@ -21,15 +21,18 @@ import coil.ImageLoader
 import coil.ImageLoaderFactory
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClient
+import okhttp3.OkHttpClient
 import javax.inject.Inject
 
 class LoggedInImageLoaderFactory @Inject constructor(
     @ApplicationContext private val context: Context,
     private val matrixClient: MatrixClient,
+    private val okHttpClient: OkHttpClient,
 ) : ImageLoaderFactory {
     override fun newImageLoader(): ImageLoader {
         return ImageLoader
             .Builder(context)
+            .okHttpClient(okHttpClient)
             .components {
                 add(AvatarKeyer())
                 add(MediaKeyer())
@@ -42,10 +45,12 @@ class LoggedInImageLoaderFactory @Inject constructor(
 
 class NotLoggedInImageLoaderFactory @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val okHttpClient: OkHttpClient,
 ) : ImageLoaderFactory {
     override fun newImageLoader(): ImageLoader {
         return ImageLoader
             .Builder(context)
+            .okHttpClient(okHttpClient)
             .build()
     }
 }

@@ -92,6 +92,11 @@ accompanist_flowlayout = { module = "com.google.accompanist:accompanist-flowlayo
 # Libraries
 squareup_seismic = "com.squareup:seismic:1.0.3"
 
+# network
+network_okhttp_bom = "com.squareup.okhttp3:okhttp-bom:4.10.0"
+network_retrofit = "com.squareup.retrofit2:retrofit:2.9.0"
+network_retrofit_converter_serialization = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
+
 # Test
 test_core = { module = "androidx.test:core", version.ref = "test_core" }
 test_corektx = { module = "androidx.test:core-ktx", version.ref = "test_core" }

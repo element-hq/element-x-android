@@ -109,6 +109,10 @@ class BugReportPresenter @Inject constructor(
                 is BugReportEvents.SetSendScreenshot -> updateFormState(formState) {
                     copy(sendScreenshot = event.sendScreenshot)
                 }
+                BugReportEvents.ClearError -> {
+                    sendingProgress.value = 0f
+                    sendingAction.value = Async.Uninitialized
+                }
             }
         }
 
@@ -132,7 +136,6 @@ class BugReportPresenter @Inject constructor(
         listener: BugReporterListener,
     ) = launch {
         bugReporter.sendBugReport(
-            coroutineScope = this,
             reportType = ReportType.BUG_REPORT,
             withDevicesLogs = formState.sendLogs,
             withCrashLogs = hasCrashLogs && formState.sendCrashLogs,

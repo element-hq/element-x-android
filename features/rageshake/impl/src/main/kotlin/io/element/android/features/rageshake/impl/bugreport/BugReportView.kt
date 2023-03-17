@@ -197,13 +197,14 @@ fun BugReportView(
         }
         when (state.sending) {
             is Async.Loading -> {
+                // Indeterminate indicator, to avoid the freeze effect if the connection takes time to initialize.
                 CircularProgressIndicator(
-                    progress = state.sendingProgress,
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
             is Async.Failure -> ErrorDialog(
                 content = state.sending.error.toString(),
+                onDismiss = { state.eventSink(BugReportEvents.ClearError) }
             )
             else -> Unit
         }

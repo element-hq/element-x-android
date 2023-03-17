@@ -16,15 +16,10 @@
 
 package io.element.android.features.rageshake.api.reporter
 
-import io.element.android.features.rageshake.api.reporter.BugReporterListener
-import io.element.android.features.rageshake.api.reporter.ReportType
-import kotlinx.coroutines.CoroutineScope
-
 interface BugReporter {
     /**
      * Send a bug report.
      *
-     * @param coroutineScope The coroutine scope
      * @param reportType The report type (bug, suggestion, feedback)
      * @param withDevicesLogs true to include the device log
      * @param withCrashLogs true to include the crash logs
@@ -36,8 +31,7 @@ interface BugReporter {
      * @param customFields fields which will be sent with the report
      * @param listener the listener
      */
-    fun sendBugReport(
-        coroutineScope: CoroutineScope,
+    suspend fun sendBugReport(
         reportType: ReportType,
         withDevicesLogs: Boolean,
         withCrashLogs: Boolean,
