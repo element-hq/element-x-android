@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,6 +36,9 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomSummary
+import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.matrix.api.verification.VerificationFlowState
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -49,6 +53,7 @@ private const val extendedRangeSize = 40
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
     private val lastMessageFormatter: LastMessageFormatter,
+    private val sessionVerificationService: SessionVerificationService,
 ) : Presenter<RoomListState> {
 
     @Composable
@@ -71,20 +76,40 @@ class RoomListPresenter @Inject constructor(
             initialLoad(matrixUser)
         }
 
+        // Session verification status (unknown, not verified, verified)
+        val sessionVerifiedStatus by sessionVerificationService.sessionVerifiedStatus.collectAsState()
+        var verificationPromptDismissed by rememberSaveable { mutableStateOf(false) }
+        // We combine both values to only display the prompt if the session is not verified and it wasn't dismissed
+        val displayVerificationPrompt by remember {
+            derivedStateOf { sessionVerifiedStatus == SessionVerifiedStatus.NotVerified && !verificationPromptDismissed }
+        }
+
+        // Current verification flow status, if any (initial, requesting, accepted, etc.)
+        val currentVerificationFlowStatus by sessionVerificationService.verificationFlowState.collectAsState()
+        // We only care about the 'Finished' state to display the 'verification success' message
+        val presentVerificationSuccessfulMessage = remember {
+            derivedStateOf { currentVerificationFlowStatus == VerificationFlowState.Finished }
+        }
+
         fun handleEvents(event: RoomListEvents) {
             when (event) {
                 is RoomListEvents.UpdateFilter -> filter = event.newFilter
                 is RoomListEvents.UpdateVisibleRange -> updateVisibleRange(event.range)
+                RoomListEvents.DismissRequestVerificationPrompt -> verificationPromptDismissed = true
+                RoomListEvents.ClearSuccessfulVerificationMessage -> sessionVerificationService.reset()
             }
         }
 
         LaunchedEffect(roomSummaries, filter) {
             filteredRoomSummaries.value = updateFilteredRoomSummaries(roomSummaries, filter)
         }
+
         return RoomListState(
             matrixUser = matrixUser.value,
             roomList = filteredRoomSummaries.value,
             filter = filter,
+            presentVerificationSuccessfulMessage = presentVerificationSuccessfulMessage.value,
+            displayVerificationPrompt = displayVerificationPrompt,
             eventSink = ::handleEvents
         )
     }
