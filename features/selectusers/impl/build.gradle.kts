@@ -46,9 +46,11 @@ dependencies {
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
+    testImplementation(libs.coroutines.core)
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
+    testImplementation(libs.test.mockk)
     testImplementation(projects.libraries.matrix.test)
 
     androidTestImplementation(libs.test.junitext)
