@@ -23,12 +23,17 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaResolver
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.impl.media.RustMediaResolver
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.sync.SlidingSyncObserverProxy
+import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
@@ -52,6 +57,9 @@ class RustMatrixClient constructor(
 ) : MatrixClient {
 
     override val sessionId: UserId = UserId(client.userId())
+
+    private val verificationService = RustSessionVerificationService()
+    private var slidingSyncUpdateJob: Job? = null
 
     private val clientDelegate = object : ClientDelegate {
         override fun didReceiveAuthError(isSoftLogout: Boolean) {
@@ -131,6 +139,9 @@ class RustMatrixClient constructor(
         client.setDelegate(clientDelegate)
         rustRoomSummaryDataSource.init()
         slidingSync.setObserver(slidingSyncObserverProxy)
+        slidingSyncUpdateJob = slidingSyncObserverProxy.updateSummaryFlow
+            .onEach { onSlidingSyncUpdate() }
+            .launchIn(coroutineScope)
     }
 
     private fun onRestartSync() {
@@ -152,6 +163,8 @@ class RustMatrixClient constructor(
 
     override fun mediaResolver(): MediaResolver = mediaResolver
 
+    override fun sessionVerificationService(): SessionVerificationService = verificationService
+
     override fun startSync() {
         if (client.isSoftLogout()) return
         if (isSyncing.compareAndSet(false, true)) {
@@ -166,12 +179,14 @@ class RustMatrixClient constructor(
     }
 
     private fun close() {
+        slidingSyncUpdateJob?.cancel()
         stopSync()
         slidingSync.setObserver(null)
         rustRoomSummaryDataSource.close()
         client.setDelegate(null)
         visibleRoomsView.destroy()
         slidingSync.destroy()
+        verificationService.destroy()
     }
 
     override suspend fun logout() = withContext(dispatchers.io) {
@@ -225,6 +240,16 @@ class RustMatrixClient constructor(
                 }
             }
         }
+
+    override fun onSlidingSyncUpdate() {
+        if (!verificationService.isReady.value) {
+            try {
+                verificationService.verificationController = client.getSessionVerificationController()
+            } catch (e: Throwable) {
+                Timber.e(e, "Could not start verification service. Will try again on the next sliding sync update.")
+            }
+        }
+    }
 
     private fun File.deleteSessionDirectory(userID: String): Boolean {
         // Rust sanitises the user ID replacing invalid characters with an _

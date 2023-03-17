@@ -77,6 +77,7 @@ fun DependencyHandlerScope.allFeaturesApi() {
     implementation(project(":features:rageshake:api"))
     implementation(project(":features:preferences:api"))
     implementation(project(":features:createroom:api"))
+    implementation(project(":features:verifysession:api"))
 }
 
 fun DependencyHandlerScope.allFeaturesImpl() {
@@ -88,4 +89,5 @@ fun DependencyHandlerScope.allFeaturesImpl() {
     implementation(project(":features:rageshake:impl"))
     implementation(project(":features:preferences:impl"))
     implementation(project(":features:createroom:impl"))
+    implementation(project(":features:verifysession:impl"))
 }

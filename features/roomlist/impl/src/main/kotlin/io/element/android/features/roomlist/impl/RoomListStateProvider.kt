@@ -29,6 +29,8 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
     override val values: Sequence<RoomListState>
         get() = sequenceOf(
             aRoomListState(),
+            aRoomListState().copy(displayVerificationPrompt = true),
+            aRoomListState().copy(presentVerificationSuccessfulMessage = true),
         )
 }
 
@@ -36,7 +38,9 @@ internal fun aRoomListState() = RoomListState(
     matrixUser = MatrixUser(id = UserId("@id"), username = "User#1", avatarData = AvatarData("@id", "U")),
     roomList = aRoomListRoomSummaryList(),
     filter = "filter",
-    eventSink = {}
+    eventSink = {},
+    presentVerificationSuccessfulMessage = false,
+    displayVerificationPrompt = false,
 )
 
 internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
