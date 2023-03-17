@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist.api
+package io.element.android.features.roomlist.impl
 
-import io.element.android.libraries.matrix.api.room.message.RoomMessage
+import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 
 interface RoomLastMessageFormatter {
-    fun processMessageItem(roomMessage: RoomMessage, isDmRoom: Boolean): CharSequence?
+    fun processMessageItem(event: EventTimelineItem, isDmRoom: Boolean): CharSequence?
 }

@@ -21,10 +21,10 @@ import androidx.compose.ui.text.AnnotatedString
 import com.google.common.truth.Truth
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.ImageInfo
-import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
+import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
@@ -47,7 +47,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageT
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.aProfileChangeMessageContent
-import io.element.android.libraries.matrix.test.room.aRoomMessage
 import io.element.android.libraries.matrix.test.room.anEventTimelineItem
 import org.junit.Before
 import org.junit.Test
@@ -76,7 +75,7 @@ class DefaultRoomLastMessageFormatterTests {
         val expected = "Message removed"
         val senderName = "Someone"
         sequenceOf(false, true).forEach { isDm ->
-            val message = createRoomMessage(false, senderName, RedactedContent)
+            val message = createRoomEvent(false, senderName, RedactedContent)
             val result = formatter.processMessageItem(message, isDm)
             if (isDm) {
                 Truth.assertThat(result).isEqualTo(expected)
@@ -92,7 +91,7 @@ class DefaultRoomLastMessageFormatterTests {
     fun `Sticker content`() {
         val body = "body"
         val info = ImageInfo(null, null, null, null, null, null, null)
-        val message = createRoomMessage(false, null, StickerContent(body, info, "url"))
+        val message = createRoomEvent(false, null, StickerContent(body, info, "url"))
         val result = formatter.processMessageItem(message, false)
         Truth.assertThat(result).isEqualTo(body)
     }
@@ -103,7 +102,7 @@ class DefaultRoomLastMessageFormatterTests {
         val expected = "Decryption error"
         val senderName = "Someone"
         sequenceOf(false, true).forEach { isDm ->
-            val message = createRoomMessage(false, senderName, UnableToDecryptContent(UnableToDecryptContent.Data.Unknown))
+            val message = createRoomEvent(false, senderName, UnableToDecryptContent(UnableToDecryptContent.Data.Unknown))
             val result = formatter.processMessageItem(message, isDm)
             if (isDm) {
                 Truth.assertThat(result).isEqualTo(expected)
@@ -125,7 +124,7 @@ class DefaultRoomLastMessageFormatterTests {
                 FailedToParseStateContent("", "", ""),
                 UnknownContent,
             ).forEach { type ->
-                val message = createRoomMessage(false, senderName, type)
+                val message = createRoomEvent(false, senderName, type)
                 val result = formatter.processMessageItem(message, isDm)
                 if (isDm) {
                     Truth.assertWithMessage("$type was not properly handled").that(result).isEqualTo(expected)
@@ -163,7 +162,7 @@ class DefaultRoomLastMessageFormatterTests {
         sequenceOf(false, true).forEach { isDm ->
             sharedContentMessagesTypes.forEach { type ->
                 val content = createMessageContent(type)
-                val message = createRoomMessage(sentByYou = false, senderDisplayName = "Someone", content = content)
+                val message = createRoomEvent(sentByYou = false, senderDisplayName = "Someone", content = content)
                 val result = formatter.processMessageItem(message, isDmRoom = isDm)
                 if (isDm) {
                     resultsInDm.add(type to result)
@@ -171,7 +170,7 @@ class DefaultRoomLastMessageFormatterTests {
                     resultsInRoom.add(type to result)
                 }
             }
-            val unknownMessage = createRoomMessage(sentByYou = false, senderDisplayName = "Someone", content = createMessageContent(UnknownMessageType))
+            val unknownMessage = createRoomEvent(sentByYou = false, senderDisplayName = "Someone", content = createMessageContent(UnknownMessageType))
             val result = UnknownMessageType to formatter.processMessageItem(unknownMessage, isDmRoom = isDm)
             if (isDm) {
                 resultsInDm.add(result)
@@ -235,12 +234,12 @@ class DefaultRoomLastMessageFormatterTests {
         val youContent = RoomMembershipContent(A_USER_ID, MembershipChange.JOINED)
         val someoneContent = RoomMembershipContent(UserId("someone_else"), MembershipChange.JOINED)
 
-        val youJoinedRoomMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = youContent)
-        val youJoinedRoom = formatter.processMessageItem(youJoinedRoomMessage, false)
+        val youJoinedRoomEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
+        val youJoinedRoom = formatter.processMessageItem(youJoinedRoomEvent, false)
         Truth.assertThat(youJoinedRoom).isEqualTo("You joined the room")
 
-        val someoneJoinedRoomMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
-        val someoneJoinedRoom = formatter.processMessageItem(someoneJoinedRoomMessage, false)
+        val someoneJoinedRoomEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
+        val someoneJoinedRoom = formatter.processMessageItem(someoneJoinedRoomEvent, false)
         Truth.assertThat(someoneJoinedRoom).isEqualTo("${someoneContent.userId.value} joined the room")
     }
 
@@ -251,12 +250,12 @@ class DefaultRoomLastMessageFormatterTests {
         val youContent = RoomMembershipContent(A_USER_ID, MembershipChange.LEFT)
         val someoneContent = RoomMembershipContent(UserId("someone_else"), MembershipChange.LEFT)
 
-        val youLeftRoomMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = youContent)
-        val youLeftRoom = formatter.processMessageItem(youLeftRoomMessage, false)
+        val youLeftRoomEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
+        val youLeftRoom = formatter.processMessageItem(youLeftRoomEvent, false)
         Truth.assertThat(youLeftRoom).isEqualTo("You left the room")
 
-        val someoneLeftRoomMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
-        val someoneLeftRoom = formatter.processMessageItem(someoneLeftRoomMessage, false)
+        val someoneLeftRoomEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
+        val someoneLeftRoom = formatter.processMessageItem(someoneLeftRoomEvent, false)
         Truth.assertThat(someoneLeftRoom).isEqualTo("${someoneContent.userId.value} left the room")
     }
 
@@ -269,20 +268,20 @@ class DefaultRoomLastMessageFormatterTests {
         val someoneContent = RoomMembershipContent(UserId("someone_else"), MembershipChange.BANNED)
         val someoneKickedContent = RoomMembershipContent(UserId("someone_else"), MembershipChange.KICKED_AND_BANNED)
 
-        val youBannedMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = youContent)
-        val youBanned = formatter.processMessageItem(youBannedMessage, false)
+        val youBannedEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
+        val youBanned = formatter.processMessageItem(youBannedEvent, false)
         Truth.assertThat(youBanned).isEqualTo("You banned ${youContent.userId.value}")
 
-        val youKickBannedMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = youKickedContent)
-        val youKickedBanned = formatter.processMessageItem(youKickBannedMessage, false)
+        val youKickBannedEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youKickedContent)
+        val youKickedBanned = formatter.processMessageItem(youKickBannedEvent, false)
         Truth.assertThat(youKickedBanned).isEqualTo("You banned ${youContent.userId.value}")
 
-        val someoneBannedMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
-        val someoneBanned = formatter.processMessageItem(someoneBannedMessage, false)
+        val someoneBannedEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
+        val someoneBanned = formatter.processMessageItem(someoneBannedEvent, false)
         Truth.assertThat(someoneBanned).isEqualTo("$otherName banned ${someoneContent.userId.value}")
 
-        val someoneKickBannedMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = someoneKickedContent)
-        val someoneKickBanned = formatter.processMessageItem(someoneKickBannedMessage, false)
+        val someoneKickBannedEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneKickedContent)
+        val someoneKickBanned = formatter.processMessageItem(someoneKickBannedEvent, false)
         Truth.assertThat(someoneKickBanned).isEqualTo("$otherName banned ${someoneContent.userId.value}")
     }
 
@@ -293,12 +292,12 @@ class DefaultRoomLastMessageFormatterTests {
         val youContent = RoomMembershipContent(UserId("someone_else"), MembershipChange.UNBANNED)
         val someoneContent = RoomMembershipContent(UserId("someone_else"), MembershipChange.UNBANNED)
 
-        val youUnbannedMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = youContent)
-        val youUnbanned = formatter.processMessageItem(youUnbannedMessage, false)
+        val youUnbannedEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
+        val youUnbanned = formatter.processMessageItem(youUnbannedEvent, false)
         Truth.assertThat(youUnbanned).isEqualTo("You unbanned ${youContent.userId.value}")
 
-        val someoneUnbannedMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
-        val someoneUnbanned = formatter.processMessageItem(someoneUnbannedMessage, false)
+        val someoneUnbannedEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
+        val someoneUnbanned = formatter.processMessageItem(someoneUnbannedEvent, false)
         Truth.assertThat(someoneUnbanned).isEqualTo("$otherName unbanned ${someoneContent.userId.value}")
     }
 
@@ -309,12 +308,12 @@ class DefaultRoomLastMessageFormatterTests {
         val youContent = RoomMembershipContent(UserId("someone_else"), MembershipChange.KICKED)
         val someoneContent = RoomMembershipContent(UserId("someone_else"), MembershipChange.KICKED)
 
-        val youKickedMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = youContent)
-        val youKicked = formatter.processMessageItem(youKickedMessage, false)
+        val youKickedEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
+        val youKicked = formatter.processMessageItem(youKickedEvent, false)
         Truth.assertThat(youKicked).isEqualTo("You removed ${youContent.userId.value}")
 
-        val someoneKickedMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
-        val someoneKicked = formatter.processMessageItem(someoneKickedMessage, false)
+        val someoneKickedEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
+        val someoneKicked = formatter.processMessageItem(someoneKickedEvent, false)
         Truth.assertThat(someoneKicked).isEqualTo("$otherName removed ${someoneContent.userId.value}")
     }
 
@@ -325,16 +324,16 @@ class DefaultRoomLastMessageFormatterTests {
         val youContent = RoomMembershipContent(A_USER_ID, MembershipChange.INVITED)
         val someoneContent = RoomMembershipContent(UserId("someone_else"), MembershipChange.INVITED)
 
-        val youWereInvitedMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = youContent)
-        val youWereInvited = formatter.processMessageItem(youWereInvitedMessage, false)
+        val youWereInvitedEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = youContent)
+        val youWereInvited = formatter.processMessageItem(youWereInvitedEvent, false)
         Truth.assertThat(youWereInvited).isEqualTo("$otherName invited you")
 
-        val youInvitedMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = someoneContent)
-        val youInvited = formatter.processMessageItem(youInvitedMessage, false)
+        val youInvitedEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = someoneContent)
+        val youInvited = formatter.processMessageItem(youInvitedEvent, false)
         Truth.assertThat(youInvited).isEqualTo("You invited ${someoneContent.userId.value}")
 
-        val someoneInvitedMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
-        val someoneInvited = formatter.processMessageItem(someoneInvitedMessage, false)
+        val someoneInvitedEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
+        val someoneInvited = formatter.processMessageItem(someoneInvitedEvent, false)
         Truth.assertThat(someoneInvited).isEqualTo("$otherName invited ${someoneContent.userId.value}")
     }
 
@@ -345,12 +344,12 @@ class DefaultRoomLastMessageFormatterTests {
         val youContent = RoomMembershipContent(A_USER_ID, MembershipChange.INVITATION_ACCEPTED)
         val someoneContent = RoomMembershipContent(UserId("someone_else"), MembershipChange.INVITATION_ACCEPTED)
 
-        val youAcceptedInviteMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = youContent)
-        val youAcceptedInvite = formatter.processMessageItem(youAcceptedInviteMessage, false)
+        val youAcceptedInviteEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
+        val youAcceptedInvite = formatter.processMessageItem(youAcceptedInviteEvent, false)
         Truth.assertThat(youAcceptedInvite).isEqualTo("You accepted the invite")
 
-        val someoneAcceptedInviteMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
-        val someoneAcceptedInvite = formatter.processMessageItem(someoneAcceptedInviteMessage, false)
+        val someoneAcceptedInviteEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
+        val someoneAcceptedInvite = formatter.processMessageItem(someoneAcceptedInviteEvent, false)
         Truth.assertThat(someoneAcceptedInvite).isEqualTo("${someoneContent.userId.value} accepted the invite")
     }
 
@@ -361,12 +360,12 @@ class DefaultRoomLastMessageFormatterTests {
         val youContent = RoomMembershipContent(A_USER_ID, MembershipChange.INVITATION_REJECTED)
         val someoneContent = RoomMembershipContent(UserId("someone_else"), MembershipChange.INVITATION_REJECTED)
 
-        val youRejectedInviteMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = youContent)
-        val youRejectedInvite = formatter.processMessageItem(youRejectedInviteMessage, false)
+        val youRejectedInviteEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
+        val youRejectedInvite = formatter.processMessageItem(youRejectedInviteEvent, false)
         Truth.assertThat(youRejectedInvite).isEqualTo("You rejected the invitation")
 
-        val someoneRejectedInviteMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
-        val someoneRejectedInvite = formatter.processMessageItem(someoneRejectedInviteMessage, false)
+        val someoneRejectedInviteEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
+        val someoneRejectedInvite = formatter.processMessageItem(someoneRejectedInviteEvent, false)
         Truth.assertThat(someoneRejectedInvite).isEqualTo("${someoneContent.userId.value} rejected the invitation")
     }
 
@@ -376,12 +375,12 @@ class DefaultRoomLastMessageFormatterTests {
         val otherName = "Someone"
         val someoneContent = RoomMembershipContent(UserId("someone_else"), MembershipChange.INVITATION_REVOKED)
 
-        val youRevokedInviteMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = someoneContent)
-        val youRevokedInvite = formatter.processMessageItem(youRevokedInviteMessage, false)
+        val youRevokedInviteEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = someoneContent)
+        val youRevokedInvite = formatter.processMessageItem(youRevokedInviteEvent, false)
         Truth.assertThat(youRevokedInvite).isEqualTo("You revoked the invitation for ${someoneContent.userId.value} to join the room")
 
-        val someoneRevokedInviteMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
-        val someoneRevokedInvite = formatter.processMessageItem(someoneRevokedInviteMessage, false)
+        val someoneRevokedInviteEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
+        val someoneRevokedInvite = formatter.processMessageItem(someoneRevokedInviteEvent, false)
         Truth.assertThat(someoneRevokedInvite).isEqualTo("$otherName revoked the invitation for ${someoneContent.userId.value} to join the room")
     }
 
@@ -392,12 +391,12 @@ class DefaultRoomLastMessageFormatterTests {
         val youContent = RoomMembershipContent(A_USER_ID, MembershipChange.KNOCKED)
         val someoneContent = RoomMembershipContent(UserId("someone_else"), MembershipChange.KNOCKED)
 
-        val youKnockedMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = youContent)
-        val youKnocked = formatter.processMessageItem(youKnockedMessage, false)
+        val youKnockedEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
+        val youKnocked = formatter.processMessageItem(youKnockedEvent, false)
         Truth.assertThat(youKnocked).isEqualTo("You requested to join")
 
-        val someoneKnockedMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
-        val someoneKnocked = formatter.processMessageItem(someoneKnockedMessage, false)
+        val someoneKnockedEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
+        val someoneKnocked = formatter.processMessageItem(someoneKnockedEvent, false)
         Truth.assertThat(someoneKnocked).isEqualTo("${someoneContent.userId.value} requested to join")
     }
 
@@ -407,12 +406,12 @@ class DefaultRoomLastMessageFormatterTests {
         val otherName = "Someone"
         val someoneContent = RoomMembershipContent(UserId("someone_else"), MembershipChange.KNOCK_ACCEPTED)
 
-        val youAcceptedKnockMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = someoneContent)
-        val youAcceptedKnock = formatter.processMessageItem(youAcceptedKnockMessage, false)
+        val youAcceptedKnockEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = someoneContent)
+        val youAcceptedKnock = formatter.processMessageItem(youAcceptedKnockEvent, false)
         Truth.assertThat(youAcceptedKnock).isEqualTo("${someoneContent.userId.value} allowed you to join")
 
-        val someoneAcceptedKnockMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
-        val someoneAcceptedKnock = formatter.processMessageItem(someoneAcceptedKnockMessage, false)
+        val someoneAcceptedKnockEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
+        val someoneAcceptedKnock = formatter.processMessageItem(someoneAcceptedKnockEvent, false)
         Truth.assertThat(someoneAcceptedKnock).isEqualTo("$otherName allowed ${someoneContent.userId.value} to join")
     }
 
@@ -423,12 +422,12 @@ class DefaultRoomLastMessageFormatterTests {
         val youContent = RoomMembershipContent(A_USER_ID, MembershipChange.KNOCK_RETRACTED)
         val someoneContent = RoomMembershipContent(UserId("someone_else"), MembershipChange.KNOCK_RETRACTED)
 
-        val youRetractedKnockMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = youContent)
-        val youRetractedKnock = formatter.processMessageItem(youRetractedKnockMessage, false)
+        val youRetractedKnockEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
+        val youRetractedKnock = formatter.processMessageItem(youRetractedKnockEvent, false)
         Truth.assertThat(youRetractedKnock).isEqualTo("You cancelled your request to join")
 
-        val someoneRetractedKnockMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
-        val someoneRetractedKnock = formatter.processMessageItem(someoneRetractedKnockMessage, false)
+        val someoneRetractedKnockEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
+        val someoneRetractedKnock = formatter.processMessageItem(someoneRetractedKnockEvent, false)
         Truth.assertThat(someoneRetractedKnock).isEqualTo("${someoneContent.userId.value} is no longer interested in joining")
     }
 
@@ -439,16 +438,16 @@ class DefaultRoomLastMessageFormatterTests {
         val youContent = RoomMembershipContent(A_USER_ID, MembershipChange.KNOCK_DENIED)
         val someoneContent = RoomMembershipContent(UserId("someone_else"), MembershipChange.KNOCK_DENIED)
 
-        val youDeniedKnockMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = someoneContent)
-        val youDeniedKnock = formatter.processMessageItem(youDeniedKnockMessage, false)
+        val youDeniedKnockEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = someoneContent)
+        val youDeniedKnock = formatter.processMessageItem(youDeniedKnockEvent, false)
         Truth.assertThat(youDeniedKnock).isEqualTo("You rejected ${someoneContent.userId.value}'s request to join")
 
-        val someoneDeniedKnockMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
-        val someoneDeniedKnock = formatter.processMessageItem(someoneDeniedKnockMessage, false)
+        val someoneDeniedKnockEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
+        val someoneDeniedKnock = formatter.processMessageItem(someoneDeniedKnockEvent, false)
         Truth.assertThat(someoneDeniedKnock).isEqualTo("$otherName rejected ${someoneContent.userId.value}'s request to join")
 
-        val someoneDeniedYourKnockMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = youContent)
-        val someoneDeniedYourKnock = formatter.processMessageItem(someoneDeniedYourKnockMessage, false)
+        val someoneDeniedYourKnockEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = youContent)
+        val someoneDeniedYourKnock = formatter.processMessageItem(someoneDeniedYourKnockEvent, false)
         Truth.assertThat(someoneDeniedYourKnock).isEqualTo("$otherName rejected your request to join")
     }
 
@@ -459,8 +458,8 @@ class DefaultRoomLastMessageFormatterTests {
 
         val results = otherChanges.map { change ->
             val content = RoomMembershipContent(A_USER_ID, change)
-            val message = createRoomMessage(sentByYou = false, senderDisplayName = "Someone", content = content)
-            val result = formatter.processMessageItem(message, false)
+            val event = createRoomEvent(sentByYou = false, senderDisplayName = "Someone", content = content)
+            val result = formatter.processMessageItem(event, false)
             change to result
         }
         val expected = otherChanges.map { it to null }
@@ -478,20 +477,20 @@ class DefaultRoomLastMessageFormatterTests {
         val changedContent = StateContent("", OtherState.RoomAvatar("new_avatar"))
         val removedContent = StateContent("", OtherState.RoomAvatar(null))
 
-        val youChangedRoomAvatarMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = changedContent)
-        val youChangedRoomAvatar = formatter.processMessageItem(youChangedRoomAvatarMessage, false)
+        val youChangedRoomAvatarEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = changedContent)
+        val youChangedRoomAvatar = formatter.processMessageItem(youChangedRoomAvatarEvent, false)
         Truth.assertThat(youChangedRoomAvatar).isEqualTo("You changed the room avatar")
 
-        val someoneChangedRoomAvatarMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = changedContent)
-        val someoneChangedRoomAvatar = formatter.processMessageItem(someoneChangedRoomAvatarMessage, false)
+        val someoneChangedRoomAvatarEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = changedContent)
+        val someoneChangedRoomAvatar = formatter.processMessageItem(someoneChangedRoomAvatarEvent, false)
         Truth.assertThat(someoneChangedRoomAvatar).isEqualTo("$otherName changed the room avatar")
 
-        val youRemovedRoomAvatarMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = removedContent)
-        val youRemovedRoomAvatar = formatter.processMessageItem(youRemovedRoomAvatarMessage, false)
+        val youRemovedRoomAvatarEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = removedContent)
+        val youRemovedRoomAvatar = formatter.processMessageItem(youRemovedRoomAvatarEvent, false)
         Truth.assertThat(youRemovedRoomAvatar).isEqualTo("You removed the room avatar")
 
-        val someoneRemovedRoomAvatarMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = removedContent)
-        val someoneRemovedRoomAvatar = formatter.processMessageItem(someoneRemovedRoomAvatarMessage, false)
+        val someoneRemovedRoomAvatarEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = removedContent)
+        val someoneRemovedRoomAvatar = formatter.processMessageItem(someoneRemovedRoomAvatarEvent, false)
         Truth.assertThat(someoneRemovedRoomAvatar).isEqualTo("$otherName removed the room avatar")
     }
 
@@ -501,12 +500,12 @@ class DefaultRoomLastMessageFormatterTests {
         val otherName = "Someone"
         val content = StateContent("", OtherState.RoomCreate)
 
-        val youCreatedRoomMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = content)
+        val youCreatedRoomMessage = createRoomEvent(sentByYou = true, senderDisplayName = null, content = content)
         val youCreatedRoom = formatter.processMessageItem(youCreatedRoomMessage, false)
         Truth.assertThat(youCreatedRoom).isEqualTo("You created the room")
 
-        val someoneCreatedRoomMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = content)
-        val someoneCreatedRoom = formatter.processMessageItem(someoneCreatedRoomMessage, false)
+        val someoneCreatedRoomEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = content)
+        val someoneCreatedRoom = formatter.processMessageItem(someoneCreatedRoomEvent, false)
         Truth.assertThat(someoneCreatedRoom).isEqualTo("$otherName created the room")
     }
 
@@ -516,12 +515,12 @@ class DefaultRoomLastMessageFormatterTests {
         val otherName = "Someone"
         val content = StateContent("", OtherState.RoomEncryption)
 
-        val youCreatedRoomMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = content)
+        val youCreatedRoomMessage = createRoomEvent(sentByYou = true, senderDisplayName = null, content = content)
         val youCreatedRoom = formatter.processMessageItem(youCreatedRoomMessage, false)
         Truth.assertThat(youCreatedRoom).isEqualTo("Encryption enabled")
 
-        val someoneCreatedRoomMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = content)
-        val someoneCreatedRoom = formatter.processMessageItem(someoneCreatedRoomMessage, false)
+        val someoneCreatedRoomEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = content)
+        val someoneCreatedRoom = formatter.processMessageItem(someoneCreatedRoomEvent, false)
         Truth.assertThat(someoneCreatedRoom).isEqualTo("Encryption enabled")
     }
 
@@ -533,20 +532,20 @@ class DefaultRoomLastMessageFormatterTests {
         val changedContent = StateContent("", OtherState.RoomName(newName))
         val removedContent = StateContent("", OtherState.RoomName(null))
 
-        val youChangedRoomNameMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = changedContent)
-        val youChangedRoomName = formatter.processMessageItem(youChangedRoomNameMessage, false)
+        val youChangedRoomNameEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = changedContent)
+        val youChangedRoomName = formatter.processMessageItem(youChangedRoomNameEvent, false)
         Truth.assertThat(youChangedRoomName).isEqualTo("You changed the room name to: $newName")
 
-        val someoneChangedRoomNameMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = changedContent)
-        val someoneChangedRoomName = formatter.processMessageItem(someoneChangedRoomNameMessage, false)
+        val someoneChangedRoomNameEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = changedContent)
+        val someoneChangedRoomName = formatter.processMessageItem(someoneChangedRoomNameEvent, false)
         Truth.assertThat(someoneChangedRoomName).isEqualTo("$otherName changed the room name to: $newName")
 
-        val youRemovedRoomNameMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = removedContent)
-        val youRemovedRoomName = formatter.processMessageItem(youRemovedRoomNameMessage, false)
+        val youRemovedRoomNameEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = removedContent)
+        val youRemovedRoomName = formatter.processMessageItem(youRemovedRoomNameEvent, false)
         Truth.assertThat(youRemovedRoomName).isEqualTo("You removed the room name")
 
-        val someoneRemovedRoomNameMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = removedContent)
-        val someoneRemovedRoomName = formatter.processMessageItem(someoneRemovedRoomNameMessage, false)
+        val someoneRemovedRoomNameEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = removedContent)
+        val someoneRemovedRoomName = formatter.processMessageItem(someoneRemovedRoomNameEvent, false)
         Truth.assertThat(someoneRemovedRoomName).isEqualTo("$otherName removed the room name")
     }
 
@@ -558,20 +557,20 @@ class DefaultRoomLastMessageFormatterTests {
         val changedContent = StateContent("", OtherState.RoomThirdPartyInvite(inviteeName))
         val removedContent = StateContent("", OtherState.RoomThirdPartyInvite(null))
 
-        val youInvitedSomeoneMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = changedContent)
-        val youInvitedSomeone = formatter.processMessageItem(youInvitedSomeoneMessage, false)
+        val youInvitedSomeoneEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = changedContent)
+        val youInvitedSomeone = formatter.processMessageItem(youInvitedSomeoneEvent, false)
         Truth.assertThat(youInvitedSomeone).isEqualTo("You sent an invitation to $inviteeName to join the room")
 
-        val someoneInvitedSomeoneMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = changedContent)
-        val someoneInvitedSomeone = formatter.processMessageItem(someoneInvitedSomeoneMessage, false)
+        val someoneInvitedSomeoneEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = changedContent)
+        val someoneInvitedSomeone = formatter.processMessageItem(someoneInvitedSomeoneEvent, false)
         Truth.assertThat(someoneInvitedSomeone).isEqualTo("$otherName sent an invitation to $inviteeName to join the room")
 
-        val youInvitedNoOneMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = removedContent)
-        val youInvitedNoOne = formatter.processMessageItem(youInvitedNoOneMessage, false)
+        val youInvitedNoOneEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = removedContent)
+        val youInvitedNoOne = formatter.processMessageItem(youInvitedNoOneEvent, false)
         Truth.assertThat(youInvitedNoOne).isNull()
 
-        val someoneInvitedNoOneMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = removedContent)
-        val someoneInvitedNoOne = formatter.processMessageItem(someoneInvitedNoOneMessage, false)
+        val someoneInvitedNoOneEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = removedContent)
+        val someoneInvitedNoOne = formatter.processMessageItem(someoneInvitedNoOneEvent, false)
         Truth.assertThat(someoneInvitedNoOne).isNull()
     }
 
@@ -583,20 +582,20 @@ class DefaultRoomLastMessageFormatterTests {
         val changedContent = StateContent("", OtherState.RoomTopic(roomTopic))
         val removedContent = StateContent("", OtherState.RoomTopic(null))
 
-        val youChangedRoomTopicMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = changedContent)
-        val youChangedRoomTopic = formatter.processMessageItem(youChangedRoomTopicMessage, false)
+        val youChangedRoomTopicEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = changedContent)
+        val youChangedRoomTopic = formatter.processMessageItem(youChangedRoomTopicEvent, false)
         Truth.assertThat(youChangedRoomTopic).isEqualTo("You changed the topic to: $roomTopic")
 
-        val someoneChangedRoomTopicMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = changedContent)
-        val someoneChangedRoomTopic = formatter.processMessageItem(someoneChangedRoomTopicMessage, false)
+        val someoneChangedRoomTopicEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = changedContent)
+        val someoneChangedRoomTopic = formatter.processMessageItem(someoneChangedRoomTopicEvent, false)
         Truth.assertThat(someoneChangedRoomTopic).isEqualTo("$otherName changed the topic to: $roomTopic")
 
-        val youRemovedRoomTopicMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = removedContent)
-        val youRemovedRoomTopic = formatter.processMessageItem(youRemovedRoomTopicMessage, false)
+        val youRemovedRoomTopicEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = removedContent)
+        val youRemovedRoomTopic = formatter.processMessageItem(youRemovedRoomTopicEvent, false)
         Truth.assertThat(youRemovedRoomTopic).isEqualTo("You removed the room topic")
 
-        val someoneRemovedRoomTopicMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = removedContent)
-        val someoneRemovedRoomTopic = formatter.processMessageItem(someoneRemovedRoomTopicMessage, false)
+        val someoneRemovedRoomTopicEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = removedContent)
+        val someoneRemovedRoomTopic = formatter.processMessageItem(someoneRemovedRoomTopicEvent, false)
         Truth.assertThat(someoneRemovedRoomTopic).isEqualTo("$otherName removed the room topic")
     }
 
@@ -611,8 +610,8 @@ class DefaultRoomLastMessageFormatterTests {
 
         val results = otherStates.map { state ->
             val content = StateContent("", state)
-            val message = createRoomMessage(sentByYou = false, senderDisplayName = "Someone", content = content)
-            val result = formatter.processMessageItem(message, false)
+            val event = createRoomEvent(sentByYou = false, senderDisplayName = "Someone", content = content)
+            val result = formatter.processMessageItem(event, false)
             state to result
         }
         val expected = otherStates.map { it to null }
@@ -633,36 +632,36 @@ class DefaultRoomLastMessageFormatterTests {
         val invalidContent = aProfileChangeMessageContent(avatarUrl = null, prevAvatarUrl = null)
         val sameContent = aProfileChangeMessageContent(avatarUrl = "same_avatar_url", prevAvatarUrl = "same_avatar_url")
 
-        val youChangedAvatarMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = changedContent)
-        val youChangedAvatar = formatter.processMessageItem(youChangedAvatarMessage, false)
+        val youChangedAvatarEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = changedContent)
+        val youChangedAvatar = formatter.processMessageItem(youChangedAvatarEvent, false)
         Truth.assertThat(youChangedAvatar).isEqualTo("You changed your avatar")
 
-        val someoneChangeAvatarMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = changedContent)
-        val someoneChangeAvatar = formatter.processMessageItem(someoneChangeAvatarMessage, false)
+        val someoneChangeAvatarEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = changedContent)
+        val someoneChangeAvatar = formatter.processMessageItem(someoneChangeAvatarEvent, false)
         Truth.assertThat(someoneChangeAvatar).isEqualTo("$otherName changed their avatar")
 
-        val youSetAvatarMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = setContent)
-        val youSetAvatar = formatter.processMessageItem(youSetAvatarMessage, false)
+        val youSetAvatarEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = setContent)
+        val youSetAvatar = formatter.processMessageItem(youSetAvatarEvent, false)
         Truth.assertThat(youSetAvatar).isEqualTo("You changed your avatar")
 
-        val someoneSetAvatarMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = setContent)
-        val someoneSetAvatar = formatter.processMessageItem(someoneSetAvatarMessage, false)
+        val someoneSetAvatarEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = setContent)
+        val someoneSetAvatar = formatter.processMessageItem(someoneSetAvatarEvent, false)
         Truth.assertThat(someoneSetAvatar).isEqualTo("$otherName changed their avatar")
 
-        val youRemovedAvatarMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = removedContent)
-        val youRemovedAvatar = formatter.processMessageItem(youRemovedAvatarMessage, false)
+        val youRemovedAvatarEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = removedContent)
+        val youRemovedAvatar = formatter.processMessageItem(youRemovedAvatarEvent, false)
         Truth.assertThat(youRemovedAvatar).isEqualTo("You changed your avatar")
 
-        val someoneRemovedAvatarMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = removedContent)
-        val someoneRemovedAvatar = formatter.processMessageItem(someoneRemovedAvatarMessage, false)
+        val someoneRemovedAvatarEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = removedContent)
+        val someoneRemovedAvatar = formatter.processMessageItem(someoneRemovedAvatarEvent, false)
         Truth.assertThat(someoneRemovedAvatar).isEqualTo("$otherName changed their avatar")
 
-        val unchangedMessage = createRoomMessage(sentByYou = true, senderDisplayName = otherName, content = sameContent)
-        val unchangedResult = formatter.processMessageItem(unchangedMessage, false)
+        val unchangedEvent = createRoomEvent(sentByYou = true, senderDisplayName = otherName, content = sameContent)
+        val unchangedResult = formatter.processMessageItem(unchangedEvent, false)
         Truth.assertThat(unchangedResult).isNull()
 
-        val invalidMessage = createRoomMessage(sentByYou = true, senderDisplayName = otherName, content = invalidContent)
-        val invalidResult = formatter.processMessageItem(invalidMessage, false)
+        val invalidEvent = createRoomEvent(sentByYou = true, senderDisplayName = otherName, content = invalidContent)
+        val invalidResult = formatter.processMessageItem(invalidEvent, false)
         Truth.assertThat(invalidResult).isNull()
     }
 
@@ -678,36 +677,36 @@ class DefaultRoomLastMessageFormatterTests {
         val sameContent = aProfileChangeMessageContent(displayName = newDisplayName, prevDisplayName = newDisplayName)
         val invalidContent = aProfileChangeMessageContent(displayName = null, prevDisplayName = null)
 
-        val youChangedDisplayNameMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = changedContent)
-        val youChangedDisplayName = formatter.processMessageItem(youChangedDisplayNameMessage, false)
+        val youChangedDisplayNameEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = changedContent)
+        val youChangedDisplayName = formatter.processMessageItem(youChangedDisplayNameEvent, false)
         Truth.assertThat(youChangedDisplayName).isEqualTo("You changed your display name from $oldDisplayName to $newDisplayName")
 
-        val someoneChangedDisplayNameMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = changedContent)
-        val someoneChangedDisplayName = formatter.processMessageItem(someoneChangedDisplayNameMessage, false)
+        val someoneChangedDisplayNameEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = changedContent)
+        val someoneChangedDisplayName = formatter.processMessageItem(someoneChangedDisplayNameEvent, false)
         Truth.assertThat(someoneChangedDisplayName).isEqualTo("$otherName changed their display name from $oldDisplayName to $newDisplayName")
 
-        val youSetDisplayNameMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = setContent)
-        val youSetDisplayName = formatter.processMessageItem(youSetDisplayNameMessage, false)
+        val youSetDisplayNameEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = setContent)
+        val youSetDisplayName = formatter.processMessageItem(youSetDisplayNameEvent, false)
         Truth.assertThat(youSetDisplayName).isEqualTo("You set your display name to $newDisplayName")
 
-        val someoneSetDisplayNameMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = setContent)
-        val someoneSetDisplayName = formatter.processMessageItem(someoneSetDisplayNameMessage, false)
+        val someoneSetDisplayNameEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = setContent)
+        val someoneSetDisplayName = formatter.processMessageItem(someoneSetDisplayNameEvent, false)
         Truth.assertThat(someoneSetDisplayName).isEqualTo("$otherName set their display name to $newDisplayName")
 
-        val youRemovedDisplayNameMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = removedContent)
-        val youRemovedDisplayName = formatter.processMessageItem(youRemovedDisplayNameMessage, false)
+        val youRemovedDisplayNameEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = removedContent)
+        val youRemovedDisplayName = formatter.processMessageItem(youRemovedDisplayNameEvent, false)
         Truth.assertThat(youRemovedDisplayName).isEqualTo("You removed your display name (it was $oldDisplayName)")
 
-        val someoneRemovedDisplayNameMessage = createRoomMessage(sentByYou = false, senderDisplayName = otherName, content = removedContent)
-        val someoneRemovedDisplayName = formatter.processMessageItem(someoneRemovedDisplayNameMessage, false)
+        val someoneRemovedDisplayNameEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = removedContent)
+        val someoneRemovedDisplayName = formatter.processMessageItem(someoneRemovedDisplayNameEvent, false)
         Truth.assertThat(someoneRemovedDisplayName).isEqualTo("$otherName removed their display name (it was $oldDisplayName)")
 
-        val unchangedMessage = createRoomMessage(sentByYou = true, senderDisplayName = otherName, content = sameContent)
-        val unchangedResult = formatter.processMessageItem(unchangedMessage, false)
+        val unchangedEvent = createRoomEvent(sentByYou = true, senderDisplayName = otherName, content = sameContent)
+        val unchangedResult = formatter.processMessageItem(unchangedEvent, false)
         Truth.assertThat(unchangedResult).isNull()
 
-        val invalidMessage = createRoomMessage(sentByYou = true, senderDisplayName = otherName, content = invalidContent)
-        val invalidResult = formatter.processMessageItem(invalidMessage, false)
+        val invalidEvent = createRoomEvent(sentByYou = true, senderDisplayName = otherName, content = invalidContent)
+        val invalidResult = formatter.processMessageItem(invalidEvent, false)
         Truth.assertThat(invalidResult).isNull()
     }
 
@@ -735,25 +734,24 @@ class DefaultRoomLastMessageFormatterTests {
             prevAvatarUrl = "same_avatar_url",
         )
 
-        val youChangedBothMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = changedContent)
-        val youChangedBoth = formatter.processMessageItem(youChangedBothMessage, false)
+        val youChangedBothEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = changedContent)
+        val youChangedBoth = formatter.processMessageItem(youChangedBothEvent, false)
         Truth.assertThat(youChangedBoth).isEqualTo("You changed your display name from $oldDisplayName to $newDisplayName\n(avatar was changed too)")
 
-        val invalidContentMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = invalidContent)
-        val invalidMessage = formatter.processMessageItem(invalidContentMessage, false)
+        val invalidContentEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = invalidContent)
+        val invalidMessage = formatter.processMessageItem(invalidContentEvent, false)
         Truth.assertThat(invalidMessage).isNull()
 
-        val sameContentMessage = createRoomMessage(sentByYou = true, senderDisplayName = null, content = sameContent)
-        val sameMessage = formatter.processMessageItem(sameContentMessage, false)
+        val sameContentEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = sameContent)
+        val sameMessage = formatter.processMessageItem(sameContentEvent, false)
         Truth.assertThat(sameMessage).isNull()
     }
 
     // endregion
 
-    private fun createRoomMessage(sentByYou: Boolean, senderDisplayName: String?, content: EventContent): RoomMessage {
+    private fun createRoomEvent(sentByYou: Boolean, senderDisplayName: String?, content: EventContent): EventTimelineItem {
         val sender = if (sentByYou) A_USER_ID else UserId("someone_else")
         val profile = ProfileTimelineDetails.Ready(senderDisplayName, false, null)
-        val event = anEventTimelineItem(content = content, senderProfile = profile, sender = sender)
-        return aRoomMessage(event = event)
+        return anEventTimelineItem(content = content, senderProfile = profile, sender = sender)
     }
 }

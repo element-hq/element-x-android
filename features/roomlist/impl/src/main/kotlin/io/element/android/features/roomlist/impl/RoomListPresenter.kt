@@ -26,7 +26,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import io.element.android.features.roomlist.api.RoomLastMessageFormatter
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryPlaceholders
 import io.element.android.libraries.architecture.Presenter
@@ -174,7 +173,7 @@ class RoomListPresenter @Inject constructor(
                         hasUnread = roomSummary.details.unreadNotificationCount > 0,
                         timestamp = lastMessageTimestampFormatter.format(roomSummary.details.lastMessageTimestamp),
                         lastMessage = roomSummary.details.lastMessage?.let { message ->
-                            roomLastMessageFormatter.processMessageItem(message, roomSummary.details.isDirect)
+                            roomLastMessageFormatter.processMessageItem(message.event, roomSummary.details.isDirect)
                         }.orEmpty(),
                         avatarData = avatarData,
                     )
