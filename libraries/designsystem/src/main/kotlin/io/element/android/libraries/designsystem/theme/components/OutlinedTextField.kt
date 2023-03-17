@@ -99,8 +99,10 @@ fun OutlinedTextField(
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun Modifier.onTabOrEnterKeyFocusNext(focusManager: FocusManager): Modifier = onPreviewKeyEvent { event ->
-    if (event.type == KeyEventType.KeyUp && (event.key == Key.Tab || event.key == Key.Enter)) {
-        focusManager.moveFocus(FocusDirection.Down)
+    if (event.key == Key.Tab || event.key == Key.Enter) {
+        if (event.type == KeyEventType.KeyUp) {
+            focusManager.moveFocus(FocusDirection.Down)
+        }
         true
     } else {
         false

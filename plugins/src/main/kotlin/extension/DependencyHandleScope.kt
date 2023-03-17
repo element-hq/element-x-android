@@ -51,14 +51,20 @@ fun DependencyHandlerScope.composeDependencies(libs: LibrariesForLibs) {
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 }
 
-fun DependencyHandlerScope.allLibraries() {
+fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:designsystem"))
-    implementation(project(":libraries:matrix:api"))
+    implementation(project(":libraries:matrix:impl"))
     implementation(project(":libraries:matrixui"))
     implementation(project(":libraries:core"))
     implementation(project(":libraries:architecture"))
-    implementation(project(":libraries:dateformatter:api"))
+    implementation(project(":libraries:dateformatter:impl"))
     implementation(project(":libraries:di"))
+    implementation(project(":libraries:session-storage:impl"))
+
+}
+
+fun DependencyHandlerScope.allServicesImpl() {
+    implementation(project(":services:appnavstate:impl"))
 }
 
 fun DependencyHandlerScope.allFeaturesApi() {
@@ -70,6 +76,7 @@ fun DependencyHandlerScope.allFeaturesApi() {
     implementation(project(":features:rageshake:api"))
     implementation(project(":features:preferences:api"))
     implementation(project(":features:createroom:api"))
+    implementation(project(":features:verifysession:api"))
 }
 
 fun DependencyHandlerScope.allFeaturesImpl() {
@@ -81,4 +88,5 @@ fun DependencyHandlerScope.allFeaturesImpl() {
     implementation(project(":features:rageshake:impl"))
     implementation(project(":features:preferences:impl"))
     implementation(project(":features:createroom:impl"))
+    implementation(project(":features:verifysession:impl"))
 }

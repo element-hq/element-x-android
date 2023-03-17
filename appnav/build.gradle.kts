@@ -45,8 +45,11 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.matrixui)
+    implementation(projects.features.verifysession.api)
     implementation(projects.tests.uitests)
     implementation(libs.coil)
+
+    implementation(projects.services.appnavstate.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

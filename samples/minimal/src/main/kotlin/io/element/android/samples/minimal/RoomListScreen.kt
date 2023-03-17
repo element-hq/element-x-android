@@ -42,10 +42,12 @@ class RoomListScreen(
     private val timeZone = TimeZone.currentSystemDefault()
     private val dateTimeProvider = LocalDateTimeProvider(clock, timeZone)
     private val dateFormatters = DateFormatters(locale, clock, timeZone)
+    private val sessionVerificationService = matrixClient.sessionVerificationService()
     private val presenter = RoomListPresenter(
         matrixClient,
         DefaultLastMessageTimestampFormatter(dateTimeProvider, dateFormatters),
-        DefaultRoomLastMessageFormatter(context, matrixClient)
+        DefaultRoomLastMessageFormatter(context, matrixClient),
+        sessionVerificationService
     )
 
     @Composable
