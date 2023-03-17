@@ -36,7 +36,6 @@ class SlidingSyncObserverProxy(
     val updateSummaryFlow: SharedFlow<UpdateSummary> = updateSummaryMutableFlow.asSharedFlow()
 
     override fun didReceiveSyncUpdate(summary: UpdateSummary) {
-        if (summary.rooms.isEmpty()) return
         coroutineScope.launch {
             updateSummaryMutableFlow.emit(summary)
         }

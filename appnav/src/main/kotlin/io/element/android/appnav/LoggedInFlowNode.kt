@@ -38,6 +38,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
+import io.element.android.features.verifysession.api.VerifySessionEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -61,6 +62,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val preferencesEntryPoint: PreferencesEntryPoint,
     private val createRoomEntryPoint: CreateRoomEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
+    private val verifySessionEntryPoint: VerifySessionEntryPoint,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.RoomList,
@@ -120,6 +122,9 @@ class LoggedInFlowNode @AssistedInject constructor(
 
         @Parcelize
         object CreateRoom : NavTarget
+
+        @Parcelize
+        object VerifySession : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -136,6 +141,10 @@ class LoggedInFlowNode @AssistedInject constructor(
 
                     override fun onCreateRoomClicked() {
                         backstack.push(NavTarget.CreateRoom)
+                    }
+
+                    override fun onSessionVerificationClicked() {
+                        backstack.push(NavTarget.VerifySession)
                     }
                 }
                 roomListEntryPoint
@@ -170,6 +179,9 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
             NavTarget.CreateRoom -> {
                 createRoomEntryPoint.createNode(this, buildContext)
+            }
+            NavTarget.VerifySession -> {
+                verifySessionEntryPoint.createNode(this, buildContext)
             }
         }
     }

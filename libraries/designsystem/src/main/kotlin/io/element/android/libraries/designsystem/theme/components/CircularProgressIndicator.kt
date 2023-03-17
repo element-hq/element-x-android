@@ -18,6 +18,9 @@ package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.progressSemantics
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -75,4 +78,19 @@ private fun ContentToPreview() {
             progress = 0.75F
         )
     }
+}
+
+@Composable
+fun ButtonCircularProgressIndicator(
+    modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.colorScheme.onPrimary,
+    strokeWidth: Dp = 2.dp,
+) {
+    CircularProgressIndicator(
+        modifier = modifier
+            .progressSemantics()
+            .size(18.dp),
+        color = color,
+        strokeWidth = strokeWidth,
+    )
 }
