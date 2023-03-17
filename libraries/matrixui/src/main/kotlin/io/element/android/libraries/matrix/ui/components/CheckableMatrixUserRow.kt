@@ -53,7 +53,6 @@ fun CheckableMatrixUserRow(
             modifier = Modifier.weight(1f),
             matrixUser = matrixUser,
             avatarSize = avatarSize,
-            isClickEnabled = false,
         )
 
         Checkbox(

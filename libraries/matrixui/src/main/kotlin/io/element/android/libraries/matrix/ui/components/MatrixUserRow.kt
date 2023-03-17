@@ -45,12 +45,11 @@ fun MatrixUserRow(
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
     avatarSize: AvatarSize = matrixUser.avatarData.size,
-    isClickEnabled: Boolean = true,
-    onClick: () -> Unit = {},
+    onClick: (() -> Unit)? = null,
 ) {
     Row(
         modifier = modifier
-            .let { if (isClickEnabled) it.clickable(onClick = onClick) else it }
+            .let { if (onClick != null) it.clickable(onClick = onClick) else it }
             .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
             .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically
