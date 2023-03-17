@@ -121,7 +121,7 @@ internal fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = 
         is FlowStep.Verifying, FlowStep.Completed -> StringR.string.verification_subtitle_verifying
     }
     Column(modifier) {
-        Spacer(Modifier.height(68.dp))
+        Spacer(Modifier.height(76.dp))
         Box(
             modifier = Modifier
                 .size(width = 70.dp, height = 70.dp)
@@ -254,14 +254,14 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
                 modifier = Modifier.fillMaxWidth(),
                 onClick = { positiveButtonEvent?.let { eventSink(it) } }
             ) {
-                positiveButtonTitle?.let { Text(stringResource(it)) }
+                positiveButtonTitle?.let { Text(stringResource(it), style = ElementTextStyles.Button) }
             }
         } else {
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = { positiveButtonEvent?.let { eventSink(it) } }
             ) {
-                positiveButtonTitle?.let { Text(stringResource(it)) }
+                positiveButtonTitle?.let { Text(stringResource(it), style = ElementTextStyles.Button) }
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
