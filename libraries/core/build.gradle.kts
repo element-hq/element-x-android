@@ -29,4 +29,7 @@ java {
 
 dependencies {
     implementation(libs.coroutines.core)
+
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.truth)
 }
