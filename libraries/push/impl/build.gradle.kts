@@ -37,7 +37,6 @@ dependencies {
     implementation(libs.serialization.json)
 
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.analytics.api)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)
@@ -46,6 +45,7 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.push.api)
 
+    implementation(projects.services.analytics.api)
     implementation(projects.services.toolbox.api)
 
     api("me.gujun.android:span:1.7") {
