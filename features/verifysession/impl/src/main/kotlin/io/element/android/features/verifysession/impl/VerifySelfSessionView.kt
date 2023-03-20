@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -82,7 +83,7 @@ fun VerifySelfSessionView(
         derivedStateOf { verificationFlowStep != FlowStep.AwaitingOtherDeviceResponse && verificationFlowStep != FlowStep.Completed }
     }
     Surface {
-        Column(modifier = modifier.fillMaxWidth()) {
+        Column(modifier = modifier.fillMaxWidth().systemBarsPadding()) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -121,7 +122,7 @@ internal fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = 
         is FlowStep.Verifying, FlowStep.Completed -> StringR.string.verification_subtitle_verifying
     }
     Column(modifier) {
-        Spacer(Modifier.height(76.dp))
+        Spacer(Modifier.height(80.dp))
         Box(
             modifier = Modifier
                 .size(width = 70.dp, height = 70.dp)
@@ -197,7 +198,7 @@ internal fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier
             ) {
                 Text(entry.code, fontSize = 34.sp)
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(entry.name, style = ElementTextStyles.Regular.body)
+                Text(entry.name, style = ElementTextStyles.Regular.bodyMD)
             }
         }
     }
@@ -270,7 +271,7 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
             onClick = negativeButtonCallback,
             enabled = negativeButtonEnabled,
         ) {
-            negativeButtonTitle?.let { Text(stringResource(it)) }
+            negativeButtonTitle?.let { Text(stringResource(it), fontSize = 16.sp) }
         }
         Spacer(Modifier.height(40.dp))
     }
