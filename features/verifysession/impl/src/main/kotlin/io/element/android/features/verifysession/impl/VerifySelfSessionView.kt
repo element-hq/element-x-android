@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -48,18 +47,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
-import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep as FlowStep
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.ButtonCircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep as FlowStep
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
@@ -165,7 +164,7 @@ internal fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = 
 
 @Composable
 internal fun Content(flowState: FlowStep, modifier: Modifier = Modifier) {
-    Column (modifier){
+    Column(modifier) {
         Spacer(Modifier.height(56.dp))
         when (flowState) {
             FlowStep.Initial, FlowStep.Canceled, FlowStep.Completed -> Unit
@@ -238,7 +237,9 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
     }
 
     val negativeButtonCallback: () -> Unit = when (verificationViewState) {
-        is FlowStep.Verifying -> { { eventSink(VerifySelfSessionViewEvents.DeclineVerification) } }
+        is FlowStep.Verifying -> {
+            { eventSink(VerifySelfSessionViewEvents.DeclineVerification) }
+        }
         else -> goBack
     }
 
@@ -248,15 +249,20 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
             .padding(horizontal = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = { positiveButtonEvent?.let { eventSink(it) } }
-        ) {
-            if (isVerifying) {
-                ButtonCircularProgressIndicator()
-                Spacer(Modifier.width(10.dp))
+        if (isVerifying) {
+            ButtonWithProgress(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { positiveButtonEvent?.let { eventSink(it) } }
+            ) {
+                positiveButtonTitle?.let { Text(stringResource(it)) }
             }
-            positiveButtonTitle?.let { Text(stringResource(it)) }
+        } else {
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { positiveButtonEvent?.let { eventSink(it) } }
+            ) {
+                positiveButtonTitle?.let { Text(stringResource(it)) }
+            }
         }
         Spacer(modifier = Modifier.height(16.dp))
         TextButton(
@@ -272,12 +278,12 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
 
 @Preview
 @Composable
-fun TemplateViewLightPreview(@PreviewParameter(VerifySelfSessionStateProvider::class) state: VerifySelfSessionState) =
+fun VerifySelfSessionViewLightPreview(@PreviewParameter(VerifySelfSessionStateProvider::class) state: VerifySelfSessionState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun TemplateViewDarkPreview(@PreviewParameter(VerifySelfSessionStateProvider::class) state: VerifySelfSessionState) =
+fun VerifySelfSessionViewDarkPreview(@PreviewParameter(VerifySelfSessionStateProvider::class) state: VerifySelfSessionState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

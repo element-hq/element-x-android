@@ -23,16 +23,24 @@ import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfSessionState> {
     override val values: Sequence<VerifySelfSessionState>
         get() = sequenceOf(
-            aTemplateState(),
-            aTemplateState().copy(verificationFlowStep = VerifySelfSessionState.VerificationStep.AwaitingOtherDeviceResponse),
-            aTemplateState().copy(verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aVerificationEmojiList(), Async.Uninitialized)),
-            aTemplateState().copy(verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aVerificationEmojiList(), Async.Loading())),
-            aTemplateState().copy(verificationFlowStep = VerifySelfSessionState.VerificationStep.Canceled),
+            aVerifySelfSessionState(),
+            aVerifySelfSessionState().copy(
+                verificationFlowStep = VerifySelfSessionState.VerificationStep.AwaitingOtherDeviceResponse
+            ),
+            aVerifySelfSessionState().copy(
+                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aVerificationEmojiList(), Async.Uninitialized)
+            ),
+            aVerifySelfSessionState().copy(
+                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aVerificationEmojiList(), Async.Loading())
+            ),
+            aVerifySelfSessionState().copy(
+                verificationFlowStep = VerifySelfSessionState.VerificationStep.Canceled
+            ),
             // Add other state here
         )
 }
 
-fun aTemplateState() = VerifySelfSessionState(
+fun aVerifySelfSessionState() = VerifySelfSessionState(
     verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial,
     eventSink = {},
 )
