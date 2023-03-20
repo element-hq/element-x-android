@@ -65,6 +65,7 @@ import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.LinkColor
 import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
@@ -96,9 +97,9 @@ fun ChangeServerView(
 ) {
     val eventSink = state.eventSink
     val scrollState = rememberScrollState()
-    val interactionEnabled by remember(state.changeServerAction) {
+    val isLoading by remember(state.changeServerAction) {
         derivedStateOf {
-            state.changeServerAction !is Async.Loading
+            state.changeServerAction is Async.Loading
         }
     }
     val focusManager = LocalFocusManager.current
@@ -114,7 +115,7 @@ fun ChangeServerView(
         topBar = {
             TopAppBar(
                 title = {},
-                navigationIcon = { BackButton(onClick = onBackPressed, enabled = interactionEnabled) }
+                navigationIcon = { BackButton(onClick = onBackPressed, enabled = isLoading) }
             )
         }
     ) { padding ->
@@ -179,7 +180,7 @@ fun ChangeServerView(
                 var homeserverFieldState by textFieldState(stateValue = state.homeserver)
                 TextField(
                     value = homeserverFieldState,
-                    readOnly = !interactionEnabled,
+                    readOnly = isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag(TestTags.changeServerServer)
@@ -201,7 +202,7 @@ fun ChangeServerView(
                         {
                             IconButton(onClick = {
                                 homeserverFieldState = ""
-                            }, enabled = interactionEnabled) {
+                            }, enabled = isLoading) {
                                 Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(StringR.string.a11y_clear))
                             }
                         }
@@ -248,23 +249,18 @@ fun ChangeServerView(
                     style = ElementTextStyles.Regular.caption1,
                 )
                 Spacer(Modifier.height(32.dp))
-                Button(
+                ButtonWithProgress(
+                    text = stringResource(id = StringR.string.login_continue),
+                    showProgress = isLoading,
                     onClick = ::submit,
-                    enabled = interactionEnabled && state.submitEnabled,
+                    enabled = state.submitEnabled || isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag(TestTags.changeServerContinue)
-                ) {
-                    Text(text = stringResource(id = StringR.string.login_continue), style = ElementTextStyles.Button)
-                }
+                )
                 if (state.changeServerAction is Async.Success) {
                     onChangeServerSuccess()
                 }
-            }
-            if (state.changeServerAction is Async.Loading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
             }
         }
     }
