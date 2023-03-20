@@ -33,9 +33,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.RoomListEntry
 import org.matrix.rustcomponents.sdk.SlidingSync
+import org.matrix.rustcomponents.sdk.SlidingSyncList
+import org.matrix.rustcomponents.sdk.SlidingSyncListRoomsListDiff
 import org.matrix.rustcomponents.sdk.SlidingSyncState
-import org.matrix.rustcomponents.sdk.SlidingSyncView
-import org.matrix.rustcomponents.sdk.SlidingSyncViewRoomsListDiff
 import org.matrix.rustcomponents.sdk.UpdateSummary
 import timber.log.Timber
 import java.io.Closeable
@@ -44,7 +44,7 @@ import java.util.UUID
 internal class RustRoomSummaryDataSource(
     private val slidingSyncUpdateFlow: Flow<UpdateSummary>,
     private val slidingSync: SlidingSync,
-    private val slidingSyncView: SlidingSyncView,
+    private val slidingSyncList: SlidingSyncList,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val onRestartSync: () -> Unit,
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
@@ -59,7 +59,7 @@ internal class RustRoomSummaryDataSource(
         coroutineScope.launch {
             updateRoomSummaries {
                 addAll(
-                    slidingSyncView.currentRoomsList().map(::buildSummaryForRoomListEntry)
+                    slidingSyncList.currentRoomsList().map(::buildSummaryForRoomListEntry)
                 )
             }
         }
@@ -69,7 +69,7 @@ internal class RustRoomSummaryDataSource(
                 didReceiveSyncUpdate(it)
             }.launchIn(coroutineScope)
 
-        slidingSyncView.roomListDiff(coroutineScope)
+        slidingSyncList.roomListDiff(coroutineScope)
             .onEach { diffs ->
                 updateRoomSummaries {
                     applyDiff(diffs)
@@ -77,7 +77,7 @@ internal class RustRoomSummaryDataSource(
             }
             .launchIn(coroutineScope)
 
-        slidingSyncView.state(coroutineScope)
+        slidingSyncList.state(coroutineScope)
             .onEach { slidingSyncState ->
                 Timber.v("New sliding sync state: $slidingSyncState")
                 state.value = slidingSyncState
@@ -95,7 +95,7 @@ internal class RustRoomSummaryDataSource(
 
     override fun setSlidingSyncRange(range: IntRange) {
         Timber.v("setVisibleRange=$range")
-        slidingSyncView.setRange(range.first.toUInt(), range.last.toUInt())
+        slidingSyncList.setRange(range.first.toUInt(), range.last.toUInt())
         onRestartSync()
     }
 
@@ -116,7 +116,7 @@ internal class RustRoomSummaryDataSource(
         }
     }
 
-    private fun MutableList<RoomSummary>.applyDiff(diff: SlidingSyncViewRoomsListDiff) {
+    private fun MutableList<RoomSummary>.applyDiff(diff: SlidingSyncListRoomsListDiff) {
         fun MutableList<RoomSummary>.fillUntil(untilIndex: Int) {
             repeat((size - 1 until untilIndex).count()) {
                 add(buildEmptyRoomSummary())
@@ -124,43 +124,43 @@ internal class RustRoomSummaryDataSource(
         }
         Timber.v("ApplyDiff: $diff for list with size: $size")
         when (diff) {
-            is SlidingSyncViewRoomsListDiff.Append -> {
+            is SlidingSyncListRoomsListDiff.Append -> {
                 val roomSummaries = diff.values.map {
                     buildSummaryForRoomListEntry(it)
                 }
                 addAll(roomSummaries)
             }
-            is SlidingSyncViewRoomsListDiff.PushBack -> {
+            is SlidingSyncListRoomsListDiff.PushBack -> {
                 val roomSummary = buildSummaryForRoomListEntry(diff.value)
                 add(roomSummary)
             }
-            is SlidingSyncViewRoomsListDiff.PushFront -> {
+            is SlidingSyncListRoomsListDiff.PushFront -> {
                 val roomSummary = buildSummaryForRoomListEntry(diff.value)
                 add(0, roomSummary)
             }
-            is SlidingSyncViewRoomsListDiff.Set -> {
+            is SlidingSyncListRoomsListDiff.Set -> {
                 fillUntil(diff.index.toInt())
                 val roomSummary = buildSummaryForRoomListEntry(diff.value)
                 set(diff.index.toInt(), roomSummary)
             }
-            is SlidingSyncViewRoomsListDiff.Insert -> {
+            is SlidingSyncListRoomsListDiff.Insert -> {
                 val roomSummary = buildSummaryForRoomListEntry(diff.value)
                 add(diff.index.toInt(), roomSummary)
             }
-            is SlidingSyncViewRoomsListDiff.Remove -> {
+            is SlidingSyncListRoomsListDiff.Remove -> {
                 removeAt(diff.index.toInt())
             }
-            is SlidingSyncViewRoomsListDiff.Reset -> {
+            is SlidingSyncListRoomsListDiff.Reset -> {
                 clear()
                 addAll(diff.values.map { buildSummaryForRoomListEntry(it) })
             }
-            SlidingSyncViewRoomsListDiff.PopBack -> {
+            SlidingSyncListRoomsListDiff.PopBack -> {
                 removeFirstOrNull()
             }
-            SlidingSyncViewRoomsListDiff.PopFront -> {
+            SlidingSyncListRoomsListDiff.PopFront -> {
                 removeLastOrNull()
             }
-            SlidingSyncViewRoomsListDiff.Clear -> {
+            SlidingSyncListRoomsListDiff.Clear -> {
                 clear()
             }
         }

@@ -33,7 +33,7 @@ interface MatrixClient {
     fun sessionVerificationService(): SessionVerificationService
     suspend fun logout()
     suspend fun loadUserDisplayName(): Result<String>
-    suspend fun loadUserAvatarURLString(): Result<String>
+    suspend fun loadUserAvatarURLString(): Result<String?>
     suspend fun loadMediaContent(url: String): Result<ByteArray>
     suspend fun loadMediaThumbnail(
         url: String,
