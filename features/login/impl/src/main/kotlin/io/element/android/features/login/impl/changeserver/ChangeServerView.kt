@@ -79,7 +79,6 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
-import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.R as StringR
@@ -100,7 +99,7 @@ fun ChangeServerView(
             state.changeServerAction !is Async.Loading
         }
     }
-    val invalidHomeserverError = (state.changeServerAction as? Async.Failure)?.error as? ChangeServerError.Footer
+    val invalidHomeserverError = (state.changeServerAction as? Async.Failure)?.error as? ChangeServerError.InlineErrorMessage
     val slidingSyncNotSupportedError = (state.changeServerAction as? Async.Failure)?.error as? ChangeServerError.SlidingSyncAlert
     val focusManager = LocalFocusManager.current
 

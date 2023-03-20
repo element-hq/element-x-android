@@ -28,7 +28,7 @@ open class ChangeServerStateProvider : PreviewParameterProvider<ChangeServerStat
             aChangeServerState().copy(homeserver = "matrix.org", changeServerAction = Async.Loading()),
             aChangeServerState().copy(
                 homeserver = "invalid.org",
-                changeServerAction = Async.Failure(ChangeServerError.Footer(R.string.server_selection_invalid_homeserver_error))
+                changeServerAction = Async.Failure(ChangeServerError.InlineErrorMessage(R.string.server_selection_invalid_homeserver_error))
             ),
             aChangeServerState().copy(homeserver = "invalid.org", changeServerAction = Async.Failure(ChangeServerError.SlidingSyncAlert)),
             aChangeServerState().copy(homeserver = "matrix.org", changeServerAction = Async.Success(Unit)),
