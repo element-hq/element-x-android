@@ -32,6 +32,7 @@ class StateMachine<Event : Any, State : Any>(
     val initialState: State,
     private val stateConfigs: Map<Class<*>, StateConfig<*>>,
     private val routes: List<StateMachineRoute<*, *, *>>,
+    private val logger: ((String) -> Unit)? = null,
 ) {
 
     private val _stateFlow = MutableStateFlow(initialState)
@@ -50,10 +51,13 @@ class StateMachine<Event : Any, State : Any>(
     fun <E : Event> process(event: E) {
         val route = findMatchingRoute(event) ?: error("No route found for state $currentState on event $event")
 
+        val nextState = route.toState(event, currentState)
+
+        logTransition(currentState, nextState, event)
+
         val lastStateConfig: StateConfig<State>? = stateConfigs[currentState::class.java] as? StateConfig<State>
         lastStateConfig?.onExit?.invoke(currentState)
 
-        val nextState = route.toState(event, currentState)
         transitionHandler?.invoke(currentState, event, nextState)
         _stateFlow.value = nextState
 
@@ -71,6 +75,26 @@ class StateMachine<Event : Any, State : Any>(
     fun restart() {
         _stateFlow.value = initialState
     }
+
+    private fun logTransition(fromState: State, toState: State, event: Event) {
+        val logger = this.logger ?: return
+        val fromStateName = if (fromState::class.objectInstance != null) {
+            fromState::class.simpleName
+        } else {
+            fromState.toString()
+        }
+        val nextStateName = if (toState::class.objectInstance != null) {
+            toState::class.simpleName
+        } else {
+            toState.toString()
+        }
+        val eventName = if (event::class.objectInstance != null) {
+            event::class.simpleName
+        } else {
+            event.toString()
+        }
+        logger.invoke("State: $fromStateName -> $nextStateName. Event: $eventName")
+    }
 }
 
 class StateMachineBuilder<Event : Any, State : Any>(
@@ -79,6 +103,8 @@ class StateMachineBuilder<Event : Any, State : Any>(
 
     lateinit var initialState: State
     var stateConfigs = mutableMapOf<Class<out State>, StateConfig<out State>>()
+
+    var logger: ((String) -> Unit)? = null
 
     inline fun <reified S : State> addState(block: StateRegistrationBuilder<Event, State, S>.() -> Unit = {}) {
         val config = StateConfig(S::class.java)
@@ -117,7 +143,7 @@ class StateMachineBuilder<Event : Any, State : Any>(
 
     fun build(): StateMachine<Event, State> {
         if (::initialState.isInitialized) {
-            return StateMachine(initialState, stateConfigs.toMap(), routes)
+            return StateMachine(initialState, stateConfigs.toMap(), routes, logger)
         } else {
             error("The state machine has no initial state")
         }

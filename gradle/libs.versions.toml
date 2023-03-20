@@ -57,6 +57,7 @@ dependencygraph = "0.10"
 android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "android_gradle_plugin" }
 firebase_gradle_plugin = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebase_gradle_plugin" }
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin_reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 
 # AndroidX
 androidx_material = { module = "com.google.android.material:material", version.ref = "material" }

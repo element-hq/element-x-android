@@ -25,6 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 
 class VerifySelfSessionStateMachine(
     coroutineScope: CoroutineScope,
@@ -32,6 +33,8 @@ class VerifySelfSessionStateMachine(
 ) {
 
     private val stateMachine = createStateMachine {
+        logger = { message -> Timber.d(message) }
+
         addInitialState(State.Initial) {
             on<Event.RequestVerification>(State.RequestingVerification)
             on<Event.StartSasVerification>(State.StartingSasVerification)
