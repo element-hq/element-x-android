@@ -18,8 +18,7 @@ package io.element.android.libraries.push.impl
 
 import io.element.android.libraries.push.impl.config.PushConfig
 import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest
-import io.element.android.libraries.toolbox.api.appname.AppNameProvider
-import java.util.UUID
+import io.element.android.services.toolbox.api.appname.AppNameProvider
 import javax.inject.Inject
 
 internal const val DEFAULT_PUSHER_FILE_TAG = "mobile"

@@ -16,10 +16,10 @@
 package io.element.android.libraries.push.impl.notifications
 
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.toolbox.api.strings.StringProvider
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
-import io.element.android.libraries.toolbox.api.systemclock.SystemClock
+import io.element.android.services.toolbox.api.strings.StringProvider
+import io.element.android.services.toolbox.api.systemclock.SystemClock
 import javax.inject.Inject
 
 /**

@@ -20,7 +20,7 @@ import android.content.Context
 import io.element.android.libraries.androidutils.system.getApplicationLabel
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.push.impl.config.PushConfig
-import io.element.android.libraries.toolbox.api.strings.StringProvider
+import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.unifiedpush.android.connector.UnifiedPush

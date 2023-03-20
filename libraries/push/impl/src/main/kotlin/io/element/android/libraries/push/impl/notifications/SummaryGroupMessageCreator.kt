@@ -18,7 +18,7 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.app.Notification
 import androidx.core.app.NotificationCompat
-import io.element.android.libraries.toolbox.api.strings.StringProvider
+import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
 
 import io.element.android.libraries.ui.strings.R as StringR

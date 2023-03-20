@@ -19,8 +19,8 @@ package io.element.android.libraries.push.impl.notifications
 import android.graphics.Bitmap
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
-import io.element.android.libraries.toolbox.api.strings.StringProvider
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
+import io.element.android.services.toolbox.api.strings.StringProvider
 import me.gujun.android.span.Span
 import me.gujun.android.span.span
 import timber.log.Timber

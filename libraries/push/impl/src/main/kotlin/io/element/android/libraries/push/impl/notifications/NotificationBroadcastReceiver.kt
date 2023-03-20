@@ -20,18 +20,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.RemoteInput
-import io.element.android.libraries.analytics.api.AnalyticsTracker
-import io.element.android.libraries.analytics.api.plan.JoinedRoom
 import io.element.android.libraries.architecture.bindings
-import io.element.android.libraries.core.data.tryOrNull
-import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
-import io.element.android.libraries.toolbox.api.systemclock.SystemClock
-import kotlinx.coroutines.launch
+import io.element.android.services.analytics.api.AnalyticsTracker
+import io.element.android.services.toolbox.api.systemclock.SystemClock
 import timber.log.Timber
-import java.util.UUID
 import javax.inject.Inject
-
-import io.element.android.libraries.ui.strings.R as StringR
 
 /**
  * Receives actions broadcast by notification (on click, on dismiss, inline replies, etc.).
@@ -39,6 +32,7 @@ import io.element.android.libraries.ui.strings.R as StringR
 class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+
     //@Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var analyticsTracker: AnalyticsTracker
     @Inject lateinit var clock: SystemClock
