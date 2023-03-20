@@ -135,7 +135,7 @@ fun RoomListContent(
         if (state.presentVerificationSuccessfulMessage) {
             snackbarHostState.showSnackbar(
                 message = verificationCompleteMessage,
-                duration = SnackbarDuration.Long,
+                duration = SnackbarDuration.Short,
             )
             state.eventSink(RoomListEvents.ClearSuccessfulVerificationMessage)
         }

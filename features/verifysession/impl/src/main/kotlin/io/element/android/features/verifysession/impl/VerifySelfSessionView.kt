@@ -198,7 +198,11 @@ internal fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier
             ) {
                 Text(entry.code, fontSize = 34.sp)
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(entry.name, style = ElementTextStyles.Regular.bodyMD)
+                Text(
+                    entry.name,
+                    style = ElementTextStyles.Regular.bodyMD,
+                    color = MaterialTheme.colorScheme.secondary,
+                )
             }
         }
     }
