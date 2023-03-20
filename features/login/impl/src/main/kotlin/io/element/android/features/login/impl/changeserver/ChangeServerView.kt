@@ -212,7 +212,7 @@ fun ChangeServerView(
                             Text(invalidHomeserverError.message(), color = MaterialTheme.colorScheme.error)
                         } else {
                             val footerMessage = stringResource(StringR.string.server_selection_server_footer)
-                            val footerAction = stringResource(StringR.string.server_selection_server_footer_action)
+                            val footerAction = stringResource(StringR.string.action_learn_more)
                             val footerText = buildAnnotatedString {
                                 val defaultColor = MaterialTheme.colorScheme.tertiary
                                 withStyle(ParagraphStyle(textAlign = TextAlign.Start)) {
