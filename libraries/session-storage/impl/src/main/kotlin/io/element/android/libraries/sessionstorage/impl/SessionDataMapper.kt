@@ -25,7 +25,6 @@ internal fun SessionData.toDbModel(): io.element.android.libraries.matrix.sessio
         accessToken = accessToken,
         refreshToken = refreshToken,
         homeserverUrl = homeserverUrl,
-        isSoftLogout = isSoftLogout,
         slidingSyncProxy = slidingSyncProxy,
     )
 }
@@ -37,7 +36,6 @@ internal fun io.element.android.libraries.matrix.session.SessionData.toApiModel(
         accessToken = accessToken,
         refreshToken = refreshToken,
         homeserverUrl = homeserverUrl,
-        isSoftLogout = isSoftLogout,
         slidingSyncProxy = slidingSyncProxy,
     )
 }

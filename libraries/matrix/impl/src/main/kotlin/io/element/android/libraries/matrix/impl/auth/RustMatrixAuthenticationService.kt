@@ -125,7 +125,6 @@ private fun SessionData.toSession() = Session(
     userId = userId,
     deviceId = deviceId,
     homeserverUrl = homeserverUrl,
-    isSoftLogout = isSoftLogout,
     slidingSyncProxy = slidingSyncProxy,
 )
 
@@ -135,6 +134,5 @@ private fun Session.toSessionData() = SessionData(
     accessToken = accessToken,
     refreshToken = refreshToken,
     homeserverUrl = homeserverUrl,
-    isSoftLogout = isSoftLogout,
     slidingSyncProxy = slidingSyncProxy,
 )
