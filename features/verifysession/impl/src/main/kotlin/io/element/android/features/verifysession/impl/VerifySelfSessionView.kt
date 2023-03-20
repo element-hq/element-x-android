@@ -249,21 +249,12 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
             .padding(horizontal = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (isVerifying) {
-            ButtonWithProgress(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { positiveButtonEvent?.let { eventSink(it) } }
-            ) {
-                positiveButtonTitle?.let { Text(stringResource(it)) }
-            }
-        } else {
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { positiveButtonEvent?.let { eventSink(it) } }
-            ) {
-                positiveButtonTitle?.let { Text(stringResource(it)) }
-            }
-        }
+        ButtonWithProgress(
+            text = positiveButtonTitle?.let { stringResource(it) },
+            showProgress = isVerifying,
+            modifier = Modifier.fillMaxWidth(),
+            onClick = { positiveButtonEvent?.let { eventSink(it) } }
+        )
         Spacer(modifier = Modifier.height(16.dp))
         TextButton(
             modifier = Modifier.fillMaxWidth(),
