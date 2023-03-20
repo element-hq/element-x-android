@@ -18,7 +18,6 @@ package io.element.android.libraries.designsystem.components.dialogs
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -70,8 +69,8 @@ fun ErrorDialog(
 }
 
 object ErrorDialogDefaults {
-    val title: String @Composable get()= stringResource(id = StringR.string.dialog_title_error)
-    val submitText: String @Composable get()= stringResource(id = StringR.string.ok)
+    val title: String @Composable get() = stringResource(id = StringR.string.dialog_title_error)
+    val submitText: String @Composable get() = stringResource(id = StringR.string.ok)
 }
 
 @Preview
