@@ -38,9 +38,9 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.RequiredState
+import org.matrix.rustcomponents.sdk.SlidingSyncListBuilder
 import org.matrix.rustcomponents.sdk.SlidingSyncMode
 import org.matrix.rustcomponents.sdk.SlidingSyncRequestListFilters
-import org.matrix.rustcomponents.sdk.SlidingSyncViewBuilder
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
 import org.matrix.rustcomponents.sdk.use
@@ -63,15 +63,8 @@ class RustMatrixClient constructor(
 
     private val clientDelegate = object : ClientDelegate {
         override fun didReceiveAuthError(isSoftLogout: Boolean) {
-            Timber.v("didReceiveAuthError()")
-        }
-
-        override fun didReceiveSyncUpdate() {
-            Timber.v("didReceiveSyncUpdate()")
-        }
-
-        override fun didUpdateRestoreToken() {
-            Timber.v("didUpdateRestoreToken()")
+            //TODO handle this
+            Timber.v("didReceiveAuthError(isSoftLogout=$isSoftLogout)")
         }
     }
 
@@ -90,7 +83,7 @@ class RustMatrixClient constructor(
         )
     }
 
-    private val visibleRoomsView = SlidingSyncViewBuilder()
+    private val visibleRoomsSlidingSyncList = SlidingSyncListBuilder()
         .timelineLimit(limit = 1u)
         .requiredState(
             requiredState = listOf(
@@ -112,7 +105,7 @@ class RustMatrixClient constructor(
         .homeserver("https://slidingsync.lab.matrix.org")
         .withCommonExtensions()
         .coldCache("ElementX")
-        .addView(visibleRoomsView)
+        .addList(visibleRoomsSlidingSyncList)
         .use {
             it.build()
         }
@@ -122,7 +115,7 @@ class RustMatrixClient constructor(
         RustRoomSummaryDataSource(
             slidingSyncObserverProxy.updateSummaryFlow,
             slidingSync,
-            visibleRoomsView,
+            visibleRoomsSlidingSyncList,
             dispatchers,
             ::onRestartSync
         )
@@ -166,7 +159,6 @@ class RustMatrixClient constructor(
     override fun sessionVerificationService(): SessionVerificationService = verificationService
 
     override fun startSync() {
-        if (client.isSoftLogout()) return
         if (isSyncing.compareAndSet(false, true)) {
             slidingSyncObserverToken = slidingSync.sync()
         }
@@ -184,7 +176,7 @@ class RustMatrixClient constructor(
         slidingSync.setObserver(null)
         rustRoomSummaryDataSource.close()
         client.setDelegate(null)
-        visibleRoomsView.destroy()
+        visibleRoomsSlidingSyncList.destroy()
         slidingSync.destroy()
         verificationService.destroy()
     }
@@ -207,7 +199,7 @@ class RustMatrixClient constructor(
         }
     }
 
-    override suspend fun loadUserAvatarURLString(): Result<String> = withContext(dispatchers.io) {
+    override suspend fun loadUserAvatarURLString(): Result<String?> = withContext(dispatchers.io) {
         runCatching {
             client.avatarUrl()
         }

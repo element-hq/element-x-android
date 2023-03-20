@@ -64,7 +64,7 @@ class FakeMatrixClient(
         return userDisplayName
     }
 
-    override suspend fun loadUserAvatarURLString(): Result<String> {
+    override suspend fun loadUserAvatarURLString(): Result<String?> {
         return userAvatarURLString
     }
 
