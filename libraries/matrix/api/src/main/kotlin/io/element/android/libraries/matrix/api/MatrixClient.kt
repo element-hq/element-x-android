@@ -31,7 +31,7 @@ interface MatrixClient {
     fun mediaResolver(): MediaResolver
     suspend fun logout()
     suspend fun loadUserDisplayName(): Result<String>
-    suspend fun loadUserAvatarURLString(): Result<String>
+    suspend fun loadUserAvatarURLString(): Result<String?>
     suspend fun loadMediaContent(url: String): Result<ByteArray>
     suspend fun loadMediaThumbnail(
         url: String,

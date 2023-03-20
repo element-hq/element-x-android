@@ -4,7 +4,6 @@ CREATE TABLE SessionData (
     accessToken TEXT NOT NULL,
     refreshToken TEXT,
     homeserverUrl TEXT NOT NULL,
-    isSoftLogout INTEGER AS Boolean NOT NULL DEFAULT 0,
     slidingSyncProxy TEXT
 );
 
@@ -15,7 +14,7 @@ selectByUserId:
 SELECT * FROM SessionData WHERE userId = ?;
 
 insertSessionData:
-INSERT INTO SessionData(userId, deviceId, accessToken, refreshToken, homeserverUrl, isSoftLogout, slidingSyncProxy) VALUES ?;
+INSERT INTO SessionData(userId, deviceId, accessToken, refreshToken, homeserverUrl, slidingSyncProxy) VALUES ?;
 
 removeSession:
 DELETE FROM SessionData WHERE userId = ?;
