@@ -30,15 +30,16 @@ import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryPlaceholders
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.parallelMap
-import io.element.android.libraries.dateformatter.api.LastMessageFormatter
+import io.element.android.libraries.core.extensions.orEmpty
+import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomSummary
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
+import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -52,7 +53,8 @@ private const val extendedRangeSize = 40
 
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
-    private val lastMessageFormatter: LastMessageFormatter,
+    private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
+    private val roomLastMessageFormatter: RoomLastMessageFormatter,
     private val sessionVerificationService: SessionVerificationService,
 ) : Presenter<RoomListState> {
 
@@ -169,8 +171,10 @@ class RoomListPresenter @Inject constructor(
                         id = roomSummary.identifier(),
                         name = roomSummary.details.name,
                         hasUnread = roomSummary.details.unreadNotificationCount > 0,
-                        timestamp = lastMessageFormatter.format(roomSummary.details.lastMessageTimestamp),
-                        lastMessage = roomSummary.details.lastMessage,
+                        timestamp = lastMessageTimestampFormatter.format(roomSummary.details.lastMessageTimestamp),
+                        lastMessage = roomSummary.details.lastMessage?.let { message ->
+                            roomLastMessageFormatter.processMessageItem(message.event, roomSummary.details.isDirect)
+                        }.orEmpty(),
                         avatarData = avatarData,
                     )
                 }

@@ -17,15 +17,15 @@
 package io.element.android.libraries.dateformatter.impl
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.dateformatter.api.LastMessageFormatter
+import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultLastMessageFormatter @Inject constructor(
+class DefaultLastMessageTimestampFormatter @Inject constructor(
     private val localDateTimeProvider: LocalDateTimeProvider,
     private val dateFormatters: DateFormatters,
-) : LastMessageFormatter {
+) : LastMessageTimestampFormatter {
 
     override fun format(timestamp: Long?): String {
         if (timestamp == null) return ""

@@ -14,8 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.dateformatter.api
+package io.element.android.libraries.dateformatter.test
 
-interface LastMessageFormatter {
-    fun format(timestamp: Long?): String
+import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
+
+class FakeLastMessageTimestampFormatter : LastMessageTimestampFormatter {
+    private var format = ""
+    fun givenFormat(format: String) {
+        this.format = format
+    }
+
+    override fun format(timestamp: Long?): String {
+        return format
+    }
 }

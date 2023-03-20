@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.room.message
+package io.element.android.features.roomlist.impl
 
-import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 
-data class RoomMessage(
-    val eventId: EventId,
-    val event: EventTimelineItem,
-    val sender: UserId,
-    val originServerTs: Long,
-)
+interface RoomLastMessageFormatter {
+    fun processMessageItem(event: EventTimelineItem, isDmRoom: Boolean): CharSequence?
+}

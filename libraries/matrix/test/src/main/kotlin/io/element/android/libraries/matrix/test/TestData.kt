@@ -33,6 +33,7 @@ val A_SPACE_ID = SpaceId("!aSpaceId")
 val A_ROOM_ID = RoomId("!aRoomId")
 val A_THREAD_ID = ThreadId("\$aThreadId")
 val AN_EVENT_ID = EventId("\$anEventId")
+const val A_UNIQUE_ID = "aUniqueId"
 
 const val A_ROOM_NAME = "A room name"
 const val A_MESSAGE = "Hello world!"
