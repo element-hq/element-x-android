@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,6 +56,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.placeholder.material.placeholder
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvider
+import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -133,13 +135,15 @@ internal fun DefaultRoomSummaryRow(
                 overflow = TextOverflow.Ellipsis
             )
             // Last Message
+            val attributedLastMessage = (room.lastMessage as? AnnotatedString)
+                ?: AnnotatedString(room.lastMessage.orEmpty().toString())
             Text(
                 modifier = Modifier.placeholder(
                     visible = room.isPlaceholder,
                     shape = TextPlaceholderShape,
                     color = ElementTheme.colors.roomListPlaceHolder(),
                 ),
-                text = room.lastMessage?.toString().orEmpty(),
+                text = attributedLastMessage,
                 color = MaterialTheme.roomListRoomMessage(),
                 fontSize = 14.sp,
                 maxLines = 1,

@@ -17,14 +17,14 @@
 package io.element.android.libraries.dateformatter.impl
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.dateformatter.api.LastMessageFormatter
+import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.test.FakeClock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import org.junit.Test
 import java.util.Locale
 
-class DefaultLastMessageFormatterTest {
+class DefaultLastMessageTimestampFormatterTest {
 
     @Test
     fun `test null`() {
@@ -100,10 +100,10 @@ class DefaultLastMessageFormatterTest {
     /**
      * Create DefaultLastMessageFormatter and set current time to the provided date.
      */
-    private fun createFormatter(@Suppress("SameParameterValue") currentDate: String): LastMessageFormatter {
+    private fun createFormatter(@Suppress("SameParameterValue") currentDate: String): LastMessageTimestampFormatter {
         val clock = FakeClock().also { it.givenInstant(Instant.parse(currentDate)) }
         val localDateTimeProvider = LocalDateTimeProvider(clock, TimeZone.UTC)
         val dateFormatters = DateFormatters(Locale.US, clock, TimeZone.UTC)
-        return DefaultLastMessageFormatter(localDateTimeProvider, dateFormatters)
+        return DefaultLastMessageTimestampFormatter(localDateTimeProvider, dateFormatters)
     }
 }

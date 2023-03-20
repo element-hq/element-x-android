@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -72,7 +73,7 @@ class MainActivity : ComponentActivity() {
                 val sessionId = matrixAuthenticationService.getLatestSessionId()!!
                 matrixAuthenticationService.restoreSession(sessionId).getOrNull()
             }
-            RoomListScreen(matrixClient = matrixClient!!).Content(modifier)
+            RoomListScreen(LocalContext.current, matrixClient!!).Content(modifier)
         }
     }
 }

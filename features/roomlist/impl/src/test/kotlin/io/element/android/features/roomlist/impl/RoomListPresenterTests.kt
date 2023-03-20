@@ -21,14 +21,13 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
-import io.element.android.libraries.dateformatter.api.LastMessageFormatter
-import io.element.android.libraries.dateformatter.test.FakeLastMessageFormatter
+import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
+import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
+import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
-import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -48,6 +47,7 @@ class RoomListPresenterTests {
         val presenter = RoomListPresenter(
             FakeMatrixClient(A_SESSION_ID),
             createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -73,6 +73,7 @@ class RoomListPresenterTests {
                 userAvatarURLString = Result.failure(AN_EXCEPTION),
             ),
             createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -92,6 +93,7 @@ class RoomListPresenterTests {
         val presenter = RoomListPresenter(
             FakeMatrixClient(A_SESSION_ID),
             createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -115,6 +117,7 @@ class RoomListPresenterTests {
                 roomSummaryDataSource = roomSummaryDataSource
             ),
             createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -143,6 +146,7 @@ class RoomListPresenterTests {
                 roomSummaryDataSource = roomSummaryDataSource
             ),
             createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -176,6 +180,7 @@ class RoomListPresenterTests {
                 roomSummaryDataSource = roomSummaryDataSource
             ),
             createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -220,6 +225,7 @@ class RoomListPresenterTests {
                 roomSummaryDataSource = roomSummaryDataSource
             ),
             createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService().apply {
                 givenIsReady(true)
                 givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
@@ -245,6 +251,7 @@ class RoomListPresenterTests {
                 roomSummaryDataSource = roomSummaryDataSource
             ),
             createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService().apply {
                 givenIsReady(true)
                 givenVerificationFlowState(VerificationFlowState.Finished)
@@ -261,8 +268,8 @@ class RoomListPresenterTests {
         }
     }
 
-    private fun createDateFormatter(): LastMessageFormatter {
-        return FakeLastMessageFormatter().apply {
+    private fun createDateFormatter(): LastMessageTimestampFormatter {
+        return FakeLastMessageTimestampFormatter().apply {
             givenFormat(A_FORMATTED_DATE)
         }
     }
@@ -276,7 +283,7 @@ private val aRoomListRoomSummary = RoomListRoomSummary(
     name = A_ROOM_NAME,
     hasUnread = true,
     timestamp = A_FORMATTED_DATE,
-    lastMessage = A_MESSAGE,
+    lastMessage = "",
     avatarData = AvatarData(id = A_ROOM_ID.value, name = A_ROOM_NAME),
     isPlaceholder = false,
 )
