@@ -107,7 +107,10 @@ if (hasChangedViews) {
 }
 
 // Check for pngs on resources
-const hasPngs = editedFiles.filter(file => file.toLowerCase().endsWith(".png")).length > 0
+const hasPngs = editedFiles.filter(file => {
+    file.toLowerCase().endsWith(".png") && !file.includes("snapshots/images/") // Exclude screenshots
+}).length > 0
+}
 if (hasPngs) {
     warn("You seem to have made changes to some images. Please consider using an vector drawable.")
 }
