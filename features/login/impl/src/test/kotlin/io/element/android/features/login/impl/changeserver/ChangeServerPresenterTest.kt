@@ -134,6 +134,7 @@ class ChangeServerPresenterTest {
             val initialState = awaitItem()
             authServer.givenChangeServerError(Throwable())
             initialState.eventSink.invoke(ChangeServerEvents.Submit)
+            skipItems(1) // Loading
             val failureState = awaitItem()
             assertThat(failureState.submitEnabled).isFalse()
             assertThat(failureState.changeServerAction).isInstanceOf(Async.Failure::class.java)
@@ -154,6 +155,8 @@ class ChangeServerPresenterTest {
             // Submit will return an error
             authenticationService.givenChangeServerError(A_THROWABLE)
             initialState.eventSink(ChangeServerEvents.Submit)
+
+            skipItems(1) // Loading
 
             // Check an error was returned
             val submittedState = awaitItem()
