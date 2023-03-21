@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -38,6 +39,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.services.networkmonitor.api.NetworkMonitor
+import io.element.android.services.networkmonitor.api.NetworkStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -48,6 +51,7 @@ class MessagesPresenter @Inject constructor(
     private val composerPresenter: MessageComposerPresenter,
     private val timelinePresenter: TimelinePresenter,
     private val actionListPresenter: ActionListPresenter,
+    private val networkMonitor: NetworkMonitor,
 ) : Presenter<MessagesState> {
 
     @Composable
@@ -64,6 +68,9 @@ class MessagesPresenter @Inject constructor(
         val roomAvatar: MutableState<AvatarData?> = remember {
             mutableStateOf(null)
         }
+
+        val networkConnectionStatus by networkMonitor.connectivity.collectAsState(initial = NetworkStatus.Online)
+
         LaunchedEffect(syncUpdateFlow) {
             roomAvatar.value =
                 AvatarData(
@@ -89,6 +96,7 @@ class MessagesPresenter @Inject constructor(
             composerState = composerState,
             timelineState = timelineState,
             actionListState = actionListState,
+            hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             eventSink = ::handleEvents
         )
     }

@@ -29,6 +29,7 @@ class ElementColors(
     messageHighlightedBackground: Color,
     quaternary: Color,
     quinary: Color,
+    gray400: Color,
     textActionCritical: Color,
     isLight: Boolean
 ) {
@@ -45,6 +46,9 @@ class ElementColors(
     var quinary by mutableStateOf(quinary)
         private set
 
+    var gray400 by mutableStateOf(gray400)
+        private set
+
     var textActionCritical by mutableStateOf(textActionCritical)
         private set
 
@@ -57,6 +61,7 @@ class ElementColors(
         messageHighlightedBackground: Color = this.messageHighlightedBackground,
         quaternary: Color = this.quaternary,
         quinary: Color = this.quinary,
+        gray400: Color = this.gray400,
         textActionCritical: Color = this.textActionCritical,
         isLight: Boolean = this.isLight,
     ) = ElementColors(
@@ -65,6 +70,7 @@ class ElementColors(
         messageHighlightedBackground = messageHighlightedBackground,
         quaternary = quaternary,
         quinary = quinary,
+        gray400 = gray400,
         textActionCritical = textActionCritical,
         isLight = isLight,
     )
@@ -75,6 +81,7 @@ class ElementColors(
         messageHighlightedBackground = other.messageHighlightedBackground
         quaternary = other.quaternary
         quinary = other.quinary
+        gray400 = other.gray400
         textActionCritical = other.textActionCritical
         isLight = other.isLight
     }

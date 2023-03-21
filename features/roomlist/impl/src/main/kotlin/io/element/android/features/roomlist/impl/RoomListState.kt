@@ -28,5 +28,6 @@ data class RoomListState(
     val filter: String,
     val presentVerificationSuccessfulMessage: Boolean,
     val displayVerificationPrompt: Boolean,
+    val hasNetworkConnection: Boolean,
     val eventSink: (RoomListEvents) -> Unit
 )

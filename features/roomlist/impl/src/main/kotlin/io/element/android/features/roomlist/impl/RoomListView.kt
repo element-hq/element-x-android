@@ -67,6 +67,7 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.services.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.designsystem.R as DrawableR
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -144,14 +145,17 @@ fun RoomListContent(
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            RoomListTopBar(
-                matrixUser = state.matrixUser,
-                filter = state.filter,
-                onFilterChanged = { state.eventSink(RoomListEvents.UpdateFilter(it)) },
-                onOpenSettings = onOpenSettings,
-                scrollBehavior = scrollBehavior,
-                modifier = Modifier,
-            )
+            Column {
+                ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
+                RoomListTopBar(
+                    matrixUser = state.matrixUser,
+                    filter = state.filter,
+                    onFilterChanged = { state.eventSink(RoomListEvents.UpdateFilter(it)) },
+                    onOpenSettings = onOpenSettings,
+                    scrollBehavior = scrollBehavior,
+                    useStatusBarInsets = state.hasNetworkConnection,
+                )
+            }
         },
         content = { padding ->
             Column(

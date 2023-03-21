@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.services.networkmonitor.test.FakeNetworkMonitor
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -141,6 +142,7 @@ class MessagesPresenterTest {
             composerPresenter = messageComposerPresenter,
             timelinePresenter = timelinePresenter,
             actionListPresenter = actionListPresenter,
+            networkMonitor = FakeNetworkMonitor(),
         )
     }
 }

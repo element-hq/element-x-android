@@ -31,6 +31,7 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState(),
             aRoomListState().copy(displayVerificationPrompt = true),
             aRoomListState().copy(presentVerificationSuccessfulMessage = true),
+            aRoomListState().copy(hasNetworkConnection = false),
         )
 }
 
@@ -40,6 +41,7 @@ internal fun aRoomListState() = RoomListState(
     filter = "filter",
     eventSink = {},
     presentVerificationSuccessfulMessage = false,
+    hasNetworkConnection = true,
     displayVerificationPrompt = false,
 )
 

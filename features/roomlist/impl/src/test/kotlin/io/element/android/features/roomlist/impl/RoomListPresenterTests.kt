@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.services.networkmonitor.test.FakeNetworkMonitor
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -49,6 +50,7 @@ class RoomListPresenterTests {
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
+            FakeNetworkMonitor(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -75,6 +77,7 @@ class RoomListPresenterTests {
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
+            FakeNetworkMonitor(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -95,6 +98,7 @@ class RoomListPresenterTests {
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
+            FakeNetworkMonitor(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -119,6 +123,7 @@ class RoomListPresenterTests {
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
+            FakeNetworkMonitor(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -148,6 +153,7 @@ class RoomListPresenterTests {
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
+            FakeNetworkMonitor(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -182,6 +188,7 @@ class RoomListPresenterTests {
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
+            FakeNetworkMonitor(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -230,6 +237,7 @@ class RoomListPresenterTests {
                 givenIsReady(true)
                 givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
             },
+            FakeNetworkMonitor(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -256,6 +264,7 @@ class RoomListPresenterTests {
                 givenIsReady(true)
                 givenVerificationFlowState(VerificationFlowState.Finished)
             },
+            FakeNetworkMonitor(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()

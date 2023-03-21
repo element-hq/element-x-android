@@ -41,6 +41,8 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationS
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.services.networkmonitor.api.NetworkMonitor
+import io.element.android.services.networkmonitor.api.NetworkStatus
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -56,6 +58,7 @@ class RoomListPresenter @Inject constructor(
     private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
     private val roomLastMessageFormatter: RoomLastMessageFormatter,
     private val sessionVerificationService: SessionVerificationService,
+    private val networkMonitor: NetworkMonitor,
 ) : Presenter<RoomListState> {
 
     @Composable
@@ -68,6 +71,8 @@ class RoomListPresenter @Inject constructor(
             .roomSummaryDataSource
             .roomSummaries()
             .collectAsState()
+
+        val networkConnectionStatus by networkMonitor.connectivity.collectAsState(initial = NetworkStatus.Online)
 
         Timber.v("RoomSummaries size = ${roomSummaries.size}")
 
@@ -112,6 +117,7 @@ class RoomListPresenter @Inject constructor(
             filter = filter,
             presentVerificationSuccessfulMessage = presentVerificationSuccessfulMessage.value,
             displayVerificationPrompt = displayVerificationPrompt,
+            hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             eventSink = ::handleEvents
         )
     }

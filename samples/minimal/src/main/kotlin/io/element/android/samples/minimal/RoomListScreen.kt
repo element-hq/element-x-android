@@ -28,6 +28,7 @@ import io.element.android.libraries.dateformatter.impl.DefaultLastMessageTimesta
 import io.element.android.libraries.dateformatter.impl.LocalDateTimeProvider
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.services.networkmonitor.impl.NetworkMonitorImpl
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -44,10 +45,11 @@ class RoomListScreen(
     private val dateFormatters = DateFormatters(locale, clock, timeZone)
     private val sessionVerificationService = matrixClient.sessionVerificationService()
     private val presenter = RoomListPresenter(
-        matrixClient,
-        DefaultLastMessageTimestampFormatter(dateTimeProvider, dateFormatters),
-        DefaultRoomLastMessageFormatter(context, matrixClient),
-        sessionVerificationService
+        client = matrixClient,
+        lastMessageTimestampFormatter = DefaultLastMessageTimestampFormatter(dateTimeProvider, dateFormatters),
+        roomLastMessageFormatter = DefaultRoomLastMessageFormatter(context, matrixClient),
+        sessionVerificationService = sessionVerificationService,
+        networkMonitor = NetworkMonitorImpl(context),
     )
 
     @Composable
