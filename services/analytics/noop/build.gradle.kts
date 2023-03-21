@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2023 New Vector Ltd
  *
@@ -17,15 +16,19 @@
 
 plugins {
     id("io.element.android-library")
+    alias(libs.plugins.anvil)
 }
 
 android {
-    namespace = "io.element.android.libraries.androidutils"
+    namespace = "io.element.android.services.analytics.impl"
+}
+
+anvil {
+    generateDaggerFactories.set(true)
 }
 
 dependencies {
-    implementation(libs.timber)
-    implementation(libs.androidx.corektx)
-    implementation(libs.androidx.activity.activity)
-    implementation(projects.libraries.core)
+    implementation(libs.dagger)
+    implementation(projects.libraries.di)
+    api(projects.services.analytics.api)
 }

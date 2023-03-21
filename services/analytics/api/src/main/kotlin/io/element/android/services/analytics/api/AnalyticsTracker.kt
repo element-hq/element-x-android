@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2023 New Vector Ltd
  *
@@ -15,17 +14,23 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.services.analytics.api
 
-android {
-    namespace = "io.element.android.libraries.androidutils"
-}
+import io.element.android.services.analytics.api.plan.UserProperties
 
-dependencies {
-    implementation(libs.timber)
-    implementation(libs.androidx.corektx)
-    implementation(libs.androidx.activity.activity)
-    implementation(projects.libraries.core)
+interface AnalyticsTracker {
+    /**
+     * Capture an Event.
+     */
+    fun capture(event: VectorAnalyticsEvent)
+
+    /**
+     * Track a displayed screen.
+     */
+    fun screen(screen: VectorAnalyticsScreen)
+
+    /**
+     * Update user specific properties.
+     */
+    fun updateUserProperties(userProperties: UserProperties)
 }
