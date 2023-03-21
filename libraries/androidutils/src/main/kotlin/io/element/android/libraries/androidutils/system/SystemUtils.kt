@@ -121,6 +121,23 @@ fun startNotificationSettingsIntent(context: Context, activityResultLauncher: Ac
     activityResultLauncher.launch(intent)
 }
 
+fun openAppSettingsPage(
+    activity: Activity,
+    noActivityFoundMessage: String,
+) {
+    try {
+        activity.startActivity(
+            Intent().apply {
+                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                data = Uri.fromParts("package", activity.packageName, null)
+            }
+        )
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        activity.toast(noActivityFoundMessage)
+    }
+}
+
 /**
  * Shows notification system settings for the given channel id.
  */

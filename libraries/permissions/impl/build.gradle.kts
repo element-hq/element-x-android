@@ -20,11 +20,10 @@ plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
-    id("kotlin-parcelize")
 }
 
 android {
-    namespace = "io.element.android.features.roomlist.impl"
+    namespace = "io.element.android.libraries.permissions.impl"
 
     testOptions {
         unitTests {
@@ -38,8 +37,12 @@ anvil {
 }
 
 dependencies {
-    implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
+    implementation(projects.anvilannotations)
+
+    implementation(libs.accompanist.permission)
+    implementation(libs.androidx.datastore.preferences)
+
     implementation(projects.libraries.core)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
@@ -47,22 +50,18 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
-    implementation(projects.libraries.permissions.api)
-    implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
-    implementation(projects.libraries.dateformatter.api)
-    implementation(libs.accompanist.placeholder)
-    api(projects.features.roomlist.api)
-    ksp(libs.showkase.processor)
+    api(projects.libraries.permissions.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
-    testImplementation(libs.test.robolectric)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.libraries.dateformatter.test)
+
 
     androidTestImplementation(libs.test.junitext)
+
+    ksp(libs.showkase.processor)
 }

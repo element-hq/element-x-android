@@ -16,6 +16,7 @@
 
 package io.element.android.features.roomlist.impl
 
+import android.app.Activity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -48,6 +49,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,6 +59,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.components.RoomListTopBar
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.libraries.androidutils.system.openAppSettingsPage
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -69,6 +72,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.launch
+import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.designsystem.R as DrawableR
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -81,14 +85,24 @@ fun RoomListView(
     onVerifyClicked: () -> Unit = {},
     onCreateRoomClicked: () -> Unit = {},
 ) {
-    RoomListContent(
-        state = state,
-        modifier = modifier,
-        onRoomClicked = onRoomClicked,
-        onOpenSettings = onOpenSettings,
-        onVerifyClicked = onVerifyClicked,
-        onCreateRoomClicked = onCreateRoomClicked,
-    )
+    val activity = LocalContext.current as? Activity
+
+    Box(modifier = modifier) {
+        RoomListContent(
+            state = state,
+            modifier = Modifier,
+            onRoomClicked = onRoomClicked,
+            onOpenSettings = onOpenSettings,
+            onVerifyClicked = onVerifyClicked,
+            onCreateRoomClicked = onCreateRoomClicked,
+        )
+        PermissionsView(
+            state = state.permissionsState,
+            openSystemSettings = {
+                activity?.let { openAppSettingsPage(it, "") }
+            }
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -197,11 +211,13 @@ fun RoomListContent(
             }
         },
         snackbarHost = {
-           SnackbarHost (snackbarHostState) { data ->
-               Snackbar(
-                   snackbarData = data,
-               )
-           }
+            SnackbarHost(snackbarHostState) { data ->
+                Snackbar(
+                    snackbarData = data,
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.primary
+                )
+            }
         },
     )
 }

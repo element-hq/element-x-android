@@ -16,6 +16,8 @@
 
 package io.element.android.features.roomlist.impl
 
+import android.Manifest
+import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -43,6 +45,8 @@ import io.element.android.libraries.matrix.api.room.RoomSummary
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.permissions.api.PermissionsPresenter
+import io.element.android.libraries.permissions.api.createDummyPostNotificationPermissionsState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -59,6 +63,7 @@ class RoomListPresenter @Inject constructor(
     private val roomLastMessageFormatter: RoomLastMessageFormatter,
     private val sessionVerificationService: SessionVerificationService,
     private val snackbarDispatcher: SnackbarDispatcher,
+    private val permissionsPresenter: PermissionsPresenter,
 ) : Presenter<RoomListState> {
 
     private val roomMembershipObserver: RoomMembershipObserver = client.roomMembershipObserver()
@@ -105,12 +110,21 @@ class RoomListPresenter @Inject constructor(
 
         val snackbarMessage = handleSnackbarMessage(snackbarDispatcher)
 
+        // Ask for POST_NOTIFICATION PERMISSION on Android 13+
+        val permissionsState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissionsPresenter.setParameter(Manifest.permission.POST_NOTIFICATIONS)
+            permissionsPresenter.present()
+        } else {
+            createDummyPostNotificationPermissionsState()
+        }
+
         return RoomListState(
             matrixUser = matrixUser.value,
             roomList = filteredRoomSummaries.value,
             filter = filter,
             displayVerificationPrompt = displayVerificationPrompt,
             snackbarMessage = snackbarMessage,
+            permissionsState = permissionsState,
             eventSink = ::handleEvents
         )
     }
