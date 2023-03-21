@@ -23,5 +23,5 @@ data class ChangeServerState(
     val changeServerAction: Async<Unit>,
     val eventSink: (ChangeServerEvents) -> Unit,
 ) {
-    val submitEnabled = homeserver.isNotEmpty() && changeServerAction !is Async.Loading
+    val submitEnabled = homeserver.isNotEmpty() && changeServerAction is Async.Uninitialized
 }

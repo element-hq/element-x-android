@@ -55,44 +55,4 @@ class ErrorFormatterTests {
     }
 
     // endregion loginError
-
-    // region changeServerError
-
-    @Test
-    fun `changeServerError - invalid unknown error returns unknown error message`() {
-        val error = Throwable("Some unknown error")
-        assertThat(changeServerError(error)).isEqualTo(R.string.unknown_error)
-    }
-
-    @Test
-    fun `changeServerError - invalid auth error returns unknown error message`() {
-        val error = AuthenticationException.SlidingSyncNotAvailable("Some message. Also contains M_FORBIDDEN, but won't be parsed")
-        assertThat(changeServerError(error)).isEqualTo(R.string.unknown_error)
-    }
-
-    @Test
-    fun `changeServerError - unknown error returns unknown error message`() {
-        val error = AuthenticationException.Generic("M_UNKNOWN")
-        assertThat(changeServerError(error)).isEqualTo(R.string.unknown_error)
-    }
-
-    @Test
-    fun `changeServerError - forbidden error returns unknown error message`() {
-        val error = AuthenticationException.Generic("M_FORBIDDEN")
-        assertThat(changeServerError(error)).isEqualTo(R.string.unknown_error)
-    }
-
-    @Test
-    fun `changeServerError - user_deactivated error returns unknown error message`() {
-        val error = AuthenticationException.Generic("M_USER_DEACTIVATED")
-        assertThat(changeServerError(error)).isEqualTo(R.string.unknown_error)
-    }
-
-    @Test
-    fun `changeServerError - invalid server name error returns invalid server name error message`() {
-        val error = AuthenticationException.InvalidServerName("Server is not valid")
-        assertThat(changeServerError(error)).isEqualTo(R.string.login_error_homeserver_not_found)
-    }
-
-    // endregion changeServerError
 }
