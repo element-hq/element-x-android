@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2023 New Vector Ltd
  *
@@ -20,12 +19,9 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.libraries.androidutils"
+    namespace = "io.element.android.services.toolbox.api"
 }
 
 dependencies {
-    implementation(libs.timber)
     implementation(libs.androidx.corektx)
-    implementation(libs.androidx.activity.activity)
-    implementation(projects.libraries.core)
 }

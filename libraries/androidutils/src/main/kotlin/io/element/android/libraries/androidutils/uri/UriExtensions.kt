@@ -1,6 +1,5 @@
-
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +14,12 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.libraries.androidutils.uri
 
-android {
-    namespace = "io.element.android.libraries.androidutils"
-}
+import android.net.Uri
 
-dependencies {
-    implementation(libs.timber)
-    implementation(libs.androidx.corektx)
-    implementation(libs.androidx.activity.activity)
-    implementation(projects.libraries.core)
-}
+const val IGNORED_SCHEMA = "ignored"
+
+fun Uri.isIgnored() = scheme == IGNORED_SCHEMA
+
+fun createIgnoredUri(path: String): Uri = Uri.parse("$IGNORED_SCHEMA://$path")

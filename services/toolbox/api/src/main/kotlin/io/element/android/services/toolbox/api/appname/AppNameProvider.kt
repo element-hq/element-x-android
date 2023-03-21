@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2023 New Vector Ltd
  *
@@ -15,17 +14,8 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.services.toolbox.api.appname
 
-android {
-    namespace = "io.element.android.libraries.androidutils"
-}
-
-dependencies {
-    implementation(libs.timber)
-    implementation(libs.androidx.corektx)
-    implementation(libs.androidx.activity.activity)
-    implementation(projects.libraries.core)
+interface AppNameProvider {
+    fun getAppName(): String
 }
