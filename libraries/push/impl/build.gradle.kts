@@ -43,7 +43,7 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.network)
     implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.push.api)
+    api(projects.libraries.push.api)
 
     implementation(projects.services.analytics.api)
     implementation(projects.services.toolbox.api)
