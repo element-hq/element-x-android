@@ -31,13 +31,3 @@ fun loginError(
         AuthErrorCode.UNKNOWN -> StringR.unknown_error
     }
 }
-
-fun changeServerError(
-    throwable: Throwable
-): Int {
-    val authException = throwable as? AuthenticationException ?: return StringR.unknown_error
-    return when (authException) {
-        is AuthenticationException.InvalidServerName -> StringR.login_error_homeserver_not_found
-        else -> StringR.unknown_error
-    }
-}
