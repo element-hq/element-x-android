@@ -24,9 +24,9 @@ import android.os.SystemClock
 class FirstThrottler(private val minimumInterval: Long = 800) {
     private var lastDate = 0L
 
-    sealed class CanHandlerResult {
-        object Yes : CanHandlerResult()
-        data class No(val shouldWaitMillis: Long) : CanHandlerResult()
+    sealed class CanHandleResult {
+        object Yes : CanHandleResult()
+        data class No(val shouldWaitMillis: Long) : CanHandleResult()
 
         fun waitMillis(): Long {
             return when (this) {
@@ -36,15 +36,15 @@ class FirstThrottler(private val minimumInterval: Long = 800) {
         }
     }
 
-    fun canHandle(): CanHandlerResult {
+    fun canHandle(): CanHandleResult {
         val now = SystemClock.elapsedRealtime()
         val delaySinceLast = now - lastDate
         if (delaySinceLast > minimumInterval) {
             lastDate = now
-            return CanHandlerResult.Yes
+            return CanHandleResult.Yes
         }
 
-        // Too soon
-        return CanHandlerResult.No(minimumInterval - delaySinceLast)
+        // Too early
+        return CanHandleResult.No(minimumInterval - delaySinceLast)
     }
 }
