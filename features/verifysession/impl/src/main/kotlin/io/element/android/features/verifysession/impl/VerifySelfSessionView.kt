@@ -39,6 +39,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -299,14 +300,14 @@ private fun ContentToPreview(state: VerifySelfSessionState) {
     )
 }
 
-@Composable
 private fun Modifier.shrinkableHeight(
     min: Dp,
     max: Dp,
     minScreenHeight: Int = 720
-): Modifier =
+): Modifier = composed {
     if (LocalConfiguration.current.screenHeightDp >= minScreenHeight) {
         then(Modifier.height(max))
     } else {
         then(Modifier.height(min))
     }
+}
