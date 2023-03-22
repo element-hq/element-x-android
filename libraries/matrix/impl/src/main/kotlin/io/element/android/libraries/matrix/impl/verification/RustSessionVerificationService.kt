@@ -38,6 +38,7 @@ class RustSessionVerificationService @Inject constructor() : SessionVerification
             _isReady.value = value != null
             // If status was 'Unknown', move it to either 'Verified' or 'NotVerified'
             if (value != null) {
+                value.setDelegate(this)
                 updateVerificationStatus(value.isVerified())
             }
         }
@@ -52,7 +53,6 @@ class RustSessionVerificationService @Inject constructor() : SessionVerification
     override val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus> = _sessionVerifiedStatus.asStateFlow()
 
     override fun requestVerification() = tryOrFail {
-        verificationController?.setDelegate(this)
         verificationController?.requestVerification()
     }
 
@@ -63,7 +63,6 @@ class RustSessionVerificationService @Inject constructor() : SessionVerification
     override fun declineVerification() = tryOrFail { verificationController?.declineVerification() }
 
     override fun startVerification() = tryOrFail {
-        verificationController?.setDelegate(this)
         verificationController?.startSasVerification()
     }
 

@@ -81,6 +81,7 @@ class VerifySelfSessionStateMachine(
         // Observe the verification service state, translate it to state machine input events
         sessionVerificationService.verificationFlowState.onEach { verificationAttemptState ->
             when (verificationAttemptState) {
+                VerificationFlowState.Initial -> stateMachine.restart()
                 VerificationFlowState.AcceptedVerificationRequest -> {
                     stateMachine.process(Event.DidAcceptVerificationRequest)
                 }
