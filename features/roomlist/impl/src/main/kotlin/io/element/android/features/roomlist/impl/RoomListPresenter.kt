@@ -46,7 +46,7 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationS
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.element.android.libraries.permissions.api.PermissionsPresenter
-import io.element.android.libraries.permissions.api.createDummyPostNotificationPermissionsState
+import io.element.android.libraries.permissions.noop.NoopPermissionsPresenter
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -63,10 +63,19 @@ class RoomListPresenter @Inject constructor(
     private val roomLastMessageFormatter: RoomLastMessageFormatter,
     private val sessionVerificationService: SessionVerificationService,
     private val snackbarDispatcher: SnackbarDispatcher,
-    private val permissionsPresenter: PermissionsPresenter,
+    private val permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<RoomListState> {
 
     private val roomMembershipObserver: RoomMembershipObserver = client.roomMembershipObserver()
+
+    private val postNotificationPermissionsPresenter by lazy {
+        // Ask for POST_NOTIFICATION PERMISSION on Android 13+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissionsPresenterFactory.create(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            NoopPermissionsPresenter()
+        }
+    }
 
     @Composable
     override fun present(): RoomListState {
@@ -110,13 +119,7 @@ class RoomListPresenter @Inject constructor(
 
         val snackbarMessage = handleSnackbarMessage(snackbarDispatcher)
 
-        // Ask for POST_NOTIFICATION PERMISSION on Android 13+
-        val permissionsState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            permissionsPresenter.setParameter(Manifest.permission.POST_NOTIFICATIONS)
-            permissionsPresenter.present()
-        } else {
-            createDummyPostNotificationPermissionsState()
-        }
+        val permissionsState = postNotificationPermissionsPresenter.present()
 
         return RoomListState(
             matrixUser = matrixUser.value,

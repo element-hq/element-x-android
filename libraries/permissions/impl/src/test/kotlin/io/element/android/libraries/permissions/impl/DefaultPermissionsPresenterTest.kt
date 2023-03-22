@@ -38,11 +38,11 @@ class DefaultPermissionsPresenterTest {
         val permissionState = FakePermissionState(A_PERMISSION, PermissionStatus.Granted)
         val permissionStateProvider = FakePermissionStateProvider(permissionState)
         val presenter = DefaultPermissionsPresenter(
+            A_PERMISSION,
             permissionsStore,
             permissionStateProvider
         )
         moleculeFlow(RecompositionClock.Immediate) {
-            presenter.setParameter(A_PERMISSION)
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -61,11 +61,11 @@ class DefaultPermissionsPresenterTest {
         val permissionState = FakePermissionState(A_PERMISSION, PermissionStatus.Denied(shouldShowRationale = false))
         val permissionStateProvider = FakePermissionStateProvider(permissionState)
         val presenter = DefaultPermissionsPresenter(
+            A_PERMISSION,
             permissionsStore,
             permissionStateProvider
         )
         moleculeFlow(RecompositionClock.Immediate) {
-            presenter.setParameter(A_PERMISSION)
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -81,11 +81,11 @@ class DefaultPermissionsPresenterTest {
         val permissionState = FakePermissionState(A_PERMISSION, PermissionStatus.Denied(shouldShowRationale = false))
         val permissionStateProvider = FakePermissionStateProvider(permissionState)
         val presenter = DefaultPermissionsPresenter(
+            A_PERMISSION,
             permissionsStore,
             permissionStateProvider
         )
         moleculeFlow(RecompositionClock.Immediate) {
-            presenter.setParameter(A_PERMISSION)
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -110,11 +110,11 @@ class DefaultPermissionsPresenterTest {
         val permissionState = FakePermissionState(A_PERMISSION, PermissionStatus.Denied(shouldShowRationale = true))
         val permissionStateProvider = FakePermissionStateProvider(permissionState)
         val presenter = DefaultPermissionsPresenter(
+            A_PERMISSION,
             permissionsStore,
             permissionStateProvider
         )
         moleculeFlow(RecompositionClock.Immediate) {
-            presenter.setParameter(A_PERMISSION)
             presenter.present()
         }.test {
             val initialState = awaitItem()
@@ -139,11 +139,11 @@ class DefaultPermissionsPresenterTest {
         val permissionState = FakePermissionState(A_PERMISSION, PermissionStatus.Denied(shouldShowRationale = false))
         val permissionStateProvider = FakePermissionStateProvider(permissionState)
         val presenter = DefaultPermissionsPresenter(
+            A_PERMISSION,
             permissionsStore,
             permissionStateProvider
         )
         moleculeFlow(RecompositionClock.Immediate) {
-            presenter.setParameter(A_PERMISSION)
             presenter.present()
         }.test {
             skipItems(1)
@@ -161,11 +161,11 @@ class DefaultPermissionsPresenterTest {
         val permissionState = FakePermissionState(A_PERMISSION, PermissionStatus.Denied(shouldShowRationale = false))
         val permissionStateProvider = FakePermissionStateProvider(permissionState)
         val presenter = DefaultPermissionsPresenter(
+            A_PERMISSION,
             permissionsStore,
             permissionStateProvider
         )
         moleculeFlow(RecompositionClock.Immediate) {
-            presenter.setParameter(A_PERMISSION)
             presenter.present()
         }.test {
             val initialState = awaitItem()

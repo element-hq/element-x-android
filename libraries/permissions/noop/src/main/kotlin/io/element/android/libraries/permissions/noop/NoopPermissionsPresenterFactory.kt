@@ -16,22 +16,8 @@
 
 package io.element.android.libraries.permissions.noop
 
-import androidx.compose.runtime.Composable
 import io.element.android.libraries.permissions.api.PermissionsPresenter
-import io.element.android.libraries.permissions.api.PermissionsState
 
-class NoopPermissionsPresenter : PermissionsPresenter {
-
-    @Composable
-    override fun present(): PermissionsState {
-        return PermissionsState(
-            permission = "",
-            permissionGranted = false,
-            shouldShowRationale = false,
-            showDialog = false,
-            permissionAlreadyAsked = false,
-            permissionAlreadyDenied = false,
-            eventSink = {},
-        )
-    }
+class NoopPermissionsPresenterFactory : PermissionsPresenter.Factory {
+    override fun create(permission: String) = NoopPermissionsPresenter()
 }
