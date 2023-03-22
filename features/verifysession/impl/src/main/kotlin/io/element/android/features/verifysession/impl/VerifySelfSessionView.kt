@@ -266,13 +266,15 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
                 positiveButtonTitle?.let { Text(stringResource(it)) }
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        TextButton(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = negativeButtonCallback,
-            enabled = negativeButtonEnabled,
-        ) {
-            negativeButtonTitle?.let { Text(stringResource(it)) }
+        if (negativeButtonTitle != null) {
+            Spacer(modifier = Modifier.height(16.dp))
+            TextButton(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = negativeButtonCallback,
+                enabled = negativeButtonEnabled,
+            ) {
+                Text(stringResource(negativeButtonTitle))
+            }
         }
         Spacer(Modifier.height(40.dp))
     }
