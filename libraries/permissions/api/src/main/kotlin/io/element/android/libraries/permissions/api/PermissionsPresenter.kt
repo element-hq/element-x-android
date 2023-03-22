@@ -19,5 +19,8 @@ package io.element.android.libraries.permissions.api
 import io.element.android.libraries.architecture.Presenter
 
 interface PermissionsPresenter : Presenter<PermissionsState> {
-    fun setParameter(permission: String)
+
+    interface Factory {
+        fun create(permission: String): PermissionsPresenter
+    }
 }

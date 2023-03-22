@@ -48,6 +48,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.permissions.api)
+    implementation(projects.libraries.permissions.noop)
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.dateformatter.api)

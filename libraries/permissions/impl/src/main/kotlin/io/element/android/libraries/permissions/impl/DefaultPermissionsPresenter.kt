@@ -30,25 +30,26 @@ import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.shouldShowRationale
 import com.squareup.anvil.annotations.ContributesBinding
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.api.PermissionsState
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
-@ContributesBinding(AppScope::class)
-class DefaultPermissionsPresenter @Inject constructor(
+class DefaultPermissionsPresenter @AssistedInject constructor(
+    @Assisted val permission: String,
     private val permissionsStore: PermissionsStore,
     private val permissionStateProvider: PermissionStateProvider,
 ) : PermissionsPresenter {
 
-    private lateinit var permission: String
-
-    // TODO Move to the constructor.
-    override fun setParameter(permission: String) {
-        this.permission = permission
+    @AssistedFactory
+    @ContributesBinding(AppScope::class)
+    interface Factory : PermissionsPresenter.Factory {
+        override fun create(permission: String): DefaultPermissionsPresenter
     }
 
     @OptIn(ExperimentalPermissionsApi::class)
