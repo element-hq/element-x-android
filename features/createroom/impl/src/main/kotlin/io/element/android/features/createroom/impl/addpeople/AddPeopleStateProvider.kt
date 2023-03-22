@@ -17,6 +17,7 @@
 package io.element.android.features.createroom.impl.addpeople
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.selectusers.api.SelectionMode
 import io.element.android.features.selectusers.api.aSelectUsersState
 import io.element.android.features.selectusers.api.aSetOfSelectedUsers
 
@@ -27,14 +28,14 @@ open class AddPeopleStateProvider : PreviewParameterProvider<AddPeopleState> {
             aAddPeopleState().copy(
                 selectUsersState = aSelectUsersState().copy(
                     selectedUsers = aSetOfSelectedUsers(),
-                    isMultiSelectionEnabled = true,
+                    selectionMode = SelectionMode.Multiple,
                 )
             ),
             aAddPeopleState().copy(
                 selectUsersState = aSelectUsersState().copy(
                     selectedUsers = aSetOfSelectedUsers(),
                     isSearchActive = true,
-                    isMultiSelectionEnabled = true,
+                    selectionMode = SelectionMode.Multiple,
                 )
             )
         )

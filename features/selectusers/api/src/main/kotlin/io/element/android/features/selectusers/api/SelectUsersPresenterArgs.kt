@@ -17,5 +17,10 @@
 package io.element.android.features.selectusers.api
 
 data class SelectUsersPresenterArgs(
-    val isMultiSelectionEnabled: Boolean,
+    val selectionMode: SelectionMode,
 )
+
+enum class SelectionMode {
+    Single,
+    Multiple,
+}

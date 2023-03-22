@@ -30,11 +30,11 @@ open class SelectUsersStateProvider : PreviewParameterProvider<SelectUsersState>
             aSelectUsersState().copy(
                 isSearchActive = false,
                 selectedUsers = aSetOfSelectedUsers(),
-                isMultiSelectionEnabled = true
+                selectionMode = SelectionMode.Multiple,
             ),
             aSelectUsersState().copy(isSearchActive = true),
             aSelectUsersState().copy(isSearchActive = true, searchQuery = "someone"),
-            aSelectUsersState().copy(isSearchActive = true, searchQuery = "someone", isMultiSelectionEnabled = true),
+            aSelectUsersState().copy(isSearchActive = true, searchQuery = "someone", selectionMode = SelectionMode.Multiple),
             aSelectUsersState().copy(
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
@@ -44,7 +44,7 @@ open class SelectUsersStateProvider : PreviewParameterProvider<SelectUsersState>
             aSelectUsersState().copy(
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
-                isMultiSelectionEnabled = true,
+                selectionMode = SelectionMode.Multiple,
                 selectedUsers = aSetOfSelectedUsers(),
                 searchResults = aListOfResults(),
             )
@@ -60,7 +60,7 @@ fun aSelectUsersState() = SelectUsersState(
         firstVisibleItemIndex = 0,
         firstVisibleItemScrollOffset = 0,
     ),
-    isMultiSelectionEnabled = false,
+    selectionMode = SelectionMode.Single,
     eventSink = {}
 )
 
