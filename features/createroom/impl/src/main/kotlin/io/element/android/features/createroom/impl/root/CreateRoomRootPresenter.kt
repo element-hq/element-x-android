@@ -17,22 +17,24 @@
 package io.element.android.features.createroom.impl.root
 
 import androidx.compose.runtime.Composable
-import io.element.android.features.selectusers.api.SINGLE_SELECTION_USERS_VARIANT
 import io.element.android.features.selectusers.api.SelectUsersPresenter
+import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import timber.log.Timber
 import javax.inject.Inject
-import javax.inject.Named
 
 class CreateRoomRootPresenter @Inject constructor(
-    @Named(SINGLE_SELECTION_USERS_VARIANT)
-    private val selectUsersPresenter: SelectUsersPresenter,
+    private val presenterFactory: SelectUsersPresenter.Factory,
 ) : Presenter<CreateRoomRootState> {
+
+    private val presenter by lazy {
+        presenterFactory.create(SelectUsersPresenterArgs(isMultiSelectionEnabled = false))
+    }
 
     @Composable
     override fun present(): CreateRoomRootState {
-        val selectUsersState = selectUsersPresenter.present()
+        val selectUsersState = presenter.present()
 
         fun handleEvents(event: CreateRoomRootEvents) {
             when (event) {

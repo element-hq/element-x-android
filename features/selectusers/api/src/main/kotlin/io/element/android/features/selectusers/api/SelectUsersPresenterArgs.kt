@@ -16,6 +16,6 @@
 
 package io.element.android.features.selectusers.api
 
-import io.element.android.libraries.architecture.Presenter
-
-interface SelectMultipleUsersPresenter : Presenter<SelectUsersState>
+data class SelectUsersPresenterArgs(
+    val isMultiSelectionEnabled: Boolean,
+)

@@ -18,7 +18,9 @@ package io.element.android.features.selectusers.api
 
 import io.element.android.libraries.architecture.Presenter
 
-const val SINGLE_SELECTION_USERS_VARIANT = "single_selection_users"
-const val MULTI_SELECTION_USERS_VARIANT = "multi_selection_users"
+interface SelectUsersPresenter : Presenter<SelectUsersState> {
 
-interface SelectUsersPresenter : Presenter<SelectUsersState>
+    interface Factory {
+        fun create(args: SelectUsersPresenterArgs): SelectUsersPresenter
+    }
+}

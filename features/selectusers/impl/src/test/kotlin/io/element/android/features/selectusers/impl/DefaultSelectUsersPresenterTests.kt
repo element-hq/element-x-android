@@ -22,6 +22,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.selectusers.api.SelectUsersEvents
+import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.model.MatrixUser
@@ -36,7 +37,7 @@ class DefaultSelectUsersPresenterTests {
 
     @Test
     fun `present - initial state for single selection`() = runTest {
-        val presenter = DefaultSelectUsersPresenter(isMultiSelectionEnabled = false)
+        val presenter = DefaultSelectUsersPresenter(SelectUsersPresenterArgs(isMultiSelectionEnabled = false))
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -51,7 +52,7 @@ class DefaultSelectUsersPresenterTests {
 
     @Test
     fun `present - initial state for multiple selection`() = runTest {
-        val presenter = DefaultSelectUsersPresenter(isMultiSelectionEnabled = true)
+        val presenter = DefaultSelectUsersPresenter(SelectUsersPresenterArgs(isMultiSelectionEnabled = true))
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -66,7 +67,7 @@ class DefaultSelectUsersPresenterTests {
 
     @Test
     fun `present - update search query`() = runTest {
-        val presenter = DefaultSelectUsersPresenter(isMultiSelectionEnabled = false)
+        val presenter = DefaultSelectUsersPresenter(SelectUsersPresenterArgs(isMultiSelectionEnabled = false))
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -95,7 +96,7 @@ class DefaultSelectUsersPresenterTests {
         mockkConstructor(LazyListState::class)
         coJustRun { anyConstructed<LazyListState>().scrollToItem(index = any()) }
 
-        val presenter = DefaultSelectUsersPresenter(isMultiSelectionEnabled = false)
+        val presenter = DefaultSelectUsersPresenter(SelectUsersPresenterArgs(isMultiSelectionEnabled = false))
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {

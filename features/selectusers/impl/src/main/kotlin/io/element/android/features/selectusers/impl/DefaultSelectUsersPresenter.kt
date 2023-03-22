@@ -27,9 +27,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import com.squareup.anvil.annotations.ContributesBinding
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import io.element.android.features.selectusers.api.SelectUsersEvents
 import io.element.android.features.selectusers.api.SelectUsersPresenter
+import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
 import io.element.android.features.selectusers.api.SelectUsersState
+import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
@@ -42,7 +48,15 @@ import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-class DefaultSelectUsersPresenter(private val isMultiSelectionEnabled: Boolean) : SelectUsersPresenter {
+class DefaultSelectUsersPresenter @AssistedInject constructor(
+    @Assisted val args: SelectUsersPresenterArgs,
+) : SelectUsersPresenter {
+
+    @AssistedFactory
+    @ContributesBinding(SessionScope::class)
+    interface DefaultSelectUsersFactory : SelectUsersPresenter.Factory {
+        override fun create(args: SelectUsersPresenterArgs): DefaultSelectUsersPresenter
+    }
 
     @Composable
     override fun present(): SelectUsersState {
@@ -88,7 +102,7 @@ class DefaultSelectUsersPresenter(private val isMultiSelectionEnabled: Boolean) 
             selectedUsers = selectedUsers.value.reversed().toImmutableSet(),
             selectedUsersListState = selectedUsersListState,
             isSearchActive = isSearchActive,
-            isMultiSelectionEnabled = isMultiSelectionEnabled,
+            isMultiSelectionEnabled = args.isMultiSelectionEnabled,
             eventSink = ::handleEvents,
         )
     }
