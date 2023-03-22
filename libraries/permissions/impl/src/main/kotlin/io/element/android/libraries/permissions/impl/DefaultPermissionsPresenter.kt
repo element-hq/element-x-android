@@ -26,8 +26,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
@@ -41,6 +41,7 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class DefaultPermissionsPresenter @Inject constructor(
     private val permissionsStore: PermissionsStore,
+    private val permissionStateProvider: PermissionStateProvider,
 ) : PermissionsPresenter {
 
     private lateinit var permission: String
@@ -85,7 +86,7 @@ class DefaultPermissionsPresenter @Inject constructor(
             }
         }
 
-        permissionState = rememberPermissionState(
+        permissionState = permissionStateProvider.provide(
             permission = permission,
             onPermissionResult = ::onPermissionResult
         )
@@ -97,7 +98,7 @@ class DefaultPermissionsPresenter @Inject constructor(
             }
         }
 
-        val showDialog = rememberSaveable { mutableStateOf(true) }
+        val showDialog = rememberSaveable { mutableStateOf(permissionState.status !is PermissionStatus.Granted) }
 
         fun handleEvents(event: PermissionsEvents) {
             Timber.tag("PERMISSION").w("New event: $event")
@@ -107,9 +108,6 @@ class DefaultPermissionsPresenter @Inject constructor(
                 }
                 PermissionsEvents.OpenSystemDialog -> {
                     permissionState.launchPermissionRequest()
-                    showDialog.value = false
-                }
-                PermissionsEvents.OpenSystemSettings -> {
                     showDialog.value = false
                 }
             }

@@ -42,7 +42,7 @@ fun PermissionsView(
             content = "In order to let the application display notification, please grant the permission to the system settings",
             submitText = "Open settings",
             onSubmitClicked = {
-                state.eventSink.invoke(PermissionsEvents.OpenSystemSettings)
+                state.eventSink.invoke(PermissionsEvents.CloseDialog)
                 openSystemSettings()
             },
             onDismiss = { state.eventSink.invoke(PermissionsEvents.CloseDialog) },
