@@ -22,17 +22,27 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.selectusers.impl.DefaultSelectMultipleUsersPresenter
+import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
+import io.element.android.features.selectusers.impl.DefaultSelectUsersPresenter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Before
 import org.junit.Test
 
 class AddPeoplePresenterTests {
 
+    private lateinit var presenter: AddPeoplePresenter
+
+    @Before
+    fun setup() {
+        val selectUsersFactory = object : DefaultSelectUsersPresenter.DefaultSelectUsersFactory {
+            override fun create(args: SelectUsersPresenterArgs) = DefaultSelectUsersPresenter(args)
+        }
+        presenter = AddPeoplePresenter(selectUsersFactory)
+    }
+
     @Test
     fun `present - initial state`() = runTest {
-        val selectUsersPresenter = DefaultSelectMultipleUsersPresenter()
-        val presenter = AddPeoplePresenter(selectUsersPresenter)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {

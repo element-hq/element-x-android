@@ -17,16 +17,18 @@
 package io.element.android.features.createroom.impl.addpeople
 
 import androidx.compose.runtime.Composable
-import io.element.android.features.selectusers.api.MULTI_SELECTION_USERS_VARIANT
 import io.element.android.features.selectusers.api.SelectUsersPresenter
+import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
-import javax.inject.Named
 
 class AddPeoplePresenter @Inject constructor(
-    @Named(MULTI_SELECTION_USERS_VARIANT)
-    private val selectUsersPresenter: SelectUsersPresenter,
+    private val selectUsersPresenterFactory: SelectUsersPresenter.Factory,
 ) : Presenter<AddPeopleState> {
+
+    private val selectUsersPresenter by lazy {
+        selectUsersPresenterFactory.create(SelectUsersPresenterArgs(isMultiSelectionEnabled = true))
+    }
 
     @Composable
     override fun present(): AddPeopleState {

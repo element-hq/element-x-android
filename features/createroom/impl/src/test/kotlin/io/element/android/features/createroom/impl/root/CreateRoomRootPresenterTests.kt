@@ -22,19 +22,29 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.selectusers.impl.DefaultSelectSingleUserPresenter
+import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
+import io.element.android.features.selectusers.impl.DefaultSelectUsersPresenter
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Before
 import org.junit.Test
 
 class CreateRoomRootPresenterTests {
 
+    private lateinit var presenter: CreateRoomRootPresenter
+
+    @Before
+    fun setup() {
+        val selectUsersPresenter = object : DefaultSelectUsersPresenter.DefaultSelectUsersFactory {
+            override fun create(args: SelectUsersPresenterArgs) = DefaultSelectUsersPresenter(args)
+        }
+        presenter = CreateRoomRootPresenter(selectUsersPresenter)
+    }
+
     @Test
     fun `present - initial state`() = runTest {
-        val selectUsersPresenter = DefaultSelectSingleUserPresenter()
-        val presenter = CreateRoomRootPresenter(selectUsersPresenter)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -45,8 +55,6 @@ class CreateRoomRootPresenterTests {
 
     @Test
     fun `present - trigger action buttons`() = runTest {
-        val selectUsersPresenter = DefaultSelectSingleUserPresenter()
-        val presenter = CreateRoomRootPresenter(selectUsersPresenter)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -57,8 +65,6 @@ class CreateRoomRootPresenterTests {
 
     @Test
     fun `present - trigger start DM action`() = runTest {
-        val selectUsersPresenter = DefaultSelectSingleUserPresenter()
-        val presenter = CreateRoomRootPresenter(selectUsersPresenter)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
