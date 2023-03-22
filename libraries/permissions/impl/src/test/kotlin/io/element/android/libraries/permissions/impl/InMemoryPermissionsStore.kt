@@ -33,7 +33,7 @@ class InMemoryPermissionsStore(
     override fun isPermissionDenied(permission: String): Flow<Boolean> = permissionDeniedFlow
 
     override suspend fun setPermissionAsked(permission: String, value: Boolean) {
-        permissionAskedFlow.value
+        permissionAskedFlow.value = value
     }
 
     override fun isPermissionAsked(permission: String): Flow<Boolean> = permissionAskedFlow
