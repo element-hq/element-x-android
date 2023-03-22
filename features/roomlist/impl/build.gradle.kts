@@ -63,6 +63,7 @@ dependencies {
     testImplementation(libs.test.robolectric)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.dateformatter.test)
+    testImplementation(projects.libraries.permissions.noop)
 
     androidTestImplementation(libs.test.junitext)
 }
