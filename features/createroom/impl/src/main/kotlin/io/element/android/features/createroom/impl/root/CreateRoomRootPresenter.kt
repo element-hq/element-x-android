@@ -19,6 +19,7 @@ package io.element.android.features.createroom.impl.root
 import androidx.compose.runtime.Composable
 import io.element.android.features.selectusers.api.SelectUsersPresenter
 import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
+import io.element.android.features.selectusers.api.SelectionMode
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import timber.log.Timber
@@ -29,7 +30,7 @@ class CreateRoomRootPresenter @Inject constructor(
 ) : Presenter<CreateRoomRootState> {
 
     private val presenter by lazy {
-        presenterFactory.create(SelectUsersPresenterArgs(isMultiSelectionEnabled = false))
+        presenterFactory.create(SelectUsersPresenterArgs(SelectionMode.Single))
     }
 
     @Composable

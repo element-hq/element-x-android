@@ -27,6 +27,8 @@ data class SelectUsersState(
     val selectedUsers: ImmutableSet<MatrixUser>,
     val selectedUsersListState: LazyListState,
     val isSearchActive: Boolean,
-    val isMultiSelectionEnabled: Boolean,
+    val selectionMode: SelectionMode,
     val eventSink: (SelectUsersEvents) -> Unit,
-)
+) {
+    val isMultiSelectionEnabled = selectionMode == SelectionMode.Multiple
+}

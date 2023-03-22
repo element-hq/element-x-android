@@ -19,6 +19,7 @@ package io.element.android.features.createroom.impl.addpeople
 import androidx.compose.runtime.Composable
 import io.element.android.features.selectusers.api.SelectUsersPresenter
 import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
+import io.element.android.features.selectusers.api.SelectionMode
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 
@@ -27,7 +28,7 @@ class AddPeoplePresenter @Inject constructor(
 ) : Presenter<AddPeopleState> {
 
     private val selectUsersPresenter by lazy {
-        selectUsersPresenterFactory.create(SelectUsersPresenterArgs(isMultiSelectionEnabled = true))
+        selectUsersPresenterFactory.create(SelectUsersPresenterArgs(SelectionMode.Multiple))
     }
 
     @Composable

@@ -102,7 +102,7 @@ class DefaultSelectUsersPresenter @AssistedInject constructor(
             selectedUsers = selectedUsers.value.reversed().toImmutableSet(),
             selectedUsersListState = selectedUsersListState,
             isSearchActive = isSearchActive,
-            isMultiSelectionEnabled = args.isMultiSelectionEnabled,
+            selectionMode = args.selectionMode,
             eventSink = ::handleEvents,
         )
     }
