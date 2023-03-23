@@ -24,38 +24,27 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.features.selectusers.api.SelectUsersView
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
-import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.ui.components.MatrixUserRow
-import io.element.android.libraries.matrix.ui.model.MatrixUser
-import kotlinx.collections.immutable.ImmutableList
 import io.element.android.libraries.designsystem.R as DrawableR
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -65,11 +54,12 @@ fun CreateRoomRootView(
     state: CreateRoomRootState,
     modifier: Modifier = Modifier,
     onClosePressed: () -> Unit = {},
+    onNewRoomClicked: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier.fillMaxWidth(),
         topBar = {
-            if (!state.isSearchActive) {
+            if (!state.selectUsersState.isSearchActive) {
                 CreateRoomRootViewTopBar(onClosePressed = onClosePressed)
             }
         }
@@ -78,20 +68,15 @@ fun CreateRoomRootView(
             modifier = Modifier.padding(paddingValues),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            CreateRoomSearchBar(
+            SelectUsersView(
                 modifier = Modifier.fillMaxWidth(),
-                query = state.searchQuery,
-                placeHolderTitle = stringResource(StringR.string.search_for_someone),
-                results = state.searchResults,
-                active = state.isSearchActive,
-                onActiveChanged = { state.eventSink(CreateRoomRootEvents.OnSearchActiveChanged(it)) },
-                onTextChanged = { state.eventSink(CreateRoomRootEvents.UpdateSearchQuery(it)) },
-                onResultSelected = { state.eventSink(CreateRoomRootEvents.StartDM(it)) }
+                state = state.selectUsersState,
+                onUserSelected = { state.eventSink.invoke(CreateRoomRootEvents.StartDM(it)) },
             )
 
-            if (!state.isSearchActive) {
+            if (!state.selectUsersState.isSearchActive) {
                 CreateRoomActionButtonsList(
-                    onNewRoomClicked = { state.eventSink(CreateRoomRootEvents.CreateRoom) },
+                    onNewRoomClicked = onNewRoomClicked,
                     onInvitePeopleClicked = { state.eventSink(CreateRoomRootEvents.InvitePeople) },
                 )
             }
@@ -122,77 +107,6 @@ fun CreateRoomRootViewTopBar(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CreateRoomSearchBar(
-    query: String,
-    placeHolderTitle: String,
-    results: ImmutableList<MatrixUser>,
-    active: Boolean,
-    modifier: Modifier = Modifier,
-    onActiveChanged: (Boolean) -> Unit = {},
-    onTextChanged: (String) -> Unit = {},
-    onResultSelected: (MatrixUser) -> Unit = {},
-) {
-    val focusManager = LocalFocusManager.current
-
-    if (!active) {
-        onTextChanged("")
-        focusManager.clearFocus()
-    }
-
-    SearchBar(
-        query = query,
-        onQueryChange = onTextChanged,
-        onSearch = { focusManager.clearFocus() },
-        active = active,
-        onActiveChange = onActiveChanged,
-        modifier = modifier
-            .padding(horizontal = if (!active) 16.dp else 0.dp),
-        placeholder = {
-            Text(
-                text = placeHolderTitle,
-                modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
-            )
-        },
-        leadingIcon = if (active) {
-            { BackButton(onClick = { onActiveChanged(false) }) }
-        } else {
-            null
-        },
-        trailingIcon = when {
-            active && query.isNotEmpty() -> {
-                {
-                    IconButton(onClick = { onTextChanged("") }) {
-                        Icon(Icons.Default.Close, stringResource(StringR.string.a11y_clear))
-                    }
-                }
-            }
-            !active -> {
-                {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = stringResource(StringR.string.search),
-                        modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
-                    )
-                }
-            }
-            else -> null
-        },
-        colors = if (!active) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
-        content = {
-            LazyColumn {
-                items(results) {
-                    CreateRoomSearchResultItem(
-                        matrixUser = it,
-                        onClick = { onResultSelected(it) }
-                    )
-                }
-            }
-        },
-    )
-}
-
 @Composable
 fun CreateRoomActionButtonsList(
     modifier: Modifier = Modifier,
@@ -211,20 +125,6 @@ fun CreateRoomActionButtonsList(
             onClick = onInvitePeopleClicked,
         )
     }
-}
-
-@Composable
-fun CreateRoomSearchResultItem(
-    matrixUser: MatrixUser,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
-) {
-    MatrixUserRow(
-        modifier = modifier,
-        matrixUser = matrixUser,
-        avatarSize = AvatarSize.Custom(36.dp),
-        onClick = onClick,
-    )
 }
 
 @Composable

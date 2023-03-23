@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.root
+package io.element.android.features.createroom.impl.addpeople
 
-import io.element.android.libraries.matrix.ui.model.MatrixUser
-
-sealed interface CreateRoomRootEvents {
-    data class StartDM(val matrixUser: MatrixUser) : CreateRoomRootEvents
-    object InvitePeople : CreateRoomRootEvents
-}
+sealed interface AddPeopleEvents

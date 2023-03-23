@@ -20,17 +20,10 @@ plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
-    id("kotlin-parcelize")
 }
 
 android {
-    namespace = "io.element.android.features.createroom.impl"
-
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
-    }
+    namespace = "io.element.android.features.selectusers.impl"
 }
 
 anvil {
@@ -46,19 +39,19 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
+    implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
-    implementation(projects.features.selectusers.api)
-    api(projects.features.createroom.api)
+    api(projects.features.selectusers.api)
+    ksp(libs.showkase.processor)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
+    testImplementation(libs.coroutines.core)
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
+    testImplementation(libs.test.mockk)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.features.selectusers.impl)
 
     androidTestImplementation(libs.test.junitext)
-
-    ksp(libs.showkase.processor)
 }

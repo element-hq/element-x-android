@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.root
+package io.element.android.features.selectusers.api
 
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 
-sealed interface CreateRoomRootEvents {
-    data class StartDM(val matrixUser: MatrixUser) : CreateRoomRootEvents
-    object InvitePeople : CreateRoomRootEvents
+sealed interface SelectUsersEvents {
+    data class UpdateSearchQuery(val query: String) : SelectUsersEvents
+    data class AddToSelection(val matrixUser: MatrixUser) : SelectUsersEvents
+    data class RemoveFromSelection(val matrixUser: MatrixUser) : SelectUsersEvents
+    data class OnSearchActiveChanged(val active: Boolean) : SelectUsersEvents
 }

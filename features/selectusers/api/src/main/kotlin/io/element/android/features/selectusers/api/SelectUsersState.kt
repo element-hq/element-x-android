@@ -14,11 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.root
+package io.element.android.features.selectusers.api
 
+import androidx.compose.foundation.lazy.LazyListState
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import kotlinx.collections.immutable.ImmutableList
 
-sealed interface CreateRoomRootEvents {
-    data class StartDM(val matrixUser: MatrixUser) : CreateRoomRootEvents
-    object InvitePeople : CreateRoomRootEvents
+data class SelectUsersState(
+    val searchQuery: String,
+    val searchResults: ImmutableList<MatrixUser>,
+    val selectedUsers: ImmutableList<MatrixUser>,
+    val selectedUsersListState: LazyListState,
+    val isSearchActive: Boolean,
+    val selectionMode: SelectionMode,
+    val eventSink: (SelectUsersEvents) -> Unit,
+) {
+    val isMultiSelectionEnabled = selectionMode == SelectionMode.Multiple
 }
