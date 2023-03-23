@@ -71,8 +71,6 @@ fun SelectUsersView(
     onUserSelected: (MatrixUser) -> Unit = {},
     onUserDeselected: (MatrixUser) -> Unit = {},
 ) {
-    val eventSink = state.eventSink
-
     Column(
         modifier = modifier,
     ) {
@@ -84,14 +82,14 @@ fun SelectUsersView(
             selectedUsersListState = state.selectedUsersListState,
             active = state.isSearchActive,
             isMultiSelectionEnabled = state.isMultiSelectionEnabled,
-            onActiveChanged = { eventSink.invoke(SelectUsersEvents.OnSearchActiveChanged(it)) },
+            onActiveChanged = { state.eventSink(SelectUsersEvents.OnSearchActiveChanged(it)) },
             onTextChanged = { state.eventSink(SelectUsersEvents.UpdateSearchQuery(it)) },
             onUserSelected = {
                 state.eventSink(SelectUsersEvents.AddToSelection(it))
                 onUserSelected(it)
             },
             onUserDeselected = {
-                eventSink(SelectUsersEvents.RemoveFromSelection(it))
+                state.eventSink(SelectUsersEvents.RemoveFromSelection(it))
                 onUserDeselected(it)
             },
         )
@@ -102,7 +100,7 @@ fun SelectUsersView(
                 modifier = Modifier.padding(16.dp),
                 selectedUsers = state.selectedUsers,
                 onUserRemoved = {
-                    eventSink(SelectUsersEvents.RemoveFromSelection(it))
+                    state.eventSink(SelectUsersEvents.RemoveFromSelection(it))
                     onUserDeselected(it)
                 },
             )
