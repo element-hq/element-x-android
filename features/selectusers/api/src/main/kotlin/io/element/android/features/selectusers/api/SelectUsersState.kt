@@ -19,12 +19,11 @@ package io.element.android.features.selectusers.api
 import androidx.compose.foundation.lazy.LazyListState
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableSet
 
 data class SelectUsersState(
     val searchQuery: String,
     val searchResults: ImmutableList<MatrixUser>,
-    val selectedUsers: ImmutableSet<MatrixUser>,
+    val selectedUsers: ImmutableList<MatrixUser>,
     val selectedUsersListState: LazyListState,
     val isSearchActive: Boolean,
     val selectionMode: SelectionMode,
