@@ -21,7 +21,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentSetOf
 
 open class SelectUsersStateProvider : PreviewParameterProvider<SelectUsersState> {
     override val values: Sequence<SelectUsersState>
@@ -29,7 +28,7 @@ open class SelectUsersStateProvider : PreviewParameterProvider<SelectUsersState>
             aSelectUsersState(),
             aSelectUsersState().copy(
                 isSearchActive = false,
-                selectedUsers = aSetOfSelectedUsers(),
+                selectedUsers = aListOfSelectedUsers(),
                 selectionMode = SelectionMode.Multiple,
             ),
             aSelectUsersState().copy(isSearchActive = true),
@@ -38,14 +37,14 @@ open class SelectUsersStateProvider : PreviewParameterProvider<SelectUsersState>
             aSelectUsersState().copy(
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
-                selectedUsers = aSetOfSelectedUsers(),
+                selectedUsers = aListOfSelectedUsers(),
                 searchResults = aListOfResults(),
             ),
             aSelectUsersState().copy(
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
                 selectionMode = SelectionMode.Multiple,
-                selectedUsers = aSetOfSelectedUsers(),
+                selectedUsers = aListOfSelectedUsers(),
                 searchResults = aListOfResults(),
             )
         )
@@ -55,7 +54,7 @@ fun aSelectUsersState() = SelectUsersState(
     isSearchActive = false,
     searchQuery = "",
     searchResults = persistentListOf(),
-    selectedUsers = persistentSetOf(),
+    selectedUsers = persistentListOf(),
     selectedUsersListState = LazyListState(
         firstVisibleItemIndex = 0,
         firstVisibleItemScrollOffset = 0,
@@ -64,7 +63,7 @@ fun aSelectUsersState() = SelectUsersState(
     eventSink = {}
 )
 
-fun aSetOfSelectedUsers() = persistentSetOf(
+fun aListOfSelectedUsers() = persistentListOf(
     MatrixUser(id = UserId("@someone:matrix.org")),
     MatrixUser(id = UserId("@other:matrix.org"), username = "other"),
 )

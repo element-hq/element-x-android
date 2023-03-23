@@ -18,8 +18,8 @@ package io.element.android.features.createroom.impl.addpeople
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.selectusers.api.SelectionMode
+import io.element.android.features.selectusers.api.aListOfSelectedUsers
 import io.element.android.features.selectusers.api.aSelectUsersState
-import io.element.android.features.selectusers.api.aSetOfSelectedUsers
 
 open class AddPeopleStateProvider : PreviewParameterProvider<AddPeopleState> {
     override val values: Sequence<AddPeopleState>
@@ -27,13 +27,13 @@ open class AddPeopleStateProvider : PreviewParameterProvider<AddPeopleState> {
             aAddPeopleState(),
             aAddPeopleState().copy(
                 selectUsersState = aSelectUsersState().copy(
-                    selectedUsers = aSetOfSelectedUsers(),
+                    selectedUsers = aListOfSelectedUsers(),
                     selectionMode = SelectionMode.Multiple,
                 )
             ),
             aAddPeopleState().copy(
                 selectUsersState = aSelectUsersState().copy(
-                    selectedUsers = aSetOfSelectedUsers(),
+                    selectedUsers = aListOfSelectedUsers(),
                     isSearchActive = true,
                     selectionMode = SelectionMode.Multiple,
                 )

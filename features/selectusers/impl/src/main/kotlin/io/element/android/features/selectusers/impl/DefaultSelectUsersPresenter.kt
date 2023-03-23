@@ -40,11 +40,8 @@ import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -62,8 +59,8 @@ class DefaultSelectUsersPresenter @AssistedInject constructor(
     override fun present(): SelectUsersState {
         val localCoroutineScope = rememberCoroutineScope()
         var isSearchActive by rememberSaveable { mutableStateOf(false) }
-        val selectedUsers: MutableState<ImmutableSet<MatrixUser>> = remember {
-            mutableStateOf(persistentSetOf())
+        val selectedUsers: MutableState<ImmutableList<MatrixUser>> = remember {
+            mutableStateOf(persistentListOf())
         }
         val selectedUsersListState = rememberLazyListState()
         var searchQuery by rememberSaveable { mutableStateOf("") }
@@ -76,10 +73,12 @@ class DefaultSelectUsersPresenter @AssistedInject constructor(
                 is SelectUsersEvents.OnSearchActiveChanged -> isSearchActive = event.active
                 is SelectUsersEvents.UpdateSearchQuery -> searchQuery = event.query
                 is SelectUsersEvents.AddToSelection -> {
-                    selectedUsers.value = selectedUsers.value.plus(event.matrixUser).toImmutableSet()
+                    if (event.matrixUser !in selectedUsers.value) {
+                        selectedUsers.value = selectedUsers.value.plus(event.matrixUser).toImmutableList()
+                    }
                     localCoroutineScope.scrollToFirstSelectedUser(selectedUsersListState)
                 }
-                is SelectUsersEvents.RemoveFromSelection -> selectedUsers.value = selectedUsers.value.minus(event.matrixUser).toImmutableSet()
+                is SelectUsersEvents.RemoveFromSelection -> selectedUsers.value = selectedUsers.value.minus(event.matrixUser).toImmutableList()
             }
         }
 
@@ -99,7 +98,7 @@ class DefaultSelectUsersPresenter @AssistedInject constructor(
         return SelectUsersState(
             searchQuery = searchQuery,
             searchResults = searchResults.value,
-            selectedUsers = selectedUsers.value.reversed().toImmutableSet(),
+            selectedUsers = selectedUsers.value.reversed().toImmutableList(),
             selectedUsersListState = selectedUsersListState,
             isSearchActive = isSearchActive,
             selectionMode = args.selectionMode,

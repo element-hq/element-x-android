@@ -105,27 +105,27 @@ class DefaultSelectUsersPresenterTests {
 
             val userA = aMatrixUser("userA", "A")
             val userB = aMatrixUser("userB", "B")
+            val userABis = aMatrixUser("userA", "A")
+            val userC = aMatrixUser("userC", "C")
+
             initialState.eventSink(SelectUsersEvents.AddToSelection(userA))
-            val selectionAfterAddingA = awaitItem().selectedUsers
-            assertThat(selectionAfterAddingA).hasSize(1)
-            assertThat(selectionAfterAddingA).contains(userA)
+            assertThat(awaitItem().selectedUsers).containsExactly(userA)
 
             initialState.eventSink(SelectUsersEvents.AddToSelection(userB))
-            val selectionAfterAddingB = awaitItem().selectedUsers
-            assertThat(selectionAfterAddingB).hasSize(2)
-            assertThat(selectionAfterAddingB).contains(userA)
-            assertThat(selectionAfterAddingB).contains(userB)
             // the last added user should be presented first
-            assertThat(selectionAfterAddingB.first()).isEqualTo(userB)
+            assertThat(awaitItem().selectedUsers).containsExactly(userB, userA)
+
+            initialState.eventSink(SelectUsersEvents.AddToSelection(userABis))
+            initialState.eventSink(SelectUsersEvents.AddToSelection(userC))
+            // duplicated users should be ignored
+            assertThat(awaitItem().selectedUsers).containsExactly(userC, userB, userA)
 
             initialState.eventSink(SelectUsersEvents.RemoveFromSelection(userB))
-            val selectionAfterRemovingB = awaitItem().selectedUsers
-            assertThat(selectionAfterRemovingB).hasSize(1)
-            assertThat(selectionAfterRemovingB).contains(userA)
-
+            assertThat(awaitItem().selectedUsers).containsExactly(userC, userA)
             initialState.eventSink(SelectUsersEvents.RemoveFromSelection(userA))
-            val selectionAfterRemovingA = awaitItem().selectedUsers
-            assertThat(selectionAfterRemovingA).isEmpty()
+            assertThat(awaitItem().selectedUsers).containsExactly(userC)
+            initialState.eventSink(SelectUsersEvents.RemoveFromSelection(userC))
+            assertThat(awaitItem().selectedUsers).isEmpty()
         }
     }
 }
