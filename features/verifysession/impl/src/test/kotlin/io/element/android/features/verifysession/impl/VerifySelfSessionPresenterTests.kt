@@ -56,6 +56,10 @@ class VerifySelfSessionPresenterTests {
             eventSink(VerifySelfSessionViewEvents.RequestVerification)
             // Await for other device response:
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.AwaitingOtherDeviceResponse)
+            // Await for the state to be Ready
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Ready)
+            // Await for other device response (again):
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.AwaitingOtherDeviceResponse)
             // Finally, ChallengeReceived:
             val verifyingState = awaitItem()
             assertThat(verifyingState.verificationFlowStep).isInstanceOf(VerificationStep.Verifying::class.java)
@@ -233,8 +237,8 @@ class VerifySelfSessionPresenterTests {
     }
 
     private suspend fun ReceiveTurbine<VerifySelfSessionState>.awaitChallengeReceivedState(): VerifySelfSessionState {
-        // Skip 'waiting for response' state
-        skipItems(1)
+        // Skip 'waiting for response', 'ready' and 'starting verification' state
+        skipItems(3)
         // Received challenge
         return awaitItem()
     }
