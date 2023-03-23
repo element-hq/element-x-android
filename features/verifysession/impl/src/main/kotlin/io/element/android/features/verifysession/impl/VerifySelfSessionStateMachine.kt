@@ -17,7 +17,7 @@
 @file:Suppress("WildcardImport")
 package io.element.android.features.verifysession.impl
 
-import io.element.android.libraries.core.statemachine.createStateMachine
+import io.element.android.libraries.statemachine.createStateMachine
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState

@@ -65,6 +65,7 @@ include(":libraries:encrypted-db")
 include(":libraries:session-storage:api")
 include(":libraries:session-storage:impl")
 include(":libraries:session-storage:impl-memory")
+include(":libraries:statemachine")
 
 include(":services:analytics:api")
 include(":services:analytics:noop")
