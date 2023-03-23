@@ -103,7 +103,6 @@ class VerifySelfSessionStateMachine(
                 VerificationFlowState.Failed -> {
                     stateMachine.process(Event.DidFail)
                 }
-                else -> Unit
             }
         }.launchIn(coroutineScope)
     }
