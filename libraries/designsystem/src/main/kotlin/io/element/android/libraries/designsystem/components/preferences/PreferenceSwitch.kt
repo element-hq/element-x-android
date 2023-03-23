@@ -53,22 +53,20 @@ fun PreferenceSwitch(
             .clickable { onCheckedChange(!isChecked) },
         contentAlignment = Alignment.CenterStart
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        Row(modifier = Modifier.fillMaxWidth()) {
             PreferenceIcon(
+                modifier = Modifier.padding(vertical = preferencePaddingVertical),
                 icon = icon,
                 enabled = enabled
             )
             Text(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).padding(vertical = preferencePaddingVertical),
                 style = MaterialTheme.typography.bodyLarge,
                 color = enabled.toEnabledColor(),
                 text = title
             )
             Checkbox(
-                modifier = Modifier.padding(end = preferencePaddingEnd),
+                modifier = Modifier.padding(end = preferencePaddingHorizontal).align(Alignment.CenterVertically),
                 checked = isChecked,
                 enabled = enabled,
                 onCheckedChange = onCheckedChange

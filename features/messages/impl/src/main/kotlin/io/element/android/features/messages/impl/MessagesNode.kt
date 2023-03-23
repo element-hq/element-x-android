@@ -21,10 +21,13 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.core.RoomId
 
 @ContributesNode(RoomScope::class)
 class MessagesNode @AssistedInject constructor(
@@ -33,12 +36,19 @@ class MessagesNode @AssistedInject constructor(
     private val presenter: MessagesPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
+    private val callback = plugins<MessagesEntryPoint.Callback>().firstOrNull()
+
+    private fun onRoomDetailsClicked() {
+        callback?.onRoomDetailsClicked()
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
         MessagesView(
             state = state,
             onBackPressed = this::navigateUp,
+            onRoomDetailsClicked = this::onRoomDetailsClicked,
             modifier = modifier
         )
     }

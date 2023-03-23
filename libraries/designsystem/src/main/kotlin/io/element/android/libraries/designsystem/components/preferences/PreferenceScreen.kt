@@ -29,7 +29,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Announcement
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -39,10 +38,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -92,12 +90,7 @@ fun PreferenceTopAppBar(
     TopAppBar(
         modifier = modifier,
         navigationIcon = {
-            IconButton(onClick = onBackPressed) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Back"
-                )
-            }
+            BackButton(onClick = onBackPressed)
         },
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -132,13 +125,16 @@ private fun ContentToPreview() {
         ) {
             PreferenceText(
                 title = "Title",
+                subtitle = "Some other text",
                 icon = Icons.Default.BugReport,
             )
+            PreferenceDivider()
             PreferenceSwitch(
                 title = "Switch",
                 icon = Icons.Default.Announcement,
-                isChecked = true
+                isChecked = true,
             )
+            PreferenceDivider()
             PreferenceSlide(
                 title = "Slide",
                 summary = "Summary",

@@ -35,27 +35,33 @@ import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
 fun PreferenceCategory(
-    title: String,
     modifier: Modifier = Modifier,
+    title: String? = null,
+    showDivider: Boolean = true,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
     ) {
-        Divider(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            color = MaterialTheme.colorScheme.secondary,
-            thickness = 1.dp
-        )
-        Text(
-            modifier = Modifier.padding(top = 8.dp, start = 56.dp),
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.primary,
-            text = title,
-        )
+        if (title != null) {
+            PreferenceCategoryTitle(title = title)
+        }
         content()
+        if (showDivider) {
+            PreferenceDivider()
+        }
     }
+}
+
+@Composable
+fun PreferenceCategoryTitle(title: String, modifier: Modifier = Modifier) {
+    Text(
+        modifier = modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp),
+        style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.primary,
+        text = title,
+    )
 }
 
 @Preview

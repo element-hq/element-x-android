@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2023 New Vector Ltd
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="room_details_topic_title">Topic</string>
+    <string name="room_details_people_title">People</string>
+    <string name="room_details_invite_people_title">Invite people</string>
+    <string name="room_details_security_title">Security</string>
+    <string name="room_details_encryption_enabled_title">Message encryption enabled</string>
+    <string name="room_details_encryption_enabled_subtitle">Messages are secured with locks. Only you and the recipient have the unique keys to unlock them.</string>
+    <string name="room_details_encryption_leave_room_title">Leave room</string>
+</resources>

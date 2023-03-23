@@ -81,6 +81,7 @@ fun DependencyHandlerScope.allFeaturesApi() {
     implementation(project(":features:createroom:api"))
     implementation(project(":features:verifysession:api"))
     implementation(project(":features:selectusers:api"))
+    implementation(project(":features:roomdetails:api"))
 }
 
 fun DependencyHandlerScope.allFeaturesImpl() {
@@ -94,4 +95,5 @@ fun DependencyHandlerScope.allFeaturesImpl() {
     implementation(project(":features:createroom:impl"))
     implementation(project(":features:verifysession:impl"))
     implementation(project(":features:selectusers:impl"))
+    implementation(project(":features:roomdetails:impl"))
 }

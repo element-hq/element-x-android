@@ -23,9 +23,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,15 +52,15 @@ fun PreferenceSlide(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = preferenceMinHeight),
-        contentAlignment = Alignment.CenterStart
+            .defaultMinSize(minHeight = preferenceMinHeight)
+            .padding(top = preferencePaddingVertical),
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
             PreferenceIcon(icon = icon)
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(end = preferencePaddingEnd),
+                    .padding(end = preferencePaddingHorizontal),
             ) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
@@ -97,6 +98,7 @@ internal fun PreferenceSlideDarkPreview() = ElementPreviewDark { ContentToPrevie
 @Composable
 private fun ContentToPreview() {
     PreferenceSlide(
+        icon = Icons.Default.Person,
         title = "Slide",
         summary = "Summary",
         value = 0.75F

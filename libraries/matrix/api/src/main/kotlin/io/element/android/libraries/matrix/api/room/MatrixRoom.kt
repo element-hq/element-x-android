@@ -29,6 +29,8 @@ interface MatrixRoom: Closeable {
     val displayName: String
     val topic: String?
     val avatarUrl: String?
+    val members: List<RoomMember>
+    val isEncrypted: Boolean
 
     fun syncUpdateFlow(): Flow<Long>
 
