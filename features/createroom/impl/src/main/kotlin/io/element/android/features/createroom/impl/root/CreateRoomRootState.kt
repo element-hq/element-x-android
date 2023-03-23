@@ -17,8 +17,6 @@
 package io.element.android.features.createroom.impl.root
 
 import io.element.android.features.selectusers.api.SelectUsersState
-import io.element.android.libraries.matrix.ui.model.MatrixUser
-import kotlinx.collections.immutable.ImmutableList
 
 data class CreateRoomRootState(
     val selectUsersState: SelectUsersState,
