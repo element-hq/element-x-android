@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -44,9 +45,7 @@ fun CheckableMatrixUserRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable {
-                onCheckedChange(!checked)
-            },
+            .clickable(role = Role.Checkbox) { onCheckedChange(!checked) },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         MatrixUserRow(

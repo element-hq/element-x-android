@@ -17,6 +17,7 @@
 package io.element.android.features.selectusers.api
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -232,10 +233,9 @@ fun SearchSingleUserResultItem(
     onClick: () -> Unit = {},
 ) {
     MatrixUserRow(
-        modifier = modifier,
+        modifier = modifier.clickable(onClick = onClick),
         matrixUser = matrixUser,
         avatarSize = AvatarSize.Custom(36.dp),
-        onClick = onClick,
     )
 }
 
