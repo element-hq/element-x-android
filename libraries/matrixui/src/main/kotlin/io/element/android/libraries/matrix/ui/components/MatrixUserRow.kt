@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -34,35 +33,32 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getBestName
 
-// FIXME Row are not the same height if there is a name or not.
 @Composable
 fun MatrixUserRow(
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
+    avatarSize: AvatarSize = matrixUser.avatarData.size,
 ) {
     Row(
         modifier = modifier
-            .clickable(onClick = onClick)
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
             .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Avatar(
-            matrixUser.avatarData,
+            matrixUser.avatarData.copy(size = avatarSize),
         )
         Column(
             modifier = Modifier
-                .padding(start = 12.dp, end = 4.dp, top = 12.dp, bottom = 12.dp)
-                .alignByBaseline()
-                .weight(1f)
+                .padding(start = 12.dp),
         ) {
             // Name
             Text(

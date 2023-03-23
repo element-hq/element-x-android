@@ -32,9 +32,9 @@ open class MatrixUserProvider : PreviewParameterProvider<MatrixUser> {
         )
 }
 
-fun aMatrixUser() = MatrixUser(
-    id = UserId("@id_of_alice:server.org"),
-    username = "Alice",
+fun aMatrixUser(id: String = "@id_of_alice:server.org", userName: String = "Alice") = MatrixUser(
+    id = UserId(id),
+    username = userName,
     avatarData = anAvatarData()
 )
 

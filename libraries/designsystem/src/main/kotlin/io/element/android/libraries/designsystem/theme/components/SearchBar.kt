@@ -20,6 +20,7 @@ package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SearchBarColors
 import androidx.compose.material3.SearchBarDefaults
@@ -34,7 +35,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DockedSearchBar(
+fun SearchBar(
     query: String,
     onQueryChange: (String) -> Unit,
     onSearch: (String) -> Unit,
@@ -45,13 +46,14 @@ fun DockedSearchBar(
     placeholder: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
-    shape: Shape = SearchBarDefaults.dockedShape,
+    shape: Shape = SearchBarDefaults.inputFieldShape,
     colors: SearchBarColors = SearchBarDefaults.colors(),
     tonalElevation: Dp = SearchBarDefaults.Elevation,
+    windowInsets: WindowInsets = SearchBarDefaults.windowInsets,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    androidx.compose.material3.DockedSearchBar(
+    androidx.compose.material3.SearchBar(
         query = query,
         onQueryChange = onQueryChange,
         onSearch = onSearch,
@@ -65,6 +67,7 @@ fun DockedSearchBar(
         shape = shape,
         colors = colors,
         tonalElevation = tonalElevation,
+        windowInsets = windowInsets,
         interactionSource = interactionSource,
         content = content,
     )
@@ -80,7 +83,7 @@ internal fun DockedSearchBarDarkPreview() = ElementPreviewDark { ContentToPrevie
 
 @Composable
 private fun ContentToPreview() {
-    DockedSearchBar(
+    SearchBar(
         query = "Some text",
         onQueryChange = {},
         onSearch = {},

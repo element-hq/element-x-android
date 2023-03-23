@@ -32,6 +32,7 @@ data class VerifySelfSessionState(
         object Initial : VerificationStep
         object Canceled : VerificationStep
         object AwaitingOtherDeviceResponse : VerificationStep
+        object Ready : VerificationStep
         data class Verifying(val emojiList: List<VerificationEmoji>, val state: Async<Unit>) : VerificationStep
         object Completed : VerificationStep
     }

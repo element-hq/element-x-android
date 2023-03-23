@@ -18,7 +18,8 @@ package io.element.android.libraries.matrix.ui.media
 
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.media.MediaResolver
+import kotlin.math.roundToInt
 
 fun AvatarData.toMetadata(): MediaResolver.Meta {
-    return MediaResolver.Meta(url = url, kind = MediaResolver.Kind.Thumbnail(size.value))
+    return MediaResolver.Meta(url = url, kind = MediaResolver.Kind.Thumbnail(size.dp.value.roundToInt()))
 }
