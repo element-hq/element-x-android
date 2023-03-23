@@ -124,7 +124,7 @@ internal fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = 
     }
 
     Column(modifier) {
-        Spacer(Modifier.shrinkableHeight(min = 20.dp, max = 80.dp))
+        Spacer(Modifier.height(80.dp))
         Box(
             modifier = Modifier
                 .size(width = 70.dp, height = 70.dp)
@@ -278,7 +278,7 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
         ) {
             negativeButtonTitle?.let { Text(stringResource(it), fontSize = 16.sp) }
         }
-        Spacer(Modifier.shrinkableHeight(min = 20.dp, max = 40.dp))
+        Spacer(Modifier.height(40.dp))
     }
 }
 
