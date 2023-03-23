@@ -305,11 +305,11 @@ We have 3 tests frameworks in place, and this should be sufficient to guarantee 
 - Maestro to test the global usage of the application. See the related [documentation](../.maestro/README.md).
 - Combination of [Showkase](https://github.com/airbnb/Showkase) and [Paparazzi](https://github.com/cashapp/paparazzi), to test UI pixel perfect. To add test,
   just add `@Preview` for the composable you are adding. See the related [documentation](screenshot_testing.md) and see in the template the
-  file [TemplateView.kt](../features/template/src/main/kotlin/io/element/android/features/roomdetails/TemplateView.kt). We create PreviewProvider to provide
+  file [TemplateView.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateView.kt). We create PreviewProvider to provide
   different states. See for instance the
-  file [TemplateStateProvider.kt](../features/template/src/main/kotlin/io/element/android/features/roomdetails/TemplateStateProvider.kt)
+  file [TemplateStateProvider.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateStateProvider.kt)
     - Tests on presenter with [Molecule](https://github.com/cashapp/molecule) and [Turbine](https://github.com/cashapp/turbine). See in the template the
-      class [TemplatePresenterTests](../features/template/src/test/kotlin/io/element/android/features/roomdetails/TemplatePresenterTests.kt).
+      class [TemplatePresenterTests](../features/template/src/test/kotlin/io/element/android/features/template/TemplatePresenterTests.kt).
 
 **Note** For now we want to avoid using class mocking (with library such as *mockk*), because this should be not necessary. We prefer to create Fake
 implementation of our interfaces. Mocking can be used to mock Android framework classes though, such as `Bitmap` for instance.

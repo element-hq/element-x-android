@@ -70,6 +70,5 @@ val Vermilion = Color(0xFFFF5B55)
 
 val LinkColor = Color(0xFF0086E6)
 
-// TODO add dark mode variant when there is one
 val TextColorCriticalLight = Color(0xFFD51928)
 val TextColorCriticalDark = Color(0xfffd3e3c)
