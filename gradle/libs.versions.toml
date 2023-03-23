@@ -130,7 +130,7 @@ sqldelight-driver-android = { module = "com.squareup.sqldelight:android-driver",
 sqldelight-driver-jvm = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 sqlcipher = "net.zetetic:android-database-sqlcipher:4.5.3"
-sqlite = "androidx.sqlite:sqlite:2.3.0"
+sqlite = "androidx.sqlite:sqlite:2.3.1"
 
 # Di
 inject = "javax.inject:javax.inject:1"
