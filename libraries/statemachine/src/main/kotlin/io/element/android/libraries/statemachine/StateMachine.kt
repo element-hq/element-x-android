@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.core.statemachine
+package io.element.android.libraries.statemachine
 
-import io.element.android.libraries.core.bool.orFalse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -64,7 +63,7 @@ class StateMachine<Event : Any, State : Any>(
     private fun <E : Event> findMatchingRoute(event: E): StateMachineRoute<E, State, State>? {
         val routesForEvent = routes.filter { it.eventType.isInstance(event) }
 
-        return (routesForEvent.firstOrNull { it.fromState?.isInstance(currentState).orFalse() }
+        return (routesForEvent.firstOrNull { it.fromState?.isInstance(currentState) == true }
                 ?: routesForEvent.firstOrNull { it.fromState == null }) as? StateMachineRoute<E, State, State>
     }
 
