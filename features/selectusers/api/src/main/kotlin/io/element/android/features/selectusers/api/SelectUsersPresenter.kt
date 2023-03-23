@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.root
+package io.element.android.features.selectusers.api
 
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.architecture.Presenter
 
-sealed interface CreateRoomRootEvents {
-    data class StartDM(val matrixUser: MatrixUser) : CreateRoomRootEvents
-    object InvitePeople : CreateRoomRootEvents
+interface SelectUsersPresenter : Presenter<SelectUsersState> {
+
+    interface Factory {
+        fun create(args: SelectUsersPresenterArgs): SelectUsersPresenter
+    }
 }

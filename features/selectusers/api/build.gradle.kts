@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.root
+plugins {
+    id("io.element.android-compose-library")
+}
 
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+android {
+    namespace = "io.element.android.features.selectusers.api"
+}
 
-sealed interface CreateRoomRootEvents {
-    data class StartDM(val matrixUser: MatrixUser) : CreateRoomRootEvents
-    object InvitePeople : CreateRoomRootEvents
+dependencies {
+    implementation(projects.libraries.architecture)
+    implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.matrixui)
 }

@@ -14,43 +14,34 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.root
+package io.element.android.features.createroom.impl.addpeople
 
 import androidx.compose.runtime.Composable
 import io.element.android.features.selectusers.api.SelectUsersPresenter
 import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
 import io.element.android.features.selectusers.api.SelectionMode
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.ui.model.MatrixUser
-import timber.log.Timber
 import javax.inject.Inject
 
-class CreateRoomRootPresenter @Inject constructor(
-    private val presenterFactory: SelectUsersPresenter.Factory,
-) : Presenter<CreateRoomRootState> {
+class AddPeoplePresenter @Inject constructor(
+    private val selectUsersPresenterFactory: SelectUsersPresenter.Factory,
+) : Presenter<AddPeopleState> {
 
-    private val presenter by lazy {
-        presenterFactory.create(SelectUsersPresenterArgs(SelectionMode.Single))
+    private val selectUsersPresenter by lazy {
+        selectUsersPresenterFactory.create(SelectUsersPresenterArgs(SelectionMode.Multiple))
     }
 
     @Composable
-    override fun present(): CreateRoomRootState {
-        val selectUsersState = presenter.present()
+    override fun present(): AddPeopleState {
+        val selectUsersState = selectUsersPresenter.present()
 
-        fun handleEvents(event: CreateRoomRootEvents) {
-            when (event) {
-                is CreateRoomRootEvents.StartDM -> handleStartDM(event.matrixUser)
-                CreateRoomRootEvents.InvitePeople -> Unit // Todo Handle invite people action
-            }
+        fun handleEvents(event: AddPeopleEvents) {
+            // do nothing for now
         }
 
-        return CreateRoomRootState(
+        return AddPeopleState(
             selectUsersState = selectUsersState,
             eventSink = ::handleEvents,
         )
-    }
-
-    private fun handleStartDM(matrixUser: MatrixUser) {
-        Timber.d("handleStartDM: $matrixUser") // Todo handle start DM action
     }
 }
