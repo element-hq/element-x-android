@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -46,11 +45,9 @@ fun MatrixUserRow(
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
     avatarSize: AvatarSize = matrixUser.avatarData.size,
-    onClick: (() -> Unit)? = null,
 ) {
     Row(
         modifier = modifier
-            .let { if (onClick != null) it.clickable(onClick = onClick) else it }
             .fillMaxWidth()
             .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
             .height(IntrinsicSize.Min),
