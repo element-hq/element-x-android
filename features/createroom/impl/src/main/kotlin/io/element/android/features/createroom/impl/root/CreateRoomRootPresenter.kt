@@ -17,16 +17,30 @@
 package io.element.android.features.createroom.impl.root
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import io.element.android.features.selectusers.api.SelectUsersEvents
 import io.element.android.features.selectusers.api.SelectUsersPresenter
 import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
 import io.element.android.features.selectusers.api.SelectionMode
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.execute
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class CreateRoomRootPresenter @Inject constructor(
     private val presenterFactory: SelectUsersPresenter.Factory,
+    private val matrixClient: MatrixClient,
 ) : Presenter<CreateRoomRootState> {
 
     private val presenter by lazy {
@@ -37,20 +51,44 @@ class CreateRoomRootPresenter @Inject constructor(
     override fun present(): CreateRoomRootState {
         val selectUsersState = presenter.present()
 
+        val localCoroutineScope = rememberCoroutineScope()
+
+        var showCreateDmConfirmationDialog by rememberSaveable { mutableStateOf(false) }
+        val startDmAction: MutableState<Async<RoomId>> = remember { mutableStateOf(Async.Uninitialized) }
+
         fun handleEvents(event: CreateRoomRootEvents) {
             when (event) {
-                is CreateRoomRootEvents.StartDM -> handleStartDM(event.matrixUser)
+                is CreateRoomRootEvents.SelectUser -> {
+                    val existingDM = matrixClient.findDM(event.matrixUser.id)
+                    if (existingDM == null) {
+                        showCreateDmConfirmationDialog = true
+                    } else {
+                        startDmAction.value = Async.Success(existingDM.roomId)
+                    }
+                }
+                is CreateRoomRootEvents.CreateDM -> {
+                    showCreateDmConfirmationDialog = false
+                    localCoroutineScope.createDM(event.matrixUser, startDmAction)
+                }
+                CreateRoomRootEvents.CancelCreateDM -> {
+                    showCreateDmConfirmationDialog = false
+                    selectUsersState.eventSink(SelectUsersEvents.ClearSelection)
+                }
                 CreateRoomRootEvents.InvitePeople -> Unit // Todo Handle invite people action
             }
         }
 
         return CreateRoomRootState(
             selectUsersState = selectUsersState,
+            showCreateDmConfirmationDialog = showCreateDmConfirmationDialog,
+            startDmAction = startDmAction.value,
             eventSink = ::handleEvents,
         )
     }
 
-    private fun handleStartDM(matrixUser: MatrixUser) {
-        Timber.d("handleStartDM: $matrixUser") // Todo handle start DM action
+    private fun CoroutineScope.createDM(user: MatrixUser, startDmAction: MutableState<Async<RoomId>>) = launch {
+        suspend {
+            matrixClient.createDM(user.id).getOrThrow()
+        }.execute(startDmAction)
     }
 }
