@@ -43,9 +43,11 @@ import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
 fun ButtonWithProgress(
+    text: String?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     showProgress: Boolean = false,
+    progressText: String? = text,
     enabled: Boolean = true,
     shape: Shape = ElementButtonDefaults.shape,
     colors: ButtonColors = ElementButtonDefaults.buttonColors(),
@@ -53,8 +55,6 @@ fun ButtonWithProgress(
     border: BorderStroke? = null,
     contentPadding: PaddingValues = ElementButtonDefaults.ContentPadding,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    text: String?,
-    progressText: String? = text,
 ) {
     Button(
         onClick = {
