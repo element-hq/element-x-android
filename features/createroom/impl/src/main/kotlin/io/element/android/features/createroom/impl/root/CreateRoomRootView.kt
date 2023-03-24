@@ -28,6 +28,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -39,6 +40,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.selectusers.api.SelectUsersView
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
@@ -46,6 +50,8 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.libraries.designsystem.R as DrawableR
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -56,7 +62,14 @@ fun CreateRoomRootView(
     modifier: Modifier = Modifier,
     onClosePressed: () -> Unit = {},
     onNewRoomClicked: () -> Unit = {},
+    onOpenDM: (RoomId) -> Unit = {},
 ) {
+    if (state.startDmAction is Async.Success) {
+        LaunchedEffect(state.startDmAction) {
+            onOpenDM(state.startDmAction.state)
+        }
+    }
+
     Scaffold(
         modifier = modifier.fillMaxWidth(),
         topBar = {
@@ -72,7 +85,7 @@ fun CreateRoomRootView(
             SelectUsersView(
                 modifier = Modifier.fillMaxWidth(),
                 state = state.selectUsersState,
-                onUserSelected = { state.eventSink.invoke(CreateRoomRootEvents.StartDM(it)) },
+                onUserSelected = { state.eventSink(CreateRoomRootEvents.SelectUser(it)) },
             )
 
             if (!state.selectUsersState.isSearchActive) {
@@ -82,6 +95,12 @@ fun CreateRoomRootView(
                 )
             }
         }
+    }
+
+    CreateDmConfirmationDialog(state)
+
+    if (state.startDmAction is Async.Loading) {
+        ProgressDialog(text = "Creating room...")
     }
 }
 
@@ -150,6 +169,26 @@ fun CreateRoomActionButton(
             contentDescription = null,
         )
         Text(text = text)
+    }
+}
+
+@Composable
+fun CreateDmConfirmationDialog(
+    state: CreateRoomRootState,
+    modifier: Modifier = Modifier,
+) {
+    if (state.showCreateDmConfirmationDialog) {
+        val selectedUser = state.selectUsersState.selectedUsers.firstOrNull()
+        if (selectedUser != null) {
+            ConfirmationDialog(
+                modifier = modifier,
+                title = "Start chat",
+                content = "You're about starting a chat with ${selectedUser.getBestName()}, do you want to continue?",
+                submitText = stringResource(io.element.android.libraries.ui.strings.R.string._continue),
+                onSubmitClicked = { state.eventSink(CreateRoomRootEvents.CreateDM(selectedUser)) },
+                onDismiss = { state.eventSink(CreateRoomRootEvents.CancelCreateDM) },
+            )
+        }
     }
 }
 

@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.test
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaResolver
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
@@ -37,10 +38,20 @@ class FakeMatrixClient(
     private val sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService()
 ) : MatrixClient {
 
+    private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
+    private var findDmResult: MatrixRoom? = FakeMatrixRoom()
     private var logoutFailure: Throwable? = null
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
         return FakeMatrixRoom(roomId)
+    }
+
+    override suspend fun createDM(userId: UserId): Result<RoomId> {
+        return createDmResult
+    }
+
+    override fun findDM(userId: UserId): MatrixRoom? {
+        return findDmResult
     }
 
     override fun startSync() = Unit
@@ -49,10 +60,6 @@ class FakeMatrixClient(
 
     override fun mediaResolver(): MediaResolver {
         return FakeMediaResolver()
-    }
-
-    fun givenLogoutError(failure: Throwable) {
-        logoutFailure = failure
     }
 
     override suspend fun logout() {
@@ -81,4 +88,18 @@ class FakeMatrixClient(
     override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService
 
     override fun onSlidingSyncUpdate() {}
+
+    // Mocks
+
+    fun givenLogoutError(failure: Throwable) {
+        logoutFailure = failure
+    }
+
+    fun givenCreateDmResult(result: Result<RoomId>) {
+        createDmResult = result
+    }
+
+    fun givenFindDmResult(result: MatrixRoom?) {
+        findDmResult = result
+    }
 }

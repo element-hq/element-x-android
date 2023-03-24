@@ -18,6 +18,7 @@ package io.element.android.features.createroom.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.selectusers.api.aSelectUsersState
+import io.element.android.libraries.architecture.Async
 
 open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRootState> {
     override val values: Sequence<CreateRoomRootState>
@@ -28,5 +29,7 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
 
 fun aCreateRoomRootState() = CreateRoomRootState(
     eventSink = {},
-    selectUsersState =  aSelectUsersState(),
+    startDmAction = Async.Uninitialized,
+    showCreateDmConfirmationDialog = false,
+    selectUsersState = aSelectUsersState(),
 )

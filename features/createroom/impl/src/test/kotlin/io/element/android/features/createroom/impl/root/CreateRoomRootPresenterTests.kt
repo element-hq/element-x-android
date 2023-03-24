@@ -25,6 +25,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
 import io.element.android.features.selectusers.impl.DefaultSelectUsersPresenter
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -34,13 +35,15 @@ import org.junit.Test
 class CreateRoomRootPresenterTests {
 
     private lateinit var presenter: CreateRoomRootPresenter
+    private lateinit var fakeMatrixClient: FakeMatrixClient
 
     @Before
     fun setup() {
         val selectUsersPresenter = object : DefaultSelectUsersPresenter.DefaultSelectUsersFactory {
             override fun create(args: SelectUsersPresenterArgs) = DefaultSelectUsersPresenter(args)
         }
-        presenter = CreateRoomRootPresenter(selectUsersPresenter)
+        fakeMatrixClient = FakeMatrixClient()
+        presenter = CreateRoomRootPresenter(selectUsersPresenter, fakeMatrixClient)
     }
 
     @Test
@@ -64,13 +67,13 @@ class CreateRoomRootPresenterTests {
     }
 
     @Test
-    fun `present - trigger start DM action`() = runTest {
+    fun `present - trigger select user action`() = runTest {
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             val matrixUser = MatrixUser(UserId("@name:matrix.org"))
-            initialState.eventSink(CreateRoomRootEvents.StartDM(matrixUser))
+            initialState.eventSink(CreateRoomRootEvents.SelectUser(matrixUser))
         }
     }
 }
