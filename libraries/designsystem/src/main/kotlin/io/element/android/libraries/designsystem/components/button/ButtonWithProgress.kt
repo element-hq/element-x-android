@@ -44,8 +44,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 fun ButtonWithProgress(
     onClick: () -> Unit,
-    showProgress: Boolean = false,
     modifier: Modifier = Modifier,
+    showProgress: Boolean = false,
     enabled: Boolean = true,
     shape: Shape = ElementButtonDefaults.shape,
     colors: ButtonColors = ElementButtonDefaults.buttonColors(),

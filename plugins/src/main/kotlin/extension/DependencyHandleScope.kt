@@ -61,11 +61,14 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:dateformatter:impl"))
     implementation(project(":libraries:di"))
     implementation(project(":libraries:session-storage:impl"))
+    implementation(project(":libraries:statemachine"))
 
 }
 
 fun DependencyHandlerScope.allServicesImpl() {
+    implementation(project(":services:analytics:noop"))
     implementation(project(":services:appnavstate:impl"))
+    implementation(project(":services:toolbox:impl"))
 }
 
 fun DependencyHandlerScope.allFeaturesApi() {
@@ -78,6 +81,7 @@ fun DependencyHandlerScope.allFeaturesApi() {
     implementation(project(":features:preferences:api"))
     implementation(project(":features:createroom:api"))
     implementation(project(":features:verifysession:api"))
+    implementation(project(":features:selectusers:api"))
 }
 
 fun DependencyHandlerScope.allFeaturesImpl() {
@@ -90,4 +94,5 @@ fun DependencyHandlerScope.allFeaturesImpl() {
     implementation(project(":features:preferences:impl"))
     implementation(project(":features:createroom:impl"))
     implementation(project(":features:verifysession:impl"))
+    implementation(project(":features:selectusers:impl"))
 }

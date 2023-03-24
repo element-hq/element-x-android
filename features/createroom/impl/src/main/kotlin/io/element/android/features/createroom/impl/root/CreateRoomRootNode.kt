@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
@@ -35,6 +36,14 @@ class CreateRoomRootNode @AssistedInject constructor(
     private val presenter: CreateRoomRootPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
+    interface Callback : Plugin {
+        fun onCreateNewRoom()
+    }
+
+    private fun onCreateNewRoom() {
+        plugins<Callback>().forEach { it.onCreateNewRoom() }
+    }
+
     sealed interface NavTarget : Parcelable {
         @Parcelize
         object Root : NavTarget
@@ -47,6 +56,7 @@ class CreateRoomRootNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onClosePressed = this::navigateUp,
+            onNewRoomClicked = this::onCreateNewRoom,
         )
     }
 }

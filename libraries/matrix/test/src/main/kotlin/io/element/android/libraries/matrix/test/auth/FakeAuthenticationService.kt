@@ -53,20 +53,13 @@ class FakeAuthenticationService : MatrixAuthenticationService {
     }
 
     override suspend fun setHomeserver(homeserver: String): Result<Unit> {
-        changeServerError?.let { throw it }
         delay(100)
-        return Result.success(Unit)
+        return changeServerError?.let { Result.failure(it) } ?: Result.success(Unit)
     }
 
     override suspend fun login(username: String, password: String): Result<SessionId> {
         delay(100)
-        return loginError.let { loginError ->
-            if (loginError == null) {
-                Result.success(A_USER_ID)
-            } else {
-                Result.failure(loginError)
-            }
-        }
+        return loginError?.let { Result.failure(it) } ?: Result.success(A_USER_ID)
     }
 
     fun givenLoginError(throwable: Throwable?) {

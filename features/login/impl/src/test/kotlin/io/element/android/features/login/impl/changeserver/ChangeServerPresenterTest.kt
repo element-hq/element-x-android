@@ -95,7 +95,7 @@ class ChangeServerPresenterTest {
             assertThat(loadingState.submitEnabled).isFalse()
             assertThat(loadingState.changeServerAction).isInstanceOf(Async.Loading::class.java)
             val successState = awaitItem()
-            assertThat(successState.submitEnabled).isTrue()
+            assertThat(successState.submitEnabled).isFalse()
             assertThat(successState.changeServerAction).isInstanceOf(Async.Success::class.java)
         }
     }
@@ -118,7 +118,7 @@ class ChangeServerPresenterTest {
             assertThat(loadingState.changeServerAction).isInstanceOf(Async.Loading::class.java)
             awaitItem() // Skip changing the url to the parsed domain
             val successState = awaitItem()
-            assertThat(successState.submitEnabled).isTrue()
+            assertThat(successState.submitEnabled).isFalse()
             assertThat(successState.changeServerAction).isInstanceOf(Async.Success::class.java)
             assertThat(successState.homeserver).isEqualTo("matrix.org")
         }
@@ -134,8 +134,9 @@ class ChangeServerPresenterTest {
             val initialState = awaitItem()
             authServer.givenChangeServerError(Throwable())
             initialState.eventSink.invoke(ChangeServerEvents.Submit)
+            skipItems(1) // Loading
             val failureState = awaitItem()
-            assertThat(failureState.submitEnabled).isTrue()
+            assertThat(failureState.submitEnabled).isFalse()
             assertThat(failureState.changeServerAction).isInstanceOf(Async.Failure::class.java)
         }
     }
@@ -155,9 +156,11 @@ class ChangeServerPresenterTest {
             authenticationService.givenChangeServerError(A_THROWABLE)
             initialState.eventSink(ChangeServerEvents.Submit)
 
+            skipItems(1) // Loading
+
             // Check an error was returned
             val submittedState = awaitItem()
-            assertThat(submittedState.changeServerAction).isEqualTo(Async.Failure<Unit>(A_THROWABLE))
+            assertThat(submittedState.changeServerAction).isInstanceOf(Async.Failure::class.java)
 
             // Assert the error is then cleared
             submittedState.eventSink(ChangeServerEvents.ClearError)

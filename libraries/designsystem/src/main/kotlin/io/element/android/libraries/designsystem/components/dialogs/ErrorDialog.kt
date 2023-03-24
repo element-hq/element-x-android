@@ -18,7 +18,6 @@ package io.element.android.libraries.designsystem.components.dialogs
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -36,8 +35,8 @@ import io.element.android.libraries.ui.strings.R as StringR
 fun ErrorDialog(
     content: String,
     modifier: Modifier = Modifier,
-    title: String = stringResource(id = StringR.string.dialog_title_error),
-    submitText: String = stringResource(id = StringR.string.ok),
+    title: String = ErrorDialogDefaults.title,
+    submitText: String = ErrorDialogDefaults.submitText,
     onDismiss: () -> Unit = {},
     shape: Shape = AlertDialogDefaults.shape,
     containerColor: Color = AlertDialogDefaults.containerColor,
@@ -67,6 +66,11 @@ fun ErrorDialog(
         textContentColor = textContentColor,
         tonalElevation = tonalElevation,
     )
+}
+
+object ErrorDialogDefaults {
+    val title: String @Composable get() = stringResource(id = StringR.string.dialog_title_error)
+    val submitText: String @Composable get() = stringResource(id = StringR.string.ok)
 }
 
 @Preview

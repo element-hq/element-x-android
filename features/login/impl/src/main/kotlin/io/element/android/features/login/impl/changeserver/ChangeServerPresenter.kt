@@ -48,7 +48,10 @@ class ChangeServerPresenter @Inject constructor(private val authenticationServic
 
         fun handleEvents(event: ChangeServerEvents) {
             when (event) {
-                is ChangeServerEvents.SetServer -> homeserver.value = event.server
+                is ChangeServerEvents.SetServer -> {
+                    homeserver.value = event.server
+                    handleEvents(ChangeServerEvents.ClearError)
+                }
                 ChangeServerEvents.Submit -> {
                     localCoroutineScope.submit(homeserver, changeServerAction)
                 }
@@ -66,8 +69,8 @@ class ChangeServerPresenter @Inject constructor(private val authenticationServic
     private fun CoroutineScope.submit(homeserverUrl: MutableState<String>, changeServerAction: MutableState<Async<Unit>>) = launch {
         suspend {
             val domain = tryOrNull { URL(homeserverUrl.value) }?.host ?: homeserverUrl.value
-            authenticationService.setHomeserver(domain)
+            authenticationService.setHomeserver(domain).getOrThrow()
             homeserverUrl.value = domain
-        }.execute(changeServerAction)
+        }.execute(changeServerAction, errorMapping = ChangeServerError::from)
     }
 }

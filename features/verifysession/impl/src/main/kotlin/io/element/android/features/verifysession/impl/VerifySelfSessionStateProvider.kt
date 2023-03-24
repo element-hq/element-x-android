@@ -36,6 +36,9 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
             aVerifySelfSessionState().copy(
                 verificationFlowStep = VerifySelfSessionState.VerificationStep.Canceled
             ),
+            aVerifySelfSessionState().copy(
+                verificationFlowStep = VerifySelfSessionState.VerificationStep.Ready
+            ),
             // Add other state here
         )
 }
