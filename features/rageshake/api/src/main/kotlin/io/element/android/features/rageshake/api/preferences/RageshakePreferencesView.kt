@@ -47,9 +47,9 @@ fun RageshakePreferencesView(
     }
 
     Column(modifier = modifier) {
-        PreferenceCategory(title = stringResource(id = StringR.string.send_bug_report)) {
+        PreferenceCategory(title = stringResource(id = StringR.string.action_report_bug)) {
             PreferenceText(
-                title = stringResource(id = StringR.string.send_bug_report),
+                title = stringResource(id = StringR.string.action_report_bug),
                 icon = Icons.Default.BugReport,
                 onClick = onOpenRageshake
             )
@@ -57,7 +57,7 @@ fun RageshakePreferencesView(
         PreferenceCategory(title = stringResource(id = StringR.string.settings_rageshake)) {
             if (state.isSupported) {
                 PreferenceSwitch(
-                    title = stringResource(id = StringR.string.send_bug_report_rage_shake),
+                    title = stringResource(id = StringR.string.preference_rageshake),
                     isChecked = state.isEnabled,
                     onCheckedChange = ::onEnabledChanged
                 )

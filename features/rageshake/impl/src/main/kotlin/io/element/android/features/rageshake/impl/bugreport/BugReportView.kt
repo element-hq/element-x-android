@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import io.element.android.features.rageshake.impl.R
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.LabelledCheckbox
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
@@ -92,7 +93,7 @@ fun BugReportView(
             val isFormEnabled = state.sending !is Async.Loading
             // Title
             Text(
-                text = stringResource(id = StringR.string.send_bug_report),
+                text = stringResource(id = StringR.string.action_report_bug),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 16.dp),
@@ -103,7 +104,7 @@ fun BugReportView(
             )
             // Form
             Text(
-                text = stringResource(id = StringR.string.send_bug_report_description),
+                text = stringResource(id = R.string.screen_bug_report_editor_description),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 16.dp),
@@ -123,10 +124,10 @@ fun BugReportView(
                         .padding(top = 16.dp),
                     enabled = isFormEnabled,
                     label = {
-                        Text(text = stringResource(id = StringR.string.send_bug_report_placeholder))
+                        Text(text = stringResource(id = R.string.screen_bug_report_editor_placeholder))
                     },
                     supportingText = {
-                        Text(text = stringResource(id = StringR.string.send_bug_report_description_in_english))
+                        Text(text = stringResource(id = R.string.screen_bug_report_editor_supporting))
                     },
                     onValueChange = {
                         descriptionFieldState = it
@@ -143,28 +144,28 @@ fun BugReportView(
                 checked = state.formState.sendLogs,
                 onCheckedChange = { eventSink(BugReportEvents.SetSendLog(it)) },
                 enabled = isFormEnabled,
-                text = stringResource(id = StringR.string.send_bug_report_include_logs)
+                text = stringResource(id = R.string.screen_bug_report_include_logs)
             )
             if (state.hasCrashLogs) {
                 LabelledCheckbox(
                     checked = state.formState.sendCrashLogs,
                     onCheckedChange = { eventSink(BugReportEvents.SetSendCrashLog(it)) },
                     enabled = isFormEnabled,
-                    text = stringResource(id = StringR.string.send_bug_report_include_crash_logs)
+                    text = stringResource(id = R.string.screen_bug_report_include_crash_logs)
                 )
             }
             LabelledCheckbox(
                 checked = state.formState.canContact,
                 onCheckedChange = { eventSink(BugReportEvents.SetCanContact(it)) },
                 enabled = isFormEnabled,
-                text = stringResource(id = StringR.string.you_may_contact_me)
+                text = stringResource(id = R.string.screen_bug_report_contact_me)
             )
             if (state.screenshotUri != null) {
                 LabelledCheckbox(
                     checked = state.formState.sendScreenshot,
                     onCheckedChange = { eventSink(BugReportEvents.SetSendScreenshot(it)) },
                     enabled = isFormEnabled,
-                    text = stringResource(id = StringR.string.send_bug_report_include_screenshot)
+                    text = stringResource(id = R.string.screen_bug_report_include_screenshot)
                 )
                 if (state.formState.sendScreenshot) {
                     Box(

@@ -44,6 +44,8 @@
     </issue>
 
     <issue id="UnusedResources" severity="warning">
+        <!-- Ignore unused strings resource from localazy -->
+        <ignore path="**/localazy.xml" />
         <!-- Ignore unused resource in debug build type -->
         <ignore path="**/src/debug/**" />
 

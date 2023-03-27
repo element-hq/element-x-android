@@ -130,7 +130,7 @@ fun RoomListContent(
     }
 
     val snackbarHostState = remember { SnackbarHostState() }
-    val verificationCompleteMessage = stringResource(StringR.string.verification_conclusion_ok_self_notice_title)
+    val verificationCompleteMessage = stringResource(StringR.string.common_verification_complete)
     LaunchedEffect(state.presentVerificationSuccessfulMessage) {
         if (state.presentVerificationSuccessfulMessage) {
             snackbarHostState.showSnackbar(
@@ -187,7 +187,7 @@ fun RoomListContent(
                 containerColor = MaterialTheme.colorScheme.primary,
                 onClick = onCreateRoomClicked
             ) {
-                Icon(resourceId = DrawableR.drawable.ic_edit_square, contentDescription = stringResource(id = StringR.string.a11y_create_message))
+                Icon(resourceId = DrawableR.drawable.ic_edit_square, contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message))
             }
         },
         snackbarHost = {
@@ -219,7 +219,7 @@ internal fun RequestVerificationHeader(
             ) {
                 Row {
                     Text(
-                        stringResource(StringR.string.session_verification_banner_title),
+                        stringResource(R.string.session_verification_banner_title),
                         modifier = Modifier.weight(1f),
                         style = ElementTextStyles.Bold.body,
                         color = MaterialTheme.colorScheme.primary,
@@ -232,14 +232,14 @@ internal fun RequestVerificationHeader(
                     )
                 }
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(stringResource(StringR.string.session_verification_banner_message), style = ElementTextStyles.Regular.bodyMD)
+                Text(stringResource(R.string.session_verification_banner_message), style = ElementTextStyles.Regular.bodyMD)
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(horizontal = 20.dp, vertical = 7.dp),
                     onClick = onVerifyClicked,
                 ) {
-                    Text(stringResource(StringR.string.session_verification_start), style = ElementTextStyles.Button)
+                    Text(stringResource(StringR.string.action_continue), style = ElementTextStyles.Button)
                 }
             }
         }

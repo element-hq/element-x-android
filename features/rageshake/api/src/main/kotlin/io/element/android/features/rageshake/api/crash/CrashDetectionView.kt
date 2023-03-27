@@ -19,6 +19,7 @@ package io.element.android.features.rageshake.api.crash
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.features.rageshake.api.R
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -55,10 +56,10 @@ fun CrashDetectionContent(
     onDismiss: () -> Unit = { },
 ) {
     ConfirmationDialog(
-        title = stringResource(id = StringR.string.send_bug_report),
-        content = stringResource(id = StringR.string.send_bug_report_app_crashed),
-        submitText = stringResource(id = StringR.string.yes),
-        cancelText = stringResource(id = StringR.string.no),
+        title = stringResource(id = StringR.string.action_report_bug),
+        content = stringResource(id = R.string.crash_detection_dialog_content, /* TODO App name */ "Element"),
+        submitText = stringResource(id = StringR.string.action_yes),
+        cancelText = stringResource(id = StringR.string.action_no),
         onCancelClicked = onNoClicked,
         onSubmitClicked = onYesClicked,
         onDismiss = onDismiss,
