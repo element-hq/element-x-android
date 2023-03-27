@@ -42,6 +42,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.statemachine)
     implementation(libs.accompanist.flowlayout)
     api(projects.features.verifysession.api)
 

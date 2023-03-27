@@ -23,11 +23,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -39,10 +39,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
@@ -82,16 +85,15 @@ fun VerifySelfSessionView(
         derivedStateOf { verificationFlowStep != FlowStep.AwaitingOtherDeviceResponse && verificationFlowStep != FlowStep.Completed }
     }
     Surface {
-        Column(modifier = modifier.fillMaxWidth()) {
+        Column(modifier = modifier.systemBarsPadding()) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
                     .weight(1f)
-                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 20.dp)
             ) {
                 HeaderContent(verificationFlowStep = verificationFlowStep)
-                Content(flowState = verificationFlowStep)
+                Content(modifier = Modifier.weight(1f), flowState = verificationFlowStep)
             }
             if (buttonsVisible) {
                 BottomMenu(screenState = state, goBack = ::goBackAndCancelIfNeeded)
@@ -106,22 +108,23 @@ internal fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = 
         FlowStep.Initial -> R.drawable.ic_verification_devices
         FlowStep.Canceled -> R.drawable.ic_verification_warning
         FlowStep.AwaitingOtherDeviceResponse -> R.drawable.ic_verification_waiting
-        is FlowStep.Verifying, FlowStep.Completed -> R.drawable.ic_verification_emoji
+        FlowStep.Ready, is FlowStep.Verifying, FlowStep.Completed -> R.drawable.ic_verification_emoji
     }
     val titleTextId = when (verificationFlowStep) {
         FlowStep.Initial -> StringR.string.verification_title_initial
         FlowStep.Canceled -> StringR.string.verification_title_canceled
         FlowStep.AwaitingOtherDeviceResponse -> StringR.string.verification_title_waiting
-        is FlowStep.Verifying, FlowStep.Completed -> StringR.string.verification_title_verifying
+        FlowStep.Ready, is FlowStep.Verifying, FlowStep.Completed -> StringR.string.verification_title_verifying
     }
     val subtitleTextId = when (verificationFlowStep) {
         FlowStep.Initial -> StringR.string.verification_subtitle_initial
         FlowStep.Canceled -> StringR.string.verification_subtitle_canceled
         FlowStep.AwaitingOtherDeviceResponse -> StringR.string.verification_subtitle_waiting
-        is FlowStep.Verifying, FlowStep.Completed -> StringR.string.verification_subtitle_verifying
+        FlowStep.Ready, is FlowStep.Verifying, FlowStep.Completed -> StringR.string.verification_subtitle_verifying
     }
+
     Column(modifier) {
-        Spacer(Modifier.height(68.dp))
+        Spacer(Modifier.height(80.dp))
         Box(
             modifier = Modifier
                 .size(width = 70.dp, height = 70.dp)
@@ -164,14 +167,14 @@ internal fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = 
 
 @Composable
 internal fun Content(flowState: FlowStep, modifier: Modifier = Modifier) {
-    Column(modifier) {
-        Spacer(Modifier.height(56.dp))
+    Column(modifier, verticalArrangement = Arrangement.Center) {
+        Spacer(Modifier.shrinkableHeight(min = 20.dp, max = 56.dp))
         when (flowState) {
-            FlowStep.Initial, FlowStep.Canceled, FlowStep.Completed -> Unit
+            FlowStep.Initial, FlowStep.Ready, FlowStep.Canceled, FlowStep.Completed -> Unit
             FlowStep.AwaitingOtherDeviceResponse -> ContentWaiting()
             is FlowStep.Verifying -> ContentVerifying(flowState)
         }
-        Spacer(Modifier.height(56.dp))
+        Spacer(Modifier.shrinkableHeight(min = 20.dp, max = 56.dp))
     }
 }
 
@@ -185,19 +188,22 @@ internal fun ContentWaiting(modifier: Modifier = Modifier) {
 @Composable
 internal fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier: Modifier = Modifier) {
     FlowRow(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState()),
         mainAxisAlignment = MainAxisAlignment.Center,
         mainAxisSpacing = 32.dp,
         crossAxisSpacing = 40.dp
     ) {
         for (entry in verificationFlowStep.emojiList) {
-            Column(
-                modifier = Modifier.defaultMinSize(minWidth = 56.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(entry.code, fontSize = 34.sp)
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(entry.name, style = ElementTextStyles.Regular.body)
+                Text(
+                    entry.name,
+                    style = ElementTextStyles.Regular.bodyMD,
+                    color = MaterialTheme.colorScheme.secondary,
+                )
             }
         }
     }
@@ -219,6 +225,7 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
                 StringR.string.verification_positive_button_verifying_start
             }
         }
+        FlowStep.Ready -> StringR.string.verification_positive_button_ready
         else -> null
     }
     val negativeButtonTitle = when (verificationViewState) {
@@ -231,6 +238,7 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
 
     val positiveButtonEvent = when (verificationViewState) {
         FlowStep.Initial -> VerifySelfSessionViewEvents.RequestVerification
+        FlowStep.Ready -> VerifySelfSessionViewEvents.StartSasVerification
         is FlowStep.Verifying -> if (!isVerifying) VerifySelfSessionViewEvents.ConfirmVerification else null
         FlowStep.Canceled -> VerifySelfSessionViewEvents.Restart
         else -> null
@@ -254,23 +262,25 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
                 modifier = Modifier.fillMaxWidth(),
                 onClick = { positiveButtonEvent?.let { eventSink(it) } }
             ) {
-                positiveButtonTitle?.let { Text(stringResource(it)) }
+                positiveButtonTitle?.let { Text(stringResource(it), style = ElementTextStyles.Button) }
             }
         } else {
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = { positiveButtonEvent?.let { eventSink(it) } }
             ) {
-                positiveButtonTitle?.let { Text(stringResource(it)) }
+                positiveButtonTitle?.let { Text(stringResource(it), style = ElementTextStyles.Button) }
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        TextButton(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = negativeButtonCallback,
-            enabled = negativeButtonEnabled,
-        ) {
-            negativeButtonTitle?.let { Text(stringResource(it)) }
+        if (negativeButtonTitle != null) {
+            Spacer(modifier = Modifier.height(16.dp))
+            TextButton(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = negativeButtonCallback,
+                enabled = negativeButtonEnabled,
+            ) {
+                Text(stringResource(negativeButtonTitle), fontSize = 16.sp)
+            }
         }
         Spacer(Modifier.height(40.dp))
     }
@@ -292,4 +302,16 @@ private fun ContentToPreview(state: VerifySelfSessionState) {
         state = state,
         goBack = {},
     )
+}
+
+private fun Modifier.shrinkableHeight(
+    min: Dp,
+    max: Dp,
+    minScreenHeight: Int = 720
+): Modifier = composed {
+    if (LocalConfiguration.current.screenHeightDp >= minScreenHeight) {
+        then(Modifier.height(max))
+    } else {
+        then(Modifier.height(min))
+    }
 }

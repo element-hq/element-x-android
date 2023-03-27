@@ -85,9 +85,12 @@ class VerifySelfSessionPresenter @Inject constructor(
             StateMachineState.RequestingVerification,
             StateMachineState.StartingSasVerification,
             StateMachineState.SasVerificationStarted,
-            StateMachineState.VerificationRequestAccepted,
             StateMachineState.Canceling -> {
                 VerifySelfSessionState.VerificationStep.AwaitingOtherDeviceResponse
+            }
+
+            StateMachineState.VerificationRequestAccepted -> {
+                VerifySelfSessionState.VerificationStep.Ready
             }
 
             StateMachineState.Canceled -> {
