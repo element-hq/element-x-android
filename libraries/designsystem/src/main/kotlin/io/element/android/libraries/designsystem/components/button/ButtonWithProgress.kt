@@ -97,5 +97,9 @@ internal fun ButtonWithProgressDarkPreview() = ElementPreviewDark { ContentToPre
 
 @Composable
 private fun ContentToPreview() {
-    ButtonWithProgress(text = "Button with progress", onClick = {})
+    ButtonWithProgress(
+        text = "Button with progress",
+        onClick = {},
+        showProgress = true,
+    )
 }

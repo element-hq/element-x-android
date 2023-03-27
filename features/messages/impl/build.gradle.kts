@@ -40,6 +40,7 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.textcomposer)
+    implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.dateformatter.api)
     implementation(libs.coil.compose)
     implementation(libs.datetime)

@@ -140,7 +140,7 @@ private fun MessageComposerView.setup(isDarkMode: Boolean, composerMode: Message
     }
     editText.setTextColor(editTextColor)
     editText.setHintTextColor(editTextColor)
-    editText.setHint(StringR.string.room_message_placeholder)
+    editText.setHint(R.string.rich_text_editor_composer_placeholder)
     emojiButton?.isVisible = true
     sendButton.isVisible = true
     editText.maxLines = MessageComposerView.MAX_LINES_WHEN_COLLAPSED

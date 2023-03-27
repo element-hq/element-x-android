@@ -66,7 +66,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
         return when (val content = event.content) {
             is MessageContent -> processMessageContents(content, senderDisplayName, isDmRoom)
             RedactedContent -> {
-                val message = context.getString(StringR.string.event_redacted)
+                val message = context.getString(StringR.string.common_message_removed)
                 if (!isDmRoom) {
                     prefix(message, senderDisplayName)
                 } else {
@@ -77,7 +77,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 content.body
             }
             is UnableToDecryptContent -> {
-                val message = context.getString(StringR.string.encryption_information_decryption_error)
+                val message = context.getString(StringR.string.common_decryption_error)
                 if (!isDmRoom) {
                     prefix(message, senderDisplayName)
                 } else {
@@ -94,7 +94,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 processRoomStateChange(content, senderDisplayName, isOutgoing)
             }
             is FailedToParseMessageLikeContent, is FailedToParseStateContent, is UnknownContent -> {
-                prefixIfNeeded(context.getString(StringR.string.room_timeline_item_unsupported), senderDisplayName, isDmRoom)
+                prefixIfNeeded(context.getString(StringR.string.common_unsupported_event), senderDisplayName, isDmRoom)
             }
         }
     }
@@ -111,19 +111,19 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 messageType.body
             }
             is VideoMessageType -> {
-                context.getString(StringR.string.sent_a_video)
+                context.getString(StringR.string.common_video)
             }
             is ImageMessageType -> {
-                context.getString(StringR.string.sent_an_image)
+                context.getString(StringR.string.common_image)
             }
             is FileMessageType -> {
-                context.getString(StringR.string.sent_a_file)
+                context.getString(StringR.string.common_file)
             }
             is AudioMessageType -> {
-                context.getString(StringR.string.sent_an_audio_file)
+                context.getString(StringR.string.common_audio)
             }
             UnknownMessageType -> {
-                context.getString(StringR.string.unknown_message_content_type_error)
+                context.getString(StringR.string.common_unsupported_event)
             }
             is NoticeMessageType -> {
                 messageType.body
@@ -137,73 +137,73 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
         val memberIsYou = userId == matrixClient.sessionId
         return when (val change = membershipContent.change) {
             MembershipChange.JOINED -> if (memberIsYou) {
-                context.getString(StringR.string.notice_room_join_by_you)
+                context.getString(R.string.state_event_room_join_by_you)
             } else {
-                context.getString(StringR.string.notice_room_join, userId.value)
+                context.getString(R.string.state_event_room_join, userId.value)
             }
             MembershipChange.LEFT -> if (memberIsYou) {
-                context.getString(StringR.string.notice_room_leave_by_you)
+                context.getString(R.string.state_event_room_leave_by_you)
             } else {
-                context.getString(StringR.string.notice_room_leave, userId.value)
+                context.getString(R.string.state_event_room_leave, userId.value)
             }
             MembershipChange.BANNED, MembershipChange.KICKED_AND_BANNED -> if (senderIsYou) {
-                context.getString(StringR.string.notice_room_ban_by_you, userId.value)
+                context.getString(R.string.state_event_room_ban_by_you, userId.value)
             } else {
-                context.getString(StringR.string.notice_room_ban, senderDisplayName, userId.value)
+                context.getString(R.string.state_event_room_ban, senderDisplayName, userId.value)
             }
             MembershipChange.UNBANNED -> if (senderIsYou) {
-                context.getString(StringR.string.notice_room_unban_by_you, userId.value)
+                context.getString(R.string.state_event_room_unban_by_you, userId.value)
             } else {
-                context.getString(StringR.string.notice_room_unban, senderDisplayName, userId.value)
+                context.getString(R.string.state_event_room_unban, senderDisplayName, userId.value)
             }
             MembershipChange.KICKED -> if (senderIsYou) {
-                context.getString(StringR.string.notice_room_remove_by_you, userId.value)
+                context.getString(R.string.state_event_room_remove_by_you, userId.value)
             } else {
-                context.getString(StringR.string.notice_room_remove, senderDisplayName, userId.value)
+                context.getString(R.string.state_event_room_remove, senderDisplayName, userId.value)
             }
             MembershipChange.INVITED -> if (senderIsYou) {
-                context.getString(StringR.string.notice_room_invite_by_you, userId.value)
+                context.getString(R.string.state_event_room_invite_by_you, userId.value)
             } else if (memberIsYou) {
-                context.getString(StringR.string.notice_room_invite_you, senderDisplayName)
+                context.getString(R.string.state_event_room_invite_you, senderDisplayName)
             } else {
-                context.getString(StringR.string.notice_room_invite, senderDisplayName, userId.value)
+                context.getString(R.string.state_event_room_invite, senderDisplayName, userId.value)
             }
             MembershipChange.INVITATION_ACCEPTED -> if (memberIsYou) {
-                context.getString(StringR.string.notice_room_invite_accepted_by_you)
+                context.getString(R.string.state_event_room_invite_accepted_by_you)
             } else {
-                context.getString(StringR.string.notice_room_invite_accepted, userId.value)
+                context.getString(R.string.state_event_room_invite_accepted, userId.value)
             }
             MembershipChange.INVITATION_REJECTED -> if (memberIsYou) {
-                context.getString(StringR.string.notice_room_reject_by_you)
+                context.getString(R.string.state_event_room_reject_by_you)
             } else {
-                context.getString(StringR.string.notice_room_reject, userId.value)
+                context.getString(R.string.state_event_room_reject, userId.value)
             }
             MembershipChange.INVITATION_REVOKED -> if (senderIsYou) {
-                context.getString(StringR.string.notice_room_third_party_revoked_invite_by_you, userId.value)
+                context.getString(R.string.state_event_room_third_party_revoked_invite_by_you, userId.value)
             } else {
-                context.getString(StringR.string.notice_room_third_party_revoked_invite, senderDisplayName, userId.value)
+                context.getString(R.string.state_event_room_third_party_revoked_invite, senderDisplayName, userId.value)
             }
             MembershipChange.KNOCKED -> if (memberIsYou) {
-                context.getString(StringR.string.notice_room_knock_by_you)
+                context.getString(R.string.state_event_room_knock_by_you)
             } else {
-                context.getString(StringR.string.notice_room_knock, userId.value)
+                context.getString(R.string.state_event_room_knock, userId.value)
             }
             MembershipChange.KNOCK_ACCEPTED -> if (senderIsYou) {
-                context.getString(StringR.string.notice_room_knock_accepted_by_you, userId.value)
+                context.getString(R.string.state_event_room_knock_accepted_by_you, userId.value)
             } else {
-                context.getString(StringR.string.notice_room_knock_accepted, senderDisplayName, userId.value)
+                context.getString(R.string.state_event_room_knock_accepted, senderDisplayName, userId.value)
             }
             MembershipChange.KNOCK_RETRACTED -> if (memberIsYou) {
-                context.getString(StringR.string.notice_room_knock_retracted_by_you)
+                context.getString(R.string.state_event_room_knock_retracted_by_you)
             } else {
-                context.getString(StringR.string.notice_room_knock_retracted, userId.value)
+                context.getString(R.string.state_event_room_knock_retracted, userId.value)
             }
             MembershipChange.KNOCK_DENIED -> if (senderIsYou) {
-                context.getString(StringR.string.notice_room_knock_denied_by_you, userId.value)
+                context.getString(R.string.state_event_room_knock_denied_by_you, userId.value)
             } else if (memberIsYou) {
-                context.getString(StringR.string.notice_room_knock_denied_you, senderDisplayName)
+                context.getString(R.string.state_event_room_knock_denied_you, senderDisplayName)
             } else {
-                context.getString(StringR.string.notice_room_knock_denied, senderDisplayName, userId.value)
+                context.getString(R.string.state_event_room_knock_denied, senderDisplayName, userId.value)
             }
             else -> {
                 Timber.v("Filtering timeline item for room membership: $membershipContent")
@@ -217,27 +217,27 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             is OtherState.RoomAvatar -> {
                 val hasAvatarUrl = content.url != null
                 when {
-                    senderIsYou && hasAvatarUrl -> context.getString(StringR.string.notice_room_avatar_changed_by_you)
-                    senderIsYou && !hasAvatarUrl -> context.getString(StringR.string.notice_room_avatar_removed_by_you)
-                    !senderIsYou && hasAvatarUrl -> context.getString(StringR.string.notice_room_avatar_changed, senderDisplayName)
-                    else -> context.getString(StringR.string.notice_room_avatar_removed, senderDisplayName)
+                    senderIsYou && hasAvatarUrl -> context.getString(R.string.state_event_room_avatar_changed_by_you)
+                    senderIsYou && !hasAvatarUrl -> context.getString(R.string.state_event_room_avatar_removed_by_you)
+                    !senderIsYou && hasAvatarUrl -> context.getString(R.string.state_event_room_avatar_changed, senderDisplayName)
+                    else -> context.getString(R.string.state_event_room_avatar_removed, senderDisplayName)
                 }
             }
             is OtherState.RoomCreate -> {
                 if (senderIsYou) {
-                    context.getString(StringR.string.notice_room_created_by_you)
+                    context.getString(R.string.state_event_room_created_by_you)
                 } else {
-                    context.getString(StringR.string.notice_room_created, senderDisplayName)
+                    context.getString(R.string.state_event_room_created, senderDisplayName)
                 }
             }
-            is OtherState.RoomEncryption -> context.getString(StringR.string.encryption_enabled)
+            is OtherState.RoomEncryption -> context.getString(StringR.string.common_encryption_enabled)
             is OtherState.RoomName -> {
                 val hasRoomName = content.name != null
                 when {
-                    senderIsYou && hasRoomName -> context.getString(StringR.string.notice_room_name_changed_by_you, content.name)
-                    senderIsYou && !hasRoomName -> context.getString(StringR.string.notice_room_name_removed_by_you)
-                    !senderIsYou && hasRoomName -> context.getString(StringR.string.notice_room_name_changed, senderDisplayName, content.name)
-                    else -> context.getString(StringR.string.notice_room_name_removed, senderDisplayName)
+                    senderIsYou && hasRoomName -> context.getString(R.string.state_event_room_name_changed_by_you, content.name)
+                    senderIsYou && !hasRoomName -> context.getString(R.string.state_event_room_name_removed_by_you)
+                    !senderIsYou && hasRoomName -> context.getString(R.string.state_event_room_name_changed, senderDisplayName, content.name)
+                    else -> context.getString(R.string.state_event_room_name_removed, senderDisplayName)
                 }
             }
             is OtherState.RoomThirdPartyInvite -> {
@@ -246,18 +246,18 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                     return null
                 }
                 if (senderIsYou) {
-                    context.getString(StringR.string.notice_room_third_party_invite_by_you, content.displayName)
+                    context.getString(R.string.state_event_room_third_party_invite_by_you, content.displayName)
                 } else {
-                    context.getString(StringR.string.notice_room_third_party_invite, senderDisplayName, content.displayName)
+                    context.getString(R.string.state_event_room_third_party_invite, senderDisplayName, content.displayName)
                 }
             }
             is OtherState.RoomTopic -> {
                 val hasRoomTopic = content.topic != null
                 when {
-                    senderIsYou && hasRoomTopic -> context.getString(StringR.string.notice_room_topic_changed_by_you, content.topic)
-                    senderIsYou && !hasRoomTopic -> context.getString(StringR.string.notice_room_topic_removed_by_you)
-                    !senderIsYou && hasRoomTopic -> context.getString(StringR.string.notice_room_topic_changed, senderDisplayName, content.topic)
-                    else -> context.getString(StringR.string.notice_room_topic_removed, senderDisplayName)
+                    senderIsYou && hasRoomTopic -> context.getString(R.string.state_event_room_topic_changed_by_you, content.topic)
+                    senderIsYou && !hasRoomTopic -> context.getString(R.string.state_event_room_topic_removed_by_you)
+                    !senderIsYou && hasRoomTopic -> context.getString(R.string.state_event_room_topic_changed, senderDisplayName, content.topic)
+                    else -> context.getString(R.string.state_event_room_topic_removed, senderDisplayName)
                 }
             }
             else -> {
@@ -277,35 +277,35 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
         return when {
             avatarChanged && displayNameChanged -> {
                 val message = processProfileChangeContent(profileChangeContent.copy(avatarUrl = null, prevAvatarUrl = null), senderDisplayName, senderIsYou)
-                val avatarChangedToo = context.getString(StringR.string.notice_avatar_changed_too)
+                val avatarChangedToo = context.getString(R.string.state_event_avatar_changed_too)
                 "$message\n$avatarChangedToo"
             }
             displayNameChanged -> {
                 if (displayName != null && prevDisplayName != null) {
                     if (senderIsYou) {
-                        context.getString(StringR.string.notice_display_name_changed_from_by_you, prevDisplayName, displayName)
+                        context.getString(R.string.state_event_display_name_changed_from_by_you, prevDisplayName, displayName)
                     } else {
-                        context.getString(StringR.string.notice_display_name_changed_from, senderDisplayName, prevDisplayName, displayName)
+                        context.getString(R.string.state_event_display_name_changed_from, senderDisplayName, prevDisplayName, displayName)
                     }
                 } else if (displayName != null) {
                     if (senderIsYou) {
-                        context.getString(StringR.string.notice_display_name_set_by_you, displayName)
+                        context.getString(R.string.state_event_display_name_set_by_you, displayName)
                     } else {
-                        context.getString(StringR.string.notice_display_name_set, senderDisplayName, displayName)
+                        context.getString(R.string.state_event_display_name_set, senderDisplayName, displayName)
                     }
                 } else {
                     if (senderIsYou) {
-                        context.getString(StringR.string.notice_display_name_removed_by_you, prevDisplayName)
+                        context.getString(R.string.state_event_display_name_removed_by_you, prevDisplayName)
                     } else {
-                        context.getString(StringR.string.notice_display_name_removed, senderDisplayName, prevDisplayName)
+                        context.getString(R.string.state_event_display_name_removed, senderDisplayName, prevDisplayName)
                     }
                 }
             }
             avatarChanged -> {
                 if (senderIsYou) {
-                    context.getString(StringR.string.notice_avatar_url_changed_by_you)
+                    context.getString(R.string.state_event_avatar_url_changed_by_you)
                 } else {
-                    context.getString(StringR.string.notice_avatar_url_changed, senderDisplayName)
+                    context.getString(R.string.state_event_avatar_url_changed, senderDisplayName)
                 }
             }
             else -> null

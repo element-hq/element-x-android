@@ -62,14 +62,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.error.loginError
 import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -120,7 +121,7 @@ fun LoginRootView(
                 Spacer(Modifier.height(16.dp))
                 // Title
                 Text(
-                    text = stringResource(id = StringR.string.ftue_auth_welcome_back_title),
+                    text = stringResource(id = R.string.screen_login_title),
                     modifier = Modifier
                         .fillMaxWidth(),
                     style = ElementTextStyles.Bold.title1,
@@ -165,7 +166,7 @@ internal fun ChangeServerSection(
     Column(modifier) {
         Text(
             modifier = Modifier.padding(start = 16.dp, bottom = 8.dp),
-            text = stringResource(id = StringR.string.ftue_auth_sign_in_choose_server_header),
+            text = stringResource(id = R.string.screen_login_server_header),
             style = ElementTextStyles.Regular.formHeader,
         )
         Row(
@@ -226,7 +227,7 @@ internal fun LoginForm(
 
     Column(modifier) {
         Text(
-            text = stringResource(StringR.string.login_form_title),
+            text = stringResource(R.string.screen_login_form_header),
             modifier = Modifier.padding(start = 16.dp),
             style = ElementTextStyles.Regular.formHeader
         )
@@ -240,7 +241,7 @@ internal fun LoginForm(
                 .onTabOrEnterKeyFocusNext(focusManager)
                 .testTag(TestTags.loginEmailUsername),
             label = {
-                Text(text = stringResource(StringR.string.ex_login_username_hint))
+                Text(text = stringResource(R.string.screen_login_username_hint))
             },
             onValueChange = {
                 loginFieldState = it
@@ -260,7 +261,7 @@ internal fun LoginForm(
                     IconButton(onClick = {
                         loginFieldState = ""
                     }) {
-                        Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(StringR.string.a11y_clear))
+                        Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(StringR.string.action_clear))
                     }
                 }
             } else null,
@@ -284,14 +285,14 @@ internal fun LoginForm(
                 eventSink(LoginRootEvents.SetPassword(it))
             },
             label = {
-                Text(text = stringResource(StringR.string.login_signup_password_hint))
+                Text(text = stringResource(R.string.screen_login_password_hint))
             },
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
                 val image =
                     if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                 val description =
-                    if (passwordVisible) stringResource(StringR.string.login_hide_password) else stringResource(StringR.string.login_show_password)
+                    if (passwordVisible) stringResource(StringR.string.a11y_hide_password) else stringResource(StringR.string.a11y_show_password)
 
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
                     Icon(imageVector = image, description)
@@ -311,7 +312,7 @@ internal fun LoginForm(
 
         // Submit
         ButtonWithProgress(
-            text = stringResource(StringR.string.login_continue),
+            text = stringResource(R.string.screen_login_submit),
             showProgress = isLoading,
             onClick = ::submit,
             enabled = state.submitEnabled || isLoading,

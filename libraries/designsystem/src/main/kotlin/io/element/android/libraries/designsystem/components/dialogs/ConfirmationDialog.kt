@@ -42,7 +42,7 @@ fun ConfirmationDialog(
     onSubmitClicked: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
-    submitText: String = stringResource(id = StringR.string.ok),
+    submitText: String = stringResource(id = StringR.string.action_ok),
     cancelText: String = stringResource(id = StringR.string.action_cancel),
     thirdButtonText: String? = null,
     emphasizeSubmitButton: Boolean = false,
