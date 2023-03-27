@@ -111,7 +111,7 @@ internal fun HeaderSection(avatarUrl: String?, roomName: String, roomId: String,
 
 @Composable
 internal fun TopicSection(roomTopic: String, modifier: Modifier = Modifier) {
-    PreferenceCategory(title = stringResource(R.string.room_details_topic_title), modifier = modifier) {
+    PreferenceCategory(title = stringResource(R.string.screen_room_details_topic_title), modifier = modifier) {
         Text(
             roomTopic,
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp),
@@ -126,12 +126,12 @@ internal fun TopicSection(roomTopic: String, modifier: Modifier = Modifier) {
 internal fun MembersSection(memberCount: Int, modifier: Modifier = Modifier) {
     PreferenceCategory(modifier = modifier) {
         PreferenceText(
-            title = stringResource(R.string.room_details_people_title),
+            title = stringResource(R.string.screen_room_details_people_title),
             icon = Icons.Outlined.Person,
             currentValue = memberCount.toString(),
         )
         PreferenceText(
-            title = stringResource(R.string.room_details_invite_people_title),
+            title = stringResource(R.string.screen_room_details_invite_people_title),
             icon = Icons.Outlined.PersonAddAlt,
         )
     }
@@ -139,10 +139,10 @@ internal fun MembersSection(memberCount: Int, modifier: Modifier = Modifier) {
 
 @Composable
 internal fun SecuritySection(modifier: Modifier = Modifier) {
-    PreferenceCategory(title = stringResource(R.string.room_details_security_title), modifier = modifier) {
+    PreferenceCategory(title = stringResource(R.string.screen_room_details_security_title), modifier = modifier) {
         PreferenceText(
-            title = stringResource(R.string.room_details_encryption_enabled_title),
-            subtitle = stringResource(R.string.room_details_encryption_enabled_subtitle),
+            title = stringResource(R.string.screen_room_details_encryption_enabled_title),
+            subtitle = stringResource(R.string.screen_room_details_encryption_enabled_subtitle),
             icon = Icons.Outlined.Lock,
         )
     }
@@ -152,7 +152,7 @@ internal fun SecuritySection(modifier: Modifier = Modifier) {
 internal fun OtherActionsSection(modifier: Modifier = Modifier) {
     PreferenceCategory(showDivider = false, modifier = modifier) {
         PreferenceText(
-            title = stringResource(R.string.room_details_encryption_leave_room_title),
+            title = stringResource(R.string.screen_room_details_leave_room_title),
             icon = ImageVector.vectorResource(R.drawable.ic_door_open),
             tintColor = LocalColors.current.textActionCritical,
         )
