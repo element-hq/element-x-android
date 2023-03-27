@@ -26,4 +26,4 @@ It will update all the `localazy.xml` and `translations.xml` resource files. In 
 
 Edit the file [config.json](./config.json) to add a new module, or add a new item in `includeRegex` arrays, then run the script again to see the effect.
 
-[generateLocalazyConfig.py](generateLocalazyConfig.py) is the Python script that convert `config.json` to a localazy configuration file. Generally should not edit this file.
+[generateLocalazyConfig.py](generateLocalazyConfig.py) is the Python script that convert `config.json` to a localazy configuration file. Generally you should not edit this file.
