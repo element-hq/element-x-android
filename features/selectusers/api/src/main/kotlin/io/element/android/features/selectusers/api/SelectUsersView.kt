@@ -118,7 +118,7 @@ fun SearchUserBar(
     active: Boolean,
     isMultiSelectionEnabled: Boolean,
     modifier: Modifier = Modifier,
-    placeHolderTitle: String = stringResource(StringR.string.search_for_someone),
+    placeHolderTitle: String = stringResource(StringR.string.common_search_for_someone),
     onActiveChanged: (Boolean) -> Unit = {},
     onTextChanged: (String) -> Unit = {},
     onUserSelected: (MatrixUser) -> Unit = {},
@@ -154,7 +154,7 @@ fun SearchUserBar(
             active && query.isNotEmpty() -> {
                 {
                     IconButton(onClick = { onTextChanged("") }) {
-                        Icon(Icons.Default.Close, stringResource(StringR.string.a11y_clear))
+                        Icon(Icons.Default.Close, stringResource(StringR.string.action_clear))
                     }
                 }
             }
@@ -162,7 +162,7 @@ fun SearchUserBar(
                 {
                     Icon(
                         imageVector = Icons.Default.Search,
-                        contentDescription = stringResource(StringR.string.search),
+                        contentDescription = stringResource(StringR.string.action_search),
                         modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
                     )
                 }
