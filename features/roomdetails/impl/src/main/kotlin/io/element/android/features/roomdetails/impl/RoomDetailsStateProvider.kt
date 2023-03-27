@@ -21,14 +21,14 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState> {
     override val values: Sequence<RoomDetailsState>
         get() = sequenceOf(
-            aTemplateState(),
-            aTemplateState().copy(roomTopic = null),
-            aTemplateState().copy(isEncrypted = false),
+            aRoomDetailsState(),
+            aRoomDetailsState().copy(roomTopic = null),
+            aRoomDetailsState().copy(isEncrypted = false),
             // Add other state here
         )
 }
 
-fun aTemplateState() = RoomDetailsState(
+fun aRoomDetailsState() = RoomDetailsState(
     roomId = "#marketing:domain.com",
     roomName = "Marketing",
     roomAvatarUrl = null,
