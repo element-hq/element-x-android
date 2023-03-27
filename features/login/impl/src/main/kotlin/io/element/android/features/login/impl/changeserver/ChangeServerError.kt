@@ -19,8 +19,8 @@ package io.element.android.features.login.impl.changeserver
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import io.element.android.features.login.impl.R
 import io.element.android.libraries.matrix.api.auth.AuthenticationException
-import io.element.android.libraries.ui.strings.R
 
 sealed class ChangeServerError : Throwable() {
     data class InlineErrorMessage(@StringRes val messageId: Int) : ChangeServerError() {
@@ -32,7 +32,7 @@ sealed class ChangeServerError : Throwable() {
     companion object {
         fun from(error: Throwable): ChangeServerError = when (error) {
             is AuthenticationException.SlidingSyncNotAvailable -> SlidingSyncAlert
-            else -> InlineErrorMessage(R.string.server_selection_invalid_homeserver_error)
+            else -> InlineErrorMessage(R.string.screen_change_server_error_invalid_homeserver)
         }
     }
 }

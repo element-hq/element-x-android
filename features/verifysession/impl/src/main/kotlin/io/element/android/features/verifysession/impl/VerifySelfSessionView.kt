@@ -111,16 +111,16 @@ internal fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = 
         FlowStep.Ready, is FlowStep.Verifying, FlowStep.Completed -> R.drawable.ic_verification_emoji
     }
     val titleTextId = when (verificationFlowStep) {
-        FlowStep.Initial -> StringR.string.verification_title_initial
-        FlowStep.Canceled -> StringR.string.verification_title_canceled
-        FlowStep.AwaitingOtherDeviceResponse -> StringR.string.verification_title_waiting
-        FlowStep.Ready, is FlowStep.Verifying, FlowStep.Completed -> StringR.string.verification_title_verifying
+        FlowStep.Initial -> R.string.screen_session_verification_open_existing_session_title
+        FlowStep.Canceled -> R.string.screen_session_verification_cancelled_title
+        FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_to_accept_title
+        FlowStep.Ready, is FlowStep.Verifying, FlowStep.Completed -> R.string.screen_session_verification_compare_emojis_title
     }
     val subtitleTextId = when (verificationFlowStep) {
-        FlowStep.Initial -> StringR.string.verification_subtitle_initial
-        FlowStep.Canceled -> StringR.string.verification_subtitle_canceled
-        FlowStep.AwaitingOtherDeviceResponse -> StringR.string.verification_subtitle_waiting
-        FlowStep.Ready, is FlowStep.Verifying, FlowStep.Completed -> StringR.string.verification_subtitle_verifying
+        FlowStep.Initial -> R.string.screen_session_verification_open_existing_session_subtitle
+        FlowStep.Canceled -> R.string.screen_session_verification_cancelled_subtitle
+        FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_to_accept_subtitle
+        FlowStep.Ready, is FlowStep.Verifying, FlowStep.Completed -> R.string.screen_session_verification_compare_emojis_subtitle
     }
 
     Column(modifier) {
@@ -216,22 +216,22 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
 
     val isVerifying = (verificationViewState as? FlowStep.Verifying)?.state is Async.Loading<Unit>
     val positiveButtonTitle = when (verificationViewState) {
-        FlowStep.Initial -> StringR.string.verification_positive_button_initial
-        FlowStep.Canceled -> StringR.string.verification_positive_button_canceled
+        FlowStep.Initial -> R.string.screen_session_verification_positive_button_initial
+        FlowStep.Canceled -> R.string.screen_session_verification_positive_button_canceled
         is FlowStep.Verifying -> {
             if (isVerifying) {
-                StringR.string.verification_positive_button_verifying_ongoing
+                R.string.screen_session_verification_positive_button_verifying_ongoing
             } else {
-                StringR.string.verification_positive_button_verifying_start
+                R.string.screen_session_verification_they_match
             }
         }
-        FlowStep.Ready -> StringR.string.verification_positive_button_ready
+        FlowStep.Ready -> R.string.screen_session_verification_positive_button_ready
         else -> null
     }
     val negativeButtonTitle = when (verificationViewState) {
-        FlowStep.Initial -> StringR.string.verification_negative_button_initial
-        FlowStep.Canceled -> StringR.string.verification_negative_button_canceled
-        is FlowStep.Verifying -> StringR.string.verification_negative_button_verifying
+        FlowStep.Initial -> StringR.string.action_cancel
+        FlowStep.Canceled -> StringR.string.action_cancel
+        is FlowStep.Verifying -> R.string.screen_session_verification_they_dont_match
         else -> null
     }
     val negativeButtonEnabled = !isVerifying

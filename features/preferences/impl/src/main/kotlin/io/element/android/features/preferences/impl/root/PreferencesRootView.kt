@@ -44,7 +44,7 @@ fun PreferencesRootView(
     PreferenceView(
         modifier = modifier,
         onBackPressed = onBackPressed,
-        title = stringResource(id = StringR.string.settings)
+        title = stringResource(id = StringR.string.common_settings)
     ) {
         UserPreferences(state.myUser)
         RageshakePreferencesView(
