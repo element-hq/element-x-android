@@ -272,7 +272,7 @@ Here are the main points:
 This documentation provides you with the steps to install and use the AS plugin for generating modules in your project. 
 The plugin and templates will help you quickly create new features with a standardized structure.
 
-##### A. Installation
+A. Installation
 
 Follow these steps to install and configure the plugin and templates:
 
@@ -289,7 +289,7 @@ Follow these steps to install and configure the plugin and templates:
 
 Everything should be ready to use.
 
-##### B. Usage
+B. Usage
 
 Example for a new feature called RoomDetails:
 
