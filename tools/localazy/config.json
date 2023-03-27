@@ -1,0 +1,62 @@
+{
+  "modules": [
+    {
+      "name": ":features:rageshake:impl",
+      "includeRegex": [
+        "screen_bug_report_.*"
+      ]
+    },
+    {
+      "name": ":features:rageshake:api",
+      "includeRegex": [
+        "crash_detection_.*",
+        "rageshake_detection_.*"
+      ]
+    },
+    {
+      "name": ":features:logout:api",
+      "includeRegex": [
+        "screen_signout_.*"
+      ]
+    },
+    {
+      "name": ":features:onboarding:impl",
+      "includeRegex": [
+        "screen_onboarding_.*"
+      ]
+    },
+    {
+      "name": ":features:createroom:impl",
+      "includeRegex": [
+        "screen_create_room_.*"
+      ]
+    },
+    {
+      "name": ":features:verifysession:impl",
+      "includeRegex": [
+        "screen_session_verification_.*"
+      ]
+    },
+    {
+      "name": ":libraries:textcomposer",
+      "includeRegex": [
+        "rich_text_editor_.*"
+      ]
+    },
+    {
+      "name": ":features:login:impl",
+      "includeRegex": [
+        "screen_login_.*",
+        "screen_change_server_.*"
+      ]
+    },
+    {
+      "name": ":features:roomlist:impl",
+      "includeRegex": [
+        "state_event_.*",
+        "screen_roomlist_.*",
+        "session_verification_banner_.*"
+      ]
+    }
+  ]
+}
