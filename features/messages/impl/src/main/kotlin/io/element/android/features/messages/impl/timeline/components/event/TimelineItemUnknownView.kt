@@ -20,10 +20,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+
+import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun TimelineItemUnknownView(
@@ -31,8 +34,8 @@ fun TimelineItemUnknownView(
     modifier: Modifier = Modifier
 ) {
     TimelineItemInformativeView(
-        text = "Event not handled by EAX",
-        iconDescription = "Info",
+        text = stringResource(id = StringR.string.common_unsupported_event),
+        iconDescription = stringResource(id = StringR.string.dialog_title_warning),
         icon = Icons.Default.Info,
         modifier = modifier
     )

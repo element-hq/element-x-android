@@ -114,7 +114,7 @@ fun OnBoardingScreen(
                     .testTag(TestTags.onBoardingSignIn)
                     .padding(top = 16.dp)
             ) {
-                Text(text = stringResource(id = StringR.string.login_splash_submit))
+                Text(text = stringResource(id = R.string.login_splash_submit))
             }
         }
     }

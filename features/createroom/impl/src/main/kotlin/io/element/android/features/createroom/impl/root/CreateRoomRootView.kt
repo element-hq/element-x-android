@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.element.android.features.createroom.impl.R
 import io.element.android.features.selectusers.api.SelectUsersView
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -94,7 +95,7 @@ fun CreateRoomRootViewTopBar(
         modifier = modifier,
         title = {
             Text(
-                text = stringResource(id = StringR.string.start_chat),
+                text = stringResource(id = StringR.string.action_start_chat),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
             )
@@ -116,12 +117,12 @@ fun CreateRoomActionButtonsList(
     Column(modifier = modifier) {
         CreateRoomActionButton(
             iconRes = DrawableR.drawable.ic_groups,
-            text = stringResource(id = StringR.string.new_room),
+            text = stringResource(id = R.string.screen_create_room_action_create_room),
             onClick = onNewRoomClicked,
         )
         CreateRoomActionButton(
             iconRes = DrawableR.drawable.ic_share,
-            text = stringResource(id = StringR.string.invite_people_menu),
+            text = stringResource(id = R.string.screen_create_room_action_invite_people),
             onClick = onInvitePeopleClicked,
         )
     }

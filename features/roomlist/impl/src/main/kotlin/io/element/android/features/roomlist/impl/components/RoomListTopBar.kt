@@ -47,6 +47,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.form.textFieldState
@@ -136,7 +137,7 @@ fun SearchRoomListTopBar(
                 },
                 placeholder = {
                     Text(
-                        text = "Search",
+                        text = stringResource(id = StringR.string.action_search),
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = ContentAlpha.medium)
                     )
                 },
@@ -207,7 +208,7 @@ private fun DefaultRoomListTopBar(
         title = {
             Text(
                 fontWeight = FontWeight.Bold,
-                text = stringResource(id = StringR.string.all_chats)
+                text = stringResource(id = R.string.screen_roomlist_main_space_title)
             )
         },
         navigationIcon = {
