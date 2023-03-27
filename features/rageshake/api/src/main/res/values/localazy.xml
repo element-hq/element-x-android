@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crash_detection_dialog_content">"%1$s crashed the last time it was used. Would you like to share a crash report with us?"</string>
+  <string name="rageshake_detection_dialog_content">"You seem to be shaking the phone in frustration. Would you like to open the bug report screen?"</string>
+</resources>
