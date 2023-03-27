@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.element.android.features.createroom.impl.R
 import io.element.android.features.selectusers.api.SelectUsersView
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -85,7 +86,7 @@ fun AddPeopleViewTopBar(
         modifier = modifier,
         title = {
             Text(
-                text = stringResource(id = StringR.string.add_people),
+                text = stringResource(id = R.string.screen_create_room_add_people_title),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
             )

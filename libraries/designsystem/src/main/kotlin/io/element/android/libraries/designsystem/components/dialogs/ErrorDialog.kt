@@ -70,7 +70,7 @@ fun ErrorDialog(
 
 object ErrorDialogDefaults {
     val title: String @Composable get() = stringResource(id = StringR.string.dialog_title_error)
-    val submitText: String @Composable get() = stringResource(id = StringR.string.ok)
+    val submitText: String @Composable get() = stringResource(id = StringR.string.action_ok)
 }
 
 @Preview

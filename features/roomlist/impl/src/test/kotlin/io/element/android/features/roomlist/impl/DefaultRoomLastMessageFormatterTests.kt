@@ -182,13 +182,13 @@ class DefaultRoomLastMessageFormatterTests {
         // Verify results of DM mode
         for ((type, result) in resultsInDm) {
             val expectedResult = when (type) {
-                is VideoMessageType -> "Video."
+                is VideoMessageType -> "Video"
                 is AudioMessageType -> "Audio"
-                is ImageMessageType -> "Image."
+                is ImageMessageType -> "Image"
                 is FileMessageType -> "File"
                 is EmoteMessageType -> "- $senderName ${type.body}"
                 is TextMessageType, is NoticeMessageType -> body
-                UnknownMessageType -> "Event type not handled by EAX"
+                UnknownMessageType -> "Unsupported event"
             }
             Truth.assertWithMessage("$type was not properly handled").that(result).isEqualTo(expectedResult)
         }
@@ -197,13 +197,13 @@ class DefaultRoomLastMessageFormatterTests {
         for ((type, result) in resultsInRoom) {
             val string = result.toString()
             val expectedResult = when (type) {
-                is VideoMessageType -> "$senderName: Video."
+                is VideoMessageType -> "$senderName: Video"
                 is AudioMessageType -> "$senderName: Audio"
-                is ImageMessageType -> "$senderName: Image."
+                is ImageMessageType -> "$senderName: Image"
                 is FileMessageType -> "$senderName: File"
                 is EmoteMessageType -> "- $senderName ${type.body}"
                 is TextMessageType, is NoticeMessageType -> "$senderName: $body"
-                UnknownMessageType -> "$senderName: Event type not handled by EAX"
+                UnknownMessageType -> "$senderName: Unsupported event"
             }
             val shouldCreateAnnotatedString = when (type) {
                 is VideoMessageType -> true

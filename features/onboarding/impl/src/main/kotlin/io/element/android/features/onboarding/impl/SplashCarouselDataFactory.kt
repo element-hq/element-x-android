@@ -17,7 +17,6 @@
 package io.element.android.features.onboarding.impl
 
 import androidx.annotation.DrawableRes
-import io.element.android.libraries.ui.strings.R as StringR
 
 class SplashCarouselDataFactory {
     fun create(): SplashCarouselData {
@@ -32,8 +31,8 @@ class SplashCarouselDataFactory {
         return SplashCarouselData(
             listOf(
                 SplashCarouselData.Item(
-                    StringR.string.ftue_auth_carousel_secure_title,
-                    StringR.string.ftue_auth_carousel_secure_body,
+                    R.string.ftue_auth_carousel_secure_title,
+                    R.string.ftue_auth_carousel_secure_body,
                     hero(
                         R.drawable.ic_splash_conversations,
                         R.drawable.ic_splash_conversations_dark
@@ -41,20 +40,20 @@ class SplashCarouselDataFactory {
                     background(R.drawable.bg_carousel_page_1)
                 ),
                 SplashCarouselData.Item(
-                    StringR.string.ftue_auth_carousel_control_title,
-                    StringR.string.ftue_auth_carousel_control_body,
+                    R.string.ftue_auth_carousel_control_title,
+                    R.string.ftue_auth_carousel_control_body,
                     hero(R.drawable.ic_splash_control, R.drawable.ic_splash_control_dark),
                     background(R.drawable.bg_carousel_page_2)
                 ),
                 SplashCarouselData.Item(
-                    StringR.string.ftue_auth_carousel_encrypted_title,
-                    StringR.string.ftue_auth_carousel_encrypted_body,
+                    R.string.ftue_auth_carousel_encrypted_title,
+                    R.string.ftue_auth_carousel_encrypted_body,
                     hero(R.drawable.ic_splash_secure, R.drawable.ic_splash_secure_dark),
                     background(R.drawable.bg_carousel_page_3)
                 ),
                 SplashCarouselData.Item(
                     collaborationTitle(),
-                    StringR.string.ftue_auth_carousel_workplace_body,
+                    R.string.ftue_auth_carousel_workplace_body,
                     hero(
                         R.drawable.ic_splash_collaboration,
                         R.drawable.ic_splash_collaboration_dark
@@ -68,7 +67,7 @@ class SplashCarouselDataFactory {
     private fun collaborationTitle(): Int {
         return when {
             true -> R.string.cut_the_slack_from_teams
-            else -> StringR.string.ftue_auth_carousel_workplace_title
+            else -> R.string.ftue_auth_carousel_workplace_title
         }
     }
 }

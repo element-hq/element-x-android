@@ -152,7 +152,7 @@ fun ChangeServerView(
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = stringResource(id = StringR.string.ftue_auth_choose_server_title),
+                    text = stringResource(id = R.string.screen_change_server_title),
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.CenterHorizontally),
@@ -162,7 +162,7 @@ fun ChangeServerView(
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    text = stringResource(id = StringR.string.ex_choose_server_subtitle),
+                    text = stringResource(id = R.string.screen_change_server_subtitle),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
@@ -172,7 +172,7 @@ fun ChangeServerView(
                 )
                 Spacer(Modifier.height(24.dp))
                 Text(
-                    stringResource(StringR.string.hs_url),
+                    stringResource(R.string.screen_change_server_form_header),
                     style = ElementTextStyles.Regular.formHeader,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
@@ -202,7 +202,7 @@ fun ChangeServerView(
                             IconButton(onClick = {
                                 eventSink(ChangeServerEvents.SetServer(""))
                             }, enabled = interactionEnabled) {
-                                Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(StringR.string.a11y_clear))
+                                Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(StringR.string.action_clear))
                             }
                         }
                     } else null,
@@ -211,14 +211,13 @@ fun ChangeServerView(
                         if (invalidHomeserverError != null) {
                             Text(invalidHomeserverError.message(), color = MaterialTheme.colorScheme.error)
                         } else {
-                            val footerMessage = stringResource(StringR.string.server_selection_server_footer)
+                            val footerMessage = stringResource(R.string.screen_change_server_form_notice, "")
                             val footerAction = stringResource(StringR.string.action_learn_more)
                             val footerText = buildAnnotatedString {
                                 val defaultColor = MaterialTheme.colorScheme.tertiary
                                 withStyle(ParagraphStyle(textAlign = TextAlign.Start)) {
                                     withStyle(SpanStyle(color = defaultColor)) {
                                         append(footerMessage)
-                                        append(" ")
                                     }
                                     val start = length
                                     withStyle(SpanStyle(color = LinkColor)) {
@@ -252,7 +251,7 @@ fun ChangeServerView(
                         .fillMaxWidth()
                         .testTag(TestTags.changeServerContinue)
                 ) {
-                    Text(text = stringResource(id = StringR.string.login_continue), style = ElementTextStyles.Button)
+                    Text(text = stringResource(id = R.string.screen_change_server_submit), style = ElementTextStyles.Button)
                 }
                 if (state.changeServerAction is Async.Success) {
                     onChangeServerSuccess()
@@ -284,8 +283,8 @@ internal fun SlidingSyncNotSupportedDialog(onLearnMoreClicked: () -> Unit, onDis
         onSubmitClicked = onLearnMoreClicked,
         onCancelClicked = onDismiss,
         emphasizeSubmitButton = true,
-        title = stringResource(StringR.string.server_selection_sliding_sync_alert_title),
-        content = stringResource(StringR.string.server_selection_sliding_sync_alert_message),
+        title = stringResource(StringR.string.dialog_title_error),
+        content = stringResource(R.string.screen_change_server_error_no_sliding_sync_message),
     )
 }
 

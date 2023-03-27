@@ -20,10 +20,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+
+import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun TimelineItemRedactedView(
@@ -31,8 +34,8 @@ fun TimelineItemRedactedView(
     modifier: Modifier = Modifier
 ) {
     TimelineItemInformativeView(
-        text = "This message has been deleted",
-        iconDescription = "Delete",
+        text = stringResource(id = StringR.string.common_message_removed),
+        iconDescription = stringResource(id = StringR.string.common_message_removed),
         icon = Icons.Default.Delete,
         modifier = modifier
     )

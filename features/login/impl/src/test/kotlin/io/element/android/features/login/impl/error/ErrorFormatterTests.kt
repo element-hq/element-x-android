@@ -17,9 +17,10 @@
 package io.element.android.features.login.impl.error
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.login.impl.R
 import io.element.android.libraries.matrix.api.auth.AuthenticationException
-import io.element.android.libraries.ui.strings.R
 import org.junit.Test
+import io.element.android.libraries.ui.strings.R as StringR
 
 class ErrorFormatterTests {
 
@@ -27,31 +28,31 @@ class ErrorFormatterTests {
     @Test
     fun `loginError - invalid unknown error returns unknown error message`() {
         val error = Throwable("Some unknown error")
-        assertThat(loginError(error)).isEqualTo(R.string.unknown_error)
+        assertThat(loginError(error)).isEqualTo(StringR.string.error_unknown)
     }
 
     @Test
     fun `loginError - invalid auth error returns unknown error message`() {
         val error = AuthenticationException.SlidingSyncNotAvailable("Some message. Also contains M_FORBIDDEN, but won't be parsed")
-        assertThat(loginError(error)).isEqualTo(R.string.unknown_error)
+        assertThat(loginError(error)).isEqualTo(StringR.string.error_unknown)
     }
 
     @Test
     fun `loginError - unknown error returns unknown error message`() {
         val error = AuthenticationException.Generic("M_UNKNOWN")
-        assertThat(loginError(error)).isEqualTo(R.string.unknown_error)
+        assertThat(loginError(error)).isEqualTo(StringR.string.error_unknown)
     }
 
     @Test
     fun `loginError - forbidden error returns incorrect credentials message`() {
         val error = AuthenticationException.Generic("M_FORBIDDEN")
-        assertThat(loginError(error)).isEqualTo(R.string.auth_invalid_login_param)
+        assertThat(loginError(error)).isEqualTo(R.string.screen_login_error_invalid_credentials)
     }
 
     @Test
     fun `loginError - user_deactivated error returns deactivated account message`() {
         val error = AuthenticationException.Generic("M_USER_DEACTIVATED")
-        assertThat(loginError(error)).isEqualTo(R.string.auth_invalid_login_deactivated_account)
+        assertThat(loginError(error)).isEqualTo(R.string.screen_login_error_deactivated_account)
     }
 
     // endregion loginError
