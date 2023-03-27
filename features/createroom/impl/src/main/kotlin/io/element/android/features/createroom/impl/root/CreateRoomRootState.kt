@@ -16,13 +16,9 @@
 
 package io.element.android.features.createroom.impl.root
 
-import io.element.android.libraries.matrix.ui.model.MatrixUser
-import kotlinx.collections.immutable.ImmutableList
+import io.element.android.features.selectusers.api.SelectUsersState
 
-// Do not use default value, so no member get forgotten in the presenters.
 data class CreateRoomRootState(
+    val selectUsersState: SelectUsersState,
     val eventSink: (CreateRoomRootEvents) -> Unit,
-    val isSearchActive: Boolean,
-    val searchQuery: String,
-    val searchResults: ImmutableList<MatrixUser>,
 )

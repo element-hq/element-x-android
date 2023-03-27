@@ -47,6 +47,7 @@
 
     <string name="verification_positive_button_initial">I am ready</string>
     <string name="verification_positive_button_canceled">Retry verification</string>
+    <string name="verification_positive_button_ready">Start</string>
     <string name="verification_positive_button_verifying_start">They match</string>
     <string name="verification_positive_button_verifying_ongoing">Waiting to match</string>
 

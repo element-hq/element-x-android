@@ -64,6 +64,7 @@ include(":libraries:encrypted-db")
 include(":libraries:session-storage:api")
 include(":libraries:session-storage:impl")
 include(":libraries:session-storage:impl-memory")
+include(":libraries:statemachine")
 
 include(":services:analytics:api")
 include(":services:analytics:noop")
@@ -71,7 +72,6 @@ include(":services:appnavstate:api")
 include(":services:appnavstate:impl")
 include(":services:toolbox:api")
 include(":services:toolbox:impl")
-
 
 fun includeProjects(directory: File, path: String) {
     directory.listFiles().orEmpty().forEach { file ->

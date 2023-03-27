@@ -22,17 +22,29 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
+import io.element.android.features.selectusers.impl.DefaultSelectUsersPresenter
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Before
 import org.junit.Test
 
 class CreateRoomRootPresenterTests {
 
+    private lateinit var presenter: CreateRoomRootPresenter
+
+    @Before
+    fun setup() {
+        val selectUsersPresenter = object : DefaultSelectUsersPresenter.DefaultSelectUsersFactory {
+            override fun create(args: SelectUsersPresenterArgs) = DefaultSelectUsersPresenter(args)
+        }
+        presenter = CreateRoomRootPresenter(selectUsersPresenter)
+    }
+
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = CreateRoomRootPresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -43,45 +55,16 @@ class CreateRoomRootPresenterTests {
 
     @Test
     fun `present - trigger action buttons`() = runTest {
-        val presenter = CreateRoomRootPresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(CreateRoomRootEvents.CreateRoom) // Not implemented yet
             initialState.eventSink(CreateRoomRootEvents.InvitePeople) // Not implemented yet
         }
     }
 
     @Test
-    fun `present - update search query`() = runTest {
-        val presenter = CreateRoomRootPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-
-            initialState.eventSink(CreateRoomRootEvents.OnSearchActiveChanged(true))
-            assertThat(awaitItem().isSearchActive).isTrue()
-
-            val matrixIdQuery = "@name:matrix.org"
-            initialState.eventSink(CreateRoomRootEvents.UpdateSearchQuery(matrixIdQuery))
-            assertThat(awaitItem().searchQuery).isEqualTo(matrixIdQuery)
-            assertThat(awaitItem().searchResults).containsExactly(MatrixUser(UserId(matrixIdQuery)))
-
-            val notMatrixIdQuery = "name"
-            initialState.eventSink(CreateRoomRootEvents.UpdateSearchQuery(notMatrixIdQuery))
-            assertThat(awaitItem().searchQuery).isEqualTo(notMatrixIdQuery)
-            assertThat(awaitItem().searchResults).isEmpty()
-
-            initialState.eventSink(CreateRoomRootEvents.OnSearchActiveChanged(false))
-            assertThat(awaitItem().isSearchActive).isFalse()
-        }
-    }
-
-    @Test
     fun `present - trigger start DM action`() = runTest {
-        val presenter = CreateRoomRootPresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
