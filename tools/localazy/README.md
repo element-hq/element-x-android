@@ -23,6 +23,7 @@ Never edit manually the files `localazy.xml` or `translations.xml`!.
 For code clarity and in order to download strings to the correct module, here are some naming rules to follow as much as possible:
 
 - Keys for common strings, i.e. strings that can be used at multiple places must start by `action_` if this is a verb, or `common_` if not;
+- Keys for common accessibility strings must start by `a11y_`. Example: `a11y_hide_password`;
 - Keys for strings used in a single screen must start with `screen_` followed by the screen name, followed by a free name. Example: `screen_onboarding_welcome_title`;
 - Keys can have `_title` or `_subtitle` suffixes. Example: `screen_onboarding_welcome_title`, `screen_change_server_subtitle`;
 - `a11y_` pattern can be used for strings that are only used for accessibility. Example: `a11y_hide_password`, `screen_roomlist_a11y_create_message`;
