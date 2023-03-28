@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2023 New Vector Ltd
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="no_valid_google_play_services_apk">No valid Google Play Services APK found. Notifications may not work properly.</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Choose how to receive notifications</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Google Services</string>
+    <string name="unifiedpush_distributor_background_sync">Background synchronization</string>
+
+    <string name="notification_listening_for_events">Listening for events</string>
+    <string name="notification_noisy_notifications">Noisy notifications</string>
+    <string name="notification_silent_notifications">Silent notifications</string>
+    <string name="call">Call</string>
+    <string name="notification_new_messages">New Messages</string>
+    <string name="action_mark_room_read">Mark as read</string>
+    <string name="action_join">Join</string>
+    <string name="action_reject">Reject</string>
+    <string name="settings_troubleshoot_test_push_notification_content">You are viewing the notification! Click me!</string>
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+    <string name="notification_inline_reply_failed">** Failed to send - please open room</string>
+    <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s in %2$s and %3$s"</string>
+    <string name="notification_unread_notified_messages_and_invitation">%1$s and %2$s"</string>
+    <string name="notification_unread_notified_messages_in_room">%1$s in %2$s"</string>
+    <plurals name="room_new_messages_notification">
+        <item quantity="one">%d new message</item>
+        <item quantity="other">%d new messages</item>
+    </plurals>
+    <plurals name="notification_unread_notified_messages">
+        <item quantity="one">%d unread notified message</item>
+        <item quantity="other">%d unread notified messages</item>
+    </plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+        <item quantity="one">%d room</item>
+        <item quantity="other">%d rooms</item>
+    </plurals>
+    <plurals name="notification_invitations">
+        <item quantity="one">%d invitation</item>
+        <item quantity="other">%d invitations</item>
+    </plurals>
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="one">%1$s: %2$d message</item>
+        <item quantity="other">%1$s: %2$d messages</item>
+    </plurals>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">%d notification</item>
+        <item quantity="other">%d notifications</item>
+    </plurals>
+</resources>

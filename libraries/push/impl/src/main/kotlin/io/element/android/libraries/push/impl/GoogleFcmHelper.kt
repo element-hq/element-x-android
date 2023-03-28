@@ -28,7 +28,6 @@ import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.DefaultPreferences
 import timber.log.Timber
 import javax.inject.Inject
-import io.element.android.libraries.ui.strings.R as StringR
 
 /**
  * This class store the FCM token in SharedPrefs and ensure this token is retrieved.
@@ -69,7 +68,7 @@ class GoogleFcmHelper @Inject constructor(
                 Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed")
             }
         } else {
-            Toast.makeText(context, StringR.string.no_valid_google_play_services_apk, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.no_valid_google_play_services_apk, Toast.LENGTH_SHORT).show()
             Timber.e("No valid Google Play Services found. Cannot use FCM.")
         }
     }

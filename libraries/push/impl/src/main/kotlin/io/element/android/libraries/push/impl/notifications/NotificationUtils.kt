@@ -145,11 +145,11 @@ class NotificationUtils @Inject constructor(
          */
         notificationManager.createNotificationChannel(NotificationChannel(
             NOISY_NOTIFICATION_CHANNEL_ID,
-            stringProvider.getString(StringR.string.notification_noisy_notifications).ifEmpty { "Noisy notifications" },
+            stringProvider.getString(R.string.notification_noisy_notifications).ifEmpty { "Noisy notifications" },
             NotificationManager.IMPORTANCE_DEFAULT
         )
             .apply {
-                description = stringProvider.getString(StringR.string.notification_noisy_notifications)
+                description = stringProvider.getString(R.string.notification_noisy_notifications)
                 enableVibration(true)
                 enableLights(true)
                 lightColor = accentColor
@@ -160,11 +160,11 @@ class NotificationUtils @Inject constructor(
          */
         notificationManager.createNotificationChannel(NotificationChannel(
             SILENT_NOTIFICATION_CHANNEL_ID,
-            stringProvider.getString(StringR.string.notification_silent_notifications).ifEmpty { "Silent notifications" },
+            stringProvider.getString(R.string.notification_silent_notifications).ifEmpty { "Silent notifications" },
             NotificationManager.IMPORTANCE_LOW
         )
             .apply {
-                description = stringProvider.getString(StringR.string.notification_silent_notifications)
+                description = stringProvider.getString(R.string.notification_silent_notifications)
                 setSound(null, null)
                 enableLights(true)
                 lightColor = accentColor
@@ -172,22 +172,22 @@ class NotificationUtils @Inject constructor(
 
         notificationManager.createNotificationChannel(NotificationChannel(
             LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID,
-            stringProvider.getString(StringR.string.notification_listening_for_events).ifEmpty { "Listening for events" },
+            stringProvider.getString(R.string.notification_listening_for_events).ifEmpty { "Listening for events" },
             NotificationManager.IMPORTANCE_MIN
         )
             .apply {
-                description = stringProvider.getString(StringR.string.notification_listening_for_events)
+                description = stringProvider.getString(R.string.notification_listening_for_events)
                 setSound(null, null)
                 setShowBadge(false)
             })
 
         notificationManager.createNotificationChannel(NotificationChannel(
             CALL_NOTIFICATION_CHANNEL_ID,
-            stringProvider.getString(StringR.string.call).ifEmpty { "Call" },
+            stringProvider.getString(R.string.call).ifEmpty { "Call" },
             NotificationManager.IMPORTANCE_HIGH
         )
             .apply {
-                description = stringProvider.getString(StringR.string.call)
+                description = stringProvider.getString(R.string.call)
                 setSound(null, null)
                 enableLights(true)
                 lightColor = accentColor
@@ -242,11 +242,11 @@ class NotificationUtils @Inject constructor(
             // Title for API < 16 devices.
             .setContentTitle(roomInfo.roomDisplayName)
             // Content for API < 16 devices.
-            .setContentText(stringProvider.getString(StringR.string.notification_new_messages))
+            .setContentText(stringProvider.getString(R.string.notification_new_messages))
             // Number of new notifications for API <24 (M and below) devices.
             .setSubText(
                 stringProvider.getQuantityString(
-                    StringR.plurals.room_new_messages_notification,
+                    R.plurals.room_new_messages_notification,
                     messageStyle.messages.size,
                     messageStyle.messages.size
                 )
@@ -292,7 +292,7 @@ class NotificationUtils @Inject constructor(
 
                 NotificationCompat.Action.Builder(
                     R.drawable.ic_material_done_all_white,
-                    stringProvider.getString(StringR.string.action_mark_room_read), markRoomReadPendingIntent
+                    stringProvider.getString(R.string.action_mark_room_read), markRoomReadPendingIntent
                 )
                     .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ)
                     .setShowsUserInterface(false)
@@ -373,7 +373,7 @@ class NotificationUtils @Inject constructor(
 
                 addAction(
                     R.drawable.vector_notification_reject_invitation,
-                    stringProvider.getString(StringR.string.action_reject),
+                    stringProvider.getString(R.string.action_reject),
                     rejectIntentPendingIntent
                 )
 
@@ -390,7 +390,7 @@ class NotificationUtils @Inject constructor(
                 )
                 addAction(
                     R.drawable.vector_notification_accept_invitation,
-                    stringProvider.getString(StringR.string.action_join),
+                    stringProvider.getString(R.string.action_join),
                     joinIntentPendingIntent
                 )
 
@@ -693,7 +693,7 @@ class NotificationUtils @Inject constructor(
             888,
             NotificationCompat.Builder(context, NOISY_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(buildMeta.applicationName)
-                .setContentText(stringProvider.getString(StringR.string.settings_troubleshoot_test_push_notification_content))
+                .setContentText(stringProvider.getString(R.string.settings_troubleshoot_test_push_notification_content))
                 .setSmallIcon(R.drawable.ic_notification)
                 .setLargeIcon(getBitmap(context, R.drawable.element_logo_green))
                 .setColor(ContextCompat.getColor(context, R.color.notification_accent_color))

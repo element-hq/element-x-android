@@ -19,13 +19,13 @@ package io.element.android.libraries.push.impl.notifications
 import android.graphics.Bitmap
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
+import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
 import me.gujun.android.span.Span
 import me.gujun.android.span.span
 import timber.log.Timber
 import javax.inject.Inject
-import io.element.android.libraries.ui.strings.R as StringR
 
 class RoomGroupMessageCreator @Inject constructor(
     private val bitmapLoader: NotificationBitmapLoader,
@@ -50,9 +50,9 @@ class RoomGroupMessageCreator @Inject constructor(
         }
 
         val tickerText = if (roomIsGroup) {
-            stringProvider.getString(StringR.string.notification_ticker_text_group, roomName, events.last().senderName, events.last().description)
+            stringProvider.getString(R.string.notification_ticker_text_group, roomName, events.last().senderName, events.last().description)
         } else {
-            stringProvider.getString(StringR.string.notification_ticker_text_dm, events.last().senderName, events.last().description)
+            stringProvider.getString(R.string.notification_ticker_text_dm, events.last().senderName, events.last().description)
         }
 
         val largeBitmap = getRoomBitmap(events)
@@ -99,7 +99,7 @@ class RoomGroupMessageCreator @Inject constructor(
             }
             when {
                 event.isSmartReplyError() -> addMessage(
-                    stringProvider.getString(StringR.string.notification_inline_reply_failed),
+                    stringProvider.getString(R.string.notification_inline_reply_failed),
                     event.timestamp,
                     senderPerson
                 )
@@ -121,7 +121,7 @@ class RoomGroupMessageCreator @Inject constructor(
                 1 -> createFirstMessageSummaryLine(events.first(), roomName, roomIsDirect)
                 else -> {
                     stringProvider.getQuantityString(
-                        StringR.plurals.notification_compat_summary_line_for_room,
+                        R.plurals.notification_compat_summary_line_for_room,
                         events.size,
                         roomName,
                         events.size
