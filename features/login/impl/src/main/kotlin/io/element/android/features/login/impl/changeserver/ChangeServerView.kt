@@ -64,14 +64,12 @@ import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.LinkColor
 import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.LocalColors
-import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -94,9 +92,9 @@ fun ChangeServerView(
 ) {
     val eventSink = state.eventSink
     val scrollState = rememberScrollState()
-    val interactionEnabled by remember(state.changeServerAction) {
+    val isLoading by remember(state.changeServerAction) {
         derivedStateOf {
-            state.changeServerAction !is Async.Loading
+            state.changeServerAction is Async.Loading
         }
     }
     val invalidHomeserverError = (state.changeServerAction as? Async.Failure)?.error as? ChangeServerError.InlineErrorMessage
@@ -114,7 +112,7 @@ fun ChangeServerView(
         topBar = {
             TopAppBar(
                 title = {},
-                navigationIcon = { BackButton(onClick = onBackPressed, enabled = interactionEnabled) }
+                navigationIcon = { BackButton(onClick = onBackPressed) }
             )
         }
     ) { padding ->
@@ -179,7 +177,7 @@ fun ChangeServerView(
                 var homeserverFieldState by textFieldState(stateValue = state.homeserver)
                 TextField(
                     value = homeserverFieldState,
-                    readOnly = !interactionEnabled,
+                    readOnly = isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag(TestTags.changeServerServer)
@@ -201,7 +199,7 @@ fun ChangeServerView(
                         {
                             IconButton(onClick = {
                                 eventSink(ChangeServerEvents.SetServer(""))
-                            }, enabled = interactionEnabled) {
+                            }, enabled = !isLoading) {
                                 Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(StringR.string.action_clear))
                             }
                         }
@@ -244,35 +242,21 @@ fun ChangeServerView(
                     })
                 }
                 Spacer(Modifier.height(32.dp))
-                Button(
+                ButtonWithProgress(
+                    text = stringResource(id = R.string.screen_change_server_submit),
+                    showProgress = isLoading,
                     onClick = ::submit,
-                    enabled = interactionEnabled && state.submitEnabled,
+                    enabled = state.submitEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag(TestTags.changeServerContinue)
-                ) {
-                    Text(text = stringResource(id = R.string.screen_change_server_submit), style = ElementTextStyles.Button)
-                }
+                )
                 if (state.changeServerAction is Async.Success) {
                     onChangeServerSuccess()
                 }
             }
-            if (state.changeServerAction is Async.Loading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
         }
     }
-}
-
-@Composable
-internal fun ChangeServerErrorDialog(title: String, message: String, onDismiss: () -> Unit) {
-    ErrorDialog(
-        title = title,
-        content = message,
-        onDismiss = onDismiss
-    )
 }
 
 @Composable
