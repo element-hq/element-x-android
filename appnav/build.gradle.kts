@@ -38,7 +38,7 @@ dependencies {
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
 
-    allFeaturesApi()
+    allFeaturesApi(rootDir)
 
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
