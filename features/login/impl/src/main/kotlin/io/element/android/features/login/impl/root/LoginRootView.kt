@@ -101,7 +101,7 @@ fun LoginRootView(
         topBar = {
             TopAppBar(
                 title = {},
-                navigationIcon = { BackButton(onClick = onBackPressed, enabled = !isLoading) },
+                navigationIcon = { BackButton(onClick = onBackPressed) },
             )
         }
     ) { padding ->
@@ -315,7 +315,7 @@ internal fun LoginForm(
             text = stringResource(R.string.screen_login_submit),
             showProgress = isLoading,
             onClick = ::submit,
-            enabled = state.submitEnabled || isLoading,
+            enabled = state.submitEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .testTag(TestTags.loginContinue)

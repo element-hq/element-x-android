@@ -112,7 +112,7 @@ fun ChangeServerView(
         topBar = {
             TopAppBar(
                 title = {},
-                navigationIcon = { BackButton(onClick = onBackPressed, enabled = !isLoading) }
+                navigationIcon = { BackButton(onClick = onBackPressed) }
             )
         }
     ) { padding ->
@@ -243,10 +243,10 @@ fun ChangeServerView(
                 }
                 Spacer(Modifier.height(32.dp))
                 ButtonWithProgress(
-                    text = stringResource(id = StringR.string.action_continue),
+                    text = stringResource(id = R.string.screen_change_server_submit),
                     showProgress = isLoading,
                     onClick = ::submit,
-                    enabled = state.submitEnabled || isLoading,
+                    enabled = state.submitEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag(TestTags.changeServerContinue)

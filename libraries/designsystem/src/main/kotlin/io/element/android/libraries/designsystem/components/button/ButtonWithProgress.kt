@@ -19,7 +19,6 @@ package io.element.android.libraries.designsystem.components.button
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -41,6 +40,13 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.ElementButtonDefaults
 import io.element.android.libraries.designsystem.theme.components.Text
 
+/**
+ * A component that will display a button with an indeterminate circular progressbar.
+ * When [showProgress] is true:
+ *  - A circular progressbar is displayed.
+ *  - [text] is replaced by [progressText], if defined.
+ *  - [onClick] gets disabled.
+ */
 @Composable
 fun ButtonWithProgress(
     text: String?,

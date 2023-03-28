@@ -27,8 +27,8 @@ data class LoginRootState(
     val formState: LoginFormState,
     val eventSink: (LoginRootEvents) -> Unit
 ) {
-    val submitEnabled =
-        formState.login.isNotEmpty() && formState.password.isNotEmpty() && loggedInState != LoggedInState.LoggingIn
+    val submitEnabled: Boolean get() =
+        formState.login.isNotEmpty() && formState.password.isNotEmpty() && loggedInState !is LoggedInState.ErrorLoggingIn
 }
 
 sealed interface LoggedInState {
