@@ -6,6 +6,7 @@ Localazy is used to host the source strings and their translations.
 
 * [Localazy project](#localazy-project)
   * [Key naming rules](#key-naming-rules)
+    * [Special suffixes](#special-suffixes)
 * [CLI Installation](#cli-installation)
 * [Download translations](#download-translations)
 * [Add translations to a specific module](#add-translations-to-a-specific-module)
@@ -30,6 +31,13 @@ For code clarity and in order to download strings to the correct module, here ar
 - Strings for error message can start by `error_`, or contain `_error_` if used in a specific screen only. Example: `error_some_messages_have_not_been_sent`, `screen_change_server_error_invalid_homeserver`.
 
 *Note*: those rules applies for `strings` and for `plurals`.
+
+#### Special suffixes
+
+- if a key is suffixed by `_ios`, it will not be imported in the Android project;
+- if a key is suffixed by `_android`, it will not be imported in the iOS project.
+
+So feel free to use those suffixes when necessary for instance when the string content is referring to something related to Android only, or iOS only.
 
 ## CLI Installation
 
