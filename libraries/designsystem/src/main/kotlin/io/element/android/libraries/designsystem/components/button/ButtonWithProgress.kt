@@ -19,7 +19,6 @@ package io.element.android.libraries.designsystem.components.button
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -40,10 +40,20 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.ElementButtonDefaults
 import io.element.android.libraries.designsystem.theme.components.Text
 
+/**
+ * A component that will display a button with an indeterminate circular progressbar.
+ * When [showProgress] is true:
+ *  - A circular progressbar is displayed.
+ *  - [text] is replaced by [progressText], if defined.
+ *  - [onClick] gets disabled.
+ */
 @Composable
 fun ButtonWithProgress(
+    text: String?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    showProgress: Boolean = false,
+    progressText: String? = text,
     enabled: Boolean = true,
     shape: Shape = ElementButtonDefaults.shape,
     colors: ButtonColors = ElementButtonDefaults.buttonColors(),
@@ -51,10 +61,11 @@ fun ButtonWithProgress(
     border: BorderStroke? = null,
     contentPadding: PaddingValues = ElementButtonDefaults.ContentPadding,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    content: @Composable RowScope.() -> Unit
 ) {
     Button(
-        onClick = onClick,
+        onClick = {
+            if (!showProgress) { onClick() }
+        },
         modifier = modifier,
         enabled = enabled,
         shape = shape,
@@ -64,15 +75,21 @@ fun ButtonWithProgress(
         contentPadding = contentPadding,
         interactionSource = interactionSource,
     ) {
-        CircularProgressIndicator(
-            modifier = Modifier
-                .progressSemantics()
-                .size(18.dp),
-            color = MaterialTheme.colorScheme.onPrimary,
-            strokeWidth = 2.dp,
-        )
-        Spacer(Modifier.width(10.dp))
-        content()
+        if (showProgress) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .progressSemantics()
+                    .size(18.dp),
+                color = MaterialTheme.colorScheme.onPrimary,
+                strokeWidth = 2.dp,
+            )
+            if (progressText != null) {
+                Spacer(Modifier.width(10.dp))
+                Text(progressText, style = ElementTextStyles.Button)
+            }
+        } else if (text != null) {
+            Text(text, style = ElementTextStyles.Button)
+        }
     }
 }
 
@@ -86,7 +103,9 @@ internal fun ButtonWithProgressDarkPreview() = ElementPreviewDark { ContentToPre
 
 @Composable
 private fun ContentToPreview() {
-    ButtonWithProgress(onClick = {}) {
-        Text(text = "Button with progress")
-    }
+    ButtonWithProgress(
+        text = "Button with progress",
+        onClick = {},
+        showProgress = true,
+    )
 }
