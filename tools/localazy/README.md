@@ -4,9 +4,21 @@ Localazy is used to host the source strings and their translations.
 
 ## Localazy project
 
-To add new strings, or to translate existing strings, go the the Localazy project: [https://localazy.com/p/element](https://localazy.com/p/element).
+To add new strings, or to translate existing strings, go the the Localazy project: [https://localazy.com/p/element](https://localazy.com/p/element). Please follow the key naming rules (see below).
 
 Never edit manually the files `localazy.xml` or `translations.xml`!.
+
+### Key naming rules
+
+For code clarity and in order to download strings to the correct module, here are some naming rules to follow as much as possible:
+
+- Keys for common strings, i.e. strings that can be used at multiple places must start by `action_` if this is a verb, or `common_` if not;
+- Keys for strings used in a single screen must start with `screen_` followed by the screen name, followed by a free name. Example: `screen_onboarding_welcome_title`;
+- Keys can have `_title` or `_subtitle` suffixes. Example: `screen_onboarding_welcome_title`, `screen_change_server_subtitle`;
+- `a11y_` pattern can be used for strings used for accessibility. Example: `a11y_hide_password`, `screen_roomlist_a11y_create_message`;
+- Strings for error message can start by `error_`, or contain `_error_` if used in a specific screen only. Example: `error_some_messages_have_not_been_sent`, `screen_change_server_error_invalid_homeserver`.
+
+*Note*: those rules applies for `strings` and for `plurals`.
 
 ## CLI Installation
 
