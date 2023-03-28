@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.Density
+import androidx.lifecycle.Lifecycle
 import app.cash.paparazzi.Paparazzi
 import com.airbnb.android.showkase.models.Showkase
 import com.google.testing.junit.testparameterinjector.TestParameter
@@ -95,9 +96,8 @@ class ScreenshotTest {
                 },
                 // Needed so that UI that uses it don't crash during screenshot tests
                 LocalOnBackPressedDispatcherOwner provides object : OnBackPressedDispatcherOwner {
-                    override fun getLifecycle() = lifecycleOwner.lifecycle
-
-                    override fun getOnBackPressedDispatcher() = OnBackPressedDispatcher()
+                    override val lifecycle: Lifecycle get() = lifecycleOwner.lifecycle
+                    override val onBackPressedDispatcher: OnBackPressedDispatcher get() = OnBackPressedDispatcher()
                 }
             ) {
                 ElementTheme {
