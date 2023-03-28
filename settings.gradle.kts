@@ -73,7 +73,7 @@ include(":services:appnavstate:impl")
 include(":services:toolbox:api")
 include(":services:toolbox:impl")
 
-fun includeProjects(directory: File, path: String) {
+fun includeProjects(directory: File, path: String, maxDepth: Int = 1) {
     directory.listFiles().orEmpty().forEach { file ->
         if (file.isDirectory) {
             val newPath = "$path:${file.name}"
@@ -81,8 +81,8 @@ fun includeProjects(directory: File, path: String) {
             if (buildFile.exists()) {
                 include(newPath)
                 println("Included project: $newPath")
-            } else {
-                includeProjects(file, newPath)
+            } else if (maxDepth > 0) {
+                includeProjects(file, newPath, maxDepth - 1)
             }
         }
     }
