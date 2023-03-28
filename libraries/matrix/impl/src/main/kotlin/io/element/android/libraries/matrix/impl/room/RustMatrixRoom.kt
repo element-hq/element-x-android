@@ -101,6 +101,12 @@ class RustMatrixRoom(
     override val isEncrypted: Boolean
         get() = innerRoom.isEncrypted()
 
+    override val alias: String?
+        get() = innerRoom.canonicalAlias()
+
+    override val alternativeAliases: List<String>
+        get() = innerRoom.alternativeAliases()
+
     override suspend fun fetchMembers(): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {
             innerRoom.fetchMembers()

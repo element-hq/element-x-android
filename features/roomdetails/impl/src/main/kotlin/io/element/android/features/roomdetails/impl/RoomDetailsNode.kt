@@ -16,8 +16,11 @@
 
 package io.element.android.features.roomdetails.impl
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -25,21 +28,40 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 
 @ContributesNode(RoomScope::class)
 class RoomDetailsNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: RoomDetailsPresenter,
+    private val room: MatrixRoom,
 ) : Node(buildContext, plugins = plugins) {
+
+    private fun onShareRoom(context: Context) {
+        val alias = room.alias ?: room.alternativeAliases.firstOrNull()
+        val permalinkResult = alias?.let { PermalinkBuilder.permalinkForRoomAlias(it) }
+            ?: PermalinkBuilder.permalinkForRoomId(room.roomId)
+        permalinkResult.onSuccess { permalink ->
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                putExtra(Intent.EXTRA_TEXT, permalink)
+                type = "text/plain"
+            }
+            val chooserIntent = Intent.createChooser(intent, "Share room")
+            context.startActivity(chooserIntent)
+        }
+    }
 
     @Composable
     override fun View(modifier: Modifier) {
+        val context = LocalContext.current
         val state = presenter.present()
         RoomDetailsView(
             state = state,
             modifier = modifier,
-            goBack = { navigateUp() }
+            goBack = { navigateUp() },
+            onShareRoom = { onShareRoom(context) },
         )
     }
 }

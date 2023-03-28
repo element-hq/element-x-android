@@ -24,13 +24,15 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState(),
             aRoomDetailsState().copy(roomTopic = null),
             aRoomDetailsState().copy(isEncrypted = false),
+            aRoomDetailsState().copy(roomAlias = null),
             // Add other state here
         )
 }
 
 fun aRoomDetailsState() = RoomDetailsState(
-    roomId = "#marketing:domain.com",
+    roomId = "a room id",
     roomName = "Marketing",
+    roomAlias = "#marketing:domain.com",
     roomAvatarUrl = null,
     roomTopic = "Welcome to #marketing, home of the Marketing team " +
         "|| WIKI PAGE: https://domain.org/wiki/Marketing " +

@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl
+package io.element.android.libraries.matrix.api.config
 
-data class RoomDetailsState(
-    val roomId: String,
-    val roomName: String,
-    val roomAlias: String?,
-    val roomAvatarUrl: String?,
-    val roomTopic: String?,
-    val memberCount: Int,
-    val isEncrypted: Boolean,
-//    val eventSink: (RoomDetailsEvent) -> Unit
-)
+object MatrixConfiguration {
+    const val matrixToPermalinkBaseUrl: String = "https://matrix.to/#/"
+    val clientPermalinkBaseUrl: String? = null
+}

@@ -30,6 +30,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.PersonAddAlt
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -42,13 +43,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
-import io.element.android.libraries.designsystem.TextColorCriticalLight
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
-import io.element.android.libraries.designsystem.components.preferences.PreferenceDivider
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -63,6 +62,7 @@ fun RoomDetailsView(
     state: RoomDetailsState,
     modifier: Modifier = Modifier,
     goBack: () -> Unit,
+    onShareRoom: () -> Unit,
 ) {
     Scaffold(
         modifier = modifier,
@@ -74,8 +74,15 @@ fun RoomDetailsView(
             .padding(padding)
             .verticalScroll(rememberScrollState())
         ) {
-            HeaderSection(avatarUrl = state.roomAvatarUrl, roomName = state.roomName, roomId = state.roomId)
-            PreferenceDivider()
+            HeaderSection(
+                avatarUrl = state.roomAvatarUrl,
+                roomId = state.roomId,
+                roomName = state.roomName,
+                roomAlias = state.roomAlias
+            )
+
+            // TODO use actual share action
+            ShareSection(onShareRoom = onShareRoom)
 
             if (state.roomTopic != null) {
                 TopicSection(roomTopic = state.roomTopic)
@@ -93,7 +100,24 @@ fun RoomDetailsView(
 }
 
 @Composable
-internal fun HeaderSection(avatarUrl: String?, roomName: String, roomId: String, modifier: Modifier = Modifier) {
+internal fun ShareSection(onShareRoom: () -> Unit, modifier: Modifier = Modifier) {
+    PreferenceCategory(modifier = modifier) {
+        PreferenceText(
+            title = stringResource(R.string.screen_room_details_share_room_title),
+            icon = Icons.Outlined.Share,
+            onClick = onShareRoom,
+        )
+    }
+}
+
+@Composable
+internal fun HeaderSection(
+    avatarUrl: String?,
+    roomId: String,
+    roomName: String,
+    roomAlias: String?,
+    modifier: Modifier = Modifier
+) {
     Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Box(modifier = Modifier.size(70.dp)) {
             Avatar(
@@ -103,8 +127,10 @@ internal fun HeaderSection(avatarUrl: String?, roomName: String, roomId: String,
         }
         Spacer(modifier = Modifier.height(30.dp))
         Text(roomName, style = ElementTextStyles.Bold.title1)
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(roomId, style = ElementTextStyles.Regular.body, color = MaterialTheme.colorScheme.secondary)
+        if (roomAlias != null) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(roomAlias, style = ElementTextStyles.Regular.body, color = MaterialTheme.colorScheme.secondary)
+        }
         Spacer(Modifier.height(32.dp))
     }
 }
@@ -174,5 +200,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
     RoomDetailsView(
         state = state,
         goBack = {},
+        onShareRoom = {},
     )
 }

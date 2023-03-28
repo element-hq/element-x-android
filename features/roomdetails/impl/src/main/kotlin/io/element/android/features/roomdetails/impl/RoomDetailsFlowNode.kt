@@ -16,6 +16,7 @@
 
 package io.element.android.features.roomdetails.impl
 
+import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.composable.Children
@@ -30,6 +31,7 @@ import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.RoomScope
+import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
 class RoomDetailsFlowNode @AssistedInject constructor(
@@ -44,7 +46,8 @@ class RoomDetailsFlowNode @AssistedInject constructor(
     plugins = plugins,
 ) {
 
-    sealed interface NavTarget {
+    sealed interface NavTarget : Parcelable {
+        @Parcelize
         object RoomDetails : NavTarget
     }
 
