@@ -58,7 +58,6 @@ include(":tests:uitests")
 include(":anvilannotations")
 include(":anvilcodegen")
 include(":libraries:architecture")
-include(":features:template")
 include(":libraries:androidutils")
 include(":samples:minimal")
 include(":libraries:encrypted-db")
@@ -74,24 +73,20 @@ include(":services:appnavstate:impl")
 include(":services:toolbox:api")
 include(":services:toolbox:impl")
 
-include(":features:onboarding:api")
-include(":features:onboarding:impl")
-include(":features:logout:api")
-include(":features:logout:impl")
-include(":features:roomlist:api")
-include(":features:roomlist:impl")
-include(":features:rageshake:api")
-include(":features:rageshake:impl")
-include(":features:rageshake:test")
-include(":features:preferences:api")
-include(":features:preferences:impl")
-include(":features:messages:api")
-include(":features:messages:impl")
-include(":features:login:api")
-include(":features:login:impl")
-include(":features:createroom:api")
-include(":features:createroom:impl")
-include(":features:verifysession:api")
-include(":features:verifysession:impl")
-include(":features:selectusers:api")
-include(":features:selectusers:impl")
+fun includeProjects(directory: File, path: String) {
+    directory.listFiles().orEmpty().forEach { file ->
+        if (file.isDirectory) {
+            val newPath = "$path:${file.name}"
+            val buildFile = File(file, "build.gradle.kts")
+            if (buildFile.exists()) {
+                include(newPath)
+                println("Included project: $newPath")
+            } else {
+                includeProjects(file, newPath)
+            }
+        }
+    }
+}
+
+val featuresDir = File(rootDir, "features")
+includeProjects(featuresDir, ":features")

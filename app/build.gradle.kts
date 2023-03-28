@@ -203,7 +203,7 @@ knit {
 dependencies {
     allLibrariesImpl()
     allServicesImpl()
-    allFeaturesImpl()
+    allFeaturesImpl(rootDir)
     implementation(projects.tests.uitests)
     implementation(projects.anvilannotations)
     implementation(projects.appnav)

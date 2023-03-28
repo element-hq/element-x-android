@@ -40,5 +40,5 @@ dependencies {
     ksp(libs.showkase.processor)
 
     allLibrariesImpl()
-    allFeaturesImpl()
+    allFeaturesImpl(rootDir)
 }
