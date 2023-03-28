@@ -2,6 +2,16 @@
 
 Localazy is used to host the source strings and their translations.
 
+<!--- TOC -->
+
+* [Localazy project](#localazy-project)
+  * [Key naming rules](#key-naming-rules)
+* [CLI Installation](#cli-installation)
+* [Download translations](#download-translations)
+* [Add translations to a specific module](#add-translations-to-a-specific-module)
+
+<!--- END -->
+
 ## Localazy project
 
 To add new strings, or to translate existing strings, go the the Localazy project: [https://localazy.com/p/element](https://localazy.com/p/element). Please follow the key naming rules (see below).

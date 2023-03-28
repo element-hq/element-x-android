@@ -5,7 +5,9 @@
 * [Contributing code to Matrix](#contributing-code-to-matrix)
 * [Android Studio settings](#android-studio-settings)
 * [Compilation](#compilation)
-* [I want to help translating Element](#i-want-to-help-translating-element)
+* [Strings](#strings)
+  * [I want to add new strings to the project](#i-want-to-add-new-strings-to-the-project)
+  * [I want to help translating Element](#i-want-to-help-translating-element)
 * [I want to submit a PR to fix an issue](#i-want-to-submit-a-pr-to-fix-an-issue)
   * [Kotlin](#kotlin)
   * [Changelog](#changelog)
@@ -15,7 +17,6 @@
     * [lint](#lint)
   * [Unit tests](#unit-tests)
   * [Tests](#tests)
-  * [Internationalisation](#internationalisation)
   * [Accessibility](#accessibility)
   * [Jetpack Compose](#jetpack-compose)
   * [Authors](#authors)
@@ -40,11 +41,26 @@ Please ensure that you're using the project formatting rules (which are in the p
 
 This project should compile without any special action. Just clone it and open it with Android Studio, or compile from command line using `gradlew`.
 
-## I want to help translating Element
+## Strings
 
-For now strings are coming from Element Android project, so:
-- If you want to fix an issue with an English string, please submit a PR on Element Android.
-- If you want to fix an issue in other languages, or add a missing translation, or even add a new language, please use [Weblate](https://translate.element.io/projects/element-android/).
+The strings of the project are managed externally using [https://localazy.com](https://localazy.com) and shared with ElementX iOS.
+
+### I want to add new strings to the project
+
+Only the core team can modify or add English strings to Localazy. As an external contributor, if you want to add new strings, feel free to add an Android resource file to the project (for instance a file named `temporary.xml`), with a note in the description of the PR for the reviewer to integrate the String into `Localazy`. If accepted, the reviewer will add the String(s) for you, and then you can download them on your branch (following these [instructions](./tools/localazy/README.md#download-translations)) and remove the temporary file.
+
+Please follow the naming rules for the key. More details in [the dedicated section in this README.md](./tools/localazy/README.md#key-naming-rules)
+
+### I want to help translating Element
+
+Please note that the Localazy project is not open yet for external contributions.
+
+To help translating, please go to [https://localazy.com/p/element](https://localazy.com/p/element).
+
+- If you want to fix an issue with an English string, please open an issue on the github project of ElementX (Android or iOS).Only the core team can modify or add English strings.
+- If you want to fix an issue in other languages, or add a missing translation, or even add a new language, please go to [https://localazy.com/p/element](https://localazy.com/p/element).
+
+More informations can be found [in this README.md](./tools/localazy/README.md).
 
 ## I want to submit a PR to fix an issue
 
@@ -134,10 +150,6 @@ Element X is currently supported on Android Lollipop (API 21+): please test your
 Also, if possible, please test your change on a real device. Testing on Android emulator may not be sufficient.
 
 You should consider adding Unit tests with your PR, and also integration tests (AndroidTest). Please refer to [this document](./docs/integration_tests.md) to install and run the integration test environment.
-
-### Internationalisation
-
-For now strings are coming from Element Android project, so please read [the documentation](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#internationalisation) from there.
 
 ### Accessibility
 
