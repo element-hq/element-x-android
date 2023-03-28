@@ -36,6 +36,8 @@ class FakeMatrixRoom(
     override val avatarUrl: String? = null,
     override val members: List<RoomMember> = emptyList(),
     override val isEncrypted: Boolean = false,
+    override val alias: String? = null,
+    override val alternativeAliases: List<String> = emptyList(),
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
 ) : MatrixRoom {
 
