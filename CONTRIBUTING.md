@@ -41,6 +41,8 @@ Please ensure that you're using the project formatting rules (which are in the p
 
 This project should compile without any special action. Just clone it and open it with Android Studio, or compile from command line using `gradlew`.
 
+Note: please make sure that the configuration is `app` and not `samples.minimal`.
+
 ## Strings
 
 The strings of the project are managed externally using [https://localazy.com](https://localazy.com) and shared with ElementX iOS.
