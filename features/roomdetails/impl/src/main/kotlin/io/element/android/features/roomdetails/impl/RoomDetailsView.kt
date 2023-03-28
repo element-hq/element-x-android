@@ -60,9 +60,9 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 @Composable
 fun RoomDetailsView(
     state: RoomDetailsState,
-    modifier: Modifier = Modifier,
     goBack: () -> Unit,
     onShareRoom: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,

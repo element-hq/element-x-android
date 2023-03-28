@@ -17,7 +17,6 @@
 package io.element.android.features.roomdetails.impl
 
 import android.content.Context
-import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -27,9 +26,11 @@ import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.ui.strings.R as StringR
 
 @ContributesNode(RoomScope::class)
 class RoomDetailsNode @AssistedInject constructor(
@@ -44,12 +45,13 @@ class RoomDetailsNode @AssistedInject constructor(
         val permalinkResult = alias?.let { PermalinkBuilder.permalinkForRoomAlias(it) }
             ?: PermalinkBuilder.permalinkForRoomId(room.roomId)
         permalinkResult.onSuccess { permalink ->
-            val intent = Intent(Intent.ACTION_SEND).apply {
-                putExtra(Intent.EXTRA_TEXT, permalink)
-                type = "text/plain"
-            }
-            val chooserIntent = Intent.createChooser(intent, "Share room")
-            context.startActivity(chooserIntent)
+            startSharePlainTextIntent(
+                context = context,
+                activityResultLauncher = null,
+                chooserTitle = context.getString(R.string.screen_room_details_share_room_title),
+                text = permalink,
+                noActivityFoundMessage = context.getString(StringR.string.error_no_compatible_app_found)
+            )
         }
     }
 
