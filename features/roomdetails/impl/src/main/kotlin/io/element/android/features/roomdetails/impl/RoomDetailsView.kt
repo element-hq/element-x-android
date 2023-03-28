@@ -81,7 +81,6 @@ fun RoomDetailsView(
                 roomAlias = state.roomAlias
             )
 
-            // TODO use actual share action
             ShareSection(onShareRoom = onShareRoom)
 
             if (state.roomTopic != null) {
