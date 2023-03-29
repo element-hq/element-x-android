@@ -37,7 +37,9 @@ fun ErrorDialog(
     modifier: Modifier = Modifier,
     title: String = ErrorDialogDefaults.title,
     submitText: String = ErrorDialogDefaults.submitText,
+    dismissText: String? = null,
     onDismiss: () -> Unit = {},
+    onSubmit: () -> Unit = onDismiss,
     shape: Shape = AlertDialogDefaults.shape,
     containerColor: Color = AlertDialogDefaults.containerColor,
     iconContentColor: Color = AlertDialogDefaults.iconContentColor,
@@ -55,8 +57,15 @@ fun ErrorDialog(
             Text(content)
         },
         confirmButton = {
-            TextButton(onClick = onDismiss) {
+            TextButton(onClick = onSubmit) {
                 Text(submitText)
+            }
+        },
+        dismissButton = dismissText?.let {
+            {
+                TextButton(onClick = onDismiss) {
+                    Text(it)
+                }
             }
         },
         shape = shape,

@@ -39,6 +39,7 @@ class FakeMatrixClient(
 ) : MatrixClient {
 
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
+    private var createDmFailure: Throwable? = null
     private var findDmResult: MatrixRoom? = FakeMatrixRoom()
     private var logoutFailure: Throwable? = null
 
@@ -47,6 +48,8 @@ class FakeMatrixClient(
     }
 
     override suspend fun createDM(userId: UserId): Result<RoomId> {
+        delay(100)
+        createDmFailure?.let { throw it }
         return createDmResult
     }
 
@@ -91,12 +94,16 @@ class FakeMatrixClient(
 
     // Mocks
 
-    fun givenLogoutError(failure: Throwable) {
+    fun givenLogoutError(failure: Throwable?) {
         logoutFailure = failure
     }
 
     fun givenCreateDmResult(result: Result<RoomId>) {
         createDmResult = result
+    }
+
+    fun givenCreateDmError(failure: Throwable?) {
+        createDmFailure = failure
     }
 
     fun givenFindDmResult(result: MatrixRoom?) {

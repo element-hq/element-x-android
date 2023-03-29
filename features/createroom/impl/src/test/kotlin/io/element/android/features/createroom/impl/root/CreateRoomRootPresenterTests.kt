@@ -18,18 +18,23 @@
 
 package io.element.android.features.createroom.impl.root
 
+import androidx.compose.runtime.Composable
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.selectusers.api.SelectUsersPresenter
 import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
-import io.element.android.features.selectusers.impl.DefaultSelectUsersPresenter
+import io.element.android.features.selectusers.api.SelectUsersState
+import io.element.android.features.selectusers.api.aSelectUsersState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -38,15 +43,17 @@ import org.junit.Test
 class CreateRoomRootPresenterTests {
 
     private lateinit var presenter: CreateRoomRootPresenter
+    private lateinit var fakeSelectUsersPresenter: FakeSelectUserPresenter
     private lateinit var fakeMatrixClient: FakeMatrixClient
 
     @Before
     fun setup() {
-        val selectUsersPresenter = object : DefaultSelectUsersPresenter.DefaultSelectUsersFactory {
-            override fun create(args: SelectUsersPresenterArgs) = DefaultSelectUsersPresenter(args)
+        val factory = object : SelectUsersPresenter.Factory {
+            override fun create(args: SelectUsersPresenterArgs) = fakeSelectUsersPresenter
         }
+        fakeSelectUsersPresenter = FakeSelectUserPresenter()
         fakeMatrixClient = FakeMatrixClient()
-        presenter = CreateRoomRootPresenter(selectUsersPresenter, fakeMatrixClient)
+        presenter = CreateRoomRootPresenter(factory, fakeMatrixClient)
     }
 
     @Test
@@ -82,6 +89,7 @@ class CreateRoomRootPresenterTests {
             fakeMatrixClient.givenCreateDmResult(createDmResult)
 
             initialState.eventSink(CreateRoomRootEvents.StartDM(matrixUser))
+            assertThat(awaitItem().startDmAction).isInstanceOf(Async.Loading::class.java)
             val stateAfterStartDM = awaitItem()
             assertThat(stateAfterStartDM.startDmAction).isInstanceOf(Async.Success::class.java)
             assertThat(stateAfterStartDM.startDmAction.dataOrNull()).isEqualTo(createDmResult.getOrNull())
@@ -103,6 +111,62 @@ class CreateRoomRootPresenterTests {
             val stateAfterStartDM = awaitItem()
             assertThat(stateAfterStartDM.startDmAction).isInstanceOf(Async.Success::class.java)
             assertThat(stateAfterStartDM.startDmAction.dataOrNull()).isEqualTo(fakeDmResult.roomId)
+        }
+    }
+
+    @Test
+    fun `present - trigger retry create DM action`() = runTest {
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val matrixUser = MatrixUser(UserId("@name:matrix.org"))
+            val createDmResult = Result.success(RoomId("!createDmResult"))
+            fakeSelectUsersPresenter.givenState(aSelectUsersState().copy(selectedUsers = persistentListOf(matrixUser)))
+
+            fakeMatrixClient.givenFindDmResult(null)
+            fakeMatrixClient.givenCreateDmError(A_THROWABLE)
+            fakeMatrixClient.givenCreateDmResult(createDmResult)
+
+            // Failure
+            initialState.eventSink(CreateRoomRootEvents.StartDM(matrixUser))
+            assertThat(awaitItem().startDmAction).isInstanceOf(Async.Loading::class.java)
+            val stateAfterStartDM = awaitItem()
+            assertThat(stateAfterStartDM.startDmAction).isInstanceOf(Async.Failure::class.java)
+
+            // Cancel
+            stateAfterStartDM.eventSink(CreateRoomRootEvents.CancelStartDM)
+            val stateAfterCancel = awaitItem()
+            assertThat(stateAfterCancel.startDmAction).isInstanceOf(Async.Uninitialized::class.java)
+
+            // Failure
+            stateAfterCancel.eventSink(CreateRoomRootEvents.StartDM(matrixUser))
+            assertThat(awaitItem().startDmAction).isInstanceOf(Async.Loading::class.java)
+            val stateAfterSecondAttempt = awaitItem()
+            assertThat(stateAfterSecondAttempt.startDmAction).isInstanceOf(Async.Failure::class.java)
+
+            // Retry with success
+            fakeMatrixClient.givenCreateDmError(null)
+            stateAfterSecondAttempt.eventSink(CreateRoomRootEvents.RetryStartDM)
+            assertThat(awaitItem().startDmAction).isInstanceOf(Async.Uninitialized::class.java)
+            assertThat(awaitItem().startDmAction).isInstanceOf(Async.Loading::class.java)
+            val stateAfterRetryStartDM = awaitItem()
+            assertThat(stateAfterRetryStartDM.startDmAction).isInstanceOf(Async.Success::class.java)
+            assertThat(stateAfterRetryStartDM.startDmAction.dataOrNull()).isEqualTo(createDmResult.getOrNull())
+        }
+    }
+
+    private class FakeSelectUserPresenter : SelectUsersPresenter {
+
+        private var state = aSelectUsersState()
+
+        fun givenState(state: SelectUsersState) {
+            this.state = state
+        }
+
+        @Composable
+        override fun present(): SelectUsersState {
+            return state
         }
     }
 }

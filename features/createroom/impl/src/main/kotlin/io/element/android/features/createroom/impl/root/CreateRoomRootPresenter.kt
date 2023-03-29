@@ -50,16 +50,24 @@ class CreateRoomRootPresenter @Inject constructor(
         val localCoroutineScope = rememberCoroutineScope()
         val startDmAction: MutableState<Async<RoomId>> = remember { mutableStateOf(Async.Uninitialized) }
 
+        fun startDm(matrixUser: MatrixUser) {
+            startDmAction.value = Async.Uninitialized
+            val existingDM = matrixClient.findDM(matrixUser.id)
+            if (existingDM == null) {
+                localCoroutineScope.createDM(matrixUser, startDmAction)
+            } else {
+                startDmAction.value = Async.Success(existingDM.roomId)
+            }
+        }
+
         fun handleEvents(event: CreateRoomRootEvents) {
             when (event) {
-                is CreateRoomRootEvents.StartDM -> {
-                    val existingDM = matrixClient.findDM(event.matrixUser.id)
-                    if (existingDM == null) {
-                        localCoroutineScope.createDM(event.matrixUser, startDmAction)
-                    } else {
-                        startDmAction.value = Async.Success(existingDM.roomId)
-                    }
+                is CreateRoomRootEvents.StartDM -> startDm(event.matrixUser)
+                CreateRoomRootEvents.RetryStartDM -> {
+                    startDmAction.value = Async.Uninitialized
+                    selectUsersState.selectedUsers.firstOrNull()?.let { startDm(it) }
                 }
+                CreateRoomRootEvents.CancelStartDM -> startDmAction.value = Async.Uninitialized
                 CreateRoomRootEvents.InvitePeople -> Unit // Todo Handle invite people action
             }
         }
