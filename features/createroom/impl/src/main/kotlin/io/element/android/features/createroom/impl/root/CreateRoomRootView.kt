@@ -184,7 +184,7 @@ fun CreateDmConfirmationDialog(
                 modifier = modifier,
                 title = "Start chat",
                 content = "You're about starting a chat with ${selectedUser.getBestName()}, do you want to continue?",
-                submitText = stringResource(io.element.android.libraries.ui.strings.R.string._continue),
+                submitText = stringResource(io.element.android.libraries.ui.strings.R.string.action_continue),
                 onSubmitClicked = { state.eventSink(CreateRoomRootEvents.CreateDM(selectedUser)) },
                 onDismiss = { state.eventSink(CreateRoomRootEvents.CancelCreateDM) },
             )
