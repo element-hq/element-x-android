@@ -25,13 +25,13 @@ object RoomMemberMapper {
 
     fun map(roomMember: RustRoomMember): RoomMember =
         RoomMember(
-            roomMember.userId,
-            roomMember.displayName,
-            roomMember.avatarUrl,
-            mapMembership(roomMember.membership),
-            roomMember.isNameAmbiguous,
-            roomMember.powerLevel,
-            roomMember.normalizedPowerLevel,
+            roomMember.userId(),
+            roomMember.displayName(),
+            roomMember.avatarUrl(),
+            mapMembership(roomMember.membership()),
+            roomMember.isNameAmbiguous(),
+            roomMember.powerLevel(),
+            roomMember.normalizedPowerLevel(),
         )
 
     fun mapMembership(membershipState: RustMembershipState): RoomMembershipState =
@@ -42,5 +42,4 @@ object RoomMemberMapper {
             RustMembershipState.KNOCK -> RoomMembershipState.KNOCK
             RustMembershipState.LEAVE -> RoomMembershipState.LEAVE
         }
-
 }
