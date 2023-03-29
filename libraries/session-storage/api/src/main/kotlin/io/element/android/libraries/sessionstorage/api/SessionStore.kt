@@ -22,6 +22,7 @@ interface SessionStore {
     fun isLoggedIn(): Flow<Boolean>
     suspend fun storeData(sessionData: SessionData)
     suspend fun getSession(sessionId: String): SessionData?
+    suspend fun getAllSessions(): List<SessionData>
     suspend fun getLatestSession(): SessionData?
     suspend fun removeSession(sessionId: String)
 }
