@@ -17,7 +17,6 @@
   <string name="action_disable">"Disable"</string>
   <string name="action_done">"Done"</string>
   <string name="action_edit">"Edit"</string>
-  <string name="action_edit_screenshot">"Edit screenshot"</string>
   <string name="action_enable">"Enable"</string>
   <string name="action_invite">"Invite"</string>
   <string name="action_invite_friends_to_app">"Invite friends to %1$s"</string>
@@ -39,6 +38,7 @@
   <string name="action_save">"Save"</string>
   <string name="action_search">"Search"</string>
   <string name="action_send">"Send"</string>
+  <string name="action_share_link">"Share link"</string>
   <string name="action_skip">"Skip"</string>
   <string name="action_start">"Start"</string>
   <string name="action_start_chat">"Start chat"</string>
@@ -63,6 +63,7 @@
   <string name="common_message_layout">"Message layout"</string>
   <string name="common_message_removed">"Message removed"</string>
   <string name="common_modern">"Modern"</string>
+  <string name="common_no_results">"No results"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_password">"Password"</string>
   <string name="common_people">"People"</string>
@@ -103,6 +104,7 @@
   <string name="emoji_picker_category_symbols">"Symbols"</string>
   <string name="error_failed_creating_the_permalink">"Failed creating the permalink"</string>
   <string name="error_failed_loading_messages">"Failed loading messages"</string>
+  <string name="error_no_compatible_app_found">"No compatible app was found to handle this action."</string>
   <string name="error_some_messages_have_not_been_sent">"Some messages have not been sent"</string>
   <string name="error_unknown">"Sorry, an error occurred"</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
@@ -125,13 +127,13 @@
   <string name="room_timeline_beginning_of_room">"This is the beginning of %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"This is the beginning of this conversation."</string>
   <string name="room_timeline_read_marker_title">"New"</string>
-  <string name="screen_room_details_encryption_enabled_subtitle">"Messages are secured with locks. Only you and the recipients have the unique keys to unlock them."</string>
-  <string name="screen_room_details_encryption_enabled_title">"Message encryption enabled"</string>
-  <string name="screen_room_details_invite_people_title">"Invite people"</string>
-  <string name="screen_room_details_leave_room_title">"Leave room"</string>
-  <string name="screen_room_details_people_title">"People"</string>
-  <string name="screen_room_details_security_title">"Security"</string>
-  <string name="screen_room_details_topic_title">"Topic"</string>
+  <string name="screen_room_member_details_block_alert_action">"Block"</string>
+  <string name="screen_room_member_details_block_alert_description">"Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime."</string>
+  <string name="screen_room_member_details_block_user">"Block user"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Unblock"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"On unblocking the user, you will be able to see all messages by them again."</string>
+  <string name="screen_room_member_details_unblock_user">"Unblock user"</string>
+  <string name="screen_start_chat_error_starting_chat">"An error occurred when trying to start a chat"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Detection threshold"</string>
   <string name="settings_title_general">"General"</string>

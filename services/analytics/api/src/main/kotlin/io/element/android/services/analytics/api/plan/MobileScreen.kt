@@ -124,7 +124,7 @@ data class MobileScreen(
          * The screen shown when tapping the name of a room from the Room
          * screen.
          */
-        RoomDetails,
+        RoomDetailss,
 
         /**
          * The screen that lists public rooms for you to discover.

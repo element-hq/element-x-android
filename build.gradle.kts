@@ -245,6 +245,7 @@ koverMerged {
                 includes += "*State"
                 excludes += "io.element.android.libraries.matrix.api.timeline.item.event.OtherState$*"
                 excludes += "io.element.android.libraries.matrix.api.timeline.item.event.EventSendState$*"
+                excludes += "io.element.android.libraries.matrix.api.room.RoomMembershipState*"
             }
             bound {
                 minValue = 90

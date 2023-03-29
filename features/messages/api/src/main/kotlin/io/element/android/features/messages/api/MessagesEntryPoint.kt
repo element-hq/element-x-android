@@ -16,6 +16,19 @@
 
 package io.element.android.features.messages.api
 
-import io.element.android.libraries.architecture.SimpleFeatureEntryPoint
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.core.plugin.Plugin
+import io.element.android.libraries.architecture.FeatureEntryPoint
 
-interface MessagesEntryPoint : SimpleFeatureEntryPoint
+interface MessagesEntryPoint : FeatureEntryPoint {
+    fun createNode(
+        parentNode: Node,
+        buildContext: BuildContext,
+        callback: Callback,
+    ): Node
+
+    interface Callback : Plugin {
+        fun onRoomDetailsClicked()
+    }
+}

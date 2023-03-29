@@ -27,8 +27,12 @@ interface MatrixRoom: Closeable {
     val name: String?
     val bestName: String
     val displayName: String
+    val alias: String?
+    val alternativeAliases: List<String>
     val topic: String?
     val avatarUrl: String?
+    val members: List<RoomMember>
+    val isEncrypted: Boolean
 
     fun syncUpdateFlow(): Flow<Long>
 
