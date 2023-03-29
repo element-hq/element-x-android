@@ -24,8 +24,11 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
 import io.element.android.features.selectusers.impl.DefaultSelectUsersPresenter
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -67,13 +70,39 @@ class CreateRoomRootPresenterTests {
     }
 
     @Test
-    fun `present - trigger select user action`() = runTest {
+    fun `present - trigger create DM action`() = runTest {
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             val matrixUser = MatrixUser(UserId("@name:matrix.org"))
+            val createDmResult = Result.success(RoomId("!createDmResult"))
+
+            fakeMatrixClient.givenFindDmResult(null)
+            fakeMatrixClient.givenCreateDmResult(createDmResult)
+
             initialState.eventSink(CreateRoomRootEvents.StartDM(matrixUser))
+            val stateAfterStartDM = awaitItem()
+            assertThat(stateAfterStartDM.startDmAction).isInstanceOf(Async.Success::class.java)
+            assertThat(stateAfterStartDM.startDmAction.dataOrNull()).isEqualTo(createDmResult.getOrNull())
+        }
+    }
+
+    @Test
+    fun `present - trigger retrieve DM action`() = runTest {
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val matrixUser = MatrixUser(UserId("@name:matrix.org"))
+            val fakeDmResult = FakeMatrixRoom(RoomId("!fakeDmResult"))
+
+            fakeMatrixClient.givenFindDmResult(fakeDmResult)
+
+            initialState.eventSink(CreateRoomRootEvents.StartDM(matrixUser))
+            val stateAfterStartDM = awaitItem()
+            assertThat(stateAfterStartDM.startDmAction).isInstanceOf(Async.Success::class.java)
+            assertThat(stateAfterStartDM.startDmAction.dataOrNull()).isEqualTo(fakeDmResult.roomId)
         }
     }
 }
