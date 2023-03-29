@@ -53,7 +53,7 @@ internal class RustRoomSummaryDataSource(
     private val coroutineScope = CoroutineScope(SupervisorJob() + coroutineDispatchers.io)
 
     private val roomSummaries = MutableStateFlow<List<RoomSummary>>(emptyList())
-    private val state = MutableStateFlow(SlidingSyncState.COLD)
+    private val state = MutableStateFlow(SlidingSyncState.NOT_LOADED)
 
     fun init() {
         coroutineScope.launch {
@@ -101,7 +101,7 @@ internal class RustRoomSummaryDataSource(
 
     private suspend fun didReceiveSyncUpdate(summary: UpdateSummary) {
         Timber.v("UpdateRooms with identifiers: ${summary.rooms}")
-        if (state.value != SlidingSyncState.LIVE) {
+        if (state.value != SlidingSyncState.FULLY_LOADED) {
             return
         }
         updateRoomSummaries {
