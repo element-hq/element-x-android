@@ -18,6 +18,7 @@ package io.element.android.libraries.push.impl
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.push.impl.notifications.NotificationDrawerManager
 import javax.inject.Inject
@@ -37,6 +38,10 @@ class DefaultPushService @Inject constructor(
 
     override fun notificationStyleChanged() {
         notificationDrawerManager.notificationStyleChanged()
+    }
+
+    override suspend fun registerPusher(userId: UserId) {
+        pusherManager.registerPusher(userId)
     }
 
     override suspend fun testPush() {

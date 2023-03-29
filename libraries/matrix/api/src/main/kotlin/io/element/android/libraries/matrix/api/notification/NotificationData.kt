@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.model
+package io.element.android.libraries.matrix.api.notification
 
-/**
- * Represent parsed data that the app has received from a Push content.
- *
- * @property eventId The Event ID. If not null, it will not be empty, and will have a valid format.
- * @property roomId The Room ID. If not null, it will not be empty, and will have a valid format.
- * @property unread Number of unread message.
- */
-data class PushData(
-        val eventId: String?,
-        val roomId: String?,
-        val unread: Int?,
-        val clientSecret: String?,
+import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+
+data class NotificationData(
+    val item: MatrixTimelineItem,
+    val title: String,
+    val subtitle: String?,
+    val isNoisy: Boolean,
+    val avatarUrl: String?,
 )

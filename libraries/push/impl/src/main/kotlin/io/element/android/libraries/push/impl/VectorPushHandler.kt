@@ -27,6 +27,8 @@ import io.element.android.libraries.androidutils.network.WifiDetector
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.store.PushDataStore
 import io.element.android.libraries.push.impl.clientsecret.PushClientSecret
 import io.element.android.libraries.push.impl.model.PushData
@@ -34,11 +36,7 @@ import io.element.android.libraries.push.impl.notifications.NotifiableEventResol
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
 import io.element.android.libraries.push.impl.notifications.NotificationDrawerManager
 import io.element.android.libraries.push.impl.store.DefaultPushDataStore
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -53,7 +51,8 @@ class VectorPushHandler @Inject constructor(
     private val pushClientSecret: PushClientSecret,
     private val actionIds: NotificationActionIds,
     @ApplicationContext private val context: Context,
-    private val buildMeta: BuildMeta
+    private val buildMeta: BuildMeta,
+    private val matrixAuthenticationService: MatrixAuthenticationService,
 ) {
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
@@ -115,9 +114,38 @@ class VectorPushHandler @Inject constructor(
                 Timber.tag(loggerTag.value).d("## handleInternal()")
             }
 
+            pushData.roomId ?: return
+            pushData.eventId ?: return
+
+            val clientSecret = pushData.clientSecret
+            val userId = if (clientSecret == null) {
+                // Should not happen. In this case, restore default session
+                null
+            } else {
+                // Get userId from client secret
+                pushClientSecret.getUserIdFromSecret(clientSecret)
+            } ?: run {
+                matrixAuthenticationService.getLatestSessionId()?.value
+            }
+
+            if (userId == null) {
+                Timber.w("Unable to get a session")
+                return
+            }
+
+            // Restore session
+            val session = matrixAuthenticationService.restoreSession(SessionId(userId)).getOrNull() ?: return
+            // TODO EAx, no need for a session?
+            val notificationData = session.notificationService().getNotification(
+                userId = userId,
+                roomId = pushData.roomId,
+                eventId = pushData.eventId,
+            )
+
+            Timber.w("Notification: $notificationData")
+            // TODO Display notification
+
             /* TODO EAx
-            - Retrieve secret and use pushClientSecret
-            - Open matching session
             - get the event
             - display the notif
 

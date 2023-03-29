@@ -16,10 +16,15 @@
 
 package io.element.android.libraries.push.api
 
+import io.element.android.libraries.matrix.api.core.UserId
+
 interface PushService {
     fun setCurrentRoom(roomId: String?)
     fun setCurrentThread(threadId: String?)
     fun notificationStyleChanged()
+
+    // Ensure pusher is registered
+    suspend fun registerPusher(userId: UserId)
 
     suspend fun testPush()
 }

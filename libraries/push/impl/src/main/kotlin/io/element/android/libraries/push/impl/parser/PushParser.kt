@@ -50,6 +50,7 @@ class PushParser @Inject constructor() {
             eventId = message["event_id"],
             roomId = message["room_id"],
             unread = message["unread"]?.let { tryOrNull { Integer.parseInt(it) } },
+            clientSecret = message["cs"],
         )
         return pushDataFcm.toPushData()
     }
