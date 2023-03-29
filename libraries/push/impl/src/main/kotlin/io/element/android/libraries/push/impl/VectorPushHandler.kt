@@ -28,6 +28,7 @@ import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.push.api.store.PushDataStore
+import io.element.android.libraries.push.impl.clientsecret.PushClientSecret
 import io.element.android.libraries.push.impl.model.PushData
 import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
@@ -49,6 +50,7 @@ class VectorPushHandler @Inject constructor(
     // private val activeSessionHolder: ActiveSessionHolder,
     private val pushDataStore: PushDataStore,
     private val defaultPushDataStore: DefaultPushDataStore,
+    private val pushClientSecret: PushClientSecret,
     private val actionIds: NotificationActionIds,
     @ApplicationContext private val context: Context,
     private val buildMeta: BuildMeta
@@ -114,7 +116,8 @@ class VectorPushHandler @Inject constructor(
             }
 
             /* TODO EAx
-            - Open session
+            - Retrieve secret and use pushClientSecret
+            - Open matching session
             - get the event
             - display the notif
 
