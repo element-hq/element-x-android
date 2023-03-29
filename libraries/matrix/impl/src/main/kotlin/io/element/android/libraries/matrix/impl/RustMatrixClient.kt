@@ -83,29 +83,46 @@ class RustMatrixClient constructor(
         )
     }
 
-    private val visibleRoomsSlidingSyncList = SlidingSyncListBuilder()
-        .timelineLimit(limit = 1u)
+    // The account data is not synchronized with the VisibleRooms window, we have to use the AllRooms window in the meantime
+    // We're waiting for the multiple windows support in the rust sdk to remove this workaround
+//    private val visibleRoomsSlidingSyncList = SlidingSyncListBuilder()
+//        .timelineLimit(limit = 1u)
+//        .requiredState(
+//            requiredState = listOf(
+//                RequiredState(key = "m.room.avatar", value = ""),
+//                RequiredState(key = "m.room.encryption", value = ""),
+//            )
+//        )
+//        .filters(slidingSyncFilters)
+//        .name(name = "CurrentlyVisibleRooms")
+//        .sendUpdatesForItems(true)
+//        .syncMode(mode = SlidingSyncMode.SELECTIVE)
+//        .addRange(0u, 20u)
+//        .use {
+//            it.build()
+//        }
+
+    private val allRoomsSlidingSyncList = SlidingSyncListBuilder()
+        .noTimelineLimit()
         .requiredState(
-            requiredState = listOf(
+            listOf(
                 RequiredState(key = "m.room.avatar", value = ""),
                 RequiredState(key = "m.room.encryption", value = ""),
             )
         )
         .filters(slidingSyncFilters)
-        .name(name = "CurrentlyVisibleRooms")
+        .name("AllRooms")
+        .syncMode(SlidingSyncMode.GROWING_FULL_SYNC)
+        .batchSize(100u)
         .sendUpdatesForItems(true)
-        .syncMode(mode = SlidingSyncMode.SELECTIVE)
-        .addRange(0u, 20u)
-        .use {
-            it.build()
-        }
+        .use { it.build() }
 
     private val slidingSync = client
         .slidingSync()
         .homeserver("https://slidingsync.lab.matrix.org")
         .withCommonExtensions()
         .coldCache("ElementX")
-        .addList(visibleRoomsSlidingSyncList)
+        .addList(allRoomsSlidingSyncList)
         .use {
             it.build()
         }
@@ -115,7 +132,7 @@ class RustMatrixClient constructor(
         RustRoomSummaryDataSource(
             slidingSyncObserverProxy.updateSummaryFlow,
             slidingSync,
-            visibleRoomsSlidingSyncList,
+            allRoomsSlidingSyncList,
             dispatchers,
             ::onRestartSync
         )
@@ -176,7 +193,7 @@ class RustMatrixClient constructor(
         slidingSync.setObserver(null)
         rustRoomSummaryDataSource.close()
         client.setDelegate(null)
-        visibleRoomsSlidingSyncList.destroy()
+        allRoomsSlidingSyncList.destroy()
         slidingSync.destroy()
         verificationService.destroy()
     }
