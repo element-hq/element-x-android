@@ -18,6 +18,7 @@ package io.element.android.libraries.push.impl
 
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
 import io.element.android.libraries.push.impl.clientsecret.PushClientSecret
 import io.element.android.libraries.push.impl.config.PushConfig
@@ -39,6 +40,7 @@ class PushersManager @Inject constructor(
     private val pushClientSecret: PushClientSecret,
     private val sessionStore: SessionStore,
     private val matrixAuthenticationService: MatrixAuthenticationService,
+    private val fcmHelper: FcmHelper,
 ) {
     suspend fun testPush() {
         pushGatewayNotifyRequest.execute(
@@ -55,6 +57,7 @@ class PushersManager @Inject constructor(
         return enqueueRegisterPusher(pushKey, PushConfig.pusher_http_url)
     }
 
+    // TODO Rename
     suspend fun enqueueRegisterPusher(
         pushKey: String,
         gateway: String
@@ -66,6 +69,14 @@ class PushersManager @Inject constructor(
             client.pushersService().setHttpPusher(createHttpPusher(pushKey, gateway, sessionData.userId))
             // Close sessions?
         }
+    }
+
+    suspend fun registerPusher(userId: UserId) {
+        val pushKey = fcmHelper.getFcmToken() ?: return
+        // Register the pusher for the session
+        val client = matrixAuthenticationService.restoreSession(userId).getOrNull() ?: return
+        client.pushersService().setHttpPusher(createHttpPusher(pushKey, PushConfig.pusher_http_url, userId.value))
+        // Close sessions?
     }
 
     private suspend fun createHttpPusher(

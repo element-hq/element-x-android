@@ -25,19 +25,22 @@ import io.element.android.libraries.matrix.api.core.MatrixPatterns
  *     "event_id":"$anEventId",
  *     "room_id":"!aRoomId",
  *     "unread":"1",
- *     "prio":"high"
+ *     "prio":"high",
+ *     "cs":"<client_secret>"
  * }
  * </pre>
  * .
  */
 data class PushDataFcm(
-        val eventId: String?,
-        val roomId: String?,
-        var unread: Int?,
+    val eventId: String?,
+    val roomId: String?,
+    var unread: Int?,
+    val clientSecret: String?
 )
 
 fun PushDataFcm.toPushData() = PushData(
-        eventId = eventId?.takeIf { MatrixPatterns.isEventId(it) },
-        roomId = roomId?.takeIf { MatrixPatterns.isRoomId(it) },
-        unread = unread
+    eventId = eventId?.takeIf { MatrixPatterns.isEventId(it) },
+    roomId = roomId?.takeIf { MatrixPatterns.isRoomId(it) },
+    unread = unread,
+    clientSecret = clientSecret,
 )

@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.api
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.media.MediaResolver
+import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -35,6 +36,7 @@ interface MatrixClient : Closeable {
     fun mediaResolver(): MediaResolver
     fun sessionVerificationService(): SessionVerificationService
     fun pushersService(): PushersService
+    fun notificationService(): NotificationService
     suspend fun logout()
     suspend fun loadUserDisplayName(): Result<String>
     suspend fun loadUserAvatarURLString(): Result<String?>

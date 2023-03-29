@@ -38,7 +38,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class PushDataUnifiedPush(
-        val notification: PushDataUnifiedPushNotification?
+    val notification: PushDataUnifiedPushNotification?
 )
 
 @Serializable
@@ -50,11 +50,12 @@ data class PushDataUnifiedPushNotification(
 
 @Serializable
 data class PushDataUnifiedPushCounts(
-        @SerialName("unread") val unread: Int?
+    @SerialName("unread") val unread: Int?
 )
 
 fun PushDataUnifiedPush.toPushData() = PushData(
-        eventId = notification?.eventId?.takeIf { MatrixPatterns.isEventId(it) },
-        roomId = notification?.roomId?.takeIf { MatrixPatterns.isRoomId(it) },
-        unread = notification?.counts?.unread
+    eventId = notification?.eventId?.takeIf { MatrixPatterns.isEventId(it) },
+    roomId = notification?.roomId?.takeIf { MatrixPatterns.isRoomId(it) },
+    unread = notification?.counts?.unread,
+    clientSecret = null // TODO EAx check how client secret will be sent through UnifiedPush
 )

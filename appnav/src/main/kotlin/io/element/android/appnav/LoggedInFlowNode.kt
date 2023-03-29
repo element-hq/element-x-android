@@ -52,9 +52,11 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
+import io.element.android.libraries.push.api.PushService
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.parcelize.Parcelize
 import kotlin.coroutines.coroutineContext
 
@@ -69,6 +71,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val verifySessionEntryPoint: VerifySessionEntryPoint,
     private val coroutineScope: CoroutineScope,
     snackbarDispatcher: SnackbarDispatcher,
+    private val pushService: PushService,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.RoomList,
@@ -111,6 +114,10 @@ class LoggedInFlowNode @AssistedInject constructor(
                 // TODO We do not support Space yet, so directly navigate to main space
                 appNavigationStateService.onNavigateToSpace(MAIN_SPACE)
                 loggedInFlowProcessor.observeEvents(coroutineScope)
+                runBlocking {
+                    // TODO
+                    pushService.registerPusher(inputs.matrixClient.sessionId)
+                }
             },
             onDestroy = {
                 val imageLoaderFactory = bindings<MatrixUIBindings>().notLoggedInImageLoaderFactory()
