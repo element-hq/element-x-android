@@ -79,7 +79,6 @@ class DefaultSelectUsersPresenter @AssistedInject constructor(
                     localCoroutineScope.scrollToFirstSelectedUser(selectedUsersListState)
                 }
                 is SelectUsersEvents.RemoveFromSelection -> selectedUsers.value = selectedUsers.value.minus(event.matrixUser).toImmutableList()
-                SelectUsersEvents.ClearSelection -> selectedUsers.value = persistentListOf()
             }
         }
 

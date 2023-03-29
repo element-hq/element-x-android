@@ -73,7 +73,7 @@ class CreateRoomRootPresenterTests {
         }.test {
             val initialState = awaitItem()
             val matrixUser = MatrixUser(UserId("@name:matrix.org"))
-            initialState.eventSink(CreateRoomRootEvents.SelectUser(matrixUser))
+            initialState.eventSink(CreateRoomRootEvents.StartDM(matrixUser))
         }
     }
 }
