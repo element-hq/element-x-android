@@ -36,7 +36,18 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
                         isSearchActive = true,
                     )
                 }
-            )
+            ),
+            aCreateRoomRootState().copy(
+                startDmAction = Async.Failure(Throwable("An error occurred when trying to start a chat")),
+                selectUsersState = aMatrixUser().let {
+                    aSelectUsersState().copy(
+                        searchQuery = it.id.value,
+                        searchResults = persistentListOf(it),
+                        selectedUsers = persistentListOf(it),
+                        isSearchActive = true,
+                    )
+                }
+            ),
         )
 }
 
