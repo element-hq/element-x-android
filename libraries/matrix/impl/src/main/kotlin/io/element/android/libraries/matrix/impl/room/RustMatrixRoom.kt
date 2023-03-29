@@ -20,6 +20,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import kotlinx.coroutines.CoroutineScope
@@ -93,6 +94,18 @@ class RustMatrixRoom(
         get() {
             return innerRoom.avatarUrl()
         }
+
+    override val members: List<RoomMember>
+        get() = innerRoom.members().map(RoomMemberMapper::map)
+
+    override val isEncrypted: Boolean
+        get() = innerRoom.isEncrypted()
+
+    override val alias: String?
+        get() = innerRoom.canonicalAlias()
+
+    override val alternativeAliases: List<String>
+        get() = innerRoom.alternativeAliases()
 
     override suspend fun fetchMembers(): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {

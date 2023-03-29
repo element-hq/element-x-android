@@ -28,3 +28,12 @@ fun Boolean.toEnabledColor(): Color {
         MaterialTheme.colorScheme.primary.copy(alpha = 0.40f)
     }
 }
+
+@Composable
+fun Boolean.toSecondaryEnabledColor(): Color {
+    return if (this) {
+        MaterialTheme.colorScheme.secondary
+    } else {
+        MaterialTheme.colorScheme.secondary.copy(alpha = 0.40f)
+    }
+}

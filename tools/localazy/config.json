@@ -57,6 +57,12 @@
         "screen_roomlist_.*",
         "session_verification_banner_.*"
       ]
+    },
+    {
+      "name": ":features:roomdetails:impl",
+      "includeRegex": [
+        "screen_room_details_.*"
+      ]
     }
   ]
 }
