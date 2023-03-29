@@ -20,7 +20,5 @@ import io.element.android.libraries.matrix.ui.model.MatrixUser
 
 sealed interface CreateRoomRootEvents {
     object InvitePeople : CreateRoomRootEvents
-    data class SelectUser(val matrixUser: MatrixUser) : CreateRoomRootEvents
-    data class CreateDM(val matrixUser: MatrixUser) : CreateRoomRootEvents
-    object CancelCreateDM : CreateRoomRootEvents
+    data class StartDM(val matrixUser: MatrixUser) : CreateRoomRootEvents
 }

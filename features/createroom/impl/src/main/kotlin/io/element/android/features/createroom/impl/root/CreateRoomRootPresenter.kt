@@ -18,13 +18,9 @@ package io.element.android.features.createroom.impl.root
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import io.element.android.features.selectusers.api.SelectUsersEvents
 import io.element.android.features.selectusers.api.SelectUsersPresenter
 import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
 import io.element.android.features.selectusers.api.SelectionMode
@@ -52,27 +48,17 @@ class CreateRoomRootPresenter @Inject constructor(
         val selectUsersState = presenter.present()
 
         val localCoroutineScope = rememberCoroutineScope()
-
-        var showCreateDmConfirmationDialog by rememberSaveable { mutableStateOf(false) }
         val startDmAction: MutableState<Async<RoomId>> = remember { mutableStateOf(Async.Uninitialized) }
 
         fun handleEvents(event: CreateRoomRootEvents) {
             when (event) {
-                is CreateRoomRootEvents.SelectUser -> {
+                is CreateRoomRootEvents.StartDM -> {
                     val existingDM = matrixClient.findDM(event.matrixUser.id)
                     if (existingDM == null) {
-                        showCreateDmConfirmationDialog = true
+                        localCoroutineScope.createDM(event.matrixUser, startDmAction)
                     } else {
                         startDmAction.value = Async.Success(existingDM.roomId)
                     }
-                }
-                is CreateRoomRootEvents.CreateDM -> {
-                    showCreateDmConfirmationDialog = false
-                    localCoroutineScope.createDM(event.matrixUser, startDmAction)
-                }
-                CreateRoomRootEvents.CancelCreateDM -> {
-                    showCreateDmConfirmationDialog = false
-                    selectUsersState.eventSink(SelectUsersEvents.ClearSelection)
                 }
                 CreateRoomRootEvents.InvitePeople -> Unit // Todo Handle invite people action
             }
@@ -80,7 +66,6 @@ class CreateRoomRootPresenter @Inject constructor(
 
         return CreateRoomRootState(
             selectUsersState = selectUsersState,
-            showCreateDmConfirmationDialog = showCreateDmConfirmationDialog,
             startDmAction = startDmAction.value,
             eventSink = ::handleEvents,
         )

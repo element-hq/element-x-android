@@ -27,7 +27,7 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
         get() = sequenceOf(
             aCreateRoomRootState(),
             aCreateRoomRootState().copy(
-                showCreateDmConfirmationDialog = true,
+                startDmAction = Async.Loading(),
                 selectUsersState = aMatrixUser().let {
                     aSelectUsersState().copy(
                         searchQuery = it.id.value,
@@ -36,13 +36,12 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
                         isSearchActive = true,
                     )
                 }
-            ),
+            )
         )
 }
 
 fun aCreateRoomRootState() = CreateRoomRootState(
     eventSink = {},
     startDmAction = Async.Uninitialized,
-    showCreateDmConfirmationDialog = false,
     selectUsersState = aSelectUsersState(),
 )
