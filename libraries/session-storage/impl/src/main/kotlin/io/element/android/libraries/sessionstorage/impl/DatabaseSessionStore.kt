@@ -53,6 +53,12 @@ class DatabaseSessionStore @Inject constructor(
             ?.toApiModel()
     }
 
+    override suspend fun getAllSessions(): List<SessionData> {
+        return database.sessionDataQueries.selectAll()
+            .executeAsList()
+            .map { it.toApiModel() }
+    }
+
     override suspend fun removeSession(sessionId: String) {
         database.sessionDataQueries.removeSession(sessionId)
     }

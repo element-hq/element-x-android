@@ -38,6 +38,10 @@ class InMemorySessionStore : SessionStore {
         return sessionDataFlow.value.takeIf { it?.userId == sessionId }
     }
 
+    override suspend fun getAllSessions(): List<SessionData> {
+        return listOfNotNull(sessionDataFlow.value)
+    }
+
     override suspend fun getLatestSession(): SessionData? {
         return sessionDataFlow.value
     }
