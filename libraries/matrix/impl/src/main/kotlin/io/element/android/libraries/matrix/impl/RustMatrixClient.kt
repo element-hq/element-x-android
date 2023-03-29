@@ -223,9 +223,9 @@ class RustMatrixClient constructor(
     ): Result<ByteArray> =
         withContext(dispatchers.io) {
             runCatching {
-                mediaSourceFromUrl(url).use { source ->
+                mediaSourceFromUrl(url).use { mediaSource ->
                     client.getMediaThumbnail(
-                        source = source,
+                        mediaSource = mediaSource,
                         width = width.toULong(),
                         height = height.toULong()
                     ).toUByteArray().toByteArray()
