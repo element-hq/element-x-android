@@ -22,8 +22,6 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.login.impl.changeserver.ChangeServerEvents
-import io.element.android.features.login.impl.changeserver.ChangeServerPresenter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.test.A_HOMESERVER
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
@@ -34,6 +32,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ChangeServerPresenterTest {
     @Test
     fun `present - should start with default homeserver`() = runTest {
@@ -92,7 +91,7 @@ class ChangeServerPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink.invoke(ChangeServerEvents.Submit)
             val loadingState = awaitItem()
-            assertThat(loadingState.submitEnabled).isFalse()
+            assertThat(loadingState.submitEnabled).isTrue()
             assertThat(loadingState.changeServerAction).isInstanceOf(Async.Loading::class.java)
             val successState = awaitItem()
             assertThat(successState.submitEnabled).isFalse()
@@ -114,7 +113,7 @@ class ChangeServerPresenterTest {
             awaitItem()
             initialState.eventSink.invoke(ChangeServerEvents.Submit)
             val loadingState = awaitItem()
-            assertThat(loadingState.submitEnabled).isFalse()
+            assertThat(loadingState.submitEnabled).isTrue()
             assertThat(loadingState.changeServerAction).isInstanceOf(Async.Loading::class.java)
             awaitItem() // Skip changing the url to the parsed domain
             val successState = awaitItem()

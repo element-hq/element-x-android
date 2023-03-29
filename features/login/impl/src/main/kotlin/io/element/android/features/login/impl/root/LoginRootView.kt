@@ -65,13 +65,12 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.error.loginError
 import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -93,16 +92,16 @@ fun LoginRootView(
     onLoginWithSuccess: (SessionId) -> Unit = {},
     onBackPressed: () -> Unit,
 ) {
-    val interactionEnabled by remember(state.loggedInState) {
+    val isLoading by remember(state.loggedInState) {
         derivedStateOf {
-            state.loggedInState != LoggedInState.LoggingIn
+            state.loggedInState == LoggedInState.LoggingIn
         }
     }
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {},
-                navigationIcon = { BackButton(onClick = onBackPressed, enabled = interactionEnabled) },
+                navigationIcon = { BackButton(onClick = onBackPressed) },
             )
         }
     ) { padding ->
@@ -131,14 +130,14 @@ fun LoginRootView(
                 Spacer(Modifier.height(32.dp))
 
                 ChangeServerSection(
-                    interactionEnabled = interactionEnabled,
+                    interactionEnabled = !isLoading,
                     homeserver = state.homeserverDetails.url,
                     onChangeServer = onChangeServer
                 )
 
                 Spacer(Modifier.height(32.dp))
 
-                LoginForm(state = state, interactionEnabled = interactionEnabled)
+                LoginForm(state = state, isLoading = isLoading)
 
                 Spacer(modifier = Modifier.height(32.dp))
 
@@ -146,12 +145,6 @@ fun LoginRootView(
             when (val loggedInState = state.loggedInState) {
                 is LoggedInState.LoggedIn -> onLoginWithSuccess(loggedInState.sessionId)
                 else -> Unit
-            }
-
-            if (state.loggedInState is LoggedInState.LoggingIn) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
             }
         }
     }
@@ -216,7 +209,7 @@ internal fun ChangeServerSection(
 @Composable
 internal fun LoginForm(
     state: LoginRootState,
-    interactionEnabled: Boolean,
+    isLoading: Boolean,
     modifier: Modifier = Modifier
 ) {
     var loginFieldState by textFieldState(stateValue = state.formState.login)
@@ -242,7 +235,7 @@ internal fun LoginForm(
         Spacer(modifier = Modifier.height(8.dp))
         TextField(
             value = loginFieldState,
-            readOnly = !interactionEnabled,
+            readOnly = isLoading,
             modifier = Modifier
                 .fillMaxWidth()
                 .onTabOrEnterKeyFocusNext(focusManager)
@@ -282,7 +275,7 @@ internal fun LoginForm(
         Spacer(Modifier.height(20.dp))
         TextField(
             value = passwordFieldState,
-            readOnly = !interactionEnabled,
+            readOnly = isLoading,
             modifier = Modifier
                 .fillMaxWidth()
                 .onTabOrEnterKeyFocusNext(focusManager)
@@ -318,15 +311,15 @@ internal fun LoginForm(
         Spacer(Modifier.height(28.dp))
 
         // Submit
-        Button(
+        ButtonWithProgress(
+            text = stringResource(R.string.screen_login_submit),
+            showProgress = isLoading,
             onClick = ::submit,
-            enabled = interactionEnabled && state.submitEnabled,
+            enabled = state.submitEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .testTag(TestTags.loginContinue)
-        ) {
-            Text(text = stringResource(R.string.screen_login_submit), style = ElementTextStyles.Button)
-        }
+        )
     }
 }
 

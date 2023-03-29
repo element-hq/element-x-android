@@ -56,7 +56,6 @@ import io.element.android.libraries.designsystem.components.button.ButtonWithPro
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.LocalColors
-import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
@@ -257,21 +256,12 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
             .padding(horizontal = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (isVerifying) {
-            ButtonWithProgress(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { positiveButtonEvent?.let { eventSink(it) } }
-            ) {
-                positiveButtonTitle?.let { Text(stringResource(it), style = ElementTextStyles.Button) }
-            }
-        } else {
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { positiveButtonEvent?.let { eventSink(it) } }
-            ) {
-                positiveButtonTitle?.let { Text(stringResource(it), style = ElementTextStyles.Button) }
-            }
-        }
+        ButtonWithProgress(
+            text = positiveButtonTitle?.let { stringResource(it) },
+            showProgress = isVerifying,
+            modifier = Modifier.fillMaxWidth(),
+            onClick = { positiveButtonEvent?.let { eventSink(it) } }
+        )
         if (negativeButtonTitle != null) {
             Spacer(modifier = Modifier.height(16.dp))
             TextButton(
