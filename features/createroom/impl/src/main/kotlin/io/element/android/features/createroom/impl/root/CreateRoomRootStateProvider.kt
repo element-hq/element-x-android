@@ -19,11 +19,24 @@ package io.element.android.features.createroom.impl.root
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.selectusers.api.aSelectUsersState
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
+import kotlinx.collections.immutable.persistentListOf
 
 open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRootState> {
     override val values: Sequence<CreateRoomRootState>
         get() = sequenceOf(
             aCreateRoomRootState(),
+            aCreateRoomRootState().copy(
+                showCreateDmConfirmationDialog = true,
+                selectUsersState = aMatrixUser().let {
+                    aSelectUsersState().copy(
+                        searchQuery = it.id.value,
+                        searchResults = persistentListOf(it),
+                        selectedUsers = persistentListOf(it),
+                        isSearchActive = true,
+                    )
+                }
+            ),
         )
 }
 
