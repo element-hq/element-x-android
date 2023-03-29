@@ -48,6 +48,7 @@
   <string name="common_about">"About"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_bubbles">"Bubbles"</string>
+  <string name="common_creating_room">"Creating room…"</string>
   <string name="common_decryption_error">"Decryption error"</string>
   <string name="common_developer_options">"Developer options"</string>
   <string name="common_edited_suffix">"(edited)"</string>
