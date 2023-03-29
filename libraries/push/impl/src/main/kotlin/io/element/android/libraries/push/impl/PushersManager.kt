@@ -16,8 +16,13 @@
 
 package io.element.android.libraries.push.impl
 
+import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
+import io.element.android.libraries.push.impl.clientsecret.PushClientSecret
 import io.element.android.libraries.push.impl.config.PushConfig
 import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.appname.AppNameProvider
 import javax.inject.Inject
 
@@ -31,6 +36,9 @@ class PushersManager @Inject constructor(
     private val appNameProvider: AppNameProvider,
     // private val getDeviceInfoUseCase: GetDeviceInfoUseCase,
     private val pushGatewayNotifyRequest: PushGatewayNotifyRequest,
+    private val pushClientSecret: PushClientSecret,
+    private val sessionStore: SessionStore,
+    private val matrixAuthenticationService: MatrixAuthenticationService,
 ) {
     suspend fun testPush() {
         pushGatewayNotifyRequest.execute(
@@ -43,47 +51,45 @@ class PushersManager @Inject constructor(
         )
     }
 
-    fun enqueueRegisterPusherWithFcmKey(pushKey: String)/*: UUID*/ {
+    suspend fun enqueueRegisterPusherWithFcmKey(pushKey: String) {
         return enqueueRegisterPusher(pushKey, PushConfig.pusher_http_url)
     }
 
-    fun enqueueRegisterPusher(
+    suspend fun enqueueRegisterPusher(
         pushKey: String,
         gateway: String
-    ) /*: UUID*/ {
-        /*
-        val currentSession = activeSessionHolder.getActiveSession()
-        val pusher = createHttpPusher(pushKey, gateway)
-        return currentSession.pushersService().enqueueAddHttpPusher(pusher)
-
-         */
-        // TODO EAx
-        // TODO()
-        // Get all sessions
-        // Register pusher
-        // Close sessions
+    ) {
+        // Register the pusher for all the sessions
+        sessionStore.getAllSessions().forEach { sessionData ->
+            val client = matrixAuthenticationService.restoreSession(SessionId(sessionData.userId)).getOrNull()
+            client ?: return@forEach
+            client.pushersService().setHttpPusher(createHttpPusher(pushKey, gateway, sessionData.userId))
+            // Close sessions?
+        }
     }
 
-    private fun createHttpPusher(
+    private suspend fun createHttpPusher(
         pushKey: String,
-        gateway: String
-    ): Any = TODO()
-    /*
-    HttpPusher(
-        pushkey = pushKey,
-        appId = PushConfig.pusher_app_id,
-        profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(activeSessionHolder.getActiveSession().myUserId.hashCode()),
-        lang = localeProvider.current().language,
-        appDisplayName = appNameProvider.getAppName(),
-        deviceDisplayName = getDeviceInfoUseCase.execute().displayName().orEmpty(),
-        url = gateway,
-        enabled = true,
-        deviceId = activeSessionHolder.getActiveSession().sessionParams.deviceId ?: "MOBILE",
-        append = false,
-        withEventIdOnly = true,
-    )
+        gateway: String,
+        userId: String,
+    ): SetHttpPusherData =
+        SetHttpPusherData(
+            pushKey = pushKey,
+            appId = PushConfig.pusher_app_id,
+            profileTag = DEFAULT_PUSHER_FILE_TAG + "_" /* TODO + abs(activeSessionHolder.getActiveSession().myUserId.hashCode())*/,
+            lang = "en", // TODO localeProvider.current().language,
+            appDisplayName = appNameProvider.getAppName(),
+            deviceDisplayName = "MyDevice", // TODO getDeviceInfoUseCase.execute().displayName().orEmpty(),
+            url = gateway,
+            defaultPayload = createDefaultPayload(pushClientSecret.getSecretForUser(userId))
+        )
 
+    /**
+     * Ex: {"cs":"sfvsdv"}
      */
+    private fun createDefaultPayload(secretForUser: String): String {
+        return "{\"cs\":\"$secretForUser\"}"
+    }
 
     suspend fun registerEmailForPush(email: String) {
         TODO()
