@@ -43,7 +43,6 @@ dependencies {
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.statemachine)
-    implementation(libs.accompanist.flowlayout)
     api(projects.features.verifysession.api)
 
     testImplementation(libs.test.junit)
