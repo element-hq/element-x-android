@@ -96,7 +96,7 @@ fun CreateRoomRootView(
     }
 
     if (state.startDmAction is Async.Loading) {
-        ProgressDialog(text = "Creating room...")
+        ProgressDialog(text = stringResource(id = StringR.string.common_creating_room))
     }
 }
 
