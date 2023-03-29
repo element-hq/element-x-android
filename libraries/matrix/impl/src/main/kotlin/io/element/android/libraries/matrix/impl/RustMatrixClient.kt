@@ -21,11 +21,13 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaResolver
+import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.impl.media.RustMediaResolver
-import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.sync.SlidingSyncObserverProxy
@@ -60,6 +62,7 @@ class RustMatrixClient constructor(
     override val sessionId: UserId = UserId(client.userId())
 
     private val verificationService = RustSessionVerificationService()
+    private val pushersService = RustPushersService(client)
     private var slidingSyncUpdateJob: Job? = null
 
     private val clientDelegate = object : ClientDelegate {
@@ -161,6 +164,8 @@ class RustMatrixClient constructor(
     override fun mediaResolver(): MediaResolver = mediaResolver
 
     override fun sessionVerificationService(): SessionVerificationService = verificationService
+
+    override fun pushersService(): PushersService = pushersService
 
     override fun startSync() {
         if (isSyncing.compareAndSet(false, true)) {

@@ -26,6 +26,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.DefaultPreferences
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -58,7 +59,9 @@ class GoogleFcmHelper @Inject constructor(
                     .addOnSuccessListener { token ->
                         storeFcmToken(token)
                         if (registerPusher) {
-                            pushersManager.enqueueRegisterPusherWithFcmKey(token)
+                            runBlocking {// TODO
+                                pushersManager.enqueueRegisterPusherWithFcmKey(token)
+                            }
                         }
                     }
                     .addOnFailureListener { e ->

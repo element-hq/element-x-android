@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.clientsecret
+package io.element.android.libraries.matrix.api.pusher
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import java.util.UUID
-import javax.inject.Inject
-
-@ContributesBinding(AppScope::class)
-class PushClientSecretFactoryImpl @Inject constructor() : PushClientSecretFactory {
-    override fun create(): String {
-        return UUID.randomUUID().toString()
-    }
-}
+data class SetHttpPusherData(
+    val pushKey: String,
+    val appId: String,
+    val url: String,
+    val appDisplayName: String,
+    val deviceDisplayName: String,
+    val profileTag: String?,
+    val lang: String,
+    val defaultPayload: String,
+)

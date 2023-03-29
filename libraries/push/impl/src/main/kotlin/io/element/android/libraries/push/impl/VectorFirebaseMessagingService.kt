@@ -24,6 +24,9 @@ import io.element.android.libraries.push.api.store.PushDataStore
 import io.element.android.libraries.push.impl.config.PushConfig
 import io.element.android.libraries.push.impl.di.FirebaseMessagingServiceBindings
 import io.element.android.libraries.push.impl.parser.PushParser
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -38,6 +41,8 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     @Inject lateinit var vectorPushHandler: VectorPushHandler
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
 
+    private val coroutineScope = CoroutineScope(SupervisorJob())
+
     override fun onCreate() {
         super.onCreate()
         applicationContext.bindings<FirebaseMessagingServiceBindings>().inject(this)
@@ -51,7 +56,9 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             // TODO EAx activeSessionHolder.hasActiveSession() &&
             unifiedPushHelper.isEmbeddedDistributor()
         ) {
-            pushersManager.enqueueRegisterPusher(token, PushConfig.pusher_http_url)
+            coroutineScope.launch {
+                pushersManager.enqueueRegisterPusher(token, PushConfig.pusher_http_url)
+            }
         }
     }
 
