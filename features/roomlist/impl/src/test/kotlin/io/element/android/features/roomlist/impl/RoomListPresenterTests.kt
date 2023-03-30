@@ -37,7 +37,6 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
-import io.element.android.libraries.permissions.noop.NoopPermissionsPresenterFactory
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -51,7 +50,6 @@ class RoomListPresenterTests {
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
             SnackbarDispatcher(),
-            NoopPermissionsPresenterFactory(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -79,7 +77,6 @@ class RoomListPresenterTests {
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
             SnackbarDispatcher(),
-            NoopPermissionsPresenterFactory(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -101,7 +98,6 @@ class RoomListPresenterTests {
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
             SnackbarDispatcher(),
-            NoopPermissionsPresenterFactory(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -127,7 +123,6 @@ class RoomListPresenterTests {
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
             SnackbarDispatcher(),
-            NoopPermissionsPresenterFactory(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -158,7 +153,6 @@ class RoomListPresenterTests {
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
             SnackbarDispatcher(),
-            NoopPermissionsPresenterFactory(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -194,7 +188,6 @@ class RoomListPresenterTests {
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
             SnackbarDispatcher(),
-            NoopPermissionsPresenterFactory(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -244,7 +237,6 @@ class RoomListPresenterTests {
                 givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
             },
             SnackbarDispatcher(),
-            NoopPermissionsPresenterFactory(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()

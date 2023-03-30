@@ -29,7 +29,6 @@ import io.element.android.libraries.dateformatter.impl.LocalDateTimeProvider
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.permissions.noop.NoopPermissionsPresenterFactory
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -45,14 +44,12 @@ class RoomListScreen(
     private val dateTimeProvider = LocalDateTimeProvider(clock, timeZone)
     private val dateFormatters = DateFormatters(locale, clock, timeZone)
     private val sessionVerificationService = matrixClient.sessionVerificationService()
-    private val permissionsPresenterFactory = NoopPermissionsPresenterFactory()
     private val presenter = RoomListPresenter(
         matrixClient,
         DefaultLastMessageTimestampFormatter(dateTimeProvider, dateFormatters),
         DefaultRoomLastMessageFormatter(context, matrixClient),
         sessionVerificationService,
         SnackbarDispatcher(),
-        permissionsPresenterFactory,
     )
 
     @Composable
