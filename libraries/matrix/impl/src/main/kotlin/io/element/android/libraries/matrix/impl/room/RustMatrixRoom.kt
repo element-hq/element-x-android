@@ -71,7 +71,7 @@ class RustMatrixRoom(
     override fun syncUpdateFlow(): Flow<Long> {
         return slidingSyncUpdateFlow
             .filter {
-                it.rooms.contains(innerRoom.id())
+                it.rooms.contains(roomId.value)
             }
             .map {
                 System.currentTimeMillis()
