@@ -105,6 +105,10 @@ class NotificationFactory @Inject constructor(
             )
         }
     }
+
+    fun createTemporaryNotification(): Notification {
+        return notificationUtils.createTemporaryNotification()
+    }
 }
 
 sealed interface RoomNotification {

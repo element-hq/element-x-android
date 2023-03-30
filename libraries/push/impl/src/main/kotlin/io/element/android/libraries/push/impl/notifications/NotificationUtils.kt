@@ -45,6 +45,7 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.push.impl.R
+import io.element.android.libraries.push.impl.intent.IntentProvider
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -61,6 +62,7 @@ class NotificationUtils @Inject constructor(
     private val stringProvider: StringProvider,
     private val clock: SystemClock,
     private val actionIds: NotificationActionIds,
+    private val intentProvider: IntentProvider,
     private val buildMeta: BuildMeta,
 ) {
 
@@ -107,6 +109,10 @@ class NotificationUtils @Inject constructor(
 
     private val notificationManager = NotificationManagerCompat.from(context)
 
+    init {
+        createNotificationChannels()
+    }
+
     /* ==========================================================================================
      * Channel names
      * ========================================================================================== */
@@ -114,7 +120,7 @@ class NotificationUtils @Inject constructor(
     /**
      * Create notification channels.
      */
-    fun createNotificationChannels() {
+    private fun createNotificationChannels() {
         if (!supportNotificationChannels()) {
             return
         }
@@ -650,14 +656,6 @@ class NotificationUtils @Inject constructor(
         )
     }
 
-    fun showNotificationMessage(tag: String?, id: Int, notification: Notification) {
-        notificationManager.notify(tag, id, notification)
-    }
-
-    fun cancelNotificationMessage(tag: String?, id: Int) {
-        notificationManager.cancel(tag, id)
-    }
-
     /**
      * Cancel the foreground notification service.
      */
@@ -703,6 +701,23 @@ class NotificationUtils @Inject constructor(
                 .setContentIntent(testPendingIntent)
                 .build()
         )
+    }
+
+    fun createTemporaryNotification(): Notification {
+        val contentIntent = intentProvider.getMainIntent()
+        val pendingIntent = PendingIntent.getActivity(context, 0, contentIntent, PendingIntentCompat.FLAG_IMMUTABLE)
+
+        return NotificationCompat.Builder(context, NOISY_NOTIFICATION_CHANNEL_ID)
+            .setContentTitle(buildMeta.applicationName)
+            .setContentText(stringProvider.getString(R.string.notification_new_messages_temporary))
+            .setSmallIcon(R.drawable.ic_notification)
+            .setLargeIcon(getBitmap(context, R.drawable.element_logo_green))
+            .setColor(ContextCompat.getColor(context, R.color.notification_accent_color))
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setCategory(NotificationCompat.CATEGORY_STATUS)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .build()
     }
 
     private fun getBitmap(context: Context, @DrawableRes drawableRes: Int): Bitmap? {
