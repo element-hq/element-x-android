@@ -39,8 +39,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.textcomposer.MessageComposerMode
-import io.element.android.services.networkmonitor.api.NetworkMonitor
-import io.element.android.services.networkmonitor.api.NetworkStatus
+import io.element.android.features.networkmonitor.api.NetworkMonitor
+import io.element.android.features.networkmonitor.api.NetworkStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber

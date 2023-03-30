@@ -70,7 +70,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
-import io.element.android.services.networkmonitor.api.ui.ConnectivityIndicatorView
+import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import kotlinx.coroutines.launch
 import timber.log.Timber
 

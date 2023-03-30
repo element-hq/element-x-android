@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import io.element.android.features.networkmonitor.impl.NetworkMonitorImpl
 import io.element.android.features.roomlist.impl.DefaultRoomLastMessageFormatter
 import io.element.android.features.roomlist.impl.RoomListPresenter
 import io.element.android.features.roomlist.impl.RoomListView
@@ -28,7 +29,6 @@ import io.element.android.libraries.dateformatter.impl.DefaultLastMessageTimesta
 import io.element.android.libraries.dateformatter.impl.LocalDateTimeProvider
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.services.networkmonitor.impl.NetworkMonitorImpl
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
