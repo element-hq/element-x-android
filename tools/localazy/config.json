@@ -61,7 +61,8 @@
     {
       "name": ":features:roomdetails:impl",
       "includeRegex": [
-        "screen_room_details_.*"
+        "screen_room_details_.*",
+        "screen_room_member_list_.*"
       ]
     }
   ]

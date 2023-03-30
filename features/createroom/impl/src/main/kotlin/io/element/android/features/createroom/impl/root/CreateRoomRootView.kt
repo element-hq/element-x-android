@@ -37,8 +37,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.element.android.features.userlist.api.UserList
 import io.element.android.features.createroom.impl.R
-import io.element.android.features.selectusers.api.SelectUsersView
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
@@ -60,7 +60,7 @@ fun CreateRoomRootView(
     Scaffold(
         modifier = modifier.fillMaxWidth(),
         topBar = {
-            if (!state.selectUsersState.isSearchActive) {
+            if (!state.userListState.isSearchActive) {
                 CreateRoomRootViewTopBar(onClosePressed = onClosePressed)
             }
         }
@@ -69,13 +69,13 @@ fun CreateRoomRootView(
             modifier = Modifier.padding(paddingValues),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            SelectUsersView(
+            UserList(
                 modifier = Modifier.fillMaxWidth(),
-                state = state.selectUsersState,
+                state = state.userListState,
                 onUserSelected = { state.eventSink.invoke(CreateRoomRootEvents.StartDM(it)) },
             )
 
-            if (!state.selectUsersState.isSearchActive) {
+            if (!state.userListState.isSearchActive) {
                 CreateRoomActionButtonsList(
                     onNewRoomClicked = onNewRoomClicked,
                     onInvitePeopleClicked = { state.eventSink(CreateRoomRootEvents.InvitePeople) },

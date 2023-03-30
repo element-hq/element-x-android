@@ -34,10 +34,10 @@ class FakeMatrixRoom(
     override val displayName: String = "",
     override val topic: String? = null,
     override val avatarUrl: String? = null,
-    override val members: List<RoomMember> = emptyList(),
     override val isEncrypted: Boolean = false,
     override val alias: String? = null,
     override val alternativeAliases: List<String> = emptyList(),
+    private val members: List<RoomMember> = emptyList(),
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
 ) : MatrixRoom {
 
@@ -59,6 +59,14 @@ class FakeMatrixRoom(
 
     override suspend fun userAvatarUrl(userId: String): Result<String?> {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun members(): List<RoomMember> {
+        return members
+    }
+
+    override suspend fun memberCount(): Int {
+        return members.count()
     }
 
     override suspend fun sendMessage(message: String): Result<Unit> {

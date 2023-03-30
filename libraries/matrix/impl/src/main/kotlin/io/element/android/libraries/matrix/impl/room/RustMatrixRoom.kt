@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -24,10 +25,12 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.SlidingSyncRoom
@@ -43,6 +46,38 @@ class RustMatrixRoom(
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : MatrixRoom {
 
+    private var loadMembersJob: Job? = null
+    private var cachedMembers: List<RoomMember> = emptyList()
+
+    private val timeline by lazy {
+        RustMatrixTimeline(
+            matrixRoom = this,
+            innerRoom = innerRoom,
+            slidingSyncRoom = slidingSyncRoom,
+            coroutineScope = coroutineScope,
+            coroutineDispatchers = coroutineDispatchers
+        )
+    }
+
+    override suspend fun members(): List<RoomMember> {
+        return cachedMembers.ifEmpty {
+            if (loadMembersJob == null) {
+                loadMembersJob = coroutineScope.launch(coroutineDispatchers.io) {
+                    cachedMembers = tryOrNull {
+                        innerRoom.members().map(RoomMemberMapper::map)
+                    } ?: emptyList()
+                }
+            }
+            loadMembersJob?.join()
+            loadMembersJob = null
+            cachedMembers
+        }
+    }
+
+    override suspend fun memberCount(): Int {
+        return members().size
+    }
+
     override fun syncUpdateFlow(): Flow<Long> {
         return slidingSyncUpdateFlow
             .filter {
@@ -55,13 +90,7 @@ class RustMatrixRoom(
     }
 
     override fun timeline(): MatrixTimeline {
-        return RustMatrixTimeline(
-            matrixRoom = this,
-            innerRoom = innerRoom,
-            slidingSyncRoom = slidingSyncRoom,
-            coroutineScope = coroutineScope,
-            coroutineDispatchers = coroutineDispatchers
-        )
+        return timeline
     }
     override fun close() {
         innerRoom.destroy()
@@ -94,9 +123,6 @@ class RustMatrixRoom(
         get() {
             return innerRoom.avatarUrl()
         }
-
-    override val members: List<RoomMember>
-        get() = innerRoom.members().map(RoomMemberMapper::map)
 
     override val isEncrypted: Boolean
         get() = innerRoom.isEncrypted()
