@@ -41,6 +41,11 @@ class FakeMatrixRoom(
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
 ) : MatrixRoom {
 
+    private var fetchMemberResult: Result<Unit> = Result.success(Unit)
+
+    var areMembersFetched: Boolean = false
+        private set
+
     override fun syncUpdateFlow(): Flow<Long> {
         return emptyFlow()
     }
@@ -50,7 +55,11 @@ class FakeMatrixRoom(
     }
 
     override suspend fun fetchMembers(): Result<Unit> {
-        return Result.success(Unit)
+        return fetchMemberResult.also { result ->
+            if (result.isSuccess) {
+                areMembersFetched = true
+            }
+        }
     }
 
     override suspend fun userDisplayName(userId: String): Result<String?> {
@@ -102,4 +111,8 @@ class FakeMatrixRoom(
     }
 
     override fun close() = Unit
+
+    fun givenFetchMemberResult(result: Result<Unit>) {
+        fetchMemberResult = result
+    }
 }

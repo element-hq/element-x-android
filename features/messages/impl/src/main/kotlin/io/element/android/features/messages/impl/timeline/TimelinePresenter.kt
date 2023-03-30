@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
@@ -77,6 +78,13 @@ class TimelinePresenter @Inject constructor(
                     }
                 }
                 .launchIn(this)
+        }
+
+        DisposableEffect(Unit) {
+            timeline.initialize()
+            onDispose {
+                timeline.dispose()
+            }
         }
 
         return TimelineState(

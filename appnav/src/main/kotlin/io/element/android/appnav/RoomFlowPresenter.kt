@@ -17,24 +17,25 @@
 package io.element.android.appnav
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import timber.log.Timber
 
 class RoomFlowPresenter(
-    room: MatrixRoom,
+    private val room: MatrixRoom,
 ) : Presenter<RoomFlowState> {
-
-    private val timeline = room.timeline()
 
     @Composable
     override fun present(): RoomFlowState {
-        // Initialize the timeline listeners when the room flow starts, dispose them when we exit it
-        DisposableEffect(Unit) {
-            timeline.initialize()
-            onDispose {
-                timeline.dispose()
-            }
+        // Preload room members so we can quickly detect if the room is a DM room
+        LaunchedEffect(Unit) {
+            room.fetchMembers()
+                .onFailure {
+                    Timber.e(it, "Fail to fetch members for room ${room.roomId}")
+                }.onSuccess {
+                    Timber.v("Success fetching members for room ${room.roomId}")
+                }
         }
 
         return RoomFlowState

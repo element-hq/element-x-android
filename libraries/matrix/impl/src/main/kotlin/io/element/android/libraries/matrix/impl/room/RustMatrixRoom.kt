@@ -49,16 +49,6 @@ class RustMatrixRoom(
     private var loadMembersJob: Job? = null
     private var cachedMembers: List<RoomMember> = emptyList()
 
-    private val timeline by lazy {
-        RustMatrixTimeline(
-            matrixRoom = this,
-            innerRoom = innerRoom,
-            slidingSyncRoom = slidingSyncRoom,
-            coroutineScope = coroutineScope,
-            coroutineDispatchers = coroutineDispatchers
-        )
-    }
-
     override suspend fun members(): List<RoomMember> {
         return cachedMembers.ifEmpty {
             if (loadMembersJob == null) {
@@ -90,7 +80,13 @@ class RustMatrixRoom(
     }
 
     override fun timeline(): MatrixTimeline {
-        return timeline
+        return RustMatrixTimeline(
+            matrixRoom = this,
+            innerRoom = innerRoom,
+            slidingSyncRoom = slidingSyncRoom,
+            coroutineScope = coroutineScope,
+            coroutineDispatchers = coroutineDispatchers
+        )
     }
     override fun close() {
         innerRoom.destroy()

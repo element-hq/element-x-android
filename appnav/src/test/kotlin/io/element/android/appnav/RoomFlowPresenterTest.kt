@@ -24,26 +24,39 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import java.lang.IllegalStateException
 
 class RoomFlowPresenterTest {
 
     @Test
-    fun `present - makes sure timeline is initialized and disposed`() = runTest {
+    fun `present - fetches room members`() = runTest {
         val fakeTimeline = FakeMatrixTimeline()
-        val presenter = RoomFlowPresenter(
-            room = FakeMatrixRoom(matrixTimeline = fakeTimeline),
-        )
-        Truth.assertThat(fakeTimeline.isInitialized).isFalse()
+        val room = FakeMatrixRoom(matrixTimeline = fakeTimeline)
+        val presenter = RoomFlowPresenter(room)
+
+        Truth.assertThat(room.areMembersFetched).isFalse()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
-            // Was initialized
-            Truth.assertThat(fakeTimeline.isInitialized).isTrue()
-            cancelAndConsumeRemainingEvents()
-            // Was disposed
-            Truth.assertThat(fakeTimeline.isInitialized).isFalse()
+            Truth.assertThat(room.areMembersFetched).isTrue()
+            cancelAndIgnoreRemainingEvents()
         }
-        Truth.assertThat(fakeTimeline.isInitialized).isFalse()
     }
 
+    @Test
+    fun `present - recovers from error while fetching room members`() = runTest {
+        val fakeTimeline = FakeMatrixTimeline()
+        val room = FakeMatrixRoom(matrixTimeline = fakeTimeline).apply {
+            givenFetchMemberResult(Result.failure(IllegalStateException("Some error")))
+        }
+        val presenter = RoomFlowPresenter(room)
+
+        Truth.assertThat(room.areMembersFetched).isFalse()
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            Truth.assertThat(room.areMembersFetched).isFalse()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
 }
