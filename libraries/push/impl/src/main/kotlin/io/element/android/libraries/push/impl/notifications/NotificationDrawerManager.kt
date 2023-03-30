@@ -41,7 +41,6 @@ import javax.inject.Inject
 @SingleIn(AppScope::class)
 class NotificationDrawerManager @Inject constructor(
     @ApplicationContext context: Context,
-    private val notificationDisplayer: NotificationDisplayer,
     private val pushDataStore: PushDataStore,
     // private val activeSessionDataSource: ActiveSessionDataSource,
     private val notifiableEventProcessor: NotifiableEventProcessor,
@@ -154,7 +153,7 @@ class NotificationDrawerManager @Inject constructor(
             val newSettings = pushDataStore.useCompleteNotificationFormat()
             if (newSettings != useCompleteNotificationFormat) {
                 // Settings has changed, remove all current notifications
-                notificationDisplayer.cancelAllNotifications()
+                notificationRenderer.cancelAllNotifications()
                 useCompleteNotificationFormat = newSettings
             }
         }
@@ -230,6 +229,13 @@ class NotificationDrawerManager @Inject constructor(
 
     fun shouldIgnoreMessageEventInRoom(resolvedEvent: NotifiableMessageEvent): Boolean {
         return resolvedEvent.shouldIgnoreMessageEventInRoom(currentRoomId, currentThreadId)
+    }
+
+    /**
+     * Temporary notification for EAx
+     */
+    fun displayTemporaryNotification() {
+        notificationRenderer.displayTemporaryNotification()
     }
 
     companion object {

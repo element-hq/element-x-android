@@ -67,7 +67,7 @@ class PushersManager @Inject constructor(
             val client = matrixAuthenticationService.restoreSession(SessionId(sessionData.userId)).getOrNull()
             client ?: return@forEach
             client.pushersService().setHttpPusher(createHttpPusher(pushKey, gateway, sessionData.userId))
-            // Close sessions?
+            // TODO EAx Close sessions
         }
     }
 
@@ -76,7 +76,7 @@ class PushersManager @Inject constructor(
         // Register the pusher for the session
         val client = matrixAuthenticationService.restoreSession(userId).getOrNull() ?: return
         client.pushersService().setHttpPusher(createHttpPusher(pushKey, PushConfig.pusher_http_url, userId.value))
-        // Close sessions?
+        // TODO EAx Close sessions
     }
 
     private suspend fun createHttpPusher(

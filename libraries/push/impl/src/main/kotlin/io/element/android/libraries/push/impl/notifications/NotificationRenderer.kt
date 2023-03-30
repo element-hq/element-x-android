@@ -104,6 +104,15 @@ class NotificationRenderer @Inject constructor(
             }
         }
     }
+
+    fun cancelAllNotifications() {
+        notificationDisplayer.cancelAllNotifications()
+    }
+
+    fun displayTemporaryNotification() {
+        val notification = notificationFactory.createTemporaryNotification()
+        notificationDisplayer.showNotificationMessage(null, TEMPORARY_ID, notification)
+    }
 }
 
 private fun List<ProcessedEvent<NotifiableEvent>>.groupByType(): GroupedNotificationEvents {

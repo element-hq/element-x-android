@@ -142,8 +142,11 @@ class VectorPushHandler @Inject constructor(
                 eventId = pushData.eventId,
             )
 
+            // TODO Remove
             Timber.w("Notification: $notificationData")
             // TODO Display notification
+
+            notificationDrawerManager.displayTemporaryNotification()
 
             /* TODO EAx
             - get the event

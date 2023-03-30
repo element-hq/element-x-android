@@ -16,20 +16,28 @@
 
 package io.element.android.libraries.push.impl.notifications
 
+import android.Manifest
 import android.app.Notification
 import android.content.Context
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import io.element.android.libraries.di.ApplicationContext
 import timber.log.Timber
 import javax.inject.Inject
 
-class NotificationDisplayer @Inject constructor(
-    @ApplicationContext context: Context,
-) {
+const val TEMPORARY_ID = 101
 
+class NotificationDisplayer @Inject constructor(
+    @ApplicationContext private val context: Context,
+) {
     private val notificationManager = NotificationManagerCompat.from(context)
 
     fun showNotificationMessage(tag: String?, id: Int, notification: Notification) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            Timber.w("Not allowed to notify.")
+            return
+        }
         notificationManager.notify(tag, id, notification)
     }
 
