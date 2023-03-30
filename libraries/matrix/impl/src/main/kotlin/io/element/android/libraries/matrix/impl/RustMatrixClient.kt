@@ -167,7 +167,7 @@ class RustMatrixClient constructor(
             runCatching {
                 val roomId = client.createRoom(
                     CreateRoomParameters(
-                        name = "",
+                        name = null,
                         topic = null,
                         isEncrypted = true,
                         isDirect = true,
