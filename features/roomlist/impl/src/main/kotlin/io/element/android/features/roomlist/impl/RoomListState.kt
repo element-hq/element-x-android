@@ -20,7 +20,6 @@ import androidx.compose.runtime.Immutable
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.matrix.ui.model.MatrixUser
-import io.element.android.libraries.permissions.api.PermissionsState
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
@@ -30,6 +29,5 @@ data class RoomListState(
     val filter: String,
     val displayVerificationPrompt: Boolean,
     val snackbarMessage: SnackbarMessage?,
-    val permissionsState: PermissionsState,
     val eventSink: (RoomListEvents) -> Unit
 )

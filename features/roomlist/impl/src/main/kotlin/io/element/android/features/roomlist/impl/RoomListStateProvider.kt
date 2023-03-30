@@ -23,7 +23,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
-import io.element.android.libraries.permissions.api.createDummyPostNotificationPermissionsState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import io.element.android.libraries.ui.strings.R as StringR
@@ -43,7 +42,6 @@ internal fun aRoomListState() = RoomListState(
     filter = "filter",
     snackbarMessage = null,
     displayVerificationPrompt = false,
-    permissionsState = createDummyPostNotificationPermissionsState(),
     eventSink = {}
 )
 

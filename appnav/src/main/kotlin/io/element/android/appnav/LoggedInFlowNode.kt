@@ -35,6 +35,8 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.appnav.loggedin.LoggedInPresenter
+import io.element.android.appnav.loggedin.LoggedInView
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
@@ -52,7 +54,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
-import io.element.android.libraries.push.api.PushService
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -71,7 +72,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val verifySessionEntryPoint: VerifySessionEntryPoint,
     private val coroutineScope: CoroutineScope,
     snackbarDispatcher: SnackbarDispatcher,
-    private val pushService: PushService,
+    private val loggedInPresenter: LoggedInPresenter,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.RoomList,
@@ -114,10 +115,6 @@ class LoggedInFlowNode @AssistedInject constructor(
                 // TODO We do not support Space yet, so directly navigate to main space
                 appNavigationStateService.onNavigateToSpace(MAIN_SPACE)
                 loggedInFlowProcessor.observeEvents(coroutineScope)
-                runBlocking {
-                    // TODO
-                    pushService.registerPusher(inputs.matrixClient.sessionId)
-                }
             },
             onDestroy = {
                 val imageLoaderFactory = bindings<MatrixUIBindings>().notLoggedInImageLoaderFactory()
@@ -208,11 +205,16 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
-            navModel = backstack,
-            modifier = modifier,
-            // Animate navigation to settings and to a room
-            transitionHandler = rememberDefaultTransitionHandler(),
-        )
+        val loggedInState = loggedInPresenter.present()
+        LoggedInView(
+            state = loggedInState
+        ) {
+            Children(
+                navModel = backstack,
+                modifier = modifier,
+                // Animate navigation to settings and to a room
+                transitionHandler = rememberDefaultTransitionHandler(),
+            )
+        }
     }
 }
