@@ -18,15 +18,8 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("io.element.android-library")
-    alias(libs.plugins.stemlibrary)
 }
 
 android {
     namespace = "io.element.android.libraries.ui.strings"
-}
-
-// forcing the stem string template generator to be cacheable, without this the templates
-// are regenerated causing the app module to recompile its sources
-tasks.withType(com.likethesalad.android.templates.common.tasks.BaseTask::class.java) {
-    outputs.cacheIf { true }
 }
