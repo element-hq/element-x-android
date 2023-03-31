@@ -141,11 +141,13 @@ class PushHandler @Inject constructor(
             // Restore session
             val session = matrixAuthenticationService.restoreSession(SessionId(userId)).getOrNull() ?: return
             // TODO EAx, no need for a session?
-            val notificationData = session.notificationService().getNotification(
-                userId = userId,
-                roomId = pushData.roomId,
-                eventId = pushData.eventId,
-            )
+            val notificationData = session.use {
+                it.notificationService().getNotification(
+                    userId = userId,
+                    roomId = pushData.roomId,
+                    eventId = pushData.eventId,
+                )
+            }
 
             // TODO Remove
             Timber.w("Notification: $notificationData")
