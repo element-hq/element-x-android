@@ -64,7 +64,10 @@ class RustMatrixClient constructor(
     override val sessionId: UserId = UserId(client.userId())
 
     private val verificationService = RustSessionVerificationService()
-    private val pushersService = RustPushersService(client)
+    private val pushersService = RustPushersService(
+        client = client,
+        dispatchers = dispatchers,
+    )
     private val notificationService = RustNotificationService(baseDirectory)
     private var slidingSyncUpdateJob: Job? = null
 
