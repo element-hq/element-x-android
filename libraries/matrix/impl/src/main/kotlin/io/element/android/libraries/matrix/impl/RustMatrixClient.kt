@@ -170,7 +170,7 @@ class RustMatrixClient constructor(
         }
     }
 
-    private fun close() {
+    override fun close() {
         slidingSyncUpdateJob?.cancel()
         stopSync()
         slidingSync.setObserver(null)
@@ -179,10 +179,10 @@ class RustMatrixClient constructor(
         visibleRoomsSlidingSyncList.destroy()
         slidingSync.destroy()
         verificationService.destroy()
+        client.destroy()
     }
 
     override suspend fun logout() = withContext(dispatchers.io) {
-        close()
         try {
             client.logout()
         } catch (failure: Throwable) {
@@ -190,7 +190,7 @@ class RustMatrixClient constructor(
         }
         baseDirectory.deleteSessionDirectory(userID = client.userId())
         sessionStore.removeSession(client.userId())
-        client.destroy()
+        close()
     }
 
     override suspend fun loadUserDisplayName(): Result<String> = withContext(dispatchers.io) {
