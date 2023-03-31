@@ -68,7 +68,7 @@ class RustMatrixClient constructor(
         client = client,
         dispatchers = dispatchers,
     )
-    private val notificationService = RustNotificationService(baseDirectory)
+    private val notificationService = RustNotificationService(baseDirectory, dispatchers)
     private var slidingSyncUpdateJob: Job? = null
 
     private val clientDelegate = object : ClientDelegate {
