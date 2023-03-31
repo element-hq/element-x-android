@@ -28,9 +28,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -43,13 +42,12 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.flowlayout.FlowRow
-import com.google.accompanist.flowlayout.MainAxisAlignment
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
@@ -60,6 +58,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep as FlowStep
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -186,25 +185,35 @@ internal fun ContentWaiting(modifier: Modifier = Modifier) {
 
 @Composable
 internal fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier: Modifier = Modifier) {
-    FlowRow(
-        modifier = modifier
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState()),
-        mainAxisAlignment = MainAxisAlignment.Center,
-        mainAxisSpacing = 32.dp,
-        crossAxisSpacing = 40.dp
-    ) {
-        for (entry in verificationFlowStep.emojiList) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(entry.code, fontSize = 34.sp)
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    entry.name,
-                    style = ElementTextStyles.Regular.bodyMD,
-                    color = MaterialTheme.colorScheme.secondary,
-                )
+    // We want each row to have up to 4 emojis
+    val rows = verificationFlowStep.emojiList.chunked(4)
+    Column(modifier = modifier.fillMaxWidth()) {
+        for ((rowIndex, emojis) in rows.withIndex()) {
+            // Vertical spacing between rows
+            if (rowIndex > 0) {
+                Spacer(modifier = Modifier.height(40.dp))
+            }
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                for (emoji in emojis) {
+                    EmojiItemView(emoji = emoji, modifier = Modifier.widthIn(max = 60.dp))
+                }
             }
         }
+    }
+}
+
+@Composable
+internal fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifier) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
+        Text(emoji.code, fontSize = 34.sp)
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            emoji.name,
+            style = ElementTextStyles.Regular.bodyMD,
+            color = MaterialTheme.colorScheme.secondary,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 
