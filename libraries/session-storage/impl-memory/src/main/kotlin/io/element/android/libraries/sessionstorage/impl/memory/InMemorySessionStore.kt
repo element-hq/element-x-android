@@ -30,6 +30,10 @@ class InMemorySessionStore : SessionStore {
         return sessionDataFlow.map { it != null }
     }
 
+    override fun sessionsFlow(): Flow<List<SessionData>> {
+        return sessionDataFlow.map { listOfNotNull(it) }
+    }
+
     override suspend fun storeData(sessionData: SessionData) {
         sessionDataFlow.value = sessionData
     }
