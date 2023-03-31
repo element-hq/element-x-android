@@ -20,7 +20,7 @@ import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.notification.NotificationService
 
 class FakeNotificationService : NotificationService {
-    override fun getNotification(userId: String, roomId: String, eventId: String): NotificationData? {
-        return null
+    override suspend fun getNotification(userId: String, roomId: String, eventId: String): Result<NotificationData?> {
+        return Result.success(null)
     }
 }

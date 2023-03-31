@@ -17,5 +17,5 @@
 package io.element.android.libraries.matrix.api.notification
 
 interface NotificationService {
-    fun getNotification(userId: String, roomId: String, eventId: String): NotificationData?
+    suspend fun getNotification(userId: String, roomId: String, eventId: String): Result<NotificationData?>
 }

@@ -16,23 +16,30 @@
 
 package io.element.android.libraries.matrix.impl.notification
 
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.notification.NotificationService
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class RustNotificationService(
     private val baseDirectory: File,
+    private val dispatchers: CoroutineDispatchers,
 ) : NotificationService {
     private val notificationMapper: NotificationMapper = NotificationMapper()
 
-    override fun getNotification(userId: String, roomId: String, eventId: String): NotificationData? {
-        return org.matrix.rustcomponents.sdk.NotificationService(
-            basePath = File(baseDirectory, "sessions").absolutePath,
-            userId = userId
-        ).use {
-            // TODO Not implemented yet, see https://github.com/matrix-org/matrix-rust-sdk/issues/1628
-            it.getNotificationItem(roomId, eventId)?.let { notificationItem ->
-                notificationMapper.map(notificationItem)
+    override suspend fun getNotification(userId: String, roomId: String, eventId: String): Result<NotificationData?> {
+        return withContext(dispatchers.io) {
+            runCatching {
+                org.matrix.rustcomponents.sdk.NotificationService(
+                    basePath = File(baseDirectory, "sessions").absolutePath,
+                    userId = userId
+                ).use {
+                    // TODO Not implemented yet, see https://github.com/matrix-org/matrix-rust-sdk/issues/1628
+                    it.getNotificationItem(roomId, eventId)?.let { notificationItem ->
+                        notificationMapper.map(notificationItem)
+                    }
+                }
             }
         }
     }
