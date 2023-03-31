@@ -22,8 +22,9 @@ import io.element.android.libraries.matrix.api.media.MediaResolver
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import java.io.Closeable
 
-interface MatrixClient {
+interface MatrixClient : Closeable {
     val sessionId: SessionId
     val roomSummaryDataSource: RoomSummaryDataSource
     fun getRoom(roomId: RoomId): MatrixRoom?
