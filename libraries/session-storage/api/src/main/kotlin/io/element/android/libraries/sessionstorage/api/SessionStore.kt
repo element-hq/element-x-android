@@ -17,9 +17,11 @@
 package io.element.android.libraries.sessionstorage.api
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 interface SessionStore {
     fun isLoggedIn(): Flow<Boolean>
+    fun sessionsFlow(): Flow<List<SessionData>>
     suspend fun storeData(sessionData: SessionData)
     suspend fun getSession(sessionId: String): SessionData?
     suspend fun getAllSessions(): List<SessionData>
@@ -29,4 +31,8 @@ interface SessionStore {
 
 fun List<SessionData>.toUserList(): List<String> {
     return map { it.userId }
+}
+
+fun Flow<List<SessionData>>.toUserListFlow(): Flow<List<String>> {
+    return map { it.toUserList() }
 }
