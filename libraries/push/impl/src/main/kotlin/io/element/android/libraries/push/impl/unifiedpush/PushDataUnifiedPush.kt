@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.model
+package io.element.android.libraries.push.impl.unifiedpush
 
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
+import io.element.android.libraries.push.impl.push.PushData
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

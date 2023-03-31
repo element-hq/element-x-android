@@ -26,7 +26,7 @@
             android:value="true" />
 
         <service
-            android:name="VectorFirebaseMessagingService"
+            android:name=".firebase.VectorFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -35,7 +35,7 @@
 
         <!-- UnifiedPush -->
         <receiver
-            android:name="VectorUnifiedPushMessagingReceiver"
+            android:name=".unifiedpush.VectorUnifiedPushMessagingReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -48,7 +48,7 @@
         </receiver>
 
         <receiver
-            android:name="KeepInternalDistributor"
+            android:name=".unifiedpush.KeepInternalDistributor"
             android:enabled="true"
             android:exported="false">
             <intent-filter>

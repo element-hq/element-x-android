@@ -27,7 +27,6 @@ import org.unifiedpush.android.connector.UnifiedPush
 import timber.log.Timber
 import java.net.URL
 import javax.inject.Inject
-import io.element.android.libraries.ui.strings.R as StringR
 
 class UnifiedPushHelper @Inject constructor(
     @ApplicationContext private val context: Context,

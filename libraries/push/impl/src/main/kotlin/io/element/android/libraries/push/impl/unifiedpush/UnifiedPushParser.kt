@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.sessionstorage.api
+package io.element.android.libraries.push.impl.unifiedpush
 
-import kotlinx.coroutines.flow.Flow
+import io.element.android.libraries.core.data.tryOrNull
+import io.element.android.libraries.push.impl.push.PushData
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import javax.inject.Inject
 
-interface SessionStore {
-    fun isLoggedIn(): Flow<Boolean>
-    suspend fun storeData(sessionData: SessionData)
-    suspend fun getSession(sessionId: String): SessionData?
-    suspend fun getAllSessions(): List<SessionData>
-    suspend fun getLatestSession(): SessionData?
-    suspend fun removeSession(sessionId: String)
-}
-
-fun List<SessionData>.toUserList(): List<String> {
-    return map { it.userId }
+class UnifiedPushParser @Inject constructor() {
+    fun parse(message: ByteArray): PushData? {
+        return tryOrNull { Json.decodeFromString<PushDataUnifiedPush>(String(message)) }?.toPushData()
+    }
 }

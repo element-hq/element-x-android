@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl
+package io.element.android.libraries.push.impl.firebase
 
+import io.element.android.libraries.push.impl.FcmHelper
+import io.element.android.libraries.push.impl.PushersManager
+import io.element.android.libraries.push.impl.UnifiedPushHelper
 import javax.inject.Inject
 
 class EnsureFcmTokenIsRetrievedUseCase @Inject constructor(
-        private val unifiedPushHelper: UnifiedPushHelper,
-        private val fcmHelper: FcmHelper,
+    private val unifiedPushHelper: UnifiedPushHelper,
+    private val fcmHelper: FcmHelper,
         // private val activeSessionHolder: ActiveSessionHolder,
 ) {
 

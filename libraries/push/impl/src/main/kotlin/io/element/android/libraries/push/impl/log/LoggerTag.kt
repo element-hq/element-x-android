@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.di
+package io.element.android.libraries.push.impl.log
 
-import com.squareup.anvil.annotations.ContributesTo
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.push.impl.VectorUnifiedPushMessagingReceiver
+import io.element.android.libraries.core.log.logger.LoggerTag
 
-@ContributesTo(AppScope::class)
-interface VectorUnifiedPushMessagingReceiverBindings {
-    fun inject(receiver: VectorUnifiedPushMessagingReceiver)
-}
+internal val pushLoggerTag = LoggerTag("Push")

@@ -23,8 +23,12 @@ import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
 import io.element.android.libraries.push.impl.clientsecret.PushClientSecret
 import io.element.android.libraries.push.impl.config.PushConfig
 import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest
+import io.element.android.libraries.push.impl.userpushstore.UserPushStoreFactory
+import io.element.android.libraries.push.impl.userpushstore.isFirebase
 import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.libraries.sessionstorage.api.toUserList
 import io.element.android.services.toolbox.api.appname.AppNameProvider
+import timber.log.Timber
 import javax.inject.Inject
 
 internal const val DEFAULT_PUSHER_FILE_TAG = "mobile"
@@ -40,6 +44,7 @@ class PushersManager @Inject constructor(
     private val pushClientSecret: PushClientSecret,
     private val sessionStore: SessionStore,
     private val matrixAuthenticationService: MatrixAuthenticationService,
+    private val userPushStoreFactory: UserPushStoreFactory,
     private val fcmHelper: FcmHelper,
 ) {
     suspend fun testPush() {
@@ -54,29 +59,54 @@ class PushersManager @Inject constructor(
     }
 
     suspend fun enqueueRegisterPusherWithFcmKey(pushKey: String) {
-        return enqueueRegisterPusher(pushKey, PushConfig.pusher_http_url)
+        // return onNewFirebaseToken(pushKey, PushConfig.pusher_http_url)
+        TODO()
     }
 
-    // TODO Rename
-    suspend fun enqueueRegisterPusher(
+    suspend fun onNewUnifiedPushEndpoint(
         pushKey: String,
         gateway: String
     ) {
+        TODO()
+    }
+
+    suspend fun onNewFirebaseToken(firebaseToken: String) {
+        fcmHelper.storeFcmToken(firebaseToken)
+
         // Register the pusher for all the sessions
-        sessionStore.getAllSessions().forEach { sessionData ->
-            val client = matrixAuthenticationService.restoreSession(SessionId(sessionData.userId)).getOrNull()
-            client ?: return@forEach
-            client.pushersService().setHttpPusher(createHttpPusher(pushKey, gateway, sessionData.userId))
-            // TODO EAx Close sessions
+        sessionStore.getAllSessions().toUserList().forEach { userId ->
+            val userDataStore = userPushStoreFactory.create(userId)
+            if (userDataStore.isFirebase()) {
+                val client = matrixAuthenticationService.restoreSession(SessionId(userId)).getOrNull()
+                client ?: return@forEach
+                registerPusher(client, firebaseToken, PushConfig.pusher_http_url)
+                // TODO EAx Close sessions
+            } else {
+                Timber.d("This session is not using Firebase pusher")
+            }
         }
     }
 
-    suspend fun registerPusher(matrixClient: MatrixClient) {
-        val pushKey = fcmHelper.getFcmToken() ?: return
-        // Register the pusher for the session
-        matrixClient.pushersService().setHttpPusher(
-            createHttpPusher(pushKey, PushConfig.pusher_http_url, matrixClient.sessionId.value)
-        )
+    /**
+     * Register a pusher to the server if not done yet.
+     */
+    suspend fun registerPusher(matrixClient: MatrixClient, pushKey: String, gateway: String) {
+        val userDataStore = userPushStoreFactory.create(matrixClient.sessionId.value)
+        if (userDataStore.getCurrentRegisteredPushKey() == pushKey) {
+            Timber.d("Unnecessary to register again the same pusher")
+        } else {
+            // Register the pusher to the server
+            matrixClient.pushersService().setHttpPusher(
+                createHttpPusher(pushKey, gateway, matrixClient.sessionId.value)
+            ).fold(
+                {
+                    userDataStore.setCurrentRegisteredPushKey(pushKey)
+                },
+                { throwable ->
+                    Timber.e(throwable, "Unable to register the pusher")
+                }
+            )
+        }
     }
 
     private suspend fun createHttpPusher(

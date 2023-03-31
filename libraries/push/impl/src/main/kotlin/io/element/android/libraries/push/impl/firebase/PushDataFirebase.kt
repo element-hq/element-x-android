@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.model
+package io.element.android.libraries.push.impl.firebase
 
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
+import io.element.android.libraries.push.impl.push.PushData
 
 /**
  * In this case, the format is:
@@ -31,14 +32,14 @@ import io.element.android.libraries.matrix.api.core.MatrixPatterns
  * </pre>
  * .
  */
-data class PushDataFcm(
+data class PushDataFirebase(
     val eventId: String?,
     val roomId: String?,
     var unread: Int?,
     val clientSecret: String?
 )
 
-fun PushDataFcm.toPushData() = PushData(
+fun PushDataFirebase.toPushData() = PushData(
     eventId = eventId?.takeIf { MatrixPatterns.isEventId(it) },
     roomId = roomId?.takeIf { MatrixPatterns.isRoomId(it) },
     unread = unread,

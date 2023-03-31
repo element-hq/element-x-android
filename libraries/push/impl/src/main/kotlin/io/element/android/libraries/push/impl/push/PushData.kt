@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.model
+package io.element.android.libraries.push.impl.push
 
 /**
  * Represent parsed data that the app has received from a Push content.

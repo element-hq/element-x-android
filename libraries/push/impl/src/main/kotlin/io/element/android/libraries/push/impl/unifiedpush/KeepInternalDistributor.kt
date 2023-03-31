@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.sessionstorage.api
+package io.element.android.libraries.push.impl.unifiedpush
 
-import kotlinx.coroutines.flow.Flow
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 
-interface SessionStore {
-    fun isLoggedIn(): Flow<Boolean>
-    suspend fun storeData(sessionData: SessionData)
-    suspend fun getSession(sessionId: String): SessionData?
-    suspend fun getAllSessions(): List<SessionData>
-    suspend fun getLatestSession(): SessionData?
-    suspend fun removeSession(sessionId: String)
-}
-
-fun List<SessionData>.toUserList(): List<String> {
-    return map { it.userId }
+/**
+ * UnifiedPush lib tracks an action to check installed and uninstalled distributors.
+ * We declare it to keep the background sync as an internal unifiedpush distributor.
+ * This class is used to declare this action.
+ */
+class KeepInternalDistributor : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {}
 }
