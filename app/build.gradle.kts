@@ -139,7 +139,7 @@ android {
         }
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 
     // Waiting for https://github.com/google/ksp/issues/37
@@ -149,6 +149,10 @@ android {
                 kotlin.srcDir("build/generated/ksp/$name/kotlin")
             }
         }
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 }
 
