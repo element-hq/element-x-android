@@ -17,5 +17,5 @@
 package io.element.android.libraries.matrix.api.pusher
 
 interface PushersService {
-    fun setHttpPusher(setHttpPusherData: SetHttpPusherData)
+    suspend fun setHttpPusher(setHttpPusherData: SetHttpPusherData): Result<Unit>
 }

@@ -16,8 +16,10 @@
 
 package io.element.android.libraries.matrix.impl.pushers
 
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
+import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.HttpPusherData
 import org.matrix.rustcomponents.sdk.PushFormat
@@ -26,24 +28,29 @@ import org.matrix.rustcomponents.sdk.PusherKind
 
 class RustPushersService(
     private val client: Client,
+    private val dispatchers: CoroutineDispatchers
 ) : PushersService {
-    override fun setHttpPusher(setHttpPusherData: SetHttpPusherData) {
-        client.setPusher(
-            identifiers = PusherIdentifiers(
-                pushkey = setHttpPusherData.pushKey,
-                appId = setHttpPusherData.appId
-            ),
-            kind = PusherKind.Http(
-                data = HttpPusherData(
-                    url = setHttpPusherData.url,
-                    format = PushFormat.EVENT_ID_ONLY,
-                    defaultPayload = setHttpPusherData.defaultPayload
+    override suspend fun setHttpPusher(setHttpPusherData: SetHttpPusherData): Result<Unit> {
+        return withContext(dispatchers.io) {
+            runCatching {
+                client.setPusher(
+                    identifiers = PusherIdentifiers(
+                        pushkey = setHttpPusherData.pushKey,
+                        appId = setHttpPusherData.appId
+                    ),
+                    kind = PusherKind.Http(
+                        data = HttpPusherData(
+                            url = setHttpPusherData.url,
+                            format = PushFormat.EVENT_ID_ONLY,
+                            defaultPayload = setHttpPusherData.defaultPayload
+                        )
+                    ),
+                    appDisplayName = setHttpPusherData.appDisplayName,
+                    deviceDisplayName = setHttpPusherData.deviceDisplayName,
+                    profileTag = setHttpPusherData.profileTag,
+                    lang = setHttpPusherData.lang
                 )
-            ),
-            appDisplayName = setHttpPusherData.appDisplayName,
-            deviceDisplayName = setHttpPusherData.deviceDisplayName,
-            profileTag = setHttpPusherData.profileTag,
-            lang = setHttpPusherData.lang
-        )
+            }
+        }
     }
 }
