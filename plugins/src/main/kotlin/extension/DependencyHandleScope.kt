@@ -22,6 +22,7 @@ import gradle.kotlin.dsl.accessors._71f190358cebd46a469f2989484fd643.implementat
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.project
+import java.io.File
 
 /**
  * Dependencies used by all the modules
@@ -51,34 +52,46 @@ fun DependencyHandlerScope.composeDependencies(libs: LibrariesForLibs) {
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 }
 
-fun DependencyHandlerScope.allLibraries() {
+private fun DependencyHandlerScope.addImplementationProjects(directory: File, path: String, nameFilter: String) {
+    directory.listFiles().orEmpty().forEach { file ->
+        if (file.isDirectory) {
+            val newPath = "$path:${file.name}"
+            val buildFile = File(file, "build.gradle.kts")
+            if (buildFile.exists() && file.name == nameFilter) {
+                implementation(project(newPath))
+                println("Added implementation(project($newPath))")
+            } else {
+                addImplementationProjects(file, newPath, nameFilter)
+            }
+        }
+    }
+}
+
+fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:designsystem"))
-    implementation(project(":libraries:matrix:api"))
+    implementation(project(":libraries:matrix:impl"))
     implementation(project(":libraries:matrixui"))
+    implementation(project(":libraries:network"))
     implementation(project(":libraries:core"))
     implementation(project(":libraries:architecture"))
-    implementation(project(":libraries:dateformatter:api"))
+    implementation(project(":libraries:dateformatter:impl"))
     implementation(project(":libraries:di"))
+    implementation(project(":libraries:session-storage:impl"))
+    implementation(project(":libraries:statemachine"))
+
 }
 
-fun DependencyHandlerScope.allFeaturesApi() {
-    implementation(project(":features:onboarding:api"))
-    implementation(project(":features:login:api"))
-    implementation(project(":features:logout:api"))
-    implementation(project(":features:roomlist:api"))
-    implementation(project(":features:messages:api"))
-    implementation(project(":features:rageshake:api"))
-    implementation(project(":features:preferences:api"))
-    implementation(project(":features:createroom:api"))
+fun DependencyHandlerScope.allServicesImpl() {
+    implementation(project(":services:analytics:noop"))
+    implementation(project(":services:appnavstate:impl"))
+    implementation(project(":services:toolbox:impl"))
 }
 
-fun DependencyHandlerScope.allFeaturesImpl() {
-    implementation(project(":features:onboarding:impl"))
-    implementation(project(":features:login:impl"))
-    implementation(project(":features:logout:impl"))
-    implementation(project(":features:roomlist:impl"))
-    implementation(project(":features:messages:impl"))
-    implementation(project(":features:rageshake:impl"))
-    implementation(project(":features:preferences:impl"))
-    implementation(project(":features:createroom:impl"))
+fun DependencyHandlerScope.allFeaturesApi(rootDir: File) {
+    val featuresDir = File(rootDir, "features")
+    addImplementationProjects(featuresDir, ":features", "api")
+}
+fun DependencyHandlerScope.allFeaturesImpl(rootDir: File) {
+    val featuresDir = File(rootDir, "features")
+    addImplementationProjects(featuresDir, ":features", "impl")
 }

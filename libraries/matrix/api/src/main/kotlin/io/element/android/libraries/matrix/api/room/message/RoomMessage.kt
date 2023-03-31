@@ -18,10 +18,11 @@ package io.element.android.libraries.matrix.api.room.message
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 
 data class RoomMessage(
     val eventId: EventId,
-    val body: String,
+    val event: EventTimelineItem,
     val sender: UserId,
     val originServerTs: Long,
 )

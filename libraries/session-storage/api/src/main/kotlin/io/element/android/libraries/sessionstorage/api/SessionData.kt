@@ -22,6 +22,5 @@ data class SessionData(
     val accessToken: String,
     val refreshToken: String?,
     val homeserverUrl: String,
-    val isSoftLogout: Boolean,
     val slidingSyncProxy: String?
 )

@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.cli.common.toBooleanLenient
 
 buildscript {
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10")
     }
 }
 
@@ -60,7 +60,7 @@ allprojects {
         config = files("$rootDir/tools/detekt/detekt.yml")
     }
     dependencies {
-        detektPlugins("io.nlopez.compose.rules:detekt:0.1.2")
+        detektPlugins("io.nlopez.compose.rules:detekt:0.1.5")
     }
 
     // KtLint
@@ -245,6 +245,7 @@ koverMerged {
                 includes += "*State"
                 excludes += "io.element.android.libraries.matrix.api.timeline.item.event.OtherState$*"
                 excludes += "io.element.android.libraries.matrix.api.timeline.item.event.EventSendState$*"
+                excludes += "io.element.android.libraries.matrix.api.room.RoomMembershipState*"
             }
             bound {
                 minValue = 90

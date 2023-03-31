@@ -16,13 +16,15 @@
 
 package io.element.android.samples.minimal
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import io.element.android.features.roomlist.impl.DefaultRoomLastMessageFormatter
 import io.element.android.features.roomlist.impl.RoomListPresenter
 import io.element.android.features.roomlist.impl.RoomListView
 import io.element.android.libraries.dateformatter.impl.DateFormatters
-import io.element.android.libraries.dateformatter.impl.DefaultLastMessageFormatter
+import io.element.android.libraries.dateformatter.impl.DefaultLastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.impl.LocalDateTimeProvider
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -32,15 +34,21 @@ import kotlinx.datetime.TimeZone
 import java.util.Locale
 
 class RoomListScreen(
-    private val matrixClient: MatrixClient
+    context: Context,
+    private val matrixClient: MatrixClient,
 ) {
-
     private val clock = Clock.System
     private val locale = Locale.getDefault()
     private val timeZone = TimeZone.currentSystemDefault()
     private val dateTimeProvider = LocalDateTimeProvider(clock, timeZone)
     private val dateFormatters = DateFormatters(locale, clock, timeZone)
-    private val presenter = RoomListPresenter(matrixClient, DefaultLastMessageFormatter(dateTimeProvider, dateFormatters))
+    private val sessionVerificationService = matrixClient.sessionVerificationService()
+    private val presenter = RoomListPresenter(
+        matrixClient,
+        DefaultLastMessageTimestampFormatter(dateTimeProvider, dateFormatters),
+        DefaultRoomLastMessageFormatter(context, matrixClient),
+        sessionVerificationService
+    )
 
     @Composable
     fun Content(modifier: Modifier = Modifier) {

@@ -1,12 +1,12 @@
 appId: ${APP_ID}
 ---
 - tapOn: "Settings"
-- assertVisible: "Rage shake to report bug"
+- assertVisible: "Rageshake to report bug"
 - takeScreenshot: build/maestro/600-Settings
 - tapOn:
     text: "Report bug"
     index: 1
-- assertVisible: "Describe your problem here"
+- assertVisible: "Describe the bug…"
 - back
 - back
 - runFlow: ../assertions/assertHomeDisplayed.yaml

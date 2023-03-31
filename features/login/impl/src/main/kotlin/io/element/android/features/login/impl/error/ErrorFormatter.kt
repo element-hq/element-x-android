@@ -16,6 +16,7 @@
 
 package io.element.android.features.login.impl.error
 
+import io.element.android.features.login.impl.R
 import io.element.android.libraries.matrix.api.auth.AuthErrorCode
 import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import io.element.android.libraries.matrix.api.auth.errorCode
@@ -24,20 +25,10 @@ import io.element.android.libraries.ui.strings.R.string as StringR
 fun loginError(
     throwable: Throwable
 ): Int {
-    val authException = throwable as? AuthenticationException ?: return StringR.unknown_error
+    val authException = throwable as? AuthenticationException ?: return StringR.error_unknown
     return when (authException.errorCode) {
-        AuthErrorCode.FORBIDDEN -> StringR.auth_invalid_login_param
-        AuthErrorCode.USER_DEACTIVATED -> StringR.auth_invalid_login_deactivated_account
-        AuthErrorCode.UNKNOWN -> StringR.unknown_error
-    }
-}
-
-fun changeServerError(
-    throwable: Throwable
-): Int {
-    val authException = throwable as? AuthenticationException ?: return StringR.unknown_error
-    return when (authException) {
-        is AuthenticationException.InvalidServerName -> StringR.login_error_homeserver_not_found
-        else -> StringR.unknown_error
+        AuthErrorCode.FORBIDDEN -> R.string.screen_login_error_invalid_credentials
+        AuthErrorCode.USER_DEACTIVATED -> R.string.screen_login_error_deactivated_account
+        AuthErrorCode.UNKNOWN -> StringR.error_unknown
     }
 }

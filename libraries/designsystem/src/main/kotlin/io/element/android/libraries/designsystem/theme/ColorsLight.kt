@@ -29,6 +29,7 @@ import io.element.android.libraries.designsystem.Gray_25
 import io.element.android.libraries.designsystem.Gray_50
 import io.element.android.libraries.designsystem.SystemGrey5Light
 import io.element.android.libraries.designsystem.SystemGrey6Light
+import io.element.android.libraries.designsystem.TextColorCriticalLight
 import io.element.android.libraries.designsystem.theme.previews.ColorsSchemePreview
 
 fun elementColorsLight() = ElementColors(
@@ -37,6 +38,7 @@ fun elementColorsLight() = ElementColors(
     messageHighlightedBackground = Azure,
     quaternary = Gray_100,
     quinary = Gray_50,
+    textActionCritical = TextColorCriticalLight,
     isLight = true,
 )
 
@@ -69,7 +71,7 @@ val materialColorSchemeLight = lightColorScheme(
     // TODO errorContainer = ColorLightTokens.ErrorContainer,
     // TODO onErrorContainer = ColorLightTokens.OnErrorContainer,
     // TODO outline = ColorLightTokens.Outline,
-    // TODO outlineVariant = ColorLightTokens.OutlineVariant,
+    outlineVariant = Gray_50,
     // TODO scrim = ColorLightTokens.Scrim,
 )
 

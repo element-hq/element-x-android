@@ -37,7 +37,6 @@ class DatabaseSessionStoreTests {
         accessToken = "accessToken",
         refreshToken = "refreshToken",
         homeserverUrl = "homeserverUrl",
-        isSoftLogout = false,
         slidingSyncProxy = null
     )
 

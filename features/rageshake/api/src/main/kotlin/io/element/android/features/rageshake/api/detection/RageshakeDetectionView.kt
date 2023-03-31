@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
+import io.element.android.features.rageshake.api.R
 import io.element.android.features.rageshake.api.screenshot.ImageResult
 import io.element.android.features.rageshake.api.screenshot.screenshot
 import io.element.android.libraries.androidutils.hardware.vibrate
@@ -87,11 +88,11 @@ fun RageshakeDialogContent(
     onYesClicked: () -> Unit = { },
 ) {
     ConfirmationDialog(
-        title = stringResource(id = StringR.string.send_bug_report),
-        content = stringResource(id = StringR.string.send_bug_report_alert_message),
+        title = stringResource(id = StringR.string.action_report_bug),
+        content = stringResource(id = R.string.rageshake_detection_dialog_content),
         thirdButtonText = stringResource(id = StringR.string.action_disable),
-        submitText = stringResource(id = StringR.string.yes),
-        cancelText = stringResource(id = StringR.string.no),
+        submitText = stringResource(id = StringR.string.action_yes),
+        cancelText = stringResource(id = StringR.string.action_no),
         onCancelClicked = onNoClicked,
         onThirdButtonClicked = onDisableClicked,
         onSubmitClicked = onYesClicked,

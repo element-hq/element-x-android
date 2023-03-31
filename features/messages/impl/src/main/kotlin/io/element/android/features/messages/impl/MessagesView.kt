@@ -21,6 +21,7 @@
 
 package io.element.android.features.messages.impl
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -69,6 +70,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
+import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -77,6 +79,7 @@ fun MessagesView(
     state: MessagesState,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
+    onRoomDetailsClicked: () -> Unit = {},
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
     val itemActionsBottomSheetState = rememberModalBottomSheetState(
@@ -112,7 +115,8 @@ fun MessagesView(
             MessagesViewTopBar(
                 roomTitle = state.roomName,
                 roomAvatar = state.roomAvatar,
-                onBackPressed = onBackPressed
+                onBackPressed = onBackPressed,
+                onRoomDetailsClicked = onRoomDetailsClicked,
             )
         },
         content = { padding ->
@@ -174,6 +178,7 @@ fun MessagesViewTopBar(
     roomTitle: String?,
     roomAvatar: AvatarData?,
     modifier: Modifier = Modifier,
+    onRoomDetailsClicked: () -> Unit = {},
     onBackPressed: () -> Unit = {},
 ) {
     TopAppBar(
@@ -187,7 +192,10 @@ fun MessagesViewTopBar(
             }
         },
         title = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.clickable { onRoomDetailsClicked() },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 if (roomAvatar != null) {
                     Avatar(roomAvatar)
                     Spacer(modifier = Modifier.width(8.dp))

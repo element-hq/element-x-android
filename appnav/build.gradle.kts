@@ -38,15 +38,19 @@ dependencies {
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
 
-    allFeaturesApi()
+    allFeaturesApi(rootDir)
 
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.matrixui)
+    implementation(projects.features.verifysession.api)
+    implementation(projects.features.roomdetails.api)
     implementation(projects.tests.uitests)
     implementation(libs.coil)
+
+    implementation(projects.services.appnavstate.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

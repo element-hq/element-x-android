@@ -181,10 +181,46 @@ A few details about some modules:
 Most of the time a feature module should not know anything about other feature module.
 The navigation glue is currently done in the `app` module.
 
-Here is the current module dependency graph:
+Here is the current simplified module dependency graph:
 
-<!-- To update this graph, run `./tools/docs/generateModuleGraph.sh` (one day the CI will do it hopefully). -->
-<img src=./images/module_graph.png width=800 />
+<!-- Note: a full graph can be generated using `./tools/docs/generateModuleGraph.sh`. -->
+<!-- Note: doc can be found at https://mermaid.js.org/syntax/flowchart.html#graph -->
+```mermaid
+flowchart TD
+    subgraph Application
+    app([:app])--implementation-->appnav([:appnav])
+    end
+    subgraph Features
+    featureapi([:features:*:api])
+    featureimpl([:features:*:impl])
+    end
+    subgraph Libraries
+        subgraph Matrix
+        matrixapi([:matrix:api])
+        matriximpl([:matrix:impl])
+        end
+    libraryarch([:libraries:architecture])
+    libraryapi([:libraries:*:api])
+    libraryimpl([:libraries:*:impl])
+    end
+    subgraph Matrix RustSdk
+    RustSdk([Rust Sdk])
+    end
+
+    app--implementation-->featureimpl
+    app--implementation-->libraryimpl
+    appnav--implementation-->featureapi
+    appnav--implementation-->libraryarch
+    featureimpl--api-->featureapi
+    featureimpl--implementation-->matrixapi
+    featureimpl--implementation-->libraryapi
+    featureimpl--implementation-->libraryarch
+    matriximpl--implementation-->matrixapi
+    matrixapi--api-->RustSdk
+    matriximpl--api-->RustSdk
+    featureapi--implementation-->libraryarch
+    libraryimpl--api-->libraryapi
+```
 
 ### Application
 
@@ -233,10 +269,42 @@ Here are the main points:
 
 #### Template and naming
 
-There is a template module to easily start a new feature. When creating a new module, you can just copy paste the template. It is
-located [here](../features/template).
+This documentation provides you with the steps to install and use the AS plugin for generating modules in your project. 
+The plugin and templates will help you quickly create new features with a standardized structure.
 
-For the naming rules, please follow what is being currently used in the template module.
+A. Installation
+
+Follow these steps to install and configure the plugin and templates:
+
+1. Install the AS plugin for generating modules :
+   [Generate Module from Template](https://plugins.jetbrains.com/plugin/13586-generate-module-from-template)
+2. Import file templates in AS :
+   - Navigate to File/Manage IDE Settings/Import Settings
+   - Pick the `tools/templates/file_templates.zip` files
+   - Click on OK
+3. Configure generate-module-from-template plugin : 
+   - Navigate to AS/Settings/Tools/Module Template Settings
+   - Click on + / Import From File
+   - Pick the `tools/templates/FeatureModule.json`
+
+Everything should be ready to use.
+
+B. Usage
+
+Example for a new feature called RoomDetails:
+
+1. Right-click on the features package and click on Create Module from Template
+2. Fill the 2 text fields like so:
+    - MODULE_NAME = roomdetails
+    - FEATURE_NAME = RoomDetails
+3. Click on Next
+4. Verify that the structure looks ok and click on Finish
+5. The modules api/impl should be created under `features/roomdetails` directory.
+6. Sync project with Gradle so the modules are recognized (no need to add them to settings.gradle).
+7. You can now add more Presentation classes (Events, State, StateProvider, View, Presenter) in the impl module with the `Template Presentation Classes`.
+   To use it, just right click on the package where you want to generate classes, and click on `Template Presentation Classes`. 
+   Fill the text field with the base name of the classes, ie `RootRoomDetails` in the `root` package.
+   
 
 Note that naming of files and classes is important, since those names are used to set up code coverage rules. For instance, presenters MUST have a
 suffix `Presenter`,states MUST have a suffix `State`, etc. Also we want to have a common naming along all the modules.

@@ -22,17 +22,29 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.createroom.impl.root.CreateRoomRootEvents
-import io.element.android.features.createroom.impl.root.CreateRoomRootPresenter
+import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
+import io.element.android.features.selectusers.impl.DefaultSelectUsersPresenter
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Before
 import org.junit.Test
 
 class CreateRoomRootPresenterTests {
 
+    private lateinit var presenter: CreateRoomRootPresenter
+
+    @Before
+    fun setup() {
+        val selectUsersPresenter = object : DefaultSelectUsersPresenter.DefaultSelectUsersFactory {
+            override fun create(args: SelectUsersPresenterArgs) = DefaultSelectUsersPresenter(args)
+        }
+        presenter = CreateRoomRootPresenter(selectUsersPresenter)
+    }
+
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = CreateRoomRootPresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -42,14 +54,23 @@ class CreateRoomRootPresenterTests {
     }
 
     @Test
-    fun `present - send event`() = runTest {
-        val presenter = CreateRoomRootPresenter()
+    fun `present - trigger action buttons`() = runTest {
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(CreateRoomRootEvents.CreateRoom) // Not implemented yet
             initialState.eventSink(CreateRoomRootEvents.InvitePeople) // Not implemented yet
+        }
+    }
+
+    @Test
+    fun `present - trigger start DM action`() = runTest {
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val matrixUser = MatrixUser(UserId("@name:matrix.org"))
+            initialState.eventSink(CreateRoomRootEvents.StartDM(matrixUser))
         }
     }
 }

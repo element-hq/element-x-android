@@ -18,7 +18,8 @@
 
 import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
 import extension.allFeaturesImpl
-import extension.allLibraries
+import extension.allLibrariesImpl
+import extension.allServicesImpl
 
 // TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
 @Suppress("DSL_SCOPE_VIOLATION")
@@ -200,11 +201,9 @@ knit {
 }
 
 dependencies {
-    allLibraries()
-    allFeaturesImpl()
-    implementation(projects.libraries.matrix.impl)
-    implementation(projects.libraries.dateformatter.impl)
-    implementation(projects.libraries.sessionStorage.impl)
+    allLibrariesImpl()
+    allServicesImpl()
+    allFeaturesImpl(rootDir)
     implementation(projects.tests.uitests)
     implementation(projects.anvilannotations)
     implementation(projects.appnav)
@@ -219,6 +218,9 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.startup)
     implementation(libs.coil)
+
+    implementation(platform(libs.network.okhttp.bom))
+    implementation("com.squareup.okhttp3:logging-interceptor")
 
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)

@@ -23,19 +23,24 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaResolver
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.impl.media.RustMediaResolver
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.sync.SlidingSyncObserverProxy
+import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.RequiredState
+import org.matrix.rustcomponents.sdk.SlidingSyncListBuilder
 import org.matrix.rustcomponents.sdk.SlidingSyncMode
 import org.matrix.rustcomponents.sdk.SlidingSyncRequestListFilters
-import org.matrix.rustcomponents.sdk.SlidingSyncViewBuilder
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
 import org.matrix.rustcomponents.sdk.use
@@ -53,17 +58,13 @@ class RustMatrixClient constructor(
 
     override val sessionId: UserId = UserId(client.userId())
 
+    private val verificationService = RustSessionVerificationService()
+    private var slidingSyncUpdateJob: Job? = null
+
     private val clientDelegate = object : ClientDelegate {
         override fun didReceiveAuthError(isSoftLogout: Boolean) {
-            Timber.v("didReceiveAuthError()")
-        }
-
-        override fun didReceiveSyncUpdate() {
-            Timber.v("didReceiveSyncUpdate()")
-        }
-
-        override fun didUpdateRestoreToken() {
-            Timber.v("didUpdateRestoreToken()")
+            //TODO handle this
+            Timber.v("didReceiveAuthError(isSoftLogout=$isSoftLogout)")
         }
     }
 
@@ -82,7 +83,7 @@ class RustMatrixClient constructor(
         )
     }
 
-    private val visibleRoomsView = SlidingSyncViewBuilder()
+    private val visibleRoomsSlidingSyncList = SlidingSyncListBuilder()
         .timelineLimit(limit = 1u)
         .requiredState(
             requiredState = listOf(
@@ -104,7 +105,7 @@ class RustMatrixClient constructor(
         .homeserver("https://slidingsync.lab.matrix.org")
         .withCommonExtensions()
         .coldCache("ElementX")
-        .addView(visibleRoomsView)
+        .addList(visibleRoomsSlidingSyncList)
         .use {
             it.build()
         }
@@ -114,7 +115,7 @@ class RustMatrixClient constructor(
         RustRoomSummaryDataSource(
             slidingSyncObserverProxy.updateSummaryFlow,
             slidingSync,
-            visibleRoomsView,
+            visibleRoomsSlidingSyncList,
             dispatchers,
             ::onRestartSync
         )
@@ -131,6 +132,9 @@ class RustMatrixClient constructor(
         client.setDelegate(clientDelegate)
         rustRoomSummaryDataSource.init()
         slidingSync.setObserver(slidingSyncObserverProxy)
+        slidingSyncUpdateJob = slidingSyncObserverProxy.updateSummaryFlow
+            .onEach { onSlidingSyncUpdate() }
+            .launchIn(coroutineScope)
     }
 
     private fun onRestartSync() {
@@ -152,8 +156,9 @@ class RustMatrixClient constructor(
 
     override fun mediaResolver(): MediaResolver = mediaResolver
 
+    override fun sessionVerificationService(): SessionVerificationService = verificationService
+
     override fun startSync() {
-        if (client.isSoftLogout()) return
         if (isSyncing.compareAndSet(false, true)) {
             slidingSyncObserverToken = slidingSync.sync()
         }
@@ -166,12 +171,14 @@ class RustMatrixClient constructor(
     }
 
     private fun close() {
+        slidingSyncUpdateJob?.cancel()
         stopSync()
         slidingSync.setObserver(null)
         rustRoomSummaryDataSource.close()
         client.setDelegate(null)
-        visibleRoomsView.destroy()
+        visibleRoomsSlidingSyncList.destroy()
         slidingSync.destroy()
+        verificationService.destroy()
     }
 
     override suspend fun logout() = withContext(dispatchers.io) {
@@ -192,7 +199,7 @@ class RustMatrixClient constructor(
         }
     }
 
-    override suspend fun loadUserAvatarURLString(): Result<String> = withContext(dispatchers.io) {
+    override suspend fun loadUserAvatarURLString(): Result<String?> = withContext(dispatchers.io) {
         runCatching {
             client.avatarUrl()
         }
@@ -216,15 +223,25 @@ class RustMatrixClient constructor(
     ): Result<ByteArray> =
         withContext(dispatchers.io) {
             runCatching {
-                mediaSourceFromUrl(url).use { source ->
+                mediaSourceFromUrl(url).use { mediaSource ->
                     client.getMediaThumbnail(
-                        source = source,
+                        mediaSource = mediaSource,
                         width = width.toULong(),
                         height = height.toULong()
                     ).toUByteArray().toByteArray()
                 }
             }
         }
+
+    override fun onSlidingSyncUpdate() {
+        if (!verificationService.isReady.value) {
+            try {
+                verificationService.verificationController = client.getSessionVerificationController()
+            } catch (e: Throwable) {
+                Timber.e(e, "Could not start verification service. Will try again on the next sliding sync update.")
+            }
+        }
+    }
 
     private fun File.deleteSessionDirectory(userID: String): Boolean {
         // Rust sanitises the user ID replacing invalid characters with an _

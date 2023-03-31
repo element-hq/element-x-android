@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.test.room
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
@@ -33,6 +34,10 @@ class FakeMatrixRoom(
     override val displayName: String = "",
     override val topic: String? = null,
     override val avatarUrl: String? = null,
+    override val members: List<RoomMember> = emptyList(),
+    override val isEncrypted: Boolean = false,
+    override val alias: String? = null,
+    override val alternativeAliases: List<String> = emptyList(),
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
 ) : MatrixRoom {
 

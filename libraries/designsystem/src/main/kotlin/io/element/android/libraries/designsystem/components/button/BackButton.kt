@@ -35,7 +35,7 @@ fun BackButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     imageVector: ImageVector = Icons.Default.ArrowBack,
-    contentDescription: String = stringResource(StringR.string.a11y_back),
+    contentDescription: String = stringResource(StringR.string.action_back),
     enabled: Boolean = true
 ) {
     IconButton(

@@ -38,47 +38,28 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "ElementX"
 include(":app")
 include(":appnav")
-include(":libraries:core")
-include(":libraries:rustsdk")
-include(":libraries:matrix:api")
-include(":libraries:matrix:impl")
-include(":libraries:matrix:test")
-include(":libraries:matrixui")
-include(":libraries:textcomposer")
-include(":libraries:dateformatter:api")
-include(":libraries:dateformatter:impl")
-include(":libraries:dateformatter:test")
-include(":libraries:elementresources")
-include(":libraries:ui-strings")
-include(":libraries:testtags")
-include(":libraries:designsystem")
-include(":libraries:di")
 include(":tests:uitests")
 include(":anvilannotations")
 include(":anvilcodegen")
-include(":libraries:architecture")
-include(":features:template")
-include(":libraries:androidutils")
-include(":samples:minimal")
-include(":libraries:encrypted-db")
-include(":libraries:session-storage:api")
-include(":libraries:session-storage:impl")
-include(":libraries:session-storage:impl-memory")
+include(":libraries:rustsdk")
 
-include(":features:onboarding:api")
-include(":features:onboarding:impl")
-include(":features:logout:api")
-include(":features:logout:impl")
-include(":features:roomlist:api")
-include(":features:roomlist:impl")
-include(":features:rageshake:api")
-include(":features:rageshake:impl")
-include(":features:rageshake:test")
-include(":features:preferences:api")
-include(":features:preferences:impl")
-include(":features:messages:api")
-include(":features:messages:impl")
-include(":features:login:api")
-include(":features:login:impl")
-include(":features:createroom:api")
-include(":features:createroom:impl")
+include(":samples:minimal")
+
+fun includeProjects(directory: File, path: String, maxDepth: Int = 1) {
+    directory.listFiles().orEmpty().forEach { file ->
+        if (file.isDirectory) {
+            val newPath = "$path:${file.name}"
+            val buildFile = File(file, "build.gradle.kts")
+            if (buildFile.exists()) {
+                include(newPath)
+                println("Included project: $newPath")
+            } else if (maxDepth > 0) {
+                includeProjects(file, newPath, maxDepth - 1)
+            }
+        }
+    }
+}
+
+includeProjects(File(rootDir, "features"), ":features")
+includeProjects(File(rootDir, "libraries"), ":libraries")
+includeProjects(File(rootDir, "services"), ":services")

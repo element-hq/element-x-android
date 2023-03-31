@@ -29,6 +29,7 @@ import io.element.android.libraries.designsystem.Gray_400
 import io.element.android.libraries.designsystem.Gray_450
 import io.element.android.libraries.designsystem.SystemGrey5Dark
 import io.element.android.libraries.designsystem.SystemGrey6Dark
+import io.element.android.libraries.designsystem.TextColorCriticalDark
 import io.element.android.libraries.designsystem.theme.previews.ColorsSchemePreview
 
 fun elementColorsDark() = ElementColors(
@@ -37,6 +38,7 @@ fun elementColorsDark() = ElementColors(
     messageHighlightedBackground = Azure,
     quaternary = Gray_400,
     quinary = Gray_450,
+    textActionCritical = TextColorCriticalDark,
     isLight = false,
 )
 
@@ -69,7 +71,7 @@ val materialColorSchemeDark = darkColorScheme(
     // TODO errorContainer = ColorDarkTokens.ErrorContainer,
     // TODO onErrorContainer = ColorDarkTokens.OnErrorContainer,
     // TODO outline = ColorDarkTokens.Outline,
-    // TODO outlineVariant = ColorDarkTokens.OutlineVariant,
+    outlineVariant = Gray_450,
     // TODO scrim = ColorDarkTokens.Scrim,
 )
 

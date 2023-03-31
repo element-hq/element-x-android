@@ -40,7 +40,7 @@ jobs:
           name: elementx-debug
           path: |
             app/build/outputs/apk/debug/*.apk
-      - uses: rnkdsh/action-upload-diawi@v1.3.1
+      - uses: rnkdsh/action-upload-diawi@v1.3.2
         id: diawi
         if: ${{ github.event_name == 'pull_request' }}
         with:

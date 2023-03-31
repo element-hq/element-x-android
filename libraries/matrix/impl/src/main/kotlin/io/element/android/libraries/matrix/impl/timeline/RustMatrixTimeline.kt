@@ -35,7 +35,9 @@ import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.PaginationOptions
+import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.RoomSubscription
 import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 import org.matrix.rustcomponents.sdk.TimelineItem
 import org.matrix.rustcomponents.sdk.TimelineListener
@@ -145,7 +147,8 @@ class RustMatrixTimeline(
 
     private suspend fun addListener(timelineListener: TimelineListener): Result<List<TimelineItem>> = withContext(coroutineDispatchers.io) {
         runCatching {
-            val result = slidingSyncRoom.subscribeAndAddTimelineListener(timelineListener, null)
+            val settings = RoomSubscription(requiredState = listOf(RequiredState(key = "m.room.canonical_alias", value = "")), timelineLimit = null)
+            val result = slidingSyncRoom.subscribeAndAddTimelineListener(timelineListener, settings)
             listenerTokens += result.taskHandle
             result.items
         }

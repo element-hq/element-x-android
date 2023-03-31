@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2022 New Vector Ltd
  *
@@ -19,6 +18,7 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("java-library")
+    id("com.android.lint")
     alias(libs.plugins.kotlin.jvm)
 }
 
@@ -29,4 +29,9 @@ java {
 
 dependencies {
     implementation(libs.coroutines.core)
+    implementation(platform(libs.network.okhttp.bom))
+    implementation("com.squareup.okhttp3:logging-interceptor")
+
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.truth)
 }

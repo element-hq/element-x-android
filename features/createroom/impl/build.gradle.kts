@@ -38,9 +38,8 @@ anvil {
 }
 
 dependencies {
-    anvil(projects.anvilcodegen)
     implementation(projects.anvilannotations)
-
+    anvil(projects.anvilcodegen)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
@@ -48,6 +47,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.features.selectusers.api)
     api(projects.features.createroom.api)
 
     testImplementation(libs.test.junit)
@@ -56,6 +56,7 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.features.selectusers.impl)
 
     androidTestImplementation(libs.test.junitext)
 

@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 object ElementTextStyles {
 
     val Button = TextStyle(
-        fontSize = 17.sp,
+        fontSize = 16.sp,
         fontWeight = FontWeight.Bold,
         lineHeight = 22.sp,
         fontStyle = FontStyle.Normal,
@@ -189,6 +189,14 @@ object ElementTextStyles {
         )
 
         val formHeader = TextStyle(
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Normal,
+            fontStyle = FontStyle.Normal,
+            lineHeight = 20.sp,
+            textAlign = TextAlign.Start
+        )
+
+        val bodyMD = TextStyle(
             fontSize = 14.sp,
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Normal,

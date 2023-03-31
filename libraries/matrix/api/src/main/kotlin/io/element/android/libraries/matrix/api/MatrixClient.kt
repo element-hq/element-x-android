@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.media.MediaResolver
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 
 interface MatrixClient {
     val sessionId: SessionId
@@ -29,13 +30,16 @@ interface MatrixClient {
     fun startSync()
     fun stopSync()
     fun mediaResolver(): MediaResolver
+    fun sessionVerificationService(): SessionVerificationService
     suspend fun logout()
     suspend fun loadUserDisplayName(): Result<String>
-    suspend fun loadUserAvatarURLString(): Result<String>
+    suspend fun loadUserAvatarURLString(): Result<String?>
     suspend fun loadMediaContent(url: String): Result<ByteArray>
     suspend fun loadMediaThumbnail(
         url: String,
         width: Long,
         height: Long
     ): Result<ByteArray>
+
+    fun onSlidingSyncUpdate()
 }

@@ -21,12 +21,13 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
-import io.element.android.libraries.dateformatter.api.LastMessageFormatter
-import io.element.android.libraries.dateformatter.test.FakeLastMessageFormatter
+import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
+import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
+import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
-import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -35,6 +36,7 @@ import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
+import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -44,7 +46,9 @@ class RoomListPresenterTests {
     fun `present - should start with no user and then load user with success`() = runTest {
         val presenter = RoomListPresenter(
             FakeMatrixClient(A_SESSION_ID),
-            createDateFormatter()
+            createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
+            FakeSessionVerificationService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -68,7 +72,9 @@ class RoomListPresenterTests {
                 userDisplayName = Result.failure(AN_EXCEPTION),
                 userAvatarURLString = Result.failure(AN_EXCEPTION),
             ),
-            createDateFormatter()
+            createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
+            FakeSessionVerificationService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -86,7 +92,9 @@ class RoomListPresenterTests {
     fun `present - should filter room with success`() = runTest {
         val presenter = RoomListPresenter(
             FakeMatrixClient(A_SESSION_ID),
-            createDateFormatter()
+            createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
+            FakeSessionVerificationService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -108,7 +116,9 @@ class RoomListPresenterTests {
                 sessionId = A_SESSION_ID,
                 roomSummaryDataSource = roomSummaryDataSource
             ),
-            createDateFormatter()
+            createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
+            FakeSessionVerificationService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -135,7 +145,9 @@ class RoomListPresenterTests {
                 sessionId = A_SESSION_ID,
                 roomSummaryDataSource = roomSummaryDataSource
             ),
-            createDateFormatter()
+            createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
+            FakeSessionVerificationService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -167,7 +179,9 @@ class RoomListPresenterTests {
                 sessionId = A_SESSION_ID,
                 roomSummaryDataSource = roomSummaryDataSource
             ),
-            createDateFormatter()
+            createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
+            FakeSessionVerificationService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -202,8 +216,60 @@ class RoomListPresenterTests {
         }
     }
 
-    private fun createDateFormatter(): LastMessageFormatter {
-        return FakeLastMessageFormatter().apply {
+    @Test
+    fun `present - handle DismissRequestVerificationPrompt`() = runTest {
+        val roomSummaryDataSource = FakeRoomSummaryDataSource()
+        val presenter = RoomListPresenter(
+            FakeMatrixClient(
+                sessionId = A_SESSION_ID,
+                roomSummaryDataSource = roomSummaryDataSource
+            ),
+            createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
+            FakeSessionVerificationService().apply {
+                givenIsReady(true)
+                givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
+            },
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val eventSink = awaitItem().eventSink
+            Truth.assertThat(awaitItem().displayVerificationPrompt).isTrue()
+
+            eventSink(RoomListEvents.DismissRequestVerificationPrompt)
+            Truth.assertThat(awaitItem().displayVerificationPrompt).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - presentVerificationSuccessfulMessage & ClearVerificationSuccesfulMessage`() = runTest {
+        val roomSummaryDataSource = FakeRoomSummaryDataSource()
+        val presenter = RoomListPresenter(
+            FakeMatrixClient(
+                sessionId = A_SESSION_ID,
+                roomSummaryDataSource = roomSummaryDataSource
+            ),
+            createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
+            FakeSessionVerificationService().apply {
+                givenIsReady(true)
+                givenVerificationFlowState(VerificationFlowState.Finished)
+            },
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val displayMessageItem = awaitItem()
+            Truth.assertThat(displayMessageItem.presentVerificationSuccessfulMessage).isTrue()
+            displayMessageItem.eventSink(RoomListEvents.ClearSuccessfulVerificationMessage)
+            Truth.assertThat(awaitItem().presentVerificationSuccessfulMessage).isFalse()
+        }
+    }
+
+    private fun createDateFormatter(): LastMessageTimestampFormatter {
+        return FakeLastMessageTimestampFormatter().apply {
             givenFormat(A_FORMATTED_DATE)
         }
     }
@@ -217,8 +283,7 @@ private val aRoomListRoomSummary = RoomListRoomSummary(
     name = A_ROOM_NAME,
     hasUnread = true,
     timestamp = A_FORMATTED_DATE,
-    lastMessage = A_MESSAGE,
+    lastMessage = "",
     avatarData = AvatarData(id = A_ROOM_ID.value, name = A_ROOM_NAME),
     isPlaceholder = false,
 )
-

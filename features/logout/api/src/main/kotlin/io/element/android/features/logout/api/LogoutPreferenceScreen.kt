@@ -56,9 +56,9 @@ fun LogoutPreferenceView(
     // Log out confirmation dialog
     if (openDialog.value) {
         ConfirmationDialog(
-            title = stringResource(id = StringR.string.action_sign_out),
-            content = stringResource(id = StringR.string.action_sign_out_confirmation_simple),
-            submitText = stringResource(id = StringR.string.action_sign_out),
+            title = stringResource(id = R.string.screen_signout_confirmation_dialog_title),
+            content = stringResource(id = R.string.screen_signout_confirmation_dialog_content),
+            submitText = stringResource(id = R.string.screen_signout_confirmation_dialog_submit),
             onCancelClicked = {
                 openDialog.value = false
             },
@@ -73,7 +73,7 @@ fun LogoutPreferenceView(
     }
 
     if (state.logoutAction is Async.Loading) {
-        ProgressDialog(text = "Login out...")
+        ProgressDialog(text = stringResource(id = R.string.screen_signout_in_progress_dialog_content))
     }
 }
 
@@ -81,9 +81,9 @@ fun LogoutPreferenceView(
 fun LogoutPreferenceContent(
     onClick: () -> Unit = {},
 ) {
-    PreferenceCategory(title = stringResource(id = StringR.string.settings_general_title)) {
+    PreferenceCategory(title = stringResource(id = StringR.string.settings_title_general)) {
         PreferenceText(
-            title = stringResource(id = StringR.string.action_sign_out),
+            title = stringResource(id = R.string.screen_signout_preference_item),
             icon = Icons.Default.Logout,
             onClick = onClick
         )

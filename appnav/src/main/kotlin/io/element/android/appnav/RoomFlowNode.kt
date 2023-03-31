@@ -26,15 +26,19 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.api.MessagesEntryPoint
+import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
@@ -43,6 +47,8 @@ class RoomFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val messagesEntryPoint: MessagesEntryPoint,
+    private val roomDetailsEntryPoint: RoomDetailsEntryPoint,
+    private val appNavigationStateService: AppNavigationStateService,
 ) : BackstackNode<RoomFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Messages,
@@ -68,11 +74,13 @@ class RoomFlowNode @AssistedInject constructor(
             onCreate = {
                 Timber.v("OnCreate")
                 plugins<LifecycleCallback>().forEach { it.onFlowCreated(inputs.room) }
+                appNavigationStateService.onNavigateToRoom(inputs.room.roomId)
             },
             onDestroy = {
                 Timber.v("OnDestroy")
                 inputs.room.close()
                 plugins<LifecycleCallback>().forEach { it.onFlowReleased(inputs.room) }
+                appNavigationStateService.onLeavingRoom()
             }
         )
     }
@@ -80,7 +88,14 @@ class RoomFlowNode @AssistedInject constructor(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Messages -> {
-                messagesEntryPoint.createNode(this, buildContext)
+                messagesEntryPoint.createNode(this, buildContext, object : MessagesEntryPoint.Callback {
+                    override fun onRoomDetailsClicked() {
+                        backstack.push(NavTarget.RoomDetails)
+                    }
+                })
+            }
+            NavTarget.RoomDetails -> {
+                roomDetailsEntryPoint.createNode(this, buildContext)
             }
         }
     }
@@ -88,6 +103,9 @@ class RoomFlowNode @AssistedInject constructor(
     sealed interface NavTarget : Parcelable {
         @Parcelize
         object Messages : NavTarget
+
+        @Parcelize
+        object RoomDetails : NavTarget
     }
 
     @Composable
@@ -95,6 +113,7 @@ class RoomFlowNode @AssistedInject constructor(
         Children(
             navModel = backstack,
             modifier = modifier,
+            transitionHandler = rememberDefaultTransitionHandler(),
         )
     }
 }

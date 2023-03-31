@@ -16,8 +16,9 @@
 
 package io.element.android.features.createroom.impl.root
 
-// TODO add your ui models. Remove the eventSink if you don't have events.
-// Do not use default value, so no member get forgotten in the presenters.
+import io.element.android.features.selectusers.api.SelectUsersState
+
 data class CreateRoomRootState(
-    val eventSink: (CreateRoomRootEvents) -> Unit
+    val selectUsersState: SelectUsersState,
+    val eventSink: (CreateRoomRootEvents) -> Unit,
 )
