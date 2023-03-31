@@ -19,6 +19,7 @@ package io.element.android.appnav.loggedin
 import android.Manifest
 import android.os.Build
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.permissions.api.PermissionsPresenter
@@ -27,9 +28,9 @@ import io.element.android.libraries.push.api.PushService
 import javax.inject.Inject
 
 class LoggedInPresenter @Inject constructor(
+    private val matrixClient: MatrixClient,
     private val permissionsPresenterFactory: PermissionsPresenter.Factory,
-   // private val matrixClient: MatrixClient,
-   // private val pushService: PushService,
+    private val pushService: PushService,
 ) : Presenter<LoggedInState> {
 
     private val postNotificationPermissionsPresenter by lazy {
@@ -43,8 +44,10 @@ class LoggedInPresenter @Inject constructor(
 
     @Composable
     override fun present(): LoggedInState {
-
-        // TODO EAx pushService.registerPusher(matrixClient.sessionId)
+        LaunchedEffect(Unit) {
+            // Ensure pusher is registered
+            pushService.registerPusher(matrixClient)
+        }
 
         val permissionsState = postNotificationPermissionsPresenter.present()
 

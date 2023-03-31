@@ -17,11 +17,7 @@
 package io.element.android.appnav.loggedin
 
 import android.app.Activity
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,31 +25,22 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.androidutils.system.openAppSettingsPage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.permissions.api.PermissionsView
 
 @Composable
 fun LoggedInView(
     state: LoggedInState,
-    modifier: Modifier = Modifier,
-    children: @Composable BoxScope.() -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val activity = LocalContext.current as? Activity
 
-    Box(
-        modifier = modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.TopCenter,
-    ) {
-        children()
-
-        PermissionsView(
-            state = state.permissionsState,
-            openSystemSettings = {
-                activity?.let { openAppSettingsPage(it, "") }
-            }
-        )
-    }
+    PermissionsView(
+        state = state.permissionsState,
+        modifier = modifier,
+        openSystemSettings = {
+            activity?.let { openAppSettingsPage(it, "") }
+        }
+    )
 }
 
 @Preview
@@ -70,7 +57,5 @@ fun LoggedInViewDarkPreview(@PreviewParameter(LoggedInStateProvider::class) stat
 private fun ContentToPreview(state: LoggedInState) {
     LoggedInView(
         state = state
-    ) {
-        Text("Children")
-    }
+    )
 }
