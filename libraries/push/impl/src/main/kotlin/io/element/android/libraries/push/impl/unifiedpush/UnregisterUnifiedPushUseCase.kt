@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl
+package io.element.android.libraries.push.impl.unifiedpush
 
 import android.content.Context
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.push.api.model.BackgroundSyncMode
 import io.element.android.libraries.push.api.store.PushDataStore
+import io.element.android.libraries.push.impl.PushersManager
+import io.element.android.libraries.push.impl.UnifiedPushHelper
+import io.element.android.libraries.push.impl.UnifiedPushStore
 import org.unifiedpush.android.connector.UnifiedPush
 import timber.log.Timber
 import javax.inject.Inject

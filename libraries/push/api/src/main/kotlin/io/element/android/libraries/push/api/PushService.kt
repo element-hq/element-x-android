@@ -28,7 +28,7 @@ interface PushService {
     fun notificationStyleChanged()
 
     // Ensure pusher is registered
-    suspend fun registerPusher(matrixClient: MatrixClient)
+    suspend fun registerFirebasePusher(matrixClient: MatrixClient)
 
     suspend fun testPush()
 }

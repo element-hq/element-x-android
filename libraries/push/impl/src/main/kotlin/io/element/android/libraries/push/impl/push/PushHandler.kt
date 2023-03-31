@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl
+package io.element.android.libraries.push.impl.push
 
 import android.content.Context
 import android.content.Intent
@@ -30,19 +30,24 @@ import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.store.PushDataStore
+import io.element.android.libraries.push.impl.PushersManager
 import io.element.android.libraries.push.impl.clientsecret.PushClientSecret
-import io.element.android.libraries.push.impl.model.PushData
 import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
 import io.element.android.libraries.push.impl.notifications.NotificationDrawerManager
+import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.store.DefaultPushDataStore
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 
-private val loggerTag = LoggerTag("Push", LoggerTag.SYNC)
+private val loggerTag = LoggerTag("Push", pushLoggerTag)
 
-class VectorPushHandler @Inject constructor(
+class PushHandler @Inject constructor(
     private val notificationDrawerManager: NotificationDrawerManager,
     private val notifiableEventResolver: NotifiableEventResolver,
     // private val activeSessionHolder: ActiveSessionHolder,

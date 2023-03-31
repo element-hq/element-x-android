@@ -14,19 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.sessionstorage.api
+package io.element.android.libraries.push.impl.firebase
 
-import kotlinx.coroutines.flow.Flow
+import com.squareup.anvil.annotations.ContributesTo
+import io.element.android.libraries.di.AppScope
 
-interface SessionStore {
-    fun isLoggedIn(): Flow<Boolean>
-    suspend fun storeData(sessionData: SessionData)
-    suspend fun getSession(sessionId: String): SessionData?
-    suspend fun getAllSessions(): List<SessionData>
-    suspend fun getLatestSession(): SessionData?
-    suspend fun removeSession(sessionId: String)
-}
-
-fun List<SessionData>.toUserList(): List<String> {
-    return map { it.userId }
+@ContributesTo(AppScope::class)
+interface VectorFirebaseMessagingServiceBindings {
+    fun inject(service: VectorFirebaseMessagingService)
 }

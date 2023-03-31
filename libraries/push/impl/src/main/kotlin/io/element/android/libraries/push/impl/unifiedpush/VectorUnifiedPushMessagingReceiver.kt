@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl
+package io.element.android.libraries.push.impl.unifiedpush
 
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import io.element.android.libraries.architecture.bindings
-
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.push.api.model.BackgroundSyncMode
 import io.element.android.libraries.push.api.store.PushDataStore
-import io.element.android.libraries.push.impl.di.VectorUnifiedPushMessagingReceiverBindings
-import io.element.android.libraries.push.impl.parser.PushParser
+import io.element.android.libraries.push.impl.*
+import io.element.android.libraries.push.impl.log.pushLoggerTag
+import io.element.android.libraries.push.impl.push.PushHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
@@ -34,15 +34,15 @@ import org.unifiedpush.android.connector.MessagingReceiver
 import timber.log.Timber
 import javax.inject.Inject
 
-private val loggerTag = LoggerTag("Push", LoggerTag.SYNC)
+private val loggerTag = LoggerTag("Unified", pushLoggerTag)
 
 class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var pushersManager: PushersManager
-    @Inject lateinit var pushParser: PushParser
+    @Inject lateinit var pushParser: UnifiedPushParser
 
     //@Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var pushDataStore: PushDataStore
-    @Inject lateinit var vectorPushHandler: VectorPushHandler
+    @Inject lateinit var pushHandler: PushHandler
     @Inject lateinit var guardServiceStarter: GuardServiceStarter
     @Inject lateinit var unifiedPushStore: UnifiedPushStore
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
@@ -64,8 +64,8 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
      */
     override fun onMessage(context: Context, message: ByteArray, instance: String) {
         Timber.tag(loggerTag.value).d("New message")
-        pushParser.parsePushDataUnifiedPush(message)?.let {
-            vectorPushHandler.handle(it)
+        pushParser.parse(message)?.let {
+            pushHandler.handle(it)
         } ?: run {
             Timber.tag(loggerTag.value).w("Invalid received data Json format")
         }
@@ -82,7 +82,7 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
                     unifiedPushHelper.storeCustomOrDefaultGateway(endpoint) {
                         unifiedPushHelper.getPushGateway()?.let {
                             coroutineScope.launch {
-                                pushersManager.enqueueRegisterPusher(endpoint, it)
+                                pushersManager.onNewUnifiedPushEndpoint(endpoint, it)
                             }
                         }
                     }

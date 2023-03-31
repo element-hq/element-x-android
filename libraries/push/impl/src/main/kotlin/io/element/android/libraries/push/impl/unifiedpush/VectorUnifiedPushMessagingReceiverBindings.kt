@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl
+package io.element.android.libraries.push.impl.unifiedpush
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
+import com.squareup.anvil.annotations.ContributesTo
+import io.element.android.libraries.di.AppScope
 
-/**
- * UnifiedPush lib tracks an action to check installed and uninstalled distributors.
- * We declare it to keep the background sync as an internal unifiedpush distributor.
- * This class is used to declare this action.
- */
-class KeepInternalDistributor : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {}
+@ContributesTo(AppScope::class)
+interface VectorUnifiedPushMessagingReceiverBindings {
+    fun inject(receiver: VectorUnifiedPushMessagingReceiver)
 }

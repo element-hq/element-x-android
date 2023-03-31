@@ -14,58 +14,50 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl
+package io.element.android.libraries.push.impl.firebase
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
-import io.element.android.libraries.push.api.store.PushDataStore
-import io.element.android.libraries.push.impl.config.PushConfig
-import io.element.android.libraries.push.impl.di.FirebaseMessagingServiceBindings
-import io.element.android.libraries.push.impl.parser.PushParser
+import io.element.android.libraries.push.impl.PushersManager
+import io.element.android.libraries.push.impl.push.PushHandler
+import io.element.android.libraries.push.impl.log.pushLoggerTag
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-private val loggerTag = LoggerTag("Push", LoggerTag.SYNC)
+private val loggerTag = LoggerTag("Firebase", pushLoggerTag)
 
 class VectorFirebaseMessagingService : FirebaseMessagingService() {
-    @Inject lateinit var fcmHelper: FcmHelper
-    @Inject lateinit var pushDataStore: PushDataStore
-    // @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var pushersManager: PushersManager
-    @Inject lateinit var pushParser: PushParser
-    @Inject lateinit var vectorPushHandler: VectorPushHandler
-    @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
+
+    @Inject
+    lateinit var pushParser: FirebasePushParser
+
+    @Inject
+    lateinit var pushHandler: PushHandler
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
     override fun onCreate() {
         super.onCreate()
-        applicationContext.bindings<FirebaseMessagingServiceBindings>().inject(this)
+        applicationContext.bindings<VectorFirebaseMessagingServiceBindings>().inject(this)
     }
 
     override fun onNewToken(token: String) {
         Timber.tag(loggerTag.value).d("New Firebase token")
-        fcmHelper.storeFcmToken(token)
-        if (
-            // pushDataStore.areNotificationEnabledForDevice() &&
-            // TODO EAx activeSessionHolder.hasActiveSession() &&
-            unifiedPushHelper.isEmbeddedDistributor()
-        ) {
-            coroutineScope.launch {
-                pushersManager.enqueueRegisterPusher(token, PushConfig.pusher_http_url)
-            }
+        coroutineScope.launch {
+            pushersManager.onNewFirebaseToken(token)
         }
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
         Timber.tag(loggerTag.value).d("New Firebase message")
-        pushParser.parsePushDataFcm(message.data).let {
-            vectorPushHandler.handle(it)
+        pushParser.parse(message.data).let {
+            pushHandler.handle(it)
         }
     }
 }

@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.di
+package io.element.android.libraries.push.impl.userpushstore
 
-import com.squareup.anvil.annotations.ContributesTo
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.push.impl.VectorFirebaseMessagingService
+import android.content.Context
+import io.element.android.libraries.di.ApplicationContext
+import javax.inject.Inject
 
-@ContributesTo(AppScope::class)
-interface FirebaseMessagingServiceBindings {
-    fun inject(service: VectorFirebaseMessagingService)
+class UserPushStoreFactory @Inject constructor(
+    @ApplicationContext private val context: Context,
+) {
+    fun create(userId: String): UserPushStore {
+        return UserPushStoreDataStore(
+            context = context,
+            userId = userId
+        )
+    }
 }
