@@ -77,10 +77,9 @@ class PushersManager @Inject constructor(
         sessionStore.getAllSessions().toUserList().forEach { userId ->
             val userDataStore = userPushStoreFactory.create(userId)
             if (userDataStore.isFirebase()) {
-                val client = matrixAuthenticationService.restoreSession(SessionId(userId)).getOrNull()
-                client ?: return@forEach
-                registerPusher(client, firebaseToken, PushConfig.pusher_http_url)
-                // TODO EAx Close sessions
+                matrixAuthenticationService.restoreSession(SessionId(userId)).getOrNull()?.use { client ->
+                    registerPusher(client, firebaseToken, PushConfig.pusher_http_url)
+                }
             } else {
                 Timber.d("This session is not using Firebase pusher")
             }
