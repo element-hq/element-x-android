@@ -31,6 +31,7 @@ import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
 import com.bumble.appyx.navmodel.backstack.operation.singleTop
@@ -39,6 +40,7 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
+import io.element.android.features.invitelist.api.InviteListEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
@@ -68,6 +70,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val createRoomEntryPoint: CreateRoomEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
     private val verifySessionEntryPoint: VerifySessionEntryPoint,
+    private val inviteListEntryPoint: InviteListEntryPoint,
     private val coroutineScope: CoroutineScope,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
@@ -142,6 +145,9 @@ class LoggedInFlowNode @AssistedInject constructor(
 
         @Parcelize
         object VerifySession : NavTarget
+
+        @Parcelize
+        object InviteList: NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -165,6 +171,10 @@ class LoggedInFlowNode @AssistedInject constructor(
 
                     override fun onSessionVerificationClicked() {
                         backstack.push(NavTarget.VerifySession)
+                    }
+
+                    override fun onInvitesClicked() {
+                        backstack.push(NavTarget.InviteList)
                     }
                 }
                 roomListEntryPoint
@@ -211,6 +221,17 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
             NavTarget.VerifySession -> {
                 verifySessionEntryPoint.createNode(this, buildContext)
+            }
+            NavTarget.InviteList -> {
+                val callback = object : InviteListEntryPoint.Callback {
+                    override fun onBackClicked() {
+                        backstack.pop()
+                    }
+                }
+
+                inviteListEntryPoint.nodeBuilder(this, buildContext)
+                    .callback(callback)
+                    .build()
             }
         }
     }
