@@ -49,9 +49,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.AutofillNode
+import androidx.compose.ui.autofill.AutofillType
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalAutofill
+import androidx.compose.ui.platform.LocalAutofillTree
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -206,6 +215,7 @@ internal fun ChangeServerSection(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun LoginForm(
     state: LoginRootState,
@@ -239,7 +249,11 @@ internal fun LoginForm(
             modifier = Modifier
                 .fillMaxWidth()
                 .onTabOrEnterKeyFocusNext(focusManager)
-                .testTag(TestTags.loginEmailUsername),
+                .testTag(TestTags.loginEmailUsername)
+                .autofill(autofillTypes = listOf(AutofillType.Username), onFill = {
+                    loginFieldState = it
+                    eventSink(LoginRootEvents.SetLogin(it))
+                }),
             label = {
                 Text(text = stringResource(R.string.screen_login_username_hint))
             },
@@ -279,7 +293,11 @@ internal fun LoginForm(
             modifier = Modifier
                 .fillMaxWidth()
                 .onTabOrEnterKeyFocusNext(focusManager)
-                .testTag(TestTags.loginPassword),
+                .testTag(TestTags.loginPassword)
+                .autofill(autofillTypes = listOf(AutofillType.Password), onFill = {
+                    passwordFieldState = it
+                    eventSink(LoginRootEvents.SetPassword(it))
+                }),
             onValueChange = {
                 passwordFieldState = it
                 eventSink(LoginRootEvents.SetPassword(it))
@@ -347,4 +365,27 @@ private fun ContentToPreview(state: LoginRootState) {
         state = state,
         onBackPressed = {}
     )
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+fun Modifier.autofill(autofillTypes: List<AutofillType>, onFill: (String) -> Unit) = composed {
+    val autofillNode = AutofillNode(autofillTypes, onFill = onFill)
+    LocalAutofillTree.current += autofillNode
+
+    val autofill = LocalAutofill.current
+
+    this
+        .onGloballyPositioned {
+            // Inform autofill framework of where our composable is so it can show the popup in the right place
+            autofillNode.boundingBox = it.boundsInWindow()
+        }
+        .onFocusChanged {
+            autofill?.run {
+                if (it.isFocused) {
+                    requestAutofillForNode(autofillNode)
+                } else {
+                    cancelAutofillForNode(autofillNode)
+                }
+            }
+        }
 }
