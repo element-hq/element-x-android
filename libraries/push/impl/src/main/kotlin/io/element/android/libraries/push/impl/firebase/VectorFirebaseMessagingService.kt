@@ -21,8 +21,8 @@ import com.google.firebase.messaging.RemoteMessage
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.push.impl.PushersManager
-import io.element.android.libraries.push.impl.push.PushHandler
 import io.element.android.libraries.push.impl.log.pushLoggerTag
+import io.element.android.libraries.push.impl.push.PushHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
@@ -33,12 +33,8 @@ private val loggerTag = LoggerTag("Firebase", pushLoggerTag)
 
 class VectorFirebaseMessagingService : FirebaseMessagingService() {
     @Inject lateinit var pushersManager: PushersManager
-
-    @Inject
-    lateinit var pushParser: FirebasePushParser
-
-    @Inject
-    lateinit var pushHandler: PushHandler
+    @Inject lateinit var pushParser: FirebasePushParser
+    @Inject lateinit var pushHandler: PushHandler
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
@@ -56,8 +52,10 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         Timber.tag(loggerTag.value).d("New Firebase message")
-        pushParser.parse(message.data).let {
-            pushHandler.handle(it)
+        coroutineScope.launch {
+            pushParser.parse(message.data).let {
+                pushHandler.handle(it)
+            }
         }
     }
 }

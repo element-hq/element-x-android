@@ -32,20 +32,19 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.store.PushDataStore
 import io.element.android.libraries.push.impl.PushersManager
 import io.element.android.libraries.push.impl.clientsecret.PushClientSecret
+import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
 import io.element.android.libraries.push.impl.notifications.NotificationDrawerManager
-import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.store.DefaultPushDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 
-private val loggerTag = LoggerTag("Push", pushLoggerTag)
+private val loggerTag = LoggerTag("PushHandler", pushLoggerTag)
 
 class PushHandler @Inject constructor(
     private val notificationDrawerManager: NotificationDrawerManager,
@@ -73,16 +72,14 @@ class PushHandler @Inject constructor(
      *
      * @param pushData the data received in the push.
      */
-    fun handle(pushData: PushData) {
+    suspend fun handle(pushData: PushData) {
         Timber.tag(loggerTag.value).d("## handling pushData")
 
         if (buildMeta.lowPrivacyLoggingEnabled) {
             Timber.tag(loggerTag.value).d("## pushData: $pushData")
         }
 
-        runBlocking {
-            defaultPushDataStore.incrementPushCounter()
-        }
+        defaultPushDataStore.incrementPushCounter()
 
         // Diagnostic Push
         if (pushData.eventId == PushersManager.TEST_EVENT_ID) {
@@ -91,6 +88,7 @@ class PushHandler @Inject constructor(
             return
         }
 
+        // TODO EAx Should be per user
         if (!pushDataStore.areNotificationEnabledForDevice()) {
             Timber.tag(loggerTag.value).i("Notification are disabled for this device")
             return
@@ -141,7 +139,7 @@ class PushHandler @Inject constructor(
             // Restore session
             val session = matrixAuthenticationService.restoreSession(SessionId(userId)).getOrNull() ?: return
             // TODO EAx, no need for a session?
-            val notificationData = session.use {
+            val notificationData = session.let {// TODO Use make the app crashes
                 it.notificationService().getNotification(
                     userId = userId,
                     roomId = pushData.roomId,
