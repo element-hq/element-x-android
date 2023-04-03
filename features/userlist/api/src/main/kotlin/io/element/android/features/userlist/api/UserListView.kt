@@ -98,7 +98,7 @@ fun UserListView(
         if (state.isMultiSelectionEnabled && !state.isSearchActive && state.selectedUsers.isNotEmpty()) {
             SelectedUsersList(
                 listState = state.selectedUsersListState,
-                modifier = Modifier.padding(16.dp),
+                contentPadding = PaddingValues(16.dp),
                 selectedUsers = state.selectedUsers,
                 onUserRemoved = {
                     state.eventSink(UserListEvents.RemoveFromSelection(it))
@@ -175,7 +175,7 @@ fun SearchUserBar(
             if (isMultiSelectionEnabled && active && selectedUsers.isNotEmpty()) {
                 SelectedUsersList(
                     listState = selectedUsersListState,
-                    modifier = Modifier.padding(16.dp),
+                    contentPadding = PaddingValues(16.dp),
                     selectedUsers = selectedUsers,
                     onUserRemoved = onUserDeselected,
                 )
