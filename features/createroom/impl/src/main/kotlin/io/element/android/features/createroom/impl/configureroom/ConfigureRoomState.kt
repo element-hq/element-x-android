@@ -16,9 +16,12 @@
 
 package io.element.android.features.createroom.impl.configureroom
 
+import android.net.Uri
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import kotlinx.collections.immutable.ImmutableList
 
 data class ConfigureRoomState(
-    val selectedUsers: List<MatrixUser>,
+    val selectedUsers: ImmutableList<MatrixUser>,
+    val avatarUri: Uri?,
     val eventSink: (ConfigureRoomEvents) -> Unit
 )
