@@ -18,15 +18,14 @@
 
 package io.element.android.features.createroom.impl.root
 
-import androidx.compose.runtime.Composable
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.selectusers.api.SelectUsersPresenter
 import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
-import io.element.android.features.selectusers.api.SelectUsersState
 import io.element.android.features.selectusers.api.aSelectUsersState
+import io.element.android.features.selectusers.test.FakeSelectUserPresenter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -153,20 +152,6 @@ class CreateRoomRootPresenterTests {
             val stateAfterRetryStartDM = awaitItem()
             assertThat(stateAfterRetryStartDM.startDmAction).isInstanceOf(Async.Success::class.java)
             assertThat(stateAfterRetryStartDM.startDmAction.dataOrNull()).isEqualTo(createDmResult.getOrNull())
-        }
-    }
-
-    private class FakeSelectUserPresenter : SelectUsersPresenter {
-
-        private var state = aSelectUsersState()
-
-        fun givenState(state: SelectUsersState) {
-            this.state = state
-        }
-
-        @Composable
-        override fun present(): SelectUsersState {
-            return state
         }
     }
 }

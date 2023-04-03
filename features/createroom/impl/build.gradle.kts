@@ -57,6 +57,7 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.features.selectusers.impl)
+    testImplementation(projects.features.selectusers.test)
 
     androidTestImplementation(libs.test.junitext)
 
