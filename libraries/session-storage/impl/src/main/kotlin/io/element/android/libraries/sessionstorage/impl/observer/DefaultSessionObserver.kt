@@ -77,7 +77,7 @@ class DefaultSessionObserver @Inject constructor(
                             val addedUsers = newUserSet - currentUserSet
                             addedUsers.forEach { addedUser ->
                                 listeners.onEach { listener ->
-                                    listener.onSessionDeleted(addedUser)
+                                    listener.onSessionCreated(addedUser)
                                 }
                             }
                         }
