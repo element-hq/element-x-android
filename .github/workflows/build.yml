@@ -44,7 +44,7 @@ jobs:
         id: diawi
         env:
           token: ${{ secrets.DIAWI_TOKEN }}
-        if: ${{ github.event_name == 'pull_request' && token != '' }}
+        if: ${{ github.event_name == 'pull_request' && env.token != '' }}
         with:
           token: ${{ secrets.DIAWI_TOKEN }}
           file: app/build/outputs/apk/debug/app-arm64-v8a-debug.apk
