@@ -23,7 +23,9 @@ import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.push.api.model.BackgroundSyncMode
 import io.element.android.libraries.push.api.store.PushDataStore
-import io.element.android.libraries.push.impl.*
+import io.element.android.libraries.push.impl.PushersManager
+import io.element.android.libraries.push.impl.UnifiedPushHelper
+import io.element.android.libraries.push.impl.UnifiedPushStore
 import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.push.PushHandler
 import kotlinx.coroutines.CoroutineScope
@@ -64,10 +66,12 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
      */
     override fun onMessage(context: Context, message: ByteArray, instance: String) {
         Timber.tag(loggerTag.value).d("New message")
-        pushParser.parse(message)?.let {
-            pushHandler.handle(it)
-        } ?: run {
-            Timber.tag(loggerTag.value).w("Invalid received data Json format")
+        coroutineScope.launch {
+            pushParser.parse(message)?.let {
+                pushHandler.handle(it)
+            } ?: run {
+                Timber.tag(loggerTag.value).w("Invalid received data Json format")
+            }
         }
     }
 
