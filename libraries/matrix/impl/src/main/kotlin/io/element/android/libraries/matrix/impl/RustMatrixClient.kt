@@ -88,20 +88,18 @@ class RustMatrixClient constructor(
         }
     }
 
-    private val slidingSyncFilters by lazy {
-        SlidingSyncRequestListFilters(
-            isDm = null,
-            spaces = emptyList(),
-            isEncrypted = null,
-            isInvite = false,
-            isTombstoned = false,
-            roomTypes = emptyList(),
-            notRoomTypes = listOf("m.space"),
-            roomNameLike = null,
-            tags = emptyList(),
-            notTags = emptyList()
-        )
-    }
+    private val visibleRoomsSlidingSyncFilters = SlidingSyncRequestListFilters(
+        isDm = null,
+        spaces = emptyList(),
+        isEncrypted = null,
+        isInvite = false,
+        isTombstoned = false,
+        roomTypes = emptyList(),
+        notRoomTypes = listOf("m.space"),
+        roomNameLike = null,
+        tags = emptyList(),
+        notTags = emptyList()
+    )
 
     private val visibleRoomsSlidingSyncList = SlidingSyncListBuilder()
         .timelineLimit(limit = 1u)
@@ -112,8 +110,27 @@ class RustMatrixClient constructor(
                 RequiredState(key = "m.room.join_rules", value = ""),
             )
         )
-        .filters(slidingSyncFilters)
+        .filters(visibleRoomsSlidingSyncFilters)
         .name(name = "CurrentlyVisibleRooms")
+        .syncMode(mode = SlidingSyncMode.SELECTIVE)
+        .addRange(0u, 20u)
+        .use {
+            it.build()
+        }
+
+    private val invitesSlidingSyncFilters = visibleRoomsSlidingSyncFilters.copy(isInvite = true)
+
+    private val invitesSlidingSyncList = SlidingSyncListBuilder()
+        .timelineLimit(limit = 1u)
+        .requiredState(
+            requiredState = listOf(
+                RequiredState(key = "m.room.avatar", value = ""),
+                RequiredState(key = "m.room.encryption", value = ""),
+                RequiredState(key = "m.room.canonical_alias", value = ""),
+            )
+        )
+        .filters(invitesSlidingSyncFilters)
+        .name(name = "CurrentInvites")
         .syncMode(mode = SlidingSyncMode.SELECTIVE)
         .addRange(0u, 20u)
         .use {
@@ -126,6 +143,7 @@ class RustMatrixClient constructor(
         .withCommonExtensions()
         .storageKey("ElementX")
         .addList(visibleRoomsSlidingSyncList)
+        .addList(invitesSlidingSyncList)
         .use {
             it.build()
         }
@@ -143,6 +161,18 @@ class RustMatrixClient constructor(
     override val roomSummaryDataSource: RoomSummaryDataSource
         get() = rustRoomSummaryDataSource
 
+    private val rustInvitesDataSource: RustRoomSummaryDataSource =
+        RustRoomSummaryDataSource(
+            slidingSyncObserverProxy.updateSummaryFlow,
+            slidingSync,
+            invitesSlidingSyncList,
+            dispatchers,
+            ::onRestartSync
+        )
+
+    override val invitesDataSource: RoomSummaryDataSource
+        get() = rustInvitesDataSource
+
     private var slidingSyncObserverToken: TaskHandle? = null
 
     private val mediaResolver = RustMediaResolver(this)
@@ -153,6 +183,7 @@ class RustMatrixClient constructor(
     init {
         client.setDelegate(clientDelegate)
         rustRoomSummaryDataSource.init()
+        rustInvitesDataSource.init()
         slidingSync.setObserver(slidingSyncObserverProxy)
         slidingSyncUpdateJob = slidingSyncObserverProxy.updateSummaryFlow
             .onEach { onSlidingSyncUpdate() }
@@ -249,6 +280,7 @@ class RustMatrixClient constructor(
         stopSync()
         slidingSync.setObserver(null)
         rustRoomSummaryDataSource.close()
+        rustInvitesDataSource.close()
         client.setDelegate(null)
         visibleRoomsSlidingSyncList.destroy()
         slidingSync.destroy()

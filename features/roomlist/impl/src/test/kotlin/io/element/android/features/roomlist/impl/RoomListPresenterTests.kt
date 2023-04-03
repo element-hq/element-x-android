@@ -257,6 +257,35 @@ class RoomListPresenterTests {
         }
     }
 
+    @Test
+    fun `present - displays invites row if any invites exist`() = runTest {
+        val invitesDataSource = FakeRoomSummaryDataSource()
+        val presenter = RoomListPresenter(
+            FakeMatrixClient(
+                sessionId = A_SESSION_ID,
+                invitesDataSource = invitesDataSource
+            ),
+            createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
+            FakeSessionVerificationService(),
+            FakeNetworkMonitor(),
+            SnackbarDispatcher(),
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+
+            Truth.assertThat(awaitItem().displayInvites).isFalse()
+
+            invitesDataSource.postRoomSummary(listOf(aRoomSummaryFilled()))
+            Truth.assertThat(awaitItem().displayInvites).isTrue()
+
+            invitesDataSource.postRoomSummary(listOf())
+            Truth.assertThat(awaitItem().displayInvites).isFalse()
+        }
+    }
+
     private fun createDateFormatter(): LastMessageTimestampFormatter {
         return FakeLastMessageTimestampFormatter().apply {
             givenFormat(A_FORMATTED_DATE)
