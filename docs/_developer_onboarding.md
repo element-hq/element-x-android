@@ -136,7 +136,7 @@ git clone git@github.com:matrix-org/matrix-rust-sdk.git
 git clone git@github.com:matrix-org/matrix-rust-components-kotlin.git
 ```
 
-Then you can launch the build script with the following params:
+Then you can launch the build script from the matrix-rust-components-kotlin repository with the following params:
 
 - `-p` Local path to the rust-sdk repository
 - `-o` Optional output path with the expected name of the aar file. By default the aar will be located in the corresponding build/outputs/aar directory.
@@ -150,12 +150,12 @@ So for example to build the sdk against aarch64-linux-android target and copy th
 ./scripts/build.sh -p [YOUR MATRIX RUST SDK PATH] -t aarch64-linux-android -o [YOUR element-x-android PATH]/libraries/rustsdk/matrix-rust-sdk.aar
 ```
 
-Finally let the `matrix/impl` module use this aar by switching those lines in the gradle file :
+Finally let the `matrix/impl` module use this aar by changing the dependencies from `libs.matrix.sdk` to `projects.libraries.rustsdk`:
 
 ```groovy
 dependencies {
-    api(projects.libraries.rustsdk) // <- comment this line
-    // api(libs.matrix.sdk) // <- uncomment this line
+    api(projects.libraries.rustsdk)    // <- use the local version of the sdk. Uncomment this line.
+    //implementation(libs.matrix.sdk)  // <- use the released version. Comment this line.
 }
 ```
 
