@@ -41,5 +41,6 @@ fun aRoomDetailsState() = RoomDetailsState(
         "|| MAI iki/Marketing...",
     memberCount = 32,
     isEncrypted = true,
-//    eventSink = {}
+    displayLeaveRoomWarning = null,
+    eventSink = {}
 )

@@ -47,6 +47,8 @@ import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -55,6 +57,7 @@ import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,7 +96,24 @@ fun RoomDetailsView(
                 SecuritySection()
             }
 
-            OtherActionsSection()
+            OtherActionsSection(onLeaveRoom = {
+                state.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
+            })
+
+            if (state.displayLeaveRoomWarning != null) {
+                ConfirmLeaveRoomDialog(
+                    leaveRoomWarning = state.displayLeaveRoomWarning,
+                    onConfirmLeave = { state.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = false)) },
+                    onDismiss = { state.eventSink(RoomDetailsEvent.ClearLeaveRoomWarning) }
+                )
+            }
+
+            if (state.error != null) {
+                ErrorDialog(
+                    content = stringResource(StringR.string.error_unknown),
+                    onDismiss = { state.eventSink(RoomDetailsEvent.ClearError) }
+                )
+            }
         }
     }
 }
@@ -174,14 +194,34 @@ internal fun SecuritySection(modifier: Modifier = Modifier) {
 }
 
 @Composable
-internal fun OtherActionsSection(modifier: Modifier = Modifier) {
+internal fun OtherActionsSection(onLeaveRoom: () -> Unit, modifier: Modifier = Modifier) {
     PreferenceCategory(showDivider = false, modifier = modifier) {
         PreferenceText(
             title = stringResource(R.string.screen_room_details_leave_room_title),
             icon = ImageVector.vectorResource(R.drawable.ic_door_open),
             tintColor = LocalColors.current.textActionCritical,
+            onClick = onLeaveRoom,
         )
     }
+}
+
+@Composable
+internal fun ConfirmLeaveRoomDialog(
+    leaveRoomWarning: LeaveRoomWarning,
+    onConfirmLeave: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    val content = when (leaveRoomWarning) {
+        LeaveRoomWarning.PrivateRoom -> "Are you sure that you want to leave this room? This room is not public and you will not be able to rejoin without an invite."
+        LeaveRoomWarning.LastUserInRoom -> "Are you sure that you want to leave this room? You are the only person here. If you leave, no one will be able to join in the future, including you."
+        LeaveRoomWarning.Generic -> "Are you sure you want to leave this room?"
+    }
+    ConfirmationDialog(
+        content = content,
+        submitText = "Leave",
+        onSubmitClicked = onConfirmLeave,
+        onDismiss = onDismiss,
+    )
 }
 
 @Preview

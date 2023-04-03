@@ -16,4 +16,8 @@
 
 package io.element.android.features.roomdetails.impl
 
-sealed interface RoomDetailsEvent
+sealed interface RoomDetailsEvent {
+    data class LeaveRoom(val needsConfirmation: Boolean) : RoomDetailsEvent
+    object ClearLeaveRoomWarning : RoomDetailsEvent
+    object ClearError : RoomDetailsEvent
+}

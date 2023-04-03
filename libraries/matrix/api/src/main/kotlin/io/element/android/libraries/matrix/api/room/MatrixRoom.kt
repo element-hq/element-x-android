@@ -33,6 +33,7 @@ interface MatrixRoom: Closeable {
     val avatarUrl: String?
     val members: List<RoomMember>
     val isEncrypted: Boolean
+    val isPublic: Boolean
 
     fun syncUpdateFlow(): Flow<Long>
 
@@ -51,4 +52,6 @@ interface MatrixRoom: Closeable {
     suspend fun replyMessage(eventId: EventId, message: String): Result<Unit>
 
     suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>
+
+    fun leave(): Result<Unit>
 }

@@ -37,11 +37,11 @@ import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun ConfirmationDialog(
-    title: String,
     content: String,
     onSubmitClicked: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
+    title: String? = null,
     submitText: String = stringResource(id = StringR.string.action_ok),
     cancelText: String = stringResource(id = StringR.string.action_cancel),
     thirdButtonText: String? = null,
@@ -60,7 +60,7 @@ fun ConfirmationDialog(
         modifier = modifier,
         onDismissRequest = onDismiss,
         title = {
-            Text(text = title)
+            if (title != null) { Text(text = title) }
         },
         text = {
             Text(content)
