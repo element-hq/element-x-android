@@ -14,24 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.components.avatar
+package io.element.android.features.createroom.impl.configureroom
 
-import android.os.Parcelable
-import androidx.compose.runtime.Immutable
-import kotlinx.parcelize.IgnoredOnParcel
-import kotlinx.parcelize.Parcelize
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
-@Immutable
-@Parcelize
-data class AvatarData(
-    val id: String,
-    val name: String?,
-    val url: String? = null,
-    @IgnoredOnParcel
-    val size: AvatarSize = AvatarSize.MEDIUM
-) : Parcelable {
-    fun getInitial(): String {
-        val firstChar = name?.firstOrNull() ?: id.getOrNull(1) ?: '?'
-        return firstChar.uppercase()
-    }
+open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomState> {
+    override val values: Sequence<ConfigureRoomState>
+        get() = sequenceOf(
+            aConfigureRoomState(),
+            // Add other state here
+        )
 }
+
+fun aConfigureRoomState() = ConfigureRoomState(
+    selectedUsers = emptyList(),
+    eventSink = {}
+)

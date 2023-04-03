@@ -31,12 +31,14 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.createroom.impl.addpeople.AddPeopleNode
+import io.element.android.features.createroom.impl.configureroom.ConfigureRoomNode
 import io.element.android.features.createroom.impl.root.CreateRoomRootNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
@@ -58,12 +60,15 @@ class CreateRoomFlowNode @AssistedInject constructor(
 
         @Parcelize
         object NewRoom : NavTarget
+
+        @Parcelize
+        data class ConfigureRoom(val users: List<MatrixUser>) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Root -> {
-                val callback = object : CreateRoomRootNode.Callback {
+                createNode<CreateRoomRootNode>(context = buildContext, plugins = listOf(object : CreateRoomRootNode.Callback {
                     override fun onCreateNewRoom() {
                         backstack.push(NavTarget.NewRoom)
                     }
@@ -71,10 +76,18 @@ class CreateRoomFlowNode @AssistedInject constructor(
                     override fun onOpenRoom(roomId: RoomId) {
                         plugins<CreateRoomEntryPoint.Callback>().forEach { it.onOpenRoom(roomId) }
                     }
-                }
-                createNode<CreateRoomRootNode>(buildContext, plugins = listOf(callback))
+                }))
             }
-            NavTarget.NewRoom -> createNode<AddPeopleNode>(buildContext)
+            NavTarget.NewRoom -> {
+                createNode<AddPeopleNode>(context = buildContext, plugins = listOf(object : AddPeopleNode.Callback {
+                    override fun onContinue(selectedUsers: List<MatrixUser>) {
+                        backstack.push(NavTarget.ConfigureRoom(selectedUsers))
+                    }
+                }))
+            }
+            is NavTarget.ConfigureRoom -> {
+                createNode<ConfigureRoomNode>(context = buildContext, plugins = listOf(ConfigureRoomNode.Inputs(navTarget.users)))
+            }
         }
     }
 
