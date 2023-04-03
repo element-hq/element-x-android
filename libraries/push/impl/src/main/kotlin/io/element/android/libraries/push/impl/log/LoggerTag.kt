@@ -19,3 +19,4 @@ package io.element.android.libraries.push.impl.log
 import io.element.android.libraries.core.log.logger.LoggerTag
 
 internal val pushLoggerTag = LoggerTag("Push")
+internal val notificationLoggerTag = LoggerTag("Notification", pushLoggerTag)

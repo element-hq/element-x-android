@@ -46,6 +46,7 @@ dependencies {
     api(projects.libraries.push.api)
 
     implementation(projects.services.analytics.api)
+    implementation(projects.services.appnavstate.api)
     implementation(projects.services.toolbox.api)
 
     api("me.gujun.android:span:1.7") {

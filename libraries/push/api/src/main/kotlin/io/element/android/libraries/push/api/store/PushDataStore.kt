@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.Flow
 interface PushDataStore {
     val pushCounterFlow: Flow<Int>
 
+    // TODO Move all those settings to the per user store...
     fun areNotificationEnabledForDevice(): Boolean
     fun setNotificationEnabledForDevice(enabled: Boolean)
 

@@ -33,4 +33,9 @@ class IntentProviderImpl @Inject constructor(
     override fun getMainIntent(): Intent {
         return Intent(context, MainActivity::class.java)
     }
+
+    override fun getIntent(sessionId: String, roomId: String?, threadId: String?): Intent {
+        // TODO Handle deeplink or pass parameters
+        return Intent(context, MainActivity::class.java)
+    }
 }

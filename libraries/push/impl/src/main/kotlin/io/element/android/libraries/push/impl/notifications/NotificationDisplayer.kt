@@ -26,8 +26,6 @@ import io.element.android.libraries.di.ApplicationContext
 import timber.log.Timber
 import javax.inject.Inject
 
-const val TEMPORARY_ID = 101
-
 class NotificationDisplayer @Inject constructor(
     @ApplicationContext private val context: Context,
 ) {

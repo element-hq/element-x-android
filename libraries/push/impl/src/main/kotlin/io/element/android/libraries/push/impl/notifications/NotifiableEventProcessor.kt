@@ -17,6 +17,7 @@
 package io.element.android.libraries.push.impl.notifications
 
 import io.element.android.libraries.push.impl.notifications.model.*
+import io.element.android.services.appnavstate.api.AppNavigationState
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -26,12 +27,16 @@ class NotifiableEventProcessor @Inject constructor(
     private val outdatedDetector: OutdatedEventDetector,
 ) {
 
-    fun process(queuedEvents: List<NotifiableEvent>, currentRoomId: String?, currentThreadId: String?, renderedEvents: ProcessedEvents): ProcessedEvents {
+    fun process(
+        queuedEvents: List<NotifiableEvent>,
+        appNavigationState: AppNavigationState?,
+        renderedEvents: ProcessedEvents,
+    ): ProcessedEvents {
         val processedEvents = queuedEvents.map {
             val type = when (it) {
                 is InviteNotifiableEvent -> ProcessedEvent.Type.KEEP
                 is NotifiableMessageEvent -> when {
-                    it.shouldIgnoreMessageEventInRoom(currentRoomId, currentThreadId) -> {
+                    it.shouldIgnoreMessageEventInRoom(appNavigationState) -> {
                         ProcessedEvent.Type.REMOVE
                             .also { Timber.d("notification message removed due to currently viewing the same room or thread") }
                     }

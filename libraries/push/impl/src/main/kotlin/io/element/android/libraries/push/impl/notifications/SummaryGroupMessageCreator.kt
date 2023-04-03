@@ -42,6 +42,7 @@ class SummaryGroupMessageCreator @Inject constructor(
 ) {
 
     fun createSummaryNotification(
+        sessionId: String,
         roomNotifications: List<RoomNotification.Message.Meta>,
         invitationNotifications: List<OneShotNotification.Append.Meta>,
         simpleNotifications: List<OneShotNotification.Append.Meta>,
@@ -71,6 +72,7 @@ class SummaryGroupMessageCreator @Inject constructor(
             .setSummaryText(stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages, nbEvents, nbEvents))
         return if (useCompleteNotificationFormat) {
             notificationUtils.buildSummaryListNotification(
+                sessionId,
                 summaryInboxStyle,
                 sumTitle,
                 noisy = summaryIsNoisy,
@@ -78,6 +80,7 @@ class SummaryGroupMessageCreator @Inject constructor(
             )
         } else {
             processSimpleGroupSummary(
+                sessionId,
                 summaryIsNoisy,
                 messageCount,
                 simpleNotifications.size,
@@ -89,6 +92,7 @@ class SummaryGroupMessageCreator @Inject constructor(
     }
 
     private fun processSimpleGroupSummary(
+        sessionId: String,
         summaryIsNoisy: Boolean,
         messageEventsCount: Int,
         simpleEventsCount: Int,
@@ -147,6 +151,7 @@ class SummaryGroupMessageCreator @Inject constructor(
             }
         }
         return notificationUtils.buildSummaryListNotification(
+            sessionId = sessionId,
             style = null,
             compatSummary = privacyTitle,
             noisy = summaryIsNoisy,

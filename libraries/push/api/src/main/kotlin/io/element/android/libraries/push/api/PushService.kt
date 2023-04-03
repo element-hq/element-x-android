@@ -19,12 +19,6 @@ package io.element.android.libraries.push.api
 import io.element.android.libraries.matrix.api.MatrixClient
 
 interface PushService {
-    // TODO EAx remove
-    fun setCurrentRoom(roomId: String?)
-
-    // TODO EAx remove
-    fun setCurrentThread(threadId: String?)
-
     fun notificationStyleChanged()
 
     // Ensure pusher is registered

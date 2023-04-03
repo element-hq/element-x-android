@@ -33,7 +33,13 @@ class RoomGroupMessageCreator @Inject constructor(
     private val notificationUtils: NotificationUtils
 ) {
 
-    fun createRoomMessage(events: List<NotifiableMessageEvent>, roomId: String, userDisplayName: String, userAvatarUrl: String?): RoomNotification.Message {
+    fun createRoomMessage(
+        sessionId: String,
+        events: List<NotifiableMessageEvent>,
+        roomId: String,
+        userDisplayName: String,
+        userAvatarUrl: String?
+    ): RoomNotification.Message {
         val lastKnownRoomEvent = events.last()
         val roomName = lastKnownRoomEvent.roomName ?: lastKnownRoomEvent.senderName ?: ""
         val roomIsGroup = !lastKnownRoomEvent.roomIsDirect
@@ -41,7 +47,7 @@ class RoomGroupMessageCreator @Inject constructor(
             Person.Builder()
                 .setName(userDisplayName)
                 .setIcon(bitmapLoader.getUserIcon(userAvatarUrl))
-                .setKey(lastKnownRoomEvent.matrixID)
+                .setKey(lastKnownRoomEvent.sessionId)
                 .build()
         ).also {
             it.conversationTitle = roomName.takeIf { roomIsGroup }
@@ -70,7 +76,12 @@ class RoomGroupMessageCreator @Inject constructor(
         return RoomNotification.Message(
             notificationUtils.buildMessagesListNotification(
                 style,
-                RoomEventGroupInfo(roomId, roomName, isDirect = !roomIsGroup).also {
+                RoomEventGroupInfo(
+                    sessionId = sessionId,
+                    roomId = roomId,
+                    roomDisplayName = roomName,
+                    isDirect = !roomIsGroup,
+                ).also {
                     it.hasSmartReplyError = smartReplyErrors.isNotEmpty()
                     it.shouldBing = meta.shouldBing
                     it.customSound = events.last().soundName

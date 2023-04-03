@@ -32,14 +32,6 @@ class DefaultPushService @Inject constructor(
     private val pushersManager: PushersManager,
     private val fcmHelper: FcmHelper,
 ) : PushService {
-    override fun setCurrentRoom(roomId: String?) {
-        notificationDrawerManager.setCurrentRoom(roomId)
-    }
-
-    override fun setCurrentThread(threadId: String?) {
-        notificationDrawerManager.setCurrentThread(threadId)
-    }
-
     override fun notificationStyleChanged() {
         notificationDrawerManager.notificationStyleChanged()
     }
