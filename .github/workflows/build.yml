@@ -42,7 +42,7 @@ jobs:
             app/build/outputs/apk/debug/*.apk
       - uses: rnkdsh/action-upload-diawi@v1.3.2
         id: diawi
-        if: ${{ github.event_name == 'pull_request' }}
+        if: ${{ github.event_name == 'pull_request' && secrets.DIAWI_TOKEN != '' }}
         with:
           token: ${{ secrets.DIAWI_TOKEN }}
           file: app/build/outputs/apk/debug/app-arm64-v8a-debug.apk
