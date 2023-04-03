@@ -14,24 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.components.avatar
+package io.element.android.features.createroom.impl.configureroom
 
-import android.os.Parcelable
-import androidx.compose.runtime.Immutable
-import kotlinx.parcelize.IgnoredOnParcel
-import kotlinx.parcelize.Parcelize
+import io.element.android.libraries.matrix.ui.model.MatrixUser
 
-@Immutable
-@Parcelize
-data class AvatarData(
-    val id: String,
-    val name: String?,
-    val url: String? = null,
-    @IgnoredOnParcel
-    val size: AvatarSize = AvatarSize.MEDIUM
-) : Parcelable {
-    fun getInitial(): String {
-        val firstChar = name?.firstOrNull() ?: id.getOrNull(1) ?: '?'
-        return firstChar.uppercase()
-    }
-}
+data class ConfigureRoomPresenterArgs(
+    val selectedUsers: List<MatrixUser>,
+)
