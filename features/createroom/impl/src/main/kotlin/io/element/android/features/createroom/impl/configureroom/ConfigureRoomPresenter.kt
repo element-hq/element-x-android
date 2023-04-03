@@ -21,6 +21,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.Presenter
+import kotlinx.collections.immutable.toImmutableList
 
 class ConfigureRoomPresenter @AssistedInject constructor(
     @Assisted val args: ConfigureRoomPresenterArgs,
@@ -41,7 +42,8 @@ class ConfigureRoomPresenter @AssistedInject constructor(
         }
 
         return ConfigureRoomState(
-            selectedUsers = args.selectedUsers,
+            selectedUsers = args.selectedUsers.toImmutableList(),
+            avatarUri = null,
             eventSink = ::handleEvents,
         )
     }
