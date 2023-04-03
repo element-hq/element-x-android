@@ -20,8 +20,9 @@ package io.element.android.libraries.push.impl.notifications
  * Data class to hold information about a group of notifications for a room.
  */
 data class RoomEventGroupInfo(
+        val sessionId: String,
         val roomId: String,
-        val roomDisplayName: String = "",
+        val roomDisplayName: String,
         val isDirect: Boolean = false
 ) {
     // An event in the list has not yet been display

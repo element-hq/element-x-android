@@ -23,7 +23,7 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableMess
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import timber.log.Timber
 
-data class NotificationEventQueue(
+data class NotificationEventQueue constructor(
     private val queue: MutableList<NotifiableEvent>,
     /**
      * An in memory FIFO cache of the seen events.
@@ -103,7 +103,7 @@ data class NotificationEventQueue(
     }
 
     private fun findExistingById(notifiableEvent: NotifiableEvent): NotifiableEvent? {
-        return queue.firstOrNull { it.eventId == notifiableEvent.eventId }
+        return queue.firstOrNull { it.sessionId == notifiableEvent.sessionId && it.eventId == notifiableEvent.eventId }
     }
 
     private fun findEdited(notifiableEvent: NotifiableEvent): NotifiableEvent? {
@@ -125,19 +125,24 @@ data class NotificationEventQueue(
         )
     }
 
-    fun clearMemberShipNotificationForRoom(roomId: String) {
-        Timber.d("clearMemberShipOfRoom $roomId")
-        queue.removeAll { it is InviteNotifiableEvent && it.roomId == roomId }
+    fun clearMemberShipNotificationForRoom(sessionId: String, roomId: String) {
+        Timber.d("clearMemberShipOfRoom $sessionId, $roomId")
+        queue.removeAll { it is InviteNotifiableEvent && it.sessionId == sessionId  && it.roomId == roomId }
     }
 
-    fun clearMessagesForRoom(roomId: String) {
-        Timber.d("clearMessageEventOfRoom $roomId")
-        queue.removeAll { it is NotifiableMessageEvent && it.roomId == roomId }
+    fun clearMessagesForSession(sessionId: String) {
+        Timber.d("clearMessagesForSession $sessionId")
+        queue.removeAll { it is NotifiableMessageEvent && it.sessionId == sessionId}
     }
 
-    fun clearMessagesForThread(roomId: String, threadId: String) {
-        Timber.d("clearMessageEventOfThread $roomId, $threadId")
-        queue.removeAll { it is NotifiableMessageEvent && it.roomId == roomId && it.threadId == threadId }
+    fun clearMessagesForRoom(sessionId: String, roomId: String) {
+        Timber.d("clearMessageEventOfRoom $sessionId, $roomId")
+        queue.removeAll { it is NotifiableMessageEvent && it.sessionId == sessionId  && it.roomId == roomId }
+    }
+
+    fun clearMessagesForThread(sessionId: String, roomId: String, threadId: String) {
+        Timber.d("clearMessageEventOfThread $sessionId, $roomId, $threadId")
+        queue.removeAll { it is NotifiableMessageEvent && it.sessionId == sessionId  && it.roomId == roomId && it.threadId == threadId }
     }
 
     fun rawEvents(): List<NotifiableEvent> = queue

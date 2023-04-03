@@ -27,7 +27,6 @@ import javax.inject.Inject
 data class NotificationActionIds @Inject constructor(
     private val buildMeta: BuildMeta,
 ) {
-
     val join = "${buildMeta.applicationId}.NotificationActions.JOIN_ACTION"
     val reject = "${buildMeta.applicationId}.NotificationActions.REJECT_ACTION"
     val quickLaunch = "${buildMeta.applicationId}.NotificationActions.QUICK_LAUNCH_ACTION"

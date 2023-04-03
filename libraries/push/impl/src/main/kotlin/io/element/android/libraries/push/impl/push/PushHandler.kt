@@ -20,15 +20,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import io.element.android.libraries.androidutils.network.WifiDetector
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.store.PushDataStore
 import io.element.android.libraries.push.impl.PushersManager
 import io.element.android.libraries.push.impl.clientsecret.PushClientSecret
@@ -49,7 +46,6 @@ private val loggerTag = LoggerTag("PushHandler", pushLoggerTag)
 class PushHandler @Inject constructor(
     private val notificationDrawerManager: NotificationDrawerManager,
     private val notifiableEventResolver: NotifiableEventResolver,
-    // private val activeSessionHolder: ActiveSessionHolder,
     private val pushDataStore: PushDataStore,
     private val defaultPushDataStore: DefaultPushDataStore,
     private val pushClientSecret: PushClientSecret,
@@ -95,12 +91,7 @@ class PushHandler @Inject constructor(
         }
 
         mUIHandler.post {
-            if (ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-                // we are in foreground, let the sync do the things?
-                Timber.tag(loggerTag.value).d("PUSH received in a foreground state, ignore")
-            } else {
-                coroutineScope.launch(Dispatchers.IO) { handleInternal(pushData) }
-            }
+            coroutineScope.launch(Dispatchers.IO) { handleInternal(pushData) }
         }
     }
 
@@ -136,96 +127,16 @@ class PushHandler @Inject constructor(
                 return
             }
 
-            // Restore session
-            val session = matrixAuthenticationService.restoreSession(SessionId(userId)).getOrNull() ?: return
-            // TODO EAx, no need for a session?
-            val notificationData = session.let {// TODO Use make the app crashes
-                it.notificationService().getNotification(
-                    userId = userId,
-                    roomId = pushData.roomId,
-                    eventId = pushData.eventId,
-                )
+            val notificationData = notifiableEventResolver.resolveEvent(userId, pushData.roomId, pushData.eventId)
+
+            if (notificationData == null) {
+                Timber.w("Unable to get a notification data")
+                return
             }
 
-            // TODO Remove
-            Timber.w("Notification: $notificationData")
-            // TODO Display notification
-
-            notificationDrawerManager.displayTemporaryNotification()
-
-            /* TODO EAx
-            - get the event
-            - display the notif
-
-            val session = activeSessionHolder.getOrInitializeSession()
-
-            if (session == null) {
-                Timber.tag(loggerTag.value).w("## Can't sync from push, no current session")
-            } else {
-                if (isEventAlreadyKnown(pushData)) {
-                    Timber.tag(loggerTag.value).d("Ignoring push, event already known")
-                } else {
-                    // Try to get the Event content faster
-                    Timber.tag(loggerTag.value).d("Requesting event in fast lane")
-                    getEventFastLane(session, pushData)
-
-                    Timber.tag(loggerTag.value).d("Requesting background sync")
-                    session.syncService().requireBackgroundSync()
-                }
-            }
-
-             */
+            notificationDrawerManager.updateEvents { it.onNotifiableEventReceived(notificationData) }
         } catch (e: Exception) {
             Timber.tag(loggerTag.value).e(e, "## handleInternal() failed")
         }
-    }
-
-    /* TODO EAx
-    private suspend fun getEventFastLane(session: Session, pushData: PushData) {
-        pushData.roomId ?: return
-        pushData.eventId ?: return
-
-        if (wifiDetector.isConnectedToWifi().not()) {
-            Timber.tag(loggerTag.value).d("No WiFi network, do not get Event")
-            return
-        }
-
-        Timber.tag(loggerTag.value).d("Fast lane: start request")
-        val event = tryOrNull { session.eventService().getEvent(pushData.roomId, pushData.eventId) } ?: return
-
-        val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event, canBeReplaced = true)
-
-        if (resolvedEvent is NotifiableMessageEvent) {
-            // If the room is currently displayed, we will not show a notification, so no need to get the Event faster
-            if (notificationDrawerManager.shouldIgnoreMessageEventInRoom(resolvedEvent)) {
-                return
-            }
-        }
-
-        resolvedEvent
-                ?.also { Timber.tag(loggerTag.value).d("Fast lane: notify drawer") }
-                ?.let {
-                    notificationDrawerManager.updateEvents { it.onNotifiableEventReceived(resolvedEvent) }
-                }
-    }
-
-     */
-
-    // check if the event was not yet received
-    // a previous catchup might have already retrieved the notified event
-    private fun isEventAlreadyKnown(pushData: PushData): Boolean {
-        /* TODO EAx
-        if (pushData.eventId != null && pushData.roomId != null) {
-            try {
-                val session = activeSessionHolder.getSafeActiveSession() ?: return false
-                val room = session.getRoom(pushData.roomId) ?: return false
-                return room.getTimelineEvent(pushData.eventId) != null
-            } catch (e: Exception) {
-                Timber.tag(loggerTag.value).e(e, "## isEventAlreadyKnown() : failed to check if the event was already defined")
-            }
-        }
-
-         */
-        return false
     }
 }

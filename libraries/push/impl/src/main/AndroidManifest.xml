@@ -60,5 +60,15 @@
                 <action android:name="org.unifiedpush.android.distributor.REGISTER" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name=".notifications.TestNotificationReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".notifications.NotificationBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
     </application>
 </manifest>

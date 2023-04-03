@@ -228,7 +228,7 @@ class NotificationUtils @Inject constructor(
                 true
                 /** TODO EAx vectorPreferences.areThreadMessagesEnabled() */
             -> buildOpenThreadIntent(roomInfo, threadId)
-            else -> buildOpenRoomIntent(roomInfo.roomId)
+            else -> buildOpenRoomIntent(roomInfo.sessionId, roomInfo.roomId)
         }
 
         val smallIcon = R.drawable.ic_notification
@@ -259,8 +259,7 @@ class NotificationUtils @Inject constructor(
             )
             // Auto-bundling is enabled for 4 or more notifications on API 24+ (N+)
             // devices and all Wear devices. But we want a custom grouping, so we specify the groupID
-            // TODO Group should be current user display name
-            .setGroup(buildMeta.applicationName)
+            .setGroup(roomInfo.sessionId)
             // In order to avoid notification making sound twice (due to the summary notification)
             .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
             .setSmallIcon(smallIcon)
@@ -287,7 +286,8 @@ class NotificationUtils @Inject constructor(
                 // Mark room as read
                 val markRoomReadIntent = Intent(context, NotificationBroadcastReceiver::class.java)
                 markRoomReadIntent.action = actionIds.markRoomRead
-                markRoomReadIntent.data = createIgnoredUri(roomInfo.roomId)
+                markRoomReadIntent.data = createIgnoredUri("markRead?${roomInfo.sessionId}&$${roomInfo.roomId}")
+                markRoomReadIntent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, roomInfo.sessionId)
                 markRoomReadIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomInfo.roomId)
                 val markRoomReadPendingIntent = PendingIntent.getBroadcast(
                     context,
@@ -307,7 +307,7 @@ class NotificationUtils @Inject constructor(
 
                 // Quick reply
                 if (!roomInfo.hasSmartReplyError) {
-                    buildQuickReplyIntent(roomInfo.roomId, threadId, senderDisplayNameForReplyCompat)?.let { replyPendingIntent ->
+                    buildQuickReplyIntent(roomInfo.sessionId, roomInfo.roomId, threadId, senderDisplayNameForReplyCompat)?.let { replyPendingIntent ->
                         val remoteInput = RemoteInput.Builder(NotificationBroadcastReceiver.KEY_TEXT_REPLY)
                             .setLabel(stringProvider.getString(StringR.string.action_quick_reply))
                             .build()
@@ -332,8 +332,9 @@ class NotificationUtils @Inject constructor(
                 }
 
                 val intent = Intent(context, NotificationBroadcastReceiver::class.java)
-                intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomInfo.roomId)
                 intent.action = actionIds.dismissRoom
+                intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, roomInfo.sessionId)
+                intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomInfo.roomId)
                 val pendingIntent = PendingIntent.getBroadcast(
                     context.applicationContext,
                     clock.epochMillis().toInt(),
@@ -347,8 +348,7 @@ class NotificationUtils @Inject constructor(
     }
 
     fun buildRoomInvitationNotification(
-        inviteNotifiableEvent: InviteNotifiableEvent,
-        matrixId: String
+        inviteNotifiableEvent: InviteNotifiableEvent
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
@@ -359,7 +359,7 @@ class NotificationUtils @Inject constructor(
             .setOnlyAlertOnce(true)
             .setContentTitle(inviteNotifiableEvent.roomName ?: buildMeta.applicationName)
             .setContentText(inviteNotifiableEvent.description)
-            .setGroup(buildMeta.applicationName)
+            .setGroup(inviteNotifiableEvent.sessionId)
             .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
             .setSmallIcon(smallIcon)
             .setColor(accentColor)
@@ -368,7 +368,8 @@ class NotificationUtils @Inject constructor(
                 // offer to type a quick reject button
                 val rejectIntent = Intent(context, NotificationBroadcastReceiver::class.java)
                 rejectIntent.action = actionIds.reject
-                rejectIntent.data = createIgnoredUri("$roomId&$matrixId")
+                rejectIntent.data = createIgnoredUri("rejectInvite?${inviteNotifiableEvent.sessionId}&$roomId")
+                rejectIntent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, inviteNotifiableEvent.sessionId)
                 rejectIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
                 val rejectIntentPendingIntent = PendingIntent.getBroadcast(
                     context,
@@ -386,7 +387,8 @@ class NotificationUtils @Inject constructor(
                 // offer to type a quick accept button
                 val joinIntent = Intent(context, NotificationBroadcastReceiver::class.java)
                 joinIntent.action = actionIds.join
-                joinIntent.data = createIgnoredUri("$roomId&$matrixId")
+                joinIntent.data = createIgnoredUri("acceptInvite?${inviteNotifiableEvent.sessionId}&$roomId")
+                joinIntent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, inviteNotifiableEvent.sessionId)
                 joinIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
                 val joinIntentPendingIntent = PendingIntent.getBroadcast(
                     context,
@@ -433,7 +435,6 @@ class NotificationUtils @Inject constructor(
 
     fun buildSimpleEventNotification(
         simpleNotifiableEvent: SimpleNotifiableEvent,
-        matrixId: String
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
@@ -445,7 +446,7 @@ class NotificationUtils @Inject constructor(
             .setOnlyAlertOnce(true)
             .setContentTitle(buildMeta.applicationName)
             .setContentText(simpleNotifiableEvent.description)
-            .setGroup(buildMeta.applicationName)
+            .setGroup(simpleNotifiableEvent.sessionId)
             .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
             .setSmallIcon(smallIcon)
             .setColor(accentColor)
@@ -476,81 +477,45 @@ class NotificationUtils @Inject constructor(
             .build()
     }
 
-    private fun buildOpenRoomIntent(roomId: String): PendingIntent? {
-        return null
-        /*
-        val roomIntentTap = RoomDetailActivity.newIntent(context, TimelineArgs(roomId = roomId, switchToParentSpace = true), true)
-        roomIntentTap.action = actionIds.tapToView
+    private fun buildOpenRoomIntent(sessionId: String, roomId: String): PendingIntent? {
+        val roomIntent = intentProvider.getIntent(sessionId = sessionId, roomId = roomId, threadId = null)
+        roomIntent.action = actionIds.tapToView
         // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
-        roomIntentTap.data = createIgnoredUri("openRoom?$roomId")
+        roomIntent.data = createIgnoredUri("openRoom?$sessionId&$roomId")
 
-        // Recreate the back stack
-        return TaskStackBuilder.create(context)
-            .addNextIntentWithParentStack(HomeActivity.newIntent(context, firstStartMainActivity = false))
-            .addNextIntent(roomIntentTap)
-            .getPendingIntent(
-                clock.epochMillis().toInt(),
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
-            )
-         */
+        return PendingIntent.getActivity(
+            context,
+            clock.epochMillis().toInt(),
+            roomIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+        )
     }
 
     private fun buildOpenThreadIntent(roomInfo: RoomEventGroupInfo, threadId: String?): PendingIntent? {
-        return null
-        /*
-        val threadTimelineArgs = ThreadTimelineArgs(
-            startsThread = false,
-            roomId = roomInfo.roomId,
-            rootThreadEventId = threadId,
-            showKeyboard = false,
-            displayName = roomInfo.roomDisplayName,
-            avatarUrl = null,
-            roomEncryptionTrustLevel = null,
-        )
-        val threadIntentTap = ThreadsActivity.newIntent(
-            context = context,
-            threadTimelineArgs = threadTimelineArgs,
-            threadListArgs = null,
-            firstStartMainActivity = true,
-        )
+        val sessionId = roomInfo.sessionId
+        val roomId = roomInfo.roomId
+        val threadIntentTap = intentProvider.getIntent(sessionId = sessionId, roomId = roomId, threadId = threadId)
         threadIntentTap.action = actionIds.tapToView
         // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
-        threadIntentTap.data = createIgnoredUri("openThread?$threadId")
+        threadIntentTap.data = createIgnoredUri("openThread?$sessionId&$roomId&$threadId")
 
-        val roomIntent = RoomDetailActivity.newIntent(
-            context = context,
-            timelineArgs = TimelineArgs(
-                roomId = roomInfo.roomId,
-                switchToParentSpace = true
-            ),
-            firstStartMainActivity = false
-        )
-        // Recreate the back stack
-        return TaskStackBuilder.create(context)
-            .addNextIntentWithParentStack(HomeActivity.newIntent(context, firstStartMainActivity = false))
-            .addNextIntentWithParentStack(roomIntent)
-            .addNextIntent(threadIntentTap)
-            .getPendingIntent(
-                clock.epochMillis().toInt(),
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
-            )
-         */
-    }
-
-    private fun buildOpenHomePendingIntentForSummary(): PendingIntent {
-        TODO()
-        /*
-        val intent = HomeActivity.newIntent(context, firstStartMainActivity = false, clearNotification = true)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        intent.data = createIgnoredUri("tapSummary")
-        val mainIntent = MainActivity.getIntentWithNextIntent(context, intent)
         return PendingIntent.getActivity(
             context,
-            Random.nextInt(1000),
-            mainIntent,
+            clock.epochMillis().toInt(),
+            threadIntentTap,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
         )
-         */
+    }
+
+    private fun buildOpenHomePendingIntentForSummary(sessionId: String): PendingIntent {
+        val intent = intentProvider.getIntent(sessionId = sessionId, roomId = null, threadId = null)
+        intent.data = createIgnoredUri("tapSummary?$sessionId")
+        return PendingIntent.getActivity(
+            context,
+            clock.epochMillis().toInt(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+        )
     }
 
     /*
@@ -560,12 +525,18 @@ class NotificationUtils @Inject constructor(
         However, for Android devices running Marshmallow and below (API level 23 and below),
         it will be more appropriate to use an activity. Since you have to provide your own UI.
      */
-    private fun buildQuickReplyIntent(roomId: String, threadId: String?, senderName: String?): PendingIntent? {
+    private fun buildQuickReplyIntent(
+        sessionId: String,
+        roomId: String,
+        threadId: String?,
+        senderName: String?
+    ): PendingIntent? {
         val intent: Intent
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent = Intent(context, NotificationBroadcastReceiver::class.java)
             intent.action = actionIds.smartReply
-            intent.data = createIgnoredUri(roomId)
+            intent.data = createIgnoredUri("quickReply?$sessionId&$roomId")
+            intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId)
             intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
             threadId?.let {
                 intent.putExtra(NotificationBroadcastReceiver.KEY_THREAD_ID, it)
@@ -602,6 +573,7 @@ class NotificationUtils @Inject constructor(
      * Build the summary notification.
      */
     fun buildSummaryListNotification(
+        sessionId: String,
         style: NotificationCompat.InboxStyle?,
         compatSummary: String,
         noisy: Boolean,
@@ -615,12 +587,12 @@ class NotificationUtils @Inject constructor(
             // used in compat < N, after summary is built based on child notifications
             .setWhen(lastMessageTimestamp)
             .setStyle(style)
-            .setContentTitle(buildMeta.applicationName)
+            .setContentTitle(sessionId)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setSmallIcon(smallIcon)
             // set content text to support devices running API level < 24
             .setContentText(compatSummary)
-            .setGroup(buildMeta.applicationName)
+            .setGroup(sessionId)
             // set this notification as the summary for the group
             .setGroupSummary(true)
             .setColor(accentColor)
@@ -639,15 +611,16 @@ class NotificationUtils @Inject constructor(
                     priority = NotificationCompat.PRIORITY_LOW
                 }
             }
-            .setContentIntent(buildOpenHomePendingIntentForSummary())
-            .setDeleteIntent(getDismissSummaryPendingIntent())
+            .setContentIntent(buildOpenHomePendingIntentForSummary(sessionId))
+            .setDeleteIntent(getDismissSummaryPendingIntent(sessionId))
             .build()
     }
 
-    private fun getDismissSummaryPendingIntent(): PendingIntent {
+    private fun getDismissSummaryPendingIntent(sessionId: String): PendingIntent {
         val intent = Intent(context, NotificationBroadcastReceiver::class.java)
         intent.action = actionIds.dismissSummary
-        intent.data = createIgnoredUri("deleteSummary")
+        intent.data = createIgnoredUri("deleteSummary?$sessionId")
+        intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId)
         return PendingIntent.getBroadcast(
             context.applicationContext,
             0,
@@ -701,23 +674,6 @@ class NotificationUtils @Inject constructor(
                 .setContentIntent(testPendingIntent)
                 .build()
         )
-    }
-
-    fun createTemporaryNotification(): Notification {
-        val contentIntent = intentProvider.getMainIntent()
-        val pendingIntent = PendingIntent.getActivity(context, 0, contentIntent, PendingIntentCompat.FLAG_IMMUTABLE)
-
-        return NotificationCompat.Builder(context, NOISY_NOTIFICATION_CHANNEL_ID)
-            .setContentTitle(buildMeta.applicationName)
-            .setContentText(stringProvider.getString(R.string.notification_new_messages_temporary))
-            .setSmallIcon(R.drawable.ic_notification)
-            .setLargeIcon(getBitmap(context, R.drawable.element_logo_green))
-            .setColor(ContextCompat.getColor(context, R.color.notification_accent_color))
-            .setPriority(NotificationCompat.PRIORITY_MAX)
-            .setCategory(NotificationCompat.CATEGORY_STATUS)
-            .setAutoCancel(true)
-            .setContentIntent(pendingIntent)
-            .build()
     }
 
     private fun getBitmap(context: Context, @DrawableRes drawableRes: Int): Bitmap? {

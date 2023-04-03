@@ -25,7 +25,6 @@
     <string name="notification_silent_notifications">Silent notifications</string>
     <string name="call">Call</string>
     <string name="notification_new_messages">New Messages</string>
-    <string name="notification_new_messages_temporary">You have new message(s)</string>
     <string name="action_mark_room_read">Mark as read</string>
     <string name="action_join">Join</string>
     <string name="action_reject">Reject</string>

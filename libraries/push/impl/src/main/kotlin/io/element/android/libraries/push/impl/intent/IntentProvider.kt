@@ -20,7 +20,13 @@ import android.content.Intent
 
 interface IntentProvider {
     /**
-     * Provide an intent to start the application
+     * Provide an intent to start the application.
      */
     fun getMainIntent(): Intent
+
+    fun getIntent(
+        sessionId: String,
+        roomId: String?,
+        threadId: String?,
+    ): Intent
 }
