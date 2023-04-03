@@ -46,10 +46,10 @@ jobs:
           token: ${{ secrets.DIAWI_TOKEN }}
         if: ${{ github.event_name == 'pull_request' && env.token != '' }}
         with:
-          token: ${{ secrets.DIAWI_TOKEN }}
+          token: ${{ env.token }}
           file: app/build/outputs/apk/debug/app-arm64-v8a-debug.apk
       - name: Add or update PR comment with QR Code to download APK.
-        if: ${{ github.event_name == 'pull_request' }}
+        if: ${{ github.event_name == 'pull_request' && steps.diawi.conclusion == 'success' }}
         uses: NejcZdovc/comment-pr@v2
         with:
           message: |
