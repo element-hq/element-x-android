@@ -22,8 +22,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
-import io.element.android.features.selectusers.impl.DefaultSelectUsersPresenter
+import io.element.android.features.selectusers.test.FakeSelectUserPresenterFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -35,10 +34,7 @@ class AddPeoplePresenterTests {
 
     @Before
     fun setup() {
-        val selectUsersFactory = object : DefaultSelectUsersPresenter.DefaultSelectUsersFactory {
-            override fun create(args: SelectUsersPresenterArgs) = DefaultSelectUsersPresenter(args)
-        }
-        presenter = AddPeoplePresenter(selectUsersFactory)
+        presenter = AddPeoplePresenter(FakeSelectUserPresenterFactory())
     }
 
     @Test
