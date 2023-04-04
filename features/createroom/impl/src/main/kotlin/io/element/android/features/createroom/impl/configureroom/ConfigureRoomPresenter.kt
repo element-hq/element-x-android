@@ -16,7 +16,12 @@
 
 package io.element.android.features.createroom.impl.configureroom
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -34,16 +39,23 @@ class ConfigureRoomPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): ConfigureRoomState {
+        var roomName by rememberSaveable { mutableStateOf("") }
+        var topic by rememberSaveable { mutableStateOf("") }
+        var avatarUri by rememberSaveable { mutableStateOf<Uri?>(null) }
 
         fun handleEvents(event: ConfigureRoomEvents) {
             when (event) {
-                ConfigureRoomEvents.MyEvent -> Unit
+                is ConfigureRoomEvents.AvatarUriChanged -> avatarUri = event.uri
+                is ConfigureRoomEvents.RoomNameChanged -> roomName = event.name
+                is ConfigureRoomEvents.TopicChanged -> topic = event.topic
             }
         }
 
         return ConfigureRoomState(
             selectedUsers = args.selectedUsers.toImmutableList(),
-            avatarUri = null,
+            roomName = roomName,
+            topic = topic,
+            avatarUri = avatarUri,
             eventSink = ::handleEvents,
         )
     }

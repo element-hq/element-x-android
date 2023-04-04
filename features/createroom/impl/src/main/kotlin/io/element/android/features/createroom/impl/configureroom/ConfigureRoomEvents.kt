@@ -16,7 +16,10 @@
 
 package io.element.android.features.createroom.impl.configureroom
 
-// TODO Add your events or remove the file completely if no events
+import android.net.Uri
+
 sealed interface ConfigureRoomEvents {
-    object MyEvent : ConfigureRoomEvents
+    data class RoomNameChanged(val name: String) : ConfigureRoomEvents
+    data class TopicChanged(val topic: String) : ConfigureRoomEvents
+    data class AvatarUriChanged(val uri: Uri?) : ConfigureRoomEvents
 }

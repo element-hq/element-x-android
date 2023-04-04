@@ -22,6 +22,8 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class ConfigureRoomState(
     val selectedUsers: ImmutableList<MatrixUser>,
+    val roomName: String,
+    val topic: String,
     val avatarUri: Uri?,
     val eventSink: (ConfigureRoomEvents) -> Unit
 )
