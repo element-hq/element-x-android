@@ -88,33 +88,42 @@ const allowList = [
     "yostyle",
 ]
 
-// We ignore signoff requirements for employees of Element
-// as copyright assignment is covered by our employee contracts.
-
-var memberOfElement
-
-try {
-   github.api.rest.orgs.checkPublicMembership({
-      org: "vector-im",
-      username: user
-   })
-   memberOfElement = true
-} catch (err) {
-   // Raises an error if 404 is returned = not member
-   memberOfElement = false
-}
-
-
-
-const requiresSignOff = !allowList.includes(user) || !memberOfElement
-
-if (requiresSignOff) {
+function signoff_needed(reason) {
+    message("Sign-off required, " + reason)
     const hasPRBodySignOff = pr.body.includes(signOff)
     const hasCommitSignOff = danger.git.commits.every(commit => commit.message.includes(signOff))
     if (!hasPRBodySignOff && !hasCommitSignOff) {
         fail("Please add a sign-off to either the PR description or to the commits themselves. See instructions [here](https://matrix-org.github.io/synapse/latest/development/contributing_guide.html#sign-off).")
     }
 }
+
+function signoff_unneeded(reason) {
+    message("Sign-off not required, " + reason)
+}
+
+// Somewhat awkward phrasing, dangerfile is not in an async context.
+if (allowList.includes(user)) {
+    signoff_unneeded("allow-list")
+} else {
+    github.api.rest.orgs.checkMembershipForUser({
+        org: "vector-im",
+        username: user,
+    }).then((result) => {
+        if (result.status == 204) {
+            signoff_unneeded("org-member")
+        }
+        else {
+            signoff_needed("not-org-member")
+        }
+    }).catch((error) => { 
+        if (error.response.status == 404) {
+            signoff_needed("not-org-member");
+        } else {
+            console.log(error); signoff_needed("error") 
+        }
+    })
+}
+
 
 // Check for screenshots on view changes
 const hasChangedViews = editedFiles.filter(file => file.includes("/layout")).length > 0
