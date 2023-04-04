@@ -17,8 +17,8 @@
 package io.element.android.features.createroom.impl.configureroom
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.matrix.ui.components.aMatrixUser
-import kotlinx.collections.immutable.persistentListOf
+import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import kotlinx.collections.immutable.toImmutableList
 
 open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomState> {
     override val values: Sequence<ConfigureRoomState>
@@ -29,7 +29,7 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
 }
 
 fun aConfigureRoomState() = ConfigureRoomState(
-    selectedUsers = persistentListOf(aMatrixUser(), aMatrixUser(), aMatrixUser(), aMatrixUser(), aMatrixUser(), aMatrixUser()),
+    selectedUsers = aMatrixUserList().toImmutableList(),
     avatarUri = null,
     eventSink = {}
 )
