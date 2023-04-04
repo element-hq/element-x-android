@@ -17,60 +17,75 @@
 package io.element.android.libraries.push.impl.notifications
 
 import android.content.Context
+import io.element.android.libraries.androidutils.file.EncryptedFileFactory
+import io.element.android.libraries.core.data.tryOrNull
+import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.push.impl.log.notificationLoggerTag
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import timber.log.Timber
 import java.io.File
-import java.io.FileOutputStream
+import java.io.ObjectInputStream
+import java.io.ObjectOutputStream
 import javax.inject.Inject
 
-// TODO Multi-account
-private const val ROOMS_NOTIFICATIONS_FILE_NAME = "im.vector.notifications.cache"
-private const val KEY_ALIAS_SECRET_STORAGE = "notificationMgr"
+private const val ROOMS_NOTIFICATIONS_FILE_NAME_LEGACY = "im.vector.notifications.cache"
+private const val FILE_NAME = "notifications.bin"
+
+private val loggerTag = LoggerTag("NotificationEventPersistence", notificationLoggerTag)
 
 class NotificationEventPersistence @Inject constructor(
     @ApplicationContext private val context: Context,
-    // private val matrix: Matrix,
 ) {
+    private val file by lazy {
+        deleteLegacyFileIfAny()
+        context.getDatabasePath(FILE_NAME)
+    }
+
+    private val encryptedFile by lazy {
+        EncryptedFileFactory(context).create(file)
+    }
 
     fun loadEvents(factory: (List<NotifiableEvent>) -> NotificationEventQueue): NotificationEventQueue {
-        try {
-            val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
-            if (file.exists()) {
-                file.inputStream().use {
-                    val events: ArrayList<NotifiableEvent>? = null // TODO EAx matrix.secureStorageService().loadSecureSecret(it, KEY_ALIAS_SECRET_STORAGE)
-                    if (events != null) {
-                        return factory(events)
+        val rawEvents: ArrayList<NotifiableEvent>? = file
+            .takeIf { it.exists() }
+            ?.let {
+                try {
+                    encryptedFile.openFileInput().use { fis ->
+                        ObjectInputStream(fis).use { ois ->
+                            @Suppress("UNCHECKED_CAST")
+                            ois.readObject() as? ArrayList<NotifiableEvent>
+                        }
+                    }.also {
+                        Timber.tag(loggerTag.value).d("Deserializing ${it?.size} NotifiableEvent(s)")
                     }
+                } catch (e: Throwable) {
+                    Timber.tag(loggerTag.value).e(e, "## Failed to load cached notification info")
+                    null
                 }
             }
-        } catch (e: Throwable) {
-            Timber.e(e, "## Failed to load cached notification info")
-        }
-        return factory(emptyList())
+        return factory(rawEvents.orEmpty())
     }
 
     fun persistEvents(queuedEvents: NotificationEventQueue) {
-        if (queuedEvents.isEmpty()) {
-            deleteCachedRoomNotifications(context)
-            return
-        }
+        Timber.tag(loggerTag.value).d("Serializing ${queuedEvents.rawEvents().size} NotifiableEvent(s)")
+        // Always delete file before writing, or encryptedFile.openFileOutput() will throw
+        file.delete()
+        if (queuedEvents.isEmpty()) return
         try {
-            val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
-            if (!file.exists()) file.createNewFile()
-            FileOutputStream(file).use {
-                // TODO EAx
-                //  matrix.secureStorageService().securelyStoreObject(queuedEvents.rawEvents(), KEY_ALIAS_SECRET_STORAGE, it)
+            encryptedFile.openFileOutput().use { fos ->
+                ObjectOutputStream(fos).use { oos ->
+                    oos.writeObject(queuedEvents.rawEvents())
+                }
             }
         } catch (e: Throwable) {
-            Timber.e(e, "## Failed to save cached notification info")
+            Timber.tag(loggerTag.value).e(e, "## Failed to save cached notification info")
         }
     }
 
-    private fun deleteCachedRoomNotifications(context: Context) {
-        val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
-        if (file.exists()) {
-            file.delete()
+    private fun deleteLegacyFileIfAny() {
+        tryOrNull {
+            File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME_LEGACY).delete()
         }
     }
 }
