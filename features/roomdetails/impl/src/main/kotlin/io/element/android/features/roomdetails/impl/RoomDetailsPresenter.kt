@@ -40,7 +40,11 @@ class RoomDetailsPresenter @Inject constructor(
         var memberCount: Async<Int> by remember { mutableStateOf(Async.Loading()) }
         LaunchedEffect(Unit) {
             withContext(Dispatchers.IO) {
-                memberCount = Async.Success(room.memberCount())
+                memberCount = runCatching { room.memberCount() }
+                    .fold(
+                        onSuccess = { Async.Success(it) },
+                        onFailure = { Async.Failure(it) }
+                    )
             }
         }
 

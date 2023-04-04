@@ -17,7 +17,7 @@
 package io.element.android.features.createroom.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.userlist.api.anUserListState
+import io.element.android.features.userlist.api.aUserListState
 
 open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRootState> {
     override val values: Sequence<CreateRoomRootState>
@@ -28,5 +28,5 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
 
 fun aCreateRoomRootState() = CreateRoomRootState(
     eventSink = {},
-    userListState =  anUserListState(),
+    userListState =  aUserListState(),
 )

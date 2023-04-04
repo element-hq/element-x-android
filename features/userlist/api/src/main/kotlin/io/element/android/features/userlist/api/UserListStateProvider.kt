@@ -25,22 +25,22 @@ import kotlinx.collections.immutable.persistentListOf
 open class UserListStateProvider : PreviewParameterProvider<UserListState> {
     override val values: Sequence<UserListState>
         get() = sequenceOf(
-            anUserListState(),
-            anUserListState().copy(
+            aUserListState(),
+            aUserListState().copy(
                 isSearchActive = false,
                 selectedUsers = aListOfSelectedUsers(),
                 selectionMode = SelectionMode.Multiple,
             ),
-            anUserListState().copy(isSearchActive = true),
-            anUserListState().copy(isSearchActive = true, searchQuery = "someone"),
-            anUserListState().copy(isSearchActive = true, searchQuery = "someone", selectionMode = SelectionMode.Multiple),
-            anUserListState().copy(
+            aUserListState().copy(isSearchActive = true),
+            aUserListState().copy(isSearchActive = true, searchQuery = "someone"),
+            aUserListState().copy(isSearchActive = true, searchQuery = "someone", selectionMode = SelectionMode.Multiple),
+            aUserListState().copy(
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
                 selectedUsers = aListOfSelectedUsers(),
                 searchResults = aListOfResults(),
             ),
-            anUserListState().copy(
+            aUserListState().copy(
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
                 selectionMode = SelectionMode.Multiple,
@@ -50,7 +50,7 @@ open class UserListStateProvider : PreviewParameterProvider<UserListState> {
         )
 }
 
-fun anUserListState() = UserListState(
+fun aUserListState() = UserListState(
     isSearchActive = false,
     searchQuery = "",
     searchResults = persistentListOf(),

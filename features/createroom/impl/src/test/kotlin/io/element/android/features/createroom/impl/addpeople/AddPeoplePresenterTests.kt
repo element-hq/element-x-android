@@ -22,12 +22,10 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.userlist.api.UserListDataSource
+import io.element.android.features.userlist.api.MatrixUserDataSource
 import io.element.android.features.userlist.api.UserListPresenterArgs
 import io.element.android.features.userlist.impl.DefaultUserListPresenter
-import io.element.android.features.userlist.test.FakeUserListDataSource
-import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.features.userlist.test.FakeMatrixUserDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -40,9 +38,9 @@ class AddPeoplePresenterTests {
     @Before
     fun setup() {
         val userListFactory = object : DefaultUserListPresenter.DefaultUserListFactory {
-            override fun create(args: UserListPresenterArgs, dataSource: UserListDataSource) = DefaultUserListPresenter(args, dataSource)
+            override fun create(args: UserListPresenterArgs, dataSource: MatrixUserDataSource) = DefaultUserListPresenter(args, dataSource)
         }
-        val dataSource = FakeUserListDataSource()
+        val dataSource = FakeMatrixUserDataSource()
         presenter = AddPeoplePresenter(userListFactory, dataSource)
     }
 

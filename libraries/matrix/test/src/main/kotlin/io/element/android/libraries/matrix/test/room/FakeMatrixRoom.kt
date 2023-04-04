@@ -75,7 +75,11 @@ class FakeMatrixRoom(
     }
 
     override suspend fun memberCount(): Int {
-        return members.count()
+        if (fetchMemberResult.isSuccess) {
+            return members.count()
+        } else {
+            throw fetchMemberResult.exceptionOrNull()!!
+        }
     }
 
     override suspend fun sendMessage(message: String): Result<Unit> {

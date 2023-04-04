@@ -18,7 +18,7 @@ package io.element.android.features.createroom.impl.root
 
 import androidx.compose.runtime.Composable
 import io.element.android.features.userlist.api.SelectionMode
-import io.element.android.features.userlist.api.UserListDataSource
+import io.element.android.features.userlist.api.MatrixUserDataSource
 import io.element.android.features.userlist.api.UserListPresenter
 import io.element.android.features.userlist.api.UserListPresenterArgs
 import io.element.android.libraries.architecture.Presenter
@@ -29,13 +29,13 @@ import javax.inject.Named
 
 class CreateRoomRootPresenter @Inject constructor(
     private val presenterFactory: UserListPresenter.Factory,
-    @Named("AllUsers") private val userListDataSource: UserListDataSource,
+    @Named("AllUsers") private val matrixUserDataSource: MatrixUserDataSource,
 ) : Presenter<CreateRoomRootState> {
 
     private val presenter by lazy {
         presenterFactory.create(
             UserListPresenterArgs(selectionMode = SelectionMode.Single),
-            userListDataSource,
+            matrixUserDataSource,
         )
     }
 

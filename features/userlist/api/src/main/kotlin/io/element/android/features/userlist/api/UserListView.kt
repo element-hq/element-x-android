@@ -65,7 +65,7 @@ import kotlinx.collections.immutable.ImmutableList
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
-fun UserList(
+fun UserListView(
     state: UserListState,
     modifier: Modifier = Modifier,
     onUserSelected: (MatrixUser) -> Unit = {},
@@ -307,5 +307,5 @@ internal fun UserListViewDarkPreview(@PreviewParameter(UserListStateProvider::cl
 
 @Composable
 private fun ContentToPreview(state: UserListState) {
-    UserList(state = state)
+    UserListView(state = state)
 }

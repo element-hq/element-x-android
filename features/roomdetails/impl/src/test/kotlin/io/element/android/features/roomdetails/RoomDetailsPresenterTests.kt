@@ -78,6 +78,22 @@ class RoomDetailsPresenterTests {
             cancelAndIgnoreRemainingEvents()
         }
     }
+
+    @Test
+    fun `present - can handle error while fetching member count`() = runTest {
+        val room = aMatrixRoom(name = null).apply {
+            givenFetchMemberResult(Result.failure(Throwable()))
+        }
+        val presenter = RoomDetailsPresenter(room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            Truth.assertThat(awaitItem().memberCount).isInstanceOf(Async.Failure::class.java)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
 }
 
 fun aMatrixRoom(

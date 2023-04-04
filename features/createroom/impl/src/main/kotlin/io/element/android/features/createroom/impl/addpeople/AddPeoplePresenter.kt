@@ -18,7 +18,7 @@ package io.element.android.features.createroom.impl.addpeople
 
 import androidx.compose.runtime.Composable
 import io.element.android.features.userlist.api.SelectionMode
-import io.element.android.features.userlist.api.UserListDataSource
+import io.element.android.features.userlist.api.MatrixUserDataSource
 import io.element.android.features.userlist.api.UserListPresenter
 import io.element.android.features.userlist.api.UserListPresenterArgs
 import io.element.android.libraries.architecture.Presenter
@@ -27,13 +27,13 @@ import javax.inject.Named
 
 class AddPeoplePresenter @Inject constructor(
     private val userListPresenterFactory: UserListPresenter.Factory,
-    @Named("AllUsers") private val userListDataSource: UserListDataSource,
+    @Named("AllUsers") private val matrixUserDataSource: MatrixUserDataSource,
 ) : Presenter<AddPeopleState> {
 
     private val userListPresenter by lazy {
         userListPresenterFactory.create(
             UserListPresenterArgs(selectionMode = SelectionMode.Multiple),
-            userListDataSource,
+            matrixUserDataSource,
         )
     }
 

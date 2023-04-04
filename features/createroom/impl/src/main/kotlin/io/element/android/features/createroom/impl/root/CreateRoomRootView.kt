@@ -37,7 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.element.android.features.userlist.api.UserList
+import io.element.android.features.userlist.api.UserListView
 import io.element.android.features.createroom.impl.R
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -69,7 +69,7 @@ fun CreateRoomRootView(
             modifier = Modifier.padding(paddingValues),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            UserList(
+            UserListView(
                 modifier = Modifier.fillMaxWidth(),
                 state = state.userListState,
                 onUserSelected = { state.eventSink.invoke(CreateRoomRootEvents.StartDM(it)) },

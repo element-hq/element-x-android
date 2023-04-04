@@ -24,7 +24,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.userlist.api.UserListEvents
 import io.element.android.features.userlist.api.UserListPresenterArgs
 import io.element.android.features.userlist.api.SelectionMode
-import io.element.android.features.userlist.test.FakeUserListDataSource
+import io.element.android.features.userlist.test.FakeMatrixUserDataSource
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.model.MatrixUser
@@ -37,7 +37,7 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class DefaultUserListPresenterTests {
 
-    private val userListDataSource = FakeUserListDataSource()
+    private val userListDataSource = FakeMatrixUserDataSource()
 
     @Test
     fun `present - initial state for single selection`() = runTest {

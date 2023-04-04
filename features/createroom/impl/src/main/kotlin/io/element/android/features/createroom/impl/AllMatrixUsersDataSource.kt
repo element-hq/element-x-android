@@ -14,12 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.features.userlist.api
+package io.element.android.features.createroom.impl
 
+import io.element.android.features.userlist.api.MatrixUserDataSource
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import javax.inject.Inject
 
-interface UserListDataSource {
-    suspend fun search(query: String): List<MatrixUser>
-    suspend fun getProfile(userId: UserId): MatrixUser?
+// TODO this is empty as we currently don't have an endpoint to perform user search
+class AllMatrixUsersDataSource @Inject constructor() : MatrixUserDataSource {
+    override suspend fun search(query: String): List<MatrixUser> {
+        return emptyList()
+    }
+
+    override suspend fun getProfile(userId: UserId): MatrixUser? {
+        return null
+    }
 }

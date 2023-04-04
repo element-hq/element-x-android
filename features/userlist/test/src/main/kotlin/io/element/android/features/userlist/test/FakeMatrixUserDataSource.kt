@@ -16,11 +16,11 @@
 
 package io.element.android.features.userlist.test
 
-import io.element.android.features.userlist.api.UserListDataSource
+import io.element.android.features.userlist.api.MatrixUserDataSource
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 
-class FakeUserListDataSource : UserListDataSource {
+class FakeMatrixUserDataSource : MatrixUserDataSource {
 
     private var searchResult: List<MatrixUser> = emptyList()
     private var profile: MatrixUser? = null

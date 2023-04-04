@@ -26,6 +26,7 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState().copy(roomTopic = null),
             aRoomDetailsState().copy(isEncrypted = false),
             aRoomDetailsState().copy(roomAlias = null),
+            aRoomDetailsState().copy(memberCount = Async.Failure(Throwable())),
             // Add other state here
         )
 }

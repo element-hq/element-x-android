@@ -18,11 +18,10 @@ package io.element.android.features.roomdetails.impl.members
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import io.element.android.features.userlist.api.SelectionMode
-import io.element.android.features.userlist.api.UserListDataSource
+import io.element.android.features.userlist.api.MatrixUserDataSource
 import io.element.android.features.userlist.api.UserListPresenter
 import io.element.android.features.userlist.api.UserListPresenterArgs
 import io.element.android.libraries.architecture.Async
@@ -37,13 +36,13 @@ import javax.inject.Named
 
 class RoomMemberListPresenter @Inject constructor(
     private val userListPresenterFactory: UserListPresenter.Factory,
-    @Named("RoomMembers") private val userListDataSource: UserListDataSource,
+    @Named("RoomMembers") private val matrixUserDataSource: MatrixUserDataSource,
 ) : Presenter<RoomMemberListState> {
 
     private val userListPresenter by lazy {
         userListPresenterFactory.create(
             UserListPresenterArgs(selectionMode = SelectionMode.Single),
-            userListDataSource,
+            matrixUserDataSource,
         )
     }
 
@@ -53,7 +52,7 @@ class RoomMemberListPresenter @Inject constructor(
         val allUsers = remember { mutableStateOf<Async<ImmutableList<MatrixUser>>>(Async.Loading()) }
         LaunchedEffect(Unit) {
             withContext(Dispatchers.IO) {
-                allUsers.value = Async.Success(userListDataSource.search("").toImmutableList())
+                allUsers.value = Async.Success(matrixUserDataSource.search("").toImmutableList())
             }
         }
         return RoomMemberListState(

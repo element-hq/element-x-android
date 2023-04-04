@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.features.userlist.api.SearchSingleUserResultItem
-import io.element.android.features.userlist.api.UserList
+import io.element.android.features.userlist.api.UserListView
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.isLoading
 import io.element.android.libraries.designsystem.ElementTextStyles
@@ -74,7 +74,7 @@ fun RoomMemberListView(
                 .padding(padding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            UserList(
+            UserListView(
                 state = state.userListState,
                 onUserSelected = onUserSelected,
             )
