@@ -38,7 +38,7 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
                 }
             ),
             aCreateRoomRootState().copy(
-                startDmAction = Async.Failure(Throwable("An error occurred when trying to start a chat")),
+                startDmAction = Async.Failure(Throwable()),
                 selectUsersState = aMatrixUser().let {
                     aSelectUsersState().copy(
                         searchQuery = it.id.value,
