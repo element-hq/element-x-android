@@ -16,11 +16,14 @@
 
 package io.element.android.libraries.matrix.test.notification
 
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.notification.NotificationService
 
 class FakeNotificationService : NotificationService {
-    override suspend fun getNotification(userId: String, roomId: String, eventId: String): Result<NotificationData?> {
+    override suspend fun getNotification(userId: SessionId, roomId: RoomId, eventId: EventId): Result<NotificationData?> {
         return Result.success(null)
     }
 }

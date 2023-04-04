@@ -17,6 +17,8 @@
 package io.element.android.libraries.push.impl.notifications
 
 import android.app.Notification
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
@@ -30,8 +32,8 @@ class NotificationFactory @Inject constructor(
     private val summaryGroupMessageCreator: SummaryGroupMessageCreator
 ) {
 
-    fun Map<String, ProcessedMessageEvents>.toNotifications(
-        sessionId: String,
+    fun Map<RoomId, ProcessedMessageEvents>.toNotifications(
+        sessionId: SessionId,
         myUserDisplayName: String,
         myUserAvatarUrl: String?
     ): List<RoomNotification> {
@@ -62,11 +64,11 @@ class NotificationFactory @Inject constructor(
     fun List<ProcessedEvent<InviteNotifiableEvent>>.toNotifications(): List<OneShotNotification> {
         return map { (processed, event) ->
             when (processed) {
-                ProcessedEvent.Type.REMOVE -> OneShotNotification.Removed(key = event.roomId)
+                ProcessedEvent.Type.REMOVE -> OneShotNotification.Removed(key = event.roomId.value)
                 ProcessedEvent.Type.KEEP -> OneShotNotification.Append(
                     notificationUtils.buildRoomInvitationNotification(event),
                     OneShotNotification.Append.Meta(
-                        key = event.roomId,
+                        key = event.roomId.value,
                         summaryLine = event.description,
                         isNoisy = event.noisy,
                         timestamp = event.timestamp
@@ -80,11 +82,11 @@ class NotificationFactory @Inject constructor(
     fun List<ProcessedEvent<SimpleNotifiableEvent>>.toNotifications(): List<OneShotNotification> {
         return map { (processed, event) ->
             when (processed) {
-                ProcessedEvent.Type.REMOVE -> OneShotNotification.Removed(key = event.eventId)
+                ProcessedEvent.Type.REMOVE -> OneShotNotification.Removed(key = event.eventId.value)
                 ProcessedEvent.Type.KEEP -> OneShotNotification.Append(
                     notificationUtils.buildSimpleEventNotification(event),
                     OneShotNotification.Append.Meta(
-                        key = event.eventId,
+                        key = event.eventId.value,
                         summaryLine = event.description,
                         isNoisy = event.noisy,
                         timestamp = event.timestamp
@@ -95,7 +97,7 @@ class NotificationFactory @Inject constructor(
     }
 
     fun createSummaryNotification(
-        sessionId: String,
+        sessionId: SessionId,
         roomNotifications: List<RoomNotification>,
         invitationNotifications: List<OneShotNotification>,
         simpleNotifications: List<OneShotNotification>,
@@ -120,10 +122,10 @@ class NotificationFactory @Inject constructor(
 }
 
 sealed interface RoomNotification {
-    data class Removed(val roomId: String) : RoomNotification
+    data class Removed(val roomId: RoomId) : RoomNotification
     data class Message(val notification: Notification, val meta: Meta) : RoomNotification {
         data class Meta(
-            val roomId: String,
+            val roomId: RoomId,
             val summaryLine: CharSequence,
             val messageCount: Int,
             val latestTimestamp: Long,

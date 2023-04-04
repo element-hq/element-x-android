@@ -18,6 +18,7 @@ package io.element.android.libraries.push.impl.clientsecret
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.matrix.api.core.SessionId
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
@@ -25,7 +26,7 @@ class PushClientSecretImpl @Inject constructor(
     private val pushClientSecretFactory: PushClientSecretFactory,
     private val pushClientSecretStore: PushClientSecretStore,
 ) : PushClientSecret {
-    override suspend fun getSecretForUser(userId: String): String {
+    override suspend fun getSecretForUser(userId: SessionId): String {
         val existingSecret = pushClientSecretStore.getSecret(userId)
         if (existingSecret != null) {
             return existingSecret
@@ -35,11 +36,11 @@ class PushClientSecretImpl @Inject constructor(
         return newSecret
     }
 
-    override suspend fun getUserIdFromSecret(clientSecret: String): String? {
+    override suspend fun getUserIdFromSecret(clientSecret: String): SessionId? {
         return pushClientSecretStore.getUserIdFromSecret(clientSecret)
     }
 
-    override suspend fun resetSecretForUser(userId: String) {
+    override suspend fun resetSecretForUser(userId: SessionId) {
         pushClientSecretStore.resetSecret(userId)
     }
 }

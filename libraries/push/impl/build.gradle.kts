@@ -54,7 +54,6 @@ dependencies {
         exclude(group = "com.android.support", module = "support-annotations")
     }
 
-
     implementation(platform(libs.google.firebase.bom))
     implementation("com.google.firebase:firebase-messaging-ktx")
 
@@ -62,7 +61,10 @@ dependencies {
     api("com.github.UnifiedPush:android-connector:2.1.1")
 
     testImplementation(libs.test.junit)
+    testImplementation(libs.test.mockk)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(libs.coroutines.test)
+    testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.services.appnavstate.test)
 }

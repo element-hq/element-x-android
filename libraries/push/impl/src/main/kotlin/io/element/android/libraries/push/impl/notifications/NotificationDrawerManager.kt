@@ -25,6 +25,9 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.api.store.PushDataStore
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
@@ -86,13 +89,13 @@ class NotificationDrawerManager @Inject constructor(
             is AppNavigationState.Space -> {}
             is AppNavigationState.Room -> {
                 // Cleanup notification for current room
-                onEnteringRoom(appNavigationState.parentSpace.parentSession.sessionId.value, appNavigationState.roomId.value)
+                onEnteringRoom(appNavigationState.parentSpace.parentSession.sessionId, appNavigationState.roomId)
             }
             is AppNavigationState.Thread -> {
                 onEnteringThread(
-                    appNavigationState.parentRoom.parentSpace.parentSession.sessionId.value,
-                    appNavigationState.parentRoom.roomId.value,
-                    appNavigationState.threadId.value
+                    appNavigationState.parentRoom.parentSpace.parentSession.sessionId,
+                    appNavigationState.parentRoom.roomId,
+                    appNavigationState.threadId
                 )
             }
         }
@@ -136,7 +139,7 @@ class NotificationDrawerManager @Inject constructor(
     /**
      * Clear all known events and refresh the notification drawer.
      */
-    fun clearAllEvents(sessionId: String) {
+    fun clearAllEvents(sessionId: SessionId) {
         updateEvents { it.clearMessagesForSession(sessionId) }
     }
 
@@ -144,7 +147,7 @@ class NotificationDrawerManager @Inject constructor(
      * Should be called when the application is currently opened and showing timeline for the given roomId.
      * Used to ignore events related to that room (no need to display notification) and clean any existing notification on this room.
      */
-    private fun onEnteringRoom(sessionId: String, roomId: String) {
+    private fun onEnteringRoom(sessionId: SessionId, roomId: RoomId) {
         updateEvents {
             it.clearMessagesForRoom(sessionId, roomId)
         }
@@ -154,7 +157,7 @@ class NotificationDrawerManager @Inject constructor(
      * Should be called when the application is currently opened and showing timeline for the given threadId.
      * Used to ignore events related to that thread (no need to display notification) and clean any existing notification on this room.
      */
-    private fun onEnteringThread(sessionId: String, roomId: String, threadId: String) {
+    private fun onEnteringThread(sessionId: SessionId, roomId: RoomId, threadId: ThreadId) {
         updateEvents {
             it.clearMessagesForThread(sessionId, roomId, threadId)
         }

@@ -16,24 +16,26 @@
 
 package io.element.android.libraries.push.impl.clientsecret
 
+import io.element.android.libraries.matrix.api.core.SessionId
+
 class InMemoryPushClientSecretStore : PushClientSecretStore {
-    private val secrets = mutableMapOf<String, String>()
+    private val secrets = mutableMapOf<SessionId, String>()
 
-    fun getSecrets(): Map<String, String> = secrets
+    fun getSecrets(): Map<SessionId, String> = secrets
 
-    override suspend fun storeSecret(userId: String, clientSecret: String) {
+    override suspend fun storeSecret(userId: SessionId, clientSecret: String) {
         secrets[userId] = clientSecret
     }
 
-    override suspend fun getSecret(userId: String): String? {
+    override suspend fun getSecret(userId: SessionId): String? {
         return secrets[userId]
     }
 
-    override suspend fun resetSecret(userId: String) {
+    override suspend fun resetSecret(userId: SessionId) {
         secrets.remove(userId)
     }
 
-    override suspend fun getUserIdFromSecret(clientSecret: String): String? {
+    override suspend fun getUserIdFromSecret(clientSecret: String): SessionId? {
         return secrets.keys.firstOrNull { secrets[it] == clientSecret }
     }
 }

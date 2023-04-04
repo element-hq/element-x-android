@@ -15,16 +15,19 @@
  */
 package io.element.android.libraries.push.impl.notifications.model
 
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import java.io.Serializable
 
 /**
  * Parent interface for all events which can be displayed as a Notification.
  */
 sealed interface NotifiableEvent : Serializable {
-    val sessionId: String
-    val roomId: String
-    val eventId: String
-    val editedEventId: String?
+    val sessionId: SessionId
+    val roomId: RoomId
+    val eventId: EventId
+    val editedEventId: EventId?
 
     // Used to know if event should be replaced with the one coming from eventstream
     val canBeReplaced: Boolean

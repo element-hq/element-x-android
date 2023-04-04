@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,9 @@
 
 package io.element.android.libraries.push.impl.push
 
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+
 /**
  * Represent parsed data that the app has received from a Push content.
  *
@@ -24,8 +27,8 @@ package io.element.android.libraries.push.impl.push
  * @property unread Number of unread message.
  */
 data class PushData(
-        val eventId: String?,
-        val roomId: String?,
+        val eventId: EventId?,
+        val roomId: RoomId?,
         val unread: Int?,
         val clientSecret: String?,
 )

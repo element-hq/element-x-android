@@ -19,6 +19,7 @@ package io.element.android.libraries.push.impl
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
 import io.element.android.libraries.push.impl.clientsecret.PushClientSecret
@@ -98,7 +99,7 @@ class PushersManager @Inject constructor(
         } else {
             // Register the pusher to the server
             matrixClient.pushersService().setHttpPusher(
-                createHttpPusher(pushKey, gateway, matrixClient.sessionId.value)
+                createHttpPusher(pushKey, gateway, matrixClient.sessionId)
             ).fold(
                 {
                     userDataStore.setCurrentRegisteredPushKey(pushKey)
@@ -113,7 +114,7 @@ class PushersManager @Inject constructor(
     private suspend fun createHttpPusher(
         pushKey: String,
         gateway: String,
-        userId: String,
+        userId: SessionId,
     ): SetHttpPusherData =
         SetHttpPusherData(
             pushKey = pushKey,
@@ -167,6 +168,6 @@ class PushersManager @Inject constructor(
     }
 
     companion object {
-        const val TEST_EVENT_ID = "\$THIS_IS_A_FAKE_EVENT_ID"
+        val TEST_EVENT_ID = EventId("\$THIS_IS_A_FAKE_EVENT_ID")
     }
 }

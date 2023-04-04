@@ -15,6 +15,7 @@
  */
 package io.element.android.libraries.push.impl.pushgateway
 
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.network.RetrofitFactory
 import io.element.android.libraries.push.api.gateway.PushGatewayFailure
 import javax.inject.Inject
@@ -26,7 +27,7 @@ class PushGatewayNotifyRequest @Inject constructor(
         val url: String,
         val appId: String,
         val pushKey: String,
-        val eventId: String
+        val eventId: EventId
     )
 
     suspend fun execute(params: Params) {
@@ -38,7 +39,7 @@ class PushGatewayNotifyRequest @Inject constructor(
         val response = sygnalApi.notify(
             PushGatewayNotifyBody(
                 PushGatewayNotification(
-                    eventId = params.eventId,
+                    eventId = params.eventId.value,
                     devices = listOf(
                         PushGatewayDevice(
                             params.appId,

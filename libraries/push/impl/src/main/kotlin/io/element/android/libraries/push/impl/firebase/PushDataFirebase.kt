@@ -17,6 +17,8 @@
 package io.element.android.libraries.push.impl.firebase
 
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
+import io.element.android.libraries.matrix.api.core.asEventId
+import io.element.android.libraries.matrix.api.core.asRoomId
 import io.element.android.libraries.push.impl.push.PushData
 
 /**
@@ -40,8 +42,8 @@ data class PushDataFirebase(
 )
 
 fun PushDataFirebase.toPushData() = PushData(
-    eventId = eventId?.takeIf { MatrixPatterns.isEventId(it) },
-    roomId = roomId?.takeIf { MatrixPatterns.isRoomId(it) },
+    eventId = eventId?.takeIf { MatrixPatterns.isEventId(it) }?.asEventId(),
+    roomId = roomId?.takeIf { MatrixPatterns.isRoomId(it) }?.asRoomId(),
     unread = unread,
     clientSecret = clientSecret,
 )

@@ -16,6 +16,8 @@
 package io.element.android.libraries.push.impl.notifications
 
 import androidx.annotation.WorkerThread
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
@@ -31,7 +33,7 @@ class NotificationRenderer @Inject constructor(
 
     @WorkerThread
     fun render(
-        sessionId: String,
+        sessionId: SessionId,
         myUserDisplayName: String,
         myUserAvatarUrl: String?,
         useCompleteNotificationFormat: Boolean,
@@ -60,12 +62,12 @@ class NotificationRenderer @Inject constructor(
                 when (wrapper) {
                     is RoomNotification.Removed -> {
                         Timber.d("Removing room messages notification ${wrapper.roomId}")
-                        notificationDisplayer.cancelNotificationMessage(wrapper.roomId, notificationIdProvider.getRoomMessagesNotificationId(sessionId))
+                        notificationDisplayer.cancelNotificationMessage(wrapper.roomId.value, notificationIdProvider.getRoomMessagesNotificationId(sessionId))
                     }
                     is RoomNotification.Message -> if (useCompleteNotificationFormat) {
                         Timber.d("Updating room messages notification ${wrapper.meta.roomId}")
                         notificationDisplayer.showNotificationMessage(
-                            wrapper.meta.roomId,
+                            wrapper.meta.roomId.value,
                             notificationIdProvider.getRoomMessagesNotificationId(sessionId),
                             wrapper.notification
                         )
@@ -125,7 +127,7 @@ class NotificationRenderer @Inject constructor(
 }
 
 private fun List<ProcessedEvent<NotifiableEvent>>.groupByType(): GroupedNotificationEvents {
-    val roomIdToEventMap: MutableMap<String, MutableList<ProcessedEvent<NotifiableMessageEvent>>> = LinkedHashMap()
+    val roomIdToEventMap: MutableMap<RoomId, MutableList<ProcessedEvent<NotifiableMessageEvent>>> = LinkedHashMap()
     val simpleEvents: MutableList<ProcessedEvent<SimpleNotifiableEvent>> = ArrayList()
     val invitationEvents: MutableList<ProcessedEvent<InviteNotifiableEvent>> = ArrayList()
     forEach {
@@ -145,7 +147,7 @@ private fun List<ProcessedEvent<NotifiableEvent>>.groupByType(): GroupedNotifica
 private fun <T : NotifiableEvent> ProcessedEvent<NotifiableEvent>.castedToEventType(): ProcessedEvent<T> = this as ProcessedEvent<T>
 
 data class GroupedNotificationEvents(
-    val roomEvents: Map<String, List<ProcessedEvent<NotifiableMessageEvent>>>,
+    val roomEvents: Map<RoomId, List<ProcessedEvent<NotifiableMessageEvent>>>,
     val simpleEvents: List<ProcessedEvent<SimpleNotifiableEvent>>,
     val invitationEvents: List<ProcessedEvent<InviteNotifiableEvent>>
 )

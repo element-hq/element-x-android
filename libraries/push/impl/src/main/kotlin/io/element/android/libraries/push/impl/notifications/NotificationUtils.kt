@@ -44,6 +44,9 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.intent.IntentProvider
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
@@ -215,7 +218,7 @@ class NotificationUtils @Inject constructor(
     fun buildMessagesListNotification(
         messageStyle: NotificationCompat.MessagingStyle,
         roomInfo: RoomEventGroupInfo,
-        threadId: String?,
+        threadId: ThreadId?,
         largeIcon: Bitmap?,
         lastMessageTimestamp: Long,
         senderDisplayNameForReplyCompat: String?,
@@ -244,7 +247,7 @@ class NotificationUtils @Inject constructor(
             // that can be displayed in not disturb mode if white listed (the later will need compat28.x)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             // ID of the corresponding shortcut, for conversation features under API 30+
-            .setShortcutId(roomInfo.roomId)
+            .setShortcutId(roomInfo.roomId.value)
             // Title for API < 16 devices.
             .setContentTitle(roomInfo.roomDisplayName)
             // Content for API < 16 devices.
@@ -259,7 +262,7 @@ class NotificationUtils @Inject constructor(
             )
             // Auto-bundling is enabled for 4 or more notifications on API 24+ (N+)
             // devices and all Wear devices. But we want a custom grouping, so we specify the groupID
-            .setGroup(roomInfo.sessionId)
+            .setGroup(roomInfo.sessionId.value)
             // In order to avoid notification making sound twice (due to the summary notification)
             .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
             .setSmallIcon(smallIcon)
@@ -359,7 +362,7 @@ class NotificationUtils @Inject constructor(
             .setOnlyAlertOnce(true)
             .setContentTitle(inviteNotifiableEvent.roomName ?: buildMeta.applicationName)
             .setContentText(inviteNotifiableEvent.description)
-            .setGroup(inviteNotifiableEvent.sessionId)
+            .setGroup(inviteNotifiableEvent.sessionId.value)
             .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
             .setSmallIcon(smallIcon)
             .setColor(accentColor)
@@ -446,7 +449,7 @@ class NotificationUtils @Inject constructor(
             .setOnlyAlertOnce(true)
             .setContentTitle(buildMeta.applicationName)
             .setContentText(simpleNotifiableEvent.description)
-            .setGroup(simpleNotifiableEvent.sessionId)
+            .setGroup(simpleNotifiableEvent.sessionId.value)
             .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
             .setSmallIcon(smallIcon)
             .setColor(accentColor)
@@ -477,7 +480,7 @@ class NotificationUtils @Inject constructor(
             .build()
     }
 
-    private fun buildOpenRoomIntent(sessionId: String, roomId: String): PendingIntent? {
+    private fun buildOpenRoomIntent(sessionId: SessionId, roomId: RoomId): PendingIntent? {
         val roomIntent = intentProvider.getIntent(sessionId = sessionId, roomId = roomId, threadId = null)
         roomIntent.action = actionIds.tapToView
         // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
@@ -491,7 +494,7 @@ class NotificationUtils @Inject constructor(
         )
     }
 
-    private fun buildOpenThreadIntent(roomInfo: RoomEventGroupInfo, threadId: String?): PendingIntent? {
+    private fun buildOpenThreadIntent(roomInfo: RoomEventGroupInfo, threadId: ThreadId?): PendingIntent? {
         val sessionId = roomInfo.sessionId
         val roomId = roomInfo.roomId
         val threadIntentTap = intentProvider.getIntent(sessionId = sessionId, roomId = roomId, threadId = threadId)
@@ -507,7 +510,7 @@ class NotificationUtils @Inject constructor(
         )
     }
 
-    private fun buildOpenHomePendingIntentForSummary(sessionId: String): PendingIntent {
+    private fun buildOpenHomePendingIntentForSummary(sessionId: SessionId): PendingIntent {
         val intent = intentProvider.getIntent(sessionId = sessionId, roomId = null, threadId = null)
         intent.data = createIgnoredUri("tapSummary?$sessionId")
         return PendingIntent.getActivity(
@@ -526,9 +529,9 @@ class NotificationUtils @Inject constructor(
         it will be more appropriate to use an activity. Since you have to provide your own UI.
      */
     private fun buildQuickReplyIntent(
-        sessionId: String,
-        roomId: String,
-        threadId: String?,
+        sessionId: SessionId,
+        roomId: RoomId,
+        threadId: ThreadId?,
         senderName: String?
     ): PendingIntent? {
         val intent: Intent
@@ -573,7 +576,7 @@ class NotificationUtils @Inject constructor(
      * Build the summary notification.
      */
     fun buildSummaryListNotification(
-        sessionId: String,
+        sessionId: SessionId,
         style: NotificationCompat.InboxStyle?,
         compatSummary: String,
         noisy: Boolean,
@@ -587,12 +590,12 @@ class NotificationUtils @Inject constructor(
             // used in compat < N, after summary is built based on child notifications
             .setWhen(lastMessageTimestamp)
             .setStyle(style)
-            .setContentTitle(sessionId)
+            .setContentTitle(sessionId.value)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setSmallIcon(smallIcon)
             // set content text to support devices running API level < 24
             .setContentText(compatSummary)
-            .setGroup(sessionId)
+            .setGroup(sessionId.value)
             // set this notification as the summary for the group
             .setGroupSummary(true)
             .setColor(accentColor)
@@ -616,7 +619,7 @@ class NotificationUtils @Inject constructor(
             .build()
     }
 
-    private fun getDismissSummaryPendingIntent(sessionId: String): PendingIntent {
+    private fun getDismissSummaryPendingIntent(sessionId: SessionId): PendingIntent {
         val intent = Intent(context, NotificationBroadcastReceiver::class.java)
         intent.action = actionIds.dismissSummary
         intent.data = createIgnoredUri("deleteSummary?$sessionId")

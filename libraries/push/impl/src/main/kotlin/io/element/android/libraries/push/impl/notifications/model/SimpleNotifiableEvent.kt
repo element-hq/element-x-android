@@ -15,11 +15,15 @@
  */
 package io.element.android.libraries.push.impl.notifications.model
 
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+
 data class SimpleNotifiableEvent(
-    override val sessionId: String,
-    override val roomId: String,
-    override val eventId: String,
-    override val editedEventId: String?,
+    override val sessionId: SessionId,
+    override val roomId: RoomId,
+    override val eventId: EventId,
+    override val editedEventId: EventId?,
     val noisy: Boolean,
     val title: String,
     val description: String,

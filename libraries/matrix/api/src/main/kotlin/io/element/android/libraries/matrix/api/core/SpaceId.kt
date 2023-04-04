@@ -25,3 +25,5 @@ value class SpaceId(val value: String) : Serializable
  * Value to use when no space is selected by the user.
  */
 val MAIN_SPACE = SpaceId("!mainSpace")
+
+fun String.asSpaceId() = SpaceId(this)

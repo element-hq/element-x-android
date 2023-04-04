@@ -19,6 +19,7 @@ import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationData
@@ -52,13 +53,13 @@ class NotifiableEventResolver @Inject constructor(
     private val buildMeta: BuildMeta,
 ) {
 
-    suspend fun resolveEvent(userId: String, roomId: String, eventId: String): NotifiableEvent? {
+    suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent? {
         // Restore session
-        val session = matrixAuthenticationService.restoreSession(SessionId(userId)).getOrNull() ?: return null
+        val session = matrixAuthenticationService.restoreSession(sessionId).getOrNull() ?: return null
         // TODO EAx, no need for a session?
         val notificationData = session.let {// TODO Use make the app crashes
             it.notificationService().getNotification(
-                userId = userId,
+                userId = sessionId,
                 roomId = roomId,
                 eventId = eventId,
             )
@@ -72,11 +73,11 @@ class NotifiableEventResolver @Inject constructor(
             }
         ).orDefault(roomId, eventId)
 
-        return notificationData.asNotifiableEvent(userId, roomId, eventId)
+        return notificationData.asNotifiableEvent(sessionId, roomId, eventId)
     }
 }
 
-private fun NotificationData.asNotifiableEvent(userId: String, roomId: String, eventId: String): NotifiableEvent {
+private fun NotificationData.asNotifiableEvent(userId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent {
     return NotifiableMessageEvent(
         sessionId = userId,
         roomId = roomId,
@@ -105,12 +106,12 @@ private fun NotificationData.asNotifiableEvent(userId: String, roomId: String, e
 /**
  * TODO This is a temporary method for EAx
  */
-private fun NotificationData?.orDefault(roomId: String, eventId: String): NotificationData {
+private fun NotificationData?.orDefault(roomId: RoomId, eventId: EventId): NotificationData {
     return this ?: NotificationData(
         item = MatrixTimelineItem.Event(
             event = EventTimelineItem(
-                uniqueIdentifier = eventId,
-                eventId = EventId(eventId),
+                uniqueIdentifier = eventId.value,
+                eventId = eventId,
                 isEditable = false,
                 isLocal = false,
                 isOwn = false,
@@ -121,18 +122,18 @@ private fun NotificationData?.orDefault(roomId: String, eventId: String): Notifi
                 senderProfile = ProfileTimelineDetails.Unavailable,
                 timestamp = System.currentTimeMillis(),
                 content = MessageContent(
-                    body = eventId,
+                    body = eventId.value,
                     inReplyTo = null,
                     isEdited = false,
                     type = TextMessageType(
-                        body = eventId,
+                        body = eventId.value,
                         formatted = null
                     )
                 )
             ),
         ),
-        title = roomId,
-        subtitle = eventId,
+        title = roomId.value,
+        subtitle = eventId.value,
         isNoisy = false,
         avatarUrl = null,
     )

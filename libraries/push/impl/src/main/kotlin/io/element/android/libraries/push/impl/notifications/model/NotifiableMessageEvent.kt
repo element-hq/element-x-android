@@ -16,16 +16,20 @@
 package io.element.android.libraries.push.impl.notifications.model
 
 import android.net.Uri
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.services.appnavstate.api.AppNavigationState
 import io.element.android.services.appnavstate.api.currentRoomId
 import io.element.android.services.appnavstate.api.currentSessionId
 import io.element.android.services.appnavstate.api.currentThreadId
 
 data class NotifiableMessageEvent(
-    override val sessionId: String,
-    override val roomId: String,
-    override val eventId: String,
-    override val editedEventId: String?,
+    override val sessionId: SessionId,
+    override val roomId: RoomId,
+    override val eventId: EventId,
+    override val editedEventId: EventId?,
     override val canBeReplaced: Boolean,
     val noisy: Boolean,
     val timestamp: Long,
@@ -35,7 +39,7 @@ data class NotifiableMessageEvent(
     // We cannot use Uri? type here, as that could trigger a
     // NotSerializableException when persisting this to storage
     val imageUriString: String?,
-    val threadId: String?,
+    val threadId: ThreadId?,
     val roomName: String?,
     val roomIsDirect: Boolean = false,
     val roomAvatarPath: String? = null,
@@ -59,9 +63,9 @@ data class NotifiableMessageEvent(
 fun NotifiableMessageEvent.shouldIgnoreMessageEventInRoom(
     appNavigationState: AppNavigationState?
 ): Boolean {
-    val currentSessionId = appNavigationState?.currentSessionId()?.value ?: return false
-    return when (val currentRoomId = appNavigationState.currentRoomId()?.value) {
+    val currentSessionId = appNavigationState?.currentSessionId() ?: return false
+    return when (val currentRoomId = appNavigationState.currentRoomId()) {
         null -> false
-        else -> sessionId == currentSessionId && roomId == currentRoomId && threadId == appNavigationState.currentThreadId()?.value
+        else -> sessionId == currentSessionId && roomId == currentRoomId && threadId == appNavigationState.currentThreadId()
     }
 }

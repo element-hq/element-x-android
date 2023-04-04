@@ -20,3 +20,5 @@ import java.io.Serializable
 
 @JvmInline
 value class RoomId(val value: String) : Serializable
+
+fun String.asRoomId() = RoomId(this)
