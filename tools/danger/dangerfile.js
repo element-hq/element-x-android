@@ -105,19 +105,24 @@ function signoff_unneeded(reason) {
 if (allowList.includes(user)) {
     signoff_unneeded("allow-list")
 } else {
-    github.api.rest.orgs.checkMembershipForUser({
+//  github.api.rest.orgs.checkMembershipForUser({
+//      org: "vector-im",
+//      username: user,
+//   }).then((result) => {
+    github.api.rest.teams.getMembershipForUserInOrg({
         org: "vector-im",
+        team_slug: "vector-core",
         username: user,
     }).then((result) => {
-        if (result.status == 204) {
-            signoff_unneeded("org-member")
+        if (result.status == 204 || result.status == 200) {
+            signoff_unneeded("team-member")
         }
         else {
-            signoff_needed("not-org-member")
+            signoff_needed("not-team-member")
         }
     }).catch((error) => { 
         if (error.response.status == 404) {
-            signoff_needed("not-org-member");
+            signoff_needed("not-team-member");
         } else {
             console.log(error); signoff_needed("error") 
         }
