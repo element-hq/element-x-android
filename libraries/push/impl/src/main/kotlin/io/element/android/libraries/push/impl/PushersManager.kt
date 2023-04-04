@@ -37,10 +37,8 @@ internal const val DEFAULT_PUSHER_FILE_TAG = "mobile"
 
 private val loggerTag = LoggerTag("PushersManager", pushLoggerTag)
 
-// TODO EAx Communicate with the SDK
 class PushersManager @Inject constructor(
     private val unifiedPushHelper: UnifiedPushHelper,
-    // private val activeSessionHolder: ActiveSessionHolder,
     // private val localeProvider: LocaleProvider,
     private val appNameProvider: AppNameProvider,
     // private val getDeviceInfoUseCase: GetDeviceInfoUseCase,
