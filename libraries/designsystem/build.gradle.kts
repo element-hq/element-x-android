@@ -24,10 +24,6 @@ plugins {
 android {
     namespace = "io.element.android.libraries.designsystem"
 
-    buildFeatures {
-        buildConfig = true
-    }
-
     dependencies {
         // Should not be there, but this is a POC
         implementation(libs.coil.compose)
