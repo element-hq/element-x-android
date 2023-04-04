@@ -90,7 +90,7 @@ class RustMatrixClient constructor(
             requiredState = listOf(
                 RequiredState(key = "m.room.avatar", value = ""),
                 RequiredState(key = "m.room.encryption", value = ""),
-                RequiredState(key = "m.room.membership", value = ""),
+                RequiredState(key = "m.room.join_rules", value = ""),
             )
         )
         .filters(slidingSyncFilters)
@@ -137,7 +137,7 @@ class RustMatrixClient constructor(
         rustRoomSummaryDataSource.init()
         slidingSync.setObserver(slidingSyncObserverProxy)
         slidingSyncUpdateJob = slidingSyncObserverProxy.updateSummaryFlow
-            .onEach { onSlidingSyncUpdate(it.rooms) }
+            .onEach { onSlidingSyncUpdate() }
             .launchIn(coroutineScope)
     }
 
@@ -237,7 +237,7 @@ class RustMatrixClient constructor(
             }
         }
 
-    override fun onSlidingSyncUpdate(roomIds: List<String>) {
+    override fun onSlidingSyncUpdate() {
         if (!verificationService.isReady.value) {
             try {
                 verificationService.verificationController = client.getSessionVerificationController()

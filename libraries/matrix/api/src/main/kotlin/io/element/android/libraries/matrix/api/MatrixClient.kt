@@ -43,7 +43,7 @@ interface MatrixClient : Closeable {
         height: Long
     ): Result<ByteArray>
 
-    fun onSlidingSyncUpdate(roomIds: List<String>)
+    fun onSlidingSyncUpdate()
 
     fun roomMembershipObserver(): RoomMembershipObserver
 }

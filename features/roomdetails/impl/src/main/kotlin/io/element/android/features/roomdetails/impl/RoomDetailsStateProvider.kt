@@ -42,5 +42,6 @@ fun aRoomDetailsState() = RoomDetailsState(
     memberCount = 32,
     isEncrypted = true,
     displayLeaveRoomWarning = null,
+    error = null,
     eventSink = {}
 )
