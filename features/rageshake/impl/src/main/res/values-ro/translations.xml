@@ -4,7 +4,7 @@
   <string name="screen_bug_report_contact_me">"Puteți să mă contactați dacă aveți întrebări suplimentare"</string>
   <string name="screen_bug_report_edit_screenshot">"Editează captura de ecran"</string>
   <string name="screen_bug_report_editor_description">"Te rugăm să descrii eroarea. Ce-ai făcut? Ce te aşteptai să se întâmple? Ce s-a întâmplat de fapt. Te rugam să intri în cât mai multe detalii cu putință."</string>
-  <string name="screen_bug_report_editor_placeholder">"Descrie eroarea..."</string>
+  <string name="screen_bug_report_editor_placeholder">"Descrie eroarea…"</string>
   <string name="screen_bug_report_editor_supporting">"Dacă posibil, te rugăm să scrii descrierea în engleză."</string>
   <string name="screen_bug_report_include_crash_logs">"Trimite log-uri"</string>
   <string name="screen_bug_report_include_logs">"Trimite log-uri pentru a ajuta"</string>

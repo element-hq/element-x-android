@@ -40,7 +40,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -146,7 +145,6 @@ fun RoomListContent(
                 )
             }
         }
-//            state.eventSink(RoomListEvents.ClearSuccessfulVerificationMessage)
     }
 
     Scaffold(

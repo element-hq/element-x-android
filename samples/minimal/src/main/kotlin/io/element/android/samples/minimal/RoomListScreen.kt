@@ -26,6 +26,7 @@ import io.element.android.features.roomlist.impl.RoomListView
 import io.element.android.libraries.dateformatter.impl.DateFormatters
 import io.element.android.libraries.dateformatter.impl.DefaultLastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.impl.LocalDateTimeProvider
+import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.launch
@@ -48,6 +49,7 @@ class RoomListScreen(
         DefaultLastMessageTimestampFormatter(dateTimeProvider, dateFormatters),
         DefaultRoomLastMessageFormatter(context, matrixClient),
         sessionVerificationService,
+        SnackbarDispatcher(),
     )
 
     @Composable

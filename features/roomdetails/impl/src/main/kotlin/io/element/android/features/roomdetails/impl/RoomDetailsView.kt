@@ -211,14 +211,16 @@ internal fun ConfirmLeaveRoomDialog(
     onConfirmLeave: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    val content = when (leaveRoomWarning) {
-        LeaveRoomWarning.PrivateRoom -> "Are you sure that you want to leave this room? This room is not public and you will not be able to rejoin without an invite."
-        LeaveRoomWarning.LastUserInRoom -> "Are you sure that you want to leave this room? You are the only person here. If you leave, no one will be able to join in the future, including you."
-        LeaveRoomWarning.Generic -> "Are you sure you want to leave this room?"
-    }
+    val content = stringResource(
+            when (leaveRoomWarning) {
+            LeaveRoomWarning.PrivateRoom -> StringR.string.leave_room_alert_private_subtitle
+            LeaveRoomWarning.LastUserInRoom -> StringR.string.leave_room_alert_empty_subtitle
+            LeaveRoomWarning.Generic -> StringR.string.leave_room_alert_subtitle
+        }
+    )
     ConfirmationDialog(
         content = content,
-        submitText = "Leave",
+        submitText = stringResource(StringR.string.action_leave),
         onSubmitClicked = onConfirmLeave,
         onDismiss = onDismiss,
     )

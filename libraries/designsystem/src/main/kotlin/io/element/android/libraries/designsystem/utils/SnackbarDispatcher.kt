@@ -18,31 +18,23 @@ package io.element.android.libraries.designsystem.utils
 
 import androidx.annotation.StringRes
 import androidx.compose.material3.SnackbarDuration
-import kotlinx.coroutines.CoroutineScope
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlin.coroutines.coroutineContext
 
 class SnackbarDispatcher {
     private val mutex = Mutex()
 
     private val snackbarState = MutableStateFlow<SnackbarMessage?>(null)
     val snackbarMessage: Flow<SnackbarMessage?> = snackbarState
-//        .onEach { value ->
-//            if (value != null) {
-//                CoroutineScope(coroutineContext + Dispatchers.Main).launch {
-//                    delay(10)
-//                    clear()
-//                }
-//            }
-//        }
 
     suspend fun post(message: SnackbarMessage) {
         mutex.withLock {
@@ -55,6 +47,21 @@ class SnackbarDispatcher {
             snackbarState.update { null }
         }
     }
+}
+
+@Composable
+fun handleSnackbarMessage(
+    snackbarDispatcher: SnackbarDispatcher
+): SnackbarMessage? {
+    val snackbarMessage by snackbarDispatcher.snackbarMessage.collectAsState(initial = null)
+    LaunchedEffect(snackbarMessage) {
+        if (snackbarMessage != null) {
+            launch(Dispatchers.Main) {
+                snackbarDispatcher.clear()
+            }
+        }
+    }
+    return snackbarMessage
 }
 
 data class SnackbarMessage(

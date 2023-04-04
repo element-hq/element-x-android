@@ -20,17 +20,19 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryPlaceholders
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import io.element.android.libraries.ui.strings.R as StringR
 
 open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
     override val values: Sequence<RoomListState>
         get() = sequenceOf(
             aRoomListState(),
             aRoomListState().copy(displayVerificationPrompt = true),
-            aRoomListState().copy(presentVerificationSuccessfulMessage = true),
+            aRoomListState().copy(snackbarMessage = SnackbarMessage(StringR.string.common_verification_complete)),
         )
 }
 
@@ -39,7 +41,6 @@ internal fun aRoomListState() = RoomListState(
     roomList = aRoomListRoomSummaryList(),
     filter = "filter",
     eventSink = {},
-    presentVerificationSuccessfulMessage = false,
     snackbarMessage = null,
     displayVerificationPrompt = false,
 )
