@@ -17,6 +17,7 @@
 package io.element.android.features.roomdetails.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.Async
 
 open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState> {
     override val values: Sequence<RoomDetailsState>
@@ -25,6 +26,7 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState().copy(roomTopic = null),
             aRoomDetailsState().copy(isEncrypted = false),
             aRoomDetailsState().copy(roomAlias = null),
+            aRoomDetailsState().copy(memberCount = Async.Failure(Throwable())),
             // Add other state here
         )
 }
@@ -39,7 +41,7 @@ fun aRoomDetailsState() = RoomDetailsState(
         "|| MAIL iki/Marketing " +
         "|| MAI iki/Marketing " +
         "|| MAI iki/Marketing...",
-    memberCount = 32,
+    memberCount = Async.Success(32),
     isEncrypted = true,
 //    eventSink = {}
 )

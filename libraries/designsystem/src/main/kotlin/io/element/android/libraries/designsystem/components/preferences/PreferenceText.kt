@@ -25,7 +25,9 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.progressSemantics
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material3.MaterialTheme
@@ -39,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
@@ -47,6 +50,7 @@ fun PreferenceText(
     modifier: Modifier = Modifier,
     subtitle: String? = null,
     currentValue: String? = null,
+    loadingCurrentValue: Boolean = false,
     icon: ImageVector? = null,
     tintColor: Color? = null,
     onClick: () -> Unit = {},
@@ -56,11 +60,13 @@ fun PreferenceText(
         modifier = modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = minHeight)
-            .padding(end = preferencePaddingHorizontal)
-            .clickable { onClick() },
+            .clickable { onClick() }
+            .padding(end = preferencePaddingHorizontal),
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(vertical = preferencePaddingVertical)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = preferencePaddingVertical)
         ) {
             PreferenceIcon(icon = icon, tintColor = tintColor)
             Column(modifier = Modifier
@@ -88,7 +94,11 @@ fun PreferenceText(
             if (currentValue != null) {
                 Text(currentValue, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
                 Spacer(Modifier.width(16.dp))
+            } else if (loadingCurrentValue) {
+                CircularProgressIndicator(modifier = Modifier.progressSemantics().size(20.dp), strokeWidth = 2.dp)
+                Spacer(Modifier.width(16.dp))
             }
+
         }
     }
 }

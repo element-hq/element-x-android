@@ -42,6 +42,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.isLoading
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -62,6 +64,7 @@ fun RoomDetailsView(
     state: RoomDetailsState,
     goBack: () -> Unit,
     onShareRoom: () -> Unit,
+    openRoomMemberList: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -87,7 +90,12 @@ fun RoomDetailsView(
                 TopicSection(roomTopic = state.roomTopic)
             }
 
-            MembersSection(memberCount = state.memberCount)
+            val memberCount = (state.memberCount as? Async.Success<Int>)?.state
+            MembersSection(
+                memberCount = memberCount,
+                isLoading = state.memberCount.isLoading(),
+                openRoomMemberList = openRoomMemberList
+            )
 
             if (state.isEncrypted) {
                 SecuritySection()
@@ -148,12 +156,19 @@ internal fun TopicSection(roomTopic: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-internal fun MembersSection(memberCount: Int, modifier: Modifier = Modifier) {
+internal fun MembersSection(
+    memberCount: Int?,
+    isLoading: Boolean,
+    modifier: Modifier = Modifier,
+    openRoomMemberList: () -> Unit
+) {
     PreferenceCategory(modifier = modifier) {
         PreferenceText(
             title = stringResource(R.string.screen_room_details_people_title),
             icon = Icons.Outlined.Person,
-            currentValue = memberCount.toString(),
+            currentValue = memberCount?.toString(),
+            onClick = openRoomMemberList,
+            loadingCurrentValue = isLoading,
         )
         PreferenceText(
             title = stringResource(R.string.screen_room_details_invite_people_title),
@@ -200,5 +215,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         state = state,
         goBack = {},
         onShareRoom = {},
+        openRoomMemberList = {},
     )
 }
