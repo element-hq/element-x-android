@@ -16,12 +16,14 @@
 
 package io.element.android.libraries.push.impl
 
+import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
 import io.element.android.libraries.push.impl.clientsecret.PushClientSecret
 import io.element.android.libraries.push.impl.config.PushConfig
+import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest
 import io.element.android.libraries.push.impl.userpushstore.UserPushStoreFactory
 import io.element.android.libraries.push.impl.userpushstore.isFirebase
@@ -32,6 +34,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal const val DEFAULT_PUSHER_FILE_TAG = "mobile"
+
+private val loggerTag = LoggerTag("PushersManager", pushLoggerTag)
 
 // TODO EAx Communicate with the SDK
 class PushersManager @Inject constructor(
@@ -81,7 +85,7 @@ class PushersManager @Inject constructor(
                     registerPusher(client, firebaseToken, PushConfig.pusher_http_url)
                 }
             } else {
-                Timber.d("This session is not using Firebase pusher")
+                Timber.tag(loggerTag.value).d("This session is not using Firebase pusher")
             }
         }
     }
@@ -92,7 +96,7 @@ class PushersManager @Inject constructor(
     suspend fun registerPusher(matrixClient: MatrixClient, pushKey: String, gateway: String) {
         val userDataStore = userPushStoreFactory.create(matrixClient.sessionId.value)
         if (userDataStore.getCurrentRegisteredPushKey() == pushKey) {
-            Timber.d("Unnecessary to register again the same pusher")
+            Timber.tag(loggerTag.value).d("Unnecessary to register again the same pusher")
         } else {
             // Register the pusher to the server
             matrixClient.pushersService().setHttpPusher(
@@ -102,7 +106,7 @@ class PushersManager @Inject constructor(
                     userDataStore.setCurrentRegisteredPushKey(pushKey)
                 },
                 { throwable ->
-                    Timber.e(throwable, "Unable to register the pusher")
+                    Timber.tag(loggerTag.value).e(throwable, "Unable to register the pusher")
                 }
             )
         }
