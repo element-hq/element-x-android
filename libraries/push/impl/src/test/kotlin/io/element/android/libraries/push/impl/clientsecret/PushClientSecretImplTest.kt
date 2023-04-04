@@ -19,12 +19,13 @@
 package io.element.android.libraries.push.impl.clientsecret
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-private const val A_USER_ID_0 = "A_USER_ID_0"
-private const val A_USER_ID_1 = "A_USER_ID_1"
+private val A_USER_ID_0 = SessionId("A_USER_ID_0")
+private val A_USER_ID_1 = SessionId("A_USER_ID_1")
 
 private const val A_UNKNOWN_SECRET = "A_UNKNOWN_SECRET"
 

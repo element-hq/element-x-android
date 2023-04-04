@@ -19,6 +19,8 @@ package io.element.android.libraries.push.impl.notifications
 import android.graphics.Bitmap
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -34,9 +36,9 @@ class RoomGroupMessageCreator @Inject constructor(
 ) {
 
     fun createRoomMessage(
-        sessionId: String,
+        sessionId: SessionId,
         events: List<NotifiableMessageEvent>,
-        roomId: String,
+        roomId: RoomId,
         userDisplayName: String,
         userAvatarUrl: String?
     ): RoomNotification.Message {
@@ -47,7 +49,7 @@ class RoomGroupMessageCreator @Inject constructor(
             Person.Builder()
                 .setName(userDisplayName)
                 .setIcon(bitmapLoader.getUserIcon(userAvatarUrl))
-                .setKey(lastKnownRoomEvent.sessionId)
+                .setKey(lastKnownRoomEvent.sessionId.value)
                 .build()
         ).also {
             it.conversationTitle = roomName.takeIf { roomIsGroup }

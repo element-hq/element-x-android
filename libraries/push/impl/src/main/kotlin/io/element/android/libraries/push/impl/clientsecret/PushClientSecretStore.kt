@@ -16,9 +16,11 @@
 
 package io.element.android.libraries.push.impl.clientsecret
 
+import io.element.android.libraries.matrix.api.core.SessionId
+
 interface PushClientSecretStore {
-    suspend fun storeSecret(userId: String, clientSecret: String)
-    suspend fun getSecret(userId: String): String?
-    suspend fun resetSecret(userId: String)
-    suspend fun getUserIdFromSecret(clientSecret: String): String?
+    suspend fun storeSecret(userId: SessionId, clientSecret: String)
+    suspend fun getSecret(userId: SessionId): String?
+    suspend fun resetSecret(userId: SessionId)
+    suspend fun getUserIdFromSecret(clientSecret: String): SessionId?
 }

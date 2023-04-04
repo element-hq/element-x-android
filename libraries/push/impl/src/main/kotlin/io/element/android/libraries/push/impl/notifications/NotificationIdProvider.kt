@@ -18,27 +18,28 @@ package io.element.android.libraries.push.impl.notifications
 
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.matrix.api.core.SessionId
 import javax.inject.Inject
 
 @SingleIn(AppScope::class)
 class NotificationIdProvider @Inject constructor() {
-    fun getSummaryNotificationId(sessionId: String): Int {
+    fun getSummaryNotificationId(sessionId: SessionId): Int {
         return getOffset(sessionId) + SUMMARY_NOTIFICATION_ID
     }
 
-    fun getRoomMessagesNotificationId(sessionId: String): Int {
+    fun getRoomMessagesNotificationId(sessionId: SessionId): Int {
         return getOffset(sessionId) + ROOM_MESSAGES_NOTIFICATION_ID
     }
 
-    fun getRoomEventNotificationId(sessionId: String): Int {
+    fun getRoomEventNotificationId(sessionId: SessionId): Int {
         return getOffset(sessionId) + ROOM_EVENT_NOTIFICATION_ID
     }
 
-    fun getRoomInvitationNotificationId(sessionId: String): Int {
+    fun getRoomInvitationNotificationId(sessionId: SessionId): Int {
         return getOffset(sessionId) + ROOM_INVITATION_NOTIFICATION_ID
     }
 
-    private fun getOffset(sessionId: String): Int {
+    private fun getOffset(sessionId: SessionId): Int {
         // TODO EAx multi account: return different value for users and persist data
         return 0
     }

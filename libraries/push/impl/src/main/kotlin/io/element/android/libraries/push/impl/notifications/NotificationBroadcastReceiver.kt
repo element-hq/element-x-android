@@ -22,6 +22,11 @@ import android.content.Intent
 import androidx.core.app.RemoteInput
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.asRoomId
+import io.element.android.libraries.matrix.api.core.asSessionId
+import io.element.android.libraries.matrix.api.core.asThreadId
 import io.element.android.libraries.push.impl.log.notificationLoggerTag
 import io.element.android.services.analytics.api.AnalyticsTracker
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -46,29 +51,29 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         if (intent == null || context == null) return
         context.bindings<NotificationBroadcastReceiverBindings>().inject(this)
         Timber.tag(loggerTag.value).v("NotificationBroadcastReceiver received : $intent")
-        val sessionId = intent.extras?.getString(KEY_SESSION_ID) ?: return
+        val sessionId = intent.extras?.getString(KEY_SESSION_ID)?.asSessionId() ?: return
         when (intent.action) {
             actionIds.smartReply ->
                 handleSmartReply(intent, context)
             actionIds.dismissRoom ->
-                intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
+                intent.getStringExtra(KEY_ROOM_ID)?.asRoomId()?.let { roomId ->
                     notificationDrawerManager.updateEvents { it.clearMessagesForRoom(sessionId, roomId) }
                 }
             actionIds.dismissSummary ->
                 notificationDrawerManager.clearAllEvents(sessionId)
             actionIds.markRoomRead ->
-                intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
+                intent.getStringExtra(KEY_ROOM_ID)?.asRoomId()?.let { roomId ->
                     notificationDrawerManager.updateEvents { it.clearMessagesForRoom(sessionId, roomId) }
                     handleMarkAsRead(sessionId, roomId)
                 }
             actionIds.join -> {
-                intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
+                intent.getStringExtra(KEY_ROOM_ID)?.asRoomId()?.let { roomId ->
                     notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(sessionId, roomId) }
                     handleJoinRoom(sessionId, roomId)
                 }
             }
             actionIds.reject -> {
-                intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
+                intent.getStringExtra(KEY_ROOM_ID)?.asRoomId()?.let { roomId ->
                     notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(sessionId, roomId) }
                     handleRejectRoom(sessionId, roomId)
                 }
@@ -76,7 +81,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun handleJoinRoom(sessionId: String, roomId: String) {
+    private fun handleJoinRoom(sessionId: SessionId, roomId: RoomId) {
         /*
         activeSessionHolder.getSafeActiveSession()?.let { session ->
             val room = session.getRoom(roomId)
@@ -93,7 +98,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
          */
     }
 
-    private fun handleRejectRoom(sessionId: String, roomId: String) {
+    private fun handleRejectRoom(sessionId: SessionId, roomId: RoomId) {
         /*
         activeSessionHolder.getSafeActiveSession()?.let { session ->
             session.coroutineScope.launch {
@@ -104,7 +109,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
          */
     }
 
-    private fun handleMarkAsRead(sessionId: String, roomId: String) {
+    private fun handleMarkAsRead(sessionId: SessionId, roomId: RoomId) {
         /*
         activeSessionHolder.getActiveSession().let { session ->
             val room = session.getRoom(roomId)
@@ -120,11 +125,11 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     private fun handleSmartReply(intent: Intent, context: Context) {
         val message = getReplyMessage(intent)
-        val sessionId = intent.getStringExtra(KEY_SESSION_ID)
-        val roomId = intent.getStringExtra(KEY_ROOM_ID)
-        val threadId = intent.getStringExtra(KEY_THREAD_ID)
+        val sessionId = intent.getStringExtra(KEY_SESSION_ID)?.asSessionId()
+        val roomId = intent.getStringExtra(KEY_ROOM_ID)?.asRoomId()
+        val threadId = intent.getStringExtra(KEY_THREAD_ID)?.asThreadId()
 
-        if (message.isNullOrBlank() || roomId.isNullOrBlank()) {
+        if (message.isNullOrBlank() || roomId == null) {
             // ignore this event
             // Can this happen? should we update notification?
             return

@@ -17,6 +17,10 @@
 package io.element.android.libraries.push.impl.notifications
 
 import io.element.android.libraries.core.cache.CircularCache
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
@@ -30,10 +34,10 @@ data class NotificationEventQueue constructor(
      * Acts as a notification debouncer to stop already dismissed push notifications from
      * displaying again when the /sync response is delayed.
      */
-    private val seenEventIds: CircularCache<String>
+    private val seenEventIds: CircularCache<EventId>
 ) {
 
-    fun markRedacted(eventIds: List<String>) {
+    fun markRedacted(eventIds: List<EventId>) {
         eventIds.forEach { redactedId ->
             queue.replace(redactedId) {
                 when (it) {
@@ -45,7 +49,8 @@ data class NotificationEventQueue constructor(
         }
     }
 
-    fun syncRoomEvents(roomsLeft: Collection<String>, roomsJoined: Collection<String>) {
+    // TODO EAx call this
+    fun syncRoomEvents(roomsLeft: Collection<RoomId>, roomsJoined: Collection<RoomId>) {
         if (roomsLeft.isNotEmpty() || roomsJoined.isNotEmpty()) {
             queue.removeAll {
                 when (it) {
@@ -125,30 +130,30 @@ data class NotificationEventQueue constructor(
         )
     }
 
-    fun clearMemberShipNotificationForRoom(sessionId: String, roomId: String) {
+    fun clearMemberShipNotificationForRoom(sessionId: SessionId, roomId: RoomId) {
         Timber.d("clearMemberShipOfRoom $sessionId, $roomId")
-        queue.removeAll { it is InviteNotifiableEvent && it.sessionId == sessionId  && it.roomId == roomId }
+        queue.removeAll { it is InviteNotifiableEvent && it.sessionId == sessionId && it.roomId == roomId }
     }
 
-    fun clearMessagesForSession(sessionId: String) {
+    fun clearMessagesForSession(sessionId: SessionId) {
         Timber.d("clearMessagesForSession $sessionId")
-        queue.removeAll { it is NotifiableMessageEvent && it.sessionId == sessionId}
+        queue.removeAll { it is NotifiableMessageEvent && it.sessionId == sessionId }
     }
 
-    fun clearMessagesForRoom(sessionId: String, roomId: String) {
+    fun clearMessagesForRoom(sessionId: SessionId, roomId: RoomId) {
         Timber.d("clearMessageEventOfRoom $sessionId, $roomId")
-        queue.removeAll { it is NotifiableMessageEvent && it.sessionId == sessionId  && it.roomId == roomId }
+        queue.removeAll { it is NotifiableMessageEvent && it.sessionId == sessionId && it.roomId == roomId }
     }
 
-    fun clearMessagesForThread(sessionId: String, roomId: String, threadId: String) {
+    fun clearMessagesForThread(sessionId: SessionId, roomId: RoomId, threadId: ThreadId) {
         Timber.d("clearMessageEventOfThread $sessionId, $roomId, $threadId")
-        queue.removeAll { it is NotifiableMessageEvent && it.sessionId == sessionId  && it.roomId == roomId && it.threadId == threadId }
+        queue.removeAll { it is NotifiableMessageEvent && it.sessionId == sessionId && it.roomId == roomId && it.threadId == threadId }
     }
 
     fun rawEvents(): List<NotifiableEvent> = queue
 }
 
-private fun MutableList<NotifiableEvent>.replace(eventId: String, block: (NotifiableEvent) -> NotifiableEvent) {
+private fun MutableList<NotifiableEvent>.replace(eventId: EventId, block: (NotifiableEvent) -> NotifiableEvent) {
     val indexToReplace = indexOfFirst { it.eventId == eventId }
     if (indexToReplace == -1) {
         return

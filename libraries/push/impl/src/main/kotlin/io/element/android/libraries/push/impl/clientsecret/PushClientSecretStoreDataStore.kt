@@ -25,6 +25,8 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.asSessionId
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
@@ -34,29 +36,29 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 class PushClientSecretStoreDataStore @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : PushClientSecretStore {
-    override suspend fun storeSecret(userId: String, clientSecret: String) {
+    override suspend fun storeSecret(userId: SessionId, clientSecret: String) {
         context.dataStore.edit { settings ->
             settings[getPreferenceKeyForUser(userId)] = clientSecret
         }
     }
 
-    override suspend fun getSecret(userId: String): String? {
+    override suspend fun getSecret(userId: SessionId): String? {
         return context.dataStore.data.first()[getPreferenceKeyForUser(userId)]
     }
 
-    override suspend fun resetSecret(userId: String) {
+    override suspend fun resetSecret(userId: SessionId) {
         context.dataStore.edit { settings ->
             settings.remove(getPreferenceKeyForUser(userId))
         }
     }
 
-    override suspend fun getUserIdFromSecret(clientSecret: String): String? {
+    override suspend fun getUserIdFromSecret(clientSecret: String): SessionId? {
         val keyValues = context.dataStore.data.first().asMap()
         val matchingKey = keyValues.keys.firstOrNull {
             keyValues[it] == clientSecret
         }
-        return matchingKey?.name
+        return matchingKey?.name?.asSessionId()
     }
 
-    private fun getPreferenceKeyForUser(userId: String) = stringPreferencesKey(userId)
+    private fun getPreferenceKeyForUser(userId: SessionId) = stringPreferencesKey(userId.value)
 }

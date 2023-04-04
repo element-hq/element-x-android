@@ -17,6 +17,9 @@
 package io.element.android.libraries.push.impl.intent
 
 import android.content.Intent
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.ThreadId
 
 interface IntentProvider {
     /**
@@ -25,8 +28,8 @@ interface IntentProvider {
     fun getMainIntent(): Intent
 
     fun getIntent(
-        sessionId: String,
-        roomId: String?,
-        threadId: String?,
+        sessionId: SessionId,
+        roomId: RoomId?,
+        threadId: ThreadId?,
     ): Intent
 }

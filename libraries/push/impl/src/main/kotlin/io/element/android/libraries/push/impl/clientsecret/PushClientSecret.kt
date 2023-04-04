@@ -16,20 +16,22 @@
 
 package io.element.android.libraries.push.impl.clientsecret
 
+import io.element.android.libraries.matrix.api.core.SessionId
+
 interface PushClientSecret {
     /**
      * To call when registering a pusher. It will return the existing secret or create a new one.
      */
-    suspend fun getSecretForUser(userId: String): String
+    suspend fun getSecretForUser(userId: SessionId): String
 
     /**
      * To call when receiving a push containing a client secret.
      * Return null if not found.
      */
-    suspend fun getUserIdFromSecret(clientSecret: String): String?
+    suspend fun getUserIdFromSecret(clientSecret: String): SessionId?
 
     /**
      * To call when the user signs out.
      */
-    suspend fun resetSecretForUser(userId: String)
+    suspend fun resetSecretForUser(userId: SessionId)
 }

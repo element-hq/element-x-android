@@ -18,6 +18,7 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.app.Notification
 import androidx.core.app.NotificationCompat
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.R
 import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
@@ -42,7 +43,7 @@ class SummaryGroupMessageCreator @Inject constructor(
 ) {
 
     fun createSummaryNotification(
-        sessionId: String,
+        sessionId: SessionId,
         roomNotifications: List<RoomNotification.Message.Meta>,
         invitationNotifications: List<OneShotNotification.Append.Meta>,
         simpleNotifications: List<OneShotNotification.Append.Meta>,
@@ -92,7 +93,7 @@ class SummaryGroupMessageCreator @Inject constructor(
     }
 
     private fun processSimpleGroupSummary(
-        sessionId: String,
+        sessionId: SessionId,
         summaryIsNoisy: Boolean,
         messageEventsCount: Int,
         simpleEventsCount: Int,

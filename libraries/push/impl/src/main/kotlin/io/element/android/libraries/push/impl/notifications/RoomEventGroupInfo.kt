@@ -16,12 +16,15 @@
 
 package io.element.android.libraries.push.impl.notifications
 
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+
 /**
  * Data class to hold information about a group of notifications for a room.
  */
 data class RoomEventGroupInfo(
-        val sessionId: String,
-        val roomId: String,
+        val sessionId: SessionId,
+        val roomId: RoomId,
         val roomDisplayName: String,
         val isDirect: Boolean = false
 ) {

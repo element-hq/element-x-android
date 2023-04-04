@@ -21,6 +21,9 @@ import android.content.Intent
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.impl.intent.IntentProvider
 import io.element.android.x.MainActivity
 import javax.inject.Inject
@@ -34,7 +37,7 @@ class IntentProviderImpl @Inject constructor(
         return Intent(context, MainActivity::class.java)
     }
 
-    override fun getIntent(sessionId: String, roomId: String?, threadId: String?): Intent {
+    override fun getIntent(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?): Intent {
         // TODO Handle deeplink or pass parameters
         return Intent(context, MainActivity::class.java)
     }

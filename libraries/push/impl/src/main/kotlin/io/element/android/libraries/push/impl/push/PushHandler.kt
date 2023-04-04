@@ -119,7 +119,7 @@ class PushHandler @Inject constructor(
                 // Get userId from client secret
                 pushClientSecret.getUserIdFromSecret(clientSecret)
             } ?: run {
-                matrixAuthenticationService.getLatestSessionId()?.value
+                matrixAuthenticationService.getLatestSessionId()
             }
 
             if (userId == null) {
