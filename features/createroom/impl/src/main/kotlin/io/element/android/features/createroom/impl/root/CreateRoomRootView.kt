@@ -156,7 +156,7 @@ fun CreateRoomActionButtonsList(
     Column(modifier = modifier) {
         CreateRoomActionButton(
             iconRes = DrawableR.drawable.ic_groups,
-            text = stringResource(id = R.string.screen_create_room_action_create_room),
+            text = stringResource(id = StringR.string.action_create_a_room),
             onClick = onNewRoomClicked,
         )
         CreateRoomActionButton(
