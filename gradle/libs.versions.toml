@@ -3,7 +3,7 @@
 
 [versions]
 # Project
-android_gradle_plugin = "7.4.2"
+android_gradle_plugin = "8.0.0-rc01"
 firebase_gradle_plugin = "3.2.0"
 kotlin = "1.8.10"
 ksp = "1.8.10-1.0.9"
@@ -156,8 +156,6 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.ref = "dependencygraph" }
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
-stem = { id = "com.likethesalad.stem", version.ref = "stem" }
-stemlibrary = { id = "com.likethesalad.stem-library", version.ref = "stem" }
 paparazzi = "app.cash.paparazzi:1.2.0"
 sonarqube = "org.sonarqube:4.0.0.2929"
 kover = "org.jetbrains.kotlinx.kover:0.6.1"

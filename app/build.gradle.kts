@@ -25,7 +25,6 @@ import extension.allServicesImpl
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("io.element.android-compose-application")
-    alias(libs.plugins.stem)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
@@ -140,7 +139,7 @@ android {
         }
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
     // Waiting for https://github.com/google/ksp/issues/37
@@ -150,6 +149,10 @@ android {
                 kotlin.srcDir("build/generated/ksp/$name/kotlin")
             }
         }
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 }
 
@@ -210,7 +213,7 @@ dependencies {
     anvil(projects.anvilcodegen)
 
     // https://developer.android.com/studio/write/java8-support#library-desugaring-versions
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
     implementation(libs.appyx.core)
     implementation(libs.androidx.splash)
     implementation(libs.androidx.corektx)
