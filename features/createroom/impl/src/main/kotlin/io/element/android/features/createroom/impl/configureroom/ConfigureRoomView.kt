@@ -81,9 +81,14 @@ fun ConfigureRoomView(
         ) {
             RoomNameWithAvatar(
                 modifier = Modifier.padding(horizontal = 16.dp),
+                avatarUri = state.avatarUri,
+                roomName = state.roomName,
+                onRoomNameChanged = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
             )
             RoomTopic(
                 modifier = Modifier.padding(horizontal = 16.dp),
+                topic = state.topic,
+                onTopicChanged = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
             )
             SelectedUsersList(
                 listState = LazyListState(), // FIXME
@@ -133,8 +138,8 @@ fun ConfigureRoomToolbar(
 @Composable
 fun RoomNameWithAvatar(
     modifier: Modifier = Modifier,
-    avatarUri: Uri? = null,
-    roomName: String = "",
+    avatarUri: Uri?,
+    roomName: String,
     onAvatarClick: () -> Unit = {},
     onRoomNameChanged: (String) -> Unit = {},
 ) {
@@ -170,7 +175,7 @@ fun RoomNameWithAvatar(
 @Composable
 fun Avatar(
     modifier: Modifier = Modifier,
-    avatarUri: Uri? = null,
+    avatarUri: Uri?,
     onClick: () -> Unit = {},
 ) {
     val commonModifier = modifier
@@ -208,7 +213,7 @@ fun Avatar(
 @Composable
 fun RoomTopic(
     modifier: Modifier = Modifier,
-    topic: String = "",
+    topic: String,
     onTopicChanged: (String) -> Unit = {},
 ) {
     Column(

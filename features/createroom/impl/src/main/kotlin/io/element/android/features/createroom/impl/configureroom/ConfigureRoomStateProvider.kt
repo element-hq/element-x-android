@@ -30,6 +30,8 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
 
 fun aConfigureRoomState() = ConfigureRoomState(
     selectedUsers = aMatrixUserList().toImmutableList(),
+    roomName = "",
+    topic = "",
     avatarUri = null,
     eventSink = {}
 )
