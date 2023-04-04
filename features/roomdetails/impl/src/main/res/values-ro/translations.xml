@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_details_encryption_enabled_subtitle">"Mesajele sunt securizate cu încuietori. Doar tu și destinatarii aveți cheile unice pentru a le debloca."</string>
+  <string name="screen_room_details_encryption_enabled_title">"Criptarea mesajelor este activată"</string>
+  <string name="screen_room_details_invite_people_title">"Invită persoane"</string>
+  <string name="screen_room_details_leave_room_title">"Părăsește camera"</string>
+  <string name="screen_room_details_people_title">"Persoane"</string>
+  <string name="screen_room_details_security_title">"Securitate"</string>
+  <string name="screen_room_details_share_room_title">"Partajează camera"</string>
+  <string name="screen_room_details_topic_title">"Subiect"</string>
+</resources>

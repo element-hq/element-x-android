@@ -34,8 +34,11 @@ import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummary
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
@@ -45,6 +48,8 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -56,7 +61,10 @@ class RoomListPresenter @Inject constructor(
     private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
     private val roomLastMessageFormatter: RoomLastMessageFormatter,
     private val sessionVerificationService: SessionVerificationService,
+    private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<RoomListState> {
+
+    private val roomMembershipObserver: RoomMembershipObserver = client.roomMembershipObserver()
 
     @Composable
     override fun present(): RoomListState {
@@ -106,12 +114,15 @@ class RoomListPresenter @Inject constructor(
             filteredRoomSummaries.value = updateFilteredRoomSummaries(roomSummaries, filter)
         }
 
+        val snackbarMessage = handleSnackbarMessage(snackbarDispatcher)
+
         return RoomListState(
             matrixUser = matrixUser.value,
             roomList = filteredRoomSummaries.value,
             filter = filter,
             presentVerificationSuccessfulMessage = presentVerificationSuccessfulMessage.value,
             displayVerificationPrompt = displayVerificationPrompt,
+            snackbarMessage = snackbarMessage,
             eventSink = ::handleEvents
         )
     }
@@ -180,5 +191,20 @@ class RoomListPresenter @Inject constructor(
                 }
             }
         }
+    }
+
+    @Composable
+    private fun handleSnackbarMessage(
+        snackbarDispatcher: SnackbarDispatcher
+    ): SnackbarMessage? {
+        val snackbarMessage by snackbarDispatcher.snackbarMessage.collectAsState(initial = null)
+        LaunchedEffect(snackbarMessage) {
+            if (snackbarMessage != null) {
+                launch(Dispatchers.Main) {
+                    snackbarDispatcher.clear()
+                }
+            }
+        }
+        return snackbarMessage
     }
 }

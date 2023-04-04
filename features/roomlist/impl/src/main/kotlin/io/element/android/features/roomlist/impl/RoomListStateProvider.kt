@@ -40,6 +40,7 @@ internal fun aRoomListState() = RoomListState(
     filter = "filter",
     eventSink = {},
     presentVerificationSuccessfulMessage = false,
+    snackbarMessage = null,
     displayVerificationPrompt = false,
 )
 

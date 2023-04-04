@@ -38,6 +38,7 @@
   <string name="action_save">"Save"</string>
   <string name="action_search">"Search"</string>
   <string name="action_send">"Send"</string>
+  <string name="action_share">"Share"</string>
   <string name="action_share_link">"Share link"</string>
   <string name="action_skip">"Skip"</string>
   <string name="action_start">"Start"</string>
@@ -48,6 +49,8 @@
   <string name="common_about">"About"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_bubbles">"Bubbles"</string>
+  <string name="common_creating_room">"Creating room…"</string>
+  <string name="common_current_user_left_room">"Left room"</string>
   <string name="common_decryption_error">"Decryption error"</string>
   <string name="common_developer_options">"Developer options"</string>
   <string name="common_edited_suffix">"(edited)"</string>
@@ -120,13 +123,25 @@
     <item quantity="one">"%1$d room change"</item>
     <item quantity="other">"%1$d room changes"</item>
   </plurals>
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"1 person"</item>
+    <item quantity="other">"%1$d people"</item>
+  </plurals>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
   <string name="rageshake_dialog_content">"You seem to be shaking the phone in frustration. Would you like to open the bug report screen?"</string>
-  <string name="report_content_explanation">"Reporting this message will send it’s unique ‘event ID’ to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images."</string>
+  <string name="report_content_explanation">"This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages."</string>
   <string name="report_content_hint">"Reason for reporting this content"</string>
   <string name="room_timeline_beginning_of_room">"This is the beginning of %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"This is the beginning of this conversation."</string>
   <string name="room_timeline_read_marker_title">"New"</string>
+  <string name="screen_dm_details_block_alert_action">"Block"</string>
+  <string name="screen_dm_details_block_alert_description">"Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime."</string>
+  <string name="screen_dm_details_block_user">"Block user"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Unblock"</string>
+  <string name="screen_dm_details_unblock_alert_description">"On unblocking the user, you will be able to see all messages by them again."</string>
+  <string name="screen_dm_details_unblock_user">"Unblock user"</string>
+  <string name="screen_report_content_block_user">"Block user"</string>
+  <string name="screen_report_content_block_user_hint">"Check if you want to hide all current and future messages from this user"</string>
   <string name="screen_room_member_details_block_alert_action">"Block"</string>
   <string name="screen_room_member_details_block_alert_description">"Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime."</string>
   <string name="screen_room_member_details_block_user">"Block user"</string>
@@ -134,6 +149,7 @@
   <string name="screen_room_member_details_unblock_alert_description">"On unblocking the user, you will be able to see all messages by them again."</string>
   <string name="screen_room_member_details_unblock_user">"Unblock user"</string>
   <string name="screen_start_chat_error_starting_chat">"An error occurred when trying to start a chat"</string>
+  <string name="screen_start_chat_unknown_profile">"We can’t validate this user’s Matrix ID. The invite might not be received."</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Detection threshold"</string>
   <string name="settings_title_general">"General"</string>

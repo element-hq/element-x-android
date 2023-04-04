@@ -47,7 +47,7 @@ class RoomListScreen(
         matrixClient,
         DefaultLastMessageTimestampFormatter(dateTimeProvider, dateFormatters),
         DefaultRoomLastMessageFormatter(context, matrixClient),
-        sessionVerificationService
+        sessionVerificationService,
     )
 
     @Composable

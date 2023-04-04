@@ -46,13 +46,17 @@ import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
 import io.element.android.services.appnavstate.api.AppNavigationStateService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.parcelize.Parcelize
+import kotlin.coroutines.coroutineContext
 
 @ContributesNode(AppScope::class)
 class LoggedInFlowNode @AssistedInject constructor(
@@ -63,6 +67,8 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val createRoomEntryPoint: CreateRoomEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
     private val verifySessionEntryPoint: VerifySessionEntryPoint,
+    private val coroutineScope: CoroutineScope,
+    snackbarDispatcher: SnackbarDispatcher,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.RoomList,
@@ -87,6 +93,11 @@ class LoggedInFlowNode @AssistedInject constructor(
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
+    private val loggedInFlowProcessor = LoggedInEventProcessor(
+        snackbarDispatcher,
+        inputs.matrixClient.roomMembershipObserver(),
+        inputs.matrixClient.sessionVerificationService(),
+    )
 
     override fun onBuilt() {
         super.onBuilt()
@@ -99,6 +110,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                 appNavigationStateService.onNavigateToSession(inputs.matrixClient.sessionId)
                 // TODO We do not support Space yet, so directly navigate to main space
                 appNavigationStateService.onNavigateToSpace(MAIN_SPACE)
+                loggedInFlowProcessor.observeEvents(coroutineScope)
             },
             onDestroy = {
                 val imageLoaderFactory = bindings<MatrixUIBindings>().notLoggedInImageLoaderFactory()
@@ -106,6 +118,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                 plugins<LifecycleCallback>().forEach { it.onFlowReleased(inputs.matrixClient) }
                 appNavigationStateService.onLeavingSpace()
                 appNavigationStateService.onLeavingSession()
+                loggedInFlowProcessor.stopObserving()
             }
         )
     }
