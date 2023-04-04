@@ -57,24 +57,24 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 handleSmartReply(intent, context)
             actionIds.dismissRoom ->
                 intent.getStringExtra(KEY_ROOM_ID)?.asRoomId()?.let { roomId ->
-                    notificationDrawerManager.updateEvents { it.clearMessagesForRoom(sessionId, roomId) }
+                    notificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
                 }
             actionIds.dismissSummary ->
                 notificationDrawerManager.clearAllEvents(sessionId)
             actionIds.markRoomRead ->
                 intent.getStringExtra(KEY_ROOM_ID)?.asRoomId()?.let { roomId ->
-                    notificationDrawerManager.updateEvents { it.clearMessagesForRoom(sessionId, roomId) }
+                    notificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
                     handleMarkAsRead(sessionId, roomId)
                 }
             actionIds.join -> {
                 intent.getStringExtra(KEY_ROOM_ID)?.asRoomId()?.let { roomId ->
-                    notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(sessionId, roomId) }
+                    notificationDrawerManager.clearMemberShipNotificationForRoom(sessionId, roomId)
                     handleJoinRoom(sessionId, roomId)
                 }
             }
             actionIds.reject -> {
                 intent.getStringExtra(KEY_ROOM_ID)?.asRoomId()?.let { roomId ->
-                    notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(sessionId, roomId) }
+                    notificationDrawerManager.clearMemberShipNotificationForRoom(sessionId, roomId)
                     handleRejectRoom(sessionId, roomId)
                 }
             }

@@ -134,7 +134,7 @@ class PushHandler @Inject constructor(
                 return
             }
 
-            notificationDrawerManager.updateEvents { it.onNotifiableEventReceived(notificationData) }
+            notificationDrawerManager.onNotifiableEventReceived(notificationData)
         } catch (e: Exception) {
             Timber.tag(loggerTag.value).e(e, "## handleInternal() failed")
         }

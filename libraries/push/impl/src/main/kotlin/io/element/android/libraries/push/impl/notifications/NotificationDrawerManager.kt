@@ -89,7 +89,7 @@ class NotificationDrawerManager @Inject constructor(
             is AppNavigationState.Space -> {}
             is AppNavigationState.Room -> {
                 // Cleanup notification for current room
-                onEnteringRoom(appNavigationState.parentSpace.parentSession.sessionId, appNavigationState.roomId)
+                clearMessagesForRoom(appNavigationState.parentSpace.parentSession.sessionId, appNavigationState.roomId)
             }
             is AppNavigationState.Thread -> {
                 onEnteringThread(
@@ -109,13 +109,7 @@ class NotificationDrawerManager @Inject constructor(
         return NotificationState(queuedEvents, renderedEvents)
     }
 
-    /**
-    Should be called as soon as a new event is ready to be displayed.
-    The notification corresponding to this event will not be displayed until
-    #refreshNotificationDrawer() is called.
-    Events might be grouped and there might not be one notification per event!
-     */
-    fun NotificationEventQueue.onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
+    private fun NotificationEventQueue.onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
         if (!pushDataStore.areNotificationEnabledForDevice()) {
             Timber.i("Notification are disabled for this device")
             return
@@ -137,19 +131,43 @@ class NotificationDrawerManager @Inject constructor(
     }
 
     /**
+     * Should be called as soon as a new event is ready to be displayed.
+     * The notification corresponding to this event will not be displayed until
+     * #refreshNotificationDrawer() is called.
+     * Events might be grouped and there might not be one notification per event!
+     */
+    fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
+        updateEvents {
+            it.onNotifiableEventReceived(notifiableEvent)
+        }
+    }
+
+    /**
      * Clear all known events and refresh the notification drawer.
      */
     fun clearAllEvents(sessionId: SessionId) {
-        updateEvents { it.clearMessagesForSession(sessionId) }
+        updateEvents {
+            it.clearMessagesForSession(sessionId)
+        }
     }
 
     /**
      * Should be called when the application is currently opened and showing timeline for the given roomId.
      * Used to ignore events related to that room (no need to display notification) and clean any existing notification on this room.
+     * Can also be called when a notification for this room is dismissed by the user.
      */
-    private fun onEnteringRoom(sessionId: SessionId, roomId: RoomId) {
+    fun clearMessagesForRoom(sessionId: SessionId, roomId: RoomId) {
         updateEvents {
             it.clearMessagesForRoom(sessionId, roomId)
+        }
+    }
+
+    /**
+     * Clear invitation notification for the provided room.
+     */
+    fun clearMemberShipNotificationForRoom(sessionId: SessionId, roomId: RoomId) {
+        updateEvents {
+            it.clearMemberShipNotificationForRoom(sessionId, roomId)
         }
     }
 
@@ -175,7 +193,7 @@ class NotificationDrawerManager @Inject constructor(
         }
     }
 
-    fun updateEvents(action: NotificationDrawerManager.(NotificationEventQueue) -> Unit) {
+    private fun updateEvents(action: NotificationDrawerManager.(NotificationEventQueue) -> Unit) {
         notificationState.updateQueuedEvents(this) { queuedEvents, _ ->
             action(queuedEvents)
         }
