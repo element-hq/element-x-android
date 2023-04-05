@@ -49,7 +49,7 @@
   <string name="common_about">"Acerca de"</string>
   <string name="common_audio">"Sonido"</string>
   <string name="common_bubbles">"Burbujas"</string>
-  <string name="common_creating_room">"Creando sala..."</string>
+  <string name="common_creating_room">"Creando sala…"</string>
   <string name="common_current_user_left_room">"Saliste de la sala"</string>
   <string name="common_decryption_error">"Error de descifrado"</string>
   <string name="common_developer_options">"Opciones de desarrollador"</string>
@@ -92,7 +92,7 @@
   <string name="common_verification_cancelled">"Verificación cancelada"</string>
   <string name="common_verification_complete">"Verificación completada"</string>
   <string name="common_video">"Vídeo"</string>
-  <string name="common_waiting">"Esperando..."</string>
+  <string name="common_waiting">"Esperando…"</string>
   <string name="dialog_title_confirmation">"Confirmar"</string>
   <string name="dialog_title_error">"Error"</string>
   <string name="dialog_title_success">"Terminado"</string>

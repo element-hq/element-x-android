@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_bullet_list">"Lista de puntos"</string>
   <string name="rich_text_editor_code_block">"Bloque de código"</string>
-  <string name="rich_text_editor_composer_placeholder">"Mensaje..."</string>
+  <string name="rich_text_editor_composer_placeholder">"Mensaje…"</string>
   <string name="rich_text_editor_format_bold">"Aplicar formato negrita"</string>
   <string name="rich_text_editor_format_italic">"Aplicar formato cursiva"</string>
   <string name="rich_text_editor_format_strikethrough">"Aplicar formato tachado"</string>
