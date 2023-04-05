@@ -20,9 +20,12 @@ regexToAlwaysExclude = [
     ".*_ios"
 ]
 
-# Replacement done in all string values
-replacements = {
-    "...": "…"
+baseAction = {
+    "type": "android",
+    # Replacement done in all string values
+    "replacements": {
+        "...": "…"
+    }
 }
 
 # Store all regex specific to module, to eclude the corresponding keyx from the common string module
@@ -33,12 +36,10 @@ allActions = []
 # Iterating on the config
 for entry in config["modules"]:
     # Create action for the default language
-    action = {
-        "type": "android",
+    action = baseAction | {
         "output": convertModuleToPath(entry["name"]) + "/src/main/res/values/localazy.xml",
         "includeKeys": list(map(lambda i: "REGEX:" + i, entry["includeRegex"])),
         "excludeKeys": list(map(lambda i: "REGEX:" + i, regexToAlwaysExclude)),
-        "replacements": replacements,
         "conditions": [
             "equals: ${languageCode}, en"
         ]
@@ -47,12 +48,10 @@ for entry in config["modules"]:
     allActions.append(action)
     # Create action for the translations
     if allFiles:
-        actionTranslation = {
-            "type": "android",
+        actionTranslation = baseAction | {
             "output": convertModuleToPath(entry["name"]) + "/src/main/res/values-${langAndroidResNoScript}/translations.xml",
             "includeKeys": list(map(lambda i: "REGEX:" + i, entry["includeRegex"])),
             "excludeKeys": list(map(lambda i: "REGEX:" + i, regexToAlwaysExclude)),
-            "replacements": replacements,
             "conditions": [
                 "!equals: ${languageCode}, en"
             ]
@@ -61,11 +60,9 @@ for entry in config["modules"]:
     allRegexToExcludeFromMainModule.extend(entry["includeRegex"])
 
 # Append configuration for the main string module: default language
-mainAction = {
-    "type": "android",
+mainAction = baseAction | {
     "output": "libraries/ui-strings/src/main/res/values/localazy.xml",
     "excludeKeys": list(map(lambda i: "REGEX:" + i, allRegexToExcludeFromMainModule + regexToAlwaysExclude)),
-    "replacements": replacements,
     "conditions": [
         "equals: ${languageCode}, en"
     ]
@@ -75,11 +72,9 @@ allActions.append(mainAction)
 
 if allFiles:
     # Append configuration for the main string module: translations
-    mainActionTranslation = {
-        "type": "android",
+    mainActionTranslation = baseAction | {
         "output": "libraries/ui-strings/src/main/res/values-${langAndroidResNoScript}/translations.xml",
         "excludeKeys": list(map(lambda i: "REGEX:" + i, allRegexToExcludeFromMainModule + regexToAlwaysExclude)),
-        "replacements": replacements,
         "conditions": [
             "!equals: ${languageCode}, en"
         ]
