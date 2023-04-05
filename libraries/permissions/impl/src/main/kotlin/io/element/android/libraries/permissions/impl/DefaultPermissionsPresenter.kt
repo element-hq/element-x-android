@@ -58,7 +58,7 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
     override fun present(): PermissionsState {
         val localCoroutineScope = rememberCoroutineScope()
 
-        // To reset the store: resetStore()
+        // To reset the store: ResetStore()
 
         val isAlreadyDenied: Boolean by permissionsStore
             .isPermissionDenied(permission)
@@ -129,7 +129,7 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
 
     /*
     @Composable
-    private fun resetStore() {
+    private fun ResetStore() {
         LaunchedEffect(this@DefaultPermissionsPresenter) {
             launch {
                 permissionsStore.resetStore()
