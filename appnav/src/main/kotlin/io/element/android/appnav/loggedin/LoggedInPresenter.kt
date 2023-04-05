@@ -51,15 +51,14 @@ class LoggedInPresenter @Inject constructor(
 
         val permissionsState = postNotificationPermissionsPresenter.present()
 
-        fun handleEvents(event: LoggedInEvents) {
-            when (event) {
-                LoggedInEvents.MyEvent -> Unit
-            }
-        }
+        // fun handleEvents(event: LoggedInEvents) {
+        //     when (event) {
+        //     }
+        // }
 
         return LoggedInState(
             permissionsState = permissionsState,
-            eventSink = ::handleEvents
+            // eventSink = ::handleEvents
         )
     }
 }

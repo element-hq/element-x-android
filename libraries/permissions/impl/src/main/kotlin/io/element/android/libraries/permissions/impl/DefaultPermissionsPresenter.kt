@@ -127,6 +127,7 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
         }
     }
 
+    /*
     @Composable
     private fun resetStore() {
         LaunchedEffect(this@DefaultPermissionsPresenter) {
@@ -135,4 +136,5 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
             }
         }
     }
+     */
 }
