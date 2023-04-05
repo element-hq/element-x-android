@@ -7,6 +7,7 @@ Localazy is used to host the source strings and their translations.
 * [Localazy project](#localazy-project)
   * [Key naming rules](#key-naming-rules)
     * [Special suffixes](#special-suffixes)
+    * [Placeholders](#placeholders)
 * [CLI Installation](#cli-installation)
 * [Download translations](#download-translations)
 * [Add translations to a specific module](#add-translations-to-a-specific-module)
@@ -39,6 +40,10 @@ For code clarity and in order to download strings to the correct module, here ar
 - if a key is suffixed by `_android`, it will not be imported in the iOS project.
 
 So feel free to use those suffixes when necessary for instance when the string content is referring to something related to Android only, or iOS only.
+
+#### Placeholders
+
+Placeholders should have the form `%1$s`, `%1$d`, etc.. Please use numbered placeholders. Note that Localazy will take care of converting the placeholder to Android (-> `%1$s`) and iOS specific format (-> `%1$@`). Ideally add a comment on Localazy to explain with what the placeholder(s) will be replaced at runtime.
 
 ## CLI Installation
 
