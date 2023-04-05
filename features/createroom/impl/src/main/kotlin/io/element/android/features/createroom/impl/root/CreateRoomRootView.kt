@@ -112,7 +112,11 @@ fun CreateRoomRootView(
             RetryDialog(
                 content = stringResource(id = StringR.string.screen_start_chat_error_starting_chat),
                 onDismiss = { state.eventSink(CreateRoomRootEvents.CancelStartDM) },
-                onRetry = { state.eventSink(CreateRoomRootEvents.RetryStartDM) },
+                onRetry = {
+                    state.userListState.selectedUsers.firstOrNull()?.let {
+                        state.eventSink(CreateRoomRootEvents.StartDM(it))
+                    }
+                },
             )
         }
         else -> Unit
