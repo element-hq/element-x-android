@@ -16,13 +16,15 @@
 
 package io.element.android.features.roomdetails.impl
 
+import io.element.android.libraries.architecture.Async
+
 data class RoomDetailsState(
     val roomId: String,
     val roomName: String,
     val roomAlias: String?,
     val roomAvatarUrl: String?,
     val roomTopic: String?,
-    val memberCount: Int,
+    val memberCount: Async<Int>,
     val isEncrypted: Boolean,
 //    val eventSink: (RoomDetailsEvent) -> Unit
 )

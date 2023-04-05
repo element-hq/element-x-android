@@ -210,7 +210,7 @@ dependencies {
     anvil(projects.anvilcodegen)
 
     // https://developer.android.com/studio/write/java8-support#library-desugaring-versions
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
     implementation(libs.appyx.core)
     implementation(libs.androidx.splash)
     implementation(libs.androidx.corektx)

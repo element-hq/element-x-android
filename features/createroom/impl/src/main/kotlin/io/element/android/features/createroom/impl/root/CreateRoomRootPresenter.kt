@@ -21,9 +21,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import io.element.android.features.selectusers.api.SelectUsersPresenter
-import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
-import io.element.android.features.selectusers.api.SelectionMode
+import io.element.android.features.userlist.api.MatrixUserDataSource
+import io.element.android.features.userlist.api.SelectionMode
+import io.element.android.features.userlist.api.UserListPresenter
+import io.element.android.features.userlist.api.UserListPresenterArgs
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.execute
@@ -33,19 +34,24 @@ import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Named
 
 class CreateRoomRootPresenter @Inject constructor(
-    private val presenterFactory: SelectUsersPresenter.Factory,
+    private val presenterFactory: UserListPresenter.Factory,
+    @Named("AllUsers") private val matrixUserDataSource: MatrixUserDataSource,
     private val matrixClient: MatrixClient,
 ) : Presenter<CreateRoomRootState> {
 
     private val presenter by lazy {
-        presenterFactory.create(SelectUsersPresenterArgs(SelectionMode.Single))
+        presenterFactory.create(
+            UserListPresenterArgs(selectionMode = SelectionMode.Single),
+            matrixUserDataSource,
+        )
     }
 
     @Composable
     override fun present(): CreateRoomRootState {
-        val selectUsersState = presenter.present()
+        val userListState = presenter.present()
 
         val localCoroutineScope = rememberCoroutineScope()
         val startDmAction: MutableState<Async<RoomId>> = remember { mutableStateOf(Async.Uninitialized) }
@@ -65,7 +71,7 @@ class CreateRoomRootPresenter @Inject constructor(
                 is CreateRoomRootEvents.StartDM -> startDm(event.matrixUser)
                 CreateRoomRootEvents.RetryStartDM -> {
                     startDmAction.value = Async.Uninitialized
-                    selectUsersState.selectedUsers.firstOrNull()?.let { startDm(it) }
+                    userListState.selectedUsers.firstOrNull()?.let { startDm(it) }
                 }
                 CreateRoomRootEvents.CancelStartDM -> startDmAction.value = Async.Uninitialized
                 CreateRoomRootEvents.InvitePeople -> Unit // Todo Handle invite people action
@@ -73,7 +79,7 @@ class CreateRoomRootPresenter @Inject constructor(
         }
 
         return CreateRoomRootState(
-            selectUsersState = selectUsersState,
+            userListState = userListState,
             startDmAction = startDmAction.value,
             eventSink = ::handleEvents,
         )

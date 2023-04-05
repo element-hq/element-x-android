@@ -123,11 +123,19 @@
   </plurals>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
   <string name="rageshake_dialog_content">"You seem to be shaking the phone in frustration. Would you like to open the bug report screen?"</string>
-  <string name="report_content_explanation">"Reporting this message will send it’s unique ‘event ID’ to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images."</string>
+  <string name="report_content_explanation">"This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages."</string>
   <string name="report_content_hint">"Reason for reporting this content"</string>
   <string name="room_timeline_beginning_of_room">"This is the beginning of %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"This is the beginning of this conversation."</string>
   <string name="room_timeline_read_marker_title">"New"</string>
+  <string name="screen_dm_details_block_alert_action">"Block"</string>
+  <string name="screen_dm_details_block_alert_description">"Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime."</string>
+  <string name="screen_dm_details_block_user">"Block user"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Unblock"</string>
+  <string name="screen_dm_details_unblock_alert_description">"On unblocking the user, you will be able to see all messages by them again."</string>
+  <string name="screen_dm_details_unblock_user">"Unblock user"</string>
+  <string name="screen_report_content_block_user">"Block user"</string>
+  <string name="screen_report_content_block_user_hint">"Check if you want to hide all current and future messages from this user"</string>
   <string name="screen_room_member_details_block_alert_action">"Block"</string>
   <string name="screen_room_member_details_block_alert_description">"Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime."</string>
   <string name="screen_room_member_details_block_user">"Block user"</string>

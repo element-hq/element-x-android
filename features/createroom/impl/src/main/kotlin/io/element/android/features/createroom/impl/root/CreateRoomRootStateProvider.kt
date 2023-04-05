@@ -17,7 +17,7 @@
 package io.element.android.features.createroom.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.selectusers.api.aSelectUsersState
+import io.element.android.features.userlist.api.aUserListState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import kotlinx.collections.immutable.persistentListOf
@@ -28,8 +28,8 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
             aCreateRoomRootState(),
             aCreateRoomRootState().copy(
                 startDmAction = Async.Loading(),
-                selectUsersState = aMatrixUser().let {
-                    aSelectUsersState().copy(
+                userListState = aMatrixUser().let {
+                    aUserListState().copy(
                         searchQuery = it.id.value,
                         searchResults = persistentListOf(it),
                         selectedUsers = persistentListOf(it),
@@ -39,8 +39,8 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
             ),
             aCreateRoomRootState().copy(
                 startDmAction = Async.Failure(Throwable()),
-                selectUsersState = aMatrixUser().let {
-                    aSelectUsersState().copy(
+                userListState = aMatrixUser().let {
+                    aUserListState().copy(
                         searchQuery = it.id.value,
                         searchResults = persistentListOf(it),
                         selectedUsers = persistentListOf(it),
@@ -54,5 +54,5 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
 fun aCreateRoomRootState() = CreateRoomRootState(
     eventSink = {},
     startDmAction = Async.Uninitialized,
-    selectUsersState = aSelectUsersState(),
+    userListState = aUserListState(),
 )

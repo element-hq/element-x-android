@@ -22,10 +22,10 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.selectusers.api.SelectUsersPresenter
-import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
-import io.element.android.features.selectusers.api.aSelectUsersState
-import io.element.android.features.selectusers.test.FakeSelectUserPresenter
+import io.element.android.features.userlist.api.aUserListState
+import io.element.android.features.userlist.test.FakeMatrixUserDataSource
+import io.element.android.features.userlist.test.FakeUserListPresenter
+import io.element.android.features.userlist.test.FakeUserListPresenterFactory
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -41,18 +41,17 @@ import org.junit.Test
 
 class CreateRoomRootPresenterTests {
 
+    private lateinit var userListDataSource: FakeMatrixUserDataSource
     private lateinit var presenter: CreateRoomRootPresenter
-    private lateinit var fakeSelectUsersPresenter: FakeSelectUserPresenter
+    private lateinit var fakeUserListPresenter: FakeUserListPresenter
     private lateinit var fakeMatrixClient: FakeMatrixClient
 
     @Before
     fun setup() {
-        val factory = object : SelectUsersPresenter.Factory {
-            override fun create(args: SelectUsersPresenterArgs) = fakeSelectUsersPresenter
-        }
-        fakeSelectUsersPresenter = FakeSelectUserPresenter()
+        fakeUserListPresenter = FakeUserListPresenter()
         fakeMatrixClient = FakeMatrixClient()
-        presenter = CreateRoomRootPresenter(factory, fakeMatrixClient)
+        userListDataSource = FakeMatrixUserDataSource()
+        presenter = CreateRoomRootPresenter(FakeUserListPresenterFactory(fakeUserListPresenter), userListDataSource, fakeMatrixClient)
     }
 
     @Test
@@ -121,7 +120,7 @@ class CreateRoomRootPresenterTests {
             val initialState = awaitItem()
             val matrixUser = MatrixUser(UserId("@name:matrix.org"))
             val createDmResult = Result.success(RoomId("!createDmResult"))
-            fakeSelectUsersPresenter.givenState(aSelectUsersState().copy(selectedUsers = persistentListOf(matrixUser)))
+            fakeUserListPresenter.givenState(aUserListState().copy(selectedUsers = persistentListOf(matrixUser)))
 
             fakeMatrixClient.givenFindDmResult(null)
             fakeMatrixClient.givenCreateDmError(A_THROWABLE)
