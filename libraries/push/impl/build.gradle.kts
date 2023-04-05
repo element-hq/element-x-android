@@ -38,7 +38,6 @@ dependencies {
     implementation(libs.serialization.json)
 
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)
     implementation(projects.libraries.androidutils)

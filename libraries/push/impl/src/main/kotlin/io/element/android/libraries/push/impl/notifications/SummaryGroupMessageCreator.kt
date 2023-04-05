@@ -105,18 +105,23 @@ class SummaryGroupMessageCreator @Inject constructor(
         val messageNotificationCount = messageEventsCount + simpleEventsCount
 
         val privacyTitle = if (invitationEventsCount > 0) {
-            val invitationsStr = stringProvider.getQuantityString(R.plurals.notification_invitations, invitationEventsCount, invitationEventsCount)
+            val invitationsStr = stringProvider.getQuantityString(
+                R.plurals.notification_invitations,
+                invitationEventsCount,
+                invitationEventsCount
+            )
             if (messageNotificationCount > 0) {
                 // Invitation and message
                 val messageStr = stringProvider.getQuantityString(
-                    R.plurals.room_new_messages_notification,
+                    R.plurals.notification_new_messages_for_room,
                     messageNotificationCount, messageNotificationCount
                 )
                 if (roomCount > 1) {
                     // In several rooms
                     val roomStr = stringProvider.getQuantityString(
                         R.plurals.notification_unread_notified_messages_in_room_rooms,
-                        roomCount, roomCount
+                        roomCount,
+                        roomCount
                     )
                     stringProvider.getString(
                         R.string.notification_unread_notified_messages_in_room_and_invitation,
@@ -139,13 +144,22 @@ class SummaryGroupMessageCreator @Inject constructor(
         } else {
             // No invitation, only messages
             val messageStr = stringProvider.getQuantityString(
-                R.plurals.room_new_messages_notification,
-                messageNotificationCount, messageNotificationCount
+                R.plurals.notification_new_messages_for_room,
+                messageNotificationCount,
+                messageNotificationCount
             )
             if (roomCount > 1) {
                 // In several rooms
-                val roomStr = stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages_in_room_rooms, roomCount, roomCount)
-                stringProvider.getString(R.string.notification_unread_notified_messages_in_room, messageStr, roomStr)
+                val roomStr = stringProvider.getQuantityString(
+                    R.plurals.notification_unread_notified_messages_in_room_rooms,
+                    roomCount,
+                    roomCount
+                )
+                stringProvider.getString(
+                    R.string.notification_unread_notified_messages_in_room,
+                    messageStr,
+                    roomStr
+                )
             } else {
                 // In one room
                 messageStr

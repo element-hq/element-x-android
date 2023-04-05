@@ -15,27 +15,29 @@
   -->
 
 <resources>
-    <string name="no_valid_google_play_services_apk">No valid Google Play Services APK found. Notifications may not work properly.</string>
-    <string name="unifiedpush_getdistributors_dialog_title">Choose how to receive notifications</string>
-    <string name="unifiedpush_distributor_fcm_fallback">Google Services</string>
-    <string name="unifiedpush_distributor_background_sync">Background synchronization</string>
+    <string name="push_no_valid_google_play_services_apk_android">No valid Google Play Services found. Notifications may not work properly.</string>
+    <string name="push_choose_distributor_dialog_title">Choose how to receive notifications</string>
+    <string name="push_distributor_firebase">Google Services</string>
+    <string name="push_distributor_background_sync">Background synchronization</string>
 
-    <string name="notification_listening_for_events">Listening for events</string>
-    <string name="notification_noisy_notifications">Noisy notifications</string>
-    <string name="notification_silent_notifications">Silent notifications</string>
-    <string name="call">Call</string>
+    <string name="notification_channel_listening_for_events">Listening for events</string>
+    <string name="notification_channel_noisy">Noisy notifications</string>
+    <string name="notification_channel_silent">Silent notifications</string>
+    <string name="notification_channel_call">Call</string>
+    <string name="notification_sender_me">Me</string>
     <string name="notification_new_messages">New Messages</string>
-    <string name="action_mark_room_read">Mark as read</string>
-    <string name="action_join">Join</string>
-    <string name="action_reject">Reject</string>
-    <string name="settings_troubleshoot_test_push_notification_content">You are viewing the notification! Click me!</string>
+    <string name="notification_room_action_mark_as_read">Mark as read</string>
+    <string name="notification_room_action_quick_reply">Quick reply</string>
+    <string name="notification_invitation_action_join">Join</string>
+    <string name="notification_invitation_action_reject">Reject</string>
+    <string name="notification_test_push_notification_content">You are viewing the notification! Click me!</string>
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
     <string name="notification_inline_reply_failed">** Failed to send - please open room</string>
     <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s in %2$s and %3$s"</string>
     <string name="notification_unread_notified_messages_and_invitation">%1$s and %2$s"</string>
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s"</string>
-    <plurals name="room_new_messages_notification">
+    <plurals name="notification_new_messages_for_room">
         <item quantity="one">%d new message</item>
         <item quantity="other">%d new messages</item>
     </plurals>
