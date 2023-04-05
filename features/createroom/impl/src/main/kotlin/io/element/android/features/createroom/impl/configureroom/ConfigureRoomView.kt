@@ -24,20 +24,27 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddAPhoto
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -45,13 +52,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import io.element.android.features.selectusers.api.SelectedUsersList
+import io.element.android.features.userlist.api.SelectedUsersList
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
@@ -97,6 +105,12 @@ fun ConfigureRoomView(
                 onUserRemoved = {
                     // TODO
                 },
+            )
+            Spacer(Modifier.weight(1f))
+            RoomPrivacyOptions(
+                modifier = Modifier.padding(bottom = 40.dp),
+                selected = state.privacy,
+                onOptionSelected = { state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it)) },
             )
         }
     }
@@ -189,15 +203,12 @@ fun Avatar(
             .data(avatarUri)
             .build()
         AsyncImage(
+            modifier = commonModifier,
             model = model,
             contentDescription = null,
-            modifier = commonModifier,
         )
     } else {
-        Box(
-            modifier = commonModifier
-                .background(LocalColors.current.quinary)
-        ) {
+        Box(modifier = commonModifier.background(LocalColors.current.quinary)) {
             Icon(
                 imageVector = Icons.Outlined.AddAPhoto,
                 contentDescription = "",
@@ -212,8 +223,8 @@ fun Avatar(
 
 @Composable
 fun RoomTopic(
-    modifier: Modifier = Modifier,
     topic: String,
+    modifier: Modifier = Modifier,
     onTopicChanged: (String) -> Unit = {},
 ) {
     Column(
@@ -230,6 +241,106 @@ fun RoomTopic(
             placeholder = { Text("What is this room about?") },
             onValueChange = onTopicChanged,
             maxLines = 3,
+        )
+    }
+}
+
+@Composable
+fun RoomPrivacyOptions(
+    selected: RoomPrivacy?,
+    modifier: Modifier = Modifier,
+    onOptionSelected: (RoomPrivacy) -> Unit = {},
+) {
+
+    data class RoomPrivacyItem(
+        val privacy: RoomPrivacy,
+        val icon: ImageVector,
+        val title: String,
+        val description: String,
+    )
+
+    val items = RoomPrivacy.values().map {
+        when (it) {
+            RoomPrivacy.Public -> RoomPrivacyItem(
+                privacy = it,
+                icon = Icons.Outlined.Lock,
+                title = "Private room (invite only)",
+                description = "Messages in this room are encrypted. Encryption can’t be disabled afterwards.",
+            )
+            RoomPrivacy.Private -> RoomPrivacyItem(
+                privacy = it,
+                icon = Icons.Outlined.Public,
+                title = "Public room (anyone)",
+                description = "Messages are not encrypted and anyone can read them. You can enable encryption at a later date.",
+            )
+        }
+    }
+    Column(modifier = modifier.selectableGroup()) {
+        items.forEach { item ->
+            RoomPrivacyOption(
+                privacy = RoomPrivacy.Private,
+                icon = item.icon,
+                title = item.title,
+                description = item.description,
+                isSelected = selected == item.privacy,
+                onOptionSelected = { onOptionSelected(item.privacy) }
+            )
+        }
+    }
+}
+
+@Composable
+fun RoomPrivacyOption(
+    privacy: RoomPrivacy,
+    icon: ImageVector,
+    title: String,
+    description: String,
+    modifier: Modifier = Modifier,
+    isSelected: Boolean = false,
+    onOptionSelected: (RoomPrivacy) -> Unit = {},
+) {
+    Row(
+        modifier
+            .fillMaxWidth()
+            .selectable(
+                selected = isSelected,
+                onClick = { onOptionSelected(privacy) },
+                role = Role.RadioButton,
+            )
+            .padding(8.dp),
+    ) {
+        Icon(
+            modifier = Modifier.padding(horizontal = 8.dp),
+            imageVector = icon,
+            contentDescription = "",
+            tint = MaterialTheme.colorScheme.secondary,
+        )
+
+        Column(
+            Modifier
+                .weight(1f)
+                .padding(horizontal = 8.dp)
+        ) {
+            Text(
+                text = title,
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            Spacer(Modifier.size(3.dp))
+            Text(
+                text = description,
+                fontSize = 12.sp,
+                lineHeight = 17.sp,
+                color = MaterialTheme.colorScheme.tertiary,
+            )
+        }
+
+        RadioButton(
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .size(48.dp),
+            selected = isSelected,
+            onClick = null // null recommended for accessibility with screenreaders
         )
     }
 }

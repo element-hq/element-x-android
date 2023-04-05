@@ -42,12 +42,14 @@ class ConfigureRoomPresenter @AssistedInject constructor(
         var roomName by rememberSaveable { mutableStateOf("") }
         var topic by rememberSaveable { mutableStateOf("") }
         var avatarUri by rememberSaveable { mutableStateOf<Uri?>(null) }
+        var privacy by rememberSaveable { mutableStateOf<RoomPrivacy?>(null) }
 
         fun handleEvents(event: ConfigureRoomEvents) {
             when (event) {
                 is ConfigureRoomEvents.AvatarUriChanged -> avatarUri = event.uri
                 is ConfigureRoomEvents.RoomNameChanged -> roomName = event.name
                 is ConfigureRoomEvents.TopicChanged -> topic = event.topic
+                is ConfigureRoomEvents.RoomPrivacyChanged -> privacy = event.privacy
             }
         }
 
@@ -56,6 +58,7 @@ class ConfigureRoomPresenter @AssistedInject constructor(
             roomName = roomName,
             topic = topic,
             avatarUri = avatarUri,
+            privacy = privacy,
             eventSink = ::handleEvents,
         )
     }

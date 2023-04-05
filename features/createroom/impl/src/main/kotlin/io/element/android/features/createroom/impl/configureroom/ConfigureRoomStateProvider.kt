@@ -33,5 +33,6 @@ fun aConfigureRoomState() = ConfigureRoomState(
     roomName = "",
     topic = "",
     avatarUri = null,
+    privacy = null,
     eventSink = {}
 )
