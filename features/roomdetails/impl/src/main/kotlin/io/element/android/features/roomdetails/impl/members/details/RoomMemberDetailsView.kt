@@ -59,9 +59,9 @@ import io.element.android.libraries.ui.strings.R as StringR
 @Composable
 fun RoomMemberDetailsView(
     state: RoomMemberDetailsState,
-    modifier: Modifier = Modifier,
     onShareUser: () -> Unit,
     goBack: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
