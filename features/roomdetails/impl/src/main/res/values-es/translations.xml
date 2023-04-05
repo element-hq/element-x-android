@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <plurals name="screen_room_member_list_header_title">
-    <item quantity="zero">"0 personas"</item>
     <item quantity="one">"Una persona"</item>
-    <item quantity="two"></item>
-    <item quantity="few"></item>
-    <item quantity="many"></item>
     <item quantity="other">"%1$d personas"</item>
   </plurals>
   <string name="screen_dm_details_block_alert_action">"Bloquear"</string>

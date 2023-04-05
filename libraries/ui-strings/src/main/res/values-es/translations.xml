@@ -116,19 +116,11 @@
   <string name="leave_room_alert_subtitle">"¿Seguro que quieres salir de la habitación?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <plurals name="common_member_count">
-    <item quantity="zero">"No hay miembros"</item>
     <item quantity="one">"%1$d miembro"</item>
-    <item quantity="two"></item>
-    <item quantity="few"></item>
-    <item quantity="many"></item>
     <item quantity="other">"%1$d miembros"</item>
   </plurals>
   <plurals name="room_timeline_state_changes">
-    <item quantity="zero">"No hay cambios en la sala"</item>
     <item quantity="one">"%1$d cambio en la sala"</item>
-    <item quantity="two"></item>
-    <item quantity="few"></item>
-    <item quantity="many"></item>
     <item quantity="other">"%1$d cambios en la sala"</item>
   </plurals>
   <string name="preference_rageshake">"Agitar con fuerza para informar de un error"</string>
