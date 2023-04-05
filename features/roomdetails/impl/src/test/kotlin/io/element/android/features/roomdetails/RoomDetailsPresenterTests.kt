@@ -21,6 +21,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.element.android.features.roomdetails.impl.RoomDetailsPresenter
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -42,8 +43,25 @@ class RoomDetailsPresenterTests {
             Truth.assertThat(initialState.roomName).isEqualTo(room.name)
             Truth.assertThat(initialState.roomAvatarUrl).isEqualTo(room.avatarUrl)
             Truth.assertThat(initialState.roomTopic).isEqualTo(room.topic)
-            Truth.assertThat(initialState.memberCount).isEqualTo(room.members.count())
+            Truth.assertThat(initialState.memberCount).isEqualTo(Async.Loading(null))
             Truth.assertThat(initialState.isEncrypted).isEqualTo(room.isEncrypted)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - room member count is calculated asynchronously`() = runTest {
+        val room = aMatrixRoom()
+        val presenter = RoomDetailsPresenter(room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            Truth.assertThat(initialState.memberCount).isEqualTo(Async.Loading(null))
+
+            val finalState = awaitItem()
+            Truth.assertThat(finalState.memberCount).isEqualTo(Async.Success(0))
         }
     }
 
@@ -56,6 +74,24 @@ class RoomDetailsPresenterTests {
         }.test {
             val initialState = awaitItem()
             Truth.assertThat(initialState.roomName).isEqualTo(room.displayName)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - can handle error while fetching member count`() = runTest {
+        val room = aMatrixRoom(name = null).apply {
+            givenFetchMemberResult(Result.failure(Throwable()))
+        }
+        val presenter = RoomDetailsPresenter(room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            Truth.assertThat(awaitItem().memberCount).isInstanceOf(Async.Failure::class.java)
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 }

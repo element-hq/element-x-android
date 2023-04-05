@@ -60,6 +60,8 @@ class FakeMatrixClient(
         logoutFailure?.let { throw it }
     }
 
+    override fun close() = Unit
+
     override suspend fun loadUserDisplayName(): Result<String> {
         return userDisplayName
     }

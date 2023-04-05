@@ -58,5 +58,5 @@ dependencies {
     implementation(projects.features.login.impl)
     implementation(projects.features.networkmonitor.impl)
     implementation(libs.coroutines.core)
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 }

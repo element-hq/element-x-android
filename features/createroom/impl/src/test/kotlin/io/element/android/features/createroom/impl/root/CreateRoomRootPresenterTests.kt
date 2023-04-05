@@ -22,8 +22,10 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
-import io.element.android.features.selectusers.impl.DefaultSelectUsersPresenter
+import io.element.android.features.userlist.api.MatrixUserDataSource
+import io.element.android.features.userlist.api.UserListPresenterArgs
+import io.element.android.features.userlist.impl.DefaultUserListPresenter
+import io.element.android.features.userlist.test.FakeMatrixUserDataSource
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,14 +35,16 @@ import org.junit.Test
 
 class CreateRoomRootPresenterTests {
 
+    private lateinit var userListDataSource: FakeMatrixUserDataSource
     private lateinit var presenter: CreateRoomRootPresenter
 
     @Before
     fun setup() {
-        val selectUsersPresenter = object : DefaultSelectUsersPresenter.DefaultSelectUsersFactory {
-            override fun create(args: SelectUsersPresenterArgs) = DefaultSelectUsersPresenter(args)
+        val userListPresenter = object : DefaultUserListPresenter.DefaultUserListFactory {
+            override fun create(args: UserListPresenterArgs, dataSource: MatrixUserDataSource) = DefaultUserListPresenter(args, dataSource)
         }
-        presenter = CreateRoomRootPresenter(selectUsersPresenter)
+        userListDataSource = FakeMatrixUserDataSource()
+        presenter = CreateRoomRootPresenter(userListPresenter, userListDataSource)
     }
 
     @Test
