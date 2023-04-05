@@ -18,12 +18,24 @@
 
 set -e
 
-echo "Generating the configuration file for localazy..."
-./tools/localazy/generateLocalazyConfig.py
+if [[ $1 == "--all" ]]; then
+  echo "Note: I will update all the files."
+  allFiles=1
+else
+  echo "Note: I will update only the English files."
+  allFiles=0
+fi
 
-echo "Deleting all existing localazy.xml and translations.xml files..."
+echo "Generating the configuration file for localazy..."
+./tools/localazy/generateLocalazyConfig.py $allFiles
+
+echo "Deleting all existing localazy.xml files..."
 find . -name 'localazy.xml' -delete
-find . -name 'translations.xml' -delete
+
+if [[ $allFiles == 1 ]]; then
+  echo "Deleting all existing translations.xml files..."
+  find . -name 'translations.xml' -delete
+fi
 
 echo "Importing the strings..."
 localazy download --config ./tools/localazy/localazy.json
