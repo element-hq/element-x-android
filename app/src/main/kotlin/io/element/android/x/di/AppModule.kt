@@ -22,6 +22,7 @@ import dagger.Module
 import dagger.Provides
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
@@ -77,5 +78,11 @@ object AppModule {
             main = Dispatchers.Main,
             diffUpdateDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
         )
+    }
+
+    @Provides
+    @SingleIn(AppScope::class)
+    fun provideSnackbarDispatcher(): SnackbarDispatcher {
+        return SnackbarDispatcher()
     }
 }

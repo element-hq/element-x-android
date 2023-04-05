@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.media.MediaResolver
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.test.media.FakeMediaResolver
@@ -81,4 +82,8 @@ class FakeMatrixClient(
     override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService
 
     override fun onSlidingSyncUpdate() {}
+
+    override fun roomMembershipObserver(): RoomMembershipObserver {
+        return RoomMembershipObserver(A_SESSION_ID)
+    }
 }

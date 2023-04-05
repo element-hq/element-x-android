@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.impl.media.RustMediaResolver
+import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.sync.SlidingSyncObserverProxy
@@ -89,6 +90,7 @@ class RustMatrixClient constructor(
             requiredState = listOf(
                 RequiredState(key = "m.room.avatar", value = ""),
                 RequiredState(key = "m.room.encryption", value = ""),
+                RequiredState(key = "m.room.join_rules", value = ""),
             )
         )
         .filters(slidingSyncFilters)
@@ -128,6 +130,8 @@ class RustMatrixClient constructor(
     private val mediaResolver = RustMediaResolver(this)
     private val isSyncing = AtomicBoolean(false)
 
+    private val roomMembershipObserver = RoomMembershipObserver(sessionId)
+
     init {
         client.setDelegate(clientDelegate)
         rustRoomSummaryDataSource.init()
@@ -150,7 +154,7 @@ class RustMatrixClient constructor(
             slidingSyncRoom = slidingSyncRoom,
             innerRoom = fullRoom,
             coroutineScope = coroutineScope,
-            coroutineDispatchers = dispatchers
+            coroutineDispatchers = dispatchers,
         )
     }
 
@@ -242,6 +246,8 @@ class RustMatrixClient constructor(
             }
         }
     }
+
+    override fun roomMembershipObserver(): RoomMembershipObserver = roomMembershipObserver
 
     private fun File.deleteSessionDirectory(userID: String): Boolean {
         // Rust sanitises the user ID replacing invalid characters with an _
