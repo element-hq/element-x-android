@@ -32,11 +32,13 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
-fun ErrorDialog(
+fun RetryDialog(
     content: String,
     modifier: Modifier = Modifier,
-    title: String = ErrorDialogDefaults.title,
-    submitText: String = ErrorDialogDefaults.submitText,
+    title: String = RetryDialogDefaults.title,
+    retryText: String = RetryDialogDefaults.retryText,
+    dismissText: String = RetryDialogDefaults.dismissText,
+    onRetry: () -> Unit = {},
     onDismiss: () -> Unit = {},
     shape: Shape = AlertDialogDefaults.shape,
     containerColor: Color = AlertDialogDefaults.containerColor,
@@ -55,8 +57,13 @@ fun ErrorDialog(
             Text(content)
         },
         confirmButton = {
+            TextButton(onClick = onRetry) {
+                Text(retryText)
+            }
+        },
+        dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(submitText)
+                Text(dismissText)
             }
         },
         shape = shape,
@@ -68,22 +75,23 @@ fun ErrorDialog(
     )
 }
 
-object ErrorDialogDefaults {
+object RetryDialogDefaults {
     val title: String @Composable get() = stringResource(id = StringR.string.dialog_title_error)
-    val submitText: String @Composable get() = stringResource(id = StringR.string.action_ok)
+    val retryText: String @Composable get() = stringResource(id = StringR.string.action_retry)
+    val dismissText: String @Composable get() = stringResource(id = StringR.string.action_cancel)
 }
 
 @Preview
 @Composable
-internal fun ErrorDialogLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun RetryDialogLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-internal fun ErrorDialogDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun RetryDialogDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
-    ErrorDialog(
+    RetryDialog(
         content = "Content",
     )
 }

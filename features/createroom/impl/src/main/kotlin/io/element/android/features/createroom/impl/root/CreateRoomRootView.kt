@@ -44,7 +44,7 @@ import io.element.android.features.createroom.impl.R
 import io.element.android.features.userlist.api.UserListView
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.ProgressDialog
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
+import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
@@ -109,12 +109,10 @@ fun CreateRoomRootView(
             ProgressDialog(text = stringResource(id = StringR.string.common_creating_room))
         }
         is Async.Failure -> {
-            ErrorDialog(
+            RetryDialog(
                 content = stringResource(id = StringR.string.screen_start_chat_error_starting_chat),
-                dismissText = stringResource(id = StringR.string.action_cancel),
-                submitText = stringResource(id = StringR.string.action_retry),
                 onDismiss = { state.eventSink(CreateRoomRootEvents.CancelStartDM) },
-                onSubmit = { state.eventSink(CreateRoomRootEvents.RetryStartDM) },
+                onRetry = { state.eventSink(CreateRoomRootEvents.RetryStartDM) },
             )
         }
         else -> Unit
