@@ -43,5 +43,7 @@ fun aRoomDetailsState() = RoomDetailsState(
         "|| MAI iki/Marketing...",
     memberCount = Async.Success(32),
     isEncrypted = true,
-//    eventSink = {}
+    displayLeaveRoomWarning = null,
+    error = null,
+    eventSink = {}
 )

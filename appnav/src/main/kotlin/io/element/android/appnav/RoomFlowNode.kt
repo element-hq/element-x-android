@@ -18,6 +18,7 @@ package io.element.android.appnav
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.lifecycle.subscribe
@@ -38,7 +39,12 @@ import io.element.android.libraries.architecture.animation.rememberDefaultTransi
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.services.appnavstate.api.AppNavigationStateService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
@@ -49,6 +55,8 @@ class RoomFlowNode @AssistedInject constructor(
     private val messagesEntryPoint: MessagesEntryPoint,
     private val roomDetailsEntryPoint: RoomDetailsEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
+    roomMembershipObserver: RoomMembershipObserver,
+    coroutineScope: CoroutineScope,
 ) : BackstackNode<RoomFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Messages,
@@ -68,6 +76,7 @@ class RoomFlowNode @AssistedInject constructor(
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
+    private val timeline = inputs.room.timeline()
 
     private val roomFlowPresenter = RoomFlowPresenter(inputs.room)
 
@@ -85,6 +94,13 @@ class RoomFlowNode @AssistedInject constructor(
                 appNavigationStateService.onLeavingRoom()
             }
         )
+
+        roomMembershipObserver.updates
+            .filter { update -> update.roomId == inputs.room.roomId && !update.isUserInRoom }
+            .onEach {
+                navigateUp()
+            }
+            .launchIn(coroutineScope)
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -97,7 +113,7 @@ class RoomFlowNode @AssistedInject constructor(
                 })
             }
             NavTarget.RoomDetails -> {
-                roomDetailsEntryPoint.createNode(this, buildContext)
+                roomDetailsEntryPoint.createNode(this, buildContext, emptyList())
             }
         }
     }

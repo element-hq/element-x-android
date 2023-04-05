@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
 import json
+import sys
 
 # Read the config.json file
 with open('./tools/localazy/config.json', 'r') as f:
     config = json.load(f)
 
+allFiles = sys.argv[1] == "1"
 
 # Convert a module name to a path
 # Ex: ":features:verifysession:impl" => "features/verifysession/impl"
@@ -18,6 +20,14 @@ regexToAlwaysExclude = [
     ".*_ios"
 ]
 
+baseAction = {
+    "type": "android",
+    # Replacement done in all string values
+    "replacements": {
+        "...": "…"
+    }
+}
+
 # Store all regex specific to module, to eclude the corresponding keyx from the common string module
 allRegexToExcludeFromMainModule = []
 # All actions that will be serialized in the localazy config
@@ -26,8 +36,7 @@ allActions = []
 # Iterating on the config
 for entry in config["modules"]:
     # Create action for the default language
-    action = {
-        "type": "android",
+    action = baseAction | {
         "output": convertModuleToPath(entry["name"]) + "/src/main/res/values/localazy.xml",
         "includeKeys": list(map(lambda i: "REGEX:" + i, entry["includeRegex"])),
         "excludeKeys": list(map(lambda i: "REGEX:" + i, regexToAlwaysExclude)),
@@ -35,24 +44,23 @@ for entry in config["modules"]:
             "equals: ${languageCode}, en"
         ]
     }
-    # Create action for the translations
-    actionTranslation = {
-        "type": "android",
-        "output": convertModuleToPath(entry["name"]) + "/src/main/res/values-${langAndroidResNoScript}/translations.xml",
-        "includeKeys": list(map(lambda i: "REGEX:" + i, entry["includeRegex"])),
-        "excludeKeys": list(map(lambda i: "REGEX:" + i, regexToAlwaysExclude)),
-        "conditions": [
-            "!equals: ${languageCode}, en"
-        ]
-    }
     # print(action)
-    allRegexToExcludeFromMainModule.extend(entry["includeRegex"])
     allActions.append(action)
-    allActions.append(actionTranslation)
+    # Create action for the translations
+    if allFiles:
+        actionTranslation = baseAction | {
+            "output": convertModuleToPath(entry["name"]) + "/src/main/res/values-${langAndroidResNoScript}/translations.xml",
+            "includeKeys": list(map(lambda i: "REGEX:" + i, entry["includeRegex"])),
+            "excludeKeys": list(map(lambda i: "REGEX:" + i, regexToAlwaysExclude)),
+            "conditions": [
+                "!equals: ${languageCode}, en"
+            ]
+        }
+        allActions.append(actionTranslation)
+    allRegexToExcludeFromMainModule.extend(entry["includeRegex"])
 
 # Append configuration for the main string module: default language
-mainAction = {
-    "type": "android",
+mainAction = baseAction | {
     "output": "libraries/ui-strings/src/main/res/values/localazy.xml",
     "excludeKeys": list(map(lambda i: "REGEX:" + i, allRegexToExcludeFromMainModule + regexToAlwaysExclude)),
     "conditions": [
@@ -62,16 +70,16 @@ mainAction = {
 # print(mainAction)
 allActions.append(mainAction)
 
-# Append configuration for the main string module: translations
-mainActionTranslation = {
-    "type": "android",
-    "output": "libraries/ui-strings/src/main/res/values-${langAndroidResNoScript}/translations.xml",
-    "excludeKeys": list(map(lambda i: "REGEX:" + i, allRegexToExcludeFromMainModule + regexToAlwaysExclude)),
-    "conditions": [
-        "!equals: ${languageCode}, en"
-    ]
-}
-allActions.append(mainActionTranslation)
+if allFiles:
+    # Append configuration for the main string module: translations
+    mainActionTranslation = baseAction | {
+        "output": "libraries/ui-strings/src/main/res/values-${langAndroidResNoScript}/translations.xml",
+        "excludeKeys": list(map(lambda i: "REGEX:" + i, allRegexToExcludeFromMainModule + regexToAlwaysExclude)),
+        "conditions": [
+            "!equals: ${languageCode}, en"
+        ]
+    }
+    allActions.append(mainActionTranslation)
 
 # Generate the configuration for localazy
 result = {
