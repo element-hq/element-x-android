@@ -14,7 +14,8 @@
 ~ limitations under the License.
 -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
@@ -37,7 +38,8 @@
         <receiver
             android:name=".unifiedpush.VectorUnifiedPushMessagingReceiver"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="org.unifiedpush.android.connector.MESSAGE" />
                 <action android:name="org.unifiedpush.android.connector.UNREGISTERED" />
