@@ -22,4 +22,5 @@ sealed interface ConfigureRoomEvents {
     data class RoomNameChanged(val name: String) : ConfigureRoomEvents
     data class TopicChanged(val topic: String) : ConfigureRoomEvents
     data class AvatarUriChanged(val uri: Uri?) : ConfigureRoomEvents
+    data class RoomPrivacyChanged(val privacy: RoomPrivacy?) : ConfigureRoomEvents
 }
