@@ -27,4 +27,10 @@ android {
 dependencies {
     implementation(projects.libraries.architecture)
     api(projects.libraries.permissions.api)
+
+    testImplementation(libs.test.junit)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.molecule.runtime)
+    testImplementation(libs.test.truth)
+    testImplementation(libs.test.turbine)
 }
