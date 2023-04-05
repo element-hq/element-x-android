@@ -21,10 +21,13 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.roomdetails.impl.RoomDetailsFlowNode
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import timber.log.Timber
 
@@ -32,11 +35,19 @@ import timber.log.Timber
 class RoomMemberListNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val room: MatrixRoom,
     private val presenter: RoomMemberListPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
+    private val callback = plugins<RoomDetailsFlowNode.Callback>().first()
+
     private fun onUserSelected(matrixUser: MatrixUser) {
-        Timber.d("TODO: implement user selection. User: $matrixUser")
+        val member = room.getMember(matrixUser.id)
+        if (member != null) {
+            callback.openRoomMemberDetails(member)
+        } else {
+            Timber.e("Could find room member ${matrixUser.id} in room ${room.roomId}")
+        }
     }
 
     @Composable

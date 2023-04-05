@@ -29,10 +29,13 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.roomdetails.impl.members.RoomMemberListNode
+import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
@@ -54,22 +57,33 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
         @Parcelize
         object RoomMemberList : NavTarget
+
+        @Parcelize
+        data class RoomMemberDetails(val roomMember: RoomMember) : NavTarget
     }
 
     interface Callback : Plugin {
         fun openRoomMemberList()
+        fun openRoomMemberDetails(roomMember: RoomMember)
     }
 
     val callback = object : Callback {
         override fun openRoomMemberList() {
             backstack.push(NavTarget.RoomMemberList)
         }
+
+        override fun openRoomMemberDetails(roomMember: RoomMember) {
+            backstack.push(NavTarget.RoomMemberDetails(roomMember))
+        }
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.RoomDetails -> createNode<RoomDetailsNode>(buildContext, listOf(callback))
-            NavTarget.RoomMemberList -> createNode<RoomMemberListNode>(buildContext)
+            NavTarget.RoomMemberList -> createNode<RoomMemberListNode>(buildContext, listOf(callback))
+            is NavTarget.RoomMemberDetails -> {
+                createNode<RoomMemberDetailsNode>(buildContext, listOf(RoomMemberDetailsNode.Inputs(navTarget.roomMember)))
+            }
         }
     }
 

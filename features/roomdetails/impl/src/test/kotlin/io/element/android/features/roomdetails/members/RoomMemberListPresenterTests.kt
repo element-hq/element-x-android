@@ -29,10 +29,12 @@ import io.element.android.features.userlist.impl.DefaultUserListPresenter
 import io.element.android.features.userlist.test.FakeMatrixUserDataSource
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.internal.toImmutableList
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class RoomMemberListPresenterTests {
 
     @Test

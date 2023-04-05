@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.core
+package io.element.android.features.roomdetails.impl.members.details
 
-import java.io.Serializable
-
-@JvmInline
-value class RoomId(val value: String) : Serializable {
-    override fun toString(): String {
-        return value
-    }
-}
+data class RoomMemberDetailsState(
+    val userId: String,
+    val userName: String?,
+    val avatarUrl: String?,
+    val isBlocked: Boolean,
+//    val eventSink: (RoomMemberDetailsEvents) -> Unit
+)

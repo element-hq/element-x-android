@@ -16,6 +16,10 @@
 
 package io.element.android.libraries.matrix.api.room
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class RoomMember(
     val userId: String,
     val displayName: String?,
@@ -23,9 +27,11 @@ data class RoomMember(
     val membership: RoomMembershipState,
     val isNameAmbiguous: Boolean,
     val powerLevel: Long,
-    val normalizedPowerLevel: Long
-)
+    val normalizedPowerLevel: Long,
+    val isIgnored: Boolean,
+) : Parcelable
 
-enum class RoomMembershipState {
+@Parcelize
+enum class RoomMembershipState : Parcelable {
     BAN, INVITE, JOIN, KNOCK, LEAVE
 }
