@@ -34,13 +34,18 @@ class FakeMatrixRoom(
     override val displayName: String = "",
     override val topic: String? = null,
     override val avatarUrl: String? = null,
-    override val members: List<RoomMember> = emptyList(),
     override val isEncrypted: Boolean = false,
     override val alias: String? = null,
     override val alternativeAliases: List<String> = emptyList(),
     override val isPublic: Boolean = true,
+    private val members: List<RoomMember> = emptyList(),
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
 ) : MatrixRoom {
+
+    private var fetchMemberResult: Result<Unit> = Result.success(Unit)
+
+    var areMembersFetched: Boolean = false
+        private set
 
     private var leaveRoomError: Throwable? = null
 
@@ -53,7 +58,11 @@ class FakeMatrixRoom(
     }
 
     override suspend fun fetchMembers(): Result<Unit> {
-        return Result.success(Unit)
+        return fetchMemberResult.also { result ->
+            if (result.isSuccess) {
+                areMembersFetched = true
+            }
+        }
     }
 
     override suspend fun userDisplayName(userId: String): Result<String?> {
@@ -62,6 +71,18 @@ class FakeMatrixRoom(
 
     override suspend fun userAvatarUrl(userId: String): Result<String?> {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun members(): List<RoomMember> {
+        return members
+    }
+
+    override suspend fun memberCount(): Int {
+        if (fetchMemberResult.isSuccess) {
+            return members.count()
+        } else {
+            throw fetchMemberResult.exceptionOrNull()!!
+        }
     }
 
     override suspend fun sendMessage(message: String): Result<Unit> {
@@ -102,5 +123,9 @@ class FakeMatrixRoom(
 
     fun givenLeaveRoomError(throwable: Throwable?) {
         this.leaveRoomError = throwable
+    }
+
+    fun givenFetchMemberResult(result: Result<Unit>) {
+        fetchMemberResult = result
     }
 }

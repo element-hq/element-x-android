@@ -17,16 +17,19 @@
 package io.element.android.features.roomdetails.impl
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RoomDetailsPresenter @Inject constructor(
@@ -43,11 +46,21 @@ class RoomDetailsPresenter @Inject constructor(
         var error by remember {
             mutableStateOf<RoomDetailsError?>(null)
         }
+        var memberCount: Async<Int> by remember { mutableStateOf(Async.Loading()) }
+        LaunchedEffect(Unit) {
+            withContext(Dispatchers.IO) {
+                memberCount = runCatching { room.memberCount() }
+                    .fold(
+                        onSuccess = { Async.Success(it) },
+                        onFailure = { Async.Failure(it) }
+                    )
+            }
+        }
         fun handleEvents(event: RoomDetailsEvent) {
             when (event) {
                 is RoomDetailsEvent.LeaveRoom -> {
                     if (event.needsConfirmation) {
-                        leaveRoomWarning = LeaveRoomWarning.computeLeaveRoomWarning(room)
+                        leaveRoomWarning = LeaveRoomWarning.computeLeaveRoomWarning(room.isPublic, memberCount)
                     } else {
                         coroutineScope.launch(Dispatchers.IO) {
                             room.leave()
@@ -65,13 +78,14 @@ class RoomDetailsPresenter @Inject constructor(
             }
         }
 
+
         return RoomDetailsState(
             roomId = room.roomId.value,
             roomName = room.name ?: room.displayName,
             roomAlias = room.alias,
             roomAvatarUrl = room.avatarUrl,
             roomTopic = room.topic,
-            memberCount = room.members.size,
+            memberCount = memberCount,
             isEncrypted = room.isEncrypted,
             displayLeaveRoomWarning = leaveRoomWarning,
             error = error,

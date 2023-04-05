@@ -78,6 +78,8 @@ class RoomFlowNode @AssistedInject constructor(
     private val inputs: Inputs = inputs()
     private val timeline = inputs.room.timeline()
 
+    private val roomFlowPresenter = RoomFlowPresenter(inputs.room)
+
     init {
         lifecycle.subscribe(
             onCreate = {
@@ -126,6 +128,7 @@ class RoomFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
+        roomFlowPresenter.present()
         Children(
             navModel = backstack,
             modifier = modifier,

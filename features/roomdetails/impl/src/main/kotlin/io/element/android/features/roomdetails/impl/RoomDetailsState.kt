@@ -16,6 +16,9 @@
 
 package io.element.android.features.roomdetails.impl
 
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.isLoading
+
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 
 data class RoomDetailsState(
@@ -24,7 +27,7 @@ data class RoomDetailsState(
     val roomAlias: String?,
     val roomAvatarUrl: String?,
     val roomTopic: String?,
-    val memberCount: Int,
+    val memberCount: Async<Int>,
     val isEncrypted: Boolean,
     val displayLeaveRoomWarning: LeaveRoomWarning?,
     val error: RoomDetailsError?,
@@ -37,10 +40,10 @@ sealed class LeaveRoomWarning {
     object LastUserInRoom : LeaveRoomWarning()
 
     companion object {
-        fun computeLeaveRoomWarning(room: MatrixRoom): LeaveRoomWarning {
+        fun computeLeaveRoomWarning(isPublic: Boolean, memberCount: Async<Int>): LeaveRoomWarning {
             return when {
-                !room.isPublic -> PrivateRoom
-                room.members.size == 1 -> LastUserInRoom
+                !isPublic -> PrivateRoom
+                (memberCount as? Async.Success<Int>)?.state == 1 -> LastUserInRoom
                 else -> Generic
             }
         }

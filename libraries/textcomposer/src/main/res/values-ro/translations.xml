@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="rich_text_editor_bullet_list">"Comutează lista cu puncte"</string>
-  <string name="rich_text_editor_code_block">"Comutează blocul de cod"</string>
+  <string name="rich_text_editor_bullet_list">"Comutați lista cu puncte"</string>
+  <string name="rich_text_editor_code_block">"Comutați blocul de cod"</string>
   <string name="rich_text_editor_composer_placeholder">"Mesaj…"</string>
-  <string name="rich_text_editor_format_bold">"Aplică formatul aldin"</string>
-  <string name="rich_text_editor_format_italic">"Aplică formatul italic"</string>
-  <string name="rich_text_editor_format_strikethrough">"Aplică formatul barat"</string>
+  <string name="rich_text_editor_format_bold">"Aplicați formatul aldin"</string>
+  <string name="rich_text_editor_format_italic">"Aplicați formatul italic"</string>
+  <string name="rich_text_editor_format_strikethrough">"Aplicați formatul barat"</string>
   <string name="rich_text_editor_format_underline">"Aplică formatul de subliniere"</string>
-  <string name="rich_text_editor_full_screen_toggle">"Comută modul ecran intreg"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Comutați modul ecran complet"</string>
   <string name="rich_text_editor_indent">"Indentare"</string>
-  <string name="rich_text_editor_inline_code">"Aplică formatul de cod in linie"</string>
+  <string name="rich_text_editor_inline_code">"Aplicați formatul de cod inline"</string>
   <string name="rich_text_editor_link">"Setați linkul"</string>
-  <string name="rich_text_editor_numbered_list">"Comută lista numerotată"</string>
-  <string name="rich_text_editor_quote">"Aplică citatul"</string>
+  <string name="rich_text_editor_numbered_list">"Comutați lista numerotată"</string>
+  <string name="rich_text_editor_quote">"Aplicați citatul"</string>
   <string name="rich_text_editor_unindent">"Dez-identare"</string>
 </resources>

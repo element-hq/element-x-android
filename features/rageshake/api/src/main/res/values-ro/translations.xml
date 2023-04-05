@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="crash_detection_dialog_content">"%1$s s-a blocat ultima dată când a fost folosit. Dorești să ne trimiti un raport?"</string>
-  <string name="rageshake_detection_dialog_content">"Se pare că scuturi telefonul de frustrare. Dorești să deschizi ecranul de raportare a unei erori?"</string>
+  <string name="crash_detection_dialog_content">"%1$s s-a blocat ultima dată când a fost folosit. Doriți să ne trimiteți un raport?"</string>
+  <string name="rageshake_detection_dialog_content">"Se pare că scuturați telefonul de frustrare. Doriți să deschdeți ecranul de raportare a unei erori?"</string>
 </resources>

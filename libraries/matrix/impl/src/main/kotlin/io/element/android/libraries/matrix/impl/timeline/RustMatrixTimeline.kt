@@ -88,14 +88,6 @@ class RustMatrixTimeline(
     override fun initialize() {
         Timber.v("Init timeline for room ${matrixRoom.roomId}")
         coroutineScope.launch {
-            matrixRoom.fetchMembers()
-                .onFailure {
-                    Timber.e(it, "Fail to fetch members for room ${matrixRoom.roomId}")
-                }.onSuccess {
-                    Timber.v("Success fetching members for room ${matrixRoom.roomId}")
-                }
-        }
-        coroutineScope.launch {
             val result = addListener(innerTimelineListener)
             result
                 .onSuccess { timelineItems ->

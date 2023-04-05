@@ -16,9 +16,9 @@
 
 package io.element.android.features.createroom.impl.addpeople
 
-import io.element.android.features.selectusers.api.SelectUsersState
+import io.element.android.features.userlist.api.UserListState
 
 data class AddPeopleState(
-    val selectUsersState: SelectUsersState,
+    val userListState: UserListState,
     val eventSink: (AddPeopleEvents) -> Unit,
 )
