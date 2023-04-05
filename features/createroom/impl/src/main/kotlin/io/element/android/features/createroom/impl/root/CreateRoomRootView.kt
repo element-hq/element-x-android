@@ -41,7 +41,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.createroom.impl.R
-import io.element.android.features.selectusers.api.SelectUsersView
+import io.element.android.features.userlist.api.UserListView
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
@@ -74,7 +74,7 @@ fun CreateRoomRootView(
     Scaffold(
         modifier = modifier.fillMaxWidth(),
         topBar = {
-            if (!state.selectUsersState.isSearchActive) {
+            if (!state.userListState.isSearchActive) {
                 CreateRoomRootViewTopBar(onClosePressed = onClosePressed)
             }
         }
@@ -84,9 +84,9 @@ fun CreateRoomRootView(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             val context = LocalContext.current
-            SelectUsersView(
+            UserListView(
                 modifier = Modifier.fillMaxWidth(),
-                state = state.selectUsersState,
+                state = state.userListState,
                 onUserSelected = {
                     // Fixme disabled DM creation since it can break the account data which is not correctly synced
                     //  uncomment to enable it again or move behind a feature flag
@@ -95,7 +95,7 @@ fun CreateRoomRootView(
                 },
             )
 
-            if (!state.selectUsersState.isSearchActive) {
+            if (!state.userListState.isSearchActive) {
                 CreateRoomActionButtonsList(
                     onNewRoomClicked = onNewRoomClicked,
                     onInvitePeopleClicked = { state.eventSink(CreateRoomRootEvents.InvitePeople) },

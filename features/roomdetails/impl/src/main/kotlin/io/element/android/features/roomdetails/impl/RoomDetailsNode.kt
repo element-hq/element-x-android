@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
@@ -39,6 +40,12 @@ class RoomDetailsNode @AssistedInject constructor(
     private val presenter: RoomDetailsPresenter,
     private val room: MatrixRoom,
 ) : Node(buildContext, plugins = plugins) {
+
+    private val callback = plugins<RoomDetailsFlowNode.Callback>().firstOrNull()
+
+    private fun openRoomMemberList() {
+        callback?.openRoomMemberList()
+    }
 
     private fun onShareRoom(context: Context) {
         val alias = room.alias ?: room.alternativeAliases.firstOrNull()
@@ -64,6 +71,7 @@ class RoomDetailsNode @AssistedInject constructor(
             modifier = modifier,
             goBack = { navigateUp() },
             onShareRoom = { onShareRoom(context) },
+            openRoomMemberList = ::openRoomMemberList,
         )
     }
 }

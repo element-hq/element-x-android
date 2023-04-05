@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="action_confirm">"Confirmare"</string>
+  <string name="action_create_a_room">"Creați o cameră"</string>
+  <string name="action_done">"Gata"</string>
+  <string name="action_ok">"OK"</string>
+  <string name="action_report_content">"Raportează conținutul"</string>
+  <string name="action_start_chat">"Începe discuția"</string>
+  <string name="action_view_source">"Vezi sursa"</string>
+</resources>

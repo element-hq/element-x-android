@@ -17,31 +17,38 @@
 package io.element.android.features.createroom.impl.addpeople
 
 import androidx.compose.runtime.Composable
-import io.element.android.features.selectusers.api.SelectUsersPresenter
-import io.element.android.features.selectusers.api.SelectUsersPresenterArgs
-import io.element.android.features.selectusers.api.SelectionMode
+import io.element.android.features.userlist.api.SelectionMode
+import io.element.android.features.userlist.api.MatrixUserDataSource
+import io.element.android.features.userlist.api.UserListPresenter
+import io.element.android.features.userlist.api.UserListPresenterArgs
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
+import javax.inject.Named
 
 class AddPeoplePresenter @Inject constructor(
-    private val selectUsersPresenterFactory: SelectUsersPresenter.Factory,
+    private val userListPresenterFactory: UserListPresenter.Factory,
+    @Named("AllUsers") private val matrixUserDataSource: MatrixUserDataSource,
 ) : Presenter<AddPeopleState> {
 
-    private val selectUsersPresenter by lazy {
-        selectUsersPresenterFactory.create(SelectUsersPresenterArgs(SelectionMode.Multiple))
+    private val userListPresenter by lazy {
+        userListPresenterFactory.create(
+            UserListPresenterArgs(selectionMode = SelectionMode.Multiple),
+            matrixUserDataSource,
+        )
     }
 
     @Composable
     override fun present(): AddPeopleState {
-        val selectUsersState = selectUsersPresenter.present()
+        val userListState = userListPresenter.present()
 
         fun handleEvents(event: AddPeopleEvents) {
             // do nothing for now
         }
 
         return AddPeopleState(
-            selectUsersState = selectUsersState,
+            userListState = userListState,
             eventSink = ::handleEvents,
         )
     }
 }
+

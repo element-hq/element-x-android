@@ -47,7 +47,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
-    implementation(projects.features.selectusers.api)
+    implementation(projects.features.userlist.api)
     api(projects.features.createroom.api)
 
     testImplementation(libs.test.junit)
@@ -56,8 +56,8 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.features.selectusers.impl)
-    testImplementation(projects.features.selectusers.test)
+    testImplementation(projects.features.userlist.impl)
+    testImplementation(projects.features.userlist.test)
 
     androidTestImplementation(libs.test.junitext)
 

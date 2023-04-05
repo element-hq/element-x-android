@@ -24,9 +24,11 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.roomdetails.impl.members.RoomMemberListNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
@@ -49,11 +51,25 @@ class RoomDetailsFlowNode @AssistedInject constructor(
     sealed interface NavTarget : Parcelable {
         @Parcelize
         object RoomDetails : NavTarget
+
+        @Parcelize
+        object RoomMemberList : NavTarget
+    }
+
+    interface Callback : Plugin {
+        fun openRoomMemberList()
+    }
+
+    val callback = object : Callback {
+        override fun openRoomMemberList() {
+            backstack.push(NavTarget.RoomMemberList)
+        }
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.RoomDetails -> createNode<RoomDetailsNode>(buildContext)
+            NavTarget.RoomDetails -> createNode<RoomDetailsNode>(buildContext, listOf(callback))
+            NavTarget.RoomMemberList -> createNode<RoomMemberListNode>(buildContext)
         }
     }
 
