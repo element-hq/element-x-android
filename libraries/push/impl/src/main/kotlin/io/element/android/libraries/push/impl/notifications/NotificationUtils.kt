@@ -18,6 +18,7 @@
 
 package io.element.android.libraries.push.impl.notifications
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Notification
@@ -26,18 +27,19 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.DrawableRes
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.content.res.ResourcesCompat
-import io.element.android.libraries.androidutils.intent.PendingIntentCompat
 import io.element.android.libraries.androidutils.system.startNotificationChannelSettingsIntent
 import io.element.android.libraries.androidutils.uri.createIgnoredUri
 import io.element.android.libraries.core.meta.BuildMeta
@@ -295,7 +297,7 @@ class NotificationUtils @Inject constructor(
                     context,
                     clock.epochMillis().toInt(),
                     markRoomReadIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
 
                 NotificationCompat.Action.Builder(
@@ -341,7 +343,7 @@ class NotificationUtils @Inject constructor(
                     context.applicationContext,
                     clock.epochMillis().toInt(),
                     intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
                 setDeleteIntent(pendingIntent)
             }
@@ -377,7 +379,7 @@ class NotificationUtils @Inject constructor(
                     context,
                     clock.epochMillis().toInt(),
                     rejectIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
 
                 addAction(
@@ -396,7 +398,7 @@ class NotificationUtils @Inject constructor(
                     context,
                     clock.epochMillis().toInt(),
                     joinIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
                 addAction(
                     R.drawable.vector_notification_accept_invitation,
@@ -489,7 +491,7 @@ class NotificationUtils @Inject constructor(
             context,
             clock.epochMillis().toInt(),
             roomIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
 
@@ -505,7 +507,7 @@ class NotificationUtils @Inject constructor(
             context,
             clock.epochMillis().toInt(),
             threadIntentTap,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
 
@@ -516,7 +518,7 @@ class NotificationUtils @Inject constructor(
             context,
             clock.epochMillis().toInt(),
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
 
@@ -549,7 +551,11 @@ class NotificationUtils @Inject constructor(
                 clock.epochMillis().toInt(),
                 intent,
                 // PendingIntents attached to actions with remote inputs must be mutable
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_MUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    PendingIntent.FLAG_MUTABLE
+                } else {
+                    0
+                }
             )
         } else {
             /*
@@ -627,7 +633,7 @@ class NotificationUtils @Inject constructor(
             context.applicationContext,
             0,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
 
@@ -652,15 +658,18 @@ class NotificationUtils @Inject constructor(
 
     @SuppressLint("LaunchActivityFromNotification")
     fun displayDiagnosticNotification() {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            Timber.w("Not allowed to notify.")
+            return
+        }
         val testActionIntent = Intent(context, TestNotificationReceiver::class.java)
         testActionIntent.action = actionIds.diagnostic
         val testPendingIntent = PendingIntent.getBroadcast(
             context,
             0,
             testActionIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-
         notificationManager.notify(
             "DIAGNOSTIC",
             888,
