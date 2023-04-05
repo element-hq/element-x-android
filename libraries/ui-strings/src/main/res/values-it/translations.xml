@@ -49,7 +49,7 @@
   <string name="common_about">"Informazioni"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_bubbles">"Fumetti"</string>
-  <string name="common_creating_room">"Creazione stanza..."</string>
+  <string name="common_creating_room">"Creazione stanza…"</string>
   <string name="common_current_user_left_room">"Hai lasciato la stanza"</string>
   <string name="common_decryption_error">"Errore di decrittazione"</string>
   <string name="common_developer_options">"Opzioni sviluppatore"</string>
