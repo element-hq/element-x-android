@@ -27,4 +27,5 @@ android {
 dependencies {
     implementation(libs.coroutines.core)
     implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.uiStrings)
 }

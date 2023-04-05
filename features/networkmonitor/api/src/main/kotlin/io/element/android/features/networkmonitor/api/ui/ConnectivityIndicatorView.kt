@@ -37,12 +37,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.LocalColors
+import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun ConnectivityIndicatorView(
@@ -72,7 +74,7 @@ fun ConnectivityIndicatorView(
                 modifier = Modifier.size(16.dp),
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = "Offline", style = ElementTextStyles.Regular.bodyMD, color = tint)
+            Text(text = stringResource(StringR.string.common_offline), style = ElementTextStyles.Regular.bodyMD, color = tint)
         }
     }
 
