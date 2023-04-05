@@ -229,7 +229,7 @@ koverMerged {
             target = kotlinx.kover.api.VerificationTarget.CLASS
             overrideClassFilter {
                 includes += "*Presenter"
-                excludes += "*TemplatePresenter"
+                excludes += "*Fake*Presenter"
             }
             bound {
                 minValue = 90
