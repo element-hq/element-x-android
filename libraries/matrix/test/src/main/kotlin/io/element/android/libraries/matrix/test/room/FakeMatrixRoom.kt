@@ -37,6 +37,7 @@ class FakeMatrixRoom(
     override val isEncrypted: Boolean = false,
     override val alias: String? = null,
     override val alternativeAliases: List<String> = emptyList(),
+    override val isPublic: Boolean = true,
     private val members: List<RoomMember> = emptyList(),
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
 ) : MatrixRoom {
@@ -45,6 +46,8 @@ class FakeMatrixRoom(
 
     var areMembersFetched: Boolean = false
         private set
+
+    private var leaveRoomError: Throwable? = null
 
     override fun syncUpdateFlow(): Flow<Long> {
         return emptyFlow()
@@ -114,7 +117,13 @@ class FakeMatrixRoom(
         return Result.success(Unit)
     }
 
+    override fun leave(): Result<Unit> = leaveRoomError?.let { Result.failure(it) } ?: Result.success(Unit)
+
     override fun close() = Unit
+
+    fun givenLeaveRoomError(throwable: Throwable?) {
+        this.leaveRoomError = throwable
+    }
 
     fun givenFetchMemberResult(result: Result<Unit>) {
         fetchMemberResult = result

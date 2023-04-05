@@ -129,6 +129,9 @@ class RustMatrixRoom(
     override val alternativeAliases: List<String>
         get() = innerRoom.alternativeAliases()
 
+    override val isPublic: Boolean
+        get() = innerRoom.isPublic()
+
     override suspend fun fetchMembers(): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {
             innerRoom.fetchMembers()
@@ -178,5 +181,9 @@ class RustMatrixRoom(
         runCatching {
             innerRoom.redact(eventId.value, reason, transactionId)
         }
+    }
+
+    override fun leave(): Result<Unit> {
+        return runCatching { innerRoom.leave() }
     }
 }
