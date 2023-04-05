@@ -44,9 +44,9 @@ class UnifiedPushHelper @Inject constructor(
     ) {
         val internalDistributorName = stringProvider.getString(
             if (fcmHelper.isFirebaseAvailable()) {
-                R.string.push_distributor_firebase
+                R.string.push_distributor_firebase_android
             } else {
-                R.string.push_distributor_background_sync
+                R.string.push_distributor_background_sync_android
             }
         )
 
@@ -60,7 +60,7 @@ class UnifiedPushHelper @Inject constructor(
         }
 
         MaterialAlertDialogBuilder(context)
-            .setTitle(stringProvider.getString(R.string.push_choose_distributor_dialog_title))
+            .setTitle(stringProvider.getString(R.string.push_choose_distributor_dialog_title_android))
             .setItems(distributorsName.toTypedArray()) { _, which ->
                 val distributor = distributors[which]
                 onDistributorSelected(distributor)
@@ -133,8 +133,8 @@ class UnifiedPushHelper @Inject constructor(
 
     fun getCurrentDistributorName(): String {
         return when {
-            isEmbeddedDistributor() -> stringProvider.getString(R.string.push_distributor_firebase)
-            isBackgroundSync() -> stringProvider.getString(R.string.push_distributor_background_sync)
+            isEmbeddedDistributor() -> stringProvider.getString(R.string.push_distributor_firebase_android)
+            isBackgroundSync() -> stringProvider.getString(R.string.push_distributor_background_sync_android)
             else -> context.getApplicationLabel(UnifiedPush.getDistributor(context))
         }
     }
