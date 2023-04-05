@@ -164,7 +164,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 noisy = false,
                 timestamp = clock.epochMillis(),
                 senderName = session.roomService().getRoomMember(session.myUserId, room.roomId)?.displayName
-                        ?: context?.getString(StringR.string.notification_sender_me),
+                        ?: context?.getString(R.string.notification_sender_me),
                 senderId = session.myUserId,
                 body = message,
                 imageUriString = null,
@@ -216,7 +216,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                         false,
                         clock.epochMillis(),
                         session.myUser?.displayname
-                                ?: context?.getString(StringR.string.notification_sender_me),
+                                ?: context?.getString(R.string.notification_sender_me),
                         session.myUserId,
                         message,
                         roomId,
