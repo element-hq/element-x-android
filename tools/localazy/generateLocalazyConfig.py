@@ -20,6 +20,11 @@ regexToAlwaysExclude = [
     ".*_ios"
 ]
 
+# Replacement done in all string values
+replacements = {
+    "...": "…"
+}
+
 # Store all regex specific to module, to eclude the corresponding keyx from the common string module
 allRegexToExcludeFromMainModule = []
 # All actions that will be serialized in the localazy config
@@ -33,6 +38,7 @@ for entry in config["modules"]:
         "output": convertModuleToPath(entry["name"]) + "/src/main/res/values/localazy.xml",
         "includeKeys": list(map(lambda i: "REGEX:" + i, entry["includeRegex"])),
         "excludeKeys": list(map(lambda i: "REGEX:" + i, regexToAlwaysExclude)),
+        "replacements": replacements,
         "conditions": [
             "equals: ${languageCode}, en"
         ]
@@ -46,6 +52,7 @@ for entry in config["modules"]:
             "output": convertModuleToPath(entry["name"]) + "/src/main/res/values-${langAndroidResNoScript}/translations.xml",
             "includeKeys": list(map(lambda i: "REGEX:" + i, entry["includeRegex"])),
             "excludeKeys": list(map(lambda i: "REGEX:" + i, regexToAlwaysExclude)),
+            "replacements": replacements,
             "conditions": [
                 "!equals: ${languageCode}, en"
             ]
@@ -58,6 +65,7 @@ mainAction = {
     "type": "android",
     "output": "libraries/ui-strings/src/main/res/values/localazy.xml",
     "excludeKeys": list(map(lambda i: "REGEX:" + i, allRegexToExcludeFromMainModule + regexToAlwaysExclude)),
+    "replacements": replacements,
     "conditions": [
         "equals: ${languageCode}, en"
     ]
@@ -71,6 +79,7 @@ if allFiles:
         "type": "android",
         "output": "libraries/ui-strings/src/main/res/values-${langAndroidResNoScript}/translations.xml",
         "excludeKeys": list(map(lambda i: "REGEX:" + i, allRegexToExcludeFromMainModule + regexToAlwaysExclude)),
+        "replacements": replacements,
         "conditions": [
             "!equals: ${languageCode}, en"
         ]
