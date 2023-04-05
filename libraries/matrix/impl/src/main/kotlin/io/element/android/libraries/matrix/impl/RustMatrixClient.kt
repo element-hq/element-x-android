@@ -38,7 +38,10 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
+import org.matrix.rustcomponents.sdk.CreateRoomParameters
 import org.matrix.rustcomponents.sdk.RequiredState
+import org.matrix.rustcomponents.sdk.RoomPreset
+import org.matrix.rustcomponents.sdk.RoomVisibility
 import org.matrix.rustcomponents.sdk.SlidingSyncListBuilder
 import org.matrix.rustcomponents.sdk.SlidingSyncMode
 import org.matrix.rustcomponents.sdk.SlidingSyncRequestListFilters
@@ -157,6 +160,30 @@ class RustMatrixClient constructor(
             coroutineDispatchers = dispatchers,
         )
     }
+
+    override fun findDM(userId: UserId): MatrixRoom? {
+        val roomId = client.getDmRoom(userId.value)?.use { RoomId(it.id()) }
+        return roomId?.let { getRoom(it) }
+    }
+
+    override suspend fun createDM(userId: UserId): Result<RoomId> =
+        withContext(dispatchers.io) {
+            runCatching {
+                val roomId = client.createRoom(
+                    CreateRoomParameters(
+                        name = null,
+                        topic = null,
+                        isEncrypted = true,
+                        isDirect = true,
+                        visibility = RoomVisibility.PRIVATE,
+                        preset = RoomPreset.TRUSTED_PRIVATE_CHAT,
+                        invite = listOf(userId.value),
+                        avatar = null,
+                    )
+                )
+                RoomId(roomId)
+            }
+        }
 
     override fun mediaResolver(): MediaResolver = mediaResolver
 

@@ -18,15 +18,41 @@ package io.element.android.features.createroom.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.userlist.api.aUserListState
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
+import kotlinx.collections.immutable.persistentListOf
 
 open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRootState> {
     override val values: Sequence<CreateRoomRootState>
         get() = sequenceOf(
             aCreateRoomRootState(),
+            aCreateRoomRootState().copy(
+                startDmAction = Async.Loading(),
+                userListState = aMatrixUser().let {
+                    aUserListState().copy(
+                        searchQuery = it.id.value,
+                        searchResults = persistentListOf(it),
+                        selectedUsers = persistentListOf(it),
+                        isSearchActive = true,
+                    )
+                }
+            ),
+            aCreateRoomRootState().copy(
+                startDmAction = Async.Failure(Throwable()),
+                userListState = aMatrixUser().let {
+                    aUserListState().copy(
+                        searchQuery = it.id.value,
+                        searchResults = persistentListOf(it),
+                        selectedUsers = persistentListOf(it),
+                        isSearchActive = true,
+                    )
+                }
+            ),
         )
 }
 
 fun aCreateRoomRootState() = CreateRoomRootState(
     eventSink = {},
-    userListState =  aUserListState(),
+    startDmAction = Async.Uninitialized,
+    userListState = aUserListState(),
 )

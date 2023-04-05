@@ -14,12 +14,23 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.root
+package io.element.android.features.userlist.test
 
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import androidx.compose.runtime.Composable
+import io.element.android.features.userlist.api.UserListPresenter
+import io.element.android.features.userlist.api.UserListState
+import io.element.android.features.userlist.api.aUserListState
 
-sealed interface CreateRoomRootEvents {
-    object InvitePeople : CreateRoomRootEvents
-    data class StartDM(val matrixUser: MatrixUser) : CreateRoomRootEvents
-    object CancelStartDM : CreateRoomRootEvents
+class FakeUserListPresenter : UserListPresenter {
+
+    private var state = aUserListState()
+
+    fun givenState(state: UserListState) {
+        this.state = state
+    }
+
+    @Composable
+    override fun present(): UserListState {
+        return state
+    }
 }
