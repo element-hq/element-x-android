@@ -113,9 +113,10 @@ fun CreateRoomRootView(
                 content = stringResource(id = StringR.string.screen_start_chat_error_starting_chat),
                 onDismiss = { state.eventSink(CreateRoomRootEvents.CancelStartDM) },
                 onRetry = {
-                    state.userListState.selectedUsers.firstOrNull()?.let {
-                        state.eventSink(CreateRoomRootEvents.StartDM(it))
-                    }
+                    state.userListState.selectedUsers.firstOrNull()
+                        ?.let { state.eventSink(CreateRoomRootEvents.StartDM(it)) }
+                    // Cancel start DM if there is no more selected user (should not happen)
+                        ?: state.eventSink(CreateRoomRootEvents.CancelStartDM)
                 },
             )
         }
