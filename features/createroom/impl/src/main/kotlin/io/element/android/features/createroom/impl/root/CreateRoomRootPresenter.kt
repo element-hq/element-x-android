@@ -69,10 +69,6 @@ class CreateRoomRootPresenter @Inject constructor(
         fun handleEvents(event: CreateRoomRootEvents) {
             when (event) {
                 is CreateRoomRootEvents.StartDM -> startDm(event.matrixUser)
-                CreateRoomRootEvents.RetryStartDM -> {
-                    startDmAction.value = Async.Uninitialized
-                    userListState.selectedUsers.firstOrNull()?.let { startDm(it) }
-                }
                 CreateRoomRootEvents.CancelStartDM -> startDmAction.value = Async.Uninitialized
                 CreateRoomRootEvents.InvitePeople -> Unit // Todo Handle invite people action
             }
