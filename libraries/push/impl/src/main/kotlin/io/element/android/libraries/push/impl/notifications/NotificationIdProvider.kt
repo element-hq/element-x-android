@@ -16,12 +16,10 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.SessionId
 import javax.inject.Inject
+import kotlin.math.abs
 
-@SingleIn(AppScope::class)
 class NotificationIdProvider @Inject constructor() {
     fun getSummaryNotificationId(sessionId: SessionId): Int {
         return getOffset(sessionId) + SUMMARY_NOTIFICATION_ID
@@ -40,8 +38,8 @@ class NotificationIdProvider @Inject constructor() {
     }
 
     private fun getOffset(sessionId: SessionId): Int {
-        // TODO EAx multi account: return different value for users and persist data
-        return 0
+        // Compute a int from a string with a low risk of collision.
+        return abs(sessionId.value.hashCode() % 100_000) * 10
     }
 
     companion object {
