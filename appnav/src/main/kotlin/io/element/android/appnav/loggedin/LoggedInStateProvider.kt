@@ -29,5 +29,5 @@ open class LoggedInStateProvider : PreviewParameterProvider<LoggedInState> {
 
 fun aLoggedInState() = LoggedInState(
     permissionsState = createDummyPostNotificationPermissionsState(),
-    eventSink = {}
+    // eventSink = {}
 )

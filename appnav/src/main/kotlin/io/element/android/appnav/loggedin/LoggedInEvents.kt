@@ -16,7 +16,6 @@
 
 package io.element.android.appnav.loggedin
 
-// TODO Add your events or remove the file completely if no events
-sealed interface LoggedInEvents {
-    object MyEvent : LoggedInEvents
-}
+// sealed interface LoggedInEvents {
+//     object MyEvent : LoggedInEvents
+// }

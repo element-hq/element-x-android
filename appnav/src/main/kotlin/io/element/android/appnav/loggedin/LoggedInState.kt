@@ -20,5 +20,5 @@ import io.element.android.libraries.permissions.api.PermissionsState
 
 data class LoggedInState(
     val permissionsState: PermissionsState,
-    val eventSink: (LoggedInEvents) -> Unit
+    // val eventSink: (LoggedInEvents) -> Unit
 )
