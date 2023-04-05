@@ -57,7 +57,13 @@ In the root folder of the project, run:
 ./tools/localazy/downloadStrings.sh
 ```
 
-It will update all the `localazy.xml` and `translations.xml` resource files. In case of merge conflicts, just erase the files and download again using the script.
+It will update all the `localazy.xml` resource files. In case of merge conflicts, just erase the files and download again using the script.
+
+To also include the translations, i.e. the `translations.xml` files, add `--all` argument:
+
+```shell
+./tools/localazy/downloadStrings.sh --all
+```
 
 ## Add translations to a specific module
 
