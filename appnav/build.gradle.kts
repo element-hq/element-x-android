@@ -45,6 +45,7 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.matrixui)
+    implementation(projects.libraries.uiStrings)
     implementation(projects.features.verifysession.api)
     implementation(projects.features.roomdetails.api)
     implementation(projects.tests.uitests)

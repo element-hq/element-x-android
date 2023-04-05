@@ -18,9 +18,9 @@ package io.element.android.features.roomdetails.api
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
 
 interface RoomDetailsEntryPoint : FeatureEntryPoint {
-    fun createNode(parentNode: Node, buildContext: BuildContext): Node
-
+    fun createNode(parentNode: Node, buildContext: BuildContext, plugins: List<Plugin>): Node
 }
