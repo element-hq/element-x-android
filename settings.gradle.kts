@@ -51,7 +51,6 @@ include(":appnav")
 include(":tests:uitests")
 include(":anvilannotations")
 include(":anvilcodegen")
-include(":libraries:rustsdk")
 
 include(":samples:minimal")
 

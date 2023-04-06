@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.root
+package io.element.android.features.userlist.test
 
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.features.userlist.api.MatrixUserDataSource
+import io.element.android.features.userlist.api.UserListPresenter
+import io.element.android.features.userlist.api.UserListPresenterArgs
 
-sealed interface CreateRoomRootEvents {
-    object InvitePeople : CreateRoomRootEvents
-    data class StartDM(val matrixUser: MatrixUser) : CreateRoomRootEvents
-    object CancelStartDM : CreateRoomRootEvents
+class FakeUserListPresenterFactory(
+    private val fakeUserListPresenter: FakeUserListPresenter = FakeUserListPresenter()
+) : UserListPresenter.Factory {
+
+    override fun create(args: UserListPresenterArgs, matrixUserDataSource: MatrixUserDataSource): UserListPresenter = fakeUserListPresenter
 }

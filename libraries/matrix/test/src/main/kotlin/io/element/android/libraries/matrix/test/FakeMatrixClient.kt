@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.test
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaResolver
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.pusher.PushersService
@@ -44,10 +45,23 @@ class FakeMatrixClient(
     private val notificationService: FakeNotificationService = FakeNotificationService(),
 ) : MatrixClient {
 
+    private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
+    private var createDmFailure: Throwable? = null
+    private var findDmResult: MatrixRoom? = FakeMatrixRoom()
     private var logoutFailure: Throwable? = null
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
         return FakeMatrixRoom(roomId)
+    }
+
+    override suspend fun createDM(userId: UserId): Result<RoomId> {
+        delay(100)
+        createDmFailure?.let { throw it }
+        return createDmResult
+    }
+
+    override fun findDM(userId: UserId): MatrixRoom? {
+        return findDmResult
     }
 
     override fun startSync() = Unit
@@ -56,10 +70,6 @@ class FakeMatrixClient(
 
     override fun mediaResolver(): MediaResolver {
         return FakeMediaResolver()
-    }
-
-    fun givenLogoutError(failure: Throwable) {
-        logoutFailure = failure
     }
 
     override suspend fun logout() {
@@ -95,5 +105,23 @@ class FakeMatrixClient(
 
     override fun roomMembershipObserver(): RoomMembershipObserver {
         return RoomMembershipObserver(A_SESSION_ID)
+    }
+
+    // Mocks
+
+    fun givenLogoutError(failure: Throwable?) {
+        logoutFailure = failure
+    }
+
+    fun givenCreateDmResult(result: Result<RoomId>) {
+        createDmResult = result
+    }
+
+    fun givenCreateDmError(failure: Throwable?) {
+        createDmFailure = failure
+    }
+
+    fun givenFindDmResult(result: MatrixRoom?) {
+        findDmResult = result
     }
 }

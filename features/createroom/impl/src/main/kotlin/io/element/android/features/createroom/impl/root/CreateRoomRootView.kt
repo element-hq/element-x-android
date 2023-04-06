@@ -16,6 +16,7 @@
 
 package io.element.android.features.createroom.impl.root
 
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,17 +29,22 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.element.android.features.userlist.api.UserListView
 import io.element.android.features.createroom.impl.R
+import io.element.android.features.userlist.api.UserListView
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
@@ -46,6 +52,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.designsystem.R as DrawableR
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -56,7 +63,14 @@ fun CreateRoomRootView(
     modifier: Modifier = Modifier,
     onClosePressed: () -> Unit = {},
     onNewRoomClicked: () -> Unit = {},
+    onOpenDM: (RoomId) -> Unit = {},
 ) {
+    if (state.startDmAction is Async.Success) {
+        LaunchedEffect(state.startDmAction) {
+            onOpenDM(state.startDmAction.state)
+        }
+    }
+
     Scaffold(
         modifier = modifier.fillMaxWidth(),
         topBar = {
@@ -69,10 +83,16 @@ fun CreateRoomRootView(
             modifier = Modifier.padding(paddingValues),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
+            val context = LocalContext.current
             UserListView(
                 modifier = Modifier.fillMaxWidth(),
                 state = state.userListState,
-                onUserSelected = { state.eventSink.invoke(CreateRoomRootEvents.StartDM(it)) },
+                onUserSelected = {
+                    // Fixme disabled DM creation since it can break the account data which is not correctly synced
+                    //  uncomment to enable it again or move behind a feature flag
+                    Toast.makeText(context, "Create DM feature is disabled.", Toast.LENGTH_SHORT).show()
+//                    state.eventSink(CreateRoomRootEvents.StartDM(it))
+                },
             )
 
             if (!state.userListState.isSearchActive) {
@@ -82,6 +102,25 @@ fun CreateRoomRootView(
                 )
             }
         }
+    }
+
+    when (state.startDmAction) {
+        is Async.Loading -> {
+            ProgressDialog(text = stringResource(id = StringR.string.common_creating_room))
+        }
+        is Async.Failure -> {
+            RetryDialog(
+                content = stringResource(id = StringR.string.screen_start_chat_error_starting_chat),
+                onDismiss = { state.eventSink(CreateRoomRootEvents.CancelStartDM) },
+                onRetry = {
+                    state.userListState.selectedUsers.firstOrNull()
+                        ?.let { state.eventSink(CreateRoomRootEvents.StartDM(it)) }
+                    // Cancel start DM if there is no more selected user (should not happen)
+                        ?: state.eventSink(CreateRoomRootEvents.CancelStartDM)
+                },
+            )
+        }
+        else -> Unit
     }
 }
 
