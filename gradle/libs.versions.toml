@@ -20,14 +20,14 @@ activity = "1.7.0"
 startup = "1.1.1"
 
 # Compose
-compose_bom = "2023.01.00"
+compose_bom = "2023.03.00"
 composecompiler = "1.4.2"
 
 # Coroutines
 coroutines = "1.6.4"
 
 # Accompanist
-accompanist = "0.28.0"
+accompanist = "0.30.1"
 
 # Test
 test_core = "1.5.0"
