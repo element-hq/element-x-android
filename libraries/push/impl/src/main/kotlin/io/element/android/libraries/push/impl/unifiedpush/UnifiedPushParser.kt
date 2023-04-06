@@ -23,7 +23,9 @@ import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 class UnifiedPushParser @Inject constructor() {
+    private val json by lazy { Json { ignoreUnknownKeys = true } }
+
     fun parse(message: ByteArray): PushData? {
-        return tryOrNull { Json.decodeFromString<PushDataUnifiedPush>(String(message)) }?.toPushData()
+        return tryOrNull { json.decodeFromString<PushDataUnifiedPush>(String(message)) }?.toPushData()
     }
 }

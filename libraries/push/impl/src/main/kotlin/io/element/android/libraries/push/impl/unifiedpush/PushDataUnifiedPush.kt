@@ -41,19 +41,19 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class PushDataUnifiedPush(
-    val notification: PushDataUnifiedPushNotification?
+    val notification: PushDataUnifiedPushNotification? = null
 )
 
 @Serializable
 data class PushDataUnifiedPushNotification(
-    @SerialName("event_id") val eventId: String?,
-    @SerialName("room_id") val roomId: String?,
-    @SerialName("counts") var counts: PushDataUnifiedPushCounts?,
+    @SerialName("event_id") val eventId: String? = null,
+    @SerialName("room_id") val roomId: String? = null,
+    @SerialName("counts") var counts: PushDataUnifiedPushCounts? = null,
 )
 
 @Serializable
 data class PushDataUnifiedPushCounts(
-    @SerialName("unread") val unread: Int?
+    @SerialName("unread") val unread: Int? = null
 )
 
 fun PushDataUnifiedPush.toPushData() = PushData(
