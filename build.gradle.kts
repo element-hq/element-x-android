@@ -231,6 +231,7 @@ koverMerged {
             overrideClassFilter {
                 includes += "*Presenter"
                 excludes += "*TemplatePresenter"
+                excludes += "*Fake*Presenter"
                 excludes += "io.element.android.appnav.loggedin.LoggedInPresenter$*"
             }
             bound {

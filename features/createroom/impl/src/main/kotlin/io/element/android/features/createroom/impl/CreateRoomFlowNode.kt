@@ -23,17 +23,20 @@ import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.createroom.impl.addpeople.AddPeopleNode
 import io.element.android.features.createroom.impl.root.CreateRoomRootNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
@@ -63,6 +66,10 @@ class CreateRoomFlowNode @AssistedInject constructor(
                 val callback = object : CreateRoomRootNode.Callback {
                     override fun onCreateNewRoom() {
                         backstack.push(NavTarget.NewRoom)
+                    }
+
+                    override fun onOpenRoom(roomId: RoomId) {
+                        plugins<CreateRoomEntryPoint.Callback>().forEach { it.onOpenRoom(roomId) }
                     }
                 }
                 createNode<CreateRoomRootNode>(buildContext, plugins = listOf(callback))
