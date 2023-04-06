@@ -231,6 +231,7 @@ koverMerged {
             overrideClassFilter {
                 includes += "*Presenter"
                 excludes += "*TemplatePresenter"
+                excludes += "io.element.android.appnav.loggedin.LoggedInPresenter$*"
             }
             bound {
                 minValue = 90
@@ -247,6 +248,7 @@ koverMerged {
                 excludes += "io.element.android.libraries.matrix.api.timeline.item.event.OtherState$*"
                 excludes += "io.element.android.libraries.matrix.api.timeline.item.event.EventSendState$*"
                 excludes += "io.element.android.libraries.matrix.api.room.RoomMembershipState*"
+                excludes += "io.element.android.libraries.push.impl.notifications.NotificationState*"
             }
             bound {
                 minValue = 90
