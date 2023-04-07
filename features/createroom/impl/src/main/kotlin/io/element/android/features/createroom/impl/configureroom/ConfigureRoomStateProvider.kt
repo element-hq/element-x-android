@@ -24,7 +24,6 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
     override val values: Sequence<ConfigureRoomState>
         get() = sequenceOf(
             aConfigureRoomState(),
-            // Add other state here
         )
 }
 
@@ -34,5 +33,6 @@ fun aConfigureRoomState() = ConfigureRoomState(
     topic = "",
     avatarUri = null,
     privacy = null,
+    isCreateButtonEnabled = false,
     eventSink = {}
 )

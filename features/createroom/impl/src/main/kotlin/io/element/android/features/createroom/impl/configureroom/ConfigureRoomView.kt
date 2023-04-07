@@ -71,16 +71,15 @@ fun ConfigureRoomView(
     state: ConfigureRoomState,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
-    onCreatePressed: () -> Unit = {},
 ) {
     val selectedUsersListState = rememberLazyListState()
     Scaffold(
         modifier = modifier,
         topBar = {
             ConfigureRoomToolbar(
-                isNextActionEnabled = false,
+                isNextActionEnabled = state.isCreateButtonEnabled,
                 onBackPressed = onBackPressed,
-                onNextPressed = onCreatePressed,
+                onNextPressed = { state.eventSink(ConfigureRoomEvents.CreateRoom) },
             )
         }
     ) { padding ->
@@ -326,6 +325,7 @@ fun RoomPrivacyOption(
     }
 }
 
+// Move this composable to design module if we want to reuse it in other screens
 @Composable
 fun LabelledTextField(
     label: String,
