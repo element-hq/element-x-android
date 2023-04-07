@@ -114,7 +114,6 @@
   <string name="emoji_picker_category_symbols">"Symbols"</string>
   <string name="error_failed_creating_the_permalink">"Failed creating the permalink"</string>
   <string name="error_failed_loading_messages">"Failed loading messages"</string>
-  <string name="error_no_compatible_app_found">"No compatible app was found to handle this action."</string>
   <string name="error_some_messages_have_not_been_sent">"Some messages have not been sent"</string>
   <string name="error_unknown">"Sorry, an error occurred"</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
