@@ -23,7 +23,8 @@ open class PermissionsViewStateProvider : PreviewParameterProvider<PermissionsSt
     override val values: Sequence<PermissionsState>
         get() = sequenceOf(
             aPermissionsState(),
-            // Add other state here
+            aPermissionsState().copy(shouldShowRationale = true),
+            aPermissionsState().copy(permissionAlreadyDenied = true),
         )
 }
 
