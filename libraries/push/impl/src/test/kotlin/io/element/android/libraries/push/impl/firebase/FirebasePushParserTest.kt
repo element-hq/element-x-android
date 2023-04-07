@@ -30,18 +30,11 @@ class FirebasePushParserTest {
         clientSecret = "a-secret"
     )
 
-    private val emptyData = PushData(
-        eventId = null,
-        roomId = null,
-        unread = null,
-        clientSecret = null
-    )
-
     @Test
     fun `test edge cases Firebase`() {
         val pushParser = FirebasePushParser()
         // Empty Json
-        assertThat(pushParser.parse(emptyMap())).isEqualTo(emptyData)
+        assertThat(pushParser.parse(emptyMap())).isNull()
         // Bad Json
         assertThat(pushParser.parse(FIREBASE_PUSH_DATA.mutate("unread", "str"))).isEqualTo(validData.copy(unread = null))
         // Extra data
@@ -57,31 +50,27 @@ class FirebasePushParserTest {
     @Test
     fun `test empty roomId`() {
         val pushParser = FirebasePushParser()
-        val expected = validData.copy(roomId = null)
-        assertThat(pushParser.parse(FIREBASE_PUSH_DATA.mutate("room_id", null))).isEqualTo(expected)
-        assertThat(pushParser.parse(FIREBASE_PUSH_DATA.mutate("room_id", ""))).isEqualTo(expected)
+        assertThat(pushParser.parse(FIREBASE_PUSH_DATA.mutate("room_id", null))).isNull()
+        assertThat(pushParser.parse(FIREBASE_PUSH_DATA.mutate("room_id", ""))).isNull()
     }
 
     @Test
     fun `test invalid roomId`() {
         val pushParser = FirebasePushParser()
-        val expected = validData.copy(roomId = null)
-        assertThat(pushParser.parse(FIREBASE_PUSH_DATA.mutate("room_id", "aRoomId:domain"))).isEqualTo(expected)
+        assertThat(pushParser.parse(FIREBASE_PUSH_DATA.mutate("room_id", "aRoomId:domain"))).isNull()
     }
 
     @Test
     fun `test empty eventId`() {
         val pushParser = FirebasePushParser()
-        val expected = validData.copy(eventId = null)
-        assertThat(pushParser.parse(FIREBASE_PUSH_DATA.mutate("event_id", null))).isEqualTo(expected)
-        assertThat(pushParser.parse(FIREBASE_PUSH_DATA.mutate("event_id", ""))).isEqualTo(expected)
+        assertThat(pushParser.parse(FIREBASE_PUSH_DATA.mutate("event_id", null))).isNull()
+        assertThat(pushParser.parse(FIREBASE_PUSH_DATA.mutate("event_id", ""))).isNull()
     }
 
     @Test
     fun `test invalid eventId`() {
         val pushParser = FirebasePushParser()
-        val expected = validData.copy(eventId = null)
-        assertThat(pushParser.parse(FIREBASE_PUSH_DATA.mutate("event_id", "anEventId"))).isEqualTo(expected)
+        assertThat(pushParser.parse(FIREBASE_PUSH_DATA.mutate("event_id", "anEventId"))).isNull()
     }
 
     companion object {

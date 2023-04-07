@@ -67,10 +67,11 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
     override fun onMessage(context: Context, message: ByteArray, instance: String) {
         Timber.tag(loggerTag.value).d("New message")
         coroutineScope.launch {
-            pushParser.parse(message)?.let {
-                pushHandler.handle(it)
-            } ?: run {
-                Timber.tag(loggerTag.value).w("Invalid received data Json format")
+            val pushData = pushParser.parse(message)
+            if (pushData == null) {
+                Timber.tag(loggerTag.value).w("Invalid data received from UnifiedPush")
+            } else {
+                pushHandler.handle(pushData)
             }
         }
     }

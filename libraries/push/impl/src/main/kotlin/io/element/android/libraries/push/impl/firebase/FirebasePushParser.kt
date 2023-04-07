@@ -20,7 +20,7 @@ import io.element.android.libraries.push.impl.push.PushData
 import javax.inject.Inject
 
 class FirebasePushParser @Inject constructor() {
-    fun parse(message: Map<String, String?>): PushData {
+    fun parse(message: Map<String, String?>): PushData? {
         val pushDataFirebase = PushDataFirebase(
             eventId = message["event_id"],
             roomId = message["room_id"],
