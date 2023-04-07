@@ -26,16 +26,20 @@ import io.element.android.libraries.sessionstorage.api.toUserList
 import timber.log.Timber
 import javax.inject.Inject
 
-private val loggerTag = LoggerTag("FirebaseSetPusher")
+private val loggerTag = LoggerTag("FirebaseNewTokenHandler")
 
-// TODO Rename
-class FirebaseSetPusher @Inject constructor(
+/**
+ * Handle new token receive from Firebase. Will update all the sessions which are using Firebase as a push provider.
+ */
+class FirebaseNewTokenHandler @Inject constructor(
     private val pusherSubscriber: PusherSubscriber,
     private val sessionStore: SessionStore,
     private val userPushStoreFactory: UserPushStoreFactory,
     private val matrixAuthenticationService: MatrixAuthenticationService,
+    private val firebaseStore: FirebaseStore,
 ) {
-    suspend fun onNewFirebaseToken(firebaseToken: String) {
+    suspend fun handle(firebaseToken: String) {
+        firebaseStore.storeFcmToken(firebaseToken)
         // Register the pusher for all the sessions
         sessionStore.getAllSessions().toUserList().forEach { userId ->
             val userDataStore = userPushStoreFactory.create(userId)

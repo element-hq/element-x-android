@@ -30,4 +30,8 @@ class UnifiedPushProvider @Inject constructor() : PushProvider {
     override suspend fun registerWith(matrixClient: MatrixClient, distributorName: String) {
         TODO("Not yet implemented")
     }
+
+    override suspend fun troubleshoot(): Result<Unit> {
+        TODO("Not yet implemented")
+    }
 }

@@ -28,4 +28,9 @@ interface PushProvider {
     val index: Int
     fun getDistributorNames(): List<String>
     suspend fun registerWith(matrixClient: MatrixClient, distributorName: String)
+
+    /**
+     * Attempt to troubleshoot the push provider
+     */
+    suspend fun troubleshoot(): Result<Unit>
 }

@@ -30,10 +30,9 @@ import javax.inject.Inject
 private val loggerTag = LoggerTag("Firebase")
 
 class VectorFirebaseMessagingService : FirebaseMessagingService() {
-    @Inject lateinit var firebaseSetPusher: FirebaseSetPusher
+    @Inject lateinit var firebaseNewTokenHandler: FirebaseNewTokenHandler
     @Inject lateinit var pushParser: FirebasePushParser
     @Inject lateinit var pushHandler: PushHandler
-    @Inject lateinit var googleFcmHelper: GoogleFcmHelper
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
@@ -44,9 +43,8 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         Timber.tag(loggerTag.value).d("New Firebase token")
-        googleFcmHelper.storeFcmToken(token)
         coroutineScope.launch {
-            firebaseSetPusher.onNewFirebaseToken(token)
+            firebaseNewTokenHandler.handle(token)
         }
     }
 
