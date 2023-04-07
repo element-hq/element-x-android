@@ -225,9 +225,6 @@ dependencies {
     implementation(platform(libs.network.okhttp.bom))
     implementation("com.squareup.okhttp3:logging-interceptor")
 
-    implementation(platform(libs.google.firebase.bom))
-    implementation("com.google.firebase:firebase-messaging-ktx")
-
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
 
