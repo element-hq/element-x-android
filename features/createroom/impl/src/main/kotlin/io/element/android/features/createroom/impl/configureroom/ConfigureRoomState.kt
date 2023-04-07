@@ -26,5 +26,6 @@ data class ConfigureRoomState(
     val topic: String,
     val avatarUri: Uri?,
     val privacy: RoomPrivacy?,
+    val isCreateButtonEnabled: Boolean,
     val eventSink: (ConfigureRoomEvents) -> Unit
 )

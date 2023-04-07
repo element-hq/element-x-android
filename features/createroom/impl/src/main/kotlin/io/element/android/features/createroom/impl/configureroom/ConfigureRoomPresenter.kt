@@ -43,6 +43,10 @@ class ConfigureRoomPresenter @AssistedInject constructor(
         var topic by rememberSaveable { mutableStateOf("") }
         var avatarUri by rememberSaveable { mutableStateOf<Uri?>(null) }
         var privacy by rememberSaveable { mutableStateOf<RoomPrivacy?>(null) }
+        val isCreateButtonEnabled by rememberSaveable(roomName, privacy) {
+            val enabled = roomName.isNotEmpty() && privacy != null
+            mutableStateOf(enabled)
+        }
 
         fun handleEvents(event: ConfigureRoomEvents) {
             when (event) {
@@ -50,6 +54,7 @@ class ConfigureRoomPresenter @AssistedInject constructor(
                 is ConfigureRoomEvents.RoomNameChanged -> roomName = event.name
                 is ConfigureRoomEvents.TopicChanged -> topic = event.topic
                 is ConfigureRoomEvents.RoomPrivacyChanged -> privacy = event.privacy
+                ConfigureRoomEvents.CreateRoom -> Unit // TODO
             }
         }
 
@@ -59,6 +64,7 @@ class ConfigureRoomPresenter @AssistedInject constructor(
             topic = topic,
             avatarUri = avatarUri,
             privacy = privacy,
+            isCreateButtonEnabled = isCreateButtonEnabled,
             eventSink = ::handleEvents,
         )
     }
