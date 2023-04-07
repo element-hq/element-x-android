@@ -139,8 +139,6 @@
   <string name="screen_room_member_details_unblock_alert_action">"Deblocați"</string>
   <string name="screen_room_member_details_unblock_alert_description">"La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta."</string>
   <string name="screen_room_member_details_unblock_user">"Deblocați utilizatorul"</string>
-  <string name="screen_start_chat_error_starting_chat">"A apărut o eroare la încercarea începerii conversației"</string>
-  <string name="screen_start_chat_unknown_profile">"Nu am putut valida ID-ul Matrix al acestui utilizator. Este posibil ca invitația să nu fi fost primită."</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Prag de detecție"</string>
   <string name="settings_title_general">"General"</string>

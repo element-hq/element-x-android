@@ -110,7 +110,7 @@ fun CreateRoomRootView(
         }
         is Async.Failure -> {
             RetryDialog(
-                content = stringResource(id = StringR.string.screen_start_chat_error_starting_chat),
+                content = stringResource(id = R.string.screen_start_chat_error_starting_chat),
                 onDismiss = { state.eventSink(CreateRoomRootEvents.CancelStartDM) },
                 onRetry = {
                     state.userListState.selectedUsers.firstOrNull()

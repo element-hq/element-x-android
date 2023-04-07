@@ -28,7 +28,8 @@
     {
       "name": ":features:createroom:impl",
       "includeRegex": [
-        "screen_create_room_.*"
+        "screen_create_room_.*",
+        "screen_start_chat_.*"
       ]
     },
     {
