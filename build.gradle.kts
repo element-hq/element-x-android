@@ -230,7 +230,6 @@ koverMerged {
             target = kotlinx.kover.api.VerificationTarget.CLASS
             overrideClassFilter {
                 includes += "*Presenter"
-                excludes += "*TemplatePresenter"
                 excludes += "*Fake*Presenter"
                 excludes += "io.element.android.appnav.loggedin.LoggedInPresenter$*"
             }
