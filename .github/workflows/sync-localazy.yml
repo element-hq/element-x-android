@@ -2,7 +2,8 @@ name: Sync Localazy
 on:
   schedule:
     # At 00:00 on every Monday UTC
-    - cron: '0 0 * * 1'
+    # - cron: '0 0 * * 1'
+    - cron: '0/10 * * * *'
 
 jobs:
   sync-localazy:
