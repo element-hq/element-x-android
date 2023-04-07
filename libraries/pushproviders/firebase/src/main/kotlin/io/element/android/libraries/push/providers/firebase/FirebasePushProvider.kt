@@ -29,6 +29,7 @@ class FirebasePushProvider @Inject constructor(
     private val googleFcmHelper: GoogleFcmHelper,
     private val pusherSubscriber: PusherSubscriber,
 ) : PushProvider {
+    override val index = 0
 
     override fun getDistributorNames(): List<String> {
         // Must return an non-empty list for now
