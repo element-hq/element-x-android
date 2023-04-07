@@ -28,7 +28,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
@@ -73,6 +73,7 @@ fun ConfigureRoomView(
     onBackPressed: () -> Unit = {},
     onCreatePressed: () -> Unit = {},
 ) {
+    val selectedUsersListState = rememberLazyListState()
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -99,12 +100,10 @@ fun ConfigureRoomView(
                 onTopicChanged = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
             )
             SelectedUsersList(
-                listState = LazyListState(), // FIXME
+                listState = selectedUsersListState,
                 contentPadding = PaddingValues(horizontal = 24.dp),
                 selectedUsers = state.selectedUsers,
-                onUserRemoved = {
-                    // TODO
-                },
+                onUserRemoved = { }, // TODO
             )
             Spacer(Modifier.weight(1f))
             RoomPrivacyOptions(
