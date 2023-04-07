@@ -26,7 +26,8 @@ import javax.inject.Inject
 private val loggerTag = LoggerTag("FirebasePushProvider")
 
 class FirebasePushProvider @Inject constructor(
-    private val googleFcmHelper: GoogleFcmHelper,
+    private val firebaseStore: FirebaseStore,
+    private val firebaseTroubleshooter: FirebaseTroubleshooter,
     private val pusherSubscriber: PusherSubscriber,
 ) : PushProvider {
     override val index = 0
@@ -37,9 +38,13 @@ class FirebasePushProvider @Inject constructor(
     }
 
     override suspend fun registerWith(matrixClient: MatrixClient, distributorName: String) {
-        val pushKey = googleFcmHelper.getFcmToken() ?: return Unit.also {
+        val pushKey = firebaseStore.getFcmToken() ?: return Unit.also {
             Timber.tag(loggerTag.value).w("Unable to register pusher, Firebase token is not known.")
         }
         pusherSubscriber.registerPusher(matrixClient, pushKey, FirebaseConfig.pusher_http_url)
+    }
+
+    override suspend fun troubleshoot(): Result<Unit> {
+        return firebaseTroubleshooter.troubleshoot()
     }
 }
