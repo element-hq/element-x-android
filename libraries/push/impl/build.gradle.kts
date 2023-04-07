@@ -49,7 +49,7 @@ dependencies {
     implementation(projects.services.appnavstate.api)
     implementation(projects.services.toolbox.api)
 
-    api("me.gujun.android:span:1.7") {
+    api(libs.gujun.span) {
         exclude(group = "com.android.support", module = "support-annotations")
     }
 
@@ -57,7 +57,7 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx")
 
     // UnifiedPush
-    api("com.github.UnifiedPush:android-connector:2.1.1")
+    api(libs.unifiedpush)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.mockk)
