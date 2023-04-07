@@ -51,6 +51,7 @@ class ConfigureRoomNode @AssistedInject constructor(
         ConfigureRoomView(
             state = state,
             modifier = modifier,
+            onBackPressed = { navigateUp() } // TODO we should keep in memory the current view state
         )
     }
 }
