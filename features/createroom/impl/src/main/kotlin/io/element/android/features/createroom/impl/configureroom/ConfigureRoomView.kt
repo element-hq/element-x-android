@@ -167,22 +167,12 @@ fun RoomNameWithAvatar(
             onClick = onAvatarClick,
         )
 
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            Text(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = "Room name"
-            )
-
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = roomName,
-                placeholder = { Text("e.g. Product Sprint") },
-                onValueChange = onRoomNameChanged,
-                maxLines = 1,
-            )
-        }
+        LabelledTextField(
+            label = "Room name",
+            value = roomName,
+            placeholder = "e.g. Product Sprint",
+            onValueChange = onRoomNameChanged
+        )
     }
 }
 
@@ -227,22 +217,14 @@ fun RoomTopic(
     modifier: Modifier = Modifier,
     onTopicChanged: (String) -> Unit = {},
 ) {
-    Column(
+    LabelledTextField(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Text(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = "Topic (optional)",
-        )
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = topic,
-            placeholder = { Text("What is this room about?") },
-            onValueChange = onTopicChanged,
-            maxLines = 3,
-        )
-    }
+        label = "Topic (optional)",
+        value = topic,
+        placeholder = "What is this room about?",
+        onValueChange = onTopicChanged,
+        maxLines = 3,
+    )
 }
 
 @Composable
@@ -341,6 +323,34 @@ fun RoomPrivacyOption(
                 .size(48.dp),
             selected = isSelected,
             onClick = null // null recommended for accessibility with screenreaders
+        )
+    }
+}
+
+@Composable
+fun LabelledTextField(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier,
+    placeholder: String = "",
+    maxLines: Int = 1,
+    onValueChange: (String) -> Unit,
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = label
+        )
+
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = value,
+            placeholder = { Text(placeholder) },
+            onValueChange = onValueChange,
+            maxLines = maxLines,
         )
     }
 }
