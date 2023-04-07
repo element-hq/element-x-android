@@ -38,6 +38,7 @@
   <string name="action_save">"Save"</string>
   <string name="action_search">"Search"</string>
   <string name="action_send">"Send"</string>
+  <string name="action_send_message">"Send message"</string>
   <string name="action_share">"Share"</string>
   <string name="action_share_link">"Share link"</string>
   <string name="action_skip">"Skip"</string>

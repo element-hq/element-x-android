@@ -21,11 +21,15 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaResolver
+import io.element.android.libraries.matrix.api.notification.NotificationService
+import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.test.media.FakeMediaResolver
+import io.element.android.libraries.matrix.test.notification.FakeNotificationService
+import io.element.android.libraries.matrix.test.pushers.FakePushersService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -36,7 +40,9 @@ class FakeMatrixClient(
     private val userDisplayName: Result<String> = Result.success(A_USER_NAME),
     private val userAvatarURLString: Result<String> = Result.success(AN_AVATAR_URL),
     override val roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
-    private val sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService()
+    private val sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
+    private val pushersService: FakePushersService = FakePushersService(),
+    private val notificationService: FakeNotificationService = FakeNotificationService(),
 ) : MatrixClient {
 
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
@@ -90,6 +96,10 @@ class FakeMatrixClient(
     }
 
     override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService
+
+    override fun pushersService(): PushersService = pushersService
+
+    override fun notificationService(): NotificationService = notificationService
 
     override fun onSlidingSyncUpdate() {}
 

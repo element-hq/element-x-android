@@ -33,6 +33,7 @@ plugins {
     id("com.google.firebase.appdistribution") version "4.0.0"
     id("org.jetbrains.kotlinx.knit") version "0.4.0"
     id("kotlin-parcelize")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -213,14 +214,19 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
     implementation(libs.appyx.core)
     implementation(libs.androidx.splash)
+    implementation(libs.androidx.core)
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.startup)
+    implementation(libs.androidx.preference)
     implementation(libs.coil)
 
     implementation(platform(libs.network.okhttp.bom))
     implementation("com.squareup.okhttp3:logging-interceptor")
+
+    implementation(platform(libs.google.firebase.bom))
+    implementation("com.google.firebase:firebase-messaging-ktx")
 
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)

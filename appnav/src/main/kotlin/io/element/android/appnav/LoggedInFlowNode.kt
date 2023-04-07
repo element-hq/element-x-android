@@ -36,6 +36,7 @@ import com.bumble.appyx.navmodel.backstack.operation.replace
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
@@ -56,6 +57,7 @@ import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.parcelize.Parcelize
 import kotlin.coroutines.coroutineContext
 
@@ -126,6 +128,9 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
+        object Permanent : NavTarget
+
+        @Parcelize
         object RoomList : NavTarget
 
         @Parcelize
@@ -143,6 +148,9 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
+            NavTarget.Permanent -> {
+                createNode<LoggedInNode>(buildContext)
+            }
             NavTarget.RoomList -> {
                 val callback = object : RoomListEntryPoint.Callback {
                     override fun onRoomClicked(roomId: RoomId) {
@@ -211,11 +219,15 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
-            navModel = backstack,
-            modifier = modifier,
-            // Animate navigation to settings and to a room
-            transitionHandler = rememberDefaultTransitionHandler(),
-        )
+        Box(modifier = modifier) {
+            Children(
+                navModel = backstack,
+                modifier = Modifier,
+                // Animate navigation to settings and to a room
+                transitionHandler = rememberDefaultTransitionHandler(),
+            )
+
+            PermanentChild(navTarget = NavTarget.Permanent)
+        }
     }
 }

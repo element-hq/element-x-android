@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.element.android.libraries.push.impl.pushgateway
 
-package io.element.android.libraries.androidutils.intent
 
-import android.app.PendingIntent
-import android.os.Build
+import retrofit2.http.Body
+import retrofit2.http.POST
 
-object PendingIntentCompat {
-    const val FLAG_IMMUTABLE = PendingIntent.FLAG_IMMUTABLE
-
-    val FLAG_MUTABLE = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        PendingIntent.FLAG_MUTABLE
-    } else {
-        0
-    }
+internal interface PushGatewayAPI {
+    /**
+     * Ask the Push Gateway to send a push to the current device.
+     *
+     * Ref: https://matrix.org/docs/spec/push_gateway/r0.1.1#post-matrix-push-v1-notify
+     */
+    @POST(PushGatewayConfig.URI_PUSH_GATEWAY_PREFIX_PATH + "notify")
+    suspend fun notify(@Body body: PushGatewayNotifyBody): PushGatewayNotifyResponse
 }

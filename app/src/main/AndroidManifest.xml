@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2022 New Vector Ltd
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,9 +30,10 @@
         tools:targetApi="33">
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.ElementX.Splash"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"
             android:exported="true"
+            android:launchMode="singleInstance"
+            android:theme="@style/Theme.ElementX.Splash"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
