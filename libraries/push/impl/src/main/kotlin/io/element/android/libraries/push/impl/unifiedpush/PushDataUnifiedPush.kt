@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.push.impl.unifiedpush
 
-import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.asEventId
 import io.element.android.libraries.matrix.api.core.asRoomId
 import io.element.android.libraries.push.impl.push.PushData
@@ -56,9 +55,13 @@ data class PushDataUnifiedPushCounts(
     @SerialName("unread") val unread: Int? = null
 )
 
-fun PushDataUnifiedPush.toPushData() = PushData(
-    eventId = notification?.eventId?.takeIf { MatrixPatterns.isEventId(it) }?.asEventId(),
-    roomId = notification?.roomId?.takeIf { MatrixPatterns.isRoomId(it) }?.asRoomId(),
-    unread = notification?.counts?.unread,
-    clientSecret = null // TODO EAx check how client secret will be sent through UnifiedPush
-)
+fun PushDataUnifiedPush.toPushData(): PushData? {
+    val safeEventId = notification?.eventId?.asEventId() ?: return null
+    val safeRoomId = notification.roomId?.asRoomId() ?: return null
+    return PushData(
+        eventId = safeEventId,
+        roomId = safeRoomId,
+        unread = notification.counts?.unread,
+        clientSecret = null // TODO EAx check how client secret will be sent through UnifiedPush
+    )
+}

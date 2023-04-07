@@ -31,20 +31,13 @@ class UnifiedPushParserTest {
         clientSecret = null
     )
 
-    private val emptyData = PushData(
-        eventId = null,
-        roomId = null,
-        unread = null,
-        clientSecret = null
-    )
-
     @Test
     fun `test edge cases UnifiedPush`() {
         val pushParser = UnifiedPushParser()
         // Empty string
         assertThat(pushParser.parse("".toByteArray())).isNull()
         // Empty Json
-        assertThat(pushParser.parse("{}".toByteArray())).isEqualTo(emptyData)
+        assertThat(pushParser.parse("{}".toByteArray())).isNull()
         // Bad Json
         assertThat(pushParser.parse("ABC".toByteArray())).isNull()
     }
@@ -58,29 +51,25 @@ class UnifiedPushParserTest {
     @Test
     fun `test empty roomId`() {
         val pushParser = UnifiedPushParser()
-        val expected = validData.copy(roomId = null)
-        assertThat(pushParser.parse(UNIFIED_PUSH_DATA.replace(A_ROOM_ID.value, "").toByteArray())).isEqualTo(expected)
+        assertThat(pushParser.parse(UNIFIED_PUSH_DATA.replace(A_ROOM_ID.value, "").toByteArray())).isNull()
     }
 
     @Test
     fun `test invalid roomId`() {
         val pushParser = UnifiedPushParser()
-        val expected = validData.copy(roomId = null)
-        assertThat(pushParser.parse(UNIFIED_PUSH_DATA.mutate(A_ROOM_ID.value, "aRoomId:domain"))).isEqualTo(expected)
+        assertThat(pushParser.parse(UNIFIED_PUSH_DATA.mutate(A_ROOM_ID.value, "aRoomId:domain"))).isNull()
     }
 
     @Test
     fun `test empty eventId`() {
         val pushParser = UnifiedPushParser()
-        val expected = validData.copy(eventId = null)
-        assertThat(pushParser.parse(UNIFIED_PUSH_DATA.mutate(AN_EVENT_ID.value, ""))).isEqualTo(expected)
+        assertThat(pushParser.parse(UNIFIED_PUSH_DATA.mutate(AN_EVENT_ID.value, ""))).isNull()
     }
 
     @Test
     fun `test invalid eventId`() {
         val pushParser = UnifiedPushParser()
-        val expected = validData.copy(eventId = null)
-        assertThat(pushParser.parse(UNIFIED_PUSH_DATA.mutate(AN_EVENT_ID.value, "anEventId"))).isEqualTo(expected)
+        assertThat(pushParser.parse(UNIFIED_PUSH_DATA.mutate(AN_EVENT_ID.value, "anEventId"))).isNull()
     }
 
     companion object {

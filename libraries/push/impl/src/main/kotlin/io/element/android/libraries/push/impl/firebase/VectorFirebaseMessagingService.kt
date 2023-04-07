@@ -53,8 +53,11 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         Timber.tag(loggerTag.value).d("New Firebase message")
         coroutineScope.launch {
-            pushParser.parse(message.data).let {
-                pushHandler.handle(it)
+            val pushData = pushParser.parse(message.data)
+            if (pushData == null) {
+                Timber.tag(loggerTag.value).w("Invalid data received from Firebase")
+            } else {
+                pushHandler.handle(pushData)
             }
         }
     }

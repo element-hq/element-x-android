@@ -22,14 +22,14 @@ import io.element.android.libraries.matrix.api.core.RoomId
 /**
  * Represent parsed data that the app has received from a Push content.
  *
- * @property eventId The Event ID. If not null, it will not be empty, and will have a valid format.
- * @property roomId The Room ID. If not null, it will not be empty, and will have a valid format.
+ * @property eventId The Event Id.
+ * @property roomId The Room Id.
  * @property unread Number of unread message.
- * @property clientSecret A client secret, used to determine which user should receive the notification.
+ * @property clientSecret data used when the pusher was configured, to be able to determine the session.
  */
 data class PushData(
-        val eventId: EventId?,
-        val roomId: RoomId?,
+        val eventId: EventId,
+        val roomId: RoomId,
         val unread: Int?,
         val clientSecret: String?,
 )
