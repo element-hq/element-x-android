@@ -16,9 +16,14 @@
 
 package io.element.android.libraries.matrix.api.core
 
+import io.element.android.libraries.matrix.api.BuildConfig
 import java.io.Serializable
 
 @JvmInline
 value class EventId(val value: String) : Serializable
 
-fun String.asEventId() = EventId(this)
+fun String.asEventId() = EventId(this).also {
+    if (BuildConfig.DEBUG && !MatrixPatterns.isEventId(this)) {
+        error("`$this` is not a valid event Id")
+    }
+}
