@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.push.impl.firebase
 
-import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.push.impl.push.PushData
 import javax.inject.Inject
 
@@ -25,7 +24,7 @@ class FirebasePushParser @Inject constructor() {
         val pushDataFirebase = PushDataFirebase(
             eventId = message["event_id"],
             roomId = message["room_id"],
-            unread = message["unread"]?.let { tryOrNull { Integer.parseInt(it) } },
+            unread = message["unread"]?.toIntOrNull(),
             clientSecret = message["cs"],
         )
         return pushDataFirebase.toPushData()
