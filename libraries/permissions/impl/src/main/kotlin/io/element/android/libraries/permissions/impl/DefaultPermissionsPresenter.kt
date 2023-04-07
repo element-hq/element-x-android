@@ -79,7 +79,7 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
             if (!result) {
                 // Should show rational true -> denied.
                 if (permissionState?.status?.shouldShowRationale == true) {
-                    Timber.tag("PERMISSION").w("onPermissionResult: reset the store")
+                    Timber.tag("PERMISSION").w("onPermissionResult: setPermissionDenied to true")
                     localCoroutineScope.launch {
                         permissionsStore.setPermissionDenied(permission, true)
                     }
