@@ -20,7 +20,9 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.push.providers.api.PushProvider
 import javax.inject.Inject
 
-class UnifiedPushProvider @Inject constructor(): PushProvider {
+class UnifiedPushProvider @Inject constructor() : PushProvider {
+    override val index = 1
+
     override fun getDistributorNames(): List<String> {
         TODO("Not yet implemented")
     }

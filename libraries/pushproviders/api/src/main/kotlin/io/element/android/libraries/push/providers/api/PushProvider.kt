@@ -22,6 +22,10 @@ import io.element.android.libraries.matrix.api.MatrixClient
  * This is the main API for this module
  */
 interface PushProvider {
+    /**
+     * Allow to sort provider, from lower index to higher index
+     */
+    val index: Int
     fun getDistributorNames(): List<String>
     suspend fun registerWith(matrixClient: MatrixClient, distributorName: String)
 }

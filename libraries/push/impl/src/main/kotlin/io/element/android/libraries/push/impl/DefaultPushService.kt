@@ -35,8 +35,7 @@ class DefaultPushService @Inject constructor(
     }
 
     override fun getAvailablePushProviders(): List<PushProvider> {
-        // TODO Sort by priority?
-        return pushProviders.toList()
+        return pushProviders.sortedBy { it.index }
     }
 
     override suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributorName: String) {
