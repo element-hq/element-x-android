@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.noop.NoopPermissionsPresenter
 import io.element.android.libraries.push.api.PushService
+import io.element.android.libraries.push.providers.api.PushProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -55,7 +56,11 @@ class LoggedInPresenterTest {
                 override fun notificationStyleChanged() {
                 }
 
-                override suspend fun registerFirebasePusher(matrixClient: MatrixClient) {
+                override fun getAvailablePushProviders(): List<PushProvider> {
+                    return emptyList()
+                }
+
+                override suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributorName: String) {
                 }
 
                 override suspend fun testPush() {
