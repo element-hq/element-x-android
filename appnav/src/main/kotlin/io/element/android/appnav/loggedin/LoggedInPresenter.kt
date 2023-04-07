@@ -48,7 +48,8 @@ class LoggedInPresenter @Inject constructor(
             // Ensure pusher is registered
             // TODO Register with Firebase for now
             val pushProvider = pushService.getAvailablePushProviders().firstOrNull() ?: return@LaunchedEffect
-            pushService.registerWith(matrixClient, pushProvider, pushProvider.getDistributorNames().first())
+            val distributor = pushProvider.getDistributorNames().firstOrNull() ?: return@LaunchedEffect
+            pushService.registerWith(matrixClient, pushProvider, distributor)
         }
 
         val permissionsState = postNotificationPermissionsPresenter.present()
