@@ -15,6 +15,11 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.8
+      - name: Setup Localazy
+        run: |
+          curl -sS https://dist.localazy.com/debian/pubkey.gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/localazy.gpg
+          echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/localazy.gpg] https://maven.localazy.com/repository/apt/ stable main" | sudo tee /etc/apt/sources.list.d/localazy.list
+          sudo apt-get update && sudo apt-get install localazy
       - name: Run Localazy script
         run: ./tools/localazy/downloadStrings.sh --all
       - name: Create Pull Request for Strings
