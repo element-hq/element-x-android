@@ -44,6 +44,12 @@
       ]
     },
     {
+      "name": ":libraries:androidutils",
+      "includeRegex": [
+        "error_no_compatible_app_found"
+      ]
+    },
+    {
       "name": ":libraries:push:impl",
       "includeRegex": [
         "push_.*",

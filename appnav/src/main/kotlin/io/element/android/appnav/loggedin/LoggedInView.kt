@@ -38,7 +38,7 @@ fun LoggedInView(
         state = state.permissionsState,
         modifier = modifier,
         openSystemSettings = {
-            activity?.let { openAppSettingsPage(it, "") }
+            activity?.let { openAppSettingsPage(it) }
         }
     )
 }
