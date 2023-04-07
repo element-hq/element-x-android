@@ -43,6 +43,8 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.network)
     implementation(projects.libraries.matrix.api)
+    api(projects.libraries.pushproviders.api)
+    api(projects.libraries.pushstore.api)
     api(projects.libraries.push.api)
 
     implementation(projects.services.analytics.api)
@@ -53,11 +55,9 @@ dependencies {
         exclude(group = "com.android.support", module = "support-annotations")
     }
 
+    // TODO Remove
     implementation(platform(libs.google.firebase.bom))
     implementation("com.google.firebase:firebase-messaging-ktx")
-
-    // UnifiedPush
-    api(libs.unifiedpush)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.mockk)
