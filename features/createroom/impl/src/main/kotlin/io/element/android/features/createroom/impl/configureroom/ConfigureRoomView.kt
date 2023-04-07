@@ -44,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import io.element.android.features.createroom.impl.R
 import io.element.android.features.userlist.api.SelectedUsersList
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -64,6 +66,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TextField
+import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -126,7 +129,7 @@ fun ConfigureRoomToolbar(
         modifier = modifier,
         title = {
             Text(
-                text = "Create a room",
+                text = stringResource(R.string.screen_create_room_title),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
             )
@@ -139,7 +142,7 @@ fun ConfigureRoomToolbar(
                 onClick = onNextPressed,
             ) {
                 Text(
-                    text = "Create",
+                    text = stringResource(StringR.string.action_create),
                     fontSize = 16.sp,
                 )
             }
@@ -166,9 +169,9 @@ fun RoomNameWithAvatar(
         )
 
         LabelledTextField(
-            label = "Room name",
+            label = stringResource(R.string.screen_create_room_room_name_label),
             value = roomName,
-            placeholder = "e.g. Product Sprint",
+            placeholder = stringResource(R.string.screen_create_room_room_name_placeholder),
             onValueChange = onRoomNameChanged
         )
     }
@@ -217,9 +220,9 @@ fun RoomTopic(
 ) {
     LabelledTextField(
         modifier = modifier,
-        label = "Topic (optional)",
+        label = stringResource(R.string.screen_create_room_topic_label),
         value = topic,
-        placeholder = "What is this room about?",
+        placeholder = stringResource(R.string.screen_create_room_topic_placeholder),
         onValueChange = onTopicChanged,
         maxLines = 3,
     )
@@ -244,14 +247,14 @@ fun RoomPrivacyOptions(
             RoomPrivacy.Public -> RoomPrivacyItem(
                 privacy = it,
                 icon = Icons.Outlined.Lock,
-                title = "Private room (invite only)",
-                description = "Messages in this room are encrypted. Encryption can’t be disabled afterwards.",
+                title = stringResource(R.string.screen_create_room_private_option_title),
+                description = stringResource(R.string.screen_create_room_private_option_description),
             )
             RoomPrivacy.Private -> RoomPrivacyItem(
                 privacy = it,
                 icon = Icons.Outlined.Public,
-                title = "Public room (anyone)",
-                description = "Messages are not encrypted and anyone can read them. You can enable encryption at a later date.",
+                title = stringResource(R.string.screen_create_room_public_option_title),
+                description = stringResource(R.string.screen_create_room_public_option_description),
             )
         }
     }
