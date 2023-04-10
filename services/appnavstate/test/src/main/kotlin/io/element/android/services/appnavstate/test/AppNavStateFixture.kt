@@ -16,7 +16,11 @@
 
 package io.element.android.services.appnavstate.test
 
-import io.element.android.libraries.matrix.api.core.*
+import io.element.android.libraries.matrix.api.core.MAIN_SPACE
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.SpaceId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.services.appnavstate.api.AppNavigationState
 
 fun anAppNavigationState(

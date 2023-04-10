@@ -26,6 +26,4 @@ interface GuardServiceStarter {
 }
 
 @ContributesBinding(AppScope::class)
-class NoopGuardServiceStarter @Inject constructor() : GuardServiceStarter {
-
-}
+class NoopGuardServiceStarter @Inject constructor() : GuardServiceStarter
