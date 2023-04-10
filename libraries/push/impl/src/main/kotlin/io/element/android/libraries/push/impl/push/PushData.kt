@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
  * @property eventId The Event ID. If not null, it will not be empty, and will have a valid format.
  * @property roomId The Room ID. If not null, it will not be empty, and will have a valid format.
  * @property unread Number of unread message.
+ * @property clientSecret A client secret, used to determine which user should receive the notification.
  */
 data class PushData(
         val eventId: EventId?,

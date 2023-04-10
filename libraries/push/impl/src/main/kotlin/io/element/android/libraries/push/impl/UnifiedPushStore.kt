@@ -24,7 +24,7 @@ import io.element.android.libraries.di.DefaultPreferences
 import javax.inject.Inject
 
 /**
- * TODO EAx Store in BDD (for multisession)
+ * TODO EAx Store in BDD (for multisession).
  */
 class UnifiedPushStore @Inject constructor(
     @ApplicationContext val context: Context,

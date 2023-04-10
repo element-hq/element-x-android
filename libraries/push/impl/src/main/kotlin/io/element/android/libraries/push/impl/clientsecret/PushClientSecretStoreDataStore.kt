@@ -54,7 +54,7 @@ class PushClientSecretStoreDataStore @Inject constructor(
 
     override suspend fun getUserIdFromSecret(clientSecret: String): SessionId? {
         val keyValues = context.dataStore.data.first().asMap()
-        val matchingKey = keyValues.keys.firstOrNull {
+        val matchingKey = keyValues.keys.find {
             keyValues[it] == clientSecret
         }
         return matchingKey?.name?.asSessionId()

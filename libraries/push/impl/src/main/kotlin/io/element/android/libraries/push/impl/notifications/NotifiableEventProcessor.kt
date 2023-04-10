@@ -16,7 +16,11 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import io.element.android.libraries.push.impl.notifications.model.*
+import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
+import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.model.shouldIgnoreMessageEventInRoom
 import io.element.android.services.appnavstate.api.AppNavigationState
 import timber.log.Timber
 import javax.inject.Inject
