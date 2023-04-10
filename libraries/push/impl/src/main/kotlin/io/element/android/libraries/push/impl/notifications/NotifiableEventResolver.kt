@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.element.android.libraries.push.impl.notifications
 
 import io.element.android.libraries.core.log.logger.LoggerTag
@@ -104,7 +105,7 @@ private fun NotificationData.asNotifiableEvent(userId: SessionId, roomId: RoomId
 }
 
 /**
- * TODO This is a temporary method for EAx
+ * TODO This is a temporary method for EAx.
  */
 private fun NotificationData?.orDefault(roomId: RoomId, eventId: EventId): NotificationData {
     return this ?: NotificationData(
