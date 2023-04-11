@@ -74,13 +74,13 @@ fun RoomMemberDetailsView(
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
         ) {
-            HeaderSection(
+            RoomMemberHeaderSection(
                 avatarUrl = state.avatarUrl,
                 userId = state.userId,
                 userName = state.userName,
             )
 
-            ShareSection(onShareUser = onShareUser)
+            RoomMemberShareSection(onShareUser = onShareUser)
 
             SendMessageSection(onSendMessage = {
                 // TODO implement send DM
@@ -94,7 +94,7 @@ fun RoomMemberDetailsView(
 }
 
 @Composable
-internal fun HeaderSection(
+internal fun RoomMemberHeaderSection(
     avatarUrl: String?,
     userId: String,
     userName: String?,
@@ -107,10 +107,10 @@ internal fun HeaderSection(
                 modifier = Modifier.fillMaxSize()
             )
         }
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(24.dp))
         if (userName != null) {
             Text(userName, style = ElementTextStyles.Bold.title1)
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(6.dp))
         }
         Text(userId, style = ElementTextStyles.Regular.body, color = MaterialTheme.colorScheme.secondary)
         Spacer(Modifier.height(32.dp))
@@ -118,7 +118,7 @@ internal fun HeaderSection(
 }
 
 @Composable
-internal fun ShareSection(onShareUser: () -> Unit, modifier: Modifier = Modifier) {
+internal fun RoomMemberShareSection(onShareUser: () -> Unit, modifier: Modifier = Modifier) {
     PreferenceCategory(modifier = modifier) {
         PreferenceText(
             title = stringResource(StringR.string.action_share),

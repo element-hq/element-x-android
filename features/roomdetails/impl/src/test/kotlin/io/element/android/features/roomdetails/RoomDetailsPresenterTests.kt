@@ -50,7 +50,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - initial state is created from room info`() = runTest {
         val room = aMatrixRoom()
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver)
+        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -69,7 +69,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - room member count is calculated asynchronously`() = runTest {
         val room = aMatrixRoom()
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver)
+        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -84,7 +84,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - initial state with no room name`() = runTest {
         val room = aMatrixRoom(name = null)
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver)
+        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -100,7 +100,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom(name = null).apply {
             givenFetchMemberResult(Result.failure(Throwable()))
         }
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver)
+        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -114,7 +114,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - Leave with confirmation on private room shows a specific warning`() = runTest {
         val room = aMatrixRoom(isPublic = false)
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver)
+        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -131,7 +131,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - Leave with confirmation on empty room shows a specific warning`() = runTest {
         val room = aMatrixRoom(members = listOf(aRoomMember()))
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver)
+        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -148,7 +148,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - Leave with confirmation shows a generic warning`() = runTest {
         val room = aMatrixRoom()
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver)
+        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -165,7 +165,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - Leave without confirmation leaves the room`() = runTest {
         val room = aMatrixRoom()
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver)
+        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -189,7 +189,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom().apply {
             givenLeaveRoomError(Throwable())
         }
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver)
+        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {

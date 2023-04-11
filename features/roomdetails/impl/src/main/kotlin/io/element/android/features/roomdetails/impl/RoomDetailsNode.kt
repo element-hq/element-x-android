@@ -29,8 +29,11 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.RoomMember
+import timber.log.Timber
 import io.element.android.libraries.ui.strings.R as StringR
 
 @ContributesNode(RoomScope::class)
@@ -62,6 +65,21 @@ class RoomDetailsNode @AssistedInject constructor(
         }
     }
 
+    private fun onShareMember(context: Context, member: RoomMember) {
+        val permalinkResult = PermalinkBuilder.permalinkForUser(UserId(member.userId))
+        permalinkResult.onSuccess { permalink ->
+            startSharePlainTextIntent(
+                context = context,
+                activityResultLauncher = null,
+                chooserTitle = context.getString(R.string.screen_room_details_share_room_title),
+                text = permalink,
+                noActivityFoundMessage = context.getString(io.element.android.libraries.ui.strings.R.string.error_no_compatible_app_found)
+            )
+        }.onFailure {
+            Timber.e(it)
+        }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val context = LocalContext.current
@@ -71,6 +89,7 @@ class RoomDetailsNode @AssistedInject constructor(
             modifier = modifier,
             goBack = { navigateUp() },
             onShareRoom = { onShareRoom(context) },
+            onShareMember = { onShareMember(context, it) },
             openRoomMemberList = ::openRoomMemberList,
         )
     }

@@ -73,6 +73,14 @@ class RustMatrixRoom(
         return cachedMembers.firstOrNull { it.userId == userId.value }
     }
 
+    override fun getDmMember(currentUserId: UserId): RoomMember? {
+        return if (cachedMembers.size == 2 && isDirect && isEncrypted) {
+            cachedMembers.find { it.userId != currentUserId.value }
+        } else {
+            null
+        }
+    }
+
     override fun syncUpdateFlow(): Flow<Long> {
         return slidingSyncUpdateFlow
             .filter {
@@ -136,6 +144,9 @@ class RustMatrixRoom(
 
     override val isPublic: Boolean
         get() = innerRoom.isPublic()
+
+    override val isDirect: Boolean
+        get() = innerRoom.isDirect()
 
     override suspend fun fetchMembers(): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {

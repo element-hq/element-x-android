@@ -31,8 +31,11 @@ import org.junit.Test
 class RoomMemberDetailsPresenterTests {
 
     @Test
-    fun `present - returns the room member's data`() = runTest {
-        val room = aMatrixRoom()
+    fun `present - returns the room member's data, then updates it if needed`() = runTest {
+        val room = aMatrixRoom().apply {
+            givenUserDisplayNameResult(Result.success("A custom name"))
+            givenUserAvatarUrlResult(Result.success("A custom avatar"))
+        }
         val roomMember = aRoomMember(displayName = "Alice")
         val presenter = RoomMemberDetailsPresenter(room, roomMember)
         moleculeFlow(RecompositionClock.Immediate) {
@@ -43,6 +46,48 @@ class RoomMemberDetailsPresenterTests {
             Truth.assertThat(initialState.userName).isEqualTo(roomMember.displayName)
             Truth.assertThat(initialState.avatarUrl).isEqualTo(roomMember.avatarUrl)
             Truth.assertThat(initialState.isBlocked).isEqualTo(roomMember.isIgnored)
+
+            val loadedState = awaitItem()
+            Truth.assertThat(loadedState.userName).isEqualTo("A custom name")
+            Truth.assertThat(loadedState.avatarUrl).isEqualTo("A custom avatar")
+        }
+    }
+
+    @Test
+    fun `present - will recover when retrieving room member details fails`() = runTest {
+        val room = aMatrixRoom().apply {
+            givenUserDisplayNameResult(Result.failure(Throwable()))
+            givenUserAvatarUrlResult(Result.failure(Throwable()))
+        }
+        val roomMember = aRoomMember(displayName = "Alice")
+        val presenter = RoomMemberDetailsPresenter(room, roomMember)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            Truth.assertThat(initialState.userName).isEqualTo(roomMember.displayName)
+            Truth.assertThat(initialState.avatarUrl).isEqualTo(roomMember.avatarUrl)
+
+            ensureAllEventsConsumed()
+        }
+    }
+
+    @Test
+    fun `present - will fallback to original data if the updated data is null`() = runTest {
+        val room = aMatrixRoom().apply {
+            givenUserDisplayNameResult(Result.success(null))
+            givenUserAvatarUrlResult(Result.success(null))
+        }
+        val roomMember = aRoomMember(displayName = "Alice")
+        val presenter = RoomMemberDetailsPresenter(room, roomMember)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            Truth.assertThat(initialState.userName).isEqualTo(roomMember.displayName)
+            Truth.assertThat(initialState.avatarUrl).isEqualTo(roomMember.avatarUrl)
+
+            ensureAllEventsConsumed()
         }
     }
 }

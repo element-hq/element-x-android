@@ -42,6 +42,9 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.roomdetails.impl.members.details.BlockSection
+import io.element.android.features.roomdetails.impl.members.details.RoomMemberHeaderSection
+import io.element.android.features.roomdetails.impl.members.details.RoomMemberShareSection
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.isLoading
 import io.element.android.libraries.designsystem.ElementTextStyles
@@ -59,6 +62,7 @@ import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,6 +71,7 @@ fun RoomDetailsView(
     state: RoomDetailsState,
     goBack: () -> Unit,
     onShareRoom: () -> Unit,
+    onShareMember: (RoomMember) -> Unit,
     openRoomMemberList: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -80,33 +85,50 @@ fun RoomDetailsView(
             .padding(padding)
             .verticalScroll(rememberScrollState())
         ) {
-            HeaderSection(
-                avatarUrl = state.roomAvatarUrl,
-                roomId = state.roomId,
-                roomName = state.roomName,
-                roomAlias = state.roomAlias
-            )
-
-            ShareSection(onShareUser = onShareRoom)
+            if (state.dmMember == null) {
+                RoomHeaderSection(
+                    avatarUrl = state.roomAvatarUrl,
+                    roomId = state.roomId,
+                    roomName = state.roomName,
+                    roomAlias = state.roomAlias
+                )
+                RoomShareSection(onShareUser = onShareRoom)
+            } else {
+                RoomMemberHeaderSection(
+                    avatarUrl = state.roomAvatarUrl ?: state.dmMember.avatarUrl,
+                    userId = state.dmMember.userId,
+                    userName = state.roomName
+                )
+                RoomMemberShareSection(onShareUser = { onShareMember(state.dmMember) })
+            }
 
             if (state.roomTopic != null) {
                 TopicSection(roomTopic = state.roomTopic)
             }
 
-            val memberCount = (state.memberCount as? Async.Success<Int>)?.state
-            MembersSection(
-                memberCount = memberCount,
-                isLoading = state.memberCount.isLoading(),
-                openRoomMemberList = openRoomMemberList
-            )
+            if (state.dmMember == null) {
+                val memberCount = (state.memberCount as? Async.Success<Int>)?.state
+                MembersSection(
+                    memberCount = memberCount,
+                    isLoading = state.memberCount.isLoading(),
+                    openRoomMemberList = openRoomMemberList
+                )
+            }
 
             if (state.isEncrypted) {
                 SecuritySection()
             }
 
-            OtherActionsSection(onLeaveRoom = {
-                state.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
-            })
+            if (state.dmMember == null) {
+                OtherActionsSection(onLeaveRoom = {
+                    state.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
+                })
+            } else {
+                BlockSection(
+                    isBlocked = state.dmMember.isIgnored,
+                    onToggleBlock = { /*TODO*/ }
+                )
+            }
 
             if (state.displayLeaveRoomWarning != null) {
                 ConfirmLeaveRoomDialog(
@@ -127,7 +149,7 @@ fun RoomDetailsView(
 }
 
 @Composable
-internal fun ShareSection(onShareUser: () -> Unit, modifier: Modifier = Modifier) {
+internal fun RoomShareSection(onShareUser: () -> Unit, modifier: Modifier = Modifier) {
     PreferenceCategory(modifier = modifier) {
         PreferenceText(
             title = stringResource(R.string.screen_room_details_share_room_title),
@@ -138,7 +160,7 @@ internal fun ShareSection(onShareUser: () -> Unit, modifier: Modifier = Modifier
 }
 
 @Composable
-internal fun HeaderSection(
+internal fun RoomHeaderSection(
     avatarUrl: String?,
     roomId: String,
     roomName: String,
@@ -152,10 +174,10 @@ internal fun HeaderSection(
                 modifier = Modifier.fillMaxSize()
             )
         }
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(24.dp))
         Text(roomName, style = ElementTextStyles.Bold.title1)
         if (roomAlias != null) {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(6.dp))
             Text(roomAlias, style = ElementTextStyles.Regular.body, color = MaterialTheme.colorScheme.secondary)
         }
         Spacer(Modifier.height(32.dp))
@@ -256,6 +278,7 @@ private fun ContentToPreview(state: RoomDetailsState) {
         state = state,
         goBack = {},
         onShareRoom = {},
+        onShareMember = {},
         openRoomMemberList = {},
     )
 }
