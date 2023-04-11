@@ -23,7 +23,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
  */
 interface PushProvider {
     /**
-     * Allow to sort provider, from lower index to higher index
+     * Allow to sort providers, from lower index to higher index.
      */
     val index: Int
 
@@ -35,17 +35,17 @@ interface PushProvider {
     fun getDistributors(): List<Distributor>
 
     /**
-     * Register the pusher to the homeserver
+     * Register the pusher to the homeserver.
      */
     suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor)
 
     /**
-     * Unregister the pusher
+     * Unregister the pusher.
      */
     suspend fun unregister(matrixClient: MatrixClient)
 
     /**
-     * Attempt to troubleshoot the push provider
+     * Attempt to troubleshoot the push provider.
      */
     suspend fun troubleshoot(): Result<Unit>
 }

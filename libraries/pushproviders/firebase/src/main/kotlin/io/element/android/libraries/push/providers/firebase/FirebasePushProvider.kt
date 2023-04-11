@@ -21,7 +21,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.push.providers.api.Distributor
 import io.element.android.libraries.push.providers.api.PushProvider
 import io.element.android.libraries.push.providers.api.PusherSubscriber
-import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -31,7 +30,6 @@ class FirebasePushProvider @Inject constructor(
     private val firebaseStore: FirebaseStore,
     private val firebaseTroubleshooter: FirebaseTroubleshooter,
     private val pusherSubscriber: PusherSubscriber,
-    private val pushClientSecret: PushClientSecret,
 ) : PushProvider {
     override val index = FirebaseConfig.index
     override val name = FirebaseConfig.name
