@@ -20,12 +20,9 @@ package io.element.android.libraries.pushstore.api
  * Store data related to push about a user.
  */
 interface UserPushStore {
-    /**
-     * [NOTIFICATION_METHOD_FIREBASE] or [NOTIFICATION_METHOD_UNIFIEDPUSH].
-     */
-    suspend fun getNotificationMethod(): String?
+    suspend fun getPushProviderName(): String?
 
-    suspend fun setNotificationMethod(value: String)
+    suspend fun setPushProviderName(value: String)
 
     suspend fun getCurrentRegisteredPushKey(): String?
 

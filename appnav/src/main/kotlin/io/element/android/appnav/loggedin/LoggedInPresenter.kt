@@ -46,9 +46,9 @@ class LoggedInPresenter @Inject constructor(
     override fun present(): LoggedInState {
         LaunchedEffect(Unit) {
             // Ensure pusher is registered
-            // TODO Register with Firebase for now
-            val pushProvider = pushService.getAvailablePushProviders().firstOrNull() ?: return@LaunchedEffect
-            val distributor = pushProvider.getDistributorNames().firstOrNull() ?: return@LaunchedEffect
+            // TODO Manually select push provider for now
+            val pushProvider = pushService.getAvailablePushProviders().find { it.name == "UnifiedPush" } ?: return@LaunchedEffect
+            val distributor = pushProvider.getDistributors().first()
             pushService.registerWith(matrixClient, pushProvider, distributor)
         }
 

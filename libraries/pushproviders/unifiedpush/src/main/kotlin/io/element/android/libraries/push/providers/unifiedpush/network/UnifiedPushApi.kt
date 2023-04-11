@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.providers.api
+package io.element.android.libraries.push.providers.unifiedpush.network
 
-import io.element.android.libraries.matrix.api.MatrixClient
+import retrofit2.http.GET
 
-interface PusherSubscriber {
-    suspend fun registerPusher(matrixClient: MatrixClient, pushKey: String, gateway: String)
-    suspend fun unregisterPusher(matrixClient: MatrixClient, pushKey: String, gateway: String)
+interface UnifiedPushApi {
+    @GET("_matrix/push/v1/notify")
+    suspend fun discover(): DiscoveryResponse
 }

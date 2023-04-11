@@ -16,21 +16,26 @@
 
 package io.element.android.libraries.push.providers.unifiedpush
 
-/*
+import android.content.Context
+import io.element.android.libraries.di.ApplicationContext
+import org.unifiedpush.android.connector.UnifiedPush
+import timber.log.Timber
+import javax.inject.Inject
+
 class UnregisterUnifiedPushUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val pushDataStore: PushDataStore,
+    //private val pushDataStore: PushDataStore,
     private val unifiedPushStore: UnifiedPushStore,
     private val unifiedPushHelper: UnifiedPushHelper,
 ) {
 
-    suspend fun execute(pushersManager: PushersManager?) {
-        val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
-        pushDataStore.setFdroidSyncBackgroundMode(mode)
+    suspend fun execute(/*pushersManager: PushersManager?*/) {
+        //val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
+        //pushDataStore.setFdroidSyncBackgroundMode(mode)
         try {
             unifiedPushHelper.getEndpointOrToken()?.let {
                 Timber.d("Removing $it")
-                pushersManager?.unregisterPusher(it)
+                // TODO pushersManager?.unregisterPusher(it)
             }
         } catch (e: Exception) {
             Timber.d(e, "Probably unregistering a non existing pusher")
@@ -40,4 +45,3 @@ class UnregisterUnifiedPushUseCase @Inject constructor(
         UnifiedPush.unregisterApp(context)
     }
 }
- */

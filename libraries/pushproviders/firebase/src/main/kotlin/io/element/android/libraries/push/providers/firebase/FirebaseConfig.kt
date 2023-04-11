@@ -23,5 +23,6 @@ object FirebaseConfig {
      */
     const val pusher_http_url: String = "https://matrix.org/_matrix/push/v1/notify"
 
-    const val internalName = "NOTIFICATION_METHOD_FIREBASE"
+    const val index = 0
+    const val name = "Firebase"
 }

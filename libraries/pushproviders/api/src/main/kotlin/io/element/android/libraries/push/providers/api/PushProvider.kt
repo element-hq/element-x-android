@@ -26,8 +26,23 @@ interface PushProvider {
      * Allow to sort provider, from lower index to higher index
      */
     val index: Int
-    fun getDistributorNames(): List<String>
-    suspend fun registerWith(matrixClient: MatrixClient, distributorName: String)
+
+    /**
+     * User friendly name.
+     */
+    val name: String
+
+    fun getDistributors(): List<Distributor>
+
+    /**
+     * Register the pusher to the homeserver
+     */
+    suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor, clientSecret: String)
+
+    /**
+     * Unregister the pusher
+     */
+    suspend fun unregister(matrixClient: MatrixClient)
 
     /**
      * Attempt to troubleshoot the push provider

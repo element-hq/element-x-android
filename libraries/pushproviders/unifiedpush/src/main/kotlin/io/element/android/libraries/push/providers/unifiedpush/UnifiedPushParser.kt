@@ -25,7 +25,7 @@ import javax.inject.Inject
 class UnifiedPushParser @Inject constructor() {
     private val json by lazy { Json { ignoreUnknownKeys = true } }
 
-    fun parse(message: ByteArray): PushData? {
-        return tryOrNull { json.decodeFromString<PushDataUnifiedPush>(String(message)) }?.toPushData()
+    fun parse(message: ByteArray, clientSecret: String): PushData? {
+        return tryOrNull { json.decodeFromString<PushDataUnifiedPush>(String(message)) }?.toPushData(clientSecret)
     }
 }

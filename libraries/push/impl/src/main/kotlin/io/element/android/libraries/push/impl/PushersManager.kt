@@ -148,9 +148,8 @@ class PushersManager @Inject constructor(
         // currentSession.pushersService().removeEmailPusher(email)
     }
 
-    suspend fun unregisterPusher(pushKey: String) {
-        // val currentSession = activeSessionHolder.getSafeActiveSession() ?: return
-        // currentSession.pushersService().removeHttpPusher(pushKey, PushConfig.pusher_app_id)
+    override suspend fun unregisterPusher(matrixClient: MatrixClient, pushKey: String, gateway: String) {
+        matrixClient.pushersService().unsetHttpPusher()
     }
 
     companion object {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.providers.firebase
+package io.element.android.libraries.push.providers.unifiedpush
 
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -26,29 +26,27 @@ import io.element.android.libraries.sessionstorage.api.toUserList
 import timber.log.Timber
 import javax.inject.Inject
 
-private val loggerTag = LoggerTag("FirebaseNewTokenHandler")
+private val loggerTag = LoggerTag("UnifiedPushNewGatewayHandler")
 
 /**
- * Handle new token receive from Firebase. Will update all the sessions which are using Firebase as a push provider.
+ * Handle new endpoint received from UnifiedPush. Will update all the sessions which are using UnifiedPush as a push provider.
  */
-class FirebaseNewTokenHandler @Inject constructor(
+class UnifiedPushNewGatewayHandler @Inject constructor(
     private val pusherSubscriber: PusherSubscriber,
     private val sessionStore: SessionStore,
     private val userPushStoreFactory: UserPushStoreFactory,
     private val matrixAuthenticationService: MatrixAuthenticationService,
-    private val firebaseStore: FirebaseStore,
 ) {
-    suspend fun handle(firebaseToken: String) {
-        firebaseStore.storeFcmToken(firebaseToken)
-        // Register the pusher for all the sessions
+    suspend fun handle(endpoint: String, pushGateway: String) {
+        // Register the pusher for all the sessions which are using UnifiedPush.
         sessionStore.getAllSessions().toUserList().forEach { userId ->
             val userDataStore = userPushStoreFactory.create(userId)
-            if (userDataStore.getPushProviderName() == FirebaseConfig.name) {
+            if (userDataStore.getPushProviderName() == UnifiedPushConfig.name) {
                 matrixAuthenticationService.restoreSession(SessionId(userId)).getOrNull()?.use { client ->
-                    pusherSubscriber.registerPusher(client, firebaseToken, FirebaseConfig.pusher_http_url)
+                    pusherSubscriber.registerPusher(client, endpoint, pushGateway)
                 }
             } else {
-                Timber.tag(loggerTag.value).d("This session is not using Firebase pusher")
+                Timber.tag(loggerTag.value).d("This session is not using UnifiedPush pusher")
             }
         }
     }

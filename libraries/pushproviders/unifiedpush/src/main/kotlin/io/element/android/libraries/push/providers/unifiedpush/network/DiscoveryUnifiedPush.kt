@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.providers.api
+package io.element.android.libraries.push.providers.unifiedpush.network
 
-import io.element.android.libraries.matrix.api.MatrixClient
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-interface PusherSubscriber {
-    suspend fun registerPusher(matrixClient: MatrixClient, pushKey: String, gateway: String)
-    suspend fun unregisterPusher(matrixClient: MatrixClient, pushKey: String, gateway: String)
-}
+@Serializable
+data class DiscoveryUnifiedPush(
+    @SerialName("gateway") val gateway: String = ""
+)

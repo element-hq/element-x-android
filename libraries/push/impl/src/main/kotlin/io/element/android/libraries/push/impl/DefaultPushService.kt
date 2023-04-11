@@ -20,14 +20,19 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.push.api.PushService
+import io.element.android.libraries.push.impl.clientsecret.PushClientSecret
 import io.element.android.libraries.push.impl.notifications.NotificationDrawerManager
+import io.element.android.libraries.push.providers.api.Distributor
 import io.element.android.libraries.push.providers.api.PushProvider
+import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultPushService @Inject constructor(
     private val notificationDrawerManager: NotificationDrawerManager,
     private val pushersManager: PushersManager,
+    private val pushClientSecret: PushClientSecret,
+    private val userPushStoreFactory: UserPushStoreFactory,
     private val pushProviders: Set<@JvmSuppressWildcards PushProvider>,
 ) : PushService {
     override fun notificationStyleChanged() {
@@ -38,10 +43,22 @@ class DefaultPushService @Inject constructor(
         return pushProviders.sortedBy { it.index }
     }
 
-    override suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributorName: String) {
-        // TODO Get current push provider, compare with provided one, then unregister and register if different, and store change
+    /**
+     * Get current push provider, compare with provided one, then unregister and register if different, and store change
+     */
+    override suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributor: Distributor) {
+        val userPushStore = userPushStoreFactory.create(matrixClient.sessionId.value)
+        val currentPushProviderName = userPushStore.getPushProviderName()
+        if (currentPushProviderName != pushProvider.name) {
+            // Unregister previous one if any
+            pushProviders.find { it.name == currentPushProviderName }?.unregister(matrixClient)
+        }
 
-        pushProvider.registerWith(matrixClient, distributorName)
+        val clientSecret = pushClientSecret.getSecretForUser(matrixClient.sessionId)
+        pushProvider.registerWith(matrixClient, distributor, clientSecret)
+
+        // Store new value
+        userPushStore.setPushProviderName(pushProvider.name)
     }
 
     override suspend fun testPush() {

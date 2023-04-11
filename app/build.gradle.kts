@@ -33,6 +33,7 @@ plugins {
     id("com.google.firebase.appdistribution") version "4.0.0"
     id("org.jetbrains.kotlinx.knit") version "0.4.0"
     id("kotlin-parcelize")
+    // TODO Move the plugin to the firebase module?
     id("com.google.gms.google-services")
 }
 

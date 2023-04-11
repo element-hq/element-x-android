@@ -33,16 +33,16 @@ class UserPushStoreDataStore(
     userId: String,
 ) : UserPushStore {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "push_store_$userId")
-    private val notificationMethod = stringPreferencesKey("notificationMethod")
+    private val pushProviderName = stringPreferencesKey("pushProviderName")
     private val currentPushKey = stringPreferencesKey("currentPushKey")
 
-    override suspend fun getNotificationMethod(): String? {
-        return context.dataStore.data.first()[notificationMethod]
+    override suspend fun getPushProviderName(): String? {
+        return context.dataStore.data.first()[pushProviderName]
     }
 
-    override suspend fun setNotificationMethod(value: String) {
+    override suspend fun setPushProviderName(value: String) {
         context.dataStore.edit {
-            it[notificationMethod] = value
+            it[pushProviderName] = value
         }
     }
 
