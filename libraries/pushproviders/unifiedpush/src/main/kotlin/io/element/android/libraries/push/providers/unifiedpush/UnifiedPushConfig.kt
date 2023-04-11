@@ -23,5 +23,6 @@ object UnifiedPushConfig {
      */
     const val default_push_gateway_http_url: String = "https://matrix.gateway.unifiedpush.org/_matrix/push/v1/notify"
 
-    const val internalName = "NOTIFICATION_METHOD_UNIFIEDPUSH"
+    const val index = 1
+    const val name = "UnifiedPush"
 }

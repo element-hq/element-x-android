@@ -40,7 +40,7 @@ dependencies {
     implementation(projects.libraries.pushproviders.api)
 
     implementation(platform(libs.google.firebase.bom))
-    implementation("com.google.firebase:firebase-messaging-ktx")
+    api("com.google.firebase:firebase-messaging-ktx")
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)

@@ -17,6 +17,7 @@
 package io.element.android.libraries.push.api
 
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.push.providers.api.Distributor
 import io.element.android.libraries.push.providers.api.PushProvider
 
 interface PushService {
@@ -30,7 +31,7 @@ interface PushService {
      *
      * The method has effect only if the [PushProvider] is different than the current one.
      */
-    suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributorName: String)
+    suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributor: Distributor)
 
     // TODO Move away
     suspend fun testPush()

@@ -79,7 +79,7 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     // Comment to not include firebase in the project
     implementation(project(":libraries:pushproviders:firebase"))
     // Comment to not include unified push in the project
-    // implementation(project(":libraries:pushproviders:unifiedpush"))
+    implementation(project(":libraries:pushproviders:unifiedpush"))
     implementation(project(":libraries:pushstore:impl"))
     implementation(project(":libraries:architecture"))
     implementation(project(":libraries:dateformatter:impl"))

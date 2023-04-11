@@ -18,45 +18,56 @@ package io.element.android.libraries.push.providers.unifiedpush
 
 import android.content.Context
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.push.providers.api.Distributor
+import io.element.android.libraries.push.providers.api.PusherSubscriber
 import org.unifiedpush.android.connector.UnifiedPush
 import javax.inject.Inject
 
 class RegisterUnifiedPushUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val pusherSubscriber: PusherSubscriber,
+    private val unifiedPushStore: UnifiedPushStore,
 ) {
 
     sealed interface RegisterUnifiedPushResult {
         object Success : RegisterUnifiedPushResult
         object NeedToAskUserForDistributor : RegisterUnifiedPushResult
+        object Error : RegisterUnifiedPushResult
     }
 
-    fun execute(distributor: String = ""): RegisterUnifiedPushResult {
-        if (distributor.isNotEmpty()) {
-            saveAndRegisterApp(distributor)
+    suspend fun execute(matrixClient: MatrixClient, distributor: Distributor, clientSecret: String): RegisterUnifiedPushResult {
+        val distributorValue = distributor.value
+        if (distributorValue.isNotEmpty()) {
+            saveAndRegisterApp(distributorValue, clientSecret)
+            val endpoint = unifiedPushStore.getEndpoint() ?: return RegisterUnifiedPushResult.Error
+            val gateway = unifiedPushStore.getPushGateway() ?: return RegisterUnifiedPushResult.Error
+            pusherSubscriber.registerPusher(matrixClient, endpoint, gateway)
             return RegisterUnifiedPushResult.Success
         }
 
+        // TODO Below should never happen?
         if (UnifiedPush.getDistributor(context).isNotEmpty()) {
-            registerApp()
+            registerApp(clientSecret)
             return RegisterUnifiedPushResult.Success
         }
 
         val distributors = UnifiedPush.getDistributors(context)
 
         return if (distributors.size == 1) {
-            saveAndRegisterApp(distributors.first())
+            saveAndRegisterApp(distributors.first(), clientSecret)
             RegisterUnifiedPushResult.Success
         } else {
             RegisterUnifiedPushResult.NeedToAskUserForDistributor
         }
     }
 
-    private fun saveAndRegisterApp(distributor: String) {
+    private fun saveAndRegisterApp(distributor: String, clientSecret: String) {
         UnifiedPush.saveDistributor(context, distributor)
-        registerApp()
+        registerApp(clientSecret)
     }
 
-    private fun registerApp() {
-        UnifiedPush.registerApp(context)
+    private fun registerApp(clientSecret: String) {
+        UnifiedPush.registerApp(context = context, instance = clientSecret)
     }
 }

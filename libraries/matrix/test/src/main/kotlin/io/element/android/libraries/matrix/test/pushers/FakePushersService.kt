@@ -21,4 +21,5 @@ import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
 
 class FakePushersService : PushersService {
     override suspend fun setHttpPusher(setHttpPusherData: SetHttpPusherData) = Result.success(Unit)
+    override suspend fun unsetHttpPusher(): Result<Unit> = Result.success(Unit)
 }

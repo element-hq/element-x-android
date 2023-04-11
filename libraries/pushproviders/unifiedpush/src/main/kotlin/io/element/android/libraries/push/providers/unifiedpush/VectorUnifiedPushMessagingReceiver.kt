@@ -21,6 +21,7 @@ import android.content.Intent
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.push.providers.api.PushHandler
+import io.element.android.libraries.push.providers.api.PusherSubscriber
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
@@ -32,22 +33,24 @@ private val loggerTag = LoggerTag("VectorUnifiedPushMessagingReceiver")
 
 class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var pushParser: UnifiedPushParser
- //   @Inject lateinit var pushDataStore: PushDataStore
+
+    //   @Inject lateinit var pushDataStore: PushDataStore
     @Inject lateinit var pushHandler: PushHandler
     @Inject lateinit var guardServiceStarter: GuardServiceStarter
-//    @Inject lateinit var unifiedPushStore: UnifiedPushStore
-//    @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
+    @Inject lateinit var unifiedPushStore: UnifiedPushStore
+    @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
+    @Inject lateinit var pusherSubscriber: PusherSubscriber
+    @Inject lateinit var newGatewayHandler: UnifiedPushNewGatewayHandler
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
     override fun onReceive(context: Context, intent: Intent) {
-        super.onReceive(context, intent)
-        // Inject
         context.applicationContext.bindings<VectorUnifiedPushMessagingReceiverBindings>().inject(this)
+        super.onReceive(context, intent)
     }
 
     /**
-     * Called when message is received.
+     * Called when message is received. The message contains the full POST body of the push message.
      *
      * @param context the Android context
      * @param message the message
@@ -56,7 +59,7 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
     override fun onMessage(context: Context, message: ByteArray, instance: String) {
         Timber.tag(loggerTag.value).d("New message")
         coroutineScope.launch {
-            val pushData = pushParser.parse(message)
+            val pushData = pushParser.parse(message, instance)
             if (pushData == null) {
                 Timber.tag(loggerTag.value).w("Invalid data received from UnifiedPush")
             } else {
@@ -65,36 +68,36 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
         }
     }
 
+    /**
+     * Called when a new endpoint is to be used for sending push messages.
+     * You should send the endpoint to your application server and sync for missing notifications.
+     * TODO use [instance] for multi-account
+     */
     override fun onNewEndpoint(context: Context, endpoint: String, instance: String) {
-        TODO()
-        /*
         Timber.tag(loggerTag.value).i("onNewEndpoint: adding $endpoint")
-        if (pushDataStore.areNotificationEnabledForDevice() /* TODO EAx && activeSessionHolder.hasActiveSession() */) {
-            // If the endpoint has changed
-            // or the gateway has changed
-            if (unifiedPushHelper.getEndpointOrToken() != endpoint) {
-                unifiedPushStore.storeUpEndpoint(endpoint)
-                coroutineScope.launch {
-                    unifiedPushHelper.storeCustomOrDefaultGateway(endpoint) {
-                        unifiedPushHelper.getPushGateway()?.let {
-                            coroutineScope.launch {
-                                pushersManager.onNewUnifiedPushEndpoint(endpoint, it)
-                            }
-                        }
-                    }
+        // If the endpoint has changed
+        // or the gateway has changed
+        if (unifiedPushHelper.getEndpointOrToken() != endpoint) {
+            unifiedPushStore.storeUpEndpoint(endpoint)
+            coroutineScope.launch {
+                unifiedPushHelper.storeCustomOrDefaultGateway(endpoint)
+                unifiedPushHelper.getPushGateway()?.let { pushGateway ->
+                    newGatewayHandler.handle(endpoint, pushGateway)
                 }
-            } else {
-                Timber.tag(loggerTag.value).i("onNewEndpoint: skipped")
             }
+        } else {
+            Timber.tag(loggerTag.value).i("onNewEndpoint: skipped")
         }
-        val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED
-        pushDataStore.setFdroidSyncBackgroundMode(mode)
+        //val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED
+        //pushDataStore.setFdroidSyncBackgroundMode(mode)
         guardServiceStarter.stop()
-         */
     }
 
+    /**
+     * Called when the registration is not possible, eg. no network.
+     */
     override fun onRegistrationFailed(context: Context, instance: String) {
-        TODO()
+        Timber.tag(loggerTag.value).e("onRegistrationFailed for $instance")
         /*
         Toast.makeText(context, "Push service registration failed", Toast.LENGTH_SHORT).show()
         val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
@@ -103,10 +106,13 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
          */
     }
 
+    /**
+     * Called when this application is unregistered from receiving push messages.
+     */
     override fun onUnregistered(context: Context, instance: String) {
+        Timber.tag(loggerTag.value).d("Unifiedpush: Unregistered")
         TODO()
         /*
-        Timber.tag(loggerTag.value).d("Unifiedpush: Unregistered")
         val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
         pushDataStore.setFdroidSyncBackgroundMode(mode)
         guardServiceStarter.start()

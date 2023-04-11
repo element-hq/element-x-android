@@ -18,6 +18,7 @@ package io.element.android.libraries.push.providers.firebase
 
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.push.providers.api.Distributor
 import io.element.android.libraries.push.providers.api.PushProvider
 import io.element.android.libraries.push.providers.api.PusherSubscriber
 import timber.log.Timber
@@ -30,18 +31,25 @@ class FirebasePushProvider @Inject constructor(
     private val firebaseTroubleshooter: FirebaseTroubleshooter,
     private val pusherSubscriber: PusherSubscriber,
 ) : PushProvider {
-    override val index = 0
+    override val index = FirebaseConfig.index
+    override val name = FirebaseConfig.name
 
-    override fun getDistributorNames(): List<String> {
-        // Must return an non-empty list for now
-        return listOf("unused")
+    override fun getDistributors(): List<Distributor> {
+        return listOf(Distributor("Firebase", "Firebase"))
     }
 
-    override suspend fun registerWith(matrixClient: MatrixClient, distributorName: String) {
+    override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor, clientSecret: String) {
         val pushKey = firebaseStore.getFcmToken() ?: return Unit.also {
             Timber.tag(loggerTag.value).w("Unable to register pusher, Firebase token is not known.")
         }
         pusherSubscriber.registerPusher(matrixClient, pushKey, FirebaseConfig.pusher_http_url)
+    }
+
+    override suspend fun unregister(matrixClient: MatrixClient) {
+        val pushKey = firebaseStore.getFcmToken() ?: return Unit.also {
+            Timber.tag(loggerTag.value).w("Unable to unregister pusher, Firebase token is not known.")
+        }
+        pusherSubscriber.unregisterPusher(matrixClient, pushKey, FirebaseConfig.pusher_http_url)
     }
 
     override suspend fun troubleshoot(): Result<Unit> {

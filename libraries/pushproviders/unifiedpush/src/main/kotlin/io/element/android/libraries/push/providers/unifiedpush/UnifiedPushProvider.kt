@@ -16,19 +16,41 @@
 
 package io.element.android.libraries.push.providers.unifiedpush
 
+import android.content.Context
+import io.element.android.libraries.androidutils.system.getApplicationLabel
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.push.providers.api.Distributor
 import io.element.android.libraries.push.providers.api.PushProvider
+import org.unifiedpush.android.connector.UnifiedPush
 import javax.inject.Inject
 
-class UnifiedPushProvider @Inject constructor() : PushProvider {
-    override val index = 1
+class UnifiedPushProvider @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
+    private val unRegisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
+) : PushProvider {
+    override val index = UnifiedPushConfig.index
+    override val name = UnifiedPushConfig.name
 
-    override fun getDistributorNames(): List<String> {
-        TODO("Not yet implemented")
+    override fun getDistributors(): List<Distributor> {
+        val distributors = UnifiedPush.getDistributors(context)
+        return distributors.mapNotNull {
+            if (it == context.packageName) {
+                // Exclude self
+                null
+            } else {
+                Distributor(it, context.getApplicationLabel(it))
+            }
+        }
     }
 
-    override suspend fun registerWith(matrixClient: MatrixClient, distributorName: String) {
-        TODO("Not yet implemented")
+    override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor, clientSecret: String) {
+        registerUnifiedPushUseCase.execute(matrixClient, distributor, clientSecret)
+    }
+
+    override suspend fun unregister(matrixClient: MatrixClient) {
+        unRegisterUnifiedPushUseCase.execute()
     }
 
     override suspend fun troubleshoot(): Result<Unit> {

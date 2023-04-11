@@ -30,13 +30,20 @@ anvil {
 
 dependencies {
     implementation(libs.dagger)
+    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.matrix.api)
 
+    implementation(projects.libraries.pushstore.api)
     implementation(projects.libraries.pushproviders.api)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
     implementation(projects.services.toolbox.api)
+
+    implementation(projects.libraries.network)
+    implementation(platform(libs.network.okhttp.bom))
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation(libs.network.retrofit)
 
     implementation(libs.serialization.json)
 

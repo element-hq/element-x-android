@@ -17,11 +17,13 @@
 package io.element.android.libraries.push.providers.unifiedpush
 
 import android.content.Context
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.network.RetrofitFactory
+import io.element.android.libraries.push.providers.unifiedpush.network.UnifiedPushApi
 import io.element.android.services.toolbox.api.strings.StringProvider
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import org.unifiedpush.android.connector.UnifiedPush
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.net.URL
 import javax.inject.Inject
@@ -30,132 +32,34 @@ class UnifiedPushHelper @Inject constructor(
     @ApplicationContext private val context: Context,
     private val unifiedPushStore: UnifiedPushStore,
     private val stringProvider: StringProvider,
+    private val retrofitFactory: RetrofitFactory,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) {
-
-    /* TODO EAx
-    @MainThread
-    fun showSelectDistributorDialog(
-        context: Context,
-        onDistributorSelected: (String) -> Unit,
-    ) {
-        val internalDistributorName = stringProvider.getString(
-            if (fcmHelper.isFirebaseAvailable()) {
-                R.string.push_distributor_firebase_android
-            } else {
-                R.string.push_distributor_background_sync_android
-            }
-        )
-
-        val distributors = UnifiedPush.getDistributors(context)
-        val distributorsName = distributors.map {
-            if (it == context.packageName) {
-                internalDistributorName
-            } else {
-                context.getApplicationLabel(it)
-            }
-        }
-
-        MaterialAlertDialogBuilder(context)
-            .setTitle(stringProvider.getString(R.string.push_choose_distributor_dialog_title_android))
-            .setItems(distributorsName.toTypedArray()) { _, which ->
-                val distributor = distributors[which]
-                onDistributorSelected(distributor)
-            }
-            .setOnCancelListener {
-                // we do not want to change the distributor on behalf of the user
-                if (UnifiedPush.getDistributor(context).isEmpty()) {
-                    // By default, use internal solution (fcm/background sync)
-                    onDistributorSelected(context.packageName)
-                }
-            }
-            .setCancelable(true)
-            .show()
-    }
-
-     */
-
-    @Serializable
-    internal data class DiscoveryResponse(
-        @SerialName("unifiedpush") val unifiedpush: DiscoveryUnifiedPush = DiscoveryUnifiedPush()
-    )
-
-    @Serializable
-    internal data class DiscoveryUnifiedPush(
-        @SerialName("gateway") val gateway: String = ""
-    )
-
-    suspend fun storeCustomOrDefaultGateway(
-        endpoint: String,
-        onDoneRunnable: Runnable? = null
-    ) {
-        // if we use the embedded distributor,
-        // register app_id type upfcm on sygnal
-        // the pushkey if FCM key
-        /*
-        if (UnifiedPush.getDistributor(context) == context.packageName) {
-            unifiedPushStore.storePushGateway(PushConfig.pusher_http_url)
-            onDoneRunnable?.run()
-            return
-        }
-
-         */
-        /* TODO EAx UnifiedPush
-        // else, unifiedpush, and pushkey is an endpoint
-        val gateway = PushConfig.default_push_gateway_http_url
+    suspend fun storeCustomOrDefaultGateway(endpoint: String) {
+        val gateway = UnifiedPushConfig.default_push_gateway_http_url
         val parsed = URL(endpoint)
         val custom = "${parsed.protocol}://${parsed.host}/_matrix/push/v1/notify"
         Timber.i("Testing $custom")
         try {
-            val response = matrix.rawService().getUrl(custom, CacheStrategy.NoCache)
-            tryOrNull { Json.decodeFromString<DiscoveryResponse>(response) }
-                ?.let { discoveryResponse ->
-                    if (discoveryResponse.unifiedpush.gateway == "matrix") {
-                        Timber.d("Using custom gateway")
-                        unifiedPushStore.storePushGateway(custom)
-                        onDoneRunnable?.run()
-                        return
+            withContext(coroutineDispatchers.io) {
+                val api = retrofitFactory.create("${parsed.protocol}://${parsed.host}")
+                    .create(UnifiedPushApi::class.java)
+                tryOrNull { api.discover() }
+                    ?.let { discoveryResponse ->
+                        if (discoveryResponse.unifiedpush.gateway == "matrix") {
+                            Timber.d("Using custom gateway")
+                            unifiedPushStore.storePushGateway(custom)
+                        }
                     }
-                }
+            }
+            return
         } catch (e: Throwable) {
             Timber.d(e, "Cannot try custom gateway")
         }
         unifiedPushStore.storePushGateway(gateway)
-        onDoneRunnable?.run()
-
-         */
     }
 
-    fun getExternalDistributors(): List<String> {
-        return UnifiedPush.getDistributors(context)
-            .filterNot { it == context.packageName }
-    }
-
-    fun getCurrentDistributorName(): String {
-        TODO()
-        /*
-        return when {
-            isEmbeddedDistributor() -> stringProvider.getString(R.string.push_distributor_firebase_android)
-            isBackgroundSync() -> stringProvider.getString(R.string.push_distributor_background_sync_android)
-            else -> context.getApplicationLabel(UnifiedPush.getDistributor(context))
-        }
-
-         */
-    }
-
-    fun isEmbeddedDistributor(): Boolean {
-        TODO()
-        //return isInternalDistributor() && fcmHelper.isFirebaseAvailable()
-    }
-
-    fun isBackgroundSync(): Boolean {
-        TODO()
-        //return isInternalDistributor() && !fcmHelper.isFirebaseAvailable()
-    }
-
-    private fun isInternalDistributor(): Boolean {
-        return UnifiedPush.getDistributor(context).isEmpty() ||
-            UnifiedPush.getDistributor(context) == context.packageName
-    }
+    private fun isEmbeddedDistributor() = false
 
     fun getPrivacyFriendlyUpEndpoint(): String? {
         val endpoint = getEndpointOrToken()

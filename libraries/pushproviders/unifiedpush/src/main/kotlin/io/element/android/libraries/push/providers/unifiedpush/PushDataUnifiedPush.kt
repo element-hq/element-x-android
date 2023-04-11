@@ -55,13 +55,13 @@ data class PushDataUnifiedPushCounts(
     @SerialName("unread") val unread: Int? = null
 )
 
-fun PushDataUnifiedPush.toPushData(): PushData? {
+fun PushDataUnifiedPush.toPushData(clientSecret: String): PushData? {
     val safeEventId = notification?.eventId?.asEventId() ?: return null
     val safeRoomId = notification.roomId?.asRoomId() ?: return null
     return PushData(
         eventId = safeEventId,
         roomId = safeRoomId,
         unread = notification.counts?.unread,
-        clientSecret = null // TODO EAx check how client secret will be sent through UnifiedPush
+        clientSecret = clientSecret
     )
 }
