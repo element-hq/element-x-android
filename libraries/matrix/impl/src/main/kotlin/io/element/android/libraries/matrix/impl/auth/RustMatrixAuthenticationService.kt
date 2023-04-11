@@ -59,7 +59,7 @@ class RustMatrixAuthenticationService @Inject constructor(
     }
 
     override suspend fun getLatestSessionId(): SessionId? = withContext(coroutineDispatchers.io) {
-        sessionStore.getLatestSession()?.userId?.let { UserId(it) }
+        sessionStore.getLatestSession()?.userId?.let { SessionId(it) }
     }
 
     override suspend fun restoreSession(sessionId: SessionId): Result<MatrixClient> = withContext(coroutineDispatchers.io) {

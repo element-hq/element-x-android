@@ -40,9 +40,9 @@ internal fun aRoomListState() = RoomListState(
     matrixUser = MatrixUser(id = UserId("@id"), username = "User#1", avatarData = AvatarData("@id", "U")),
     roomList = aRoomListRoomSummaryList(),
     filter = "filter",
-    eventSink = {},
     snackbarMessage = null,
     displayVerificationPrompt = false,
+    eventSink = {}
 )
 
 internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {

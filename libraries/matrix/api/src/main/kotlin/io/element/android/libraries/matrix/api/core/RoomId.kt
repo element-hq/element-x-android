@@ -24,3 +24,5 @@ value class RoomId(val value: String) : Serializable {
         return value
     }
 }
+
+fun String.asRoomId() = RoomId(this)

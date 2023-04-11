@@ -27,7 +27,7 @@ else
 fi
 
 echo "Generating the configuration file for localazy..."
-./tools/localazy/generateLocalazyConfig.py $allFiles
+python3 ./tools/localazy/generateLocalazyConfig.py $allFiles
 
 echo "Deleting all existing localazy.xml files..."
 find . -name 'localazy.xml' -delete

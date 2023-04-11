@@ -16,7 +16,6 @@
 
 package io.element.android.features.createroom.impl.root
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
@@ -27,7 +26,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.SessionScope
-import kotlinx.parcelize.Parcelize
+import io.element.android.libraries.matrix.api.core.RoomId
 
 @ContributesNode(SessionScope::class)
 class CreateRoomRootNode @AssistedInject constructor(
@@ -38,15 +37,17 @@ class CreateRoomRootNode @AssistedInject constructor(
 
     interface Callback : Plugin {
         fun onCreateNewRoom()
+        fun onOpenRoom(roomId: RoomId)
     }
 
-    private fun onCreateNewRoom() {
-        plugins<Callback>().forEach { it.onCreateNewRoom() }
-    }
+    private val callback = object : Callback {
+        override fun onCreateNewRoom() {
+            plugins<Callback>().forEach { it.onCreateNewRoom() }
+        }
 
-    sealed interface NavTarget : Parcelable {
-        @Parcelize
-        object Root : NavTarget
+        override fun onOpenRoom(roomId: RoomId) {
+            plugins<Callback>().forEach { it.onOpenRoom(roomId) }
+        }
     }
 
     @Composable
@@ -56,7 +57,8 @@ class CreateRoomRootNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onClosePressed = this::navigateUp,
-            onNewRoomClicked = this::onCreateNewRoom,
+            onNewRoomClicked = callback::onCreateNewRoom,
+            onOpenDM = callback::onOpenRoom,
         )
     }
 }
