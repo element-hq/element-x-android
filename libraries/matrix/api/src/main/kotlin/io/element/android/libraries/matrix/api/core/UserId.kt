@@ -24,3 +24,5 @@ value class UserId(val value: String) : Serializable {
         return value
     }
 }
+
+fun String.asUserId() = UserId(this)

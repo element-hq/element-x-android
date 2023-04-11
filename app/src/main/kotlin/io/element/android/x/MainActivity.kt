@@ -16,6 +16,7 @@
 
 package io.element.android.x
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -30,6 +31,7 @@ import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.x.di.AppBindings
+import timber.log.Timber
 
 class MainActivity : NodeComponentActivity() {
 
@@ -50,6 +52,17 @@ class MainActivity : NodeComponentActivity() {
                 }
             }
         }
+    }
+
+    /**
+     * Called when:
+     * - the launcher icon is clicked (if the app is already running);
+     * - a notification is clicked.
+     * - the app is going to background (<- this is strange)
+     */
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Timber.w("onNewIntent")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

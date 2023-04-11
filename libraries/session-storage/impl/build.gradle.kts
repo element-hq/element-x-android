@@ -30,6 +30,7 @@ anvil {
 
 dependencies {
     implementation(libs.dagger)
+    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.encryptedDb)
     api(projects.libraries.sessionStorage.api)

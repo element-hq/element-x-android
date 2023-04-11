@@ -21,11 +21,15 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaResolver
+import io.element.android.libraries.matrix.api.notification.NotificationService
+import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.impl.media.RustMediaResolver
-import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.impl.notification.RustNotificationService
+import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.sync.SlidingSyncObserverProxy
@@ -38,7 +42,10 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
+import org.matrix.rustcomponents.sdk.CreateRoomParameters
 import org.matrix.rustcomponents.sdk.RequiredState
+import org.matrix.rustcomponents.sdk.RoomPreset
+import org.matrix.rustcomponents.sdk.RoomVisibility
 import org.matrix.rustcomponents.sdk.SlidingSyncListBuilder
 import org.matrix.rustcomponents.sdk.SlidingSyncMode
 import org.matrix.rustcomponents.sdk.SlidingSyncRequestListFilters
@@ -60,6 +67,11 @@ class RustMatrixClient constructor(
     override val sessionId: UserId = UserId(client.userId())
 
     private val verificationService = RustSessionVerificationService()
+    private val pushersService = RustPushersService(
+        client = client,
+        dispatchers = dispatchers,
+    )
+    private val notificationService = RustNotificationService(baseDirectory, dispatchers)
     private var slidingSyncUpdateJob: Job? = null
 
     private val clientDelegate = object : ClientDelegate {
@@ -158,9 +170,37 @@ class RustMatrixClient constructor(
         )
     }
 
+    override fun findDM(userId: UserId): MatrixRoom? {
+        val roomId = client.getDmRoom(userId.value)?.use { RoomId(it.id()) }
+        return roomId?.let { getRoom(it) }
+    }
+
+    override suspend fun createDM(userId: UserId): Result<RoomId> =
+        withContext(dispatchers.io) {
+            runCatching {
+                val roomId = client.createRoom(
+                    CreateRoomParameters(
+                        name = null,
+                        topic = null,
+                        isEncrypted = true,
+                        isDirect = true,
+                        visibility = RoomVisibility.PRIVATE,
+                        preset = RoomPreset.TRUSTED_PRIVATE_CHAT,
+                        invite = listOf(userId.value),
+                        avatar = null,
+                    )
+                )
+                RoomId(roomId)
+            }
+        }
+
     override fun mediaResolver(): MediaResolver = mediaResolver
 
     override fun sessionVerificationService(): SessionVerificationService = verificationService
+
+    override fun pushersService(): PushersService = pushersService
+
+    override fun notificationService(): NotificationService = notificationService
 
     override fun startSync() {
         if (isSyncing.compareAndSet(false, true)) {

@@ -30,12 +30,20 @@ class InMemorySessionStore : SessionStore {
         return sessionDataFlow.map { it != null }
     }
 
+    override fun sessionsFlow(): Flow<List<SessionData>> {
+        return sessionDataFlow.map { listOfNotNull(it) }
+    }
+
     override suspend fun storeData(sessionData: SessionData) {
         sessionDataFlow.value = sessionData
     }
 
     override suspend fun getSession(sessionId: String): SessionData? {
         return sessionDataFlow.value.takeIf { it?.userId == sessionId }
+    }
+
+    override suspend fun getAllSessions(): List<SessionData> {
+        return listOfNotNull(sessionDataFlow.value)
     }
 
     override suspend fun getLatestSession(): SessionData? {
