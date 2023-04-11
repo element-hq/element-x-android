@@ -57,3 +57,7 @@ suspend fun <T> (suspend () -> Result<T>).executeResult(state: MutableState<Asyn
         }
     )
 }
+
+fun <T> Async<T>.isLoading(): Boolean {
+    return this is Async.Loading<T>
+}

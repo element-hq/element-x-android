@@ -42,11 +42,15 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.isLoading
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -55,6 +59,7 @@ import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,6 +67,7 @@ fun RoomDetailsView(
     state: RoomDetailsState,
     goBack: () -> Unit,
     onShareRoom: () -> Unit,
+    openRoomMemberList: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -87,13 +93,35 @@ fun RoomDetailsView(
                 TopicSection(roomTopic = state.roomTopic)
             }
 
-            MembersSection(memberCount = state.memberCount)
+            val memberCount = (state.memberCount as? Async.Success<Int>)?.state
+            MembersSection(
+                memberCount = memberCount,
+                isLoading = state.memberCount.isLoading(),
+                openRoomMemberList = openRoomMemberList
+            )
 
             if (state.isEncrypted) {
                 SecuritySection()
             }
 
-            OtherActionsSection()
+            OtherActionsSection(onLeaveRoom = {
+                state.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
+            })
+
+            if (state.displayLeaveRoomWarning != null) {
+                ConfirmLeaveRoomDialog(
+                    leaveRoomWarning = state.displayLeaveRoomWarning,
+                    onConfirmLeave = { state.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = false)) },
+                    onDismiss = { state.eventSink(RoomDetailsEvent.ClearLeaveRoomWarning) }
+                )
+            }
+
+            if (state.error != null) {
+                ErrorDialog(
+                    content = stringResource(StringR.string.error_unknown),
+                    onDismiss = { state.eventSink(RoomDetailsEvent.ClearError) }
+                )
+            }
         }
     }
 }
@@ -148,12 +176,19 @@ internal fun TopicSection(roomTopic: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-internal fun MembersSection(memberCount: Int, modifier: Modifier = Modifier) {
+internal fun MembersSection(
+    memberCount: Int?,
+    isLoading: Boolean,
+    modifier: Modifier = Modifier,
+    openRoomMemberList: () -> Unit
+) {
     PreferenceCategory(modifier = modifier) {
         PreferenceText(
             title = stringResource(R.string.screen_room_details_people_title),
             icon = Icons.Outlined.Person,
-            currentValue = memberCount.toString(),
+            currentValue = memberCount?.toString(),
+            onClick = openRoomMemberList,
+            loadingCurrentValue = isLoading,
         )
         PreferenceText(
             title = stringResource(R.string.screen_room_details_invite_people_title),
@@ -174,14 +209,36 @@ internal fun SecuritySection(modifier: Modifier = Modifier) {
 }
 
 @Composable
-internal fun OtherActionsSection(modifier: Modifier = Modifier) {
+internal fun OtherActionsSection(onLeaveRoom: () -> Unit, modifier: Modifier = Modifier) {
     PreferenceCategory(showDivider = false, modifier = modifier) {
         PreferenceText(
             title = stringResource(R.string.screen_room_details_leave_room_title),
             icon = ImageVector.vectorResource(R.drawable.ic_door_open),
             tintColor = LocalColors.current.textActionCritical,
+            onClick = onLeaveRoom,
         )
     }
+}
+
+@Composable
+internal fun ConfirmLeaveRoomDialog(
+    leaveRoomWarning: LeaveRoomWarning,
+    onConfirmLeave: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    val content = stringResource(
+            when (leaveRoomWarning) {
+            LeaveRoomWarning.PrivateRoom -> StringR.string.leave_room_alert_private_subtitle
+            LeaveRoomWarning.LastUserInRoom -> StringR.string.leave_room_alert_empty_subtitle
+            LeaveRoomWarning.Generic -> StringR.string.leave_room_alert_subtitle
+        }
+    )
+    ConfirmationDialog(
+        content = content,
+        submitText = stringResource(StringR.string.action_leave),
+        onSubmitClicked = onConfirmLeave,
+        onDismiss = onDismiss,
+    )
 }
 
 @Preview
@@ -200,5 +257,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         state = state,
         goBack = {},
         onShareRoom = {},
+        openRoomMemberList = {},
     )
 }

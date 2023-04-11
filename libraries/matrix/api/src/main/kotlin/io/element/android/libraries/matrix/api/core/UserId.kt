@@ -20,3 +20,5 @@ import java.io.Serializable
 
 @JvmInline
 value class UserId(val value: String) : Serializable
+
+fun String.asUserId() = UserId(this)

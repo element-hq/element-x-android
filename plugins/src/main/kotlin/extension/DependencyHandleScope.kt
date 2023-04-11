@@ -16,16 +16,13 @@
 
 package extension
 
+import gradle.kotlin.dsl.accessors._71f190358cebd46a469f2989484fd643.androidTestImplementation
+import gradle.kotlin.dsl.accessors._71f190358cebd46a469f2989484fd643.debugImplementation
+import gradle.kotlin.dsl.accessors._71f190358cebd46a469f2989484fd643.implementation
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.project
 import java.io.File
-
-private fun DependencyHandlerScope.implementation(dependency: Any) = dependencies.add("implementation", dependency)
-
-private fun DependencyHandlerScope.androidTestImplementation(dependency: Any) = dependencies.add("androidTestImplementation", dependency)
-
-private fun DependencyHandlerScope.debugImplementation(dependency: Any) = dependencies.add("debugImplementation", dependency)
 
 /**
  * Dependencies used by all the modules
@@ -76,6 +73,8 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:matrixui"))
     implementation(project(":libraries:network"))
     implementation(project(":libraries:core"))
+    implementation(project(":libraries:permissions:impl"))
+    implementation(project(":libraries:push:impl"))
     implementation(project(":libraries:architecture"))
     implementation(project(":libraries:dateformatter:impl"))
     implementation(project(":libraries:di"))

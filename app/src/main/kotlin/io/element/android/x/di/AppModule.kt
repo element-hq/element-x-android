@@ -17,13 +17,18 @@
 package io.element.android.x.di
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.content.res.Resources
+import androidx.preference.PreferenceManager
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.DefaultPreferences
 import io.element.android.libraries.di.SingleIn
 import io.element.android.x.BuildConfig
 import io.element.android.x.R
@@ -44,6 +49,11 @@ object AppModule {
     @Provides
     fun providesBaseDirectory(@ApplicationContext context: Context): File {
         return File(context.filesDir, "sessions")
+    }
+
+    @Provides
+    fun providesResources(@ApplicationContext context: Context): Resources {
+        return context.resources
     }
 
     @Provides
@@ -70,6 +80,13 @@ object AppModule {
 
     @Provides
     @SingleIn(AppScope::class)
+    @DefaultPreferences
+    fun providesDefaultSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+    }
+
+    @Provides
+    @SingleIn(AppScope::class)
     fun providesCoroutineDispatchers(): CoroutineDispatchers {
         return CoroutineDispatchers(
             io = Dispatchers.IO,
@@ -77,5 +94,11 @@ object AppModule {
             main = Dispatchers.Main,
             diffUpdateDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
         )
+    }
+
+    @Provides
+    @SingleIn(AppScope::class)
+    fun provideSnackbarDispatcher(): SnackbarDispatcher {
+        return SnackbarDispatcher()
     }
 }

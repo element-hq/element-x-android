@@ -32,9 +32,11 @@ import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
+import com.bumble.appyx.navmodel.backstack.operation.replace
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
@@ -46,13 +48,18 @@ import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
 import io.element.android.services.appnavstate.api.AppNavigationStateService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.parcelize.Parcelize
+import kotlin.coroutines.coroutineContext
 
 @ContributesNode(AppScope::class)
 class LoggedInFlowNode @AssistedInject constructor(
@@ -63,6 +70,8 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val createRoomEntryPoint: CreateRoomEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
     private val verifySessionEntryPoint: VerifySessionEntryPoint,
+    private val coroutineScope: CoroutineScope,
+    snackbarDispatcher: SnackbarDispatcher,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.RoomList,
@@ -87,6 +96,11 @@ class LoggedInFlowNode @AssistedInject constructor(
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
+    private val loggedInFlowProcessor = LoggedInEventProcessor(
+        snackbarDispatcher,
+        inputs.matrixClient.roomMembershipObserver(),
+        inputs.matrixClient.sessionVerificationService(),
+    )
 
     override fun onBuilt() {
         super.onBuilt()
@@ -99,6 +113,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                 appNavigationStateService.onNavigateToSession(inputs.matrixClient.sessionId)
                 // TODO We do not support Space yet, so directly navigate to main space
                 appNavigationStateService.onNavigateToSpace(MAIN_SPACE)
+                loggedInFlowProcessor.observeEvents(coroutineScope)
             },
             onDestroy = {
                 val imageLoaderFactory = bindings<MatrixUIBindings>().notLoggedInImageLoaderFactory()
@@ -106,11 +121,15 @@ class LoggedInFlowNode @AssistedInject constructor(
                 plugins<LifecycleCallback>().forEach { it.onFlowReleased(inputs.matrixClient) }
                 appNavigationStateService.onLeavingSpace()
                 appNavigationStateService.onLeavingSession()
+                loggedInFlowProcessor.stopObserving()
             }
         )
     }
 
     sealed interface NavTarget : Parcelable {
+        @Parcelize
+        object Permanent : NavTarget
+
         @Parcelize
         object RoomList : NavTarget
 
@@ -129,6 +148,9 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
+            NavTarget.Permanent -> {
+                createNode<LoggedInNode>(buildContext)
+            }
             NavTarget.RoomList -> {
                 val callback = object : RoomListEntryPoint.Callback {
                     override fun onRoomClicked(roomId: RoomId) {
@@ -178,7 +200,16 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .build()
             }
             NavTarget.CreateRoom -> {
-                createRoomEntryPoint.createNode(this, buildContext)
+                val callback = object : CreateRoomEntryPoint.Callback {
+                    override fun onOpenRoom(roomId: RoomId) {
+                        backstack.replace(NavTarget.Room(roomId))
+                    }
+                }
+
+                createRoomEntryPoint
+                    .nodeBuilder(this, buildContext)
+                    .callback(callback)
+                    .build()
             }
             NavTarget.VerifySession -> {
                 verifySessionEntryPoint.createNode(this, buildContext)
@@ -188,11 +219,15 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
-            navModel = backstack,
-            modifier = modifier,
-            // Animate navigation to settings and to a room
-            transitionHandler = rememberDefaultTransitionHandler(),
-        )
+        Box(modifier = modifier) {
+            Children(
+                navModel = backstack,
+                modifier = Modifier,
+                // Animate navigation to settings and to a room
+                transitionHandler = rememberDefaultTransitionHandler(),
+            )
+
+            PermanentChild(navTarget = NavTarget.Permanent)
+        }
     }
 }

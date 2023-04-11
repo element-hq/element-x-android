@@ -25,10 +25,6 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.matrix.api"
-
-    buildFeatures {
-        buildConfig = true
-    }
 }
 
 anvil {
