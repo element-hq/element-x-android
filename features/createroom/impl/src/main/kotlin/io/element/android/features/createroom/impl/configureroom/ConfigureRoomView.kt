@@ -152,9 +152,9 @@ fun ConfigureRoomToolbar(
 
 @Composable
 fun RoomNameWithAvatar(
-    modifier: Modifier = Modifier,
     avatarUri: Uri?,
     roomName: String,
+    modifier: Modifier = Modifier,
     onAvatarClick: () -> Unit = {},
     onRoomNameChanged: (String) -> Unit = {},
 ) {
@@ -179,8 +179,8 @@ fun RoomNameWithAvatar(
 
 @Composable
 fun Avatar(
-    modifier: Modifier = Modifier,
     avatarUri: Uri?,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
     val commonModifier = modifier
