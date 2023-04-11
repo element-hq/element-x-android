@@ -31,8 +31,17 @@ dependencies {
     implementation(libs.dagger)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
+    implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.pushstore.api)
     implementation(projects.libraries.sessionStorage.api)
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.datastore.preferences)
+
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.mockk)
+    testImplementation(libs.test.truth)
+    testImplementation(libs.test.turbine)
+    testImplementation(libs.coroutines.test)
+    testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.services.appnavstate.test)
 }

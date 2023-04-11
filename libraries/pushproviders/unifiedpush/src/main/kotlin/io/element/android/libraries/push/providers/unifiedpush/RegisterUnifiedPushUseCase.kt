@@ -40,8 +40,8 @@ class RegisterUnifiedPushUseCase @Inject constructor(
         val distributorValue = distributor.value
         if (distributorValue.isNotEmpty()) {
             saveAndRegisterApp(distributorValue, clientSecret)
-            val endpoint = unifiedPushStore.getEndpoint() ?: return RegisterUnifiedPushResult.Error
-            val gateway = unifiedPushStore.getPushGateway() ?: return RegisterUnifiedPushResult.Error
+            val endpoint = unifiedPushStore.getEndpoint(clientSecret) ?: return RegisterUnifiedPushResult.Error
+            val gateway = unifiedPushStore.getPushGateway(clientSecret) ?: return RegisterUnifiedPushResult.Error
             pusherSubscriber.registerPusher(matrixClient, endpoint, gateway)
             return RegisterUnifiedPushResult.Success
         }

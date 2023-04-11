@@ -37,7 +37,7 @@ interface PushProvider {
     /**
      * Register the pusher to the homeserver
      */
-    suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor, clientSecret: String)
+    suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor)
 
     /**
      * Unregister the pusher

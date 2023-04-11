@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.clientsecret
+package io.element.android.libraries.pushstore.impl.clientsecret
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -27,6 +27,7 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.asSessionId
+import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretStore
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 

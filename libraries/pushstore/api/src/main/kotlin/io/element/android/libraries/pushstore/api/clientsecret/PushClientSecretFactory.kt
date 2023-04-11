@@ -14,16 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.clientsecret
+package io.element.android.libraries.pushstore.api.clientsecret
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
-import java.util.UUID
-import javax.inject.Inject
-
-@ContributesBinding(AppScope::class)
-class PushClientSecretFactoryImpl @Inject constructor() : PushClientSecretFactory {
-    override fun create(): String {
-        return UUID.randomUUID().toString()
-    }
+interface PushClientSecretFactory {
+    fun create(): String
 }

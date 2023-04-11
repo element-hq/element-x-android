@@ -23,9 +23,6 @@ import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.DefaultPreferences
 import javax.inject.Inject
 
-/**
- * TODO EAx Store in BDD (for multisession).
- */
 class UnifiedPushStore @Inject constructor(
     @ApplicationContext val context: Context,
     @DefaultPreferences private val defaultPrefs: SharedPreferences,
@@ -35,8 +32,8 @@ class UnifiedPushStore @Inject constructor(
      *
      * @return the UnifiedPush Endpoint or null if not received
      */
-    fun getEndpoint(): String? {
-        return defaultPrefs.getString(PREFS_ENDPOINT_OR_TOKEN, null)
+    fun getEndpoint(clientSecret: String): String? {
+        return defaultPrefs.getString(PREFS_ENDPOINT_OR_TOKEN + clientSecret, null)
     }
 
     /**
@@ -44,9 +41,9 @@ class UnifiedPushStore @Inject constructor(
      *
      * @param endpoint the endpoint to store
      */
-    fun storeUpEndpoint(endpoint: String?) {
+    fun storeUpEndpoint(endpoint: String?, clientSecret: String) {
         defaultPrefs.edit {
-            putString(PREFS_ENDPOINT_OR_TOKEN, endpoint)
+            putString(PREFS_ENDPOINT_OR_TOKEN + clientSecret, endpoint)
         }
     }
 
@@ -55,8 +52,8 @@ class UnifiedPushStore @Inject constructor(
      *
      * @return the Push Gateway or null if not defined
      */
-    fun getPushGateway(): String? {
-        return defaultPrefs.getString(PREFS_PUSH_GATEWAY, null)
+    fun getPushGateway(clientSecret: String): String? {
+        return defaultPrefs.getString(PREFS_PUSH_GATEWAY + clientSecret, null)
     }
 
     /**
@@ -64,9 +61,9 @@ class UnifiedPushStore @Inject constructor(
      *
      * @param gateway the push gateway to store
      */
-    fun storePushGateway(gateway: String?) {
+    fun storePushGateway(gateway: String?, clientSecret: String) {
         defaultPrefs.edit {
-            putString(PREFS_PUSH_GATEWAY, gateway)
+            putString(PREFS_PUSH_GATEWAY + clientSecret, gateway)
         }
     }
 

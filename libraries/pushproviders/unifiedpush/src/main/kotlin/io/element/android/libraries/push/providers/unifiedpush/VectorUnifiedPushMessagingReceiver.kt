@@ -21,7 +21,6 @@ import android.content.Intent
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.push.providers.api.PushHandler
-import io.element.android.libraries.push.providers.api.PusherSubscriber
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
@@ -33,13 +32,10 @@ private val loggerTag = LoggerTag("VectorUnifiedPushMessagingReceiver")
 
 class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var pushParser: UnifiedPushParser
-
-    //   @Inject lateinit var pushDataStore: PushDataStore
     @Inject lateinit var pushHandler: PushHandler
     @Inject lateinit var guardServiceStarter: GuardServiceStarter
     @Inject lateinit var unifiedPushStore: UnifiedPushStore
-    @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
-    @Inject lateinit var pusherSubscriber: PusherSubscriber
+    @Inject lateinit var unifiedPushGatewayResolver: UnifiedPushGatewayResolver
     @Inject lateinit var newGatewayHandler: UnifiedPushNewGatewayHandler
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
@@ -71,25 +67,23 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
     /**
      * Called when a new endpoint is to be used for sending push messages.
      * You should send the endpoint to your application server and sync for missing notifications.
-     * TODO use [instance] for multi-account
      */
     override fun onNewEndpoint(context: Context, endpoint: String, instance: String) {
         Timber.tag(loggerTag.value).i("onNewEndpoint: adding $endpoint")
         // If the endpoint has changed
         // or the gateway has changed
-        if (unifiedPushHelper.getEndpointOrToken() != endpoint) {
-            unifiedPushStore.storeUpEndpoint(endpoint)
+        if (unifiedPushStore.getEndpoint(instance) != endpoint) {
+            unifiedPushStore.storeUpEndpoint(endpoint, instance)
             coroutineScope.launch {
-                unifiedPushHelper.storeCustomOrDefaultGateway(endpoint)
-                unifiedPushHelper.getPushGateway()?.let { pushGateway ->
-                    newGatewayHandler.handle(endpoint, pushGateway)
+                val gateway = unifiedPushGatewayResolver.getGateway(endpoint)
+                unifiedPushStore.storePushGateway(gateway, instance)
+                gateway?.let { pushGateway ->
+                    newGatewayHandler.handle(endpoint, pushGateway, instance)
                 }
             }
         } else {
             Timber.tag(loggerTag.value).i("onNewEndpoint: skipped")
         }
-        //val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED
-        //pushDataStore.setFdroidSyncBackgroundMode(mode)
         guardServiceStarter.stop()
     }
 

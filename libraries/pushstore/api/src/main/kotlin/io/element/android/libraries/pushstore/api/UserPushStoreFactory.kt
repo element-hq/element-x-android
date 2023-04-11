@@ -16,9 +16,11 @@
 
 package io.element.android.libraries.pushstore.api
 
+import io.element.android.libraries.matrix.api.core.SessionId
+
 /**
  * Store data related to push about a user.
  */
 interface UserPushStoreFactory {
-    fun create(userId: String): UserPushStore
+    fun create(userId: SessionId): UserPushStore
 }

@@ -22,6 +22,7 @@ import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.push.providers.api.Distributor
 import io.element.android.libraries.push.providers.api.PushProvider
+import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import org.unifiedpush.android.connector.UnifiedPush
 import javax.inject.Inject
 
@@ -29,6 +30,7 @@ class UnifiedPushProvider @Inject constructor(
     @ApplicationContext private val context: Context,
     private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
     private val unRegisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
+    private val pushClientSecret: PushClientSecret,
 ) : PushProvider {
     override val index = UnifiedPushConfig.index
     override val name = UnifiedPushConfig.name
@@ -45,12 +47,14 @@ class UnifiedPushProvider @Inject constructor(
         }
     }
 
-    override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor, clientSecret: String) {
+    override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor) {
+        val clientSecret = pushClientSecret.getSecretForUser(matrixClient.sessionId)
         registerUnifiedPushUseCase.execute(matrixClient, distributor, clientSecret)
     }
 
     override suspend fun unregister(matrixClient: MatrixClient) {
-        unRegisterUnifiedPushUseCase.execute()
+        val clientSecret = pushClientSecret.getSecretForUser(matrixClient.sessionId)
+        unRegisterUnifiedPushUseCase.execute(clientSecret)
     }
 
     override suspend fun troubleshoot(): Result<Unit> {

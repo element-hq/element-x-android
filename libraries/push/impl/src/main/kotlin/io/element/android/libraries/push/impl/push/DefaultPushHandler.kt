@@ -30,7 +30,7 @@ import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.push.api.store.PushDataStore
 import io.element.android.libraries.push.impl.PushersManager
-import io.element.android.libraries.push.impl.clientsecret.PushClientSecret
+import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds

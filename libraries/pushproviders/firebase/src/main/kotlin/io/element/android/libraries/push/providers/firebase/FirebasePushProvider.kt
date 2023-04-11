@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.push.providers.api.Distributor
 import io.element.android.libraries.push.providers.api.PushProvider
 import io.element.android.libraries.push.providers.api.PusherSubscriber
+import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -30,6 +31,7 @@ class FirebasePushProvider @Inject constructor(
     private val firebaseStore: FirebaseStore,
     private val firebaseTroubleshooter: FirebaseTroubleshooter,
     private val pusherSubscriber: PusherSubscriber,
+    private val pushClientSecret: PushClientSecret,
 ) : PushProvider {
     override val index = FirebaseConfig.index
     override val name = FirebaseConfig.name
@@ -38,7 +40,7 @@ class FirebasePushProvider @Inject constructor(
         return listOf(Distributor("Firebase", "Firebase"))
     }
 
-    override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor, clientSecret: String) {
+    override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor) {
         val pushKey = firebaseStore.getFcmToken() ?: return Unit.also {
             Timber.tag(loggerTag.value).w("Unable to register pusher, Firebase token is not known.")
         }

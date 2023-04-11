@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.clientsecret
+package io.element.android.libraries.pushstore.impl.clientsecret
 
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretStore
 
 class InMemoryPushClientSecretStore : PushClientSecretStore {
     private val secrets = mutableMapOf<SessionId, String>()

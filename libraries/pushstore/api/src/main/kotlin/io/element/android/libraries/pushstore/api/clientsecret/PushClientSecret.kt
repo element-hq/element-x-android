@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.clientsecret
+package io.element.android.libraries.pushstore.api.clientsecret
 
 import io.element.android.libraries.matrix.api.core.SessionId
 
