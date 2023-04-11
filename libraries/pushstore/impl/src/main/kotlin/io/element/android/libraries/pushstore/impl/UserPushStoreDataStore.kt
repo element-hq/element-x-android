@@ -19,9 +19,11 @@ package io.element.android.libraries.pushstore.impl
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushstore.api.UserPushStore
 import kotlinx.coroutines.flow.first
@@ -36,6 +38,7 @@ class UserPushStoreDataStore(
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "push_store_$userId")
     private val pushProviderName = stringPreferencesKey("pushProviderName")
     private val currentPushKey = stringPreferencesKey("currentPushKey")
+    private val notificationEnabled = booleanPreferencesKey("notificationEnabled")
 
     override suspend fun getPushProviderName(): String? {
         return context.dataStore.data.first()[pushProviderName]
@@ -55,6 +58,20 @@ class UserPushStoreDataStore(
         context.dataStore.edit {
             it[currentPushKey] = value
         }
+    }
+
+    override suspend fun areNotificationEnabledForDevice(): Boolean {
+        return context.dataStore.data.first()[notificationEnabled].orTrue()
+    }
+
+    override suspend fun setNotificationEnabledForDevice(enabled: Boolean) {
+        context.dataStore.edit {
+            it[notificationEnabled] = enabled
+        }
+    }
+
+    override fun useCompleteNotificationFormat(): Boolean {
+        return true
     }
 
     override suspend fun reset() {
