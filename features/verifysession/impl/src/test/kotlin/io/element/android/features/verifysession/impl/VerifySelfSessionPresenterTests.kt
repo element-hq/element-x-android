@@ -27,9 +27,11 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class VerifySelfSessionPresenterTests {
 
     @Test

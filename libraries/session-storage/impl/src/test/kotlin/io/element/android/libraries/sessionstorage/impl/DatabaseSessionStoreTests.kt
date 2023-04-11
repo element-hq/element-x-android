@@ -57,6 +57,7 @@ class DatabaseSessionStoreTests {
         databaseSessionStore.storeData(aSessionData.toApiModel())
 
         assertThat(database.sessionDataQueries.selectFirst().executeAsOneOrNull()).isEqualTo(aSessionData)
+        assertThat(database.sessionDataQueries.selectAll().executeAsList().size).isEqualTo(1)
     }
 
     @Test
@@ -88,6 +89,7 @@ class DatabaseSessionStoreTests {
         val foundSession = databaseSessionStore.getSession(aSessionData.userId)?.toDbModel()
 
         assertThat(foundSession).isEqualTo(aSessionData)
+        assertThat(database.sessionDataQueries.selectAll().executeAsList().size).isEqualTo(2)
     }
 
     @Test
@@ -107,5 +109,4 @@ class DatabaseSessionStoreTests {
 
         assertThat(database.sessionDataQueries.selectByUserId(aSessionData.userId).executeAsOneOrNull()).isNull()
     }
-
 }

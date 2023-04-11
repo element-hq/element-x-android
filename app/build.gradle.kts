@@ -25,6 +25,7 @@ import extension.allServicesImpl
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("io.element.android-compose-application")
+    alias(libs.plugins.stem)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
@@ -32,6 +33,7 @@ plugins {
     id("com.google.firebase.appdistribution") version "4.0.0"
     id("org.jetbrains.kotlinx.knit") version "0.4.0"
     id("kotlin-parcelize")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -139,7 +141,7 @@ android {
         }
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "1.8"
     }
 
     // Waiting for https://github.com/google/ksp/issues/37
@@ -149,10 +151,6 @@ android {
                 kotlin.srcDir("build/generated/ksp/$name/kotlin")
             }
         }
-    }
-
-    buildFeatures {
-        buildConfig = true
     }
 }
 
@@ -216,14 +214,19 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
     implementation(libs.appyx.core)
     implementation(libs.androidx.splash)
+    implementation(libs.androidx.core)
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.startup)
+    implementation(libs.androidx.preference)
     implementation(libs.coil)
 
     implementation(platform(libs.network.okhttp.bom))
     implementation("com.squareup.okhttp3:logging-interceptor")
+
+    implementation(platform(libs.google.firebase.bom))
+    implementation("com.google.firebase:firebase-messaging-ktx")
 
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)

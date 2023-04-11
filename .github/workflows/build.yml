@@ -28,11 +28,6 @@ jobs:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
-      - name: Use JDK 17
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '17'
       - name: Configure gradle
         uses: gradle/gradle-build-action@v2
         with:
@@ -47,12 +42,14 @@ jobs:
             app/build/outputs/apk/debug/*.apk
       - uses: rnkdsh/action-upload-diawi@v1.3.2
         id: diawi
-        if: ${{ github.event_name == 'pull_request' }}
-        with:
+        env:
           token: ${{ secrets.DIAWI_TOKEN }}
+        if: ${{ github.event_name == 'pull_request' && env.token != '' }}
+        with:
+          token: ${{ env.token }}
           file: app/build/outputs/apk/debug/app-arm64-v8a-debug.apk
       - name: Add or update PR comment with QR Code to download APK.
-        if: ${{ github.event_name == 'pull_request' }}
+        if: ${{ github.event_name == 'pull_request' && steps.diawi.conclusion == 'success' }}
         uses: NejcZdovc/comment-pr@v2
         with:
           message: |

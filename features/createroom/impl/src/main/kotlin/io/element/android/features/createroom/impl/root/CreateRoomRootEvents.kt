@@ -19,6 +19,7 @@ package io.element.android.features.createroom.impl.root
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 
 sealed interface CreateRoomRootEvents {
-    data class StartDM(val matrixUser: MatrixUser) : CreateRoomRootEvents
     object InvitePeople : CreateRoomRootEvents
+    data class StartDM(val matrixUser: MatrixUser) : CreateRoomRootEvents
+    object CancelStartDM : CreateRoomRootEvents
 }

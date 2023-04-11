@@ -22,7 +22,9 @@ import dagger.Provides
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 
 @Module
 @ContributesTo(SessionScope::class)
@@ -31,5 +33,11 @@ object SessionMatrixModule {
     @SingleIn(SessionScope::class)
     fun providesRustSessionVerificationService(matrixClient: MatrixClient): SessionVerificationService {
         return matrixClient.sessionVerificationService()
+    }
+
+    @Provides
+    @SingleIn(SessionScope::class)
+    fun provideRoomMembershipObserver(matrixClient: MatrixClient): RoomMembershipObserver {
+        return matrixClient.roomMembershipObserver()
     }
 }

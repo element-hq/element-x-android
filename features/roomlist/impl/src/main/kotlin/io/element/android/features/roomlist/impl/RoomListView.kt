@@ -40,10 +40,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -67,6 +68,7 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.api.core.RoomId
+import kotlinx.coroutines.launch
 import io.element.android.libraries.designsystem.R as DrawableR
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -130,14 +132,18 @@ fun RoomListContent(
     }
 
     val snackbarHostState = remember { SnackbarHostState() }
-    val verificationCompleteMessage = stringResource(StringR.string.common_verification_complete)
-    LaunchedEffect(state.presentVerificationSuccessfulMessage) {
-        if (state.presentVerificationSuccessfulMessage) {
-            snackbarHostState.showSnackbar(
-                message = verificationCompleteMessage,
-                duration = SnackbarDuration.Short,
-            )
-            state.eventSink(RoomListEvents.ClearSuccessfulVerificationMessage)
+    val snackbarMessageText = if (state.snackbarMessage != null ) {
+        stringResource(state.snackbarMessage.messageResId)
+    } else null
+    val coroutineScope = rememberCoroutineScope()
+    if (snackbarMessageText != null) {
+        SideEffect {
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(
+                    message = snackbarMessageText,
+                    duration = SnackbarDuration.Short,
+                )
+            }
         }
     }
 
@@ -191,11 +197,13 @@ fun RoomListContent(
             }
         },
         snackbarHost = {
-           SnackbarHost (snackbarHostState) { data ->
-               Snackbar(
-                   snackbarData = data,
-               )
-           }
+            SnackbarHost(snackbarHostState) { data ->
+                Snackbar(
+                    snackbarData = data,
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.primary
+                )
+            }
         },
     )
 }
