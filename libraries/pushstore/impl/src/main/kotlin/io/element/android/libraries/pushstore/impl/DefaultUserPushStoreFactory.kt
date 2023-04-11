@@ -21,6 +21,8 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.asSessionId
 import io.element.android.libraries.pushstore.api.UserPushStore
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
@@ -38,8 +40,8 @@ class DefaultUserPushStoreFactory @Inject constructor(
     }
 
     // We can have only one class accessing a single data store, so keep a cache of them.
-    private val cache = mutableMapOf<String, UserPushStore>()
-    override fun create(userId: String): UserPushStore {
+    private val cache = mutableMapOf<SessionId, UserPushStore>()
+    override fun create(userId: SessionId): UserPushStore {
         return cache.getOrPut(userId) {
             UserPushStoreDataStore(
                 context = context,
@@ -58,6 +60,6 @@ class DefaultUserPushStoreFactory @Inject constructor(
 
     override suspend fun onSessionDeleted(userId: String) {
         // Delete the store
-        create(userId).reset()
+        create(userId.asSessionId()).reset()
     }
 }

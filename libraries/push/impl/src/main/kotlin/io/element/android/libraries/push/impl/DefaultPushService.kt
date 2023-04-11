@@ -20,7 +20,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.push.api.PushService
-import io.element.android.libraries.push.impl.clientsecret.PushClientSecret
+import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.push.impl.notifications.NotificationDrawerManager
 import io.element.android.libraries.push.providers.api.Distributor
 import io.element.android.libraries.push.providers.api.PushProvider
@@ -31,7 +31,6 @@ import javax.inject.Inject
 class DefaultPushService @Inject constructor(
     private val notificationDrawerManager: NotificationDrawerManager,
     private val pushersManager: PushersManager,
-    private val pushClientSecret: PushClientSecret,
     private val userPushStoreFactory: UserPushStoreFactory,
     private val pushProviders: Set<@JvmSuppressWildcards PushProvider>,
 ) : PushService {
@@ -47,16 +46,13 @@ class DefaultPushService @Inject constructor(
      * Get current push provider, compare with provided one, then unregister and register if different, and store change
      */
     override suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributor: Distributor) {
-        val userPushStore = userPushStoreFactory.create(matrixClient.sessionId.value)
+        val userPushStore = userPushStoreFactory.create(matrixClient.sessionId)
         val currentPushProviderName = userPushStore.getPushProviderName()
         if (currentPushProviderName != pushProvider.name) {
             // Unregister previous one if any
             pushProviders.find { it.name == currentPushProviderName }?.unregister(matrixClient)
         }
-
-        val clientSecret = pushClientSecret.getSecretForUser(matrixClient.sessionId)
-        pushProvider.registerWith(matrixClient, distributor, clientSecret)
-
+        pushProvider.registerWith(matrixClient, distributor)
         // Store new value
         userPushStore.setPushProviderName(pushProvider.name)
     }

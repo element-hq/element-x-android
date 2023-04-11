@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.clientsecret
+package io.element.android.libraries.pushstore.impl.clientsecret
 
-private const val A_SECRET_PREFIX = "A_SECRET_"
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretFactory
+import java.util.UUID
+import javax.inject.Inject
 
-class FakePushClientSecretFactory : PushClientSecretFactory {
-    private var index = 0
-
-    override fun create() = getSecretForUser(index++)
-
-    fun getSecretForUser(i: Int): String {
-        return A_SECRET_PREFIX + i
+@ContributesBinding(AppScope::class)
+class PushClientSecretFactoryImpl @Inject constructor() : PushClientSecretFactory {
+    override fun create(): String {
+        return UUID.randomUUID().toString()
     }
 }

@@ -18,11 +18,9 @@ package io.element.android.libraries.push.providers.unifiedpush
 
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.providers.api.PusherSubscriber
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
-import io.element.android.libraries.sessionstorage.api.SessionStore
-import io.element.android.libraries.sessionstorage.api.toUserList
+import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -33,21 +31,22 @@ private val loggerTag = LoggerTag("UnifiedPushNewGatewayHandler")
  */
 class UnifiedPushNewGatewayHandler @Inject constructor(
     private val pusherSubscriber: PusherSubscriber,
-    private val sessionStore: SessionStore,
     private val userPushStoreFactory: UserPushStoreFactory,
+    private val pushClientSecret: PushClientSecret,
     private val matrixAuthenticationService: MatrixAuthenticationService,
 ) {
-    suspend fun handle(endpoint: String, pushGateway: String) {
-        // Register the pusher for all the sessions which are using UnifiedPush.
-        sessionStore.getAllSessions().toUserList().forEach { userId ->
-            val userDataStore = userPushStoreFactory.create(userId)
-            if (userDataStore.getPushProviderName() == UnifiedPushConfig.name) {
-                matrixAuthenticationService.restoreSession(SessionId(userId)).getOrNull()?.use { client ->
-                    pusherSubscriber.registerPusher(client, endpoint, pushGateway)
-                }
-            } else {
-                Timber.tag(loggerTag.value).d("This session is not using UnifiedPush pusher")
+    suspend fun handle(endpoint: String, pushGateway: String, clientSecret: String) {
+        // Register the pusher for the session with this client secret, if is it using UnifiedPush.
+        val userId = pushClientSecret.getUserIdFromSecret(clientSecret) ?: return Unit.also {
+            Timber.w("Unable to retrieve session")
+        }
+        val userDataStore = userPushStoreFactory.create(userId)
+        if (userDataStore.getPushProviderName() == UnifiedPushConfig.name) {
+            matrixAuthenticationService.restoreSession(userId).getOrNull()?.use { client ->
+                pusherSubscriber.registerPusher(client, endpoint, pushGateway)
             }
+        } else {
+            Timber.tag(loggerTag.value).d("This session is not using UnifiedPush pusher")
         }
     }
 }

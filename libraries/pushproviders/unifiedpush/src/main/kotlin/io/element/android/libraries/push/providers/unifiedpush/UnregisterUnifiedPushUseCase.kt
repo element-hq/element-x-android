@@ -26,22 +26,22 @@ class UnregisterUnifiedPushUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
     //private val pushDataStore: PushDataStore,
     private val unifiedPushStore: UnifiedPushStore,
-    private val unifiedPushHelper: UnifiedPushHelper,
+    private val unifiedPushGatewayResolver: UnifiedPushGatewayResolver,
 ) {
 
-    suspend fun execute(/*pushersManager: PushersManager?*/) {
+    suspend fun execute(clientSecret: String /*pushersManager: PushersManager?*/) {
         //val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
         //pushDataStore.setFdroidSyncBackgroundMode(mode)
         try {
-            unifiedPushHelper.getEndpointOrToken()?.let {
+            unifiedPushStore.getEndpoint(clientSecret)?.let {
                 Timber.d("Removing $it")
                 // TODO pushersManager?.unregisterPusher(it)
             }
         } catch (e: Exception) {
             Timber.d(e, "Probably unregistering a non existing pusher")
         }
-        unifiedPushStore.storeUpEndpoint(null)
-        unifiedPushStore.storePushGateway(null)
+        unifiedPushStore.storeUpEndpoint(null, clientSecret)
+        unifiedPushStore.storePushGateway(null, clientSecret)
         UnifiedPush.unregisterApp(context)
     }
 }

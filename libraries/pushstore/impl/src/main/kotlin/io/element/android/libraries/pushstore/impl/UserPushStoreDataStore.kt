@@ -22,6 +22,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushstore.api.UserPushStore
 import kotlinx.coroutines.flow.first
 
@@ -30,7 +31,7 @@ import kotlinx.coroutines.flow.first
  */
 class UserPushStoreDataStore(
     private val context: Context,
-    userId: String,
+    userId: SessionId,
 ) : UserPushStore {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "push_store_$userId")
     private val pushProviderName = stringPreferencesKey("pushProviderName")

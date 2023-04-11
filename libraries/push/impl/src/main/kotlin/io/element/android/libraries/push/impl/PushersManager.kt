@@ -24,7 +24,7 @@ import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
-import io.element.android.libraries.push.impl.clientsecret.PushClientSecret
+import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.push.impl.config.PushConfig
 import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest
@@ -79,7 +79,7 @@ class PushersManager @Inject constructor(
      * Register a pusher to the server if not done yet.
      */
     override suspend fun registerPusher(matrixClient: MatrixClient, pushKey: String, gateway: String) {
-        val userDataStore = userPushStoreFactory.create(matrixClient.sessionId.value)
+        val userDataStore = userPushStoreFactory.create(matrixClient.sessionId)
         if (userDataStore.getCurrentRegisteredPushKey() == pushKey) {
             Timber.tag(loggerTag.value).d("Unnecessary to register again the same pusher")
         } else {

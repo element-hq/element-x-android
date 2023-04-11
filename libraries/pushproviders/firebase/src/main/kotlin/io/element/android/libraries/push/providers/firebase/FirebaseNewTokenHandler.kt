@@ -18,7 +18,7 @@ package io.element.android.libraries.push.providers.firebase
 
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
-import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.asSessionId
 import io.element.android.libraries.push.providers.api.PusherSubscriber
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -41,15 +41,17 @@ class FirebaseNewTokenHandler @Inject constructor(
     suspend fun handle(firebaseToken: String) {
         firebaseStore.storeFcmToken(firebaseToken)
         // Register the pusher for all the sessions
-        sessionStore.getAllSessions().toUserList().forEach { userId ->
-            val userDataStore = userPushStoreFactory.create(userId)
-            if (userDataStore.getPushProviderName() == FirebaseConfig.name) {
-                matrixAuthenticationService.restoreSession(SessionId(userId)).getOrNull()?.use { client ->
-                    pusherSubscriber.registerPusher(client, firebaseToken, FirebaseConfig.pusher_http_url)
+        sessionStore.getAllSessions().toUserList()
+            .map { it.asSessionId() }
+            .forEach { userId ->
+                val userDataStore = userPushStoreFactory.create(userId)
+                if (userDataStore.getPushProviderName() == FirebaseConfig.name) {
+                    matrixAuthenticationService.restoreSession(userId).getOrNull()?.use { client ->
+                        pusherSubscriber.registerPusher(client, firebaseToken, FirebaseConfig.pusher_http_url)
+                    }
+                } else {
+                    Timber.tag(loggerTag.value).d("This session is not using Firebase pusher")
                 }
-            } else {
-                Timber.tag(loggerTag.value).d("This session is not using Firebase pusher")
             }
-        }
     }
 }
