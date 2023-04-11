@@ -21,12 +21,17 @@ package io.element.android.libraries.pushstore.api
  */
 interface UserPushStore {
     suspend fun getPushProviderName(): String?
-
     suspend fun setPushProviderName(value: String)
-
     suspend fun getCurrentRegisteredPushKey(): String?
-
     suspend fun setCurrentRegisteredPushKey(value: String)
+
+    suspend fun areNotificationEnabledForDevice(): Boolean
+    suspend fun setNotificationEnabledForDevice(enabled: Boolean)
+
+    /**
+     * Return true if Pin code is disabled, or if user set the settings to see full notification content.
+     */
+    fun useCompleteNotificationFormat(): Boolean
 
     suspend fun reset()
 }

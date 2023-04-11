@@ -22,15 +22,12 @@ import android.os.Handler
 import android.os.Looper
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.androidutils.network.WifiDetector
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
-import io.element.android.libraries.push.api.store.PushDataStore
 import io.element.android.libraries.push.impl.PushersManager
-import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
@@ -38,6 +35,8 @@ import io.element.android.libraries.push.impl.notifications.NotificationDrawerMa
 import io.element.android.libraries.push.impl.store.DefaultPushDataStore
 import io.element.android.libraries.push.providers.api.PushData
 import io.element.android.libraries.push.providers.api.PushHandler
+import io.element.android.libraries.pushstore.api.UserPushStoreFactory
+import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -51,17 +50,16 @@ private val loggerTag = LoggerTag("PushHandler", pushLoggerTag)
 class DefaultPushHandler @Inject constructor(
     private val notificationDrawerManager: NotificationDrawerManager,
     private val notifiableEventResolver: NotifiableEventResolver,
-    private val pushDataStore: PushDataStore,
     private val defaultPushDataStore: DefaultPushDataStore,
+    private val userPushStoreFactory: UserPushStoreFactory,
     private val pushClientSecret: PushClientSecret,
     private val actionIds: NotificationActionIds,
     @ApplicationContext private val context: Context,
     private val buildMeta: BuildMeta,
     private val matrixAuthenticationService: MatrixAuthenticationService,
-): PushHandler {
+) : PushHandler {
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
-    private val wifiDetector: WifiDetector = WifiDetector(context)
 
     // UI handler
     private val mUIHandler by lazy {
@@ -86,12 +84,6 @@ class DefaultPushHandler @Inject constructor(
         if (pushData.eventId == PushersManager.TEST_EVENT_ID) {
             val intent = Intent(actionIds.push)
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
-            return
-        }
-
-        // TODO EAx Should be per user
-        if (!pushDataStore.areNotificationEnabledForDevice()) {
-            Timber.tag(loggerTag.value).i("Notification are disabled for this device")
             return
         }
 
@@ -136,6 +128,13 @@ class DefaultPushHandler @Inject constructor(
 
             if (notificationData == null) {
                 Timber.w("Unable to get a notification data")
+                return
+            }
+
+            val userPushStore = userPushStoreFactory.create(userId)
+            if (!userPushStore.areNotificationEnabledForDevice()) {
+                // TODO We need to check if this is an incoming call
+                Timber.tag(loggerTag.value).i("Notification are disabled for this device, ignore push.")
                 return
             }
 
