@@ -47,8 +47,8 @@ class LoggedInPresenter @Inject constructor(
         LaunchedEffect(Unit) {
             // Ensure pusher is registered
             // TODO Manually select push provider for now
-            val pushProvider = pushService.getAvailablePushProviders().find { it.name == "UnifiedPush" } ?: return@LaunchedEffect
-            val distributor = pushProvider.getDistributors().first()
+            val pushProvider = pushService.getAvailablePushProviders().firstOrNull() ?: return@LaunchedEffect
+            val distributor = pushProvider.getDistributors().firstOrNull() ?: return@LaunchedEffect
             pushService.registerWith(matrixClient, pushProvider, distributor)
         }
 
