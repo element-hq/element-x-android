@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_hide_password">"Masquer le mot de passe"</string>
+  <string name="a11y_send_files">"Envoyer des fichiers"</string>
+  <string name="a11y_show_password">"Afficher le mot de passe"</string>
+  <string name="a11y_user_menu">"Menu utilisateur"</string>
+  <string name="action_back">"Retour"</string>
+  <string name="action_cancel">"Annuler"</string>
+  <string name="action_clear">"Effacer"</string>
+  <string name="action_close">"Fermer"</string>
   <string name="action_confirm">"Confirmer"</string>
+  <string name="action_continue">"Continuer"</string>
+  <string name="action_copy">"Copier"</string>
+  <string name="action_copy_link">"Copier le lien"</string>
   <string name="test_language_identifier">"fr"</string>
 </resources>
