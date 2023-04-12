@@ -43,7 +43,7 @@ class DefaultPushService @Inject constructor(
     }
 
     /**
-     * Get current push provider, compare with provided one, then unregister and register if different, and store change
+     * Get current push provider, compare with provided one, then unregister and register if different, and store change.
      */
     override suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributor: Distributor) {
         val userPushStore = userPushStoreFactory.create(matrixClient.sessionId)

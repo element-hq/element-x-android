@@ -30,6 +30,7 @@ class UnifiedPushStore @Inject constructor(
     /**
      * Retrieves the UnifiedPush Endpoint.
      *
+     * @param clientSecret the client secret, to identify the session
      * @return the UnifiedPush Endpoint or null if not received
      */
     fun getEndpoint(clientSecret: String): String? {
@@ -40,6 +41,7 @@ class UnifiedPushStore @Inject constructor(
      * Store UnifiedPush Endpoint to the SharedPrefs.
      *
      * @param endpoint the endpoint to store
+     * @param clientSecret the client secret, to identify the session
      */
     fun storeUpEndpoint(endpoint: String?, clientSecret: String) {
         defaultPrefs.edit {
@@ -50,6 +52,7 @@ class UnifiedPushStore @Inject constructor(
     /**
      * Retrieves the Push Gateway.
      *
+     * @param clientSecret the client secret, to identify the session
      * @return the Push Gateway or null if not defined
      */
     fun getPushGateway(clientSecret: String): String? {
@@ -60,6 +63,7 @@ class UnifiedPushStore @Inject constructor(
      * Store Push Gateway to the SharedPrefs.
      *
      * @param gateway the push gateway to store
+     * @param clientSecret the client secret, to identify the session
      */
     fun storePushGateway(gateway: String?, clientSecret: String) {
         defaultPrefs.edit {

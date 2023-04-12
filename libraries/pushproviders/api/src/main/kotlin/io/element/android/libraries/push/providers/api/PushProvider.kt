@@ -19,7 +19,7 @@ package io.element.android.libraries.push.providers.api
 import io.element.android.libraries.matrix.api.MatrixClient
 
 /**
- * This is the main API for this module
+ * This is the main API for this module.
  */
 interface PushProvider {
     /**
