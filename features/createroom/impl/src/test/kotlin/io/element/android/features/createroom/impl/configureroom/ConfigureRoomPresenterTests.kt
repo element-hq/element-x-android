@@ -23,6 +23,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
@@ -40,7 +41,7 @@ class ConfigureRoomPresenterTests {
 
     @Before
     fun setup() {
-        presenter = ConfigureRoomPresenter(ConfigureRoomPresenterArgs(emptyList()))
+        presenter = ConfigureRoomPresenter(CreateRoomDataStore())
     }
 
     @Test
@@ -49,9 +50,9 @@ class ConfigureRoomPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.roomName).isEmpty()
-            assertThat(initialState.topic).isEmpty()
-            assertThat(initialState.privacy).isNull()
+            assertThat(initialState.config.roomName).isNull()
+            assertThat(initialState.config.topic).isNull()
+            assertThat(initialState.config.privacy).isNull()
         }
     }
 
@@ -66,19 +67,19 @@ class ConfigureRoomPresenterTests {
             // Room name not empty
             initialState.eventSink(ConfigureRoomEvents.RoomNameChanged(A_ROOM_NAME))
             var newState: ConfigureRoomState = awaitItem()
-            assertThat(newState.roomName).isEqualTo(A_ROOM_NAME)
+            assertThat(newState.config.roomName).isEqualTo(A_ROOM_NAME)
             assertThat(newState.isCreateButtonEnabled).isFalse()
 
             // Select privacy
             initialState.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(RoomPrivacy.Private))
             newState = awaitItem()
-            assertThat(newState.privacy).isEqualTo(RoomPrivacy.Private)
+            assertThat(newState.config.privacy).isEqualTo(RoomPrivacy.Private)
             assertThat(newState.isCreateButtonEnabled).isTrue()
 
             // Clear room name
             initialState.eventSink(ConfigureRoomEvents.RoomNameChanged(""))
             newState = awaitItem()
-            assertThat(newState.roomName).isEqualTo("")
+            assertThat(newState.config.roomName).isNull()
             assertThat(newState.isCreateButtonEnabled).isFalse()
         }
     }
@@ -92,23 +93,23 @@ class ConfigureRoomPresenterTests {
             // Room name
             initialState.eventSink(ConfigureRoomEvents.RoomNameChanged(A_ROOM_NAME))
             val stateAfterRoomNameChanged = awaitItem()
-            assertThat(stateAfterRoomNameChanged.roomName).isEqualTo(A_ROOM_NAME)
+            assertThat(stateAfterRoomNameChanged.config.roomName).isEqualTo(A_ROOM_NAME)
 
             // Room topic
             stateAfterRoomNameChanged.eventSink(ConfigureRoomEvents.TopicChanged(A_MESSAGE))
             val stateAfterTopicChanged = awaitItem()
-            assertThat(stateAfterTopicChanged.topic).isEqualTo(A_MESSAGE)
+            assertThat(stateAfterTopicChanged.config.topic).isEqualTo(A_MESSAGE)
 
             // Room avatar
             val anUri = Uri.parse(AN_AVATAR_URL)
             stateAfterTopicChanged.eventSink(ConfigureRoomEvents.AvatarUriChanged(anUri))
             val stateAfterAvatarUriChanged = awaitItem()
-            assertThat(stateAfterAvatarUriChanged.avatarUri).isEqualTo(anUri)
+            assertThat(stateAfterAvatarUriChanged.config.avatarUrl).isEqualTo(anUri.toString())
 
             // Room privacy
             stateAfterAvatarUriChanged.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(RoomPrivacy.Public))
             val stateAfterPrivacyChanged = awaitItem()
-            assertThat(stateAfterPrivacyChanged.privacy).isEqualTo(RoomPrivacy.Public)
+            assertThat(stateAfterPrivacyChanged.config.privacy).isEqualTo(RoomPrivacy.Public)
         }
     }
 }
