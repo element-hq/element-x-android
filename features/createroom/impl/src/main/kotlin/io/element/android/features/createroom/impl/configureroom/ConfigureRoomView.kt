@@ -106,7 +106,7 @@ fun ConfigureRoomView(
                 listState = selectedUsersListState,
                 contentPadding = PaddingValues(horizontal = 24.dp),
                 selectedUsers = state.config.invites,
-                onUserRemoved = { }, // TODO
+                onUserRemoved = { state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it)) },
             )
             Spacer(Modifier.weight(1f))
             RoomPrivacyOptions(

@@ -17,11 +17,13 @@
 package io.element.android.features.createroom.impl.configureroom
 
 import android.net.Uri
+import io.element.android.libraries.matrix.ui.model.MatrixUser
 
 sealed interface ConfigureRoomEvents {
     data class RoomNameChanged(val name: String) : ConfigureRoomEvents
     data class TopicChanged(val topic: String) : ConfigureRoomEvents
     data class AvatarUriChanged(val uri: Uri?) : ConfigureRoomEvents
     data class RoomPrivacyChanged(val privacy: RoomPrivacy?) : ConfigureRoomEvents
+    data class RemoveFromSelection(val matrixUser: MatrixUser) : ConfigureRoomEvents
     object CreateRoom : ConfigureRoomEvents
 }
