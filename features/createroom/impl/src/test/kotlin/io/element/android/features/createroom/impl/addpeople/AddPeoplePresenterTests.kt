@@ -22,7 +22,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.userlist.test.FakeMatrixUserDataSource
+import io.element.android.features.userlist.test.FakeUserListDataSource
 import io.element.android.features.userlist.test.FakeUserListPresenterFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -35,7 +35,7 @@ class AddPeoplePresenterTests {
 
     @Before
     fun setup() {
-        presenter = AddPeoplePresenter(FakeUserListPresenterFactory(), FakeMatrixUserDataSource())
+        presenter = AddPeoplePresenter(FakeUserListPresenterFactory(), FakeUserListDataSource())
     }
 
     @Test

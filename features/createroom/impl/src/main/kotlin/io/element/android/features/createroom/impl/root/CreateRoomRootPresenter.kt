@@ -21,8 +21,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import io.element.android.features.userlist.api.MatrixUserDataSource
 import io.element.android.features.userlist.api.SelectionMode
+import io.element.android.features.userlist.api.UserListDataSource
 import io.element.android.features.userlist.api.UserListPresenter
 import io.element.android.features.userlist.api.UserListPresenterArgs
 import io.element.android.libraries.architecture.Async
@@ -38,14 +38,14 @@ import javax.inject.Named
 
 class CreateRoomRootPresenter @Inject constructor(
     private val presenterFactory: UserListPresenter.Factory,
-    @Named("AllUsers") private val matrixUserDataSource: MatrixUserDataSource,
+    @Named("AllUsers") private val userListDataSource: UserListDataSource,
     private val matrixClient: MatrixClient,
 ) : Presenter<CreateRoomRootState> {
 
     private val presenter by lazy {
         presenterFactory.create(
             UserListPresenterArgs(selectionMode = SelectionMode.Single),
-            matrixUserDataSource,
+            userListDataSource,
         )
     }
 

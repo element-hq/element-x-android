@@ -23,7 +23,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.userlist.api.aUserListState
-import io.element.android.features.userlist.test.FakeMatrixUserDataSource
+import io.element.android.features.userlist.test.FakeUserListDataSource
 import io.element.android.features.userlist.test.FakeUserListPresenter
 import io.element.android.features.userlist.test.FakeUserListPresenterFactory
 import io.element.android.libraries.architecture.Async
@@ -41,7 +41,7 @@ import org.junit.Test
 
 class CreateRoomRootPresenterTests {
 
-    private lateinit var userListDataSource: FakeMatrixUserDataSource
+    private lateinit var userListDataSource: FakeUserListDataSource
     private lateinit var presenter: CreateRoomRootPresenter
     private lateinit var fakeUserListPresenter: FakeUserListPresenter
     private lateinit var fakeMatrixClient: FakeMatrixClient
@@ -50,7 +50,7 @@ class CreateRoomRootPresenterTests {
     fun setup() {
         fakeUserListPresenter = FakeUserListPresenter()
         fakeMatrixClient = FakeMatrixClient()
-        userListDataSource = FakeMatrixUserDataSource()
+        userListDataSource = FakeUserListDataSource()
         presenter = CreateRoomRootPresenter(FakeUserListPresenterFactory(fakeUserListPresenter), userListDataSource, fakeMatrixClient)
     }
 

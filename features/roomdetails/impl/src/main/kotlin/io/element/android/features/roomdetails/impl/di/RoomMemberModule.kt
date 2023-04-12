@@ -19,8 +19,8 @@ package io.element.android.features.roomdetails.impl.di
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Binds
 import dagger.Module
-import io.element.android.features.roomdetails.impl.members.RoomMatrixUserDataSource
-import io.element.android.features.userlist.api.MatrixUserDataSource
+import io.element.android.features.roomdetails.impl.members.RoomUserListDataSource
+import io.element.android.features.userlist.api.UserListDataSource
 import io.element.android.libraries.di.RoomScope
 import javax.inject.Named
 
@@ -30,6 +30,6 @@ interface RoomMemberModule {
 
     @Binds
     @Named("RoomMembers")
-    fun bindRoomMemberUserListDataSource(dataSource: RoomMatrixUserDataSource): MatrixUserDataSource
+    fun bindRoomMemberUserListDataSource(dataSource: RoomUserListDataSource): UserListDataSource
 
 }

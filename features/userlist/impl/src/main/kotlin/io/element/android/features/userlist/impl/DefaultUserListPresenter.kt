@@ -31,7 +31,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.features.userlist.api.MatrixUserDataSource
+import io.element.android.features.userlist.api.UserListDataSource
 import io.element.android.features.userlist.api.UserListEvents
 import io.element.android.features.userlist.api.UserListPresenterArgs
 import io.element.android.features.userlist.api.UserListState
@@ -48,13 +48,13 @@ import kotlinx.coroutines.launch
 
 class DefaultUserListPresenter @AssistedInject constructor(
     @Assisted val args: UserListPresenterArgs,
-    @Assisted val matrixUserDataSource: MatrixUserDataSource,
+    @Assisted val userListDataSource: UserListDataSource,
 ) : UserListPresenter {
 
     @AssistedFactory
     @ContributesBinding(SessionScope::class)
     interface DefaultUserListFactory : UserListPresenter.Factory {
-        override fun create(args: UserListPresenterArgs, matrixUserDataSource: MatrixUserDataSource): DefaultUserListPresenter
+        override fun create(args: UserListPresenterArgs, userListDataSource: UserListDataSource): DefaultUserListPresenter
     }
 
     @Composable
@@ -110,9 +110,9 @@ class DefaultUserListPresenter @AssistedInject constructor(
 
     private suspend fun performSearch(query: String): ImmutableList<MatrixUser> {
         val isMatrixId = MatrixPatterns.isUserId(query)
-        val results = matrixUserDataSource.search(query).toMutableList()
+        val results = userListDataSource.search(query).toMutableList()
         if (isMatrixId && results.none { it.id.value == query }) {
-            val getProfileResult: MatrixUser? = matrixUserDataSource.getProfile(UserId(query))
+            val getProfileResult: MatrixUser? = userListDataSource.getProfile(UserId(query))
             val profile = getProfileResult ?: MatrixUser(UserId(query))
             results.add(0, profile)
         }
