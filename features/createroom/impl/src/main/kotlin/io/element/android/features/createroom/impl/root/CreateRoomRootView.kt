@@ -41,7 +41,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.createroom.impl.R
-import io.element.android.features.userlist.api.UserListView
+import io.element.android.features.userlist.api.components.UserListView
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog

@@ -55,7 +55,7 @@ import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import io.element.android.features.createroom.impl.R
-import io.element.android.features.userlist.api.SelectedUsersList
+import io.element.android.features.userlist.api.components.SelectedUsersList
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
