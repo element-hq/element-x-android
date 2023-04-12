@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.core
+package io.element.android.tests.testutils
 
-import io.element.android.libraries.matrix.api.BuildConfig
+import com.google.common.truth.Truth.assertThat
+import org.junit.Assert.assertThrows
 
-typealias SessionId = UserId
-
-fun String.asSessionId() = if (MatrixPatterns.isSessionId(this)) {
-    SessionId(this)
-} else {
+/**
+ * Assert that the lambda throws on debug and returns null on release.
+ */
+fun assertNullOrThrow(lambda: () -> Any?) {
     if (BuildConfig.DEBUG) {
-        error("`$this` is not a valid session Id")
+        assertThrows(IllegalStateException::class.java) {
+            lambda()
+        }
     } else {
-        null
+        assertThat(lambda()).isNull()
     }
 }
