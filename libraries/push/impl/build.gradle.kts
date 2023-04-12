@@ -55,9 +55,8 @@ dependencies {
         exclude(group = "com.android.support", module = "support-annotations")
     }
 
-    // TODO Remove
-    implementation(platform(libs.google.firebase.bom))
-    implementation("com.google.firebase:firebase-messaging-ktx")
+    // TODO Temporary use the deprecated LocalBroadcastManager, to be changed later.
+    implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.mockk)

@@ -20,17 +20,15 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
-import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.push.impl.config.PushConfig
 import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest
 import io.element.android.libraries.push.providers.api.PusherSubscriber
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
-import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.services.toolbox.api.appname.AppNameProvider
 import timber.log.Timber
 import javax.inject.Inject
@@ -41,16 +39,13 @@ private val loggerTag = LoggerTag("PushersManager", pushLoggerTag)
 
 @ContributesBinding(AppScope::class)
 class PushersManager @Inject constructor(
-    // private val unifiedPushHelper: UnifiedPushHelper,
     // private val localeProvider: LocaleProvider,
     private val appNameProvider: AppNameProvider,
     // private val getDeviceInfoUseCase: GetDeviceInfoUseCase,
     private val pushGatewayNotifyRequest: PushGatewayNotifyRequest,
     private val pushClientSecret: PushClientSecret,
-    private val sessionStore: SessionStore,
-    private val matrixAuthenticationService: MatrixAuthenticationService,
     private val userPushStoreFactory: UserPushStoreFactory,
-): PusherSubscriber {
+) : PusherSubscriber {
     // TODO Move this to the PushProvider API
     suspend fun testPush() {
         pushGatewayNotifyRequest.execute(
@@ -61,18 +56,6 @@ class PushersManager @Inject constructor(
                 eventId = TEST_EVENT_ID
             )
         )
-    }
-
-    suspend fun enqueueRegisterPusherWithFcmKey(pushKey: String) {
-        // return onNewFirebaseToken(pushKey, PushConfig.pusher_http_url)
-        TODO()
-    }
-
-    suspend fun onNewUnifiedPushEndpoint(
-        pushKey: String,
-        gateway: String
-    ) {
-        TODO()
     }
 
     /**
