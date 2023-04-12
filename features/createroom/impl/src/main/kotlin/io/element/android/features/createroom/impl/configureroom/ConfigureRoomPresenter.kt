@@ -41,17 +41,18 @@ class ConfigureRoomPresenter @Inject constructor(
 
         fun handleEvents(event: ConfigureRoomEvents) {
             when (event) {
-                is ConfigureRoomEvents.AvatarUriChanged -> dataStore.setCreateRoomConfig(createRoomConfig.value.copy(avatarUrl = event.uri?.toString()))
-                is ConfigureRoomEvents.RoomNameChanged -> dataStore.setCreateRoomConfig(createRoomConfig.value.copy(roomName = event.name))
-                is ConfigureRoomEvents.TopicChanged -> dataStore.setCreateRoomConfig(createRoomConfig.value.copy(topic = event.topic.takeUnless { it.isEmpty() }))
-                is ConfigureRoomEvents.RoomPrivacyChanged -> dataStore.setCreateRoomConfig(createRoomConfig.value.copy(privacy = event.privacy))
-                is ConfigureRoomEvents.RemoveFromSelection -> dataStore.setCreateRoomConfig(
-                    createRoomConfig.value.copy(
-                        invites = createRoomConfig.value.invites.minus(
-                            event.matrixUser
-                        ).toImmutableList()
+                is ConfigureRoomEvents.AvatarUriChanged ->
+                    dataStore.setCreateRoomConfig(createRoomConfig.value.copy(avatarUrl = event.uri?.toString()))
+                is ConfigureRoomEvents.RoomNameChanged ->
+                    dataStore.setCreateRoomConfig(createRoomConfig.value.copy(roomName = event.name.takeUnless { it.isEmpty() }))
+                is ConfigureRoomEvents.TopicChanged ->
+                    dataStore.setCreateRoomConfig(createRoomConfig.value.copy(topic = event.topic.takeUnless { it.isEmpty() }))
+                is ConfigureRoomEvents.RoomPrivacyChanged ->
+                    dataStore.setCreateRoomConfig(createRoomConfig.value.copy(privacy = event.privacy))
+                is ConfigureRoomEvents.RemoveFromSelection ->
+                    dataStore.setCreateRoomConfig(
+                        createRoomConfig.value.copy(invites = createRoomConfig.value.invites.minus(event.matrixUser).toImmutableList())
                     )
-                )
                 ConfigureRoomEvents.CreateRoom -> Unit
             }
         }
