@@ -14,12 +14,6 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.configureroom
+package io.element.android.features.createroom.impl.di
 
-import io.element.android.features.createroom.impl.CreateRoomConfig
-
-data class ConfigureRoomState(
-    val config: CreateRoomConfig,
-    val isCreateButtonEnabled: Boolean,
-    val eventSink: (ConfigureRoomEvents) -> Unit
-)
+abstract class CreateRoomScope private constructor()

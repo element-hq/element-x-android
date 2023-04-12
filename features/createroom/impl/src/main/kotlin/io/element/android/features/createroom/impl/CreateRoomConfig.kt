@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.configureroom
+package io.element.android.features.createroom.impl
 
-import io.element.android.features.createroom.impl.CreateRoomConfig
+import io.element.android.features.createroom.impl.configureroom.RoomPrivacy
+import io.element.android.libraries.matrix.ui.model.MatrixUser
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
-data class ConfigureRoomState(
-    val config: CreateRoomConfig,
-    val isCreateButtonEnabled: Boolean,
-    val eventSink: (ConfigureRoomEvents) -> Unit
+data class CreateRoomConfig(
+    val roomName: String? = null,
+    val topic: String? = null,
+    val avatarUrl: String? = null,
+    val invites: ImmutableList<MatrixUser> = persistentListOf(),
+    val privacy: RoomPrivacy? = null,
 )

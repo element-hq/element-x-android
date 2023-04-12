@@ -32,10 +32,13 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.createroom.impl.addpeople.AddPeopleNode
 import io.element.android.features.createroom.impl.configureroom.ConfigureRoomNode
+import io.element.android.features.createroom.impl.di.CreateRoomComponent
 import io.element.android.features.createroom.impl.root.CreateRoomRootNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
+import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
@@ -45,14 +48,22 @@ import kotlinx.parcelize.Parcelize
 class CreateRoomFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-) : BackstackNode<CreateRoomFlowNode.NavTarget>(
-    backstack = BackStack(
-        initialElement = NavTarget.Root,
-        savedStateMap = buildContext.savedStateMap,
-    ),
-    buildContext = buildContext,
-    plugins = plugins
-) {
+) : DaggerComponentOwner,
+    BackstackNode<CreateRoomFlowNode.NavTarget>(
+        backstack = BackStack(
+            initialElement = NavTarget.Root,
+            savedStateMap = buildContext.savedStateMap,
+        ),
+        buildContext = buildContext,
+        plugins = plugins
+    ) {
+
+    private val component by lazy {
+        parent!!.bindings<CreateRoomComponent.ParentBindings>().createRoomComponentBuilder().build()
+    }
+
+    override val daggerComponent: Any
+        get() = component
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
@@ -62,7 +73,7 @@ class CreateRoomFlowNode @AssistedInject constructor(
         object NewRoom : NavTarget
 
         @Parcelize
-        data class ConfigureRoom(val users: List<MatrixUser>) : NavTarget
+        object ConfigureRoom : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -82,13 +93,13 @@ class CreateRoomFlowNode @AssistedInject constructor(
             NavTarget.NewRoom -> {
                 val callback = object : AddPeopleNode.Callback {
                     override fun onContinue(selectedUsers: List<MatrixUser>) {
-                        backstack.push(NavTarget.ConfigureRoom(selectedUsers))
+                        backstack.push(NavTarget.ConfigureRoom)
                     }
                 }
                 createNode<AddPeopleNode>(context = buildContext, plugins = listOf(callback))
             }
-            is NavTarget.ConfigureRoom -> {
-                createNode<ConfigureRoomNode>(context = buildContext, plugins = listOf(ConfigureRoomNode.Inputs(navTarget.users)))
+            NavTarget.ConfigureRoom -> {
+                createNode<ConfigureRoomNode>(context = buildContext)
             }
         }
     }

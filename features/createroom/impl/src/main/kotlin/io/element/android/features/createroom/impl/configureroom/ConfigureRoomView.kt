@@ -51,6 +51,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import io.element.android.features.createroom.impl.R
@@ -92,25 +93,25 @@ fun ConfigureRoomView(
         ) {
             RoomNameWithAvatar(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                avatarUri = state.avatarUri,
-                roomName = state.roomName,
+                avatarUri = state.config.avatarUrl?.toUri(),
+                roomName = state.config.roomName.orEmpty(),
                 onRoomNameChanged = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
             )
             RoomTopic(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                topic = state.topic,
+                topic = state.config.topic.orEmpty(),
                 onTopicChanged = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
             )
             SelectedUsersList(
                 listState = selectedUsersListState,
                 contentPadding = PaddingValues(horizontal = 24.dp),
-                selectedUsers = state.selectedUsers,
+                selectedUsers = state.config.invites,
                 onUserRemoved = { }, // TODO
             )
             Spacer(Modifier.weight(1f))
             RoomPrivacyOptions(
                 modifier = Modifier.padding(bottom = 40.dp),
-                selected = state.privacy,
+                selected = state.config.privacy,
                 onOptionSelected = { state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it)) },
             )
         }

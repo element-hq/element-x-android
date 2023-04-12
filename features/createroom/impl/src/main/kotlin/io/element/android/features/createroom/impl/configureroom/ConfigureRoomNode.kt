@@ -24,26 +24,14 @@ import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.architecture.NodeInputs
-import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.features.createroom.impl.di.CreateRoomScope
 
-@ContributesNode(SessionScope::class)
+@ContributesNode(CreateRoomScope::class)
 class ConfigureRoomNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenterFactory: ConfigureRoomPresenter.Factory,
+    private val presenter: ConfigureRoomPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
-    data class Inputs(
-        val selectedUsers: List<MatrixUser>
-    ) : NodeInputs
-
-    private val inputs: Inputs = inputs()
-    private val presenter by lazy {
-        presenterFactory.create(ConfigureRoomPresenterArgs(inputs.selectedUsers))
-    }
 
     @Composable
     override fun View(modifier: Modifier) {

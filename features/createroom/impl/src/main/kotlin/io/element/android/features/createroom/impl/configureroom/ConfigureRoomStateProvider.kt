@@ -17,8 +17,7 @@
 package io.element.android.features.createroom.impl.configureroom
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.matrix.ui.components.aMatrixUserList
-import kotlinx.collections.immutable.toImmutableList
+import io.element.android.features.createroom.impl.CreateRoomConfig
 
 open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomState> {
     override val values: Sequence<ConfigureRoomState>
@@ -28,11 +27,7 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
 }
 
 fun aConfigureRoomState() = ConfigureRoomState(
-    selectedUsers = aMatrixUserList().toImmutableList(),
-    roomName = "",
-    topic = "",
-    avatarUri = null,
-    privacy = null,
+    config = CreateRoomConfig(),
     isCreateButtonEnabled = false,
     eventSink = {}
 )

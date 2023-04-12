@@ -17,8 +17,12 @@
 package io.element.android.features.createroom.impl.addpeople
 
 import androidx.compose.runtime.Composable
-import io.element.android.features.userlist.api.SelectionMode
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import io.element.android.features.createroom.impl.CreateRoomConfig
+import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.features.userlist.api.MatrixUserDataSource
+import io.element.android.features.userlist.api.SelectionMode
 import io.element.android.features.userlist.api.UserListPresenter
 import io.element.android.features.userlist.api.UserListPresenterArgs
 import io.element.android.libraries.architecture.Presenter
@@ -28,6 +32,7 @@ import javax.inject.Named
 class AddPeoplePresenter @Inject constructor(
     private val userListPresenterFactory: UserListPresenter.Factory,
     @Named("AllUsers") private val matrixUserDataSource: MatrixUserDataSource,
+    private val dataStore: CreateRoomDataStore,
 ) : Presenter<AddPeopleState> {
 
     private val userListPresenter by lazy {
@@ -40,7 +45,10 @@ class AddPeoplePresenter @Inject constructor(
     @Composable
     override fun present(): AddPeopleState {
         val userListState = userListPresenter.present()
-
+        val createRoomConfig = dataStore.getCreateRoomConfig().collectAsState(CreateRoomConfig())
+        LaunchedEffect(userListState.selectedUsers) {
+            dataStore.setCreateRoomConfig(createRoomConfig.value.copy(invites = userListState.selectedUsers))
+        }
         fun handleEvents(event: AddPeopleEvents) {
             // do nothing for now
         }
