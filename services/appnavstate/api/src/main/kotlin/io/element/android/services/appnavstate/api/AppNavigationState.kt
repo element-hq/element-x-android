@@ -21,26 +21,34 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.SpaceId
 import io.element.android.libraries.matrix.api.core.ThreadId
 
-sealed interface AppNavigationState {
-    object Root : AppNavigationState
+/**
+ * Can represent the current global app navigation state.
+ * @param owner mostly a Node identifier associated with the state.
+ */
+sealed class AppNavigationState(open val owner: String) {
+    object Root : AppNavigationState("ROOT")
 
     data class Session(
+        override val owner: String,
         val sessionId: SessionId,
-    ) : AppNavigationState
+    ) : AppNavigationState(owner)
 
     data class Space(
+        override val owner: String,
         // Can be fake value, if no space is selected
         val spaceId: SpaceId,
         val parentSession: Session,
-    ) : AppNavigationState
+    ) : AppNavigationState(owner)
 
     data class Room(
+        override val owner: String,
         val roomId: RoomId,
         val parentSpace: Space,
-    ) : AppNavigationState
+    ) : AppNavigationState(owner)
 
     data class Thread(
+        override val owner: String,
         val threadId: ThreadId,
         val parentRoom: Room,
-    ) : AppNavigationState
+    ) : AppNavigationState(owner)
 }
