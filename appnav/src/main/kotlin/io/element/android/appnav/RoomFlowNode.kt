@@ -82,13 +82,13 @@ class RoomFlowNode @AssistedInject constructor(
             onCreate = {
                 Timber.v("OnCreate")
                 plugins<LifecycleCallback>().forEach { it.onFlowCreated(inputs.room) }
-                appNavigationStateService.onNavigateToRoom(inputs.room.roomId)
+                appNavigationStateService.onNavigateToRoom(id, inputs.room.roomId)
             },
             onDestroy = {
                 Timber.v("OnDestroy")
                 inputs.room.close()
                 plugins<LifecycleCallback>().forEach { it.onFlowReleased(inputs.room) }
-                appNavigationStateService.onLeavingRoom()
+                appNavigationStateService.onLeavingRoom(id)
             }
         )
 
