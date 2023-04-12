@@ -56,19 +56,16 @@ class RoomDetailsFlowNode @AssistedInject constructor(
         object RoomMemberList : NavTarget
     }
 
-    interface Callback : Plugin {
-        fun openRoomMemberList()
-    }
-
-    val callback = object : Callback {
-        override fun openRoomMemberList() {
-            backstack.push(NavTarget.RoomMemberList)
-        }
-    }
-
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.RoomDetails -> createNode<RoomDetailsNode>(buildContext, listOf(callback))
+            NavTarget.RoomDetails -> {
+                val callback = object : RoomDetailsNode.Callback {
+                    override fun openRoomMemberList() {
+                        backstack.push(NavTarget.RoomMemberList)
+                    }
+                }
+                createNode<RoomDetailsNode>(buildContext, listOf(callback))
+            }
             NavTarget.RoomMemberList -> createNode<RoomMemberListNode>(buildContext)
         }
     }
