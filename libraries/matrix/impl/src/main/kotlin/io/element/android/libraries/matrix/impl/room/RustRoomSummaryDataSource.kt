@@ -59,7 +59,7 @@ internal class RustRoomSummaryDataSource(
         coroutineScope.launch {
             updateRoomSummaries {
                 addAll(
-                    slidingSyncList.currentRoomsList().map(::buildSummaryForRoomListEntry)
+                    slidingSyncList.currentRoomList().map(::buildSummaryForRoomListEntry)
                 )
             }
         }

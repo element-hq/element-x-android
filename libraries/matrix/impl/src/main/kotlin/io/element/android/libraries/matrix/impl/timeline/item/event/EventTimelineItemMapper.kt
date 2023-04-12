@@ -25,7 +25,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimeli
 import org.matrix.rustcomponents.sdk.Reaction
 import org.matrix.rustcomponents.sdk.EventSendState as RustEventSendState
 import org.matrix.rustcomponents.sdk.EventTimelineItem as RustEventTimelineItem
-import org.matrix.rustcomponents.sdk.ProfileTimelineDetails as RustProfileTimelineDetails
+import org.matrix.rustcomponents.sdk.ProfileDetails as RustProfileDetails
 
 class EventTimelineItemMapper(private val contentMapper: TimelineEventContentMapper = TimelineEventContentMapper()) {
 
@@ -47,12 +47,12 @@ class EventTimelineItemMapper(private val contentMapper: TimelineEventContentMap
     }
 }
 
-fun RustProfileTimelineDetails.map(): ProfileTimelineDetails {
+fun RustProfileDetails.map(): ProfileTimelineDetails {
     return when (this) {
-        RustProfileTimelineDetails.Pending -> ProfileTimelineDetails.Pending
-        RustProfileTimelineDetails.Unavailable -> ProfileTimelineDetails.Unavailable
-        is RustProfileTimelineDetails.Error -> ProfileTimelineDetails.Error(message)
-        is RustProfileTimelineDetails.Ready -> ProfileTimelineDetails.Ready(
+        RustProfileDetails.Pending -> ProfileTimelineDetails.Pending
+        RustProfileDetails.Unavailable -> ProfileTimelineDetails.Unavailable
+        is RustProfileDetails.Error -> ProfileTimelineDetails.Error(message)
+        is RustProfileDetails.Ready -> ProfileTimelineDetails.Ready(
             displayName = displayName,
             displayNameAmbiguous = displayNameAmbiguous,
             avatarUrl = avatarUrl

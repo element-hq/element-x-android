@@ -114,7 +114,6 @@ class RustMatrixClient constructor(
         )
         .filters(slidingSyncFilters)
         .name(name = "CurrentlyVisibleRooms")
-        .sendUpdatesForItems(true)
         .syncMode(mode = SlidingSyncMode.SELECTIVE)
         .addRange(0u, 20u)
         .use {
@@ -125,7 +124,7 @@ class RustMatrixClient constructor(
         .slidingSync()
         .homeserver("https://slidingsync.lab.matrix.org")
         .withCommonExtensions()
-        .coldCache("ElementX")
+        .storageKey("ElementX")
         .addList(visibleRoomsSlidingSyncList)
         .use {
             it.build()
