@@ -24,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.libraries.architecture.Presenter
+import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
 class ConfigureRoomPresenter @Inject constructor(
@@ -44,6 +45,13 @@ class ConfigureRoomPresenter @Inject constructor(
                 is ConfigureRoomEvents.RoomNameChanged -> dataStore.setCreateRoomConfig(createRoomConfig.value.copy(roomName = event.name))
                 is ConfigureRoomEvents.TopicChanged -> dataStore.setCreateRoomConfig(createRoomConfig.value.copy(topic = event.topic.takeUnless { it.isEmpty() }))
                 is ConfigureRoomEvents.RoomPrivacyChanged -> dataStore.setCreateRoomConfig(createRoomConfig.value.copy(privacy = event.privacy))
+                is ConfigureRoomEvents.RemoveFromSelection -> dataStore.setCreateRoomConfig(
+                    createRoomConfig.value.copy(
+                        invites = createRoomConfig.value.invites.minus(
+                            event.matrixUser
+                        ).toImmutableList()
+                    )
+                )
                 ConfigureRoomEvents.CreateRoom -> Unit
             }
         }
