@@ -63,4 +63,4 @@ fun aUserListState() = UserListState(
     eventSink = {}
 )
 
-fun aListOfSelectedUsers() = aMatrixUserList().take(4).toImmutableList()
+fun aListOfSelectedUsers() = aMatrixUserList().take(6).toImmutableList()
