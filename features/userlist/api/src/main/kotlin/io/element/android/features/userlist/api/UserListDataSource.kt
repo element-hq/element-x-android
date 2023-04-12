@@ -19,7 +19,7 @@ package io.element.android.features.userlist.api
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 
-interface MatrixUserDataSource {
+interface UserListDataSource {
     suspend fun search(query: String): List<MatrixUser>
     suspend fun getProfile(userId: UserId): MatrixUser?
 }

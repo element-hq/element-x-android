@@ -16,7 +16,7 @@
 
 package io.element.android.features.roomdetails.impl.members
 
-import io.element.android.features.userlist.api.MatrixUserDataSource
+import io.element.android.features.userlist.api.UserListDataSource
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.UserId
@@ -25,9 +25,9 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import javax.inject.Inject
 
-class RoomMatrixUserDataSource @Inject constructor(
+class RoomUserListDataSource @Inject constructor(
     private val room: MatrixRoom
-) : MatrixUserDataSource {
+) : UserListDataSource {
 
     override suspend fun search(query: String): List<MatrixUser> {
         return room.members().filter { member ->
