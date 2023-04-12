@@ -60,6 +60,6 @@ class DefaultUserPushStoreFactory @Inject constructor(
 
     override suspend fun onSessionDeleted(userId: String) {
         // Delete the store
-        create(userId.asSessionId()).reset()
+        userId.asSessionId()?.let { create(it).reset() }
     }
 }

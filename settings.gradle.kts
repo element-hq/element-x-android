@@ -49,6 +49,7 @@ rootProject.name = "ElementX"
 include(":app")
 include(":appnav")
 include(":tests:uitests")
+include(":tests:testutils")
 include(":anvilannotations")
 include(":anvilcodegen")
 

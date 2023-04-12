@@ -22,8 +22,12 @@ import java.io.Serializable
 @JvmInline
 value class RoomId(val value: String) : Serializable
 
-fun String.asRoomId() = RoomId(this).also {
-    if (BuildConfig.DEBUG && !MatrixPatterns.isRoomId(this)) {
+fun String.asRoomId() =  if (MatrixPatterns.isRoomId(this)) {
+    RoomId(this)
+} else {
+    if (BuildConfig.DEBUG) {
         error("`$this` is not a valid room Id")
+    } else {
+        null
     }
 }

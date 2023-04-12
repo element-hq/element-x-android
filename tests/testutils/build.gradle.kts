@@ -14,18 +14,23 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.core
+// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
+@Suppress("DSL_SCOPE_VIOLATION")
+plugins {
+    id("io.element.android-library")
+    alias(libs.plugins.ksp)
+}
 
-import io.element.android.libraries.matrix.api.BuildConfig
+android {
+    namespace = "io.element.android.tests.testutils"
+}
 
-typealias SessionId = UserId
-
-fun String.asSessionId() = if (MatrixPatterns.isSessionId(this)) {
-    SessionId(this)
-} else {
-    if (BuildConfig.DEBUG) {
-        error("`$this` is not a valid session Id")
-    } else {
-        null
-    }
+dependencies {
+    implementation(libs.test.junit)
+    implementation(libs.test.mockk)
+    implementation(libs.test.truth)
+    implementation(libs.test.turbine)
+    implementation(libs.coroutines.test)
+    implementation(projects.libraries.matrix.test)
+    implementation(projects.services.appnavstate.test)
 }

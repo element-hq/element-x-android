@@ -42,7 +42,7 @@ class FirebaseNewTokenHandler @Inject constructor(
         firebaseStore.storeFcmToken(firebaseToken)
         // Register the pusher for all the sessions
         sessionStore.getAllSessions().toUserList()
-            .map { it.asSessionId() }
+            .mapNotNull { it.asSessionId() }
             .forEach { userId ->
                 val userDataStore = userPushStoreFactory.create(userId)
                 if (userDataStore.getPushProviderName() == FirebaseConfig.name) {

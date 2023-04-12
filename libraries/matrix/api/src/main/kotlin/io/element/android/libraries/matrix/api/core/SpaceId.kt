@@ -27,8 +27,12 @@ value class SpaceId(val value: String) : Serializable
  */
 val MAIN_SPACE = SpaceId("!mainSpace")
 
-fun String.asSpaceId() = SpaceId(this).also {
-    if (BuildConfig.DEBUG && !MatrixPatterns.isSpaceId(this)) {
+fun String.asSpaceId() = if (MatrixPatterns.isSpaceId(this)) {
+    SpaceId(this)
+} else {
+    if (BuildConfig.DEBUG) {
         error("`$this` is not a valid space Id")
+    } else {
+        null
     }
 }
