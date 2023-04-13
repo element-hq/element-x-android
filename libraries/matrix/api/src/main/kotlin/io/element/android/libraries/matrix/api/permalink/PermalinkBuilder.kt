@@ -19,8 +19,14 @@ package io.element.android.libraries.matrix.api.permalink
 import io.element.android.libraries.matrix.api.config.MatrixConfiguration
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 
 object PermalinkBuilder {
+
+    private const val ROOM_PATH = "room/"
+    private const val USER_PATH = "user/"
+    private const val GROUP_PATH = "group/"
+
     private val permalinkBaseUrl get() = (MatrixConfiguration.clientPermalinkBaseUrl ?: MatrixConfiguration.matrixToPermalinkBaseUrl).also {
         var baseUrl = it
         if (!baseUrl.endsWith("/")) {
@@ -28,6 +34,21 @@ object PermalinkBuilder {
         }
         if (!baseUrl.endsWith("/#/")) {
             baseUrl += "/#/"
+        }
+    }
+
+    fun permalinkForUser(userId: UserId): Result<String> {
+        return if (MatrixPatterns.isUserId(userId.value)) {
+            val url = buildString {
+                append(permalinkBaseUrl)
+                if (!isMatrixTo()) {
+                    append(USER_PATH)
+                }
+                append(userId.value)
+            }
+            Result.success(url)
+        } else {
+            Result.failure(PermalinkBuilderError.InvalidRoomAlias)
         }
     }
 
@@ -49,10 +70,18 @@ object PermalinkBuilder {
 
     private fun permalinkForRoomAliasOrId(value: String): String {
         val id = escapeId(value)
-        return permalinkBaseUrl + id
+        return buildString {
+            append(permalinkBaseUrl)
+            if (!isMatrixTo()) {
+                append(ROOM_PATH)
+            }
+            append(id)
+        }
     }
 
     private fun escapeId(value: String) = value.replace("/", "%2F")
+
+    private fun isMatrixTo(): Boolean = permalinkBaseUrl.startsWith(MatrixConfiguration.matrixToPermalinkBaseUrl)
 }
 
 sealed class PermalinkBuilderError : Throwable() {

@@ -14,22 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl.di
+package io.element.android.features.roomdetails.impl.members.details
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Binds
-import dagger.Module
-import io.element.android.features.roomdetails.impl.members.RoomMatrixUserDataSource
-import io.element.android.features.userlist.api.MatrixUserDataSource
-import io.element.android.libraries.di.RoomScope
-import javax.inject.Named
-
-@Module
-@ContributesTo(RoomScope::class)
-interface RoomMemberModule {
-
-    @Binds
-    @Named("RoomMembers")
-    fun bindRoomMemberUserListDataSource(dataSource: RoomMatrixUserDataSource): MatrixUserDataSource
-
+// TODO Add your events or remove the file completely if no events
+sealed interface RoomMemberDetailsEvents {
+    object MyEvent : RoomMemberDetailsEvents
 }
