@@ -24,7 +24,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.libraries.architecture.Presenter
-import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
 class ConfigureRoomPresenter @Inject constructor(
@@ -41,18 +40,11 @@ class ConfigureRoomPresenter @Inject constructor(
 
         fun handleEvents(event: ConfigureRoomEvents) {
             when (event) {
-                is ConfigureRoomEvents.AvatarUriChanged ->
-                    dataStore.setCreateRoomConfig(createRoomConfig.value.copy(avatarUrl = event.uri?.toString()))
-                is ConfigureRoomEvents.RoomNameChanged ->
-                    dataStore.setCreateRoomConfig(createRoomConfig.value.copy(roomName = event.name.takeUnless { it.isEmpty() }))
-                is ConfigureRoomEvents.TopicChanged ->
-                    dataStore.setCreateRoomConfig(createRoomConfig.value.copy(topic = event.topic.takeUnless { it.isEmpty() }))
-                is ConfigureRoomEvents.RoomPrivacyChanged ->
-                    dataStore.setCreateRoomConfig(createRoomConfig.value.copy(privacy = event.privacy))
-                is ConfigureRoomEvents.RemoveFromSelection ->
-                    dataStore.setCreateRoomConfig(
-                        createRoomConfig.value.copy(invites = createRoomConfig.value.invites.minus(event.matrixUser).toImmutableList())
-                    )
+                is ConfigureRoomEvents.AvatarUriChanged -> dataStore.setAvatarUrl(event.uri?.toString())
+                is ConfigureRoomEvents.RoomNameChanged -> dataStore.setRoomName(event.name)
+                is ConfigureRoomEvents.TopicChanged -> dataStore.setTopic(event.topic)
+                is ConfigureRoomEvents.RoomPrivacyChanged -> dataStore.setPrivacy(event.privacy)
+                is ConfigureRoomEvents.RemoveFromSelection -> dataStore.selectedUserListDataStore.removeUserFromSelection(event.matrixUser)
                 ConfigureRoomEvents.CreateRoom -> Unit
             }
         }
