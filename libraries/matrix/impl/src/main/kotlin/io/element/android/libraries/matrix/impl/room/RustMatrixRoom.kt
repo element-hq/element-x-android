@@ -20,6 +20,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
@@ -66,6 +67,10 @@ class RustMatrixRoom(
 
     override suspend fun memberCount(): Int {
         return members().size
+    }
+
+    override fun getMember(userId: UserId): RoomMember? {
+        return cachedMembers.firstOrNull { it.userId == userId.value }
     }
 
     override fun syncUpdateFlow(): Flow<Long> {
