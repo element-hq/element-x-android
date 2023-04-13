@@ -17,6 +17,7 @@
 package io.element.android.appnav
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,6 +46,8 @@ import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.deeplink.DeeplinkData
+import io.element.android.libraries.deeplink.DeeplinkParser
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -65,6 +68,7 @@ class RootFlowNode @AssistedInject constructor(
     private val matrixClientsHolder: MatrixClientsHolder,
     private val presenter: RootPresenter,
     private val bugReportEntryPoint: BugReportEntryPoint,
+    private val deeplinkParser: DeeplinkParser,
 ) :
     BackstackNode<RootFlowNode.NavTarget>(
         backstack = BackStack(
@@ -205,6 +209,32 @@ class RootFlowNode @AssistedInject constructor(
     private fun splashNode(buildContext: BuildContext) = node(buildContext) {
         Box(modifier = it.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
+        }
+    }
+
+    suspend fun handleIntent(intent: Intent) {
+        deeplinkParser.getFromIntent(intent)
+            ?.let { navigateTo(it) }
+    }
+
+    private suspend fun navigateTo(deeplinkData: DeeplinkData) {
+        Timber.d("Navigating to $deeplinkData")
+        attachSession(deeplinkData.sessionId)
+            .apply {
+                val roomId = deeplinkData.roomId
+                if (roomId == null) {
+                    // In case room is not provided, ensure the app navigate back to the room list
+                    attachRoot()
+                } else {
+                    attachRoom(roomId)
+                    // TODO .attachThread(deeplinkData.threadId)
+                }
+            }
+    }
+
+    private suspend fun attachSession(sessionId: SessionId): LoggedInFlowNode {
+        return attachChild {
+            backstack.newRoot(NavTarget.LoggedInFlow(sessionId))
         }
     }
 }

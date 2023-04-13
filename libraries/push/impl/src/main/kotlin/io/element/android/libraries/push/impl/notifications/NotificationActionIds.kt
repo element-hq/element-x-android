@@ -34,7 +34,6 @@ data class NotificationActionIds @Inject constructor(
     val smartReply = "${buildMeta.applicationId}.NotificationActions.SMART_REPLY_ACTION"
     val dismissSummary = "${buildMeta.applicationId}.NotificationActions.DISMISS_SUMMARY_ACTION"
     val dismissRoom = "${buildMeta.applicationId}.NotificationActions.DISMISS_ROOM_NOTIF_ACTION"
-    val tapToView = "${buildMeta.applicationId}.NotificationActions.TAP_TO_VIEW_ACTION"
     val diagnostic = "${buildMeta.applicationId}.NotificationActions.DIAGNOSTIC"
     val push = "${buildMeta.applicationId}.PUSH"
 }

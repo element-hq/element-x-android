@@ -28,12 +28,15 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.bumble.appyx.core.integration.NodeHost
 import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
+import com.bumble.appyx.core.plugin.NodeReadyObserver
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.x.di.AppBindings
 import timber.log.Timber
 
 class MainActivity : NodeComponentActivity() {
+
+    lateinit var mainNode: MainNode
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -44,10 +47,23 @@ class MainActivity : NodeComponentActivity() {
         setContent {
             ElementTheme {
                 Box(
-                    modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background),
                 ) {
                     NodeHost(integrationPoint = appyxIntegrationPoint) {
-                        MainNode(it, appBindings.mainDaggerComponentOwner())
+                        MainNode(
+                            it,
+                            appBindings.mainDaggerComponentOwner(),
+                            plugins = listOf(
+                                object : NodeReadyObserver<MainNode> {
+                                    override fun init(node: MainNode) {
+                                        mainNode = node
+                                        mainNode.handleIntent(intent)
+                                    }
+                                }
+                            )
+                        )
                     }
                 }
             }
@@ -63,6 +79,8 @@ class MainActivity : NodeComponentActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         Timber.w("onNewIntent")
+        intent ?: return
+        mainNode.handleIntent(intent)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
