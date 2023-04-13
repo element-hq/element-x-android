@@ -29,7 +29,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
@@ -77,7 +76,6 @@ fun ConfigureRoomView(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
 ) {
-    val selectedUsersListState = rememberLazyListState()
     val context = LocalContext.current
     Scaffold(
         modifier = modifier,
@@ -106,7 +104,6 @@ fun ConfigureRoomView(
                 onTopicChanged = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
             )
             SelectedUsersList(
-                listState = selectedUsersListState,
                 contentPadding = PaddingValues(horizontal = 24.dp),
                 selectedUsers = state.config.invites,
                 onUserRemoved = { state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it)) },

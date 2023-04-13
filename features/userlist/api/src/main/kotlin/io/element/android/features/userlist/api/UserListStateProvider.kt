@@ -16,7 +16,6 @@
 
 package io.element.android.features.userlist.api
 
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import kotlinx.collections.immutable.persistentListOf
@@ -55,10 +54,6 @@ fun aUserListState() = UserListState(
     searchQuery = "",
     searchResults = persistentListOf(),
     selectedUsers = persistentListOf(),
-    selectedUsersListState = LazyListState(
-        firstVisibleItemIndex = 0,
-        firstVisibleItemScrollOffset = 0,
-    ),
     selectionMode = SelectionMode.Single,
     eventSink = {}
 )

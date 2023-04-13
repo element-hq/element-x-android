@@ -46,7 +46,6 @@ fun UserListView(
             query = state.searchQuery,
             results = state.searchResults,
             selectedUsers = state.selectedUsers,
-            selectedUsersListState = state.selectedUsersListState,
             active = state.isSearchActive,
             isMultiSelectionEnabled = state.isMultiSelectionEnabled,
             onActiveChanged = { state.eventSink(UserListEvents.OnSearchActiveChanged(it)) },
@@ -63,9 +62,9 @@ fun UserListView(
 
         if (state.isMultiSelectionEnabled && !state.isSearchActive && state.selectedUsers.isNotEmpty()) {
             SelectedUsersList(
-                listState = state.selectedUsersListState,
                 contentPadding = PaddingValues(16.dp),
                 selectedUsers = state.selectedUsers,
+                autoScroll = true,
                 onUserRemoved = {
                     state.eventSink(UserListEvents.RemoveFromSelection(it))
                     onUserDeselected(it)
