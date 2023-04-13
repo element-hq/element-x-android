@@ -34,10 +34,11 @@ import io.element.android.features.userlist.api.aListOfSelectedUsers
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun SelectedUsersList(
-    selectedUsers: List<MatrixUser>,
+    selectedUsers: ImmutableList<MatrixUser>,
     modifier: Modifier = Modifier,
     autoScroll: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
