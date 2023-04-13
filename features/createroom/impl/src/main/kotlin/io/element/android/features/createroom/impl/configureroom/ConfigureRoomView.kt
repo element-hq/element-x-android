@@ -261,12 +261,12 @@ fun RoomPrivacyOptions(
     Column(modifier = modifier.selectableGroup()) {
         items.forEach { item ->
             RoomPrivacyOption(
-                privacy = RoomPrivacy.Private,
+                privacy = item.privacy,
                 icon = item.icon,
                 title = item.title,
                 description = item.description,
                 isSelected = selected == item.privacy,
-                onOptionSelected = { onOptionSelected(item.privacy) }
+                onOptionSelected = onOptionSelected,
             )
         }
     }
