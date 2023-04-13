@@ -233,7 +233,8 @@ fun aRoomMember(
     membership: RoomMembershipState = RoomMembershipState.JOIN,
     isNameAmbiguous: Boolean = false,
     powerLevel: Long = 0L,
-    normalizedPowerLevel: Long = 0L
+    normalizedPowerLevel: Long = 0L,
+    isIgnored: Boolean = false,
 ) = RoomMember(
     userId = userId.value,
     displayName = displayName,
@@ -242,4 +243,5 @@ fun aRoomMember(
     isNameAmbiguous = isNameAmbiguous,
     powerLevel = powerLevel,
     normalizedPowerLevel = normalizedPowerLevel,
+    isIgnored = isIgnored,
 )
