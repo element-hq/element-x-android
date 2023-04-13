@@ -111,7 +111,7 @@ fun ConfigureRoomView(
             RoomPrivacyOptions(
                 modifier = Modifier.padding(bottom = 40.dp),
                 selected = state.privacy,
-                onOptionSelected = { state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it)) },
+                onOptionSelected = { state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it.privacy)) },
             )
         }
     }
@@ -228,20 +228,19 @@ fun RoomTopic(
     )
 }
 
+data class RoomPrivacyItem(
+    val privacy: RoomPrivacy,
+    val icon: ImageVector,
+    val title: String,
+    val description: String,
+)
+
 @Composable
 fun RoomPrivacyOptions(
     selected: RoomPrivacy?,
     modifier: Modifier = Modifier,
-    onOptionSelected: (RoomPrivacy) -> Unit = {},
+    onOptionSelected: (RoomPrivacyItem) -> Unit = {},
 ) {
-
-    data class RoomPrivacyItem(
-        val privacy: RoomPrivacy,
-        val icon: ImageVector,
-        val title: String,
-        val description: String,
-    )
-
     val items = RoomPrivacy.values().map {
         when (it) {
             RoomPrivacy.Public -> RoomPrivacyItem(
@@ -261,10 +260,7 @@ fun RoomPrivacyOptions(
     Column(modifier = modifier.selectableGroup()) {
         items.forEach { item ->
             RoomPrivacyOption(
-                privacy = item.privacy,
-                icon = item.icon,
-                title = item.title,
-                description = item.description,
+                roomPrivacyItem = item,
                 isSelected = selected == item.privacy,
                 onOptionSelected = onOptionSelected,
             )
@@ -274,27 +270,24 @@ fun RoomPrivacyOptions(
 
 @Composable
 fun RoomPrivacyOption(
-    privacy: RoomPrivacy,
-    icon: ImageVector,
-    title: String,
-    description: String,
+    roomPrivacyItem: RoomPrivacyItem,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
-    onOptionSelected: (RoomPrivacy) -> Unit = {},
+    onOptionSelected: (RoomPrivacyItem) -> Unit = {},
 ) {
     Row(
         modifier
             .fillMaxWidth()
             .selectable(
                 selected = isSelected,
-                onClick = { onOptionSelected(privacy) },
+                onClick = { onOptionSelected(roomPrivacyItem) },
                 role = Role.RadioButton,
             )
             .padding(8.dp),
     ) {
         Icon(
             modifier = Modifier.padding(horizontal = 8.dp),
-            imageVector = icon,
+            imageVector = roomPrivacyItem.icon,
             contentDescription = "",
             tint = MaterialTheme.colorScheme.secondary,
         )
@@ -305,13 +298,13 @@ fun RoomPrivacyOption(
                 .padding(horizontal = 8.dp)
         ) {
             Text(
-                text = title,
+                text = roomPrivacyItem.title,
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.primary,
             )
             Spacer(Modifier.size(3.dp))
             Text(
-                text = description,
+                text = roomPrivacyItem.description,
                 fontSize = 12.sp,
                 lineHeight = 17.sp,
                 color = MaterialTheme.colorScheme.tertiary,
