@@ -16,20 +16,43 @@
 
 package io.element.android.features.createroom.impl
 
+import io.element.android.features.createroom.impl.configureroom.RoomPrivacy
 import io.element.android.features.createroom.impl.di.CreateRoomScope
+import io.element.android.features.userlist.api.UserListDataStore
 import io.element.android.libraries.di.SingleIn
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
 
 @SingleIn(CreateRoomScope::class)
-class CreateRoomDataStore @Inject constructor() {
+class CreateRoomDataStore @Inject constructor(
+    val selectedUserListDataStore: UserListDataStore,
+) {
 
     private val createRoomConfigFlow: MutableStateFlow<CreateRoomConfig> = MutableStateFlow(CreateRoomConfig())
 
-    fun getCreateRoomConfig(): Flow<CreateRoomConfig> = createRoomConfigFlow
+    fun getCreateRoomConfig(): Flow<CreateRoomConfig> = combine(
+        selectedUserListDataStore.selectedUsers(),
+        createRoomConfigFlow,
+    ) { selectedUsers, config ->
+        config.copy(invites = selectedUsers.toImmutableList())
+    }
 
-    fun setCreateRoomConfig(createRoomConfig: CreateRoomConfig) {
-        createRoomConfigFlow.tryEmit(createRoomConfig)
+    fun setRoomName(roomName: String?) {
+        createRoomConfigFlow.tryEmit(createRoomConfigFlow.value.copy(roomName = roomName?.takeIf { it.isNotEmpty() }))
+    }
+
+    fun setTopic(topic: String?) {
+        createRoomConfigFlow.tryEmit(createRoomConfigFlow.value.copy(topic = topic?.takeIf { it.isNotEmpty() }))
+    }
+
+    fun setAvatarUrl(avatarUrl: String?) {
+        createRoomConfigFlow.tryEmit(createRoomConfigFlow.value.copy(avatarUrl = avatarUrl))
+    }
+
+    fun setPrivacy(privacy: RoomPrivacy?) {
+        createRoomConfigFlow.tryEmit(createRoomConfigFlow.value.copy(privacy = privacy))
     }
 }

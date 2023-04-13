@@ -16,15 +16,22 @@
 
 package io.element.android.features.userlist.api
 
-import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.ui.model.MatrixUser
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import javax.inject.Inject
 
-interface UserListPresenter : Presenter<UserListState> {
+class UserListDataStore @Inject constructor() {
 
-    interface Factory {
-        fun create(
-            args: UserListPresenterArgs,
-            userListDataSource: UserListDataSource,
-            userListDataStore: UserListDataStore,
-        ): UserListPresenter
+    private val selectedUsers: MutableStateFlow<List<MatrixUser>> = MutableStateFlow(emptyList())
+
+    fun selectUser(user: MatrixUser) {
+        selectedUsers.tryEmit(selectedUsers.value.plus(user))
     }
+
+    fun removeUserFromSelection(user: MatrixUser) {
+        selectedUsers.tryEmit(selectedUsers.value.minus(user))
+    }
+
+    fun selectedUsers(): Flow<List<MatrixUser>> = selectedUsers
 }
