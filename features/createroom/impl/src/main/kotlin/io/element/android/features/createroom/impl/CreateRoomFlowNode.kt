@@ -68,7 +68,7 @@ class CreateRoomFlowNode @AssistedInject constructor(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Root -> {
-                createNode<CreateRoomRootNode>(context = buildContext, plugins = listOf(object : CreateRoomRootNode.Callback {
+                val callback = object : CreateRoomRootNode.Callback {
                     override fun onCreateNewRoom() {
                         backstack.push(NavTarget.NewRoom)
                     }
@@ -76,14 +76,16 @@ class CreateRoomFlowNode @AssistedInject constructor(
                     override fun onOpenRoom(roomId: RoomId) {
                         plugins<CreateRoomEntryPoint.Callback>().forEach { it.onOpenRoom(roomId) }
                     }
-                }))
+                }
+                createNode<CreateRoomRootNode>(context = buildContext, plugins = listOf(callback))
             }
             NavTarget.NewRoom -> {
-                createNode<AddPeopleNode>(context = buildContext, plugins = listOf(object : AddPeopleNode.Callback {
+                val callback = object : AddPeopleNode.Callback {
                     override fun onContinue(selectedUsers: List<MatrixUser>) {
                         backstack.push(NavTarget.ConfigureRoom(selectedUsers))
                     }
-                }))
+                }
+                createNode<AddPeopleNode>(context = buildContext, plugins = listOf(callback))
             }
             is NavTarget.ConfigureRoom -> {
                 createNode<ConfigureRoomNode>(context = buildContext, plugins = listOf(ConfigureRoomNode.Inputs(navTarget.users)))
