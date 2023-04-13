@@ -72,11 +72,7 @@ class DefaultUserListPresenter @AssistedInject constructor(
             when (event) {
                 is UserListEvents.OnSearchActiveChanged -> isSearchActive = event.active
                 is UserListEvents.UpdateSearchQuery -> searchQuery = event.query
-                is UserListEvents.AddToSelection -> {
-                    if (event.matrixUser !in selectedUsers.value) {
-                        userListDataStore.selectUser(event.matrixUser)
-                    }
-                }
+                is UserListEvents.AddToSelection -> userListDataStore.selectUser(event.matrixUser)
                 is UserListEvents.RemoveFromSelection -> userListDataStore.removeUserFromSelection(event.matrixUser)
             }
         }
