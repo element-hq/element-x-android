@@ -18,8 +18,10 @@ package io.element.android.features.createroom.impl.configureroom
 
 import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
@@ -43,9 +45,10 @@ class ConfigureRoomPresenter @AssistedInject constructor(
         var topic by rememberSaveable { mutableStateOf("") }
         var avatarUri by rememberSaveable { mutableStateOf<Uri?>(null) }
         var privacy by rememberSaveable { mutableStateOf<RoomPrivacy?>(null) }
-        val isCreateButtonEnabled by rememberSaveable(roomName, privacy) {
-            val enabled = roomName.isNotEmpty() && privacy != null
-            mutableStateOf(enabled)
+        val isCreateButtonEnabled by remember {
+            derivedStateOf {
+                roomName.isNotEmpty() && privacy != null
+            }
         }
 
         fun handleEvents(event: ConfigureRoomEvents) {
