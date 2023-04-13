@@ -37,5 +37,7 @@ dependencies {
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)
+    testImplementation(libs.test.robolectric)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.tests.testutils)
 }
