@@ -41,6 +41,7 @@ dependencies {
     implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
     implementation(projects.libraries.core)
+    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
@@ -63,6 +64,7 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.dateformatter.test)
     testImplementation(projects.features.networkmonitor.test)
+    testImplementation(projects.libraries.permissions.noop)
 
     androidTestImplementation(libs.test.junitext)
 }

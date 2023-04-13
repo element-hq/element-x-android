@@ -20,3 +20,5 @@ import java.io.Serializable
 
 @JvmInline
 value class ThreadId(val value: String) : Serializable
+
+fun String.asThreadId() = ThreadId(this)

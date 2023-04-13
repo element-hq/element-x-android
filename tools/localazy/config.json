@@ -44,6 +44,13 @@
       ]
     },
     {
+      "name": ":libraries:push:impl",
+      "includeRegex": [
+        "push_.*",
+        "notification_.*"
+      ]
+    },
+    {
       "name": ":features:login:impl",
       "includeRegex": [
         "screen_login_.*",

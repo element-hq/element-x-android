@@ -18,6 +18,7 @@ package io.element.android.libraries.sessionstorage.impl
 
 import com.squareup.anvil.annotations.ContributesBinding
 import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
@@ -25,6 +26,7 @@ import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import javax.inject.Inject
 
 @SingleIn(AppScope::class)
@@ -34,7 +36,10 @@ class DatabaseSessionStore @Inject constructor(
 ) : SessionStore {
 
     override fun isLoggedIn(): Flow<Boolean> {
-        return database.sessionDataQueries.selectFirst().asFlow().mapToOneOrNull().map { it != null }
+        return database.sessionDataQueries.selectFirst()
+            .asFlow()
+            .mapToOneOrNull()
+            .map { it != null }
     }
 
     override suspend fun storeData(sessionData: SessionData) {
@@ -51,6 +56,20 @@ class DatabaseSessionStore @Inject constructor(
         return database.sessionDataQueries.selectByUserId(sessionId)
             .executeAsOneOrNull()
             ?.toApiModel()
+    }
+
+    override suspend fun getAllSessions(): List<SessionData> {
+        return database.sessionDataQueries.selectAll()
+            .executeAsList()
+            .map { it.toApiModel() }
+    }
+
+    override fun sessionsFlow(): Flow<List<SessionData>> {
+        Timber.w("Observing session list!")
+        return database.sessionDataQueries.selectAll()
+            .asFlow()
+            .mapToList()
+            .map { it.map { sessionData -> sessionData.toApiModel() } }
     }
 
     override suspend fun removeSession(sessionId: String) {

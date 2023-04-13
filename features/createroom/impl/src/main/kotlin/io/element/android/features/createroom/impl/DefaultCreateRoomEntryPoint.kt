@@ -18,6 +18,7 @@ package io.element.android.features.createroom.impl
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.core.plugin.Plugin
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.libraries.architecture.createNode
@@ -26,7 +27,21 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultCreateRoomEntryPoint @Inject constructor() : CreateRoomEntryPoint {
-    override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
-        return parentNode.createNode<CreateRoomFlowNode>(buildContext)
+
+    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): CreateRoomEntryPoint.NodeBuilder {
+
+        val plugins = ArrayList<Plugin>()
+
+        return object : CreateRoomEntryPoint.NodeBuilder {
+
+            override fun callback(callback: CreateRoomEntryPoint.Callback): CreateRoomEntryPoint.NodeBuilder {
+                plugins += callback
+                return this
+            }
+
+            override fun build(): Node {
+                return parentNode.createNode<CreateRoomFlowNode>(buildContext, plugins)
+            }
+        }
     }
 }

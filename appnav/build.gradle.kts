@@ -41,10 +41,16 @@ dependencies {
     allFeaturesApi(rootDir)
 
     implementation(projects.libraries.core)
+    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.push.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.matrixui)
+    implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.permissions.api)
+    implementation(projects.libraries.permissions.noop)
+
     implementation(projects.features.verifysession.api)
     implementation(projects.features.roomdetails.api)
     implementation(projects.tests.uitests)

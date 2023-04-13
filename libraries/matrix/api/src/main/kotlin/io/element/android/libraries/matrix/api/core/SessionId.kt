@@ -17,3 +17,5 @@
 package io.element.android.libraries.matrix.api.core
 
 typealias SessionId = UserId
+
+fun String.asSessionId() = SessionId(this)

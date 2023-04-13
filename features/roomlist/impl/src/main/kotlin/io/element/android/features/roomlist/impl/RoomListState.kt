@@ -18,6 +18,7 @@ package io.element.android.features.roomlist.impl
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
@@ -26,8 +27,8 @@ data class RoomListState(
     val matrixUser: MatrixUser?,
     val roomList: ImmutableList<RoomListRoomSummary>,
     val filter: String,
-    val presentVerificationSuccessfulMessage: Boolean,
     val displayVerificationPrompt: Boolean,
     val hasNetworkConnection: Boolean,
+    val snackbarMessage: SnackbarMessage?,
     val eventSink: (RoomListEvents) -> Unit
 )

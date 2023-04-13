@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.androidutils.system
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.ActivityNotFoundException
@@ -77,6 +78,7 @@ fun Context.getApplicationLabel(packageName: String): String {
  * Note: If the user finally does not grant the permission, PushManager.isBackgroundSyncAllowed()
  * will return false and the notification privacy will fallback to "LOW_DETAIL".
  */
+@SuppressLint("BatteryLife")
 fun requestDisablingBatteryOptimization(activity: Activity, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val intent = Intent()
     intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
@@ -114,11 +116,28 @@ fun startNotificationSettingsIntent(context: Context, activityResultLauncher: Ac
         intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
         intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
     } else {
-        intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
-        intent.putExtra("app_package", context.packageName)
-        intent.putExtra("app_uid", context.applicationInfo?.uid)
+        intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.data = Uri.fromParts("package", context.packageName, null)
     }
     activityResultLauncher.launch(intent)
+}
+
+fun openAppSettingsPage(
+    activity: Activity,
+    noActivityFoundMessage: String,
+) {
+    try {
+        activity.startActivity(
+            Intent().apply {
+                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                data = Uri.fromParts("package", activity.packageName, null)
+            }
+        )
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        activity.toast(noActivityFoundMessage)
+    }
 }
 
 /**
