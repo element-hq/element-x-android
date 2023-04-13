@@ -23,58 +23,64 @@ import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.createroom.api.CreateRoomEntryPoint
-import io.element.android.features.createroom.impl.root.CreateRoomRootNode
+import io.element.android.features.createroom.impl.addpeople.AddPeopleNode
+import io.element.android.features.createroom.impl.configureroom.ConfigureRoomNode
+import io.element.android.features.createroom.impl.di.CreateRoomComponent
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
+import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
-class CreateRoomFlowNode @AssistedInject constructor(
+class ConfigureRoomFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-) : BackstackNode<CreateRoomFlowNode.NavTarget>(
-    backstack = BackStack(
-        initialElement = NavTarget.Root,
-        savedStateMap = buildContext.savedStateMap,
-    ),
-    buildContext = buildContext,
-    plugins = plugins
-) {
+) : DaggerComponentOwner,
+    BackstackNode<ConfigureRoomFlowNode.NavTarget>(
+        backstack = BackStack(
+            initialElement = NavTarget.Root,
+            savedStateMap = buildContext.savedStateMap,
+        ),
+        buildContext = buildContext,
+        plugins = plugins
+    ) {
+
+    private val component by lazy {
+        parent!!.bindings<CreateRoomComponent.ParentBindings>().createRoomComponentBuilder().build()
+    }
+
+    override val daggerComponent: Any
+        get() = component
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
         object Root : NavTarget
 
         @Parcelize
-        object NewRoom : NavTarget
+        object ConfigureRoom : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Root -> {
-                val callback = object : CreateRoomRootNode.Callback {
-                    override fun onCreateNewRoom() {
-                        backstack.push(NavTarget.NewRoom)
-                    }
-
-                    override fun onOpenRoom(roomId: RoomId) {
-                        plugins<CreateRoomEntryPoint.Callback>().forEach { it.onOpenRoom(roomId) }
+                val callback = object : AddPeopleNode.Callback {
+                    override fun onContinue(selectedUsers: List<MatrixUser>) {
+                        backstack.push(NavTarget.ConfigureRoom)
                     }
                 }
-                createNode<CreateRoomRootNode>(context = buildContext, plugins = listOf(callback))
+                createNode<AddPeopleNode>(context = buildContext, plugins = listOf(callback))
             }
-            NavTarget.NewRoom -> {
-                createNode<ConfigureRoomFlowNode>(context = buildContext, plugins = emptyList())
+            NavTarget.ConfigureRoom -> {
+                createNode<ConfigureRoomNode>(context = buildContext)
             }
         }
     }
