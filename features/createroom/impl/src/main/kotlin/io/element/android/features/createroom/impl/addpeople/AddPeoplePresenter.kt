@@ -18,10 +18,7 @@ package io.element.android.features.createroom.impl.addpeople
 
 import androidx.compose.runtime.Composable
 import io.element.android.features.createroom.impl.CreateRoomDataStore
-import io.element.android.features.userlist.api.SelectionMode
-import io.element.android.features.userlist.api.UserListDataSource
-import io.element.android.features.userlist.api.UserListPresenter
-import io.element.android.features.userlist.api.UserListPresenterArgs
+import io.element.android.features.userlist.api.*
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 import javax.inject.Named
@@ -30,7 +27,7 @@ class AddPeoplePresenter @Inject constructor(
     private val userListPresenterFactory: UserListPresenter.Factory,
     @Named("AllUsers") private val userListDataSource: UserListDataSource,
     private val dataStore: CreateRoomDataStore,
-) : Presenter<AddPeopleState> {
+) : Presenter<UserListState> {
 
     private val userListPresenter by lazy {
         userListPresenterFactory.create(
@@ -41,16 +38,8 @@ class AddPeoplePresenter @Inject constructor(
     }
 
     @Composable
-    override fun present(): AddPeopleState {
-        val userListState = userListPresenter.present()
-        fun handleEvents(event: AddPeopleEvents) {
-            // do nothing for now
-        }
-
-        return AddPeopleState(
-            userListState = userListState,
-            eventSink = ::handleEvents,
-        )
+    override fun present(): UserListState {
+        return userListPresenter.present()
     }
 }
 
