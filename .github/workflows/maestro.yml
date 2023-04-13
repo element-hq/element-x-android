@@ -35,6 +35,12 @@ jobs:
           java-version: '17'
       - name: Assemble debug APK
         run: ./gradlew assembleDebug $CI_GRADLE_ARG_PROPERTIES
+      - name: Upload debug APKs
+        uses: actions/upload-artifact@v3
+        with:
+          name: elementx-debug
+          path: |
+            app/build/outputs/apk/debug/*.apk
       - uses: mobile-dev-inc/action-maestro-cloud@v1.3.1
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
