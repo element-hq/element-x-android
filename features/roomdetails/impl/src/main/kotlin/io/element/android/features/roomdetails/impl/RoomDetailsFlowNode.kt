@@ -64,23 +64,25 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
     interface Callback : Plugin {
         fun openRoomMemberList()
-        fun openRoomMemberDetails(roomMember: RoomMember)
     }
 
     val callback = object : Callback {
         override fun openRoomMemberList() {
             backstack.push(NavTarget.RoomMemberList)
         }
-
-        override fun openRoomMemberDetails(roomMember: RoomMember) {
-            backstack.push(NavTarget.RoomMemberDetails(roomMember))
-        }
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.RoomDetails -> createNode<RoomDetailsNode>(buildContext, listOf(callback))
-            NavTarget.RoomMemberList -> createNode<RoomMemberListNode>(buildContext, listOf(callback))
+            NavTarget.RoomMemberList -> {
+                val callback = object : RoomMemberListNode.Callback {
+                    override fun openRoomMemberDetails(roomMember: RoomMember) {
+                        backstack.push(NavTarget.RoomMemberDetails(roomMember))
+                    }
+                }
+                createNode<RoomMemberListNode>(buildContext, listOf(callback))
+            }
             is NavTarget.RoomMemberDetails -> {
                 createNode<RoomMemberDetailsNode>(buildContext, listOf(RoomMemberDetailsNode.Inputs(navTarget.roomMember)))
             }
