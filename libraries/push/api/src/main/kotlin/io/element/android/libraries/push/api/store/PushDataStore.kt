@@ -16,26 +16,8 @@
 
 package io.element.android.libraries.push.api.store
 
-import io.element.android.libraries.push.api.model.BackgroundSyncMode
 import kotlinx.coroutines.flow.Flow
 
 interface PushDataStore {
     val pushCounterFlow: Flow<Int>
-
-    // TODO Move all those settings to the per user store...
-    fun areNotificationEnabledForDevice(): Boolean
-    fun setNotificationEnabledForDevice(enabled: Boolean)
-
-    fun backgroundSyncTimeOut(): Int
-    fun setBackgroundSyncTimeout(timeInSecond: Int)
-    fun backgroundSyncDelay(): Int
-    fun setBackgroundSyncDelay(timeInSecond: Int)
-    fun isBackgroundSyncEnabled(): Boolean
-    fun setFdroidSyncBackgroundMode(mode: BackgroundSyncMode)
-    fun getFdroidSyncBackgroundMode(): BackgroundSyncMode
-
-    /**
-     * Return true if Pin code is disabled, or if user set the settings to see full notification content.
-     */
-    fun useCompleteNotificationFormat(): Boolean
 }

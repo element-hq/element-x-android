@@ -16,9 +16,14 @@
 
 package io.element.android.libraries.matrix.api.core
 
+import io.element.android.libraries.matrix.api.BuildConfig
 import java.io.Serializable
 
 @JvmInline
 value class RoomId(val value: String) : Serializable
 
-fun String.asRoomId() = RoomId(this)
+fun String.asRoomId() = if (BuildConfig.DEBUG && !MatrixPatterns.isRoomId(this)) {
+    error("`$this` is not a valid room Id")
+} else {
+    RoomId(this)
+}

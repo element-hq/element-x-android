@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.api.core
 
+import io.element.android.libraries.matrix.api.BuildConfig
 import java.io.Serializable
 
 @JvmInline
@@ -26,4 +27,8 @@ value class SpaceId(val value: String) : Serializable
  */
 val MAIN_SPACE = SpaceId("!mainSpace")
 
-fun String.asSpaceId() = SpaceId(this)
+fun String.asSpaceId() = if (BuildConfig.DEBUG && !MatrixPatterns.isSpaceId(this)) {
+    error("`$this` is not a valid space Id")
+} else {
+    SpaceId(this)
+}

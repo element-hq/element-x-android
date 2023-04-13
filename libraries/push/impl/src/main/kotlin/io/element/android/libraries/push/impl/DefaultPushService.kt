@@ -20,27 +20,41 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.push.api.PushService
-import io.element.android.libraries.push.impl.config.PushConfig
-import io.element.android.libraries.push.impl.log.pushLoggerTag
+import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.push.impl.notifications.NotificationDrawerManager
-import timber.log.Timber
+import io.element.android.libraries.push.providers.api.Distributor
+import io.element.android.libraries.push.providers.api.PushProvider
+import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultPushService @Inject constructor(
     private val notificationDrawerManager: NotificationDrawerManager,
     private val pushersManager: PushersManager,
-    private val fcmHelper: FcmHelper,
+    private val userPushStoreFactory: UserPushStoreFactory,
+    private val pushProviders: Set<@JvmSuppressWildcards PushProvider>,
 ) : PushService {
     override fun notificationStyleChanged() {
         notificationDrawerManager.notificationStyleChanged()
     }
 
-    override suspend fun registerFirebasePusher(matrixClient: MatrixClient) {
-        val pushKey = fcmHelper.getFcmToken() ?: return Unit.also {
-            Timber.tag(pushLoggerTag.value).w("Unable to register pusher, Firebase token is not known.")
+    override fun getAvailablePushProviders(): List<PushProvider> {
+        return pushProviders.sortedBy { it.index }
+    }
+
+    /**
+     * Get current push provider, compare with provided one, then unregister and register if different, and store change.
+     */
+    override suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributor: Distributor) {
+        val userPushStore = userPushStoreFactory.create(matrixClient.sessionId)
+        val currentPushProviderName = userPushStore.getPushProviderName()
+        if (currentPushProviderName != pushProvider.name) {
+            // Unregister previous one if any
+            pushProviders.find { it.name == currentPushProviderName }?.unregister(matrixClient)
         }
-        pushersManager.registerPusher(matrixClient, pushKey, PushConfig.pusher_http_url)
+        pushProvider.registerWith(matrixClient, distributor)
+        // Store new value
+        userPushStore.setPushProviderName(pushProvider.name)
     }
 
     override suspend fun testPush() {

@@ -43,21 +43,20 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.network)
     implementation(projects.libraries.matrix.api)
+    api(projects.libraries.pushproviders.api)
+    api(projects.libraries.pushstore.api)
     api(projects.libraries.push.api)
 
     implementation(projects.services.analytics.api)
     implementation(projects.services.appnavstate.api)
     implementation(projects.services.toolbox.api)
 
-    api("me.gujun.android:span:1.7") {
+    api(libs.gujun.span) {
         exclude(group = "com.android.support", module = "support-annotations")
     }
 
-    implementation(platform(libs.google.firebase.bom))
-    implementation("com.google.firebase:firebase-messaging-ktx")
-
-    // UnifiedPush
-    api("com.github.UnifiedPush:android-connector:2.1.1")
+    // TODO Temporary use the deprecated LocalBroadcastManager, to be changed later.
+    implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.mockk)
