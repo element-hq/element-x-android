@@ -76,10 +76,10 @@ class ConfigureRoomFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.ConfigureRoom)
                     }
                 }
-                createNode<AddPeopleNode>(context = buildContext, plugins = listOf(callback))
+                createNode<AddPeopleNode>(context = buildContext, plugins = plugins.plus(callback))
             }
             NavTarget.ConfigureRoom -> {
-                createNode<ConfigureRoomNode>(context = buildContext)
+                createNode<ConfigureRoomNode>(context = buildContext, plugins = plugins)
             }
         }
     }

@@ -30,6 +30,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
+import io.element.android.features.createroom.impl.configureroom.ConfigureRoomNode
 import io.element.android.features.createroom.impl.root.CreateRoomRootNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -74,7 +75,12 @@ class CreateRoomFlowNode @AssistedInject constructor(
                 createNode<CreateRoomRootNode>(context = buildContext, plugins = listOf(callback))
             }
             NavTarget.NewRoom -> {
-                createNode<ConfigureRoomFlowNode>(context = buildContext, plugins = emptyList())
+                val callback = object : ConfigureRoomNode.Callback {
+                    override fun onRoomCreated(roomId: RoomId) {
+                        plugins<CreateRoomEntryPoint.Callback>().forEach { it.onOpenRoom(roomId) }
+                    }
+                }
+                createNode<ConfigureRoomFlowNode>(context = buildContext, plugins = listOf(callback))
             }
         }
     }

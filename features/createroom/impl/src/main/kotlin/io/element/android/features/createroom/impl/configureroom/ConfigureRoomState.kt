@@ -17,9 +17,12 @@
 package io.element.android.features.createroom.impl.configureroom
 
 import io.element.android.features.createroom.impl.CreateRoomConfig
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.api.core.RoomId
 
 data class ConfigureRoomState(
     val config: CreateRoomConfig,
     val isCreateButtonEnabled: Boolean,
+    val createRoomAction: Async<RoomId>,
     val eventSink: (ConfigureRoomEvents) -> Unit
 )

@@ -19,6 +19,7 @@ package io.element.android.features.createroom.impl.configureroom
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.userlist.api.aListOfSelectedUsers
+import io.element.android.libraries.architecture.Async
 
 open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomState> {
     override val values: Sequence<ConfigureRoomState>
@@ -39,5 +40,6 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
 fun aConfigureRoomState() = ConfigureRoomState(
     config = CreateRoomConfig(),
     isCreateButtonEnabled = false,
+    createRoomAction = Async.Uninitialized,
     eventSink = {}
 )
