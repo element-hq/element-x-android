@@ -18,10 +18,15 @@ package io.element.android.features.userlist.api.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,18 +34,29 @@ import io.element.android.features.userlist.api.aListOfSelectedUsers
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.matrix.ui.model.MatrixUser
-import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun SelectedUsersList(
-    listState: LazyListState,
-    selectedUsers: ImmutableList<MatrixUser>,
+    selectedUsers: List<MatrixUser>,
     modifier: Modifier = Modifier,
+    autoScroll: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     onUserRemoved: (MatrixUser) -> Unit = {},
 ) {
+    val lazyListState = rememberLazyListState()
+    if (autoScroll) {
+        var currentSize by rememberSaveable { mutableStateOf(selectedUsers.size) }
+        LaunchedEffect(selectedUsers.size) {
+            val isItemAdded = selectedUsers.size > currentSize
+            if (isItemAdded) {
+                lazyListState.animateScrollToItem(selectedUsers.lastIndex)
+            }
+            currentSize = selectedUsers.size
+        }
+    }
+
     LazyRow(
-        state = listState,
+        state = lazyListState,
         modifier = modifier,
         contentPadding = contentPadding,
         horizontalArrangement = Arrangement.spacedBy(24.dp),
@@ -65,7 +81,6 @@ internal fun SelectedUsersListDarkPreview() = ElementPreviewDark { ContentToPrev
 @Composable
 private fun ContentToPreview() {
     SelectedUsersList(
-        listState = LazyListState(),
         selectedUsers = aListOfSelectedUsers(),
     )
 }

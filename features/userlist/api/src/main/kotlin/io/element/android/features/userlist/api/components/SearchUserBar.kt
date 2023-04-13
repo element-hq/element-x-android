@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -49,7 +48,6 @@ fun SearchUserBar(
     query: String,
     results: ImmutableList<MatrixUser>,
     selectedUsers: ImmutableList<MatrixUser>,
-    selectedUsersListState: LazyListState,
     active: Boolean,
     isMultiSelectionEnabled: Boolean,
     modifier: Modifier = Modifier,
@@ -108,9 +106,9 @@ fun SearchUserBar(
         content = {
             if (isMultiSelectionEnabled && active && selectedUsers.isNotEmpty()) {
                 SelectedUsersList(
-                    listState = selectedUsersListState,
                     contentPadding = PaddingValues(16.dp),
                     selectedUsers = selectedUsers,
+                    autoScroll = true,
                     onUserRemoved = onUserDeselected,
                 )
             }
