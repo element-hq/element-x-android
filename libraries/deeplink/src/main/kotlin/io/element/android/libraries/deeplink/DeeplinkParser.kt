@@ -32,8 +32,8 @@ class DeeplinkParser @Inject constructor() {
     }
 
     private fun Uri.toDeeplinkData(): DeeplinkData? {
-        if (scheme != "elementx") return null
-        if (host != "open") return null
+        if (scheme != SCHEME) return null
+        if (host != HOST) return null
         val pathBits = path.orEmpty().split("/").drop(1)
         val sessionId = pathBits.elementAtOrNull(0)?.asSessionId() ?: return null
         val roomId = pathBits.elementAtOrNull(1)?.asRoomId()
