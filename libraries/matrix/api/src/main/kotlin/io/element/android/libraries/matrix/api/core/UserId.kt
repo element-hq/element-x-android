@@ -22,12 +22,8 @@ import java.io.Serializable
 @JvmInline
 value class UserId(val value: String) : Serializable
 
-fun String.asUserId() = if (MatrixPatterns.isUserId(this)) {
-    UserId(this)
+fun String.asUserId() = if (BuildConfig.DEBUG && !MatrixPatterns.isUserId(this)) {
+    error("`$this` is not a valid user Id")
 } else {
-    if (BuildConfig.DEBUG) {
-        error("`$this` is not a valid user Id")
-    } else {
-        null
-    }
+    UserId(this)
 }

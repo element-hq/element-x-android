@@ -22,12 +22,8 @@ import java.io.Serializable
 @JvmInline
 value class EventId(val value: String) : Serializable
 
-fun String.asEventId() = if (MatrixPatterns.isEventId(this)) {
-    EventId(this)
+fun String.asEventId() = if (BuildConfig.DEBUG && !MatrixPatterns.isEventId(this)) {
+    error("`$this` is not a valid event Id")
 } else {
-    if (BuildConfig.DEBUG) {
-        error("`$this` is not a valid event Id")
-    } else {
-        null
-    }
+    EventId(this)
 }
