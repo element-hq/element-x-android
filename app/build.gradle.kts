@@ -33,7 +33,8 @@ plugins {
     id("com.google.firebase.appdistribution") version "4.0.0"
     id("org.jetbrains.kotlinx.knit") version "0.4.0"
     id("kotlin-parcelize")
-    id("com.google.gms.google-services")
+    // To be able to update the firebase.xml files, uncomment and build the project
+    // id("com.google.gms.google-services")
 }
 
 android {
@@ -224,9 +225,6 @@ dependencies {
 
     implementation(platform(libs.network.okhttp.bom))
     implementation("com.squareup.okhttp3:logging-interceptor")
-
-    implementation(platform(libs.google.firebase.bom))
-    implementation("com.google.firebase:firebase-messaging-ktx")
 
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)

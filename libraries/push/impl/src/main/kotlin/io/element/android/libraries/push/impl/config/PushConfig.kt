@@ -18,24 +18,7 @@ package io.element.android.libraries.push.impl.config
 
 object PushConfig {
     /**
-     * It is the push gateway for FCM embedded distributor.
-     * Note: pusher_http_url should have path '/_matrix/push/v1/notify' -->
-     */
-    const val pusher_http_url: String = "https://matrix.org/_matrix/push/v1/notify"
-
-    /**
-     * It is the push gateway for UnifiedPush.
-     * Note: default_push_gateway_http_url should have path '/_matrix/push/v1/notify'
-     */
-    const val default_push_gateway_http_url: String = "https://matrix.gateway.unifiedpush.org/_matrix/push/v1/notify"
-
-    /**
      * Note: pusher_app_id cannot exceed 64 chars.
      */
     const val pusher_app_id: String = "im.vector.app.android"
-
-    /**
-     * Set to true to allow external push distributor such as Ntfy.
-     */
-    const val allowExternalUnifiedPushDistributors: Boolean = false
 }

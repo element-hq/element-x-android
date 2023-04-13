@@ -31,7 +31,6 @@ import io.element.android.libraries.androidutils.system.startSharePlainTextInten
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.ui.strings.R as StringR
 
 @ContributesNode(RoomScope::class)
 class RoomDetailsNode @AssistedInject constructor(
@@ -57,7 +56,6 @@ class RoomDetailsNode @AssistedInject constructor(
                 activityResultLauncher = null,
                 chooserTitle = context.getString(R.string.screen_room_details_share_room_title),
                 text = permalink,
-                noActivityFoundMessage = context.getString(StringR.string.error_no_compatible_app_found)
             )
         }
     }

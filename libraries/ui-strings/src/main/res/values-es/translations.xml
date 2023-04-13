@@ -107,7 +107,6 @@
   <string name="emoji_picker_category_symbols">"Símbolos"</string>
   <string name="error_failed_creating_the_permalink">"No se pudo crear el enlace permanente"</string>
   <string name="error_failed_loading_messages">"Error al cargar mensajes"</string>
-  <string name="error_no_compatible_app_found">"No se encontró ninguna aplicación compatible con esta acción."</string>
   <string name="error_some_messages_have_not_been_sent">"Algunos mensajes no se han enviado"</string>
   <string name="error_unknown">"Lo siento, se ha producido un error"</string>
   <string name="invite_friends_text">"Hola, puedes hablar conmigo en %1$s: %2$s"</string>
