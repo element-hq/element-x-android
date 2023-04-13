@@ -3,6 +3,7 @@ name: Maestro
 # Run this flow only on pull request, and only when the pull request has been approved, to limit our usage of maestro cloud.
 # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#running-a-workflow-when-a-pull-request-is-approved
 on:
+  workflow_dispatch:
   pull_request_review:
     types: [submitted]
 
