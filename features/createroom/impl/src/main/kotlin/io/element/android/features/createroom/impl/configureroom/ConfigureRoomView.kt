@@ -17,6 +17,7 @@
 package io.element.android.features.createroom.impl.configureroom
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -77,6 +78,7 @@ fun ConfigureRoomView(
     onBackPressed: () -> Unit = {},
 ) {
     val selectedUsersListState = rememberLazyListState()
+    val context = LocalContext.current
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -95,6 +97,7 @@ fun ConfigureRoomView(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 avatarUri = state.config.avatarUrl?.toUri(),
                 roomName = state.config.roomName.orEmpty(),
+                onAvatarClick = { Toast.makeText(context, "not implemented yet", Toast.LENGTH_SHORT).show() },
                 onRoomNameChanged = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
             )
             RoomTopic(

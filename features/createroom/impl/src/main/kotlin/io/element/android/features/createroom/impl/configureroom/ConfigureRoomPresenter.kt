@@ -16,11 +16,13 @@
 
 package io.element.android.features.createroom.impl.configureroom
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.platform.LocalContext
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.libraries.architecture.Presenter
@@ -38,6 +40,7 @@ class ConfigureRoomPresenter @Inject constructor(
             mutableStateOf(enabled)
         }
 
+        val context = LocalContext.current
         fun handleEvents(event: ConfigureRoomEvents) {
             when (event) {
                 is ConfigureRoomEvents.AvatarUriChanged -> dataStore.setAvatarUrl(event.uri?.toString())
@@ -45,7 +48,7 @@ class ConfigureRoomPresenter @Inject constructor(
                 is ConfigureRoomEvents.TopicChanged -> dataStore.setTopic(event.topic)
                 is ConfigureRoomEvents.RoomPrivacyChanged -> dataStore.setPrivacy(event.privacy)
                 is ConfigureRoomEvents.RemoveFromSelection -> dataStore.selectedUserListDataStore.removeUserFromSelection(event.matrixUser)
-                ConfigureRoomEvents.CreateRoom -> Unit
+                ConfigureRoomEvents.CreateRoom -> Toast.makeText(context, "not implemented yet", Toast.LENGTH_SHORT).show()
             }
         }
 
