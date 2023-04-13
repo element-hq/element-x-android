@@ -24,7 +24,7 @@ import javax.inject.Inject
 class DeepLinkCreator @Inject constructor() {
     fun create(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?): String {
         return buildString {
-            append("elementx://open/")
+            append("$SCHEME://$HOST/")
             append(sessionId.value)
             if (roomId != null) {
                 append("/")
