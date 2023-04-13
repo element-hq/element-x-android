@@ -35,7 +35,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.RoomMember
 import timber.log.Timber
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.androidutils.R as AndroidUtilsR
 
 @ContributesNode(RoomScope::class)
 class RoomMemberDetailsNode @AssistedInject constructor(
@@ -59,7 +59,7 @@ class RoomMemberDetailsNode @AssistedInject constructor(
                 activityResultLauncher = null,
                 chooserTitle = context.getString(R.string.screen_room_details_share_room_title),
                 text = permalink,
-                noActivityFoundMessage = context.getString(StringR.string.error_no_compatible_app_found)
+                noActivityFoundMessage = context.getString(AndroidUtilsR.string.error_no_compatible_app_found)
             )
         }.onFailure {
             Timber.e(it)
