@@ -23,6 +23,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.createroom.impl.CreateRoomDataStore
+import io.element.android.features.userlist.api.UserListDataStore
 import io.element.android.features.userlist.test.FakeUserListDataSource
 import io.element.android.features.userlist.test.FakeUserListPresenterFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -36,7 +37,7 @@ class AddPeoplePresenterTests {
 
     @Before
     fun setup() {
-        presenter = AddPeoplePresenter(FakeUserListPresenterFactory(), FakeUserListDataSource(), CreateRoomDataStore())
+        presenter = AddPeoplePresenter(FakeUserListPresenterFactory(), FakeUserListDataSource(), CreateRoomDataStore(UserListDataStore()))
     }
 
     @Test

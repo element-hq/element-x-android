@@ -24,6 +24,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.createroom.impl.CreateRoomDataStore
+import io.element.android.features.userlist.api.UserListDataStore
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
@@ -41,7 +42,7 @@ class ConfigureRoomPresenterTests {
 
     @Before
     fun setup() {
-        presenter = ConfigureRoomPresenter(CreateRoomDataStore())
+        presenter = ConfigureRoomPresenter(CreateRoomDataStore(UserListDataStore()))
     }
 
     @Test

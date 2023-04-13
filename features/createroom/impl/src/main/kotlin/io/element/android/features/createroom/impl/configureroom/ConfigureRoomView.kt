@@ -83,7 +83,10 @@ fun ConfigureRoomView(
             ConfigureRoomToolbar(
                 isNextActionEnabled = state.isCreateButtonEnabled,
                 onBackPressed = onBackPressed,
-                onNextPressed = { state.eventSink(ConfigureRoomEvents.CreateRoom) },
+                onNextPressed = {
+                    // state.eventSink(ConfigureRoomEvents.CreateRoom)
+                    Toast.makeText(context, "not implemented yet", Toast.LENGTH_SHORT).show()
+                },
             )
         }
     ) { padding ->
