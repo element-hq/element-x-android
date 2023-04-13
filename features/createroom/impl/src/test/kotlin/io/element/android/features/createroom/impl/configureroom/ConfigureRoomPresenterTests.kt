@@ -29,6 +29,7 @@ import io.element.android.features.userlist.api.UserListDataStore
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -48,7 +49,10 @@ class ConfigureRoomPresenterTests {
     @Before
     fun setup() {
         userListDataStore = UserListDataStore()
-        presenter = ConfigureRoomPresenter(CreateRoomDataStore(userListDataStore))
+        presenter = ConfigureRoomPresenter(
+            dataStore = CreateRoomDataStore(userListDataStore),
+            matrixClient = FakeMatrixClient()
+        )
     }
 
     @Test

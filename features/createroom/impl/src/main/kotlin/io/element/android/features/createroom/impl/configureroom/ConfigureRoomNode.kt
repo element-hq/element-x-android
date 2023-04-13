@@ -21,10 +21,12 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.createroom.impl.di.CreateRoomScope
+import io.element.android.libraries.matrix.api.core.RoomId
 
 @ContributesNode(CreateRoomScope::class)
 class ConfigureRoomNode @AssistedInject constructor(
@@ -33,13 +35,24 @@ class ConfigureRoomNode @AssistedInject constructor(
     private val presenter: ConfigureRoomPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
+    interface Callback : Plugin {
+        fun onRoomCreated(roomId: RoomId)
+    }
+
+    private val callback = object : Callback {
+        override fun onRoomCreated(roomId: RoomId) {
+            plugins<Callback>().forEach { it.onRoomCreated(roomId) }
+        }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
         ConfigureRoomView(
             state = state,
             modifier = modifier,
-            onBackPressed = { navigateUp() } // TODO we should keep in memory the current view state
+            onBackPressed = this::navigateUp,
+            onRoomCreated = callback::onRoomCreated
         )
     }
 }
