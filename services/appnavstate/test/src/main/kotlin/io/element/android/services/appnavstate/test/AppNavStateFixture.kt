@@ -28,21 +28,22 @@ fun anAppNavigationState(
     spaceId: SpaceId? = MAIN_SPACE,
     roomId: RoomId? = null,
     threadId: ThreadId? = null,
+    owner: String = "a-owner",
 ): AppNavigationState {
     if (sessionId == null) {
         return AppNavigationState.Root
     }
-    val session = AppNavigationState.Session(sessionId)
+    val session = AppNavigationState.Session(owner, sessionId)
     if (spaceId == null) {
         return session
     }
-    val space = AppNavigationState.Space(spaceId, session)
+    val space = AppNavigationState.Space(owner, spaceId, session)
     if (roomId == null) {
         return space
     }
-    val room = AppNavigationState.Room(roomId, space)
+    val room = AppNavigationState.Room(owner, roomId, space)
     if (threadId == null) {
         return room
     }
-    return AppNavigationState.Thread(threadId, room)
+    return AppNavigationState.Thread(owner, threadId, room)
 }
