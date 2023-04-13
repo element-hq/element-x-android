@@ -137,8 +137,6 @@
   <string name="screen_room_member_details_unblock_alert_action">"Sblocca"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Dopo aver sbloccato l\'utente, potrai vedere nuovamente tutti i suoi messaggi."</string>
   <string name="screen_room_member_details_unblock_user">"Sblocca utente"</string>
-  <string name="screen_start_chat_error_starting_chat">"Si è verificato un errore durante il tentativo di avviare una chat"</string>
-  <string name="screen_start_chat_unknown_profile">"Non possiamo convalidare l\'ID Matrix di questo utente. L\'invito potrebbe non essere ricevuto."</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Soglia di rilevamento"</string>
   <string name="settings_title_general">"Generali"</string>

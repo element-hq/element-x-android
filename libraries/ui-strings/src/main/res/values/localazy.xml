@@ -181,6 +181,7 @@
   <string name="room_timeline_beginning_of_room">"This is the beginning of %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"This is the beginning of this conversation."</string>
   <string name="room_timeline_read_marker_title">"New"</string>
+  <string name="screen_invites_empty_list">"No Invites"</string>
   <string name="screen_invites_invited_you">"%1$s invited you"</string>
   <string name="screen_report_content_block_user">"Block user"</string>
   <string name="screen_report_content_block_user_hint">"Check if you want to hide all current and future messages from this user"</string>
@@ -190,8 +191,6 @@
   <string name="screen_room_member_details_unblock_alert_action">"Unblock"</string>
   <string name="screen_room_member_details_unblock_alert_description">"On unblocking the user, you will be able to see all messages by them again."</string>
   <string name="screen_room_member_details_unblock_user">"Unblock user"</string>
-  <string name="screen_start_chat_error_starting_chat">"An error occurred when trying to start a chat"</string>
-  <string name="screen_start_chat_unknown_profile">"We can’t validate this user’s Matrix ID. The invite might not be received."</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Detection threshold"</string>
   <string name="settings_title_general">"General"</string>
