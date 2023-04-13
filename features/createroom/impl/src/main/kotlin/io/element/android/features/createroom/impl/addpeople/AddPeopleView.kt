@@ -39,7 +39,6 @@ import io.element.android.libraries.designsystem.theme.components.CenterAlignedT
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
-import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +47,7 @@ fun AddPeopleView(
     state: UserListState,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
-    onNextPressed: (List<MatrixUser>) -> Unit = {},
+    onNextPressed: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -56,7 +55,7 @@ fun AddPeopleView(
                 AddPeopleViewTopBar(
                     hasSelectedUsers = state.selectedUsers.isNotEmpty(),
                     onBackPressed = onBackPressed,
-                    onNextPressed = { onNextPressed(state.selectedUsers) },
+                    onNextPressed = onNextPressed,
                 )
             }
         }
