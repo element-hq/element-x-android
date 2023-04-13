@@ -203,7 +203,7 @@ fun Avatar(
             Icon(
                 imageVector = Icons.Outlined.AddAPhoto,
                 contentDescription = "",
-                modifier = modifier
+                modifier = Modifier
                     .align(Alignment.Center)
                     .size(40.dp),
                 tint = MaterialTheme.colorScheme.secondary,
