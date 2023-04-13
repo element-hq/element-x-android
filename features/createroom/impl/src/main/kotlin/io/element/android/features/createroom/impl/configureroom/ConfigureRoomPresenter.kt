@@ -18,9 +18,9 @@ package io.element.android.features.createroom.impl.configureroom
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.libraries.architecture.Presenter
@@ -33,9 +33,10 @@ class ConfigureRoomPresenter @Inject constructor(
     @Composable
     override fun present(): ConfigureRoomState {
         val createRoomConfig = dataStore.getCreateRoomConfig().collectAsState(CreateRoomConfig())
-        val isCreateButtonEnabled by rememberSaveable(createRoomConfig.value.roomName, createRoomConfig.value.privacy) {
-            val enabled = createRoomConfig.value.roomName.isNullOrEmpty().not() && createRoomConfig.value.privacy != null
-            mutableStateOf(enabled)
+        val isCreateButtonEnabled by remember(createRoomConfig.value.roomName, createRoomConfig.value.privacy) {
+            derivedStateOf {
+                createRoomConfig.value.roomName.isNullOrEmpty().not() && createRoomConfig.value.privacy != null
+            }
         }
 
         fun handleEvents(event: ConfigureRoomEvents) {
