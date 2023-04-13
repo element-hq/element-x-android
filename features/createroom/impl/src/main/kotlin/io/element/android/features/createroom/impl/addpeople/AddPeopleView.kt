@@ -108,12 +108,12 @@ fun AddPeopleViewTopBar(
 
 @Preview
 @Composable
-internal fun AddPeopleViewLightPreview(@PreviewParameter(AddPeopleStateProvider::class) state: UserListState) =
+internal fun AddPeopleViewLightPreview(@PreviewParameter(AddPeopleUserListStateProvider::class) state: UserListState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-internal fun AddPeopleViewDarkPreview(@PreviewParameter(AddPeopleStateProvider::class) state: UserListState) =
+internal fun AddPeopleViewDarkPreview(@PreviewParameter(AddPeopleUserListStateProvider::class) state: UserListState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

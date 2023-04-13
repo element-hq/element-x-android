@@ -24,7 +24,7 @@ import io.element.android.features.userlist.api.aUserListState
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import kotlinx.collections.immutable.toImmutableList
 
-open class AddPeopleStateProvider : PreviewParameterProvider<UserListState> {
+open class AddPeopleUserListStateProvider : PreviewParameterProvider<UserListState> {
     override val values: Sequence<UserListState>
         get() = sequenceOf(
             aUserListState(),
