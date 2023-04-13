@@ -14,63 +14,15 @@
 ~ limitations under the License.
 -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
     <application>
-
-        <!-- Firebase components -->
-        <meta-data
-            android:name="firebase_analytics_collection_deactivated"
-            android:value="true" />
-
-        <service
-            android:name=".firebase.VectorFirebaseMessagingService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-
-        <!-- UnifiedPush -->
-        <receiver
-            android:name=".unifiedpush.VectorUnifiedPushMessagingReceiver"
-            android:enabled="true"
-            android:exported="true"
-            tools:ignore="ExportedReceiver">
-            <intent-filter>
-                <action android:name="org.unifiedpush.android.connector.MESSAGE" />
-                <action android:name="org.unifiedpush.android.connector.UNREGISTERED" />
-                <action android:name="org.unifiedpush.android.connector.NEW_ENDPOINT" />
-                <action android:name="org.unifiedpush.android.connector.REGISTRATION_FAILED" />
-                <action android:name="org.unifiedpush.android.connector.REGISTRATION_REFUSED" />
-            </intent-filter>
-        </receiver>
-
-        <receiver
-            android:name=".unifiedpush.KeepInternalDistributor"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <!--
-                This action is checked to track installed and uninstalled distributors.
-                We declare it to keep the background sync as an internal
-                unifiedpush distributor.
-                -->
-                <action android:name="org.unifiedpush.android.distributor.REGISTER" />
-            </intent-filter>
-        </receiver>
-
         <receiver
             android:name=".notifications.TestNotificationReceiver"
             android:exported="false" />
-
         <receiver
             android:name=".notifications.NotificationBroadcastReceiver"
             android:enabled="true"
             android:exported="false" />
-
     </application>
 </manifest>

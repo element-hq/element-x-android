@@ -32,48 +32,52 @@ fun PermissionsView(
 ) {
     if (state.showDialog.not()) return
 
-    if (state.permissionGranted) {
-        // Notification Granted, nothing to do
-    } else if (state.permissionAlreadyDenied) {
-        // In this case, tell the user to go to the settings
-        ConfirmationDialog(
-            modifier = modifier,
-            title = "System",
-            content = "In order to let the application display notification, please grant the permission to the system settings",
-            submitText = "Open settings",
-            onSubmitClicked = {
-                state.eventSink.invoke(PermissionsEvents.CloseDialog)
-                openSystemSettings()
-            },
-            onDismiss = { state.eventSink.invoke(PermissionsEvents.CloseDialog) },
-        )
-    } else {
-        val textToShow = if (state.shouldShowRationale) {
-            // TODO Move to state
-            // If the user has denied the permission but the rationale can be shown,
-            // then gently explain why the app requires this permission
-            // permissions_rationale_msg_notification
-            "To be able to receive notifications, please grant the permission. Else you will not be able to be alerted if you've got new messages."
-        } else {
-            // TODO Move to state
-            // If it's the first time the user lands on this feature, or the user
-            // doesn't want to be asked again for this permission, explain that the
-            // permission is required
-            "To be able to receive notifications, please grant the permission."
+    when {
+        state.permissionGranted -> {
+            // Notification Granted, nothing to do
         }
-        ConfirmationDialog(
-            modifier = modifier,
-            title = "Notifications",
-            content = textToShow,
-            submitText = "Request permission",
-            onSubmitClicked = {
-                state.eventSink.invoke(PermissionsEvents.OpenSystemDialog)
-            },
-            onCancelClicked = {
-                state.eventSink.invoke(PermissionsEvents.CloseDialog)
-            },
-            onDismiss = {}
-        )
+        state.permissionAlreadyDenied -> {
+            // In this case, tell the user to go to the settings
+            ConfirmationDialog(
+                modifier = modifier,
+                title = "System",
+                content = "In order to let the application display notification, please grant the permission to the system settings",
+                submitText = "Open settings",
+                onSubmitClicked = {
+                    state.eventSink.invoke(PermissionsEvents.CloseDialog)
+                    openSystemSettings()
+                },
+                onDismiss = { state.eventSink.invoke(PermissionsEvents.CloseDialog) },
+            )
+        }
+        else -> {
+            val textToShow = if (state.shouldShowRationale) {
+                // TODO Move to state
+                // If the user has denied the permission but the rationale can be shown,
+                // then gently explain why the app requires this permission
+                // permissions_rationale_msg_notification
+                "To be able to receive notifications, please grant the permission. Else you will not be able to be alerted if you've got new messages."
+            } else {
+                // TODO Move to state
+                // If it's the first time the user lands on this feature, or the user
+                // doesn't want to be asked again for this permission, explain that the
+                // permission is required
+                "To be able to receive notifications, please grant the permission."
+            }
+            ConfirmationDialog(
+                modifier = modifier,
+                title = "Notifications",
+                content = textToShow,
+                submitText = "Request permission",
+                onSubmitClicked = {
+                    state.eventSink.invoke(PermissionsEvents.OpenSystemDialog)
+                },
+                onCancelClicked = {
+                    state.eventSink.invoke(PermissionsEvents.CloseDialog)
+                },
+                onDismiss = {}
+            )
+        }
     }
 }
 

@@ -33,12 +33,15 @@ import com.squareup.anvil.annotations.ContributesBinding
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.api.PermissionsState
 import kotlinx.coroutines.launch
 import timber.log.Timber
+
+private val loggerTag = LoggerTag("DefaultPermissionsPresenter")
 
 class DefaultPermissionsPresenter @AssistedInject constructor(
     @Assisted val permission: String,
@@ -71,7 +74,7 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
         var permissionState: PermissionState? = null
 
         fun onPermissionResult(result: Boolean) {
-            Timber.tag("PERMISSION").w("onPermissionResult: $result")
+            Timber.tag(loggerTag.value).d("onPermissionResult: $result")
             localCoroutineScope.launch {
                 permissionsStore.setPermissionAsked(permission, true)
             }
@@ -79,7 +82,7 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
             if (!result) {
                 // Should show rational true -> denied.
                 if (permissionState?.status?.shouldShowRationale == true) {
-                    Timber.tag("PERMISSION").w("onPermissionResult: reset the store")
+                    Timber.tag(loggerTag.value).d("onPermissionResult: setPermissionDenied to true")
                     localCoroutineScope.launch {
                         permissionsStore.setPermissionDenied(permission, true)
                     }
@@ -102,7 +105,6 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
         val showDialog = rememberSaveable { mutableStateOf(permissionState.status !is PermissionStatus.Granted) }
 
         fun handleEvents(event: PermissionsEvents) {
-            Timber.tag("PERMISSION").w("New event: $event")
             when (event) {
                 PermissionsEvents.CloseDialog -> {
                     showDialog.value = false
@@ -123,7 +125,7 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
             permissionAlreadyDenied = isAlreadyDenied,
             eventSink = ::handleEvents
         ).also {
-            Timber.tag("PERMISSION").w("New state: $it")
+            Timber.tag(loggerTag.value).d("New state: $it")
         }
     }
 

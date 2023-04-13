@@ -107,7 +107,6 @@
   <string name="emoji_picker_category_symbols">"Simboluri"</string>
   <string name="error_failed_creating_the_permalink">"Crearea permalink-ului a eșuat"</string>
   <string name="error_failed_loading_messages">"Încărcarea mesajelor a eșuat"</string>
-  <string name="error_no_compatible_app_found">"Nu a fost găsită nicio aplicație capabilă să gestioneze această acțiune."</string>
   <string name="error_some_messages_have_not_been_sent">"Unele mesaje nu au fost trimise"</string>
   <string name="error_unknown">"Ne pare rău, a apărut o eroare"</string>
   <string name="invite_friends_text">"Hei, vorbește cu mine pe %1$s: %2$s"</string>
