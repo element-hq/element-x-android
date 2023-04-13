@@ -14,43 +14,44 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.addpeople
+package io.element.android.features.createroom.impl.configureroom
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 
 @ContributesNode(SessionScope::class)
-class AddPeopleNode @AssistedInject constructor(
+class ConfigureRoomNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: AddPeoplePresenter,
+    private val presenterFactory: ConfigureRoomPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
 
-    interface Callback : Plugin {
-        fun onContinue(selectedUsers: List<MatrixUser>)
-    }
+    data class Inputs(
+        val selectedUsers: List<MatrixUser>
+    ) : NodeInputs
 
-    private fun onContinue(selectedUsers: List<MatrixUser>) {
-        plugins<Callback>().forEach { it.onContinue(selectedUsers) }
+    private val inputs: Inputs = inputs()
+    private val presenter by lazy {
+        presenterFactory.create(ConfigureRoomPresenterArgs(inputs.selectedUsers))
     }
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        AddPeopleView(
+        ConfigureRoomView(
             state = state,
             modifier = modifier,
-            onBackPressed = { navigateUp() },
-            onNextPressed = this::onContinue,
+            onBackPressed = { navigateUp() } // TODO we should keep in memory the current view state
         )
     }
 }
