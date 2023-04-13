@@ -37,7 +37,6 @@ import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
@@ -73,7 +72,7 @@ class ConfigureRoomFlowNode @AssistedInject constructor(
         return when (navTarget) {
             NavTarget.Root -> {
                 val callback = object : AddPeopleNode.Callback {
-                    override fun onContinue(selectedUsers: List<MatrixUser>) {
+                    override fun onContinue() {
                         backstack.push(NavTarget.ConfigureRoom)
                     }
                 }
