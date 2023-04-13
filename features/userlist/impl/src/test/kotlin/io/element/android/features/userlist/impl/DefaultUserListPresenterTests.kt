@@ -22,6 +22,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.userlist.api.SelectionMode
+import io.element.android.features.userlist.api.UserListDataStore
 import io.element.android.features.userlist.api.UserListEvents
 import io.element.android.features.userlist.api.UserListPresenterArgs
 import io.element.android.features.userlist.test.FakeUserListDataSource
@@ -43,7 +44,8 @@ class DefaultUserListPresenterTests {
     fun `present - initial state for single selection`() = runTest {
         val presenter = DefaultUserListPresenter(
             UserListPresenterArgs(selectionMode = SelectionMode.Single),
-            userListDataSource
+            userListDataSource,
+            UserListDataStore(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -61,7 +63,8 @@ class DefaultUserListPresenterTests {
     fun `present - initial state for multiple selection`() = runTest {
         val presenter = DefaultUserListPresenter(
             UserListPresenterArgs(selectionMode = SelectionMode.Multiple),
-            userListDataSource
+            userListDataSource,
+            UserListDataStore(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -79,7 +82,8 @@ class DefaultUserListPresenterTests {
     fun `present - update search query`() = runTest {
         val presenter = DefaultUserListPresenter(
             UserListPresenterArgs(selectionMode = SelectionMode.Single),
-            userListDataSource
+            userListDataSource,
+            UserListDataStore(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -111,7 +115,8 @@ class DefaultUserListPresenterTests {
 
         val presenter = DefaultUserListPresenter(
             UserListPresenterArgs(selectionMode = SelectionMode.Single),
-            userListDataSource
+            userListDataSource,
+            UserListDataStore(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
