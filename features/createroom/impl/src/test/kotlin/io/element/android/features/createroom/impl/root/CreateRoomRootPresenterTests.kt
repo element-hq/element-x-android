@@ -22,6 +22,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.userlist.api.UserListDataStore
 import io.element.android.features.userlist.api.aUserListState
 import io.element.android.features.userlist.test.FakeUserListDataSource
 import io.element.android.features.userlist.test.FakeUserListPresenter
@@ -51,7 +52,7 @@ class CreateRoomRootPresenterTests {
         fakeUserListPresenter = FakeUserListPresenter()
         fakeMatrixClient = FakeMatrixClient()
         userListDataSource = FakeUserListDataSource()
-        presenter = CreateRoomRootPresenter(FakeUserListPresenterFactory(fakeUserListPresenter), userListDataSource, fakeMatrixClient)
+        presenter = CreateRoomRootPresenter(FakeUserListPresenterFactory(fakeUserListPresenter), userListDataSource, UserListDataStore(), fakeMatrixClient)
     }
 
     @Test
