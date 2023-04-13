@@ -22,12 +22,8 @@ import java.io.Serializable
 @JvmInline
 value class ThreadId(val value: String) : Serializable
 
-fun String.asThreadId() = if (MatrixPatterns.isThreadId(this)) {
-    ThreadId(this)
+fun String.asThreadId() = if (BuildConfig.DEBUG && !MatrixPatterns.isThreadId(this)) {
+    error("`$this` is not a valid thread Id")
 } else {
-    if (BuildConfig.DEBUG) {
-        error("`$this` is not a valid thread Id")
-    } else {
-        null
-    }
+    ThreadId(this)
 }

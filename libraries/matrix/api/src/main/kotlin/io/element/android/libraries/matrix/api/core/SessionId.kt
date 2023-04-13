@@ -20,12 +20,8 @@ import io.element.android.libraries.matrix.api.BuildConfig
 
 typealias SessionId = UserId
 
-fun String.asSessionId() = if (MatrixPatterns.isSessionId(this)) {
-    SessionId(this)
+fun String.asSessionId() = if (BuildConfig.DEBUG && !MatrixPatterns.isSessionId(this)) {
+    error("`$this` is not a valid session Id")
 } else {
-    if (BuildConfig.DEBUG) {
-        error("`$this` is not a valid session Id")
-    } else {
-        null
-    }
+    SessionId(this)
 }
