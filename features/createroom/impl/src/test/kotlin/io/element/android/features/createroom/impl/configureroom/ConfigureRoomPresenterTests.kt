@@ -26,9 +26,12 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.features.userlist.api.UserListDataStore
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
+import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import kotlinx.collections.immutable.persistentListOf
@@ -45,13 +48,15 @@ class ConfigureRoomPresenterTests {
 
     private lateinit var presenter: ConfigureRoomPresenter
     private lateinit var userListDataStore: UserListDataStore
+    private lateinit var fakeMatrixClient: FakeMatrixClient
 
     @Before
     fun setup() {
+        fakeMatrixClient = FakeMatrixClient()
         userListDataStore = UserListDataStore()
         presenter = ConfigureRoomPresenter(
             dataStore = CreateRoomDataStore(userListDataStore),
-            matrixClient = FakeMatrixClient()
+            matrixClient = fakeMatrixClient
         )
     }
 
@@ -151,6 +156,55 @@ class ConfigureRoomPresenterTests {
             newState = awaitItem()
             expectedConfig = expectedConfig.copy(invites = expectedConfig.invites.minus(selectedUser1).toImmutableList())
             assertThat(newState.config).isEqualTo(expectedConfig)
+        }
+    }
+
+    @Test
+    fun `present - trigger create room action`() = runTest {
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val createRoomResult = Result.success(RoomId("!createRoomResult"))
+
+            fakeMatrixClient.givenCreateRoomResult(createRoomResult)
+
+            initialState.eventSink(ConfigureRoomEvents.CreateRoom(initialState.config))
+            assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Loading::class.java)
+            val stateAfterCreateRoom = awaitItem()
+            assertThat(stateAfterCreateRoom.createRoomAction).isInstanceOf(Async.Success::class.java)
+            assertThat(stateAfterCreateRoom.createRoomAction.dataOrNull()).isEqualTo(createRoomResult.getOrNull())
+        }
+    }
+
+    @Test
+    fun `present - trigger retry and cancel actions`() = runTest {
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val createRoomResult = Result.failure<RoomId>(A_THROWABLE)
+
+            fakeMatrixClient.givenCreateRoomResult(createRoomResult)
+
+            // Create
+            initialState.eventSink(ConfigureRoomEvents.CreateRoom(initialState.config))
+            assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Loading::class.java)
+            val stateAfterCreateRoom = awaitItem()
+            assertThat(stateAfterCreateRoom.createRoomAction).isInstanceOf(Async.Failure::class.java)
+            assertThat((stateAfterCreateRoom.createRoomAction as? Async.Failure)?.error).isEqualTo(createRoomResult.exceptionOrNull())
+
+            // Retry
+            stateAfterCreateRoom.eventSink(ConfigureRoomEvents.CreateRoom(initialState.config))
+            assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Uninitialized::class.java)
+            assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Loading::class.java)
+            val stateAfterRetry = awaitItem()
+            assertThat(stateAfterRetry.createRoomAction).isInstanceOf(Async.Failure::class.java)
+            assertThat((stateAfterRetry.createRoomAction as? Async.Failure)?.error).isEqualTo(createRoomResult.exceptionOrNull())
+
+            // Cancel
+            stateAfterRetry.eventSink(ConfigureRoomEvents.CancelCreateRoom)
+            assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Uninitialized::class.java)
         }
     }
 }
