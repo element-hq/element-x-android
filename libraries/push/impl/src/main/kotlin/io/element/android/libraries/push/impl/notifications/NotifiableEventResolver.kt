@@ -89,7 +89,7 @@ private fun NotificationData.asNotifiableEvent(userId: SessionId, roomId: RoomId
         timestamp = System.currentTimeMillis(),
         senderName = null,
         senderId = null,
-        body = "$eventId in $roomId",
+        body = "Message ${eventId.value.take(8)}… in room ${roomId.value.take(8)}…",
         imageUriString = null,
         threadId = null,
         roomName = null,
