@@ -482,15 +482,11 @@ class NotificationUtils @Inject constructor(
     }
 
     private fun buildOpenRoomIntent(sessionId: SessionId, roomId: RoomId): PendingIntent? {
-        val roomIntent = intentProvider.getIntent(sessionId = sessionId, roomId = roomId, threadId = null)
-        roomIntent.action = actionIds.tapToView
-        // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
-        roomIntent.data = createIgnoredUri("openRoom?$sessionId&$roomId")
-
+        val intent = intentProvider.getViewIntent(sessionId = sessionId, roomId = roomId, threadId = null)
         return PendingIntent.getActivity(
             context,
             clock.epochMillis().toInt(),
-            roomIntent,
+            intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
@@ -498,22 +494,17 @@ class NotificationUtils @Inject constructor(
     private fun buildOpenThreadIntent(roomInfo: RoomEventGroupInfo, threadId: ThreadId?): PendingIntent? {
         val sessionId = roomInfo.sessionId
         val roomId = roomInfo.roomId
-        val threadIntentTap = intentProvider.getIntent(sessionId = sessionId, roomId = roomId, threadId = threadId)
-        threadIntentTap.action = actionIds.tapToView
-        // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
-        threadIntentTap.data = createIgnoredUri("openThread?$sessionId&$roomId&$threadId")
-
+        val intent = intentProvider.getViewIntent(sessionId = sessionId, roomId = roomId, threadId = threadId)
         return PendingIntent.getActivity(
             context,
             clock.epochMillis().toInt(),
-            threadIntentTap,
+            intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
 
     private fun buildOpenHomePendingIntentForSummary(sessionId: SessionId): PendingIntent {
-        val intent = intentProvider.getIntent(sessionId = sessionId, roomId = null, threadId = null)
-        intent.data = createIgnoredUri("tapSummary?$sessionId")
+        val intent = intentProvider.getViewIntent(sessionId = sessionId, roomId = null, threadId = null)
         return PendingIntent.getActivity(
             context,
             clock.epochMillis().toInt(),

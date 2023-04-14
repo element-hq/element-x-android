@@ -16,14 +16,17 @@
 
 package io.element.android.x
 
+import android.content.Intent
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.navigation.model.permanent.PermanentNavModel
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
+import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.appnav.LoggedInFlowNode
 import io.element.android.appnav.RoomFlowNode
 import io.element.android.appnav.RootFlowNode
@@ -35,11 +38,13 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.x.di.MainDaggerComponentsOwner
 import io.element.android.x.di.RoomComponent
 import io.element.android.x.di.SessionComponent
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 class MainNode(
     buildContext: BuildContext,
     private val mainDaggerComponentOwner: MainDaggerComponentsOwner,
+    plugins: List<Plugin>,
 ) :
     ParentNode<MainNode.RootNavTarget>(
         navModel = PermanentNavModel(
@@ -47,6 +52,7 @@ class MainNode(
             savedStateMap = buildContext.savedStateMap,
         ),
         buildContext = buildContext,
+        plugins = plugins,
     ),
     DaggerComponentOwner by mainDaggerComponentOwner {
 
@@ -73,12 +79,24 @@ class MainNode(
     }
 
     override fun resolve(navTarget: RootNavTarget, buildContext: BuildContext): Node {
-        return createNode<RootFlowNode>(buildContext, plugins = listOf(loggedInFlowNodeCallback, roomFlowNodeCallback))
+        return createNode<RootFlowNode>(
+            context = buildContext,
+            plugins = listOf(
+                loggedInFlowNodeCallback,
+                roomFlowNodeCallback,
+            )
+        )
     }
 
     @Composable
     override fun View(modifier: Modifier) {
         Children(navModel = navModel)
+    }
+
+    fun handleIntent(intent: Intent) {
+        lifecycleScope.launch {
+            waitForChildAttached<RootFlowNode>().handleIntent(intent)
+        }
     }
 
     @Parcelize
