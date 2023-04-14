@@ -32,7 +32,6 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
-import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -45,7 +44,7 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class RoomDetailsPresenterTests {
 
-    private val roomMembershipObserver = RoomMembershipObserver(A_SESSION_ID)
+    private val roomMembershipObserver = RoomMembershipObserver()
 
     @Test
     fun `present - initial state is created from room info`() = runTest {

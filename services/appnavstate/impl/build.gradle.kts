@@ -47,4 +47,5 @@ dependencies {
     testImplementation(libs.coroutines.test)
     testImplementation(libs.test.truth)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.services.appnavstate.test)
 }
