@@ -20,16 +20,12 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Notification
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.os.Build
-import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.DrawableRes
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -37,14 +33,12 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.content.res.ResourcesCompat
-import io.element.android.libraries.androidutils.system.startNotificationChannelSettingsIntent
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.impl.R
+import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
 import io.element.android.libraries.push.impl.notifications.factories.PendingIntentFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.AcceptInvitationActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.MarkAsReadActionFactory
@@ -56,9 +50,9 @@ import io.element.android.services.toolbox.api.strings.StringProvider
 import timber.log.Timber
 import javax.inject.Inject
 
-@SingleIn(AppScope::class)
 class NotificationUtils @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val notificationChannels: NotificationChannels,
     // private val vectorPreferences: VectorPreferences,
     private val stringProvider: StringProvider,
     private val buildMeta: BuildMeta,
@@ -81,136 +75,9 @@ class NotificationUtils @Inject constructor(
          * the application is doing while in background.
          */
         const val NOTIFICATION_ID_FOREGROUND_SERVICE = 61
-
-        /* ==========================================================================================
-         * IDs for channels
-         * ========================================================================================== */
-
-        // on devices >= android O, we need to define a channel for each notifications
-        private const val LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID = "LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID"
-
-        private const val NOISY_NOTIFICATION_CHANNEL_ID = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID"
-
-        const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID_V2"
-        private const val CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID_V2"
-
-        @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
-        fun supportNotificationChannels() = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-
-        fun openSystemSettingsForSilentCategory(activity: Activity) {
-            startNotificationChannelSettingsIntent(activity, SILENT_NOTIFICATION_CHANNEL_ID)
-        }
-
-        fun openSystemSettingsForNoisyCategory(activity: Activity) {
-            startNotificationChannelSettingsIntent(activity, NOISY_NOTIFICATION_CHANNEL_ID)
-        }
-
-        fun openSystemSettingsForCallCategory(activity: Activity) {
-            startNotificationChannelSettingsIntent(activity, CALL_NOTIFICATION_CHANNEL_ID)
-        }
     }
 
     private val notificationManager = NotificationManagerCompat.from(context)
-
-    init {
-        createNotificationChannels()
-    }
-
-    /* ==========================================================================================
-     * Channel names
-     * ========================================================================================== */
-
-    /**
-     * Create notification channels.
-     */
-    private fun createNotificationChannels() {
-        if (!supportNotificationChannels()) {
-            return
-        }
-
-        val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
-
-        // Migration - the noisy channel was deleted and recreated when sound preference was changed (id was DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID_BASE
-        // + currentTimeMillis).
-        // Now the sound can only be change directly in system settings, so for app upgrading we are deleting this former channel
-        // Starting from this version the channel will not be dynamic
-        for (channel in notificationManager.notificationChannels) {
-            val channelId = channel.id
-            val legacyBaseName = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID_BASE"
-            if (channelId.startsWith(legacyBaseName)) {
-                notificationManager.deleteNotificationChannel(channelId)
-            }
-        }
-        // Migration - Remove deprecated channels
-        for (channelId in listOf("DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID", "CALL_NOTIFICATION_CHANNEL_ID")) {
-            notificationManager.getNotificationChannel(channelId)?.let {
-                notificationManager.deleteNotificationChannel(channelId)
-            }
-        }
-
-        /**
-         * Default notification importance: shows everywhere, makes noise, but does not visually
-         * intrude.
-         */
-        notificationManager.createNotificationChannel(NotificationChannel(
-            NOISY_NOTIFICATION_CHANNEL_ID,
-            stringProvider.getString(R.string.notification_channel_noisy).ifEmpty { "Noisy notifications" },
-            NotificationManager.IMPORTANCE_DEFAULT
-        )
-            .apply {
-                description = stringProvider.getString(R.string.notification_channel_noisy)
-                enableVibration(true)
-                enableLights(true)
-                lightColor = accentColor
-            })
-
-        /**
-         * Low notification importance: shows everywhere, but is not intrusive.
-         */
-        notificationManager.createNotificationChannel(NotificationChannel(
-            SILENT_NOTIFICATION_CHANNEL_ID,
-            stringProvider.getString(R.string.notification_channel_silent).ifEmpty { "Silent notifications" },
-            NotificationManager.IMPORTANCE_LOW
-        )
-            .apply {
-                description = stringProvider.getString(R.string.notification_channel_silent)
-                setSound(null, null)
-                enableLights(true)
-                lightColor = accentColor
-            })
-
-        notificationManager.createNotificationChannel(NotificationChannel(
-            LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID,
-            stringProvider.getString(R.string.notification_channel_listening_for_events).ifEmpty { "Listening for events" },
-            NotificationManager.IMPORTANCE_MIN
-        )
-            .apply {
-                description = stringProvider.getString(R.string.notification_channel_listening_for_events)
-                setSound(null, null)
-                setShowBadge(false)
-            })
-
-        notificationManager.createNotificationChannel(NotificationChannel(
-            CALL_NOTIFICATION_CHANNEL_ID,
-            stringProvider.getString(R.string.notification_channel_call).ifEmpty { "Call" },
-            NotificationManager.IMPORTANCE_HIGH
-        )
-            .apply {
-                description = stringProvider.getString(R.string.notification_channel_call)
-                setSound(null, null)
-                enableLights(true)
-                lightColor = accentColor
-            })
-    }
-
-    fun getChannel(channelId: String): NotificationChannel? {
-        return notificationManager.getNotificationChannel(channelId)
-    }
-
-    fun getChannelForIncomingCall(fromBg: Boolean): NotificationChannel? {
-        val notificationChannel = if (fromBg) CALL_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
-        return getChannel(notificationChannel)
-    }
 
     /**
      * Build a notification for a Room.
@@ -236,8 +103,8 @@ class NotificationUtils @Inject constructor(
 
         val smallIcon = R.drawable.ic_notification
 
-        val channelID = if (roomInfo.shouldBing) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
-        return NotificationCompat.Builder(context, channelID)
+        val channelId = notificationChannels.getChannelIdForMessage(roomInfo.shouldBing)
+        return NotificationCompat.Builder(context, channelId)
             .setOnlyAlertOnce(roomInfo.isUpdated)
             .setWhen(lastMessageTimestamp)
             // MESSAGING_STYLE sets title and content for API 16 and above devices.
@@ -309,9 +176,8 @@ class NotificationUtils @Inject constructor(
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         val smallIcon = R.drawable.ic_notification
-        val channelID = if (inviteNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
-
-        return NotificationCompat.Builder(context, channelID)
+        val channelId = notificationChannels.getChannelIdForMessage(inviteNotifiableEvent.noisy)
+        return NotificationCompat.Builder(context, channelId)
             .setOnlyAlertOnce(true)
             .setContentTitle(inviteNotifiableEvent.roomName ?: buildMeta.applicationName)
             .setContentText(inviteNotifiableEvent.description)
@@ -359,9 +225,8 @@ class NotificationUtils @Inject constructor(
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         val smallIcon = R.drawable.ic_notification
 
-        val channelID = if (simpleNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
-
-        return NotificationCompat.Builder(context, channelID)
+        val channelId = notificationChannels.getChannelIdForMessage(simpleNotifiableEvent.noisy)
+        return NotificationCompat.Builder(context, channelId)
             .setOnlyAlertOnce(true)
             .setContentTitle(buildMeta.applicationName)
             .setContentText(simpleNotifiableEvent.description)
@@ -401,8 +266,8 @@ class NotificationUtils @Inject constructor(
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         val smallIcon = R.drawable.ic_notification
-
-        return NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
+        val channelId = notificationChannels.getChannelIdForMessage(noisy)
+        return NotificationCompat.Builder(context, channelId)
             .setOnlyAlertOnce(true)
             // used in compat < N, after summary is built based on child notifications
             .setWhen(lastMessageTimestamp)
@@ -464,7 +329,7 @@ class NotificationUtils @Inject constructor(
         notificationManager.notify(
             "DIAGNOSTIC",
             888,
-            NotificationCompat.Builder(context, NOISY_NOTIFICATION_CHANNEL_ID)
+            NotificationCompat.Builder(context, notificationChannels.getChannelIdForTest())
                 .setContentTitle(buildMeta.applicationName)
                 .setContentText(stringProvider.getString(R.string.notification_test_push_notification_content))
                 .setSmallIcon(R.drawable.ic_notification)
