@@ -19,29 +19,31 @@
 package io.element.android.features.createroom.impl.configureroom
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.Avatar
 import io.element.android.features.createroom.impl.components.LabelledTextField
 import io.element.android.features.createroom.impl.components.RoomPrivacyOption
-import io.element.android.features.userlist.api.SelectedUsersList
+import io.element.android.features.userlist.api.components.SelectedUsersList
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -57,14 +59,17 @@ fun ConfigureRoomView(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
 ) {
-    val selectedUsersListState = rememberLazyListState()
+    val context = LocalContext.current
     Scaffold(
         modifier = modifier,
         topBar = {
             ConfigureRoomToolbar(
                 isNextActionEnabled = state.isCreateButtonEnabled,
                 onBackPressed = onBackPressed,
-                onNextPressed = { state.eventSink(ConfigureRoomEvents.CreateRoom) },
+                onNextPressed = {
+                    // state.eventSink(ConfigureRoomEvents.CreateRoom)
+                    Toast.makeText(context, "not implemented yet", Toast.LENGTH_SHORT).show()
+                },
             )
         }
     ) { padding ->
@@ -74,25 +79,25 @@ fun ConfigureRoomView(
         ) {
             RoomNameWithAvatar(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                avatarUri = state.avatarUri,
-                roomName = state.roomName,
+                avatarUri = state.config.avatarUrl?.toUri(),
+                roomName = state.config.roomName.orEmpty(),
+                onAvatarClick = { Toast.makeText(context, "not implemented yet", Toast.LENGTH_SHORT).show() },
                 onRoomNameChanged = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
             )
             RoomTopic(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                topic = state.topic,
+                topic = state.config.topic.orEmpty(),
                 onTopicChanged = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
             )
             SelectedUsersList(
-                listState = selectedUsersListState,
                 contentPadding = PaddingValues(horizontal = 24.dp),
-                selectedUsers = state.selectedUsers,
-                onUserRemoved = { }, // TODO
+                selectedUsers = state.config.invites,
+                onUserRemoved = { state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it)) },
             )
             Spacer(Modifier.weight(1f))
             RoomPrivacyOptions(
                 modifier = Modifier.padding(bottom = 40.dp),
-                selected = state.privacy,
+                selected = state.config.privacy,
                 onOptionSelected = { state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it.privacy)) },
             )
         }

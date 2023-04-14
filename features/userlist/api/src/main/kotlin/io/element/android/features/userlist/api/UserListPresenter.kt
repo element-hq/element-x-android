@@ -21,6 +21,10 @@ import io.element.android.libraries.architecture.Presenter
 interface UserListPresenter : Presenter<UserListState> {
 
     interface Factory {
-        fun create(args: UserListPresenterArgs, matrixUserDataSource: MatrixUserDataSource): UserListPresenter
+        fun create(
+            args: UserListPresenterArgs,
+            userListDataSource: UserListDataSource,
+            userListDataStore: UserListDataStore,
+        ): UserListPresenter
     }
 }

@@ -14,22 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.di
+package io.element.android.libraries.matrix.api.createroom
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Binds
-import dagger.Module
-import io.element.android.features.createroom.impl.AllMatrixUsersDataSource
-import io.element.android.features.userlist.api.UserListDataSource
-import io.element.android.libraries.di.AppScope
-import javax.inject.Named
+import io.element.android.libraries.matrix.api.core.UserId
 
-@Module
-@ContributesTo(AppScope::class)
-interface CreateRoomModule {
-
-    @Binds
-    @Named("AllUsers")
-    fun bindAllUserListDataSource(dataSource: AllMatrixUsersDataSource): UserListDataSource
-
-}
+data class CreateRoomParameters(
+    val name: String?,
+    val topic: String? = null,
+    val isEncrypted: Boolean,
+    val isDirect: Boolean = false,
+    val visibility: RoomVisibility,
+    val preset: RoomPreset,
+    val invite: List<UserId>? = null,
+    val avatar: String? = null,
+)

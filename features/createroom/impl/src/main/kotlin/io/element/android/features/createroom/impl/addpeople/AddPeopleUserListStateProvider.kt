@@ -18,30 +18,27 @@ package io.element.android.features.createroom.impl.addpeople
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.userlist.api.SelectionMode
+import io.element.android.features.userlist.api.UserListState
 import io.element.android.features.userlist.api.aListOfSelectedUsers
 import io.element.android.features.userlist.api.aUserListState
+import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import kotlinx.collections.immutable.toImmutableList
 
-open class AddPeopleStateProvider : PreviewParameterProvider<AddPeopleState> {
-    override val values: Sequence<AddPeopleState>
+open class AddPeopleUserListStateProvider : PreviewParameterProvider<UserListState> {
+    override val values: Sequence<UserListState>
         get() = sequenceOf(
-            aAddPeopleState(),
-            aAddPeopleState().copy(
-                userListState = aUserListState().copy(
-                    selectedUsers = aListOfSelectedUsers(),
-                    selectionMode = SelectionMode.Multiple,
-                )
+            aUserListState(),
+            aUserListState().copy(
+                searchResults = aMatrixUserList().toImmutableList(),
+                selectedUsers = aListOfSelectedUsers(),
+                isSearchActive = false,
+                selectionMode = SelectionMode.Multiple,
             ),
-            aAddPeopleState().copy(
-                userListState = aUserListState().copy(
-                    selectedUsers = aListOfSelectedUsers(),
-                    isSearchActive = true,
-                    selectionMode = SelectionMode.Multiple,
-                )
+            aUserListState().copy(
+                searchResults = aMatrixUserList().toImmutableList(),
+                selectedUsers = aListOfSelectedUsers(),
+                isSearchActive = true,
+                selectionMode = SelectionMode.Multiple,
             )
         )
 }
-
-fun aAddPeopleState() = AddPeopleState(
-    userListState = aUserListState(),
-    eventSink = {}
-)

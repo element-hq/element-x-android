@@ -16,57 +16,42 @@
 
 package io.element.android.features.createroom.impl.configureroom
 
-import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import io.element.android.features.createroom.impl.CreateRoomConfig
+import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.libraries.architecture.Presenter
-import kotlinx.collections.immutable.toImmutableList
+import javax.inject.Inject
 
-class ConfigureRoomPresenter @AssistedInject constructor(
-    @Assisted val args: ConfigureRoomPresenterArgs,
+class ConfigureRoomPresenter @Inject constructor(
+    private val dataStore: CreateRoomDataStore,
 ) : Presenter<ConfigureRoomState> {
-
-    @AssistedFactory
-    interface Factory {
-        fun create(args: ConfigureRoomPresenterArgs): ConfigureRoomPresenter
-    }
 
     @Composable
     override fun present(): ConfigureRoomState {
-        var roomName by rememberSaveable { mutableStateOf("") }
-        var topic by rememberSaveable { mutableStateOf("") }
-        var avatarUri by rememberSaveable { mutableStateOf<Uri?>(null) }
-        var privacy by rememberSaveable { mutableStateOf<RoomPrivacy?>(null) }
-        val isCreateButtonEnabled by remember {
+        val createRoomConfig = dataStore.getCreateRoomConfig().collectAsState(CreateRoomConfig())
+        val isCreateButtonEnabled by remember(createRoomConfig.value.roomName, createRoomConfig.value.privacy) {
             derivedStateOf {
-                roomName.isNotEmpty() && privacy != null
+                createRoomConfig.value.roomName.isNullOrEmpty().not() && createRoomConfig.value.privacy != null
             }
         }
 
         fun handleEvents(event: ConfigureRoomEvents) {
             when (event) {
-                is ConfigureRoomEvents.AvatarUriChanged -> avatarUri = event.uri
-                is ConfigureRoomEvents.RoomNameChanged -> roomName = event.name
-                is ConfigureRoomEvents.TopicChanged -> topic = event.topic
-                is ConfigureRoomEvents.RoomPrivacyChanged -> privacy = event.privacy
+                is ConfigureRoomEvents.AvatarUriChanged -> dataStore.setAvatarUrl(event.uri?.toString())
+                is ConfigureRoomEvents.RoomNameChanged -> dataStore.setRoomName(event.name)
+                is ConfigureRoomEvents.TopicChanged -> dataStore.setTopic(event.topic)
+                is ConfigureRoomEvents.RoomPrivacyChanged -> dataStore.setPrivacy(event.privacy)
+                is ConfigureRoomEvents.RemoveFromSelection -> dataStore.selectedUserListDataStore.removeUserFromSelection(event.matrixUser)
                 ConfigureRoomEvents.CreateRoom -> Unit // TODO
             }
         }
 
         return ConfigureRoomState(
-            selectedUsers = args.selectedUsers.toImmutableList(),
-            roomName = roomName,
-            topic = topic,
-            avatarUri = avatarUri,
-            privacy = privacy,
+            createRoomConfig.value,
             isCreateButtonEnabled = isCreateButtonEnabled,
             eventSink = ::handleEvents,
         )

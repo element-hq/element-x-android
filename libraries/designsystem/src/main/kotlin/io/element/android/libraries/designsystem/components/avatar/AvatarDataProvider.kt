@@ -27,8 +27,8 @@ open class AvatarDataProvider : PreviewParameterProvider<AvatarData> {
         )
 }
 
-fun anAvatarData() = AvatarData(
+fun anAvatarData(id: String = "@id_of_alice:server.org", name: String = "Alice") = AvatarData(
     // Let's the id not start with a 'a'.
-    id = "@id_of_alice:server.org",
-    name = "Alice",
+    id = id,
+    name = name,
 )

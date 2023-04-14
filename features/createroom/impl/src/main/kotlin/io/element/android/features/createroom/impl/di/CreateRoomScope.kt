@@ -16,20 +16,4 @@
 
 package io.element.android.features.createroom.impl.di
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Binds
-import dagger.Module
-import io.element.android.features.createroom.impl.AllMatrixUsersDataSource
-import io.element.android.features.userlist.api.UserListDataSource
-import io.element.android.libraries.di.AppScope
-import javax.inject.Named
-
-@Module
-@ContributesTo(AppScope::class)
-interface CreateRoomModule {
-
-    @Binds
-    @Named("AllUsers")
-    fun bindAllUserListDataSource(dataSource: AllMatrixUsersDataSource): UserListDataSource
-
-}
+abstract class CreateRoomScope private constructor()

@@ -14,20 +14,26 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl
+package io.element.android.features.userlist.api
 
-import io.element.android.features.userlist.api.UserListDataSource
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
-// TODO this is empty as we currently don't have an endpoint to perform user search
-class AllMatrixUsersDataSource @Inject constructor() : UserListDataSource {
-    override suspend fun search(query: String): List<MatrixUser> {
-        return emptyList()
+class UserListDataStore @Inject constructor() {
+
+    private val selectedUsers: MutableStateFlow<List<MatrixUser>> = MutableStateFlow(emptyList())
+
+    fun selectUser(user: MatrixUser) {
+        if (user !in selectedUsers.value) {
+            selectedUsers.tryEmit(selectedUsers.value.plus(user))
+        }
     }
 
-    override suspend fun getProfile(userId: UserId): MatrixUser? {
-        return null
+    fun removeUserFromSelection(user: MatrixUser) {
+        selectedUsers.tryEmit(selectedUsers.value.minus(user))
     }
+
+    fun selectedUsers(): Flow<List<MatrixUser>> = selectedUsers
 }
