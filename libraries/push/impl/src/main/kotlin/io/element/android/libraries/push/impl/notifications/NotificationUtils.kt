@@ -50,10 +50,10 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.intent.IntentProvider
-import io.element.android.libraries.push.impl.notifications.actions.AcceptInvitationActionFactory
-import io.element.android.libraries.push.impl.notifications.actions.MarkAsReadActionFactory
-import io.element.android.libraries.push.impl.notifications.actions.QuickReplyActionFactory
-import io.element.android.libraries.push.impl.notifications.actions.RejectInvitationActionFactory
+import io.element.android.libraries.push.impl.notifications.factories.AcceptInvitationActionFactory
+import io.element.android.libraries.push.impl.notifications.factories.MarkAsReadActionFactory
+import io.element.android.libraries.push.impl.notifications.factories.QuickReplyActionFactory
+import io.element.android.libraries.push.impl.notifications.factories.RejectInvitationActionFactory
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -306,7 +306,7 @@ class NotificationUtils @Inject constructor(
                 if (largeIcon != null) {
                     setLargeIcon(largeIcon)
                 }
-                setDeleteIntent(getDismissRoomPendingIntent(roomInfo))
+                setDeleteIntent(getDismissRoomPendingIntent(roomInfo.sessionId, roomInfo.roomId))
             }
             .setTicker(tickerText)
             .build()
@@ -471,7 +471,7 @@ class NotificationUtils @Inject constructor(
     private fun getDismissSummaryPendingIntent(sessionId: SessionId): PendingIntent {
         val intent = Intent(context, NotificationBroadcastReceiver::class.java)
         intent.action = actionIds.dismissSummary
-        intent.data = createIgnoredUri("deleteSummary?$sessionId")
+        intent.data = createIgnoredUri("deleteSummary?${sessionId.value}")
         intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId)
         return PendingIntent.getBroadcast(
             context,
@@ -481,11 +481,12 @@ class NotificationUtils @Inject constructor(
         )
     }
 
-    private fun getDismissRoomPendingIntent(roomInfo: RoomEventGroupInfo): PendingIntent {
+    private fun getDismissRoomPendingIntent(sessionId: SessionId, roomId: RoomId): PendingIntent {
         val intent = Intent(context, NotificationBroadcastReceiver::class.java)
         intent.action = actionIds.dismissRoom
-        intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, roomInfo.sessionId)
-        intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomInfo.roomId)
+        intent.data = createIgnoredUri("deleteRoom?${sessionId.value}&${roomId.value}")
+        intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId)
+        intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
         return PendingIntent.getBroadcast(
             context,
             clock.epochMillis().toInt(),
