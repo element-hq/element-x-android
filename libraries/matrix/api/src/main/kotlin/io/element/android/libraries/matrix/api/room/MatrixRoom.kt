@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.api.room
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import kotlinx.coroutines.flow.Flow
 import java.io.Closeable
@@ -37,6 +38,8 @@ interface MatrixRoom: Closeable {
     suspend fun members() : List<RoomMember>
 
     suspend fun memberCount(): Int
+
+    fun getMember(userId: UserId): RoomMember?
 
     fun syncUpdateFlow(): Flow<Long>
 

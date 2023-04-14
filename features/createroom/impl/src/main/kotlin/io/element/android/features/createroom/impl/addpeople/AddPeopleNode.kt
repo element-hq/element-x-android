@@ -21,17 +21,26 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.di.SessionScope
+import io.element.android.features.createroom.impl.di.CreateRoomScope
 
-@ContributesNode(SessionScope::class)
+@ContributesNode(CreateRoomScope::class)
 class AddPeopleNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: AddPeoplePresenter,
 ) : Node(buildContext, plugins = plugins) {
+
+    interface Callback : Plugin {
+        fun onContinue()
+    }
+
+    private fun onContinue() {
+        plugins<Callback>().forEach { it.onContinue() }
+    }
 
     @Composable
     override fun View(modifier: Modifier) {
@@ -39,8 +48,8 @@ class AddPeopleNode @AssistedInject constructor(
         AddPeopleView(
             state = state,
             modifier = modifier,
-            onBackPressed = { navigateUp() },
-            onNextPressed = { },
+            onBackPressed = this::navigateUp,
+            onNextPressed = this::onContinue,
         )
     }
 }

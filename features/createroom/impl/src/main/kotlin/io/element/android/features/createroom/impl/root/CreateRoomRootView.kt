@@ -41,7 +41,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.createroom.impl.R
-import io.element.android.features.userlist.api.UserListView
+import io.element.android.features.userlist.api.components.UserListView
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
@@ -110,7 +110,7 @@ fun CreateRoomRootView(
         }
         is Async.Failure -> {
             RetryDialog(
-                content = stringResource(id = StringR.string.screen_start_chat_error_starting_chat),
+                content = stringResource(id = R.string.screen_start_chat_error_starting_chat),
                 onDismiss = { state.eventSink(CreateRoomRootEvents.CancelStartDM) },
                 onRetry = {
                     state.userListState.selectedUsers.firstOrNull()
@@ -156,7 +156,7 @@ fun CreateRoomActionButtonsList(
     Column(modifier = modifier) {
         CreateRoomActionButton(
             iconRes = DrawableR.drawable.ic_groups,
-            text = stringResource(id = R.string.screen_create_room_action_create_room),
+            text = stringResource(id = StringR.string.action_create_a_room),
             onClick = onNewRoomClicked,
         )
         CreateRoomActionButton(

@@ -17,12 +17,22 @@
 package io.element.android.libraries.push.api
 
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.push.providers.api.Distributor
+import io.element.android.libraries.push.providers.api.PushProvider
 
 interface PushService {
+    // TODO Move away
     fun notificationStyleChanged()
 
-    // Ensure pusher is registered
-    suspend fun registerFirebasePusher(matrixClient: MatrixClient)
+    fun getAvailablePushProviders(): List<PushProvider>
 
+    /**
+     * Will unregister any previous pusher and register a new one with the provided [PushProvider].
+     *
+     * The method has effect only if the [PushProvider] is different than the current one.
+     */
+    suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributor: Distributor)
+
+    // TODO Move away
     suspend fun testPush()
 }

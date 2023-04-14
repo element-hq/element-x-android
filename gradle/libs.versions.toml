@@ -6,7 +6,7 @@
 android_gradle_plugin = "7.4.2"
 kotlin = "1.8.10"
 ksp = "1.8.10-1.0.9"
-molecule = "0.8.0"
+molecule = "0.9.0"
 
 # AndroidX
 material = "1.8.0"
@@ -19,7 +19,7 @@ activity = "1.7.0"
 startup = "1.1.1"
 
 # Compose
-compose_bom = "2023.03.00"
+compose_bom = "2023.04.00"
 composecompiler = "1.4.2"
 
 # Coroutines
@@ -135,6 +135,8 @@ sqldelight-driver-jvm = { module = "com.squareup.sqldelight:sqlite-driver", vers
 sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 sqlcipher = "net.zetetic:android-database-sqlcipher:4.5.3"
 sqlite = "androidx.sqlite:sqlite:2.3.1"
+unifiedpush = "com.github.UnifiedPush:android-connector:2.1.1"
+gujun_span = "me.gujun.android:span:1.7"
 
 # Di
 inject = "javax.inject:javax.inject:1"

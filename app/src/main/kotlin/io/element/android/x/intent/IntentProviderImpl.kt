@@ -18,7 +18,9 @@ package io.element.android.x.intent
 
 import android.content.Context
 import android.content.Intent
+import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.deeplink.DeepLinkCreator
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -28,17 +30,19 @@ import io.element.android.libraries.push.impl.intent.IntentProvider
 import io.element.android.x.MainActivity
 import javax.inject.Inject
 
-// TODO EAx change to deep-link.
 @ContributesBinding(AppScope::class)
 class IntentProviderImpl @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val deepLinkCreator: DeepLinkCreator,
 ) : IntentProvider {
-    override fun getMainIntent(): Intent {
-        return Intent(context, MainActivity::class.java)
-    }
-
-    override fun getIntent(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?): Intent {
-        // TODO Handle deeplink or pass parameters
-        return Intent(context, MainActivity::class.java)
+    override fun getViewIntent(
+        sessionId: SessionId,
+        roomId: RoomId?,
+        threadId: ThreadId?,
+    ): Intent {
+        return Intent(context, MainActivity::class.java).apply {
+            action = Intent.ACTION_VIEW
+            data = deepLinkCreator.create(sessionId, roomId, threadId).toUri()
+        }
     }
 }

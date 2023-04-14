@@ -20,7 +20,7 @@ import com.squareup.anvil.annotations.ContributesTo
 import dagger.Binds
 import dagger.Module
 import io.element.android.features.createroom.impl.AllMatrixUsersDataSource
-import io.element.android.features.userlist.api.MatrixUserDataSource
+import io.element.android.features.userlist.api.UserListDataSource
 import io.element.android.libraries.di.AppScope
 import javax.inject.Named
 
@@ -30,6 +30,6 @@ interface CreateRoomModule {
 
     @Binds
     @Named("AllUsers")
-    fun bindAllUserListDataSource(dataSource: AllMatrixUsersDataSource): MatrixUserDataSource
+    fun bindAllUserListDataSource(dataSource: AllMatrixUsersDataSource): UserListDataSource
 
 }

@@ -24,6 +24,10 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 /**
  * Can represent the current global app navigation state.
  * @param owner mostly a Node identifier associated with the state.
+ * We are using the owner parameter to check when calling onLeaving methods is still using the same owner than his companion onNavigate.
+ * Why this is needed : for now we rely on lifecycle methods of the node, which are async.
+ * If you navigate quickly between nodes, onCreate of the new node is called before onDestroy of the previous node.
+ * So we assume if we don't get the same owner, we can skip the onLeaving action as we already replaced it.
  */
 sealed class AppNavigationState(open val owner: String) {
     object Root : AppNavigationState("ROOT")

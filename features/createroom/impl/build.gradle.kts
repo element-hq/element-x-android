@@ -49,12 +49,14 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(projects.features.userlist.api)
     api(projects.features.createroom.api)
+    implementation(libs.coil.compose) // FIXME temp
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
+    testImplementation(libs.test.robolectric)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.features.userlist.impl)
     testImplementation(projects.features.userlist.test)
