@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.notifications.actions
+package io.element.android.libraries.push.impl.notifications.factories
 
 import android.app.PendingIntent
 import android.content.Context
@@ -22,28 +22,26 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import io.element.android.libraries.androidutils.uri.createIgnoredUri
 import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.push.impl.NotificationConfig
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
 import io.element.android.libraries.push.impl.notifications.NotificationBroadcastReceiver
-import io.element.android.libraries.push.impl.notifications.RoomEventGroupInfo
+import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import javax.inject.Inject
 
-class MarkAsReadActionFactory @Inject constructor(
+class RejectInvitationActionFactory @Inject constructor(
     @ApplicationContext private val context: Context,
     private val actionIds: NotificationActionIds,
     private val stringProvider: StringProvider,
     private val clock: SystemClock,
 ) {
-    fun create(roomInfo: RoomEventGroupInfo): NotificationCompat.Action? {
-        if (!NotificationConfig.supportMarkAsReadAction) return null
-        val sessionId = roomInfo.sessionId
-        val roomId = roomInfo.roomId
+    fun create(inviteNotifiableEvent: InviteNotifiableEvent): NotificationCompat.Action? {
+        val sessionId = inviteNotifiableEvent.sessionId
+        val roomId = inviteNotifiableEvent.roomId
         val intent = Intent(context, NotificationBroadcastReceiver::class.java)
-        intent.action = actionIds.markRoomRead
-        intent.data = createIgnoredUri("markRead?${sessionId.value}&$${roomId.value}")
+        intent.action = actionIds.reject
+        intent.data = createIgnoredUri("rejectInvite?${sessionId.value}&${roomId.value}")
         intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId)
         intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
         val pendingIntent = PendingIntent.getBroadcast(
@@ -54,12 +52,9 @@ class MarkAsReadActionFactory @Inject constructor(
         )
 
         return NotificationCompat.Action.Builder(
-            R.drawable.ic_material_done_all_white,
-            stringProvider.getString(R.string.notification_room_action_mark_as_read),
+            R.drawable.vector_notification_reject_invitation,
+            stringProvider.getString(R.string.notification_invitation_action_reject),
             pendingIntent
-        )
-            .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ)
-            .setShowsUserInterface(false)
-            .build()
+        ).build()
     }
 }
