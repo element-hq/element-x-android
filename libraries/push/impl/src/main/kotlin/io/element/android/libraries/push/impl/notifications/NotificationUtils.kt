@@ -300,26 +300,13 @@ class NotificationUtils @Inject constructor(
                 if (!roomInfo.hasSmartReplyError) {
                     addAction(quickReplyActionFactory.create(roomInfo, threadId))
                 }
-
                 if (openIntent != null) {
                     setContentIntent(openIntent)
                 }
-
                 if (largeIcon != null) {
                     setLargeIcon(largeIcon)
                 }
-
-                val intent = Intent(context, NotificationBroadcastReceiver::class.java)
-                intent.action = actionIds.dismissRoom
-                intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, roomInfo.sessionId)
-                intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomInfo.roomId)
-                val pendingIntent = PendingIntent.getBroadcast(
-                    context.applicationContext,
-                    clock.epochMillis().toInt(),
-                    intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-                setDeleteIntent(pendingIntent)
+                setDeleteIntent(getDismissRoomPendingIntent(roomInfo))
             }
             .setTicker(tickerText)
             .build()
@@ -487,8 +474,21 @@ class NotificationUtils @Inject constructor(
         intent.data = createIgnoredUri("deleteSummary?$sessionId")
         intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId)
         return PendingIntent.getBroadcast(
-            context.applicationContext,
+            context,
             0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
+    private fun getDismissRoomPendingIntent(roomInfo: RoomEventGroupInfo): PendingIntent {
+        val intent = Intent(context, NotificationBroadcastReceiver::class.java)
+        intent.action = actionIds.dismissRoom
+        intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, roomInfo.sessionId)
+        intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomInfo.roomId)
+        return PendingIntent.getBroadcast(
+            context,
+            clock.epochMillis().toInt(),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
