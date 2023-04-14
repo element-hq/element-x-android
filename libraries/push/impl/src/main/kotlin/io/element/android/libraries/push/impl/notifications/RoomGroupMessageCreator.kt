@@ -44,7 +44,7 @@ class RoomGroupMessageCreator @Inject constructor(
         userAvatarUrl: String?
     ): RoomNotification.Message {
         val lastKnownRoomEvent = events.last()
-        val roomName = lastKnownRoomEvent.roomName ?: lastKnownRoomEvent.senderName ?: ""
+        val roomName = lastKnownRoomEvent.roomName ?: lastKnownRoomEvent.senderName ?: "Room name (${roomId.value.take(8)}…)"
         val roomIsGroup = !lastKnownRoomEvent.roomIsDirect
         val style = NotificationCompat.MessagingStyle(
             Person.Builder()
