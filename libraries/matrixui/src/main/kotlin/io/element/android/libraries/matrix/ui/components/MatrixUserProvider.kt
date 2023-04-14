@@ -35,7 +35,7 @@ open class MatrixUserProvider : PreviewParameterProvider<MatrixUser> {
 fun aMatrixUser(id: String = "@id_of_alice:server.org", userName: String = "Alice") = MatrixUser(
     id = UserId(id),
     username = userName,
-    avatarData = anAvatarData()
+    avatarData = anAvatarData(id, userName)
 )
 
 fun aMatrixUserList() = listOf(

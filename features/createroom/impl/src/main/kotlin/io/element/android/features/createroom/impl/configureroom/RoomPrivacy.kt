@@ -17,6 +17,6 @@
 package io.element.android.features.createroom.impl.configureroom
 
 enum class RoomPrivacy {
-    Public,
     Private,
+    Public,
 }

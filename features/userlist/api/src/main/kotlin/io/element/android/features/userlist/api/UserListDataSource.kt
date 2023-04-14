@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.addpeople
+package io.element.android.features.userlist.api
 
-sealed interface AddPeopleEvents
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.ui.model.MatrixUser
+
+interface UserListDataSource {
+    suspend fun search(query: String): List<MatrixUser>
+    suspend fun getProfile(userId: UserId): MatrixUser?
+}

@@ -30,7 +30,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.createroom.impl.R
-import io.element.android.features.userlist.api.UserListView
+import io.element.android.features.userlist.api.UserListState
+import io.element.android.features.userlist.api.components.UserListView
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -38,26 +39,23 @@ import io.element.android.libraries.designsystem.theme.components.CenterAlignedT
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
-import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddPeopleView(
-    state: AddPeopleState,
+    state: UserListState,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
-    onNextPressed: (List<MatrixUser>) -> Unit = {},
+    onNextPressed: () -> Unit = {},
 ) {
-    val eventSink = state.eventSink
-
     Scaffold(
         topBar = {
-            if (!state.userListState.isSearchActive) {
+            if (!state.isSearchActive) {
                 AddPeopleViewTopBar(
-                    hasSelectedUsers = state.userListState.selectedUsers.isNotEmpty(),
+                    hasSelectedUsers = state.selectedUsers.isNotEmpty(),
                     onBackPressed = onBackPressed,
-                    onNextPressed = { onNextPressed(state.userListState.selectedUsers) },
+                    onNextPressed = onNextPressed,
                 )
             }
         }
@@ -69,7 +67,7 @@ fun AddPeopleView(
         ) {
             UserListView(
                 modifier = Modifier.fillMaxWidth(),
-                state = state.userListState,
+                state = state,
             )
         }
     }
@@ -110,15 +108,15 @@ fun AddPeopleViewTopBar(
 
 @Preview
 @Composable
-internal fun AddPeopleViewLightPreview(@PreviewParameter(AddPeopleStateProvider::class) state: AddPeopleState) =
+internal fun AddPeopleViewLightPreview(@PreviewParameter(AddPeopleUserListStateProvider::class) state: UserListState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-internal fun AddPeopleViewDarkPreview(@PreviewParameter(AddPeopleStateProvider::class) state: AddPeopleState) =
+internal fun AddPeopleViewDarkPreview(@PreviewParameter(AddPeopleUserListStateProvider::class) state: UserListState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
-private fun ContentToPreview(state: AddPeopleState) {
+private fun ContentToPreview(state: UserListState) {
     AddPeopleView(state = state)
 }

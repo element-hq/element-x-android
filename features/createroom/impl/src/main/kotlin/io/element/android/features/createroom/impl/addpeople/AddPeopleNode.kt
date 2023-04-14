@@ -25,10 +25,9 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.features.createroom.impl.di.CreateRoomScope
 
-@ContributesNode(SessionScope::class)
+@ContributesNode(CreateRoomScope::class)
 class AddPeopleNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
@@ -36,11 +35,11 @@ class AddPeopleNode @AssistedInject constructor(
 ) : Node(buildContext, plugins = plugins) {
 
     interface Callback : Plugin {
-        fun onContinue(selectedUsers: List<MatrixUser>)
+        fun onContinue()
     }
 
-    private fun onContinue(selectedUsers: List<MatrixUser>) {
-        plugins<Callback>().forEach { it.onContinue(selectedUsers) }
+    private fun onContinue() {
+        plugins<Callback>().forEach { it.onContinue() }
     }
 
     @Composable
@@ -49,7 +48,7 @@ class AddPeopleNode @AssistedInject constructor(
         AddPeopleView(
             state = state,
             modifier = modifier,
-            onBackPressed = { navigateUp() },
+            onBackPressed = this::navigateUp,
             onNextPressed = this::onContinue,
         )
     }

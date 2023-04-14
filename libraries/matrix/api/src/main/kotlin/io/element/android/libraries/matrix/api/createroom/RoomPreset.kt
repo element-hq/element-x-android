@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.element.android.libraries.matrix.api.createroom
 
-package io.element.android.features.createroom.impl.addpeople
-
-import io.element.android.features.userlist.api.UserListState
-
-data class AddPeopleState(
-    val userListState: UserListState,
-    val eventSink: (AddPeopleEvents) -> Unit,
-)
+enum class RoomPreset {
+    PRIVATE_CHAT,
+    PUBLIC_CHAT,
+    TRUSTED_PRIVATE_CHAT,
+}

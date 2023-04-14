@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.api
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.media.MediaResolver
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.pusher.PushersService
@@ -32,8 +33,9 @@ interface MatrixClient : Closeable {
     val sessionId: SessionId
     val roomSummaryDataSource: RoomSummaryDataSource
     fun getRoom(roomId: RoomId): MatrixRoom?
-    suspend fun createDM(userId: UserId): Result<RoomId>
     fun findDM(userId: UserId): MatrixRoom?
+    suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId>
+    suspend fun createDM(userId: UserId): Result<RoomId>
     fun startSync()
     fun stopSync()
     fun mediaResolver(): MediaResolver

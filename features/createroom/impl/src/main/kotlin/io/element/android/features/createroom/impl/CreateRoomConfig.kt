@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.features.userlist.api
+package io.element.android.features.createroom.impl
 
-import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.features.createroom.impl.configureroom.RoomPrivacy
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
-interface MatrixUserDataSource {
-    suspend fun search(query: String): List<MatrixUser>
-    suspend fun getProfile(userId: UserId): MatrixUser?
-}
+data class CreateRoomConfig(
+    val roomName: String? = null,
+    val topic: String? = null,
+    val avatarUrl: String? = null,
+    val invites: ImmutableList<MatrixUser> = persistentListOf(),
+    val privacy: RoomPrivacy? = null,
+)

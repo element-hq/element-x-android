@@ -22,11 +22,12 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.element.android.features.roomdetails.impl.members.RoomMemberListPresenter
 import io.element.android.features.userlist.api.SelectionMode
-import io.element.android.features.userlist.api.MatrixUserDataSource
+import io.element.android.features.userlist.api.UserListDataSource
+import io.element.android.features.userlist.api.UserListDataStore
 import io.element.android.features.userlist.api.UserListPresenter
 import io.element.android.features.userlist.api.UserListPresenterArgs
 import io.element.android.features.userlist.impl.DefaultUserListPresenter
-import io.element.android.features.userlist.test.FakeMatrixUserDataSource
+import io.element.android.features.userlist.test.FakeUserListDataSource
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -40,13 +41,18 @@ class RoomMemberListPresenterTests {
     @Test
     fun `present - search is done automatically on start, but is async`() = runTest {
         val searchResult = listOf(aMatrixUser())
-        val userListDataSource = FakeMatrixUserDataSource().apply {
+        val userListDataSource = FakeUserListDataSource().apply {
             givenSearchResult(searchResult)
         }
+        val userListDataStore = UserListDataStore()
         val userListFactory = object : UserListPresenter.Factory {
-            override fun create(args: UserListPresenterArgs, dataSource: MatrixUserDataSource) = DefaultUserListPresenter(args, dataSource)
+            override fun create(
+                args: UserListPresenterArgs,
+                userListDataSource: UserListDataSource,
+                userListDataStore: UserListDataStore,
+            ) = DefaultUserListPresenter(args, userListDataSource, userListDataStore)
         }
-        val presenter = RoomMemberListPresenter(userListFactory, userListDataSource)
+        val presenter = RoomMemberListPresenter(userListFactory, userListDataSource, userListDataStore)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -60,5 +66,4 @@ class RoomMemberListPresenterTests {
             Truth.assertThat((loadedState.allUsers as? Async.Success)?.state).isEqualTo(searchResult.toImmutableList())
         }
     }
-
 }

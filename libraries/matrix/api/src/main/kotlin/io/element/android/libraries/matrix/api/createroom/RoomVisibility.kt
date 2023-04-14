@@ -13,23 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.element.android.libraries.matrix.api.createroom
 
-package io.element.android.features.createroom.impl.di
-
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Binds
-import dagger.Module
-import io.element.android.features.createroom.impl.AllMatrixUsersDataSource
-import io.element.android.features.userlist.api.UserListDataSource
-import io.element.android.libraries.di.AppScope
-import javax.inject.Named
-
-@Module
-@ContributesTo(AppScope::class)
-interface CreateRoomModule {
-
-    @Binds
-    @Named("AllUsers")
-    fun bindAllUserListDataSource(dataSource: AllMatrixUsersDataSource): UserListDataSource
-
+enum class RoomVisibility {
+    PUBLIC,
+    PRIVATE,
 }

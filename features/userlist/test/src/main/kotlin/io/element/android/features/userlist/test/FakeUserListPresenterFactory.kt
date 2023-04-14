@@ -16,7 +16,8 @@
 
 package io.element.android.features.userlist.test
 
-import io.element.android.features.userlist.api.MatrixUserDataSource
+import io.element.android.features.userlist.api.UserListDataSource
+import io.element.android.features.userlist.api.UserListDataStore
 import io.element.android.features.userlist.api.UserListPresenter
 import io.element.android.features.userlist.api.UserListPresenterArgs
 
@@ -24,5 +25,9 @@ class FakeUserListPresenterFactory(
     private val fakeUserListPresenter: FakeUserListPresenter = FakeUserListPresenter()
 ) : UserListPresenter.Factory {
 
-    override fun create(args: UserListPresenterArgs, matrixUserDataSource: MatrixUserDataSource): UserListPresenter = fakeUserListPresenter
+    override fun create(
+        args: UserListPresenterArgs,
+        userListDataSource: UserListDataSource,
+        userListDataStore: UserListDataStore,
+    ): UserListPresenter = fakeUserListPresenter
 }
