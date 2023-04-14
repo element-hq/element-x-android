@@ -32,6 +32,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
+import io.element.android.libraries.androidutils.R
 import io.element.android.libraries.androidutils.compat.getApplicationInfoCompat
 
 /**
@@ -125,7 +126,7 @@ fun startNotificationSettingsIntent(context: Context, activityResultLauncher: Ac
 
 fun openAppSettingsPage(
     activity: Activity,
-    noActivityFoundMessage: String,
+    noActivityFoundMessage: String = activity.getString(R.string.error_no_compatible_app_found),
 ) {
     try {
         activity.startActivity(
@@ -156,7 +157,7 @@ fun startNotificationChannelSettingsIntent(activity: Activity, channelID: String
 fun startAddGoogleAccountIntent(
     context: Context,
     activityResultLauncher: ActivityResultLauncher<Intent>,
-    noActivityFoundMessage: String,
+    noActivityFoundMessage: String = context.getString(R.string.error_no_compatible_app_found),
 ) {
     val intent = Intent(Settings.ACTION_ADD_ACCOUNT)
     intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
@@ -171,7 +172,7 @@ fun startAddGoogleAccountIntent(
 fun startInstallFromSourceIntent(
     context: Context,
     activityResultLauncher: ActivityResultLauncher<Intent>,
-    noActivityFoundMessage: String,
+    noActivityFoundMessage: String = context.getString(R.string.error_no_compatible_app_found),
 ) {
     val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
         .setData(Uri.parse(String.format("package:%s", context.packageName)))
@@ -189,7 +190,7 @@ fun startSharePlainTextIntent(
     text: String,
     subject: String? = null,
     extraTitle: String? = null,
-    noActivityFoundMessage: String,
+    noActivityFoundMessage: String = context.getString(R.string.error_no_compatible_app_found),
 ) {
     val share = Intent(Intent.ACTION_SEND)
     share.type = "text/plain"
@@ -217,7 +218,7 @@ fun startSharePlainTextIntent(
 fun startImportTextFromFileIntent(
     context: Context,
     activityResultLauncher: ActivityResultLauncher<Intent>,
-    noActivityFoundMessage: String,
+    noActivityFoundMessage: String = context.getString(R.string.error_no_compatible_app_found),
 ) {
     val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
         type = "text/plain"

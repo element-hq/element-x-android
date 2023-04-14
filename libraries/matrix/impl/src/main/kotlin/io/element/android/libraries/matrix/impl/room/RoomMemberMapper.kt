@@ -32,6 +32,7 @@ object RoomMemberMapper {
             roomMember.isNameAmbiguous(),
             roomMember.powerLevel(),
             roomMember.normalizedPowerLevel(),
+            roomMember.isIgnored(),
         )
 
     fun mapMembership(membershipState: RustMembershipState): RoomMembershipState =

@@ -16,26 +16,25 @@
 
 package io.element.android.features.userlist.impl
 
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.squareup.anvil.annotations.ContributesBinding
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.features.userlist.api.MatrixUserDataSource
+import io.element.android.features.userlist.api.UserListDataSource
+import io.element.android.features.userlist.api.UserListDataStore
 import io.element.android.features.userlist.api.UserListEvents
+import io.element.android.features.userlist.api.UserListPresenter
 import io.element.android.features.userlist.api.UserListPresenterArgs
 import io.element.android.features.userlist.api.UserListState
-import io.element.android.features.userlist.api.UserListPresenter
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.UserId
@@ -43,28 +42,27 @@ import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 class DefaultUserListPresenter @AssistedInject constructor(
     @Assisted val args: UserListPresenterArgs,
-    @Assisted val matrixUserDataSource: MatrixUserDataSource,
+    @Assisted val userListDataSource: UserListDataSource,
+    @Assisted val userListDataStore: UserListDataStore,
 ) : UserListPresenter {
 
     @AssistedFactory
     @ContributesBinding(SessionScope::class)
     interface DefaultUserListFactory : UserListPresenter.Factory {
-        override fun create(args: UserListPresenterArgs, matrixUserDataSource: MatrixUserDataSource): DefaultUserListPresenter
+        override fun create(
+            args: UserListPresenterArgs,
+            userListDataSource: UserListDataSource,
+            userListDataStore: UserListDataStore,
+        ): DefaultUserListPresenter
     }
 
     @Composable
     override fun present(): UserListState {
-        val localCoroutineScope = rememberCoroutineScope()
         var isSearchActive by rememberSaveable { mutableStateOf(false) }
-        val selectedUsers: MutableState<ImmutableList<MatrixUser>> = remember {
-            mutableStateOf(persistentListOf())
-        }
-        val selectedUsersListState = rememberLazyListState()
+        val selectedUsers = userListDataStore.selectedUsers().collectAsState(emptyList())
         var searchQuery by rememberSaveable { mutableStateOf("") }
         val searchResults: MutableState<ImmutableList<MatrixUser>> = remember {
             mutableStateOf(persistentListOf())
@@ -74,13 +72,8 @@ class DefaultUserListPresenter @AssistedInject constructor(
             when (event) {
                 is UserListEvents.OnSearchActiveChanged -> isSearchActive = event.active
                 is UserListEvents.UpdateSearchQuery -> searchQuery = event.query
-                is UserListEvents.AddToSelection -> {
-                    if (event.matrixUser !in selectedUsers.value) {
-                        selectedUsers.value = selectedUsers.value.plus(event.matrixUser).toImmutableList()
-                    }
-                    localCoroutineScope.scrollToFirstSelectedUser(selectedUsersListState)
-                }
-                is UserListEvents.RemoveFromSelection -> selectedUsers.value = selectedUsers.value.minus(event.matrixUser).toImmutableList()
+                is UserListEvents.AddToSelection -> userListDataStore.selectUser(event.matrixUser)
+                is UserListEvents.RemoveFromSelection -> userListDataStore.removeUserFromSelection(event.matrixUser)
             }
         }
 
@@ -100,8 +93,7 @@ class DefaultUserListPresenter @AssistedInject constructor(
         return UserListState(
             searchQuery = searchQuery,
             searchResults = searchResults.value,
-            selectedUsers = selectedUsers.value.reversed().toImmutableList(),
-            selectedUsersListState = selectedUsersListState,
+            selectedUsers = selectedUsers.value.toImmutableList(),
             isSearchActive = isSearchActive,
             selectionMode = args.selectionMode,
             eventSink = ::handleEvents,
@@ -110,16 +102,12 @@ class DefaultUserListPresenter @AssistedInject constructor(
 
     private suspend fun performSearch(query: String): ImmutableList<MatrixUser> {
         val isMatrixId = MatrixPatterns.isUserId(query)
-        val results = matrixUserDataSource.search(query).toMutableList()
+        val results = userListDataSource.search(query).toMutableList()
         if (isMatrixId && results.none { it.id.value == query }) {
-            val getProfileResult: MatrixUser? = matrixUserDataSource.getProfile(UserId(query))
+            val getProfileResult: MatrixUser? = userListDataSource.getProfile(UserId(query))
             val profile = getProfileResult ?: MatrixUser(UserId(query))
             results.add(0, profile)
         }
         return results.toImmutableList()
-    }
-
-    private fun CoroutineScope.scrollToFirstSelectedUser(listState: LazyListState) = launch {
-        listState.scrollToItem(index = 0)
     }
 }

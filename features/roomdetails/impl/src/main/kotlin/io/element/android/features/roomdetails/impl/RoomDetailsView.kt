@@ -87,7 +87,7 @@ fun RoomDetailsView(
                 roomAlias = state.roomAlias
             )
 
-            ShareSection(onShareRoom = onShareRoom)
+            ShareSection(onShareUser = onShareRoom)
 
             if (state.roomTopic != null) {
                 TopicSection(roomTopic = state.roomTopic)
@@ -127,12 +127,12 @@ fun RoomDetailsView(
 }
 
 @Composable
-internal fun ShareSection(onShareRoom: () -> Unit, modifier: Modifier = Modifier) {
+internal fun ShareSection(onShareUser: () -> Unit, modifier: Modifier = Modifier) {
     PreferenceCategory(modifier = modifier) {
         PreferenceText(
             title = stringResource(R.string.screen_room_details_share_room_title),
             icon = Icons.Outlined.Share,
-            onClick = onShareRoom,
+            onClick = onShareUser,
         )
     }
 }
@@ -172,7 +172,6 @@ internal fun TopicSection(roomTopic: String, modifier: Modifier = Modifier) {
             color = MaterialTheme.colorScheme.tertiary
         )
     }
-
 }
 
 @Composable

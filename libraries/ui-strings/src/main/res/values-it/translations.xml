@@ -107,7 +107,6 @@
   <string name="emoji_picker_category_symbols">"Simboli"</string>
   <string name="error_failed_creating_the_permalink">"Impossibile creare il collegamento permanente"</string>
   <string name="error_failed_loading_messages">"Caricamento dei messaggi non riuscito"</string>
-  <string name="error_no_compatible_app_found">"Non è stata trovata alcuna app compatibile per gestire questa azione."</string>
   <string name="error_some_messages_have_not_been_sent">"Alcuni messaggi non sono stati inviati"</string>
   <string name="error_unknown">"Siamo spiacenti, si è verificato un errore"</string>
   <string name="invite_friends_text">"Ehi, parlami su %1$s: %2$s"</string>
@@ -138,8 +137,6 @@
   <string name="screen_room_member_details_unblock_alert_action">"Sblocca"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Dopo aver sbloccato l\'utente, potrai vedere nuovamente tutti i suoi messaggi."</string>
   <string name="screen_room_member_details_unblock_user">"Sblocca utente"</string>
-  <string name="screen_start_chat_error_starting_chat">"Si è verificato un errore durante il tentativo di avviare una chat"</string>
-  <string name="screen_start_chat_unknown_profile">"Non possiamo convalidare l\'ID Matrix di questo utente. L\'invito potrebbe non essere ricevuto."</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Soglia di rilevamento"</string>
   <string name="settings_title_general">"Generali"</string>

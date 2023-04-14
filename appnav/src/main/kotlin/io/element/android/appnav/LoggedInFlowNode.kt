@@ -33,6 +33,7 @@ import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
+import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
@@ -211,6 +212,19 @@ class LoggedInFlowNode @AssistedInject constructor(
             NavTarget.VerifySession -> {
                 verifySessionEntryPoint.createNode(this, buildContext)
             }
+        }
+    }
+
+    suspend fun attachRoot(): Node {
+        return attachChild {
+            backstack.singleTop(NavTarget.RoomList)
+        }
+    }
+
+    suspend fun attachRoom(roomId: RoomId): RoomFlowNode {
+        return attachChild {
+            backstack.singleTop(NavTarget.RoomList)
+            backstack.push(NavTarget.Room(roomId))
         }
     }
 

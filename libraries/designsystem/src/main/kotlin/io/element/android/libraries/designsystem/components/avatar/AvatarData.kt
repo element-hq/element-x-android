@@ -16,15 +16,20 @@
 
 package io.element.android.libraries.designsystem.components.avatar
 
+import android.os.Parcelable
 import androidx.compose.runtime.Immutable
+import kotlinx.parcelize.IgnoredOnParcel
+import kotlinx.parcelize.Parcelize
 
 @Immutable
+@Parcelize
 data class AvatarData(
     val id: String,
     val name: String?,
     val url: String? = null,
+    @IgnoredOnParcel
     val size: AvatarSize = AvatarSize.MEDIUM
-) {
+) : Parcelable {
     fun getInitial(): String {
         val firstChar = name?.firstOrNull() ?: id.getOrNull(1) ?: '?'
         return firstChar.uppercase()

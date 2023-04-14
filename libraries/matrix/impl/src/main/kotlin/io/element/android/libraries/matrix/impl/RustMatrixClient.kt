@@ -20,6 +20,9 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
+import io.element.android.libraries.matrix.api.createroom.RoomPreset
+import io.element.android.libraries.matrix.api.createroom.RoomVisibility
 import io.element.android.libraries.matrix.api.media.MediaResolver
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.pusher.PushersService
@@ -42,10 +45,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
-import org.matrix.rustcomponents.sdk.CreateRoomParameters
 import org.matrix.rustcomponents.sdk.RequiredState
-import org.matrix.rustcomponents.sdk.RoomPreset
-import org.matrix.rustcomponents.sdk.RoomVisibility
 import org.matrix.rustcomponents.sdk.SlidingSyncListBuilder
 import org.matrix.rustcomponents.sdk.SlidingSyncMode
 import org.matrix.rustcomponents.sdk.SlidingSyncRequestListFilters
@@ -55,6 +55,9 @@ import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
+import org.matrix.rustcomponents.sdk.CreateRoomParameters as RustCreateRoomParameters
+import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
+import org.matrix.rustcomponents.sdk.RoomVisibility as RustRoomVisibility
 
 class RustMatrixClient constructor(
     private val client: Client,
@@ -175,24 +178,46 @@ class RustMatrixClient constructor(
         return roomId?.let { getRoom(it) }
     }
 
-    override suspend fun createDM(userId: UserId): Result<RoomId> =
-        withContext(dispatchers.io) {
-            runCatching {
-                val roomId = client.createRoom(
-                    CreateRoomParameters(
-                        name = null,
-                        topic = null,
-                        isEncrypted = true,
-                        isDirect = true,
-                        visibility = RoomVisibility.PRIVATE,
-                        preset = RoomPreset.TRUSTED_PRIVATE_CHAT,
-                        invite = listOf(userId.value),
-                        avatar = null,
-                    )
+    override suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId> = withContext(dispatchers.io) {
+        runCatching {
+            val roomId = client.createRoom(
+                RustCreateRoomParameters(
+                    name = createRoomParams.name,
+                    topic = createRoomParams.topic,
+                    isEncrypted = createRoomParams.isEncrypted,
+                    isDirect = createRoomParams.isDirect,
+                    visibility = when (createRoomParams.visibility) {
+                        RoomVisibility.PUBLIC -> RustRoomVisibility.PUBLIC
+                        RoomVisibility.PRIVATE -> RustRoomVisibility.PRIVATE
+                    },
+                    preset = when (createRoomParams.preset) {
+                        RoomPreset.PRIVATE_CHAT -> RustRoomPreset.PRIVATE_CHAT
+                        RoomPreset.PUBLIC_CHAT -> RustRoomPreset.PUBLIC_CHAT
+                        RoomPreset.TRUSTED_PRIVATE_CHAT -> RustRoomPreset.TRUSTED_PRIVATE_CHAT
+                    },
+                    invite = createRoomParams.invite?.map { it.value },
+                    avatar = createRoomParams.avatar,
                 )
-                RoomId(roomId)
-            }
+            )
+            RoomId(roomId)
         }
+    }
+
+    override suspend fun createDM(userId: UserId): Result<RoomId> = withContext(dispatchers.io) {
+        runCatching {
+            val roomId = client.createRoom(
+                RustCreateRoomParameters(
+                    name = null,
+                    isEncrypted = true,
+                    isDirect = true,
+                    visibility = RustRoomVisibility.PRIVATE,
+                    preset = RustRoomPreset.TRUSTED_PRIVATE_CHAT,
+                    invite = listOf(userId.value),
+                )
+            )
+            RoomId(roomId)
+        }
+    }
 
     override fun mediaResolver(): MediaResolver = mediaResolver
 

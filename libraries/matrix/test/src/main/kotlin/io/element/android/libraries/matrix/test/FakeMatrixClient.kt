@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.media.MediaResolver
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.pusher.PushersService
@@ -54,14 +55,19 @@ class FakeMatrixClient(
         return FakeMatrixRoom(roomId)
     }
 
+    override fun findDM(userId: UserId): MatrixRoom? {
+        return findDmResult
+    }
+
+    override suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId> {
+        delay(100)
+        return Result.success(A_ROOM_ID)
+    }
+
     override suspend fun createDM(userId: UserId): Result<RoomId> {
         delay(100)
         createDmFailure?.let { throw it }
         return createDmResult
-    }
-
-    override fun findDM(userId: UserId): MatrixRoom? {
-        return findDmResult
     }
 
     override fun startSync() = Unit

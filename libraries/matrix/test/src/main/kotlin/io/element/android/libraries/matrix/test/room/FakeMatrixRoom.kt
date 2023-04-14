@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.test.room
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -83,6 +84,10 @@ class FakeMatrixRoom(
         } else {
             throw fetchMemberResult.exceptionOrNull()!!
         }
+    }
+
+    override fun getMember(userId: UserId): RoomMember? {
+        return members.firstOrNull { it.userId == userId.value }
     }
 
     override suspend fun sendMessage(message: String): Result<Unit> {

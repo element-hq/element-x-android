@@ -53,4 +53,9 @@ class RustPushersService(
             }
         }
     }
+
+    override suspend fun unsetHttpPusher(): Result<Unit> {
+        // TODO Missing client API. We need to set the pusher with Kind == null, but we do not have access to this field from the SDK.
+        return Result.success(Unit)
+    }
 }
