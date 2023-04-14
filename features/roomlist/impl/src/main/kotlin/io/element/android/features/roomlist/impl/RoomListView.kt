@@ -197,11 +197,13 @@ fun RoomListContent(
             }
         },
         snackbarHost = {
-           SnackbarHost (snackbarHostState) { data ->
-               Snackbar(
-                   snackbarData = data,
-               )
-           }
+            SnackbarHost(snackbarHostState) { data ->
+                Snackbar(
+                    snackbarData = data,
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.primary
+                )
+            }
         },
     )
 }

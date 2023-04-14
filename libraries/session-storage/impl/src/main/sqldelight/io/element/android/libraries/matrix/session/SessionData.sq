@@ -10,6 +10,9 @@ CREATE TABLE SessionData (
 selectFirst:
 SELECT * FROM SessionData LIMIT 1;
 
+selectAll:
+SELECT * FROM SessionData;
+
 selectByUserId:
 SELECT * FROM SessionData WHERE userId = ?;
 

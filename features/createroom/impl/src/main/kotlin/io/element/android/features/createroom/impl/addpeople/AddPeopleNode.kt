@@ -21,10 +21,12 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.ui.model.MatrixUser
 
 @ContributesNode(SessionScope::class)
 class AddPeopleNode @AssistedInject constructor(
@@ -33,6 +35,14 @@ class AddPeopleNode @AssistedInject constructor(
     private val presenter: AddPeoplePresenter,
 ) : Node(buildContext, plugins = plugins) {
 
+    interface Callback : Plugin {
+        fun onContinue(selectedUsers: List<MatrixUser>)
+    }
+
+    private fun onContinue(selectedUsers: List<MatrixUser>) {
+        plugins<Callback>().forEach { it.onContinue(selectedUsers) }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -40,7 +50,7 @@ class AddPeopleNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onBackPressed = { navigateUp() },
-            onNextPressed = { },
+            onNextPressed = this::onContinue,
         )
     }
 }
