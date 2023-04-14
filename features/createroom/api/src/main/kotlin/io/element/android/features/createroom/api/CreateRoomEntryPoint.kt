@@ -31,6 +31,6 @@ interface CreateRoomEntryPoint : FeatureEntryPoint {
     }
 
     interface Callback : Plugin {
-        fun onOpenRoom(roomId: RoomId)
+        fun onSuccess(roomId: RoomId)
     }
 }

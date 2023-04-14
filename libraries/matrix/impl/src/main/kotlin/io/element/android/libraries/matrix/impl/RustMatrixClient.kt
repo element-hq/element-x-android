@@ -20,6 +20,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.core.asRoomId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.createroom.RoomVisibility
@@ -40,9 +41,12 @@ import io.element.android.libraries.matrix.impl.verification.RustSessionVerifica
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.RequiredState
@@ -180,43 +184,44 @@ class RustMatrixClient constructor(
 
     override suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId> = withContext(dispatchers.io) {
         runCatching {
-            val roomId = client.createRoom(
-                RustCreateRoomParameters(
-                    name = createRoomParams.name,
-                    topic = createRoomParams.topic,
-                    isEncrypted = createRoomParams.isEncrypted,
-                    isDirect = createRoomParams.isDirect,
-                    visibility = when (createRoomParams.visibility) {
-                        RoomVisibility.PUBLIC -> RustRoomVisibility.PUBLIC
-                        RoomVisibility.PRIVATE -> RustRoomVisibility.PRIVATE
-                    },
-                    preset = when (createRoomParams.preset) {
-                        RoomPreset.PRIVATE_CHAT -> RustRoomPreset.PRIVATE_CHAT
-                        RoomPreset.PUBLIC_CHAT -> RustRoomPreset.PUBLIC_CHAT
-                        RoomPreset.TRUSTED_PRIVATE_CHAT -> RustRoomPreset.TRUSTED_PRIVATE_CHAT
-                    },
-                    invite = createRoomParams.invite?.map { it.value },
-                    avatar = createRoomParams.avatar,
-                )
+            val rustParams = RustCreateRoomParameters(
+                name = createRoomParams.name,
+                topic = createRoomParams.topic,
+                isEncrypted = createRoomParams.isEncrypted,
+                isDirect = createRoomParams.isDirect,
+                visibility = when (createRoomParams.visibility) {
+                    RoomVisibility.PUBLIC -> RustRoomVisibility.PUBLIC
+                    RoomVisibility.PRIVATE -> RustRoomVisibility.PRIVATE
+                },
+                preset = when (createRoomParams.preset) {
+                    RoomPreset.PRIVATE_CHAT -> RustRoomPreset.PRIVATE_CHAT
+                    RoomPreset.PUBLIC_CHAT -> RustRoomPreset.PUBLIC_CHAT
+                    RoomPreset.TRUSTED_PRIVATE_CHAT -> RustRoomPreset.TRUSTED_PRIVATE_CHAT
+                },
+                invite = createRoomParams.invite?.map { it.value },
+                avatar = createRoomParams.avatar,
             )
-            RoomId(roomId)
+            val roomId = client.createRoom(rustParams).asRoomId()
+
+            // Wait to receive the room back from the sync
+            withTimeout(30_000L) {
+                slidingSyncObserverProxy.updateSummaryFlow.filter { roomId.value in it.rooms }.first()
+            }
+
+            roomId
         }
     }
 
-    override suspend fun createDM(userId: UserId): Result<RoomId> = withContext(dispatchers.io) {
-        runCatching {
-            val roomId = client.createRoom(
-                RustCreateRoomParameters(
-                    name = null,
-                    isEncrypted = true,
-                    isDirect = true,
-                    visibility = RustRoomVisibility.PRIVATE,
-                    preset = RustRoomPreset.TRUSTED_PRIVATE_CHAT,
-                    invite = listOf(userId.value),
-                )
-            )
-            RoomId(roomId)
-        }
+    override suspend fun createDM(userId: UserId): Result<RoomId> {
+        val createRoomParams = CreateRoomParameters(
+            name = null,
+            isEncrypted = true,
+            isDirect = true,
+            visibility = RoomVisibility.PRIVATE,
+            preset = RoomPreset.TRUSTED_PRIVATE_CHAT,
+            invite = listOf(userId)
+        )
+        return createRoom(createRoomParams)
     }
 
     override fun mediaResolver(): MediaResolver = mediaResolver
@@ -321,3 +326,4 @@ class RustMatrixClient constructor(
         return sessionDirectory.deleteRecursively()
     }
 }
+
