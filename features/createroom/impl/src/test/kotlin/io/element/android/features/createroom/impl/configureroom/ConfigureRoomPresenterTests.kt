@@ -29,6 +29,9 @@ import io.element.android.features.userlist.api.UserListDataStore
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -40,10 +43,12 @@ import org.robolectric.RobolectricTestRunner
 class ConfigureRoomPresenterTests {
 
     private lateinit var presenter: ConfigureRoomPresenter
+    private lateinit var userListDataStore: UserListDataStore
 
     @Before
     fun setup() {
-        presenter = ConfigureRoomPresenter(CreateRoomDataStore(UserListDataStore()))
+        userListDataStore = UserListDataStore()
+        presenter = ConfigureRoomPresenter(CreateRoomDataStore(userListDataStore))
     }
 
     @Test
@@ -99,32 +104,49 @@ class ConfigureRoomPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            var config = initialState.config
+            var expectedConfig = CreateRoomConfig()
+            assertThat(initialState.config).isEqualTo(expectedConfig)
+
+            // Select User
+            val selectedUser1 = aMatrixUser()
+            val selectedUser2 = aMatrixUser("@id_of_bob:server.org", "Bob")
+            userListDataStore.selectUser(selectedUser1)
+            skipItems(1)
+            userListDataStore.selectUser(selectedUser2)
+            var newState = awaitItem()
+            expectedConfig = expectedConfig.copy(invites = persistentListOf(selectedUser1, selectedUser2))
+            assertThat(newState.config).isEqualTo(expectedConfig)
 
             // Room name
             initialState.eventSink(ConfigureRoomEvents.RoomNameChanged(A_ROOM_NAME))
-            var newState = awaitItem()
-            config = config.copy(roomName = A_ROOM_NAME)
-            assertThat(newState.config).isEqualTo(config)
+            newState = awaitItem()
+            expectedConfig = expectedConfig.copy(roomName = A_ROOM_NAME)
+            assertThat(newState.config).isEqualTo(expectedConfig)
 
             // Room topic
             newState.eventSink(ConfigureRoomEvents.TopicChanged(A_MESSAGE))
             newState = awaitItem()
-            config = config.copy(topic = A_MESSAGE)
-            assertThat(newState.config).isEqualTo(config)
+            expectedConfig = expectedConfig.copy(topic = A_MESSAGE)
+            assertThat(newState.config).isEqualTo(expectedConfig)
 
             // Room avatar
             val anUri = Uri.parse(AN_AVATAR_URL)
             newState.eventSink(ConfigureRoomEvents.AvatarUriChanged(anUri))
             newState = awaitItem()
-            config = config.copy(avatarUrl = anUri.toString())
-            assertThat(newState.config).isEqualTo(config)
+            expectedConfig = expectedConfig.copy(avatarUrl = anUri.toString())
+            assertThat(newState.config).isEqualTo(expectedConfig)
 
             // Room privacy
             newState.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(RoomPrivacy.Public))
             newState = awaitItem()
-            config = config.copy(privacy = RoomPrivacy.Public)
-            assertThat(newState.config).isEqualTo(config)
+            expectedConfig = expectedConfig.copy(privacy = RoomPrivacy.Public)
+            assertThat(newState.config).isEqualTo(expectedConfig)
+
+            // Remove user
+            newState.eventSink(ConfigureRoomEvents.RemoveFromSelection(selectedUser1))
+            newState = awaitItem()
+            expectedConfig = expectedConfig.copy(invites = expectedConfig.invites.minus(selectedUser1).toImmutableList())
+            assertThat(newState.config).isEqualTo(expectedConfig)
         }
     }
 }
