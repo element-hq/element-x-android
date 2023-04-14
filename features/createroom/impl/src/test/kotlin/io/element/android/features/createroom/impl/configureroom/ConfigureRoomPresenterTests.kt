@@ -23,6 +23,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.features.userlist.api.UserListDataStore
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
@@ -51,8 +52,11 @@ class ConfigureRoomPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            assertThat(initialState.config).isEqualTo(CreateRoomConfig())
             assertThat(initialState.config.roomName).isNull()
             assertThat(initialState.config.topic).isNull()
+            assertThat(initialState.config.invites).isEmpty()
+            assertThat(initialState.config.avatarUrl).isNull()
             assertThat(initialState.config.privacy).isNull()
         }
     }
@@ -63,24 +67,28 @@ class ConfigureRoomPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            var config = initialState.config
             assertThat(initialState.isCreateButtonEnabled).isFalse()
 
             // Room name not empty
             initialState.eventSink(ConfigureRoomEvents.RoomNameChanged(A_ROOM_NAME))
             var newState: ConfigureRoomState = awaitItem()
-            assertThat(newState.config.roomName).isEqualTo(A_ROOM_NAME)
+            config = config.copy(roomName = A_ROOM_NAME)
+            assertThat(newState.config).isEqualTo(config)
             assertThat(newState.isCreateButtonEnabled).isFalse()
 
             // Select privacy
-            initialState.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(RoomPrivacy.Private))
+            newState.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(RoomPrivacy.Private))
             newState = awaitItem()
-            assertThat(newState.config.privacy).isEqualTo(RoomPrivacy.Private)
+            config = config.copy(privacy = RoomPrivacy.Private)
+            assertThat(newState.config).isEqualTo(config)
             assertThat(newState.isCreateButtonEnabled).isTrue()
 
             // Clear room name
-            initialState.eventSink(ConfigureRoomEvents.RoomNameChanged(""))
+            newState.eventSink(ConfigureRoomEvents.RoomNameChanged(""))
             newState = awaitItem()
-            assertThat(newState.config.roomName).isNull()
+            config = config.copy(roomName = null)
+            assertThat(newState.config).isEqualTo(config)
             assertThat(newState.isCreateButtonEnabled).isFalse()
         }
     }
@@ -91,26 +99,32 @@ class ConfigureRoomPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            var config = initialState.config
+
             // Room name
             initialState.eventSink(ConfigureRoomEvents.RoomNameChanged(A_ROOM_NAME))
-            val stateAfterRoomNameChanged = awaitItem()
-            assertThat(stateAfterRoomNameChanged.config.roomName).isEqualTo(A_ROOM_NAME)
+            var newState = awaitItem()
+            config = config.copy(roomName = A_ROOM_NAME)
+            assertThat(newState.config).isEqualTo(config)
 
             // Room topic
-            stateAfterRoomNameChanged.eventSink(ConfigureRoomEvents.TopicChanged(A_MESSAGE))
-            val stateAfterTopicChanged = awaitItem()
-            assertThat(stateAfterTopicChanged.config.topic).isEqualTo(A_MESSAGE)
+            newState.eventSink(ConfigureRoomEvents.TopicChanged(A_MESSAGE))
+            newState = awaitItem()
+            config = config.copy(topic = A_MESSAGE)
+            assertThat(newState.config).isEqualTo(config)
 
             // Room avatar
             val anUri = Uri.parse(AN_AVATAR_URL)
-            stateAfterTopicChanged.eventSink(ConfigureRoomEvents.AvatarUriChanged(anUri))
-            val stateAfterAvatarUriChanged = awaitItem()
-            assertThat(stateAfterAvatarUriChanged.config.avatarUrl).isEqualTo(anUri.toString())
+            newState.eventSink(ConfigureRoomEvents.AvatarUriChanged(anUri))
+            newState = awaitItem()
+            config = config.copy(avatarUrl = anUri.toString())
+            assertThat(newState.config).isEqualTo(config)
 
             // Room privacy
-            stateAfterAvatarUriChanged.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(RoomPrivacy.Public))
-            val stateAfterPrivacyChanged = awaitItem()
-            assertThat(stateAfterPrivacyChanged.config.privacy).isEqualTo(RoomPrivacy.Public)
+            newState.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(RoomPrivacy.Public))
+            newState = awaitItem()
+            config = config.copy(privacy = RoomPrivacy.Public)
+            assertThat(newState.config).isEqualTo(config)
         }
     }
 }
