@@ -19,6 +19,7 @@ package io.element.android.libraries.androidutils.system
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
+import android.app.NotificationManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -70,6 +71,17 @@ fun Context.getApplicationLabel(packageName: String): String {
     } catch (e: PackageManager.NameNotFoundException) {
         packageName
     }
+}
+
+/**
+ * Return true it the user has enabled the do not disturb mode.
+ */
+fun isDoNotDisturbModeOn(context: Context): Boolean {
+    // We cannot use NotificationManagerCompat here.
+    val setting = context.getSystemService<NotificationManager>()!!.currentInterruptionFilter
+
+    return setting == NotificationManager.INTERRUPTION_FILTER_NONE ||
+        setting == NotificationManager.INTERRUPTION_FILTER_ALARMS
 }
 
 /**

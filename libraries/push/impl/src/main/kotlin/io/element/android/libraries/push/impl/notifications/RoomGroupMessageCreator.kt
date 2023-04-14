@@ -22,6 +22,7 @@ import androidx.core.app.Person
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.R
+import io.element.android.libraries.push.impl.notifications.factories.NotificationFactory
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
 import me.gujun.android.span.Span
@@ -32,7 +33,7 @@ import javax.inject.Inject
 class RoomGroupMessageCreator @Inject constructor(
     private val bitmapLoader: NotificationBitmapLoader,
     private val stringProvider: StringProvider,
-    private val notificationUtils: NotificationUtils
+    private val notificationFactory: NotificationFactory
 ) {
 
     fun createRoomMessage(
@@ -76,7 +77,7 @@ class RoomGroupMessageCreator @Inject constructor(
             shouldBing = events.any { it.noisy }
         )
         return RoomNotification.Message(
-            notificationUtils.buildMessagesListNotification(
+            notificationFactory.createMessagesListNotification(
                 style,
                 RoomEventGroupInfo(
                     sessionId = sessionId,
