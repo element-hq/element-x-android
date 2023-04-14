@@ -33,9 +33,11 @@ import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
+import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
@@ -55,9 +57,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.parcelize.Parcelize
-import kotlin.coroutines.coroutineContext
 
 @ContributesNode(AppScope::class)
 class LoggedInFlowNode @AssistedInject constructor(
@@ -126,6 +126,9 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
+        object Permanent : NavTarget
+
+        @Parcelize
         object RoomList : NavTarget
 
         @Parcelize
@@ -143,6 +146,9 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
+            NavTarget.Permanent -> {
+                createNode<LoggedInNode>(buildContext)
+            }
             NavTarget.RoomList -> {
                 val callback = object : RoomListEntryPoint.Callback {
                     override fun onRoomClicked(roomId: RoomId) {
@@ -209,13 +215,30 @@ class LoggedInFlowNode @AssistedInject constructor(
         }
     }
 
+    suspend fun attachRoot(): Node {
+        return attachChild {
+            backstack.singleTop(NavTarget.RoomList)
+        }
+    }
+
+    suspend fun attachRoom(roomId: RoomId): RoomFlowNode {
+        return attachChild {
+            backstack.singleTop(NavTarget.RoomList)
+            backstack.push(NavTarget.Room(roomId))
+        }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
-            navModel = backstack,
-            modifier = modifier,
-            // Animate navigation to settings and to a room
-            transitionHandler = rememberDefaultTransitionHandler(),
-        )
+        Box(modifier = modifier) {
+            Children(
+                navModel = backstack,
+                modifier = Modifier,
+                // Animate navigation to settings and to a room
+                transitionHandler = rememberDefaultTransitionHandler(),
+            )
+
+            PermanentChild(navTarget = NavTarget.Permanent)
+        }
     }
 }

@@ -16,7 +16,14 @@
 
 package io.element.android.libraries.matrix.api.core
 
+import io.element.android.libraries.matrix.api.BuildConfig
 import java.io.Serializable
 
 @JvmInline
 value class ThreadId(val value: String) : Serializable
+
+fun String.asThreadId() = if (BuildConfig.DEBUG && !MatrixPatterns.isThreadId(this)) {
+    error("`$this` is not a valid thread Id")
+} else {
+    ThreadId(this)
+}

@@ -16,7 +16,18 @@
 
 package io.element.android.libraries.matrix.api.core
 
+import io.element.android.libraries.matrix.api.BuildConfig
 import java.io.Serializable
 
 @JvmInline
-value class UserId(val value: String) : Serializable
+value class UserId(val value: String) : Serializable {
+    override fun toString(): String {
+        return value
+    }
+}
+
+fun String.asUserId() = if (BuildConfig.DEBUG && !MatrixPatterns.isUserId(this)) {
+    error("`$this` is not a valid user Id")
+} else {
+    UserId(this)
+}

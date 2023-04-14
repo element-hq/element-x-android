@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.androidutils.system
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.ActivityNotFoundException
@@ -31,6 +32,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
+import io.element.android.libraries.androidutils.R
 import io.element.android.libraries.androidutils.compat.getApplicationInfoCompat
 
 /**
@@ -77,6 +79,7 @@ fun Context.getApplicationLabel(packageName: String): String {
  * Note: If the user finally does not grant the permission, PushManager.isBackgroundSyncAllowed()
  * will return false and the notification privacy will fallback to "LOW_DETAIL".
  */
+@SuppressLint("BatteryLife")
 fun requestDisablingBatteryOptimization(activity: Activity, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val intent = Intent()
     intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
@@ -114,11 +117,28 @@ fun startNotificationSettingsIntent(context: Context, activityResultLauncher: Ac
         intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
         intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
     } else {
-        intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
-        intent.putExtra("app_package", context.packageName)
-        intent.putExtra("app_uid", context.applicationInfo?.uid)
+        intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.data = Uri.fromParts("package", context.packageName, null)
     }
     activityResultLauncher.launch(intent)
+}
+
+fun openAppSettingsPage(
+    activity: Activity,
+    noActivityFoundMessage: String = activity.getString(R.string.error_no_compatible_app_found),
+) {
+    try {
+        activity.startActivity(
+            Intent().apply {
+                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                data = Uri.fromParts("package", activity.packageName, null)
+            }
+        )
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        activity.toast(noActivityFoundMessage)
+    }
 }
 
 /**
@@ -137,7 +157,7 @@ fun startNotificationChannelSettingsIntent(activity: Activity, channelID: String
 fun startAddGoogleAccountIntent(
     context: Context,
     activityResultLauncher: ActivityResultLauncher<Intent>,
-    noActivityFoundMessage: String,
+    noActivityFoundMessage: String = context.getString(R.string.error_no_compatible_app_found),
 ) {
     val intent = Intent(Settings.ACTION_ADD_ACCOUNT)
     intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
@@ -152,7 +172,7 @@ fun startAddGoogleAccountIntent(
 fun startInstallFromSourceIntent(
     context: Context,
     activityResultLauncher: ActivityResultLauncher<Intent>,
-    noActivityFoundMessage: String,
+    noActivityFoundMessage: String = context.getString(R.string.error_no_compatible_app_found),
 ) {
     val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
         .setData(Uri.parse(String.format("package:%s", context.packageName)))
@@ -170,7 +190,7 @@ fun startSharePlainTextIntent(
     text: String,
     subject: String? = null,
     extraTitle: String? = null,
-    noActivityFoundMessage: String,
+    noActivityFoundMessage: String = context.getString(R.string.error_no_compatible_app_found),
 ) {
     val share = Intent(Intent.ACTION_SEND)
     share.type = "text/plain"
@@ -198,7 +218,7 @@ fun startSharePlainTextIntent(
 fun startImportTextFromFileIntent(
     context: Context,
     activityResultLauncher: ActivityResultLauncher<Intent>,
-    noActivityFoundMessage: String,
+    noActivityFoundMessage: String = context.getString(R.string.error_no_compatible_app_found),
 ) {
     val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
         type = "text/plain"

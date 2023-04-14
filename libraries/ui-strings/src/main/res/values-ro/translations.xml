@@ -107,7 +107,6 @@
   <string name="emoji_picker_category_symbols">"Simboluri"</string>
   <string name="error_failed_creating_the_permalink">"Crearea permalink-ului a eșuat"</string>
   <string name="error_failed_loading_messages">"Încărcarea mesajelor a eșuat"</string>
-  <string name="error_no_compatible_app_found">"Nu a fost găsită nicio aplicație capabilă să gestioneze această acțiune."</string>
   <string name="error_some_messages_have_not_been_sent">"Unele mesaje nu au fost trimise"</string>
   <string name="error_unknown">"Ne pare rău, a apărut o eroare"</string>
   <string name="invite_friends_text">"Hei, vorbește cu mine pe %1$s: %2$s"</string>
@@ -140,8 +139,6 @@
   <string name="screen_room_member_details_unblock_alert_action">"Deblocați"</string>
   <string name="screen_room_member_details_unblock_alert_description">"La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta."</string>
   <string name="screen_room_member_details_unblock_user">"Deblocați utilizatorul"</string>
-  <string name="screen_start_chat_error_starting_chat">"A apărut o eroare la încercarea începerii conversației"</string>
-  <string name="screen_start_chat_unknown_profile">"Nu am putut valida ID-ul Matrix al acestui utilizator. Este posibil ca invitația să nu fi fost primită."</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Prag de detecție"</string>
   <string name="settings_title_general">"General"</string>

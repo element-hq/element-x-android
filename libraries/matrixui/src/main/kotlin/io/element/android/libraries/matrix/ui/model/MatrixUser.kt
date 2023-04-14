@@ -16,16 +16,19 @@
 
 package io.element.android.libraries.matrix.ui.model
 
+import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.UserId
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Immutable
 data class MatrixUser(
     val id: UserId,
     val username: String? = null,
     val avatarData: AvatarData = AvatarData(id.value, username),
-)
+) : Parcelable
 
 fun MatrixUser.getBestName(): String {
     return username?.takeIf { it.isNotEmpty() } ?: id.value

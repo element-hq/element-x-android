@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.cli.common.toBooleanLenient
 buildscript {
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10")
+        classpath("com.google.gms:google-services:4.3.15")
     }
 }
 
@@ -230,6 +231,7 @@ koverMerged {
             overrideClassFilter {
                 includes += "*Presenter"
                 excludes += "*Fake*Presenter"
+                excludes += "io.element.android.appnav.loggedin.LoggedInPresenter$*"
             }
             bound {
                 minValue = 90
@@ -246,6 +248,7 @@ koverMerged {
                 excludes += "io.element.android.libraries.matrix.api.timeline.item.event.OtherState$*"
                 excludes += "io.element.android.libraries.matrix.api.timeline.item.event.EventSendState$*"
                 excludes += "io.element.android.libraries.matrix.api.room.RoomMembershipState*"
+                excludes += "io.element.android.libraries.push.impl.notifications.NotificationState*"
             }
             bound {
                 minValue = 90

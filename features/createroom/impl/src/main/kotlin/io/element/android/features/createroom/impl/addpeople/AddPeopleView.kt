@@ -29,8 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.element.android.features.userlist.api.UserListView
 import io.element.android.features.createroom.impl.R
+import io.element.android.features.userlist.api.UserListView
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -38,6 +38,7 @@ import io.element.android.libraries.designsystem.theme.components.CenterAlignedT
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,7 +47,7 @@ fun AddPeopleView(
     state: AddPeopleState,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
-    onNextPressed: () -> Unit = {},
+    onNextPressed: (List<MatrixUser>) -> Unit = {},
 ) {
     val eventSink = state.eventSink
 
@@ -56,7 +57,7 @@ fun AddPeopleView(
                 AddPeopleViewTopBar(
                     hasSelectedUsers = state.userListState.selectedUsers.isNotEmpty(),
                     onBackPressed = onBackPressed,
-                    onNextPressed = onNextPressed,
+                    onNextPressed = { onNextPressed(state.userListState.selectedUsers) },
                 )
             }
         }

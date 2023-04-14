@@ -33,6 +33,8 @@ plugins {
     id("com.google.firebase.appdistribution") version "4.0.0"
     id("org.jetbrains.kotlinx.knit") version "0.4.0"
     id("kotlin-parcelize")
+    // To be able to update the firebase.xml files, uncomment and build the project
+    // id("com.google.gms.google-services")
 }
 
 android {
@@ -204,6 +206,7 @@ dependencies {
     allLibrariesImpl()
     allServicesImpl()
     allFeaturesImpl(rootDir)
+    implementation(projects.libraries.deeplink)
     implementation(projects.tests.uitests)
     implementation(projects.anvilannotations)
     implementation(projects.appnav)
@@ -213,10 +216,12 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
     implementation(libs.appyx.core)
     implementation(libs.androidx.splash)
+    implementation(libs.androidx.core)
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.startup)
+    implementation(libs.androidx.preference)
     implementation(libs.coil)
 
     implementation(platform(libs.network.okhttp.bom))
