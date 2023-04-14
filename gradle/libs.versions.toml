@@ -44,7 +44,7 @@ sqldelight = "1.5.5"
 
 # DI
 dagger = "2.45"
-anvil = "2.4.4"
+anvil = "2.4.5"
 
 # quality
 detekt = "1.22.0"
