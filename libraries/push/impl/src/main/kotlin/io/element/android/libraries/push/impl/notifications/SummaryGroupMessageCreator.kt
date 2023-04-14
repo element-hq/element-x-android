@@ -20,6 +20,7 @@ import android.app.Notification
 import androidx.core.app.NotificationCompat
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.R
+import io.element.android.libraries.push.impl.notifications.factories.NotificationFactory
 import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
 
@@ -39,7 +40,7 @@ import javax.inject.Inject
  */
 class SummaryGroupMessageCreator @Inject constructor(
     private val stringProvider: StringProvider,
-    private val notificationUtils: NotificationUtils
+    private val notificationFactory: NotificationFactory
 ) {
 
     fun createSummaryNotification(
@@ -72,7 +73,7 @@ class SummaryGroupMessageCreator @Inject constructor(
             // TODO get latest event?
             .setSummaryText(stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages, nbEvents, nbEvents))
         return if (useCompleteNotificationFormat) {
-            notificationUtils.buildSummaryListNotification(
+            notificationFactory.createSummaryListNotification(
                 sessionId,
                 summaryInboxStyle,
                 sumTitle,
@@ -165,7 +166,7 @@ class SummaryGroupMessageCreator @Inject constructor(
                 messageStr
             }
         }
-        return notificationUtils.buildSummaryListNotification(
+        return notificationFactory.createSummaryListNotification(
             sessionId = sessionId,
             style = null,
             compatSummary = privacyTitle,
