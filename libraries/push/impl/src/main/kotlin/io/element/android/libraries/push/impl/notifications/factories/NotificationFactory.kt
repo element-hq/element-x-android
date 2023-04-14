@@ -274,7 +274,7 @@ class NotificationFactory @Inject constructor(
             .setContentTitle(buildMeta.applicationName)
             .setContentText(stringProvider.getString(R.string.notification_test_push_notification_content))
             .setSmallIcon(R.drawable.ic_notification)
-            .setLargeIcon(getBitmap(context, R.drawable.element_logo_green))
+            .setLargeIcon(getBitmap(R.drawable.element_logo_green))
             .setColor(ContextCompat.getColor(context, R.color.notification_accent_color))
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_STATUS)
@@ -283,7 +283,7 @@ class NotificationFactory @Inject constructor(
             .build()
     }
 
-    private fun getBitmap(context: Context, @DrawableRes drawableRes: Int): Bitmap? {
+    private fun getBitmap(@DrawableRes drawableRes: Int): Bitmap? {
         val drawable = ResourcesCompat.getDrawable(context.resources, drawableRes, null) ?: return null
         val canvas = Canvas()
         val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
