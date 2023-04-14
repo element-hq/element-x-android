@@ -36,12 +36,12 @@ class ConfigureRoomNode @AssistedInject constructor(
 ) : Node(buildContext, plugins = plugins) {
 
     interface Callback : Plugin {
-        fun onRoomCreated(roomId: RoomId)
+        fun onCreateRoomSuccess(roomId: RoomId)
     }
 
     private val callback = object : Callback {
-        override fun onRoomCreated(roomId: RoomId) {
-            plugins<Callback>().forEach { it.onRoomCreated(roomId) }
+        override fun onCreateRoomSuccess(roomId: RoomId) {
+            plugins<Callback>().forEach { it.onCreateRoomSuccess(roomId) }
         }
     }
 
@@ -52,7 +52,7 @@ class ConfigureRoomNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onBackPressed = this::navigateUp,
-            onRoomCreated = callback::onRoomCreated
+            onRoomCreated = callback::onCreateRoomSuccess
         )
     }
 }

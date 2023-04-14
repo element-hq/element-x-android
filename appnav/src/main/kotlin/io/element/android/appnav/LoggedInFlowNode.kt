@@ -56,10 +56,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import kotlinx.parcelize.Parcelize
-import kotlin.coroutines.coroutineContext
 
 @ContributesNode(AppScope::class)
 class LoggedInFlowNode @AssistedInject constructor(
@@ -201,7 +198,7 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
             NavTarget.CreateRoom -> {
                 val callback = object : CreateRoomEntryPoint.Callback {
-                    override fun onOpenRoom(roomId: RoomId) {
+                    override fun onSuccess(roomId: RoomId) {
                         backstack.replace(NavTarget.Room(roomId))
                     }
                 }

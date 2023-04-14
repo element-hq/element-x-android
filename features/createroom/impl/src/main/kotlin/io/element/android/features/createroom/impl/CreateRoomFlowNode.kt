@@ -68,16 +68,16 @@ class CreateRoomFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.NewRoom)
                     }
 
-                    override fun onOpenRoom(roomId: RoomId) {
-                        plugins<CreateRoomEntryPoint.Callback>().forEach { it.onOpenRoom(roomId) }
+                    override fun onStartChatSuccess(roomId: RoomId) {
+                        plugins<CreateRoomEntryPoint.Callback>().forEach { it.onSuccess(roomId) }
                     }
                 }
                 createNode<CreateRoomRootNode>(context = buildContext, plugins = listOf(callback))
             }
             NavTarget.NewRoom -> {
                 val callback = object : ConfigureRoomNode.Callback {
-                    override fun onRoomCreated(roomId: RoomId) {
-                        plugins<CreateRoomEntryPoint.Callback>().forEach { it.onOpenRoom(roomId) }
+                    override fun onCreateRoomSuccess(roomId: RoomId) {
+                        plugins<CreateRoomEntryPoint.Callback>().forEach { it.onSuccess(roomId) }
                     }
                 }
                 createNode<ConfigureRoomFlowNode>(context = buildContext, plugins = listOf(callback))
