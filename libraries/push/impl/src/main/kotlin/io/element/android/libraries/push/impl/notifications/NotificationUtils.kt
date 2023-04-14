@@ -24,9 +24,7 @@ import android.app.Activity
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -40,37 +38,31 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import io.element.android.libraries.androidutils.system.startNotificationChannelSettingsIntent
-import io.element.android.libraries.androidutils.uri.createIgnoredUri
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.impl.R
-import io.element.android.libraries.push.impl.intent.IntentProvider
-import io.element.android.libraries.push.impl.notifications.factories.AcceptInvitationActionFactory
-import io.element.android.libraries.push.impl.notifications.factories.MarkAsReadActionFactory
-import io.element.android.libraries.push.impl.notifications.factories.QuickReplyActionFactory
-import io.element.android.libraries.push.impl.notifications.factories.RejectInvitationActionFactory
+import io.element.android.libraries.push.impl.notifications.factories.PendingIntentFactory
+import io.element.android.libraries.push.impl.notifications.factories.action.AcceptInvitationActionFactory
+import io.element.android.libraries.push.impl.notifications.factories.action.MarkAsReadActionFactory
+import io.element.android.libraries.push.impl.notifications.factories.action.QuickReplyActionFactory
+import io.element.android.libraries.push.impl.notifications.factories.action.RejectInvitationActionFactory
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
-import io.element.android.services.toolbox.api.systemclock.SystemClock
 import timber.log.Timber
 import javax.inject.Inject
 
-// TODO EAx Split into factories
 @SingleIn(AppScope::class)
 class NotificationUtils @Inject constructor(
     @ApplicationContext private val context: Context,
     // private val vectorPreferences: VectorPreferences,
     private val stringProvider: StringProvider,
-    private val clock: SystemClock,
-    private val actionIds: NotificationActionIds,
-    private val intentProvider: IntentProvider,
     private val buildMeta: BuildMeta,
+    private val pendingIntentFactory: PendingIntentFactory,
     private val markAsReadActionFactory: MarkAsReadActionFactory,
     private val quickReplyActionFactory: QuickReplyActionFactory,
     private val rejectInvitationActionFactory: RejectInvitationActionFactory,
@@ -237,9 +229,9 @@ class NotificationUtils @Inject constructor(
             threadId != null &&
                 true
                 /** TODO EAx vectorPreferences.areThreadMessagesEnabled() */
-            -> buildOpenThreadIntent(roomInfo, threadId)
+            -> pendingIntentFactory.createOpenThreadPendingIntent(roomInfo, threadId)
 
-            else -> buildOpenRoomIntent(roomInfo.sessionId, roomInfo.roomId)
+            else -> pendingIntentFactory.createOpenRoomPendingIntent(roomInfo.sessionId, roomInfo.roomId)
         }
 
         val smallIcon = R.drawable.ic_notification
@@ -306,7 +298,7 @@ class NotificationUtils @Inject constructor(
                 if (largeIcon != null) {
                     setLargeIcon(largeIcon)
                 }
-                setDeleteIntent(getDismissRoomPendingIntent(roomInfo.sessionId, roomInfo.roomId))
+                setDeleteIntent(pendingIntentFactory.createDismissRoomPendingIntent(roomInfo.sessionId, roomInfo.roomId))
             }
             .setTicker(tickerText)
             .build()
@@ -351,7 +343,6 @@ class NotificationUtils @Inject constructor(
                     vectorPreferences.getNotificationRingTone()?.let {
                         setSound(it)
                     }
-
                      */
                     setLights(accentColor, 500, 500)
                 } else {
@@ -379,7 +370,7 @@ class NotificationUtils @Inject constructor(
             .setSmallIcon(smallIcon)
             .setColor(accentColor)
             .setAutoCancel(true)
-            .setContentIntent(buildOpenRoomIntent(simpleNotifiableEvent.sessionId, simpleNotifiableEvent.roomId))
+            .setContentIntent(pendingIntentFactory.createOpenRoomPendingIntent(simpleNotifiableEvent.sessionId, simpleNotifiableEvent.roomId))
             .apply {
                 if (simpleNotifiableEvent.noisy) {
                     // Compat
@@ -388,7 +379,6 @@ class NotificationUtils @Inject constructor(
                     vectorPreferences.getNotificationRingTone()?.let {
                         setSound(it)
                     }
-
                      */
                     setLights(accentColor, 500, 500)
                 } else {
@@ -397,28 +387,6 @@ class NotificationUtils @Inject constructor(
                 setAutoCancel(true)
             }
             .build()
-    }
-
-    private fun buildOpenSessionIntent(sessionId: SessionId): PendingIntent? {
-        return getPendingIntent(sessionId = sessionId, roomId = null, threadId = null)
-    }
-
-    private fun buildOpenRoomIntent(sessionId: SessionId, roomId: RoomId): PendingIntent? {
-        return getPendingIntent(sessionId = sessionId, roomId = roomId, threadId = null)
-    }
-
-    private fun buildOpenThreadIntent(roomInfo: RoomEventGroupInfo, threadId: ThreadId?): PendingIntent? {
-        return getPendingIntent(sessionId = roomInfo.sessionId, roomId = roomInfo.roomId, threadId = threadId)
-    }
-
-    private fun getPendingIntent(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?): PendingIntent? {
-        val intent = intentProvider.getViewIntent(sessionId = sessionId, roomId = roomId, threadId = threadId)
-        return PendingIntent.getActivity(
-            context,
-            clock.epochMillis().toInt(),
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
     }
 
     /**
@@ -463,36 +431,9 @@ class NotificationUtils @Inject constructor(
                     priority = NotificationCompat.PRIORITY_LOW
                 }
             }
-            .setContentIntent(buildOpenSessionIntent(sessionId))
-            .setDeleteIntent(getDismissSummaryPendingIntent(sessionId))
+            .setContentIntent(pendingIntentFactory.createOpenSessionPendingIntent(sessionId))
+            .setDeleteIntent(pendingIntentFactory.createDismissSummaryPendingIntent(sessionId))
             .build()
-    }
-
-    private fun getDismissSummaryPendingIntent(sessionId: SessionId): PendingIntent {
-        val intent = Intent(context, NotificationBroadcastReceiver::class.java)
-        intent.action = actionIds.dismissSummary
-        intent.data = createIgnoredUri("deleteSummary?${sessionId.value}")
-        intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId)
-        return PendingIntent.getBroadcast(
-            context,
-            0,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-    }
-
-    private fun getDismissRoomPendingIntent(sessionId: SessionId, roomId: RoomId): PendingIntent {
-        val intent = Intent(context, NotificationBroadcastReceiver::class.java)
-        intent.action = actionIds.dismissRoom
-        intent.data = createIgnoredUri("deleteRoom?${sessionId.value}&${roomId.value}")
-        intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId)
-        intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
-        return PendingIntent.getBroadcast(
-            context,
-            clock.epochMillis().toInt(),
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
     }
 
     /**
@@ -520,14 +461,6 @@ class NotificationUtils @Inject constructor(
             Timber.w("Not allowed to notify.")
             return
         }
-        val testActionIntent = Intent(context, TestNotificationReceiver::class.java)
-        testActionIntent.action = actionIds.diagnostic
-        val testPendingIntent = PendingIntent.getBroadcast(
-            context,
-            0,
-            testActionIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
         notificationManager.notify(
             "DIAGNOSTIC",
             888,
@@ -540,7 +473,7 @@ class NotificationUtils @Inject constructor(
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setCategory(NotificationCompat.CATEGORY_STATUS)
                 .setAutoCancel(true)
-                .setContentIntent(testPendingIntent)
+                .setContentIntent(pendingIntentFactory.createTestPendingIntent())
                 .build()
         )
     }
