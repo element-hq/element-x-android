@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -44,13 +45,17 @@ import io.element.android.features.createroom.impl.components.Avatar
 import io.element.android.features.createroom.impl.components.LabelledTextField
 import io.element.android.features.createroom.impl.components.RoomPrivacyOption
 import io.element.android.features.userlist.api.components.SelectedUsersList
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
@@ -58,7 +63,14 @@ fun ConfigureRoomView(
     state: ConfigureRoomState,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
+    onRoomCreated: (RoomId) -> Unit = {},
 ) {
+    if (state.createRoomAction is Async.Success) {
+        LaunchedEffect(state.createRoomAction) {
+            onRoomCreated(state.createRoomAction.state)
+        }
+    }
+
     val context = LocalContext.current
     Scaffold(
         modifier = modifier,
@@ -67,8 +79,7 @@ fun ConfigureRoomView(
                 isNextActionEnabled = state.isCreateButtonEnabled,
                 onBackPressed = onBackPressed,
                 onNextPressed = {
-                    // state.eventSink(ConfigureRoomEvents.CreateRoom)
-                    Toast.makeText(context, "not implemented yet", Toast.LENGTH_SHORT).show()
+                    state.eventSink(ConfigureRoomEvents.CreateRoom(state.config))
                 },
             )
         }
@@ -101,6 +112,20 @@ fun ConfigureRoomView(
                 onOptionSelected = { state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it.privacy)) },
             )
         }
+    }
+
+    when (state.createRoomAction) {
+        is Async.Loading -> {
+            ProgressDialog(text = stringResource(StringR.string.common_creating_room))
+        }
+        is Async.Failure -> {
+            RetryDialog(
+                content = stringResource(R.string.screen_create_room_error_creating_room),
+                onDismiss = { state.eventSink(ConfigureRoomEvents.CancelCreateRoom) },
+                onRetry = { state.eventSink(ConfigureRoomEvents.CreateRoom(state.config)) },
+            )
+        }
+        else -> Unit
     }
 }
 
