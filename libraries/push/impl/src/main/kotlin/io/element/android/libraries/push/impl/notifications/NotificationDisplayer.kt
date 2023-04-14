@@ -17,6 +17,7 @@
 package io.element.android.libraries.push.impl.notifications
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.content.Context
 import android.content.pm.PackageManager
@@ -50,5 +51,37 @@ class NotificationDisplayer @Inject constructor(
         } catch (e: Exception) {
             Timber.e(e, "## cancelAllNotifications() failed")
         }
+    }
+
+    @SuppressLint("LaunchActivityFromNotification")
+    fun displayDiagnosticNotification(notification: Notification) {
+        showNotificationMessage(
+            tag = "DIAGNOSTIC",
+            id = NOTIFICATION_ID_DIAGNOSTIC,
+            notification = notification
+        )
+    }
+
+    /**
+     * Cancel the foreground notification service.
+     */
+    fun cancelNotificationForegroundService() {
+        notificationManager.cancel(NOTIFICATION_ID_FOREGROUND_SERVICE)
+    }
+
+    companion object {
+        /* ==========================================================================================
+         * IDs for notifications
+         * ========================================================================================== */
+
+        /**
+         * Identifier of the foreground notification used to keep the application alive
+         * when it runs in background.
+         * This notification, which is not removable by the end user, displays what
+         * the application is doing while in background.
+         */
+        private const val NOTIFICATION_ID_FOREGROUND_SERVICE = 61
+
+        private const val NOTIFICATION_ID_DIAGNOSTIC = 888
     }
 }
