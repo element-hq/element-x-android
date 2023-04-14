@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.notifications.factories
+package io.element.android.libraries.push.impl.notifications.factories.action
 
 import android.app.PendingIntent
 import android.content.Context
