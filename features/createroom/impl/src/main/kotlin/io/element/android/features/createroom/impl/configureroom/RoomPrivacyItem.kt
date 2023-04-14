@@ -38,13 +38,13 @@ fun roomPrivacyItems(): ImmutableList<RoomPrivacyItem> {
     return RoomPrivacy.values()
         .map {
             when (it) {
-                RoomPrivacy.Public -> RoomPrivacyItem(
+                RoomPrivacy.Private -> RoomPrivacyItem(
                     privacy = it,
                     icon = Icons.Outlined.Lock,
                     title = stringResource(R.string.screen_create_room_private_option_title),
                     description = stringResource(R.string.screen_create_room_private_option_description),
                 )
-                RoomPrivacy.Private -> RoomPrivacyItem(
+                RoomPrivacy.Public -> RoomPrivacyItem(
                     privacy = it,
                     icon = Icons.Outlined.Public,
                     title = stringResource(R.string.screen_create_room_public_option_title),
