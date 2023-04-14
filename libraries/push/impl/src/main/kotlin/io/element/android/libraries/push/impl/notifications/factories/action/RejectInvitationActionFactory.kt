@@ -37,11 +37,11 @@ class RejectInvitationActionFactory @Inject constructor(
     private val clock: SystemClock,
 ) {
     fun create(inviteNotifiableEvent: InviteNotifiableEvent): NotificationCompat.Action? {
-        val sessionId = inviteNotifiableEvent.sessionId
-        val roomId = inviteNotifiableEvent.roomId
+        val sessionId = inviteNotifiableEvent.sessionId.value
+        val roomId = inviteNotifiableEvent.roomId.value
         val intent = Intent(context, NotificationBroadcastReceiver::class.java)
         intent.action = actionIds.reject
-        intent.data = createIgnoredUri("rejectInvite?${sessionId.value}&${roomId.value}")
+        intent.data = createIgnoredUri("rejectInvite/$sessionId/$roomId")
         intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId)
         intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
         val pendingIntent = PendingIntent.getBroadcast(

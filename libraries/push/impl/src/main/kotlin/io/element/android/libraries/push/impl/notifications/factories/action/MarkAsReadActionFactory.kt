@@ -39,11 +39,11 @@ class MarkAsReadActionFactory @Inject constructor(
 ) {
     fun create(roomInfo: RoomEventGroupInfo): NotificationCompat.Action? {
         if (!NotificationConfig.supportMarkAsReadAction) return null
-        val sessionId = roomInfo.sessionId
-        val roomId = roomInfo.roomId
+        val sessionId = roomInfo.sessionId.value
+        val roomId = roomInfo.roomId.value
         val intent = Intent(context, NotificationBroadcastReceiver::class.java)
         intent.action = actionIds.markRoomRead
-        intent.data = createIgnoredUri("markRead?${sessionId.value}&$${roomId.value}")
+        intent.data = createIgnoredUri("markRead/$sessionId/$roomId")
         intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId)
         intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
         val pendingIntent = PendingIntent.getBroadcast(
