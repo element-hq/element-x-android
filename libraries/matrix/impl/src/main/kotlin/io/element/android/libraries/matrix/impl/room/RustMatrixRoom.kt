@@ -93,6 +93,7 @@ class RustMatrixRoom(
             coroutineDispatchers = coroutineDispatchers
         )
     }
+
     override fun close() {
         innerRoom.destroy()
         slidingSyncRoom.destroy()
@@ -188,7 +189,9 @@ class RustMatrixRoom(
         }
     }
 
-    override fun leave(): Result<Unit> {
-        return runCatching { innerRoom.leave() }
+    override suspend fun leave(): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            innerRoom.leave()
+        }
     }
 }

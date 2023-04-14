@@ -40,7 +40,11 @@ class RoomDetailsNode @AssistedInject constructor(
     private val room: MatrixRoom,
 ) : Node(buildContext, plugins = plugins) {
 
-    private val callback = plugins<RoomDetailsFlowNode.Callback>().firstOrNull()
+    interface Callback : Plugin {
+        fun openRoomMemberList()
+    }
+
+    private val callback = plugins<Callback>().firstOrNull()
 
     private fun openRoomMemberList() {
         callback?.openRoomMemberList()

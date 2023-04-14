@@ -17,14 +17,11 @@
 package io.element.android.libraries.matrix.api.room
 
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
-class RoomMembershipObserver(
-    private val sessionId: SessionId,
-) {
+class RoomMembershipObserver {
     data class RoomMembershipUpdate(
         val roomId: RoomId,
         val isUserInRoom: Boolean,

@@ -68,4 +68,7 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.features.rageshake.impl)
+    testImplementation(projects.services.appnavstate.test)
+    testImplementation(libs.test.appyx.junit)
+    testImplementation(libs.test.arch.core)
 }
