@@ -24,37 +24,35 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SPACE_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.services.appnavstate.api.AppNavigationState
+import io.element.android.services.appnavstate.test.A_ROOM_OWNER
+import io.element.android.services.appnavstate.test.A_SESSION_OWNER
+import io.element.android.services.appnavstate.test.A_SPACE_OWNER
+import io.element.android.services.appnavstate.test.A_THREAD_OWNER
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertThrows
 import org.junit.Test
-
-private const val aSessionOwner = "aSessionOwner"
-private const val aSpaceOwner = "aSpaceOwner"
-private const val aRoomOwner = "aRoomOwner"
-private const val aThreadOwner = "aThreadOwner"
-
 class DefaultAppNavigationStateServiceTest {
 
     @Test
     fun testNavigation() = runTest {
         val service = DefaultAppNavigationStateService()
-        service.onNavigateToSession(aSessionOwner, A_SESSION_ID)
-        service.onNavigateToSpace(aSpaceOwner, A_SPACE_ID)
-        service.onNavigateToRoom(aRoomOwner, A_ROOM_ID)
-        service.onNavigateToThread(aThreadOwner, A_THREAD_ID)
+        service.onNavigateToSession(A_SESSION_OWNER, A_SESSION_ID)
+        service.onNavigateToSpace(A_SPACE_OWNER, A_SPACE_ID)
+        service.onNavigateToRoom(A_ROOM_OWNER, A_ROOM_ID)
+        service.onNavigateToThread(A_THREAD_OWNER, A_THREAD_ID)
         assertThat(service.appNavigationStateFlow.first()).isEqualTo(
             AppNavigationState.Thread(
-                aThreadOwner, A_THREAD_ID,
+                A_THREAD_OWNER, A_THREAD_ID,
                 AppNavigationState.Room(
-                    aRoomOwner,
+                    A_ROOM_OWNER,
                     A_ROOM_ID,
                     AppNavigationState.Space(
-                        aSpaceOwner,
+                        A_SPACE_OWNER,
                         A_SPACE_ID,
                         AppNavigationState.Session(
-                            aSessionOwner,
+                            A_SESSION_OWNER,
                             A_SESSION_ID
                         )
                     )
@@ -66,6 +64,6 @@ class DefaultAppNavigationStateServiceTest {
     @Test
     fun testFailure() = runTest {
         val service = DefaultAppNavigationStateService()
-        assertThrows(IllegalStateException::class.java) { service.onNavigateToSpace(aSpaceOwner, A_SPACE_ID) }
+        assertThrows(IllegalStateException::class.java) { service.onNavigateToSpace(A_SPACE_OWNER, A_SPACE_ID) }
     }
 }

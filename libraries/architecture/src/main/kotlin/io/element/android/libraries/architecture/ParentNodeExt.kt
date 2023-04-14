@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.libraries.architecture
 
-android {
-    namespace = "io.element.android.services.appnavstate.test"
-}
+import com.bumble.appyx.core.children.nodeOrNull
+import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.core.node.ParentNode
 
-dependencies {
-    api(projects.libraries.matrix.api)
-    api(projects.services.appnavstate.api)
-    implementation(libs.coroutines.core)
+fun <NavTarget : Any> ParentNode<NavTarget>.childNode(navTarget: NavTarget): Node? {
+    val childMap = children.value
+    val key = childMap.keys.find { it.navTarget == navTarget }
+    return childMap[key]?.nodeOrNull
 }

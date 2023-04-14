@@ -83,6 +83,7 @@ class RoomFlowNode @AssistedInject constructor(
                 Timber.v("OnCreate")
                 plugins<LifecycleCallback>().forEach { it.onFlowCreated(inputs.room) }
                 appNavigationStateService.onNavigateToRoom(id, inputs.room.roomId)
+                fetchRoomMembers()
             },
             onDestroy = {
                 Timber.v("OnDestroy")
@@ -91,8 +92,6 @@ class RoomFlowNode @AssistedInject constructor(
                 appNavigationStateService.onLeavingRoom(id)
             }
         )
-
-        lifecycleScope.fetchRoomMembers()
         roomMembershipObserver.updates
             .filter { update -> update.roomId == inputs.room.roomId && !update.isUserInRoom }
             .onEach {
@@ -101,7 +100,7 @@ class RoomFlowNode @AssistedInject constructor(
             .launchIn(lifecycleScope)
     }
 
-    private fun CoroutineScope.fetchRoomMembers() = launch {
+    private fun fetchRoomMembers() = lifecycleScope.launch {
         val room = inputs.room
         room.fetchMembers()
             .onFailure {
