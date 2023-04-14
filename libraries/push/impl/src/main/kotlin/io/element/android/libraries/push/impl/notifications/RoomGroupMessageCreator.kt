@@ -92,7 +92,6 @@ class RoomGroupMessageCreator @Inject constructor(
                 threadId = lastKnownRoomEvent.threadId,
                 largeIcon = largeBitmap,
                 lastMessageTimestamp,
-                userDisplayName,
                 tickerText
             ),
             meta

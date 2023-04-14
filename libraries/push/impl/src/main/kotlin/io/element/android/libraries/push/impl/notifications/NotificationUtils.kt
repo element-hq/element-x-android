@@ -36,7 +36,6 @@ import androidx.annotation.DrawableRes
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.app.RemoteInput
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.content.res.ResourcesCompat
@@ -51,6 +50,10 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.intent.IntentProvider
+import io.element.android.libraries.push.impl.notifications.actions.AcceptInvitationActionFactory
+import io.element.android.libraries.push.impl.notifications.actions.MarkAsReadActionFactory
+import io.element.android.libraries.push.impl.notifications.actions.QuickReplyActionFactory
+import io.element.android.libraries.push.impl.notifications.actions.RejectInvitationActionFactory
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -68,6 +71,10 @@ class NotificationUtils @Inject constructor(
     private val actionIds: NotificationActionIds,
     private val intentProvider: IntentProvider,
     private val buildMeta: BuildMeta,
+    private val markAsReadActionFactory: MarkAsReadActionFactory,
+    private val quickReplyActionFactory: QuickReplyActionFactory,
+    private val rejectInvitationActionFactory: RejectInvitationActionFactory,
+    private val acceptInvitationActionFactory: AcceptInvitationActionFactory,
 ) {
 
     companion object {
@@ -222,7 +229,6 @@ class NotificationUtils @Inject constructor(
         threadId: ThreadId?,
         largeIcon: Bitmap?,
         lastMessageTimestamp: Long,
-        senderDisplayNameForReplyCompat: String?,
         tickerText: String
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
@@ -232,6 +238,7 @@ class NotificationUtils @Inject constructor(
                 true
                 /** TODO EAx vectorPreferences.areThreadMessagesEnabled() */
             -> buildOpenThreadIntent(roomInfo, threadId)
+
             else -> buildOpenRoomIntent(roomInfo.sessionId, roomInfo.roomId)
         }
 
@@ -288,43 +295,10 @@ class NotificationUtils @Inject constructor(
 
                 // Add actions and notification intents
                 // Mark room as read
-                val markRoomReadIntent = Intent(context, NotificationBroadcastReceiver::class.java)
-                markRoomReadIntent.action = actionIds.markRoomRead
-                markRoomReadIntent.data = createIgnoredUri("markRead?${roomInfo.sessionId}&$${roomInfo.roomId}")
-                markRoomReadIntent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, roomInfo.sessionId)
-                markRoomReadIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomInfo.roomId)
-                val markRoomReadPendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    clock.epochMillis().toInt(),
-                    markRoomReadIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-
-                NotificationCompat.Action.Builder(
-                    R.drawable.ic_material_done_all_white,
-                    stringProvider.getString(R.string.notification_room_action_mark_as_read), markRoomReadPendingIntent
-                )
-                    .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ)
-                    .setShowsUserInterface(false)
-                    .build()
-                    .let { addAction(it) }
-
+                addAction(markAsReadActionFactory.create(roomInfo))
                 // Quick reply
                 if (!roomInfo.hasSmartReplyError) {
-                    buildQuickReplyIntent(roomInfo.sessionId, roomInfo.roomId, threadId, senderDisplayNameForReplyCompat)?.let { replyPendingIntent ->
-                        val remoteInput = RemoteInput.Builder(NotificationBroadcastReceiver.KEY_TEXT_REPLY)
-                            .setLabel(stringProvider.getString(R.string.notification_room_action_quick_reply))
-                            .build()
-                        NotificationCompat.Action.Builder(
-                            R.drawable.vector_notification_quick_reply,
-                            stringProvider.getString(R.string.notification_room_action_quick_reply), replyPendingIntent
-                        )
-                            .addRemoteInput(remoteInput)
-                            .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_REPLY)
-                            .setShowsUserInterface(false)
-                            .build()
-                            .let { addAction(it) }
-                    }
+                    addAction(quickReplyActionFactory.create(roomInfo, threadId))
                 }
 
                 if (openIntent != null) {
@@ -366,45 +340,9 @@ class NotificationUtils @Inject constructor(
             .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
             .setSmallIcon(smallIcon)
             .setColor(accentColor)
+            .addAction(rejectInvitationActionFactory.create(inviteNotifiableEvent))
+            .addAction(acceptInvitationActionFactory.create(inviteNotifiableEvent))
             .apply {
-                val roomId = inviteNotifiableEvent.roomId
-                // offer to type a quick reject button
-                val rejectIntent = Intent(context, NotificationBroadcastReceiver::class.java)
-                rejectIntent.action = actionIds.reject
-                rejectIntent.data = createIgnoredUri("rejectInvite?${inviteNotifiableEvent.sessionId}&$roomId")
-                rejectIntent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, inviteNotifiableEvent.sessionId)
-                rejectIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
-                val rejectIntentPendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    clock.epochMillis().toInt(),
-                    rejectIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-
-                addAction(
-                    R.drawable.vector_notification_reject_invitation,
-                    stringProvider.getString(R.string.notification_invitation_action_reject),
-                    rejectIntentPendingIntent
-                )
-
-                // offer to type a quick accept button
-                val joinIntent = Intent(context, NotificationBroadcastReceiver::class.java)
-                joinIntent.action = actionIds.join
-                joinIntent.data = createIgnoredUri("acceptInvite?${inviteNotifiableEvent.sessionId}&$roomId")
-                joinIntent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, inviteNotifiableEvent.sessionId)
-                joinIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
-                val joinIntentPendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    clock.epochMillis().toInt(),
-                    joinIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-                addAction(
-                    R.drawable.vector_notification_accept_invitation,
-                    stringProvider.getString(R.string.notification_invitation_action_join),
-                    joinIntentPendingIntent
-                )
-
                 /*
                 // Build the pending intent for when the notification is clicked
                 val contentIntent = HomeActivity.newIntent(
@@ -494,60 +432,6 @@ class NotificationUtils @Inject constructor(
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-    }
-
-    /*
-        Direct reply is new in Android N, and Android already handles the UI, so the right pending intent
-        here will ideally be a Service/IntentService (for a long running background task) or a BroadcastReceiver,
-         which runs on the UI thread. It also works without unlocking, making the process really fluid for the user.
-        However, for Android devices running Marshmallow and below (API level 23 and below),
-        it will be more appropriate to use an activity. Since you have to provide your own UI.
-     */
-    private fun buildQuickReplyIntent(
-        sessionId: SessionId,
-        roomId: RoomId,
-        threadId: ThreadId?,
-        senderName: String?
-    ): PendingIntent? {
-        val intent: Intent
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent = Intent(context, NotificationBroadcastReceiver::class.java)
-            intent.action = actionIds.smartReply
-            intent.data = createIgnoredUri("quickReply?$sessionId&$roomId")
-            intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId)
-            intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
-            threadId?.let {
-                intent.putExtra(NotificationBroadcastReceiver.KEY_THREAD_ID, it)
-            }
-
-            return PendingIntent.getBroadcast(
-                context,
-                clock.epochMillis().toInt(),
-                intent,
-                // PendingIntents attached to actions with remote inputs must be mutable
-                PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    PendingIntent.FLAG_MUTABLE
-                } else {
-                    0
-                }
-            )
-        } else {
-            /*
-            TODO
-            if (!LockScreenActivity.isDisplayingALockScreenActivity()) {
-                // start your activity for Android M and below
-                val quickReplyIntent = Intent(context, LockScreenActivity::class.java)
-                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_ROOM_ID, roomId)
-                quickReplyIntent.putExtra(LockScreenActivity.EXTRA_SENDER_NAME, senderName ?: "")
-
-                // the action must be unique else the parameters are ignored
-                quickReplyIntent.action = QUICK_LAUNCH_ACTION
-                quickReplyIntent.data = createIgnoredUri($roomId")
-                return PendingIntent.getActivity(context, 0, quickReplyIntent, PendingIntentCompat.FLAG_IMMUTABLE)
-            }
-             */
-        }
-        return null
     }
 
     /**
