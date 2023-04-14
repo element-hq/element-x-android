@@ -355,7 +355,6 @@ class NotificationUtils @Inject constructor(
         inviteNotifiableEvent: InviteNotifiableEvent
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
-        // Build the pending intent for when the notification is clicked
         val smallIcon = R.drawable.ic_notification
         val channelID = if (inviteNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
 
@@ -407,6 +406,7 @@ class NotificationUtils @Inject constructor(
                 )
 
                 /*
+                // Build the pending intent for when the notification is clicked
                 val contentIntent = HomeActivity.newIntent(
                     context,
                     firstStartMainActivity = true,
@@ -441,7 +441,6 @@ class NotificationUtils @Inject constructor(
         simpleNotifiableEvent: SimpleNotifiableEvent,
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
-        // Build the pending intent for when the notification is clicked
         val smallIcon = R.drawable.ic_notification
 
         val channelID = if (simpleNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
@@ -455,14 +454,8 @@ class NotificationUtils @Inject constructor(
             .setSmallIcon(smallIcon)
             .setColor(accentColor)
             .setAutoCancel(true)
+            .setContentIntent(buildOpenRoomIntent(simpleNotifiableEvent.sessionId, simpleNotifiableEvent.roomId))
             .apply {
-                /* TODO EAx
-                val contentIntent = HomeActivity.newIntent(context, firstStartMainActivity = true)
-                contentIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
-                contentIntent.data = createIgnoredUri(simpleNotifiableEvent.eventId)
-                setContentIntent(PendingIntent.getActivity(context, 0, contentIntent, PendingIntentCompat.FLAG_IMMUTABLE))
-                 */
                 if (simpleNotifiableEvent.noisy) {
                     // Compat
                     priority = NotificationCompat.PRIORITY_DEFAULT
@@ -481,30 +474,20 @@ class NotificationUtils @Inject constructor(
             .build()
     }
 
+    private fun buildOpenSessionIntent(sessionId: SessionId): PendingIntent? {
+        return getPendingIntent(sessionId = sessionId, roomId = null, threadId = null)
+    }
+
     private fun buildOpenRoomIntent(sessionId: SessionId, roomId: RoomId): PendingIntent? {
-        val intent = intentProvider.getViewIntent(sessionId = sessionId, roomId = roomId, threadId = null)
-        return PendingIntent.getActivity(
-            context,
-            clock.epochMillis().toInt(),
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+        return getPendingIntent(sessionId = sessionId, roomId = roomId, threadId = null)
     }
 
     private fun buildOpenThreadIntent(roomInfo: RoomEventGroupInfo, threadId: ThreadId?): PendingIntent? {
-        val sessionId = roomInfo.sessionId
-        val roomId = roomInfo.roomId
-        val intent = intentProvider.getViewIntent(sessionId = sessionId, roomId = roomId, threadId = threadId)
-        return PendingIntent.getActivity(
-            context,
-            clock.epochMillis().toInt(),
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+        return getPendingIntent(sessionId = roomInfo.sessionId, roomId = roomInfo.roomId, threadId = threadId)
     }
 
-    private fun buildOpenHomePendingIntentForSummary(sessionId: SessionId): PendingIntent {
-        val intent = intentProvider.getViewIntent(sessionId = sessionId, roomId = null, threadId = null)
+    private fun getPendingIntent(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?): PendingIntent? {
+        val intent = intentProvider.getViewIntent(sessionId = sessionId, roomId = roomId, threadId = threadId)
         return PendingIntent.getActivity(
             context,
             clock.epochMillis().toInt(),
@@ -567,7 +550,6 @@ class NotificationUtils @Inject constructor(
         return null
     }
 
-    // // Number of new notifications for API <24 (M and below) devices.
     /**
      * Build the summary notification.
      */
@@ -610,7 +592,7 @@ class NotificationUtils @Inject constructor(
                     priority = NotificationCompat.PRIORITY_LOW
                 }
             }
-            .setContentIntent(buildOpenHomePendingIntentForSummary(sessionId))
+            .setContentIntent(buildOpenSessionIntent(sessionId))
             .setDeleteIntent(getDismissSummaryPendingIntent(sessionId))
             .build()
     }
