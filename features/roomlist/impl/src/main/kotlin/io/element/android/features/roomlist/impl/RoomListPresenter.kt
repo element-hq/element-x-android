@@ -38,7 +38,6 @@ import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.handleSnackbarMessage
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummary
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
@@ -61,11 +60,9 @@ class RoomListPresenter @Inject constructor(
     private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<RoomListState> {
 
-    private val roomMembershipObserver: RoomMembershipObserver = client.roomMembershipObserver()
-
     @Composable
     override fun present(): RoomListState {
-        val matrixUser: MutableState<MatrixUser?> = remember {
+        val matrixUser: MutableState<MatrixUser?> = rememberSaveable {
             mutableStateOf(null)
         }
         var filter by rememberSaveable { mutableStateOf("") }

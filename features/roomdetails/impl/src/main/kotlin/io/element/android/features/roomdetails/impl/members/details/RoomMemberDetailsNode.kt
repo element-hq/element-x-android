@@ -16,7 +16,6 @@
 
 package io.element.android.features.roomdetails.impl.members.details
 
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -51,30 +50,32 @@ class RoomMemberDetailsNode @AssistedInject constructor(
     private val inputs = inputs<Inputs>()
     private val presenter = presenterFactory.create(inputs.member)
 
-    private fun onShareUser(context: Context) {
-        val permalinkResult = PermalinkBuilder.permalinkForUser(UserId(inputs.member.userId))
-        permalinkResult.onSuccess { permalink ->
-            startSharePlainTextIntent(
-                context = context,
-                activityResultLauncher = null,
-                chooserTitle = context.getString(R.string.screen_room_details_share_room_title),
-                text = permalink,
-                noActivityFoundMessage = context.getString(AndroidUtilsR.string.error_no_compatible_app_found)
-            )
-        }.onFailure {
-            Timber.e(it)
-        }
-    }
-
     @Composable
     override fun View(modifier: Modifier) {
+
         val context = LocalContext.current
+
+        fun onShareUser() {
+            val permalinkResult = PermalinkBuilder.permalinkForUser(UserId(inputs.member.userId))
+            permalinkResult.onSuccess { permalink ->
+                startSharePlainTextIntent(
+                    context = context,
+                    activityResultLauncher = null,
+                    chooserTitle = context.getString(R.string.screen_room_details_share_room_title),
+                    text = permalink,
+                    noActivityFoundMessage = context.getString(AndroidUtilsR.string.error_no_compatible_app_found)
+                )
+            }.onFailure {
+                Timber.e(it)
+            }
+        }
+
         val state = presenter.present()
         RoomMemberDetailsView(
             state = state,
             modifier = modifier,
-            goBack = { navigateUp() },
-            onShareUser = { onShareUser(context) }
+            goBack = this::navigateUp,
+            onShareUser = ::onShareUser
         )
     }
 }

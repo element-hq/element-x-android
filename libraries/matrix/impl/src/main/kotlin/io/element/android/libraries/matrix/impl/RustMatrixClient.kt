@@ -145,7 +145,7 @@ class RustMatrixClient constructor(
     private val mediaResolver = RustMediaResolver(this)
     private val isSyncing = AtomicBoolean(false)
 
-    private val roomMembershipObserver = RoomMembershipObserver(sessionId)
+    private val roomMembershipObserver = RoomMembershipObserver()
 
     init {
         client.setDelegate(clientDelegate)

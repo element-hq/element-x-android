@@ -34,7 +34,6 @@ import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.parcelize.Parcelize
 
@@ -62,19 +61,16 @@ class RoomDetailsFlowNode @AssistedInject constructor(
         data class RoomMemberDetails(val roomMember: RoomMember) : NavTarget
     }
 
-    interface Callback : Plugin {
-        fun openRoomMemberList()
-    }
-
-    val callback = object : Callback {
-        override fun openRoomMemberList() {
-            backstack.push(NavTarget.RoomMemberList)
-        }
-    }
-
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.RoomDetails -> createNode<RoomDetailsNode>(buildContext, listOf(callback))
+            NavTarget.RoomDetails -> {
+                val callback = object : RoomDetailsNode.Callback {
+                    override fun openRoomMemberList() {
+                        backstack.push(NavTarget.RoomMemberList)
+                    }
+                }
+                createNode<RoomDetailsNode>(buildContext, listOf(callback))
+            }
             NavTarget.RoomMemberList -> {
                 val callback = object : RoomMemberListNode.Callback {
                     override fun openRoomMemberDetails(roomMember: RoomMember) {
@@ -84,7 +80,8 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                 createNode<RoomMemberListNode>(buildContext, listOf(callback))
             }
             is NavTarget.RoomMemberDetails -> {
-                createNode<RoomMemberDetailsNode>(buildContext, listOf(RoomMemberDetailsNode.Inputs(navTarget.roomMember)))
+                val inputs = RoomMemberDetailsNode.Inputs(navTarget.roomMember)
+                createNode<RoomMemberDetailsNode>(buildContext, listOf(inputs))
             }
         }
     }

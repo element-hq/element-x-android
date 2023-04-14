@@ -110,7 +110,7 @@ class FakeMatrixClient(
     override fun onSlidingSyncUpdate() {}
 
     override fun roomMembershipObserver(): RoomMembershipObserver {
-        return RoomMembershipObserver(A_SESSION_ID)
+        return RoomMembershipObserver()
     }
 
     // Mocks

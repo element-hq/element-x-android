@@ -19,6 +19,7 @@ package io.element.android.appnav
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
@@ -44,6 +45,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
@@ -55,7 +57,6 @@ class RoomFlowNode @AssistedInject constructor(
     private val roomDetailsEntryPoint: RoomDetailsEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
     roomMembershipObserver: RoomMembershipObserver,
-    coroutineScope: CoroutineScope,
 ) : BackstackNode<RoomFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Messages,
@@ -75,41 +76,49 @@ class RoomFlowNode @AssistedInject constructor(
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
-    private val timeline = inputs.room.timeline()
-
-    private val roomFlowPresenter = RoomFlowPresenter(inputs.room)
 
     init {
         lifecycle.subscribe(
             onCreate = {
                 Timber.v("OnCreate")
                 plugins<LifecycleCallback>().forEach { it.onFlowCreated(inputs.room) }
-                appNavigationStateService.onNavigateToRoom(inputs.room.roomId)
+                appNavigationStateService.onNavigateToRoom(id, inputs.room.roomId)
+                fetchRoomMembers()
             },
             onDestroy = {
                 Timber.v("OnDestroy")
                 inputs.room.close()
                 plugins<LifecycleCallback>().forEach { it.onFlowReleased(inputs.room) }
-                appNavigationStateService.onLeavingRoom()
+                appNavigationStateService.onLeavingRoom(id)
             }
         )
-
         roomMembershipObserver.updates
             .filter { update -> update.roomId == inputs.room.roomId && !update.isUserInRoom }
             .onEach {
                 navigateUp()
             }
-            .launchIn(coroutineScope)
+            .launchIn(lifecycleScope)
+    }
+
+    private fun fetchRoomMembers() = lifecycleScope.launch {
+        val room = inputs.room
+        room.fetchMembers()
+            .onFailure {
+                Timber.e(it, "Fail to fetch members for room ${room.roomId}")
+            }.onSuccess {
+                Timber.v("Success fetching members for room ${room.roomId}")
+            }
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Messages -> {
-                messagesEntryPoint.createNode(this, buildContext, object : MessagesEntryPoint.Callback {
+                val callback = object : MessagesEntryPoint.Callback {
                     override fun onRoomDetailsClicked() {
                         backstack.push(NavTarget.RoomDetails)
                     }
-                })
+                }
+                messagesEntryPoint.createNode(this, buildContext, callback)
             }
             NavTarget.RoomDetails -> {
                 roomDetailsEntryPoint.createNode(this, buildContext, emptyList())
@@ -127,7 +136,6 @@ class RoomFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        roomFlowPresenter.present()
         Children(
             navModel = backstack,
             modifier = modifier,

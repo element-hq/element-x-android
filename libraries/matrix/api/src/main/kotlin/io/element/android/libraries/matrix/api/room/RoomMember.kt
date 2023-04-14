@@ -31,7 +31,6 @@ data class RoomMember(
     val isIgnored: Boolean,
 ) : Parcelable
 
-@Parcelize
-enum class RoomMembershipState : Parcelable {
+enum class RoomMembershipState {
     BAN, INVITE, JOIN, KNOCK, LEAVE
 }

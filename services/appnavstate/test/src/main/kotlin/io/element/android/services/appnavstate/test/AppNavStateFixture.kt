@@ -23,6 +23,11 @@ import io.element.android.libraries.matrix.api.core.SpaceId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.services.appnavstate.api.AppNavigationState
 
+const val A_SESSION_OWNER = "aSessionOwner"
+const val A_SPACE_OWNER = "aSpaceOwner"
+const val A_ROOM_OWNER = "aRoomOwner"
+const val A_THREAD_OWNER = "aThreadOwner"
+
 fun anAppNavigationState(
     sessionId: SessionId? = null,
     spaceId: SpaceId? = MAIN_SPACE,
@@ -32,17 +37,17 @@ fun anAppNavigationState(
     if (sessionId == null) {
         return AppNavigationState.Root
     }
-    val session = AppNavigationState.Session(sessionId)
+    val session = AppNavigationState.Session(A_SESSION_OWNER, sessionId)
     if (spaceId == null) {
         return session
     }
-    val space = AppNavigationState.Space(spaceId, session)
+    val space = AppNavigationState.Space(A_SPACE_OWNER, spaceId, session)
     if (roomId == null) {
         return space
     }
-    val room = AppNavigationState.Room(roomId, space)
+    val room = AppNavigationState.Room(A_ROOM_OWNER, roomId, space)
     if (threadId == null) {
         return room
     }
-    return AppNavigationState.Thread(threadId, room)
+    return AppNavigationState.Thread(A_THREAD_OWNER, threadId, room)
 }
