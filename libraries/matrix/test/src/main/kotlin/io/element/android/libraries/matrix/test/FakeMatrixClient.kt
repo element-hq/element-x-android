@@ -46,6 +46,7 @@ class FakeMatrixClient(
     private val notificationService: FakeNotificationService = FakeNotificationService(),
 ) : MatrixClient {
 
+    private var createRoomResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmFailure: Throwable? = null
     private var findDmResult: MatrixRoom? = FakeMatrixRoom()
@@ -61,7 +62,7 @@ class FakeMatrixClient(
 
     override suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId> {
         delay(100)
-        return Result.success(A_ROOM_ID)
+        return createRoomResult
     }
 
     override suspend fun createDM(userId: UserId): Result<RoomId> {
@@ -117,6 +118,10 @@ class FakeMatrixClient(
 
     fun givenLogoutError(failure: Throwable?) {
         logoutFailure = failure
+    }
+
+    fun givenCreateRoomResult(result: Result<RoomId>) {
+        createRoomResult = result
     }
 
     fun givenCreateDmResult(result: Result<RoomId>) {
