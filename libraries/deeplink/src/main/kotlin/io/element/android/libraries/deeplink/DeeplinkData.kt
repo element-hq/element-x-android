@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.intent
+package io.element.android.libraries.deeplink
 
-import android.content.Intent
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 
-interface IntentProvider {
-    /**
-     * Provide an intent to start the application.
-     */
-    fun getViewIntent(
-        sessionId: SessionId,
-        roomId: RoomId?,
-        threadId: ThreadId?,
-    ): Intent
-}
+data class DeeplinkData(
+    val sessionId: SessionId,
+    val roomId: RoomId? = null,
+    val threadId: ThreadId? = null,
+)
