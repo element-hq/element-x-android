@@ -159,7 +159,6 @@ fun RoomListContent(
                     onFilterChanged = { state.eventSink(RoomListEvents.UpdateFilter(it)) },
                     onOpenSettings = onOpenSettings,
                     scrollBehavior = scrollBehavior,
-                    useStatusBarInsets = state.hasNetworkConnection,
                 )
             }
         },

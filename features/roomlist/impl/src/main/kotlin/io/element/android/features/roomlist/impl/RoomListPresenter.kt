@@ -74,7 +74,7 @@ class RoomListPresenter @Inject constructor(
             .roomSummaries()
             .collectAsState()
 
-        val networkConnectionStatus by networkMonitor.connectivity.collectAsState(initial = NetworkStatus.Online)
+        val networkConnectionStatus by networkMonitor.connectivity.collectAsState(initial = networkMonitor.currentConnectivityStatus)
 
         Timber.v("RoomSummaries size = ${roomSummaries.size}")
 

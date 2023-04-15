@@ -73,7 +73,6 @@ fun RoomListTopBar(
     onFilterChanged: (String) -> Unit,
     onOpenSettings: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
-    useStatusBarInsets: Boolean,
     modifier: Modifier = Modifier,
 ) {
     LogCompositions(

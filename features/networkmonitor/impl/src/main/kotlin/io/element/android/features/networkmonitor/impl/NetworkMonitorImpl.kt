@@ -22,67 +22,60 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.networkmonitor.api.NetworkMonitor
+import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
-import io.element.android.features.networkmonitor.api.NetworkMonitor
-import io.element.android.features.networkmonitor.api.NetworkStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import timber.log.Timber
 import javax.inject.Inject
 
-@ContributesBinding(scope = AppScope::class, boundType = NetworkMonitor::class)
+@ContributesBinding(scope = AppScope::class)
 @SingleIn(AppScope::class)
 class NetworkMonitorImpl @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext context: Context
 ) : NetworkMonitor {
 
-    private val connectivityManager: ConnectivityManager by lazy {
-        context.getSystemService(ConnectivityManager::class.java)
-    }
+    private val connectivityManager: ConnectivityManager = context.getSystemService(ConnectivityManager::class.java)
 
-    private var callback: ConnectivityManager.NetworkCallback? = null
+    private val callback = object : ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network) {
+            _connectivity.value = connectivityManager.currentConnectionStatus()
+            Timber.v("Connectivity status (available): ${connectivityManager.currentConnectionStatus()}")
+        }
+
+        override fun onLost(network: Network) {
+            _connectivity.value = connectivityManager.currentConnectionStatus()
+            Timber.v("Connectivity status (lost): ${connectivityManager.currentConnectionStatus()}")
+        }
+
+        override fun onCapabilitiesChanged(
+            network: Network,
+            networkCapabilities: NetworkCapabilities
+        ) {
+            _connectivity.value = connectivityManager.currentConnectionStatus()
+            Timber.v("Connectivity status (changed): ${connectivityManager.currentConnectionStatus()}")
+        }
+    }
 
     private val _connectivity = MutableStateFlow(NetworkStatus.Online)
     override val connectivity: Flow<NetworkStatus> = _connectivity
 
+    override val currentConnectivityStatus: NetworkStatus get() = _connectivity.value
+
     init {
-        subscribeToConnectionChanges()
+        listenToConnectionChanges()
     }
 
-    private fun subscribeToConnectionChanges() {
-        if (callback != null) return
-
-        val callback = object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) {
-                _connectivity.value = connectivityManager.currentConnectionStatus()
-                Timber.v("Connectivity status (available): ${connectivityManager.currentConnectionStatus()}")
-            }
-
-            override fun onLost(network: Network) {
-                _connectivity.value = connectivityManager.currentConnectionStatus()
-                Timber.v("Connectivity status (lost): ${connectivityManager.currentConnectionStatus()}")
-            }
-
-            override fun onCapabilitiesChanged(
-                network: Network,
-                networkCapabilities: NetworkCapabilities
-            ) {
-                _connectivity.value = connectivityManager.currentConnectionStatus()
-                Timber.v("Connectivity status (changed): ${connectivityManager.currentConnectionStatus()}")
-            }
-        }
-        this.callback = callback
-
-        connectivityManager.registerNetworkCallback(
-            NetworkRequest.Builder()
-                .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-                .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                .build(),
-            callback
-        )
+    private fun listenToConnectionChanges() {
+        val request = NetworkRequest.Builder()
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .build()
+        connectivityManager.registerNetworkCallback(request, callback)
 
         _connectivity.tryEmit(connectivityManager.currentConnectionStatus())
     }

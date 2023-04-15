@@ -19,6 +19,12 @@ package io.element.android.features.networkmonitor.test
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 
-class FakeNetworkMonitor(override val connectivity: Flow<NetworkStatus> = emptyFlow()) : NetworkMonitor
+class FakeNetworkMonitor(initialStatus: NetworkStatus = NetworkStatus.Online) : NetworkMonitor {
+    override val currentConnectivityStatus: NetworkStatus
+        get() = _connectivityStatus.value
+
+    private val _connectivityStatus: MutableStateFlow<NetworkStatus> = MutableStateFlow(initialStatus)
+    override val connectivity: Flow<NetworkStatus> = _connectivityStatus
+}

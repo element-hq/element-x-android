@@ -17,7 +17,10 @@
 package io.element.android.features.networkmonitor.api.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,6 +37,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.WifiOff
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -51,41 +58,54 @@ fun ConnectivityIndicatorView(
     isOnline: Boolean,
     modifier: Modifier = Modifier
 ) {
+    val isIndicatorVisible = remember { MutableTransitionState(!isOnline) }.apply { targetState = !isOnline }
+    val isStatusBarPaddingVisible = remember { MutableTransitionState(isOnline) }.apply { targetState = isOnline }
+
     // Display the network indicator with an animation
     AnimatedVisibility(
-        visible = !isOnline,
-        enter = expandVertically(),
-        exit = shrinkVertically(),
+        visibleState = isIndicatorVisible,
+        enter = fadeIn() + expandVertically(),
+        exit = fadeOut() + shrinkVertically(),
     ) {
-        Row(
-            modifier
-                .fillMaxWidth()
-                .background(LocalColors.current.gray400)
-                .statusBarsPadding()
-                .padding(vertical = 6.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.Bottom,
-        ) {
-            val tint = MaterialTheme.colorScheme.primary
-            Image(
-                imageVector = Icons.Outlined.WifiOff,
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(tint),
-                modifier = Modifier.size(16.dp),
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(text = stringResource(StringR.string.common_offline), style = ElementTextStyles.Regular.bodyMD, color = tint)
-        }
+        Indicator(modifier)
     }
 
     // Show missing status bar padding when the indicator is not visible
     AnimatedVisibility(
-        visible = isOnline,
-        enter = expandVertically(),
-        exit = shrinkVertically(),
+        visibleState = isStatusBarPaddingVisible,
+        enter = fadeIn() + expandVertically(),
+        exit = fadeOut() + shrinkVertically(),
     ) {
-        Spacer(modifier = Modifier.statusBarsPadding())
+        StatusBarPaddingSpacer(modifier)
     }
+}
+
+@Composable
+private fun Indicator(modifier: Modifier = Modifier) {
+    Row(
+        modifier
+            .fillMaxWidth()
+            .background(LocalColors.current.gray400)
+            .statusBarsPadding()
+            .padding(vertical = 6.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.Bottom,
+    ) {
+        val tint = MaterialTheme.colorScheme.primary
+        Image(
+            imageVector = Icons.Outlined.WifiOff,
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(tint),
+            modifier = Modifier.size(16.dp),
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = stringResource(StringR.string.common_offline), style = ElementTextStyles.Regular.bodyMD, color = tint)
+    }
+}
+
+@Composable
+private fun StatusBarPaddingSpacer(modifier: Modifier = Modifier) {
+    Spacer(modifier = modifier.statusBarsPadding())
 }
 
 @Preview

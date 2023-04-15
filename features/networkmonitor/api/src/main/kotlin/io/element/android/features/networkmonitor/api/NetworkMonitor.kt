@@ -20,4 +20,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface NetworkMonitor {
     val connectivity: Flow<NetworkStatus>
+    val currentConnectivityStatus: NetworkStatus
 }
