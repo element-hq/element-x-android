@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.api.timeline.item.event
 
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
@@ -26,7 +27,7 @@ sealed interface EventContent
 
 data class MessageContent(
     val body: String,
-    val inReplyTo: UserId?,
+    val inReplyTo: EventId?,
     val isEdited: Boolean,
     val type: MessageType?
 ) : EventContent

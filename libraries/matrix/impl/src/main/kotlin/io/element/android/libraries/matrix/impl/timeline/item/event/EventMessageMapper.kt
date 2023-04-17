@@ -16,16 +16,17 @@
 
 package io.element.android.libraries.matrix.impl.timeline.item.event
 
-import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.asEventId
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.impl.media.map
@@ -69,7 +70,7 @@ class EventMessageMapper {
         }
         MessageContent(
             body = message.body(),
-            inReplyTo = message.inReplyTo()?.let { UserId(it) },
+            inReplyTo = message.inReplyTo()?.eventId?.asEventId(),
             isEdited = message.isEdited(),
             type = type
         )
