@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("java-library")
     id("com.android.lint")
@@ -23,8 +20,8 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 dependencies {

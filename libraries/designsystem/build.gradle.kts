@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.ksp)
@@ -24,6 +22,10 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.designsystem"
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     dependencies {
         // Should not be there, but this is a POC

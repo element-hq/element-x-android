@@ -21,11 +21,8 @@ import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 import extension.allServicesImpl
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("io.element.android-compose-application")
-    alias(libs.plugins.stem)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
@@ -142,7 +139,7 @@ android {
         }
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
     // Waiting for https://github.com/google/ksp/issues/37
@@ -152,6 +149,10 @@ android {
                 kotlin.srcDir("build/generated/ksp/$name/kotlin")
             }
         }
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 }
 

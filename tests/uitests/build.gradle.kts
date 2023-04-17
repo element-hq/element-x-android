@@ -17,8 +17,6 @@
 import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.ksp)
