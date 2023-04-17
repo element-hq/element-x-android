@@ -31,7 +31,7 @@ class DefaultFeatureFlagService @Inject constructor(
 
     override suspend fun isFeatureEnabled(feature: Feature): Boolean {
         return providers.filter { it.hasFeature(feature) }
-            .sortedBy(FeatureFlagProvider::priority)
+            .sortedByDescending(FeatureFlagProvider::priority)
             .firstOrNull()
             ?.isFeatureEnabled(feature)
             ?: feature.defaultValue
