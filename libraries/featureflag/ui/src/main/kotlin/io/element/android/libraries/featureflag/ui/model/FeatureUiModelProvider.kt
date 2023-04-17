@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.root
+package io.element.android.libraries.featureflag.ui.model
 
-import io.element.android.features.logout.api.LogoutPreferenceState
-import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
-data class PreferencesRootState(
-    val logoutState: LogoutPreferenceState,
-    val rageshakeState: RageshakePreferencesState,
-    val myUser: Async<MatrixUser>,
-    val showDeveloperSettings: Boolean
-)
+fun aFeatureUiModelList(): ImmutableList<FeatureUiModel> {
+    return persistentListOf(
+        FeatureUiModel("key1", "Display State Events", true),
+        FeatureUiModel("key2", "Display Room Events", false)
+    )
+}

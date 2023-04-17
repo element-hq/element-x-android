@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.root
+plugins {
+    id("io.element.android-library")
+}
 
-import io.element.android.features.logout.api.LogoutPreferenceState
-import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+android {
+    namespace = "io.element.android.libraries.featureflag.api"
+}
 
-data class PreferencesRootState(
-    val logoutState: LogoutPreferenceState,
-    val rageshakeState: RageshakePreferencesState,
-    val myUser: Async<MatrixUser>,
-    val showDeveloperSettings: Boolean
-)
+dependencies {
+    implementation(libs.coroutines.core)
+}
