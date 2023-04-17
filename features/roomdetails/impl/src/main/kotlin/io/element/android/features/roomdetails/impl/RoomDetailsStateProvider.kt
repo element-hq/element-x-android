@@ -18,6 +18,9 @@ package io.element.android.features.roomdetails.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomMembershipState
 
 open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState> {
     override val values: Sequence<RoomDetailsState>
@@ -27,9 +30,31 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState().copy(isEncrypted = false),
             aRoomDetailsState().copy(roomAlias = null),
             aRoomDetailsState().copy(memberCount = Async.Failure(Throwable())),
+            aRoomDetailsState().copy(roomType = RoomDetailsType.Dm(aDmRoomMember()), roomName = "Daniel"),
+            aRoomDetailsState().copy(roomType = RoomDetailsType.Dm(aDmRoomMember(isIgnored = true)), roomName = "Daniel"),
             // Add other state here
         )
 }
+
+fun aDmRoomMember(
+    userId: UserId = UserId("@daniel:domain.com"),
+    displayName: String? = "Daniel",
+    avatarUrl: String? = null,
+    membership: RoomMembershipState = RoomMembershipState.JOIN,
+    isNameAmbiguous: Boolean = false,
+    powerLevel: Long = 0,
+    normalizedPowerLevel: Long = powerLevel,
+    isIgnored: Boolean = false,
+) = RoomMember(
+    userId = userId,
+    displayName = displayName,
+    avatarUrl = avatarUrl,
+    membership = membership,
+    isNameAmbiguous = isNameAmbiguous,
+    powerLevel = powerLevel,
+    normalizedPowerLevel = normalizedPowerLevel,
+    isIgnored = isIgnored,
+)
 
 fun aRoomDetailsState() = RoomDetailsState(
     roomId = "a room id",
@@ -45,5 +70,6 @@ fun aRoomDetailsState() = RoomDetailsState(
     isEncrypted = true,
     displayLeaveRoomWarning = null,
     error = null,
+    roomType = RoomDetailsType.Room,
     eventSink = {}
 )

@@ -48,7 +48,7 @@ object PermalinkBuilder {
             }
             Result.success(url)
         } else {
-            Result.failure(PermalinkBuilderError.InvalidRoomAlias)
+            Result.failure(PermalinkBuilderError.InvalidUserId)
         }
     }
 
@@ -87,4 +87,5 @@ object PermalinkBuilder {
 sealed class PermalinkBuilderError : Throwable() {
     object InvalidRoomAlias : PermalinkBuilderError()
     object InvalidRoomId : PermalinkBuilderError()
+    object InvalidUserId : PermalinkBuilderError()
 }

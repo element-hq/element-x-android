@@ -39,10 +39,14 @@ class FakeMatrixRoom(
     override val alias: String? = null,
     override val alternativeAliases: List<String> = emptyList(),
     override val isPublic: Boolean = true,
+    override val isDirect: Boolean = false,
     private val members: List<RoomMember> = emptyList(),
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
 ) : MatrixRoom {
 
+    private var userDisplayNameResult = Result.success<String?>(null)
+    private var userAvatarUrlResult = Result.success<String?>(null)
+    private var dmMember: RoomMember? = null
     private var fetchMemberResult: Result<Unit> = Result.success(Unit)
 
     var areMembersFetched: Boolean = false
@@ -66,12 +70,16 @@ class FakeMatrixRoom(
         }
     }
 
-    override suspend fun userDisplayName(userId: String): Result<String?> {
-        return Result.success("")
+    override fun getDmMember(): RoomMember? {
+        return dmMember
     }
 
-    override suspend fun userAvatarUrl(userId: String): Result<String?> {
-        TODO("Not yet implemented")
+    override suspend fun userDisplayName(userId: UserId): Result<String?> {
+        return userDisplayNameResult
+    }
+
+    override suspend fun userAvatarUrl(userId: UserId): Result<String?> {
+        return userAvatarUrlResult
     }
 
     override suspend fun members(): List<RoomMember> {
@@ -87,7 +95,7 @@ class FakeMatrixRoom(
     }
 
     override fun getMember(userId: UserId): RoomMember? {
-        return members.firstOrNull { it.userId == userId.value }
+        return members.firstOrNull { it.userId == userId }
     }
 
     override suspend fun sendMessage(message: String): Result<Unit> {
@@ -132,5 +140,17 @@ class FakeMatrixRoom(
 
     fun givenFetchMemberResult(result: Result<Unit>) {
         fetchMemberResult = result
+    }
+
+    fun givenDmMember(roomMember: RoomMember) {
+        this.dmMember = roomMember
+    }
+
+    fun givenUserDisplayNameResult(displayName: Result<String?>) {
+        userDisplayNameResult = displayName
+    }
+
+    fun givenUserAvatarUrlResult(avatarUrl: Result<String?>) {
+        userAvatarUrlResult = avatarUrl
     }
 }

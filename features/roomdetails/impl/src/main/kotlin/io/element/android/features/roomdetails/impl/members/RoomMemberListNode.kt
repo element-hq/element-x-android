@@ -25,7 +25,6 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.roomdetails.impl.RoomDetailsFlowNode
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -44,12 +43,12 @@ class RoomMemberListNode @AssistedInject constructor(
         fun openRoomMemberDetails(roomMember: RoomMember)
     }
 
-    private val callback = plugins<Callback>().first()
+    private val callbacks = plugins<Callback>()
 
     private fun onUserSelected(matrixUser: MatrixUser) {
         val member = room.getMember(matrixUser.id)
         if (member != null) {
-            callback.openRoomMemberDetails(member)
+            callbacks.forEach { it.openRoomMemberDetails(member) }
         } else {
             Timber.e("Could find room member ${matrixUser.id} in room ${room.roomId}")
         }

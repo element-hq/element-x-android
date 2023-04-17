@@ -34,6 +34,7 @@ import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.parcelize.Parcelize
 
@@ -64,24 +65,23 @@ class RoomDetailsFlowNode @AssistedInject constructor(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.RoomDetails -> {
-                val callback = object : RoomDetailsNode.Callback {
+                val roomDetailsCallback = object : RoomDetailsNode.Callback {
                     override fun openRoomMemberList() {
                         backstack.push(NavTarget.RoomMemberList)
                     }
                 }
-                createNode<RoomDetailsNode>(buildContext, listOf(callback))
+                createNode<RoomDetailsNode>(buildContext, listOf(roomDetailsCallback))
             }
             NavTarget.RoomMemberList -> {
-                val callback = object : RoomMemberListNode.Callback {
+                val roomMemberListCallback = object : RoomMemberListNode.Callback {
                     override fun openRoomMemberDetails(roomMember: RoomMember) {
                         backstack.push(NavTarget.RoomMemberDetails(roomMember))
                     }
                 }
-                createNode<RoomMemberListNode>(buildContext, listOf(callback))
+                createNode<RoomMemberListNode>(buildContext, listOf(roomMemberListCallback))
             }
             is NavTarget.RoomMemberDetails -> {
-                val inputs = RoomMemberDetailsNode.Inputs(navTarget.roomMember)
-                createNode<RoomMemberDetailsNode>(buildContext, listOf(inputs))
+                createNode<RoomMemberDetailsNode>(buildContext, listOf(RoomMemberDetailsNode.Inputs(navTarget.roomMember)))
             }
         }
     }

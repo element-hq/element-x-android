@@ -20,6 +20,7 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.isLoading
 
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.RoomMember
 
 data class RoomDetailsState(
     val roomId: String,
@@ -31,8 +32,14 @@ data class RoomDetailsState(
     val isEncrypted: Boolean,
     val displayLeaveRoomWarning: LeaveRoomWarning?,
     val error: RoomDetailsError?,
+    val roomType: RoomDetailsType,
     val eventSink: (RoomDetailsEvent) -> Unit
 )
+
+sealed interface RoomDetailsType {
+    object Room : RoomDetailsType
+    data class Dm(val roomMember: RoomMember) : RoomDetailsType
+}
 
 sealed class LeaveRoomWarning {
     object Generic : LeaveRoomWarning()
