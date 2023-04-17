@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 plugins {
     id("java-library")
     id("com.android.lint")

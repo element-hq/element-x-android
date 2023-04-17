@@ -18,7 +18,6 @@
 
 import extension.allFeaturesApi
 
-
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)

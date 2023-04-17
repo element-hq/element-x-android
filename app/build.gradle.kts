@@ -21,7 +21,6 @@ import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 import extension.allServicesImpl
 
-
 plugins {
     id("io.element.android-compose-application")
     alias(libs.plugins.kotlin.android)
