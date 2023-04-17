@@ -58,7 +58,7 @@ fun CommonExtension<*, *, *, *>.composeConfig(libs: LibrariesForLibs) {
         kotlinCompilerExtensionVersion = libs.versions.composecompiler.get()
     }
 
-    packagingOptions {
+    packaging {
         resources.excludes.apply {
             add("META-INF/AL2.0")
             add("META-INF/LGPL2.1")
