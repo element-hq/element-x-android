@@ -32,8 +32,8 @@ fun CommonExtension<*, *, *, *>.androidConfig(project: Project) {
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     testOptions {
@@ -58,7 +58,7 @@ fun CommonExtension<*, *, *, *>.composeConfig(libs: LibrariesForLibs) {
         kotlinCompilerExtensionVersion = libs.versions.composecompiler.get()
     }
 
-    packagingOptions {
+    packaging {
         resources.excludes.apply {
             add("META-INF/AL2.0")
             add("META-INF/LGPL2.1")

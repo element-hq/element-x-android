@@ -22,7 +22,6 @@ import extension.commonDependencies
 import org.gradle.accessors.dm.LibrariesForLibs
 
 val libs = the<LibrariesForLibs>()
-
 plugins {
     id("com.android.library")
     id("kotlin-android")
