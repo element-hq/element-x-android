@@ -17,24 +17,24 @@
 package io.element.android.libraries.push.impl.notifications.fake
 
 import android.app.Notification
-import io.element.android.libraries.push.impl.notifications.NotificationUtils
+import io.element.android.libraries.push.impl.notifications.factories.NotificationFactory
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.mockk.every
 import io.mockk.mockk
 
-class FakeNotificationUtils {
-    val instance = mockk<NotificationUtils>()
+class FakeAndroidNotificationFactory {
+    val instance = mockk<NotificationFactory>()
 
-    fun givenBuildRoomInvitationNotificationFor(event: InviteNotifiableEvent): Notification {
+    fun givenCreateRoomInvitationNotificationFor(event: InviteNotifiableEvent): Notification {
         val mockNotification = mockk<Notification>()
-        every { instance.buildRoomInvitationNotification(event) } returns mockNotification
+        every { instance.createRoomInvitationNotification(event) } returns mockNotification
         return mockNotification
     }
 
-    fun givenBuildSimpleInvitationNotificationFor(event: SimpleNotifiableEvent): Notification {
+    fun givenCreateSimpleInvitationNotificationFor(event: SimpleNotifiableEvent): Notification {
         val mockNotification = mockk<Notification>()
-        every { instance.buildSimpleEventNotification(event) } returns mockNotification
+        every { instance.createSimpleEventNotification(event) } returns mockNotification
         return mockNotification
     }
 }
