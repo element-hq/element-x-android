@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import io.element.android.features.networkmonitor.impl.NetworkMonitorImpl
 import io.element.android.features.roomlist.impl.DefaultRoomLastMessageFormatter
 import io.element.android.features.roomlist.impl.RoomListPresenter
 import io.element.android.features.roomlist.impl.RoomListView
@@ -45,11 +46,12 @@ class RoomListScreen(
     private val dateFormatters = DateFormatters(locale, clock, timeZone)
     private val sessionVerificationService = matrixClient.sessionVerificationService()
     private val presenter = RoomListPresenter(
-        matrixClient,
-        DefaultLastMessageTimestampFormatter(dateTimeProvider, dateFormatters),
-        DefaultRoomLastMessageFormatter(context, matrixClient),
-        sessionVerificationService,
-        SnackbarDispatcher(),
+        client = matrixClient,
+        lastMessageTimestampFormatter = DefaultLastMessageTimestampFormatter(dateTimeProvider, dateFormatters),
+        roomLastMessageFormatter = DefaultRoomLastMessageFormatter(context, matrixClient),
+        sessionVerificationService = sessionVerificationService,
+        networkMonitor = NetworkMonitorImpl(context),
+        snackbarDispatcher = SnackbarDispatcher(),
     )
 
     @Composable

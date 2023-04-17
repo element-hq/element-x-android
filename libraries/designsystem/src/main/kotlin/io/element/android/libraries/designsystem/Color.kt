@@ -70,5 +70,10 @@ val Vermilion = Color(0xFFFF5B55)
 
 val LinkColor = Color(0xFF0086E6)
 
+// Compound colors
+
 val TextColorCriticalLight = Color(0xFFD51928)
 val TextColorCriticalDark = Color(0xfffd3e3c)
+
+val Gray_400_Light = Color(0xFFE1E6EC)
+val Gray_400_Dark = Color(0xFF26282D)

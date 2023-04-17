@@ -48,6 +48,7 @@ dependencies {
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.dateformatter.api)
+    implementation(projects.features.networkmonitor.api)
     implementation(libs.accompanist.placeholder)
     api(projects.features.roomlist.api)
     ksp(libs.showkase.processor)
@@ -60,6 +61,7 @@ dependencies {
     testImplementation(libs.test.robolectric)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.dateformatter.test)
+    testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.libraries.permissions.noop)
 
     androidTestImplementation(libs.test.junitext)
