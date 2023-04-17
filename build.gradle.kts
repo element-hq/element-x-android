@@ -70,8 +70,8 @@ allprojects {
     // See https://github.com/JLLeitschuh/ktlint-gradle#configuration
     configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
         // See https://github.com/pinterest/ktlint/releases/
-        // TODO 0.47.1 is available
-        version.set("0.45.1")
+        // TODO Regularly check for new version here ^
+        version.set("0.48.2")
         android.set(true)
         ignoreFailures.set(false)
         enableExperimentalRules.set(true)
@@ -85,33 +85,6 @@ allprojects {
         filter {
             exclude { element -> element.file.path.contains("$buildDir/generated/") }
         }
-        disabledRules.set(
-            setOf(
-                // TODO Re-enable these 4 rules after reformatting project
-                "indent",
-                "experimental:argument-list-wrapping",
-                "max-line-length",
-                "parameter-list-wrapping",
-
-                "spacing-between-declarations-with-comments",
-                "no-multi-spaces",
-                "experimental:spacing-between-declarations-with-annotations",
-                "experimental:annotation",
-                // - Missing newline after "("
-                // - Missing newline before ")"
-                "wrapping",
-                // - Unnecessary trailing comma before ")"
-                "experimental:trailing-comma",
-                // - A block comment in between other elements on the same line is disallowed
-                "experimental:comment-wrapping",
-                // - A KDoc comment after any other element on the same line must be separated by a new line
-                "experimental:kdoc-wrapping",
-                // Ignore error "Redundant curly braces", since we use it to fix false positives, for instance in "elementLogs.${i}.txt"
-                "string-template",
-                // Not the same order than Android Studio formatter...
-                "import-ordering",
-            )
-        )
     }
     // Dependency check
     apply {
@@ -283,7 +256,9 @@ val ciBuildProperty = "ci-build"
 val isCiBuild = if (project.hasProperty(ciBuildProperty)) {
     val raw = project.property(ciBuildProperty) as? String
     raw?.toBooleanLenient() == true || raw?.toIntOrNull() == 1
-} else false
+} else {
+    false
+}
 if (isCiBuild) {
     allprojects {
         afterEvaluate {
