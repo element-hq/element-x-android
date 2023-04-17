@@ -70,7 +70,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -112,12 +112,15 @@ fun MessagesView(
         modifier = modifier,
         contentWindowInsets = WindowInsets.statusBars,
         topBar = {
-            MessagesViewTopBar(
-                roomTitle = state.roomName,
-                roomAvatar = state.roomAvatar,
-                onBackPressed = onBackPressed,
-                onRoomDetailsClicked = onRoomDetailsClicked,
-            )
+            Column {
+                ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
+                MessagesViewTopBar(
+                    roomTitle = state.roomName,
+                    roomAvatar = state.roomAvatar,
+                    onBackPressed = onBackPressed,
+                    onRoomDetailsClicked = onRoomDetailsClicked,
+                )
+            }
         },
         content = { padding ->
             MessagesViewContent(
@@ -208,7 +211,8 @@ fun MessagesViewTopBar(
                     overflow = TextOverflow.Ellipsis
                 )
             }
-        }
+        },
+        windowInsets = WindowInsets(0.dp)
     )
 }
 

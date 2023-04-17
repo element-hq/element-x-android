@@ -28,6 +28,7 @@ data class RoomListState(
     val roomList: ImmutableList<RoomListRoomSummary>,
     val filter: String,
     val displayVerificationPrompt: Boolean,
+    val hasNetworkConnection: Boolean,
     val snackbarMessage: SnackbarMessage?,
     val eventSink: (RoomListEvents) -> Unit
 )

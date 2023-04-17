@@ -33,6 +33,7 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState(),
             aRoomListState().copy(displayVerificationPrompt = true),
             aRoomListState().copy(snackbarMessage = SnackbarMessage(StringR.string.common_verification_complete)),
+            aRoomListState().copy(hasNetworkConnection = false),
         )
 }
 
@@ -40,6 +41,7 @@ internal fun aRoomListState() = RoomListState(
     matrixUser = MatrixUser(id = UserId("@id"), username = "User#1", avatarData = AvatarData("@id", "U")),
     roomList = aRoomListRoomSummaryList(),
     filter = "filter",
+    hasNetworkConnection = true,
     snackbarMessage = null,
     displayVerificationPrompt = false,
     eventSink = {}

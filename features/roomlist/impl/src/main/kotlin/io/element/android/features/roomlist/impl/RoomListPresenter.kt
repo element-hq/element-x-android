@@ -26,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryPlaceholders
 import io.element.android.libraries.architecture.Presenter
@@ -42,6 +43,7 @@ import io.element.android.libraries.matrix.api.room.RoomSummary
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.features.networkmonitor.api.NetworkStatus
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -57,6 +59,7 @@ class RoomListPresenter @Inject constructor(
     private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
     private val roomLastMessageFormatter: RoomLastMessageFormatter,
     private val sessionVerificationService: SessionVerificationService,
+    private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<RoomListState> {
 
@@ -70,6 +73,8 @@ class RoomListPresenter @Inject constructor(
             .roomSummaryDataSource
             .roomSummaries()
             .collectAsState()
+
+        val networkConnectionStatus by networkMonitor.connectivity.collectAsState(initial = networkMonitor.currentConnectivityStatus)
 
         Timber.v("RoomSummaries size = ${roomSummaries.size}")
 
@@ -108,6 +113,7 @@ class RoomListPresenter @Inject constructor(
             filter = filter,
             displayVerificationPrompt = displayVerificationPrompt,
             snackbarMessage = snackbarMessage,
+            hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             eventSink = ::handleEvents
         )
     }

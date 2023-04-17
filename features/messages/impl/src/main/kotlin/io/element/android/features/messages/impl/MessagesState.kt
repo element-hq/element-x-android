@@ -31,5 +31,6 @@ data class MessagesState(
     val composerState: MessageComposerState,
     val timelineState: TimelineState,
     val actionListState: ActionListState,
+    val hasNetworkConnection: Boolean,
     val eventSink: (MessagesEvents) -> Unit
 )

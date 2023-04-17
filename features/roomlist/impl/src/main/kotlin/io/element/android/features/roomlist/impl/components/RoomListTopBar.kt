@@ -19,6 +19,7 @@
 package io.element.android.features.roomlist.impl.components
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.icons.Icons
@@ -46,6 +47,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -172,6 +174,7 @@ fun SearchRoomListTopBar(
                 )
             }
         },
+        windowInsets = WindowInsets(0.dp)
     )
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -231,6 +234,7 @@ private fun DefaultRoomListTopBar(
             }
         },
         scrollBehavior = scrollBehavior,
+        windowInsets = WindowInsets(0.dp),
     )
 }
 

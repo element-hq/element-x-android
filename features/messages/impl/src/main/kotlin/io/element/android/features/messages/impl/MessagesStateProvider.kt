@@ -31,6 +31,7 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
     override val values: Sequence<MessagesState>
         get() = sequenceOf(
             aMessagesState(),
+            aMessagesState().copy(hasNetworkConnection = false),
         )
 }
 
@@ -47,5 +48,6 @@ fun aMessagesState() = MessagesState(
         timelineItems = aTimelineItemList(aTimelineItemContent()),
     ),
     actionListState = anActionListState(),
+    hasNetworkConnection = true,
     eventSink = {}
 )
