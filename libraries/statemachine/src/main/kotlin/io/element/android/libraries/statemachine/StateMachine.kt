@@ -64,7 +64,7 @@ class StateMachine<Event : Any, State : Any>(
         val routesForEvent = routes.filter { it.eventType.isInstance(event) }
 
         return (routesForEvent.firstOrNull { it.fromState?.isInstance(currentState) == true }
-                ?: routesForEvent.firstOrNull { it.fromState == null }) as? StateMachineRoute<E, State, State>
+            ?: routesForEvent.firstOrNull { it.fromState == null }) as? StateMachineRoute<E, State, State>
     }
 
     fun restart() {
@@ -129,7 +129,7 @@ class StateMachineBuilder<Event : Any, State : Any>(
             newRoutes: List<StateMachineRoute<*, *, *>>,
         ) {
             val oldEvents = oldRoutes.filter { it.fromState == state }.map { it.eventType }
-            val newEvents = newRoutes.filter { it.fromState == state  }.map { it.eventType }
+            val newEvents = newRoutes.filter { it.fromState == state }.map { it.eventType }
             val intersection = oldEvents.intersect(newEvents)
             if (intersection.isNotEmpty()) {
                 val duplicates = intersection.joinToString(", ") { it.name }
