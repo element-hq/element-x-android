@@ -40,6 +40,7 @@ import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 
 class RustMatrixRoom(
+    private val currentUserId: UserId,
     private val slidingSyncUpdateFlow: Flow<UpdateSummary>,
     private val slidingSyncRoom: SlidingSyncRoom,
     private val innerRoom: Room,
@@ -70,12 +71,12 @@ class RustMatrixRoom(
     }
 
     override fun getMember(userId: UserId): RoomMember? {
-        return cachedMembers.find { it.userId == userId.value }
+        return cachedMembers.find { it.userId == userId }
     }
 
-    override fun getDmMember(currentUserId: UserId): RoomMember? {
+    override fun getDmMember(): RoomMember? {
         return if (cachedMembers.size == 2 && isDirect && isEncrypted) {
-            cachedMembers.find { it.userId != currentUserId.value }
+            cachedMembers.find { it.userId != currentUserId }
         } else {
             null
         }
@@ -135,7 +136,7 @@ class RustMatrixRoom(
         }
 
     override val isEncrypted: Boolean
-        get() = innerRoom.isEncrypted()
+        get() = runCatching { innerRoom.isEncrypted() }.getOrDefault(false)
 
     override val alias: String?
         get() = innerRoom.canonicalAlias()
@@ -155,17 +156,17 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun userDisplayName(userId: String): Result<String?> =
+    override suspend fun userDisplayName(userId: UserId): Result<String?> =
         withContext(coroutineDispatchers.io) {
             runCatching {
-                innerRoom.memberDisplayName(userId)
+                innerRoom.memberDisplayName(userId.value)
             }
         }
 
-    override suspend fun userAvatarUrl(userId: String): Result<String?> =
+    override suspend fun userAvatarUrl(userId: UserId): Result<String?> =
         withContext(coroutineDispatchers.io) {
             runCatching {
-                innerRoom.memberAvatarUrl(userId)
+                innerRoom.memberAvatarUrl(userId.value)
             }
         }
 

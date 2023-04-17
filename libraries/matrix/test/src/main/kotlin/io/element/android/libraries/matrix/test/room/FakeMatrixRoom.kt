@@ -70,15 +70,15 @@ class FakeMatrixRoom(
         }
     }
 
-    override fun getDmMember(currentUserId: UserId): RoomMember? {
+    override fun getDmMember(): RoomMember? {
         return dmMember
     }
 
-    override suspend fun userDisplayName(userId: String): Result<String?> {
+    override suspend fun userDisplayName(userId: UserId): Result<String?> {
         return userDisplayNameResult
     }
 
-    override suspend fun userAvatarUrl(userId: String): Result<String?> {
+    override suspend fun userAvatarUrl(userId: UserId): Result<String?> {
         return userAvatarUrlResult
     }
 
@@ -95,7 +95,7 @@ class FakeMatrixRoom(
     }
 
     override fun getMember(userId: UserId): RoomMember? {
-        return members.firstOrNull { it.userId == userId.value }
+        return members.firstOrNull { it.userId == userId }
     }
 
     override suspend fun sendMessage(message: String): Result<Unit> {

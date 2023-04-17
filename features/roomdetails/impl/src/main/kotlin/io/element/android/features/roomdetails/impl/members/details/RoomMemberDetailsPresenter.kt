@@ -55,7 +55,7 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
         }
 
         return RoomMemberDetailsState(
-            userId = roomMember.userId,
+            userId = roomMember.userId.value,
             userName = userName,
             avatarUrl = userAvatar,
             isBlocked = roomMember.isIgnored,

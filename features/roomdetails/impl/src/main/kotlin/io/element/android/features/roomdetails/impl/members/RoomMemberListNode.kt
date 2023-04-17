@@ -43,12 +43,12 @@ class RoomMemberListNode @AssistedInject constructor(
         fun openRoomMemberDetails(roomMember: RoomMember)
     }
 
-    private val callback = plugins<Callback>().first()
+    private val callbacks = plugins<Callback>()
 
     private fun onUserSelected(matrixUser: MatrixUser) {
         val member = room.getMember(matrixUser.id)
         if (member != null) {
-            callback.openRoomMemberDetails(member)
+            callbacks.forEach { it.openRoomMemberDetails(member) }
         } else {
             Timber.e("Could find room member ${matrixUser.id} in room ${room.roomId}")
         }

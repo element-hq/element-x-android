@@ -61,7 +61,12 @@ class RoomDetailsPresenter @Inject constructor(
             }
         }
 
-        val dmMember = room.getDmMember(sessionId)
+        val dmMember = room.getDmMember()
+        val roomType = if (dmMember != null) {
+            RoomDetailsType.Dm(dmMember)
+        } else {
+            RoomDetailsType.Room
+        }
 
         fun handleEvents(event: RoomDetailsEvent) {
             when (event) {
@@ -95,7 +100,7 @@ class RoomDetailsPresenter @Inject constructor(
             isEncrypted = room.isEncrypted,
             displayLeaveRoomWarning = leaveRoomWarning,
             error = error,
-            dmMember = dmMember,
+            roomType = roomType,
             eventSink = ::handleEvents,
         )
     }

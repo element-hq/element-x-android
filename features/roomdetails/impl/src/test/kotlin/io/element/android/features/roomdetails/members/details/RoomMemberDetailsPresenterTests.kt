@@ -42,7 +42,7 @@ class RoomMemberDetailsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.userId).isEqualTo(roomMember.userId)
+            Truth.assertThat(initialState.userId).isEqualTo(roomMember.userId.value)
             Truth.assertThat(initialState.userName).isEqualTo(roomMember.displayName)
             Truth.assertThat(initialState.avatarUrl).isEqualTo(roomMember.avatarUrl)
             Truth.assertThat(initialState.isBlocked).isEqualTo(roomMember.isIgnored)

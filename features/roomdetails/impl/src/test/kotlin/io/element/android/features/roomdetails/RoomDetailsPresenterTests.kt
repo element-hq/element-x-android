@@ -236,7 +236,7 @@ fun aRoomMember(
     normalizedPowerLevel: Long = 0L,
     isIgnored: Boolean = false,
 ) = RoomMember(
-    userId = userId.value,
+    userId = userId,
     displayName = displayName,
     avatarUrl = avatarUrl,
     membership = membership,

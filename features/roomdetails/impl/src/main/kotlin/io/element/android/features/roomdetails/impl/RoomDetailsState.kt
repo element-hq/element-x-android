@@ -32,9 +32,14 @@ data class RoomDetailsState(
     val isEncrypted: Boolean,
     val displayLeaveRoomWarning: LeaveRoomWarning?,
     val error: RoomDetailsError?,
-    val dmMember: RoomMember?,
+    val roomType: RoomDetailsType,
     val eventSink: (RoomDetailsEvent) -> Unit
 )
+
+sealed interface RoomDetailsType {
+    object Room : RoomDetailsType
+    data class Dm(val roomMember: RoomMember) : RoomDetailsType
+}
 
 sealed class LeaveRoomWarning {
     object Generic : LeaveRoomWarning()

@@ -29,7 +29,6 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -48,10 +47,10 @@ class RoomDetailsNode @AssistedInject constructor(
         fun openRoomMemberList()
     }
 
-    private val callback = plugins<Callback>().firstOrNull()
+    private val callbacks = plugins<Callback>()
 
     private fun openRoomMemberList() {
-        callback?.openRoomMemberList()
+        callbacks.forEach { it.openRoomMemberList() }
     }
 
     private fun onShareRoom(context: Context) {
@@ -69,7 +68,7 @@ class RoomDetailsNode @AssistedInject constructor(
     }
 
     private fun onShareMember(context: Context, member: RoomMember) {
-        val permalinkResult = PermalinkBuilder.permalinkForUser(UserId(member.userId))
+        val permalinkResult = PermalinkBuilder.permalinkForUser(member.userId)
         permalinkResult.onSuccess { permalink ->
             startSharePlainTextIntent(
                 context = context,

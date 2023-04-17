@@ -85,28 +85,32 @@ fun RoomDetailsView(
             .padding(padding)
             .verticalScroll(rememberScrollState())
         ) {
-            if (state.dmMember == null) {
-                RoomHeaderSection(
-                    avatarUrl = state.roomAvatarUrl,
-                    roomId = state.roomId,
-                    roomName = state.roomName,
-                    roomAlias = state.roomAlias
-                )
-                RoomShareSection(onShareRoom = onShareRoom)
-            } else {
-                RoomMemberHeaderSection(
-                    avatarUrl = state.roomAvatarUrl ?: state.dmMember.avatarUrl,
-                    userId = state.dmMember.userId,
-                    userName = state.roomName
-                )
-                RoomMemberShareSection(onShareUser = { onShareMember(state.dmMember) })
+            when (state.roomType) {
+                RoomDetailsType.Room -> {
+                    RoomHeaderSection(
+                        avatarUrl = state.roomAvatarUrl,
+                        roomId = state.roomId,
+                        roomName = state.roomName,
+                        roomAlias = state.roomAlias
+                    )
+                    RoomShareSection(onShareRoom = onShareRoom)
+                }
+                is RoomDetailsType.Dm -> {
+                    val member = state.roomType.roomMember
+                    RoomMemberHeaderSection(
+                        avatarUrl = state.roomAvatarUrl ?: member.avatarUrl,
+                        userId = member.userId.value,
+                        userName = state.roomName
+                    )
+                    RoomMemberShareSection(onShareUser = { onShareMember(member) })
+                }
             }
 
             if (state.roomTopic != null) {
                 TopicSection(roomTopic = state.roomTopic)
             }
 
-            if (state.dmMember == null) {
+            if (state.roomType is RoomDetailsType.Room) {
                 val memberCount = (state.memberCount as? Async.Success<Int>)?.state
                 MembersSection(
                     memberCount = memberCount,
@@ -119,15 +123,18 @@ fun RoomDetailsView(
                 SecuritySection()
             }
 
-            if (state.dmMember == null) {
-                OtherActionsSection(onLeaveRoom = {
-                    state.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
-                })
-            } else {
-                BlockSection(
-                    isBlocked = state.dmMember.isIgnored,
-                    onToggleBlock = { /*TODO*/ }
-                )
+            when (state.roomType) {
+                RoomDetailsType.Room -> {
+                    OtherActionsSection(onLeaveRoom = {
+                        state.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
+                    })
+                }
+                is RoomDetailsType.Dm -> {
+                    BlockSection(
+                        isBlocked = state.roomType.roomMember.isIgnored,
+                        onToggleBlock = { /*TODO*/ }
+                    )
+                }
             }
 
             if (state.displayLeaveRoomWarning != null) {

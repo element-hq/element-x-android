@@ -42,7 +42,7 @@ interface MatrixRoom: Closeable {
 
     fun getMember(userId: UserId): RoomMember?
 
-    fun getDmMember(currentUserId: UserId): RoomMember?
+    fun getDmMember(): RoomMember?
 
     fun syncUpdateFlow(): Flow<Long>
 
@@ -50,9 +50,9 @@ interface MatrixRoom: Closeable {
 
     suspend fun fetchMembers(): Result<Unit>
 
-    suspend fun userDisplayName(userId: String): Result<String?>
+    suspend fun userDisplayName(userId: UserId): Result<String?>
 
-    suspend fun userAvatarUrl(userId: String): Result<String?>
+    suspend fun userAvatarUrl(userId: UserId): Result<String?>
 
     suspend fun sendMessage(message: String): Result<Unit>
 

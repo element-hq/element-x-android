@@ -30,14 +30,14 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState().copy(isEncrypted = false),
             aRoomDetailsState().copy(roomAlias = null),
             aRoomDetailsState().copy(memberCount = Async.Failure(Throwable())),
-            aRoomDetailsState().copy(dmMember = aDmRoomMember(), roomName = "Daniel"),
-            aRoomDetailsState().copy(dmMember = aDmRoomMember(isIgnored = true), roomName = "Daniel"),
+            aRoomDetailsState().copy(roomType = RoomDetailsType.Dm(aDmRoomMember()), roomName = "Daniel"),
+            aRoomDetailsState().copy(roomType = RoomDetailsType.Dm(aDmRoomMember(isIgnored = true)), roomName = "Daniel"),
             // Add other state here
         )
 }
 
 fun aDmRoomMember(
-    userId: String = "@daniel:domain.com",
+    userId: UserId = UserId("@daniel:domain.com"),
     displayName: String? = "Daniel",
     avatarUrl: String? = null,
     membership: RoomMembershipState = RoomMembershipState.JOIN,
@@ -70,6 +70,6 @@ fun aRoomDetailsState() = RoomDetailsState(
     isEncrypted = true,
     displayLeaveRoomWarning = null,
     error = null,
-    dmMember = null,
+    roomType = RoomDetailsType.Room,
     eventSink = {}
 )
