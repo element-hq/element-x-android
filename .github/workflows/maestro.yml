@@ -3,6 +3,7 @@ name: Maestro
 # Run this flow only on pull request, and only when the pull request has been approved, to limit our usage of maestro cloud.
 # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#running-a-workflow-when-a-pull-request-is-approved
 on:
+  workflow_dispatch:
   pull_request_review:
     types: [submitted]
 
@@ -35,6 +36,12 @@ jobs:
           java-version: '17'
       - name: Assemble debug APK
         run: ./gradlew assembleDebug $CI_GRADLE_ARG_PROPERTIES
+      - name: Upload debug APKs
+        uses: actions/upload-artifact@v3
+        with:
+          name: elementx-debug
+          path: |
+            app/build/outputs/apk/debug/*.apk
       - uses: mobile-dev-inc/action-maestro-cloud@v1.3.1
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
