@@ -21,7 +21,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationUtils
+import io.element.android.libraries.push.impl.notifications.fake.FakeAndroidNotificationFactory
 import io.element.android.libraries.push.impl.notifications.fake.FakeRoomGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeSummaryGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
@@ -36,19 +36,19 @@ private val A_MESSAGE_EVENT = aNotifiableMessageEvent(eventId = AN_EVENT_ID, roo
 
 class NotificationFactoryTest {
 
-    private val notificationUtils = FakeNotificationUtils()
+    private val androidNotificationFactory = FakeAndroidNotificationFactory()
     private val roomGroupMessageCreator = FakeRoomGroupMessageCreator()
     private val summaryGroupMessageCreator = FakeSummaryGroupMessageCreator()
 
     private val notificationFactory = NotificationFactory(
-        notificationUtils.instance,
+        androidNotificationFactory.instance,
         roomGroupMessageCreator.instance,
         summaryGroupMessageCreator.instance
     )
 
     @Test
     fun `given a room invitation when mapping to notification then is Append`() = testWith(notificationFactory) {
-        val expectedNotification = notificationUtils.givenBuildRoomInvitationNotificationFor(AN_INVITATION_EVENT)
+        val expectedNotification = androidNotificationFactory.givenCreateRoomInvitationNotificationFor(AN_INVITATION_EVENT)
         val roomInvitation = listOf(ProcessedEvent(ProcessedEvent.Type.KEEP, AN_INVITATION_EVENT))
 
         val result = roomInvitation.toNotifications()
@@ -85,7 +85,7 @@ class NotificationFactoryTest {
 
     @Test
     fun `given a simple event when mapping to notification then is Append`() = testWith(notificationFactory) {
-        val expectedNotification = notificationUtils.givenBuildSimpleInvitationNotificationFor(A_SIMPLE_EVENT)
+        val expectedNotification = androidNotificationFactory.givenCreateSimpleInvitationNotificationFor(A_SIMPLE_EVENT)
         val roomInvitation = listOf(ProcessedEvent(ProcessedEvent.Type.KEEP, A_SIMPLE_EVENT))
 
         val result = roomInvitation.toNotifications()
