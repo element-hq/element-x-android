@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.root
+package io.element.android.features.preferences.impl.developer
 
-import io.element.android.features.logout.api.LogoutPreferenceState
-import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 
-data class PreferencesRootState(
-    val logoutState: LogoutPreferenceState,
-    val rageshakeState: RageshakePreferencesState,
-    val myUser: Async<MatrixUser>,
-    val showDeveloperSettings: Boolean
-)
+sealed interface DeveloperSettingsEvents {
+    data class UpdateEnabledFeature(val feature: FeatureUiModel, val isEnabled: Boolean) : DeveloperSettingsEvents
+}

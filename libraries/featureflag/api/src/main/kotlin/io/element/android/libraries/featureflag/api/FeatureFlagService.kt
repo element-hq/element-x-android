@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.root
+package io.element.android.libraries.featureflag.api
 
-import io.element.android.features.logout.api.LogoutPreferenceState
-import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+interface FeatureFlagService {
 
-data class PreferencesRootState(
-    val logoutState: LogoutPreferenceState,
-    val rageshakeState: RageshakePreferencesState,
-    val myUser: Async<MatrixUser>,
-    val showDeveloperSettings: Boolean
-)
+    /**
+     * @param feature the feature to check for
+     *
+     * @return true if the feature is enabled
+     */
+    suspend fun isFeatureEnabled(feature: Feature): Boolean
+
+    /**
+     * @param feature the feature to enable or disable
+     * @param enabled true to enable the feature
+     *
+     * @return true if the method succeeds, ie if a RuntimeFeatureFlagProvider is registered
+     */
+    suspend fun setFeatureEnabled(feature: Feature, enabled: Boolean): Boolean
+}

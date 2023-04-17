@@ -23,5 +23,6 @@ import io.element.android.libraries.architecture.Async
 fun aPreferencesRootState() = PreferencesRootState(
     logoutState = aLogoutPreferenceState(),
     rageshakeState = aRageshakePreferencesState(),
-    myUser = Async.Uninitialized
+    myUser = Async.Uninitialized,
+    showDeveloperSettings = true
 )

@@ -16,6 +16,8 @@
 
 package io.element.android.features.preferences.impl.root
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DeveloperMode
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,6 +27,8 @@ import io.element.android.features.logout.api.LogoutPreferenceView
 import io.element.android.features.preferences.impl.user.UserPreferences
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesView
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
+import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.components.preferences.PreferenceView
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -38,6 +42,7 @@ fun PreferencesRootView(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
     onOpenRageShake: () -> Unit = {},
+    onOpenDeveloperSettings: () -> Unit = {},
 ) {
     // TODO Hierarchy!
     // Include pref from other modules
@@ -53,6 +58,20 @@ fun PreferencesRootView(
         )
         LogoutPreferenceView(
             state = state.logoutState,
+        )
+        if (state.showDeveloperSettings) {
+            DeveloperPreferencesView(onOpenDeveloperSettings)
+        }
+    }
+}
+
+@Composable
+fun DeveloperPreferencesView(onOpenDeveloperSettings: () -> Unit) {
+    PreferenceCategory(title = stringResource(id = StringR.string.common_developer_options)) {
+        PreferenceText(
+            title = stringResource(id = StringR.string.common_developer_options),
+            icon = Icons.Default.DeveloperMode,
+            onClick = onOpenDeveloperSettings
         )
     }
 }

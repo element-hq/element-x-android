@@ -21,22 +21,24 @@ import io.element.android.features.logout.api.LogoutPreferencePresenter
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.meta.BuildMeta
 import javax.inject.Inject
 
 class PreferencesRootPresenter @Inject constructor(
     private val logoutPresenter: LogoutPreferencePresenter,
     private val rageshakePresenter: RageshakePreferencesPresenter,
+    private val buildMeta: BuildMeta,
 ) : Presenter<PreferencesRootState> {
 
     @Composable
     override fun present(): PreferencesRootState {
         val logoutState = logoutPresenter.present()
         val rageshakeState = rageshakePresenter.present()
-
         return PreferencesRootState(
             logoutState = logoutState,
             rageshakeState = rageshakeState,
             myUser = Async.Uninitialized,
+            showDeveloperSettings = buildMeta.isDebug
         )
     }
 }

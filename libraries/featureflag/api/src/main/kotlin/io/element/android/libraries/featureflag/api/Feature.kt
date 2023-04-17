@@ -14,16 +14,26 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.root
+package io.element.android.libraries.featureflag.api
 
-import io.element.android.features.logout.api.LogoutPreferenceState
-import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+interface Feature {
+    /**
+     * Unique key to identify the feature.
+     */
+    val key: String
 
-data class PreferencesRootState(
-    val logoutState: LogoutPreferenceState,
-    val rageshakeState: RageshakePreferencesState,
-    val myUser: Async<MatrixUser>,
-    val showDeveloperSettings: Boolean
-)
+    /**
+     * Title to show in the UI. Not needed to be translated as it's only dev accessible.
+     */
+    val title: String
+
+    /**
+     * Optional description to give more context on the feature.
+     */
+    val description: String?
+
+    /**
+     * The default value of the feature (enabled or disabled).
+     */
+    val defaultValue: Boolean
+}

@@ -1,5 +1,7 @@
 import java.net.URI
 
+include(":libraries:featureflag:ui")
+
 /*
  * Copyright (c) 2022 New Vector Ltd
  *

@@ -14,16 +14,26 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.root
+// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
+@Suppress("DSL_SCOPE_VIOLATION")
+plugins {
+    id("io.element.android-compose-library")
+    alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
+    id("kotlin-parcelize")
+}
 
-import io.element.android.features.logout.api.LogoutPreferenceState
-import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+android {
+    namespace = "io.element.android.libraries.featureflag.ui"
+}
 
-data class PreferencesRootState(
-    val logoutState: LogoutPreferenceState,
-    val rageshakeState: RageshakePreferencesState,
-    val myUser: Async<MatrixUser>,
-    val showDeveloperSettings: Boolean
-)
+anvil {
+    generateDaggerFactories.set(true)
+}
+
+dependencies {
+    implementation(projects.anvilannotations)
+    anvil(projects.anvilcodegen)
+    implementation(projects.libraries.designsystem)
+    ksp(libs.showkase.processor)
+}

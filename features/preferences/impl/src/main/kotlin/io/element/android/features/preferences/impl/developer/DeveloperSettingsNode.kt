@@ -14,49 +14,32 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.root
+package io.element.android.features.preferences.impl.developer
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
-class PreferencesRootNode @AssistedInject constructor(
+class DeveloperSettingsNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: PreferencesRootPresenter,
+    private val presenter: DeveloperSettingsPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
-    interface Callback : Plugin {
-        fun onOpenBugReport()
-        fun onOpenDeveloperSettings()
-    }
-
-    private fun onOpenBugReport() {
-        plugins<Callback>().forEach { it.onOpenBugReport() }
-    }
-
-    private fun onOpenDeveloperSettings() {
-        plugins<Callback>().forEach { it.onOpenDeveloperSettings() }
-    }
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        PreferencesRootView(
+        DeveloperSettingsView(
             state = state,
             modifier = modifier,
-            onBackPressed = this::navigateUp,
-            onOpenRageShake = this::onOpenBugReport,
-            onOpenDeveloperSettings = this::onOpenDeveloperSettings
+            onBackPressed = this::navigateUp
         )
     }
-
 }
