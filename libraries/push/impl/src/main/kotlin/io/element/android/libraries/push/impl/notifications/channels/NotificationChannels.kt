@@ -33,7 +33,7 @@ import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
 
 /**
- * on devices >= android O, we need to define a channel for each notifications
+ * on devices >= android O, we need to define a channel for each notifications.
  */
 @SingleIn(AppScope::class)
 class NotificationChannels @Inject constructor(
