@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.impl.timeline.item.event
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.asEventId
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
@@ -69,7 +70,7 @@ class EventMessageMapper {
         }
         MessageContent(
             body = message.body(),
-            inReplyTo = message.inReplyTo()?.eventId?.let { EventId(it) },
+            inReplyTo = message.inReplyTo()?.eventId?.asEventId(),
             isEdited = message.isEdited(),
             type = type
         )
