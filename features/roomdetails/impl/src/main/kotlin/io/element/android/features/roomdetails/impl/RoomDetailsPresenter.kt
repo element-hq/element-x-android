@@ -25,6 +25,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +35,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RoomDetailsPresenter @Inject constructor(
+    private val sessionId: SessionId,
     private val room: MatrixRoom,
     private val roomMembershipObserver: RoomMembershipObserver,
 ) : Presenter<RoomDetailsState> {
@@ -46,6 +49,7 @@ class RoomDetailsPresenter @Inject constructor(
         var error by remember {
             mutableStateOf<RoomDetailsError?>(null)
         }
+
         var memberCount: Async<Int> by remember { mutableStateOf(Async.Loading()) }
         LaunchedEffect(Unit) {
             withContext(Dispatchers.IO) {
@@ -56,6 +60,14 @@ class RoomDetailsPresenter @Inject constructor(
                     )
             }
         }
+
+        val dmMember = room.getDmMember()
+        val roomType = if (dmMember != null) {
+            RoomDetailsType.Dm(dmMember)
+        } else {
+            RoomDetailsType.Room
+        }
+
         fun handleEvents(event: RoomDetailsEvent) {
             when (event) {
                 is RoomDetailsEvent.LeaveRoom -> {
@@ -78,7 +90,6 @@ class RoomDetailsPresenter @Inject constructor(
             }
         }
 
-
         return RoomDetailsState(
             roomId = room.roomId.value,
             roomName = room.name ?: room.displayName,
@@ -89,7 +100,8 @@ class RoomDetailsPresenter @Inject constructor(
             isEncrypted = room.isEncrypted,
             displayLeaveRoomWarning = leaveRoomWarning,
             error = error,
-            eventSink = ::handleEvents
+            roomType = roomType,
+            eventSink = ::handleEvents,
         )
     }
 }

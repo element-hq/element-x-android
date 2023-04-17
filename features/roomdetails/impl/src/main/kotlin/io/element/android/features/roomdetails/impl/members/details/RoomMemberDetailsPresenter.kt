@@ -17,6 +17,8 @@
 package io.element.android.features.roomdetails.impl.members.details
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.Presenter
@@ -40,10 +42,22 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
 //            }
 //        }
 
+        val userName by produceState(initialValue = roomMember.displayName) {
+            room.userDisplayName(roomMember.userId).onSuccess { displayName ->
+                if (displayName != null) value = displayName
+            }
+        }
+
+        val userAvatar by produceState(initialValue = roomMember.avatarUrl) {
+            room.userAvatarUrl(roomMember.userId).onSuccess { avatarUrl ->
+                if (avatarUrl != null) value = avatarUrl
+            }
+        }
+
         return RoomMemberDetailsState(
-            userId = roomMember.userId,
-            userName = roomMember.displayName,
-            avatarUrl = roomMember.avatarUrl,
+            userId = roomMember.userId.value,
+            userName = userName,
+            avatarUrl = userAvatar,
             isBlocked = roomMember.isIgnored,
 //            eventSink = ::handleEvents
         )

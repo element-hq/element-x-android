@@ -32,6 +32,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -49,7 +50,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - initial state is created from room info`() = runTest {
         val room = aMatrixRoom()
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver)
+        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -68,7 +69,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - room member count is calculated asynchronously`() = runTest {
         val room = aMatrixRoom()
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver)
+        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -83,7 +84,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - initial state with no room name`() = runTest {
         val room = aMatrixRoom(name = null)
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver)
+        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -99,7 +100,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom(name = null).apply {
             givenFetchMemberResult(Result.failure(Throwable()))
         }
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver)
+        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -113,7 +114,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - Leave with confirmation on private room shows a specific warning`() = runTest {
         val room = aMatrixRoom(isPublic = false)
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver)
+        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -130,7 +131,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - Leave with confirmation on empty room shows a specific warning`() = runTest {
         val room = aMatrixRoom(members = listOf(aRoomMember()))
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver)
+        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -147,7 +148,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - Leave with confirmation shows a generic warning`() = runTest {
         val room = aMatrixRoom()
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver)
+        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -164,7 +165,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - Leave without confirmation leaves the room`() = runTest {
         val room = aMatrixRoom()
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver)
+        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -188,7 +189,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom().apply {
             givenLeaveRoomError(Throwable())
         }
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver)
+        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -235,7 +236,7 @@ fun aRoomMember(
     normalizedPowerLevel: Long = 0L,
     isIgnored: Boolean = false,
 ) = RoomMember(
-    userId = userId.value,
+    userId = userId,
     displayName = displayName,
     avatarUrl = avatarUrl,
     membership = membership,

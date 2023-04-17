@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.room
 
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import org.matrix.rustcomponents.sdk.MembershipState as RustMembershipState
@@ -25,7 +26,7 @@ object RoomMemberMapper {
 
     fun map(roomMember: RustRoomMember): RoomMember =
         RoomMember(
-            roomMember.userId(),
+            UserId(roomMember.userId()),
             roomMember.displayName(),
             roomMember.avatarUrl(),
             mapMembership(roomMember.membership()),

@@ -17,11 +17,12 @@
 package io.element.android.libraries.matrix.api.room
 
 import android.os.Parcelable
+import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class RoomMember(
-    val userId: String,
+    val userId: UserId,
     val displayName: String?,
     val avatarUrl: String?,
     val membership: RoomMembershipState,

@@ -16,7 +16,4 @@
 
 package io.element.android.features.roomdetails.impl.members.details
 
-// TODO Add your events or remove the file completely if no events
-sealed interface RoomMemberDetailsEvents {
-    object MyEvent : RoomMemberDetailsEvents
-}
+sealed interface RoomMemberDetailsEvents

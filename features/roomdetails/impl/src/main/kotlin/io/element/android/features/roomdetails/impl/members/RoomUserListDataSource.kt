@@ -34,7 +34,8 @@ class RoomUserListDataSource @Inject constructor(
             if (query.isBlank()) {
                 true
             } else {
-                member.userId.contains(query, ignoreCase = true) || member.displayName?.contains(query, ignoreCase = true).orFalse()
+                member.userId.value.contains(query, ignoreCase = true)
+                    || member.displayName?.contains(query, ignoreCase = true).orFalse()
             }
         }.map(::mapMemberToMatrixUser)
     }
@@ -45,10 +46,10 @@ class RoomUserListDataSource @Inject constructor(
 
     private fun mapMemberToMatrixUser(member: RoomMember): MatrixUser {
         return MatrixUser(
-            id = UserId(member.userId),
+            id = member.userId,
             username = member.displayName,
             avatarData = AvatarData(
-                id = member.userId,
+                id = member.userId.value,
                 name = member.displayName,
                 url = member.avatarUrl
             )
