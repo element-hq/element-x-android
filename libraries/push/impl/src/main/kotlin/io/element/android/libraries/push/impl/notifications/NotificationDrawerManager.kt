@@ -70,7 +70,8 @@ class NotificationDrawerManager @Inject constructor(
     private var currentAppNavigationState: AppNavigationState? = null
     private val firstThrottler = FirstThrottler(200)
 
-    private var useCompleteNotificationFormat = pushDataStore.useCompleteNotificationFormat()
+    // TODO EAx add a setting per user for this
+    private var useCompleteNotificationFormat = true
 
     init {
         handlerThread.start()
@@ -111,12 +112,6 @@ class NotificationDrawerManager @Inject constructor(
     }
 
     private fun NotificationEventQueue.onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
-        if (!pushDataStore.areNotificationEnabledForDevice()) {
-            Timber.i("Notification are disabled for this device")
-            return
-        }
-        // If we support multi session, event list should be per userId
-        // Currently only manage single session
         if (buildMeta.lowPrivacyLoggingEnabled) {
             Timber.d("onNotifiableEventReceived(): $notifiableEvent")
         } else {
@@ -185,7 +180,7 @@ class NotificationDrawerManager @Inject constructor(
     // TODO EAx Must be per account
     fun notificationStyleChanged() {
         updateEvents {
-            val newSettings = pushDataStore.useCompleteNotificationFormat()
+            val newSettings = true // pushDataStore.useCompleteNotificationFormat()
             if (newSettings != useCompleteNotificationFormat) {
                 // Settings has changed, remove all current notifications
                 notificationRenderer.cancelAllNotifications()

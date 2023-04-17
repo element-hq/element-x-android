@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.media.MediaResolver
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.pusher.PushersService
@@ -45,6 +46,7 @@ class FakeMatrixClient(
     private val notificationService: FakeNotificationService = FakeNotificationService(),
 ) : MatrixClient {
 
+    private var createRoomResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmFailure: Throwable? = null
     private var findDmResult: MatrixRoom? = FakeMatrixRoom()
@@ -54,14 +56,19 @@ class FakeMatrixClient(
         return FakeMatrixRoom(roomId)
     }
 
+    override fun findDM(userId: UserId): MatrixRoom? {
+        return findDmResult
+    }
+
+    override suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId> {
+        delay(100)
+        return createRoomResult
+    }
+
     override suspend fun createDM(userId: UserId): Result<RoomId> {
         delay(100)
         createDmFailure?.let { throw it }
         return createDmResult
-    }
-
-    override fun findDM(userId: UserId): MatrixRoom? {
-        return findDmResult
     }
 
     override fun startSync() = Unit
@@ -104,13 +111,17 @@ class FakeMatrixClient(
     override fun onSlidingSyncUpdate() {}
 
     override fun roomMembershipObserver(): RoomMembershipObserver {
-        return RoomMembershipObserver(A_SESSION_ID)
+        return RoomMembershipObserver()
     }
 
     // Mocks
 
     fun givenLogoutError(failure: Throwable?) {
         logoutFailure = failure
+    }
+
+    fun givenCreateRoomResult(result: Result<RoomId>) {
+        createRoomResult = result
     }
 
     fun givenCreateDmResult(result: Result<RoomId>) {

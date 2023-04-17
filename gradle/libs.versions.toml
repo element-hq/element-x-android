@@ -6,7 +6,7 @@
 android_gradle_plugin = "7.4.2"
 kotlin = "1.8.10"
 ksp = "1.8.10-1.0.9"
-molecule = "0.8.0"
+molecule = "0.9.0"
 
 # AndroidX
 material = "1.8.0"
@@ -19,7 +19,7 @@ activity = "1.7.0"
 startup = "1.1.1"
 
 # Compose
-compose_bom = "2023.03.00"
+compose_bom = "2023.04.00"
 composecompiler = "1.4.2"
 
 # Coroutines
@@ -37,7 +37,7 @@ datetime = "0.4.0"
 serialization_json = "1.5.0"
 showkase = "1.0.0-beta17"
 jsoup = "1.15.4"
-appyx = "1.1.2"
+appyx = "1.2.0"
 dependencycheck = "8.2.1"
 stem = "2.3.0"
 sqldelight = "1.5.5"
@@ -103,11 +103,12 @@ network_retrofit_converter_serialization = "com.jakewharton.retrofit:retrofit2-k
 # Test
 test_core = { module = "androidx.test:core", version.ref = "test_core" }
 test_corektx = { module = "androidx.test:core-ktx", version.ref = "test_core" }
+test_arch_core = "androidx.arch.core:core-testing:2.2.0"
 test_junit = "junit:junit:4.13.2"
 test_runner = "androidx.test:runner:1.5.2"
 test_uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 test_junitext = "androidx.test.ext:junit:1.1.5"
-test_mockk = "io.mockk:mockk:1.13.4"
+test_mockk = "io.mockk:mockk:1.13.5"
 test_barista = "com.adevinta.android:barista:4.3.0"
 test_hamcrest = "org.hamcrest:hamcrest:2.2"
 test_orchestrator = "androidx.test:orchestrator:1.4.2"
@@ -115,6 +116,7 @@ test_turbine = "app.cash.turbine:turbine:0.12.1"
 test_truth = "com.google.truth:truth:1.1.3"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.11"
 test_robolectric = "org.robolectric:robolectric:4.9.2"
+test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 
 # Others
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
@@ -133,6 +135,8 @@ sqldelight-driver-jvm = { module = "com.squareup.sqldelight:sqlite-driver", vers
 sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 sqlcipher = "net.zetetic:android-database-sqlcipher:4.5.3"
 sqlite = "androidx.sqlite:sqlite:2.3.1"
+unifiedpush = "com.github.UnifiedPush:android-connector:2.1.1"
+gujun_span = "me.gujun.android:span:1.7"
 
 # Di
 inject = "javax.inject:javax.inject:1"

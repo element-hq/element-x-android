@@ -35,7 +35,20 @@ open class MatrixUserProvider : PreviewParameterProvider<MatrixUser> {
 fun aMatrixUser(id: String = "@id_of_alice:server.org", userName: String = "Alice") = MatrixUser(
     id = UserId(id),
     username = userName,
-    avatarData = anAvatarData()
+    avatarData = anAvatarData(id, userName)
+)
+
+fun aMatrixUserList() = listOf(
+    aMatrixUser("@alice:server.org", "Alice"),
+    aMatrixUser("@bob:server.org", "Bob"),
+    aMatrixUser("@carol:server.org", "Carol"),
+    aMatrixUser("@david:server.org", "David"),
+    aMatrixUser("@eve:server.org", "Eve"),
+    aMatrixUser("@justin:server.org", "Justin"),
+    aMatrixUser("@mallory:server.org", "Mallory"),
+    aMatrixUser("@susie:server.org", "Susie"),
+    aMatrixUser("@victor:server.org", "Victor"),
+    aMatrixUser("@walter:server.org", "Walter"),
 )
 
 open class MatrixUserWithNullProvider : PreviewParameterProvider<MatrixUser?> {

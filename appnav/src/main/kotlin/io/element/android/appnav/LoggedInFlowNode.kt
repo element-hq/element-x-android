@@ -33,6 +33,7 @@ import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
+import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
@@ -56,10 +57,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import kotlinx.parcelize.Parcelize
-import kotlin.coroutines.coroutineContext
 
 @ContributesNode(AppScope::class)
 class LoggedInFlowNode @AssistedInject constructor(
@@ -110,17 +108,17 @@ class LoggedInFlowNode @AssistedInject constructor(
                 val imageLoaderFactory = bindings<MatrixUIBindings>().loggedInImageLoaderFactory()
                 Coil.setImageLoader(imageLoaderFactory)
                 inputs.matrixClient.startSync()
-                appNavigationStateService.onNavigateToSession(inputs.matrixClient.sessionId)
+                appNavigationStateService.onNavigateToSession(id, inputs.matrixClient.sessionId)
                 // TODO We do not support Space yet, so directly navigate to main space
-                appNavigationStateService.onNavigateToSpace(MAIN_SPACE)
+                appNavigationStateService.onNavigateToSpace(id, MAIN_SPACE)
                 loggedInFlowProcessor.observeEvents(coroutineScope)
             },
             onDestroy = {
                 val imageLoaderFactory = bindings<MatrixUIBindings>().notLoggedInImageLoaderFactory()
                 Coil.setImageLoader(imageLoaderFactory)
                 plugins<LifecycleCallback>().forEach { it.onFlowReleased(inputs.matrixClient) }
-                appNavigationStateService.onLeavingSpace()
-                appNavigationStateService.onLeavingSession()
+                appNavigationStateService.onLeavingSpace(id)
+                appNavigationStateService.onLeavingSession(id)
                 loggedInFlowProcessor.stopObserving()
             }
         )
@@ -201,7 +199,7 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
             NavTarget.CreateRoom -> {
                 val callback = object : CreateRoomEntryPoint.Callback {
-                    override fun onOpenRoom(roomId: RoomId) {
+                    override fun onSuccess(roomId: RoomId) {
                         backstack.replace(NavTarget.Room(roomId))
                     }
                 }
@@ -214,6 +212,19 @@ class LoggedInFlowNode @AssistedInject constructor(
             NavTarget.VerifySession -> {
                 verifySessionEntryPoint.createNode(this, buildContext)
             }
+        }
+    }
+
+    suspend fun attachRoot(): Node {
+        return attachChild {
+            backstack.singleTop(NavTarget.RoomList)
+        }
+    }
+
+    suspend fun attachRoom(roomId: RoomId): RoomFlowNode {
+        return attachChild {
+            backstack.singleTop(NavTarget.RoomList)
+            backstack.push(NavTarget.Room(roomId))
         }
     }
 

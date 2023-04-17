@@ -43,8 +43,10 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
+    implementation(projects.libraries.deeplink)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.push.api)
+    implementation(projects.libraries.pushproviders.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.uiStrings)
@@ -66,4 +68,7 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.features.rageshake.impl)
+    testImplementation(projects.services.appnavstate.test)
+    testImplementation(libs.test.appyx.junit)
+    testImplementation(libs.test.arch.core)
 }

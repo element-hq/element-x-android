@@ -16,20 +16,19 @@
 
 package io.element.android.libraries.push.impl
 
+import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.log.logger.LoggerTag
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
-import io.element.android.libraries.push.impl.clientsecret.PushClientSecret
 import io.element.android.libraries.push.impl.config.PushConfig
 import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest
-import io.element.android.libraries.push.impl.userpushstore.UserPushStoreFactory
-import io.element.android.libraries.push.impl.userpushstore.isFirebase
-import io.element.android.libraries.sessionstorage.api.SessionStore
-import io.element.android.libraries.sessionstorage.api.toUserList
+import io.element.android.libraries.push.providers.api.PusherSubscriber
+import io.element.android.libraries.pushstore.api.UserPushStoreFactory
+import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.services.toolbox.api.appname.AppNameProvider
 import timber.log.Timber
 import javax.inject.Inject
@@ -38,62 +37,32 @@ internal const val DEFAULT_PUSHER_FILE_TAG = "mobile"
 
 private val loggerTag = LoggerTag("PushersManager", pushLoggerTag)
 
+@ContributesBinding(AppScope::class)
 class PushersManager @Inject constructor(
-    private val unifiedPushHelper: UnifiedPushHelper,
     // private val localeProvider: LocaleProvider,
     private val appNameProvider: AppNameProvider,
     // private val getDeviceInfoUseCase: GetDeviceInfoUseCase,
     private val pushGatewayNotifyRequest: PushGatewayNotifyRequest,
     private val pushClientSecret: PushClientSecret,
-    private val sessionStore: SessionStore,
-    private val matrixAuthenticationService: MatrixAuthenticationService,
     private val userPushStoreFactory: UserPushStoreFactory,
-    private val fcmHelper: FcmHelper,
-) {
+) : PusherSubscriber {
+    // TODO Move this to the PushProvider API
     suspend fun testPush() {
         pushGatewayNotifyRequest.execute(
             PushGatewayNotifyRequest.Params(
-                url = unifiedPushHelper.getPushGateway() ?: return,
+                url = "TODO", // unifiedPushHelper.getPushGateway() ?: return,
                 appId = PushConfig.pusher_app_id,
-                pushKey = unifiedPushHelper.getEndpointOrToken().orEmpty(),
+                pushKey = "TODO", // unifiedPushHelper.getEndpointOrToken().orEmpty(),
                 eventId = TEST_EVENT_ID
             )
         )
     }
 
-    suspend fun enqueueRegisterPusherWithFcmKey(pushKey: String) {
-        // return onNewFirebaseToken(pushKey, PushConfig.pusher_http_url)
-        TODO()
-    }
-
-    suspend fun onNewUnifiedPushEndpoint(
-        pushKey: String,
-        gateway: String
-    ) {
-        TODO()
-    }
-
-    suspend fun onNewFirebaseToken(firebaseToken: String) {
-        fcmHelper.storeFcmToken(firebaseToken)
-
-        // Register the pusher for all the sessions
-        sessionStore.getAllSessions().toUserList().forEach { userId ->
-            val userDataStore = userPushStoreFactory.create(userId)
-            if (userDataStore.isFirebase()) {
-                matrixAuthenticationService.restoreSession(SessionId(userId)).getOrNull()?.use { client ->
-                    registerPusher(client, firebaseToken, PushConfig.pusher_http_url)
-                }
-            } else {
-                Timber.tag(loggerTag.value).d("This session is not using Firebase pusher")
-            }
-        }
-    }
-
     /**
      * Register a pusher to the server if not done yet.
      */
-    suspend fun registerPusher(matrixClient: MatrixClient, pushKey: String, gateway: String) {
-        val userDataStore = userPushStoreFactory.create(matrixClient.sessionId.value)
+    override suspend fun registerPusher(matrixClient: MatrixClient, pushKey: String, gateway: String) {
+        val userDataStore = userPushStoreFactory.create(matrixClient.sessionId)
         if (userDataStore.getCurrentRegisteredPushKey() == pushKey) {
             Timber.tag(loggerTag.value).d("Unnecessary to register again the same pusher")
         } else {
@@ -162,9 +131,8 @@ class PushersManager @Inject constructor(
         // currentSession.pushersService().removeEmailPusher(email)
     }
 
-    suspend fun unregisterPusher(pushKey: String) {
-        // val currentSession = activeSessionHolder.getSafeActiveSession() ?: return
-        // currentSession.pushersService().removeHttpPusher(pushKey, PushConfig.pusher_app_id)
+    override suspend fun unregisterPusher(matrixClient: MatrixClient, pushKey: String, gateway: String) {
+        matrixClient.pushersService().unsetHttpPusher()
     }
 
     companion object {

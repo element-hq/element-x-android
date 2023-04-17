@@ -16,11 +16,10 @@
 
 package io.element.android.features.userlist.api
 
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 open class UserListStateProvider : PreviewParameterProvider<UserListState> {
     override val values: Sequence<UserListState>
@@ -38,14 +37,14 @@ open class UserListStateProvider : PreviewParameterProvider<UserListState> {
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
                 selectedUsers = aListOfSelectedUsers(),
-                searchResults = aListOfResults(),
+                searchResults = aMatrixUserList().toImmutableList(),
             ),
             aUserListState().copy(
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
                 selectionMode = SelectionMode.Multiple,
                 selectedUsers = aListOfSelectedUsers(),
-                searchResults = aListOfResults(),
+                searchResults = aMatrixUserList().toImmutableList(),
             )
         )
 }
@@ -55,33 +54,8 @@ fun aUserListState() = UserListState(
     searchQuery = "",
     searchResults = persistentListOf(),
     selectedUsers = persistentListOf(),
-    selectedUsersListState = LazyListState(
-        firstVisibleItemIndex = 0,
-        firstVisibleItemScrollOffset = 0,
-    ),
     selectionMode = SelectionMode.Single,
     eventSink = {}
 )
 
-fun aListOfSelectedUsers() = persistentListOf(
-    MatrixUser(id = UserId("@someone:matrix.org")),
-    MatrixUser(id = UserId("@other:matrix.org"), username = "other"),
-)
-
-fun aListOfResults() = persistentListOf(
-    MatrixUser(id = UserId("@someone:matrix.org")),
-    MatrixUser(id = UserId("@other:matrix.org"), username = "other"),
-    MatrixUser(
-        id = UserId("@someone_with_a_very_long_matrix_identifier:a_very_long_domain.org"),
-        username = "hey, I am someone with a very long display name"
-    ),
-    MatrixUser(id = UserId("@someone_2:matrix.org"), username = "someone 2"),
-    MatrixUser(id = UserId("@someone_3:matrix.org"), username = "someone 3"),
-    MatrixUser(id = UserId("@someone_4:matrix.org"), username = "someone 4"),
-    MatrixUser(id = UserId("@someone_5:matrix.org"), username = "someone 5"),
-    MatrixUser(id = UserId("@someone_6:matrix.org"), username = "someone 6"),
-    MatrixUser(id = UserId("@someone_7:matrix.org"), username = "someone 7"),
-    MatrixUser(id = UserId("@someone_8:matrix.org"), username = "someone 8"),
-    MatrixUser(id = UserId("@someone_9:matrix.org"), username = "someone 9"),
-    MatrixUser(id = UserId("@someone_10:matrix.org"), username = "someone 10"),
-)
+fun aListOfSelectedUsers() = aMatrixUserList().take(6).toImmutableList()

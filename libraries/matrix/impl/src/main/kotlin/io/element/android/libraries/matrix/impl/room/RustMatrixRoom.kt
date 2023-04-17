@@ -70,7 +70,7 @@ class RustMatrixRoom(
     }
 
     override fun getMember(userId: UserId): RoomMember? {
-        return cachedMembers.firstOrNull { it.userId == userId.value }
+        return cachedMembers.find { it.userId == userId.value }
     }
 
     override fun getDmMember(currentUserId: UserId): RoomMember? {
@@ -101,6 +101,7 @@ class RustMatrixRoom(
             coroutineDispatchers = coroutineDispatchers
         )
     }
+
     override fun close() {
         innerRoom.destroy()
         slidingSyncRoom.destroy()
@@ -199,7 +200,9 @@ class RustMatrixRoom(
         }
     }
 
-    override fun leave(): Result<Unit> {
-        return runCatching { innerRoom.leave() }
+    override suspend fun leave(): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            innerRoom.leave()
+        }
     }
 }

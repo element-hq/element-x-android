@@ -130,7 +130,7 @@ class FakeMatrixRoom(
         return Result.success(Unit)
     }
 
-    override fun leave(): Result<Unit> = leaveRoomError?.let { Result.failure(it) } ?: Result.success(Unit)
+    override suspend fun leave(): Result<Unit> = leaveRoomError?.let { Result.failure(it) } ?: Result.success(Unit)
 
     override fun close() = Unit
 

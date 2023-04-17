@@ -16,7 +16,6 @@
 
 package io.element.android.features.userlist.api
 
-import androidx.compose.foundation.lazy.LazyListState
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
@@ -24,7 +23,6 @@ data class UserListState(
     val searchQuery: String,
     val searchResults: ImmutableList<MatrixUser>,
     val selectedUsers: ImmutableList<MatrixUser>,
-    val selectedUsersListState: LazyListState,
     val isSearchActive: Boolean,
     val selectionMode: SelectionMode,
     val eventSink: (UserListEvents) -> Unit,

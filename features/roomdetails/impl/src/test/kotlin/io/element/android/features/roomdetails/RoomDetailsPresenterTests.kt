@@ -45,7 +45,7 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class RoomDetailsPresenterTests {
 
-    private val roomMembershipObserver = RoomMembershipObserver(A_SESSION_ID)
+    private val roomMembershipObserver = RoomMembershipObserver()
 
     @Test
     fun `present - initial state is created from room info`() = runTest {

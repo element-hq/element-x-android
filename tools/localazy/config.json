@@ -28,7 +28,8 @@
     {
       "name": ":features:createroom:impl",
       "includeRegex": [
-        "screen_create_room_.*"
+        "screen_create_room_.*",
+        "screen_start_chat_.*"
       ]
     },
     {
@@ -41,6 +42,12 @@
       "name": ":libraries:textcomposer",
       "includeRegex": [
         "rich_text_editor_.*"
+      ]
+    },
+    {
+      "name": ":libraries:androidutils",
+      "includeRegex": [
+        "error_no_compatible_app_found"
       ]
     },
     {

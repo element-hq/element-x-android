@@ -25,15 +25,15 @@ import kotlinx.coroutines.flow.StateFlow
 interface AppNavigationStateService {
     val appNavigationStateFlow: StateFlow<AppNavigationState>
 
-    fun onNavigateToSession(sessionId: SessionId)
-    fun onLeavingSession()
+    fun onNavigateToSession(owner: String, sessionId: SessionId)
+    fun onLeavingSession(owner: String)
 
-    fun onNavigateToSpace(spaceId: SpaceId)
-    fun onLeavingSpace()
+    fun onNavigateToSpace(owner: String, spaceId: SpaceId)
+    fun onLeavingSpace(owner: String)
 
-    fun onNavigateToRoom(roomId: RoomId)
-    fun onLeavingRoom()
+    fun onNavigateToRoom(owner: String, roomId: RoomId)
+    fun onLeavingRoom(owner: String)
 
-    fun onNavigateToThread(threadId: ThreadId)
-    fun onLeavingThread()
+    fun onNavigateToThread(owner: String, threadId: ThreadId)
+    fun onLeavingThread(owner: String)
 }

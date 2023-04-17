@@ -62,5 +62,5 @@ interface MatrixRoom: Closeable {
 
     suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>
 
-    fun leave(): Result<Unit>
+    suspend fun leave(): Result<Unit>
 }

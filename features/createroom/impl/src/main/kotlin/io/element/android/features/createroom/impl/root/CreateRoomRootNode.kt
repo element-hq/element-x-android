@@ -37,7 +37,7 @@ class CreateRoomRootNode @AssistedInject constructor(
 
     interface Callback : Plugin {
         fun onCreateNewRoom()
-        fun onOpenRoom(roomId: RoomId)
+        fun onStartChatSuccess(roomId: RoomId)
     }
 
     private val callback = object : Callback {
@@ -45,8 +45,8 @@ class CreateRoomRootNode @AssistedInject constructor(
             plugins<Callback>().forEach { it.onCreateNewRoom() }
         }
 
-        override fun onOpenRoom(roomId: RoomId) {
-            plugins<Callback>().forEach { it.onOpenRoom(roomId) }
+        override fun onStartChatSuccess(roomId: RoomId) {
+            plugins<Callback>().forEach { it.onStartChatSuccess(roomId) }
         }
     }
 
@@ -58,7 +58,7 @@ class CreateRoomRootNode @AssistedInject constructor(
             modifier = modifier,
             onClosePressed = this::navigateUp,
             onNewRoomClicked = callback::onCreateNewRoom,
-            onOpenDM = callback::onOpenRoom,
+            onOpenDM = callback::onStartChatSuccess,
         )
     }
 }

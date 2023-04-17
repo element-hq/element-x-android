@@ -92,7 +92,7 @@ fun RoomDetailsView(
                     roomName = state.roomName,
                     roomAlias = state.roomAlias
                 )
-                RoomShareSection(onShareUser = onShareRoom)
+                RoomShareSection(onShareRoom = onShareRoom)
             } else {
                 RoomMemberHeaderSection(
                     avatarUrl = state.roomAvatarUrl ?: state.dmMember.avatarUrl,
@@ -149,12 +149,12 @@ fun RoomDetailsView(
 }
 
 @Composable
-internal fun RoomShareSection(onShareUser: () -> Unit, modifier: Modifier = Modifier) {
+internal fun RoomShareSection(onShareRoom: () -> Unit, modifier: Modifier = Modifier) {
     PreferenceCategory(modifier = modifier) {
         PreferenceText(
             title = stringResource(R.string.screen_room_details_share_room_title),
             icon = Icons.Outlined.Share,
-            onClick = onShareUser,
+            onClick = onShareRoom,
         )
     }
 }

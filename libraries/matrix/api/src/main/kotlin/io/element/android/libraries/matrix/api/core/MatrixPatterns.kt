@@ -92,6 +92,14 @@ object MatrixPatterns {
     )
 
     /**
+     * Tells if a string is a valid session Id. This is an alias for [isUserId]
+     *
+     * @param str the string to test
+     * @return true if the string is a valid session id
+     */
+    fun isSessionId(str: String?) = isUserId(str)
+
+    /**
      * Tells if a string is a valid user Id.
      *
      * @param str the string to test
@@ -100,6 +108,14 @@ object MatrixPatterns {
     fun isUserId(str: String?): Boolean {
         return str != null && str matches PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER
     }
+
+    /**
+     * Tells if a string is a valid space id. This is an alias for [isRoomId]
+     *
+     * @param str the string to test
+     * @return true if the string is a valid space Id
+     */
+    fun isSpaceId(str: String?) = isRoomId(str)
 
     /**
      * Tells if a string is a valid room id.
@@ -133,6 +149,14 @@ object MatrixPatterns {
                 str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V3 ||
                 str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V4)
     }
+
+    /**
+     * Tells if a string is a valid thread id. This is an alias for [isEventId].
+     *
+     * @param str the string to test
+     * @return true if the string is a valid thread id.
+     */
+    fun isThreadId(str: String?) = isEventId(str)
 
     /**
      * Tells if a string is a valid group id.

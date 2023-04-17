@@ -4,8 +4,10 @@
   <string name="a11y_send_files">"Send files"</string>
   <string name="a11y_show_password">"Show password"</string>
   <string name="a11y_user_menu">"User menu"</string>
+  <string name="action_accept">"Accept"</string>
   <string name="action_back">"Back"</string>
   <string name="action_cancel">"Cancel"</string>
+  <string name="action_choose_photo">"Choose photo"</string>
   <string name="action_clear">"Clear"</string>
   <string name="action_close">"Close"</string>
   <string name="action_complete_verification">"Complete verification"</string>
@@ -13,13 +15,16 @@
   <string name="action_continue">"Continue"</string>
   <string name="action_copy">"Copy"</string>
   <string name="action_copy_link">"Copy link"</string>
+  <string name="action_create">"Create"</string>
   <string name="action_create_a_room">"Create a room"</string>
+  <string name="action_decline">"Decline"</string>
   <string name="action_disable">"Disable"</string>
   <string name="action_done">"Done"</string>
   <string name="action_edit">"Edit"</string>
   <string name="action_enable">"Enable"</string>
   <string name="action_invite">"Invite"</string>
   <string name="action_invite_friends_to_app">"Invite friends to %1$s"</string>
+  <string name="action_invites_list">"Invites"</string>
   <string name="action_learn_more">"Learn more"</string>
   <string name="action_leave">"Leave"</string>
   <string name="action_leave_room">"Leave room"</string>
@@ -45,6 +50,7 @@
   <string name="action_start">"Start"</string>
   <string name="action_start_chat">"Start chat"</string>
   <string name="action_start_verification">"Start verification"</string>
+  <string name="action_take_photo">"Take photo"</string>
   <string name="action_view_source">"View Source"</string>
   <string name="action_yes">"Yes"</string>
   <string name="common_about">"About"</string>
@@ -108,7 +114,6 @@
   <string name="emoji_picker_category_symbols">"Symbols"</string>
   <string name="error_failed_creating_the_permalink">"Failed creating the permalink"</string>
   <string name="error_failed_loading_messages">"Failed loading messages"</string>
-  <string name="error_no_compatible_app_found">"No compatible app was found to handle this action."</string>
   <string name="error_some_messages_have_not_been_sent">"Some messages have not been sent"</string>
   <string name="error_unknown">"Sorry, an error occurred"</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
@@ -176,6 +181,8 @@
   <string name="room_timeline_beginning_of_room">"This is the beginning of %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"This is the beginning of this conversation."</string>
   <string name="room_timeline_read_marker_title">"New"</string>
+  <string name="screen_invites_empty_list">"No Invites"</string>
+  <string name="screen_invites_invited_you">"%1$s invited you"</string>
   <string name="screen_report_content_block_user">"Block user"</string>
   <string name="screen_report_content_block_user_hint">"Check if you want to hide all current and future messages from this user"</string>
   <string name="screen_room_member_details_block_alert_action">"Block"</string>
@@ -184,8 +191,6 @@
   <string name="screen_room_member_details_unblock_alert_action">"Unblock"</string>
   <string name="screen_room_member_details_unblock_alert_description">"On unblocking the user, you will be able to see all messages by them again."</string>
   <string name="screen_room_member_details_unblock_user">"Unblock user"</string>
-  <string name="screen_start_chat_error_starting_chat">"An error occurred when trying to start a chat"</string>
-  <string name="screen_start_chat_unknown_profile">"We can’t validate this user’s Matrix ID. The invite might not be received."</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Detection threshold"</string>
   <string name="settings_title_general">"General"</string>

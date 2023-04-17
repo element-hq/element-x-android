@@ -25,9 +25,7 @@ interface IntentProvider {
     /**
      * Provide an intent to start the application.
      */
-    fun getMainIntent(): Intent
-
-    fun getIntent(
+    fun getViewIntent(
         sessionId: SessionId,
         roomId: RoomId?,
         threadId: ThreadId?,
