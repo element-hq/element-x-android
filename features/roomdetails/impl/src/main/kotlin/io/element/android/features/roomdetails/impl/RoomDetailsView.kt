@@ -75,6 +75,11 @@ fun RoomDetailsView(
     openRoomMemberList: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+
+    fun onShareMember() {
+        onShareMember((state.roomType as RoomDetailsType.Dm).roomMember)
+    }
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -102,7 +107,7 @@ fun RoomDetailsView(
                         userId = member.userId.value,
                         userName = state.roomName
                     )
-                    RoomMemberShareSection(onShareUser = { onShareMember(member) })
+                    RoomMemberShareSection(onShareUser = ::onShareMember)
                 }
             }
 
