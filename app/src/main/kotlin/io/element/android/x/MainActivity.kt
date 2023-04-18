@@ -30,15 +30,19 @@ import com.bumble.appyx.core.integration.NodeHost
 import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
 import com.bumble.appyx.core.plugin.NodeReadyObserver
 import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.x.di.AppBindings
 import timber.log.Timber
+
+private val loggerTag = LoggerTag("MainActivity")
 
 class MainActivity : NodeComponentActivity() {
 
     lateinit var mainNode: MainNode
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Timber.tag(loggerTag.value).w("onCreate, with savedInstanceState: ${savedInstanceState != null}")
         installSplashScreen()
         super.onCreate(savedInstanceState)
         val appBindings = bindings<AppBindings>()
@@ -78,9 +82,24 @@ class MainActivity : NodeComponentActivity() {
      */
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        Timber.w("onNewIntent")
+        Timber.tag(loggerTag.value).w("onNewIntent")
         intent ?: return
         mainNode.handleIntent(intent)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Timber.tag(loggerTag.value).w("onPause")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Timber.tag(loggerTag.value).w("onResume")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Timber.tag(loggerTag.value).w("onDestroy")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
