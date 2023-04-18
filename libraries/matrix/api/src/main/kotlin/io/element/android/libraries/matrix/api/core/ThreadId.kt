@@ -20,10 +20,16 @@ import io.element.android.libraries.matrix.api.BuildConfig
 import java.io.Serializable
 
 @JvmInline
-value class ThreadId(val value: String) : Serializable
+value class ThreadId(val value: String) : Serializable {
+    init {
+        if (BuildConfig.DEBUG && !MatrixPatterns.isThreadId(value)) {
+            error(
+                "`$value` is not a valid thread id.\n" +
+                "Thread ids are the same as event ids.\n" +
+                "Example thread id: `\$Rqnc-F-dvnEYJTyHq_iKxU2bZ1CI92-kuZq3a5lr5Zg`."
+            )
+        }
+    }
 
-fun String.asThreadId() = if (BuildConfig.DEBUG && !MatrixPatterns.isThreadId(this)) {
-    error("`$this` is not a valid thread Id")
-} else {
-    ThreadId(this)
+    override fun toString(): String = value
 }

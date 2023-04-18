@@ -26,7 +26,6 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.core.asSessionId
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretStore
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -58,7 +57,7 @@ class PushClientSecretStoreDataStore @Inject constructor(
         val matchingKey = keyValues.keys.find {
             keyValues[it] == clientSecret
         }
-        return matchingKey?.name?.asSessionId()
+        return matchingKey?.name?.let(::SessionId)
     }
 
     private fun getPreferenceKeyForUser(userId: SessionId) = stringPreferencesKey(userId.value)

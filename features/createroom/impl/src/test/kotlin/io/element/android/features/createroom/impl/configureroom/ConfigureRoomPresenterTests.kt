@@ -165,7 +165,7 @@ class ConfigureRoomPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            val createRoomResult = Result.success(RoomId("!createRoomResult"))
+            val createRoomResult = Result.success(RoomId("!createRoomResult:domain"))
 
             fakeMatrixClient.givenCreateRoomResult(createRoomResult)
 

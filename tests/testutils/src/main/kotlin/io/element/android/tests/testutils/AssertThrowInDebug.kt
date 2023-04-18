@@ -16,18 +16,17 @@
 
 package io.element.android.tests.testutils
 
-import com.google.common.truth.Truth.assertThat
 import org.junit.Assert.assertThrows
 
 /**
- * Assert that the lambda throws on debug and returns null on release.
+ * Assert that the lambda throws only on debug mode.
  */
-fun assertNullOrThrow(lambda: () -> Any?) {
+fun assertThrowsInDebug(lambda: () -> Any?) {
     if (BuildConfig.DEBUG) {
         assertThrows(IllegalStateException::class.java) {
             lambda()
         }
     } else {
-        assertThat(lambda()).isNull()
+        lambda()
     }
 }

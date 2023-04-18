@@ -38,7 +38,7 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
 }
 
 internal fun aRoomListState() = RoomListState(
-    matrixUser = MatrixUser(id = UserId("@id"), username = "User#1", avatarData = AvatarData("@id", "U")),
+    matrixUser = MatrixUser(id = UserId("@id:domain"), username = "User#1", avatarData = AvatarData("@id:domain", "U")),
     roomList = aRoomListRoomSummaryList(),
     filter = "filter",
     hasNetworkConnection = true,
@@ -55,7 +55,7 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
             timestamp = "14:18",
             lastMessage = "A very very very very long message which suites on two lines",
             avatarData = AvatarData("!id", "R"),
-            id = "roomId"
+            id = "!roomId:domain"
         ),
         RoomListRoomSummary(
             name = "Room#2",
@@ -63,8 +63,8 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
             timestamp = "14:16",
             lastMessage = "A short message",
             avatarData = AvatarData("!id", "Z"),
-            id = "roomId2"
+            id = "!roomId2:domain"
         ),
-        RoomListRoomSummaryPlaceholders.create("roomId2")
+        RoomListRoomSummaryPlaceholders.create("!roomId2:domain")
     )
 }

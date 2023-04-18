@@ -20,15 +20,21 @@ import io.element.android.libraries.matrix.api.BuildConfig
 import java.io.Serializable
 
 @JvmInline
-value class SpaceId(val value: String) : Serializable
+value class SpaceId(val value: String) : Serializable {
+    init {
+        if (BuildConfig.DEBUG && !MatrixPatterns.isSpaceId(value)) {
+            error(
+                "`$value` is not a valid space id.\n" +
+                "Space ids are the same as room ids.\n" +
+                "Example space id: `!space_id:domain`."
+            )
+        }
+    }
+
+    override fun toString(): String = value
+}
 
 /**
  * Value to use when no space is selected by the user.
  */
-val MAIN_SPACE = SpaceId("!mainSpace")
-
-fun String.asSpaceId() = if (BuildConfig.DEBUG && !MatrixPatterns.isSpaceId(this)) {
-    error("`$this` is not a valid space Id")
-} else {
-    SpaceId(this)
-}
+val MAIN_SPACE = SpaceId("!mainSpace:matrix.org")

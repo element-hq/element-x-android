@@ -20,7 +20,6 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.core.asRoomId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.createroom.RoomVisibility
@@ -201,7 +200,7 @@ class RustMatrixClient constructor(
                 invite = createRoomParams.invite?.map { it.value },
                 avatar = createRoomParams.avatar,
             )
-            val roomId = client.createRoom(rustParams).asRoomId()
+            val roomId = RoomId(client.createRoom(rustParams))
 
             // Wait to receive the room back from the sync
             withTimeout(30_000L) {

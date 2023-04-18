@@ -24,8 +24,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-private val A_USER_ID_0 = SessionId("A_USER_ID_0")
-private val A_USER_ID_1 = SessionId("A_USER_ID_1")
+private val A_USER_ID_0 = SessionId("@A_USER_ID_0:domain")
+private val A_USER_ID_1 = SessionId("@A_USER_ID_1:domain")
 
 private const val A_UNKNOWN_SECRET = "A_UNKNOWN_SECRET"
 

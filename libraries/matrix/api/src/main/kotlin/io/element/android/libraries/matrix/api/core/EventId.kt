@@ -20,10 +20,12 @@ import io.element.android.libraries.matrix.api.BuildConfig
 import java.io.Serializable
 
 @JvmInline
-value class EventId(val value: String) : Serializable
+value class EventId(val value: String) : Serializable {
+    init {
+        if (BuildConfig.DEBUG && !MatrixPatterns.isEventId(value)) {
+            error("`$value` is not a valid event id.\nExample event id: `\$Rqnc-F-dvnEYJTyHq_iKxU2bZ1CI92-kuZq3a5lr5Zg`.")
+        }
+    }
 
-fun String.asEventId() = if (BuildConfig.DEBUG && !MatrixPatterns.isEventId(this)) {
-    error("`$this` is not a valid event Id")
-} else {
-    EventId(this)
+    override fun toString(): String = value
 }

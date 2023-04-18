@@ -28,7 +28,7 @@ open class LoginRootStateProvider : PreviewParameterProvider<LoginRootState> {
             aLoginRootState().copy(formState = LoginFormState("user", "pass")),
             aLoginRootState().copy(formState = LoginFormState("user", "pass"), loggedInState = LoggedInState.LoggingIn),
             aLoginRootState().copy(formState = LoginFormState("user", "pass"), loggedInState = LoggedInState.ErrorLoggingIn(Throwable())),
-            aLoginRootState().copy(formState = LoginFormState("user", "pass"), loggedInState = LoggedInState.LoggedIn(SessionId("1234"))),
+            aLoginRootState().copy(formState = LoginFormState("user", "pass"), loggedInState = LoggedInState.LoggedIn(SessionId("@user:domain"))),
         )
 }
 

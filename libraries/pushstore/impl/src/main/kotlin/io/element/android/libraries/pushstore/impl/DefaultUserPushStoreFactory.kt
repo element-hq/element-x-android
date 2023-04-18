@@ -22,7 +22,6 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.core.asSessionId
 import io.element.android.libraries.pushstore.api.UserPushStore
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
@@ -60,6 +59,6 @@ class DefaultUserPushStoreFactory @Inject constructor(
 
     override suspend fun onSessionDeleted(userId: String) {
         // Delete the store
-        userId.asSessionId()?.let { create(it).reset() }
+        userId.let(::SessionId)?.let { create(it).reset() }
     }
 }

@@ -36,9 +36,9 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
 }
 
 fun aMessagesState() = MessagesState(
-    roomId = RoomId("!id"),
+    roomId = RoomId("!id:matrix.org"),
     roomName = "Room name",
-    roomAvatar = AvatarData("!id", "Room name"),
+    roomAvatar = AvatarData("!id:matrix.org", "Room name"),
     composerState = aMessageComposerState().copy(
         text = StableCharSequence("Hello"),
         isFullScreen = false,
