@@ -25,4 +25,5 @@ data class PreferencesRootState(
     val logoutState: LogoutPreferenceState,
     val rageshakeState: RageshakePreferencesState,
     val myUser: Async<MatrixUser>,
+    val showDeveloperSettings: Boolean
 )

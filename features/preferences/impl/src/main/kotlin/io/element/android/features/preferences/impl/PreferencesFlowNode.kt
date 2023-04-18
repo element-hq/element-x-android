@@ -25,10 +25,12 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.preferences.api.PreferencesEntryPoint
+import io.element.android.features.preferences.impl.developer.DeveloperSettingsNode
 import io.element.android.features.preferences.impl.root.PreferencesRootNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -52,6 +54,9 @@ class PreferencesFlowNode @AssistedInject constructor(
     sealed interface NavTarget : Parcelable {
         @Parcelize
         object Root : NavTarget
+
+        @Parcelize
+        object DeveloperSettings : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -61,8 +66,15 @@ class PreferencesFlowNode @AssistedInject constructor(
                     override fun onOpenBugReport() {
                         plugins<PreferencesEntryPoint.Callback>().forEach { it.onOpenBugReport() }
                     }
+
+                    override fun onOpenDeveloperSettings() {
+                        backstack.push(NavTarget.DeveloperSettings)
+                    }
                 }
                 createNode<PreferencesRootNode>(buildContext, plugins = listOf(callback))
+            }
+            NavTarget.DeveloperSettings -> {
+                createNode<DeveloperSettingsNode>(buildContext)
             }
         }
     }

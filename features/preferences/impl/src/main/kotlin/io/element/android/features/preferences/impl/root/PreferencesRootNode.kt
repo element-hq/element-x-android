@@ -36,10 +36,15 @@ class PreferencesRootNode @AssistedInject constructor(
 
     interface Callback : Plugin {
         fun onOpenBugReport()
+        fun onOpenDeveloperSettings()
     }
 
     private fun onOpenBugReport() {
         plugins<Callback>().forEach { it.onOpenBugReport() }
+    }
+
+    private fun onOpenDeveloperSettings() {
+        plugins<Callback>().forEach { it.onOpenDeveloperSettings() }
     }
 
     @Composable
@@ -49,7 +54,9 @@ class PreferencesRootNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onBackPressed = this::navigateUp,
-            onOpenRageShake = this::onOpenBugReport
+            onOpenRageShake = this::onOpenBugReport,
+            onOpenDeveloperSettings = this::onOpenDeveloperSettings
         )
     }
+
 }
