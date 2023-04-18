@@ -16,7 +16,9 @@
 
 package io.element.android.libraries.push.providers.firebase
 
+import com.squareup.anvil.annotations.ContributesMultibinding
 import io.element.android.libraries.core.log.logger.LoggerTag
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.push.providers.api.Distributor
 import io.element.android.libraries.push.providers.api.PushProvider
@@ -26,6 +28,7 @@ import javax.inject.Inject
 
 private val loggerTag = LoggerTag("FirebasePushProvider")
 
+@ContributesMultibinding(AppScope::class)
 class FirebasePushProvider @Inject constructor(
     private val firebaseStore: FirebaseStore,
     private val firebaseTroubleshooter: FirebaseTroubleshooter,
