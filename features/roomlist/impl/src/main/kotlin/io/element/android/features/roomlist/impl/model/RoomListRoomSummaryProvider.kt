@@ -34,7 +34,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
 
 fun aRoomListRoomSummary() = RoomListRoomSummary(
     id = "!roomId",
-    roomId = RoomId("!roomId:matrix.org"),
+    roomId = RoomId("!roomId:domain"),
     name = "Room name",
     hasUnread = false,
     timestamp = null,
