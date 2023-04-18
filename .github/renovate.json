@@ -5,5 +5,15 @@
   ],
   "labels": ["dependencies"],
   "reviewers": ["team:element-x-android-reviewers"],
-  "ignoreDeps": ["string:app_name"]
+  "ignoreDeps": ["string:app_name"],
+  "packageRules": [
+    {
+      "matchPackagePatterns": [
+        "^org.jetbrains.kotlin",
+        "^com.google.devtools.ksp",
+        "^androidx.compose.compiler"
+      ],
+      "groupName": "kotlin"
+    }
+  ]
 }
