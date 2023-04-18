@@ -25,6 +25,7 @@ import dagger.Module
 import dagger.Provides
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
@@ -38,7 +39,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.plus
-import okhttp3.logging.HttpLoggingInterceptor
 import java.io.File
 import java.util.concurrent.Executors
 
@@ -64,8 +64,15 @@ object AppModule {
 
     @Provides
     @SingleIn(AppScope::class)
-    fun providesBuildMeta(@ApplicationContext context: Context) = BuildMeta(
-        isDebug = BuildConfig.DEBUG,
+    fun providesBuildType(): BuildType {
+        return BuildType.valueOf(BuildConfig.BUILD_TYPE.uppercase())
+    }
+
+    @Provides
+    @SingleIn(AppScope::class)
+    fun providesBuildMeta(@ApplicationContext context: Context, buildType: BuildType) = BuildMeta(
+        isDebuggable = BuildConfig.DEBUG,
+        buildType = buildType,
         applicationName = context.getString(R.string.app_name),
         applicationId = BuildConfig.APPLICATION_ID,
         lowPrivacyLoggingEnabled = false, // TODO EAx Config.LOW_PRIVACY_LOG_ENABLE,
@@ -75,7 +82,6 @@ object AppModule {
         gitBranchName = "TODO", //  BuildConfig.GIT_BRANCH_NAME,
         flavorDescription = "TODO", //  BuildConfig.FLAVOR_DESCRIPTION,
         flavorShortDescription = "TODO", //  BuildConfig.SHORT_FLAVOR_DESCRIPTION,
-        okHttpLoggingLevel = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.BASIC,
     )
 
     @Provides

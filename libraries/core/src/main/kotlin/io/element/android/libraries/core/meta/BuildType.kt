@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,10 @@
  * limitations under the License.
  */
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
-plugins {
-    id("java-library")
-    id("com.android.lint")
-    alias(libs.plugins.kotlin.jvm)
-}
+package io.element.android.libraries.core.meta
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-dependencies {
-    implementation(libs.coroutines.core)
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
+enum class BuildType {
+    RELEASE,
+    NIGHTLY,
+    DEBUG
 }
