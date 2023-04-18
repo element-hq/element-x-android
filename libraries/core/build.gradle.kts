@@ -26,9 +26,6 @@ java {
 
 dependencies {
     implementation(libs.coroutines.core)
-    implementation(platform(libs.network.okhttp.bom))
-    implementation("com.squareup.okhttp3:logging-interceptor")
-
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)
 }

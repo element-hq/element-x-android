@@ -22,11 +22,11 @@ import dagger.Provides
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.network.interceptors.FormattedJsonHttpLogger
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
-import io.element.android.libraries.network.interceptors.FormattedJsonHttpLogger
-import java.util.concurrent.TimeUnit
 import okhttp3.logging.HttpLoggingInterceptor
+import java.util.concurrent.TimeUnit
 
 @Module
 @ContributesTo(AppScope::class)
@@ -35,9 +35,14 @@ object NetworkModule {
     @Provides
     @JvmStatic
     fun providesHttpLoggingInterceptor(buildMeta: BuildMeta): HttpLoggingInterceptor {
-        val logger = FormattedJsonHttpLogger(buildMeta.okHttpLoggingLevel)
+        val loggingLevel = if (buildMeta.isDebuggable) {
+            HttpLoggingInterceptor.Level.BODY
+        } else {
+            HttpLoggingInterceptor.Level.BASIC
+        }
+        val logger = FormattedJsonHttpLogger(loggingLevel)
         val interceptor = HttpLoggingInterceptor(logger)
-        interceptor.level = buildMeta.okHttpLoggingLevel
+        interceptor.level = loggingLevel
         return interceptor
     }
 
