@@ -123,10 +123,10 @@ class DefaultUserListPresenterTests {
         }.test {
             val initialState = awaitItem()
 
-            val userA = aMatrixUser("userA", "A")
-            val userB = aMatrixUser("userB", "B")
-            val userABis = aMatrixUser("userA", "A")
-            val userC = aMatrixUser("userC", "C")
+            val userA = aMatrixUser("@userA:domain", "A")
+            val userB = aMatrixUser("@userB:domain", "B")
+            val userABis = aMatrixUser("@userA:domain", "A")
+            val userC = aMatrixUser("@userC:domain", "C")
 
             initialState.eventSink(UserListEvents.AddToSelection(userA))
             assertThat(awaitItem().selectedUsers).containsExactly(userA)

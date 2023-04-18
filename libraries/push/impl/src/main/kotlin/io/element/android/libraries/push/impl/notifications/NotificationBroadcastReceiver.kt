@@ -24,9 +24,7 @@ import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.core.asRoomId
-import io.element.android.libraries.matrix.api.core.asSessionId
-import io.element.android.libraries.matrix.api.core.asThreadId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.impl.log.notificationLoggerTag
 import io.element.android.services.analytics.api.AnalyticsTracker
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -51,32 +49,27 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         if (intent == null || context == null) return
         context.bindings<NotificationBroadcastReceiverBindings>().inject(this)
         Timber.tag(loggerTag.value).v("NotificationBroadcastReceiver received : $intent")
-        val sessionId = intent.extras?.getString(KEY_SESSION_ID)?.asSessionId() ?: return
+        val sessionId = intent.extras?.getString(KEY_SESSION_ID)?.let(::SessionId) ?: return
+        val roomId = intent.getStringExtra(KEY_ROOM_ID)?.let(::RoomId)
         when (intent.action) {
             actionIds.smartReply ->
                 handleSmartReply(intent, context)
-            actionIds.dismissRoom ->
-                intent.getStringExtra(KEY_ROOM_ID)?.asRoomId()?.let { roomId ->
-                    notificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
-                }
+            actionIds.dismissRoom -> if (roomId != null) {
+                notificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
+            }
             actionIds.dismissSummary ->
                 notificationDrawerManager.clearAllEvents(sessionId)
-            actionIds.markRoomRead ->
-                intent.getStringExtra(KEY_ROOM_ID)?.asRoomId()?.let { roomId ->
-                    notificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
-                    handleMarkAsRead(sessionId, roomId)
-                }
-            actionIds.join -> {
-                intent.getStringExtra(KEY_ROOM_ID)?.asRoomId()?.let { roomId ->
-                    notificationDrawerManager.clearMemberShipNotificationForRoom(sessionId, roomId)
-                    handleJoinRoom(sessionId, roomId)
-                }
+            actionIds.markRoomRead -> if (roomId != null) {
+                notificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
+                handleMarkAsRead(sessionId, roomId)
             }
-            actionIds.reject -> {
-                intent.getStringExtra(KEY_ROOM_ID)?.asRoomId()?.let { roomId ->
-                    notificationDrawerManager.clearMemberShipNotificationForRoom(sessionId, roomId)
-                    handleRejectRoom(sessionId, roomId)
-                }
+            actionIds.join -> if (roomId != null) {
+                notificationDrawerManager.clearMemberShipNotificationForRoom(sessionId, roomId)
+                handleJoinRoom(sessionId, roomId)
+            }
+            actionIds.reject -> if (roomId != null) {
+                notificationDrawerManager.clearMemberShipNotificationForRoom(sessionId, roomId)
+                handleRejectRoom(sessionId, roomId)
             }
         }
     }
@@ -125,9 +118,9 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     private fun handleSmartReply(intent: Intent, context: Context) {
         val message = getReplyMessage(intent)
-        val sessionId = intent.getStringExtra(KEY_SESSION_ID)?.asSessionId()
-        val roomId = intent.getStringExtra(KEY_ROOM_ID)?.asRoomId()
-        val threadId = intent.getStringExtra(KEY_THREAD_ID)?.asThreadId()
+        val sessionId = intent.getStringExtra(KEY_SESSION_ID)?.let(::SessionId)
+        val roomId = intent.getStringExtra(KEY_ROOM_ID)?.let(::RoomId)
+        val threadId = intent.getStringExtra(KEY_THREAD_ID)?.let(::ThreadId)
 
         if (message.isNullOrBlank() || roomId == null) {
             // ignore this event

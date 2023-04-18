@@ -78,7 +78,7 @@ class QuickReplyActionFactory @Inject constructor(
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val intent = Intent(context, NotificationBroadcastReceiver::class.java)
             intent.action = actionIds.smartReply
-            intent.data = createIgnoredUri("quickReply/${sessionId.value}/${roomId.value}" + threadId?.let { "/${it.value}" }.orEmpty())
+            intent.data = createIgnoredUri("quickReply/$sessionId/$roomId" + threadId?.let { "/$it" }.orEmpty())
             intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId.value)
             intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId.value)
             threadId?.let {

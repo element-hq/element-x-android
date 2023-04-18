@@ -20,7 +20,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.push.providers.api.PushData
-import io.element.android.tests.testutils.assertNullOrThrow
+import io.element.android.tests.testutils.assertThrowsInDebug
 import org.junit.Test
 
 class UnifiedPushParserTest {
@@ -52,7 +52,7 @@ class UnifiedPushParserTest {
     @Test
     fun `test empty roomId`() {
         val pushParser = UnifiedPushParser()
-        assertNullOrThrow {
+        assertThrowsInDebug {
             pushParser.parse(UNIFIED_PUSH_DATA.replace(A_ROOM_ID.value, "").toByteArray(), aClientSecret)
         }
     }
@@ -60,7 +60,7 @@ class UnifiedPushParserTest {
     @Test
     fun `test invalid roomId`() {
         val pushParser = UnifiedPushParser()
-        assertNullOrThrow {
+        assertThrowsInDebug {
             pushParser.parse(UNIFIED_PUSH_DATA.mutate(A_ROOM_ID.value, "aRoomId:domain"), aClientSecret)
         }
     }
@@ -68,7 +68,7 @@ class UnifiedPushParserTest {
     @Test
     fun `test empty eventId`() {
         val pushParser = UnifiedPushParser()
-        assertNullOrThrow {
+        assertThrowsInDebug {
             pushParser.parse(UNIFIED_PUSH_DATA.mutate(AN_EVENT_ID.value, ""), aClientSecret)
         }
     }
@@ -76,14 +76,14 @@ class UnifiedPushParserTest {
     @Test
     fun `test invalid eventId`() {
         val pushParser = UnifiedPushParser()
-        assertNullOrThrow {
+        assertThrowsInDebug {
             pushParser.parse(UNIFIED_PUSH_DATA.mutate(AN_EVENT_ID.value, "anEventId"), aClientSecret)
         }
     }
 
     companion object {
         private val UNIFIED_PUSH_DATA =
-            "{\"notification\":{\"event_id\":\"${AN_EVENT_ID.value}\",\"room_id\":\"${A_ROOM_ID.value}\",\"counts\":{\"unread\":1},\"prio\":\"high\"}}"
+            "{\"notification\":{\"event_id\":\"$AN_EVENT_ID\",\"room_id\":\"$A_ROOM_ID\",\"counts\":{\"unread\":1},\"prio\":\"high\"}}"
         // TODO Check client secret format?
     }
 }

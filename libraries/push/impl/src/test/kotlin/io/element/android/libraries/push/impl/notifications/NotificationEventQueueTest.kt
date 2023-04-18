@@ -35,21 +35,21 @@ class NotificationEventQueueTest {
     fun `given events when redacting some then marks matching event ids as redacted`() {
         val queue = givenQueue(
             listOf(
-                aSimpleNotifiableEvent(eventId = EventId("redacted-id-1")),
-                aNotifiableMessageEvent(eventId = EventId("redacted-id-2")),
-                anInviteNotifiableEvent(eventId = EventId("redacted-id-3")),
-                aSimpleNotifiableEvent(eventId = EventId("kept-id")),
+                aSimpleNotifiableEvent(eventId = EventId("\$redacted-id-1")),
+                aNotifiableMessageEvent(eventId = EventId("\$redacted-id-2")),
+                anInviteNotifiableEvent(eventId = EventId("\$redacted-id-3")),
+                aSimpleNotifiableEvent(eventId = EventId("\$kept-id")),
             )
         )
 
-        queue.markRedacted(listOf(EventId("redacted-id-1"), EventId("redacted-id-2"), EventId("redacted-id-3")))
+        queue.markRedacted(listOf(EventId("\$redacted-id-1"), EventId("\$redacted-id-2"), EventId("\$redacted-id-3")))
 
         assertThat(queue.rawEvents()).isEqualTo(
             listOf(
-                aSimpleNotifiableEvent(eventId = EventId("redacted-id-1"), isRedacted = true),
-                aNotifiableMessageEvent(eventId = EventId("redacted-id-2"), isRedacted = true),
-                anInviteNotifiableEvent(eventId = EventId("redacted-id-3"), isRedacted = true),
-                aSimpleNotifiableEvent(eventId = EventId("kept-id"), isRedacted = false),
+                aSimpleNotifiableEvent(eventId = EventId("\$redacted-id-1"), isRedacted = true),
+                aNotifiableMessageEvent(eventId = EventId("\$redacted-id-2"), isRedacted = true),
+                anInviteNotifiableEvent(eventId = EventId("\$redacted-id-3"), isRedacted = true),
+                aSimpleNotifiableEvent(eventId = EventId("\$kept-id"), isRedacted = false),
             )
         )
     }
@@ -179,8 +179,8 @@ class NotificationEventQueueTest {
 
     @Test
     fun `given event when adding new event with edited event id matching the existing event id then updates existing event`() {
-        val editedEvent = aSimpleNotifiableEvent(eventId = EventId("id-to-edit"))
-        val updatedEvent = editedEvent.copy(eventId = EventId("1"), editedEventId = EventId("id-to-edit"), title = "updated title", isUpdated = true)
+        val editedEvent = aSimpleNotifiableEvent(eventId = EventId("\$id-to-edit"))
+        val updatedEvent = editedEvent.copy(eventId = EventId("\$1"), editedEventId = EventId("\$id-to-edit"), title = "updated title", isUpdated = true)
         val queue = givenQueue(listOf(editedEvent))
 
         queue.add(updatedEvent)
@@ -190,8 +190,8 @@ class NotificationEventQueueTest {
 
     @Test
     fun `given event when adding new event with edited event id matching the existing event edited id then updates existing event`() {
-        val editedEvent = aSimpleNotifiableEvent(eventId = EventId("0"), editedEventId = EventId("id-to-edit"))
-        val updatedEvent = editedEvent.copy(eventId = EventId("1"), editedEventId = EventId("id-to-edit"), title = "updated title", isUpdated = true)
+        val editedEvent = aSimpleNotifiableEvent(eventId = EventId("\$0"), editedEventId = EventId("\$id-to-edit"))
+        val updatedEvent = editedEvent.copy(eventId = EventId("\$1"), editedEventId = EventId("\$id-to-edit"), title = "updated title", isUpdated = true)
         val queue = givenQueue(listOf(editedEvent))
 
         queue.add(updatedEvent)

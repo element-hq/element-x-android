@@ -16,8 +16,8 @@
 
 package io.element.android.libraries.push.providers.firebase
 
-import io.element.android.libraries.matrix.api.core.asEventId
-import io.element.android.libraries.matrix.api.core.asRoomId
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.push.providers.api.PushData
 
 /**
@@ -41,8 +41,8 @@ data class PushDataFirebase(
 )
 
 fun PushDataFirebase.toPushData(): PushData? {
-    val safeEventId = eventId?.asEventId() ?: return null
-    val safeRoomId = roomId?.asRoomId() ?: return null
+    val safeEventId = eventId?.let(::EventId) ?: return null
+    val safeRoomId = roomId?.let(::RoomId) ?: return null
     return PushData(
         eventId = safeEventId,
         roomId = safeRoomId,

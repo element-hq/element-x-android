@@ -21,13 +21,12 @@ import java.io.Serializable
 
 @JvmInline
 value class RoomId(val value: String) : Serializable {
-    override fun toString(): String {
-        return value
-    }
-}
 
-fun String.asRoomId() = if (BuildConfig.DEBUG && !MatrixPatterns.isRoomId(this)) {
-    error("`$this` is not a valid room Id")
-} else {
-    RoomId(this)
+    init {
+        if (BuildConfig.DEBUG && !MatrixPatterns.isRoomId(value)) {
+            error("`$value` is not a valid room id.\n Example room id: `!room_id:domain`.")
+        }
+    }
+
+    override fun toString(): String = value
 }
