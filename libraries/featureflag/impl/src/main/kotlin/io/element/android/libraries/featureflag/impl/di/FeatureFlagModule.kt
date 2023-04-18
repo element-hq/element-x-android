@@ -20,36 +20,29 @@ import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.ElementsIntoSet
-import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.featureflag.impl.BuildtimeFeatureFlagProvider
 import io.element.android.libraries.featureflag.impl.FeatureFlagProvider
 import io.element.android.libraries.featureflag.impl.PreferencesFeatureFlagProvider
-import io.element.android.libraries.featureflag.impl.RuntimeFeatureFlagProvider
 
 @Module
 @ContributesTo(AppScope::class)
 object FeatureFlagModule {
 
-    @Provides
-    fun providesRuntimeFeatureFlagProvider(preferencesFeatureFlagProvider: PreferencesFeatureFlagProvider): RuntimeFeatureFlagProvider {
-        return preferencesFeatureFlagProvider
-    }
-
     @JvmStatic
     @Provides
     @ElementsIntoSet
     fun providesFeatureFlagProvider(
-        buildMeta: BuildMeta,
+        buildType: BuildType,
+        runtimeFeatureFlagProvider: PreferencesFeatureFlagProvider,
         buildtimeFeatureFlagProvider: BuildtimeFeatureFlagProvider,
-        runtimeFeatureFlagProvider: RuntimeFeatureFlagProvider,
     ): Set<FeatureFlagProvider> {
         val providers = HashSet<FeatureFlagProvider>()
-        //TODO change this condition?
-        if (buildMeta.isDebug) {
-            providers.add(runtimeFeatureFlagProvider)
-        } else {
+        if (buildType == BuildType.RELEASE) {
             providers.add(buildtimeFeatureFlagProvider)
+        } else {
+            providers.add(runtimeFeatureFlagProvider)
         }
         return providers
     }

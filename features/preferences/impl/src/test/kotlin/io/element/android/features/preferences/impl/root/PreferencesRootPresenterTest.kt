@@ -27,6 +27,7 @@ import io.element.android.features.rageshake.impl.preferences.DefaultRageshakePr
 import io.element.android.features.rageshake.test.rageshake.FakeRageShake
 import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -38,7 +39,9 @@ class PreferencesRootPresenterTest {
         val logoutPresenter = DefaultLogoutPreferencePresenter(FakeMatrixClient())
         val rageshakePresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore())
         val presenter = PreferencesRootPresenter(
-            logoutPresenter, rageshakePresenter
+            logoutPresenter,
+            rageshakePresenter,
+            BuildType.DEBUG
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -50,6 +53,7 @@ class PreferencesRootPresenterTest {
             assertThat(initialState.rageshakeState.isSupported).isTrue()
             assertThat(initialState.rageshakeState.sensitivity).isEqualTo(1.0f)
             assertThat(initialState.myUser).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.showDeveloperSettings).isEqualTo(true)
         }
     }
 }
