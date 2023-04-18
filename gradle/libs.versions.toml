@@ -48,7 +48,6 @@ anvil = "2.4.4"
 
 # quality
 detekt = "1.22.0"
-ktlint = "11.3.1"
 dependencygraph = "0.10"
 
 [libraries]
@@ -165,7 +164,7 @@ kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+ktlint = "org.jlleitschuh.gradle.ktlint:11.3.1"
 dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.ref = "dependencygraph" }
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
 paparazzi = "app.cash.paparazzi:1.2.0"
