@@ -1,9 +1,5 @@
 import java.net.URI
 
-include(":libraries:featureflag:test")
-
-include(":libraries:featureflag:ui")
-
 /*
  * Copyright (c) 2022 New Vector Ltd
  *
