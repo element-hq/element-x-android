@@ -86,15 +86,47 @@ const allowList = [
     "yostyle",
 ]
 
-const requiresSignOff = !allowList.includes(user)
-
-if (requiresSignOff) {
+function signoff_needed(reason) {
+    message("Sign-off required, " + reason)
     const hasPRBodySignOff = pr.body.includes(signOff)
     const hasCommitSignOff = danger.git.commits.every(commit => commit.message.includes(signOff))
     if (!hasPRBodySignOff && !hasCommitSignOff) {
         fail("Please add a sign-off to either the PR description or to the commits themselves. See instructions [here](https://matrix-org.github.io/synapse/latest/development/contributing_guide.html#sign-off).")
     }
 }
+
+function signoff_unneeded(reason) {
+    message("Sign-off not required, " + reason)
+}
+
+// Somewhat awkward phrasing, dangerfile is not in an async context.
+if (allowList.includes(user)) {
+    signoff_unneeded("allow-list")
+} else {
+//  github.api.rest.orgs.checkMembershipForUser({
+//      org: "vector-im",
+//      username: user,
+//   }).then((result) => {
+    github.api.rest.teams.getMembershipForUserInOrg({
+        org: "vector-im",
+        team_slug: "vector-core",
+        username: user,
+    }).then((result) => {
+        if (result.status == 204 || result.status == 200) {
+            signoff_unneeded("team-member")
+        }
+        else {
+            signoff_needed("not-team-member")
+        }
+    }).catch((error) => { 
+        if (error.response.status == 404) {
+            signoff_needed("not-team-member");
+        } else {
+            console.log(error); signoff_needed("error") 
+        }
+    })
+}
+
 
 // Check for screenshots on view changes
 const hasChangedViews = editedFiles.filter(file => file.includes("/layout")).length > 0
