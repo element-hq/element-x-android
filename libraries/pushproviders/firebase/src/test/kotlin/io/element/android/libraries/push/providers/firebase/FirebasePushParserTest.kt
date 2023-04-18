@@ -20,7 +20,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.push.providers.api.PushData
-import io.element.android.tests.testutils.assertNullOrThrow
+import io.element.android.tests.testutils.assertThrowsInDebug
 import org.junit.Test
 
 class FirebasePushParserTest {
@@ -52,26 +52,26 @@ class FirebasePushParserTest {
     fun `test empty roomId`() {
         val pushParser = FirebasePushParser()
         assertThat(pushParser.parse(FIREBASE_PUSH_DATA.mutate("room_id", null))).isNull()
-        assertNullOrThrow { pushParser.parse(FIREBASE_PUSH_DATA.mutate("room_id", "")) }
+        assertThrowsInDebug { pushParser.parse(FIREBASE_PUSH_DATA.mutate("room_id", "")) }
     }
 
     @Test
     fun `test invalid roomId`() {
         val pushParser = FirebasePushParser()
-        assertNullOrThrow { pushParser.parse(FIREBASE_PUSH_DATA.mutate("room_id", "aRoomId:domain")) }
+        assertThrowsInDebug { pushParser.parse(FIREBASE_PUSH_DATA.mutate("room_id", "aRoomId:domain")) }
     }
 
     @Test
     fun `test empty eventId`() {
         val pushParser = FirebasePushParser()
         assertThat(pushParser.parse(FIREBASE_PUSH_DATA.mutate("event_id", null))).isNull()
-        assertNullOrThrow { pushParser.parse(FIREBASE_PUSH_DATA.mutate("event_id", "")) }
+        assertThrowsInDebug { pushParser.parse(FIREBASE_PUSH_DATA.mutate("event_id", "")) }
     }
 
     @Test
     fun `test invalid eventId`() {
         val pushParser = FirebasePushParser()
-        assertNullOrThrow { pushParser.parse(FIREBASE_PUSH_DATA.mutate("event_id", "anEventId")) }
+        assertThrowsInDebug { pushParser.parse(FIREBASE_PUSH_DATA.mutate("event_id", "anEventId")) }
     }
 
     companion object {

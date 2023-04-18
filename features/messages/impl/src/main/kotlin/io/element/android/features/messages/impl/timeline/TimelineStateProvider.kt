@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlin.random.Random
 
 fun aTimelineState() = TimelineState(
     timelineItems = persistentListOf(),
@@ -78,12 +79,12 @@ internal fun aTimelineItemEvent(
     content: TimelineItemEventContent = aTimelineItemContent(),
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.First
 ): TimelineItem.Event {
-    val randomId = Math.random().toString()
+    val randomId = "\$" + Random.nextInt().toString()
     return TimelineItem.Event(
         id = randomId,
         eventId = EventId(randomId),
-        senderId = UserId("@senderId"),
-        senderAvatar = AvatarData("@senderId", "sender"),
+        senderId = UserId("@senderId:domain"),
+        senderAvatar = AvatarData("@senderId:domain", "sender"),
         content = content,
         reactionsState = TimelineItemReactions(
             persistentListOf(

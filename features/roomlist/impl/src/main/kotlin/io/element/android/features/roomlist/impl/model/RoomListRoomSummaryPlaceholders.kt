@@ -34,7 +34,7 @@ object RoomListRoomSummaryPlaceholders {
     fun createFakeList(size: Int): List<RoomListRoomSummary> {
         return mutableListOf<RoomListRoomSummary>().apply {
             repeat(size) {
-                add(create("\$fakeRoom$it"))
+                add(create("!fakeRoom$it:domain"))
             }
         }
     }

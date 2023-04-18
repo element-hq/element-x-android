@@ -18,7 +18,7 @@ package io.element.android.libraries.push.providers.firebase
 
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
-import io.element.android.libraries.matrix.api.core.asSessionId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.providers.api.PusherSubscriber
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -42,7 +42,7 @@ class FirebaseNewTokenHandler @Inject constructor(
         firebaseStore.storeFcmToken(firebaseToken)
         // Register the pusher for all the sessions
         sessionStore.getAllSessions().toUserList()
-            .mapNotNull { it.asSessionId() }
+            .map { SessionId(it) }
             .forEach { userId ->
                 val userDataStore = userPushStoreFactory.create(userId)
                 if (userDataStore.getPushProviderName() == FirebaseConfig.name) {

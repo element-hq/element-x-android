@@ -18,9 +18,9 @@ package io.element.android.libraries.deeplink
 
 import android.content.Intent
 import android.net.Uri
-import io.element.android.libraries.matrix.api.core.asRoomId
-import io.element.android.libraries.matrix.api.core.asSessionId
-import io.element.android.libraries.matrix.api.core.asThreadId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import javax.inject.Inject
 
 class DeeplinkParser @Inject constructor() {
@@ -35,9 +35,9 @@ class DeeplinkParser @Inject constructor() {
         if (scheme != SCHEME) return null
         if (host != HOST) return null
         val pathBits = path.orEmpty().split("/").drop(1)
-        val sessionId = pathBits.elementAtOrNull(0)?.asSessionId() ?: return null
-        val roomId = pathBits.elementAtOrNull(1)?.asRoomId()
-        val threadId = pathBits.elementAtOrNull(2)?.asThreadId()
+        val sessionId = pathBits.elementAtOrNull(0)?.let(::SessionId) ?: return null
+        val roomId = pathBits.elementAtOrNull(1)?.let(::RoomId)
+        val threadId = pathBits.elementAtOrNull(2)?.let(::ThreadId)
         return DeeplinkData(
             sessionId = sessionId,
             roomId = roomId,

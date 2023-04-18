@@ -22,7 +22,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
-import io.element.android.tests.testutils.assertNullOrThrow
+import io.element.android.tests.testutils.assertThrowsInDebug
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -59,12 +59,13 @@ class DeeplinkParserTest {
         assertThat(sut.getFromIntent(createIntent("elementx://close/@alice:server.org"))).isNull()
         // No session Id
         assertThat(sut.getFromIntent(createIntent("elementx://open"))).isNull()
-        // Invalid sessionId
-        assertNullOrThrow {
+
+        assertThrowsInDebug {
+            // Invalid sessionId
             sut.getFromIntent(createIntent("elementx://open/alice:server.org"))
         }
-        // Empty sessionId
-        assertNullOrThrow {
+        assertThrowsInDebug {
+            // Empty sessionId
             sut.getFromIntent(createIntent("elementx://open//"))
         }
     }

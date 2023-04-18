@@ -63,7 +63,7 @@ class PendingIntentFactory @Inject constructor(
     fun createDismissSummaryPendingIntent(sessionId: SessionId): PendingIntent {
         val intent = Intent(context, NotificationBroadcastReceiver::class.java)
         intent.action = actionIds.dismissSummary
-        intent.data = createIgnoredUri("deleteSummary/${sessionId.value}")
+        intent.data = createIgnoredUri("deleteSummary/$sessionId")
         intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId.value)
         return PendingIntent.getBroadcast(
             context,
@@ -76,7 +76,7 @@ class PendingIntentFactory @Inject constructor(
     fun createDismissRoomPendingIntent(sessionId: SessionId, roomId: RoomId): PendingIntent {
         val intent = Intent(context, NotificationBroadcastReceiver::class.java)
         intent.action = actionIds.dismissRoom
-        intent.data = createIgnoredUri("deleteRoom/${sessionId.value}/${roomId.value}")
+        intent.data = createIgnoredUri("deleteRoom/$sessionId/$roomId")
         intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId.value)
         intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId.value)
         return PendingIntent.getBroadcast(

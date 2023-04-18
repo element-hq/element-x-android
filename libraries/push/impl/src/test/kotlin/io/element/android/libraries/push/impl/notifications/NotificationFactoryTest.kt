@@ -171,10 +171,10 @@ class NotificationFactoryTest {
         val roomWithRedactedMessage = mapOf(
             A_ROOM_ID to listOf(
                 ProcessedEvent(ProcessedEvent.Type.KEEP, A_MESSAGE_EVENT.copy(isRedacted = true)),
-                ProcessedEvent(ProcessedEvent.Type.KEEP, A_MESSAGE_EVENT.copy(eventId = EventId("not-redacted")))
+                ProcessedEvent(ProcessedEvent.Type.KEEP, A_MESSAGE_EVENT.copy(eventId = EventId("\$not-redacted")))
             )
         )
-        val withRedactedRemoved = listOf(A_MESSAGE_EVENT.copy(eventId = EventId("not-redacted")))
+        val withRedactedRemoved = listOf(A_MESSAGE_EVENT.copy(eventId = EventId("\$not-redacted")))
         val expectedNotification = roomGroupMessageCreator.givenCreatesRoomMessageFor(
             A_SESSION_ID,
             withRedactedRemoved,

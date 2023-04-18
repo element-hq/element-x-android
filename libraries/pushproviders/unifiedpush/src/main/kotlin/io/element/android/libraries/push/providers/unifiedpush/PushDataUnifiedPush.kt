@@ -16,8 +16,8 @@
 
 package io.element.android.libraries.push.providers.unifiedpush
 
-import io.element.android.libraries.matrix.api.core.asEventId
-import io.element.android.libraries.matrix.api.core.asRoomId
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.push.providers.api.PushData
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -56,8 +56,8 @@ data class PushDataUnifiedPushCounts(
 )
 
 fun PushDataUnifiedPush.toPushData(clientSecret: String): PushData? {
-    val safeEventId = notification?.eventId?.asEventId() ?: return null
-    val safeRoomId = notification.roomId?.asRoomId() ?: return null
+    val safeEventId = notification?.eventId?.let(::EventId) ?: return null
+    val safeRoomId = notification.roomId?.let(::RoomId) ?: return null
     return PushData(
         eventId = safeEventId,
         roomId = safeRoomId,

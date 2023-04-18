@@ -81,8 +81,8 @@ class CreateRoomRootPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            val matrixUser = MatrixUser(UserId("@name:matrix.org"))
-            val createDmResult = Result.success(RoomId("!createDmResult"))
+            val matrixUser = MatrixUser(UserId("@name:domain"))
+            val createDmResult = Result.success(RoomId("!createDmResult:domain"))
 
             fakeMatrixClient.givenFindDmResult(null)
             fakeMatrixClient.givenCreateDmResult(createDmResult)
@@ -101,8 +101,8 @@ class CreateRoomRootPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            val matrixUser = MatrixUser(UserId("@name:matrix.org"))
-            val fakeDmResult = FakeMatrixRoom(RoomId("!fakeDmResult"))
+            val matrixUser = MatrixUser(UserId("@name:domain"))
+            val fakeDmResult = FakeMatrixRoom(RoomId("!fakeDmResult:domain"))
 
             fakeMatrixClient.givenFindDmResult(fakeDmResult)
 
@@ -119,8 +119,8 @@ class CreateRoomRootPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            val matrixUser = MatrixUser(UserId("@name:matrix.org"))
-            val createDmResult = Result.success(RoomId("!createDmResult"))
+            val matrixUser = MatrixUser(UserId("@name:domain"))
+            val createDmResult = Result.success(RoomId("!createDmResult:domain"))
             fakeUserListPresenter.givenState(aUserListState().copy(selectedUsers = persistentListOf(matrixUser)))
 
             fakeMatrixClient.givenFindDmResult(null)
