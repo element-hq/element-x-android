@@ -25,3 +25,10 @@
 -keepclassmembers class <1>.<2> {
   <1>.<2>$Companion Companion;
 }
+
+# OkHttp platform used only on JVM and when Conscrypt and other security providers are available.
+# Taken from https://raw.githubusercontent.com/square/okhttp/master/okhttp/src/jvmMain/resources/META-INF/proguard/okhttp3.pro
+-dontwarn okhttp3.internal.platform.**
+-dontwarn org.conscrypt.**
+-dontwarn org.bouncycastle.**
+-dontwarn org.openjsse.**
