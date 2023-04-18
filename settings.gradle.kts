@@ -1,5 +1,7 @@
 import java.net.URI
 
+include(":libraries:featureflag:test")
+
 include(":libraries:featureflag:ui")
 
 /*
