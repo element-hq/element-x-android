@@ -17,7 +17,9 @@
 package io.element.android.libraries.push.providers.unifiedpush
 
 import android.content.Context
+import com.squareup.anvil.annotations.ContributesMultibinding
 import io.element.android.libraries.androidutils.system.getApplicationLabel
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.push.providers.api.Distributor
@@ -26,6 +28,7 @@ import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import org.unifiedpush.android.connector.UnifiedPush
 import javax.inject.Inject
 
+@ContributesMultibinding(AppScope::class)
 class UnifiedPushProvider @Inject constructor(
     @ApplicationContext private val context: Context,
     private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
