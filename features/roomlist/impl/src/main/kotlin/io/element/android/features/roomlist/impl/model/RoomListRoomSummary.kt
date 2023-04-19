@@ -17,13 +17,14 @@
 package io.element.android.features.roomlist.impl.model
 
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.RoomId
 
 @Immutable
 data class RoomListRoomSummary(
     val id: String,
-    val roomId: RoomId = RoomId(id),
+    val roomId: RoomId?,
     val name: String = "",
     val hasUnread: Boolean = false,
     val timestamp: String? = null,
