@@ -70,6 +70,7 @@ fun CompoundTheme(
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
+            typography = compoundTypography,
             content = content,
         )
     }
