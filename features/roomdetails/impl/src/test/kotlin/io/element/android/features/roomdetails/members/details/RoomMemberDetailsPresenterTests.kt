@@ -22,7 +22,9 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.aRoomMember
+import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsEvents
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
+import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -86,6 +88,65 @@ class RoomMemberDetailsPresenterTests {
             val initialState = awaitItem()
             Truth.assertThat(initialState.userName).isEqualTo(roomMember.displayName)
             Truth.assertThat(initialState.avatarUrl).isEqualTo(roomMember.avatarUrl)
+
+            ensureAllEventsConsumed()
+        }
+    }
+
+    @Test
+    fun `present - BlockUser needing confirmation displays confirmation dialog`() = runTest {
+        val room = aMatrixRoom()
+        val roomMember = aRoomMember()
+        val presenter = RoomMemberDetailsPresenter(room, roomMember)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(RoomMemberDetailsEvents.BlockUser(needsConfirmation = true))
+
+            val dialogState = awaitItem()
+            Truth.assertThat(dialogState.displayConfirmationDialog).isEqualTo(RoomMemberDetailsState.ConfirmationDialog.Block)
+
+            dialogState.eventSink(RoomMemberDetailsEvents.ClearConfirmationDialog)
+            Truth.assertThat(awaitItem().displayConfirmationDialog).isNull()
+
+            ensureAllEventsConsumed()
+        }
+    }
+
+    @Test
+    fun `present - BlockUser and UnblockUser without confirmation change the 'blocked' state`() = runTest {
+        val room = aMatrixRoom()
+        val roomMember = aRoomMember()
+        val presenter = RoomMemberDetailsPresenter(room, roomMember)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(RoomMemberDetailsEvents.BlockUser(needsConfirmation = false))
+            Truth.assertThat(awaitItem().isBlocked).isTrue()
+
+            initialState.eventSink(RoomMemberDetailsEvents.UnblockUser(needsConfirmation = false))
+            Truth.assertThat(awaitItem().isBlocked).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - UnblockUser needing confirmation displays confirmation dialog`() = runTest {
+        val room = aMatrixRoom()
+        val roomMember = aRoomMember()
+        val presenter = RoomMemberDetailsPresenter(room, roomMember)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(RoomMemberDetailsEvents.UnblockUser(needsConfirmation = true))
+
+            val dialogState = awaitItem()
+            Truth.assertThat(dialogState.displayConfirmationDialog).isEqualTo(RoomMemberDetailsState.ConfirmationDialog.Unblock)
+
+            dialogState.eventSink(RoomMemberDetailsEvents.ClearConfirmationDialog)
+            Truth.assertThat(awaitItem().displayConfirmationDialog).isNull()
 
             ensureAllEventsConsumed()
         }

@@ -23,6 +23,7 @@ android {
 }
 
 dependencies {
+    api(projects.libraries.core)
     api(projects.libraries.matrix.api)
     api(libs.coroutines.core)
 }

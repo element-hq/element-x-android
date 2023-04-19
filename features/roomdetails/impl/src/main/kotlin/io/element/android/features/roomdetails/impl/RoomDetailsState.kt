@@ -16,10 +16,8 @@
 
 package io.element.android.features.roomdetails.impl
 
+import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.architecture.isLoading
-
-import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 
 data class RoomDetailsState(
@@ -33,6 +31,7 @@ data class RoomDetailsState(
     val displayLeaveRoomWarning: LeaveRoomWarning?,
     val error: RoomDetailsError?,
     val roomType: RoomDetailsType,
+    val roomMemberDetailsState: RoomMemberDetailsState?,
     val eventSink: (RoomDetailsEvent) -> Unit
 )
 

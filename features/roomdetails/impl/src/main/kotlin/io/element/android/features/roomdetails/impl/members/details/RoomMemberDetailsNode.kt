@@ -30,7 +30,6 @@ import io.element.android.libraries.androidutils.system.startSharePlainTextInten
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.RoomMember
 import timber.log.Timber
@@ -52,7 +51,6 @@ class RoomMemberDetailsNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-
         val context = LocalContext.current
 
         fun onShareUser() {

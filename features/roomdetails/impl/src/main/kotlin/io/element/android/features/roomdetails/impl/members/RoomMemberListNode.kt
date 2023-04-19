@@ -29,6 +29,9 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @ContributesNode(RoomScope::class)
@@ -37,6 +40,7 @@ class RoomMemberListNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val room: MatrixRoom,
     private val presenter: RoomMemberListPresenter,
+    private val coroutineScope: CoroutineScope,
 ) : Node(buildContext, plugins = plugins) {
 
     interface Callback : Plugin {
@@ -45,8 +49,8 @@ class RoomMemberListNode @AssistedInject constructor(
 
     private val callbacks = plugins<Callback>()
 
-    private fun onUserSelected(matrixUser: MatrixUser) {
-        val member = room.getMember(matrixUser.id)
+    private fun onUserSelected(matrixUser: MatrixUser) = coroutineScope.launch {
+        val member = room.getMember(matrixUser.id).firstOrNull()
         if (member != null) {
             callbacks.forEach { it.openRoomMemberDetails(member) }
         } else {
