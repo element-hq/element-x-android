@@ -15,7 +15,7 @@ datastore = "1.0.0"
 constraintlayout = "2.1.4"
 recyclerview = "1.3.0"
 lifecycle = "2.6.1"
-activity = "1.7.0"
+activity = "1.7.1"
 startup = "1.1.1"
 
 # Compose
