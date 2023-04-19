@@ -23,6 +23,7 @@ object RoomListRoomSummaryPlaceholders {
     fun create(id: String): RoomListRoomSummary {
         return RoomListRoomSummary(
             id = id,
+            roomId = null,
             isPlaceholder = true,
             name = "Short name",
             timestamp = "hh:mm",

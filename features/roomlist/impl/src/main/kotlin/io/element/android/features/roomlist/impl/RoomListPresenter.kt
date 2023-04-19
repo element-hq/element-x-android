@@ -44,6 +44,7 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationS
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -177,8 +178,10 @@ class RoomListPresenter @Inject constructor(
                         name = roomSummary.details.name,
                         url = roomSummary.details.avatarURLString
                     )
+                    val roomIdentifier = roomSummary.identifier()
                     RoomListRoomSummary(
                         id = roomSummary.identifier(),
+                        roomId = RoomId(roomIdentifier),
                         name = roomSummary.details.name,
                         hasUnread = roomSummary.details.unreadNotificationCount > 0,
                         timestamp = lastMessageTimestampFormatter.format(roomSummary.details.lastMessageTimestamp),
