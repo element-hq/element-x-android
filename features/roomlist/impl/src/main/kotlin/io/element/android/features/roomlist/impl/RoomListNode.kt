@@ -52,6 +52,10 @@ class RoomListNode @AssistedInject constructor(
         plugins<RoomListEntryPoint.Callback>().forEach { it.onSessionVerificationClicked() }
     }
 
+    private fun onInvitesClicked() {
+        plugins<RoomListEntryPoint.Callback>().forEach { it.onInvitesClicked() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -62,6 +66,7 @@ class RoomListNode @AssistedInject constructor(
             onOpenSettings = this::onOpenSettings,
             onCreateRoomClicked = this::onCreateRoomClicked,
             onVerifyClicked = this::onSessionVerificationClicked,
+            onInvitesClicked = this::onInvitesClicked,
         )
     }
 }

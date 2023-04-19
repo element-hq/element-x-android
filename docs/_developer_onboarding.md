@@ -22,6 +22,7 @@
   * [Code coverage](#code-coverage)
   * [Other points](#other-points)
     * [Logging](#logging)
+    * [Translations](#translations)
     * [Rageshake](#rageshake)
   * [Tips](#tips)
 * [Happy coding!](#happy-coding)
@@ -391,6 +392,12 @@ because automatic tag (= class name) will not be available on the release versio
 Also generally it is recommended to provide the `Throwable` to the Timber log functions.
 
 Last point, note that `Timber.v` function may have no effect on some devices. Prefer using `Timber.d` and up.
+
+
+#### Translations
+
+Translations are handled through localazy. See [the dedicated README.md file](../tools/localazy/README.md) for information on how
+to configure new modules etc.
 
 #### Rageshake
 

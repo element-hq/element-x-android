@@ -41,6 +41,7 @@ class FakeMatrixClient(
     private val userDisplayName: Result<String> = Result.success(A_USER_NAME),
     private val userAvatarURLString: Result<String> = Result.success(AN_AVATAR_URL),
     override val roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
+    override val invitesDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
     private val sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
     private val pushersService: FakePushersService = FakePushersService(),
     private val notificationService: FakeNotificationService = FakeNotificationService(),

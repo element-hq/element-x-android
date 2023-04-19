@@ -85,6 +85,13 @@ class RoomListPresenter @Inject constructor(
             initialLoad(matrixUser)
         }
 
+        val invites by client
+            .invitesDataSource
+            .roomSummaries()
+            .collectAsState()
+
+        Timber.v("Invites size = ${invites.size}")
+
         // Session verification status (unknown, not verified, verified)
         val sessionVerifiedStatus by sessionVerificationService.sessionVerifiedStatus.collectAsState()
         var verificationPromptDismissed by rememberSaveable { mutableStateOf(false) }
@@ -114,6 +121,7 @@ class RoomListPresenter @Inject constructor(
             displayVerificationPrompt = displayVerificationPrompt,
             snackbarMessage = snackbarMessage,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
+            displayInvites = invites.isNotEmpty(),
             eventSink = ::handleEvents
         )
     }

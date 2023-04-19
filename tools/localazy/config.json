@@ -26,6 +26,12 @@
       ]
     },
     {
+      "name": ":features:invitelist:impl",
+      "includeRegex": [
+        "screen_invites_.*"
+      ]
+    },
+    {
       "name": ":features:createroom:impl",
       "includeRegex": [
         "screen_create_room_.*",
