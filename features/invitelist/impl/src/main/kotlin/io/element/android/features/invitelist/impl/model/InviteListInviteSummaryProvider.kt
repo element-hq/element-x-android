@@ -30,7 +30,7 @@ open class InviteListInviteSummaryProvider : PreviewParameterProvider<InviteList
 }
 
 fun aInviteListInviteSummary() = InviteListInviteSummary(
-    roomId = RoomId("!room1"),
+    roomId = RoomId("!room1:example.com"),
     roomName = "Some room",
     sender = InviteSender(
         userId = UserId("@alice:example.org"),
