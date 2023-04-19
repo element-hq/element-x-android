@@ -16,7 +16,9 @@
 
 package io.element.android.features.login.impl.root
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,6 +28,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -71,6 +74,9 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
+import io.element.android.libraries.designsystem.compound.components.CompoundButtonWithProgress
+import io.element.android.libraries.designsystem.compound.components.CompoundErrorDialog
+import io.element.android.libraries.designsystem.compound.components.CompoundOutlinedTextField
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -127,7 +133,7 @@ fun LoginRootView(
                     text = stringResource(id = R.string.screen_login_title),
                     modifier = Modifier
                         .fillMaxWidth(),
-                    style = ElementTextStyles.Bold.title1,
+                    style = MaterialTheme.typography.headlineMedium.copy(textAlign = TextAlign.Center),
                     color = MaterialTheme.colorScheme.primary,
                 )
                 Spacer(Modifier.height(32.dp))
@@ -169,14 +175,15 @@ internal fun ChangeServerSection(
     Column(modifier) {
         Text(
             modifier = Modifier.padding(start = 16.dp, bottom = 8.dp),
+            color = MaterialTheme.colorScheme.primary,
             text = stringResource(id = R.string.screen_login_server_header),
-            style = ElementTextStyles.Regular.formHeader,
+            style = MaterialTheme.typography.bodyMedium,
         )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(14.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .heightIn(min = 56.dp)
+                .border(BorderStroke(1.dp, MaterialTheme.colorScheme.outline), MaterialTheme.shapes.medium)
                 .testTag(TestTags.loginChangeServer)
                 .clickable {
                     if (interactionEnabled) {
@@ -188,7 +195,8 @@ internal fun ChangeServerSection(
         ) {
             Text(
                 text = homeserver,
-                style = ElementTextStyles.Bold.body,
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.titleSmall,
                 textAlign = TextAlign.Start,
                 modifier = Modifier
                     .weight(1f)
@@ -202,7 +210,7 @@ internal fun ChangeServerSection(
                     }
                 }
             ) {
-                Icon(imageVector = Icons.Default.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.tertiary)
+                Icon(imageVector = Icons.Default.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
             }
             Spacer(Modifier.width(8.dp))
         }
@@ -232,12 +240,13 @@ internal fun LoginForm(
     Column(modifier) {
         Text(
             text = stringResource(R.string.screen_login_form_header),
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(start = 16.dp),
-            style = ElementTextStyles.Regular.formHeader
+            style = MaterialTheme.typography.bodyMedium
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(
+        Spacer(modifier = Modifier.height(2.dp))
+        CompoundOutlinedTextField(
             value = loginFieldState,
             readOnly = isLoading,
             modifier = Modifier
@@ -280,8 +289,8 @@ internal fun LoginForm(
             // Ensure password is hidden when user submits the form
             passwordVisible = false
         }
-        Spacer(Modifier.height(20.dp))
-        TextField(
+        Spacer(Modifier.height(12.dp))
+        CompoundOutlinedTextField(
             value = passwordFieldState,
             readOnly = isLoading,
             modifier = Modifier
@@ -323,7 +332,7 @@ internal fun LoginForm(
         Spacer(Modifier.height(28.dp))
 
         // Submit
-        ButtonWithProgress(
+        CompoundButtonWithProgress(
             text = stringResource(R.string.screen_login_submit),
             showProgress = isLoading,
             onClick = ::submit,
@@ -337,7 +346,7 @@ internal fun LoginForm(
 
 @Composable
 internal fun LoginErrorDialog(error: Throwable, onDismiss: () -> Unit) {
-    ErrorDialog(
+    CompoundErrorDialog(
         content = stringResource(loginError(error)),
         onDismiss = onDismiss
     )

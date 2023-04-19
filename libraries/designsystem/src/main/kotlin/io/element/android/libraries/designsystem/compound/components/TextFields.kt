@@ -67,7 +67,7 @@ fun CompoundOutlinedTextField(
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     minLines: Int = 1,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    shape: Shape = TextFieldDefaults.outlinedShape,
+    shape: Shape = MaterialTheme.shapes.medium,
     colors: TextFieldColors = CompoundTextFieldDefaults.outlinedTextFieldColors()
 ) {
     OutlinedTextField(
@@ -117,7 +117,7 @@ fun CompoundOutlinedTextField(
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     minLines: Int = 1,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    shape: Shape = TextFieldDefaults.outlinedShape,
+    shape: Shape = MaterialTheme.shapes.medium,
     colors: TextFieldColors = CompoundTextFieldDefaults.outlinedTextFieldColors()
 ) {
     OutlinedTextField(
@@ -152,7 +152,10 @@ object CompoundTextFieldDefaults {
         containerColor: Color = Color.Transparent,
         textColor: Color = MaterialTheme.colorScheme.primary,
         disabledTextColor: Color = LocalCompoundColors.current.textDisabled.withDisabledAlpha(),
-        placeholderColor: Color = MaterialTheme.colorScheme.secondary,
+        unfocusedLabelColor: Color = MaterialTheme.colorScheme.secondary,
+        focusedLabelColor: Color = textColor,
+        disabledLabelColor: Color = disabledTextColor,
+        placeholderColor: Color = unfocusedLabelColor,
         disabledPlaceholderColor: Color = disabledTextColor,
         unfocusedLeadingIconColor: Color = MaterialTheme.colorScheme.secondary,
         focusedLeadingIconColor: Color = unfocusedLeadingIconColor,
@@ -175,6 +178,10 @@ object CompoundTextFieldDefaults {
         // Placeholder text colors
         placeholderColor = placeholderColor,
         disabledPlaceholderColor = disabledPlaceholderColor,
+        // Label colors
+        unfocusedLabelColor = unfocusedLabelColor,
+        focusedLabelColor = focusedLabelColor,
+        disabledLabelColor = disabledLabelColor,
         // Leading icon colors
         unfocusedLeadingIconColor = unfocusedLeadingIconColor,
         focusedLeadingIconColor = focusedLeadingIconColor,

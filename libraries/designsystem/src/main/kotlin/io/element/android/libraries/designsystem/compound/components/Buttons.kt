@@ -20,6 +20,10 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.progressSemantics
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -30,8 +34,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.compound.CompoundTheme
 import io.element.android.libraries.designsystem.compound.LocalCompoundColors
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.ElementButtonDefaults
 import io.element.android.libraries.designsystem.theme.components.Text
 
@@ -60,6 +66,54 @@ fun CompoundButton(
         interactionSource = interactionSource,
         content = content,
     )
+}
+
+@Composable
+fun CompoundButtonWithProgress(
+    text: String?,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    showProgress: Boolean = false,
+    progressText: String? = text,
+    enabled: Boolean = true,
+    shape: Shape = ElementButtonDefaults.shape,
+    colors: ButtonColors = CompoundButtonDefaults.buttonColors(),
+    elevation: ButtonElevation? = ElementButtonDefaults.buttonElevation(),
+    border: BorderStroke? = null,
+    contentPadding: PaddingValues = ElementButtonDefaults.ContentPadding,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+) {
+    CompoundButton(
+        onClick = {
+            if (!showProgress) {
+                onClick()
+            }
+        },
+        modifier = modifier,
+        enabled = enabled,
+        shape = shape,
+        colors = colors,
+        elevation = elevation,
+        border = border,
+        contentPadding = contentPadding,
+        interactionSource = interactionSource,
+    ) {
+        if (showProgress) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .progressSemantics()
+                    .size(18.dp),
+                color = MaterialTheme.colorScheme.onPrimary,
+                strokeWidth = 2.dp,
+            )
+            if (progressText != null) {
+                Spacer(Modifier.width(10.dp))
+                Text(progressText, style = MaterialTheme.typography.labelLarge)
+            }
+        } else if (text != null) {
+            Text(text, style = MaterialTheme.typography.labelLarge)
+        }
+    }
 }
 
 object CompoundButtonDefaults {

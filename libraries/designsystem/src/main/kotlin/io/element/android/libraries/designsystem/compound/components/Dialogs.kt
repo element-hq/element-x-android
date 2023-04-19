@@ -36,10 +36,10 @@ fun CompoundErrorDialog(
     submitText: String = ErrorDialogDefaults.submitText,
     onDismiss: () -> Unit = {},
     shape: Shape = AlertDialogDefaults.shape,
-    containerColor: Color = AlertDialogDefaults.containerColor,
-    iconContentColor: Color = AlertDialogDefaults.iconContentColor,
-    titleContentColor: Color = AlertDialogDefaults.titleContentColor,
-    textContentColor: Color = AlertDialogDefaults.textContentColor,
+    containerColor: Color = CompoundAlertDialogDefaults.containerColor,
+    iconContentColor: Color = CompoundAlertDialogDefaults.iconContentColor,
+    titleContentColor: Color = CompoundAlertDialogDefaults.titleContentColor,
+    textContentColor: Color = CompoundAlertDialogDefaults.textContentColor,
     tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
 ) {
     AlertDialog(
