@@ -39,7 +39,7 @@ internal fun aInviteListState() = InviteListState(
 internal fun aInviteListInviteSummaryList(): ImmutableList<InviteListInviteSummary> {
     return persistentListOf(
         InviteListInviteSummary(
-            roomId = RoomId("!id1"),
+            roomId = RoomId("!id1:example.com"),
             roomName = "Room 1",
             roomAlias = "#room:example.org",
             sender = InviteSender(
@@ -48,7 +48,7 @@ internal fun aInviteListInviteSummaryList(): ImmutableList<InviteListInviteSumma
             ),
         ),
         InviteListInviteSummary(
-            roomId = RoomId("!id2"),
+            roomId = RoomId("!id2:example.com"),
             roomName = "Room 2",
             sender = InviteSender(
                 userId = UserId("@bob:example.org"),
@@ -56,7 +56,7 @@ internal fun aInviteListInviteSummaryList(): ImmutableList<InviteListInviteSumma
             ),
         ),
         InviteListInviteSummary(
-            roomId = RoomId("!id3"),
+            roomId = RoomId("!id3:example.com"),
             roomName = "Alice",
             roomAlias = "@alice:example.com"
         ),

@@ -37,14 +37,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.WifiOff
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
@@ -99,7 +97,11 @@ private fun Indicator(modifier: Modifier = Modifier) {
             modifier = Modifier.size(16.dp),
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = stringResource(StringR.string.common_offline), style = ElementTextStyles.Regular.bodyMD, color = tint)
+        Text(
+            text = stringResource(StringR.string.common_offline),
+            style = ElementTextStyles.Regular.bodyMD.copy(fontWeight = FontWeight.Medium),
+            color = tint,
+        )
     }
 }
 
