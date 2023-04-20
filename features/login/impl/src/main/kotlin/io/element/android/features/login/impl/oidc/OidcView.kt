@@ -92,7 +92,6 @@ fun OidcView(
                 )
             }
             is Async.Loading -> {
-                // Indeterminate indicator, to avoid the freeze effect if the connection takes time to initialize.
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
