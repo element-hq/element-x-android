@@ -33,7 +33,11 @@ import javax.inject.Inject
 
 class LoginRootPresenter @Inject constructor(private val authenticationService: MatrixAuthenticationService) : Presenter<LoginRootState> {
 
-    private val defaultHomeserver = MatrixHomeServerDetails(LoginConstants.DEFAULT_HOMESERVER_URL, true, null)
+    private val defaultHomeserver = MatrixHomeServerDetails(
+        url = LoginConstants.DEFAULT_HOMESERVER_URL,
+        supportsPasswordLogin = true,
+        supportsOidc = false,
+    )
 
     @Composable
     override fun present(): LoginRootState {
@@ -54,7 +58,12 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
                 is LoginRootEvents.SetPassword -> updateFormState(formState) {
                     copy(password = event.password)
                 }
-                LoginRootEvents.Submit -> localCoroutineScope.submit(homeserver.url, formState.value, loggedInState)
+                LoginRootEvents.Submit -> {
+                    when {
+                        homeserver.supportsOidc -> localCoroutineScope.submitOidc(homeserver.url, loggedInState)
+                        homeserver.supportsPasswordLogin -> localCoroutineScope.submit(homeserver.url, formState.value, loggedInState)
+                    }
+                }
                 LoginRootEvents.ClearError -> loggedInState.value = LoggedInState.NotLoggedIn
             }
         }
@@ -67,9 +76,22 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
         )
     }
 
+    private fun CoroutineScope.submitOidc(homeserver: String, loggedInState: MutableState<LoggedInState>) = launch {
+        loggedInState.value = LoggedInState.LoggingIn
+        // TODO rework the setHomeserver flow
+        authenticationService.setHomeserver(homeserver)
+        authenticationService.getOidcUrl()
+            .onSuccess {
+                loggedInState.value = LoggedInState.OidcStarted(it)
+            }
+            .onFailure { failure ->
+                loggedInState.value = LoggedInState.ErrorLoggingIn(failure)
+            }
+    }
+
     private fun CoroutineScope.submit(homeserver: String, formState: LoginFormState, loggedInState: MutableState<LoggedInState>) = launch {
         loggedInState.value = LoggedInState.LoggingIn
-        //TODO rework the setHomeserver flow
+        // TODO rework the setHomeserver flow
         authenticationService.setHomeserver(homeserver)
         authenticationService.login(formState.login.trim(), formState.password)
             .onSuccess { sessionId ->

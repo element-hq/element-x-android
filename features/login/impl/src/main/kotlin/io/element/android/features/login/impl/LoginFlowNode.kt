@@ -29,11 +29,13 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.login.impl.changeserver.ChangeServerNode
+import io.element.android.features.login.impl.oidc.OidcNode
 import io.element.android.features.login.impl.root.LoginRootNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.matrix.api.auth.OidcDetails
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
@@ -55,6 +57,9 @@ class LoginFlowNode @AssistedInject constructor(
 
         @Parcelize
         object ChangeServer : NavTarget
+
+        @Parcelize
+        data class OidcView(val oidcDetails: OidcDetails) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -64,10 +69,19 @@ class LoginFlowNode @AssistedInject constructor(
                     override fun onChangeHomeServer() {
                         backstack.push(NavTarget.ChangeServer)
                     }
+
+                    override fun onOidcDetails(oidcDetails: OidcDetails) {
+                        backstack.push(NavTarget.OidcView(oidcDetails))
+                    }
                 }
                 createNode<LoginRootNode>(buildContext, plugins = listOf(callback))
             }
+
             NavTarget.ChangeServer -> createNode<ChangeServerNode>(buildContext)
+            is NavTarget.OidcView -> {
+                val input = OidcNode.Inputs(navTarget.oidcDetails)
+                createNode<OidcNode>(buildContext, plugins = listOf(input))
+            }
         }
     }
 
