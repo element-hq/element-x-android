@@ -32,7 +32,7 @@ class OidcUrlParser {
      * Return a OidcAction, or null if the url is not a OidcUrl
      */
     fun parse(url: String): OidcAction? {
-        if (!url.startsWith(OidcConfig.redirectUri)) return null
+        if (url.startsWith(OidcConfig.redirectUri).not()) return null
         if (url.contains("error=access_denied")) return OidcAction.GoBack
         if (url.contains("code=")) return OidcAction.Success(url)
 

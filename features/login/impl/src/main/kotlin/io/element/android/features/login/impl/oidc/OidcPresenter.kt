@@ -51,25 +51,27 @@ class OidcPresenter @AssistedInject constructor(
         fun handleCancel() {
             requestState = Async.Loading()
             localCoroutineScope.launch {
-                requestState = try {
-                    authenticationService.cancelOidcLogin()
-                    // Then go back
-                    Async.Success(Unit)
-                } catch (throwable: Throwable) {
-                    Async.Failure(throwable)
-                }
+                authenticationService.cancelOidcLogin()
+                    .fold(
+                        onSuccess = {
+                            // Then go back
+                            requestState = Async.Success(Unit)
+                        },
+                        onFailure = {
+                            requestState = Async.Failure(it)
+                        }
+                    )
             }
         }
 
         fun handleSuccess(url: String) {
             requestState = Async.Loading()
             localCoroutineScope.launch {
-                try {
-                    authenticationService.loginWithOidc(url)
-                    // Then the node tree will be updated, there is nothing to do
-                } catch (throwable: Throwable) {
-                    requestState = Async.Failure(throwable)
-                }
+                authenticationService.loginWithOidc(url)
+                    .onFailure {
+                        requestState = Async.Failure(it)
+                    }
+                // On success, the node tree will be updated, there is nothing to do
             }
         }
 

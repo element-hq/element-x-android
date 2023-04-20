@@ -97,10 +97,12 @@ class LoginRootPresenter @Inject constructor(
         homeserver: String,
         state: MutableState<Async<MatrixHomeServerDetails>>,
     ) = launch {
-        state.value = Async.Loading()
         suspend {
             authenticationService.setHomeserver(homeserver)
-            authenticationService.getHomeserverDetails().value!!
+                .map {
+                    authenticationService.getHomeserverDetails().value!!
+                }
+                .getOrThrow()
         }.execute(state)
     }
 
