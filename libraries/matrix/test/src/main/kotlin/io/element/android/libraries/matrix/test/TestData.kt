@@ -47,7 +47,8 @@ const val ANOTHER_MESSAGE = "Hello universe!"
 const val A_HOMESERVER_URL = "matrix.org"
 const val A_HOMESERVER_URL_2 = "matrix-client.org"
 
-val A_HOMESERVER = MatrixHomeServerDetails(A_HOMESERVER_URL, true, null)
+val A_HOMESERVER = MatrixHomeServerDetails(A_HOMESERVER_URL, supportsPasswordLogin = true, supportsOidc = false)
+val A_HOMESERVER_OIDC = MatrixHomeServerDetails(A_HOMESERVER_URL, supportsPasswordLogin = false, supportsOidc = true)
 
 const val AN_AVATAR_URL = "mxc://data"
 

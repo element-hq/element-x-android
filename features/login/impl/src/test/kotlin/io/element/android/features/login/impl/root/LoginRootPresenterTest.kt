@@ -20,11 +20,16 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.login.impl.util.LoginConstants
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.test.A_HOMESERVER
+import io.element.android.libraries.matrix.test.A_HOMESERVER_OIDC
 import io.element.android.libraries.matrix.test.A_PASSWORD
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.A_USER_NAME
+import io.element.android.libraries.matrix.test.auth.A_OIDC_DATA
 import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -39,18 +44,79 @@ class LoginRootPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.homeserverDetails).isEqualTo(A_HOMESERVER)
+            assertThat(initialState.homeserverUrl).isEqualTo(LoginConstants.DEFAULT_HOMESERVER_URL)
+            assertThat(initialState.homeserverDetails).isEqualTo(Async.Uninitialized)
             assertThat(initialState.loggedInState).isEqualTo(LoggedInState.NotLoggedIn)
             assertThat(initialState.formState).isEqualTo(LoginFormState.Default)
             assertThat(initialState.submitEnabled).isFalse()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - initial state server load`() = runTest {
+        val authenticationService = FakeAuthenticationService()
+        val presenter = LoginRootPresenter(
+            authenticationService,
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.homeserverUrl).isEqualTo(LoginConstants.DEFAULT_HOMESERVER_URL)
+            assertThat(initialState.homeserverDetails).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.loggedInState).isEqualTo(LoggedInState.NotLoggedIn)
+            assertThat(initialState.formState).isEqualTo(LoginFormState.Default)
+            assertThat(initialState.submitEnabled).isFalse()
+            val loadingState = awaitItem()
+            assertThat(loadingState.homeserverDetails).isEqualTo(Async.Loading<MatrixHomeServerDetails>())
+            authenticationService.givenHomeserver(A_HOMESERVER)
+            skipItems(1)
+            val loadedState = awaitItem()
+            assertThat(loadedState.homeserverDetails).isEqualTo(Async.Success(A_HOMESERVER))
+        }
+    }
+
+    @Test
+    fun `present - initial state server load error and retry`() = runTest {
+        val authenticationService = FakeAuthenticationService()
+        val presenter = LoginRootPresenter(
+            authenticationService,
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.homeserverUrl).isEqualTo(LoginConstants.DEFAULT_HOMESERVER_URL)
+            assertThat(initialState.homeserverDetails).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.loggedInState).isEqualTo(LoggedInState.NotLoggedIn)
+            assertThat(initialState.formState).isEqualTo(LoginFormState.Default)
+            assertThat(initialState.submitEnabled).isFalse()
+            val loadingState = awaitItem()
+            assertThat(loadingState.homeserverDetails).isEqualTo(Async.Loading<MatrixHomeServerDetails>())
+            val aThrowable = Throwable("Error")
+            authenticationService.givenChangeServerError(aThrowable)
+            val errorState = awaitItem()
+            assertThat(errorState.homeserverDetails).isEqualTo(Async.Failure<MatrixHomeServerDetails>(aThrowable))
+            // Retry
+            errorState.eventSink.invoke(LoginRootEvents.RetryFetchServerInfo)
+            val loadingState2 = awaitItem()
+            assertThat(loadingState2.homeserverDetails).isEqualTo(Async.Loading<MatrixHomeServerDetails>())
+            authenticationService.givenChangeServerError(null)
+            authenticationService.givenHomeserver(A_HOMESERVER)
+            skipItems(1)
+            val loadedState = awaitItem()
+            assertThat(loadedState.homeserverDetails).isEqualTo(Async.Success(A_HOMESERVER))
         }
     }
 
     @Test
     fun `present - enter login and password`() = runTest {
+        val authenticationService = FakeAuthenticationService()
         val presenter = LoginRootPresenter(
-            FakeAuthenticationService(),
+            authenticationService,
         )
+        authenticationService.givenHomeserver(A_HOMESERVER)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -67,10 +133,49 @@ class LoginRootPresenterTest {
     }
 
     @Test
-    fun `present - submit`() = runTest {
+    fun `present - oidc login`() = runTest {
+        val authenticationService = FakeAuthenticationService()
         val presenter = LoginRootPresenter(
-            FakeAuthenticationService(),
+            authenticationService,
         )
+        authenticationService.givenHomeserver(A_HOMESERVER_OIDC)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.submitEnabled).isTrue()
+            initialState.eventSink.invoke(LoginRootEvents.Submit)
+            val oidcState = awaitItem()
+            assertThat(oidcState.loggedInState).isEqualTo(LoggedInState.OidcStarted(A_OIDC_DATA))
+        }
+    }
+
+    @Test
+    fun `present - oidc login error`() = runTest {
+        val authenticationService = FakeAuthenticationService()
+        val presenter = LoginRootPresenter(
+            authenticationService,
+        )
+        authenticationService.givenHomeserver(A_HOMESERVER_OIDC)
+        authenticationService.givenOidcError(A_THROWABLE)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.submitEnabled).isTrue()
+            initialState.eventSink.invoke(LoginRootEvents.Submit)
+            val oidcState = awaitItem()
+            assertThat(oidcState.loggedInState).isEqualTo(LoggedInState.ErrorLoggingIn(A_THROWABLE))
+        }
+    }
+
+    @Test
+    fun `present - submit`() = runTest {
+        val authenticationService = FakeAuthenticationService()
+        val presenter = LoginRootPresenter(
+            authenticationService,
+        )
+        authenticationService.givenHomeserver(A_HOMESERVER)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -93,6 +198,7 @@ class LoginRootPresenterTest {
         val presenter = LoginRootPresenter(
             authenticationService,
         )
+        authenticationService.givenHomeserver(A_HOMESERVER)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -116,11 +222,11 @@ class LoginRootPresenterTest {
         val presenter = LoginRootPresenter(
             authenticationService,
         )
+        authenticationService.givenHomeserver(A_HOMESERVER)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-
             // Submit will return an error
             authenticationService.givenLoginError(A_THROWABLE)
             initialState.eventSink(LoginRootEvents.Submit)
