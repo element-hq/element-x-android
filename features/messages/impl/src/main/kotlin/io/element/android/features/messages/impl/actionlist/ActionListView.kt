@@ -102,6 +102,7 @@ private fun SheetContent(
             // Crashes if sheetContent size is zero
             Box(modifier = modifier.size(1.dp))
         }
+
         is ActionListState.Target.Success -> {
             val actions = target.actions
             LazyColumn(
@@ -146,5 +147,11 @@ fun SheetContentDarkPreview(@PreviewParameter(ActionListStateProvider::class) st
 
 @Composable
 private fun ContentToPreview(state: ActionListState) {
-    SheetContent(state)
+    ActionListView(
+        state = state,
+        modalBottomSheetState = ModalBottomSheetState(
+            initialValue = ModalBottomSheetValue.Expanded
+        ),
+        onActionSelected = { _, _ -> }
+    )
 }
