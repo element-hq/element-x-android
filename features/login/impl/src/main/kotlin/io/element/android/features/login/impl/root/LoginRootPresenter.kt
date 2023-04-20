@@ -76,7 +76,7 @@ class LoginRootPresenter @Inject constructor(
                 LoginRootEvents.Submit -> {
                     val homeServerDetails = getHomeServerDetailsAction.value.dataOrNull() ?: return
                     when {
-                        homeServerDetails.supportsOidc -> localCoroutineScope.submitOidc(loggedInState)
+                        homeServerDetails.supportsOidcLogin -> localCoroutineScope.submitOidc(loggedInState)
                         homeServerDetails.supportsPasswordLogin -> localCoroutineScope.submit(formState.value, loggedInState)
                     }
                 }

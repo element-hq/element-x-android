@@ -30,7 +30,7 @@ open class LoginRootStateProvider : PreviewParameterProvider<LoginRootState> {
                     MatrixHomeServerDetails(
                         "some-custom-server.com",
                         supportsPasswordLogin = true,
-                        supportsOidc = false
+                        supportsOidcLogin = false
                     )
                 )
             ),
@@ -45,7 +45,7 @@ open class LoginRootStateProvider : PreviewParameterProvider<LoginRootState> {
                     MatrixHomeServerDetails(
                         "server-with-oidc.org",
                         supportsPasswordLogin = false,
-                        supportsOidc = true
+                        supportsOidcLogin = true
                     )
                 )
             ),
@@ -56,7 +56,7 @@ open class LoginRootStateProvider : PreviewParameterProvider<LoginRootState> {
                     MatrixHomeServerDetails(
                         "wrong.org",
                         supportsPasswordLogin = false,
-                        supportsOidc = false
+                        supportsOidcLogin = false
                     )
                 )
             ),
@@ -69,7 +69,7 @@ open class LoginRootStateProvider : PreviewParameterProvider<LoginRootState> {
 
 fun aLoginRootState() = LoginRootState(
     homeserverUrl = "matrix.org",
-    homeserverDetails = Async.Success(MatrixHomeServerDetails("matrix.org", supportsPasswordLogin = true, supportsOidc = false)),
+    homeserverDetails = Async.Success(MatrixHomeServerDetails("matrix.org", supportsPasswordLogin = true, supportsOidcLogin = false)),
     loggedInState = LoggedInState.NotLoggedIn,
     formState = LoginFormState.Default,
     eventSink = {}

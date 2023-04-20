@@ -32,7 +32,7 @@ data class LoginRootState(
     val eventSink: (LoginRootEvents) -> Unit
 ) {
     val supportPasswordLogin = (homeserverDetails as? Async.Success)?.state?.supportsPasswordLogin.orFalse()
-    val supportOidcLogin = (homeserverDetails as? Async.Success)?.state?.supportsOidc.orFalse()
+    val supportOidcLogin = (homeserverDetails as? Async.Success)?.state?.supportsOidcLogin.orFalse()
     val submitEnabled: Boolean
         get() = loggedInState !is LoggedInState.ErrorLoggingIn &&
             ((formState.login.isNotEmpty() && formState.password.isNotEmpty()) || supportOidcLogin)

@@ -29,9 +29,6 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 
-/**
- * TODO Transmit back press to the webview
- */
 @ContributesNode(AppScope::class)
 class OidcNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
