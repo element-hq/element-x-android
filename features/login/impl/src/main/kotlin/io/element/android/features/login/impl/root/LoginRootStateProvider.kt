@@ -24,16 +24,20 @@ open class LoginRootStateProvider : PreviewParameterProvider<LoginRootState> {
     override val values: Sequence<LoginRootState>
         get() = sequenceOf(
             aLoginRootState(),
-            aLoginRootState().copy(homeserverDetails = MatrixHomeServerDetails("some-custom-server.com", true, null)),
+            aLoginRootState().copy(homeserverDetails = MatrixHomeServerDetails("some-custom-server.com", supportsPasswordLogin = true, supportsOidc = false)),
             aLoginRootState().copy(formState = LoginFormState("user", "pass")),
             aLoginRootState().copy(formState = LoginFormState("user", "pass"), loggedInState = LoggedInState.LoggingIn),
             aLoginRootState().copy(formState = LoginFormState("user", "pass"), loggedInState = LoggedInState.ErrorLoggingIn(Throwable())),
             aLoginRootState().copy(formState = LoginFormState("user", "pass"), loggedInState = LoggedInState.LoggedIn(SessionId("@user:domain"))),
+            // Oidc
+            aLoginRootState().copy(homeserverDetails = MatrixHomeServerDetails("server-with-oidc.org", supportsPasswordLogin = false, supportsOidc = true)),
+            // No password, no oidc support
+            aLoginRootState().copy(homeserverDetails = MatrixHomeServerDetails("wrong.org", supportsPasswordLogin = false, supportsOidc = false)),
         )
 }
 
 fun aLoginRootState() = LoginRootState(
-    homeserverDetails = MatrixHomeServerDetails("matrix.org", true, null),
+    homeserverDetails = MatrixHomeServerDetails("matrix.org", supportsPasswordLogin = true, supportsOidc = false),
     loggedInState = LoggedInState.NotLoggedIn,
     formState = LoginFormState.Default,
     eventSink = {}

@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.auth
+package io.element.android.features.login.impl.oidc
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
-data class MatrixHomeServerDetails(
-    val url: String,
-    val supportsPasswordLogin: Boolean,
-    val supportsOidc: Boolean,
-): Parcelable
+interface WebViewEventListener {
+    /**
+     * Triggered when a Webview loads an url.
+     *
+     * @param url The url about to be rendered.
+     * @return true if the method needs to manage some custom handling
+     */
+    fun shouldOverrideUrlLoading(url: String): Boolean {
+        return false
+    }
+}

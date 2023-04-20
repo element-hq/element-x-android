@@ -23,6 +23,6 @@ fun HomeserverLoginDetails.map(): MatrixHomeServerDetails = use {
     MatrixHomeServerDetails(
         url = url(),
         supportsPasswordLogin = supportsPasswordLogin(),
-        authenticationIssuer = authenticationIssuer()
+        supportsOidc = supportsOidcLogin(),
     )
 }

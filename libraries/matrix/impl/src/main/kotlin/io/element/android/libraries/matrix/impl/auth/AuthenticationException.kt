@@ -26,6 +26,13 @@ fun Throwable.mapAuthenticationException(): Throwable {
         is RustAuthenticationException.InvalidServerName -> AuthenticationException.InvalidServerName(this.message!!)
         is RustAuthenticationException.SessionMissing -> AuthenticationException.SessionMissing(this.message!!)
         is RustAuthenticationException.SlidingSyncNotAvailable -> AuthenticationException.SlidingSyncNotAvailable(this.message!!)
+
+        is RustAuthenticationException.OidcException -> AuthenticationException.OidcError("OidcException", message!!)
+        is RustAuthenticationException.OidcMetadataInvalid -> AuthenticationException.OidcError("OidcMetadataInvalid", message!!)
+        is RustAuthenticationException.OidcMetadataMissing -> AuthenticationException.OidcError("OidcMetadataMissing", message!!)
+        is RustAuthenticationException.OidcNotStarted -> AuthenticationException.OidcError("OidcNotStarted", message!!)
+        is RustAuthenticationException.OidcNotSupported -> AuthenticationException.OidcError("OidcNotSupported", message!!)
+
         else -> this
     }
 }

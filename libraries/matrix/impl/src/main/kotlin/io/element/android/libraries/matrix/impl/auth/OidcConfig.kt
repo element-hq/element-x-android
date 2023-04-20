@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.auth
+package io.element.android.libraries.matrix.impl.auth
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import io.element.android.libraries.matrix.api.auth.OidcConfig
+import org.matrix.rustcomponents.sdk.OidcClientMetadata
 
-@Parcelize
-data class MatrixHomeServerDetails(
-    val url: String,
-    val supportsPasswordLogin: Boolean,
-    val supportsOidc: Boolean,
-): Parcelable
+val oidcClientMetadata: OidcClientMetadata = OidcClientMetadata(
+    clientName = "Element",
+    redirectUri = OidcConfig.redirectUri,
+    clientUri = "https://element.io",
+    tosUri = "https://element.io/user-terms-of-service",
+    policyUri = "https://element.io/privacy"
+)
+

@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.auth
+package io.element.android.features.login.impl.oidc
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
-data class MatrixHomeServerDetails(
-    val url: String,
-    val supportsPasswordLogin: Boolean,
-    val supportsOidc: Boolean,
-): Parcelable
+sealed interface OidcEvents {
+    object Cancel : OidcEvents
+    data class OidcActionEvent(val oidcAction: OidcAction): OidcEvents
+    object ClearError : OidcEvents
+}

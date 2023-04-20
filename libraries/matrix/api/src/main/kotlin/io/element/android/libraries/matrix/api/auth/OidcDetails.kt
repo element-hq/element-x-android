@@ -20,8 +20,6 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class MatrixHomeServerDetails(
+data class OidcDetails(
     val url: String,
-    val supportsPasswordLogin: Boolean,
-    val supportsOidc: Boolean,
-): Parcelable
+) : Parcelable

@@ -14,49 +14,45 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.root
+package io.element.android.features.login.impl.oidc
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 
+/**
+ * TODO Transmit back press to the webview
+ */
 @ContributesNode(AppScope::class)
-class LoginRootNode @AssistedInject constructor(
+class OidcNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: LoginRootPresenter,
+    presenterFactory: OidcPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
 
-    interface Callback : Plugin {
-        fun onChangeHomeServer()
-        fun onOidcDetails(oidcDetails: OidcDetails)
-    }
+    data class Inputs(
+        val oidcDetails: OidcDetails,
+    ) : NodeInputs
 
-    private fun onChangeHomeServer() {
-        plugins<Callback>().forEach { it.onChangeHomeServer() }
-    }
-
-    private fun onOidcDetails(oidcDetails: OidcDetails) {
-        plugins<Callback>().forEach { it.onOidcDetails(oidcDetails) }
-    }
+    private val inputs: Inputs = inputs()
+    private val presenter = presenterFactory.create(inputs.oidcDetails)
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        LoginRootView(
+        OidcView(
             state = state,
             modifier = modifier,
-            onChangeServer = ::onChangeHomeServer,
-            onOidcDetails = ::onOidcDetails,
-            onBackPressed = ::navigateUp
+            onNavigateBack = ::navigateUp,
         )
     }
 }
