@@ -17,15 +17,24 @@
 package io.element.android.features.invitelist.impl
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.invitelist.impl.model.InviteListInviteSummary
 import io.element.android.features.invitelist.impl.model.InviteSender
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.execute
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomSummary
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class InviteListPresenter @Inject constructor(
@@ -39,9 +48,69 @@ class InviteListPresenter @Inject constructor(
             .roomSummaries()
             .collectAsState()
 
+        val localCoroutineScope = rememberCoroutineScope()
+        val acceptedAction: MutableState<Async<RoomId>> = remember { mutableStateOf(Async.Uninitialized) }
+        val declinedAction: MutableState<Async<Unit>> = remember { mutableStateOf(Async.Uninitialized) }
+        val decliningInvite: MutableState<InviteListInviteSummary?> = remember { mutableStateOf(null) }
+
+        fun handleEvent(event: InviteListEvents) {
+            when (event) {
+                is InviteListEvents.AcceptInvite -> {
+                    acceptedAction.value = Async.Uninitialized
+                    localCoroutineScope.acceptInvite(event.invite.roomId, acceptedAction)
+                }
+
+                is InviteListEvents.DeclineInvite -> {
+                    decliningInvite.value = event.invite
+                }
+
+                is InviteListEvents.ConfirmDeclineInvite -> {
+                    declinedAction.value = Async.Uninitialized
+                    decliningInvite.value?.let {
+                        localCoroutineScope.declineInvite(it.roomId, declinedAction)
+                    }
+                    decliningInvite.value = null
+                }
+
+                is InviteListEvents.CancelDeclineInvite -> {
+                    decliningInvite.value = null
+                }
+
+                is InviteListEvents.DismissAcceptError -> {
+                    acceptedAction.value = Async.Uninitialized
+                }
+
+                is InviteListEvents.DismissDeclineError -> {
+                    declinedAction.value = Async.Uninitialized
+                }
+            }
+        }
+
         return InviteListState(
             inviteList = invites.mapNotNull(::toInviteSummary).toPersistentList(),
+            declineConfirmationDialog = decliningInvite.value?.let {
+                InviteDeclineConfirmationDialog.Visible(
+                    isDirect = it.isDirect,
+                    name = it.roomName,
+                )
+            } ?: InviteDeclineConfirmationDialog.Hidden,
+            acceptedAction = acceptedAction.value,
+            declinedAction = declinedAction.value,
+            eventSink = ::handleEvent
         )
+    }
+
+    private fun CoroutineScope.acceptInvite(roomId: RoomId, acceptedAction: MutableState<Async<RoomId>>) = launch {
+        suspend {
+            client.getRoom(roomId)?.acceptInvitation()?.getOrThrow()
+            roomId
+        }.execute(acceptedAction)
+    }
+
+    private fun CoroutineScope.declineInvite(roomId: RoomId, declinedAction: MutableState<Async<Unit>>) = launch {
+        suspend {
+            client.getRoom(roomId)?.rejectInvitation()?.getOrThrow() ?: Unit
+        }.execute(declinedAction)
     }
 
     private fun toInviteSummary(roomSummary: RoomSummary): InviteListInviteSummary? {
@@ -71,6 +140,7 @@ class InviteListPresenter @Inject constructor(
                     roomName = name,
                     roomAlias = alias,
                     roomAvatarData = avatarData,
+                    isDirect = isDirect,
                     sender = if (isDirect) null else inviter?.let {
                         InviteSender(
                             userId = it.userId,
@@ -81,9 +151,10 @@ class InviteListPresenter @Inject constructor(
                                 url = it.avatarUrl,
                             ),
                         )
-                    }
+                    },
                 )
             }
+
             else -> null
         }
     }

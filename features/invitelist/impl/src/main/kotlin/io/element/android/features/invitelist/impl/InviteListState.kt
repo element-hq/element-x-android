@@ -18,9 +18,20 @@ package io.element.android.features.invitelist.impl
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.invitelist.impl.model.InviteListInviteSummary
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 data class InviteListState(
-    val inviteList: ImmutableList<InviteListInviteSummary>
+    val inviteList: ImmutableList<InviteListInviteSummary>,
+    val declineConfirmationDialog: InviteDeclineConfirmationDialog = InviteDeclineConfirmationDialog.Hidden,
+    val acceptedAction: Async<RoomId> = Async.Uninitialized,
+    val declinedAction: Async<Unit> = Async.Uninitialized,
+    val eventSink: (InviteListEvents) -> Unit = {}
 )
+
+sealed interface InviteDeclineConfirmationDialog {
+    object Hidden : InviteDeclineConfirmationDialog
+    data class Visible(val isDirect: Boolean, val name: String) : InviteDeclineConfirmationDialog
+}
