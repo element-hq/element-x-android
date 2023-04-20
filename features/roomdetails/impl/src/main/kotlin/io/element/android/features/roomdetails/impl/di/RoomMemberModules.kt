@@ -45,15 +45,6 @@ interface RoomMemberBindsModule {
 object RoomMemberProvidesModule {
 
     @Provides
-    fun provideRoomDetailsPresenter(
-        matrixClient: MatrixClient,
-        room: MatrixRoom,
-        roomMembershipObserver: RoomMembershipObserver,
-    ): RoomDetailsPresenter {
-        return RoomDetailsPresenter(matrixClient.sessionId, room, roomMembershipObserver)
-    }
-
-    @Provides
     fun provideRoomMemberDetailsPresenterFactory(
         room: MatrixRoom,
     ): RoomMemberDetailsPresenter.Factory {

@@ -25,6 +25,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import kotlinx.collections.immutable.toImmutableList
+import timber.log.Timber
 import javax.inject.Inject
 
 class TimelineItemEventFactory @Inject constructor(
@@ -42,6 +43,7 @@ class TimelineItemEventFactory @Inject constructor(
         val senderDisplayName: String?
         val senderAvatarUrl: String?
 
+        Timber.v("SenderProfile($currentSender) = ${currentTimelineItem.event.senderProfile}")
         when (val senderProfile = currentTimelineItem.event.senderProfile) {
             ProfileTimelineDetails.Unavailable,
             ProfileTimelineDetails.Pending,

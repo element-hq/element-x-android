@@ -30,7 +30,7 @@ class RoomUserListDataSource @Inject constructor(
 ) : UserListDataSource {
 
     override suspend fun search(query: String): List<MatrixUser> {
-        return room.members().filter { member ->
+        return room.membersFlow.value.filter { member ->
             if (query.isBlank()) {
                 true
             } else {

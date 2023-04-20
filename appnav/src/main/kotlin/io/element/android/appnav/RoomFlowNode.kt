@@ -41,7 +41,6 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.services.appnavstate.api.AppNavigationStateService
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -102,12 +101,18 @@ class RoomFlowNode @AssistedInject constructor(
 
     private fun fetchRoomMembers() = lifecycleScope.launch {
         val room = inputs.room
+        /*
         room.fetchMembers()
+            .map {
+                room.updateMembers()
+            }
             .onFailure {
                 Timber.e(it, "Fail to fetch members for room ${room.roomId}")
             }.onSuccess {
                 Timber.v("Success fetching members for room ${room.roomId}")
             }
+
+         */
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {

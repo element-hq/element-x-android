@@ -28,6 +28,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.getMember
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import timber.log.Timber
 

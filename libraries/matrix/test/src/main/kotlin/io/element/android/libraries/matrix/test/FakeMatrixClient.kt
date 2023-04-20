@@ -54,7 +54,7 @@ class FakeMatrixClient(
     private var logoutFailure: Throwable? = null
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
-        return FakeMatrixRoom(roomId)
+        return FakeMatrixRoom(sessionId = sessionId, roomId = roomId)
     }
 
     override fun findDM(userId: UserId): MatrixRoom? {
