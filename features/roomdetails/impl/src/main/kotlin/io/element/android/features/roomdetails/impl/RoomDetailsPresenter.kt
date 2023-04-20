@@ -18,6 +18,7 @@ package io.element.android.features.roomdetails.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,17 +26,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.architecture.executeResult
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.room.getDmMember
+import io.element.android.libraries.matrix.api.room.memberCount
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RoomDetailsPresenter @Inject constructor(
-    private val sessionId: SessionId,
     private val room: MatrixRoom,
     private val roomMembershipObserver: RoomMembershipObserver,
 ) : Presenter<RoomDetailsState> {
@@ -50,15 +50,14 @@ class RoomDetailsPresenter @Inject constructor(
             mutableStateOf<RoomDetailsError?>(null)
         }
 
-        var memberCount: Async<Int> by remember { mutableStateOf(Async.Loading()) }
+        val memberCount: MutableState<Async<Int>> = remember {
+            mutableStateOf(Async.Uninitialized)
+        }
         LaunchedEffect(Unit) {
-            withContext(Dispatchers.IO) {
-                memberCount = runCatching { room.memberCount() }
-                    .fold(
-                        onSuccess = { Async.Success(it) },
-                        onFailure = { Async.Failure(it) }
-                    )
-            }
+            suspend {
+                room.updateMembers()
+                    .map { room.memberCount() }
+            }.executeResult(memberCount)
         }
 
         val dmMember = room.getDmMember()
@@ -72,7 +71,7 @@ class RoomDetailsPresenter @Inject constructor(
             when (event) {
                 is RoomDetailsEvent.LeaveRoom -> {
                     if (event.needsConfirmation) {
-                        leaveRoomWarning = LeaveRoomWarning.computeLeaveRoomWarning(room.isPublic, memberCount)
+                        leaveRoomWarning = LeaveRoomWarning.computeLeaveRoomWarning(room.isPublic, memberCount.value)
                     } else {
                         coroutineScope.launch(Dispatchers.IO) {
                             room.leave()
@@ -96,7 +95,7 @@ class RoomDetailsPresenter @Inject constructor(
             roomAlias = room.alias,
             roomAvatarUrl = room.avatarUrl,
             roomTopic = room.topic,
-            memberCount = memberCount,
+            memberCount = memberCount.value,
             isEncrypted = room.isEncrypted,
             displayLeaveRoomWarning = leaveRoomWarning,
             error = error,

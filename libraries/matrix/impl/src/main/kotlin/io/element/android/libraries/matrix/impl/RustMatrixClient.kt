@@ -198,7 +198,7 @@ class RustMatrixClient constructor(
         val slidingSyncRoom = slidingSync.getRoom(roomId.value) ?: return null
         val fullRoom = slidingSyncRoom.fullRoom() ?: return null
         return RustMatrixRoom(
-            currentUserId = sessionId,
+            sessionId = sessionId,
             slidingSyncUpdateFlow = slidingSyncObserverProxy.updateSummaryFlow,
             slidingSyncRoom = slidingSyncRoom,
             innerRoom = fullRoom,

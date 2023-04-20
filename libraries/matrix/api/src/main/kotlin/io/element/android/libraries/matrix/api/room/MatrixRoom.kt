@@ -18,12 +18,15 @@ package io.element.android.libraries.matrix.api.room
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import java.io.Closeable
 
-interface MatrixRoom: Closeable {
+interface MatrixRoom : Closeable {
+    val sessionId: SessionId
     val roomId: RoomId
     val name: String?
     val bestName: String
@@ -36,19 +39,21 @@ interface MatrixRoom: Closeable {
     val isDirect: Boolean
     val isPublic: Boolean
 
-    suspend fun members() : List<RoomMember>
+    /**
+     * The current loaded members as a StateFlow.
+     * Initial value is an emptyList.
+     * To update them you should call [updateMembers].
+     */
+    val membersFlow: StateFlow<List<RoomMember>>
 
-    suspend fun memberCount(): Int
-
-    fun getMember(userId: UserId): RoomMember?
-
-    fun getDmMember(): RoomMember?
+    /**
+     * Try to load the room members and update the membersFlow.
+     */
+    suspend fun updateMembers(): Result<Unit>
 
     fun syncUpdateFlow(): Flow<Long>
 
     fun timeline(): MatrixTimeline
-
-    suspend fun fetchMembers(): Result<Unit>
 
     suspend fun userDisplayName(userId: UserId): Result<String?>
 
@@ -63,4 +68,20 @@ interface MatrixRoom: Closeable {
     suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>
 
     suspend fun leave(): Result<Unit>
+}
+
+fun MatrixRoom.getMember(userId: UserId): RoomMember? {
+    return membersFlow.value.find { it.userId == userId }
+}
+
+fun MatrixRoom.getDmMember(): RoomMember? {
+    return if (membersFlow.value.size == 2 && isDirect && isEncrypted) {
+        membersFlow.value.find { it.userId != this.sessionId }
+    } else {
+        null
+    }
+}
+
+fun MatrixRoom.memberCount(): Int {
+    return membersFlow.value.size
 }
