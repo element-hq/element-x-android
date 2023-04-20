@@ -68,7 +68,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.error.loginError
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.components.async.AsyncFailure
+import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
@@ -146,39 +149,22 @@ fun LoginRootView(
 
                 ChangeServerSection(
                     interactionEnabled = !isLoading,
-                    homeserver = state.homeserverDetails.url,
+                    homeserver = state.homeserverUrl,
                     onChangeServer = onChangeServer
                 )
 
                 Spacer(Modifier.height(32.dp))
 
-                when {
-                    state.supportOidcLogin -> {
-                        // Oidc, in this case, just display a Spacer and the submit button
-                        Spacer(Modifier.height(28.dp))
-                    }
-                    state.supportPasswordLogin -> {
-                        LoginForm(state = state, isLoading = isLoading, onSubmit = ::submit)
-                    }
-                    else -> {
-                        Text(text = "No supported login flow")
-                    }
-                }
-
-                Spacer(Modifier.height(28.dp))
-
-                if (state.supportOidcLogin || state.supportPasswordLogin) {
-                    // Submit
-                    ButtonWithProgress(
-                        text = stringResource(R.string.screen_login_submit),
-                        showProgress = isLoading,
-                        onClick = ::submit,
-                        enabled = state.submitEnabled,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .testTag(TestTags.loginContinue)
+                when (state.homeserverDetails) {
+                    Async.Uninitialized,
+                    is Async.Loading -> AsyncLoading()
+                    is Async.Failure -> AsyncFailure(
+                        throwable = state.homeserverDetails.error,
+                        onRetry = {
+                            state.eventSink.invoke(LoginRootEvents.RetryFetchServerInfo)
+                        }
                     )
-                    Spacer(modifier = Modifier.height(32.dp))
+                    is Async.Success -> ServerDetailForm(state, isLoading, ::submit)
                 }
             }
             when (val loggedInState = state.loggedInState) {
@@ -192,6 +178,43 @@ fun LoginRootView(
         LoginErrorDialog(error = state.loggedInState.failure, onDismiss = {
             state.eventSink(LoginRootEvents.ClearError)
         })
+    }
+}
+
+@Composable
+fun ServerDetailForm(
+    state: LoginRootState,
+    isLoading: Boolean,
+    submit: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    when {
+        state.supportOidcLogin -> {
+            // Oidc, in this case, just display a Spacer and the submit button
+            Spacer(modifier.height(28.dp))
+        }
+        state.supportPasswordLogin -> {
+            LoginForm(state = state, isLoading = isLoading, onSubmit = submit, modifier = modifier)
+        }
+        else -> {
+            Text(modifier = modifier, text = "No supported login flow")
+        }
+    }
+
+    Spacer(Modifier.height(28.dp))
+
+    if (state.supportOidcLogin || state.supportPasswordLogin) {
+        // Submit
+        ButtonWithProgress(
+            text = stringResource(R.string.screen_login_submit),
+            showProgress = isLoading,
+            onClick = submit,
+            enabled = state.submitEnabled,
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(TestTags.loginContinue)
+        )
+        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 

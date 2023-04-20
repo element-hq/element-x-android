@@ -17,6 +17,7 @@
 package io.element.android.features.login.impl.root
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -24,25 +25,38 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.features.login.impl.util.LoginConstants
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.execute
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class LoginRootPresenter @Inject constructor(private val authenticationService: MatrixAuthenticationService) : Presenter<LoginRootState> {
-
-    private val defaultHomeserver = MatrixHomeServerDetails(
-        url = LoginConstants.DEFAULT_HOMESERVER_URL,
-        supportsPasswordLogin = true,
-        supportsOidc = false,
-    )
+class LoginRootPresenter @Inject constructor(
+    private val authenticationService: MatrixAuthenticationService,
+) : Presenter<LoginRootState> {
 
     @Composable
     override fun present(): LoginRootState {
         val localCoroutineScope = rememberCoroutineScope()
-        val homeserver = authenticationService.getHomeserverDetails().collectAsState().value ?: defaultHomeserver
+        val currentHomeServerDetails = authenticationService.getHomeserverDetails().collectAsState().value
+        val homeserver = currentHomeServerDetails?.url ?: LoginConstants.DEFAULT_HOMESERVER_URL
+        val getHomeServerDetailsAction: MutableState<Async<MatrixHomeServerDetails>> = remember {
+            if (currentHomeServerDetails != null) {
+                mutableStateOf(Async.Success(currentHomeServerDetails))
+            } else {
+                mutableStateOf(Async.Uninitialized)
+            }
+        }
+
+        LaunchedEffect(Unit) {
+            if (currentHomeServerDetails == null) {
+                getHomeServerDetails(homeserver, getHomeServerDetailsAction)
+            }
+        }
+
         val loggedInState: MutableState<LoggedInState> = remember {
             mutableStateOf(LoggedInState.NotLoggedIn)
         }
@@ -52,6 +66,7 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
 
         fun handleEvents(event: LoginRootEvents) {
             when (event) {
+                LoginRootEvents.RetryFetchServerInfo -> localCoroutineScope.getHomeServerDetails(homeserver, getHomeServerDetailsAction)
                 is LoginRootEvents.SetLogin -> updateFormState(formState) {
                     copy(login = event.login)
                 }
@@ -59,9 +74,10 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
                     copy(password = event.password)
                 }
                 LoginRootEvents.Submit -> {
+                    val homeServerDetails = getHomeServerDetailsAction.value.dataOrNull() ?: return
                     when {
-                        homeserver.supportsOidc -> localCoroutineScope.submitOidc(homeserver.url, loggedInState)
-                        homeserver.supportsPasswordLogin -> localCoroutineScope.submit(homeserver.url, formState.value, loggedInState)
+                        homeServerDetails.supportsOidc -> localCoroutineScope.submitOidc(loggedInState)
+                        homeServerDetails.supportsPasswordLogin -> localCoroutineScope.submit(formState.value, loggedInState)
                     }
                 }
                 LoginRootEvents.ClearError -> loggedInState.value = LoggedInState.NotLoggedIn
@@ -69,17 +85,27 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
         }
 
         return LoginRootState(
-            homeserverDetails = homeserver,
+            homeserverUrl = homeserver,
+            homeserverDetails = getHomeServerDetailsAction.value,
             loggedInState = loggedInState.value,
             formState = formState.value,
             eventSink = ::handleEvents
         )
     }
 
-    private fun CoroutineScope.submitOidc(homeserver: String, loggedInState: MutableState<LoggedInState>) = launch {
+    private fun CoroutineScope.getHomeServerDetails(
+        homeserver: String,
+        state: MutableState<Async<MatrixHomeServerDetails>>,
+    ) = launch {
+        state.value = Async.Loading()
+        suspend {
+            authenticationService.setHomeserver(homeserver)
+            authenticationService.getHomeserverDetails().value!!
+        }.execute(state)
+    }
+
+    private fun CoroutineScope.submitOidc(loggedInState: MutableState<LoggedInState>) = launch {
         loggedInState.value = LoggedInState.LoggingIn
-        // TODO rework the setHomeserver flow
-        authenticationService.setHomeserver(homeserver)
         authenticationService.getOidcUrl()
             .onSuccess {
                 loggedInState.value = LoggedInState.OidcStarted(it)
@@ -89,10 +115,8 @@ class LoginRootPresenter @Inject constructor(private val authenticationService: 
             }
     }
 
-    private fun CoroutineScope.submit(homeserver: String, formState: LoginFormState, loggedInState: MutableState<LoggedInState>) = launch {
+    private fun CoroutineScope.submit(formState: LoginFormState, loggedInState: MutableState<LoggedInState>) = launch {
         loggedInState.value = LoggedInState.LoggingIn
-        // TODO rework the setHomeserver flow
-        authenticationService.setHomeserver(homeserver)
         authenticationService.login(formState.login.trim(), formState.password)
             .onSuccess { sessionId ->
                 loggedInState.value = LoggedInState.LoggedIn(sessionId)
