@@ -33,7 +33,7 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
             roomId = RoomId(slidingSyncRoom.roomId()),
             name = slidingSyncRoom.name() ?: slidingSyncRoom.roomId(),
             canonicalAlias = room?.canonicalAlias(),
-            isDirect = slidingSyncRoom.isDm() ?: false,
+            isDirect = room?.isDirect() ?: false,
             avatarURLString = room?.avatarUrl(),
             unreadNotificationCount = slidingSyncRoom.unreadNotifications().use { it.notificationCount().toInt() },
             lastMessage = latestRoomMessage,

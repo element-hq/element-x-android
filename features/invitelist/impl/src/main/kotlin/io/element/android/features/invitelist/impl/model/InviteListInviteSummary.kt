@@ -27,7 +27,8 @@ data class InviteListInviteSummary(
     val roomName: String = "",
     val roomAlias: String? = null,
     val roomAvatarData: AvatarData = AvatarData(roomId.value, roomName),
-    val sender: InviteSender? = null
+    val sender: InviteSender? = null,
+    val isDirect: Boolean = false
 )
 
 data class InviteSender(
