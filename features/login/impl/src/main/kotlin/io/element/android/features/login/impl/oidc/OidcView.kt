@@ -71,7 +71,7 @@ fun OidcView(
 
     Box(modifier = modifier.statusBarsPadding()) {
         AndroidView(
-            modifier = modifier
+            modifier = Modifier
                 .statusBarsPadding(),
             factory = { context ->
                 WebView(context).apply {
