@@ -26,6 +26,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -33,7 +34,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.invitelist.impl.components.InviteSummaryRow
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -47,16 +51,56 @@ fun InviteListView(
     state: InviteListState,
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
-    onAcceptClicked: (RoomId) -> Unit = {},
-    onDeclineClicked: (RoomId) -> Unit = {},
+    onInviteAccepted: (RoomId) -> Unit = {},
 ) {
+    if (state.acceptedAction is Async.Success) {
+        LaunchedEffect(state.acceptedAction) {
+            onInviteAccepted(state.acceptedAction.state)
+        }
+    }
+
     InviteListContent(
         state = state,
         modifier = modifier,
         onBackClicked = onBackClicked,
-        onAcceptClicked = onAcceptClicked,
-        onDeclineClicked = onDeclineClicked,
     )
+
+    if (state.declineConfirmationDialog is InviteDeclineConfirmationDialog.Visible) {
+        val contentResource = if (state.declineConfirmationDialog.isDirect)
+            R.string.screen_invites_decline_direct_chat_message
+        else
+            R.string.screen_invites_decline_chat_message
+
+        val titleResource = if (state.declineConfirmationDialog.isDirect)
+            R.string.screen_invites_decline_direct_chat_title
+        else
+            R.string.screen_invites_decline_chat_title
+
+        ConfirmationDialog(
+            content = stringResource(contentResource, state.declineConfirmationDialog.name),
+            title = stringResource(titleResource),
+            onSubmitClicked = { state.eventSink(InviteListEvents.ConfirmDeclineInvite) },
+            onDismiss = { state.eventSink(InviteListEvents.CancelDeclineInvite) }
+        )
+    }
+
+    if (state.acceptedAction is Async.Failure) {
+        ErrorDialog(
+            content = stringResource(StringR.string.error_unknown),
+            title = stringResource(StringR.string.common_error),
+            submitText = stringResource(StringR.string.action_ok),
+            onDismiss = { state.eventSink(InviteListEvents.DismissAcceptError) }
+        )
+    }
+
+    if (state.declinedAction is Async.Failure) {
+        ErrorDialog(
+            content = stringResource(StringR.string.error_unknown),
+            title = stringResource(StringR.string.common_error),
+            submitText = stringResource(StringR.string.action_ok),
+            onDismiss = { state.eventSink(InviteListEvents.DismissDeclineError) }
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,8 +109,6 @@ fun InviteListContent(
     state: InviteListState,
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
-    onAcceptClicked: (RoomId) -> Unit = {},
-    onDeclineClicked: (RoomId) -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier,
@@ -102,8 +144,8 @@ fun InviteListContent(
                         ) { invite ->
                             InviteSummaryRow(
                                 invite = invite,
-                                onAcceptClicked = onAcceptClicked,
-                                onDeclineClicked = onDeclineClicked,
+                                onAcceptClicked = { state.eventSink(InviteListEvents.AcceptInvite(invite)) },
+                                onDeclineClicked = { state.eventSink(InviteListEvents.DeclineInvite(invite)) },
                             )
                         }
                     }

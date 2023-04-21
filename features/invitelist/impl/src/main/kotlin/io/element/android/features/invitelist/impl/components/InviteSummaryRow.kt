@@ -59,7 +59,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.collections.immutable.persistentMapOf
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -69,8 +68,8 @@ private val minHeight = 72.dp
 internal fun InviteSummaryRow(
     invite: InviteListInviteSummary,
     modifier: Modifier = Modifier,
-    onAcceptClicked: (RoomId) -> Unit = {},
-    onDeclineClicked: (RoomId) -> Unit = {},
+    onAcceptClicked: () -> Unit = {},
+    onDeclineClicked: () -> Unit = {},
 ) {
     Box(
         modifier = modifier
@@ -88,8 +87,8 @@ internal fun InviteSummaryRow(
 @Composable
 internal fun DefaultInviteSummaryRow(
     invite: InviteListInviteSummary,
-    onAcceptClicked: (RoomId) -> Unit = {},
-    onDeclineClicked: (RoomId) -> Unit = {},
+    onAcceptClicked: () -> Unit = {},
+    onDeclineClicked: () -> Unit = {},
 ) {
     Row(
         modifier = Modifier
@@ -138,7 +137,7 @@ internal fun DefaultInviteSummaryRow(
             Row(Modifier.padding(top = 12.dp)) {
                 OutlinedButton(
                     content = { Text(stringResource(StringR.string.action_decline), style = ElementTextStyles.Button) },
-                    onClick = { onDeclineClicked(invite.roomId) },
+                    onClick = onDeclineClicked,
                     modifier = Modifier.weight(1f),
                     contentPadding = PaddingValues(horizontal = 24.dp, vertical = 7.dp),
                 )
@@ -147,7 +146,7 @@ internal fun DefaultInviteSummaryRow(
 
                 Button(
                     content = { Text(stringResource(StringR.string.action_accept), style = ElementTextStyles.Button) },
-                    onClick = { onAcceptClicked(invite.roomId) },
+                    onClick = onAcceptClicked,
                     modifier = Modifier.weight(1f),
                     contentPadding = PaddingValues(horizontal = 24.dp, vertical = 7.dp),
                 )
