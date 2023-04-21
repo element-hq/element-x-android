@@ -67,7 +67,7 @@ androidx_constraintlayout = { module = "androidx.constraintlayout:constraintlayo
 androidx_recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 androidx_lifecycle_runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx_lifecycle_process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
-androidx_splash = "androidx.core:core-splashscreen:1.0.0"
+androidx_splash = "androidx.core:core-splashscreen:1.0.1"
 androidx_security_crypto = "androidx.security:security-crypto:1.0.0"
 
 androidx_activity_activity = { module = "androidx.activity:activity", version.ref = "activity" }
