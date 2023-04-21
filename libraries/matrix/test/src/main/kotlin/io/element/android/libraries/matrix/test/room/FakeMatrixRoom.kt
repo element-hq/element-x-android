@@ -21,7 +21,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -44,18 +44,16 @@ class FakeMatrixRoom(
     override val alternativeAliases: List<String> = emptyList(),
     override val isPublic: Boolean = true,
     override val isDirect: Boolean = false,
-    initialMembers: List<RoomMember> = emptyList(),
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
 ) : MatrixRoom {
 
     private var userDisplayNameResult = Result.success<String?>(null)
     private var userAvatarUrlResult = Result.success<String?>(null)
-    private var dmMember: RoomMember? = null
     private var updateMembersResult: Result<Unit> = Result.success(Unit)
 
     private var leaveRoomError: Throwable? = null
 
-    override val membersFlow: MutableStateFlow<List<RoomMember>> = MutableStateFlow(initialMembers)
+    override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)
 
     override suspend fun updateMembers(): Result<Unit> {
         return updateMembersResult
@@ -117,12 +115,12 @@ class FakeMatrixRoom(
         this.leaveRoomError = throwable
     }
 
-    fun givenFetchMemberResult(result: Result<Unit>) {
-        updateMembersResult = result
+    fun givenRoomMembersState(state: MatrixRoomMembersState) {
+        membersStateFlow.value = state
     }
 
-    fun givenDmMember(roomMember: RoomMember) {
-        this.dmMember = roomMember
+    fun givenUpdateMembersResult(result: Result<Unit>) {
+        updateMembersResult = result
     }
 
     fun givenUserDisplayNameResult(displayName: Result<String?>) {

@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.userlist.api
+package io.element.android.features.roomdetails.impl.members
 
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 
-interface UserListDataSource {
-    //TODO should probably have a flow
-    suspend fun search(query: String): List<MatrixUser>
-    suspend fun getProfile(userId: UserId): MatrixUser?
+sealed interface RoomMemberListEvents {
+    data class SelectUser(val user: MatrixUser) : RoomMemberListEvents
 }

@@ -28,6 +28,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
@@ -51,6 +52,7 @@ import io.element.android.libraries.designsystem.theme.components.CenterAlignedT
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,8 +61,19 @@ fun RoomMemberListView(
     state: RoomMemberListState,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
-    onUserSelected: (MatrixUser) -> Unit = {},
+    onMemberSelected: (RoomMember) -> Unit = {},
 ) {
+
+    LaunchedEffect(state.selectedRoomMember) {
+        if (state.selectedRoomMember != null) {
+            onMemberSelected(state.selectedRoomMember)
+        }
+    }
+
+    fun onUserSelected(user: MatrixUser) {
+        state.eventSink(RoomMemberListEvents.SelectUser(user))
+    }
+
     Scaffold(
         topBar = {
             if (!state.userListState.isSearchActive) {
@@ -76,7 +89,7 @@ fun RoomMemberListView(
         ) {
             UserListView(
                 state = state.userListState,
-                onUserSelected = onUserSelected,
+                onUserSelected = ::onUserSelected,
             )
 
             if (!state.userListState.isSearchActive) {

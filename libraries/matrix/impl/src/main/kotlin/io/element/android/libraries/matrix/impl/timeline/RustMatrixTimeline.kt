@@ -143,12 +143,15 @@ class RustMatrixTimeline(
                 requiredState = listOf(
                     RequiredState(key = "m.room.canonical_alias", value = ""),
                     RequiredState(key = "m.room.topic", value = ""),
+                    RequiredState(key = "m.room.name", value = ""),
                     RequiredState(key = "m.room.join_rule", value = ""),
                 ),
                 timelineLimit = 20.toUInt()
             )
             val result = slidingSyncRoom.subscribeAndAddTimelineListener(timelineListener, settings)
-            fetchMembers()
+            launch {
+                fetchMembers()
+            }
             listenerTokens += result.taskHandle
             result.items
         }

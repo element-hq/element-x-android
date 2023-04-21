@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import java.io.Closeable
 
 interface MatrixRoom : Closeable {
@@ -41,10 +42,10 @@ interface MatrixRoom : Closeable {
 
     /**
      * The current loaded members as a StateFlow.
-     * Initial value is an emptyList.
+     * Initial value is [MatrixRoomMembersState.Unknown].
      * To update them you should call [updateMembers].
      */
-    val membersFlow: StateFlow<List<RoomMember>>
+    val membersStateFlow: StateFlow<MatrixRoomMembersState>
 
     /**
      * Try to load the room members and update the membersFlow.
@@ -70,18 +71,21 @@ interface MatrixRoom : Closeable {
     suspend fun leave(): Result<Unit>
 }
 
-fun MatrixRoom.getMember(userId: UserId): RoomMember? {
-    return membersFlow.value.find { it.userId == userId }
-}
-
-fun MatrixRoom.getDmMember(): RoomMember? {
-    return if (membersFlow.value.size == 2 && isDirect && isEncrypted) {
-        membersFlow.value.find { it.userId != this.sessionId }
-    } else {
-        null
+fun MatrixRoom.getMemberFlow(userId: UserId): Flow<RoomMember?> {
+    return membersStateFlow.map { state ->
+        state.roomMembers().find {
+            it.userId == userId
+        }
     }
 }
 
-fun MatrixRoom.memberCount(): Int {
-    return membersFlow.value.size
+fun MatrixRoom.getDmMemberFlow(): Flow<RoomMember?> {
+    return membersStateFlow.map { state ->
+        val members = state.roomMembers()
+        if (members.size == 2 && isDirect && isEncrypted) {
+            members.find { it.userId != this.sessionId }
+        } else {
+            null
+        }
+    }
 }

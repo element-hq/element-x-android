@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.fixtures
+package io.element.android.libraries.matrix.api.room
 
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+sealed interface MatrixRoomMembersState {
+    object Unknown : MatrixRoomMembersState
+    object Pending : MatrixRoomMembersState
+    data class Error(val failure: Throwable) : MatrixRoomMembersState
+    data class Ready(val roomMembers: List<RoomMember>) : MatrixRoomMembersState
+}
 
-// TODO Move to common module to reuse
-internal fun testCoroutineDispatchers() = CoroutineDispatchers(
-    io = UnconfinedTestDispatcher(),
-    computation = UnconfinedTestDispatcher(),
-    main = UnconfinedTestDispatcher(),
-    diffUpdateDispatcher = UnconfinedTestDispatcher(),
-)
+fun MatrixRoomMembersState.roomMembers(): List<RoomMember> {
+    return when (this) {
+        is MatrixRoomMembersState.Ready -> roomMembers
+        else -> emptyList()
+    }
+}

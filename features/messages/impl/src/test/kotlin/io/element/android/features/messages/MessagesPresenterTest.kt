@@ -131,7 +131,6 @@ class MessagesPresenterTest {
             appCoroutineScope = this,
             room = matrixRoom
         )
-
         val timelinePresenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
             room = matrixRoom,

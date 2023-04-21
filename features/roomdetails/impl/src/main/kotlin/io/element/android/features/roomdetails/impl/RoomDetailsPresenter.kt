@@ -17,75 +17,60 @@
 package io.element.android.features.roomdetails.impl
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.executeResult
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.room.getDmMember
-import io.element.android.libraries.matrix.api.room.memberCount
-import kotlinx.coroutines.Dispatchers
+import io.element.android.libraries.matrix.api.room.getDmMemberFlow
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RoomDetailsPresenter @Inject constructor(
     private val room: MatrixRoom,
     private val roomMembershipObserver: RoomMembershipObserver,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) : Presenter<RoomDetailsState> {
 
     @Composable
     override fun present(): RoomDetailsState {
         val coroutineScope = rememberCoroutineScope()
-        var leaveRoomWarning by remember {
+        val leaveRoomWarning = remember {
             mutableStateOf<LeaveRoomWarning?>(null)
         }
-        var error by remember {
+        val error = remember {
             mutableStateOf<RoomDetailsError?>(null)
         }
+        val membersState by room.membersStateFlow.collectAsState()
+        val memberCount by getMemberCount(membersState)
+        val dmMemberState by room.getDmMemberFlow()
+            .collectAsState(initial = null, context = coroutineDispatchers.computation)
 
-        val memberCount: MutableState<Async<Int>> = remember {
-            mutableStateOf(Async.Uninitialized)
-        }
-        LaunchedEffect(Unit) {
-            suspend {
-                room.updateMembers()
-                    .map { room.memberCount() }
-            }.executeResult(memberCount)
-        }
-
-        val dmMember = room.getDmMember()
-        val roomType = if (dmMember != null) {
-            RoomDetailsType.Dm(dmMember)
-        } else {
-            RoomDetailsType.Room
-        }
+        val roomType = getRoomType(dmMemberState)
 
         fun handleEvents(event: RoomDetailsEvent) {
             when (event) {
                 is RoomDetailsEvent.LeaveRoom -> {
-                    if (event.needsConfirmation) {
-                        leaveRoomWarning = LeaveRoomWarning.computeLeaveRoomWarning(room.isPublic, memberCount.value)
-                    } else {
-                        coroutineScope.launch(Dispatchers.IO) {
-                            room.leave()
-                                .onSuccess {
-                                    roomMembershipObserver.notifyUserLeftRoom(room.roomId)
-                                }.onFailure {
-                                    error = RoomDetailsError.AlertGeneric
-                                }
-                            leaveRoomWarning = null
-                        }
-                    }
+                    coroutineScope.leaveRoom(
+                        needsConfirmation = event.needsConfirmation,
+                        memberCount = memberCount,
+                        leaveRoomWarning = leaveRoomWarning,
+                        error = error,
+                    )
                 }
-                is RoomDetailsEvent.ClearLeaveRoomWarning -> leaveRoomWarning = null
-                RoomDetailsEvent.ClearError -> error = null
+                is RoomDetailsEvent.ClearLeaveRoomWarning -> leaveRoomWarning.value = null
+                RoomDetailsEvent.ClearError -> error.value = null
             }
         }
 
@@ -95,12 +80,56 @@ class RoomDetailsPresenter @Inject constructor(
             roomAlias = room.alias,
             roomAvatarUrl = room.avatarUrl,
             roomTopic = room.topic,
-            memberCount = memberCount.value,
+            memberCount = memberCount,
             isEncrypted = room.isEncrypted,
-            displayLeaveRoomWarning = leaveRoomWarning,
-            error = error,
-            roomType = roomType,
+            displayLeaveRoomWarning = leaveRoomWarning.value,
+            error = error.value,
+            roomType = roomType.value,
             eventSink = ::handleEvents,
         )
     }
+
+    @Composable
+    private fun getRoomType(dmMember: RoomMember?): State<RoomDetailsType> = remember(dmMember) {
+        derivedStateOf {
+            if (dmMember != null) {
+                RoomDetailsType.Dm(dmMember)
+            } else {
+                RoomDetailsType.Room
+            }
+        }
+    }
+
+    @Composable
+    private fun getMemberCount(membersState: MatrixRoomMembersState): State<Async<Int>> = remember(membersState) {
+        derivedStateOf {
+            when (membersState) {
+                MatrixRoomMembersState.Unknown -> Async.Uninitialized
+                MatrixRoomMembersState.Pending -> Async.Loading()
+                is MatrixRoomMembersState.Ready -> Async.Success(membersState.roomMembers.size)
+                is MatrixRoomMembersState.Error -> Async.Failure(membersState.failure)
+            }
+        }
+    }
+
+    private fun CoroutineScope.leaveRoom(
+        needsConfirmation: Boolean,
+        memberCount: Async<Int>,
+        leaveRoomWarning: MutableState<LeaveRoomWarning?>,
+        error: MutableState<RoomDetailsError?>,
+    ) = launch(coroutineDispatchers.io) {
+        if (needsConfirmation) {
+            leaveRoomWarning.value = LeaveRoomWarning.computeLeaveRoomWarning(room.isPublic, memberCount)
+        } else {
+            room.leave()
+                .onSuccess {
+                    roomMembershipObserver.notifyUserLeftRoom(room.roomId)
+                }.onFailure {
+                    error.value = RoomDetailsError.AlertGeneric
+                }
+            leaveRoomWarning.value = null
+        }
+    }
 }
+
+
