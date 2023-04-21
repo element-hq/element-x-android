@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.features.invitelist.impl
 
-android {
-    namespace = "io.element.android.features.invitelist.api"
-}
+import io.element.android.features.invitelist.impl.model.InviteListInviteSummary
 
-dependencies {
-    implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix.api)
+sealed interface InviteListEvents {
+
+    data class AcceptInvite(val invite: InviteListInviteSummary) : InviteListEvents
+    data class DeclineInvite(val invite: InviteListInviteSummary) : InviteListEvents
+
+    object ConfirmDeclineInvite: InviteListEvents
+    object CancelDeclineInvite: InviteListEvents
+
+    object DismissAcceptError: InviteListEvents
+    object DismissDeclineError: InviteListEvents
+
 }

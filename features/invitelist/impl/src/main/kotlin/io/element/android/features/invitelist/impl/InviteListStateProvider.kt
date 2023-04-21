@@ -19,6 +19,7 @@ package io.element.android.features.invitelist.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.invitelist.impl.model.InviteListInviteSummary
 import io.element.android.features.invitelist.impl.model.InviteSender
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.collections.immutable.ImmutableList
@@ -28,7 +29,11 @@ open class InviteListStateProvider : PreviewParameterProvider<InviteListState> {
     override val values: Sequence<InviteListState>
         get() = sequenceOf(
             aInviteListState(),
-            aInviteListState().copy(inviteList = persistentListOf())
+            aInviteListState().copy(inviteList = persistentListOf()),
+            aInviteListState().copy(declineConfirmationDialog = InviteDeclineConfirmationDialog.Visible(true, "Alice")),
+            aInviteListState().copy(declineConfirmationDialog = InviteDeclineConfirmationDialog.Visible(false, "Some Room")),
+            aInviteListState().copy(acceptedAction = Async.Failure(Throwable("Whoops"))),
+            aInviteListState().copy(declinedAction = Async.Failure(Throwable("Whoops"))),
         )
 }
 

@@ -27,6 +27,7 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.invitelist.api.InviteListEntryPoint
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.RoomId
 
 @ContributesNode(SessionScope::class)
 class InviteListNode @AssistedInject constructor(
@@ -39,12 +40,17 @@ class InviteListNode @AssistedInject constructor(
         plugins<InviteListEntryPoint.Callback>().forEach { it.onBackClicked() }
     }
 
+    private fun onInviteAccepted(roomId: RoomId) {
+        plugins<InviteListEntryPoint.Callback>().forEach { it.onInviteAccepted(roomId) }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
         InviteListView(
             state = state,
             onBackClicked = ::onBackClicked,
+            onInviteAccepted = ::onInviteAccepted,
         )
     }
 }

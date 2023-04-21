@@ -227,6 +227,10 @@ class LoggedInFlowNode @AssistedInject constructor(
                     override fun onBackClicked() {
                         backstack.pop()
                     }
+
+                    override fun onInviteAccepted(roomId: RoomId) {
+                        backstack.push(NavTarget.Room(roomId))
+                    }
                 }
 
                 inviteListEntryPoint.nodeBuilder(this, buildContext)
