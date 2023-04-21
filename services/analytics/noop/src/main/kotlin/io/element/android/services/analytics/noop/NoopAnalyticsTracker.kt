@@ -17,11 +17,11 @@
 package io.element.android.services.analytics.noop
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.services.analytics.api.AnalyticsTracker
-import io.element.android.services.analytics.api.VectorAnalyticsEvent
-import io.element.android.services.analytics.api.VectorAnalyticsScreen
-import io.element.android.services.analytics.api.plan.UserProperties
+import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
+import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
+import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.libraries.di.AppScope
+import io.element.android.services.analytics.api.AnalyticsTracker
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)

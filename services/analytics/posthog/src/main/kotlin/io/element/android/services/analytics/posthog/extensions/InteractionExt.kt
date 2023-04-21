@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.services.analytics.api
+package io.element.android.services.analytics.posthog.extensions
 
-interface VectorAnalyticsScreen {
-    fun getName(): String
-    fun getProperties(): Map<String, Any>?
-}
+import im.vector.app.features.analytics.plan.Interaction
+
+fun Interaction.Name.toAnalyticsInteraction(interactionType: Interaction.InteractionType = Interaction.InteractionType.Touch) =
+        Interaction(
+                name = this,
+                interactionType = interactionType
+        )

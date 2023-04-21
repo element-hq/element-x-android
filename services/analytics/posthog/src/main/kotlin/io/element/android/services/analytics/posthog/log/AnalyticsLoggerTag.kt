@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.services.analytics.api
+package io.element.android.services.analytics.posthog.log
 
-interface VectorAnalyticsEvent {
-    fun getName(): String
-    fun getProperties(): Map<String, Any?>?
-}
+import io.element.android.libraries.core.log.logger.LoggerTag
+
+val analyticsTag = LoggerTag("Analytics")

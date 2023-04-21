@@ -16,7 +16,9 @@
 
 package io.element.android.services.analytics.api
 
-import io.element.android.services.analytics.api.plan.UserProperties
+import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
+import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
+import im.vector.app.features.analytics.plan.UserProperties
 
 interface AnalyticsTracker {
     /**

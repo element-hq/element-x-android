@@ -15,12 +15,28 @@
  */
 plugins {
     id("io.element.android-library")
+    alias(libs.plugins.anvil)
 }
 
 android {
-    namespace = "io.element.android.services.analytics.api"
+    namespace = "io.element.android.services.analytics.impl"
+}
+
+anvil {
+    generateDaggerFactories.set(true)
 }
 
 dependencies {
-    api("com.github.matrix-org:matrix-analytics-events:PR81-SNAPSHOT")
+    implementation(libs.dagger)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.coroutines.core)
+    implementation(libs.sentry.android)
+    implementation(libs.posthog) {
+        exclude("com.android.support", "support-annotations")
+    }
+    implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.core)
+    implementation(projects.libraries.di)
+    implementation(projects.services.toolbox.api)
+    api(projects.services.analytics.api)
 }

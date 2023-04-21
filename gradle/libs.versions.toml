@@ -147,6 +147,10 @@ otaliastudios_transcoder = "com.otaliastudios:transcoder:0.10.5"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.1.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 
+# Analytics
+posthog = "com.posthog.android:posthog:2.0.3"
+sentry_android = "io.sentry:sentry-android:6.17.0"
+
 # Di
 inject = "javax.inject:javax.inject:1"
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }

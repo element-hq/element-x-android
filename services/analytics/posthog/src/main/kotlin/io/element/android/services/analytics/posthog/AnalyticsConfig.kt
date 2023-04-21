@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-}
 
-android {
-    namespace = "io.element.android.services.analytics.api"
-}
+package io.element.android.services.analytics.posthog
 
-dependencies {
-    api("com.github.matrix-org:matrix-analytics-events:PR81-SNAPSHOT")
-}
+data class AnalyticsConfig(
+        val isEnabled: Boolean,
+        val postHogHost: String,
+        val postHogApiKey: String,
+        val policyLink: String,
+        val sentryDSN: String,
+        val sentryEnvironment: String
+)
