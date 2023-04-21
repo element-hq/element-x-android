@@ -29,7 +29,7 @@ class OidcUrlParser {
     // On success, we get:
     // `io.element:/callback?state=IFF1UETGye2ZA8pO&code=y6X1GZeqA3xxOWcTeShgv8nkgFJXyzWB`
     /**
-     * Return a OidcAction, or null if the url is not a OidcUrl
+     * Return a OidcAction, or null if the url is not a OidcUrl.
      */
     fun parse(url: String): OidcAction? {
         if (url.startsWith(OidcConfig.redirectUri).not()) return null
