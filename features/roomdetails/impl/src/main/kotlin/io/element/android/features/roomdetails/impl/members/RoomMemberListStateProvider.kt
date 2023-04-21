@@ -39,4 +39,5 @@ internal fun aRoomMemberListState(
     RoomMemberListState(
         userListState = aUserListState().copy(searchResults = searchResults),
         allUsers = allUsers,
+        eventSink = {}
     )

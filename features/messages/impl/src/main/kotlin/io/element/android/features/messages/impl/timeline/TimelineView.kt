@@ -75,6 +75,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun TimelineView(
@@ -100,11 +101,11 @@ fun TimelineView(
             itemsIndexed(
                 items = state.timelineItems,
                 contentType = { _, timelineItem -> timelineItem.contentType() },
-                key = { _, timelineItem -> timelineItem.key() },
+                key = { _, timelineItem -> timelineItem.identifier() },
             ) { index, timelineItem ->
                 TimelineItemRow(
                     timelineItem = timelineItem,
-                    isHighlighted = timelineItem.key() == state.highlightedEventId?.value,
+                    isHighlighted = timelineItem.identifier() == state.highlightedEventId?.value,
                     onClick = onMessageClicked,
                     onLongClick = onMessageLongClicked
                 )
@@ -114,27 +115,22 @@ fun TimelineView(
             }
         }
 
+        /*
         TimelineScrollHelper(
             lazyListState = lazyListState,
             timelineItems = state.timelineItems,
             onLoadMore = ::onReachedLoadMore
         )
+
+         */
     }
 }
 
-private fun TimelineItem.key(): String {
-    return when (this) {
-        is TimelineItem.Event -> id
-        is TimelineItem.Virtual -> id
-    }
-}
-
-private fun TimelineItem.contentType(): Int {
-    // Todo optimize for each subtype
-    return when (this) {
-        is TimelineItem.Event -> 0
-        is TimelineItem.Virtual -> 1
-    }
+private fun TimelineItem.contentType() = when (this) {
+    is TimelineItem.Event -> content.javaClass.simpleName
+    is TimelineItem.Virtual -> model.javaClass.simpleName
+}.also {
+    Timber.v("ContentType = $it")
 }
 
 @Composable

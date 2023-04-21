@@ -22,7 +22,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import kotlinx.coroutines.CoroutineScope
@@ -48,10 +48,10 @@ class RustMatrixRoom(
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : MatrixRoom {
 
-    override val membersFlow: StateFlow<List<RoomMember>>
-        get() = cachedMembers
+    override val membersStateFlow: StateFlow<MatrixRoomMembersState>
+        get() = _membersStateFlow
 
-    private var cachedMembers = MutableStateFlow<List<RoomMember>>(emptyList())
+    private var _membersStateFlow = MutableStateFlow<MatrixRoomMembersState>(MatrixRoomMembersState.Unknown)
 
     override fun syncUpdateFlow(): Flow<Long> {
         return slidingSyncUpdateFlow
@@ -122,9 +122,14 @@ class RustMatrixRoom(
         get() = innerRoom.isDirect()
 
     override suspend fun updateMembers(): Result<Unit> = withContext(coroutineDispatchers.io) {
+        _membersStateFlow.value = MatrixRoomMembersState.Pending
         runCatching {
-            cachedMembers.value = innerRoom.members().map(RoomMemberMapper::map)
-        }
+            innerRoom.members().map(RoomMemberMapper::map)
+        }.onSuccess {
+            _membersStateFlow.value = MatrixRoomMembersState.Ready(it)
+        }.onFailure {
+            _membersStateFlow.value = MatrixRoomMembersState.Error(it)
+        }.map { }
     }
 
     override suspend fun userDisplayName(userId: UserId): Result<String?> =
