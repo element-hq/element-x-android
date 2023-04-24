@@ -16,9 +16,12 @@
 
 package io.element.android.features.login.impl
 
+import android.app.Activity
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -54,6 +57,8 @@ class LoginFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins,
 ) {
+    private var activity: Activity? = null
+
     sealed interface NavTarget : Parcelable {
         @Parcelize
         object Root : NavTarget
@@ -76,7 +81,7 @@ class LoginFlowNode @AssistedInject constructor(
                     override fun onOidcDetails(oidcDetails: OidcDetails) {
                         if (customTabAvailabilityChecker.supportCustomTab()) {
                             // In this case open a Chrome Custom tab
-                            customTabHandler.open(oidcDetails.url)
+                            activity?.let { customTabHandler.open(it, oidcDetails.url) }
                         } else {
                             // Fallback to WebView mode
                             backstack.push(NavTarget.OidcView(oidcDetails))
@@ -96,6 +101,12 @@ class LoginFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
+        activity = LocalContext.current as? Activity
+        DisposableEffect(lifecycle) {
+            onDispose {
+                activity = null
+            }
+        }
         Children(
             navModel = backstack,
             modifier = modifier,

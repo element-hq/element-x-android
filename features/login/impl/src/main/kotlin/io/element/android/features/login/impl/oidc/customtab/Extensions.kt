@@ -16,9 +16,8 @@
 
 package io.element.android.features.login.impl.oidc.customtab
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
@@ -29,7 +28,7 @@ import androidx.browser.customtabs.CustomTabsSession
  * If several compatible browsers are installed, the user will be proposed to choose one.
  * Ref: https://developer.chrome.com/multidevice/android/customtabs.
  */
-fun Context.openUrlInChromeCustomTab(
+fun Activity.openUrlInChromeCustomTab(
     session: CustomTabsSession?,
     darkTheme: Boolean,
     url: String
@@ -54,9 +53,6 @@ fun Context.openUrlInChromeCustomTab(
             // .setExitAnimations(context, R.anim.enter_fade_in, R.anim.exit_fade_out)
             .apply { session?.let { setSession(it) } }
             .build()
-            .apply {
-                intent.flags += Intent.FLAG_ACTIVITY_NEW_TASK
-            }
             .launchUrl(this, Uri.parse(url))
     } catch (activityNotFoundException: ActivityNotFoundException) {
         // TODO context.toast(R.string.error_no_external_application_found)
