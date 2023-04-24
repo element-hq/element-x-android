@@ -30,8 +30,36 @@ data class AvatarData(
     @IgnoredOnParcel
     val size: AvatarSize = AvatarSize.MEDIUM
 ) : Parcelable {
-    fun getInitial(): String {
-        val firstChar = name?.firstOrNull() ?: id.getOrNull(1) ?: '?'
-        return firstChar.uppercase()
+
+    val initial by lazy {
+        (name?.takeIf { it.isNotBlank() } ?: id)
+            .let { dn ->
+                var startIndex = 0
+                val initial = dn[startIndex]
+
+                if (initial in listOf('@', '#', '+') && dn.length > 1) {
+                    startIndex++
+                }
+
+                var length = 1
+                var first = dn[startIndex]
+
+                // LEFT-TO-RIGHT MARK
+                if (dn.length >= 2 && 0x200e == first.code) {
+                    startIndex++
+                    first = dn[startIndex]
+                }
+
+                // check if it’s the start of a surrogate pair
+                if (first.code in 0xD800..0xDBFF && dn.length > startIndex + 1) {
+                    val second = dn[startIndex + 1]
+                    if (second.code in 0xDC00..0xDFFF) {
+                        length++
+                    }
+                }
+
+                dn.substring(startIndex, startIndex + length)
+            }
+            .uppercase()
     }
 }
