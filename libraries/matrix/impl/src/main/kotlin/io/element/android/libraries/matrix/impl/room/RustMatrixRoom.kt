@@ -85,7 +85,7 @@ class RustMatrixRoom(
     }
 
     override fun getDmMember(): Flow<RoomMember?> {
-        return members().map { members ->
+        return membersFlow.map { members ->
             if (members.size == 2 && isDirect && isEncrypted) {
                 members.find { it.userId != currentUserId }
             } else {

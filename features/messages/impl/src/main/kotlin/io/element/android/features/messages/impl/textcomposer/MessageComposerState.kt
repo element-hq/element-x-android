@@ -25,7 +25,6 @@ data class MessageComposerState(
     val text: StableCharSequence?,
     val isFullScreen: Boolean,
     val mode: MessageComposerMode,
-    val isVisible: Boolean,
     val eventSink: (MessageComposerEvents) -> Unit
 ) {
     val isSendButtonVisible: Boolean = text?.charSequence.isNullOrEmpty().not()

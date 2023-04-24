@@ -167,15 +167,12 @@ fun MessagesViewContent(
                 onMessageLongClicked = onMessageLongClicked
             )
         }
-
-        if (state.composerState.isVisible) {
-            MessageComposerView(
-                state = state.composerState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(Alignment.Bottom)
-            )
-        }
+        MessageComposerView(
+            state = state.composerState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(Alignment.Bottom)
+        )
     }
 }
 

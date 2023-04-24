@@ -19,13 +19,10 @@ package io.element.android.features.messages.impl.textcomposer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.core.data.toStableCharSequence
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -36,7 +33,7 @@ import javax.inject.Inject
 
 class MessageComposerPresenter @Inject constructor(
     private val appCoroutineScope: CoroutineScope,
-    private val room: MatrixRoom,
+    private val room: MatrixRoom
 ) : Presenter<MessageComposerState> {
 
     @Composable
@@ -50,11 +47,6 @@ class MessageComposerPresenter @Inject constructor(
         val composerMode: MutableState<MessageComposerMode> = rememberSaveable {
             mutableStateOf(MessageComposerMode.Normal(""))
         }
-
-        val dmMember by room.getDmMember().collectAsState(initial = null)
-
-        // Hide the composer if it's a DM and the other user is ignored
-        val isVisible = (dmMember?.isIgnored?.not()).orTrue()
 
         LaunchedEffect(composerMode.value) {
             when (val modeValue = composerMode.value) {
@@ -80,7 +72,6 @@ class MessageComposerPresenter @Inject constructor(
             text = text.value,
             isFullScreen = isFullScreen.value,
             mode = composerMode.value,
-            isVisible = isVisible,
             eventSink = ::handleEvents
         )
     }

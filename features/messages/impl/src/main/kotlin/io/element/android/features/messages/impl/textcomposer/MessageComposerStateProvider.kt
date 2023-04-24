@@ -31,6 +31,5 @@ fun aMessageComposerState() = MessageComposerState(
     text = StableCharSequence(""),
     isFullScreen = false,
     mode = MessageComposerMode.Normal(content = ""),
-    isVisible = true,
     eventSink = {}
 )
