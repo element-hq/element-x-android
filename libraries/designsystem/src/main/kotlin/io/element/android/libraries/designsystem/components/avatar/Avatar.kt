@@ -93,7 +93,7 @@ private fun InitialsAvatar(
     ) {
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = avatarData.getInitial(),
+            text = avatarData.initial,
             fontSize = (avatarData.size.dp / 2).value.sp,
             color = Color.White,
         )
