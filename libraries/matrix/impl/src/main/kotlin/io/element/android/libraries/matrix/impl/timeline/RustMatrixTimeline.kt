@@ -42,6 +42,7 @@ import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 import org.matrix.rustcomponents.sdk.TimelineItem
 import org.matrix.rustcomponents.sdk.TimelineListener
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicBoolean
 
 class RustMatrixTimeline(
     private val matrixRoom: MatrixRoom,
@@ -50,6 +51,8 @@ class RustMatrixTimeline(
     private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : MatrixTimeline {
+
+    private val isInit = AtomicBoolean(false)
 
     private val timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
         MutableStateFlow(emptyList())
@@ -95,6 +98,7 @@ class RustMatrixTimeline(
                     withContext(coroutineDispatchers.diffUpdateDispatcher) {
                         this@RustMatrixTimeline.timelineItems.value = matrixTimelineItems
                     }
+                    isInit.set(true)
                 }
                 .onFailure {
                     Timber.e("Failed adding timeline listener on room with identifier: ${matrixRoom.roomId})")
@@ -105,6 +109,7 @@ class RustMatrixTimeline(
     override fun dispose() {
         Timber.v("Dispose timeline for room ${matrixRoom.roomId}")
         listenerTokens.dispose()
+        isInit.set(false)
     }
 
     /**
@@ -125,6 +130,9 @@ class RustMatrixTimeline(
     override suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {
             Timber.v("Start back paginating for room ${matrixRoom.roomId} ")
+            if (!isInit.get()) {
+                throw IllegalStateException("Timeline is not init yet")
+            }
             val paginationOptions = PaginationOptions.UntilNumItems(
                 eventLimit = requestSize.toUShort(),
                 items = untilNumberOfItems.toUShort()
