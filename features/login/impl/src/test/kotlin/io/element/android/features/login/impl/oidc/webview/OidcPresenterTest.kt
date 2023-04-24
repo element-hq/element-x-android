@@ -16,7 +16,7 @@
 
 @file:OptIn(ExperimentalCoroutinesApi::class)
 
-package io.element.android.features.login.impl.oidc
+package io.element.android.features.login.impl.oidc.webview
 
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow

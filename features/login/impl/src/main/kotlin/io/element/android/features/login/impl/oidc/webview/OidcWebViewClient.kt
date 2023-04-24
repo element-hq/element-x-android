@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.oidc
+package io.element.android.features.login.impl.oidc.webview
 
 import android.annotation.TargetApi
 import android.os.Build
@@ -23,7 +23,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import timber.log.Timber
 
-// TODO Move to a dedicated module
 class OidcWebViewClient(private val eventListener: WebViewEventListener) : WebViewClient() {
     @TargetApi(Build.VERSION_CODES.N)
     override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {

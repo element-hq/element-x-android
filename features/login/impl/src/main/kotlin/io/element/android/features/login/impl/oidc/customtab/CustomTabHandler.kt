@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.oidc
+package io.element.android.features.login.impl.oidc.customtab
 
 import android.content.ComponentName
 import android.content.Context
@@ -22,7 +22,6 @@ import android.net.Uri
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsServiceConnection
 import androidx.browser.customtabs.CustomTabsSession
-import io.element.android.features.login.impl.oidc.web.openUrlInChromeCustomTab
 import io.element.android.libraries.di.ApplicationContext
 import javax.inject.Inject
 
@@ -32,15 +31,6 @@ class CustomTabHandler @Inject constructor(
     private var customTabsSession: CustomTabsSession? = null
     private var customTabsClient: CustomTabsClient? = null
     private var customTabsServiceConnection: CustomTabsServiceConnection? = null
-
-    /**
-     * Return true if the device supports Custom tab, i.e. there is an third party app with
-     * CustomTab support (ex: Chrome, Firefox, etc.).
-     */
-    fun supportCustomTab(): Boolean {
-        val packageName = CustomTabsClient.getPackageName(context, null)
-        return packageName != null
-    }
 
     fun prepareCustomTab(url: String) {
         val packageName = CustomTabsClient.getPackageName(context, null)
@@ -82,6 +72,6 @@ class CustomTabHandler @Inject constructor(
     }
 
     fun open(url: String) {
-        openUrlInChromeCustomTab(context, customTabsSession, false, url)
+        context.openUrlInChromeCustomTab(customTabsSession, false, url)
     }
 }

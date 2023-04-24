@@ -16,10 +16,20 @@
 
 package io.element.android.features.login.impl.oidc
 
-import io.element.android.features.login.api.oidc.OidcAction
+import android.content.Context
+import androidx.browser.customtabs.CustomTabsClient
+import io.element.android.libraries.di.ApplicationContext
+import javax.inject.Inject
 
-sealed interface OidcEvents {
-    object Cancel : OidcEvents
-    data class OidcActionEvent(val oidcAction: OidcAction): OidcEvents
-    object ClearError : OidcEvents
+class CustomTabAvailabilityChecker @Inject constructor(
+    @ApplicationContext private val context: Context,
+) {
+    /**
+     * Return true if the device supports Custom tab, i.e. there is an third party app with
+     * CustomTab support (ex: Chrome, Firefox, etc.).
+     */
+    fun supportCustomTab(): Boolean {
+        val packageName = CustomTabsClient.getPackageName(context, null)
+        return packageName != null
+    }
 }

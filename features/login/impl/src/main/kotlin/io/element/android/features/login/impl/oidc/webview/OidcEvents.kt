@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.oidc
+package io.element.android.features.login.impl.oidc.webview
 
-interface WebViewEventListener {
-    /**
-     * Triggered when a Webview loads an url.
-     *
-     * @param url The url about to be rendered.
-     * @return true if the method needs to manage some custom handling
-     */
-    fun shouldOverrideUrlLoading(url: String): Boolean {
-        return false
-    }
+import io.element.android.features.login.api.oidc.OidcAction
+
+sealed interface OidcEvents {
+    object Cancel : OidcEvents
+    data class OidcActionEvent(val oidcAction: OidcAction): OidcEvents
+    object ClearError : OidcEvents
 }
