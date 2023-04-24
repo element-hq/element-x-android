@@ -52,9 +52,10 @@ class FakeMatrixClient(
     private var createDmFailure: Throwable? = null
     private var findDmResult: MatrixRoom? = FakeMatrixRoom()
     private var logoutFailure: Throwable? = null
+    private val getRoomResults = mutableMapOf<RoomId, MatrixRoom>()
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
-        return FakeMatrixRoom(sessionId = sessionId, roomId = roomId)
+        return getRoomResults[roomId]
     }
 
     override fun findDM(userId: UserId): MatrixRoom? {
@@ -135,5 +136,9 @@ class FakeMatrixClient(
 
     fun givenFindDmResult(result: MatrixRoom?) {
         findDmResult = result
+    }
+
+    fun givenGetRoomResult(roomId: RoomId, result: MatrixRoom) {
+        getRoomResults[roomId] = result
     }
 }

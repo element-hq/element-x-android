@@ -20,6 +20,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.matrix.api.core.RoomId
 
 interface InviteListEntryPoint : FeatureEntryPoint {
 
@@ -32,6 +33,8 @@ interface InviteListEntryPoint : FeatureEntryPoint {
 
     interface Callback : Plugin {
         fun onBackClicked()
+
+        fun onInviteAccepted(roomId: RoomId)
     }
 }
 

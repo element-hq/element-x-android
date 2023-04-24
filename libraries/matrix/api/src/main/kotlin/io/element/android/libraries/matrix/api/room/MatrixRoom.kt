@@ -69,6 +69,10 @@ interface MatrixRoom : Closeable {
     suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>
 
     suspend fun leave(): Result<Unit>
+
+    suspend fun acceptInvitation(): Result<Unit>
+
+    suspend fun rejectInvitation(): Result<Unit>
 }
 
 fun MatrixRoom.getMemberFlow(userId: UserId): Flow<RoomMember?> {
