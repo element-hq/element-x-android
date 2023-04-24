@@ -25,7 +25,7 @@ internal class CacheInvalidator(private val itemStatesCache: MutableList<Timelin
     ListUpdateCallback {
 
     override fun onChanged(position: Int, count: Int, payload: Any?) {
-        Timber.v("onChanged(position= $position, count= $count")
+        Timber.d("onChanged(position= $position, count= $count)")
         (position until position + count).forEach {
             // Invalidate cache
             itemStatesCache[it] = null
@@ -33,13 +33,13 @@ internal class CacheInvalidator(private val itemStatesCache: MutableList<Timelin
     }
 
     override fun onMoved(fromPosition: Int, toPosition: Int) {
-        Timber.v("onMoved(fromPosition= $fromPosition, toPosition= $toPosition")
+        Timber.d("onMoved(fromPosition= $fromPosition, toPosition= $toPosition)")
         val model = itemStatesCache.removeAt(fromPosition)
         itemStatesCache.add(toPosition, model)
     }
 
     override fun onInserted(position: Int, count: Int) {
-        Timber.v("onInserted(position= $position, count= $count")
+        Timber.d("onInserted(position= $position, count= $count)")
         itemStatesCache.invalidateLast()
         repeat(count) {
             itemStatesCache.add(position, null)
@@ -47,7 +47,7 @@ internal class CacheInvalidator(private val itemStatesCache: MutableList<Timelin
     }
 
     override fun onRemoved(position: Int, count: Int) {
-        Timber.v("onRemoved(position= $position, count= $count")
+        Timber.d("onRemoved(position= $position, count= $count)")
         itemStatesCache.invalidateLast()
         repeat(count) {
             itemStatesCache.removeAt(position)

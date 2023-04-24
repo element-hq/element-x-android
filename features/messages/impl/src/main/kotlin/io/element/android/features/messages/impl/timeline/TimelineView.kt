@@ -75,7 +75,6 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @Composable
 fun TimelineView(
@@ -115,22 +114,12 @@ fun TimelineView(
             }
         }
 
-        /*
         TimelineScrollHelper(
             lazyListState = lazyListState,
             timelineItems = state.timelineItems,
             onLoadMore = ::onReachedLoadMore
         )
-
-         */
     }
-}
-
-private fun TimelineItem.contentType() = when (this) {
-    is TimelineItem.Event -> content.javaClass.simpleName
-    is TimelineItem.Virtual -> model.javaClass.simpleName
-}.also {
-    Timber.v("ContentType = $it")
 }
 
 @Composable

@@ -19,4 +19,6 @@ package io.element.android.features.messages.impl.timeline.model.virtual
 import androidx.compose.runtime.Immutable
 
 @Immutable
-sealed interface TimelineItemVirtualModel
+sealed interface TimelineItemVirtualModel {
+    val type: String
+}
