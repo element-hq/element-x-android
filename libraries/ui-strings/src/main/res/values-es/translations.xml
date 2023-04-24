@@ -94,8 +94,6 @@
   <string name="common_video">"Vídeo"</string>
   <string name="common_waiting">"Esperando…"</string>
   <string name="dialog_title_confirmation">"Confirmar"</string>
-  <string name="dialog_title_error">"Error"</string>
-  <string name="dialog_title_success">"Terminado"</string>
   <string name="dialog_title_warning">"Atención"</string>
   <string name="emoji_picker_category_activity">"Actividades"</string>
   <string name="emoji_picker_category_flags">"Banderas"</string>
@@ -129,7 +127,6 @@
   <string name="room_timeline_beginning_of_room">"Este es el principio de %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"Este es el principio de esta conversación."</string>
   <string name="room_timeline_read_marker_title">"Nuevos"</string>
-  <string name="screen_report_content_block_user">"Bloquear usuario"</string>
   <string name="screen_report_content_block_user_hint">"Marque si quieres ocultar todos los mensajes actuales y futuros de este usuario"</string>
   <string name="screen_room_member_details_block_alert_action">"Bloquear"</string>
   <string name="screen_room_member_details_block_alert_description">"Los usuarios bloqueados no podrán enviarte mensajes y se ocultarán todos sus mensajes. Puede revertir esta acción en cualquier momento."</string>
@@ -142,4 +139,7 @@
   <string name="settings_title_general">"General"</string>
   <string name="settings_version_number">"Versión: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"es"</string>
+  <string name="dialog_title_error">"Error"</string>
+  <string name="dialog_title_success">"Terminado"</string>
+  <string name="screen_report_content_block_user">"Bloquear usuario"</string>
 </resources>
