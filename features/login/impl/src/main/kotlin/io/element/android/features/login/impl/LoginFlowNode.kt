@@ -20,6 +20,7 @@ import android.app.Activity
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.composable.Children
@@ -105,7 +106,7 @@ class LoginFlowNode @AssistedInject constructor(
     override fun View(modifier: Modifier) {
         activity = LocalContext.current as? Activity
         darkTheme = !ElementTheme.colors.isLight
-        DisposableEffect(lifecycle) {
+        DisposableEffect(Unit) {
             onDispose {
                 activity = null
             }
