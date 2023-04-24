@@ -16,6 +16,7 @@
 
 package io.element.android.features.login.impl.oidc.customtab
 
+import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
 import android.net.Uri
@@ -71,7 +72,7 @@ class CustomTabHandler @Inject constructor(
         customTabsServiceConnection = null
     }
 
-    fun open(url: String) {
-        context.openUrlInChromeCustomTab(customTabsSession, false, url)
+    fun open(activity: Activity, url: String) {
+        activity.openUrlInChromeCustomTab(customTabsSession, false, url)
     }
 }
