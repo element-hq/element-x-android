@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -50,6 +51,14 @@ class FakeMatrixRoom(
     private var userDisplayNameResult = Result.success<String?>(null)
     private var userAvatarUrlResult = Result.success<String?>(null)
     private var updateMembersResult: Result<Unit> = Result.success(Unit)
+    private var acceptInviteResult = Result.success(Unit)
+    private var rejectInviteResult = Result.success(Unit)
+
+    var isInviteAccepted: Boolean = false
+        private set
+
+    var isInviteRejected: Boolean = false
+        private set
 
     private var leaveRoomError: Throwable? = null
 
@@ -108,6 +117,15 @@ class FakeMatrixRoom(
     }
 
     override suspend fun leave(): Result<Unit> = leaveRoomError?.let { Result.failure(it) } ?: Result.success(Unit)
+    override suspend fun acceptInvitation(): Result<Unit> {
+        isInviteAccepted = true
+        return acceptInviteResult
+    }
+
+    override suspend fun rejectInvitation(): Result<Unit> {
+        isInviteRejected = true
+        return rejectInviteResult
+    }
 
     override fun close() = Unit
 
@@ -130,4 +148,13 @@ class FakeMatrixRoom(
     fun givenUserAvatarUrlResult(avatarUrl: Result<String?>) {
         userAvatarUrlResult = avatarUrl
     }
+
+    fun givenAcceptInviteResult(result: Result<Unit>) {
+        acceptInviteResult = result
+    }
+
+    fun givenRejectInviteResult(result: Result<Unit>) {
+        rejectInviteResult = result
+    }
+
 }
