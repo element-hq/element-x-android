@@ -39,6 +39,7 @@ import io.element.android.features.login.impl.root.LoginRootNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import kotlinx.parcelize.Parcelize
@@ -58,6 +59,7 @@ class LoginFlowNode @AssistedInject constructor(
     plugins = plugins,
 ) {
     private var activity: Activity? = null
+    private var darkTheme: Boolean = false
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
@@ -81,7 +83,7 @@ class LoginFlowNode @AssistedInject constructor(
                     override fun onOidcDetails(oidcDetails: OidcDetails) {
                         if (customTabAvailabilityChecker.supportCustomTab()) {
                             // In this case open a Chrome Custom tab
-                            activity?.let { customTabHandler.open(it, oidcDetails.url) }
+                            activity?.let { customTabHandler.open(it, darkTheme, oidcDetails.url) }
                         } else {
                             // Fallback to WebView mode
                             backstack.push(NavTarget.OidcView(oidcDetails))
@@ -102,6 +104,7 @@ class LoginFlowNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         activity = LocalContext.current as? Activity
+        darkTheme = !ElementTheme.colors.isLight
         DisposableEffect(lifecycle) {
             onDispose {
                 activity = null

@@ -72,7 +72,7 @@ class CustomTabHandler @Inject constructor(
         customTabsServiceConnection = null
     }
 
-    fun open(activity: Activity, url: String) {
-        activity.openUrlInChromeCustomTab(customTabsSession, false, url)
+    fun open(activity: Activity, darkTheme: Boolean, url: String) {
+        activity.openUrlInChromeCustomTab(customTabsSession, darkTheme, url)
     }
 }
