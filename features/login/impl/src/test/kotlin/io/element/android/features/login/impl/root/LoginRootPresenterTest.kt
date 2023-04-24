@@ -20,6 +20,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.login.api.oidc.OidcAction
 import io.element.android.features.login.impl.oidc.customtab.DefaultOidcActionFlow
 import io.element.android.features.login.impl.util.LoginConstants
 import io.element.android.libraries.architecture.Async
@@ -178,6 +179,50 @@ class LoginRootPresenterTest {
             initialState.eventSink.invoke(LoginRootEvents.Submit)
             val oidcState = awaitItem()
             assertThat(oidcState.loggedInState).isEqualTo(LoggedInState.ErrorLoggingIn(A_THROWABLE))
+        }
+    }
+
+    @Test
+    fun `present - oidc custom tab login`() = runTest {
+        val authenticationService = FakeAuthenticationService()
+        val oidcActionFlow = DefaultOidcActionFlow()
+        val presenter = LoginRootPresenter(
+            authenticationService,
+            oidcActionFlow,
+        )
+        authenticationService.givenHomeserver(A_HOMESERVER_OIDC)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.submitEnabled).isTrue()
+            initialState.eventSink.invoke(LoginRootEvents.Submit)
+            val oidcState = awaitItem()
+            assertThat(oidcState.loggedInState).isEqualTo(LoggedInState.OidcStarted(A_OIDC_DATA))
+            // Oidc cancel, sdk error
+            authenticationService.givenOidcCancelError(A_THROWABLE)
+            oidcActionFlow.post(OidcAction.GoBack)
+            val stateCancelSdkError = awaitItem()
+            assertThat(stateCancelSdkError.loggedInState).isEqualTo(LoggedInState.ErrorLoggingIn(A_THROWABLE))
+            // Oidc cancel, sdk OK
+            authenticationService.givenOidcCancelError(null)
+            oidcActionFlow.post(OidcAction.GoBack)
+            val stateCancel = awaitItem()
+            assertThat(stateCancel.loggedInState).isEqualTo(LoggedInState.NotLoggedIn)
+            // Oidc success, sdk error
+            authenticationService.givenLoginError(A_THROWABLE)
+            oidcActionFlow.post(OidcAction.Success(A_OIDC_DATA.url))
+            val stateSuccessSdkErrorLoading = awaitItem()
+            assertThat(stateSuccessSdkErrorLoading.loggedInState).isEqualTo(LoggedInState.LoggingIn)
+            val stateSuccessSdkError = awaitItem()
+            assertThat(stateSuccessSdkError.loggedInState).isEqualTo(LoggedInState.ErrorLoggingIn(A_THROWABLE))
+            // Oidc success
+            authenticationService.givenLoginError(null)
+            oidcActionFlow.post(OidcAction.Success(A_OIDC_DATA.url))
+            val stateSuccess = awaitItem()
+            assertThat(stateSuccess.loggedInState).isEqualTo(LoggedInState.LoggingIn)
+            val stateSuccessLoggedIn = awaitItem()
+            assertThat(stateSuccessLoggedIn.loggedInState).isEqualTo(LoggedInState.LoggedIn(A_SESSION_ID))
         }
     }
 
