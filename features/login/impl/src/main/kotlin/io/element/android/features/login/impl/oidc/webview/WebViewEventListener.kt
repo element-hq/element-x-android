@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.oidc
+package io.element.android.features.login.impl.oidc.webview
 
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.api.auth.OidcDetails
-
-data class OidcState(
-    val oidcDetails: OidcDetails,
-    val requestState: Async<Unit>,
-    val eventSink: (OidcEvents) -> Unit
-)
+interface WebViewEventListener {
+    /**
+     * Triggered when a Webview loads an url.
+     *
+     * @param url The url about to be rendered.
+     * @return true if the method needs to manage some custom handling
+     */
+    fun shouldOverrideUrlLoading(url: String): Boolean {
+        return false
+    }
+}

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.oidc.web
+package io.element.android.features.login.impl.oidc.customtab
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.login.api.oidc.OidcAction

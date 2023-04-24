@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.oidc
+package io.element.android.features.login.impl.oidc.webview
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

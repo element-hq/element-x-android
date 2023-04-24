@@ -29,8 +29,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.login.impl.changeserver.ChangeServerNode
-import io.element.android.features.login.impl.oidc.CustomTabHandler
-import io.element.android.features.login.impl.oidc.OidcNode
+import io.element.android.features.login.impl.oidc.CustomTabAvailabilityChecker
+import io.element.android.features.login.impl.oidc.customtab.CustomTabHandler
+import io.element.android.features.login.impl.oidc.webview.OidcNode
 import io.element.android.features.login.impl.root.LoginRootNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -43,6 +44,7 @@ import kotlinx.parcelize.Parcelize
 class LoginFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val customTabAvailabilityChecker: CustomTabAvailabilityChecker,
     private val customTabHandler: CustomTabHandler,
 ) : BackstackNode<LoginFlowNode.NavTarget>(
     backstack = BackStack(
@@ -72,7 +74,8 @@ class LoginFlowNode @AssistedInject constructor(
                     }
 
                     override fun onOidcDetails(oidcDetails: OidcDetails) {
-                        if (customTabHandler.supportCustomTab()) {
+                        if (customTabAvailabilityChecker.supportCustomTab()) {
+                            // In this case open a Chrome Custom tab
                             customTabHandler.open(oidcDetails.url)
                         } else {
                             // Fallback to WebView mode
