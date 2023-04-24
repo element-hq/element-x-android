@@ -22,6 +22,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.login.api.oidc.OidcAction
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.auth.A_OIDC_DATA

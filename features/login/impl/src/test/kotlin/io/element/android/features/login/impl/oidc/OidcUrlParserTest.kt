@@ -17,6 +17,7 @@
 package io.element.android.features.login.impl.oidc
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.login.api.oidc.OidcAction
 import io.element.android.libraries.matrix.api.auth.OidcConfig
 import org.junit.Assert
 import org.junit.Test
