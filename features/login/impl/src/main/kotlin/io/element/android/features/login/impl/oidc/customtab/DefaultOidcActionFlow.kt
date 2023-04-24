@@ -36,4 +36,8 @@ class DefaultOidcActionFlow @Inject constructor() : OidcActionFlow {
     suspend fun collect(lambda: suspend (OidcAction?) -> Unit) {
         mutableStateFlow.collect(lambda)
     }
+
+    fun reset() {
+        mutableStateFlow.value = null
+    }
 }

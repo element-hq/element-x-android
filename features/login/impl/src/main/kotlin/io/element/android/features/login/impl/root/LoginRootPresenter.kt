@@ -166,5 +166,6 @@ class LoginRootPresenter @Inject constructor(
                     }
             }
         }
+        defaultOidcActionFlow.reset()
     }
 }
