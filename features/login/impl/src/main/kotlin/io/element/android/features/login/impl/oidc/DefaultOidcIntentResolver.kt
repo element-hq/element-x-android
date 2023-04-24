@@ -16,10 +16,18 @@
 
 package io.element.android.features.login.impl.oidc
 
+import android.content.Intent
+import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.login.api.oidc.OidcAction
+import io.element.android.features.login.api.oidc.OidcIntentResolver
+import io.element.android.libraries.di.AppScope
+import javax.inject.Inject
 
-sealed interface OidcEvents {
-    object Cancel : OidcEvents
-    data class OidcActionEvent(val oidcAction: OidcAction): OidcEvents
-    object ClearError : OidcEvents
+@ContributesBinding(AppScope::class)
+class DefaultOidcIntentResolver @Inject constructor(
+    private val oidcUrlParser: OidcUrlParser,
+) : OidcIntentResolver {
+    override fun resolve(intent: Intent): OidcAction? {
+        return oidcUrlParser.parse(intent.dataString.orEmpty())
+    }
 }

@@ -16,13 +16,15 @@
 
 package io.element.android.features.login.impl.oidc
 
+import io.element.android.features.login.api.oidc.OidcAction
 import io.element.android.libraries.matrix.api.auth.OidcConfig
+import javax.inject.Inject
 
 /**
  * Simple parser for oidc url interception.
  * TODO Find documentation about the format.
  */
-class OidcUrlParser {
+class OidcUrlParser @Inject constructor() {
 
     // When user press button "Cancel", we get the url:
     // `io.element:/callback?error=access_denied&state=IFF1UETGye2ZA8pO`
@@ -39,9 +41,4 @@ class OidcUrlParser {
         // Other case not supported, let's crash the app for now
         error("Not supported: $url")
     }
-}
-
-sealed interface OidcAction {
-    object GoBack : OidcAction
-    data class Success(val url: String) : OidcAction
 }

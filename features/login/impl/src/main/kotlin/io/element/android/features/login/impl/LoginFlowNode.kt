@@ -29,6 +29,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.login.impl.changeserver.ChangeServerNode
+import io.element.android.features.login.impl.oidc.CustomTabHandler
 import io.element.android.features.login.impl.oidc.OidcNode
 import io.element.android.features.login.impl.root.LoginRootNode
 import io.element.android.libraries.architecture.BackstackNode
@@ -42,6 +43,7 @@ import kotlinx.parcelize.Parcelize
 class LoginFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val customTabHandler: CustomTabHandler,
 ) : BackstackNode<LoginFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -50,7 +52,6 @@ class LoginFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins,
 ) {
-
     sealed interface NavTarget : Parcelable {
         @Parcelize
         object Root : NavTarget
@@ -71,7 +72,12 @@ class LoginFlowNode @AssistedInject constructor(
                     }
 
                     override fun onOidcDetails(oidcDetails: OidcDetails) {
-                        backstack.push(NavTarget.OidcView(oidcDetails))
+                        if (customTabHandler.supportCustomTab()) {
+                            customTabHandler.open(oidcDetails.url)
+                        } else {
+                            // Fallback to WebView mode
+                            backstack.push(NavTarget.OidcView(oidcDetails))
+                        }
                     }
                 }
                 createNode<LoginRootNode>(buildContext, plugins = listOf(callback))

@@ -24,6 +24,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import io.element.android.features.login.api.oidc.OidcAction
+import io.element.android.features.login.impl.oidc.web.DefaultOidcActionFlow
 import io.element.android.features.login.impl.util.LoginConstants
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
@@ -36,6 +38,7 @@ import javax.inject.Inject
 
 class LoginRootPresenter @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
+    private val defaultOidcActionFlow: DefaultOidcActionFlow,
 ) : Presenter<LoginRootState> {
 
     @Composable
@@ -62,6 +65,14 @@ class LoginRootPresenter @Inject constructor(
         }
         val formState = rememberSaveable {
             mutableStateOf(LoginFormState.Default)
+        }
+
+        LaunchedEffect(Unit) {
+            launch {
+                defaultOidcActionFlow.collect {
+                    onOidcAction(it, loggedInState)
+                }
+            }
         }
 
         fun handleEvents(event: LoginRootEvents) {
@@ -130,5 +141,30 @@ class LoginRootPresenter @Inject constructor(
 
     private fun updateFormState(formState: MutableState<LoginFormState>, updateLambda: LoginFormState.() -> LoginFormState) {
         formState.value = updateLambda(formState.value)
+    }
+
+    private suspend fun onOidcAction(oidcAction: OidcAction?, loggedInState: MutableState<LoggedInState>) {
+        oidcAction ?: return
+        loggedInState.value = LoggedInState.LoggingIn
+        when (oidcAction) {
+            OidcAction.GoBack -> {
+                authenticationService.cancelOidcLogin()
+                    .onSuccess {
+                        loggedInState.value = LoggedInState.NotLoggedIn
+                    }
+                    .onFailure { failure ->
+                        loggedInState.value = LoggedInState.ErrorLoggingIn(failure)
+                    }
+            }
+            is OidcAction.Success -> {
+                authenticationService.loginWithOidc(oidcAction.url)
+                    .onSuccess { sessionId ->
+                        loggedInState.value = LoggedInState.LoggedIn(sessionId)
+                    }
+                    .onFailure { failure ->
+                        loggedInState.value = LoggedInState.ErrorLoggingIn(failure)
+                    }
+            }
+        }
     }
 }
