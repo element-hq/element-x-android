@@ -141,7 +141,7 @@ class RustMatrixAuthenticationService @Inject constructor(
     }
 
     /**
-     * callbackUrl should be the uriRedirect from OidcClientMetadata (with all the parameters)
+     * callbackUrl should be the uriRedirect from OidcClientMetadata (with all the parameters).
      */
     override suspend fun loginWithOidc(callbackUrl: String): Result<SessionId> {
         return withContext(coroutineDispatchers.io) {
