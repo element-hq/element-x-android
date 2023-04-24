@@ -20,6 +20,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
+import io.element.android.features.invitelist.test.FakeSeenInvitesStore
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -29,6 +30,7 @@ import io.element.android.libraries.matrix.api.room.RoomSummary
 import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -50,7 +52,8 @@ class InviteListPresenterTests {
             FakeMatrixClient(
                 sessionId = A_SESSION_ID,
                 invitesDataSource = invitesDataSource,
-            )
+            ),
+            FakeSeenInvitesStore(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -58,21 +61,7 @@ class InviteListPresenterTests {
             val initialState = awaitItem()
             Truth.assertThat(initialState.inviteList).isEmpty()
 
-            invitesDataSource.postRoomSummary(
-                listOf(
-                    RoomSummary.Filled(
-                        RoomSummaryDetails(
-                            roomId = A_ROOM_ID,
-                            name = A_ROOM_NAME,
-                            avatarURLString = null,
-                            isDirect = false,
-                            lastMessage = null,
-                            lastMessageTimestamp = null,
-                            unreadNotificationCount = 0,
-                        )
-                    )
-                )
-            )
+            invitesDataSource.postRoomSummary(listOf(aRoomSummary()))
 
             val withInviteState = awaitItem()
             Truth.assertThat(withInviteState.inviteList.size).isEqualTo(1)
@@ -88,7 +77,8 @@ class InviteListPresenterTests {
             FakeMatrixClient(
                 sessionId = A_SESSION_ID,
                 invitesDataSource = invitesDataSource,
-            )
+            ),
+            FakeSeenInvitesStore(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -117,7 +107,8 @@ class InviteListPresenterTests {
             FakeMatrixClient(
                 sessionId = A_SESSION_ID,
                 invitesDataSource = invitesDataSource,
-            )
+            ),
+            FakeSeenInvitesStore(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -144,7 +135,8 @@ class InviteListPresenterTests {
             FakeMatrixClient(
                 sessionId = A_SESSION_ID,
                 invitesDataSource = invitesDataSource,
-            )
+            ),
+            FakeSeenInvitesStore(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -169,7 +161,8 @@ class InviteListPresenterTests {
             FakeMatrixClient(
                 sessionId = A_SESSION_ID,
                 invitesDataSource = invitesDataSource,
-            )
+            ),
+            FakeSeenInvitesStore(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -194,7 +187,8 @@ class InviteListPresenterTests {
             FakeMatrixClient(
                 sessionId = A_SESSION_ID,
                 invitesDataSource = invitesDataSource,
-            )
+            ),
+            FakeSeenInvitesStore(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -219,7 +213,7 @@ class InviteListPresenterTests {
             invitesDataSource = invitesDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = InviteListPresenter(client)
+        val presenter = InviteListPresenter(client, FakeSeenInvitesStore())
         client.givenGetRoomResult(A_ROOM_ID, room)
 
         moleculeFlow(RecompositionClock.Immediate) {
@@ -246,7 +240,7 @@ class InviteListPresenterTests {
             invitesDataSource = invitesDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = InviteListPresenter(client)
+        val presenter = InviteListPresenter(client, FakeSeenInvitesStore())
         val ex = Throwable("Ruh roh!")
         room.givenRejectInviteResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
@@ -278,7 +272,7 @@ class InviteListPresenterTests {
             invitesDataSource = invitesDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = InviteListPresenter(client)
+        val presenter = InviteListPresenter(client, FakeSeenInvitesStore())
         val ex = Throwable("Ruh roh!")
         room.givenRejectInviteResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
@@ -311,7 +305,7 @@ class InviteListPresenterTests {
             invitesDataSource = invitesDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = InviteListPresenter(client)
+        val presenter = InviteListPresenter(client, FakeSeenInvitesStore())
         client.givenGetRoomResult(A_ROOM_ID, room)
 
         moleculeFlow(RecompositionClock.Immediate) {
@@ -335,7 +329,7 @@ class InviteListPresenterTests {
             invitesDataSource = invitesDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = InviteListPresenter(client)
+        val presenter = InviteListPresenter(client, FakeSeenInvitesStore())
         val ex = Throwable("Ruh roh!")
         room.givenAcceptInviteResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
@@ -361,7 +355,7 @@ class InviteListPresenterTests {
             invitesDataSource = invitesDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = InviteListPresenter(client)
+        val presenter = InviteListPresenter(client, FakeSeenInvitesStore())
         val ex = Throwable("Ruh roh!")
         room.givenAcceptInviteResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
@@ -378,6 +372,70 @@ class InviteListPresenterTests {
 
             val newState = awaitItem()
             Truth.assertThat(newState.acceptedAction).isEqualTo(Async.Uninitialized)
+        }
+    }
+
+    @Test
+    fun `present - stores seen invites when received`() = runTest {
+        val invitesDataSource = FakeRoomSummaryDataSource()
+        val store = FakeSeenInvitesStore()
+        val presenter = InviteListPresenter(
+            FakeMatrixClient(
+                sessionId = A_SESSION_ID,
+                invitesDataSource = invitesDataSource,
+            ),
+            store,
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem()
+
+            // When one invite is received, that ID is saved
+            invitesDataSource.postRoomSummary(listOf(aRoomSummary()))
+
+            awaitItem()
+            Truth.assertThat(store.getProvidedRoomIds()).isEqualTo(setOf(A_ROOM_ID.value))
+
+            // When a second is added, both are saved
+            invitesDataSource.postRoomSummary(listOf(aRoomSummary(), aRoomSummary(A_ROOM_ID_2)))
+
+            awaitItem()
+            Truth.assertThat(store.getProvidedRoomIds()).isEqualTo(setOf(A_ROOM_ID.value, A_ROOM_ID_2.value))
+
+            // When they're both dismissed, an empty set is saved
+            invitesDataSource.postRoomSummary(listOf())
+
+            awaitItem()
+            Truth.assertThat(store.getProvidedRoomIds()).isEmpty()
+        }
+    }
+
+    @Test
+    fun `present - marks invite as new if they're unseen`() = runTest {
+        val invitesDataSource = FakeRoomSummaryDataSource()
+        val store = FakeSeenInvitesStore()
+        store.givenExistingRoomIds(setOf(A_ROOM_ID.value))
+        val presenter = InviteListPresenter(
+            FakeMatrixClient(
+                sessionId = A_SESSION_ID,
+                invitesDataSource = invitesDataSource,
+            ),
+            store,
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem()
+
+            invitesDataSource.postRoomSummary(listOf(aRoomSummary(), aRoomSummary(A_ROOM_ID_2)))
+
+            val withInviteState = awaitItem()
+            Truth.assertThat(withInviteState.inviteList.size).isEqualTo(2)
+            Truth.assertThat(withInviteState.inviteList[0].roomId).isEqualTo(A_ROOM_ID)
+            Truth.assertThat(withInviteState.inviteList[0].isNew).isFalse()
+            Truth.assertThat(withInviteState.inviteList[1].roomId).isEqualTo(A_ROOM_ID_2)
+            Truth.assertThat(withInviteState.inviteList[1].isNew).isTrue()
         }
     }
 
@@ -438,4 +496,17 @@ class InviteListPresenterTests {
         )
         return this
     }
+
+    private fun aRoomSummary(id: RoomId = A_ROOM_ID) = RoomSummary.Filled(
+        RoomSummaryDetails(
+            roomId = id,
+            name = A_ROOM_NAME,
+            avatarURLString = null,
+            isDirect = false,
+            lastMessage = null,
+            lastMessageTimestamp = null,
+            unreadNotificationCount = 0,
+        )
+    )
+
 }

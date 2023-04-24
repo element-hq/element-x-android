@@ -20,6 +20,8 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import androidx.preference.PreferenceManager
+import io.element.android.features.invitelist.impl.DefaultSeenInvitesStore
 import io.element.android.features.networkmonitor.impl.NetworkMonitorImpl
 import io.element.android.features.roomlist.impl.DefaultRoomLastMessageFormatter
 import io.element.android.features.roomlist.impl.RoomListPresenter
@@ -52,6 +54,7 @@ class RoomListScreen(
         sessionVerificationService = sessionVerificationService,
         networkMonitor = NetworkMonitorImpl(context),
         snackbarDispatcher = SnackbarDispatcher(),
+        seenInvitesStore = DefaultSeenInvitesStore(PreferenceManager.getDefaultSharedPreferences(context))
     )
 
     @Composable

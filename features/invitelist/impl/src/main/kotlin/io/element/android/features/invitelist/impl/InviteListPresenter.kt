@@ -17,12 +17,14 @@
 package io.element.android.features.invitelist.impl
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import io.element.android.features.invitelist.api.SeenInvitesStore
 import io.element.android.features.invitelist.impl.model.InviteListInviteSummary
 import io.element.android.features.invitelist.impl.model.InviteSender
 import io.element.android.libraries.architecture.Async
@@ -39,6 +41,7 @@ import javax.inject.Inject
 
 class InviteListPresenter @Inject constructor(
     private val client: MatrixClient,
+    private val store: SeenInvitesStore,
 ) : Presenter<InviteListState> {
 
     @Composable
@@ -47,6 +50,12 @@ class InviteListPresenter @Inject constructor(
             .invitesDataSource
             .roomSummaries()
             .collectAsState()
+
+        val seenInvites = remember { store.seenRoomIds }
+
+        LaunchedEffect(invites) {
+            store.seenRoomIds = invites.map { it.identifier() }.toSet()
+        }
 
         val localCoroutineScope = rememberCoroutineScope()
         val acceptedAction: MutableState<Async<RoomId>> = remember { mutableStateOf(Async.Uninitialized) }
@@ -87,7 +96,7 @@ class InviteListPresenter @Inject constructor(
         }
 
         return InviteListState(
-            inviteList = invites.mapNotNull(::toInviteSummary).toPersistentList(),
+            inviteList = invites.mapNotNull{ it.toInviteSummary(seenInvites.contains(it.identifier())) }.toPersistentList(),
             declineConfirmationDialog = decliningInvite.value?.let {
                 InviteDeclineConfirmationDialog.Visible(
                     isDirect = it.isDirect,
@@ -113,9 +122,9 @@ class InviteListPresenter @Inject constructor(
         }.execute(declinedAction)
     }
 
-    private fun toInviteSummary(roomSummary: RoomSummary): InviteListInviteSummary? {
-        return when (roomSummary) {
-            is RoomSummary.Filled -> roomSummary.details.run {
+    private fun RoomSummary.toInviteSummary(seen: Boolean): InviteListInviteSummary? {
+        return when (this) {
+            is RoomSummary.Filled -> details.run {
                 val i = inviter
                 val avatarData = if (isDirect && i != null)
                     AvatarData(
@@ -141,6 +150,7 @@ class InviteListPresenter @Inject constructor(
                     roomAlias = alias,
                     roomAvatarData = avatarData,
                     isDirect = isDirect,
+                    isNew = !seen,
                     sender = if (isDirect) null else inviter?.let {
                         InviteSender(
                             userId = it.userId,

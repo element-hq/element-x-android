@@ -194,19 +194,23 @@ fun RoomListContent(
                         }
                     }
 
-                    if (state.displayInvites) {
+                    if (state.invitesState != InvitesState.NoInvites) {
                         item {
                             Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxSize()) {
                                 TextButton(
                                     content = {
                                         Text(stringResource(StringR.string.action_invites_list))
-                                        Spacer(Modifier.size(8.dp))
-                                        Box(
-                                            modifier = Modifier
-                                                .size(12.dp)
-                                                .clip(CircleShape)
-                                                .background(MaterialTheme.roomListUnreadIndicator())
-                                        )
+
+                                        if (state.invitesState == InvitesState.NewInvites) {
+                                            Spacer(Modifier.size(8.dp))
+
+                                            Box(
+                                                modifier = Modifier
+                                                    .size(12.dp)
+                                                    .clip(CircleShape)
+                                                    .background(MaterialTheme.roomListUnreadIndicator())
+                                            )
+                                        }
                                     },
                                     onClick = onInvitesClicked,
                                 )

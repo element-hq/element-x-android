@@ -35,7 +35,8 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState().copy(displayVerificationPrompt = true),
             aRoomListState().copy(snackbarMessage = SnackbarMessage(StringR.string.common_verification_complete)),
             aRoomListState().copy(hasNetworkConnection = false),
-            aRoomListState().copy(displayInvites = true),
+            aRoomListState().copy(invitesState = InvitesState.SeenInvites),
+            aRoomListState().copy(invitesState = InvitesState.NewInvites),
         )
 }
 
@@ -46,7 +47,7 @@ internal fun aRoomListState() = RoomListState(
     hasNetworkConnection = true,
     snackbarMessage = null,
     displayVerificationPrompt = false,
-    displayInvites = false,
+    invitesState = InvitesState.NoInvites,
     eventSink = {}
 )
 

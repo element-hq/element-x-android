@@ -48,6 +48,7 @@ dependencies {
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.dateformatter.api)
+    implementation(projects.features.invitelist.api)
     implementation(projects.features.networkmonitor.api)
     implementation(libs.accompanist.placeholder)
     api(projects.features.roomlist.api)
@@ -61,8 +62,9 @@ dependencies {
     testImplementation(libs.test.robolectric)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.dateformatter.test)
-    testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.libraries.permissions.noop)
+    testImplementation(projects.features.invitelist.test)
+    testImplementation(projects.features.networkmonitor.test)
 
     androidTestImplementation(libs.test.junitext)
 }

@@ -30,6 +30,12 @@ data class RoomListState(
     val displayVerificationPrompt: Boolean,
     val hasNetworkConnection: Boolean,
     val snackbarMessage: SnackbarMessage?,
-    val displayInvites: Boolean,
+    val invitesState: InvitesState,
     val eventSink: (RoomListEvents) -> Unit
 )
+
+enum class InvitesState {
+    NoInvites,
+    SeenInvites,
+    NewInvites,
+}
