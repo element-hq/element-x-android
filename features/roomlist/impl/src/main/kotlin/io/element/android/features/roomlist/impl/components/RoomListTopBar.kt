@@ -26,7 +26,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
@@ -35,9 +34,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -66,11 +63,13 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.element.android.libraries.ui.strings.R as StringR
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoomListTopBar(
     matrixUser: MatrixUser?,
-    filter: String,
+    areSearchResultsDisplayed: Boolean,
     onFilterChanged: (String) -> Unit,
+    onToggleSearch: () -> Unit,
     onOpenSettings: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
@@ -79,36 +78,23 @@ fun RoomListTopBar(
         tag = "RoomListScreen",
         msg = "TopBar"
     )
-    var searchWidgetStateIsOpened by rememberSaveable { mutableStateOf(false) }
 
     fun closeFilter() {
         onFilterChanged("")
-        searchWidgetStateIsOpened = false
     }
 
-    BackHandler(enabled = searchWidgetStateIsOpened) {
+    BackHandler(enabled = areSearchResultsDisplayed) {
         closeFilter()
+        onToggleSearch()
     }
 
-    if (searchWidgetStateIsOpened) {
-        SearchRoomListTopBar(
-            text = filter,
-            onFilterChanged = onFilterChanged,
-            onCloseClicked = ::closeFilter,
-            scrollBehavior = scrollBehavior,
-            modifier = modifier,
-        )
-    } else {
-        DefaultRoomListTopBar(
-            matrixUser = matrixUser,
-            onOpenSettings = onOpenSettings,
-            onSearchClicked = {
-                searchWidgetStateIsOpened = true
-            },
-            scrollBehavior = scrollBehavior,
-            modifier = modifier,
-        )
-    }
+    DefaultRoomListTopBar(
+        matrixUser = matrixUser,
+        onOpenSettings = onOpenSettings,
+        onSearchClicked = onToggleSearch,
+        scrollBehavior = scrollBehavior,
+        modifier = modifier,
+    )
 }
 
 @Composable
@@ -216,7 +202,7 @@ private fun DefaultRoomListTopBar(
         },
         navigationIcon = {
             if (matrixUser != null) {
-                IconButton(onClick = {}) {
+                IconButton(onClick = onOpenSettings) {
                     Avatar(matrixUser.avatarData)
                 }
             }
@@ -226,11 +212,6 @@ private fun DefaultRoomListTopBar(
                 onClick = onSearchClicked
             ) {
                 Icon(Icons.Default.Search, contentDescription = "search")
-            }
-            IconButton(
-                onClick = onOpenSettings
-            ) {
-                Icon(Icons.Default.Settings, contentDescription = "Settings")
             }
         },
         scrollBehavior = scrollBehavior,

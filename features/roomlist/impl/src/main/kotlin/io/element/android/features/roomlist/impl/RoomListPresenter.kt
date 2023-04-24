@@ -101,11 +101,14 @@ class RoomListPresenter @Inject constructor(
             derivedStateOf { sessionVerifiedStatus == SessionVerifiedStatus.NotVerified && !verificationPromptDismissed }
         }
 
+        var displaySearchResults by rememberSaveable { mutableStateOf(false) }
+
         fun handleEvents(event: RoomListEvents) {
             when (event) {
                 is RoomListEvents.UpdateFilter -> filter = event.newFilter
                 is RoomListEvents.UpdateVisibleRange -> updateVisibleRange(event.range)
                 RoomListEvents.DismissRequestVerificationPrompt -> verificationPromptDismissed = true
+                RoomListEvents.ToggleSearchResults -> displaySearchResults =! displaySearchResults
             }
         }
 
@@ -123,6 +126,7 @@ class RoomListPresenter @Inject constructor(
             snackbarMessage = snackbarMessage,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             displayInvites = invites.isNotEmpty(),
+            displaySearchResults = displaySearchResults,
             eventSink = ::handleEvents
         )
     }

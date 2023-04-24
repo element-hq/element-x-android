@@ -20,4 +20,5 @@ sealed interface RoomListEvents {
     data class UpdateFilter(val newFilter: String) : RoomListEvents
     data class UpdateVisibleRange(val range: IntRange) : RoomListEvents
     object DismissRequestVerificationPrompt : RoomListEvents
+    object ToggleSearchResults : RoomListEvents
 }

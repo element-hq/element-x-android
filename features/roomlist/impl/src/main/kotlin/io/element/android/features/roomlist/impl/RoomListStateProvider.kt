@@ -36,6 +36,7 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState().copy(snackbarMessage = SnackbarMessage(StringR.string.common_verification_complete)),
             aRoomListState().copy(hasNetworkConnection = false),
             aRoomListState().copy(displayInvites = true),
+            aRoomListState().copy(displaySearchResults = true),
         )
 }
 
@@ -47,6 +48,7 @@ internal fun aRoomListState() = RoomListState(
     snackbarMessage = null,
     displayVerificationPrompt = false,
     displayInvites = false,
+    displaySearchResults = false,
     eventSink = {}
 )
 
