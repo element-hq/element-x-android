@@ -21,6 +21,7 @@ import io.element.android.features.login.api.oidc.OidcAction
 import io.element.android.features.login.api.oidc.OidcActionFlow
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
@@ -33,8 +34,8 @@ class DefaultOidcActionFlow @Inject constructor() : OidcActionFlow {
         mutableStateFlow.value = oidcAction
     }
 
-    suspend fun collect(lambda: suspend (OidcAction?) -> Unit) {
-        mutableStateFlow.collect(lambda)
+    suspend fun collect(collector: FlowCollector<OidcAction?>) {
+        mutableStateFlow.collect(collector)
     }
 
     fun reset() {
