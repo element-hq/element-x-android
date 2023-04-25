@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_session_verification_cancelled_subtitle">"Ceva nu este în regulă. Fie cererea a expirat, fie a fost respinsă."</string>
-  <string name="screen_session_verification_cancelled_title">"Verificare anulată"</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Confirmați că emoticoanele de mai jos se potrivesc cu cele afișate în cealaltă sesiune."</string>
   <string name="screen_session_verification_compare_emojis_title">"Comparați emoticoanele"</string>
   <string name="screen_session_verification_complete_subtitle">"Noua dumneavoastră sesiune este acum verificată. Are acces la mesajele dumneavoastră criptate, iar alți utilizatori vă vor vedea ca fiind de încredere."</string>
@@ -9,11 +8,12 @@
   <string name="screen_session_verification_open_existing_session_title">"Deschideți o sesiune existentă"</string>
   <string name="screen_session_verification_positive_button_canceled">"Reîncercați verificarea"</string>
   <string name="screen_session_verification_positive_button_initial">"Sunt pregătit"</string>
-  <string name="screen_session_verification_positive_button_ready">"Începeți"</string>
   <string name="screen_session_verification_positive_button_verifying_ongoing">"Se așteaptă confirmarea"</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Comparăți emoticoalene asigurându-vă că apar în aceeași ordine."</string>
   <string name="screen_session_verification_they_dont_match">"Nu se potrivesc"</string>
   <string name="screen_session_verification_they_match">"Se potrivesc"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Acceptați solicitarea de a începe procesul de verificare în cealaltă sesiune pentru a continua."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Se așteptă acceptarea cererii"</string>
+  <string name="screen_session_verification_cancelled_title">"Verificare anulată"</string>
+  <string name="screen_session_verification_positive_button_ready">"Începeți"</string>
 </resources>
