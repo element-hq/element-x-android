@@ -20,6 +20,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -31,6 +32,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -59,6 +61,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.copy
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.R
 
@@ -120,7 +123,9 @@ internal fun RoomListSearchResultContent(
                     val filter = state.filter.orEmpty()
                     val focusRequester = FocusRequester()
                     TextField(
-                        modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusRequester(focusRequester),
                         value = filter,
                         onValueChange = { state.eventSink(RoomListEvents.UpdateFilter(it)) },
                         colors = TextFieldDefaults.textFieldColors(
@@ -149,7 +154,8 @@ internal fun RoomListSearchResultContent(
                             focusRequester.requestFocus()
                         }
                     }
-                }
+                },
+                windowInsets = TopAppBarDefaults.windowInsets.copy(top = 0)
             )
         }
     ) { padding ->
@@ -178,7 +184,9 @@ internal fun RoomListSearchResultContent(
                 .padding(padding)
         ) {
             LazyColumn(
-                modifier = Modifier.weight(1f).nestedScroll(nestedScrollConnection),
+                modifier = Modifier
+                    .weight(1f)
+                    .nestedScroll(nestedScrollConnection),
                 state = lazyListState,
             ) {
                 items(

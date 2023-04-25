@@ -93,23 +93,26 @@ fun RoomListView(
     onCreateRoomClicked: () -> Unit = {},
     onInvitesClicked: () -> Unit = {},
 ) {
-    Box(modifier = modifier) {
-        RoomListContent(
-            state = state,
-            onRoomClicked = onRoomClicked,
-            onOpenSettings = onOpenSettings,
-            onVerifyClicked = onVerifyClicked,
-            onCreateRoomClicked = onCreateRoomClicked,
-            onInvitesClicked = onInvitesClicked,
-        )
-        // This overlaid view will only be visible when state.displaySearchResults is true
-        RoomListSearchResultView(
-            state = state,
-            onRoomClicked = onRoomClicked,
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-        )
+    Column(modifier = modifier) {
+        ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
+        Box {
+            RoomListContent(
+                state = state,
+                onRoomClicked = onRoomClicked,
+                onOpenSettings = onOpenSettings,
+                onVerifyClicked = onVerifyClicked,
+                onCreateRoomClicked = onCreateRoomClicked,
+                onInvitesClicked = onInvitesClicked,
+            )
+            // This overlaid view will only be visible when state.displaySearchResults is true
+            RoomListSearchResultView(
+                state = state,
+                onRoomClicked = onRoomClicked,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+            )
+        }
     }
 }
 
@@ -174,17 +177,14 @@ fun RoomListContent(
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            Column {
-                ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
-                RoomListTopBar(
-                    matrixUser = state.matrixUser,
-                    areSearchResultsDisplayed = state.displaySearchResults,
-                    onFilterChanged = { state.eventSink(RoomListEvents.UpdateFilter(it)) },
-                    onToggleSearch = { state.eventSink(RoomListEvents.ToggleSearchResults) },
-                    onOpenSettings = onOpenSettings,
-                    scrollBehavior = scrollBehavior,
-                )
-            }
+            RoomListTopBar(
+                matrixUser = state.matrixUser,
+                areSearchResultsDisplayed = state.displaySearchResults,
+                onFilterChanged = { state.eventSink(RoomListEvents.UpdateFilter(it)) },
+                onToggleSearch = { state.eventSink(RoomListEvents.ToggleSearchResults) },
+                onOpenSettings = onOpenSettings,
+                scrollBehavior = scrollBehavior,
+            )
         },
         content = { padding ->
             Column(

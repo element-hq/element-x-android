@@ -20,44 +20,28 @@ package io.element.android.features.roomlist.impl.components
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.ContentAlpha
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.MediumTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TextField
-import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
@@ -97,92 +81,7 @@ fun RoomListTopBar(
     )
 }
 
-@Composable
-fun SearchRoomListTopBar(
-    text: String,
-    scrollBehavior: TopAppBarScrollBehavior,
-    modifier: Modifier = Modifier,
-    onFilterChanged: (String) -> Unit = {},
-    onCloseClicked: () -> Unit = {},
-) {
-    var filterState by textFieldState(stateValue = text)
-    val focusRequester = remember { FocusRequester() }
-    TopAppBar(
-        modifier = modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
-        title = {
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .focusRequester(focusRequester),
-                value = filterState,
-                textStyle = TextStyle(
-                    fontSize = 17.sp
-                ),
-                onValueChange = {
-                    filterState = it
-                    onFilterChanged(it)
-                },
-                placeholder = {
-                    Text(
-                        text = stringResource(id = StringR.string.action_search),
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = ContentAlpha.medium)
-                    )
-                },
-                singleLine = true,
-                trailingIcon = {
-                    if (text.isNotEmpty()) {
-                        IconButton(
-                            onClick = {
-                                onFilterChanged("")
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Close,
-                                contentDescription = "clear",
-                                tint = MaterialTheme.colorScheme.onBackground
-                            )
-                        }
-                    }
-                },
-            )
-        },
-        navigationIcon = {
-            IconButton(
-                onClick = {
-                    onCloseClicked()
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "close",
-                    tint = MaterialTheme.colorScheme.onBackground
-                )
-            }
-        },
-        windowInsets = WindowInsets(0.dp)
-    )
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
-}
-
-@Preview
-@Composable
-internal fun SearchRoomListTopBarLightPreview() = ElementPreviewLight { SearchRoomListTopBarPreview() }
-
-@Preview
-@Composable
-internal fun SearchRoomListTopBarDarkPreview() = ElementPreviewDark { SearchRoomListTopBarPreview() }
-
-@Composable
-private fun SearchRoomListTopBarPreview() {
-    SearchRoomListTopBar(
-        text = "Hello",
-        scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState()),
-    )
-}
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DefaultRoomListTopBar(
     matrixUser: MatrixUser?,
@@ -203,7 +102,7 @@ private fun DefaultRoomListTopBar(
         navigationIcon = {
             if (matrixUser != null) {
                 IconButton(onClick = onOpenSettings) {
-                    Avatar(matrixUser.avatarData)
+                    Avatar(matrixUser.avatarData, contentDescription = stringResource(StringR.string.common_settings))
                 }
             }
         },
@@ -211,7 +110,7 @@ private fun DefaultRoomListTopBar(
             IconButton(
                 onClick = onSearchClicked
             ) {
-                Icon(Icons.Default.Search, contentDescription = "search")
+                Icon(Icons.Default.Search, contentDescription = stringResource(StringR.string.action_search))
             }
         },
         scrollBehavior = scrollBehavior,
@@ -227,6 +126,7 @@ internal fun DefaultRoomListTopBarLightPreview() = ElementPreviewLight { Default
 @Composable
 internal fun DefaultRoomListTopBarDarkPreview() = ElementPreviewDark { DefaultRoomListTopBarPreview() }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DefaultRoomListTopBarPreview() {
     DefaultRoomListTopBar(
