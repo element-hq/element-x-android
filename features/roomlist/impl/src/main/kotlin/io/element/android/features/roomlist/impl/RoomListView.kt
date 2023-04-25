@@ -16,10 +16,6 @@
 
 package io.element.android.features.roomlist.impl
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -46,31 +42,19 @@ import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -80,20 +64,18 @@ import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorVi
 import io.element.android.features.roomlist.impl.components.RoomListTopBar
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.features.roomlist.impl.search.RoomListSearchResultContent
+import io.element.android.features.roomlist.impl.search.RoomListSearchResultView
 import io.element.android.libraries.designsystem.ElementTextStyles
-import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.modifiers.applyIf
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
-import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.roomListUnreadIndicator
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -101,7 +83,6 @@ import kotlinx.coroutines.launch
 import io.element.android.libraries.designsystem.R as DrawableR
 import io.element.android.libraries.ui.strings.R as StringR
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoomListView(
     state: RoomListState,
@@ -124,94 +105,11 @@ fun RoomListView(
         // This overlaid view will only be visible when state.displaySearchResults is true
         RoomListSearchResultView(
             state = state,
-            onBackButtonPressed = { TODO() },
+            onRoomClicked = onRoomClicked,
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         )
-    }
-}
-
-@Composable
-internal fun RoomListSearchResultView(
-    state: RoomListState,
-    onBackButtonPressed: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    AnimatedVisibility(
-        visible = state.displaySearchResults,
-        enter = fadeIn(),
-        exit = fadeOut(),
-    ) {
-        Column(
-            modifier = modifier
-                .applyIf(state.displaySearchResults, ifTrue = {
-                    // Disable input interaction to underlying views
-                    pointerInput(Unit) {}
-                })
-        ) {
-            if (state.displaySearchResults) {
-                RoomListSearchResultContent(state = state, onBackButtonPressed = onBackButtonPressed)
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-internal fun RoomListSearchResultContent(
-    state: RoomListState,
-    onBackButtonPressed: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val borderColor = MaterialTheme.colorScheme.tertiary
-    val strokeWidth = 1.dp
-    Scaffold (
-        topBar = {
-            TopAppBar(
-                modifier = Modifier.drawBehind {
-                    drawLine(
-                        color = borderColor,
-                        start = Offset(0f, size.height),
-                        end = Offset(size.width, size.height),
-                        strokeWidth = strokeWidth.value
-                    )
-                },
-                navigationIcon = { BackButton(onClick = onBackButtonPressed) },
-
-                title = {
-                    var value by remember { mutableStateOf(TextFieldValue()) }
-                    val focusRequester = FocusRequester()
-                    TextField(
-                        modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
-                        value = value,
-                        onValueChange = { value = it },
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            errorIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent
-                        ),
-                        trailingIcon = {
-                            if (value.text.isNotEmpty()) {
-                                IconButton(onClick = { /*TODO*/ }) {
-                                    Icon(imageVector = Icons.Default.Close, contentDescription = stringResource(StringR.string.action_cancel))
-                                }
-                            }
-                        }
-                    )
-
-                    LaunchedEffect(state.displaySearchResults) {
-                        if (state.displaySearchResults) {
-                            focusRequester.requestFocus()
-                        }
-                    }
-                }
-            )
-        }
-    ) {
-
     }
 }
 
@@ -420,7 +318,7 @@ internal fun PreviewRequestVerificationHeaderDark() {
     }
 }
 
-private fun RoomListRoomSummary.contentType() = isPlaceholder
+internal fun RoomListRoomSummary.contentType() = isPlaceholder
 
 @Preview
 @Composable
@@ -441,6 +339,6 @@ private fun ContentToPreview(state: RoomListState) {
 @Composable
 internal fun RoomListSearchResultContentPreview() {
     ElementPreviewLight {
-        RoomListSearchResultContent(state = aRoomListState(), onBackButtonPressed = {})
+        RoomListSearchResultContent(state = aRoomListState(), onRoomClicked = {})
     }
 }

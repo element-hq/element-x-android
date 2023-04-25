@@ -26,7 +26,8 @@ import kotlinx.collections.immutable.ImmutableList
 data class RoomListState(
     val matrixUser: MatrixUser?,
     val roomList: ImmutableList<RoomListRoomSummary>,
-    val filter: String,
+    val filter: String?,
+    val filteredRoomList: ImmutableList<RoomListRoomSummary>,
     val displayVerificationPrompt: Boolean,
     val hasNetworkConnection: Boolean,
     val snackbarMessage: SnackbarMessage?,
