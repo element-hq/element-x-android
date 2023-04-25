@@ -64,6 +64,8 @@ import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorVi
 import io.element.android.features.roomlist.impl.components.RoomListTopBar
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.features.roomlist.impl.search.RoomListSearchResultContent
+import io.element.android.features.roomlist.impl.search.RoomListSearchResultView
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -91,15 +93,27 @@ fun RoomListView(
     onCreateRoomClicked: () -> Unit = {},
     onInvitesClicked: () -> Unit = {},
 ) {
-    RoomListContent(
-        state = state,
-        modifier = modifier,
-        onRoomClicked = onRoomClicked,
-        onOpenSettings = onOpenSettings,
-        onVerifyClicked = onVerifyClicked,
-        onCreateRoomClicked = onCreateRoomClicked,
-        onInvitesClicked = onInvitesClicked,
-    )
+    Column(modifier = modifier) {
+        ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
+        Box {
+            RoomListContent(
+                state = state,
+                onRoomClicked = onRoomClicked,
+                onOpenSettings = onOpenSettings,
+                onVerifyClicked = onVerifyClicked,
+                onCreateRoomClicked = onCreateRoomClicked,
+                onInvitesClicked = onInvitesClicked,
+            )
+            // This overlaid view will only be visible when state.displaySearchResults is true
+            RoomListSearchResultView(
+                state = state,
+                onRoomClicked = onRoomClicked,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -163,16 +177,14 @@ fun RoomListContent(
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            Column {
-                ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
-                RoomListTopBar(
-                    matrixUser = state.matrixUser,
-                    filter = state.filter,
-                    onFilterChanged = { state.eventSink(RoomListEvents.UpdateFilter(it)) },
-                    onOpenSettings = onOpenSettings,
-                    scrollBehavior = scrollBehavior,
-                )
-            }
+            RoomListTopBar(
+                matrixUser = state.matrixUser,
+                areSearchResultsDisplayed = state.displaySearchResults,
+                onFilterChanged = { state.eventSink(RoomListEvents.UpdateFilter(it)) },
+                onToggleSearch = { state.eventSink(RoomListEvents.ToggleSearchResults) },
+                onOpenSettings = onOpenSettings,
+                scrollBehavior = scrollBehavior,
+            )
         },
         content = { padding ->
             Column(
@@ -306,7 +318,7 @@ internal fun PreviewRequestVerificationHeaderDark() {
     }
 }
 
-private fun RoomListRoomSummary.contentType() = isPlaceholder
+internal fun RoomListRoomSummary.contentType() = isPlaceholder
 
 @Preview
 @Composable
@@ -321,4 +333,12 @@ internal fun RoomListViewDarkPreview(@PreviewParameter(RoomListStateProvider::cl
 @Composable
 private fun ContentToPreview(state: RoomListState) {
     RoomListView(state)
+}
+
+@Preview
+@Composable
+internal fun RoomListSearchResultContentPreview() {
+    ElementPreviewLight {
+        RoomListSearchResultContent(state = aRoomListState(), onRoomClicked = {})
+    }
 }
