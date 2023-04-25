@@ -31,6 +31,7 @@ data class AvatarData(
     val size: AvatarSize = AvatarSize.MEDIUM
 ) : Parcelable {
 
+    @IgnoredOnParcel
     val initial by lazy {
         (name?.takeIf { it.isNotBlank() } ?: id)
             .let { dn ->

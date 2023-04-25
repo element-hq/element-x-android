@@ -184,13 +184,13 @@ class RustMatrixRoom(
     }
 
     override suspend fun acceptInvitation(): Result<Unit> = withContext(coroutineDispatchers.io) {
-        kotlin.runCatching {
+        runCatching {
             innerRoom.acceptInvitation()
         }
     }
 
     override suspend fun rejectInvitation(): Result<Unit> = withContext(coroutineDispatchers.io) {
-        kotlin.runCatching {
+        runCatching {
             innerRoom.rejectInvitation()
         }
     }

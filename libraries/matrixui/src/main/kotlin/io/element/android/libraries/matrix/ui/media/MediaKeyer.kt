@@ -33,4 +33,7 @@ internal class MediaKeyer : Keyer<MediaResolver.Meta> {
     }
 }
 
-private fun MediaResolver.Meta.toKey() = "${url}_${kind}"
+private fun MediaResolver.Meta.toKey(): String? {
+    if (url.isNullOrBlank()) return null
+    return "${url}_${kind}"
+}
