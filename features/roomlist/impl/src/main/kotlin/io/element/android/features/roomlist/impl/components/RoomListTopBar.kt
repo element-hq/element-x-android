@@ -45,6 +45,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -101,14 +103,17 @@ private fun DefaultRoomListTopBar(
         },
         navigationIcon = {
             if (matrixUser != null) {
-                IconButton(onClick = onOpenSettings) {
+                IconButton(
+                    modifier = Modifier.testTag(TestTags.homeScreenSettings),
+                    onClick = onOpenSettings
+                ) {
                     Avatar(matrixUser.avatarData, contentDescription = stringResource(StringR.string.common_settings))
                 }
             }
         },
         actions = {
             IconButton(
-                onClick = onSearchClicked
+                onClick = onSearchClicked,
             ) {
                 Icon(Icons.Default.Search, contentDescription = stringResource(StringR.string.action_search))
             }
