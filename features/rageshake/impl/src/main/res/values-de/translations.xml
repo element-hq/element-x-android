@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_editor_placeholder">"Beschreibe den Fehler…"</string>
+  <string name="screen_bug_report_include_crash_logs">"Absturzprotokolle senden"</string>
+  <string name="screen_bug_report_include_screenshot">"Bildschirmfoto senden"</string>
+</resources>
