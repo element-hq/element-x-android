@@ -1,6 +1,7 @@
 appId: ${APP_ID}
 ---
-- tapOn: "Settings"
+- tapOn:
+    id: "home_screen-settings"
 - assertVisible: "Rageshake to report bug"
 - takeScreenshot: build/maestro/600-Settings
 - tapOn:
