@@ -17,18 +17,23 @@
 package io.element.android.features.roomlist.impl
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,6 +51,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -54,6 +60,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.features.roomlist.impl.components.RoomListTopBar
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
@@ -66,9 +73,10 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.theme.roomListUnreadIndicator
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import kotlinx.coroutines.launch
 import io.element.android.libraries.designsystem.R as DrawableR
 import io.element.android.libraries.ui.strings.R as StringR
@@ -81,6 +89,7 @@ fun RoomListView(
     onOpenSettings: () -> Unit = {},
     onVerifyClicked: () -> Unit = {},
     onCreateRoomClicked: () -> Unit = {},
+    onInvitesClicked: () -> Unit = {},
 ) {
     RoomListContent(
         state = state,
@@ -89,6 +98,7 @@ fun RoomListView(
         onOpenSettings = onOpenSettings,
         onVerifyClicked = onVerifyClicked,
         onCreateRoomClicked = onCreateRoomClicked,
+        onInvitesClicked = onInvitesClicked,
     )
 }
 
@@ -101,8 +111,10 @@ fun RoomListContent(
     onRoomClicked: (RoomId) -> Unit = {},
     onOpenSettings: () -> Unit = {},
     onCreateRoomClicked: () -> Unit = {},
+    onInvitesClicked: () -> Unit = {},
 ) {
     fun onRoomClicked(room: RoomListRoomSummary) {
+        if (room.roomId == null) return
         onRoomClicked(room.roomId)
     }
 
@@ -133,7 +145,7 @@ fun RoomListContent(
     }
 
     val snackbarHostState = remember { SnackbarHostState() }
-    val snackbarMessageText = if (state.snackbarMessage != null ) {
+    val snackbarMessageText = if (state.snackbarMessage != null) {
         stringResource(state.snackbarMessage.messageResId)
     } else null
     val coroutineScope = rememberCoroutineScope()
@@ -181,6 +193,27 @@ fun RoomListContent(
                             )
                         }
                     }
+
+                    if (state.displayInvites) {
+                        item {
+                            Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxSize()) {
+                                TextButton(
+                                    content = {
+                                        Text(stringResource(StringR.string.action_invites_list))
+                                        Spacer(Modifier.size(8.dp))
+                                        Box(
+                                            modifier = Modifier
+                                                .size(12.dp)
+                                                .clip(CircleShape)
+                                                .background(MaterialTheme.roomListUnreadIndicator())
+                                        )
+                                    },
+                                    onClick = onInvitesClicked,
+                                )
+                            }
+                        }
+                    }
+
                     items(
                         items = state.roomList,
                         contentType = { room -> room.contentType() },

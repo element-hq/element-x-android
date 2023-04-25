@@ -41,6 +41,7 @@ class FakeMatrixClient(
     private val userDisplayName: Result<String> = Result.success(A_USER_NAME),
     private val userAvatarURLString: Result<String> = Result.success(AN_AVATAR_URL),
     override val roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
+    override val invitesDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
     private val sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
     private val pushersService: FakePushersService = FakePushersService(),
     private val notificationService: FakeNotificationService = FakeNotificationService(),
@@ -51,9 +52,10 @@ class FakeMatrixClient(
     private var createDmFailure: Throwable? = null
     private var findDmResult: MatrixRoom? = FakeMatrixRoom()
     private var logoutFailure: Throwable? = null
+    private val getRoomResults = mutableMapOf<RoomId, MatrixRoom>()
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
-        return FakeMatrixRoom(roomId)
+        return getRoomResults[roomId]
     }
 
     override fun findDM(userId: UserId): MatrixRoom? {
@@ -134,5 +136,9 @@ class FakeMatrixClient(
 
     fun givenFindDmResult(result: MatrixRoom?) {
         findDmResult = result
+    }
+
+    fun givenGetRoomResult(roomId: RoomId, result: MatrixRoom) {
+        getRoomResults[roomId] = result
     }
 }

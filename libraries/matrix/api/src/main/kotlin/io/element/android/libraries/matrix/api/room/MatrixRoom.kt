@@ -23,7 +23,7 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import kotlinx.coroutines.flow.Flow
 import java.io.Closeable
 
-interface MatrixRoom: Closeable {
+interface MatrixRoom : Closeable {
     val roomId: RoomId
     val name: String?
     val bestName: String
@@ -67,4 +67,8 @@ interface MatrixRoom: Closeable {
     suspend fun unignoreUser(userId: UserId): Result<Unit>
 
     suspend fun leave(): Result<Unit>
+
+    suspend fun acceptInvitation(): Result<Unit>
+
+    suspend fun rejectInvitation(): Result<Unit>
 }

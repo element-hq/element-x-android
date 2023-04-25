@@ -22,13 +22,12 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
-import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 
 class FakeMatrixRoom(
@@ -49,12 +48,20 @@ class FakeMatrixRoom(
 
     private var userDisplayNameResult = Result.success<String?>(null)
     private var userAvatarUrlResult = Result.success<String?>(null)
+    private var acceptInviteResult = Result.success(Unit)
+    private var rejectInviteResult = Result.success(Unit)
     private var dmMember: RoomMember? = null
     private var fetchMemberResult: Result<Unit> = Result.success(Unit)
     private var ignoreResult = Result.success(Unit)
     private var unignoreResult = Result.success(Unit)
 
     var areMembersFetched: Boolean = false
+        private set
+
+    var isInviteAccepted: Boolean = false
+        private set
+
+    var isInviteRejected: Boolean = false
         private set
 
     private var leaveRoomError: Throwable? = null
@@ -138,6 +145,15 @@ class FakeMatrixRoom(
     override suspend fun unignoreUser(userId: UserId): Result<Unit> = unignoreResult
 
     override suspend fun leave(): Result<Unit> = leaveRoomError?.let { Result.failure(it) } ?: Result.success(Unit)
+    override suspend fun acceptInvitation(): Result<Unit> {
+        isInviteAccepted = true
+        return acceptInviteResult
+    }
+
+    override suspend fun rejectInvitation(): Result<Unit> {
+        isInviteRejected = true
+        return rejectInviteResult
+    }
 
     override fun close() = Unit
 
@@ -160,6 +176,15 @@ class FakeMatrixRoom(
     fun givenUserAvatarUrlResult(avatarUrl: Result<String?>) {
         userAvatarUrlResult = avatarUrl
     }
+
+    fun givenAcceptInviteResult(result: Result<Unit>) {
+        acceptInviteResult = result
+    }
+
+    fun givenRejectInviteResult(result: Result<Unit>) {
+        rejectInviteResult = result
+    }
+
 
     fun givenIgnoreResult(result: Result<Unit>) {
         ignoreResult = result

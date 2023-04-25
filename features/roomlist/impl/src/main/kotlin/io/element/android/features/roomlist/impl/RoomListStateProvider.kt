@@ -21,6 +21,7 @@ import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryPlaceholders
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.utils.SnackbarMessage
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
@@ -34,6 +35,7 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState().copy(displayVerificationPrompt = true),
             aRoomListState().copy(snackbarMessage = SnackbarMessage(StringR.string.common_verification_complete)),
             aRoomListState().copy(hasNetworkConnection = false),
+            aRoomListState().copy(displayInvites = true),
         )
 }
 
@@ -44,6 +46,7 @@ internal fun aRoomListState() = RoomListState(
     hasNetworkConnection = true,
     snackbarMessage = null,
     displayVerificationPrompt = false,
+    displayInvites = false,
     eventSink = {}
 )
 
@@ -55,7 +58,8 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
             timestamp = "14:18",
             lastMessage = "A very very very very long message which suites on two lines",
             avatarData = AvatarData("!id", "R"),
-            id = "!roomId:domain"
+            id = "!roomId:domain",
+            roomId = RoomId("!roomId:domain")
         ),
         RoomListRoomSummary(
             name = "Room#2",
@@ -63,7 +67,8 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
             timestamp = "14:16",
             lastMessage = "A short message",
             avatarData = AvatarData("!id", "Z"),
-            id = "!roomId2:domain"
+            id = "!roomId2:domain",
+            roomId = RoomId("!roomId2:domain")
         ),
         RoomListRoomSummaryPlaceholders.create("!roomId2:domain")
     )

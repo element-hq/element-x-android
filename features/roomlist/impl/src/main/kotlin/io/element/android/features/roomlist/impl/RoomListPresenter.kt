@@ -44,6 +44,7 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationS
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -85,6 +86,13 @@ class RoomListPresenter @Inject constructor(
             initialLoad(matrixUser)
         }
 
+        val invites by client
+            .invitesDataSource
+            .roomSummaries()
+            .collectAsState()
+
+        Timber.v("Invites size = ${invites.size}")
+
         // Session verification status (unknown, not verified, verified)
         val sessionVerifiedStatus by sessionVerificationService.sessionVerifiedStatus.collectAsState()
         var verificationPromptDismissed by rememberSaveable { mutableStateOf(false) }
@@ -114,6 +122,7 @@ class RoomListPresenter @Inject constructor(
             displayVerificationPrompt = displayVerificationPrompt,
             snackbarMessage = snackbarMessage,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
+            displayInvites = invites.isNotEmpty(),
             eventSink = ::handleEvents
         )
     }
@@ -169,8 +178,10 @@ class RoomListPresenter @Inject constructor(
                         name = roomSummary.details.name,
                         url = roomSummary.details.avatarURLString
                     )
+                    val roomIdentifier = roomSummary.identifier()
                     RoomListRoomSummary(
                         id = roomSummary.identifier(),
+                        roomId = RoomId(roomIdentifier),
                         name = roomSummary.details.name,
                         hasUnread = roomSummary.details.unreadNotificationCount > 0,
                         timestamp = lastMessageTimestampFormatter.format(roomSummary.details.lastMessageTimestamp),

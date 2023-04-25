@@ -26,26 +26,18 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.onSubscription
-import kotlinx.coroutines.flow.singleOrNull
-import kotlinx.coroutines.flow.skip
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 import org.matrix.rustcomponents.sdk.UpdateSummary
 import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
-import java.lang.IllegalStateException
 import org.matrix.rustcomponents.sdk.RoomMember as RustRoomMember
 
 class RustMatrixRoom(
@@ -212,6 +204,19 @@ class RustMatrixRoom(
             innerRoom.leave()
         }
     }
+
+    override suspend fun acceptInvitation(): Result<Unit> = withContext(coroutineDispatchers.io) {
+        kotlin.runCatching {
+            innerRoom.acceptInvitation()
+        }
+    }
+
+    override suspend fun rejectInvitation(): Result<Unit> = withContext(coroutineDispatchers.io) {
+        kotlin.runCatching {
+            innerRoom.rejectInvitation()
+        }
+    }
+
 
     override suspend fun ignoreUser(userId: UserId): Result<Unit> {
         return runCatching {
