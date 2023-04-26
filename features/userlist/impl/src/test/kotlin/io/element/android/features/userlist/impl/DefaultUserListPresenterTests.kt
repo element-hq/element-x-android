@@ -25,12 +25,14 @@ import io.element.android.features.userlist.api.SelectionMode
 import io.element.android.features.userlist.api.UserListDataStore
 import io.element.android.features.userlist.api.UserListEvents
 import io.element.android.features.userlist.api.UserListPresenterArgs
+import io.element.android.features.userlist.api.UserSearchResultState
 import io.element.android.features.userlist.test.FakeUserListDataSource
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.mockk.coJustRun
 import io.mockk.mockkConstructor
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -55,7 +57,7 @@ class DefaultUserListPresenterTests {
             assertThat(initialState.isMultiSelectionEnabled).isFalse()
             assertThat(initialState.isSearchActive).isFalse()
             assertThat(initialState.selectedUsers).isEmpty()
-            assertThat(initialState.searchResults).isEmpty()
+            assertThat(initialState.searchResults).isEqualTo(UserSearchResultState.NotSearching)
         }
     }
 
@@ -74,7 +76,7 @@ class DefaultUserListPresenterTests {
             assertThat(initialState.isMultiSelectionEnabled).isTrue()
             assertThat(initialState.isSearchActive).isFalse()
             assertThat(initialState.selectedUsers).isEmpty()
-            assertThat(initialState.searchResults).isEmpty()
+            assertThat(initialState.searchResults).isEqualTo(UserSearchResultState.NotSearching)
         }
     }
 
@@ -96,15 +98,39 @@ class DefaultUserListPresenterTests {
             val matrixIdQuery = "@name:matrix.org"
             initialState.eventSink(UserListEvents.UpdateSearchQuery(matrixIdQuery))
             assertThat(awaitItem().searchQuery).isEqualTo(matrixIdQuery)
-            assertThat(awaitItem().searchResults).containsExactly(MatrixUser(UserId(matrixIdQuery)))
+            assertThat(awaitItem().searchResults).isEqualTo(UserSearchResultState.Results(persistentListOf(MatrixUser(UserId(matrixIdQuery)))))
 
             val notMatrixIdQuery = "name"
             initialState.eventSink(UserListEvents.UpdateSearchQuery(notMatrixIdQuery))
             assertThat(awaitItem().searchQuery).isEqualTo(notMatrixIdQuery)
-            assertThat(awaitItem().searchResults).isEmpty()
+            assertThat(awaitItem().searchResults).isEqualTo(UserSearchResultState.NoResults)
 
             initialState.eventSink(UserListEvents.OnSearchActiveChanged(false))
             assertThat(awaitItem().isSearchActive).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - searches when minimum length exceeded`() = runTest {
+        val presenter = DefaultUserListPresenter(
+            UserListPresenterArgs(selectionMode = SelectionMode.Single, minimumSearchLength = 3),
+            userListDataSource,
+            UserListDataStore(),
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+
+            // When the search term is too short, nothing happens
+            initialState.eventSink(UserListEvents.UpdateSearchQuery("al"))
+            assertThat(awaitItem().searchResults).isEqualTo(UserSearchResultState.NotSearching)
+
+            // When it reaches the minimum length, a search is performed asynchronously
+            userListDataSource.givenSearchResult(listOf(aMatrixUser()))
+            initialState.eventSink(UserListEvents.UpdateSearchQuery("alice"))
+            assertThat(awaitItem().searchResults).isEqualTo(UserSearchResultState.NotSearching)
+            assertThat(awaitItem().searchResults).isEqualTo(UserSearchResultState.Results(persistentListOf(aMatrixUser())))
         }
     }
 

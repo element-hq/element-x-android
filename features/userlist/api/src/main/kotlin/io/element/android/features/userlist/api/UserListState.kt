@@ -21,11 +21,17 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class UserListState(
     val searchQuery: String,
-    val searchResults: ImmutableList<MatrixUser>,
+    val searchResults: UserSearchResultState,
     val selectedUsers: ImmutableList<MatrixUser>,
     val isSearchActive: Boolean,
     val selectionMode: SelectionMode,
     val eventSink: (UserListEvents) -> Unit,
 ) {
     val isMultiSelectionEnabled = selectionMode == SelectionMode.Multiple
+}
+
+sealed interface UserSearchResultState {
+    object NotSearching : UserSearchResultState
+    object NoResults : UserSearchResultState
+    data class Results(val results: ImmutableList<MatrixUser>) : UserSearchResultState
 }

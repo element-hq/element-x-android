@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.di
+package io.element.android.libraries.matrix.api.usersearch
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Binds
-import dagger.Module
-import io.element.android.features.createroom.impl.AllMatrixUsersDataSource
-import io.element.android.features.userlist.api.UserListDataSource
-import io.element.android.libraries.di.SessionScope
-import javax.inject.Named
+import io.element.android.libraries.matrix.api.core.UserId
 
-@Module
-@ContributesTo(SessionScope::class)
-interface CreateRoomModule {
-
-    @Binds
-    @Named("AllUsers")
-    fun bindAllUserListDataSource(dataSource: AllMatrixUsersDataSource): UserListDataSource
-
-}
+data class MatrixUserProfile(
+    val userId: UserId,
+    val displayName: String?,
+    val avatarUrl: String?
+)

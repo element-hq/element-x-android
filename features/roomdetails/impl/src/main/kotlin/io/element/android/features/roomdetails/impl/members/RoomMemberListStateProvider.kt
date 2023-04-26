@@ -17,6 +17,7 @@
 package io.element.android.features.roomdetails.impl.members
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.userlist.api.UserSearchResultState
 import io.element.android.features.userlist.api.aUserListState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
@@ -33,7 +34,7 @@ internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMember
 }
 
 internal fun aRoomMemberListState(
-    searchResults: ImmutableList<MatrixUser> = persistentListOf(),
+    searchResults: UserSearchResultState = UserSearchResultState.NotSearching,
     allUsers: Async<ImmutableList<MatrixUser>> = Async.Uninitialized,
 ) =
     RoomMemberListState(
