@@ -37,11 +37,12 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
+import timber.log.Timber
 
 @Composable
 fun TimelineItemImageView(
     content: TimelineItemImageContent,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val widthPercent = if (content.aspectRatio > 1f) {
         1f
@@ -65,7 +66,11 @@ fun TimelineItemImageView(
             contentDescription = null,
             placeholder = debugPlaceholderBackground(ColorPainter(MaterialTheme.colorScheme.surfaceVariant)),
             contentScale = ContentScale.Crop,
-            onSuccess = { isLoading.value = false },
+            onSuccess = {
+                Timber.v("OnSuccess = ${it.result.dataSource}")
+                isLoading.value = false
+            },
+            onError = { Timber.e(it.result.throwable) }
         )
     }
 }

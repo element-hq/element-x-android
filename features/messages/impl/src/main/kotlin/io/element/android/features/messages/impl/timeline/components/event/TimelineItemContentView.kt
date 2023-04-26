@@ -17,14 +17,20 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
+
+private fun Modifier.defaultContentPadding(): Modifier = padding(
+    horizontal = 12.dp, vertical = 6.dp
+)
 
 @Composable
 fun TimelineItemEventContentView(
@@ -37,26 +43,26 @@ fun TimelineItemEventContentView(
     when (content) {
         is TimelineItemEncryptedContent -> TimelineItemEncryptedView(
             content = content,
-            modifier = modifier
+            modifier = modifier.defaultContentPadding()
         )
         is TimelineItemRedactedContent -> TimelineItemRedactedView(
             content = content,
-            modifier = modifier
+            modifier = modifier.defaultContentPadding()
         )
         is TimelineItemTextBasedContent -> TimelineItemTextView(
             content = content,
             interactionSource = interactionSource,
-            modifier = modifier,
+            modifier = modifier.defaultContentPadding(),
             onTextClicked = onClick,
             onTextLongClicked = onLongClick
         )
         is TimelineItemUnknownContent -> TimelineItemUnknownView(
             content = content,
-            modifier = modifier
+            modifier = modifier.defaultContentPadding()
         )
         is TimelineItemImageContent -> TimelineItemImageView(
             content = content,
-            modifier = modifier
+            modifier = modifier,
         )
     }
 }
