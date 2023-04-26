@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.mediapickers.PickerProvider
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -129,7 +130,8 @@ class MessagesPresenterTest {
     ): MessagesPresenter {
         val messageComposerPresenter = MessageComposerPresenter(
             appCoroutineScope = this,
-            room = matrixRoom
+            room = matrixRoom,
+            mediaPickerProvider = PickerProvider(isInTest = true),
         )
 
         val timelinePresenter = TimelinePresenter(

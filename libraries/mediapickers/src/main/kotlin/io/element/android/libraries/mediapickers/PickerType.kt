@@ -14,51 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.pickers
+package io.element.android.libraries.mediapickers
 
-import android.content.Context
-import android.content.Intent
 import android.net.Uri
-import android.provider.MediaStore
-import androidx.activity.compose.ManagedActivityResultLauncher
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalInspectionMode
 import io.element.android.libraries.core.mimetype.MimeTypes
-
-/**
- * Wrapper around [ManagedActivityResultLauncher] to be used with media/file pickers.
- */
-interface PickerLauncher<Input, Output> {
-    /** Starts the activity result launcher with its default input. */
-    fun launch()
-
-    /** Starts the activity result launcher with a [customInput]. */
-    fun launch(customInput: Input)
-}
-
-class ComposePickerLauncher<Input, Output>(
-    private val managedLauncher: ManagedActivityResultLauncher<Input, Output>,
-    private val defaultRequest: Input,
-) : PickerLauncher<Input, Output> {
-    override fun launch() {
-        managedLauncher.launch(defaultRequest)
-    }
-
-    override fun launch(customInput: Input) {
-        managedLauncher.launch(customInput)
-    }
-}
-
-/** Needed for screenshot tests. */
-class NoOpPickerLauncher<Input, Output> : PickerLauncher<Input, Output> {
-    override fun launch() {}
-    override fun launch(customInput: Input) {}
-}
 
 sealed interface PickerType<Input, Output> {
     fun getContract(): ActivityResultContract<Input, Output>
@@ -92,22 +54,5 @@ sealed interface PickerType<Input, Output> {
         override fun getDefaultRequest(): String {
             return MimeTypes.Any
         }
-    }
-}
-
-/**
- * Remembers and returns a [PickerLauncher] for a certain media/file [type].
- */
-@Composable
-fun <Input, Output> rememberPickerLauncher(
-    type: PickerType<Input, Output>,
-    onResult: (Output) -> Unit,
-): PickerLauncher<Input, Output> {
-    return if (LocalInspectionMode.current) {
-        NoOpPickerLauncher()
-    } else {
-        val contract = type.getContract()
-        val managedLauncher = rememberLauncherForActivityResult(contract = contract, onResult = onResult)
-        remember(type) { ComposePickerLauncher(managedLauncher, type.getDefaultRequest()) }
     }
 }

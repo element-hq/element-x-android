@@ -24,4 +24,6 @@ sealed interface MessageComposerEvents {
     object CloseSpecialMode : MessageComposerEvents
     data class SetMode(val composerMode: MessageComposerMode) : MessageComposerEvents
     data class UpdateText(val text: CharSequence) : MessageComposerEvents
+
+    object TakePhoto : MessageComposerEvents
 }

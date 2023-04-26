@@ -40,6 +40,7 @@ dependencies {
     implementation(projects.libraries.textcomposer)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.dateformatter.api)
+    implementation(projects.libraries.mediapickers)
     implementation(projects.features.networkmonitor.api)
     implementation(libs.coil.compose)
     implementation(libs.datetime)
