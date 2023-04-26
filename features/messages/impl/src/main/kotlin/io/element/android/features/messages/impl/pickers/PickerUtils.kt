@@ -16,7 +16,10 @@
 
 package io.element.android.features.messages.impl.pickers
 
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.provider.MediaStore
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -24,52 +27,67 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalInspectionMode
 import io.element.android.libraries.core.mimetype.MimeTypes
 
 /**
  * Wrapper around [ManagedActivityResultLauncher] to be used with media/file pickers.
  */
-class PickerLauncher<Input, Output>(
-    private val managedLauncher: ManagedActivityResultLauncher<Input, Output?>,
-    private val defaultRequest: Input,
-) {
+interface PickerLauncher<Input, Output> {
     /** Starts the activity result launcher with its default input. */
-    fun launch() {
+    fun launch()
+
+    /** Starts the activity result launcher with a [customInput]. */
+    fun launch(customInput: Input)
+}
+
+class ComposePickerLauncher<Input, Output>(
+    private val managedLauncher: ManagedActivityResultLauncher<Input, Output>,
+    private val defaultRequest: Input,
+) : PickerLauncher<Input, Output> {
+    override fun launch() {
         managedLauncher.launch(defaultRequest)
     }
 
-    /** Starts the activity result launcher with a [customInput]. */
-    fun launch(customInput: Input) {
+    override fun launch(customInput: Input) {
         managedLauncher.launch(customInput)
     }
 }
 
+/** Needed for screenshot tests. */
+class NoOpPickerLauncher<Input, Output> : PickerLauncher<Input, Output> {
+    override fun launch() {}
+    override fun launch(customInput: Input) {}
+}
+
 sealed interface PickerType<Input, Output> {
-    fun getContract(): ActivityResultContract<Input, Output?>
+    fun getContract(): ActivityResultContract<Input, Output>
     fun getDefaultRequest(): Input
 
-    object Image : PickerType<PickVisualMediaRequest, Uri> {
+    object ImageAndVideo : PickerType<PickVisualMediaRequest, Uri?> {
         override fun getContract() = ActivityResultContracts.PickVisualMedia()
         override fun getDefaultRequest(): PickVisualMediaRequest {
-            return PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+            return PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)
         }
     }
 
-    object Video : PickerType<PickVisualMediaRequest, Uri> {
-        override fun getContract() = ActivityResultContracts.PickVisualMedia()
-        override fun getDefaultRequest(): PickVisualMediaRequest {
-            return PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly)
+    object Camera {
+        data class Photo(val destUri: Uri) : PickerType<Uri, Boolean> {
+            override fun getContract() = ActivityResultContracts.TakePicture()
+            override fun getDefaultRequest(): Uri {
+                return destUri
+            }
+        }
+
+        data class Video(val destUri: Uri) : PickerType<Uri, Boolean> {
+            override fun getContract() = ActivityResultContracts.CaptureVideo()
+            override fun getDefaultRequest(): Uri {
+                return destUri
+            }
         }
     }
 
-    object Audio : PickerType<String, Uri> {
-        override fun getContract() = ActivityResultContracts.GetContent()
-        override fun getDefaultRequest(): String {
-            return MimeTypes.Audio
-        }
-    }
-
-    object File : PickerType<String, Uri> {
+    object File : PickerType<String, Uri?> {
         override fun getContract() = ActivityResultContracts.GetContent()
         override fun getDefaultRequest(): String {
             return MimeTypes.Any
@@ -77,24 +95,27 @@ sealed interface PickerType<Input, Output> {
     }
 }
 
+class CameraContract : ActivityResultContracts.CaptureVideo() {
+    override fun createIntent(context: Context, input: Uri): Intent {
+        super.createIntent(context, input)
+        return Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)
+            .putExtra(MediaStore.EXTRA_OUTPUT, input)
+    }
+}
+
 /**
  * Remembers and returns a [PickerLauncher] for a certain media/file [type].
- * If the picker returns an item, it'll be emitted in [onSuccess]. If it does not, [onFailure] will be called instead.
  */
 @Composable
 fun <Input, Output> rememberPickerLauncher(
     type: PickerType<Input, Output>,
-    onSuccess: (Output) -> Unit,
-    onFailure: () -> Unit = {},
+    onResult: (Output) -> Unit,
 ): PickerLauncher<Input, Output> {
-    val contract = type.getContract()
-    val managedLauncher = rememberLauncherForActivityResult(contract = contract, onResult = { result ->
-        if (result != null) {
-            onSuccess(result)
-        } else {
-            onFailure()
-        }
-    })
-
-    return remember { PickerLauncher(managedLauncher, type.getDefaultRequest()) }
+    return if (LocalInspectionMode.current) {
+        NoOpPickerLauncher()
+    } else {
+        val contract = type.getContract()
+        val managedLauncher = rememberLauncherForActivityResult(contract = contract, onResult = onResult)
+        remember(type) { ComposePickerLauncher(managedLauncher, type.getDefaultRequest()) }
+    }
 }

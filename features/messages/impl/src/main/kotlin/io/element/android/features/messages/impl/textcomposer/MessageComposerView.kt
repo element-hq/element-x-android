@@ -16,10 +16,17 @@
 
 package io.element.android.features.messages.impl.textcomposer
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.core.content.FileProvider
+import io.element.android.features.messages.impl.pickers.NoOpPickerLauncher
+import io.element.android.features.messages.impl.pickers.PickerLauncher
 import io.element.android.features.messages.impl.pickers.PickerType
 import io.element.android.features.messages.impl.pickers.rememberPickerLauncher
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -27,14 +34,17 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.textcomposer.TextComposer
 import timber.log.Timber
+import java.io.File
+import java.util.UUID
 
 @Composable
 fun MessageComposerView(
     state: MessageComposerState,
     modifier: Modifier = Modifier,
 ) {
-    val pickerLauncher = rememberPickerLauncher(type = PickerType.File, onSuccess = {
-        Timber.v("Picker file at: $it")
+    // Example usage of custom pickers
+    val cameraLauncher = CameraPhotoPicker(onResult = { uri ->
+        Timber.d("Photo saved at $uri")
     })
 
     fun onFullscreenToggle() {
@@ -61,13 +71,39 @@ fun MessageComposerView(
         onCloseSpecialMode = ::onCloseSpecialMode,
         onComposerTextChange = ::onComposerTextChange,
         onAddAttachment = {
-            pickerLauncher.launch()
+            cameraLauncher.launch()
         },
         composerCanSendMessage = state.isSendButtonVisible,
         composerText = state.text?.charSequence?.toString(),
         isInDarkMode = !ElementTheme.colors.isLight,
         modifier = modifier
     )
+}
+
+@Composable
+internal fun CameraPhotoPicker(onResult: (Uri?) -> Unit): PickerLauncher<Uri, Boolean> {
+    // Screenshot tests and preview can't handle FileProviders, so we might as well disable the whole picker
+    return if (LocalInspectionMode.current) {
+        NoOpPickerLauncher()
+    } else {
+        val context = LocalContext.current
+        val tmpFile = remember {
+            val filename = UUID.randomUUID().toString()
+            File(context.cacheDir, filename)
+        }
+        val tmpFileUri = remember(tmpFile) {
+            val authority = "${context.packageName}.fileprovider"
+            FileProvider.getUriForFile(context, authority, tmpFile)
+        }
+        rememberPickerLauncher(type = PickerType.Camera.Photo(tmpFileUri)) { success ->
+            // Execute callback
+            onResult(if (success) tmpFileUri else null)
+            // Then remove the file and clear the picker
+            if (tmpFile.exists()) {
+                tmpFile.delete()
+            }
+        }
+    }
 }
 
 @Preview
