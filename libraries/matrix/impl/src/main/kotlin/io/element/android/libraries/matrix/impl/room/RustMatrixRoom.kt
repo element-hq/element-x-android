@@ -26,18 +26,19 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 import org.matrix.rustcomponents.sdk.UpdateSummary
 import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
+import org.matrix.rustcomponents.sdk.RoomMember as RustRoomMember
 
 class RustMatrixRoom(
     private val currentUserId: UserId,
@@ -48,37 +49,40 @@ class RustMatrixRoom(
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : MatrixRoom {
 
-    private var loadMembersJob: Job? = null
-    private var cachedMembers: List<RoomMember> = emptyList()
+    private val timeline by lazy {
+        RustMatrixTimeline(
+            matrixRoom = this,
+            innerRoom = innerRoom,
+            slidingSyncRoom = slidingSyncRoom,
+            coroutineScope = coroutineScope,
+            coroutineDispatchers = coroutineDispatchers
+        )
+    }
 
-    override suspend fun members(): List<RoomMember> {
-        return cachedMembers.ifEmpty {
-            if (loadMembersJob == null) {
-                loadMembersJob = coroutineScope.launch(coroutineDispatchers.io) {
-                    cachedMembers = tryOrNull {
-                        innerRoom.members().map(RoomMemberMapper::map)
-                    } ?: emptyList()
-                }
+    private var membersFlow = MutableStateFlow<List<RoomMember>>(emptyList())
+
+    override fun members(): Flow<List<RoomMember>> {
+        return membersFlow.onSubscription { updateMembers() }
+    }
+
+    override fun updateMembers() {
+        val updatedMembers = tryOrNull {
+            innerRoom.members().map(RoomMemberMapper::map)
+        } ?: emptyList()
+        membersFlow.tryEmit(updatedMembers)
+    }
+
+    override fun getMember(userId: UserId): Flow<RoomMember?> {
+        return membersFlow.map { members -> members.find { it.userId == userId } }
+    }
+
+    override fun getDmMember(): Flow<RoomMember?> {
+        return membersFlow.map { members ->
+            if (members.size == 2 && isDirect && isEncrypted) {
+                members.find { it.userId != currentUserId }
+            } else {
+                null
             }
-            loadMembersJob?.join()
-            loadMembersJob = null
-            cachedMembers
-        }
-    }
-
-    override suspend fun memberCount(): Int {
-        return members().size
-    }
-
-    override fun getMember(userId: UserId): RoomMember? {
-        return cachedMembers.find { it.userId == userId }
-    }
-
-    override fun getDmMember(): RoomMember? {
-        return if (cachedMembers.size == 2 && isDirect && isEncrypted) {
-            cachedMembers.find { it.userId != currentUserId }
-        } else {
-            null
         }
     }
 
@@ -94,13 +98,7 @@ class RustMatrixRoom(
     }
 
     override fun timeline(): MatrixTimeline {
-        return RustMatrixTimeline(
-            matrixRoom = this,
-            innerRoom = innerRoom,
-            slidingSyncRoom = slidingSyncRoom,
-            coroutineScope = coroutineScope,
-            coroutineDispatchers = coroutineDispatchers
-        )
+        return timeline
     }
 
     override fun close() {
@@ -219,4 +217,20 @@ class RustMatrixRoom(
         }
     }
 
+
+    override suspend fun ignoreUser(userId: UserId): Result<Unit> {
+        return runCatching {
+            getRustMember(userId)?.ignore() ?: error("No member with userId $userId exists in room $roomId")
+        }
+    }
+
+    override suspend fun unignoreUser(userId: UserId): Result<Unit> {
+        return runCatching {
+            getRustMember(userId)?.unignore() ?: error("No member with userId $userId exists in room $roomId")
+        }
+    }
+
+    private fun getRustMember(userId: UserId): RustRoomMember? {
+        return innerRoom.members().find { it.userId() == userId.value }
+    }
 }

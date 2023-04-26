@@ -17,15 +17,26 @@
 package io.element.android.features.roomdetails.impl.members.details
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState.ConfirmationDialog
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class RoomMemberDetailsPresenter @AssistedInject constructor(
+    private val currentUserSessionId: SessionId,
     private val room: MatrixRoom,
     @Assisted private val roomMember: RoomMember,
 ) : Presenter<RoomMemberDetailsState> {
@@ -36,11 +47,31 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): RoomMemberDetailsState {
+        val coroutineScope = rememberCoroutineScope()
+        var confirmationDialog by remember { mutableStateOf<ConfirmationDialog?>(null) }
+        var isBlocked = remember { mutableStateOf(roomMember.isIgnored) }
 
-//        fun handleEvents(event: RoomMemberDetailsEvents) {
-//            when (event) {
-//            }
-//        }
+        fun handleEvents(event: RoomMemberDetailsEvents) {
+            when (event) {
+                is RoomMemberDetailsEvents.BlockUser -> {
+                    if (event.needsConfirmation) {
+                        confirmationDialog = ConfirmationDialog.Block
+                    } else {
+                        confirmationDialog = null
+                        coroutineScope.blockUser(roomMember.userId, isBlocked)
+                    }
+                }
+                is RoomMemberDetailsEvents.UnblockUser -> {
+                    if (event.needsConfirmation) {
+                        confirmationDialog = ConfirmationDialog.Unblock
+                    } else {
+                        confirmationDialog = null
+                        coroutineScope.unblockUser(roomMember.userId, isBlocked)
+                    }
+                }
+                RoomMemberDetailsEvents.ClearConfirmationDialog -> confirmationDialog = null
+            }
+        }
 
         val userName by produceState(initialValue = roomMember.displayName) {
             room.userDisplayName(roomMember.userId).onSuccess { displayName ->
@@ -58,8 +89,18 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
             userId = roomMember.userId.value,
             userName = userName,
             avatarUrl = userAvatar,
-            isBlocked = roomMember.isIgnored,
-//            eventSink = ::handleEvents
+            isBlocked = isBlocked.value,
+            displayConfirmationDialog = confirmationDialog,
+            isCurrentUser = roomMember.userId == currentUserSessionId,
+            eventSink = ::handleEvents
         )
+    }
+
+    private fun CoroutineScope.blockUser(userId: UserId, isBlockedState: MutableState<Boolean>) = launch {
+        room.ignoreUser(userId).onSuccess { isBlockedState.value = true }
+    }
+
+    private fun CoroutineScope.unblockUser(userId: UserId, isBlockedState: MutableState<Boolean>) = launch {
+        room.unignoreUser(userId).onSuccess { isBlockedState.value = false }
     }
 }

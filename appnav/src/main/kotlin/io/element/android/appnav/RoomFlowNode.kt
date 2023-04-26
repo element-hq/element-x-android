@@ -18,6 +18,7 @@ package io.element.android.appnav
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.composable.Children
@@ -134,8 +135,18 @@ class RoomFlowNode @AssistedInject constructor(
         object RoomDetails : NavTarget
     }
 
+    private val timeline = inputs.room.timeline()
+
     @Composable
     override fun View(modifier: Modifier) {
+
+        DisposableEffect(Unit) {
+            timeline.initialize()
+            onDispose {
+                timeline.dispose()
+            }
+        }
+
         Children(
             navModel = backstack,
             modifier = modifier,
