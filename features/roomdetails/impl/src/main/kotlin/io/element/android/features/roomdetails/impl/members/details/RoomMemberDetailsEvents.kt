@@ -16,4 +16,8 @@
 
 package io.element.android.features.roomdetails.impl.members.details
 
-sealed interface RoomMemberDetailsEvents
+sealed interface RoomMemberDetailsEvents {
+    data class BlockUser(val needsConfirmation: Boolean = false) : RoomMemberDetailsEvents
+    data class UnblockUser(val needsConfirmation: Boolean = false) : RoomMemberDetailsEvents
+    object ClearConfirmationDialog : RoomMemberDetailsEvents
+}

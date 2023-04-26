@@ -14,18 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl.members.details
+package io.element.android.libraries.core.coroutine
 
-data class RoomMemberDetailsState(
-    val userId: String,
-    val userName: String?,
-    val avatarUrl: String?,
-    val isBlocked: Boolean,
-    val displayConfirmationDialog: ConfirmationDialog? = null,
-    val isCurrentUser: Boolean,
-    val eventSink: (RoomMemberDetailsEvents) -> Unit
-) {
-    enum class ConfirmationDialog {
-        Block, Unblock
-    }
-}
+import kotlinx.coroutines.flow.flow
+
+/** Create a Flow emitting a single error event. It should be useful for tests. */
+fun <T> errorFlow(throwable: Throwable) = flow<T> { throw throwable }

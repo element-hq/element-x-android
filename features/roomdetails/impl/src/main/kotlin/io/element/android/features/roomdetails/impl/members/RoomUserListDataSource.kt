@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 
 class RoomUserListDataSource @Inject constructor(
@@ -30,7 +31,7 @@ class RoomUserListDataSource @Inject constructor(
 ) : UserListDataSource {
 
     override suspend fun search(query: String): List<MatrixUser> {
-        return room.members().filter { member ->
+        return room.members().firstOrNull().orEmpty().filter { member ->
             if (query.isBlank()) {
                 true
             } else {

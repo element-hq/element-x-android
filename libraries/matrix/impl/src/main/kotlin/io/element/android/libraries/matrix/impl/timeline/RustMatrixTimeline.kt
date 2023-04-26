@@ -139,7 +139,14 @@ class RustMatrixTimeline(
 
     private suspend fun addListener(timelineListener: TimelineListener): Result<List<TimelineItem>> = withContext(coroutineDispatchers.io) {
         runCatching {
-            val settings = RoomSubscription(requiredState = listOf(RequiredState(key = "m.room.canonical_alias", value = "")), timelineLimit = null)
+            val settings = RoomSubscription(
+                requiredState = listOf(
+                    RequiredState(key = "m.room.topic", value = ""),
+                    RequiredState(key = "m.room.canonical_alias", value = ""),
+                    RequiredState(key = "m.room.join_rules", value = ""),
+                ),
+                timelineLimit = null
+            )
             val result = slidingSyncRoom.subscribeAndAddTimelineListener(timelineListener, settings)
             listenerTokens += result.taskHandle
             result.items

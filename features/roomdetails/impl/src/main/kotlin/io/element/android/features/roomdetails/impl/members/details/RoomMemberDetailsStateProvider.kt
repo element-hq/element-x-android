@@ -24,6 +24,8 @@ open class RoomMemberDetailsStateProvider : PreviewParameterProvider<RoomMemberD
             aRoomMemberDetailsState(),
             aRoomMemberDetailsState().copy(userName = null),
             aRoomMemberDetailsState().copy(isBlocked = true),
+            aRoomMemberDetailsState().copy(displayConfirmationDialog = RoomMemberDetailsState.ConfirmationDialog.Block),
+            aRoomMemberDetailsState().copy(displayConfirmationDialog = RoomMemberDetailsState.ConfirmationDialog.Unblock),
             // Add other states here
         )
 }
@@ -33,5 +35,6 @@ fun aRoomMemberDetailsState() = RoomMemberDetailsState(
     userName = "Daniel",
     avatarUrl = null,
     isBlocked = false,
-//    eventSink = {},
+    isCurrentUser = false,
+    eventSink = {},
 )

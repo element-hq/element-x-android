@@ -63,7 +63,10 @@ class RoomDetailsNode @AssistedInject constructor(
                 activityResultLauncher = null,
                 chooserTitle = context.getString(R.string.screen_room_details_share_room_title),
                 text = permalink,
+                noActivityFoundMessage = context.getString(AndroidUtilsR.string.error_no_compatible_app_found)
             )
+        }.onFailure {
+            Timber.e(it)
         }
     }
 
@@ -86,12 +89,21 @@ class RoomDetailsNode @AssistedInject constructor(
     override fun View(modifier: Modifier) {
         val context = LocalContext.current
         val state = presenter.present()
+
+        fun onShareRoom() {
+            this.onShareRoom(context)
+        }
+
+        fun onShareMember(roomMember: RoomMember) {
+            this.onShareMember(context, roomMember)
+        }
+
         RoomDetailsView(
             state = state,
             modifier = modifier,
-            goBack = { navigateUp() },
-            onShareRoom = { onShareRoom(context) },
-            onShareMember = { onShareMember(context, it) },
+            goBack = this::navigateUp,
+            onShareRoom = ::onShareRoom,
+            onShareMember = ::onShareMember,
             openRoomMemberList = ::openRoomMemberList,
         )
     }
