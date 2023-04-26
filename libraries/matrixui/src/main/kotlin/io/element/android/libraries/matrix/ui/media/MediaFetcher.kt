@@ -26,16 +26,23 @@ import io.element.android.libraries.matrix.api.media.MediaResolver
 import java.nio.ByteBuffer
 
 internal class MediaFetcher(
-    private val mediaResolver: MediaResolver?,
+    private val mediaResolver: MediaResolver,
     private val meta: MediaResolver.Meta,
     private val options: Options,
     private val imageLoader: ImageLoader
 ) : Fetcher {
 
     override suspend fun fetch(): FetchResult? {
-        val byteArray = mediaResolver?.resolve(meta.url, meta.kind) ?: return null
-        val byteBuffer = ByteBuffer.wrap(byteArray)
-        return imageLoader.components.newFetcher(byteBuffer, options, imageLoader)?.first?.fetch()
+        return mediaResolver.resolve(meta.url, meta.kind)
+            .map { byteArray ->
+                ByteBuffer.wrap(byteArray)
+            }.map { byteBuffer ->
+                imageLoader.components.newFetcher(byteBuffer, options, imageLoader)?.first?.fetch()
+            }
+            .fold(
+                { result -> result },
+                { failure -> throw failure }
+            )
     }
 
     class MetaFactory(private val client: MatrixClient) :

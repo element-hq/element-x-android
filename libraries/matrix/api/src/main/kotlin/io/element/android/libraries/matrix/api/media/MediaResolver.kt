@@ -31,6 +31,6 @@ interface MediaResolver {
         val kind: Kind
     )
 
-    suspend fun resolve(url: String?, kind: Kind): ByteArray?
+    suspend fun resolve(url: String?, kind: Kind): Result<ByteArray>
 
 }

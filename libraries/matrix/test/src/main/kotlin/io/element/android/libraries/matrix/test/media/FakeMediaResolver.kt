@@ -19,7 +19,14 @@ package io.element.android.libraries.matrix.test.media
 import io.element.android.libraries.matrix.api.media.MediaResolver
 
 class FakeMediaResolver : MediaResolver {
-    override suspend fun resolve(url: String?, kind: MediaResolver.Kind): ByteArray? {
-        return null
+
+    private var result: Result<ByteArray> = Result.success(ByteArray(0))
+
+    fun givenResult(result: Result<ByteArray>) {
+        this.result = result
+    }
+
+    override suspend fun resolve(url: String?, kind: MediaResolver.Kind): Result<ByteArray> {
+        return result
     }
 }

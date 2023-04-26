@@ -18,11 +18,12 @@ package io.element.android.libraries.matrix.impl.media
 
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.media.MediaResolver
+import java.lang.IllegalStateException
 
 internal class RustMediaResolver(private val client: MatrixClient) : MediaResolver {
 
-    override suspend fun resolve(url: String?, kind: MediaResolver.Kind): ByteArray? {
-        if (url.isNullOrEmpty()) return null
+    override suspend fun resolve(url: String?, kind: MediaResolver.Kind): Result<ByteArray> {
+        if (url.isNullOrEmpty()) return Result.failure(IllegalStateException("The url is null or empty"))
         return when (kind) {
             is MediaResolver.Kind.Content -> client.loadMediaContent(url)
             is MediaResolver.Kind.Thumbnail -> client.loadMediaThumbnail(
@@ -30,6 +31,6 @@ internal class RustMediaResolver(private val client: MatrixClient) : MediaResolv
                 kind.width.toLong(),
                 kind.height.toLong()
             )
-        }.getOrNull()
+        }
     }
 }
