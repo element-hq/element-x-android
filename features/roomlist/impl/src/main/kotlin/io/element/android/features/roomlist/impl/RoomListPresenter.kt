@@ -81,6 +81,7 @@ class RoomListPresenter @Inject constructor(
 
         Timber.v("RoomSummaries size = ${roomSummaries.size}")
 
+        val mappedRoomSummaries: MutableState<ImmutableList<RoomListRoomSummary>> = remember { mutableStateOf(persistentListOf()) }
         val filteredRoomSummaries: MutableState<ImmutableList<RoomListRoomSummary>> = remember {
             mutableStateOf(persistentListOf())
         }
@@ -105,24 +106,38 @@ class RoomListPresenter @Inject constructor(
             derivedStateOf { sessionVerifiedStatus == SessionVerifiedStatus.NotVerified && !verificationPromptDismissed }
         }
 
+        var displaySearchResults by rememberSaveable { mutableStateOf(false) }
+
         fun handleEvents(event: RoomListEvents) {
             when (event) {
                 is RoomListEvents.UpdateFilter -> filter = event.newFilter
                 is RoomListEvents.UpdateVisibleRange -> updateVisibleRange(event.range)
                 RoomListEvents.DismissRequestVerificationPrompt -> verificationPromptDismissed = true
+                RoomListEvents.ToggleSearchResults -> {
+                    if (displaySearchResults) {
+                        filter = ""
+                    }
+                    displaySearchResults =! displaySearchResults
+                }
             }
         }
 
         LaunchedEffect(roomSummaries, filter) {
-            filteredRoomSummaries.value = updateFilteredRoomSummaries(roomSummaries, filter)
+            mappedRoomSummaries.value = if (roomSummaries.isEmpty()) {
+                RoomListRoomSummaryPlaceholders.createFakeList(16).toImmutableList()
+            } else {
+                mapRoomSummaries(roomSummaries).toImmutableList()
+            }
+            filteredRoomSummaries.value = updateFilteredRoomSummaries(mappedRoomSummaries.value, filter)
         }
 
         val snackbarMessage = handleSnackbarMessage(snackbarDispatcher)
 
         return RoomListState(
             matrixUser = matrixUser.value,
-            roomList = filteredRoomSummaries.value,
+            roomList = mappedRoomSummaries.value,
             filter = filter,
+            filteredRoomList = filteredRoomSummaries.value,
             displayVerificationPrompt = displayVerificationPrompt,
             snackbarMessage = snackbarMessage,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
@@ -131,19 +146,15 @@ class RoomListPresenter @Inject constructor(
                 invites.map { it.identifier() }.all(seenInvites::contains) -> InvitesState.SeenInvites
                 else -> InvitesState.NewInvites
             },
+            displaySearchResults = displaySearchResults,
             eventSink = ::handleEvents
         )
     }
 
-    private suspend fun updateFilteredRoomSummaries(roomSummaries: List<RoomSummary>?, filter: String): ImmutableList<RoomListRoomSummary> {
-        if (roomSummaries.isNullOrEmpty()) {
-            return RoomListRoomSummaryPlaceholders.createFakeList(16).toImmutableList()
-        }
-        val mappedRoomSummaries = mapRoomSummaries(roomSummaries)
-        return if (filter.isEmpty()) {
-            mappedRoomSummaries
-        } else {
-            mappedRoomSummaries.filter { it.name.contains(filter, ignoreCase = true) }
+    private fun updateFilteredRoomSummaries(mappedRoomSummaries: ImmutableList<RoomListRoomSummary>, filter: String): ImmutableList<RoomListRoomSummary> {
+        return when {
+            filter.isEmpty() -> emptyList()
+            else -> mappedRoomSummaries.filter { it.name.contains(filter, ignoreCase = true) }
         }.toImmutableList()
     }
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_change_server_subtitle">"Wie lautet die Adresse deines Servers?"</string>
+  <string name="screen_login_title">"Willkommen zurück!"</string>
+  <string name="screen_login_password_hint">"Passwort"</string>
+  <string name="screen_login_username_hint">"Benutzername"</string>
+</resources>

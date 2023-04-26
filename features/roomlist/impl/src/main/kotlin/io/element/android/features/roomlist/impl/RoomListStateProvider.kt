@@ -37,6 +37,8 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState().copy(hasNetworkConnection = false),
             aRoomListState().copy(invitesState = InvitesState.SeenInvites),
             aRoomListState().copy(invitesState = InvitesState.NewInvites),
+            aRoomListState().copy(displaySearchResults = true, filter = "", filteredRoomList = persistentListOf()),
+            aRoomListState().copy(displaySearchResults = true),
         )
 }
 
@@ -44,10 +46,12 @@ internal fun aRoomListState() = RoomListState(
     matrixUser = MatrixUser(id = UserId("@id:domain"), username = "User#1", avatarData = AvatarData("@id:domain", "U")),
     roomList = aRoomListRoomSummaryList(),
     filter = "filter",
+    filteredRoomList = aRoomListRoomSummaryList(),
     hasNetworkConnection = true,
     snackbarMessage = null,
     displayVerificationPrompt = false,
     invitesState = InvitesState.NoInvites,
+    displaySearchResults = false,
     eventSink = {}
 )
 
