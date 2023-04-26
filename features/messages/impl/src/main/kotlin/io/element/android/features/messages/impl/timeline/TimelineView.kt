@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -212,12 +211,13 @@ fun TimelineItemEventRow(
                         Modifier.zIndex(1f)
                     )
                 }
+                val bubbleState = BubbleState(
+                    groupPosition = event.groupPosition,
+                    isMine = event.isMine,
+                    isHighlighted = isHighlighted,
+                )
                 MessageEventBubble(
-                    state = BubbleState(
-                        groupPosition = event.groupPosition,
-                        isMine = event.isMine,
-                        isHighlighted = isHighlighted,
-                    ),
+                    state = bubbleState,
                     interactionSource = interactionSource,
                     onClick = onClick,
                     onLongClick = onLongClick,
@@ -225,8 +225,12 @@ fun TimelineItemEventRow(
                         .zIndex(-1f)
                         .widthIn(max = 320.dp)
                 ) {
-                    val contentModifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
-                    TimelineItemEventContentView(event.content, interactionSource, onClick, onLongClick, contentModifier)
+                    TimelineItemEventContentView(
+                        content = event.content,
+                        interactionSource = interactionSource,
+                        onClick = onClick,
+                        onLongClick = onLongClick,
+                    )
                 }
                 TimelineItemReactionsView(
                     reactionsState = event.reactionsState,
