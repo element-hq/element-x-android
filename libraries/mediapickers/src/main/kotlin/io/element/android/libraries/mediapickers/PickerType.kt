@@ -49,10 +49,10 @@ sealed interface PickerType<Input, Output> {
         }
     }
 
-    object File : PickerType<String, Uri?> {
+    data class File(val mimeType: String = MimeTypes.Any) : PickerType<String, Uri?> {
         override fun getContract() = ActivityResultContracts.GetContent()
         override fun getDefaultRequest(): String {
-            return MimeTypes.Any
+            return mimeType
         }
     }
 }
