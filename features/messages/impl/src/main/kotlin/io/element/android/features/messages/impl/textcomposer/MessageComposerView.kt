@@ -20,16 +20,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.features.messages.impl.pickers.PickerType
+import io.element.android.features.messages.impl.pickers.rememberPickerLauncher
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.textcomposer.TextComposer
+import timber.log.Timber
 
 @Composable
 fun MessageComposerView(
     state: MessageComposerState,
     modifier: Modifier = Modifier,
 ) {
+    val pickerLauncher = rememberPickerLauncher(type = PickerType.File, onSuccess = {
+        Timber.v("Picker file at: $it")
+    })
+
     fun onFullscreenToggle() {
         state.eventSink(MessageComposerEvents.ToggleFullScreenState)
     }
@@ -53,6 +60,9 @@ fun MessageComposerView(
         composerMode = state.mode,
         onCloseSpecialMode = ::onCloseSpecialMode,
         onComposerTextChange = ::onComposerTextChange,
+        onAddAttachment = {
+            pickerLauncher.launch()
+        },
         composerCanSendMessage = state.isSendButtonVisible,
         composerText = state.text?.charSequence?.toString(),
         isInDarkMode = !ElementTheme.colors.isLight,
