@@ -95,14 +95,6 @@ sealed interface PickerType<Input, Output> {
     }
 }
 
-class CameraContract : ActivityResultContracts.CaptureVideo() {
-    override fun createIntent(context: Context, input: Uri): Intent {
-        super.createIntent(context, input)
-        return Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)
-            .putExtra(MediaStore.EXTRA_OUTPUT, input)
-    }
-}
-
 /**
  * Remembers and returns a [PickerLauncher] for a certain media/file [type].
  */
