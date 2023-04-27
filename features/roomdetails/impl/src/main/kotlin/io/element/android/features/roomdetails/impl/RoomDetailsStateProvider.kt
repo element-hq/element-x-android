@@ -17,6 +17,7 @@
 package io.element.android.features.roomdetails.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.roomdetails.impl.members.details.aRoomMemberDetailsState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -30,8 +31,8 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState().copy(isEncrypted = false),
             aRoomDetailsState().copy(roomAlias = null),
             aRoomDetailsState().copy(memberCount = Async.Failure(Throwable())),
-            aRoomDetailsState().copy(roomType = RoomDetailsType.Dm(aDmRoomMember()), roomName = "Daniel"),
-            aRoomDetailsState().copy(roomType = RoomDetailsType.Dm(aDmRoomMember(isIgnored = true)), roomName = "Daniel"),
+            aRoomDetailsState().copy(roomType = RoomDetailsType.Dm(aDmRoomMember()), roomName = "Daniel", roomMemberDetailsState = aRoomMemberDetailsState()),
+            aRoomDetailsState().copy(roomType = RoomDetailsType.Dm(aDmRoomMember(isIgnored = true)), roomName = "Daniel", roomMemberDetailsState = aRoomMemberDetailsState()),
             // Add other state here
         )
 }

@@ -16,8 +16,12 @@
 
 package io.element.android.features.roomdetails.impl
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,6 +35,7 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.PersonAddAlt
 import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -39,13 +44,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomdetails.blockuser.BlockUserDialogs
 import io.element.android.features.roomdetails.blockuser.BlockUserSection
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberHeaderSection
-import io.element.android.features.roomdetails.impl.members.details.RoomMemberShareSection
+import io.element.android.features.roomdetails.impl.members.details.RoomMemberMainActionsSection
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.isLoading
 import io.element.android.libraries.designsystem.ElementTextStyles
@@ -60,6 +66,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.LocalColors
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -99,7 +106,7 @@ fun RoomDetailsView(
                         roomName = state.roomName,
                         roomAlias = state.roomAlias
                     )
-                    RoomShareSection(onShareRoom = onShareRoom)
+                    MainActionsSection(onShareRoom = onShareRoom)
                 }
                 is RoomDetailsType.Dm -> {
                     val member = state.roomType.roomMember
@@ -108,9 +115,10 @@ fun RoomDetailsView(
                         userId = member.userId.value,
                         userName = state.roomName
                     )
-                    RoomMemberShareSection(onShareUser = ::onShareMember)
+                    RoomMemberMainActionsSection(onShareUser = ::onShareMember)
                 }
             }
+            Spacer(Modifier.height(26.dp))
 
             if (state.roomTopic != null) {
                 TopicSection(roomTopic = state.roomTopic)
@@ -129,20 +137,15 @@ fun RoomDetailsView(
                 SecuritySection()
             }
 
-            when (state.roomType) {
-                RoomDetailsType.Room -> {
-                    OtherActionsSection(onLeaveRoom = {
-                        state.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
-                    })
-                }
-                is RoomDetailsType.Dm -> {
-                    if (state.roomMemberDetailsState != null) {
-                        val roomMemberState = state.roomMemberDetailsState
-                        BlockUserSection(roomMemberState)
-                        BlockUserDialogs(roomMemberState)
-                    }
-                }
+            if (state.roomType is RoomDetailsType.Dm && state.roomMemberDetailsState != null) {
+                val roomMemberState = state.roomMemberDetailsState
+                BlockUserSection(roomMemberState)
+                BlockUserDialogs(roomMemberState)
             }
+
+            OtherActionsSection(onLeaveRoom = {
+                state.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
+            })
 
             if (state.displayLeaveRoomWarning != null) {
                 ConfirmLeaveRoomDialog(
@@ -163,13 +166,27 @@ fun RoomDetailsView(
 }
 
 @Composable
-internal fun RoomShareSection(onShareRoom: () -> Unit, modifier: Modifier = Modifier) {
-    PreferenceCategory(modifier = modifier) {
-        PreferenceText(
-            title = stringResource(R.string.screen_room_details_share_room_title),
-            icon = Icons.Outlined.Share,
-            onClick = onShareRoom,
-        )
+internal fun MainActionsSection(onShareRoom: () -> Unit, modifier: Modifier = Modifier) {
+    Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        MainActionButton(title = stringResource(R.string.screen_room_details_share_room_title), icon = Icons.Outlined.Share, onClick = onShareRoom)
+    }
+}
+
+@Composable
+internal fun MainActionButton(title: String, icon: ImageVector, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    val ripple = rememberRipple(bounded = false)
+    val interactionSource = MutableInteractionSource()
+    Column(
+        modifier.clickable(
+            interactionSource = interactionSource,
+            onClick = onClick,
+            indication = ripple
+        ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Icon(icon, contentDescription = title)
+        Spacer(modifier = Modifier.height(14.dp))
+        Text(title, style = ElementTextStyles.Regular.bodyMD.copy(fontWeight = FontWeight.Medium), color = MaterialTheme.colorScheme.primary)
     }
 }
 
