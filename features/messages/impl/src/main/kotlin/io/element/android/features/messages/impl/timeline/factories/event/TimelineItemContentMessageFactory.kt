@@ -23,12 +23,12 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.util.toHtmlDocument
-import io.element.android.libraries.matrix.api.media.MediaResolver
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
+import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import javax.inject.Inject
 
 class TimelineItemContentMessageFactory @Inject constructor() {
@@ -49,9 +49,9 @@ class TimelineItemContentMessageFactory @Inject constructor() {
                 }
                 TimelineItemImageContent(
                     body = messageType.body,
-                    imageMeta = MediaResolver.Meta(
+                    mediaRequestData = MediaRequestData(
                         url = messageType.url,
-                        kind = MediaResolver.Kind.Content
+                        kind = MediaRequestData.Kind.Content
                     ),
                     blurhash = messageType.info?.blurhash,
                     aspectRatio = aspectRatio

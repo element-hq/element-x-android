@@ -16,10 +16,17 @@
 
 package io.element.android.libraries.matrix.ui.media
 
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.api.media.MediaResolver
-import kotlin.math.roundToInt
+data class MediaRequestData(
+    val url: String,
+    val kind: Kind
+) {
 
-fun AvatarData.toMetadata(): MediaResolver.Meta {
-    return MediaResolver.Meta(url = url, kind = MediaResolver.Kind.Thumbnail(size.dp.value.roundToInt()))
+    sealed interface Kind {
+        data class Thumbnail(val width: Long, val height: Long) : Kind {
+            constructor(size: Long) : this(size, size)
+        }
+
+        object Content : Kind
+    }
 }
+
