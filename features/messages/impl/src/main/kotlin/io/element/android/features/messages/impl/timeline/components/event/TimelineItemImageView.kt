@@ -19,25 +19,17 @@ package io.element.android.features.messages.impl.timeline.components.event
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContentProvider
+import io.element.android.libraries.designsystem.components.blurhash.BlurHashAsyncImage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
-import timber.log.Timber
 
 @Composable
 fun TimelineItemImageView(
@@ -55,22 +47,10 @@ fun TimelineItemImageView(
             .aspectRatio(content.aspectRatio),
         contentAlignment = Alignment.Center,
     ) {
-        val isLoading = rememberSaveable(content.mediaRequestData) { mutableStateOf(true) }
-        val context = LocalContext.current
-        val model = ImageRequest.Builder(context)
-            .data(content.mediaRequestData)
-            .build()
-
-        AsyncImage(
-            model = model,
-            contentDescription = null,
-            placeholder = debugPlaceholderBackground(ColorPainter(MaterialTheme.colorScheme.surfaceVariant)),
+        BlurHashAsyncImage(
+            blurHash = content.blurhash,
+            model = content.mediaRequestData,
             contentScale = ContentScale.Crop,
-            onSuccess = {
-                Timber.v("OnSuccess = ${it.result.dataSource}")
-                isLoading.value = false
-            },
-            onError = { Timber.e(it.result.throwable) }
         )
     }
 }
