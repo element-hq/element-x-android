@@ -27,6 +27,8 @@ import io.element.android.features.messages.impl.textcomposer.MessageComposerEve
 import io.element.android.features.messages.impl.textcomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.textcomposer.MessageComposerState
 import io.element.android.libraries.core.data.StableCharSequence
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.test.ANOTHER_MESSAGE
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
@@ -36,12 +38,18 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediapickers.PickerProvider
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class MessageComposerPresenterTest {
 
     private val pickerProvider = PickerProvider(isInTest = true)
+    private val featureFlagService = FakeFeatureFlagService().apply {
+        runBlocking {
+            setFeatureEnabled(FeatureFlags.ShowMediaUploadingFlow, true)
+        }
+    }
 
     @Test
     fun `present - initial state`() = runTest {
@@ -49,6 +57,7 @@ class MessageComposerPresenterTest {
             this,
             FakeMatrixRoom(),
             pickerProvider,
+            featureFlagService,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -67,6 +76,7 @@ class MessageComposerPresenterTest {
             this,
             FakeMatrixRoom(),
             pickerProvider,
+            featureFlagService,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -87,6 +97,7 @@ class MessageComposerPresenterTest {
             this,
             FakeMatrixRoom(),
             pickerProvider,
+            featureFlagService,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -109,6 +120,7 @@ class MessageComposerPresenterTest {
             this,
             FakeMatrixRoom(),
             pickerProvider,
+            featureFlagService,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -140,6 +152,7 @@ class MessageComposerPresenterTest {
             this,
             FakeMatrixRoom(),
             pickerProvider,
+            featureFlagService,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -161,6 +174,7 @@ class MessageComposerPresenterTest {
             this,
             FakeMatrixRoom(),
             pickerProvider,
+            featureFlagService,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -182,6 +196,7 @@ class MessageComposerPresenterTest {
             this,
             FakeMatrixRoom(),
             pickerProvider,
+            featureFlagService,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -205,6 +220,7 @@ class MessageComposerPresenterTest {
             this,
             fakeMatrixRoom,
             pickerProvider,
+            featureFlagService,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -237,6 +253,7 @@ class MessageComposerPresenterTest {
             this,
             fakeMatrixRoom,
             pickerProvider,
+            featureFlagService,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -269,6 +286,7 @@ class MessageComposerPresenterTest {
             this,
             fakeMatrixRoom,
             pickerProvider,
+            featureFlagService,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()

@@ -72,7 +72,7 @@ class PickerProvider constructor(private val isInTest: Boolean) {
      */
     @Composable
     fun registerFilePicker(mimeType: String = MimeTypes.Any, onResult: (Uri?) -> Unit): PickerLauncher<String, Uri?> {
-        // Tests and UI preview can't handle Contexts, so we might as well disable the whole picker
+        // Tests and UI preview can't handle Context or FileProviders, so we might as well disable the whole picker
         return if (LocalInspectionMode.current || isInTest) {
             NoOpPickerLauncher { onResult(null) }
         } else {
@@ -93,13 +93,14 @@ class PickerProvider constructor(private val isInTest: Boolean) {
             NoOpPickerLauncher { onResult(null) }
         } else {
             val context = LocalContext.current
-            val tmpFileUri = remember { getTemporaryUri(context) }
+            val tmpFile = remember { getTemporaryFile(context) }
+            val tmpFileUri = remember(tmpFile) { getTemporaryUri(context, tmpFile) }
             rememberPickerLauncher(type = PickerType.Camera.Photo(tmpFileUri)) { success ->
                 // Execute callback
                 onResult(if (success) tmpFileUri else null)
                 // Then remove the file and clear the picker
                 if (deleteAfter) {
-                    deleteTemporaryUri(tmpFileUri)
+                    tmpFile.delete()
                 }
             }
         }
@@ -118,30 +119,32 @@ class PickerProvider constructor(private val isInTest: Boolean) {
             NoOpPickerLauncher { onResult(null) }
         } else {
             val context = LocalContext.current
-            val tmpFileUri = remember { getTemporaryUri(context) }
+            val tmpFile = remember { getTemporaryFile(context) }
+            val tmpFileUri = remember(tmpFile) { getTemporaryUri(context, tmpFile) }
             rememberPickerLauncher(type = PickerType.Camera.Video(tmpFileUri)) { success ->
                 // Execute callback
                 onResult(if (success) tmpFileUri else null)
                 // Then remove the file and clear the picker
                 if (deleteAfter) {
-                    deleteTemporaryUri(tmpFileUri)
+                    tmpFile.delete()
                 }
             }
         }
     }
 
-    private fun getTemporaryUri(
+    private fun getTemporaryFile(
         context: Context,
         baseFolder: File = context.cacheDir,
         filename: String = UUID.randomUUID().toString(),
-    ): Uri {
-        val tmpFile = File(baseFolder, filename)
-        val authority = "${context.packageName}.fileprovider"
-        return FileProvider.getUriForFile(context, authority, tmpFile)
+    ): File {
+        return File(baseFolder, filename)
     }
 
-    private fun deleteTemporaryUri(uri: Uri): Boolean {
-        val provider = FileProvider()
-        return provider.delete(uri, null, null) == 1
+    private fun getTemporaryUri(
+        context: Context,
+        file: File,
+    ): Uri {
+        val authority = "${context.packageName}.fileprovider"
+        return FileProvider.getUriForFile(context, authority, file)
     }
 }

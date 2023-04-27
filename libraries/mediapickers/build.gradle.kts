@@ -25,5 +25,10 @@ android {
         implementation(projects.libraries.uiStrings)
         implementation(projects.libraries.core)
         implementation(libs.inject)
+
+        testImplementation(libs.test.junit)
+        testImplementation(libs.coroutines.test)
+        testImplementation(libs.test.truth)
+        testImplementation(libs.test.robolectric)
     }
 }

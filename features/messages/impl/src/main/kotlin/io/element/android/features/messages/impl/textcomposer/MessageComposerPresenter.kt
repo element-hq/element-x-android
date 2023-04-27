@@ -21,10 +21,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.core.data.toStableCharSequence
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediapickers.PickerProvider
 import io.element.android.libraries.textcomposer.MessageComposerMode
@@ -37,10 +40,13 @@ class MessageComposerPresenter @Inject constructor(
     private val appCoroutineScope: CoroutineScope,
     private val room: MatrixRoom,
     private val mediaPickerProvider: PickerProvider,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<MessageComposerState> {
 
     @Composable
     override fun present(): MessageComposerState {
+        val localCoroutineScope = rememberCoroutineScope()
+
         // Example usage of custom pickers
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(onResult = { uri ->
             Timber.d("Photo saved at $uri")
@@ -74,8 +80,11 @@ class MessageComposerPresenter @Inject constructor(
 
                 is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(event.message, composerMode, text)
                 is MessageComposerEvents.SetMode -> composerMode.value = event.composerMode
-                MessageComposerEvents.TakePhoto -> cameraPhotoPicker.launch()
-            }
+                MessageComposerEvents.TakePhoto -> localCoroutineScope.launch {
+                    if (featureFlagService.isFeatureEnabled(FeatureFlags.ShowMediaUploadingFlow)) {
+                        cameraPhotoPicker.launch()
+                    }
+                }}
         }
 
         return MessageComposerState(
