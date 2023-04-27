@@ -31,8 +31,8 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState().copy(isEncrypted = false),
             aRoomDetailsState().copy(roomAlias = null),
             aRoomDetailsState().copy(memberCount = Async.Failure(Throwable())),
-            aRoomDetailsState().copy(roomType = RoomDetailsType.Dm(aDmRoomMember()), roomName = "Daniel", roomMemberDetailsState = aRoomMemberDetailsState()),
-            aRoomDetailsState().copy(roomType = RoomDetailsType.Dm(aDmRoomMember(isIgnored = true)), roomName = "Daniel", roomMemberDetailsState = aRoomMemberDetailsState()),
+            aDmRoomDetailsState().copy(roomName = "Daniel"),
+            aDmRoomDetailsState(isDmMemberIgnored = true).copy(roomName = "Daniel"),
             // Add other state here
         )
 }
@@ -74,4 +74,8 @@ fun aRoomDetailsState() = RoomDetailsState(
     roomType = RoomDetailsType.Room,
     roomMemberDetailsState = null,
     eventSink = {}
+)
+
+fun aDmRoomDetailsState(isDmMemberIgnored: Boolean = false) = aRoomDetailsState().copy(
+    roomType = RoomDetailsType.Dm(aDmRoomMember(isIgnored = isDmMemberIgnored)), roomMemberDetailsState = aRoomMemberDetailsState()
 )
