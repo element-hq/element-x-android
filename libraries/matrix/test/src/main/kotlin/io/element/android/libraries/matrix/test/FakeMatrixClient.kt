@@ -21,14 +21,14 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
-import io.element.android.libraries.matrix.api.media.MediaResolver
+import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.test.media.FakeMediaResolver
+import io.element.android.libraries.matrix.test.media.FakeMediaLoader
 import io.element.android.libraries.matrix.test.notification.FakeNotificationService
 import io.element.android.libraries.matrix.test.pushers.FakePushersService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -42,6 +42,7 @@ class FakeMatrixClient(
     private val userAvatarURLString: Result<String> = Result.success(AN_AVATAR_URL),
     override val roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
     override val invitesDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
+    override val mediaLoader: MatrixMediaLoader = FakeMediaLoader(),
     private val sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
     private val pushersService: FakePushersService = FakePushersService(),
     private val notificationService: FakeNotificationService = FakeNotificationService(),
@@ -77,10 +78,6 @@ class FakeMatrixClient(
 
     override fun stopSync() = Unit
 
-    override fun mediaResolver(): MediaResolver {
-        return FakeMediaResolver()
-    }
-
     override suspend fun logout() {
         delay(100)
         logoutFailure?.let { throw it }
@@ -94,14 +91,6 @@ class FakeMatrixClient(
 
     override suspend fun loadUserAvatarURLString(): Result<String?> {
         return userAvatarURLString
-    }
-
-    override suspend fun loadMediaContent(url: String): Result<ByteArray> {
-        return Result.success(ByteArray(0))
-    }
-
-    override suspend fun loadMediaThumbnail(url: String, width: Long, height: Long): Result<ByteArray> {
-        return Result.success(ByteArray(0))
     }
 
     override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService

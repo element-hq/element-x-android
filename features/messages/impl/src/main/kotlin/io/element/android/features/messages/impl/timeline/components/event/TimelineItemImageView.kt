@@ -55,10 +55,10 @@ fun TimelineItemImageView(
             .aspectRatio(content.aspectRatio),
         contentAlignment = Alignment.Center,
     ) {
-        val isLoading = rememberSaveable(content.imageMeta) { mutableStateOf(true) }
+        val isLoading = rememberSaveable(content.mediaRequestData) { mutableStateOf(true) }
         val context = LocalContext.current
         val model = ImageRequest.Builder(context)
-            .data(content.imageMeta)
+            .data(content.mediaRequestData)
             .build()
 
         AsyncImage(

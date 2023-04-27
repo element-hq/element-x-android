@@ -20,7 +20,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
-import io.element.android.libraries.matrix.api.media.MediaResolver
+import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -33,25 +33,19 @@ interface MatrixClient : Closeable {
     val sessionId: SessionId
     val roomSummaryDataSource: RoomSummaryDataSource
     val invitesDataSource: RoomSummaryDataSource
+    val mediaLoader: MatrixMediaLoader
     fun getRoom(roomId: RoomId): MatrixRoom?
     fun findDM(userId: UserId): MatrixRoom?
     suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId>
     suspend fun createDM(userId: UserId): Result<RoomId>
     fun startSync()
     fun stopSync()
-    fun mediaResolver(): MediaResolver
     fun sessionVerificationService(): SessionVerificationService
     fun pushersService(): PushersService
     fun notificationService(): NotificationService
     suspend fun logout()
     suspend fun loadUserDisplayName(): Result<String>
     suspend fun loadUserAvatarURLString(): Result<String?>
-    suspend fun loadMediaContent(url: String): Result<ByteArray>
-    suspend fun loadMediaThumbnail(
-        url: String,
-        width: Long,
-        height: Long
-    ): Result<ByteArray>
 
     fun onSlidingSyncUpdate()
 

@@ -22,20 +22,20 @@ import coil.fetch.Fetcher
 import coil.request.Options
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.media.MediaResolver
+import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import java.nio.ByteBuffer
 
-internal class MediaFetcher(
-    private val mediaResolver: MediaResolver,
-    private val meta: MediaResolver.Meta,
+internal class CoilMediaFetcher(
+    private val mediaLoader: MatrixMediaLoader,
+    private val mediaData: MediaRequestData?,
     private val options: Options,
     private val imageLoader: ImageLoader
 ) : Fetcher {
 
     override suspend fun fetch(): FetchResult? {
-        return mediaResolver.resolve(meta.url, meta.kind)
-            .map { byteArray ->
-                ByteBuffer.wrap(byteArray)
+        return loadMedia()
+            .map { data ->
+                ByteBuffer.wrap(data)
             }.map { byteBuffer ->
                 imageLoader.components.newFetcher(byteBuffer, options, imageLoader)?.first?.fetch()
             }
@@ -45,16 +45,28 @@ internal class MediaFetcher(
             )
     }
 
-    class MetaFactory(private val client: MatrixClient) :
-        Fetcher.Factory<MediaResolver.Meta> {
+    private suspend fun loadMedia(): Result<ByteArray> {
+        if (mediaData == null) return Result.failure(IllegalStateException("No media data to fetch."))
+        return when (mediaData.kind) {
+            is MediaRequestData.Kind.Content -> mediaLoader.loadMediaContent(url = mediaData.url)
+            is MediaRequestData.Kind.Thumbnail -> mediaLoader.loadMediaThumbnail(
+                url = mediaData.url,
+                width = mediaData.kind.width,
+                height = mediaData.kind.height
+            )
+        }
+    }
+
+    class MediaRequestDataFactory(private val client: MatrixClient) :
+        Fetcher.Factory<MediaRequestData> {
         override fun create(
-            data: MediaResolver.Meta,
+            data: MediaRequestData,
             options: Options,
             imageLoader: ImageLoader
         ): Fetcher {
-            return MediaFetcher(
-                mediaResolver = client.mediaResolver(),
-                meta = data,
+            return CoilMediaFetcher(
+                mediaLoader = client.mediaLoader,
+                mediaData = data,
                 options = options,
                 imageLoader = imageLoader
             )
@@ -63,14 +75,15 @@ internal class MediaFetcher(
 
     class AvatarFactory(private val client: MatrixClient) :
         Fetcher.Factory<AvatarData> {
+
         override fun create(
             data: AvatarData,
             options: Options,
             imageLoader: ImageLoader
         ): Fetcher {
-            return MediaFetcher(
-                mediaResolver = client.mediaResolver(),
-                meta = data.toMetadata(),
+            return CoilMediaFetcher(
+                mediaLoader = client.mediaLoader,
+                mediaData = data.toMediaRequestData(),
                 options = options,
                 imageLoader = imageLoader
             )
