@@ -22,7 +22,6 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
-import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -48,6 +47,8 @@ class FakeMatrixRoom(
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
 ) : MatrixRoom {
 
+    private var ignoreResult: Result<Unit> = Result.success(Unit)
+    private var unignoreResult: Result<Unit> = Result.success(Unit)
     private var userDisplayNameResult = Result.success<String?>(null)
     private var userAvatarUrlResult = Result.success<String?>(null)
     private var updateMembersResult: Result<Unit> = Result.success(Unit)
@@ -116,6 +117,10 @@ class FakeMatrixRoom(
         return Result.success(Unit)
     }
 
+    override suspend fun ignoreUser(userId: UserId): Result<Unit> = ignoreResult
+
+    override suspend fun unignoreUser(userId: UserId): Result<Unit> = unignoreResult
+
     override suspend fun leave(): Result<Unit> = leaveRoomError?.let { Result.failure(it) } ?: Result.success(Unit)
     override suspend fun acceptInvitation(): Result<Unit> {
         isInviteAccepted = true
@@ -157,4 +162,11 @@ class FakeMatrixRoom(
         rejectInviteResult = result
     }
 
+    fun givenIgnoreResult(result: Result<Unit>) {
+        ignoreResult = result
+    }
+
+    fun givenUnIgnoreResult(result: Result<Unit>) {
+        unignoreResult = result
+    }
 }
