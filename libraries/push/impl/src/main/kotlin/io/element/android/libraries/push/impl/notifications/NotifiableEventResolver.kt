@@ -119,7 +119,7 @@ private fun NotificationData?.orDefault(roomId: RoomId, eventId: EventId): Notif
                 isRemote = false,
                 localSendState = null,
                 reactions = emptyList(),
-                sender = UserId(""),
+                sender = UserId("@user:domain"),
                 senderProfile = ProfileTimelineDetails.Unavailable,
                 timestamp = System.currentTimeMillis(),
                 content = MessageContent(
