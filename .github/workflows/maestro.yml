@@ -16,7 +16,7 @@ jobs:
   maestro-cloud:
     name: Maestro test suite
     runs-on: ubuntu-latest
-    if: github.event.review.state == 'approved'
+    if: github.event.review.state == 'approved' || github.event_name == 'workflow_dispatch'
     strategy:
       fail-fast: false
     # Allow one per PR.

@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -41,6 +42,7 @@ class RoomDetailsPresenter @Inject constructor(
     private val room: MatrixRoom,
     private val roomMembershipObserver: RoomMembershipObserver,
     private val coroutineDispatchers: CoroutineDispatchers,
+    private val roomMembersDetailsPresenterFactory: RoomMemberDetailsPresenter.Factory,
 ) : Presenter<RoomDetailsState> {
 
     @Composable
@@ -56,6 +58,8 @@ class RoomDetailsPresenter @Inject constructor(
         val memberCount by getMemberCount(membersState)
         val dmMemberState by room.getDmMemberFlow()
             .collectAsState(initial = null, context = coroutineDispatchers.computation)
+
+        val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMemberState)
 
         val roomType = getRoomType(dmMemberState)
 
@@ -74,6 +78,8 @@ class RoomDetailsPresenter @Inject constructor(
             }
         }
 
+        val roomMemberDetailsState = roomMemberDetailsPresenter?.present()
+
         return RoomDetailsState(
             roomId = room.roomId.value,
             roomName = room.name ?: room.displayName,
@@ -85,8 +91,16 @@ class RoomDetailsPresenter @Inject constructor(
             displayLeaveRoomWarning = leaveRoomWarning.value,
             error = error.value,
             roomType = roomType.value,
+            roomMemberDetailsState = roomMemberDetailsState,
             eventSink = ::handleEvents,
         )
+    }
+
+    @Composable
+    private fun roomMemberDetailsPresenter(dmMemberState: RoomMember?) = remember(dmMemberState) {
+        dmMemberState?.let { roomMember ->
+            roomMembersDetailsPresenterFactory.create(roomMember)
+        }
     }
 
     @Composable

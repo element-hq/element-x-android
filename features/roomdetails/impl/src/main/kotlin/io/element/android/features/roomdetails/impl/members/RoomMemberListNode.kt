@@ -26,14 +26,12 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 
 @ContributesNode(RoomScope::class)
 class RoomMemberListNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val room: MatrixRoom,
     private val presenter: RoomMemberListPresenter,
 ) : Node(buildContext, plugins = plugins) {
 

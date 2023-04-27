@@ -80,13 +80,6 @@ class TimelinePresenter @Inject constructor(
                 .launchIn(this)
         }
 
-        DisposableEffect(Unit) {
-            timeline.initialize()
-            onDispose {
-                timeline.dispose()
-            }
-        }
-
         return TimelineState(
             highlightedEventId = highlightedEventId.value,
             paginationState = paginationState.value,

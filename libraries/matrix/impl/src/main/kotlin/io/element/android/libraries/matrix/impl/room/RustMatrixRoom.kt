@@ -38,6 +38,7 @@ import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 import org.matrix.rustcomponents.sdk.UpdateSummary
 import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
+import org.matrix.rustcomponents.sdk.RoomMember as RustRoomMember
 
 class RustMatrixRoom(
     override val sessionId: SessionId,
@@ -53,6 +54,16 @@ class RustMatrixRoom(
 
     private var _membersStateFlow = MutableStateFlow<MatrixRoomMembersState>(MatrixRoomMembersState.Unknown)
 
+    private val timeline by lazy {
+        RustMatrixTimeline(
+            matrixRoom = this,
+            innerRoom = innerRoom,
+            slidingSyncRoom = slidingSyncRoom,
+            coroutineScope = coroutineScope,
+            coroutineDispatchers = coroutineDispatchers
+        )
+    }
+
     override fun syncUpdateFlow(): Flow<Long> {
         return slidingSyncUpdateFlow
             .filter {
@@ -65,13 +76,7 @@ class RustMatrixRoom(
     }
 
     override fun timeline(): MatrixTimeline {
-        return RustMatrixTimeline(
-            matrixRoom = this,
-            innerRoom = innerRoom,
-            slidingSyncRoom = slidingSyncRoom,
-            coroutineScope = coroutineScope,
-            coroutineDispatchers = coroutineDispatchers
-        )
+        return timeline
     }
 
     override fun close() {
@@ -125,11 +130,11 @@ class RustMatrixRoom(
         _membersStateFlow.value = MatrixRoomMembersState.Pending
         runCatching {
             innerRoom.members().map(RoomMemberMapper::map)
-        }.onSuccess {
+        }.map {
             _membersStateFlow.value = MatrixRoomMembersState.Ready(it)
         }.onFailure {
             _membersStateFlow.value = MatrixRoomMembersState.Error(it)
-        }.map { }
+        }
     }
 
     override suspend fun userDisplayName(userId: UserId): Result<String?> =
@@ -195,4 +200,19 @@ class RustMatrixRoom(
         }
     }
 
+    override suspend fun ignoreUser(userId: UserId): Result<Unit> {
+        return runCatching {
+            getRustMember(userId)?.ignore() ?: error("No member with userId $userId exists in room $roomId")
+        }
+    }
+
+    override suspend fun unignoreUser(userId: UserId): Result<Unit> {
+        return runCatching {
+            getRustMember(userId)?.unignore() ?: error("No member with userId $userId exists in room $roomId")
+        }
+    }
+
+    private fun getRustMember(userId: UserId): RustRoomMember? {
+        return innerRoom.members().find { it.userId() == userId.value }
+    }
 }

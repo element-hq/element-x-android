@@ -28,8 +28,6 @@ import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.coroutines.flow.dropWhile
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.skip
-import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -40,7 +38,7 @@ class RoomUserListDataSource @Inject constructor(
 
     override suspend fun search(query: String): List<MatrixUser> = withContext(coroutineDispatchers.io) {
         val roomMembers = room.membersStateFlow
-            .dropWhile { it !is MatrixRoomMembersState.Ready}
+            .dropWhile { it !is MatrixRoomMembersState.Ready }
             .first()
             .roomMembers()
         val filteredMembers = if (query.isBlank()) {

@@ -23,9 +23,12 @@ import com.google.common.truth.Truth
 import io.element.android.features.roomdetails.impl.LeaveRoomWarning
 import io.element.android.features.roomdetails.impl.RoomDetailsEvent
 import io.element.android.features.roomdetails.impl.RoomDetailsPresenter
+import io.element.android.features.roomdetails.impl.RoomDetailsType
+import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -33,7 +36,9 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -49,10 +54,19 @@ class RoomDetailsPresenterTests {
     private val roomMembershipObserver = RoomMembershipObserver()
     private val testCoroutineDispatchers = testCoroutineDispatchers()
 
+    private fun aRoomDetailsPresenter(room: MatrixRoom): RoomDetailsPresenter {
+        val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
+            override fun create(roomMember: RoomMember): RoomMemberDetailsPresenter {
+                return RoomMemberDetailsPresenter(A_SESSION_ID, room, roomMember)
+            }
+        }
+        return RoomDetailsPresenter(room, roomMembershipObserver, testCoroutineDispatchers, roomMemberDetailsPresenterFactory)
+    }
+
     @Test
     fun `present - initial state is created from room info`() = runTest {
         val room = aMatrixRoom()
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver, testCoroutineDispatchers)
+        val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -71,7 +85,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - room member count is calculated asynchronously`() = runTest {
         val room = aMatrixRoom()
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver, testCoroutineDispatchers)
+        val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -86,7 +100,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - initial state with no room name`() = runTest {
         val room = aMatrixRoom(name = null)
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver, testCoroutineDispatchers)
+        val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -98,11 +112,40 @@ class RoomDetailsPresenterTests {
     }
 
     @Test
+    fun `present - initial state with DM member sets custom DM roomType`() = runTest {
+        val room = aMatrixRoom(
+            isEncrypted = true,
+            isPublic = false,
+            name = null
+        ).apply {
+            val roomMembers = listOf(
+                aRoomMember(A_SESSION_ID),
+                aRoomMember(A_USER_ID_2),
+            )
+            givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
+        }
+        val presenter = aRoomDetailsPresenter(room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            // It's not configured yet in the first iteration
+            Truth.assertThat(initialState.roomType).isEqualTo(RoomDetailsType.Room)
+
+            // Once updated, the RoomDetailsType becomes 'Dm'
+            val updatedState = awaitItem()
+            Truth.assertThat(updatedState.roomType).isEqualTo(RoomDetailsType.Dm(aRoomMember()))
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - can handle error while fetching member count`() = runTest {
         val room = aMatrixRoom(name = null).apply {
             givenRoomMembersState(MatrixRoomMembersState.Error(Throwable()))
         }
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver, testCoroutineDispatchers)
+        val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -116,7 +159,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom(isPublic = false).apply {
             givenRoomMembersState(MatrixRoomMembersState.Ready(emptyList()))
         }
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver, testCoroutineDispatchers)
+        val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -132,7 +175,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom().apply {
             givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(aRoomMember())))
         }
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver, testCoroutineDispatchers)
+        val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -148,7 +191,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom().apply {
             givenRoomMembersState(MatrixRoomMembersState.Ready(emptyList()))
         }
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver, testCoroutineDispatchers)
+        val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -164,7 +207,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom().apply {
             givenRoomMembersState(MatrixRoomMembersState.Ready(emptyList()))
         }
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver, testCoroutineDispatchers)
+        val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -185,7 +228,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom().apply {
             givenLeaveRoomError(Throwable())
         }
-        val presenter = RoomDetailsPresenter(room, roomMembershipObserver, testCoroutineDispatchers)
+        val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
