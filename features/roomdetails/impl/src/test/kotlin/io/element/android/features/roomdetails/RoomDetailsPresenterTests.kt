@@ -58,8 +58,8 @@ class RoomDetailsPresenterTests {
 
     private fun aRoomDetailsPresenter(room: MatrixRoom): RoomDetailsPresenter {
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
-            override fun create(roomMember: RoomMember): RoomMemberDetailsPresenter {
-                return RoomMemberDetailsPresenter(aMatrixClient(), room, roomMember)
+            override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
+                return RoomMemberDetailsPresenter(aMatrixClient(), room, roomMemberId)
             }
         }
         return RoomDetailsPresenter(room, roomMembershipObserver, testCoroutineDispatchers, roomMemberDetailsPresenterFactory)

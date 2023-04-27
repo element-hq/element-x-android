@@ -99,7 +99,7 @@ class RoomDetailsPresenter @Inject constructor(
     @Composable
     private fun roomMemberDetailsPresenter(dmMemberState: RoomMember?) = remember(dmMemberState) {
         dmMemberState?.let { roomMember ->
-            roomMembersDetailsPresenterFactory.create(roomMember)
+            roomMembersDetailsPresenterFactory.create(roomMember.userId)
         }
     }
 

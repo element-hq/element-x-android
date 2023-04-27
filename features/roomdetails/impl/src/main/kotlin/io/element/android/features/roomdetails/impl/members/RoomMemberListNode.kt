@@ -26,6 +26,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 
 @ContributesNode(RoomScope::class)
@@ -36,14 +37,14 @@ class RoomMemberListNode @AssistedInject constructor(
 ) : Node(buildContext, plugins = plugins) {
 
     interface Callback : Plugin {
-        fun openRoomMemberDetails(roomMember: RoomMember)
+        fun openRoomMemberDetails(roomMemberId: UserId)
     }
 
     private val callbacks = plugins<Callback>()
 
-    private fun openRoomMemberDetails(roomMember: RoomMember) {
+    private fun openRoomMemberDetails(roomMemberId: UserId) {
         callbacks.forEach {
-            it.openRoomMemberDetails(roomMember)
+            it.openRoomMemberDetails(roomMemberId)
         }
     }
 

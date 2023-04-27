@@ -25,6 +25,7 @@ import io.element.android.features.roomdetails.impl.members.details.RoomMemberDe
 import io.element.android.features.userlist.api.UserListDataSource
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import javax.inject.Named
@@ -48,8 +49,8 @@ object RoomMemberProvidesModule {
         room: MatrixRoom,
     ): RoomMemberDetailsPresenter.Factory {
         return object : RoomMemberDetailsPresenter.Factory {
-            override fun create(roomMember: RoomMember): RoomMemberDetailsPresenter {
-                return RoomMemberDetailsPresenter(matrixClient, room, roomMember)
+            override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
+                return RoomMemberDetailsPresenter(matrixClient, room, roomMemberId)
             }
         }
     }

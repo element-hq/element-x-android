@@ -25,6 +25,4 @@ import kotlinx.collections.immutable.ImmutableList
 data class RoomMemberListState(
     val allUsers: Async<ImmutableList<MatrixUser>>,
     val userListState: UserListState,
-    val selectedRoomMember: RoomMember? = null,
-    val eventSink: (RoomMemberListEvents) -> Unit,
 )
