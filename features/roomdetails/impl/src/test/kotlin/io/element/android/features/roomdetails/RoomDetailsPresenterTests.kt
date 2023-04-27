@@ -113,15 +113,13 @@ class RoomDetailsPresenterTests {
 
     @Test
     fun `present - initial state with DM member sets custom DM roomType`() = runTest {
+        val myRoomMember = aRoomMember(A_SESSION_ID)
+        val otherRoomMember = aRoomMember(A_USER_ID_2)
         val room = aMatrixRoom(
             isEncrypted = true,
-            isPublic = false,
-            name = null
+            isDirect = true,
         ).apply {
-            val roomMembers = listOf(
-                aRoomMember(A_SESSION_ID),
-                aRoomMember(A_USER_ID_2),
-            )
+            val roomMembers = listOf(myRoomMember, otherRoomMember)
             givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
         }
         val presenter = aRoomDetailsPresenter(room)
@@ -134,7 +132,7 @@ class RoomDetailsPresenterTests {
 
             // Once updated, the RoomDetailsType becomes 'Dm'
             val updatedState = awaitItem()
-            Truth.assertThat(updatedState.roomType).isEqualTo(RoomDetailsType.Dm(aRoomMember()))
+            Truth.assertThat(updatedState.roomType).isEqualTo(RoomDetailsType.Dm(otherRoomMember))
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -250,6 +248,7 @@ fun aMatrixRoom(
     avatarUrl: String? = "https://matrix.org/avatar.jpg",
     isEncrypted: Boolean = true,
     isPublic: Boolean = true,
+    isDirect: Boolean = false,
 ) = FakeMatrixRoom(
     roomId = roomId,
     name = name,
@@ -258,6 +257,7 @@ fun aMatrixRoom(
     avatarUrl = avatarUrl,
     isEncrypted = isEncrypted,
     isPublic = isPublic,
+    isDirect = isDirect,
 )
 
 fun aRoomMember(
