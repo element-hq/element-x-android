@@ -30,8 +30,8 @@ import io.element.android.libraries.androidutils.system.startSharePlainTextInten
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
-import io.element.android.libraries.matrix.api.room.RoomMember
 import timber.log.Timber
 import io.element.android.libraries.androidutils.R as AndroidUtilsR
 
@@ -43,18 +43,18 @@ class RoomMemberDetailsNode @AssistedInject constructor(
 ) : Node(buildContext, plugins = plugins) {
 
     data class Inputs(
-        val member: RoomMember,
+        val roomMemberId: UserId,
     ) : NodeInputs
 
     private val inputs = inputs<Inputs>()
-    private val presenter = presenterFactory.create(inputs.member)
+    private val presenter = presenterFactory.create(inputs.roomMemberId)
 
     @Composable
     override fun View(modifier: Modifier) {
         val context = LocalContext.current
 
         fun onShareUser() {
-            val permalinkResult = PermalinkBuilder.permalinkForUser(inputs.member.userId)
+            val permalinkResult = PermalinkBuilder.permalinkForUser(inputs.roomMemberId)
             permalinkResult.onSuccess { permalink ->
                 startSharePlainTextIntent(
                     context = context,

@@ -21,7 +21,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.userlist.api.SelectionMode
 import io.element.android.features.userlist.api.UserListDataSource
 import io.element.android.features.userlist.api.UserListDataStore
@@ -61,33 +60,20 @@ class RoomMemberListPresenter @Inject constructor(
 
     @Composable
     override fun present(): RoomMemberListState {
-        val coroutineScope = rememberCoroutineScope()
         val userListState = userListPresenter.present()
         val allUsers = remember { mutableStateOf<Async<ImmutableList<MatrixUser>>>(Async.Loading()) }
-        val selectedMember: MutableState<RoomMember?> = remember {
-            mutableStateOf(null)
-        }
+
         LaunchedEffect(Unit) {
             withContext(coroutineDispatchers.io) {
                 allUsers.value = Async.Success(userListDataSource.search("").toImmutableList())
             }
         }
 
-        fun handleEvents(roomMemberListEvents: RoomMemberListEvents) {
-            when (roomMemberListEvents) {
-                is RoomMemberListEvents.SelectUser -> coroutineScope.loadRoomMember(roomMemberListEvents.user, selectedMember)
-            }
-        }
         return RoomMemberListState(
             allUsers = allUsers.value,
             userListState = userListState,
-            selectedRoomMember = selectedMember.value,
-            eventSink = ::handleEvents
         )
     }
 
-    private fun CoroutineScope.loadRoomMember(user: MatrixUser, selectedMember: MutableState<RoomMember?>) = launch(coroutineDispatchers.io) {
-        selectedMember.value = room.getMemberFlow(user.id).firstOrNull()
-    }
 }
 
