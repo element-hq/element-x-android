@@ -38,6 +38,7 @@ import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 import org.matrix.rustcomponents.sdk.UpdateSummary
 import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
+import org.matrix.rustcomponents.sdk.use
 import org.matrix.rustcomponents.sdk.RoomMember as RustRoomMember
 
 class RustMatrixRoom(
@@ -200,19 +201,10 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun ignoreUser(userId: UserId): Result<Unit> {
-        return runCatching {
-            getRustMember(userId)?.ignore() ?: error("No member with userId $userId exists in room $roomId")
-        }
-    }
-
-    override suspend fun unignoreUser(userId: UserId): Result<Unit> {
-        return runCatching {
-            getRustMember(userId)?.unignore() ?: error("No member with userId $userId exists in room $roomId")
-        }
-    }
-
-    private fun getRustMember(userId: UserId): RustRoomMember? {
-        return innerRoom.members().find { it.userId() == userId.value }
+    private fun findRoomMember(userId: UserId, action: (RustRoomMember).() -> Unit) {
+        return innerRoom.members()
+            .find { it.userId() == userId.value }
+            ?.use(action)
+            ?: error("No member with userId $userId exists in room $roomId")
     }
 }

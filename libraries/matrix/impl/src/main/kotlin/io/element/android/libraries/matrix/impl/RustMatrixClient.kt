@@ -212,6 +212,18 @@ class RustMatrixClient constructor(
         return roomId?.let { getRoom(it) }
     }
 
+    override suspend fun ignoreUser(userId: UserId): Result<Unit> = withContext(dispatchers.io) {
+        runCatching {
+            client.ignoreUser(userId.value)
+        }
+    }
+
+    override suspend fun unignoreUser(userId: UserId): Result<Unit> = withContext(dispatchers.io) {
+        runCatching {
+            client.unignoreUser(userId.value)
+        }
+    }
+
     override suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId> = withContext(dispatchers.io) {
         runCatching {
             val rustParams = RustCreateRoomParameters(

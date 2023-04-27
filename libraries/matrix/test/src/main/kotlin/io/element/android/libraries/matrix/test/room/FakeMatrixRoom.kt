@@ -117,10 +117,6 @@ class FakeMatrixRoom(
         return Result.success(Unit)
     }
 
-    override suspend fun ignoreUser(userId: UserId): Result<Unit> = ignoreResult
-
-    override suspend fun unignoreUser(userId: UserId): Result<Unit> = unignoreResult
-
     override suspend fun leave(): Result<Unit> = leaveRoomError?.let { Result.failure(it) } ?: Result.success(Unit)
     override suspend fun acceptInvitation(): Result<Unit> {
         isInviteAccepted = true

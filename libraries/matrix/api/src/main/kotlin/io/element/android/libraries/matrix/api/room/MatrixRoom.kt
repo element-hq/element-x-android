@@ -68,10 +68,6 @@ interface MatrixRoom : Closeable {
 
     suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>
 
-    suspend fun ignoreUser(userId: UserId): Result<Unit>
-
-    suspend fun unignoreUser(userId: UserId): Result<Unit>
-
     suspend fun leave(): Result<Unit>
 
     suspend fun acceptInvitation(): Result<Unit>

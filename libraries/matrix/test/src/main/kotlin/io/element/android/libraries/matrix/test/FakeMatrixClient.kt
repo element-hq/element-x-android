@@ -47,6 +47,8 @@ class FakeMatrixClient(
     private val notificationService: FakeNotificationService = FakeNotificationService(),
 ) : MatrixClient {
 
+    private var ignoreUserResult: Result<Unit> = Result.success(Unit)
+    private var unignoreUserResult: Result<Unit> = Result.success(Unit)
     private var createRoomResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmFailure: Throwable? = null
@@ -60,6 +62,14 @@ class FakeMatrixClient(
 
     override fun findDM(userId: UserId): MatrixRoom? {
         return findDmResult
+    }
+
+    override suspend fun ignoreUser(userId: UserId): Result<Unit> {
+        return ignoreUserResult
+    }
+
+    override suspend fun unignoreUser(userId: UserId): Result<Unit> {
+        return unignoreUserResult
     }
 
     override suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId> {
@@ -128,6 +138,14 @@ class FakeMatrixClient(
 
     fun givenCreateDmResult(result: Result<RoomId>) {
         createDmResult = result
+    }
+
+    fun givenIgnoreUserResult(result: Result<Unit>) {
+        ignoreUserResult = result
+    }
+
+    fun givenUnignoreUserResult(result: Result<Unit>) {
+        unignoreUserResult = result
     }
 
     fun givenCreateDmError(failure: Throwable?) {

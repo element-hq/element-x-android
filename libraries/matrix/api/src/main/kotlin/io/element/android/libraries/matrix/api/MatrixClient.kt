@@ -35,6 +35,8 @@ interface MatrixClient : Closeable {
     val invitesDataSource: RoomSummaryDataSource
     fun getRoom(roomId: RoomId): MatrixRoom?
     fun findDM(userId: UserId): MatrixRoom?
+    suspend fun ignoreUser(userId: UserId): Result<Unit>
+    suspend fun unignoreUser(userId: UserId): Result<Unit>
     suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId>
     suspend fun createDM(userId: UserId): Result<RoomId>
     fun startSync()

@@ -49,7 +49,7 @@ object RoomMemberProvidesModule {
     ): RoomMemberDetailsPresenter.Factory {
         return object : RoomMemberDetailsPresenter.Factory {
             override fun create(roomMember: RoomMember): RoomMemberDetailsPresenter {
-                return RoomMemberDetailsPresenter(matrixClient.sessionId, room, roomMember)
+                return RoomMemberDetailsPresenter(matrixClient, room, roomMember)
             }
         }
     }
