@@ -27,6 +27,7 @@ import io.element.android.features.roomdetails.impl.RoomDetailsType
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -39,6 +40,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -57,7 +59,7 @@ class RoomDetailsPresenterTests {
     private fun aRoomDetailsPresenter(room: MatrixRoom): RoomDetailsPresenter {
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
             override fun create(roomMember: RoomMember): RoomMemberDetailsPresenter {
-                return RoomMemberDetailsPresenter(A_SESSION_ID, room, roomMember)
+                return RoomMemberDetailsPresenter(aMatrixClient(), room, roomMember)
             }
         }
         return RoomDetailsPresenter(room, roomMembershipObserver, testCoroutineDispatchers, roomMemberDetailsPresenterFactory)
@@ -239,6 +241,10 @@ class RoomDetailsPresenterTests {
         }
     }
 }
+
+fun aMatrixClient(
+    sessionId: SessionId = A_SESSION_ID,
+) = FakeMatrixClient()
 
 fun aMatrixRoom(
     roomId: RoomId = A_ROOM_ID,

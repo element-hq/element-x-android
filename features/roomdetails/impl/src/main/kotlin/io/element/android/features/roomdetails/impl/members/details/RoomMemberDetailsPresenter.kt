@@ -28,6 +28,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState.ConfirmationDialog
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -36,7 +37,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class RoomMemberDetailsPresenter @AssistedInject constructor(
-    private val currentUserSessionId: SessionId,
+    private val client: MatrixClient,
     private val room: MatrixRoom,
     @Assisted private val roomMember: RoomMember,
 ) : Presenter<RoomMemberDetailsState> {
@@ -91,16 +92,16 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
             avatarUrl = userAvatar,
             isBlocked = isBlocked.value,
             displayConfirmationDialog = confirmationDialog,
-            isCurrentUser = roomMember.userId == currentUserSessionId,
+            isCurrentUser = roomMember.userId == client.sessionId,
             eventSink = ::handleEvents
         )
     }
 
     private fun CoroutineScope.blockUser(userId: UserId, isBlockedState: MutableState<Boolean>) = launch {
-        room.ignoreUser(userId).onSuccess { isBlockedState.value = true }
+        client.ignoreUser(userId).onSuccess { isBlockedState.value = true }
     }
 
     private fun CoroutineScope.unblockUser(userId: UserId, isBlockedState: MutableState<Boolean>) = launch {
-        room.unignoreUser(userId).onSuccess { isBlockedState.value = false }
+        client.unignoreUser(userId).onSuccess { isBlockedState.value = false }
     }
 }
