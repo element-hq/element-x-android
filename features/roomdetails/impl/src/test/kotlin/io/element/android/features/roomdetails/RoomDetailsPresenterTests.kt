@@ -96,6 +96,7 @@ class RoomDetailsPresenterTests {
             room.givenRoomMembersState(MatrixRoomMembersState.Ready(emptyList()))
             val finalState = awaitItem()
             Truth.assertThat(finalState.memberCount).isEqualTo(Async.Success(0))
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -129,12 +130,7 @@ class RoomDetailsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            // It's not configured yet in the first iteration
-            Truth.assertThat(initialState.roomType).isEqualTo(RoomDetailsType.Room)
-
-            // Once updated, the RoomDetailsType becomes 'Dm'
-            val updatedState = awaitItem()
-            Truth.assertThat(updatedState.roomType).isEqualTo(RoomDetailsType.Dm(otherRoomMember))
+            Truth.assertThat(initialState.roomType).isEqualTo(RoomDetailsType.Dm(otherRoomMember))
 
             cancelAndIgnoreRemainingEvents()
         }

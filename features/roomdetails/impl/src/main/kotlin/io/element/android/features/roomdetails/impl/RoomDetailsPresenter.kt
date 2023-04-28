@@ -17,6 +17,7 @@
 package io.element.android.features.roomdetails.impl
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
@@ -33,7 +34,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.room.getDmMemberFlow
+import io.element.android.libraries.matrix.ui.room.directRoomMember
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -54,14 +55,14 @@ class RoomDetailsPresenter @Inject constructor(
         val error = remember {
             mutableStateOf<RoomDetailsError?>(null)
         }
+        LaunchedEffect(Unit) {
+            room.updateMembers()
+        }
         val membersState by room.membersStateFlow.collectAsState()
         val memberCount by getMemberCount(membersState)
-        val dmMemberState by room.getDmMemberFlow()
-            .collectAsState(initial = null, context = coroutineDispatchers.computation)
-
-        val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMemberState)
-
-        val roomType = getRoomType(dmMemberState)
+        val dmMember by room.directRoomMember()
+        val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
+        val roomType = getRoomType(dmMember)
 
         fun handleEvents(event: RoomDetailsEvent) {
             when (event) {
@@ -119,9 +120,9 @@ class RoomDetailsPresenter @Inject constructor(
         derivedStateOf {
             when (membersState) {
                 MatrixRoomMembersState.Unknown -> Async.Uninitialized
-                MatrixRoomMembersState.Pending -> Async.Loading()
+                is MatrixRoomMembersState.Pending -> Async.Loading(prevState = membersState.prevRoomMembers?.size)
+                is MatrixRoomMembersState.Error -> Async.Failure(membersState.failure, prevState = membersState.prevRoomMembers?.size)
                 is MatrixRoomMembersState.Ready -> Async.Success(membersState.roomMembers.size)
-                is MatrixRoomMembersState.Error -> Async.Failure(membersState.failure)
             }
         }
     }

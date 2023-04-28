@@ -18,7 +18,6 @@ package io.element.android.features.roomdetails.impl.members
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import io.element.android.features.userlist.api.SelectionMode
@@ -30,14 +29,9 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.getMemberFlow
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Named
@@ -74,6 +68,5 @@ class RoomMemberListPresenter @Inject constructor(
             userListState = userListState,
         )
     }
-
 }
 

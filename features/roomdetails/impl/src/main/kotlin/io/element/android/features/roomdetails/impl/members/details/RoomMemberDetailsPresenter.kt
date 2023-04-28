@@ -17,8 +17,8 @@
 package io.element.android.features.roomdetails.impl.members.details
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -33,9 +33,10 @@ import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.getMemberFlow
+import io.element.android.libraries.matrix.ui.room.roomMember
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class RoomMemberDetailsPresenter @AssistedInject constructor(
     private val client: MatrixClient,
@@ -51,10 +52,13 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
     override fun present(): RoomMemberDetailsState {
         val coroutineScope = rememberCoroutineScope()
         var confirmationDialog by remember { mutableStateOf<ConfirmationDialog?>(null) }
-        val roomMember by room.getMemberFlow(roomMemberId).collectAsState(initial = null)
-
-        val isBlocked = remember(roomMember?.isIgnored) {
+        val roomMember by room.roomMember(roomMemberId)
+        // the room member is not really live...
+        val isBlocked = remember {
             mutableStateOf(roomMember?.isIgnored.orFalse())
+        }
+        LaunchedEffect(Unit) {
+            room.updateMembers()
         }
 
         fun handleEvents(event: RoomMemberDetailsEvents) {

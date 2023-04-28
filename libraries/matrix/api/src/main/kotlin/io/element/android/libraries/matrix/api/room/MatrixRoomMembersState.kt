@@ -18,14 +18,18 @@ package io.element.android.libraries.matrix.api.room
 
 sealed interface MatrixRoomMembersState {
     object Unknown : MatrixRoomMembersState
-    object Pending : MatrixRoomMembersState
-    data class Error(val failure: Throwable) : MatrixRoomMembersState
+    data class Pending(val prevRoomMembers: List<RoomMember>? = null) : MatrixRoomMembersState
+    data class Error(val failure: Throwable, val prevRoomMembers: List<RoomMember>? = null) : MatrixRoomMembersState
     data class Ready(val roomMembers: List<RoomMember>) : MatrixRoomMembersState
 }
 
-fun MatrixRoomMembersState.roomMembers(): List<RoomMember> {
+fun MatrixRoomMembersState.roomMembers(): List<RoomMember>? {
     return when (this) {
         is MatrixRoomMembersState.Ready -> roomMembers
-        else -> emptyList()
+        is MatrixRoomMembersState.Pending -> prevRoomMembers
+        is MatrixRoomMembersState.Error -> prevRoomMembers
+        else -> null
     }
 }
+
+
