@@ -31,10 +31,12 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.textcomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.mediapickers.PickerProvider
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -129,7 +131,9 @@ class MessagesPresenterTest {
     ): MessagesPresenter {
         val messageComposerPresenter = MessageComposerPresenter(
             appCoroutineScope = this,
-            room = matrixRoom
+            room = matrixRoom,
+            mediaPickerProvider = PickerProvider(isInTest = true),
+            featureFlagService = FakeFeatureFlagService(),
         )
 
         val timelinePresenter = TimelinePresenter(

@@ -36,13 +36,13 @@ interface MatrixRoom : Closeable {
     val isDirect: Boolean
     val isPublic: Boolean
 
-    suspend fun members(): List<RoomMember>
+    fun members() : Flow<List<RoomMember>>
 
-    suspend fun memberCount(): Int
+    fun updateMembers()
 
-    fun getMember(userId: UserId): RoomMember?
+    fun getMember(userId: UserId): Flow<RoomMember?>
 
-    fun getDmMember(): RoomMember?
+    fun getDmMember(): Flow<RoomMember?>
 
     fun syncUpdateFlow(): Flow<Long>
 
@@ -61,6 +61,10 @@ interface MatrixRoom : Closeable {
     suspend fun replyMessage(eventId: EventId, message: String): Result<Unit>
 
     suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>
+
+    suspend fun ignoreUser(userId: UserId): Result<Unit>
+
+    suspend fun unignoreUser(userId: UserId): Result<Unit>
 
     suspend fun leave(): Result<Unit>
 

@@ -20,7 +20,6 @@ import com.squareup.anvil.annotations.ContributesTo
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import io.element.android.features.roomdetails.impl.RoomDetailsPresenter
 import io.element.android.features.roomdetails.impl.members.RoomUserListDataSource
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.userlist.api.UserListDataSource
@@ -28,7 +27,6 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import javax.inject.Named
 
 @Module
@@ -45,21 +43,13 @@ interface RoomMemberBindsModule {
 object RoomMemberProvidesModule {
 
     @Provides
-    fun provideRoomDetailsPresenter(
-        matrixClient: MatrixClient,
-        room: MatrixRoom,
-        roomMembershipObserver: RoomMembershipObserver,
-    ): RoomDetailsPresenter {
-        return RoomDetailsPresenter(matrixClient.sessionId, room, roomMembershipObserver)
-    }
-
-    @Provides
     fun provideRoomMemberDetailsPresenterFactory(
+        matrixClient: MatrixClient,
         room: MatrixRoom,
     ): RoomMemberDetailsPresenter.Factory {
         return object : RoomMemberDetailsPresenter.Factory {
             override fun create(roomMember: RoomMember): RoomMemberDetailsPresenter {
-                return RoomMemberDetailsPresenter(room, roomMember)
+                return RoomMemberDetailsPresenter(matrixClient.sessionId, room, roomMember)
             }
         }
     }

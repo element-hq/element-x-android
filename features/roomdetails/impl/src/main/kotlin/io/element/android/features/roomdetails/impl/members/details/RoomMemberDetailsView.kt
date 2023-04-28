@@ -39,12 +39,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.roomdetails.blockuser.BlockUserDialogs
+import io.element.android.features.roomdetails.blockuser.BlockUserSection
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -86,9 +89,10 @@ fun RoomMemberDetailsView(
                 // TODO implement send DM
             })
 
-            BlockSection(isBlocked = state.isBlocked, onToggleBlock = {
-                // TODO implement block & unblock
-            })
+            if (!state.isCurrentUser) {
+                BlockUserSection(state)
+                BlockUserDialogs(state)
+            }
         }
     }
 }
@@ -136,24 +140,6 @@ internal fun SendMessageSection(onSendMessage: () -> Unit, modifier: Modifier = 
             icon = Icons.Outlined.ChatBubbleOutline,
             onClick = onSendMessage,
         )
-    }
-}
-
-@Composable
-internal fun BlockSection(isBlocked: Boolean, onToggleBlock: () -> Unit, modifier: Modifier = Modifier) {
-    PreferenceCategory(showDivider = false, modifier = modifier) {
-        if (isBlocked) {
-            PreferenceText(
-                title = stringResource(R.string.screen_dm_details_unblock_user),
-                icon = Icons.Outlined.Block,
-            )
-        } else {
-            PreferenceText(
-                title = stringResource(R.string.screen_dm_details_block_user),
-                icon = Icons.Outlined.Block,
-                tintColor = LocalColors.current.textActionCritical,
-            )
-        }
     }
 }
 

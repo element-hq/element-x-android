@@ -42,7 +42,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.features.roomdetails.impl.members.details.BlockSection
+import io.element.android.features.roomdetails.blockuser.BlockUserDialogs
+import io.element.android.features.roomdetails.blockuser.BlockUserSection
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberHeaderSection
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberShareSection
 import io.element.android.libraries.architecture.Async
@@ -135,10 +136,11 @@ fun RoomDetailsView(
                     })
                 }
                 is RoomDetailsType.Dm -> {
-                    BlockSection(
-                        isBlocked = state.roomType.roomMember.isIgnored,
-                        onToggleBlock = { /*TODO*/ }
-                    )
+                    if (state.roomMemberDetailsState != null) {
+                        val roomMemberState = state.roomMemberDetailsState
+                        BlockUserSection(roomMemberState)
+                        BlockUserDialogs(roomMemberState)
+                    }
                 }
             }
 

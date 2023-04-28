@@ -17,12 +17,14 @@
 package io.element.android.features.roomdetails.impl
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -30,15 +32,31 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class RoomDetailsPresenter @Inject constructor(
-    private val sessionId: SessionId,
+    private val matrixClient: MatrixClient,
     private val room: MatrixRoom,
     private val roomMembershipObserver: RoomMembershipObserver,
 ) : Presenter<RoomDetailsState> {
+
+    private val roomMemberDetailsPresenter by lazy {
+        val dmMember = runBlocking {
+            room.getDmMember().firstOrNull()
+        }
+        if (dmMember != null) {
+            RoomMemberDetailsPresenter(matrixClient.sessionId, room, dmMember)
+        } else {
+            null
+        }
+    }
 
     @Composable
     override fun present(): RoomDetailsState {
@@ -50,20 +68,16 @@ class RoomDetailsPresenter @Inject constructor(
             mutableStateOf<RoomDetailsError?>(null)
         }
 
-        var memberCount: Async<Int> by remember { mutableStateOf(Async.Loading()) }
-        LaunchedEffect(Unit) {
-            withContext(Dispatchers.IO) {
-                memberCount = runCatching { room.memberCount() }
-                    .fold(
-                        onSuccess = { Async.Success(it) },
-                        onFailure = { Async.Failure(it) }
-                    )
-            }
+        val memberCount by produceState<Async<Int>>(initialValue = Async.Loading(null)) {
+            room.members().map { it.count() }
+                .onEach { value = Async.Success(it) }
+                .catch { value = Async.Failure(it) }
+                .launchIn(coroutineScope)
         }
 
-        val dmMember = room.getDmMember()
+        val dmMember by room.getDmMember().collectAsState(initial = null)
         val roomType = if (dmMember != null) {
-            RoomDetailsType.Dm(dmMember)
+            RoomDetailsType.Dm(dmMember!!)
         } else {
             RoomDetailsType.Room
         }
@@ -90,6 +104,12 @@ class RoomDetailsPresenter @Inject constructor(
             }
         }
 
+        val roomMemberDetailsState = if (dmMember != null) {
+            roomMemberDetailsPresenter?.present()
+        } else {
+            null
+        }
+
         return RoomDetailsState(
             roomId = room.roomId.value,
             roomName = room.name ?: room.displayName,
@@ -101,6 +121,7 @@ class RoomDetailsPresenter @Inject constructor(
             displayLeaveRoomWarning = leaveRoomWarning,
             error = error,
             roomType = roomType,
+            roomMemberDetailsState = roomMemberDetailsState,
             eventSink = ::handleEvents,
         )
     }
