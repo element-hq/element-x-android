@@ -17,21 +17,24 @@
 package io.element.android.features.invitelist.test
 
 import io.element.android.features.invitelist.api.SeenInvitesStore
-
+import io.element.android.libraries.matrix.api.core.RoomId
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeSeenInvitesStore : SeenInvitesStore {
 
-    private var existing = emptySet<String>()
-    private var provided: Set<String>? = null
+    private var existing = MutableStateFlow(emptySet<RoomId>())
+    private var provided: Set<RoomId>? = null
 
-    override var seenRoomIds: Set<String>
-        get() = existing
-        set(value) { provided = value }
-
-    fun givenExistingRoomIds(invites: Set<String>) {
-        existing = invites
+    fun publishRoomIds(invites: Set<RoomId>) {
+        existing.value = invites
     }
 
     fun getProvidedRoomIds() = provided
 
+    override fun seenRoomIds(): Flow<Set<RoomId>> = existing
+
+    override suspend fun markAsSeen(roomIds: Set<RoomId>) {
+        provided = roomIds.toSet()
+    }
 }

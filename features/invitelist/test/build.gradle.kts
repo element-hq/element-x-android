@@ -23,5 +23,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.coroutines.core)
+    implementation(projects.libraries.matrix.api)
     api(projects.features.invitelist.api)
 }

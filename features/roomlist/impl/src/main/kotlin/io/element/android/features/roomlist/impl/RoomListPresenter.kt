@@ -26,7 +26,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import io.element.android.features.invitelist.api.SeenInvitesStore
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
@@ -63,7 +62,7 @@ class RoomListPresenter @Inject constructor(
     private val sessionVerificationService: SessionVerificationService,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
-    private val seenInvitesStore: SeenInvitesStore,
+    private val inviteStateDataSource: InviteStateDataSource,
 ) : Presenter<RoomListState> {
 
     @Composable
@@ -89,14 +88,9 @@ class RoomListPresenter @Inject constructor(
             initialLoad(matrixUser)
         }
 
-        val invites by client
-            .invitesDataSource
-            .roomSummaries()
-            .collectAsState()
-
-        val seenInvites = remember { seenInvitesStore.seenRoomIds }
-
-        Timber.v("Invites size = ${invites.size}")
+        val inviteState by inviteStateDataSource
+            .inviteState()
+            .collectAsState(InvitesState.NoInvites)
 
         // Session verification status (unknown, not verified, verified)
         val sessionVerifiedStatus by sessionVerificationService.sessionVerifiedStatus.collectAsState()
@@ -117,7 +111,7 @@ class RoomListPresenter @Inject constructor(
                     if (displaySearchResults) {
                         filter = ""
                     }
-                    displaySearchResults =! displaySearchResults
+                    displaySearchResults = !displaySearchResults
                 }
             }
         }
@@ -141,11 +135,7 @@ class RoomListPresenter @Inject constructor(
             displayVerificationPrompt = displayVerificationPrompt,
             snackbarMessage = snackbarMessage,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
-            invitesState = when {
-                invites.isEmpty() -> InvitesState.NoInvites
-                invites.map { it.identifier() }.all(seenInvites::contains) -> InvitesState.SeenInvites
-                else -> InvitesState.NewInvites
-            },
+            invitesState = inviteState,
             displaySearchResults = displaySearchResults,
             eventSink = ::handleEvents
         )

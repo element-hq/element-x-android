@@ -395,13 +395,13 @@ class InviteListPresenterTests {
             invitesDataSource.postRoomSummary(listOf(aRoomSummary()))
 
             awaitItem()
-            Truth.assertThat(store.getProvidedRoomIds()).isEqualTo(setOf(A_ROOM_ID.value))
+            Truth.assertThat(store.getProvidedRoomIds()).isEqualTo(setOf(A_ROOM_ID))
 
             // When a second is added, both are saved
             invitesDataSource.postRoomSummary(listOf(aRoomSummary(), aRoomSummary(A_ROOM_ID_2)))
 
             awaitItem()
-            Truth.assertThat(store.getProvidedRoomIds()).isEqualTo(setOf(A_ROOM_ID.value, A_ROOM_ID_2.value))
+            Truth.assertThat(store.getProvidedRoomIds()).isEqualTo(setOf(A_ROOM_ID, A_ROOM_ID_2))
 
             // When they're both dismissed, an empty set is saved
             invitesDataSource.postRoomSummary(listOf())
@@ -415,7 +415,7 @@ class InviteListPresenterTests {
     fun `present - marks invite as new if they're unseen`() = runTest {
         val invitesDataSource = FakeRoomSummaryDataSource()
         val store = FakeSeenInvitesStore()
-        store.givenExistingRoomIds(setOf(A_ROOM_ID.value))
+        store.publishRoomIds(setOf(A_ROOM_ID))
         val presenter = InviteListPresenter(
             FakeMatrixClient(
                 sessionId = A_SESSION_ID,

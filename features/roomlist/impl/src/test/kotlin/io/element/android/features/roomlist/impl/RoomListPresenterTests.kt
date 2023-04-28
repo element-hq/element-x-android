@@ -20,7 +20,6 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
-import io.element.android.features.invitelist.test.FakeSeenInvitesStore
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
@@ -31,7 +30,6 @@ import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatu
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
-import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -41,6 +39,7 @@ import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -55,7 +54,7 @@ import org.junit.Test
             FakeSessionVerificationService(),
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
-            FakeSeenInvitesStore(),
+            FakeInviteDataSource(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -84,7 +83,7 @@ import org.junit.Test
             FakeSessionVerificationService(),
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
-            FakeSeenInvitesStore(),
+            FakeInviteDataSource(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -107,7 +106,7 @@ import org.junit.Test
             FakeSessionVerificationService(),
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
-            FakeSeenInvitesStore(),
+            FakeInviteDataSource(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -136,7 +135,7 @@ import org.junit.Test
             FakeSessionVerificationService(),
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
-            FakeSeenInvitesStore(),
+            FakeInviteDataSource(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -168,7 +167,7 @@ import org.junit.Test
             FakeSessionVerificationService(),
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
-            FakeSeenInvitesStore(),
+            FakeInviteDataSource(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -206,7 +205,7 @@ import org.junit.Test
             FakeSessionVerificationService(),
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
-            FakeSeenInvitesStore(),
+            FakeInviteDataSource(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -257,7 +256,7 @@ import org.junit.Test
             },
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
-            FakeSeenInvitesStore(),
+            FakeInviteDataSource(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -272,21 +271,17 @@ import org.junit.Test
 
     @Test
     fun `present - sets invite state`() = runTest {
-        val invitesDataSource = FakeRoomSummaryDataSource()
-        val seenStore = FakeSeenInvitesStore()
-        seenStore.givenExistingRoomIds(setOf(A_ROOM_ID.value))
-
+        val inviteStateFlow = MutableStateFlow(InvitesState.NoInvites)
         val presenter = RoomListPresenter(
             FakeMatrixClient(
                 sessionId = A_SESSION_ID,
-                invitesDataSource = invitesDataSource
             ),
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
-            seenStore,
+            FakeInviteDataSource(inviteStateFlow),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -295,16 +290,13 @@ import org.junit.Test
 
             Truth.assertThat(awaitItem().invitesState).isEqualTo(InvitesState.NoInvites)
 
-            // A previously-viewed invite is received...
-            invitesDataSource.postRoomSummary(listOf(aRoomSummaryFilled()))
+            inviteStateFlow.value = InvitesState.SeenInvites
             Truth.assertThat(awaitItem().invitesState).isEqualTo(InvitesState.SeenInvites)
 
-            // Then a new, unseen invite is received...
-            invitesDataSource.postRoomSummary(listOf(aRoomSummaryFilled(), aRoomSummaryFilled(roomId = A_ROOM_ID_2)))
+            inviteStateFlow.value = InvitesState.NewInvites
             Truth.assertThat(awaitItem().invitesState).isEqualTo(InvitesState.NewInvites)
 
-            // Then the invites are cleared somehow...
-            invitesDataSource.postRoomSummary(listOf())
+            inviteStateFlow.value = InvitesState.NoInvites
             Truth.assertThat(awaitItem().invitesState).isEqualTo(InvitesState.NoInvites)
         }
     }

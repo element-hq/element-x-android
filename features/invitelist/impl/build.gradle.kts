@@ -35,6 +35,7 @@ dependencies {
     implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
     api(projects.features.invitelist.api)
+    implementation(libs.androidx.datastore.preferences)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)

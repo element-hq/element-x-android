@@ -16,24 +16,44 @@
 
 package io.element.android.features.invitelist.impl
 
-import android.content.SharedPreferences
-import androidx.core.content.edit
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringSetPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.invitelist.api.SeenInvitesStore
-import io.element.android.libraries.di.DefaultPreferences
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.RoomId
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "elementx_seeninvites")
+private val seenInvitesKey = stringSetPreferencesKey("seenInvites")
+
 
 @ContributesBinding(SessionScope::class)
 class DefaultSeenInvitesStore @Inject constructor(
-    @DefaultPreferences private val sharedPrefs: SharedPreferences,
+    @ApplicationContext context: Context
 ) : SeenInvitesStore {
 
-    override var seenRoomIds: Set<String>
-        get() = sharedPrefs.getStringSet(PREFS_KEY_SEEN_INVITES, null) ?: emptySet()
-        set(value) = sharedPrefs.edit { putStringSet(PREFS_KEY_SEEN_INVITES, value) }
+    private val store = context.dataStore
 
-    companion object {
-        private const val PREFS_KEY_SEEN_INVITES = "SEEN_INVITES"
+    override fun seenRoomIds(): Flow<Set<RoomId>> =
+        store.data.map { prefs ->
+            prefs[seenInvitesKey]
+                .orEmpty()
+                .map { RoomId(it) }
+                .toSet()
+        }
+
+    override suspend fun markAsSeen(roomIds: Set<RoomId>) {
+        store.edit { prefs ->
+            prefs[seenInvitesKey] = roomIds.map { it.value }.toSet()
+        }
     }
+
 }

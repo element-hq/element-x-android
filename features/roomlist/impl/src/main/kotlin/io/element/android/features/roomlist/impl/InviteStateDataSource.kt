@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.invitelist.api
+package io.element.android.features.roomlist.impl
 
-import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.flow.Flow
 
-interface SeenInvitesStore {
-    fun seenRoomIds(): Flow<Set<RoomId>>
-    suspend fun markAsSeen(roomIds: Set<RoomId>)
+interface InviteStateDataSource {
+
+    fun inviteState(): Flow<InvitesState>
 }
