@@ -23,7 +23,6 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
 import java.io.Closeable
 
 interface MatrixRoom : Closeable {
@@ -73,23 +72,4 @@ interface MatrixRoom : Closeable {
     suspend fun acceptInvitation(): Result<Unit>
 
     suspend fun rejectInvitation(): Result<Unit>
-}
-
-fun MatrixRoom.getMemberFlow(userId: UserId): Flow<RoomMember?> {
-    return membersStateFlow.map { state ->
-        state.roomMembers().find {
-            it.userId == userId
-        }
-    }
-}
-
-fun MatrixRoom.getDmMemberFlow(): Flow<RoomMember?> {
-    return membersStateFlow.map { state ->
-        val members = state.roomMembers()
-        if (members.size == 2 && isDirect && isEncrypted) {
-            members.find { it.userId != this.sessionId }
-        } else {
-            null
-        }
-    }
 }

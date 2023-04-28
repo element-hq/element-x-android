@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import kotlinx.coroutines.CoroutineScope
@@ -32,14 +33,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 import org.matrix.rustcomponents.sdk.UpdateSummary
 import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
-import org.matrix.rustcomponents.sdk.use
-import org.matrix.rustcomponents.sdk.RoomMember as RustRoomMember
 
 class RustMatrixRoom(
     override val sessionId: SessionId,
@@ -128,13 +128,15 @@ class RustMatrixRoom(
         get() = innerRoom.isDirect()
 
     override suspend fun updateMembers(): Result<Unit> = withContext(coroutineDispatchers.io) {
-        _membersStateFlow.value = MatrixRoomMembersState.Pending
+        val currentState = _membersStateFlow.value
+        val currentMembers = currentState.roomMembers()
+        _membersStateFlow.value = MatrixRoomMembersState.Pending(prevRoomMembers = currentMembers)
         runCatching {
             innerRoom.members().map(RoomMemberMapper::map)
         }.map {
             _membersStateFlow.value = MatrixRoomMembersState.Ready(it)
         }.onFailure {
-            _membersStateFlow.value = MatrixRoomMembersState.Error(it)
+            _membersStateFlow.value = MatrixRoomMembersState.Error(prevRoomMembers = currentMembers, failure = it)
         }
     }
 
@@ -201,10 +203,4 @@ class RustMatrixRoom(
         }
     }
 
-    private fun findRoomMember(userId: UserId, action: (RustRoomMember).() -> Unit) {
-        return innerRoom.members()
-            .find { it.userId() == userId.value }
-            ?.use(action)
-            ?: error("No member with userId $userId exists in room $roomId")
-    }
 }

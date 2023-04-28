@@ -41,6 +41,7 @@ class RoomUserListDataSource @Inject constructor(
             .dropWhile { it !is MatrixRoomMembersState.Ready }
             .first()
             .roomMembers()
+            .orEmpty()
         val filteredMembers = if (query.isBlank()) {
             roomMembers
         } else {
