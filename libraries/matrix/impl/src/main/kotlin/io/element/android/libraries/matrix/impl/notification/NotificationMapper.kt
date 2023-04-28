@@ -16,35 +16,28 @@
 
 package io.element.android.libraries.matrix.impl.notification
 
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationData
-import io.element.android.libraries.matrix.impl.timeline.MatrixTimelineItemMapper
-import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessageMapper
-import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
-import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
-import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
 import org.matrix.rustcomponents.sdk.NotificationItem
 import org.matrix.rustcomponents.sdk.use
 import javax.inject.Inject
 
 class NotificationMapper @Inject constructor() {
-    // TODO Inject and remove duplicate?
-    private val timelineItemFactory = MatrixTimelineItemMapper(
-        virtualTimelineItemMapper = VirtualTimelineItemMapper(),
-        eventTimelineItemMapper = EventTimelineItemMapper(
-            contentMapper = TimelineEventContentMapper(
-                eventMessageMapper = EventMessageMapper()
-            )
-        )
-    )
 
     fun map(notificationItem: NotificationItem): NotificationData {
         return notificationItem.use {
             NotificationData(
-                item = timelineItemFactory.map(it.item),
-                title = it.title,
-                subtitle = it.subtitle,
-                isNoisy = it.isNoisy,
-                avatarUrl = it.avatarUrl,
+                senderId = UserId(it.event.senderId()),
+                eventId = EventId(it.event.eventId()),
+                roomId = RoomId(it.roomId),
+                senderAvatarUrl = it.senderAvatarUrl,
+                senderDisplayName = it.senderDisplayName,
+                roomAvatarUrl = it.roomAvatarUrl,
+                isDirect = it.isDirect,
+                isEncrypted = it.isEncrypted,
+                isNoisy = it.isNoisy
             )
         }
     }
