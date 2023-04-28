@@ -50,6 +50,7 @@ fun TextComposer(
     onFullscreenToggle: () -> Unit = {},
     onCloseSpecialMode: () -> Unit = {},
     onComposerTextChange: (CharSequence) -> Unit = {},
+    onAddAttachment:() -> Unit = {},
 ) {
     if (LocalInspectionMode.current) {
         FakeComposer(modifier)
@@ -78,6 +79,7 @@ fun TextComposer(
                         }
 
                         override fun onAddAttachment() {
+                            onAddAttachment()
                         }
 
                         override fun onExpandOrCompactChange() {
