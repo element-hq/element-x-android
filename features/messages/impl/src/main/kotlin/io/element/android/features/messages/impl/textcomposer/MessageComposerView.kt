@@ -53,6 +53,9 @@ fun MessageComposerView(
         composerMode = state.mode,
         onCloseSpecialMode = ::onCloseSpecialMode,
         onComposerTextChange = ::onComposerTextChange,
+        onAddAttachment = {
+            state.eventSink(MessageComposerEvents.TakePhoto)
+        },
         composerCanSendMessage = state.isSendButtonVisible,
         composerText = state.text?.charSequence?.toString(),
         isInDarkMode = !ElementTheme.colors.isLight,
