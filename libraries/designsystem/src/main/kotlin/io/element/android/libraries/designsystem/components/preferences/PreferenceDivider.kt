@@ -16,12 +16,28 @@
 
 package io.element.android.libraries.designsystem.components.preferences
 
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Divider
 
 @Composable
 fun PreferenceDivider(modifier: Modifier = Modifier) {
     Divider(modifier, thickness = 0.5.dp)
+}
+
+@Preview(group = PreviewGroup.Dividers)
+@Composable
+internal fun PreferenceDividerPreview() {
+    ElementThemedPreview {
+        Spacer(modifier = Modifier.height(10.dp))
+        PreferenceDivider(Modifier.fillMaxWidth())
+        Spacer(modifier = Modifier.height(10.dp))
+    }
 }

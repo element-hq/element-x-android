@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 
 @Composable
 fun Surface(
@@ -57,13 +58,8 @@ fun Surface(
 
 @Preview
 @Composable
-internal fun SurfaceLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun SurfaceDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
+internal fun SurfacePreview() =
+    ElementThemedPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

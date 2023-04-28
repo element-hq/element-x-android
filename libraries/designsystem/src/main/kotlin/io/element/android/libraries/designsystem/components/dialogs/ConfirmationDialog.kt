@@ -18,8 +18,8 @@ package io.element.android.libraries.designsystem.components.dialogs
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,13 +28,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
-import io.element.android.libraries.designsystem.ElementTextStyles
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.utils.BooleanProvider
 import io.element.android.libraries.ui.strings.R as StringR
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConfirmationDialog(
     content: String,
@@ -56,70 +55,82 @@ fun ConfirmationDialog(
     textContentColor: Color = AlertDialogDefaults.textContentColor,
     tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
 ) {
-    AlertDialog(
+    AlertDialog(modifier = modifier, onDismissRequest = onDismiss) {
+        ConfirmationDialogContent(
+            title = title,
+            content = content,
+            submitText = submitText,
+            cancelText = cancelText,
+            thirdButtonText = thirdButtonText,
+            onSubmitClicked = onSubmitClicked,
+            onCancelClicked = onCancelClicked,
+            onThirdButtonClicked = onThirdButtonClicked,
+            shape = shape,
+            containerColor = containerColor,
+            iconContentColor = iconContentColor,
+            titleContentColor = titleContentColor,
+            textContentColor = textContentColor,
+            tonalElevation = tonalElevation,
+            emphasizeSubmitButton = emphasizeSubmitButton,
+        )
+    }
+}
+
+@Composable
+private fun ConfirmationDialogContent(
+    content: String,
+    submitText: String,
+    cancelText: String,
+    onSubmitClicked: () -> Unit,
+    onCancelClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+    title: String? = null,
+    thirdButtonText: String? = null,
+    onThirdButtonClicked: () -> Unit = {},
+    emphasizeSubmitButton: Boolean = false,
+    shape: Shape = AlertDialogDefaults.shape,
+    containerColor: Color = AlertDialogDefaults.containerColor,
+    iconContentColor: Color = AlertDialogDefaults.iconContentColor,
+    titleContentColor: Color = AlertDialogDefaults.titleContentColor,
+    textContentColor: Color = AlertDialogDefaults.textContentColor,
+    tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
+    icon: @Composable (() -> Unit)? = null,
+) {
+    SimpleAlertDialogContent(
         modifier = modifier,
-        onDismissRequest = onDismiss,
-        title = {
-            if (title != null) { Text(text = title) }
-        },
-        text = {
-            Text(content)
-        },
-        dismissButton = {
-            if (thirdButtonText != null) {
-                    // If there is a 3rd item it should be at the end of the dialog
-                    // Having this 3rd action is discouraged, see https://m3.material.io/components/dialogs/guidelines#e13b68f5-e367-4275-ad6f-c552ee8e358f
-                    TextButton(onClick = onThirdButtonClicked) {
-                        Text(thirdButtonText)
-                    }
-                }
-            TextButton(onClick = onCancelClicked) {
-                Text(cancelText)
-            }
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    onSubmitClicked()
-                },
-            ) {
-                Text(
-                    submitText,
-                    style = if (emphasizeSubmitButton) {
-                        ElementTextStyles.Bold.subheadline
-                    } else {
-                        MaterialTheme.typography.labelLarge
-                    }
-                )
-            }
-        },
+        title = title,
+        content = content,
+        submitText = submitText,
+        onSubmitClicked = onSubmitClicked,
+        cancelText = cancelText,
+        onCancelClicked = onCancelClicked,
+        thirdButtonText = thirdButtonText,
+        onThirdButtonClicked = onThirdButtonClicked,
+        emphasizeSubmitButton = emphasizeSubmitButton,
         shape = shape,
         containerColor = containerColor,
         iconContentColor = iconContentColor,
         titleContentColor = titleContentColor,
         textContentColor = textContentColor,
         tonalElevation = tonalElevation,
+        icon = icon,
     )
 }
 
-@Preview
+@Preview(group = PreviewGroup.Dialogs)
 @Composable
-internal fun ConfirmationDialogLightPreview(@PreviewParameter(BooleanProvider::class) emphasizeSubmitButton: Boolean) =
-    ElementPreviewLight { ContentToPreview(emphasizeSubmitButton) }
-
-@Preview
-@Composable
-internal fun ConfirmationDialogDarkPreview(@PreviewParameter(BooleanProvider::class) emphasizeSubmitButton: Boolean) =
-    ElementPreviewDark { ContentToPreview(emphasizeSubmitButton) }
-
-@Composable
-private fun ContentToPreview(emphasizeSubmitButton: Boolean) {
-    ConfirmationDialog(
-        title = "Title",
-        content = "Content",
-        thirdButtonText = "Disable",
-        onSubmitClicked = {},
-        onDismiss = {},
-        emphasizeSubmitButton = emphasizeSubmitButton,
-    )
-}
+internal fun ConfirmationDialogPreview(@PreviewParameter(BooleanProvider::class) emphasizeSubmitButton: Boolean) =
+    ElementThemedPreview {
+        DialogPreview {
+            ConfirmationDialogContent(
+                content = "Content",
+                title = "Title",
+                submitText = "OK",
+                cancelText = "Cancel",
+                thirdButtonText = "Disable",
+                onSubmitClicked = {},
+                onCancelClicked = {},
+                emphasizeSubmitButton = emphasizeSubmitButton,
+            )
+        }
+    }
