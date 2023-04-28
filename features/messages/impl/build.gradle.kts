@@ -40,6 +40,8 @@ dependencies {
     implementation(projects.libraries.textcomposer)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.dateformatter.api)
+    implementation(projects.libraries.mediapickers)
+    implementation(projects.libraries.featureflag.api)
     implementation(projects.features.networkmonitor.api)
     implementation(libs.coil.compose)
     implementation(libs.datetime)
@@ -56,6 +58,7 @@ dependencies {
     testImplementation(projects.libraries.dateformatter.test)
     testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.tests.testutils)
+    testImplementation(projects.libraries.featureflag.test)
 
     androidTestImplementation(libs.test.junitext)
     ksp(libs.showkase.processor)
