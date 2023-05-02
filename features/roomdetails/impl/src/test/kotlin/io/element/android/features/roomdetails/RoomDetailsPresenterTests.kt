@@ -86,16 +86,34 @@ class RoomDetailsPresenterTests {
 
     @Test
     fun `present - room member count is calculated asynchronously`() = runTest {
+        val error = RuntimeException()
         val room = aMatrixRoom()
+        val roomMembers = listOf(
+            aRoomMember(A_USER_ID),
+            aRoomMember(A_USER_ID_2),
+        )
         val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
+            room.givenRoomMembersState(MatrixRoomMembersState.Unknown)
             val initialState = awaitItem()
             Truth.assertThat(initialState.memberCount).isEqualTo(Async.Uninitialized)
-            room.givenRoomMembersState(MatrixRoomMembersState.Ready(emptyList()))
-            val finalState = awaitItem()
-            Truth.assertThat(finalState.memberCount).isEqualTo(Async.Success(0))
+
+            room.givenRoomMembersState(MatrixRoomMembersState.Pending(null))
+            val loadingState = awaitItem()
+            Truth.assertThat(loadingState.memberCount).isEqualTo(Async.Loading(null))
+
+            room.givenRoomMembersState(MatrixRoomMembersState.Error(error))
+            //skipItems(1)
+            val failureState = awaitItem()
+            Truth.assertThat(failureState.memberCount).isEqualTo(Async.Failure(error, null))
+
+            room.givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
+            //skipItems(1)
+            val successState = awaitItem()
+            Truth.assertThat(successState.memberCount).isEqualTo(Async.Success(roomMembers.size))
+
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -132,20 +150,6 @@ class RoomDetailsPresenterTests {
             val initialState = awaitItem()
             Truth.assertThat(initialState.roomType).isEqualTo(RoomDetailsType.Dm(otherRoomMember))
 
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - can handle error while fetching member count`() = runTest {
-        val room = aMatrixRoom(name = null).apply {
-            givenRoomMembersState(MatrixRoomMembersState.Error(Throwable()))
-        }
-        val presenter = aRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionClock.Immediate) {
-            presenter.present()
-        }.test {
-            Truth.assertThat(awaitItem().memberCount).isInstanceOf(Async.Failure::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }

@@ -33,10 +33,9 @@ import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.ui.room.roomMember
+import io.element.android.libraries.matrix.ui.room.getRoomMember
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class RoomMemberDetailsPresenter @AssistedInject constructor(
     private val client: MatrixClient,
@@ -52,7 +51,7 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
     override fun present(): RoomMemberDetailsState {
         val coroutineScope = rememberCoroutineScope()
         var confirmationDialog by remember { mutableStateOf<ConfirmationDialog?>(null) }
-        val roomMember by room.roomMember(roomMemberId)
+        val roomMember by room.getRoomMember(roomMemberId)
         // the room member is not really live...
         val isBlocked = remember {
             mutableStateOf(roomMember?.isIgnored.orFalse())
