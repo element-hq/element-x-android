@@ -17,21 +17,23 @@
 package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.SlidingSyncRoom
@@ -40,7 +42,7 @@ import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 
 class RustMatrixRoom(
-    private val currentUserId: UserId,
+    override val sessionId: SessionId,
     private val slidingSyncUpdateFlow: Flow<UpdateSummary>,
     private val slidingSyncRoom: SlidingSyncRoom,
     private val innerRoom: Room,
@@ -48,38 +50,19 @@ class RustMatrixRoom(
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : MatrixRoom {
 
-    private var loadMembersJob: Job? = null
-    private var cachedMembers: List<RoomMember> = emptyList()
+    override val membersStateFlow: StateFlow<MatrixRoomMembersState>
+        get() = _membersStateFlow
 
-    override suspend fun members(): List<RoomMember> {
-        return cachedMembers.ifEmpty {
-            if (loadMembersJob == null) {
-                loadMembersJob = coroutineScope.launch(coroutineDispatchers.io) {
-                    cachedMembers = tryOrNull {
-                        innerRoom.members().map(RoomMemberMapper::map)
-                    } ?: emptyList()
-                }
-            }
-            loadMembersJob?.join()
-            loadMembersJob = null
-            cachedMembers
-        }
-    }
+    private var _membersStateFlow = MutableStateFlow<MatrixRoomMembersState>(MatrixRoomMembersState.Unknown)
 
-    override suspend fun memberCount(): Int {
-        return members().size
-    }
-
-    override fun getMember(userId: UserId): RoomMember? {
-        return cachedMembers.find { it.userId == userId }
-    }
-
-    override fun getDmMember(): RoomMember? {
-        return if (cachedMembers.size == 2 && isDirect && isEncrypted) {
-            cachedMembers.find { it.userId != currentUserId }
-        } else {
-            null
-        }
+    private val timeline by lazy {
+        RustMatrixTimeline(
+            matrixRoom = this,
+            innerRoom = innerRoom,
+            slidingSyncRoom = slidingSyncRoom,
+            coroutineScope = coroutineScope,
+            coroutineDispatchers = coroutineDispatchers
+        )
     }
 
     override fun syncUpdateFlow(): Flow<Long> {
@@ -94,13 +77,7 @@ class RustMatrixRoom(
     }
 
     override fun timeline(): MatrixTimeline {
-        return RustMatrixTimeline(
-            matrixRoom = this,
-            innerRoom = innerRoom,
-            slidingSyncRoom = slidingSyncRoom,
-            coroutineScope = coroutineScope,
-            coroutineDispatchers = coroutineDispatchers
-        )
+        return timeline
     }
 
     override fun close() {
@@ -150,9 +127,16 @@ class RustMatrixRoom(
     override val isDirect: Boolean
         get() = innerRoom.isDirect()
 
-    override suspend fun fetchMembers(): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun updateMembers(): Result<Unit> = withContext(coroutineDispatchers.io) {
+        val currentState = _membersStateFlow.value
+        val currentMembers = currentState.roomMembers()
+        _membersStateFlow.value = MatrixRoomMembersState.Pending(prevRoomMembers = currentMembers)
         runCatching {
-            innerRoom.fetchMembers()
+            innerRoom.members().map(RoomMemberMapper::map)
+        }.map {
+            _membersStateFlow.value = MatrixRoomMembersState.Ready(it)
+        }.onFailure {
+            _membersStateFlow.value = MatrixRoomMembersState.Error(prevRoomMembers = currentMembers, failure = it)
         }
     }
 
@@ -208,13 +192,13 @@ class RustMatrixRoom(
     }
 
     override suspend fun acceptInvitation(): Result<Unit> = withContext(coroutineDispatchers.io) {
-        kotlin.runCatching {
+        runCatching {
             innerRoom.acceptInvitation()
         }
     }
 
     override suspend fun rejectInvitation(): Result<Unit> = withContext(coroutineDispatchers.io) {
-        kotlin.runCatching {
+        runCatching {
             innerRoom.rejectInvitation()
         }
     }

@@ -41,7 +41,11 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import timber.log.Timber
 
 @Composable
-fun Avatar(avatarData: AvatarData, modifier: Modifier = Modifier) {
+fun Avatar(
+    avatarData: AvatarData,
+    modifier: Modifier = Modifier,
+    contentDescription: String? = null,
+) {
     val commonModifier = modifier
         .size(avatarData.size.dp)
         .clip(CircleShape)
@@ -54,6 +58,7 @@ fun Avatar(avatarData: AvatarData, modifier: Modifier = Modifier) {
         ImageAvatar(
             avatarData = avatarData,
             modifier = commonModifier,
+            contentDescription = contentDescription,
         )
     }
 }
@@ -62,13 +67,14 @@ fun Avatar(avatarData: AvatarData, modifier: Modifier = Modifier) {
 private fun ImageAvatar(
     avatarData: AvatarData,
     modifier: Modifier = Modifier,
+    contentDescription: String? = null,
 ) {
     AsyncImage(
         model = avatarData,
         onError = {
             Timber.e("TAG", "Error $it\n${it.result}", it.result.throwable)
         },
-        contentDescription = null,
+        contentDescription = contentDescription,
         contentScale = ContentScale.Crop,
         placeholder = debugPlaceholderAvatar(),
         modifier = modifier
@@ -89,11 +95,11 @@ private fun InitialsAvatar(
         end = Offset(100f, 0f)
     )
     Box(
-        modifier.background(brush = initialsGradient)
+        modifier.background(brush = initialsGradient),
     ) {
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = avatarData.getInitial(),
+            text = avatarData.initial,
             fontSize = (avatarData.size.dp / 2).value.sp,
             color = Color.White,
         )

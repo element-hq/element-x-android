@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_session_verification_compare_emojis_title">"Emojis vergleichen"</string>
+  <string name="screen_session_verification_open_existing_session_subtitle">"Beweise, dass du es bist, um auf deinen verschlüsselten Nachrichtenverlauf zuzugreifen."</string>
+  <string name="screen_session_verification_positive_button_initial">"Ich bin bereit"</string>
+  <string name="screen_session_verification_positive_button_verifying_ongoing">"Warten auf Übereinstimmung"</string>
+  <string name="screen_session_verification_they_dont_match">"Sie stimmen nicht überein"</string>
+  <string name="screen_session_verification_they_match">"Sie stimmen überein"</string>
+  <string name="screen_session_verification_cancelled_title">"Verifizierung abgebrochen"</string>
+</resources>

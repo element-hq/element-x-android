@@ -200,7 +200,7 @@ class RustMatrixClient constructor(
         val slidingSyncRoom = slidingSync.getRoom(roomId.value) ?: return null
         val fullRoom = slidingSyncRoom.fullRoom() ?: return null
         return RustMatrixRoom(
-            currentUserId = sessionId,
+            sessionId = sessionId,
             slidingSyncUpdateFlow = slidingSyncObserverProxy.updateSummaryFlow,
             slidingSyncRoom = slidingSyncRoom,
             innerRoom = fullRoom,
@@ -212,6 +212,18 @@ class RustMatrixClient constructor(
     override fun findDM(userId: UserId): MatrixRoom? {
         val roomId = client.getDmRoom(userId.value)?.use { RoomId(it.id()) }
         return roomId?.let { getRoom(it) }
+    }
+
+    override suspend fun ignoreUser(userId: UserId): Result<Unit> = withContext(dispatchers.io) {
+        runCatching {
+            client.ignoreUser(userId.value)
+        }
+    }
+
+    override suspend fun unignoreUser(userId: UserId): Result<Unit> = withContext(dispatchers.io) {
+        runCatching {
+            client.unignoreUser(userId.value)
+        }
     }
 
     override suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId> = withContext(dispatchers.io) {

@@ -18,6 +18,7 @@ package io.element.android.appnav
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.composable.Children
@@ -41,7 +42,6 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.services.appnavstate.api.AppNavigationStateService
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -102,7 +102,7 @@ class RoomFlowNode @AssistedInject constructor(
 
     private fun fetchRoomMembers() = lifecycleScope.launch {
         val room = inputs.room
-        room.fetchMembers()
+        room.updateMembers()
             .onFailure {
                 Timber.e(it, "Fail to fetch members for room ${room.roomId}")
             }.onSuccess {
@@ -134,8 +134,18 @@ class RoomFlowNode @AssistedInject constructor(
         object RoomDetails : NavTarget
     }
 
+    private val timeline = inputs.room.timeline()
+
     @Composable
     override fun View(modifier: Modifier) {
+
+        DisposableEffect(Unit) {
+            timeline.initialize()
+            onDispose {
+                timeline.dispose()
+            }
+        }
+
         Children(
             navModel = backstack,
             modifier = modifier,

@@ -16,12 +16,19 @@
 
 package io.element.android.libraries.matrix.api.notification
 
-import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 
+//TODO add content
 data class NotificationData(
-    val item: MatrixTimelineItem,
-    val title: String,
-    val subtitle: String?,
+    val senderId: UserId,
+    val eventId: EventId,
+    val roomId: RoomId,
+    val senderAvatarUrl: String? = null,
+    val senderDisplayName: String? = null,
+    val roomAvatarUrl: String? = null,
+    val isDirect: Boolean,
+    val isEncrypted: Boolean,
     val isNoisy: Boolean,
-    val avatarUrl: String?,
 )

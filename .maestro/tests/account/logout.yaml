@@ -1,6 +1,7 @@
 appId: ${APP_ID}
 ---
-- tapOn: "Settings"
+- tapOn:
+    id: "home_screen-settings"
 - tapOn: "Sign out"
 - takeScreenshot: build/maestro/900-SignOutDialg
 # Ensure cancel cancels

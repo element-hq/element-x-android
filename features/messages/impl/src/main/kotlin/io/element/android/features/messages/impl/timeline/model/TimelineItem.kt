@@ -31,6 +31,11 @@ sealed interface TimelineItem {
         is Virtual -> id
     }
 
+    fun contentType(): String = when (this) {
+        is Event -> content.type
+        is Virtual -> model.type
+    }
+
     @Immutable
     data class Virtual(
         val id: String,

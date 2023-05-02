@@ -18,26 +18,39 @@ package io.element.android.features.roomdetails.impl.members
 
 import io.element.android.features.userlist.api.UserListDataSource
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.ui.model.MatrixUser
+import kotlinx.coroutines.flow.dropWhile
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RoomUserListDataSource @Inject constructor(
-    private val room: MatrixRoom
+    private val room: MatrixRoom,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) : UserListDataSource {
 
-    override suspend fun search(query: String): List<MatrixUser> {
-        return room.members().filter { member ->
-            if (query.isBlank()) {
-                true
-            } else {
+    override suspend fun search(query: String): List<MatrixUser> = withContext(coroutineDispatchers.io) {
+        val roomMembers = room.membersStateFlow
+            .dropWhile { it !is MatrixRoomMembersState.Ready }
+            .first()
+            .roomMembers()
+            .orEmpty()
+        val filteredMembers = if (query.isBlank()) {
+            roomMembers
+        } else {
+            roomMembers.filter { member ->
                 member.userId.value.contains(query, ignoreCase = true)
                     || member.displayName?.contains(query, ignoreCase = true).orFalse()
             }
-        }.map(::mapMemberToMatrixUser)
+        }
+        filteredMembers.map(::mapMemberToMatrixUser)
     }
 
     override suspend fun getProfile(userId: UserId): MatrixUser? {
@@ -55,5 +68,4 @@ class RoomUserListDataSource @Inject constructor(
             )
         )
     }
-
 }

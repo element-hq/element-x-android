@@ -21,5 +21,11 @@ data class RoomMemberDetailsState(
     val userName: String?,
     val avatarUrl: String?,
     val isBlocked: Boolean,
-//    val eventSink: (RoomMemberDetailsEvents) -> Unit
-)
+    val displayConfirmationDialog: ConfirmationDialog? = null,
+    val isCurrentUser: Boolean,
+    val eventSink: (RoomMemberDetailsEvents) -> Unit
+) {
+    enum class ConfirmationDialog {
+        Block, Unblock
+    }
+}

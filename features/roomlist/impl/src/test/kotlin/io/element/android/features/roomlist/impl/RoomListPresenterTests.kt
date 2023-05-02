@@ -112,6 +112,8 @@ class RoomListPresenterTests {
             withUserState.eventSink.invoke(RoomListEvents.UpdateFilter("t"))
             val withFilterState = awaitItem()
             Truth.assertThat(withFilterState.filter).isEqualTo("t")
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -168,17 +170,18 @@ class RoomListPresenterTests {
             val loadedState = awaitItem()
             // Test filtering with result
             loadedState.eventSink.invoke(RoomListEvents.UpdateFilter(A_ROOM_NAME.substring(0, 3)))
+            skipItems(1) // Filter update
             val withNotFilteredRoomState = awaitItem()
             Truth.assertThat(withNotFilteredRoomState.filter).isEqualTo(A_ROOM_NAME.substring(0, 3))
-            Truth.assertThat(withNotFilteredRoomState.roomList.size).isEqualTo(1)
-            Truth.assertThat(withNotFilteredRoomState.roomList.first())
+            Truth.assertThat(withNotFilteredRoomState.filteredRoomList.size).isEqualTo(1)
+            Truth.assertThat(withNotFilteredRoomState.filteredRoomList.first())
                 .isEqualTo(aRoomListRoomSummary)
             // Test filtering without result
             withNotFilteredRoomState.eventSink.invoke(RoomListEvents.UpdateFilter("tada"))
             skipItems(1) // Filter update
             val withFilteredRoomState = awaitItem()
             Truth.assertThat(withFilteredRoomState.filter).isEqualTo("tada")
-            Truth.assertThat(withFilteredRoomState.roomList).isEmpty()
+            Truth.assertThat(withFilteredRoomState.filteredRoomList).isEmpty()
         }
     }
 

@@ -71,5 +71,6 @@ fun aRoomDetailsState() = RoomDetailsState(
     displayLeaveRoomWarning = null,
     error = null,
     roomType = RoomDetailsType.Room,
+    roomMemberDetailsState = null,
     eventSink = {}
 )

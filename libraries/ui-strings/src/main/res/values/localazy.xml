@@ -102,8 +102,6 @@
   <string name="common_video">"Video"</string>
   <string name="common_waiting">"Waiting…"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
-  <string name="dialog_title_error">"Error"</string>
-  <string name="dialog_title_success">"Success"</string>
   <string name="dialog_title_warning">"Warning"</string>
   <string name="emoji_picker_category_activity">"Activities"</string>
   <string name="emoji_picker_category_flags">"Flags"</string>
@@ -122,60 +120,15 @@
   <string name="leave_room_alert_private_subtitle">"Are you sure that you want to leave this room? This room is not public and you will not be able to rejoin without an invite."</string>
   <string name="leave_room_alert_subtitle">"Are you sure that you want to leave the room?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <string name="notification_channel_call">"Call"</string>
-  <string name="notification_channel_listening_for_events">"Listening for events"</string>
-  <string name="notification_channel_noisy">"Noisy notifications"</string>
-  <string name="notification_channel_silent">"Silent notifications"</string>
-  <string name="notification_inline_reply_failed">"** Failed to send - please open room"</string>
-  <string name="notification_invitation_action_join">"Join"</string>
-  <string name="notification_invitation_action_reject">"Reject"</string>
-  <string name="notification_new_messages">"New Messages"</string>
-  <string name="notification_room_action_mark_as_read">"Mark as read"</string>
-  <string name="notification_room_action_quick_reply">"Quick reply"</string>
-  <string name="notification_sender_me">"Me"</string>
-  <string name="notification_test_push_notification_content">"You are viewing the notification! Click me!"</string>
-  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
-  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
-  <string name="notification_unread_notified_messages_and_invitation">"%1$s and %2$s"</string>
-  <string name="notification_unread_notified_messages_in_room">"%1$s in %2$s"</string>
-  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s in %2$s and %3$s"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d member"</item>
     <item quantity="other">"%1$d members"</item>
-  </plurals>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s: %2$d message"</item>
-    <item quantity="other">"%1$s: %2$d messages"</item>
-  </plurals>
-  <plurals name="notification_compat_summary_title">
-    <item quantity="one">"%d notification"</item>
-    <item quantity="other">"%d notifications"</item>
-  </plurals>
-  <plurals name="notification_invitations">
-    <item quantity="one">"%d invitation"</item>
-    <item quantity="other">"%d invitations"</item>
-  </plurals>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d new message"</item>
-    <item quantity="other">"%d new messages"</item>
-  </plurals>
-  <plurals name="notification_unread_notified_messages">
-    <item quantity="one">"%d unread notified message"</item>
-    <item quantity="other">"%d unread notified messages"</item>
-  </plurals>
-  <plurals name="notification_unread_notified_messages_in_room_rooms">
-    <item quantity="one">"%d room"</item>
-    <item quantity="other">"%d rooms"</item>
   </plurals>
   <plurals name="room_timeline_state_changes">
     <item quantity="one">"%1$d room change"</item>
     <item quantity="other">"%1$d room changes"</item>
   </plurals>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
-  <string name="push_choose_distributor_dialog_title_android">"Choose how to receive notifications"</string>
-  <string name="push_distributor_background_sync_android">"Background synchronization"</string>
-  <string name="push_distributor_firebase_android">"Google Services"</string>
-  <string name="push_no_valid_google_play_services_apk_android">"No valid Google Play Services found. Notifications may not work properly."</string>
   <string name="rageshake_dialog_content">"You seem to be shaking the phone in frustration. Would you like to open the bug report screen?"</string>
   <string name="report_content_explanation">"This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages."</string>
   <string name="report_content_hint">"Reason for reporting this content"</string>
@@ -193,7 +146,6 @@
   <string name="screen_analytics_read_terms">"You can read all our terms %1$s."</string>
   <string name="screen_analytics_read_terms_content_link">"here"</string>
   <string name="screen_analytics_share_data">"Share analytics data"</string>
-  <string name="screen_report_content_block_user">"Block user"</string>
   <string name="screen_report_content_block_user_hint">"Check if you want to hide all current and future messages from this user"</string>
   <string name="screen_room_member_details_block_alert_action">"Block"</string>
   <string name="screen_room_member_details_block_alert_description">"Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime."</string>
@@ -207,4 +159,7 @@
   <string name="settings_version_number">"Version: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
   <string name="test_untranslated_default_language_identifier">"en"</string>
+  <string name="dialog_title_error">"Error"</string>
+  <string name="dialog_title_success">"Success"</string>
+  <string name="screen_report_content_block_user">"Block user"</string>
 </resources>

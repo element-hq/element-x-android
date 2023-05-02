@@ -3,7 +3,7 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.0.0"
+android_gradle_plugin = "8.0.1"
 kotlin = "1.8.20"
 ksp = "1.8.20-1.0.11"
 molecule = "0.9.0"
@@ -36,14 +36,14 @@ coil = "2.3.0"
 datetime = "0.4.0"
 serialization_json = "1.5.0"
 showkase = "1.0.0-beta17"
-jsoup = "1.15.4"
+jsoup = "1.16.1"
 appyx = "1.2.0"
 dependencycheck = "8.2.1"
 stem = "2.3.0"
 sqldelight = "1.5.5"
 
 # DI
-dagger = "2.45"
+dagger = "2.46"
 anvil = "2.4.5"
 
 # quality
@@ -55,7 +55,7 @@ dependencygraph = "0.10"
 android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "android_gradle_plugin" }
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:31.5.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:32.0.0"
 
 # AndroidX
 androidx_material = { module = "com.google.android.material:material", version.ref = "material" }
@@ -128,11 +128,11 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.10"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.11"
 sqldelight-driver-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-sqlcipher = "net.zetetic:android-database-sqlcipher:4.5.3"
+sqlcipher = "net.zetetic:android-database-sqlcipher:4.5.4"
 sqlite = "androidx.sqlite:sqlite:2.3.1"
 unifiedpush = "com.github.UnifiedPush:android-connector:2.1.1"
 gujun_span = "me.gujun.android:span:1.7"
@@ -164,7 +164,7 @@ kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-ktlint = "org.jlleitschuh.gradle.ktlint:11.3.1"
+ktlint = "org.jlleitschuh.gradle.ktlint:11.3.2"
 dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.ref = "dependencygraph" }
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
 paparazzi = "app.cash.paparazzi:1.2.0"

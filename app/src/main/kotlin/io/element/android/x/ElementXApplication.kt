@@ -19,8 +19,8 @@ package io.element.android.x
 import android.app.Application
 import androidx.startup.AppInitializer
 import io.element.android.x.di.AppComponent
-import io.element.android.x.di.DaggerAppComponent
 import io.element.android.libraries.di.DaggerComponentOwner
+import io.element.android.x.di.DaggerAppComponent
 import io.element.android.x.info.logApplicationInfo
 import io.element.android.x.initializer.CrashInitializer
 import io.element.android.x.initializer.MatrixInitializer

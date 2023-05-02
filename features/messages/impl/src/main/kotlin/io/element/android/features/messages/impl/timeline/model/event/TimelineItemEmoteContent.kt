@@ -21,4 +21,6 @@ import org.jsoup.nodes.Document
 data class TimelineItemEmoteContent(
     override val body: String,
     override val htmlDocument: Document?
-) : TimelineItemTextBasedContent
+) : TimelineItemTextBasedContent {
+    override val type: String = "TimelineItemEmoteContent"
+}

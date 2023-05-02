@@ -94,8 +94,6 @@
   <string name="common_video">"Video"</string>
   <string name="common_waiting">"In attesa…"</string>
   <string name="dialog_title_confirmation">"Conferma"</string>
-  <string name="dialog_title_error">"Errore"</string>
-  <string name="dialog_title_success">"Operazione riuscita"</string>
   <string name="dialog_title_warning">"Attenzione"</string>
   <string name="emoji_picker_category_activity">"Attività"</string>
   <string name="emoji_picker_category_flags">"Bandiere"</string>
@@ -129,7 +127,6 @@
   <string name="room_timeline_beginning_of_room">"Questo è l\'inizio di %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"Questo è l\'inizio della conversazione."</string>
   <string name="room_timeline_read_marker_title">"Nuovo"</string>
-  <string name="screen_report_content_block_user">"Blocca utente"</string>
   <string name="screen_report_content_block_user_hint">"Seleziona se vuoi nascondere tutti i messaggi attuali e futuri di questo utente"</string>
   <string name="screen_room_member_details_block_alert_action">"Blocca"</string>
   <string name="screen_room_member_details_block_alert_description">"Gli utenti bloccati non saranno in grado di inviarti nuovi messaggi e tutti quelli già esistenti saranno nascosti. Potrai annullare questa azione in qualsiasi momento."</string>
@@ -142,4 +139,7 @@
   <string name="settings_title_general">"Generali"</string>
   <string name="settings_version_number">"Versione: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"it"</string>
+  <string name="dialog_title_error">"Errore"</string>
+  <string name="dialog_title_success">"Operazione riuscita"</string>
+  <string name="screen_report_content_block_user">"Blocca utente"</string>
 </resources>
