@@ -18,6 +18,7 @@ plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
+    id("kotlin-parcelize")
 }
 
 android {
