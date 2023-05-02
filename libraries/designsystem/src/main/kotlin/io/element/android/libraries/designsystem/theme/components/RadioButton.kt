@@ -24,8 +24,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Composable
 fun RadioButton(
@@ -46,13 +46,9 @@ fun RadioButton(
     )
 }
 
-@Preview
+@Preview(group = PreviewGroup.Toggles)
 @Composable
-internal fun RadioButtonLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun RadioButtonDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun RadioButtonPreview() = ElementThemedPreview(vertical = false) { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

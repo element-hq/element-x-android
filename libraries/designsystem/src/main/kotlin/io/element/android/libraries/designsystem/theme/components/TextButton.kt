@@ -29,8 +29,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Composable
 fun TextButton(
@@ -59,13 +59,9 @@ fun TextButton(
     )
 }
 
-@Preview
+@Preview(group = PreviewGroup.Buttons)
 @Composable
-internal fun TextButtonLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun TextButtonDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun TextButtonPreview() = ElementThemedPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

@@ -24,6 +24,8 @@ import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -32,11 +34,14 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import app.cash.paparazzi.Paparazzi
 import com.airbnb.android.showkase.models.Showkase
+import com.android.ide.common.rendering.api.SessionParams
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
+import io.element.android.libraries.designsystem.modifiers.applyIf
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import org.junit.Rule
 import org.junit.Test
@@ -69,6 +74,7 @@ class ScreenshotTest {
     @get:Rule
     val paparazzi = Paparazzi(
         maxPercentDifference = 0.01,
+        renderingMode = SessionParams.RenderingMode.SHRINK,
     )
 
     @Test
@@ -78,10 +84,14 @@ class ScreenshotTest {
         @TestParameter(value = ["1.0"/*, "1.5"*/]) fontScale: Float,
         @TestParameter(value = ["en" /*"fr", "de", "ru"*/]) localeStr: String,
     ) {
+        val needsScrolling = componentTestPreview.needsScroll
+        val screenHeight = componentTestPreview.customHeightDp.takeIf { it != null }
         paparazzi.unsafeUpdateConfig(
             deviceConfig = baseDeviceConfig.deviceConfig.copy(
                 softButtons = false,
-            )
+                screenHeight = screenHeight ?: baseDeviceConfig.deviceConfig.screenHeight
+            ),
+            renderingMode = if (needsScrolling) SessionParams.RenderingMode.V_SCROLL else SessionParams.RenderingMode.SHRINK
         )
         paparazzi.snapshot {
             val lifecycleOwner = LocalLifecycleOwner.current
@@ -101,7 +111,14 @@ class ScreenshotTest {
                 }
             ) {
                 ElementTheme {
-                    Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+                    Box(
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.background)
+                            .sizeIn(minWidth = 1.dp, minHeight = 1.dp)
+                            .applyIf(needsScrolling, ifTrue = {
+                                heightIn(max = 1000.dp)
+                            })
+                    ) {
                         componentTestPreview.Content()
                     }
                 }

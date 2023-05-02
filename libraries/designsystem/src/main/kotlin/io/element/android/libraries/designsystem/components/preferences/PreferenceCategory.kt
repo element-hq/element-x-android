@@ -28,9 +28,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
@@ -64,13 +63,9 @@ fun PreferenceCategoryTitle(title: String, modifier: Modifier = Modifier) {
     )
 }
 
-@Preview
+@Preview(group = PreviewGroup.Preferences)
 @Composable
-internal fun PreferenceCategoryLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun PreferenceCategoryDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun PreferenceCategoryPreview() = ElementThemedPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

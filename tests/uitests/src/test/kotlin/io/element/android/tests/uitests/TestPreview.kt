@@ -21,4 +21,8 @@ import androidx.compose.runtime.Composable
 interface TestPreview {
     @Composable
     fun Content()
+
+    val needsScroll: Boolean get() = false
+
+    val customHeightDp: Int? get() = null
 }
