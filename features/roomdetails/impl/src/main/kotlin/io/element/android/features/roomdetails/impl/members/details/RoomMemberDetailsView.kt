@@ -16,8 +16,10 @@
 
 package io.element.android.features.roomdetails.impl.members.details
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,7 +29,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.ChatBubbleOutline
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,18 +42,16 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomdetails.blockuser.BlockUserDialogs
 import io.element.android.features.roomdetails.blockuser.BlockUserSection
-import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.LocalColors
+import io.element.android.libraries.designsystem.components.button.MainActionButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -83,7 +82,9 @@ fun RoomMemberDetailsView(
                 userName = state.userName,
             )
 
-            RoomMemberShareSection(onShareUser = onShareUser)
+            RoomMemberMainActionsSection(onShareUser = onShareUser)
+
+            Spacer(modifier = Modifier.height(26.dp))
 
             SendMessageSection(onSendMessage = {
                 // TODO implement send DM
@@ -117,18 +118,14 @@ internal fun RoomMemberHeaderSection(
             Spacer(modifier = Modifier.height(6.dp))
         }
         Text(userId, style = ElementTextStyles.Regular.body, color = MaterialTheme.colorScheme.secondary)
-        Spacer(Modifier.height(32.dp))
+        Spacer(Modifier.height(40.dp))
     }
 }
 
 @Composable
-internal fun RoomMemberShareSection(onShareUser: () -> Unit, modifier: Modifier = Modifier) {
-    PreferenceCategory(modifier = modifier) {
-        PreferenceText(
-            title = stringResource(StringR.string.action_share),
-            icon = Icons.Outlined.Share,
-            onClick = onShareUser,
-        )
+internal fun RoomMemberMainActionsSection(onShareUser: () -> Unit, modifier: Modifier = Modifier) {
+    Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        MainActionButton(title = stringResource(StringR.string.action_share), icon = Icons.Outlined.Share, onClick = onShareUser)
     }
 }
 

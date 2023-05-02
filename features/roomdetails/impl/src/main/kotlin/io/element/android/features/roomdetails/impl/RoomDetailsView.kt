@@ -16,8 +16,10 @@
 
 package io.element.android.features.roomdetails.impl
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,7 +47,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.roomdetails.blockuser.BlockUserDialogs
 import io.element.android.features.roomdetails.blockuser.BlockUserSection
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberHeaderSection
-import io.element.android.features.roomdetails.impl.members.details.RoomMemberShareSection
+import io.element.android.features.roomdetails.impl.members.details.RoomMemberMainActionsSection
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.isLoading
 import io.element.android.libraries.designsystem.ElementTextStyles
@@ -60,6 +62,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.LocalColors
+import io.element.android.libraries.designsystem.components.button.MainActionButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -99,7 +102,7 @@ fun RoomDetailsView(
                         roomName = state.roomName,
                         roomAlias = state.roomAlias
                     )
-                    RoomShareSection(onShareRoom = onShareRoom)
+                    MainActionsSection(onShareRoom = onShareRoom)
                 }
                 is RoomDetailsType.Dm -> {
                     val member = state.roomType.roomMember
@@ -108,9 +111,10 @@ fun RoomDetailsView(
                         userId = member.userId.value,
                         userName = state.roomName
                     )
-                    RoomMemberShareSection(onShareUser = ::onShareMember)
+                    RoomMemberMainActionsSection(onShareUser = ::onShareMember)
                 }
             }
+            Spacer(Modifier.height(26.dp))
 
             if (state.roomTopic != null) {
                 TopicSection(roomTopic = state.roomTopic)
@@ -129,20 +133,15 @@ fun RoomDetailsView(
                 SecuritySection()
             }
 
-            when (state.roomType) {
-                RoomDetailsType.Room -> {
-                    OtherActionsSection(onLeaveRoom = {
-                        state.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
-                    })
-                }
-                is RoomDetailsType.Dm -> {
-                    if (state.roomMemberDetailsState != null) {
-                        val roomMemberState = state.roomMemberDetailsState
-                        BlockUserSection(roomMemberState)
-                        BlockUserDialogs(roomMemberState)
-                    }
-                }
+            if (state.roomType is RoomDetailsType.Dm && state.roomMemberDetailsState != null) {
+                val roomMemberState = state.roomMemberDetailsState
+                BlockUserSection(roomMemberState)
+                BlockUserDialogs(roomMemberState)
             }
+
+            OtherActionsSection(onLeaveRoom = {
+                state.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
+            })
 
             if (state.displayLeaveRoomWarning != null) {
                 ConfirmLeaveRoomDialog(
@@ -163,13 +162,9 @@ fun RoomDetailsView(
 }
 
 @Composable
-internal fun RoomShareSection(onShareRoom: () -> Unit, modifier: Modifier = Modifier) {
-    PreferenceCategory(modifier = modifier) {
-        PreferenceText(
-            title = stringResource(R.string.screen_room_details_share_room_title),
-            icon = Icons.Outlined.Share,
-            onClick = onShareRoom,
-        )
+internal fun MainActionsSection(onShareRoom: () -> Unit, modifier: Modifier = Modifier) {
+    Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        MainActionButton(title = stringResource(R.string.screen_room_details_share_room_title), icon = Icons.Outlined.Share, onClick = onShareRoom)
     }
 }
 
