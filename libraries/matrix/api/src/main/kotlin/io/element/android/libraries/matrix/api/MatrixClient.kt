@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import java.io.Closeable
 
@@ -40,6 +41,7 @@ interface MatrixClient : Closeable {
     suspend fun unignoreUser(userId: UserId): Result<Unit>
     suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId>
     suspend fun createDM(userId: UserId): Result<RoomId>
+    suspend fun getProfile(userId: UserId): Result<MatrixUser>
     fun startSync()
     fun stopSync()
     fun mediaResolver(): MediaResolver
@@ -60,5 +62,5 @@ interface MatrixClient : Closeable {
 
     fun roomMembershipObserver(): RoomMembershipObserver
 
-   suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults>
+    suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults>
 }

@@ -16,15 +16,15 @@
 
 package io.element.android.libraries.matrix.impl.usersearch
 
-import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
-import org.matrix.rustcomponents.sdk.SearchUsersResults
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import org.matrix.rustcomponents.sdk.UserProfile
 
-object UserSearchResultMapper {
-
-    fun map(result: SearchUsersResults): MatrixSearchUserResults {
-        return MatrixSearchUserResults(
-            results = result.results.map(UserProfileMapper::map),
-            limited = result.limited,
+object UserProfileMapper {
+    fun map(userProfile: UserProfile): MatrixUser =
+        MatrixUser(
+            userId = UserId(userProfile.userId),
+            displayName = userProfile.displayName,
+            avatarUrl = userProfile.avatarUrl,
         )
-    }
 }

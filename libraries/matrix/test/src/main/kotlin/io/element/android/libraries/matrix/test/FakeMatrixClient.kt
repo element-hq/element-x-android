@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.test.media.FakeMediaResolver
 import io.element.android.libraries.matrix.test.notification.FakeNotificationService
@@ -83,6 +84,10 @@ class FakeMatrixClient(
         delay(100)
         createDmFailure?.let { throw it }
         return createDmResult
+    }
+
+    override suspend fun getProfile(userId: UserId): Result<MatrixUser> {
+        return Result.success(MatrixUser(userId))
     }
 
     override fun startSync() = Unit
