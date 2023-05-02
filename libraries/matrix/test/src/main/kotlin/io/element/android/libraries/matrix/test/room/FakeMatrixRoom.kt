@@ -16,21 +16,23 @@
 
 package io.element.android.libraries.matrix.test.room
 
-import io.element.android.libraries.core.coroutine.errorFlow
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flowOf
 
 class FakeMatrixRoom(
+    override val sessionId: SessionId = A_SESSION_ID,
     override val roomId: RoomId = A_ROOM_ID,
     override val name: String? = null,
     override val bestName: String = "",
@@ -42,21 +44,16 @@ class FakeMatrixRoom(
     override val alternativeAliases: List<String> = emptyList(),
     override val isPublic: Boolean = true,
     override val isDirect: Boolean = false,
-    private val members: List<RoomMember> = emptyList(),
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
 ) : MatrixRoom {
 
+    private var ignoreResult: Result<Unit> = Result.success(Unit)
+    private var unignoreResult: Result<Unit> = Result.success(Unit)
     private var userDisplayNameResult = Result.success<String?>(null)
     private var userAvatarUrlResult = Result.success<String?>(null)
+    private var updateMembersResult: Result<Unit> = Result.success(Unit)
     private var acceptInviteResult = Result.success(Unit)
     private var rejectInviteResult = Result.success(Unit)
-    private var dmMember: RoomMember? = null
-    private var fetchMemberResult: Result<Unit> = Result.success(Unit)
-    private var ignoreResult = Result.success(Unit)
-    private var unignoreResult = Result.success(Unit)
-
-    var areMembersFetched: Boolean = false
-        private set
 
     var isInviteAccepted: Boolean = false
         private set
@@ -66,6 +63,12 @@ class FakeMatrixRoom(
 
     private var leaveRoomError: Throwable? = null
 
+    override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)
+
+    override suspend fun updateMembers(): Result<Unit> {
+        return updateMembersResult
+    }
+
     override fun syncUpdateFlow(): Flow<Long> {
         return emptyFlow()
     }
@@ -74,38 +77,12 @@ class FakeMatrixRoom(
         return matrixTimeline
     }
 
-    override suspend fun fetchMembers(): Result<Unit> {
-        return fetchMemberResult.also { result ->
-            if (result.isSuccess) {
-                areMembersFetched = true
-            }
-        }
-    }
-
-    override fun getDmMember(): Flow<RoomMember?> {
-        return flowOf(dmMember)
-    }
-
     override suspend fun userDisplayName(userId: UserId): Result<String?> {
         return userDisplayNameResult
     }
 
     override suspend fun userAvatarUrl(userId: UserId): Result<String?> {
         return userAvatarUrlResult
-    }
-
-    override fun members(): Flow<List<RoomMember>> {
-        return fetchMemberResult.fold(onSuccess = {
-            flowOf(members)
-        }, onFailure = {
-            errorFlow(it)
-        })
-    }
-
-    override fun updateMembers() = Unit
-
-    override fun getMember(userId: UserId): Flow<RoomMember?> {
-        return flowOf(members.find { it.userId == userId })
     }
 
     override suspend fun sendMessage(message: String): Result<Unit> {
@@ -140,10 +117,6 @@ class FakeMatrixRoom(
         return Result.success(Unit)
     }
 
-    override suspend fun ignoreUser(userId: UserId): Result<Unit> = ignoreResult
-
-    override suspend fun unignoreUser(userId: UserId): Result<Unit> = unignoreResult
-
     override suspend fun leave(): Result<Unit> = leaveRoomError?.let { Result.failure(it) } ?: Result.success(Unit)
     override suspend fun acceptInvitation(): Result<Unit> {
         isInviteAccepted = true
@@ -161,12 +134,12 @@ class FakeMatrixRoom(
         this.leaveRoomError = throwable
     }
 
-    fun givenFetchMemberResult(result: Result<Unit>) {
-        fetchMemberResult = result
+    fun givenRoomMembersState(state: MatrixRoomMembersState) {
+        membersStateFlow.value = state
     }
 
-    fun givenDmMember(roomMember: RoomMember) {
-        this.dmMember = roomMember
+    fun givenUpdateMembersResult(result: Result<Unit>) {
+        updateMembersResult = result
     }
 
     fun givenUserDisplayNameResult(displayName: Result<String?>) {
@@ -184,7 +157,6 @@ class FakeMatrixRoom(
     fun givenRejectInviteResult(result: Result<Unit>) {
         rejectInviteResult = result
     }
-
 
     fun givenIgnoreResult(result: Result<Unit>) {
         ignoreResult = result

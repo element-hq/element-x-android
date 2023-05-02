@@ -20,12 +20,13 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
+import io.element.android.features.roomdetails.aMatrixClient
 import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsEvents
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
-import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -33,14 +34,17 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class RoomMemberDetailsPresenterTests {
 
+    private val matrixClient = aMatrixClient()
+
     @Test
     fun `present - returns the room member's data, then updates it if needed`() = runTest {
+        val roomMember = aRoomMember(displayName = "Alice")
         val room = aMatrixRoom().apply {
             givenUserDisplayNameResult(Result.success("A custom name"))
             givenUserAvatarUrlResult(Result.success("A custom avatar"))
+            givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(roomMember)))
         }
-        val roomMember = aRoomMember(displayName = "Alice")
-        val presenter = RoomMemberDetailsPresenter(A_SESSION_ID, room, roomMember)
+        val presenter = RoomMemberDetailsPresenter(matrixClient, room, roomMember.userId)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -58,12 +62,13 @@ class RoomMemberDetailsPresenterTests {
 
     @Test
     fun `present - will recover when retrieving room member details fails`() = runTest {
+        val roomMember = aRoomMember(displayName = "Alice")
         val room = aMatrixRoom().apply {
             givenUserDisplayNameResult(Result.failure(Throwable()))
             givenUserAvatarUrlResult(Result.failure(Throwable()))
+            givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(roomMember)))
         }
-        val roomMember = aRoomMember(displayName = "Alice")
-        val presenter = RoomMemberDetailsPresenter(A_SESSION_ID, room, roomMember)
+        val presenter = RoomMemberDetailsPresenter(matrixClient, room, roomMember.userId)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -77,12 +82,13 @@ class RoomMemberDetailsPresenterTests {
 
     @Test
     fun `present - will fallback to original data if the updated data is null`() = runTest {
+        val roomMember = aRoomMember(displayName = "Alice")
         val room = aMatrixRoom().apply {
             givenUserDisplayNameResult(Result.success(null))
             givenUserAvatarUrlResult(Result.success(null))
+            givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(roomMember)))
         }
-        val roomMember = aRoomMember(displayName = "Alice")
-        val presenter = RoomMemberDetailsPresenter(A_SESSION_ID, room, roomMember)
+        val presenter =RoomMemberDetailsPresenter(matrixClient, room, roomMember.userId)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -98,7 +104,7 @@ class RoomMemberDetailsPresenterTests {
     fun `present - BlockUser needing confirmation displays confirmation dialog`() = runTest {
         val room = aMatrixRoom()
         val roomMember = aRoomMember()
-        val presenter = RoomMemberDetailsPresenter(A_SESSION_ID, room, roomMember)
+        val presenter =RoomMemberDetailsPresenter(matrixClient, room, roomMember.userId)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -119,7 +125,7 @@ class RoomMemberDetailsPresenterTests {
     fun `present - BlockUser and UnblockUser without confirmation change the 'blocked' state`() = runTest {
         val room = aMatrixRoom()
         val roomMember = aRoomMember()
-        val presenter = RoomMemberDetailsPresenter(A_SESSION_ID, room, roomMember)
+        val presenter =RoomMemberDetailsPresenter(matrixClient, room, roomMember.userId)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -136,7 +142,7 @@ class RoomMemberDetailsPresenterTests {
     fun `present - UnblockUser needing confirmation displays confirmation dialog`() = runTest {
         val room = aMatrixRoom()
         val roomMember = aRoomMember()
-        val presenter = RoomMemberDetailsPresenter(A_SESSION_ID, room, roomMember)
+        val presenter =RoomMemberDetailsPresenter(matrixClient, room, roomMember.userId)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
