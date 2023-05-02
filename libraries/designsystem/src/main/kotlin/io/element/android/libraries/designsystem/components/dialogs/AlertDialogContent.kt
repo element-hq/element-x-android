@@ -121,7 +121,6 @@ internal fun SimpleAlertDialogContent(
 @Composable
 internal fun AlertDialogContent(
     buttons: @Composable () -> Unit,
-    modifier: Modifier = Modifier,
     icon: (@Composable () -> Unit)?,
     title: (@Composable () -> Unit)?,
     text: @Composable (() -> Unit)?,
@@ -132,6 +131,7 @@ internal fun AlertDialogContent(
     iconContentColor: Color,
     titleContentColor: Color,
     textContentColor: Color,
+    modifier: Modifier = Modifier,
 ) {
     Surface(
         modifier = modifier,

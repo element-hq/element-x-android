@@ -56,6 +56,7 @@ fun ElementPreviewDark(
 }
 
 @Composable
+@Suppress("ModifierMissing")
 fun ElementThemedPreview(
     showBackground: Boolean = true,
     vertical: Boolean = true,
@@ -93,6 +94,7 @@ fun ElementThemedPreview(
 }
 
 @Composable
+@Suppress("ModifierMissing")
 private fun ElementPreview(
     darkTheme: Boolean,
     showBackground: Boolean,
