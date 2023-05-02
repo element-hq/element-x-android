@@ -14,51 +14,36 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl
+package io.element.android.features.messages.impl.media.viewer
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.media.viewer.model.MediaContentUiModel
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
 
 @ContributesNode(RoomScope::class)
-class MessagesNode @AssistedInject constructor(
+class MediaViewerNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: MessagesPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
-    private val callback = plugins<Callback>().firstOrNull()
+    data class Inputs(val mediaContent: MediaContentUiModel) : NodeInputs
 
-    interface Callback : Plugin {
-        fun onRoomDetailsClicked()
-        fun onEventClicked(event: TimelineItem.Event)
-    }
-
-    private fun onRoomDetailsClicked() {
-        callback?.onRoomDetailsClicked()
-    }
-
-    private fun onEventClicked(event: TimelineItem.Event) {
-        callback?.onEventClicked(event)
-    }
+    private val inputs: Inputs = inputs()
 
     @Composable
     override fun View(modifier: Modifier) {
-        val state = presenter.present()
-        MessagesView(
-            state = state,
-            onBackPressed = this::navigateUp,
-            onRoomDetailsClicked = this::onRoomDetailsClicked,
-            onEventClicked = this::onEventClicked,
-            modifier = modifier,
+        MediaViewerView(
+            state = MediaViewerState(inputs.mediaContent),
+            modifier = modifier
         )
     }
 }

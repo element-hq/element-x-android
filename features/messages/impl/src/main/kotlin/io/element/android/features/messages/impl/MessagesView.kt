@@ -60,6 +60,7 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.textcomposer.MessageComposerView
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -70,16 +71,16 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
-import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @Composable
 fun MessagesView(
     state: MessagesState,
+    onBackPressed: () -> Unit,
+    onRoomDetailsClicked: () -> Unit,
+    onEventClicked: (event: TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
-    onRoomDetailsClicked: () -> Unit = {},
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
     val itemActionsBottomSheetState = rememberModalBottomSheetState(
@@ -93,6 +94,7 @@ fun MessagesView(
 
     fun onMessageClicked(event: TimelineItem.Event) {
         Timber.v("OnMessageClicked= ${event.id}")
+        onEventClicked(event)
     }
 
     fun onMessageLongClicked(event: TimelineItem.Event) {
@@ -228,5 +230,5 @@ internal fun MessagesViewDarkPreview(@PreviewParameter(MessagesStateProvider::cl
 
 @Composable
 private fun ContentToPreview(state: MessagesState) {
-    MessagesView(state)
+    MessagesView(state, {}, {}, {})
 }
