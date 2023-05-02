@@ -16,10 +16,12 @@
 
 package io.element.android.libraries.designsystem.theme.components
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,9 +46,9 @@ fun Divider(
 @Preview(group = PreviewGroup.Dividers)
 @Composable
 internal fun DividerPreview() = ElementThemedPreview {
-    Spacer(Modifier.height(10.dp))
-    ContentToPreview()
-    Spacer(Modifier.height(10.dp))
+    Box(Modifier.padding(vertical = 10.dp), contentAlignment = Alignment.Center) {
+        ContentToPreview()
+    }
 }
 
 @Composable
