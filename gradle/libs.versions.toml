@@ -164,7 +164,7 @@ kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-ktlint = "org.jlleitschuh.gradle.ktlint:11.3.1"
+ktlint = "org.jlleitschuh.gradle.ktlint:11.3.2"
 dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.ref = "dependencygraph" }
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
 paparazzi = "app.cash.paparazzi:1.2.0"
