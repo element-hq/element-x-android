@@ -29,14 +29,20 @@ import io.element.android.features.userlist.api.UserListPresenterArgs
 import io.element.android.features.userlist.impl.DefaultUserListPresenter
 import io.element.android.features.userlist.test.FakeUserListDataSource
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import okhttp3.internal.toImmutableList
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class RoomMemberListPresenterTests {
+
+    private val testCoroutineDispatchers = testCoroutineDispatchers()
 
     @Test
     fun `present - search is done automatically on start, but is async`() = runTest {
@@ -52,7 +58,14 @@ class RoomMemberListPresenterTests {
                 userListDataStore: UserListDataStore,
             ) = DefaultUserListPresenter(args, userListDataSource, userListDataStore)
         }
-        val presenter = RoomMemberListPresenter(userListFactory, userListDataSource, userListDataStore)
+        val fakeRoom = FakeMatrixRoom()
+        val presenter = RoomMemberListPresenter(
+            userListPresenterFactory = userListFactory,
+            userListDataSource = userListDataSource,
+            userListDataStore = userListDataStore,
+            room = fakeRoom,
+            coroutineDispatchers = testCoroutineDispatchers
+        )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {

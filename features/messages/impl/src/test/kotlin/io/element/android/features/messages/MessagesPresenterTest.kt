@@ -135,7 +135,6 @@ class MessagesPresenterTest {
             mediaPickerProvider = PickerProvider(isInTest = true),
             featureFlagService = FakeFeatureFlagService(),
         )
-
         val timelinePresenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
             room = matrixRoom,

@@ -59,7 +59,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
         object RoomMemberList : NavTarget
 
         @Parcelize
-        data class RoomMemberDetails(val roomMember: RoomMember) : NavTarget
+        data class RoomMemberDetails(val roomMemberId: UserId) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -74,14 +74,14 @@ class RoomDetailsFlowNode @AssistedInject constructor(
             }
             NavTarget.RoomMemberList -> {
                 val roomMemberListCallback = object : RoomMemberListNode.Callback {
-                    override fun openRoomMemberDetails(roomMember: RoomMember) {
-                        backstack.push(NavTarget.RoomMemberDetails(roomMember))
+                    override fun openRoomMemberDetails(roomMemberId: UserId) {
+                        backstack.push(NavTarget.RoomMemberDetails(roomMemberId))
                     }
                 }
                 createNode<RoomMemberListNode>(buildContext, listOf(roomMemberListCallback))
             }
             is NavTarget.RoomMemberDetails -> {
-                createNode<RoomMemberDetailsNode>(buildContext, listOf(RoomMemberDetailsNode.Inputs(navTarget.roomMember)))
+                createNode<RoomMemberDetailsNode>(buildContext, listOf(RoomMemberDetailsNode.Inputs(navTarget.roomMemberId)))
             }
         }
     }

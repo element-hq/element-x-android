@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.fixtures
+package io.element.android.features.roomdetails.impl.members
 
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import io.element.android.libraries.matrix.ui.model.MatrixUser
 
-// TODO Move to common module to reuse
-internal fun testCoroutineDispatchers() = CoroutineDispatchers(
-    io = UnconfinedTestDispatcher(),
-    computation = UnconfinedTestDispatcher(),
-    main = UnconfinedTestDispatcher(),
-    diffUpdateDispatcher = UnconfinedTestDispatcher(),
-)
+sealed interface RoomMemberListEvents {
+    data class SelectUser(val user: MatrixUser) : RoomMemberListEvents
+}

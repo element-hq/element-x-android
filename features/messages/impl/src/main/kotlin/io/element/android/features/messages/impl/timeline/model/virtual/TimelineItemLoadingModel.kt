@@ -16,4 +16,6 @@
 
 package io.element.android.features.messages.impl.timeline.model.virtual
 
-object TimelineItemLoadingModel : TimelineItemVirtualModel
+object TimelineItemLoadingModel : TimelineItemVirtualModel {
+    override val type: String = "TimelineItemLoadingModel"
+}

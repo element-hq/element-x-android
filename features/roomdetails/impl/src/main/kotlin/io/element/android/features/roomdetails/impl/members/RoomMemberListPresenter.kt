@@ -27,10 +27,11 @@ import io.element.android.features.userlist.api.UserListPresenter
 import io.element.android.features.userlist.api.UserListPresenterArgs
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Named
@@ -39,6 +40,8 @@ class RoomMemberListPresenter @Inject constructor(
     private val userListPresenterFactory: UserListPresenter.Factory,
     @Named("RoomMembers") private val userListDataSource: UserListDataSource,
     private val userListDataStore: UserListDataStore,
+    private val room: MatrixRoom,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) : Presenter<RoomMemberListState> {
 
     private val userListPresenter by lazy {
@@ -53,14 +56,16 @@ class RoomMemberListPresenter @Inject constructor(
     override fun present(): RoomMemberListState {
         val userListState = userListPresenter.present()
         val allUsers = remember { mutableStateOf<Async<ImmutableList<MatrixUser>>>(Async.Loading()) }
+
         LaunchedEffect(Unit) {
-            withContext(Dispatchers.IO) {
+            withContext(coroutineDispatchers.io) {
                 allUsers.value = Async.Success(userListDataSource.search("").toImmutableList())
             }
         }
+
         return RoomMemberListState(
             allUsers = allUsers.value,
-            userListState = userListState
+            userListState = userListState,
         )
     }
 }

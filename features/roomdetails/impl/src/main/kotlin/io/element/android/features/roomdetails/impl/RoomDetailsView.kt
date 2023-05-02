@@ -117,7 +117,7 @@ fun RoomDetailsView(
             }
 
             if (state.roomType is RoomDetailsType.Room) {
-                val memberCount = (state.memberCount as? Async.Success<Int>)?.state
+                val memberCount = state.memberCount.dataOrNull()
                 MembersSection(
                     memberCount = memberCount,
                     isLoading = state.memberCount.isLoading(),

@@ -24,7 +24,6 @@ import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.activeElement
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
-import com.bumble.appyx.testing.unit.common.helper.nodeTestHelper
 import com.bumble.appyx.testing.unit.common.helper.parentNodeTestHelper
 import com.google.common.truth.Truth
 import io.element.android.features.messages.api.MessagesEntryPoint
@@ -80,19 +79,6 @@ class RoomFlowNodeTest {
         appNavigationStateService = NoopAppNavigationStateService(),
         roomMembershipObserver = RoomMembershipObserver()
     )
-
-    @Test
-    fun `given a room flow node when initialized then it fetches room members`() {
-        // GIVEN
-        val room = FakeMatrixRoom()
-        val inputs = RoomFlowNode.Inputs(room)
-        val roomFlowNode = aRoomFlowNode(listOf(inputs))
-        Truth.assertThat(room.areMembersFetched).isFalse()
-        // WHEN
-        roomFlowNode.nodeTestHelper()
-        // THEN
-        Truth.assertThat(room.areMembersFetched).isTrue()
-    }
 
     @Test
     fun `given a room flow node when initialized then it loads messages entry point`() {
