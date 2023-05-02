@@ -34,7 +34,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.ui.room.directRoomMember
+import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -58,9 +58,10 @@ class RoomDetailsPresenter @Inject constructor(
         LaunchedEffect(Unit) {
             room.updateMembers()
         }
+
         val membersState by room.membersStateFlow.collectAsState()
         val memberCount by getMemberCount(membersState)
-        val dmMember by room.directRoomMember()
+        val dmMember by room.getDirectRoomMember(membersState)
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
         val roomType = getRoomType(dmMember)
 
@@ -116,13 +117,15 @@ class RoomDetailsPresenter @Inject constructor(
     }
 
     @Composable
-    private fun getMemberCount(membersState: MatrixRoomMembersState): State<Async<Int>> = remember(membersState) {
-        derivedStateOf {
-            when (membersState) {
-                MatrixRoomMembersState.Unknown -> Async.Uninitialized
-                is MatrixRoomMembersState.Pending -> Async.Loading(prevState = membersState.prevRoomMembers?.size)
-                is MatrixRoomMembersState.Error -> Async.Failure(membersState.failure, prevState = membersState.prevRoomMembers?.size)
-                is MatrixRoomMembersState.Ready -> Async.Success(membersState.roomMembers.size)
+    private fun getMemberCount(membersState: MatrixRoomMembersState): State<Async<Int>> {
+        return remember(membersState) {
+            derivedStateOf {
+                when (membersState) {
+                    MatrixRoomMembersState.Unknown -> Async.Uninitialized
+                    is MatrixRoomMembersState.Pending -> Async.Loading(prevState = membersState.prevRoomMembers?.size)
+                    is MatrixRoomMembersState.Error -> Async.Failure(membersState.failure, prevState = membersState.prevRoomMembers?.size)
+                    is MatrixRoomMembersState.Ready -> Async.Success(membersState.roomMembers.size)
+                }
             }
         }
     }
@@ -146,5 +149,7 @@ class RoomDetailsPresenter @Inject constructor(
         }
     }
 }
+
+
 
 

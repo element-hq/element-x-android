@@ -24,12 +24,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.roomMembers
 
 @Composable
-fun MatrixRoom.roomMember(userId: UserId): State<RoomMember?> {
+fun MatrixRoom.getRoomMember(userId: UserId): State<RoomMember?> {
     val roomMembersState by membersStateFlow.collectAsState()
+    return getRoomMember(roomMembersState = roomMembersState, userId = userId)
+}
+
+@Composable
+fun getRoomMember(roomMembersState: MatrixRoomMembersState, userId: UserId): State<RoomMember?> {
     val roomMembers = roomMembersState.roomMembers()
     return remember(roomMembers) {
         derivedStateOf {
@@ -41,8 +47,13 @@ fun MatrixRoom.roomMember(userId: UserId): State<RoomMember?> {
 }
 
 @Composable
-fun MatrixRoom.directRoomMember(): State<RoomMember?> {
+fun MatrixRoom.getDirectRoomMember(): State<RoomMember?> {
     val roomMembersState by membersStateFlow.collectAsState()
+    return getDirectRoomMember(roomMembersState = roomMembersState)
+}
+
+@Composable
+fun MatrixRoom.getDirectRoomMember(roomMembersState: MatrixRoomMembersState): State<RoomMember?> {
     val roomMembers = roomMembersState.roomMembers()
     return remember(roomMembers) {
         derivedStateOf {
@@ -56,3 +67,4 @@ fun MatrixRoom.directRoomMember(): State<RoomMember?> {
         }
     }
 }
+
