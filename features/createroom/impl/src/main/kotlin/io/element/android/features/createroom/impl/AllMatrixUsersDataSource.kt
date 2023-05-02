@@ -24,16 +24,16 @@ import io.element.android.libraries.matrix.api.usersearch.MatrixUserProfile
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import javax.inject.Inject
 
-// TODO this is empty as we currently don't have an endpoint to perform user search
 class AllMatrixUsersDataSource @Inject constructor(
     private val client: MatrixClient
 ) : UserListDataSource {
     override suspend fun search(query: String): List<MatrixUser> {
-        val res = client.searchUsers(query, SEARCH_RESULTS)
+        val res = client.searchUsers(query, MAX_SEARCH_RESULTS)
         return res.getOrNull()?.results?.map(::toMatrixUser).orEmpty()
     }
 
     override suspend fun getProfile(userId: UserId): MatrixUser? {
+        // TODO: hook up to matrix client
         return null
     }
 
@@ -48,6 +48,6 @@ class AllMatrixUsersDataSource @Inject constructor(
     )
 
     companion object {
-        private const val SEARCH_RESULTS = 5L
+        private const val MAX_SEARCH_RESULTS = 5L
     }
 }
