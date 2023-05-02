@@ -132,7 +132,7 @@ matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.10"
 sqldelight-driver-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-sqlcipher = "net.zetetic:android-database-sqlcipher:4.5.3"
+sqlcipher = "net.zetetic:android-database-sqlcipher:4.5.4"
 sqlite = "androidx.sqlite:sqlite:2.3.1"
 unifiedpush = "com.github.UnifiedPush:android-connector:2.1.1"
 gujun_span = "me.gujun.android:span:1.7"
