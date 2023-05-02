@@ -38,6 +38,11 @@ object TestTags {
      */
     val changeServerServer = TestTag("change_server-server")
     val changeServerContinue = TestTag("change_server-continue")
+
+    /**
+     * Room list / Home screen.
+     */
+    val homeScreenSettings = TestTag("home_screen-settings")
 }
 
 

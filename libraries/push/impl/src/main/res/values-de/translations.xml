@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_noisy">"Laute Benachrichtigungen"</string>
+  <string name="notification_invitation_action_join">"Beitreten"</string>
+  <string name="notification_invitation_action_reject">"Ablehnen"</string>
+  <string name="notification_new_messages">"Neue Nachrichten"</string>
+  <string name="notification_room_action_mark_as_read">"Als gelesen markieren"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s in %2$s und %3$s"</string>
+  <plurals name="notification_compat_summary_line_for_room">
+    <item quantity="one">"%1$s: %2$d Nachricht"</item>
+    <item quantity="other">"%1$s: %2$d Nachrichten"</item>
+  </plurals>
+  <plurals name="notification_invitations">
+    <item quantity="one">"%d Einladung"</item>
+    <item quantity="other">"%d Einladungen"</item>
+  </plurals>
+  <plurals name="notification_new_messages_for_room">
+    <item quantity="one">"%d neue Nachricht"</item>
+    <item quantity="other">"%d neue Nachrichten"</item>
+  </plurals>
+  <plurals name="notification_unread_notified_messages_in_room_rooms">
+    <item quantity="one">"%d Raum"</item>
+    <item quantity="other">"%d Räume"</item>
+  </plurals>
+  <string name="push_distributor_firebase_android">"Google-Dienste"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"Keine gültigen Google Play-Dienste gefunden. Benachrichtigungen funktionieren möglicherweise nicht richtig."</string>
+  <string name="notification_room_action_quick_reply">"Schnellantwort"</string>
+</resources>

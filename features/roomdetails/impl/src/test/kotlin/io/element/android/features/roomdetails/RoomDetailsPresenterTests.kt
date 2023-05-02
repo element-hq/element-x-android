@@ -23,9 +23,14 @@ import com.google.common.truth.Truth
 import io.element.android.features.roomdetails.impl.LeaveRoomWarning
 import io.element.android.features.roomdetails.impl.RoomDetailsEvent
 import io.element.android.features.roomdetails.impl.RoomDetailsPresenter
+import io.element.android.features.roomdetails.impl.RoomDetailsType
+import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
@@ -34,7 +39,10 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.A_USER_ID_2
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
@@ -46,11 +54,21 @@ import org.junit.Test
 class RoomDetailsPresenterTests {
 
     private val roomMembershipObserver = RoomMembershipObserver()
+    private val testCoroutineDispatchers = testCoroutineDispatchers()
+
+    private fun aRoomDetailsPresenter(room: MatrixRoom): RoomDetailsPresenter {
+        val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
+            override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
+                return RoomMemberDetailsPresenter(aMatrixClient(), room, roomMemberId)
+            }
+        }
+        return RoomDetailsPresenter(room, roomMembershipObserver, testCoroutineDispatchers, roomMemberDetailsPresenterFactory)
+    }
 
     @Test
     fun `present - initial state is created from room info`() = runTest {
         val room = aMatrixRoom()
-        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
+        val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -59,7 +77,7 @@ class RoomDetailsPresenterTests {
             Truth.assertThat(initialState.roomName).isEqualTo(room.name)
             Truth.assertThat(initialState.roomAvatarUrl).isEqualTo(room.avatarUrl)
             Truth.assertThat(initialState.roomTopic).isEqualTo(room.topic)
-            Truth.assertThat(initialState.memberCount).isEqualTo(Async.Loading(null))
+            Truth.assertThat(initialState.memberCount).isEqualTo(Async.Uninitialized)
             Truth.assertThat(initialState.isEncrypted).isEqualTo(room.isEncrypted)
 
             cancelAndIgnoreRemainingEvents()
@@ -68,23 +86,42 @@ class RoomDetailsPresenterTests {
 
     @Test
     fun `present - room member count is calculated asynchronously`() = runTest {
+        val error = RuntimeException()
         val room = aMatrixRoom()
-        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
+        val roomMembers = listOf(
+            aRoomMember(A_USER_ID),
+            aRoomMember(A_USER_ID_2),
+        )
+        val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
+            room.givenRoomMembersState(MatrixRoomMembersState.Unknown)
             val initialState = awaitItem()
-            Truth.assertThat(initialState.memberCount).isEqualTo(Async.Loading(null))
+            Truth.assertThat(initialState.memberCount).isEqualTo(Async.Uninitialized)
 
-            val finalState = awaitItem()
-            Truth.assertThat(finalState.memberCount).isEqualTo(Async.Success(0))
+            room.givenRoomMembersState(MatrixRoomMembersState.Pending(null))
+            val loadingState = awaitItem()
+            Truth.assertThat(loadingState.memberCount).isEqualTo(Async.Loading(null))
+
+            room.givenRoomMembersState(MatrixRoomMembersState.Error(error))
+            //skipItems(1)
+            val failureState = awaitItem()
+            Truth.assertThat(failureState.memberCount).isEqualTo(Async.Failure(error, null))
+
+            room.givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
+            //skipItems(1)
+            val successState = awaitItem()
+            Truth.assertThat(successState.memberCount).isEqualTo(Async.Success(roomMembers.size))
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
     fun `present - initial state with no room name`() = runTest {
         val room = aMatrixRoom(name = null)
-        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
+        val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -96,16 +133,22 @@ class RoomDetailsPresenterTests {
     }
 
     @Test
-    fun `present - can handle error while fetching member count`() = runTest {
-        val room = aMatrixRoom(name = null).apply {
-            givenFetchMemberResult(Result.failure(Throwable()))
+    fun `present - initial state with DM member sets custom DM roomType`() = runTest {
+        val myRoomMember = aRoomMember(A_SESSION_ID)
+        val otherRoomMember = aRoomMember(A_USER_ID_2)
+        val room = aMatrixRoom(
+            isEncrypted = true,
+            isDirect = true,
+        ).apply {
+            val roomMembers = listOf(myRoomMember, otherRoomMember)
+            givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
         }
-        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
+        val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            Truth.assertThat(awaitItem().memberCount).isInstanceOf(Async.Failure::class.java)
+            val initialState = awaitItem()
+            Truth.assertThat(initialState.roomType).isEqualTo(RoomDetailsType.Dm(otherRoomMember))
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -113,15 +156,14 @@ class RoomDetailsPresenterTests {
 
     @Test
     fun `present - Leave with confirmation on private room shows a specific warning`() = runTest {
-        val room = aMatrixRoom(isPublic = false)
-        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
+        val room = aMatrixRoom(isPublic = false).apply {
+            givenRoomMembersState(MatrixRoomMembersState.Ready(emptyList()))
+        }
+        val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            // Allow room member count to load
-            skipItems(1)
-
             initialState.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
             val confirmationState = awaitItem()
             Truth.assertThat(confirmationState.displayLeaveRoomWarning).isEqualTo(LeaveRoomWarning.PrivateRoom)
@@ -130,15 +172,14 @@ class RoomDetailsPresenterTests {
 
     @Test
     fun `present - Leave with confirmation on empty room shows a specific warning`() = runTest {
-        val room = aMatrixRoom(members = listOf(aRoomMember()))
-        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
+        val room = aMatrixRoom().apply {
+            givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(aRoomMember())))
+        }
+        val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            // Allow room member count to load
-            skipItems(1)
-
             initialState.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
             val confirmationState = awaitItem()
             Truth.assertThat(confirmationState.displayLeaveRoomWarning).isEqualTo(LeaveRoomWarning.LastUserInRoom)
@@ -147,15 +188,14 @@ class RoomDetailsPresenterTests {
 
     @Test
     fun `present - Leave with confirmation shows a generic warning`() = runTest {
-        val room = aMatrixRoom()
-        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
+        val room = aMatrixRoom().apply {
+            givenRoomMembersState(MatrixRoomMembersState.Ready(emptyList()))
+        }
+        val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            // Allow room member count to load
-            skipItems(1)
-
             initialState.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
             val confirmationState = awaitItem()
             Truth.assertThat(confirmationState.displayLeaveRoomWarning).isEqualTo(LeaveRoomWarning.Generic)
@@ -164,15 +204,14 @@ class RoomDetailsPresenterTests {
 
     @Test
     fun `present - Leave without confirmation leaves the room`() = runTest {
-        val room = aMatrixRoom()
-        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
+        val room = aMatrixRoom().apply {
+            givenRoomMembersState(MatrixRoomMembersState.Ready(emptyList()))
+        }
+        val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            // Allow room member count to load
-            skipItems(1)
-
             initialState.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = false))
 
             cancelAndIgnoreRemainingEvents()
@@ -189,14 +228,11 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom().apply {
             givenLeaveRoomError(Throwable())
         }
-        val presenter = RoomDetailsPresenter(A_SESSION_ID, room, roomMembershipObserver)
+        val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            // Allow room member count to load
-            skipItems(1)
-
             initialState.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = false))
             val errorState = awaitItem()
             Truth.assertThat(errorState.error).isNotNull()
@@ -206,24 +242,28 @@ class RoomDetailsPresenterTests {
     }
 }
 
+fun aMatrixClient(
+    sessionId: SessionId = A_SESSION_ID,
+) = FakeMatrixClient()
+
 fun aMatrixRoom(
     roomId: RoomId = A_ROOM_ID,
     name: String? = A_ROOM_NAME,
     displayName: String = "A fallback display name",
     topic: String? = "A topic",
     avatarUrl: String? = "https://matrix.org/avatar.jpg",
-    members: List<RoomMember> = emptyList(),
     isEncrypted: Boolean = true,
     isPublic: Boolean = true,
+    isDirect: Boolean = false,
 ) = FakeMatrixRoom(
     roomId = roomId,
     name = name,
     displayName = displayName,
     topic = topic,
     avatarUrl = avatarUrl,
-    members = members,
     isEncrypted = isEncrypted,
     isPublic = isPublic,
+    isDirect = isDirect,
 )
 
 fun aRoomMember(

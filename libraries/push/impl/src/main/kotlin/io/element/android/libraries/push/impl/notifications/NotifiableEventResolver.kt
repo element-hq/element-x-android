@@ -24,11 +24,6 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationData
-import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
-import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
-import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
-import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
@@ -74,28 +69,28 @@ class NotifiableEventResolver @Inject constructor(
             }
         ).orDefault(roomId, eventId)
 
-        return notificationData.asNotifiableEvent(sessionId, roomId, eventId)
+        return notificationData.asNotifiableEvent(sessionId)
     }
 }
 
-private fun NotificationData.asNotifiableEvent(userId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent {
+private fun NotificationData.asNotifiableEvent(userId: SessionId): NotifiableEvent {
     return NotifiableMessageEvent(
         sessionId = userId,
         roomId = roomId,
         eventId = eventId,
         editedEventId = null,
         canBeReplaced = true,
-        noisy = false,
+        noisy = isNoisy,
         timestamp = System.currentTimeMillis(),
-        senderName = null,
-        senderId = null,
+        senderName = senderDisplayName,
+        senderId = senderId.value,
         body = "Message ${eventId.value.take(8)}… in room ${roomId.value.take(8)}…",
         imageUriString = null,
         threadId = null,
         roomName = null,
         roomIsDirect = false,
-        roomAvatarPath = null,
-        senderAvatarPath = null,
+        roomAvatarPath = roomAvatarUrl,
+        senderAvatarPath = senderAvatarUrl,
         soundName = null,
         outGoingMessage = false,
         outGoingMessageFailed = false,
@@ -109,33 +104,11 @@ private fun NotificationData.asNotifiableEvent(userId: SessionId, roomId: RoomId
  */
 private fun NotificationData?.orDefault(roomId: RoomId, eventId: EventId): NotificationData {
     return this ?: NotificationData(
-        item = MatrixTimelineItem.Event(
-            event = EventTimelineItem(
-                uniqueIdentifier = eventId.value,
-                eventId = eventId,
-                isEditable = false,
-                isLocal = false,
-                isOwn = false,
-                isRemote = false,
-                localSendState = null,
-                reactions = emptyList(),
-                sender = UserId(""),
-                senderProfile = ProfileTimelineDetails.Unavailable,
-                timestamp = System.currentTimeMillis(),
-                content = MessageContent(
-                    body = eventId.value,
-                    inReplyTo = null,
-                    isEdited = false,
-                    type = TextMessageType(
-                        body = eventId.value,
-                        formatted = null
-                    )
-                )
-            ),
-        ),
-        title = roomId.value,
-        subtitle = eventId.value,
+        eventId = eventId,
+        senderId = UserId("@user:domain"),
+        roomId = roomId,
         isNoisy = false,
-        avatarUrl = null,
+        isEncrypted = false,
+        isDirect = false
     )
 }

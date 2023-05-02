@@ -63,7 +63,7 @@ class RustMediaLoader(
             runCatching {
                 mediaSourceFromUrl(url).use { mediaSource ->
                     innerClient.getMediaFile(
-                        source = mediaSource,
+                        mediaSource = mediaSource,
                         mimeType = mimeType ?: "application/octet-stream"
                     ).use {
                         Path(it.path())

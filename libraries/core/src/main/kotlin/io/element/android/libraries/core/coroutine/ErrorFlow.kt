@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.fixtures
+package io.element.android.libraries.core.coroutine
 
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.flow.flow
 
-// TODO Move to common module to reuse
-internal fun testCoroutineDispatchers() = CoroutineDispatchers(
-    io = UnconfinedTestDispatcher(),
-    computation = UnconfinedTestDispatcher(),
-    main = UnconfinedTestDispatcher(),
-    diffUpdateDispatcher = UnconfinedTestDispatcher(),
-)
+/** Create a Flow emitting a single error event. It should be useful for tests. */
+fun <T> errorFlow(throwable: Throwable) = flow<T> { throw throwable }

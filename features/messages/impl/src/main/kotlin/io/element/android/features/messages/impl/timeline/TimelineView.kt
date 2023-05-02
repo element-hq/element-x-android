@@ -99,11 +99,11 @@ fun TimelineView(
             itemsIndexed(
                 items = state.timelineItems,
                 contentType = { _, timelineItem -> timelineItem.contentType() },
-                key = { _, timelineItem -> timelineItem.key() },
+                key = { _, timelineItem -> timelineItem.identifier() },
             ) { index, timelineItem ->
                 TimelineItemRow(
                     timelineItem = timelineItem,
-                    isHighlighted = timelineItem.key() == state.highlightedEventId?.value,
+                    isHighlighted = timelineItem.identifier() == state.highlightedEventId?.value,
                     onClick = onMessageClicked,
                     onLongClick = onMessageLongClicked
                 )
@@ -118,21 +118,6 @@ fun TimelineView(
             timelineItems = state.timelineItems,
             onLoadMore = ::onReachedLoadMore
         )
-    }
-}
-
-private fun TimelineItem.key(): String {
-    return when (this) {
-        is TimelineItem.Event -> id
-        is TimelineItem.Virtual -> id
-    }
-}
-
-private fun TimelineItem.contentType(): Int {
-    // Todo optimize for each subtype
-    return when (this) {
-        is TimelineItem.Event -> 0
-        is TimelineItem.Virtual -> 1
     }
 }
 

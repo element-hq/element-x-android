@@ -102,7 +102,7 @@ class CreateRoomRootPresenterTests {
         }.test {
             val initialState = awaitItem()
             val matrixUser = MatrixUser(UserId("@name:domain"))
-            val fakeDmResult = FakeMatrixRoom(RoomId("!fakeDmResult:domain"))
+            val fakeDmResult = FakeMatrixRoom(roomId = RoomId("!fakeDmResult:domain"))
 
             fakeMatrixClient.givenFindDmResult(fakeDmResult)
 

@@ -28,6 +28,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ElementX"
         tools:targetApi="33">
+
+        <provider
+            android:authorities="${applicationId}.fileprovider"
+            android:name="androidx.core.content.FileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data  android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_providers" />
+        </provider>
+
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"

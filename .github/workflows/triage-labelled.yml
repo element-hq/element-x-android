@@ -12,22 +12,10 @@ jobs:
     if: >
       github.repository == 'vector-im/element-x-android'
     steps:
-      - uses: octokit/graphql-action@v2.x
+      - uses: actions/add-to-project@main
         with:
-          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-          query: |
-            mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
-                item {
-                  id
-                }
-              }
-            }
-          projectid: ${{ env.PROJECT_ID }}
-          contentid: ${{ github.event.issue.node_id }}
-        env:
-          PROJECT_ID: "PVT_kwDOAM0swc4ABTXY"
-          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+          project-url: https://github.com/orgs/vector-im/projects/43
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   ex_plorers:
     name: Add labelled issues to X-Plorer project
@@ -35,23 +23,10 @@ jobs:
     if: >
       contains(github.event.issue.labels.*.name, 'Team: Element X Feature')
     steps:
-      - uses: octokit/graphql-action@v2.x
-        id: add_to_project
+      - uses: actions/add-to-project@main
         with:
-          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-          query: |
-              mutation add_to_project($projectid:ID!,$contentid:ID!) {
-                addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
-                item {
-                  id
-                  }
-                }
-              }
-          projectid: ${{ env.PROJECT_ID }}
-          contentid: ${{ github.event.issue.node_id }}
-        env:
-          PROJECT_ID: "PVT_kwDOAM0swc4ALoFY"
-          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+          project-url: https://github.com/orgs/vector-im/projects/73
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   verticals_feature:
     name: Add labelled issues to Verticals Feature project
@@ -59,20 +34,18 @@ jobs:
     if: >
       contains(github.event.issue.labels.*.name, 'Team: Verticals Feature')
     steps:
-      - uses: octokit/graphql-action@v2.x
-        id: add_to_project
+      - uses: actions/add-to-project@main
         with:
-          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-          query: |
-              mutation add_to_project($projectid:ID!,$contentid:ID!) {
-                addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
-                item {
-                  id
-                  }
-                }
-              }
-          projectid: ${{ env.PROJECT_ID }}
-          contentid: ${{ github.event.issue.node_id }}
-        env:
-          PROJECT_ID: "PVT_kwDOAM0swc4AHJKW"
-          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+          project-url: https://github.com/orgs/vector-im/projects/57
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  qa:
+    name: Add labelled issues to QA project
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.issue.labels.*.name, 'Team: QA')
+    steps:
+      - uses: actions/add-to-project@main
+        with:
+          project-url: https://github.com/orgs/vector-im/projects/69
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

@@ -47,7 +47,9 @@ suspend fun <T> (suspend () -> T).execute(state: MutableState<Async<T>>, errorMa
 }
 
 suspend fun <T> (suspend () -> Result<T>).executeResult(state: MutableState<Async<T>>) {
-    state.value = Async.Loading()
+    if (state.value !is Async.Success) {
+        state.value = Async.Loading()
+    }
     this().fold(
         onSuccess = {
             state.value = Async.Success(it)

@@ -16,4 +16,6 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
-object TimelineItemUnknownContent : TimelineItemEventContent
+object TimelineItemUnknownContent : TimelineItemEventContent {
+    override val type: String = "TimelineItemUnknownContent"
+}

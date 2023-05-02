@@ -26,31 +26,25 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.ui.model.MatrixUser
-import timber.log.Timber
 
 @ContributesNode(RoomScope::class)
 class RoomMemberListNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val room: MatrixRoom,
     private val presenter: RoomMemberListPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
     interface Callback : Plugin {
-        fun openRoomMemberDetails(roomMember: RoomMember)
+        fun openRoomMemberDetails(roomMemberId: UserId)
     }
 
     private val callbacks = plugins<Callback>()
 
-    private fun onUserSelected(matrixUser: MatrixUser) {
-        val member = room.getMember(matrixUser.id)
-        if (member != null) {
-            callbacks.forEach { it.openRoomMemberDetails(member) }
-        } else {
-            Timber.e("Could find room member ${matrixUser.id} in room ${room.roomId}")
+    private fun openRoomMemberDetails(roomMemberId: UserId) {
+        callbacks.forEach {
+            it.openRoomMemberDetails(roomMemberId)
         }
     }
 
@@ -61,7 +55,7 @@ class RoomMemberListNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onBackPressed = { navigateUp() },
-            onUserSelected = ::onUserSelected,
+            onMemberSelected = this::openRoomMemberDetails,
         )
     }
 }

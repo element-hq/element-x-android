@@ -71,8 +71,8 @@ class NetworkMonitorImpl @Inject constructor(
 
     private fun listenToConnectionChanges() {
         val request = NetworkRequest.Builder()
-            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+//            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+//            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             .build()
         connectivityManager.registerNetworkCallback(request, callback)
