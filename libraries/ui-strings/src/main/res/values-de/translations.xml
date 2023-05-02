@@ -93,6 +93,8 @@
   <string name="report_content_hint">"Grund für die Meldung dieses Inhalts"</string>
   <string name="room_timeline_beginning_of_room">"Dies ist der Anfang von %1$s."</string>
   <string name="room_timeline_read_marker_title">"Neu"</string>
+  <string name="screen_analytics_settings_share_data">"Teile Analyse-Daten"</string>
+  <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
   <string name="screen_room_member_details_block_alert_action">"Blockieren"</string>
   <string name="screen_room_member_details_block_user">"Nutzer blockieren"</string>
   <string name="screen_room_member_details_unblock_alert_action">"Blockierung aufheben"</string>
