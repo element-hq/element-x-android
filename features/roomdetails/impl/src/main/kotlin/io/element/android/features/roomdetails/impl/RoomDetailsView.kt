@@ -60,7 +60,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.preview.ScrollingPreview
+import io.element.android.libraries.designsystem.preview.LargeHeightPreview
 import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -270,12 +270,12 @@ internal fun ConfirmLeaveRoomDialog(
     )
 }
 
-@ScrollingPreview
+@LargeHeightPreview
 @Composable
 fun RoomDetailsLightPreview(@PreviewParameter(RoomDetailsStateProvider::class) state: RoomDetailsState) =
     ElementPreviewLight { ContentToPreview(state) }
 
-@ScrollingPreview
+@LargeHeightPreview
 @Composable
 fun RoomDetailsDarkPreview(@PreviewParameter(RoomDetailsStateProvider::class) state: RoomDetailsState) =
     ElementPreviewDark { ContentToPreview(state) }

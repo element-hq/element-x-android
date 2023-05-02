@@ -23,4 +23,4 @@ import androidx.compose.ui.tooling.preview.Preview
  * adding extra vertical space so long scrolling components can be displayed. This is a helper for that functionality.
  */
 @Preview(heightDp = 1000)
-annotation class ScrollingPreview
+annotation class LargeHeightPreview
