@@ -16,8 +16,6 @@
 
 package io.element.android.features.roomdetails.impl.members.details
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,15 +31,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ChatBubbleOutline
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -56,7 +51,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.components.button.MainActionButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -131,24 +126,6 @@ internal fun RoomMemberHeaderSection(
 internal fun RoomMemberMainActionsSection(onShareUser: () -> Unit, modifier: Modifier = Modifier) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         MainActionButton(title = stringResource(StringR.string.action_share), icon = Icons.Outlined.Share, onClick = onShareUser)
-    }
-}
-
-@Composable
-internal fun MainActionButton(title: String, icon: ImageVector, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    val ripple = rememberRipple(bounded = false)
-    val interactionSource = MutableInteractionSource()
-    Column(
-        modifier.clickable(
-            interactionSource = interactionSource,
-            indication = ripple,
-            onClick = onClick
-        ),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Icon(icon, contentDescription = title)
-        Spacer(modifier = Modifier.height(14.dp))
-        Text(title, style = ElementTextStyles.Regular.bodyMD.copy(fontWeight = FontWeight.Medium), color = MaterialTheme.colorScheme.primary)
     }
 }
 
