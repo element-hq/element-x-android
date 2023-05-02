@@ -7,6 +7,7 @@
   <string name="notification_room_action_mark_as_read">"Als gelesen markieren"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s und %2$s"</string>
   <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s in %2$s und %3$s"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d Nachricht"</item>
