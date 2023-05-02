@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,7 +54,7 @@ class InviteListPresenter @Inject constructor(
 
         val seenInvites = remember { mutableStateOf<Set<RoomId>>(emptySet()) }
 
-    LaunchedEffect(Unit) {
+        LaunchedEffect(Unit) {
             seenInvites.value = store.seenRoomIds().first()
         }
 
@@ -106,13 +105,11 @@ class InviteListPresenter @Inject constructor(
             }
         }
 
-        val inviteList by remember(seenInvites) {
-            derivedStateOf {
-                invites
-                    .filterIsInstance<RoomSummary.Filled>()
-                    .map { it.toInviteSummary(seenInvites.value.contains(it.details.roomId)) }
-                    .toPersistentList()
-            }
+        val inviteList = remember(seenInvites, invites) {
+            invites
+                .filterIsInstance<RoomSummary.Filled>()
+                .map { it.toInviteSummary(seenInvites.value.contains(it.details.roomId)) }
+                .toPersistentList()
         }
 
         return InviteListState(

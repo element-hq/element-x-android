@@ -16,11 +16,18 @@
 
 package io.element.android.features.roomlist.impl
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 class FakeInviteDataSource(
-    private val flow: Flow<InvitesState> = flowOf(InvitesState.NoInvites)
+    private val flow: Flow<InvitesState> = flowOf()
 ) : InviteStateDataSource {
-    override fun inviteState() = flow
+
+    @Composable
+    override fun inviteState(): InvitesState {
+        val state = flow.collectAsState(initial = InvitesState.NoInvites)
+        return state.value
+    }
 }

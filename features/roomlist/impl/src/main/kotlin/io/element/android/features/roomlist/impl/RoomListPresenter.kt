@@ -88,10 +88,6 @@ class RoomListPresenter @Inject constructor(
             initialLoad(matrixUser)
         }
 
-        val inviteState by inviteStateDataSource
-            .inviteState()
-            .collectAsState(InvitesState.NoInvites)
-
         // Session verification status (unknown, not verified, verified)
         val sessionVerifiedStatus by sessionVerificationService.sessionVerifiedStatus.collectAsState()
         var verificationPromptDismissed by rememberSaveable { mutableStateOf(false) }
@@ -135,7 +131,7 @@ class RoomListPresenter @Inject constructor(
             displayVerificationPrompt = displayVerificationPrompt,
             snackbarMessage = snackbarMessage,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
-            invitesState = inviteState,
+            invitesState = inviteStateDataSource.inviteState(),
             displaySearchResults = displaySearchResults,
             eventSink = ::handleEvents
         )

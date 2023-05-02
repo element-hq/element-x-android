@@ -16,9 +16,11 @@
 
 package io.element.android.features.roomlist.impl
 
-import kotlinx.coroutines.flow.Flow
+import androidx.compose.runtime.Composable
 
 interface InviteStateDataSource {
 
-    fun inviteState(): Flow<InvitesState>
+    @Composable
+    fun inviteState(): InvitesState
+
 }

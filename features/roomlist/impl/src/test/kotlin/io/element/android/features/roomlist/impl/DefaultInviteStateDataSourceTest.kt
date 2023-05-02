@@ -16,6 +16,8 @@
 
 package io.element.android.features.roomlist.impl
 
+import app.cash.molecule.RecompositionClock
+import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.element.android.features.invitelist.test.FakeSeenInvitesStore
@@ -38,7 +40,9 @@ internal class DefaultInviteStateDataSourceTest {
         val seenStore = FakeSeenInvitesStore()
         val dataSource = DefaultInviteStateDataSource(client, seenStore)
 
-        dataSource.inviteState().test {
+        moleculeFlow(RecompositionClock.Immediate) {
+            dataSource.inviteState()
+        }.test {
             Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NoInvites)
         }
     }
@@ -51,7 +55,9 @@ internal class DefaultInviteStateDataSourceTest {
         val seenStore = FakeSeenInvitesStore()
         val dataSource = DefaultInviteStateDataSource(client, seenStore)
 
-        dataSource.inviteState().test {
+        moleculeFlow(RecompositionClock.Immediate) {
+            dataSource.inviteState()
+        }.test {
             Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NewInvites)
         }
     }
@@ -65,7 +71,10 @@ internal class DefaultInviteStateDataSourceTest {
         seenStore.publishRoomIds(setOf(A_ROOM_ID))
         val dataSource = DefaultInviteStateDataSource(client, seenStore)
 
-        dataSource.inviteState().test {
+        moleculeFlow(RecompositionClock.Immediate) {
+            dataSource.inviteState()
+        }.test {
+            skipItems(1)
             Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NewInvites)
         }
     }
@@ -79,7 +88,11 @@ internal class DefaultInviteStateDataSourceTest {
         seenStore.publishRoomIds(setOf(A_ROOM_ID))
         val dataSource = DefaultInviteStateDataSource(client, seenStore)
 
-        dataSource.inviteState().test {
+        moleculeFlow(RecompositionClock.Immediate) {
+            dataSource.inviteState()
+        }.test {
+            skipItems(1)
+
             Truth.assertThat(awaitItem()).isEqualTo(InvitesState.SeenInvites)
         }
     }
@@ -91,7 +104,9 @@ internal class DefaultInviteStateDataSourceTest {
         val seenStore = FakeSeenInvitesStore()
         val dataSource = DefaultInviteStateDataSource(client, seenStore)
 
-        dataSource.inviteState().test {
+        moleculeFlow(RecompositionClock.Immediate) {
+            dataSource.inviteState()
+        }.test {
             // Initially there are no invites
             Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NoInvites)
 

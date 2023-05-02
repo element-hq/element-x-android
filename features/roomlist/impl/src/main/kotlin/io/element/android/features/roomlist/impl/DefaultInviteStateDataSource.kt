@@ -16,14 +16,16 @@
 
 package io.element.android.features.roomlist.impl
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.invitelist.api.SeenInvitesStore
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomSummary
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
@@ -32,16 +34,25 @@ class DefaultInviteStateDataSource @Inject constructor(
     private val seenInvitesStore: SeenInvitesStore,
 ) : InviteStateDataSource {
 
-    override fun inviteState(): Flow<InvitesState> =
-        client.invitesDataSource
+    @Composable
+    override fun inviteState(): InvitesState {
+        val invites by client
+            .invitesDataSource
             .roomSummaries()
-            .combine(seenInvitesStore.seenRoomIds()) { invites, seenIds ->
-                when {
-                    invites.isEmpty() -> InvitesState.NoInvites
-                    seenIds.containsAll(invites.roomIds) -> InvitesState.SeenInvites
-                    else -> InvitesState.NewInvites
-                }
+            .collectAsState()
+
+        val seenInvites by seenInvitesStore
+            .seenRoomIds()
+            .collectAsState(initial = emptySet())
+
+        return remember(invites, seenInvites) {
+            when {
+                invites.isEmpty() -> InvitesState.NoInvites
+                seenInvites.containsAll(invites.roomIds) -> InvitesState.SeenInvites
+                else -> InvitesState.NewInvites
             }
+        }
+    }
 }
 
 private val List<RoomSummary>.roomIds: Collection<RoomId>
