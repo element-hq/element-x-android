@@ -31,8 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.toEnabledColor
@@ -60,13 +60,17 @@ fun PreferenceSwitch(
                 enabled = enabled
             )
             Text(
-                modifier = Modifier.weight(1f).padding(vertical = preferencePaddingVertical),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(vertical = preferencePaddingVertical),
                 style = MaterialTheme.typography.bodyLarge,
                 color = enabled.toEnabledColor(),
                 text = title
             )
             Checkbox(
-                modifier = Modifier.padding(end = preferencePaddingHorizontal).align(Alignment.CenterVertically),
+                modifier = Modifier
+                    .padding(end = preferencePaddingHorizontal)
+                    .align(Alignment.CenterVertically),
                 checked = isChecked,
                 enabled = enabled,
                 onCheckedChange = onCheckedChange
@@ -75,13 +79,9 @@ fun PreferenceSwitch(
     }
 }
 
-@Preview
+@Preview(group = PreviewGroup.Preferences)
 @Composable
-internal fun PreferenceSwitchLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun PreferenceSwitchDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun PreferenceSwitchPreview() = ElementThemedPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

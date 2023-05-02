@@ -21,7 +21,6 @@ import androidx.compose.material.icons.filled.DeveloperMode
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.logout.api.LogoutPreferenceView
 import io.element.android.features.preferences.impl.user.UserPreferences
@@ -32,6 +31,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceView
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.LargeHeightPreview
 import io.element.android.libraries.matrix.ui.components.MatrixUserProvider
 import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.element.android.libraries.ui.strings.R as StringR
@@ -76,12 +76,12 @@ fun DeveloperPreferencesView(onOpenDeveloperSettings: () -> Unit) {
     }
 }
 
-@Preview
+@LargeHeightPreview
 @Composable
 fun PreferencesRootViewLightPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
     ElementPreviewLight { ContentToPreview(matrixUser) }
 
-@Preview
+@LargeHeightPreview
 @Composable
 fun PreferencesRootViewDarkPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
     ElementPreviewDark { ContentToPreview(matrixUser) }
