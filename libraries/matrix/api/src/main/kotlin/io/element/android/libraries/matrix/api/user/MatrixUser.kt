@@ -16,10 +16,13 @@
 
 package io.element.android.libraries.matrix.api.user
 
+import android.os.Parcelable
 import io.element.android.libraries.matrix.api.core.UserId
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class MatrixUser(
     val userId: UserId,
     val displayName: String? = null,
     val avatarUrl: String? = null
-)
+) : Parcelable
