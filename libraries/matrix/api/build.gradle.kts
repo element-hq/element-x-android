@@ -18,7 +18,7 @@ plugins {
     id("io.element.android-library")
     id("kotlin-parcelize")
     alias(libs.plugins.anvil)
-    kotlin("plugin.serialization") version "1.8.20"
+    kotlin("plugin.serialization") version "1.8.21"
 }
 
 android {
