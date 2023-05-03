@@ -33,7 +33,7 @@ class AllMatrixUsersDataSource @Inject constructor(
     }
 
     override suspend fun getProfile(userId: UserId): MatrixUser? {
-        // TODO: hook up to matrix client
+        // TODO hook up to matrix client
         return null
     }
 
