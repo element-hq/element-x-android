@@ -17,6 +17,7 @@
 package io.element.android.features.createroom.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.userlist.api.UserSearchResultState
 import io.element.android.features.userlist.api.aUserListState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
@@ -31,7 +32,7 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
                 userListState = aMatrixUser().let {
                     aUserListState().copy(
                         searchQuery = it.id.value,
-                        searchResults = persistentListOf(it),
+                        searchResults = UserSearchResultState.Results(persistentListOf(it)),
                         selectedUsers = persistentListOf(it),
                         isSearchActive = true,
                     )
@@ -42,7 +43,7 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
                 userListState = aMatrixUser().let {
                     aUserListState().copy(
                         searchQuery = it.id.value,
-                        searchResults = persistentListOf(it),
+                        searchResults = UserSearchResultState.Results(persistentListOf(it)),
                         selectedUsers = persistentListOf(it),
                         isSearchActive = true,
                     )

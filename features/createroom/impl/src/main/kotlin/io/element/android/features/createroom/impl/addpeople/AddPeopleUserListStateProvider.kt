@@ -19,6 +19,7 @@ package io.element.android.features.createroom.impl.addpeople
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.userlist.api.SelectionMode
 import io.element.android.features.userlist.api.UserListState
+import io.element.android.features.userlist.api.UserSearchResultState
 import io.element.android.features.userlist.api.aListOfSelectedUsers
 import io.element.android.features.userlist.api.aUserListState
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
@@ -29,13 +30,13 @@ open class AddPeopleUserListStateProvider : PreviewParameterProvider<UserListSta
         get() = sequenceOf(
             aUserListState(),
             aUserListState().copy(
-                searchResults = aMatrixUserList().toImmutableList(),
+                searchResults = UserSearchResultState.Results(aMatrixUserList().toImmutableList()),
                 selectedUsers = aListOfSelectedUsers(),
                 isSearchActive = false,
                 selectionMode = SelectionMode.Multiple,
             ),
             aUserListState().copy(
-                searchResults = aMatrixUserList().toImmutableList(),
+                searchResults = UserSearchResultState.Results(aMatrixUserList().toImmutableList()),
                 selectedUsers = aListOfSelectedUsers(),
                 isSearchActive = true,
                 selectionMode = SelectionMode.Multiple,

@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.usersearch.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import java.io.Closeable
 
@@ -58,4 +59,6 @@ interface MatrixClient : Closeable {
     fun onSlidingSyncUpdate()
 
     fun roomMembershipObserver(): RoomMembershipObserver
+
+   suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults>
 }

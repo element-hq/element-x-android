@@ -46,7 +46,11 @@ class CreateRoomRootPresenter @Inject constructor(
 
     private val presenter by lazy {
         presenterFactory.create(
-            UserListPresenterArgs(selectionMode = SelectionMode.Single),
+            UserListPresenterArgs(
+                selectionMode = SelectionMode.Single,
+                minimumSearchLength = 3,
+                searchDebouncePeriodMillis = 500,
+            ),
             userListDataSource,
             userListDataStore,
         )

@@ -17,14 +17,17 @@
 package io.element.android.features.userlist.api.components
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -32,7 +35,9 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import io.element.android.features.userlist.api.UserSearchResultState
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
@@ -46,7 +51,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun SearchUserBar(
     query: String,
-    results: ImmutableList<MatrixUser>,
+    state: UserSearchResultState,
     selectedUsers: ImmutableList<MatrixUser>,
     active: Boolean,
     isMultiSelectionEnabled: Boolean,
@@ -91,6 +96,7 @@ fun SearchUserBar(
                     }
                 }
             }
+
             !active -> {
                 {
                     Icon(
@@ -100,6 +106,7 @@ fun SearchUserBar(
                     )
                 }
             }
+
             else -> null
         },
         colors = if (!active) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
@@ -113,31 +120,43 @@ fun SearchUserBar(
                 )
             }
 
-            LazyColumn {
-                if (isMultiSelectionEnabled) {
-                    items(results) { matrixUser ->
-                        SearchMultipleUsersResultItem(
-                            modifier = Modifier.fillMaxWidth(),
-                            matrixUser = matrixUser,
-                            isUserSelected = selectedUsers.find { it.id == matrixUser.id } != null,
-                            onCheckedChange = { checked ->
-                                if (checked) {
-                                    onUserSelected(matrixUser)
-                                } else {
-                                    onUserDeselected(matrixUser)
+
+            if (state is UserSearchResultState.Results) {
+                LazyColumn {
+                    if (isMultiSelectionEnabled) {
+                        items(state.results) { matrixUser ->
+                            SearchMultipleUsersResultItem(
+                                modifier = Modifier.fillMaxWidth(),
+                                matrixUser = matrixUser,
+                                isUserSelected = selectedUsers.find { it.id == matrixUser.id } != null,
+                                onCheckedChange = { checked ->
+                                    if (checked) {
+                                        onUserSelected(matrixUser)
+                                    } else {
+                                        onUserDeselected(matrixUser)
+                                    }
                                 }
-                            }
-                        )
-                    }
-                } else {
-                    items(results) { matrixUser ->
-                        SearchSingleUserResultItem(
-                            modifier = Modifier.fillMaxWidth(),
-                            matrixUser = matrixUser,
-                            onClick = { onUserSelected(matrixUser) }
-                        )
+                            )
+                        }
+                    } else {
+                        items(state.results) { matrixUser ->
+                            SearchSingleUserResultItem(
+                                modifier = Modifier.fillMaxWidth(),
+                                matrixUser = matrixUser,
+                                onClick = { onUserSelected(matrixUser) }
+                            )
+                        }
                     }
                 }
+            } else if (state is UserSearchResultState.NoResults) {
+                Spacer(Modifier.size(80.dp))
+
+                Text(
+                    text = stringResource(R.string.common_no_results),
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         },
     )
