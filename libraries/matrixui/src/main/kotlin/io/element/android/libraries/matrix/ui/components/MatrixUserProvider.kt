@@ -17,25 +17,20 @@
 package io.element.android.libraries.matrix.ui.components
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 open class MatrixUserProvider : PreviewParameterProvider<MatrixUser> {
     override val values: Sequence<MatrixUser>
         get() = sequenceOf(
             aMatrixUser(),
-            aMatrixUser().copy(
-                username = null,
-                avatarData = anAvatarData().copy(name = null)
-            ),
+            aMatrixUser().copy(displayName = null),
         )
 }
 
-fun aMatrixUser(id: String = "@id_of_alice:server.org", userName: String = "Alice") = MatrixUser(
-    id = UserId(id),
-    username = userName,
-    avatarData = anAvatarData(id, userName)
+fun aMatrixUser(id: String = "@id_of_alice:server.org", displayName: String = "Alice") = MatrixUser(
+    userId = UserId(id),
+    displayName = displayName,
 )
 
 fun aMatrixUserList() = listOf(
@@ -55,10 +50,7 @@ open class MatrixUserWithNullProvider : PreviewParameterProvider<MatrixUser?> {
     override val values: Sequence<MatrixUser?>
         get() = sequenceOf(
             aMatrixUser(),
-            aMatrixUser().copy(
-                username = null,
-                avatarData = anAvatarData().copy(name = null)
-            ),
+            aMatrixUser().copy(displayName = null),
             null,
         )
 }

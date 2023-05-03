@@ -17,11 +17,9 @@
 package io.element.android.features.createroom.impl
 
 import io.element.android.features.userlist.api.UserListDataSource
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.usersearch.MatrixUserProfile
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import javax.inject.Inject
 
 class AllMatrixUsersDataSource @Inject constructor(
@@ -29,23 +27,13 @@ class AllMatrixUsersDataSource @Inject constructor(
 ) : UserListDataSource {
     override suspend fun search(query: String): List<MatrixUser> {
         val res = client.searchUsers(query, MAX_SEARCH_RESULTS)
-        return res.getOrNull()?.results?.map(::toMatrixUser).orEmpty()
+        return res.getOrNull()?.results.orEmpty()
     }
 
     override suspend fun getProfile(userId: UserId): MatrixUser? {
         // TODO hook up to matrix client
         return null
     }
-
-    private fun toMatrixUser(matrixUserProfile: MatrixUserProfile) = MatrixUser(
-        id = matrixUserProfile.userId,
-        username = matrixUserProfile.displayName,
-        avatarData = AvatarData(
-            id = matrixUserProfile.userId.value,
-            name = matrixUserProfile.displayName,
-            url = matrixUserProfile.avatarUrl,
-        )
-    )
 
     companion object {
         private const val MAX_SEARCH_RESULTS = 5L

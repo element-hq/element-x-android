@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.usersearch
+package io.element.android.libraries.matrix.api.user
 
-data class MatrixSearchUserResults(
-    val results: List<MatrixUserProfile>,
-    val limited: Boolean,
+import io.element.android.libraries.matrix.api.core.UserId
+
+data class MatrixUser(
+    val userId: UserId,
+    val displayName: String? = null,
+    val avatarUrl: String? = null
 )

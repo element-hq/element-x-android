@@ -23,7 +23,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import io.element.android.libraries.ui.strings.R as StringR
@@ -42,7 +42,7 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
 }
 
 internal fun aRoomListState() = RoomListState(
-    matrixUser = MatrixUser(id = UserId("@id:domain"), username = "User#1", avatarData = AvatarData("@id:domain", "U")),
+    matrixUser = MatrixUser(userId = UserId("@id:domain"), displayName = "User#1"),
     roomList = aRoomListRoomSummaryList(),
     filter = "filter",
     filteredRoomList = aRoomListRoomSummaryList(),

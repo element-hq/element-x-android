@@ -16,7 +16,7 @@
 
 package io.element.android.features.createroom.impl.root
 
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 sealed interface CreateRoomRootEvents {
     object InvitePeople : CreateRoomRootEvents

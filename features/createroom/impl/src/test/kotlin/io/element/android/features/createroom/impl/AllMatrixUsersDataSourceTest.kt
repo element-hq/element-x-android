@@ -17,16 +17,14 @@
 package io.element.android.features.createroom.impl
 
 import com.google.common.truth.Truth
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.usersearch.MatrixSearchUserResults
-import io.element.android.libraries.matrix.api.usersearch.MatrixUserProfile
+import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -51,15 +49,15 @@ internal class AllMatrixUsersDataSourceTest {
         val results = dataSource.search("test")
         Truth.assertThat(results).containsExactly(
             MatrixUser(
-                id = A_USER_ID,
-                username = A_USER_NAME,
-                avatarData = AvatarData(id = A_USER_ID.value, name = A_USER_NAME, url = AN_AVATAR_URL)
+                userId = A_USER_ID,
+                displayName = A_USER_NAME,
+                avatarUrl = AN_AVATAR_URL
             ),
             MatrixUser(
-                id = A_USER_ID_2,
-                username = A_USER_NAME,
-                avatarData = AvatarData(id = A_USER_ID_2.value, name = A_USER_NAME, url = AN_AVATAR_URL)
-            )
+                userId = A_USER_ID_2,
+                displayName = A_USER_NAME,
+                avatarUrl = AN_AVATAR_URL
+            ),
         )
     }
 
@@ -80,5 +78,5 @@ internal class AllMatrixUsersDataSourceTest {
         userId: UserId = A_USER_ID,
         displayName: String = A_USER_NAME,
         avatarUrl: String = AN_AVATAR_URL
-    ) = MatrixUserProfile(userId, displayName, avatarUrl)
+    ) = MatrixUser(userId, displayName, avatarUrl)
 }

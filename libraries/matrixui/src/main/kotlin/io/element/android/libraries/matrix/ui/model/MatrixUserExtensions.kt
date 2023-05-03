@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.usersearch
+package io.element.android.libraries.matrix.ui.model
 
-import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
-data class MatrixUserProfile(
-    val userId: UserId,
-    val displayName: String?,
-    val avatarUrl: String?
+fun MatrixUser.getAvatarData(size: AvatarSize = AvatarSize.MEDIUM) = AvatarData(
+    id = userId.value,
+    name = displayName,
+    url = avatarUrl,
+    size = size,
 )
+
+fun MatrixUser.getBestName(): String {
+    return displayName?.takeIf { it.isNotEmpty() } ?: userId.value
+}

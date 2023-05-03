@@ -30,14 +30,14 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Checkbox
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 @Composable
 fun CheckableMatrixUserRow(
     checked: Boolean,
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
-    avatarSize: AvatarSize = matrixUser.avatarData.size,
+    avatarSize: AvatarSize = AvatarSize.MEDIUM,
     onCheckedChange: (Boolean) -> Unit = {},
     enabled: Boolean = true,
 ) {

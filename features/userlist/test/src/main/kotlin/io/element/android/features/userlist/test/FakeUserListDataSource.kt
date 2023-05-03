@@ -18,7 +18,7 @@ package io.element.android.features.userlist.test
 
 import io.element.android.features.userlist.api.UserListDataSource
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 class FakeUserListDataSource : UserListDataSource {
 

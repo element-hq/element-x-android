@@ -17,8 +17,8 @@
 package io.element.android.libraries.matrix.impl.usersearch
 
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.usersearch.MatrixSearchUserResults
-import io.element.android.libraries.matrix.api.usersearch.MatrixUserProfile
+import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import org.matrix.rustcomponents.sdk.SearchUsersResults
 import org.matrix.rustcomponents.sdk.UserProfile
 
@@ -31,8 +31,8 @@ object UserSearchResultMapper {
         )
     }
 
-    private fun mapUserProfile(userProfile: UserProfile): MatrixUserProfile {
-        return MatrixUserProfile(
+    private fun mapUserProfile(userProfile: UserProfile): MatrixUser {
+        return MatrixUser(
             userId = UserId(userProfile.userId),
             displayName = userProfile.displayName,
             avatarUrl = userProfile.avatarUrl,
