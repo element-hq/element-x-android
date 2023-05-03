@@ -31,7 +31,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.execute
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -65,7 +65,7 @@ class CreateRoomRootPresenter @Inject constructor(
 
         fun startDm(matrixUser: MatrixUser) {
             startDmAction.value = Async.Uninitialized
-            val existingDM = matrixClient.findDM(matrixUser.id)
+            val existingDM = matrixClient.findDM(matrixUser.userId)
             if (existingDM == null) {
                 localCoroutineScope.createDM(matrixUser, startDmAction)
             } else {
@@ -90,7 +90,7 @@ class CreateRoomRootPresenter @Inject constructor(
 
     private fun CoroutineScope.createDM(user: MatrixUser, startDmAction: MutableState<Async<RoomId>>) = launch {
         suspend {
-            matrixClient.createDM(user.id).getOrThrow()
+            matrixClient.createDM(user.userId).getOrThrow()
         }.execute(startDmAction)
     }
 }

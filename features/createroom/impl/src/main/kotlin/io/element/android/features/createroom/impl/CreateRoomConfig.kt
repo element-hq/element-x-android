@@ -17,7 +17,7 @@
 package io.element.android.features.createroom.impl
 
 import io.element.android.features.createroom.impl.configureroom.RoomPrivacy
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 

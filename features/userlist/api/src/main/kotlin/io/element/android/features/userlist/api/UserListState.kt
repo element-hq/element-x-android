@@ -16,7 +16,7 @@
 
 package io.element.android.features.userlist.api
 
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
 data class UserListState(

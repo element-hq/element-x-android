@@ -43,7 +43,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.R
 import kotlinx.collections.immutable.ImmutableList
 
@@ -128,7 +128,7 @@ fun SearchUserBar(
                             SearchMultipleUsersResultItem(
                                 modifier = Modifier.fillMaxWidth(),
                                 matrixUser = matrixUser,
-                                isUserSelected = selectedUsers.find { it.id == matrixUser.id } != null,
+                                isUserSelected = selectedUsers.find { it.userId == matrixUser.userId } != null,
                                 onCheckedChange = { checked ->
                                     if (checked) {
                                         onUserSelected(matrixUser)

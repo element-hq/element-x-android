@@ -16,7 +16,7 @@
 
 package io.element.android.features.roomdetails.impl.members
 
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 sealed interface RoomMemberListEvents {
     data class SelectUser(val user: MatrixUser) : RoomMemberListEvents

@@ -37,14 +37,15 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
 
 @Composable
 fun MatrixUserRow(
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
-    avatarSize: AvatarSize = matrixUser.avatarData.size,
+    avatarSize: AvatarSize = AvatarSize.MEDIUM,
 ) {
     Row(
         modifier = modifier
@@ -54,7 +55,7 @@ fun MatrixUserRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Avatar(
-            matrixUser.avatarData.copy(size = avatarSize),
+            matrixUser.getAvatarData(size = avatarSize),
         )
         Column(
             modifier = Modifier
@@ -70,9 +71,9 @@ fun MatrixUserRow(
                 color = MaterialTheme.colorScheme.primary,
             )
             // Id
-            if (matrixUser.username.isNullOrEmpty().not()) {
+            if (matrixUser.displayName.isNullOrEmpty().not()) {
                 Text(
-                    text = matrixUser.id.value,
+                    text = matrixUser.userId.value,
                     color = MaterialTheme.colorScheme.secondary,
                     fontSize = 14.sp,
                     maxLines = 1,
