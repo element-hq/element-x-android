@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.usersearch.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.impl.media.RustMediaResolver
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
@@ -36,6 +37,7 @@ import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.sync.SlidingSyncObserverProxy
+import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CoroutineScope
@@ -361,6 +363,13 @@ class RustMatrixClient constructor(
     }
 
     override fun roomMembershipObserver(): RoomMembershipObserver = roomMembershipObserver
+
+    override suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults> =
+        withContext(dispatchers.io) {
+            runCatching {
+                UserSearchResultMapper.map(client.searchUsers(searchTerm, limit.toULong()))
+            }
+        }
 
     private fun File.deleteSessionDirectory(userID: String): Boolean {
         // Rust sanitises the user ID replacing invalid characters with an _

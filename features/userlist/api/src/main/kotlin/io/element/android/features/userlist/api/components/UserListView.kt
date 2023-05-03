@@ -44,7 +44,7 @@ fun UserListView(
         SearchUserBar(
             modifier = Modifier.fillMaxWidth(),
             query = state.searchQuery,
-            results = state.searchResults,
+            state = state.searchResults,
             selectedUsers = state.selectedUsers,
             active = state.isSearchActive,
             isMultiSelectionEnabled = state.isMultiSelectionEnabled,

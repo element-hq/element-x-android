@@ -21,11 +21,22 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class UserListState(
     val searchQuery: String,
-    val searchResults: ImmutableList<MatrixUser>,
+    val searchResults: UserSearchResultState,
     val selectedUsers: ImmutableList<MatrixUser>,
     val isSearchActive: Boolean,
     val selectionMode: SelectionMode,
     val eventSink: (UserListEvents) -> Unit,
 ) {
     val isMultiSelectionEnabled = selectionMode == SelectionMode.Multiple
+}
+
+sealed interface UserSearchResultState {
+    /** No search results are available yet (e.g. because the user hasn't entered a (long enough) search term). */
+    object NotSearching : UserSearchResultState
+
+    /** The search has completed, but no results were found. */
+    object NoResults : UserSearchResultState
+
+    /** The search has completed, and some matching users were found. */
+    data class Results(val results: ImmutableList<MatrixUser>) : UserSearchResultState
 }

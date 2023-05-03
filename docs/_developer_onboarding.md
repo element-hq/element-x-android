@@ -426,6 +426,7 @@ Rageshake can be very useful to get logs from a release version of the applicati
 - When this is possible, prefer using `sealed interface` instead of `sealed class`;
 - When writing temporary code, using the string "DO NOT COMMIT" in a comment can help to avoid committing things by mistake. If committed and pushed, the CI
   will detect this String and will warn the user about it. (TODO Not supported yet!)
+- Very occasionally the gradle cache misbehaves and causes problems with Dagger. Try building with `--no-build-cache` if Dagger isn't behaving how you expect.
 
 ## Happy coding!
 
