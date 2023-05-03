@@ -25,7 +25,13 @@ data class MessageComposerState(
     val text: StableCharSequence?,
     val isFullScreen: Boolean,
     val mode: MessageComposerMode,
+    val attachmentSourcePicker: AttachmentSourcePicker?,
     val eventSink: (MessageComposerEvents) -> Unit
 ) {
     val isSendButtonVisible: Boolean = text?.charSequence.isNullOrEmpty().not()
+}
+
+sealed interface AttachmentSourcePicker {
+    object AllMedia : AttachmentSourcePicker
+    object Camera : AttachmentSourcePicker
 }

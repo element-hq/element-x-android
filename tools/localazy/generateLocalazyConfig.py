@@ -36,10 +36,13 @@ allActions = []
 # Iterating on the config
 for entry in config["modules"]:
     # Create action for the default language
+    excludeRegex = regexToAlwaysExclude
+    if "excludeRegex" in entry:
+        excludeRegex += entry["excludeRegex"]
     action = baseAction | {
         "output": convertModuleToPath(entry["name"]) + "/src/main/res/values/localazy.xml",
         "includeKeys": list(map(lambda i: "REGEX:" + i, entry["includeRegex"])),
-        "excludeKeys": list(map(lambda i: "REGEX:" + i, regexToAlwaysExclude)),
+        "excludeKeys": list(map(lambda i: "REGEX:" + i, excludeRegex)),
         "conditions": [
             "equals: ${languageCode}, en"
         ]

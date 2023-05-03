@@ -27,7 +27,6 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.matrix.api.core.RoomId
 
 @ContributesNode(RoomScope::class)
 class MessagesNode @AssistedInject constructor(
