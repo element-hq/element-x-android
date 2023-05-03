@@ -51,10 +51,13 @@ for entry in config["modules"]:
     allActions.append(action)
     # Create action for the translations
     if allFiles:
+        excludeRegex = regexToAlwaysExclude
+        if "excludeRegex" in entry:
+            excludeRegex += entry["excludeRegex"]
         actionTranslation = baseAction | {
             "output": convertModuleToPath(entry["name"]) + "/src/main/res/values-${langAndroidResNoScript}/translations.xml",
             "includeKeys": list(map(lambda i: "REGEX:" + i, entry["includeRegex"])),
-            "excludeKeys": list(map(lambda i: "REGEX:" + i, regexToAlwaysExclude)),
+            "excludeKeys": list(map(lambda i: "REGEX:" + i, excludeRegex)),
             "conditions": [
                 "!equals: ${languageCode}, en"
             ]
