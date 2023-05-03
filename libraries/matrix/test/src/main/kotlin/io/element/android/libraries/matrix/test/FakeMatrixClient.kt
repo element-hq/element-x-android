@@ -58,6 +58,7 @@ class FakeMatrixClient(
     private var logoutFailure: Throwable? = null
     private val getRoomResults = mutableMapOf<RoomId, MatrixRoom>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
+    private val getProfileResults = mutableMapOf<UserId, Result<MatrixUser>>()
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
         return getRoomResults[roomId]
@@ -87,7 +88,7 @@ class FakeMatrixClient(
     }
 
     override suspend fun getProfile(userId: UserId): Result<MatrixUser> {
-        return Result.success(MatrixUser(userId))
+        return getProfileResults[userId] ?: Result.failure(IllegalStateException("No profile found for $userId"))
     }
 
     override fun startSync() = Unit
@@ -173,5 +174,9 @@ class FakeMatrixClient(
 
     fun givenSearchUsersResult(searchTerm: String, result: Result<MatrixSearchUserResults>) {
         searchUserResults[searchTerm] = result
+    }
+
+    fun givenGetProfileResult(userId: UserId, result: Result<MatrixUser>) {
+        getProfileResults[userId] = result
     }
 }
