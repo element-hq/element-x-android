@@ -14,22 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.ui.model
+package io.element.android.libraries.matrix.api.user
 
-import android.os.Parcelable
-import androidx.compose.runtime.Immutable
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.api.core.UserId
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
-@Immutable
-data class MatrixUser(
-    val id: UserId,
-    val username: String? = null,
-    val avatarData: AvatarData = AvatarData(id.value, username),
-) : Parcelable
-
-fun MatrixUser.getBestName(): String {
-    return username?.takeIf { it.isNotEmpty() } ?: id.value
-}
+data class MatrixSearchUserResults(
+    val results: List<MatrixUser>,
+    val limited: Boolean,
+)

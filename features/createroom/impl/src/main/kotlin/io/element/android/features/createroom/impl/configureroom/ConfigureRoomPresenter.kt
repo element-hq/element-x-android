@@ -89,7 +89,7 @@ class ConfigureRoomPresenter @Inject constructor(
                 isDirect = false,
                 visibility = if (config.privacy == RoomPrivacy.Public) RoomVisibility.PUBLIC else RoomVisibility.PRIVATE,
                 preset = if (config.privacy == RoomPrivacy.Public) RoomPreset.PUBLIC_CHAT else RoomPreset.PRIVATE_CHAT,
-                invite = config.invites.map { it.id },
+                invite = config.invites.map { it.userId },
                 avatar = config.avatarUrl,
             )
             matrixClient.createRoom(params).getOrThrow()

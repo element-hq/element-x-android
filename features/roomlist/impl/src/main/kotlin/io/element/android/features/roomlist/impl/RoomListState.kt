@@ -19,7 +19,7 @@ package io.element.android.features.roomlist.impl
 import androidx.compose.runtime.Immutable
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.designsystem.utils.SnackbarMessage
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable

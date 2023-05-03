@@ -40,8 +40,9 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.libraries.ui.strings.R
 
@@ -55,7 +56,7 @@ fun SelectedUser(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Avatar(matrixUser.avatarData.copy(size = AvatarSize.Custom(56.dp)))
+            Avatar(matrixUser.getAvatarData(size = AvatarSize.Custom(56.dp)))
             Text(
                 text = matrixUser.getBestName(),
                 overflow = TextOverflow.Ellipsis,

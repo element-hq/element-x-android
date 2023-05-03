@@ -31,7 +31,7 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
                 startDmAction = Async.Loading(),
                 userListState = aMatrixUser().let {
                     aUserListState().copy(
-                        searchQuery = it.id.value,
+                        searchQuery = it.userId.value,
                         searchResults = UserSearchResultState.Results(persistentListOf(it)),
                         selectedUsers = persistentListOf(it),
                         isSearchActive = true,
@@ -42,7 +42,7 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
                 startDmAction = Async.Failure(Throwable()),
                 userListState = aMatrixUser().let {
                     aUserListState().copy(
-                        searchQuery = it.id.value,
+                        searchQuery = it.userId.value,
                         searchResults = UserSearchResultState.Results(persistentListOf(it)),
                         selectedUsers = persistentListOf(it),
                         isSearchActive = true,

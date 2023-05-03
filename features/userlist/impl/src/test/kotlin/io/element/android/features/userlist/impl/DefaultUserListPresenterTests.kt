@@ -28,8 +28,8 @@ import io.element.android.features.userlist.api.UserListPresenterArgs
 import io.element.android.features.userlist.api.UserSearchResultState
 import io.element.android.features.userlist.test.FakeUserListDataSource
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
-import io.element.android.libraries.matrix.ui.model.MatrixUser
 import io.mockk.coJustRun
 import io.mockk.mockkConstructor
 import kotlinx.collections.immutable.persistentListOf

@@ -18,8 +18,7 @@ package io.element.android.features.roomdetails.impl.members
 
 import io.element.android.features.userlist.api.UserListState
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
 data class RoomMemberListState(

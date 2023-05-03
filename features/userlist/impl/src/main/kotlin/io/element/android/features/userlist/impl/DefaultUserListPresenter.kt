@@ -38,7 +38,7 @@ import io.element.android.features.userlist.api.UserSearchResultState
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
@@ -105,7 +105,7 @@ class DefaultUserListPresenter @AssistedInject constructor(
     private suspend fun performSearch(query: String): UserSearchResultState {
         val isMatrixId = MatrixPatterns.isUserId(query)
         val results = userListDataSource.search(query).toMutableList()
-        if (isMatrixId && results.none { it.id.value == query }) {
+        if (isMatrixId && results.none { it.userId.value == query }) {
             val getProfileResult: MatrixUser? = userListDataSource.getProfile(UserId(query))
             val profile = getProfileResult ?: MatrixUser(UserId(query))
             results.add(0, profile)

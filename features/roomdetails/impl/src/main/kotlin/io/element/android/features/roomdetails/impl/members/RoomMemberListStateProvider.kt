@@ -20,8 +20,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.userlist.api.UserSearchResultState
 import io.element.android.features.userlist.api.aUserListState
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
-import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 

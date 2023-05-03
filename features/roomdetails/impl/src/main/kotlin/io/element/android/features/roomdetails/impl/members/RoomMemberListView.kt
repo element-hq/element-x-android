@@ -52,7 +52,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,7 +64,7 @@ fun RoomMemberListView(
 ) {
 
     fun onUserSelected(user: MatrixUser) {
-        onMemberSelected(user.id)
+        onMemberSelected(user.userId)
     }
 
     Scaffold(
