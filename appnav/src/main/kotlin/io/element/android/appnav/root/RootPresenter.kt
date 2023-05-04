@@ -17,8 +17,6 @@
 package io.element.android.appnav.root
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.features.rageshake.api.crash.CrashDetectionPresenter
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionPresenter
 import io.element.android.libraries.architecture.Presenter
@@ -31,20 +29,13 @@ class RootPresenter @Inject constructor(
 
     @Composable
     override fun present(): RootState {
-        val isShowkaseButtonVisible = rememberSaveable {
-            mutableStateOf(true)
-        }
         val rageshakeDetectionState = rageshakeDetectionPresenter.present()
         val crashDetectionState = crashDetectionPresenter.present()
 
-        fun handleEvent(event: RootEvents) {
-            when (event) {
-                RootEvents.HideShowkaseButton -> isShowkaseButtonVisible.value = false
-            }
+        fun handleEvent(@Suppress("UNUSED_PARAMETER") event: RootEvents) {
         }
 
         return RootState(
-            isShowkaseButtonVisible = isShowkaseButtonVisible.value,
             rageshakeDetectionState = rageshakeDetectionState,
             crashDetectionState = crashDetectionState,
             eventSink = ::handleEvent
