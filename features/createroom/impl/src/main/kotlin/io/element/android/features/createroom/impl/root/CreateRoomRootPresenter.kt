@@ -49,7 +49,7 @@ class CreateRoomRootPresenter @Inject constructor(
             UserListPresenterArgs(
                 selectionMode = SelectionMode.Single,
                 minimumSearchLength = 3,
-                searchDebouncePeriodMillis = 500,
+                searchDebouncePeriodMillis = UserListPresenterArgs.DEFAULT_DEBOUNCE,
             ),
             userListDataSource,
             userListDataStore,
