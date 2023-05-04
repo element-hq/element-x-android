@@ -31,17 +31,19 @@ class UnifiedPushGatewayResolver @Inject constructor(
     suspend fun getGateway(endpoint: String): String? {
         val gateway = UnifiedPushConfig.default_push_gateway_http_url
         val url = URL(endpoint)
-        val custom = "${url.protocol}://${url.host}/_matrix/push/v1/notify"
-        Timber.i("Testing $custom")
+        val port = if (url.port != -1) { ":${url.port}" } else { "" }
+        val customBase = "${url.protocol}://${url.host}${port}"
+        val customUrl = "$customBase/_matrix/push/v1/notify"
+        Timber.i("Testing $customUrl")
         try {
             return withContext(coroutineDispatchers.io) {
-                val api = retrofitFactory.create("${url.protocol}://${url.host}")
+                val api = retrofitFactory.create(customBase)
                     .create(UnifiedPushApi::class.java)
                 try {
                     val discoveryResponse = api.discover()
                     if (discoveryResponse.unifiedpush.gateway == "matrix") {
                         Timber.d("Using custom gateway")
-                        return@withContext custom
+                        return@withContext customUrl
                     }
                 } catch (throwable: Throwable) {
                     Timber.tag("UnifiedPushHelper").e(throwable)

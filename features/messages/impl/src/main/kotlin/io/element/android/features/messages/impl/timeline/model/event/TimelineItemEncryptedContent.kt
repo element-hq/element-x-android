@@ -20,4 +20,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecry
 
 data class TimelineItemEncryptedContent(
     val data: UnableToDecryptContent.Data
-) : TimelineItemEventContent
+) : TimelineItemEventContent {
+    override val type: String = "TimelineItemEncryptedContent"
+}

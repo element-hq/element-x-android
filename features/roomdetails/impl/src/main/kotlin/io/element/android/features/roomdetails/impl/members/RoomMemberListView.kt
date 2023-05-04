@@ -51,7 +51,8 @@ import io.element.android.libraries.designsystem.theme.components.CenterAlignedT
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,8 +60,13 @@ fun RoomMemberListView(
     state: RoomMemberListState,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
-    onUserSelected: (MatrixUser) -> Unit = {},
+    onMemberSelected: (UserId) -> Unit = {},
 ) {
+
+    fun onUserSelected(user: MatrixUser) {
+        onMemberSelected(user.userId)
+    }
+
     Scaffold(
         topBar = {
             if (!state.userListState.isSearchActive) {
@@ -76,7 +82,7 @@ fun RoomMemberListView(
         ) {
             UserListView(
                 state = state.userListState,
-                onUserSelected = onUserSelected,
+                onUserSelected = ::onUserSelected,
             )
 
             if (!state.userListState.isSearchActive) {

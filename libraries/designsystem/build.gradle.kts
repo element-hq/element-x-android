@@ -33,6 +33,8 @@ android {
         implementation(libs.accompanist.systemui)
         implementation(projects.libraries.elementresources)
         implementation(projects.libraries.uiStrings)
+
         ksp(libs.showkase.processor)
+        kspTest(libs.showkase.processor)
     }
 }

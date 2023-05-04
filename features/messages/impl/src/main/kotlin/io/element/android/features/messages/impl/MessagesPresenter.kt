@@ -70,7 +70,6 @@ class MessagesPresenter @Inject constructor(
         }
 
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState(initial = networkMonitor.currentConnectivityStatus)
-        println(networkConnectionStatus)
 
         LaunchedEffect(syncUpdateFlow) {
             roomAvatar.value =

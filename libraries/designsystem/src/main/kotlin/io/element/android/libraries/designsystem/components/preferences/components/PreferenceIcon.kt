@@ -27,8 +27,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.toSecondaryEnabledColor
 
@@ -57,15 +57,10 @@ fun PreferenceIcon(
     }
 }
 
-@Preview
+@Preview(group = PreviewGroup.Preferences)
 @Composable
-internal fun PreferenceIconLightPreview(@PreviewParameter(ImageVectorProvider::class) content: ImageVector?) =
-    ElementPreviewLight { ContentToPreview(content) }
-
-@Preview
-@Composable
-internal fun PreferenceIconDarkPreview(@PreviewParameter(ImageVectorProvider::class) content: ImageVector?) =
-    ElementPreviewDark { ContentToPreview(content) }
+internal fun PreferenceIconPreview(@PreviewParameter(ImageVectorProvider::class) content: ImageVector?) =
+    ElementThemedPreview { ContentToPreview(content) }
 
 @Composable
 private fun ContentToPreview(content: ImageVector?) {

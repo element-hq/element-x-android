@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.test.media.FakeMediaResolver
 import io.element.android.libraries.matrix.test.notification.FakeNotificationService
@@ -47,12 +48,15 @@ class FakeMatrixClient(
     private val notificationService: FakeNotificationService = FakeNotificationService(),
 ) : MatrixClient {
 
+    private var ignoreUserResult: Result<Unit> = Result.success(Unit)
+    private var unignoreUserResult: Result<Unit> = Result.success(Unit)
     private var createRoomResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmFailure: Throwable? = null
     private var findDmResult: MatrixRoom? = FakeMatrixRoom()
     private var logoutFailure: Throwable? = null
     private val getRoomResults = mutableMapOf<RoomId, MatrixRoom>()
+    private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
         return getRoomResults[roomId]
@@ -60,6 +64,14 @@ class FakeMatrixClient(
 
     override fun findDM(userId: UserId): MatrixRoom? {
         return findDmResult
+    }
+
+    override suspend fun ignoreUser(userId: UserId): Result<Unit> {
+        return ignoreUserResult
+    }
+
+    override suspend fun unignoreUser(userId: UserId): Result<Unit> {
+        return unignoreUserResult
     }
 
     override suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId> {
@@ -116,6 +128,10 @@ class FakeMatrixClient(
         return RoomMembershipObserver()
     }
 
+    override suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults> {
+        return searchUserResults[searchTerm] ?: Result.failure(IllegalStateException("No response defined for $searchTerm"))
+    }
+
     // Mocks
 
     fun givenLogoutError(failure: Throwable?) {
@@ -130,6 +146,14 @@ class FakeMatrixClient(
         createDmResult = result
     }
 
+    fun givenIgnoreUserResult(result: Result<Unit>) {
+        ignoreUserResult = result
+    }
+
+    fun givenUnignoreUserResult(result: Result<Unit>) {
+        unignoreUserResult = result
+    }
+
     fun givenCreateDmError(failure: Throwable?) {
         createDmFailure = failure
     }
@@ -140,5 +164,9 @@ class FakeMatrixClient(
 
     fun givenGetRoomResult(roomId: RoomId, result: MatrixRoom) {
         getRoomResults[roomId] = result
+    }
+
+    fun givenSearchUsersResult(searchTerm: String, result: Result<MatrixSearchUserResults>) {
+        searchUserResults[searchTerm] = result
     }
 }

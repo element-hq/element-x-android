@@ -17,17 +17,25 @@
 package io.element.android.features.createroom.impl
 
 import io.element.android.features.userlist.api.UserListDataSource
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import javax.inject.Inject
 
-// TODO this is empty as we currently don't have an endpoint to perform user search
-class AllMatrixUsersDataSource @Inject constructor() : UserListDataSource {
+class AllMatrixUsersDataSource @Inject constructor(
+    private val client: MatrixClient
+) : UserListDataSource {
     override suspend fun search(query: String): List<MatrixUser> {
-        return emptyList()
+        val res = client.searchUsers(query, MAX_SEARCH_RESULTS)
+        return res.getOrNull()?.results.orEmpty()
     }
 
     override suspend fun getProfile(userId: UserId): MatrixUser? {
+        // TODO hook up to matrix client
         return null
+    }
+
+    companion object {
+        private const val MAX_SEARCH_RESULTS = 5L
     }
 }

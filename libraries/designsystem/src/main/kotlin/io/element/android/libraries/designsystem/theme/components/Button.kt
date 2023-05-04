@@ -30,8 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Composable
 fun Button(
@@ -71,16 +71,9 @@ object ElementButtonDefaults {
 
 }
 
-@Preview
+@Preview(group = PreviewGroup.Buttons)
 @Composable
-internal fun ButtonsLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun ButtonsDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun ButtonPreview() = ElementThemedPreview {
     Column {
         Button(onClick = {}, enabled = true) {
             Text(text = "Click me! - Enabled")

@@ -27,8 +27,8 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,16 +52,12 @@ fun TopAppBar(
     )
 }
 
-@Preview
+@Preview(group = PreviewGroup.AppBars)
 @Composable
-internal fun TopAppBarLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+internal fun TopAppBarPreview() =
+    ElementThemedPreview { ContentToPreview() }
 
-@Preview
-@Composable
-internal fun TopAppBarDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ContentToPreview() {
     TopAppBar(title = { Text(text = "Title") })

@@ -37,22 +37,27 @@ open class UserListStateProvider : PreviewParameterProvider<UserListState> {
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
                 selectedUsers = aListOfSelectedUsers(),
-                searchResults = aMatrixUserList().toImmutableList(),
+                searchResults = UserSearchResultState.Results(aMatrixUserList().toImmutableList()),
             ),
             aUserListState().copy(
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
                 selectionMode = SelectionMode.Multiple,
                 selectedUsers = aListOfSelectedUsers(),
-                searchResults = aMatrixUserList().toImmutableList(),
-            )
+                searchResults = UserSearchResultState.Results(aMatrixUserList().toImmutableList()),
+            ),
+            aUserListState().copy(
+                isSearchActive = true,
+                searchQuery = "something-with-no-results",
+                searchResults = UserSearchResultState.NoResults
+            ),
         )
 }
 
 fun aUserListState() = UserListState(
     isSearchActive = false,
     searchQuery = "",
-    searchResults = persistentListOf(),
+    searchResults = UserSearchResultState.NotSearching,
     selectedUsers = persistentListOf(),
     selectionMode = SelectionMode.Single,
     eventSink = {}

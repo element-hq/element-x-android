@@ -2,7 +2,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"o persoană"</item>
-    <item quantity="few"></item>
     <item quantity="other">"%1$d persoane"</item>
   </plurals>
   <string name="screen_room_details_encryption_enabled_subtitle">"Mesajele sunt securizate cu încuietori. Doar dumneavoastră și destinatarii aveți cheile unice pentru a le debloca."</string>

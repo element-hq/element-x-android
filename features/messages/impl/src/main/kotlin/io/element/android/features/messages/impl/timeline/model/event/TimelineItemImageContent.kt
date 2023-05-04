@@ -23,4 +23,6 @@ data class TimelineItemImageContent(
     val imageMeta: MediaResolver.Meta,
     val blurhash: String?,
     val aspectRatio: Float
-) : TimelineItemEventContent
+) : TimelineItemEventContent{
+    override val type: String = "TimelineItemImageContent"
+}

@@ -35,7 +35,6 @@ dependencies {
     kspTest(libs.showkase.processor)
 
     implementation(libs.showkase)
-    ksp(libs.showkase.processor)
 
     allLibrariesImpl()
     allFeaturesImpl(rootDir)

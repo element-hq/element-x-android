@@ -26,10 +26,13 @@ import io.element.android.features.userlist.api.UserListDataSource
 import io.element.android.features.userlist.api.UserListDataStore
 import io.element.android.features.userlist.api.UserListPresenter
 import io.element.android.features.userlist.api.UserListPresenterArgs
+import io.element.android.features.userlist.api.UserSearchResultState
 import io.element.android.features.userlist.impl.DefaultUserListPresenter
 import io.element.android.features.userlist.test.FakeUserListDataSource
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.internal.toImmutableList
@@ -37,6 +40,8 @@ import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class RoomMemberListPresenterTests {
+
+    private val testCoroutineDispatchers = testCoroutineDispatchers()
 
     @Test
     fun `present - search is done automatically on start, but is async`() = runTest {
@@ -52,14 +57,21 @@ class RoomMemberListPresenterTests {
                 userListDataStore: UserListDataStore,
             ) = DefaultUserListPresenter(args, userListDataSource, userListDataStore)
         }
-        val presenter = RoomMemberListPresenter(userListFactory, userListDataSource, userListDataStore)
+        val fakeRoom = FakeMatrixRoom()
+        val presenter = RoomMemberListPresenter(
+            userListPresenterFactory = userListFactory,
+            userListDataSource = userListDataSource,
+            userListDataStore = userListDataStore,
+            room = fakeRoom,
+            coroutineDispatchers = testCoroutineDispatchers
+        )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             Truth.assertThat(initialState.allUsers).isInstanceOf(Async.Loading::class.java)
             Truth.assertThat(initialState.userListState.isSearchActive).isFalse()
-            Truth.assertThat(initialState.userListState.searchResults).isEmpty()
+            Truth.assertThat(initialState.userListState.searchResults).isEqualTo(UserSearchResultState.NotSearching)
             Truth.assertThat(initialState.userListState.selectionMode).isEqualTo(SelectionMode.Single)
 
             val loadedState = awaitItem()

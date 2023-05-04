@@ -63,10 +63,9 @@ import org.junit.Test
             Truth.assertThat(initialState.matrixUser).isNull()
             val withUserState = awaitItem()
             Truth.assertThat(withUserState.matrixUser).isNotNull()
-            Truth.assertThat(withUserState.matrixUser!!.id).isEqualTo(A_USER_ID)
-            Truth.assertThat(withUserState.matrixUser!!.username).isEqualTo(A_USER_NAME)
-            Truth.assertThat(withUserState.matrixUser!!.avatarData.name).isEqualTo(A_USER_NAME)
-            Truth.assertThat(withUserState.matrixUser!!.avatarData.url).isEqualTo(AN_AVATAR_URL)
+            Truth.assertThat(withUserState.matrixUser!!.userId).isEqualTo(A_USER_ID)
+            Truth.assertThat(withUserState.matrixUser!!.displayName).isEqualTo(A_USER_NAME)
+            Truth.assertThat(withUserState.matrixUser!!.avatarUrl).isEqualTo(AN_AVATAR_URL)
         }
     }
 
@@ -92,8 +91,6 @@ import org.junit.Test
             Truth.assertThat(initialState.matrixUser).isNull()
             val withUserState = awaitItem()
             Truth.assertThat(withUserState.matrixUser).isNotNull()
-            // username fallback to user id value
-            Truth.assertThat(withUserState.matrixUser!!.username).isEqualTo(A_USER_ID.value)
         }
     }
 

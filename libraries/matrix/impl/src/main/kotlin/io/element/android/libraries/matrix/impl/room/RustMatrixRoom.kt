@@ -17,17 +17,19 @@
 package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -38,16 +40,20 @@ import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 import org.matrix.rustcomponents.sdk.UpdateSummary
 import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
-import org.matrix.rustcomponents.sdk.RoomMember as RustRoomMember
 
 class RustMatrixRoom(
-    private val currentUserId: UserId,
+    override val sessionId: SessionId,
     private val slidingSyncUpdateFlow: Flow<UpdateSummary>,
     private val slidingSyncRoom: SlidingSyncRoom,
     private val innerRoom: Room,
     private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : MatrixRoom {
+
+    override val membersStateFlow: StateFlow<MatrixRoomMembersState>
+        get() = _membersStateFlow
+
+    private var _membersStateFlow = MutableStateFlow<MatrixRoomMembersState>(MatrixRoomMembersState.Unknown)
 
     private val timeline by lazy {
         RustMatrixTimeline(
@@ -57,33 +63,6 @@ class RustMatrixRoom(
             coroutineScope = coroutineScope,
             coroutineDispatchers = coroutineDispatchers
         )
-    }
-
-    private var membersFlow = MutableStateFlow<List<RoomMember>>(emptyList())
-
-    override fun members(): Flow<List<RoomMember>> {
-        return membersFlow.onSubscription { updateMembers() }
-    }
-
-    override fun updateMembers() {
-        val updatedMembers = tryOrNull {
-            innerRoom.members().map(RoomMemberMapper::map)
-        } ?: emptyList()
-        membersFlow.tryEmit(updatedMembers)
-    }
-
-    override fun getMember(userId: UserId): Flow<RoomMember?> {
-        return membersFlow.map { members -> members.find { it.userId == userId } }
-    }
-
-    override fun getDmMember(): Flow<RoomMember?> {
-        return membersFlow.map { members ->
-            if (members.size == 2 && isDirect && isEncrypted) {
-                members.find { it.userId != currentUserId }
-            } else {
-                null
-            }
-        }
     }
 
     override fun syncUpdateFlow(): Flow<Long> {
@@ -148,9 +127,16 @@ class RustMatrixRoom(
     override val isDirect: Boolean
         get() = innerRoom.isDirect()
 
-    override suspend fun fetchMembers(): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun updateMembers(): Result<Unit> = withContext(coroutineDispatchers.io) {
+        val currentState = _membersStateFlow.value
+        val currentMembers = currentState.roomMembers()
+        _membersStateFlow.value = MatrixRoomMembersState.Pending(prevRoomMembers = currentMembers)
         runCatching {
-            innerRoom.fetchMembers()
+            innerRoom.members().map(RoomMemberMapper::map)
+        }.map {
+            _membersStateFlow.value = MatrixRoomMembersState.Ready(it)
+        }.onFailure {
+            _membersStateFlow.value = MatrixRoomMembersState.Error(prevRoomMembers = currentMembers, failure = it)
         }
     }
 
@@ -206,31 +192,15 @@ class RustMatrixRoom(
     }
 
     override suspend fun acceptInvitation(): Result<Unit> = withContext(coroutineDispatchers.io) {
-        kotlin.runCatching {
+        runCatching {
             innerRoom.acceptInvitation()
         }
     }
 
     override suspend fun rejectInvitation(): Result<Unit> = withContext(coroutineDispatchers.io) {
-        kotlin.runCatching {
+        runCatching {
             innerRoom.rejectInvitation()
         }
     }
 
-
-    override suspend fun ignoreUser(userId: UserId): Result<Unit> {
-        return runCatching {
-            getRustMember(userId)?.ignore() ?: error("No member with userId $userId exists in room $roomId")
-        }
-    }
-
-    override suspend fun unignoreUser(userId: UserId): Result<Unit> {
-        return runCatching {
-            getRustMember(userId)?.unignore() ?: error("No member with userId $userId exists in room $roomId")
-        }
-    }
-
-    private fun getRustMember(userId: UserId): RustRoomMember? {
-        return innerRoom.members().find { it.userId() == userId.value }
-    }
 }

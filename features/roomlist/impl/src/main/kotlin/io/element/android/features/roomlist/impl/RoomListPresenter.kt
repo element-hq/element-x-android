@@ -35,16 +35,15 @@ import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.handleSnackbarMessage
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomSummary
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
-import io.element.android.libraries.matrix.ui.model.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -147,17 +146,10 @@ class RoomListPresenter @Inject constructor(
     private fun CoroutineScope.initialLoad(matrixUser: MutableState<MatrixUser?>) = launch {
         val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
         val userDisplayName = client.loadUserDisplayName().getOrNull()
-        val avatarData =
-            AvatarData(
-                id = client.sessionId.value,
-                name = userDisplayName,
-                url = userAvatarUrl,
-                size = AvatarSize.SMALL
-            )
         matrixUser.value = MatrixUser(
-            id = UserId(client.sessionId.value),
-            username = userDisplayName ?: client.sessionId.value,
-            avatarData = avatarData,
+            userId = UserId(client.sessionId.value),
+            displayName = userDisplayName,
+            avatarUrl = userAvatarUrl,
         )
     }
 
