@@ -25,6 +25,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,8 +57,9 @@ fun TextComposer(
     if (LocalInspectionMode.current) {
         FakeComposer(modifier)
     } else {
+        val focusRequester = FocusRequester()
         AndroidView(
-            modifier = modifier,
+            modifier = modifier.focusRequester(focusRequester),
             factory = { context ->
                 RichTextComposerLayout(context).apply {
                     // Sets up listeners for View -> Compose communication

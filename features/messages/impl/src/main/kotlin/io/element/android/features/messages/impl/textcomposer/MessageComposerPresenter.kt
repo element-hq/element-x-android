@@ -19,13 +19,17 @@ package io.element.android.features.messages.impl.textcomposer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.core.data.toStableCharSequence
+import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -36,6 +40,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
+@SingleIn(RoomScope::class)
 class MessageComposerPresenter @Inject constructor(
     private val appCoroutineScope: CoroutineScope,
     private val room: MatrixRoom,
@@ -47,9 +52,20 @@ class MessageComposerPresenter @Inject constructor(
     override fun present(): MessageComposerState {
         val localCoroutineScope = rememberCoroutineScope()
 
-        // Example usage of custom pickers
+        val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker(onResult = { uri ->
+            Timber.d("Media picked from $uri")
+        })
+
+        val filesPicker = mediaPickerProvider.registerFilePicker(onResult = { uri ->
+            Timber.d("File picked from $uri")
+        })
+
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(onResult = { uri ->
             Timber.d("Photo saved at $uri")
+        })
+
+        val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker(onResult = { uri ->
+            Timber.d("Video saved at $uri")
         })
 
         val isFullScreen = rememberSaveable {
@@ -61,6 +77,8 @@ class MessageComposerPresenter @Inject constructor(
         val composerMode: MutableState<MessageComposerMode> = rememberSaveable {
             mutableStateOf(MessageComposerMode.Normal(""))
         }
+
+        var attachmentSourcePicker: AttachmentSourcePicker? by remember { mutableStateOf(null) }
 
         LaunchedEffect(composerMode.value) {
             when (val modeValue = composerMode.value) {
@@ -80,19 +98,45 @@ class MessageComposerPresenter @Inject constructor(
 
                 is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(event.message, composerMode, text)
                 is MessageComposerEvents.SetMode -> composerMode.value = event.composerMode
-                MessageComposerEvents.TakePhoto -> localCoroutineScope.launch {
-                    if (featureFlagService.isFeatureEnabled(FeatureFlags.ShowMediaUploadingFlow)) {
-                        cameraPhotoPicker.launch()
-                    }
-                }}
+                MessageComposerEvents.AddAttachment -> localCoroutineScope.ifMediaPickersEnabled {
+                    attachmentSourcePicker = AttachmentSourcePicker.AllMedia
+                }
+                MessageComposerEvents.DismissAttachmentMenu -> attachmentSourcePicker = null
+                MessageComposerEvents.PickAttachmentSource.FromGallery -> localCoroutineScope.ifMediaPickersEnabled {
+                    attachmentSourcePicker = null
+                    galleryMediaPicker.launch()
+                }
+                MessageComposerEvents.PickAttachmentSource.FromFiles -> localCoroutineScope.ifMediaPickersEnabled {
+                    attachmentSourcePicker = null
+                    filesPicker.launch()
+                }
+                MessageComposerEvents.PickAttachmentSource.FromCamera -> localCoroutineScope.ifMediaPickersEnabled {
+                    attachmentSourcePicker = AttachmentSourcePicker.Camera
+                }
+                MessageComposerEvents.PickCameraAttachmentSource.Photo -> localCoroutineScope.ifMediaPickersEnabled {
+                    attachmentSourcePicker = null
+                    cameraPhotoPicker.launch()
+                }
+                MessageComposerEvents.PickCameraAttachmentSource.Video -> localCoroutineScope.ifMediaPickersEnabled {
+                    attachmentSourcePicker = null
+                    cameraVideoPicker.launch()
+                }
+            }
         }
 
         return MessageComposerState(
             text = text.value,
             isFullScreen = isFullScreen.value,
             mode = composerMode.value,
+            attachmentSourcePicker = attachmentSourcePicker,
             eventSink = ::handleEvents
         )
+    }
+
+    private fun CoroutineScope.ifMediaPickersEnabled(action: suspend () -> Unit) = launch {
+        if (featureFlagService.isFeatureEnabled(FeatureFlags.ShowMediaUploadingFlow)) {
+            action()
+        }
     }
 
     private fun MutableState<MessageComposerMode>.setToNormal() {

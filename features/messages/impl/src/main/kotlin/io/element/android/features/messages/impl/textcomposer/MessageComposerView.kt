@@ -54,7 +54,7 @@ fun MessageComposerView(
         onCloseSpecialMode = ::onCloseSpecialMode,
         onComposerTextChange = ::onComposerTextChange,
         onAddAttachment = {
-            state.eventSink(MessageComposerEvents.TakePhoto)
+            state.eventSink(MessageComposerEvents.AddAttachment)
         },
         composerCanSendMessage = state.isSendButtonVisible,
         composerText = state.text?.charSequence?.toString(),

@@ -128,12 +128,6 @@
   <string name="room_timeline_beginning_of_room_no_name">"Este es el principio de esta conversación."</string>
   <string name="room_timeline_read_marker_title">"Nuevos"</string>
   <string name="screen_report_content_block_user_hint">"Marque si quieres ocultar todos los mensajes actuales y futuros de este usuario"</string>
-  <string name="screen_room_member_details_block_alert_action">"Bloquear"</string>
-  <string name="screen_room_member_details_block_alert_description">"Los usuarios bloqueados no podrán enviarte mensajes y se ocultarán todos sus mensajes. Puede revertir esta acción en cualquier momento."</string>
-  <string name="screen_room_member_details_block_user">"Bloquear usuario"</string>
-  <string name="screen_room_member_details_unblock_alert_action">"Desbloquear"</string>
-  <string name="screen_room_member_details_unblock_alert_description">"Al desbloquear al usuario, podrás volver a ver todos sus mensajes."</string>
-  <string name="screen_room_member_details_unblock_user">"Desbloquear usuario"</string>
   <string name="settings_rageshake">"Agitar con fuerza"</string>
   <string name="settings_rageshake_detection_threshold">"Umbral de detección"</string>
   <string name="settings_title_general">"General"</string>

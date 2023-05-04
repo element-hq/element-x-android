@@ -21,6 +21,7 @@
 
 package io.element.android.features.messages.impl
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,6 +36,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ListItem
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -43,11 +45,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,20 +62,24 @@ import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.textcomposer.AttachmentSourcePicker
+import io.element.android.features.messages.impl.textcomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.textcomposer.MessageComposerView
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
+import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
+import io.element.android.libraries.designsystem.theme.components.ModalBottomSheetLayout
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
-import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -86,8 +95,23 @@ fun MessagesView(
         initialValue = ModalBottomSheetValue.Hidden,
     )
     val snackbarHostState = remember { SnackbarHostState() }
-    val focusManager = LocalFocusManager.current
+    val composerState = state.composerState
+    val initialBottomSheetState = if (LocalInspectionMode.current && composerState.attachmentSourcePicker != null) {
+        ModalBottomSheetValue.Expanded
+    } else {
+        ModalBottomSheetValue.Hidden
+    }
+    val bottomSheetState = rememberModalBottomSheetState(initialValue = initialBottomSheetState)
     val coroutineScope = rememberCoroutineScope()
+
+    BackHandler(enabled = bottomSheetState.isVisible) {
+        coroutineScope.launch {
+            bottomSheetState.hide()
+        }
+    }
+
+    // This is needed because the composer is inside an AndroidView that can't be affected by the FocusManager in Compose
+    val localView = LocalView.current
 
     LogCompositions(tag = "MessagesScreen", msg = "Content")
 
@@ -97,7 +121,7 @@ fun MessagesView(
 
     fun onMessageLongClicked(event: TimelineItem.Event) {
         Timber.v("OnMessageLongClicked= ${event.id}")
-        focusManager.clearFocus(force = true)
+        localView.hideKeyboard()
         state.actionListState.eventSink(ActionListEvents.ComputeForMessage(event))
         coroutineScope.launch {
             itemActionsBottomSheetState.show()
@@ -108,41 +132,67 @@ fun MessagesView(
         state.eventSink(MessagesEvents.HandleAction(action, event))
     }
 
-    Scaffold(
-        modifier = modifier,
-        contentWindowInsets = WindowInsets.statusBars,
-        topBar = {
-            Column {
-                ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
-                MessagesViewTopBar(
-                    roomTitle = state.roomName,
-                    roomAvatar = state.roomAvatar,
-                    onBackPressed = onBackPressed,
-                    onRoomDetailsClicked = onRoomDetailsClicked,
+    LaunchedEffect(composerState.attachmentSourcePicker) {
+        if (composerState.attachmentSourcePicker != null) {
+            // We need to use this instead of `LocalFocusManager.clearFocus()` to hide the keyboard when focus is on an Android View
+            localView.hideKeyboard()
+            bottomSheetState.show()
+        } else {
+            bottomSheetState.hide()
+        }
+    }
+    // Send 'DismissAttachmentMenu' event when the bottomsheet was just hidden
+    LaunchedEffect(bottomSheetState.isVisible) {
+        if (!bottomSheetState.isVisible) {
+            composerState.eventSink(MessageComposerEvents.DismissAttachmentMenu)
+        }
+    }
+    ModalBottomSheetLayout(
+        sheetState = bottomSheetState,
+        displayHandle = true,
+        sheetContent = {
+            MediaPickerMenu(
+                addAttachmentSourcePicker = composerState.attachmentSourcePicker,
+                eventSink = composerState.eventSink
+            )
+        }
+    ) {
+        Scaffold(
+            modifier = modifier,
+            contentWindowInsets = WindowInsets.statusBars,
+            topBar = {
+                Column {
+                    ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
+                    MessagesViewTopBar(
+                        roomTitle = state.roomName,
+                        roomAvatar = state.roomAvatar,
+                        onBackPressed = onBackPressed,
+                        onRoomDetailsClicked = onRoomDetailsClicked,
+                    )
+                }
+            },
+            content = { padding ->
+                MessagesViewContent(
+                    state = state,
+                    modifier = Modifier.padding(padding),
+                    onMessageClicked = ::onMessageClicked,
+                    onMessageLongClicked = ::onMessageLongClicked
                 )
-            }
-        },
-        content = { padding ->
-            MessagesViewContent(
-                state = state,
-                modifier = Modifier.padding(padding),
-                onMessageClicked = ::onMessageClicked,
-                onMessageLongClicked = ::onMessageLongClicked
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                snackbarHostState,
-                modifier = Modifier.navigationBarsPadding()
-            )
-        },
-    )
+            },
+            snackbarHost = {
+                SnackbarHost(
+                    snackbarHostState,
+                    modifier = Modifier.navigationBarsPadding()
+                )
+            },
+        )
 
-    ActionListView(
-        state = state.actionListState,
-        modalBottomSheetState = itemActionsBottomSheetState,
-        onActionSelected = ::onActionSelected
-    )
+        ActionListView(
+            state = state.actionListState,
+            modalBottomSheetState = itemActionsBottomSheetState,
+            onActionSelected = ::onActionSelected
+        )
+    }
 }
 
 @Composable
@@ -214,6 +264,53 @@ fun MessagesViewTopBar(
         },
         windowInsets = WindowInsets(0.dp)
     )
+}
+
+@Composable
+internal fun MediaPickerMenu(
+    addAttachmentSourcePicker: AttachmentSourcePicker?,
+    eventSink: (MessageComposerEvents) -> Unit,
+) {
+    when (addAttachmentSourcePicker) {
+        null -> return
+        AttachmentSourcePicker.AllMedia -> AllMediaSourcePickerMenu(eventSink = eventSink)
+        AttachmentSourcePicker.Camera -> CameraSourcePickerMenu(eventSink = eventSink)
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+internal fun AllMediaSourcePickerMenu(
+    eventSink: (MessageComposerEvents) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier) {
+        ListItem(Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery) }) {
+            Text(stringResource(R.string.screen_room_attachment_source_gallery))
+        }
+        ListItem(Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles) }) {
+            Text(stringResource(R.string.screen_room_attachment_source_files))
+        }
+        ListItem(Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.FromCamera) }) {
+            Text(stringResource(R.string.screen_room_attachment_source_camera))
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+internal fun CameraSourcePickerMenu(
+    eventSink: (MessageComposerEvents) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier) {
+        ListItem(Modifier.clickable { eventSink(MessageComposerEvents.PickCameraAttachmentSource.Photo) }) {
+            Text(stringResource(R.string.screen_room_attachment_source_camera_photo))
+        }
+        ListItem(Modifier.clickable { eventSink(MessageComposerEvents.PickCameraAttachmentSource.Video) }) {
+            Text(stringResource(R.string.screen_room_attachment_source_camera_video))
+        }
+    }
 }
 
 @Preview
