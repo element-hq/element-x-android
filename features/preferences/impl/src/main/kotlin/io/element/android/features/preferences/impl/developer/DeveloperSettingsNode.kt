@@ -17,7 +17,6 @@
 package io.element.android.features.preferences.impl.developer
 
 import android.app.Activity
-import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -41,10 +40,9 @@ class DeveloperSettingsNode @AssistedInject constructor(
     override fun View(modifier: Modifier) {
         val activity = LocalContext.current as Activity
         fun openShowkase() {
-            val intent = Intent(activity, ShowkaseBrowserActivity::class.java)
-            intent.putExtra(
-                "SHOWKASE_ROOT_MODULE",
-                "io.element.android.libraries.designsystem.showkase.DesignSystemShowkaseRootModule"
+            val intent = ShowkaseBrowserActivity.getIntent(
+                context = activity,
+                rootModuleCanonicalName = "io.element.android.libraries.designsystem.showkase.DesignSystemShowkaseRootModule"
             )
             activity.startActivity(intent)
         }
