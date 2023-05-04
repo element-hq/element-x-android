@@ -120,13 +120,14 @@
   <string name="leave_room_alert_private_subtitle">"Sunteți sigur că vrei să părăsiți această cameră? Această cameră nu este publică și nu va veti putea alătura din nou fără o invitație."</string>
   <string name="leave_room_alert_subtitle">"Sunteți sigur că vreți să părăsiți camera?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
+    <!-- These lines should cause a lint issue -->
   <plurals name="common_member_count">
-    <item quantity="one">"%1$d membru"</item>
-    <item quantity="other">"%1$d membri"</item>
+    <item quantity="one">"%1$d membru!"</item>
+    <item quantity="other">"%1$d membri!"</item>
   </plurals>
   <plurals name="room_timeline_state_changes">
-    <item quantity="one">"%1$d schimbare a camerii"</item>
-    <item quantity="other">"%1$d schimbări ale camerei"</item>
+    <item quantity="one">"%1$d schimbare a camerii!"</item>
+    <item quantity="other">"%1$d schimbări ale camerei!"</item>
   </plurals>
   <string name="preference_rageshake">"Rageshake pentru a raporta erori"</string>
   <string name="rageshake_dialog_content">"Se pare că scuturați telefonul de frustrare. Doriți să deschdeți ecranul de raportare a unei erori?"</string>
