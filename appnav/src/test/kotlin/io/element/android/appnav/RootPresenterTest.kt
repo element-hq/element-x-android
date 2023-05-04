@@ -44,21 +44,7 @@ class RootPresenterTest {
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.isShowkaseButtonVisible).isTrue()
-        }
-    }
-
-    @Test
-    fun `present - hide showkase button`() = runTest {
-        val presenter = createPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
-            presenter.present()
-        }.test {
-            skipItems(1)
-            val initialState = awaitItem()
-            assertThat(initialState.isShowkaseButtonVisible).isTrue()
-            initialState.eventSink.invoke(RootEvents.HideShowkaseButton)
-            assertThat(awaitItem().isShowkaseButtonVisible).isFalse()
+            assertThat(initialState.crashDetectionState.crashDetected).isFalse()
         }
     }
 

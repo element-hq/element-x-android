@@ -16,6 +16,4 @@
 
 package io.element.android.appnav.root
 
-sealed interface RootEvents {
-    object HideShowkaseButton : RootEvents
-}
+sealed interface RootEvents

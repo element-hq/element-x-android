@@ -24,12 +24,10 @@ open class RootStateProvider : PreviewParameterProvider<RootState> {
     override val values: Sequence<RootState>
         get() = sequenceOf(
             aRootState().copy(
-                isShowkaseButtonVisible = true,
                 rageshakeDetectionState = aRageshakeDetectionState().copy(showDialog = false),
                 crashDetectionState = aCrashDetectionState().copy(crashDetected = true),
             ),
             aRootState().copy(
-                isShowkaseButtonVisible = true,
                 rageshakeDetectionState = aRageshakeDetectionState().copy(showDialog = true),
                 crashDetectionState = aCrashDetectionState().copy(crashDetected = false),
             )
@@ -37,7 +35,6 @@ open class RootStateProvider : PreviewParameterProvider<RootState> {
 }
 
 fun aRootState() = RootState(
-    isShowkaseButtonVisible = false,
     rageshakeDetectionState = aRageshakeDetectionState(),
     crashDetectionState = aCrashDetectionState(),
     eventSink = {}

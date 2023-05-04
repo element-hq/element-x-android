@@ -16,8 +16,12 @@
 
 package io.element.android.features.preferences.impl.developer
 
+import android.app.Activity
+import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import com.airbnb.android.showkase.ui.ShowkaseBrowserActivity
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -35,11 +39,22 @@ class DeveloperSettingsNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
+        val activity = LocalContext.current as Activity
+        fun openShowkase() {
+            val intent = Intent(activity, ShowkaseBrowserActivity::class.java)
+            intent.putExtra(
+                "SHOWKASE_ROOT_MODULE",
+                "io.element.android.libraries.designsystem.showkase.DesignSystemShowkaseRootModule"
+            )
+            activity.startActivity(intent)
+        }
+
         val state = presenter.present()
         DeveloperSettingsView(
             state = state,
             modifier = modifier,
-            onBackPressed = this::navigateUp
+            onOpenShowkase = ::openShowkase,
+            onBackPressed = ::navigateUp
         )
     }
 }

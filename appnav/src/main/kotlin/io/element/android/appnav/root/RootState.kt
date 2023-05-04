@@ -22,7 +22,6 @@ import io.element.android.features.rageshake.api.detection.RageshakeDetectionSta
 
 @Immutable
 data class RootState(
-    val isShowkaseButtonVisible: Boolean,
     val rageshakeDetectionState: RageshakeDetectionState,
     val crashDetectionState: CrashDetectionState,
     val eventSink: (RootEvents) -> Unit

@@ -37,7 +37,6 @@ fun RootView(
     state: RootState,
     modifier: Modifier = Modifier,
     onOpenBugReport: () -> Unit = {},
-    onOpenShowkase: () -> Unit = {},
     children: @Composable BoxScope.() -> Unit,
 ) {
     Box(
@@ -54,11 +53,6 @@ fun RootView(
             onOpenBugReport.invoke()
         }
 
-        ShowkaseButton(
-            isVisible = state.isShowkaseButtonVisible,
-            onCloseClicked = { eventSink(RootEvents.HideShowkaseButton) },
-            onClick = onOpenShowkase
-        )
         RageshakeDetectionView(
             state = state.rageshakeDetectionState,
             onOpenBugReport = ::onOpenBugReport,
