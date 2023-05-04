@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import io.element.android.features.invitelist.api.SeenInvitesStore
 import io.element.android.features.invitelist.impl.model.InviteListInviteSummary
 import io.element.android.features.invitelist.impl.model.InviteSender
@@ -52,10 +53,10 @@ class InviteListPresenter @Inject constructor(
             .roomSummaries()
             .collectAsState()
 
-        val seenInvites = remember { mutableStateOf<Set<RoomId>>(emptySet()) }
+        var seenInvites by remember { mutableStateOf<Set<RoomId>>(emptySet()) }
 
         LaunchedEffect(Unit) {
-            seenInvites.value = store.seenRoomIds().first()
+            seenInvites = store.seenRoomIds().first()
         }
 
         LaunchedEffect(invites) {
@@ -108,7 +109,9 @@ class InviteListPresenter @Inject constructor(
         val inviteList = remember(seenInvites, invites) {
             invites
                 .filterIsInstance<RoomSummary.Filled>()
-                .map { it.toInviteSummary(seenInvites.value.contains(it.details.roomId)) }
+                .map {
+                    it.toInviteSummary(seenInvites.contains(it.details.roomId))
+                }
                 .toPersistentList()
         }
 

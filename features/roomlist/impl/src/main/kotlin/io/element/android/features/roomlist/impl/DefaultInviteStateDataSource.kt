@@ -17,21 +17,27 @@
 package io.element.android.features.roomlist.impl
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.invitelist.api.SeenInvitesStore
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomSummary
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
 class DefaultInviteStateDataSource @Inject constructor(
     private val client: MatrixClient,
     private val seenInvitesStore: SeenInvitesStore,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) : InviteStateDataSource {
 
     @Composable
@@ -45,13 +51,19 @@ class DefaultInviteStateDataSource @Inject constructor(
             .seenRoomIds()
             .collectAsState(initial = emptySet())
 
-        return remember(invites, seenInvites) {
-            when {
-                invites.isEmpty() -> InvitesState.NoInvites
-                seenInvites.containsAll(invites.roomIds) -> InvitesState.SeenInvites
-                else -> InvitesState.NewInvites
+        var state by remember { mutableStateOf(InvitesState.NoInvites) }
+
+        LaunchedEffect(invites, seenInvites) {
+            withContext(coroutineDispatchers.computation) {
+                state = when {
+                    invites.isEmpty() -> InvitesState.NoInvites
+                    seenInvites.containsAll(invites.roomIds) -> InvitesState.SeenInvites
+                    else -> InvitesState.NewInvites
+                }
             }
         }
+
+        return state
     }
 }
 

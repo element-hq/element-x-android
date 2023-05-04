@@ -26,16 +26,20 @@ import io.element.android.features.roomlist.impl.DefaultInviteStateDataSource
 import io.element.android.features.roomlist.impl.DefaultRoomLastMessageFormatter
 import io.element.android.features.roomlist.impl.RoomListPresenter
 import io.element.android.features.roomlist.impl.RoomListView
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.impl.DateFormatters
 import io.element.android.libraries.dateformatter.impl.DefaultLastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.impl.LocalDateTimeProvider
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import java.util.Locale
+import java.util.concurrent.Executors
 
 class RoomListScreen(
     context: Context,
@@ -54,7 +58,16 @@ class RoomListScreen(
         sessionVerificationService = sessionVerificationService,
         networkMonitor = NetworkMonitorImpl(context),
         snackbarDispatcher = SnackbarDispatcher(),
-        inviteStateDataSource = DefaultInviteStateDataSource(matrixClient, DefaultSeenInvitesStore(context))
+        inviteStateDataSource = DefaultInviteStateDataSource(
+            matrixClient,
+            DefaultSeenInvitesStore(context),
+            CoroutineDispatchers(
+                io = Dispatchers.IO,
+                computation = Dispatchers.Default,
+                main = Dispatchers.Main,
+                diffUpdateDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+            )
+        )
     )
 
     @Composable

@@ -65,6 +65,7 @@ dependencies {
     testImplementation(projects.libraries.permissions.noop)
     testImplementation(projects.features.invitelist.test)
     testImplementation(projects.features.networkmonitor.test)
+    testImplementation(projects.tests.testutils)
 
     androidTestImplementation(libs.test.junitext)
 }

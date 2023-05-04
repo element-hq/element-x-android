@@ -429,6 +429,7 @@ class InviteListPresenterTests {
             awaitItem()
 
             invitesDataSource.postRoomSummary(listOf(aRoomSummary(), aRoomSummary(A_ROOM_ID_2)))
+            skipItems(1)
 
             val withInviteState = awaitItem()
             Truth.assertThat(withInviteState.inviteList.size).isEqualTo(2)

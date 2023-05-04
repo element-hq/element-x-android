@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -38,7 +39,7 @@ internal class DefaultInviteStateDataSourceTest {
         val matrixDataSource = FakeRoomSummaryDataSource()
         val client = FakeMatrixClient(invitesDataSource = matrixDataSource)
         val seenStore = FakeSeenInvitesStore()
-        val dataSource = DefaultInviteStateDataSource(client, seenStore)
+        val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers())
 
         moleculeFlow(RecompositionClock.Immediate) {
             dataSource.inviteState()
@@ -53,11 +54,12 @@ internal class DefaultInviteStateDataSourceTest {
         matrixDataSource.postRoomSummary(listOf(aRoomSummaryFilled(roomId = A_ROOM_ID)))
         val client = FakeMatrixClient(invitesDataSource = matrixDataSource)
         val seenStore = FakeSeenInvitesStore()
-        val dataSource = DefaultInviteStateDataSource(client, seenStore)
+        val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers())
 
         moleculeFlow(RecompositionClock.Immediate) {
             dataSource.inviteState()
         }.test {
+            skipItems(1)
             Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NewInvites)
         }
     }
@@ -69,7 +71,7 @@ internal class DefaultInviteStateDataSourceTest {
         val client = FakeMatrixClient(invitesDataSource = matrixDataSource)
         val seenStore = FakeSeenInvitesStore()
         seenStore.publishRoomIds(setOf(A_ROOM_ID))
-        val dataSource = DefaultInviteStateDataSource(client, seenStore)
+        val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers())
 
         moleculeFlow(RecompositionClock.Immediate) {
             dataSource.inviteState()
@@ -86,7 +88,7 @@ internal class DefaultInviteStateDataSourceTest {
         val client = FakeMatrixClient(invitesDataSource = matrixDataSource)
         val seenStore = FakeSeenInvitesStore()
         seenStore.publishRoomIds(setOf(A_ROOM_ID))
-        val dataSource = DefaultInviteStateDataSource(client, seenStore)
+        val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers())
 
         moleculeFlow(RecompositionClock.Immediate) {
             dataSource.inviteState()
@@ -102,7 +104,7 @@ internal class DefaultInviteStateDataSourceTest {
         val matrixDataSource = FakeRoomSummaryDataSource()
         val client = FakeMatrixClient(invitesDataSource = matrixDataSource)
         val seenStore = FakeSeenInvitesStore()
-        val dataSource = DefaultInviteStateDataSource(client, seenStore)
+        val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers())
 
         moleculeFlow(RecompositionClock.Immediate) {
             dataSource.inviteState()
@@ -112,18 +114,22 @@ internal class DefaultInviteStateDataSourceTest {
 
             // When a single invite is received, state should be NewInvites
             matrixDataSource.postRoomSummary(listOf(aRoomSummaryFilled(roomId = A_ROOM_ID)))
+            skipItems(1)
             Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NewInvites)
 
             // If that invite is marked as seen, then the state becomes SeenInvites
             seenStore.publishRoomIds(setOf(A_ROOM_ID))
+            skipItems(1)
             Truth.assertThat(awaitItem()).isEqualTo(InvitesState.SeenInvites)
 
             // Another new invite resets it to NewInvites
             matrixDataSource.postRoomSummary(listOf(aRoomSummaryFilled(roomId = A_ROOM_ID), aRoomSummaryFilled(roomId = A_ROOM_ID_2)))
+            skipItems(1)
             Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NewInvites)
 
             // All of the invites going away reverts to NoInvites
             matrixDataSource.postRoomSummary(emptyList())
+            skipItems(1)
             Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NoInvites)
         }
     }
