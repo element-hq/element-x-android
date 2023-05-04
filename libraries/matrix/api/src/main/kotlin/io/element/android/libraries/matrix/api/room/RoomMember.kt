@@ -34,6 +34,7 @@ fun RoomMember.toMatrixUser() = MatrixUser(
     userId = userId,
     displayName = displayName,
     avatarUrl = avatarUrl,
+    isPending = membership == RoomMembershipState.INVITE,
 )
 
 enum class RoomMembershipState {

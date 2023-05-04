@@ -22,6 +22,6 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
 data class RoomMemberListState(
-    val allUsers: Async<ImmutableList<MatrixUser>>,
+    val allUsers: Async<UserList>,
     val userListState: UserListState,
 )

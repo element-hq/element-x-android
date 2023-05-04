@@ -55,11 +55,15 @@ class RoomMemberListPresenter @Inject constructor(
     @Composable
     override fun present(): RoomMemberListState {
         val userListState = userListPresenter.present()
-        val allUsers = remember { mutableStateOf<Async<ImmutableList<MatrixUser>>>(Async.Loading()) }
+        val allUsers = remember { mutableStateOf<Async<UserList>>(Async.Loading()) }
 
         LaunchedEffect(Unit) {
             withContext(coroutineDispatchers.io) {
-                allUsers.value = Async.Success(userListDataSource.search("").toImmutableList())
+                val users = userListDataSource.search("").partition { it.isPending }
+                allUsers.value = Async.Success(UserList(
+                    pending = users.first.toImmutableList(),
+                    members = users.second.toImmutableList(),
+                ))
             }
         }
 
@@ -70,3 +74,7 @@ class RoomMemberListPresenter @Inject constructor(
     }
 }
 
+data class UserList(
+    val pending: ImmutableList<MatrixUser>,
+    val members: ImmutableList<MatrixUser>
+)

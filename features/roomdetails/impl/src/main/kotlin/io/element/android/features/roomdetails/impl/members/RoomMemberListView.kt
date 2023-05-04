@@ -89,7 +89,7 @@ fun RoomMemberListView(
                 if (state.allUsers is Async.Success) {
                     LazyColumn(modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()) {
                         item {
-                            val memberCount = state.allUsers.state.count()
+                            val memberCount = state.allUsers.state.pending.count()
                             Text(
                                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                                 text = pluralStringResource(id = R.plurals.screen_room_member_list_header_title, count = memberCount, memberCount),
@@ -98,7 +98,24 @@ fun RoomMemberListView(
                                 textAlign = TextAlign.Start,
                             )
                         }
-                        items(state.allUsers.state) { matrixUser ->
+                        items(state.allUsers.state.pending) { matrixUser ->
+                            SearchSingleUserResultItem(
+                                modifier = Modifier.fillMaxWidth(),
+                                matrixUser = matrixUser,
+                                onClick = { onUserSelected(matrixUser) }
+                            )
+                        }
+                        item {
+                            val memberCount = state.allUsers.state.members.count()
+                            Text(
+                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                                text = pluralStringResource(id = R.plurals.screen_room_member_list_header_title, count = memberCount, memberCount),
+                                style = ElementTextStyles.Regular.callout,
+                                color = MaterialTheme.colorScheme.secondary,
+                                textAlign = TextAlign.Start,
+                            )
+                        }
+                        items(state.allUsers.state.members) { matrixUser ->
                             SearchSingleUserResultItem(
                                 modifier = Modifier.fillMaxWidth(),
                                 matrixUser = matrixUser,

@@ -28,14 +28,14 @@ import kotlinx.collections.immutable.persistentListOf
 internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMemberListState> {
     override val values: Sequence<RoomMemberListState>
         get() = sequenceOf(
-            aRoomMemberListState(allUsers = Async.Success(persistentListOf(aMatrixUser()))),
+            aRoomMemberListState(allUsers = Async.Success(UserList(pending = persistentListOf(aMatrixUser()), members = persistentListOf(aMatrixUser())))),
             aRoomMemberListState(allUsers = Async.Loading())
         )
 }
 
 internal fun aRoomMemberListState(
     searchResults: UserSearchResultState = UserSearchResultState.NotSearching,
-    allUsers: Async<ImmutableList<MatrixUser>> = Async.Uninitialized,
+    allUsers: Async<UserList> = Async.Uninitialized,
 ) =
     RoomMemberListState(
         userListState = aUserListState().copy(searchResults = searchResults),
