@@ -95,10 +95,6 @@
   <string name="room_timeline_read_marker_title">"Neu"</string>
   <string name="screen_analytics_settings_share_data">"Teile Analyse-Daten"</string>
   <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
-  <string name="screen_room_member_details_block_alert_action">"Blockieren"</string>
-  <string name="screen_room_member_details_block_user">"Nutzer blockieren"</string>
-  <string name="screen_room_member_details_unblock_alert_action">"Blockierung aufheben"</string>
-  <string name="screen_room_member_details_unblock_user">"Nutzer entblockieren"</string>
   <string name="settings_rageshake_detection_threshold">"Erkennungsschwelle"</string>
   <string name="settings_version_number">"Version: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"de"</string>
