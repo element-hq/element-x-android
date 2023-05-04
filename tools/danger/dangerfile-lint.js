@@ -6,7 +6,7 @@ import { schedule } from 'danger'
  * It covers, lint, ktlint, and detekt errors
  */
 
-const reporter = require("danger-plugin-lint-report")
+const reporter = require("@jmartinesp/danger-plugin-lint-report")
 schedule(reporter.scan({
     /**
      * File mask used to find XML checkstyle reports.
