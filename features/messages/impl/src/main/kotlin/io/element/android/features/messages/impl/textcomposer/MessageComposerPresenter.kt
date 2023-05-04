@@ -65,7 +65,7 @@ class MessageComposerPresenter @Inject constructor(
         })
 
         val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker(onResult = { uri ->
-            Timber.d("Photo saved at $uri")
+            Timber.d("Video saved at $uri")
         })
 
         val isFullScreen = rememberSaveable {

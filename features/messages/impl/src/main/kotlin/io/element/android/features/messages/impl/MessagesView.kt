@@ -134,7 +134,7 @@ fun MessagesView(
 
     LaunchedEffect(composerState.attachmentSourcePicker) {
         if (composerState.attachmentSourcePicker != null) {
-            // Instead of using
+            // We need to use this instead of `LocalFocusManager.clearFocus()` to hide the keyboard when focus is on an Android View
             localView.hideKeyboard()
             bottomSheetState.show()
         } else {
@@ -151,7 +151,7 @@ fun MessagesView(
         sheetState = bottomSheetState,
         displayHandle = true,
         sheetContent = {
-            MediaPicker(
+            MediaPickerMenu(
                 addAttachmentSourcePicker = composerState.attachmentSourcePicker,
                 eventSink = composerState.eventSink
             )
@@ -267,20 +267,20 @@ fun MessagesViewTopBar(
 }
 
 @Composable
-internal fun MediaPicker(
+internal fun MediaPickerMenu(
     addAttachmentSourcePicker: AttachmentSourcePicker?,
     eventSink: (MessageComposerEvents) -> Unit,
 ) {
     when (addAttachmentSourcePicker) {
         null -> return
-        AttachmentSourcePicker.AllMedia -> AllMediaSourcePicker(eventSink = eventSink)
-        AttachmentSourcePicker.Camera -> CameraSourcePicker(eventSink = eventSink)
+        AttachmentSourcePicker.AllMedia -> AllMediaSourcePickerMenu(eventSink = eventSink)
+        AttachmentSourcePicker.Camera -> CameraSourcePickerMenu(eventSink = eventSink)
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-internal fun AllMediaSourcePicker(
+internal fun AllMediaSourcePickerMenu(
     eventSink: (MessageComposerEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -299,7 +299,7 @@ internal fun AllMediaSourcePicker(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-internal fun CameraSourcePicker(
+internal fun CameraSourcePickerMenu(
     eventSink: (MessageComposerEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
