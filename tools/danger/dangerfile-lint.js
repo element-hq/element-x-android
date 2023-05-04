@@ -26,4 +26,5 @@ schedule(reporter.scan({
      * This can be useful if there are multiple reports being parsed to make them distinguishable.
      */
      // outputPrefix?: ""
+     removeDuplicates: true,
 }))

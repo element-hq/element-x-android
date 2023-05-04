@@ -48,7 +48,8 @@ jobs:
         run: |
           npm install --save-dev @babel/core
           npm install --save-dev @babel/plugin-transform-flow-strip-types
-          yarn add danger-plugin-lint-report --dev
+          yarn add https://github.com/jmartinesp/danger-plugin-lint-report.git --dev
+#          yarn add danger-plugin-lint-report --dev
       - name: Danger lint
         if: always()
         uses: danger/danger-js@11.2.6
