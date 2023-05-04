@@ -19,8 +19,13 @@ package io.element.android.features.userlist.api
 data class UserListPresenterArgs(
     val selectionMode: SelectionMode,
     val minimumSearchLength: Int = 1,
-    val searchDebouncePeriodMillis: Long = 0,
-)
+    val searchDebouncePeriodMillis: Long = NO_DEBOUNCE,
+) {
+    companion object {
+        const val NO_DEBOUNCE = 0L
+        const val DEFAULT_DEBOUNCE = 500L
+    }
+}
 
 enum class SelectionMode {
     Single,
