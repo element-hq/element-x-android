@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.test.media.FakeMediaResolver
 import io.element.android.libraries.matrix.test.notification.FakeNotificationService
@@ -57,6 +58,7 @@ class FakeMatrixClient(
     private var logoutFailure: Throwable? = null
     private val getRoomResults = mutableMapOf<RoomId, MatrixRoom>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
+    private val getProfileResults = mutableMapOf<UserId, Result<MatrixUser>>()
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
         return getRoomResults[roomId]
@@ -83,6 +85,10 @@ class FakeMatrixClient(
         delay(100)
         createDmFailure?.let { throw it }
         return createDmResult
+    }
+
+    override suspend fun getProfile(userId: UserId): Result<MatrixUser> {
+        return getProfileResults[userId] ?: Result.failure(IllegalStateException("No profile found for $userId"))
     }
 
     override fun startSync() = Unit
@@ -168,5 +174,9 @@ class FakeMatrixClient(
 
     fun givenSearchUsersResult(searchTerm: String, result: Result<MatrixSearchUserResults>) {
         searchUserResults[searchTerm] = result
+    }
+
+    fun givenGetProfileResult(userId: UserId, result: Result<MatrixUser>) {
+        getProfileResults[userId] = result
     }
 }
