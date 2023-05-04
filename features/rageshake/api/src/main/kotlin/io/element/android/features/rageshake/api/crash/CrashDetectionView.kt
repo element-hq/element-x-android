@@ -80,3 +80,5 @@ private fun ContentToPreview() {
         state = aCrashDetectionState().copy(crashDetected = true)
     )
 }
+
+// This file has a @Preview but the showkase processor isn't included in the build file :(
