@@ -47,18 +47,7 @@ internal class AllMatrixUsersDataSourceTest {
         val dataSource = AllMatrixUsersDataSource(matrixClient)
 
         val results = dataSource.search("test")
-        Truth.assertThat(results).containsExactly(
-            MatrixUser(
-                userId = A_USER_ID,
-                displayName = A_USER_NAME,
-                avatarUrl = AN_AVATAR_URL
-            ),
-            MatrixUser(
-                userId = A_USER_ID_2,
-                displayName = A_USER_NAME,
-                avatarUrl = AN_AVATAR_URL
-            ),
-        )
+        Truth.assertThat(results).containsExactly(aMatrixUserProfile(), aMatrixUserProfile(userId = A_USER_ID_2))
     }
 
     @Test
@@ -72,6 +61,32 @@ internal class AllMatrixUsersDataSourceTest {
 
         val results = dataSource.search("test")
         Truth.assertThat(results).isEmpty()
+    }
+
+    @Test
+    fun `get profile - returns user on success`() = runTest {
+        val matrixClient = FakeMatrixClient()
+        matrixClient.givenGetProfileResult(
+            userId = A_USER_ID,
+            result = Result.success(aMatrixUserProfile())
+        )
+        val dataSource = AllMatrixUsersDataSource(matrixClient)
+
+        val result = dataSource.getProfile(A_USER_ID)
+        Truth.assertThat(result).isEqualTo(aMatrixUserProfile())
+    }
+
+    @Test
+    fun `get profile - returns null on error`() = runTest {
+        val matrixClient = FakeMatrixClient()
+        matrixClient.givenGetProfileResult(
+            userId = A_USER_ID,
+            result = Result.failure(Throwable("Ruhroh"))
+        )
+        val dataSource = AllMatrixUsersDataSource(matrixClient)
+
+        val result = dataSource.getProfile(A_USER_ID)
+        Truth.assertThat(result).isNull()
     }
 
     private fun aMatrixUserProfile(
