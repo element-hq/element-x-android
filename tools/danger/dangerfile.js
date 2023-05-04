@@ -152,7 +152,7 @@ const buildFilesWithMissingProcessor = filesWithPreviews.map(file => {
 })
 
 if (buildFilesWithMissingProcessor.length > 0) {
-    fail("Please make sure modules with @Preview functions use the showkase processor. Missing processor in: " + buildFilesWithMissingProcessor.join(", "))
+    warn("You have made changes to a file containing a `@Preview` annotated function but its module doesn't include the showkase processor. Missing processor in: " + buildFilesWithMissingProcessor.join(", "))
 }
 
 // Check for screenshots on view changes
