@@ -26,6 +26,7 @@ open class InviteListInviteSummaryProvider : PreviewParameterProvider<InviteList
             aInviteListInviteSummary(),
             aInviteListInviteSummary().copy(roomAlias = "#someroom:example.com"),
             aInviteListInviteSummary().copy(roomName = "Alice", sender = null),
+            aInviteListInviteSummary().copy(isNew = true)
         )
 }
 
