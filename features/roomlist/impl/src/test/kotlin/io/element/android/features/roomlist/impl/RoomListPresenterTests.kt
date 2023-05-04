@@ -38,10 +38,12 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class RoomListPresenterTests {
+@OptIn(ExperimentalCoroutinesApi::class) class RoomListPresenterTests {
 
     @Test
     fun `present - should start with no user and then load user with success`() = runTest {
@@ -52,6 +54,7 @@ class RoomListPresenterTests {
             FakeSessionVerificationService(),
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
+            FakeInviteDataSource(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -79,6 +82,7 @@ class RoomListPresenterTests {
             FakeSessionVerificationService(),
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
+            FakeInviteDataSource(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -99,6 +103,7 @@ class RoomListPresenterTests {
             FakeSessionVerificationService(),
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
+            FakeInviteDataSource(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -127,6 +132,7 @@ class RoomListPresenterTests {
             FakeSessionVerificationService(),
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
+            FakeInviteDataSource(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -158,6 +164,7 @@ class RoomListPresenterTests {
             FakeSessionVerificationService(),
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
+            FakeInviteDataSource(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -195,6 +202,7 @@ class RoomListPresenterTests {
             FakeSessionVerificationService(),
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
+            FakeInviteDataSource(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -245,6 +253,7 @@ class RoomListPresenterTests {
             },
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
+            FakeInviteDataSource(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -258,31 +267,34 @@ class RoomListPresenterTests {
     }
 
     @Test
-    fun `present - displays invites row if any invites exist`() = runTest {
-        val invitesDataSource = FakeRoomSummaryDataSource()
+    fun `present - sets invite state`() = runTest {
+        val inviteStateFlow = MutableStateFlow(InvitesState.NoInvites)
         val presenter = RoomListPresenter(
             FakeMatrixClient(
                 sessionId = A_SESSION_ID,
-                invitesDataSource = invitesDataSource
             ),
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
+            FakeInviteDataSource(inviteStateFlow),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
 
-            Truth.assertThat(awaitItem().displayInvites).isFalse()
+            Truth.assertThat(awaitItem().invitesState).isEqualTo(InvitesState.NoInvites)
 
-            invitesDataSource.postRoomSummary(listOf(aRoomSummaryFilled()))
-            Truth.assertThat(awaitItem().displayInvites).isTrue()
+            inviteStateFlow.value = InvitesState.SeenInvites
+            Truth.assertThat(awaitItem().invitesState).isEqualTo(InvitesState.SeenInvites)
 
-            invitesDataSource.postRoomSummary(listOf())
-            Truth.assertThat(awaitItem().displayInvites).isFalse()
+            inviteStateFlow.value = InvitesState.NewInvites
+            Truth.assertThat(awaitItem().invitesState).isEqualTo(InvitesState.NewInvites)
+
+            inviteStateFlow.value = InvitesState.NoInvites
+            Truth.assertThat(awaitItem().invitesState).isEqualTo(InvitesState.NoInvites)
         }
     }
 

@@ -17,12 +17,15 @@
 package io.element.android.features.invitelist.impl
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import io.element.android.features.invitelist.api.SeenInvitesStore
 import io.element.android.features.invitelist.impl.model.InviteListInviteSummary
 import io.element.android.features.invitelist.impl.model.InviteSender
 import io.element.android.libraries.architecture.Async
@@ -34,11 +37,13 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomSummary
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class InviteListPresenter @Inject constructor(
     private val client: MatrixClient,
+    private val store: SeenInvitesStore,
 ) : Presenter<InviteListState> {
 
     @Composable
@@ -47,6 +52,21 @@ class InviteListPresenter @Inject constructor(
             .invitesDataSource
             .roomSummaries()
             .collectAsState()
+
+        var seenInvites by remember { mutableStateOf<Set<RoomId>>(emptySet()) }
+
+        LaunchedEffect(Unit) {
+            seenInvites = store.seenRoomIds().first()
+        }
+
+        LaunchedEffect(invites) {
+            store.markAsSeen(
+                invites
+                    .filterIsInstance<RoomSummary.Filled>()
+                    .map { it.details.roomId }
+                    .toSet()
+            )
+        }
 
         val localCoroutineScope = rememberCoroutineScope()
         val acceptedAction: MutableState<Async<RoomId>> = remember { mutableStateOf(Async.Uninitialized) }
@@ -86,8 +106,17 @@ class InviteListPresenter @Inject constructor(
             }
         }
 
+        val inviteList = remember(seenInvites, invites) {
+            invites
+                .filterIsInstance<RoomSummary.Filled>()
+                .map {
+                    it.toInviteSummary(seenInvites.contains(it.details.roomId))
+                }
+                .toPersistentList()
+        }
+
         return InviteListState(
-            inviteList = invites.mapNotNull(::toInviteSummary).toPersistentList(),
+            inviteList = inviteList,
             declineConfirmationDialog = decliningInvite.value?.let {
                 InviteDeclineConfirmationDialog.Visible(
                     isDirect = it.isDirect,
@@ -113,49 +142,44 @@ class InviteListPresenter @Inject constructor(
         }.execute(declinedAction)
     }
 
-    private fun toInviteSummary(roomSummary: RoomSummary): InviteListInviteSummary? {
-        return when (roomSummary) {
-            is RoomSummary.Filled -> roomSummary.details.run {
-                val i = inviter
-                val avatarData = if (isDirect && i != null)
-                    AvatarData(
-                        id = i.userId.value,
-                        name = i.displayName,
-                        url = i.avatarUrl,
-                    )
-                else
-                    AvatarData(
-                        id = roomId.value,
-                        name = name,
-                        url = avatarURLString
-                    )
+    private fun RoomSummary.Filled.toInviteSummary(seen: Boolean) = details.run {
+        val i = inviter
+        val avatarData = if (isDirect && i != null)
+            AvatarData(
+                id = i.userId.value,
+                name = i.displayName,
+                url = i.avatarUrl,
+            )
+        else
+            AvatarData(
+                id = roomId.value,
+                name = name,
+                url = avatarURLString
+            )
 
-                val alias = if (isDirect)
-                    inviter?.userId?.value
-                else
-                    canonicalAlias
+        val alias = if (isDirect)
+            inviter?.userId?.value
+        else
+            canonicalAlias
 
-                InviteListInviteSummary(
-                    roomId = roomId,
-                    roomName = name,
-                    roomAlias = alias,
-                    roomAvatarData = avatarData,
-                    isDirect = isDirect,
-                    sender = if (isDirect) null else inviter?.let {
-                        InviteSender(
-                            userId = it.userId,
-                            displayName = it.displayName ?: "",
-                            avatarData = AvatarData(
-                                id = it.userId.value,
-                                name = it.displayName,
-                                url = it.avatarUrl,
-                            ),
-                        )
-                    },
+        InviteListInviteSummary(
+            roomId = roomId,
+            roomName = name,
+            roomAlias = alias,
+            roomAvatarData = avatarData,
+            isDirect = isDirect,
+            isNew = !seen,
+            sender = if (isDirect) null else inviter?.run {
+                InviteSender(
+                    userId = userId,
+                    displayName = displayName ?: "",
+                    avatarData = AvatarData(
+                        id = userId.value,
+                        name = displayName,
+                        url = avatarUrl,
+                    ),
                 )
-            }
-
-            else -> null
-        }
+            },
+        )
     }
 }
