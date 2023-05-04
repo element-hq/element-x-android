@@ -77,6 +77,7 @@ const allowList = [
     "github-actions[bot]",
     "jmartinesp",
     "jonnyandrew",
+    "julioromano",
     "kittykat",
     "langleyd",
     "MadLittleMods",
