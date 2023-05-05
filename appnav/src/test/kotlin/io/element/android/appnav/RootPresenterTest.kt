@@ -22,7 +22,6 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.appnav.root.RootEvents
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.features.rageshake.impl.crash.DefaultCrashDetectionPresenter
 import io.element.android.features.rageshake.impl.detection.DefaultRageshakeDetectionPresenter
@@ -44,21 +43,7 @@ class RootPresenterTest {
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.isShowkaseButtonVisible).isTrue()
-        }
-    }
-
-    @Test
-    fun `present - hide showkase button`() = runTest {
-        val presenter = createPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
-            presenter.present()
-        }.test {
-            skipItems(1)
-            val initialState = awaitItem()
-            assertThat(initialState.isShowkaseButtonVisible).isTrue()
-            initialState.eventSink.invoke(RootEvents.HideShowkaseButton)
-            assertThat(awaitItem().isShowkaseButtonVisible).isFalse()
+            assertThat(initialState.crashDetectionState.crashDetected).isFalse()
         }
     }
 
