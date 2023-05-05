@@ -16,15 +16,16 @@
 
 package io.element.android.libraries.matrix.test.media
 
+import android.net.Uri
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
-import java.nio.file.Path
-import kotlin.io.path.Path
+import io.element.android.libraries.matrix.api.media.MatrixMediaSource
+import java.io.File
 
 class FakeMediaLoader : MatrixMediaLoader {
 
     var shouldFail = false
 
-    override suspend fun loadMediaContent(url: String): Result<ByteArray> {
+    override suspend fun loadMediaContent(source: MatrixMediaSource): Result<ByteArray> {
         return if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
@@ -32,7 +33,7 @@ class FakeMediaLoader : MatrixMediaLoader {
         }
     }
 
-    override suspend fun loadMediaThumbnail(url: String, width: Long, height: Long): Result<ByteArray> {
+    override suspend fun loadMediaThumbnail(source: MatrixMediaSource, width: Long, height: Long): Result<ByteArray> {
         return if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
@@ -40,11 +41,11 @@ class FakeMediaLoader : MatrixMediaLoader {
         }
     }
 
-    override suspend fun loadMediaFile(url: String, mimeType: String?): Result<Path> {
+    override suspend fun loadMediaFile(source: MatrixMediaSource, mimeType: String?): Result<Uri> {
         return if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
-            return Result.success(Path("path"))
+            return Result.success(Uri.fromFile(File("path")))
         }
     }
 }

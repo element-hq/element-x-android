@@ -17,13 +17,12 @@
 package io.element.android.libraries.matrix.ui.media
 
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.matrix.api.media.MatrixMediaSource
 import kotlin.math.roundToLong
 
-fun AvatarData.toMediaRequestData(): MediaRequestData? {
-    return url?.let {
-        MediaRequestData(
-            url = it,
-            kind = MediaRequestData.Kind.Thumbnail(size.dp.value.roundToLong())
-        )
-    }
+fun AvatarData.toMediaRequestData(): MediaRequestData {
+    return MediaRequestData(
+        source = url?.let { MatrixMediaSource(it) },
+        kind = MediaRequestData.Kind.Thumbnail(size.dp.value.roundToLong())
+    )
 }

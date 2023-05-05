@@ -16,14 +16,14 @@
 
 package io.element.android.libraries.matrix.api.media
 
-import java.nio.file.Path
+import android.net.Uri
 
 interface MatrixMediaLoader {
     /**
      * @param url to fetch the content for.
      * @return a [Result] of ByteArray. It contains the binary data for the media.
      */
-    suspend fun loadMediaContent(url: String): Result<ByteArray>
+    suspend fun loadMediaContent(source: MatrixMediaSource): Result<ByteArray>
 
     /**
      * @param url to fetch the data for.
@@ -31,12 +31,12 @@ interface MatrixMediaLoader {
      * @param height: the desired height for rescaling the media as thumbnail
      * @return a [Result] of ByteArray. It contains the binary data for the media.
      */
-    suspend fun loadMediaThumbnail(url: String, width: Long, height: Long): Result<ByteArray>
+    suspend fun loadMediaThumbnail(source: MatrixMediaSource, width: Long, height: Long): Result<ByteArray>
 
     /**
      * @param url to fetch the data for.
      * @param mimeType: optional mime type
-     * @return a [Result] of [Path]. It's the path to the downloaded file.
+     * @return a [Result] of [Uri]. It's the uri of the downloaded file.
      */
-    suspend fun loadMediaFile(url: String, mimeType: String?): Result<Path>
+    suspend fun loadMediaFile(source: MatrixMediaSource, mimeType: String?): Result<Uri>
 }

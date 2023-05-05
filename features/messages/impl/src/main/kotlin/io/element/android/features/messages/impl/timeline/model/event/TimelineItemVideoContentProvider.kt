@@ -20,20 +20,23 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.media.MatrixMediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 
-open class TimelineItemImageContentProvider : PreviewParameterProvider<TimelineItemImageContent> {
-    override val values: Sequence<TimelineItemImageContent>
+open class TimelineItemVideoContentProvider : PreviewParameterProvider<TimelineItemVideoContent> {
+    override val values: Sequence<TimelineItemVideoContent>
         get() = sequenceOf(
-            aTimelineItemImageContent(),
-            aTimelineItemImageContent().copy(aspectRatio = 1.0f),
-            aTimelineItemImageContent().copy(aspectRatio = 1.5f),
+            aTimelineItemVideoContent(),
+            aTimelineItemVideoContent().copy(aspectRatio = 1.0f),
+            aTimelineItemVideoContent().copy(aspectRatio = 1.5f),
         )
 }
 
-fun aTimelineItemImageContent() = TimelineItemImageContent(
-    body = "a body",
-    mediaSource = MatrixMediaSource(""),
+fun aTimelineItemVideoContent() = TimelineItemVideoContent(
+    body = "a video",
+    thumbnailSource = MatrixMediaSource(url = ""),
     blurhash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
     aspectRatio = 0.5f,
+    duration = 0,
+    videoSource = MatrixMediaSource(""),
     height = null,
-    width = null
+    width = null,
+    mimetype = null
 )

@@ -22,6 +22,6 @@ data class ImageInfo(
     val mimetype: String?,
     val size: Long?,
     val thumbnailInfo: ThumbnailInfo?,
-    val thumbnailUrl: String?,
+    val thumbnailSource: MatrixMediaSource?,
     val blurhash: String?
 )

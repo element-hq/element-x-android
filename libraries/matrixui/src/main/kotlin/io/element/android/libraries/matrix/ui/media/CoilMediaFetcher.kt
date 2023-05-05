@@ -38,19 +38,15 @@ internal class CoilMediaFetcher(
                 ByteBuffer.wrap(data)
             }.map { byteBuffer ->
                 imageLoader.components.newFetcher(byteBuffer, options, imageLoader)?.first?.fetch()
-            }
-            .fold(
-                { result -> result },
-                { failure -> throw failure }
-            )
+            }.getOrThrow()
     }
 
     private suspend fun loadMedia(): Result<ByteArray> {
-        if (mediaData == null) return Result.failure(IllegalStateException("No media data to fetch."))
+        if (mediaData?.source == null) return Result.failure(IllegalStateException("No media data to fetch."))
         return when (mediaData.kind) {
-            is MediaRequestData.Kind.Content -> mediaLoader.loadMediaContent(url = mediaData.url)
+            is MediaRequestData.Kind.Content -> mediaLoader.loadMediaContent(source = mediaData.source)
             is MediaRequestData.Kind.Thumbnail -> mediaLoader.loadMediaThumbnail(
-                url = mediaData.url,
+                source = mediaData.source,
                 width = mediaData.kind.width,
                 height = mediaData.kind.height
             )
