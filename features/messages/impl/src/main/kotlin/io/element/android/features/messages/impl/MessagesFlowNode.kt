@@ -26,18 +26,23 @@ import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
+import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackFader
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.api.MessagesEntryPoint
+import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
 import io.element.android.features.messages.impl.media.viewer.MediaViewerNode
-import io.element.android.features.messages.impl.media.viewer.model.MediaContentUiModel
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.media.MatrixMediaSource
 import kotlinx.android.parcel.Parcelize
+import kotlinx.collections.immutable.ImmutableList
 
 @ContributesNode(RoomScope::class)
 class MessagesFlowNode @AssistedInject constructor(
@@ -57,7 +62,10 @@ class MessagesFlowNode @AssistedInject constructor(
         object Messages : NavTarget
 
         @Parcelize
-        data class MediaViewer(val mediaContent: MediaContentUiModel) : NavTarget
+        data class MediaViewer(val title: String, val mediaSource: MatrixMediaSource) : NavTarget
+
+        @Parcelize
+        data class AttachmentPreview(val attachment: Attachment) : NavTarget
     }
 
     private val callback = plugins<MessagesEntryPoint.Callback>().firstOrNull()
@@ -73,12 +81,20 @@ class MessagesFlowNode @AssistedInject constructor(
                     override fun onEventClicked(event: TimelineItem.Event) {
                         processEventClicked(event)
                     }
+
+                    override fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {
+                        backstack.push(NavTarget.AttachmentPreview(attachments.first()))
+                    }
                 }
                 createNode<MessagesNode>(buildContext, listOf(callback))
             }
             is NavTarget.MediaViewer -> {
-                val inputs = MediaViewerNode.Inputs(navTarget.mediaContent)
+                val inputs = MediaViewerNode.Inputs(navTarget.title, navTarget.mediaSource)
                 createNode<MediaViewerNode>(buildContext, listOf(inputs))
+            }
+            is NavTarget.AttachmentPreview -> {
+                val inputs = AttachmentsPreviewNode.Inputs(navTarget.attachment)
+                createNode<AttachmentsPreviewNode>(buildContext, listOf(inputs))
             }
         }
     }
@@ -86,12 +102,14 @@ class MessagesFlowNode @AssistedInject constructor(
     private fun processEventClicked(event: TimelineItem.Event) {
         when (event.content) {
             is TimelineItemImageContent -> {
-                val mediaContent = MediaContentUiModel.Image(
-                    body = event.content.body,
-                    url = event.content.mediaRequestData.url,
-                    blurhash = event.content.blurhash
-                )
-                backstack.push(NavTarget.MediaViewer(mediaContent))
+                val mediaSource = event.content.mediaSource
+                val navTarget = NavTarget.MediaViewer(event.content.body, mediaSource)
+                backstack.push(navTarget)
+            }
+            is TimelineItemVideoContent -> {
+                val mediaSource = event.content.videoSource
+                val navTarget = NavTarget.MediaViewer(event.content.body, mediaSource)
+                backstack.push(navTarget)
             }
             else -> Unit
         }
@@ -102,6 +120,7 @@ class MessagesFlowNode @AssistedInject constructor(
         Children(
             navModel = backstack,
             modifier = modifier,
+            transitionHandler = rememberBackstackFader()
         )
     }
 }

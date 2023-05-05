@@ -25,8 +25,10 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.di.RoomScope
+import kotlinx.collections.immutable.ImmutableList
 
 @ContributesNode(RoomScope::class)
 class MessagesNode @AssistedInject constructor(
@@ -40,6 +42,7 @@ class MessagesNode @AssistedInject constructor(
     interface Callback : Plugin {
         fun onRoomDetailsClicked()
         fun onEventClicked(event: TimelineItem.Event)
+        fun onPreviewAttachments(attachments: ImmutableList<Attachment>)
     }
 
     private fun onRoomDetailsClicked() {
@@ -50,6 +53,10 @@ class MessagesNode @AssistedInject constructor(
         callback?.onEventClicked(event)
     }
 
+    private fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {
+        callback?.onPreviewAttachments(attachments)
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -58,6 +65,7 @@ class MessagesNode @AssistedInject constructor(
             onBackPressed = this::navigateUp,
             onRoomDetailsClicked = this::onRoomDetailsClicked,
             onEventClicked = this::onEventClicked,
+            onPreviewAttachments = this::onPreviewAttachments,
             modifier = modifier,
         )
     }

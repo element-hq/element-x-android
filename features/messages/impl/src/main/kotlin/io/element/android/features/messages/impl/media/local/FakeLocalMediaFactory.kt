@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.media.viewer
+package io.element.android.features.messages.impl.media.local
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import android.net.Uri
 
-open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState> {
-    override val values: Sequence<MediaViewerState>
-        get() = sequenceOf(
-            aMediaViewerState(),
-            // Add other states here
-        )
+class FakeLocalMediaFactory() : LocalMediaFactory {
+
+    var mimeType: String? = null
+
+    override fun createFromUri(uri: Uri?, mimeType: String?): LocalMedia? {
+        if (uri == null) return null
+        return LocalMedia(uri, mimeType)
+    }
 }
-
-fun aMediaViewerState() = MediaViewerState(
-    name = "A media",
-    downloadedMedia = Async.Uninitialized
-)

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.media.viewer
+package io.element.android.features.messages.impl.attachments.preview
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,31 +24,28 @@ import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.matrix.api.media.MatrixMediaSource
 
 @ContributesNode(RoomScope::class)
-class MediaViewerNode @AssistedInject constructor(
+class AttachmentsPreviewNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    presenterFactory: MediaViewerPresenter.Factory,
+    presenterFactory: AttachmentsPreviewPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
 
-    data class Inputs(
-        val name: String,
-        val mediaSource: MatrixMediaSource,
-    ) : NodeInputs
+    data class Inputs(val attachment: Attachment) : NodeInputs
 
     private val inputs: Inputs = inputs()
 
-    private val presenter = presenterFactory.create(inputs.name, inputs.mediaSource)
+    private val presenter = presenterFactory.create(inputs.attachment)
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        MediaViewerView(
+        AttachmentsPreviewView(
             state = state,
             modifier = modifier
         )

@@ -62,7 +62,9 @@ import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.textcomposer.AttachmentSourcePicker
+import io.element.android.features.messages.impl.textcomposer.AttachmentsState
 import io.element.android.features.messages.impl.textcomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.textcomposer.MessageComposerView
 import io.element.android.features.messages.impl.timeline.TimelineView
@@ -80,6 +82,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -89,6 +92,7 @@ fun MessagesView(
     onBackPressed: () -> Unit,
     onRoomDetailsClicked: () -> Unit,
     onEventClicked: (event: TimelineItem.Event) -> Unit,
+    onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
@@ -104,6 +108,13 @@ fun MessagesView(
     }
     val bottomSheetState = rememberModalBottomSheetState(initialValue = initialBottomSheetState)
     val coroutineScope = rememberCoroutineScope()
+
+    val attachmentsState = state.composerState.attachmentsState
+    if (attachmentsState is AttachmentsState.Previewing) {
+        LaunchedEffect(attachmentsState) {
+            onPreviewAttachments(attachmentsState.attachments)
+        }
+    }
 
     BackHandler(enabled = bottomSheetState.isVisible) {
         coroutineScope.launch {
@@ -327,5 +338,5 @@ internal fun MessagesViewDarkPreview(@PreviewParameter(MessagesStateProvider::cl
 
 @Composable
 private fun ContentToPreview(state: MessagesState) {
-    MessagesView(state, {}, {}, {})
+    MessagesView(state, {}, {}, {}, {})
 }

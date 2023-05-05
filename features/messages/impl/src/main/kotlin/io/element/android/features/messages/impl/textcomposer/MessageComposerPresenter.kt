@@ -16,6 +16,8 @@
 
 package io.element.android.features.messages.impl.textcomposer
 
+import android.annotation.SuppressLint
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -25,6 +27,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.media3.common.MimeTypes
+import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.media.local.LocalMediaFactory
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.core.data.toStableCharSequence
@@ -35,9 +40,9 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediapickers.PickerProvider
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @SingleIn(RoomScope::class)
@@ -46,27 +51,32 @@ class MessageComposerPresenter @Inject constructor(
     private val room: MatrixRoom,
     private val mediaPickerProvider: PickerProvider,
     private val featureFlagService: FeatureFlagService,
+    private val localMediaFactory: LocalMediaFactory,
 ) : Presenter<MessageComposerState> {
 
+    @SuppressLint("UnsafeOptInUsageError")
     @Composable
     override fun present(): MessageComposerState {
         val localCoroutineScope = rememberCoroutineScope()
 
-        val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker(onResult = { uri ->
-            Timber.d("Media picked from $uri")
-        })
+        val attachmentsState = remember {
+            mutableStateOf<AttachmentsState>(AttachmentsState.None)
+        }
 
-        val filesPicker = mediaPickerProvider.registerFilePicker(onResult = { uri ->
-            Timber.d("File picked from $uri")
-        })
+        fun handlePickedMedia(uri: Uri?, mimeType: String? = null) {
+            val localMedia = localMediaFactory.createFromUri(uri, mimeType)
+            attachmentsState.value = if (localMedia == null) {
+                AttachmentsState.None
+            } else {
+                val mediaAttachment = Attachment.Media(localMedia)
+                AttachmentsState.Previewing(persistentListOf(mediaAttachment))
+            }
+        }
 
-        val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(onResult = { uri ->
-            Timber.d("Photo saved at $uri")
-        })
-
-        val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker(onResult = { uri ->
-            Timber.d("Video saved at $uri")
-        })
+        val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker(onResult = { handlePickedMedia(it) })
+        val filesPicker = mediaPickerProvider.registerFilePicker(onResult = { handlePickedMedia(it) })
+        val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(onResult = { handlePickedMedia(it, MimeTypes.IMAGE_JPEG) }, deleteAfter = false)
+        val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker(onResult = { handlePickedMedia(it, MimeTypes.VIDEO_MP4) }, deleteAfter = false)
 
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
@@ -129,6 +139,7 @@ class MessageComposerPresenter @Inject constructor(
             isFullScreen = isFullScreen.value,
             mode = composerMode.value,
             attachmentSourcePicker = attachmentSourcePicker,
+            attachmentsState = attachmentsState.value,
             eventSink = ::handleEvents
         )
     }

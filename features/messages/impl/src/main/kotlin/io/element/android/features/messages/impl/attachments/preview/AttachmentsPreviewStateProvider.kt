@@ -14,20 +14,23 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.media.viewer
+package io.element.android.features.messages.impl.attachments.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import androidx.core.net.toUri
+import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.media.local.LocalMedia
 
-open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState> {
-    override val values: Sequence<MediaViewerState>
+open class AttachmentsPreviewStateProvider : PreviewParameterProvider<AttachmentsPreviewState> {
+    override val values: Sequence<AttachmentsPreviewState>
         get() = sequenceOf(
-            aMediaViewerState(),
+            aAttachmentsPreviewState(),
             // Add other states here
         )
 }
 
-fun aMediaViewerState() = MediaViewerState(
-    name = "A media",
-    downloadedMedia = Async.Uninitialized
+fun aAttachmentsPreviewState() = AttachmentsPreviewState(
+    attachment = Attachment.Media(
+        localMedia = LocalMedia("".toUri(), mimeType = null)
+    )
 )

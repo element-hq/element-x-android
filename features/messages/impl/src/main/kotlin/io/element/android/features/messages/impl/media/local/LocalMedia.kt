@@ -14,27 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.media.viewer.model
+package io.element.android.features.messages.impl.media.local
 
+import android.net.Uri
 import android.os.Parcelable
-import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import kotlinx.android.parcel.Parcelize
 
-sealed interface MediaContentUiModel : Parcelable {
-
-    @Parcelize
-    data class Image(
-        val body: String,
-        val url: String,
-        val blurhash: String?,
-    ) : MediaContentUiModel {
-        val mediaRequestData = MediaRequestData(
-            url = url, kind = MediaRequestData.Kind.Content
-        )
-    }
-
-    @Parcelize
-    data class Video(
-        val body: String,
-    ) : MediaContentUiModel
-}
+@Parcelize
+data class LocalMedia(
+    val uri: Uri,
+    val mimeType: String?,
+) : Parcelable
