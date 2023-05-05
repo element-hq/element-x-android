@@ -45,7 +45,6 @@ fun RootView(
         contentAlignment = Alignment.TopCenter,
     ) {
         children()
-        val eventSink = state.eventSink
 
         fun onOpenBugReport() {
             state.crashDetectionState.eventSink(CrashDetectionEvents.ResetAppHasCrashed)

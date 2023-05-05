@@ -24,5 +24,4 @@ import io.element.android.features.rageshake.api.detection.RageshakeDetectionSta
 data class RootState(
     val rageshakeDetectionState: RageshakeDetectionState,
     val crashDetectionState: CrashDetectionState,
-    val eventSink: (RootEvents) -> Unit
 )
