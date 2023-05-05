@@ -22,7 +22,6 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.appnav.root.RootEvents
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.features.rageshake.impl.crash.DefaultCrashDetectionPresenter
 import io.element.android.features.rageshake.impl.detection.DefaultRageshakeDetectionPresenter
