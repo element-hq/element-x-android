@@ -30,8 +30,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.components.dialogs.DialogPreview
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 
@@ -71,15 +72,43 @@ fun ProgressDialog(
     }
 }
 
-@Preview
 @Composable
-internal fun ProgressDialogLightPreview() = ElementPreviewLight { ContentToPreview() }
+private fun ProgressDialogContent(
+    modifier: Modifier = Modifier,
+    text: String? = null,
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .fillMaxWidth()
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = RoundedCornerShape(8.dp)
+            )
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            CircularProgressIndicator(
+                modifier = Modifier.padding(16.dp),
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            if (!text.isNullOrBlank()) {
+                Text(
+                    text = text,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+        }
+    }
+}
 
-@Preview
+@Preview(group = PreviewGroup.Dialogs)
 @Composable
-internal fun ProgressDialogDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun ProgressDialogPreview() = ElementThemedPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
-    ProgressDialog(text = "test dialog content")
+    DialogPreview {
+        ProgressDialogContent(text = "test dialog content")
+    }
 }

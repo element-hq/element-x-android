@@ -35,6 +35,7 @@ dependencies {
     implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
     api(projects.features.invitelist.api)
+    implementation(libs.androidx.datastore.preferences)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
@@ -48,6 +49,7 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.features.invitelist.test)
 
     ksp(libs.showkase.processor)
 }

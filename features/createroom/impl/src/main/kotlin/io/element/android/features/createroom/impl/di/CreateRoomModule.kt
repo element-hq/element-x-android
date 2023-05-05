@@ -21,11 +21,11 @@ import dagger.Binds
 import dagger.Module
 import io.element.android.features.createroom.impl.AllMatrixUsersDataSource
 import io.element.android.features.userlist.api.UserListDataSource
-import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.SessionScope
 import javax.inject.Named
 
 @Module
-@ContributesTo(AppScope::class)
+@ContributesTo(SessionScope::class)
 interface CreateRoomModule {
 
     @Binds

@@ -19,7 +19,17 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetDefaults
 import androidx.compose.material.ModalBottomSheetState
@@ -28,13 +38,17 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.modifiers.applyIf
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -42,15 +56,36 @@ fun ModalBottomSheetLayout(
     sheetContent: @Composable ColumnScope.() -> Unit,
     modifier: Modifier = Modifier,
     sheetState: ModalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden),
-    sheetShape: Shape = MaterialTheme.shapes.large,
+    sheetShape: Shape = MaterialTheme.shapes.large.copy(bottomStart = CornerSize(0.dp), bottomEnd = CornerSize(0.dp)),
     sheetElevation: Dp = ModalBottomSheetDefaults.Elevation,
     sheetBackgroundColor: Color = MaterialTheme.colorScheme.surface,
     sheetContentColor: Color = contentColorFor(sheetBackgroundColor),
     scrimColor: Color = ModalBottomSheetDefaults.scrimColor,
+    displayHandle: Boolean = false,
+    useSystemPadding: Boolean = true,
     content: @Composable () -> Unit = {}
 ) {
     androidx.compose.material.ModalBottomSheetLayout(
-        sheetContent = sheetContent,
+        sheetContent = {
+            Column(
+                Modifier.fillMaxWidth()
+                    .applyIf(useSystemPadding, ifTrue = {
+                        navigationBarsPadding()
+                    })
+            ) {
+                if (displayHandle) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Box(
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.onSurfaceVariant, RoundedCornerShape(2.dp))
+                            .size(width = 32.dp, height = 4.dp)
+                            .align(Alignment.CenterHorizontally),
+                    )
+                    Spacer(modifier = Modifier.height(24.dp))
+                }
+                sheetContent()
+            }
+        },
         modifier = modifier,
         sheetState = sheetState,
         sheetShape = sheetShape,
@@ -62,12 +97,12 @@ fun ModalBottomSheetLayout(
     )
 }
 
-@Preview
+@Preview(group = PreviewGroup.BottomSheets)
 @Composable
 internal fun ModalBottomSheetLayoutLightPreview() =
     ElementPreviewLight { ContentToPreview() }
 
-@Preview
+@Preview(group = PreviewGroup.BottomSheets)
 @Composable
 internal fun ModalBottomSheetLayoutDarkPreview() =
     ElementPreviewDark { ContentToPreview() }
@@ -75,9 +110,13 @@ internal fun ModalBottomSheetLayoutDarkPreview() =
 @Composable
 private fun ContentToPreview() {
     ModalBottomSheetLayout(
+        modifier = Modifier.height(140.dp),
+        displayHandle = true,
         sheetState = ModalBottomSheetState(ModalBottomSheetValue.Expanded),
         sheetContent = {
-            Text(text = "Sheet Content", modifier = Modifier.background(color = Color.Green))
+            Text(text = "Sheet Content", modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp, bottom = 20.dp)
+                .background(color = Color.Green))
         }
     ) {
         Text(text = "Content", modifier = Modifier.background(color = Color.Red))

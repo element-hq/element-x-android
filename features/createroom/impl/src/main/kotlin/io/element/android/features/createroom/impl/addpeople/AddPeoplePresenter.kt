@@ -35,7 +35,11 @@ class AddPeoplePresenter @Inject constructor(
 
     private val userListPresenter by lazy {
         userListPresenterFactory.create(
-            UserListPresenterArgs(selectionMode = SelectionMode.Multiple),
+            UserListPresenterArgs(
+                selectionMode = SelectionMode.Multiple,
+                minimumSearchLength = 3,
+                searchDebouncePeriodMillis = UserListPresenterArgs.DEFAULT_DEBOUNCE
+            ),
             userListDataSource,
             dataStore.selectedUserListDataStore,
         )

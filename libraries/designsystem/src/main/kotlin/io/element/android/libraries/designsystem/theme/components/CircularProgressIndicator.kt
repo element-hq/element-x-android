@@ -25,8 +25,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Composable
 fun CircularProgressIndicator(
@@ -56,13 +56,9 @@ fun CircularProgressIndicator(
     )
 }
 
-@Preview
+@Preview(group = PreviewGroup.Progress)
 @Composable
-internal fun CircularProgressIndicatorLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun CircularProgressIndicatorDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun CircularProgressIndicatorPreview() = ElementThemedPreview(vertical = false) { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

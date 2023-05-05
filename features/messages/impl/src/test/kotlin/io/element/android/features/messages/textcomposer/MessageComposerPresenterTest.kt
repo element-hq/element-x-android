@@ -22,7 +22,9 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
+import com.google.common.truth.Truth
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.messages.impl.textcomposer.AttachmentSourcePicker
 import io.element.android.features.messages.impl.textcomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.textcomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.textcomposer.MessageComposerState
@@ -280,6 +282,103 @@ class MessageComposerPresenterTest {
     }
 
     @Test
+    fun `present - Open attachments menu`() = runTest {
+        val fakeMatrixRoom = FakeMatrixRoom()
+        val presenter = MessageComposerPresenter(
+            this,
+            fakeMatrixRoom,
+            pickerProvider,
+            featureFlagService,
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvents.AddAttachment)
+
+            assertThat(awaitItem().attachmentSourcePicker).isEqualTo(AttachmentSourcePicker.AllMedia)
+        }
+    }
+
+    @Test
+    fun `present - Open camera attachments menu`() = runTest {
+        val fakeMatrixRoom = FakeMatrixRoom()
+        val presenter = MessageComposerPresenter(
+            this,
+            fakeMatrixRoom,
+            pickerProvider,
+            featureFlagService,
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromCamera)
+
+            assertThat(awaitItem().attachmentSourcePicker).isEqualTo(AttachmentSourcePicker.Camera)
+        }
+    }
+
+    @Test
+    fun `present - Dismiss attachments menu`() = runTest {
+        val fakeMatrixRoom = FakeMatrixRoom()
+        val presenter = MessageComposerPresenter(
+            this,
+            fakeMatrixRoom,
+            pickerProvider,
+            featureFlagService,
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvents.AddAttachment)
+            skipItems(1)
+
+            initialState.eventSink(MessageComposerEvents.DismissAttachmentMenu)
+            assertThat(awaitItem().attachmentSourcePicker).isNull()
+        }
+    }
+
+    @Test
+    fun `present - Pick media from gallery`() = runTest {
+        val fakeMatrixRoom = FakeMatrixRoom()
+        val presenter = MessageComposerPresenter(
+            this,
+            fakeMatrixRoom,
+            pickerProvider,
+            featureFlagService,
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery)
+
+            // TODO verify some post processing of the selected media is done
+        }
+    }
+
+    @Test
+    fun `present - Pick file from storage`() = runTest {
+        val fakeMatrixRoom = FakeMatrixRoom()
+        val presenter = MessageComposerPresenter(
+            this,
+            fakeMatrixRoom,
+            pickerProvider,
+            featureFlagService,
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles)
+
+            // TODO verify some post processing of the selected media is done
+        }
+    }
+
+    @Test
     fun `present - Take photo`() = runTest {
         val fakeMatrixRoom = FakeMatrixRoom()
         val presenter = MessageComposerPresenter(
@@ -292,9 +391,28 @@ class MessageComposerPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(MessageComposerEvents.TakePhoto)
+            initialState.eventSink(MessageComposerEvents.PickCameraAttachmentSource.Photo)
 
             // TODO verify some post processing of the captured image is done
+        }
+    }
+
+    @Test
+    fun `present - Record video`() = runTest {
+        val fakeMatrixRoom = FakeMatrixRoom()
+        val presenter = MessageComposerPresenter(
+            this,
+            fakeMatrixRoom,
+            pickerProvider,
+            featureFlagService,
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvents.PickCameraAttachmentSource.Video)
+
+            // TODO verify some post processing of the captured video is done
         }
     }
 }

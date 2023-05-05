@@ -29,7 +29,7 @@ import io.element.android.features.userlist.api.UserListState
 import io.element.android.features.userlist.api.UserListStateProvider
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 @Composable
 fun UserListView(
@@ -44,7 +44,7 @@ fun UserListView(
         SearchUserBar(
             modifier = Modifier.fillMaxWidth(),
             query = state.searchQuery,
-            results = state.searchResults,
+            state = state.searchResults,
             selectedUsers = state.selectedUsers,
             active = state.isSearchActive,
             isMultiSelectionEnabled = state.isMultiSelectionEnabled,

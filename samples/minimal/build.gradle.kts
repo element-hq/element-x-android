@@ -46,6 +46,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.preference)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrix.impl)
     implementation(projects.libraries.permissions.noop)
@@ -54,6 +55,7 @@ dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
     implementation(projects.libraries.dateformatter.impl)
+    implementation(projects.features.invitelist.impl)
     implementation(projects.features.roomlist.impl)
     implementation(projects.features.login.impl)
     implementation(projects.features.networkmonitor.impl)

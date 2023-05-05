@@ -29,6 +29,8 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
@@ -36,9 +38,12 @@ import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.sync.SlidingSyncObserverProxy
+import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
+import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
@@ -268,6 +273,12 @@ class RustMatrixClient constructor(
         return createRoom(createRoomParams)
     }
 
+    override suspend fun getProfile(userId: UserId): Result<MatrixUser> = withContext(Dispatchers.IO) {
+        runCatching {
+            client.getProfile(userId.value).let(UserProfileMapper::map)
+        }
+    }
+
     override fun sessionVerificationService(): SessionVerificationService = verificationService
 
     override fun pushersService(): PushersService = pushersService
@@ -333,6 +344,13 @@ class RustMatrixClient constructor(
     }
 
     override fun roomMembershipObserver(): RoomMembershipObserver = roomMembershipObserver
+
+    override suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults> =
+        withContext(dispatchers.io) {
+            runCatching {
+                client.searchUsers(searchTerm, limit.toULong()).let(UserSearchResultMapper::map)
+            }
+        }
 
     private fun File.deleteSessionDirectory(userID: String): Boolean {
         // Rust sanitises the user ID replacing invalid characters with an _

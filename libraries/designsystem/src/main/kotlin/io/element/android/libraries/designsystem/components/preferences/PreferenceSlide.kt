@@ -31,8 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Slider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.toEnabledColor
@@ -87,13 +87,9 @@ fun PreferenceSlide(
     }
 }
 
-@Preview
+@Preview(group = PreviewGroup.Preferences)
 @Composable
-internal fun PreferenceSlideLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun PreferenceSlideDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun PreferenceSlidePreview() = ElementThemedPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

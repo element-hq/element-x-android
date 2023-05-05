@@ -17,6 +17,7 @@
 package io.element.android.features.roomdetails.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.roomdetails.impl.members.details.aRoomMemberDetailsState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -30,8 +31,8 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState().copy(isEncrypted = false),
             aRoomDetailsState().copy(roomAlias = null),
             aRoomDetailsState().copy(memberCount = Async.Failure(Throwable())),
-            aRoomDetailsState().copy(roomType = RoomDetailsType.Dm(aDmRoomMember()), roomName = "Daniel"),
-            aRoomDetailsState().copy(roomType = RoomDetailsType.Dm(aDmRoomMember(isIgnored = true)), roomName = "Daniel"),
+            aDmRoomDetailsState().copy(roomName = "Daniel"),
+            aDmRoomDetailsState(isDmMemberIgnored = true).copy(roomName = "Daniel"),
             // Add other state here
         )
 }
@@ -73,4 +74,8 @@ fun aRoomDetailsState() = RoomDetailsState(
     roomType = RoomDetailsType.Room,
     roomMemberDetailsState = null,
     eventSink = {}
+)
+
+fun aDmRoomDetailsState(isDmMemberIgnored: Boolean = false) = aRoomDetailsState().copy(
+    roomType = RoomDetailsType.Dm(aDmRoomMember(isIgnored = isDmMemberIgnored)), roomMemberDetailsState = aRoomMemberDetailsState()
 )

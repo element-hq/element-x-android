@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.userlist.api.aListOfSelectedUsers
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
