@@ -16,8 +16,10 @@
 
 package io.element.android.features.messages.impl.media.viewer
 
-import io.element.android.features.messages.impl.media.viewer.model.MediaContentUiModel
+import io.element.android.features.messages.impl.media.local.LocalMedia
+import io.element.android.libraries.architecture.Async
 
 data class MediaViewerState(
-    val mediaContent: MediaContentUiModel
+    val name: String,
+    val downloadedMedia: Async<LocalMedia>
 )

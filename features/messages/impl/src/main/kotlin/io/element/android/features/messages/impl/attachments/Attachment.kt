@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.media.viewer
+package io.element.android.features.messages.impl.attachments
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import android.os.Parcelable
+import androidx.compose.runtime.Immutable
+import io.element.android.features.messages.impl.media.local.LocalMedia
+import kotlinx.parcelize.Parcelize
 
-open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState> {
-    override val values: Sequence<MediaViewerState>
-        get() = sequenceOf(
-            aMediaViewerState(),
-            // Add other states here
-        )
+@Immutable
+sealed interface Attachment : Parcelable {
+
+    @Parcelize
+    data class Media(val localMedia: LocalMedia) : Attachment
 }
-
-fun aMediaViewerState() = MediaViewerState(
-    name = "A media",
-    downloadedMedia = Async.Uninitialized
-)

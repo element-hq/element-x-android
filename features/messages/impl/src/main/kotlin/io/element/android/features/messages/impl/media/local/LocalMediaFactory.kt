@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.media.viewer
+package io.element.android.features.messages.impl.media.local
 
-// TODO Add your events or remove the file completely if no events
-sealed interface MediaViewerEvents {
-    object MyEvent : MediaViewerEvents
+import android.net.Uri
+
+interface LocalMediaFactory {
+    fun createFromUri(uri: Uri?, mimeType: String?): LocalMedia?
 }

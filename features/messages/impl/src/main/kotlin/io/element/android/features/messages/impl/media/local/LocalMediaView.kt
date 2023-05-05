@@ -1,0 +1,113 @@
+/*
+ * Copyright (c) 2023 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package io.element.android.features.messages.impl.media.local
+
+import android.annotation.SuppressLint
+import android.net.Uri
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.FrameLayout
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.Lifecycle
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MimeTypes
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.AspectRatioFrameLayout
+import androidx.media3.ui.PlayerView
+import coil.compose.AsyncImage
+import io.element.android.libraries.designsystem.components.ZoomableBox
+import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
+
+@SuppressLint("UnsafeOptInUsageError")
+@Composable
+fun LocalMediaView(
+    localMedia: LocalMedia,
+    modifier: Modifier = Modifier
+) {
+    when {
+        MimeTypes.isImage(localMedia.mimeType) -> MediaImageView(
+            uri = localMedia.uri,
+            modifier = modifier
+        )
+        MimeTypes.isVideo(localMedia.mimeType) -> MediaVideoView(
+            uri = localMedia.uri,
+            modifier = modifier
+        )
+        else -> Unit
+    }
+}
+
+@Composable
+private fun MediaImageView(
+    uri: Uri,
+    modifier: Modifier = Modifier,
+) {
+    ZoomableBox(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        AsyncImage(
+            modifier = Modifier
+                .zoomable()
+                .fillMaxSize(),
+            model = uri,
+            contentDescription = "Image",
+            contentScale = ContentScale.Fit,
+        )
+    }
+}
+
+@UnstableApi
+@Composable
+fun MediaVideoView(
+    uri: Uri,
+    modifier: Modifier = Modifier,
+) {
+    val context = LocalContext.current
+    val exoPlayer = ExoPlayer.Builder(LocalContext.current).build()
+    val mediaItem = MediaItem.Builder()
+        .setUri(uri)
+        .build()
+    exoPlayer.playWhenReady
+    exoPlayer.setMediaItem(mediaItem)
+    exoPlayer.prepare()
+
+    AndroidView(
+        factory = {
+            PlayerView(context).apply {
+                player = exoPlayer
+                resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
+                layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+            }
+        }, modifier = modifier.fillMaxSize()
+    )
+
+    OnLifecycleEvent { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_RESUME -> exoPlayer.play()
+            Lifecycle.Event.ON_PAUSE -> exoPlayer.pause()
+            Lifecycle.Event.ON_DESTROY -> exoPlayer.release()
+            else -> Unit
+        }
+    }
+}

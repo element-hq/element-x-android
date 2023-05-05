@@ -50,6 +50,9 @@ dependencies {
     implementation(libs.accompanist.flowlayout)
     implementation(libs.androidx.recyclerview)
     implementation(libs.jsoup)
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
+    implementation(libs.accompanist.systemui)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

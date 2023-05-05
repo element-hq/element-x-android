@@ -16,8 +16,10 @@
 
 package io.element.android.features.messages.impl.textcomposer
 
+import androidx.compose.runtime.Immutable
 import io.element.android.libraries.textcomposer.MessageComposerMode
 
+@Immutable
 sealed interface MessageComposerEvents {
     object ToggleFullScreenState : MessageComposerEvents
     data class SendMessage(val message: String) : MessageComposerEvents
