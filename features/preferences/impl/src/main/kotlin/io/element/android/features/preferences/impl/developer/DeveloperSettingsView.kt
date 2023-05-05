@@ -33,9 +33,9 @@ import io.element.android.libraries.ui.strings.R
 @Composable
 fun DeveloperSettingsView(
     state: DeveloperSettingsState,
-    modifier: Modifier = Modifier,
     onOpenShowkase: () -> Unit,
     onBackPressed: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     PreferenceView(
         modifier = modifier,
