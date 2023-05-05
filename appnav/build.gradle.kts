@@ -69,4 +69,6 @@ dependencies {
     testImplementation(projects.services.appnavstate.test)
     testImplementation(libs.test.appyx.junit)
     testImplementation(libs.test.arch.core)
+
+    ksp(libs.showkase.processor)
 }
