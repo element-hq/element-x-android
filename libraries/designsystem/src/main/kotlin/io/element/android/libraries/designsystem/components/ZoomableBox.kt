@@ -28,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
@@ -39,27 +40,31 @@ import androidx.compose.ui.unit.IntSize
 @Composable
 fun ZoomableBox(
     modifier: Modifier = Modifier,
-    minScale: Float = 1f,
-    maxScale: Float = 5f,
+    contentAlignment: Alignment = Alignment.TopStart,
+    minZoom: Float = 1f,
+    maxZoom: Float = 5f,
     content: @Composable ZoomableBoxScope.() -> Unit
 ) {
-    var scale by remember { mutableStateOf(1f) }
+    var zoom by remember { mutableStateOf(minZoom) }
     var offsetX by remember { mutableStateOf(0f) }
     var offsetY by remember { mutableStateOf(0f) }
     var size by remember { mutableStateOf(IntSize.Zero) }
+
     Box(
         modifier = modifier
             .clip(RectangleShape)
-            .onSizeChanged { size = it }
+            .onSizeChanged {
+                size = it
+            }
             .pointerInput(Unit) {
-                detectTransformGestures { _, pan, zoom, _ ->
-                    scale = maxOf(minScale, minOf(scale * zoom, maxScale))
-                    val maxX = (size.width * (scale - 1)) / 2
+                detectTransformGestures { _, panChange, zoomChange, _ ->
+                    zoom = (zoom * zoomChange).coerceIn(minZoom, maxZoom)
+                    val maxX = (size.width * (zoom - 1)) / 2f
                     val minX = -maxX
-                    offsetX = maxOf(minX, minOf(maxX, offsetX + pan.x))
-                    val maxY = (size.height * (scale - 1)) / 2
+                    val maxY = (size.height * (zoom - 1)) / 2f
                     val minY = -maxY
-                    offsetY = maxOf(minY, minOf(maxY, offsetY + pan.y))
+                    offsetX = maxOf(minX, minOf(maxX, offsetX + panChange.x))
+                    offsetY = maxOf(minY, minOf(maxY, offsetY + panChange.y))
                 }
             }
             .pointerInput(Unit) {
@@ -67,17 +72,18 @@ fun ZoomableBox(
                     onDoubleTap = {
                         offsetX = 0f
                         offsetY = 0f
-                        scale = if (scale > minScale) {
-                            minScale
+                        zoom = if (zoom > minZoom) {
+                            minZoom
                         } else {
-                            maxScale / 2f
+                            maxZoom / 2f
                         }
 
                     }
                 )
-            }
+            },
+        contentAlignment = contentAlignment,
     ) {
-        DefaultZoomableBoxScope(this, scale, offsetX, offsetY).content()
+        DefaultZoomableBoxScope(this, zoom, offsetX, offsetY).content()
     }
 }
 
@@ -95,12 +101,12 @@ private class DefaultZoomableBoxScope(
     private val offsetY: Float
 ) : ZoomableBoxScope, BoxScope by parentScope {
 
-    override fun Modifier.zoomable(): Modifier {
-        return graphicsLayer(
+    override fun Modifier.zoomable() = this.then(
+        graphicsLayer(
             scaleX = scale,
             scaleY = scale,
             translationX = offsetX,
-            translationY = offsetY
+            translationY = offsetY,
         )
-    }
+    )
 }
