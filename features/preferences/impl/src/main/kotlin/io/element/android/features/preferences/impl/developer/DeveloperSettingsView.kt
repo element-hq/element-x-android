@@ -14,28 +14,18 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.features.preferences.impl.developer
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.libraries.designsystem.components.preferences.PreferenceTopAppBar
+import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
+import io.element.android.libraries.designsystem.components.preferences.PreferenceText
+import io.element.android.libraries.designsystem.components.preferences.PreferenceView
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.featureflag.ui.FeatureListView
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 import io.element.android.libraries.ui.strings.R
@@ -43,45 +33,42 @@ import io.element.android.libraries.ui.strings.R
 @Composable
 fun DeveloperSettingsView(
     state: DeveloperSettingsState,
-    modifier: Modifier = Modifier,
+    onOpenShowkase: () -> Unit,
     onBackPressed: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Scaffold(
-        modifier = modifier
-            .fillMaxSize()
-            .systemBarsPadding()
-            .imePadding(),
-        contentWindowInsets = WindowInsets.statusBars,
-        topBar = {
-            PreferenceTopAppBar(
-                title = stringResource(id = R.string.common_developer_options),
-                onBackPressed = onBackPressed,
-            )
-        },
-        content = {
-            FeatureListContent(it, state)
+    PreferenceView(
+        modifier = modifier,
+        onBackPressed = onBackPressed,
+        title = stringResource(id = R.string.common_developer_options)
+    ) {
+        // Note: this is OK to hardcode strings in this debug screen.
+        PreferenceCategory(title = "Feature flags") {
+            FeatureListContent(state)
         }
-    )
+        PreferenceCategory(title = "Showkase") {
+            PreferenceText(
+                title = "Open Showkase browser",
+                onClick = onOpenShowkase
+            )
+        }
+    }
 }
 
 @Composable
 fun FeatureListContent(
-    paddingValues: PaddingValues,
     state: DeveloperSettingsState,
     modifier: Modifier = Modifier
 ) {
-
     fun onFeatureEnabled(feature: FeatureUiModel, isEnabled: Boolean) {
         state.eventSink(DeveloperSettingsEvents.UpdateEnabledFeature(feature, isEnabled))
     }
 
-    Box(
-        modifier = modifier
-            .padding(paddingValues)
-            .fillMaxSize()
-    ) {
-        FeatureListView(features = state.features, onCheckedChange = ::onFeatureEnabled)
-    }
+    FeatureListView(
+        modifier = modifier,
+        features = state.features,
+        onCheckedChange = ::onFeatureEnabled,
+    )
 }
 
 @Preview
@@ -98,6 +85,7 @@ fun DeveloperSettingsViewDarkPreview(@PreviewParameter(DeveloperSettingsStatePro
 private fun ContentToPreview(state: DeveloperSettingsState) {
     DeveloperSettingsView(
         state = state,
+        onOpenShowkase = {},
         onBackPressed = {}
     )
 }

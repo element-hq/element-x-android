@@ -16,8 +16,7 @@
 
 package io.element.android.libraries.featureflag.ui
 
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,14 +33,10 @@ fun FeatureListView(
     onCheckedChange: (FeatureUiModel, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
+    Column(
         modifier = modifier,
     ) {
-        items(
-            items = features,
-            key = { it.key }
-        ) { feature ->
-
+        features.forEach { feature ->
             fun onCheckedChange(isChecked: Boolean) {
                 onCheckedChange(feature, isChecked)
             }
