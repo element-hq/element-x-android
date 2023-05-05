@@ -59,9 +59,9 @@ class RoomMemberListPresenterTests {
         }
         val fakeRoom = FakeMatrixRoom()
         val presenter = RoomMemberListPresenter(
-            userListPresenterFactory = userListFactory,
-            userListDataSource = userListDataSource,
-            userListDataStore = userListDataStore,
+            memberListPresenterFactory = userListFactory,
+            memberListDataSource = userListDataSource,
+            memberListDataStore = userListDataStore,
             room = fakeRoom,
             coroutineDispatchers = testCoroutineDispatchers
         )
@@ -70,9 +70,9 @@ class RoomMemberListPresenterTests {
         }.test {
             val initialState = awaitItem()
             Truth.assertThat(initialState.allUsers).isInstanceOf(Async.Loading::class.java)
-            Truth.assertThat(initialState.userListState.isSearchActive).isFalse()
-            Truth.assertThat(initialState.userListState.searchResults).isEqualTo(UserSearchResultState.NotSearching)
-            Truth.assertThat(initialState.userListState.selectionMode).isEqualTo(SelectionMode.Single)
+            Truth.assertThat(initialState.memberListState.isSearchActive).isFalse()
+            Truth.assertThat(initialState.memberListState.searchResults).isEqualTo(UserSearchResultState.NotSearching)
+            Truth.assertThat(initialState.memberListState.selectionMode).isEqualTo(SelectionMode.Single)
 
             val loadedState = awaitItem()
             Truth.assertThat((loadedState.allUsers as? Async.Success)?.state).isEqualTo(searchResult.toImmutableList())

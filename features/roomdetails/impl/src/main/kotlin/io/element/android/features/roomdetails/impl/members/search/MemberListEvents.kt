@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl.members
+package io.element.android.features.roomdetails.impl.members.search
 
-import io.element.android.features.roomdetails.impl.members.search.MemberListState
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import kotlinx.collections.immutable.ImmutableList
 
-data class RoomMemberListState(
-    val allUsers: Async<ImmutableList<MatrixUser>>,
-    val memberListState: MemberListState,
-)
+sealed interface MemberListEvents {
+    data class UpdateSearchQuery(val query: String) : MemberListEvents
+    data class AddToSelection(val matrixUser: MatrixUser) : MemberListEvents
+    data class RemoveFromSelection(val matrixUser: MatrixUser) : MemberListEvents
+    data class OnSearchActiveChanged(val active: Boolean) : MemberListEvents
+}

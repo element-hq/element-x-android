@@ -17,8 +17,8 @@
 package io.element.android.features.roomdetails.impl.members
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.userlist.api.UserSearchResultState
-import io.element.android.features.userlist.api.aUserListState
+import io.element.android.features.roomdetails.impl.members.search.UserSearchResultState
+import io.element.android.features.roomdetails.impl.members.search.aUserListState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
@@ -38,6 +38,6 @@ internal fun aRoomMemberListState(
     allUsers: Async<ImmutableList<MatrixUser>> = Async.Uninitialized,
 ) =
     RoomMemberListState(
-        userListState = aUserListState().copy(searchResults = searchResults),
+        memberListState = aUserListState().copy(searchResults = searchResults),
         allUsers = allUsers,
     )

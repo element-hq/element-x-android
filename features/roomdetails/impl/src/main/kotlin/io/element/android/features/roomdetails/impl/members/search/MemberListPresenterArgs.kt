@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl.members
+package io.element.android.features.roomdetails.impl.members.search
 
-import io.element.android.features.roomdetails.impl.members.search.MemberListState
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.api.user.MatrixUser
-import kotlinx.collections.immutable.ImmutableList
+data class MemberListPresenterArgs(
+    val selectionMode: SelectionMode,
+    val minimumSearchLength: Int = 1,
+    val searchDebouncePeriodMillis: Long = NO_DEBOUNCE,
+) {
+    companion object {
+        const val NO_DEBOUNCE = 0L
+        const val DEFAULT_DEBOUNCE = 500L
+    }
+}
 
-data class RoomMemberListState(
-    val allUsers: Async<ImmutableList<MatrixUser>>,
-    val memberListState: MemberListState,
-)
+enum class SelectionMode {
+    Single,
+    Multiple,
+}

@@ -16,10 +16,8 @@
 
 package io.element.android.features.roomdetails.impl.members
 
-import io.element.android.features.userlist.api.UserListDataSource
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -31,12 +29,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class RoomUserListDataSource @Inject constructor(
+class MemberListDataSource @Inject constructor(
     private val room: MatrixRoom,
     private val coroutineDispatchers: CoroutineDispatchers,
-) : UserListDataSource {
+) {
 
-    override suspend fun search(query: String): List<MatrixUser> = withContext(coroutineDispatchers.io) {
+    suspend fun search(query: String): List<MatrixUser> = withContext(coroutineDispatchers.io) {
         val roomMembers = room.membersStateFlow
             .dropWhile { it !is MatrixRoomMembersState.Ready }
             .first()
@@ -51,10 +49,6 @@ class RoomUserListDataSource @Inject constructor(
             }
         }
         filteredMembers.map(RoomMember::toMatrixUser)
-    }
-
-    override suspend fun getProfile(userId: UserId): MatrixUser? {
-        return null
     }
 
 }

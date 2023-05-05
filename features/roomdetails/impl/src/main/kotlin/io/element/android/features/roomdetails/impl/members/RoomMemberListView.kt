@@ -39,8 +39,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.roomdetails.impl.R
-import io.element.android.features.userlist.api.components.SearchSingleUserResultItem
-import io.element.android.features.userlist.api.components.UserListView
+import io.element.android.features.roomdetails.impl.members.search.components.SearchSingleMemberResultItem
+import io.element.android.features.roomdetails.impl.members.search.components.MemberListView
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.isLoading
 import io.element.android.libraries.designsystem.ElementTextStyles
@@ -69,7 +69,7 @@ fun RoomMemberListView(
 
     Scaffold(
         topBar = {
-            if (!state.userListState.isSearchActive) {
+            if (!state.memberListState.isSearchActive) {
                 RoomMemberListTopBar(onBackPressed = onBackPressed)
             }
         }
@@ -80,12 +80,12 @@ fun RoomMemberListView(
                 .padding(padding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            UserListView(
-                state = state.userListState,
+            MemberListView(
+                state = state.memberListState,
                 onUserSelected = ::onUserSelected,
             )
 
-            if (!state.userListState.isSearchActive) {
+            if (!state.memberListState.isSearchActive) {
                 if (state.allUsers is Async.Success) {
                     LazyColumn(modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()) {
                         item {
@@ -99,7 +99,7 @@ fun RoomMemberListView(
                             )
                         }
                         items(state.allUsers.state) { matrixUser ->
-                            SearchSingleUserResultItem(
+                            SearchSingleMemberResultItem(
                                 modifier = Modifier.fillMaxWidth(),
                                 matrixUser = matrixUser,
                                 onClick = { onUserSelected(matrixUser) }
