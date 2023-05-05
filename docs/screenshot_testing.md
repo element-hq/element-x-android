@@ -30,11 +30,16 @@ If installed correctly, `git push` and `git pull` will now include LFS content.
 
 ## Recording
 
-It's recommended to delete the content of the folder `/snapshots` before recording.
+```shell
+./gradlew recordPaparazziDebug
+```
+
+The task will delete the content of the folder `/snapshots` before recording (see the task `removeOldSnapshots` defined in the project).
+
+If this is not the case, you can run
 
 ```shell
 rm -rf ./tests/uitests/src/test/snapshots
-./gradlew recordPaparazziDebug
 ```
 
 Paparazzi will generate images in `:tests:uitests/src/test/snapshots`, which will need to be committed to the repository using Git LFS.
