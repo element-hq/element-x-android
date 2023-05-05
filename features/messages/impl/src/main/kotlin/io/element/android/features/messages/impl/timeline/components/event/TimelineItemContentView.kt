@@ -27,6 +27,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 
 private fun Modifier.defaultContentPadding(): Modifier = padding(
     horizontal = 12.dp, vertical = 6.dp
@@ -63,6 +64,10 @@ fun TimelineItemEventContentView(
         is TimelineItemImageContent -> TimelineItemImageView(
             content = content,
             modifier = modifier,
+        )
+        is TimelineItemVideoContent -> TimelineItemVideoView(
+            content = content,
+            modifier = modifier
         )
     }
 }

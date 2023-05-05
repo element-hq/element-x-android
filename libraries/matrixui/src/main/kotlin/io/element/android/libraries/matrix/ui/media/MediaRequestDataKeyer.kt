@@ -22,7 +22,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 
 internal class AvatarDataKeyer : Keyer<AvatarData> {
     override fun key(data: AvatarData, options: Options): String? {
-        return data.toMediaRequestData()?.toKey()
+        return data.toMediaRequestData().toKey()
     }
 }
 
@@ -32,4 +32,7 @@ internal class MediaRequestDataKeyer : Keyer<MediaRequestData> {
     }
 }
 
-private fun MediaRequestData.toKey() = "${url}_${kind}"
+private fun MediaRequestData.toKey(): String? {
+    if (source == null) return null
+    return "${source.url}_${kind}"
+}

@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.impl.media
+package io.element.android.libraries.matrix.api.media
 
-import io.element.android.libraries.matrix.api.media.VideoInfo
-import org.matrix.rustcomponents.sdk.VideoInfo as RustVideoInfo
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-fun RustVideoInfo.map(): VideoInfo = VideoInfo(
-    duration = duration?.toLong(),
-    height = height?.toLong(),
-    width = width?.toLong(),
-    mimetype = mimetype,
-    size = size?.toLong(),
-    thumbnailInfo = thumbnailInfo?.map(),
-    thumbnailSource = thumbnailSource?.map(),
-    blurhash = blurhash
-)
+@Parcelize
+data class MatrixMediaSource(
+    val url: String
+) : Parcelable

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.impl.media
+package io.element.android.features.messages.impl.timeline.model.event
 
-import io.element.android.libraries.matrix.api.media.VideoInfo
-import org.matrix.rustcomponents.sdk.VideoInfo as RustVideoInfo
+import io.element.android.libraries.matrix.api.media.MatrixMediaSource
 
-fun RustVideoInfo.map(): VideoInfo = VideoInfo(
-    duration = duration?.toLong(),
-    height = height?.toLong(),
-    width = width?.toLong(),
-    mimetype = mimetype,
-    size = size?.toLong(),
-    thumbnailInfo = thumbnailInfo?.map(),
-    thumbnailSource = thumbnailSource?.map(),
-    blurhash = blurhash
-)
+data class TimelineItemVideoContent(
+    val body: String,
+    val duration: Long,
+    val videoSource: MatrixMediaSource,
+    val thumbnailSource: MatrixMediaSource?,
+    val aspectRatio: Float,
+    val blurhash: String?,
+    val height: Int?,
+    val width: Int?,
+    val mimetype: String?,
+) : TimelineItemEventContent {
+    override val type: String = "TimelineItemImageContent"
+}

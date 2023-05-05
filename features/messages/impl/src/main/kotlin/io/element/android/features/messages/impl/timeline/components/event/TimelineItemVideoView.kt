@@ -16,18 +16,23 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContentProvider
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.libraries.designsystem.components.blurhash.BlurHashAsyncImage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -35,8 +40,8 @@ import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import kotlin.math.min
 
 @Composable
-fun TimelineItemImageView(
-    content: TimelineItemImageContent,
+fun TimelineItemVideoView(
+    content: TimelineItemVideoContent,
     modifier: Modifier = Modifier,
 ) {
     val maxHeight = min(300, content.height ?: Int.MAX_VALUE)
@@ -48,20 +53,26 @@ fun TimelineItemImageView(
     ) {
         BlurHashAsyncImage(
             blurHash = content.blurhash,
-            model = MediaRequestData(content.mediaSource, MediaRequestData.Kind.Content),
+            model = MediaRequestData(content.thumbnailSource, MediaRequestData.Kind.Content),
             contentScale = ContentScale.Fit,
         )
+        Image(
+            painterResource(id = androidx.media3.ui.R.drawable.exo_ic_play_circle_filled),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+        )
+
     }
 }
 
 @Preview
 @Composable
-internal fun TimelineItemImageViewLightPreview(@PreviewParameter(TimelineItemImageContentProvider::class) content: TimelineItemImageContent) =
+internal fun TimelineItemVideoViewLightPreview(@PreviewParameter(TimelineItemImageContentProvider::class) content: TimelineItemImageContent) =
     ElementPreviewLight { ContentToPreview(content) }
 
 @Preview
 @Composable
-internal fun TimelineItemImageViewDarkPreview(@PreviewParameter(TimelineItemImageContentProvider::class) content: TimelineItemImageContent) =
+internal fun TimelineItemVideoViewDarkPreview(@PreviewParameter(TimelineItemImageContentProvider::class) content: TimelineItemImageContent) =
     ElementPreviewDark { ContentToPreview(content) }
 
 @Composable

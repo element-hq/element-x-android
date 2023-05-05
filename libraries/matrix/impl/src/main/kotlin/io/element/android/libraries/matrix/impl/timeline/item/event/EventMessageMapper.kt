@@ -29,7 +29,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.impl.media.map
-import io.element.android.libraries.matrix.impl.media.useUrl
 import org.matrix.rustcomponents.sdk.Message
 import org.matrix.rustcomponents.sdk.MessageType
 import org.matrix.rustcomponents.sdk.use
@@ -42,13 +41,13 @@ class EventMessageMapper {
         val type = message.msgtype().use { type ->
             when (type) {
                 is MessageType.Audio -> {
-                    AudioMessageType(type.content.body, type.content.source.useUrl(), type.content.info?.map())
+                    AudioMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
                 }
                 is MessageType.File -> {
-                    FileMessageType(type.content.body, type.content.source.useUrl(), type.content.info?.map())
+                    FileMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
                 }
                 is MessageType.Image -> {
-                    ImageMessageType(type.content.body, type.content.source.useUrl(), type.content.info?.map())
+                    ImageMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
                 }
                 is MessageType.Notice -> {
                     NoticeMessageType(type.content.body, type.content.formatted?.map())
@@ -60,7 +59,7 @@ class EventMessageMapper {
                     EmoteMessageType(type.content.body, type.content.formatted?.map())
                 }
                 is MessageType.Video -> {
-                    VideoMessageType(type.content.body, type.content.source.useUrl(), type.content.info?.map())
+                    VideoMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
                 }
                 null -> {
                     UnknownMessageType

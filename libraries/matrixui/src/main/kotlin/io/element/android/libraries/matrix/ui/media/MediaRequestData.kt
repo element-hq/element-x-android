@@ -16,8 +16,10 @@
 
 package io.element.android.libraries.matrix.ui.media
 
+import io.element.android.libraries.matrix.api.media.MatrixMediaSource
+
 data class MediaRequestData(
-    val url: String,
+    val source: MatrixMediaSource?,
     val kind: Kind
 ) {
 
