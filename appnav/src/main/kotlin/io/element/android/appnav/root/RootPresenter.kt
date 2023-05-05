@@ -32,13 +32,9 @@ class RootPresenter @Inject constructor(
         val rageshakeDetectionState = rageshakeDetectionPresenter.present()
         val crashDetectionState = crashDetectionPresenter.present()
 
-        fun handleEvent(@Suppress("UNUSED_PARAMETER") event: RootEvents) {
-        }
-
         return RootState(
             rageshakeDetectionState = rageshakeDetectionState,
             crashDetectionState = crashDetectionState,
-            eventSink = ::handleEvent
         )
     }
 }

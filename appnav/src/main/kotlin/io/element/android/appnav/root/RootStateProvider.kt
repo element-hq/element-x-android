@@ -37,5 +37,4 @@ open class RootStateProvider : PreviewParameterProvider<RootState> {
 fun aRootState() = RootState(
     rageshakeDetectionState = aRageshakeDetectionState(),
     crashDetectionState = aCrashDetectionState(),
-    eventSink = {}
 )
