@@ -1,4 +1,6 @@
 const {danger, warn} = require('danger')
+const fs = require('fs')
+const path = require('path')
 
 /**
  * Note: if you update the checks in this file, please also update the file ./docs/danger.md
@@ -128,9 +130,33 @@ if (allowList.includes(user)) {
     })
 }
 
+const previewAnnotations = [
+    'androidx.compose.ui.tooling.preview.Preview',
+    'io.element.android.libraries.designsystem.preview.LargeHeightPreview'
+]
+
+const filesWithPreviews = editedFiles.filter(file => file.endsWith(".kt")).filter(file => {
+    const content = fs.readFileSync(file);
+    return previewAnnotations.some((ann) => content.includes(ann));
+})
+
+const buildFilesWithMissingProcessor = filesWithPreviews.map(file => {
+    let parent = path.dirname(file);
+    while (fs.statSync(path.join(parent, 'build.gradle.kts'), {throwIfNoEntry: false}) === undefined) {
+        parent = path.dirname(parent);
+    }
+    return path.join(parent, 'build.gradle.kts');
+}).filter((value, index, array) => array.indexOf(value) === index).filter(buildFile => {
+    const content = fs.readFileSync(buildFile);
+    return !content.includes('ksp(libs.showkase.processor)');
+})
+
+if (buildFilesWithMissingProcessor.length > 0) {
+    warn("You have made changes to a file containing a `@Preview` annotated function but its module doesn't include the showkase processor. Missing processor in: " + buildFilesWithMissingProcessor.join(", "))
+}
 
 // Check for screenshots on view changes
-const hasChangedViews = editedFiles.filter(file => file.includes("/layout")).length > 0
+const hasChangedViews = filesWithPreviews.length > 0
 if (hasChangedViews) {
     if (!pr.body.includes("user-images")) {
         warn("You seem to have made changes to views. Please consider adding screenshots.")

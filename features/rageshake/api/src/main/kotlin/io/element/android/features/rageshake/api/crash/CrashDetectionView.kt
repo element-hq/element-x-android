@@ -80,3 +80,4 @@ private fun ContentToPreview() {
         state = aCrashDetectionState().copy(crashDetected = true)
     )
 }
+
