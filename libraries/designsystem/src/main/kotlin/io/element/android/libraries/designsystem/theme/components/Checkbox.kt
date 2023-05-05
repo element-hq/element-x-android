@@ -24,8 +24,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Composable
 fun Checkbox(
@@ -46,13 +46,9 @@ fun Checkbox(
     )
 }
 
-@Preview
+@Preview(group = PreviewGroup.Toggles)
 @Composable
-internal fun CheckboxesLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun CheckboxesDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun CheckboxesPreview() = ElementThemedPreview(vertical = false) { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

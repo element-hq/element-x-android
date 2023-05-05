@@ -26,8 +26,8 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -75,23 +75,54 @@ fun RetryDialog(
     )
 }
 
+@Composable
+private fun RetryDialogContent(
+    content: String,
+    modifier: Modifier = Modifier,
+    title: String = RetryDialogDefaults.title,
+    retryText: String = RetryDialogDefaults.retryText,
+    dismissText: String = RetryDialogDefaults.dismissText,
+    onRetry: () -> Unit = {},
+    onDismiss: () -> Unit = {},
+    shape: Shape = AlertDialogDefaults.shape,
+    containerColor: Color = AlertDialogDefaults.containerColor,
+    iconContentColor: Color = AlertDialogDefaults.iconContentColor,
+    titleContentColor: Color = AlertDialogDefaults.titleContentColor,
+    textContentColor: Color = AlertDialogDefaults.textContentColor,
+    tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
+) {
+    SimpleAlertDialogContent(
+        modifier = modifier,
+        title = title,
+        content = content,
+        submitText = retryText,
+        onSubmitClicked = onRetry,
+        cancelText = dismissText,
+        onCancelClicked = onDismiss,
+        shape = shape,
+        containerColor = containerColor,
+        iconContentColor = iconContentColor,
+        titleContentColor = titleContentColor,
+        textContentColor = textContentColor,
+        tonalElevation = tonalElevation,
+    )
+}
+
 object RetryDialogDefaults {
     val title: String @Composable get() = stringResource(id = StringR.string.dialog_title_error)
     val retryText: String @Composable get() = stringResource(id = StringR.string.action_retry)
     val dismissText: String @Composable get() = stringResource(id = StringR.string.action_cancel)
 }
 
-@Preview
+@Preview(group = PreviewGroup.Dialogs)
 @Composable
-internal fun RetryDialogLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun RetryDialogDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun RetryDialogPreview() = ElementThemedPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
-    RetryDialog(
-        content = "Content",
-    )
+    DialogPreview {
+        RetryDialogContent(
+            content = "Content",
+        )
+    }
 }

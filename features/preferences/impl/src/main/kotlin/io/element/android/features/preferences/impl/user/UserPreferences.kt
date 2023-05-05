@@ -26,9 +26,9 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserHeader
 import io.element.android.libraries.matrix.ui.components.MatrixUserWithNullProvider
-import io.element.android.libraries.matrix.ui.model.MatrixUser
 
 @Composable
 fun UserPreferences(

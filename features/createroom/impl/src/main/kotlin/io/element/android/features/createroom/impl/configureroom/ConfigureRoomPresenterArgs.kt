@@ -16,7 +16,7 @@
 
 package io.element.android.features.createroom.impl.configureroom
 
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 data class ConfigureRoomPresenterArgs(
     val selectedUsers: List<MatrixUser>,

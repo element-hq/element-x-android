@@ -39,8 +39,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 
@@ -95,7 +95,9 @@ fun PreferenceText(
                 Text(currentValue, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
                 Spacer(Modifier.width(16.dp))
             } else if (loadingCurrentValue) {
-                CircularProgressIndicator(modifier = Modifier.progressSemantics().size(20.dp), strokeWidth = 2.dp)
+                CircularProgressIndicator(modifier = Modifier
+                    .progressSemantics()
+                    .size(20.dp), strokeWidth = 2.dp)
                 Spacer(Modifier.width(16.dp))
             }
 
@@ -103,13 +105,9 @@ fun PreferenceText(
     }
 }
 
-@Preview
+@Preview(group = PreviewGroup.Preferences)
 @Composable
-internal fun PreferenceTextLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun PreferenceTextDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun PreferenceTextPreview() = ElementThemedPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

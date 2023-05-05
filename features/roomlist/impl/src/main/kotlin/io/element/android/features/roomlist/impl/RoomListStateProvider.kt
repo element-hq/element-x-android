@@ -23,7 +23,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import io.element.android.libraries.ui.strings.R as StringR
@@ -35,21 +35,22 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState().copy(displayVerificationPrompt = true),
             aRoomListState().copy(snackbarMessage = SnackbarMessage(StringR.string.common_verification_complete)),
             aRoomListState().copy(hasNetworkConnection = false),
-            aRoomListState().copy(displayInvites = true),
+            aRoomListState().copy(invitesState = InvitesState.SeenInvites),
+            aRoomListState().copy(invitesState = InvitesState.NewInvites),
             aRoomListState().copy(displaySearchResults = true, filter = "", filteredRoomList = persistentListOf()),
             aRoomListState().copy(displaySearchResults = true),
         )
 }
 
 internal fun aRoomListState() = RoomListState(
-    matrixUser = MatrixUser(id = UserId("@id:domain"), username = "User#1", avatarData = AvatarData("@id:domain", "U")),
+    matrixUser = MatrixUser(userId = UserId("@id:domain"), displayName = "User#1"),
     roomList = aRoomListRoomSummaryList(),
     filter = "filter",
     filteredRoomList = aRoomListRoomSummaryList(),
     hasNetworkConnection = true,
     snackbarMessage = null,
     displayVerificationPrompt = false,
-    displayInvites = false,
+    invitesState = InvitesState.NoInvites,
     displaySearchResults = false,
     eventSink = {}
 )

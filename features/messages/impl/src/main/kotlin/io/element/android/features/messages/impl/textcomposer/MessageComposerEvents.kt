@@ -24,6 +24,15 @@ sealed interface MessageComposerEvents {
     object CloseSpecialMode : MessageComposerEvents
     data class SetMode(val composerMode: MessageComposerMode) : MessageComposerEvents
     data class UpdateText(val text: CharSequence) : MessageComposerEvents
-
-    object TakePhoto : MessageComposerEvents
+    object AddAttachment : MessageComposerEvents
+    object DismissAttachmentMenu : MessageComposerEvents
+    sealed interface PickAttachmentSource : MessageComposerEvents {
+        object FromGallery : PickAttachmentSource
+        object FromCamera : PickAttachmentSource
+        object FromFiles : PickAttachmentSource
+    }
+    sealed interface PickCameraAttachmentSource : MessageComposerEvents {
+        object Photo : PickCameraAttachmentSource
+        object Video : PickCameraAttachmentSource
+    }
 }

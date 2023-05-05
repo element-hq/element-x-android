@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 open class ImageVectorProvider : PreviewParameterProvider<ImageVector?> {
     override val values: Sequence<ImageVector?>
         get() = sequenceOf(
-            null,
             Icons.Default.BugReport,
+            null,
         )
 }

@@ -27,6 +27,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -35,7 +38,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -44,7 +46,8 @@ import io.element.android.libraries.designsystem.theme.components.MediumTopAppBa
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.ui.model.MatrixUser
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.R as StringR
@@ -107,7 +110,8 @@ private fun DefaultRoomListTopBar(
                     modifier = Modifier.testTag(TestTags.homeScreenSettings),
                     onClick = onOpenSettings
                 ) {
-                    Avatar(matrixUser.avatarData, contentDescription = stringResource(StringR.string.common_settings))
+                    val avatarData by remember { derivedStateOf { matrixUser.getAvatarData() } }
+                    Avatar(avatarData, contentDescription = stringResource(StringR.string.common_settings))
                 }
             }
         },
@@ -135,7 +139,7 @@ internal fun DefaultRoomListTopBarDarkPreview() = ElementPreviewDark { DefaultRo
 @Composable
 private fun DefaultRoomListTopBarPreview() {
     DefaultRoomListTopBar(
-        matrixUser = MatrixUser(UserId("@id:domain"), "Alice", AvatarData("@id:domain", "Alice")),
+        matrixUser = MatrixUser(UserId("@id:domain"), "Alice"),
         scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState()),
     )
 }

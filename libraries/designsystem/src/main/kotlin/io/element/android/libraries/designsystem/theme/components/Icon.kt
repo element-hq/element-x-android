@@ -27,8 +27,8 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Composable
 fun Icon(
@@ -75,15 +75,10 @@ fun Icon(
     )
 }
 
-@Preview
+@Preview(group = PreviewGroup.Icons)
 @Composable
-internal fun IconImageVectorLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun IconImageVectorDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
+internal fun IconImageVectorPreview() =
+    ElementThemedPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {

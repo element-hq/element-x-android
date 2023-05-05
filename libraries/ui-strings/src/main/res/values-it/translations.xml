@@ -128,12 +128,6 @@
   <string name="room_timeline_beginning_of_room_no_name">"Questo è l\'inizio della conversazione."</string>
   <string name="room_timeline_read_marker_title">"Nuovo"</string>
   <string name="screen_report_content_block_user_hint">"Seleziona se vuoi nascondere tutti i messaggi attuali e futuri di questo utente"</string>
-  <string name="screen_room_member_details_block_alert_action">"Blocca"</string>
-  <string name="screen_room_member_details_block_alert_description">"Gli utenti bloccati non saranno in grado di inviarti nuovi messaggi e tutti quelli già esistenti saranno nascosti. Potrai annullare questa azione in qualsiasi momento."</string>
-  <string name="screen_room_member_details_block_user">"Blocca utente"</string>
-  <string name="screen_room_member_details_unblock_alert_action">"Sblocca"</string>
-  <string name="screen_room_member_details_unblock_alert_description">"Dopo aver sbloccato l\'utente, potrai vedere nuovamente tutti i suoi messaggi."</string>
-  <string name="screen_room_member_details_unblock_user">"Sblocca utente"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Soglia di rilevamento"</string>
   <string name="settings_title_general">"Generali"</string>

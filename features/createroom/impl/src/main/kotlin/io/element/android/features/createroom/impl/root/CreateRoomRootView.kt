@@ -16,7 +16,6 @@
 
 package io.element.android.features.createroom.impl.root
 
-import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -88,10 +87,7 @@ fun CreateRoomRootView(
                 modifier = Modifier.fillMaxWidth(),
                 state = state.userListState,
                 onUserSelected = {
-                    // Fixme disabled DM creation since it can break the account data which is not correctly synced
-                    //  uncomment to enable it again or move behind a feature flag
-                    Toast.makeText(context, "Create DM feature is disabled.", Toast.LENGTH_SHORT).show()
-//                    state.eventSink(CreateRoomRootEvents.StartDM(it))
+                    state.eventSink(CreateRoomRootEvents.StartDM(it))
                 },
             )
 
@@ -108,6 +104,7 @@ fun CreateRoomRootView(
         is Async.Loading -> {
             ProgressDialog(text = stringResource(id = StringR.string.common_creating_room))
         }
+
         is Async.Failure -> {
             RetryDialog(
                 content = stringResource(id = R.string.screen_start_chat_error_starting_chat),
@@ -120,6 +117,7 @@ fun CreateRoomRootView(
                 },
             )
         }
+
         else -> Unit
     }
 }
