@@ -39,8 +39,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.roomdetails.impl.R
-import io.element.android.features.roomdetails.impl.members.search.components.SearchSingleMemberResultItem
-import io.element.android.features.roomdetails.impl.members.search.components.MemberListView
+import io.element.android.features.roomdetails.impl.members.components.RoomMemberSearchResultItem
+import io.element.android.features.roomdetails.impl.members.components.RoomMemberListView
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.isLoading
 import io.element.android.libraries.designsystem.ElementTextStyles
@@ -52,7 +52,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.room.RoomMember
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,13 +63,13 @@ fun RoomMemberListView(
     onMemberSelected: (UserId) -> Unit = {},
 ) {
 
-    fun onUserSelected(user: MatrixUser) {
-        onMemberSelected(user.userId)
+    fun onUserSelected(roomMember: RoomMember) {
+        onMemberSelected(roomMember.userId)
     }
 
     Scaffold(
         topBar = {
-            if (!state.memberListState.isSearchActive) {
+            if (!state.isSearchActive) {
                 RoomMemberListTopBar(onBackPressed = onBackPressed)
             }
         }
@@ -80,16 +80,33 @@ fun RoomMemberListView(
                 .padding(padding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            MemberListView(
-                state = state.memberListState,
-                onUserSelected = ::onUserSelected,
+            RoomMemberListView(
+                state = state,
             )
 
-            if (!state.memberListState.isSearchActive) {
-                if (state.allUsers is Async.Success) {
+            if (!state.isSearchActive) {
+                if (state.roomMembers is Async.Success) {
                     LazyColumn(modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()) {
+                        if (state.roomMembers.state.invited.isNotEmpty()) {
+                            item {
+                                Text(
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                                    text = stringResource(id = R.string.screen_room_member_list_pending_header_title),
+                                    style = ElementTextStyles.Regular.callout,
+                                    color = MaterialTheme.colorScheme.secondary,
+                                    textAlign = TextAlign.Start,
+                                )
+                            }
+                            items(state.roomMembers.state.invited) { matrixUser ->
+                                RoomMemberSearchResultItem(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    roomMember = matrixUser,
+                                    onClick = { onUserSelected(matrixUser) }
+                                )
+                            }
+                        }
                         item {
-                            val memberCount = state.allUsers.state.count()
+                            val memberCount = state.roomMembers.state.joined.count()
                             Text(
                                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                                 text = pluralStringResource(id = R.plurals.screen_room_member_list_header_title, count = memberCount, memberCount),
@@ -98,15 +115,15 @@ fun RoomMemberListView(
                                 textAlign = TextAlign.Start,
                             )
                         }
-                        items(state.allUsers.state) { matrixUser ->
-                            SearchSingleMemberResultItem(
+                        items(state.roomMembers.state.joined) { matrixUser ->
+                            RoomMemberSearchResultItem(
                                 modifier = Modifier.fillMaxWidth(),
-                                matrixUser = matrixUser,
+                                roomMember = matrixUser,
                                 onClick = { onUserSelected(matrixUser) }
                             )
                         }
                     }
-                } else if (state.allUsers.isLoading()) {
+                } else if (state.roomMembers.isLoading()) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }

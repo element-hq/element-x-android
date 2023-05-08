@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl.members.search.components
+package io.element.android.features.roomdetails.impl.members.components
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -37,30 +36,26 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import io.element.android.features.roomdetails.impl.members.search.UserSearchResultState
+import io.element.android.features.roomdetails.impl.members.RoomMemberSearchResultState
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.ui.strings.R
-import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchMemberBar(
+fun RoomMemberSearchBar(
     query: String,
-    state: UserSearchResultState,
-    selectedUsers: ImmutableList<MatrixUser>,
+    state: RoomMemberSearchResultState,
     active: Boolean,
-    isMultiSelectionEnabled: Boolean,
     modifier: Modifier = Modifier,
     placeHolderTitle: String = stringResource(R.string.common_search_for_someone),
     onActiveChanged: (Boolean) -> Unit = {},
     onTextChanged: (String) -> Unit = {},
-    onUserSelected: (MatrixUser) -> Unit = {},
-    onUserDeselected: (MatrixUser) -> Unit = {},
+    onUserSelected: (RoomMember) -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -111,44 +106,17 @@ fun SearchMemberBar(
         },
         colors = if (!active) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
         content = {
-            if (isMultiSelectionEnabled && active && selectedUsers.isNotEmpty()) {
-                SelectedMembersList(
-                    contentPadding = PaddingValues(16.dp),
-                    selectedUsers = selectedUsers,
-                    autoScroll = true,
-                    onUserRemoved = onUserDeselected,
-                )
-            }
-
-
-            if (state is UserSearchResultState.Results) {
+            if (state is RoomMemberSearchResultState.Results) {
                 LazyColumn {
-                    if (isMultiSelectionEnabled) {
-                        items(state.results) { matrixUser ->
-                            SearchMultipleMembersResultItem(
-                                modifier = Modifier.fillMaxWidth(),
-                                matrixUser = matrixUser,
-                                isUserSelected = selectedUsers.find { it.userId == matrixUser.userId } != null,
-                                onCheckedChange = { checked ->
-                                    if (checked) {
-                                        onUserSelected(matrixUser)
-                                    } else {
-                                        onUserDeselected(matrixUser)
-                                    }
-                                }
-                            )
-                        }
-                    } else {
-                        items(state.results) { matrixUser ->
-                            SearchSingleMemberResultItem(
-                                modifier = Modifier.fillMaxWidth(),
-                                matrixUser = matrixUser,
-                                onClick = { onUserSelected(matrixUser) }
-                            )
-                        }
+                    items(state.results) { matrixUser ->
+                        RoomMemberSearchResultItem(
+                            modifier = Modifier.fillMaxWidth(),
+                            roomMember = matrixUser,
+                            onClick = { onUserSelected(matrixUser) }
+                        )
                     }
                 }
-            } else if (state is UserSearchResultState.NoResults) {
+            } else if (state is RoomMemberSearchResultState.NoResults) {
                 Spacer(Modifier.size(80.dp))
 
                 Text(

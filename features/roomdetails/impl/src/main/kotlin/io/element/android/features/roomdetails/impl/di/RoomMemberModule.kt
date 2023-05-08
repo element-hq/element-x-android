@@ -27,7 +27,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 
 @Module
 @ContributesTo(RoomScope::class)
-object RoomMemberProvidesModule {
+object RoomMemberModule {
 
     @Provides
     fun provideRoomMemberDetailsPresenterFactory(

@@ -24,6 +24,7 @@ import io.element.android.features.roomdetails.impl.LeaveRoomWarning
 import io.element.android.features.roomdetails.impl.RoomDetailsEvent
 import io.element.android.features.roomdetails.impl.RoomDetailsPresenter
 import io.element.android.features.roomdetails.impl.RoomDetailsType
+import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -266,22 +267,3 @@ fun aMatrixRoom(
     isDirect = isDirect,
 )
 
-fun aRoomMember(
-    userId: UserId = A_USER_ID,
-    displayName: String? = null,
-    avatarUrl: String? = null,
-    membership: RoomMembershipState = RoomMembershipState.JOIN,
-    isNameAmbiguous: Boolean = false,
-    powerLevel: Long = 0L,
-    normalizedPowerLevel: Long = 0L,
-    isIgnored: Boolean = false,
-) = RoomMember(
-    userId = userId,
-    displayName = displayName,
-    avatarUrl = avatarUrl,
-    membership = membership,
-    isNameAmbiguous = isNameAmbiguous,
-    powerLevel = powerLevel,
-    normalizedPowerLevel = normalizedPowerLevel,
-    isIgnored = isIgnored,
-)

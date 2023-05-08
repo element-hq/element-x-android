@@ -40,7 +40,6 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
-    implementation(projects.features.userlist.api)
     implementation(projects.libraries.androidutils)
     api(projects.features.roomdetails.api)
     implementation(libs.coil.compose)

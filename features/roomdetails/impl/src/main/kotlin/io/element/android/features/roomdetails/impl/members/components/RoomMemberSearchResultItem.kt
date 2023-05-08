@@ -14,48 +14,47 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl.members.search.components
+package io.element.android.features.roomdetails.impl.members.components
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.clickable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.ui.components.CheckableMatrixUserRow
-import io.element.android.libraries.matrix.ui.components.aMatrixUser
+import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 
 @Composable
-fun SearchMultipleMembersResultItem(
-    matrixUser: MatrixUser,
-    isUserSelected: Boolean,
+fun RoomMemberSearchResultItem(
+    roomMember: RoomMember,
     modifier: Modifier = Modifier,
-    onCheckedChange: (Boolean) -> Unit = {},
+    onClick: () -> Unit = {},
 ) {
-    CheckableMatrixUserRow(
-        checked = isUserSelected,
-        modifier = modifier,
-        matrixUser = matrixUser,
+    MatrixUserRow(
+        modifier = modifier.clickable(onClick = onClick),
+        matrixUser = MatrixUser(
+            userId = roomMember.userId,
+            displayName = roomMember.displayName,
+            avatarUrl = roomMember.avatarUrl
+        ),
         avatarSize = AvatarSize.Custom(36.dp),
-        onCheckedChange = onCheckedChange,
     )
 }
 
 @Preview
 @Composable
-internal fun SearchMultipleUsersResultItemLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun SearchSingleUserResultItemLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-internal fun SearchMultipleUsersResultItemDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun SearchSingleUserResultItemDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
-    Column {
-        SearchMultipleMembersResultItem(matrixUser = aMatrixUser(), isUserSelected = true)
-        SearchMultipleMembersResultItem(matrixUser = aMatrixUser(), isUserSelected = false)
-    }
+    RoomMemberSearchResultItem(roomMember = aRoomMember())
 }

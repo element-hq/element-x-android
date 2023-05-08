@@ -22,19 +22,17 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.roomMembers
-import io.element.android.libraries.matrix.api.room.toMatrixUser
-import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.coroutines.flow.dropWhile
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class MemberListDataSource @Inject constructor(
+class RoomMemberListDataSource @Inject constructor(
     private val room: MatrixRoom,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) {
 
-    suspend fun search(query: String): List<MatrixUser> = withContext(coroutineDispatchers.io) {
+    suspend fun search(query: String): List<RoomMember> = withContext(coroutineDispatchers.io) {
         val roomMembers = room.membersStateFlow
             .dropWhile { it !is MatrixRoomMembersState.Ready }
             .first()
@@ -48,7 +46,7 @@ class MemberListDataSource @Inject constructor(
                     || member.displayName?.contains(query, ignoreCase = true).orFalse()
             }
         }
-        filteredMembers.map(RoomMember::toMatrixUser)
+        filteredMembers
     }
 
 }

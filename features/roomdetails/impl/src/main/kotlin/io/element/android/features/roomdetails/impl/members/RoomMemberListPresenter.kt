@@ -18,52 +18,68 @@ package io.element.android.features.roomdetails.impl.members
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import io.element.android.features.roomdetails.impl.members.search.SelectionMode
-import io.element.android.features.roomdetails.impl.members.search.MemberListDataStore
-import io.element.android.features.roomdetails.impl.members.search.MemberListPresenter
-import io.element.android.features.roomdetails.impl.members.search.MemberListPresenterArgs
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.user.MatrixUser
-import kotlinx.collections.immutable.ImmutableList
+import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RoomMemberListPresenter @Inject constructor(
-    private val memberListPresenterFactory: MemberListPresenter.Factory,
-    private val memberListDataSource: MemberListDataSource,
-    private val memberListDataStore: MemberListDataStore,
-    private val room: MatrixRoom,
+    private val roomMemberListDataSource: RoomMemberListDataSource,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : Presenter<RoomMemberListState> {
 
-    private val userListPresenter by lazy {
-        memberListPresenterFactory.create(
-            MemberListPresenterArgs(selectionMode = SelectionMode.Single),
-            memberListDataSource,
-            memberListDataStore,
-        )
-    }
-
     @Composable
     override fun present(): RoomMemberListState {
-        val userListState = userListPresenter.present()
-        val allUsers = remember { mutableStateOf<Async<ImmutableList<MatrixUser>>>(Async.Loading()) }
+        var roomMembers by remember { mutableStateOf<Async<RoomMembers>>(Async.Loading()) }
+        var isSearchActive by rememberSaveable { mutableStateOf(false) }
+        var searchQuery by rememberSaveable { mutableStateOf("") }
+        var searchResults by remember {
+            mutableStateOf<RoomMemberSearchResultState>(RoomMemberSearchResultState.NotSearching)
+        }
 
         LaunchedEffect(Unit) {
             withContext(coroutineDispatchers.io) {
-                allUsers.value = Async.Success(memberListDataSource.search("").toImmutableList())
+                val members = roomMemberListDataSource.search("").groupBy { it.membership }
+                roomMembers = Async.Success(
+                    RoomMembers(
+                        invited = members.getOrDefault(RoomMembershipState.INVITE, emptyList()).toImmutableList(),
+                        joined = members.getOrDefault(RoomMembershipState.JOIN, emptyList()).toImmutableList(),
+                    )
+                )
+            }
+        }
+
+        LaunchedEffect(searchQuery) {
+            withContext(coroutineDispatchers.io) {
+                searchResults = if (searchQuery.isEmpty()) {
+                    RoomMemberSearchResultState.NotSearching
+                } else {
+                    val results = roomMemberListDataSource.search(searchQuery)
+                    if (results.isEmpty()) RoomMemberSearchResultState.NoResults
+                    else RoomMemberSearchResultState.Results(results.toImmutableList())
+                }
             }
         }
 
         return RoomMemberListState(
-            allUsers = allUsers.value,
-            memberListState = userListState,
+            roomMembers = roomMembers,
+            searchQuery = searchQuery,
+            searchResults = searchResults,
+            isSearchActive = isSearchActive,
+            eventSink = { event ->
+                when (event) {
+                    is RoomMemberListEvents.OnSearchActiveChanged -> isSearchActive = event.active
+                    is RoomMemberListEvents.UpdateSearchQuery -> searchQuery = event.query
+                }
+            },
         )
     }
 }
