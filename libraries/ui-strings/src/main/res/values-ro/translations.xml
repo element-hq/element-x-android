@@ -122,10 +122,12 @@
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d membru"</item>
+    <item quantity="few">"%1$d membri"</item>
     <item quantity="other">"%1$d membri"</item>
   </plurals>
   <plurals name="room_timeline_state_changes">
     <item quantity="one">"%1$d schimbare a camerii"</item>
+    <item quantity="few">"%1$d schimbări ale camerei"</item>
     <item quantity="other">"%1$d schimbări ale camerei"</item>
   </plurals>
   <string name="preference_rageshake">"Rageshake pentru a raporta erori"</string>
