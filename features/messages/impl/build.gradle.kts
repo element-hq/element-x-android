@@ -43,6 +43,7 @@ dependencies {
     implementation(projects.libraries.dateformatter.api)
     implementation(projects.libraries.mediapickers)
     implementation(projects.libraries.featureflag.api)
+    implementation(projects.libraries.mediaupload)
     implementation(projects.features.networkmonitor.api)
     implementation(libs.coil.compose)
     implementation(libs.datetime)

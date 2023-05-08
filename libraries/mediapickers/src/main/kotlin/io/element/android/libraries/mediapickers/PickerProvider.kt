@@ -57,12 +57,18 @@ class PickerProvider constructor(private val isInTest: Boolean) {
      * [onResult] will be called with either the selected file's [Uri] or `null` if nothing was selected.
      */
     @Composable
-    fun registerGalleryPicker(onResult: (Uri?) -> Unit): PickerLauncher<PickVisualMediaRequest, Uri?> {
+    fun registerGalleryPicker(
+        onResult: (uri: Uri?, mimeType: String?) -> Unit
+    ): PickerLauncher<PickVisualMediaRequest, Uri?> {
         // Tests and UI preview can't handle Contexts, so we might as well disable the whole picker
         return if (LocalInspectionMode.current || isInTest) {
-            NoOpPickerLauncher { onResult(null) }
+            NoOpPickerLauncher { onResult(null, null) }
         } else {
-            rememberPickerLauncher(type = PickerType.ImageAndVideo) { uri -> onResult(uri) }
+            val context = LocalContext.current
+            rememberPickerLauncher(type = PickerType.ImageAndVideo) { uri ->
+                val mimeType = uri?.let { context.contentResolver.getType(it) }
+                onResult(uri, mimeType)
+            }
         }
     }
 
@@ -83,11 +89,9 @@ class PickerProvider constructor(private val isInTest: Boolean) {
     /**
      * Remembers and returns a [PickerLauncher] for taking a photo with a camera app.
      * @param [onResult] will be called with either the photo's [Uri] or `null` if nothing was selected.
-     * @param [deleteAfter] When it's `true`, the taken photo will be automatically removed after calling [onResult].
-     *  It's `true` by default.
      */
     @Composable
-    fun registerCameraPhotoPicker(onResult: (Uri?) -> Unit, deleteAfter: Boolean = true): PickerLauncher<Uri, Boolean> {
+    fun registerCameraPhotoPicker(onResult: (Uri?) -> Unit): PickerLauncher<Uri, Boolean> {
         // Tests and UI preview can't handle Context or FileProviders, so we might as well disable the whole picker
         return if (LocalInspectionMode.current || isInTest) {
             NoOpPickerLauncher { onResult(null) }
@@ -98,10 +102,6 @@ class PickerProvider constructor(private val isInTest: Boolean) {
             rememberPickerLauncher(type = PickerType.Camera.Photo(tmpFileUri)) { success ->
                 // Execute callback
                 onResult(if (success) tmpFileUri else null)
-                // Then remove the file and clear the picker
-                if (deleteAfter) {
-                    tmpFile.delete()
-                }
             }
         }
     }
@@ -109,11 +109,9 @@ class PickerProvider constructor(private val isInTest: Boolean) {
     /**
      * Remembers and returns a [PickerLauncher] for recording a video with a camera app.
      * @param [onResult] will be called with either the video's [Uri] or `null` if nothing was selected.
-     * @param [deleteAfter] When it's `true`, the recorded video will be automatically removed after calling [onResult].
-     *  It's `true` by default.
      */
     @Composable
-    fun registerCameraVideoPicker(onResult: (Uri?) -> Unit, deleteAfter: Boolean = true): PickerLauncher<Uri, Boolean> {
+    fun registerCameraVideoPicker(onResult: (Uri?) -> Unit): PickerLauncher<Uri, Boolean> {
         // Tests and UI preview can't handle Context or FileProviders, so we might as well disable the whole picker
         return if (LocalInspectionMode.current || isInTest) {
             NoOpPickerLauncher { onResult(null) }
@@ -124,10 +122,6 @@ class PickerProvider constructor(private val isInTest: Boolean) {
             rememberPickerLauncher(type = PickerType.Camera.Video(tmpFileUri)) { success ->
                 // Execute callback
                 onResult(if (success) tmpFileUri else null)
-                // Then remove the file and clear the picker
-                if (deleteAfter) {
-                    tmpFile.delete()
-                }
             }
         }
     }
