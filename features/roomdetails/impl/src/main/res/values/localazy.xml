@@ -7,6 +7,7 @@
   <string name="screen_room_details_encryption_enabled_subtitle">"Messages are secured with locks. Only you and the recipients have the unique keys to unlock them."</string>
   <string name="screen_room_details_encryption_enabled_title">"Message encryption enabled"</string>
   <string name="screen_room_details_share_room_title">"Share room"</string>
+  <string name="screen_room_member_list_pending_header_title">"Pending"</string>
   <string name="screen_dm_details_block_alert_action">"Block"</string>
   <string name="screen_dm_details_block_alert_description">"Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime."</string>
   <string name="screen_dm_details_block_user">"Block user"</string>
