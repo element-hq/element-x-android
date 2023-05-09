@@ -16,7 +16,9 @@
 
 package io.element.android.libraries.designsystem.preview
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,6 +29,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Surface
@@ -93,11 +96,15 @@ fun ElementThemedPreview(
     }
 }
 
+@Preview(name = "Light theme")
+@Preview(name = "Dark theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
+annotation class ElementPreviews
+
 @Composable
 @Suppress("ModifierMissing")
-private fun ElementPreview(
-    darkTheme: Boolean,
-    showBackground: Boolean,
+fun ElementPreview(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    showBackground: Boolean = true,
     content: @Composable () -> Unit
 ) {
     ElementTheme(darkTheme = darkTheme) {

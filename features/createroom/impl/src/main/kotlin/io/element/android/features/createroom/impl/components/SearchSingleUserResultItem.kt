@@ -19,11 +19,10 @@ package io.element.android.features.createroom.impl.components
 import androidx.compose.foundation.clickable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.ElementPreviews
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
@@ -41,15 +40,10 @@ fun SearchSingleUserResultItem(
     )
 }
 
-@Preview
+@ElementPreviews
 @Composable
-internal fun SearchSingleUserResultItemLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun SearchSingleUserResultItemDarkPreview() = ElementPreviewDark { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
-    SearchSingleUserResultItem(matrixUser = aMatrixUser())
+internal fun SearchSingleUserResultItemPreview() {
+    ElementPreview {
+        SearchSingleUserResultItem(matrixUser = aMatrixUser())
+    }
 }
