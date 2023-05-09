@@ -14,17 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.configureroom
+package io.element.android.features.createroom.impl.configureroom.avatar
 
-import io.element.android.features.createroom.impl.CreateRoomConfig
-import io.element.android.features.createroom.impl.configureroom.avatar.AvatarActionListState
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.api.core.RoomId
-
-data class ConfigureRoomState(
-    val config: CreateRoomConfig,
-    val isCreateButtonEnabled: Boolean,
-    val avatarActionListState: AvatarActionListState,
-    val createRoomAction: Async<RoomId>,
-    val eventSink: (ConfigureRoomEvents) -> Unit
-)
+sealed interface AvatarActionListEvents {
+    data class HandleAction(val action: AvatarAction) : AvatarActionListEvents
+}

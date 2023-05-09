@@ -60,6 +60,20 @@ class PickerProviderImpl constructor(private val isInTest: Boolean) : PickerProv
     }
 
     /**
+     * Remembers and returns a [PickerLauncher] for a gallery picture.
+     * [onResult] will be called with either the selected file's [Uri] or `null` if nothing was selected.
+     */
+    @Composable
+    fun registerGalleryImagePicker(onResult: (Uri?) -> Unit): PickerLauncher<PickVisualMediaRequest, Uri?> {
+        // Tests and UI preview can't handle Contexts, so we might as well disable the whole picker
+        return if (LocalInspectionMode.current || isInTest) {
+            NoOpPickerLauncher { onResult(null) }
+        } else {
+            rememberPickerLauncher(type = PickerType.Image) { uri -> onResult(uri) }
+        }
+    }
+
+    /**
      * Remembers and returns a [PickerLauncher] for a gallery item, either a picture or a video.
      * [onResult] will be called with either the selected file's [Uri] or `null` if nothing was selected.
      */
