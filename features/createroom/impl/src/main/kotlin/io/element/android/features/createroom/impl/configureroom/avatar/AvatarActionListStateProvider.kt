@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.configureroom
+package io.element.android.features.createroom.impl.configureroom.avatar
 
-import io.element.android.features.createroom.impl.CreateRoomConfig
-import io.element.android.features.createroom.impl.configureroom.avatar.AvatarActionListState
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.api.core.RoomId
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import kotlinx.collections.immutable.persistentListOf
 
-data class ConfigureRoomState(
-    val config: CreateRoomConfig,
-    val isCreateButtonEnabled: Boolean,
-    val avatarActionListState: AvatarActionListState,
-    val createRoomAction: Async<RoomId>,
-    val eventSink: (ConfigureRoomEvents) -> Unit
+open class ActionListStateProvider : PreviewParameterProvider<AvatarActionListState> {
+    override val values: Sequence<AvatarActionListState>
+        get() = sequenceOf(anActionListState())
+}
+
+fun anActionListState() = AvatarActionListState(
+    actions = persistentListOf(AvatarAction.TakePhoto, AvatarAction.ChoosePhoto),
+    eventSink = {}
 )

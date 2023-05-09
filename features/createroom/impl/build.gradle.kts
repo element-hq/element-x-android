@@ -48,6 +48,7 @@ dependencies {
     implementation(projects.features.userlist.api)
     api(projects.features.createroom.api)
     implementation(libs.coil.compose) // FIXME temp
+    implementation(projects.libraries.mediapickers)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

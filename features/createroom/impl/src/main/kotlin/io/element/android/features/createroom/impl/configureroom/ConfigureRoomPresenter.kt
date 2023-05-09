@@ -26,6 +26,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
+import io.element.android.features.createroom.impl.configureroom.avatar.AvatarAction
+import io.element.android.features.createroom.impl.configureroom.avatar.AvatarActionListEvents
+import io.element.android.features.createroom.impl.configureroom.avatar.AvatarActionListState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.execute
@@ -34,6 +37,8 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.createroom.RoomVisibility
+import io.element.android.libraries.mediapickers.PickerProvider
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -41,6 +46,7 @@ import javax.inject.Inject
 class ConfigureRoomPresenter @Inject constructor(
     private val dataStore: CreateRoomDataStore,
     private val matrixClient: MatrixClient,
+    private val mediaPickerProvider: PickerProvider,
 ) : Presenter<ConfigureRoomState> {
 
     @Composable
@@ -52,6 +58,13 @@ class ConfigureRoomPresenter @Inject constructor(
             }
         }
 
+        val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(onResult = { uri ->
+            if (uri != null) dataStore.setAvatarUrl(uri.toString())
+        })
+        val galleryImagePicker = mediaPickerProvider.registerGalleryImagePicker(onResult = { uri ->
+            if (uri != null) dataStore.setAvatarUrl(uri.toString())
+        })
+
         val localCoroutineScope = rememberCoroutineScope()
         val createRoomAction: MutableState<Async<RoomId>> = remember { mutableStateOf(Async.Uninitialized) }
 
@@ -62,7 +75,6 @@ class ConfigureRoomPresenter @Inject constructor(
 
         fun handleEvents(event: ConfigureRoomEvents) {
             when (event) {
-                is ConfigureRoomEvents.AvatarUriChanged -> dataStore.setAvatarUrl(event.uri?.toString())
                 is ConfigureRoomEvents.RoomNameChanged -> dataStore.setRoomName(event.name)
                 is ConfigureRoomEvents.TopicChanged -> dataStore.setTopic(event.topic)
                 is ConfigureRoomEvents.RoomPrivacyChanged -> dataStore.setPrivacy(event.privacy)
@@ -72,9 +84,27 @@ class ConfigureRoomPresenter @Inject constructor(
             }
         }
 
+        fun handleAvatarEvents(event: AvatarActionListEvents) {
+            when (event) {
+                is AvatarActionListEvents.HandleAction -> when (event.action) {
+                    AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
+                    AvatarAction.TakePhoto -> cameraPhotoPicker.launch()
+                }
+            }
+        }
+
+        val avatarActionListState = AvatarActionListState(
+            actions = persistentListOf(
+                AvatarAction.ChoosePhoto,
+                AvatarAction.TakePhoto,
+            ),
+            eventSink = ::handleAvatarEvents,
+        )
+
         return ConfigureRoomState(
             config = createRoomConfig.value,
             isCreateButtonEnabled = isCreateButtonEnabled,
+            avatarActionListState = avatarActionListState,
             createRoomAction = createRoomAction.value,
             eventSink = ::handleEvents,
         )

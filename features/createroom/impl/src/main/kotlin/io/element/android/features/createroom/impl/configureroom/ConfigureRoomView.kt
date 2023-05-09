@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 
 package io.element.android.features.createroom.impl.configureroom
 
 import android.net.Uri
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -27,12 +26,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,6 +46,8 @@ import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.Avatar
 import io.element.android.features.createroom.impl.components.LabelledTextField
 import io.element.android.features.createroom.impl.components.RoomPrivacyOption
+import io.element.android.features.createroom.impl.configureroom.avatar.AvatarActionListEvents
+import io.element.android.features.createroom.impl.configureroom.avatar.AvatarActionListView
 import io.element.android.features.userlist.api.components.SelectedUsersList
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.ProgressDialog
@@ -56,6 +60,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.core.RoomId
+import kotlinx.coroutines.launch
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
@@ -65,13 +70,23 @@ fun ConfigureRoomView(
     onBackPressed: () -> Unit = {},
     onRoomCreated: (RoomId) -> Unit = {},
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    val itemActionsBottomSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+    )
+
     if (state.createRoomAction is Async.Success) {
         LaunchedEffect(state.createRoomAction) {
             onRoomCreated(state.createRoomAction.state)
         }
     }
 
-    val context = LocalContext.current
+    fun onAvatarClicked() {
+        coroutineScope.launch {
+            itemActionsBottomSheetState.show()
+        }
+    }
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -92,7 +107,7 @@ fun ConfigureRoomView(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 avatarUri = state.config.avatarUrl?.toUri(),
                 roomName = state.config.roomName.orEmpty(),
-                onAvatarClick = { Toast.makeText(context, "not implemented yet", Toast.LENGTH_SHORT).show() },
+                onAvatarClick = ::onAvatarClicked,
                 onRoomNameChanged = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
             )
             RoomTopic(
@@ -114,10 +129,17 @@ fun ConfigureRoomView(
         }
     }
 
+    AvatarActionListView(
+        state = state.avatarActionListState,
+        modalBottomSheetState = itemActionsBottomSheetState,
+        onActionSelected = { state.avatarActionListState.eventSink(AvatarActionListEvents.HandleAction(it)) }
+    )
+
     when (state.createRoomAction) {
         is Async.Loading -> {
             ProgressDialog(text = stringResource(StringR.string.common_creating_room))
         }
+
         is Async.Failure -> {
             RetryDialog(
                 content = stringResource(R.string.screen_create_room_error_creating_room),
@@ -125,6 +147,7 @@ fun ConfigureRoomView(
                 onRetry = { state.eventSink(ConfigureRoomEvents.CreateRoom(state.config)) },
             )
         }
+
         else -> Unit
     }
 }
