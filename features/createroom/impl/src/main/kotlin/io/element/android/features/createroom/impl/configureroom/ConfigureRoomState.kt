@@ -17,14 +17,15 @@
 package io.element.android.features.createroom.impl.configureroom
 
 import io.element.android.features.createroom.impl.CreateRoomConfig
-import io.element.android.features.createroom.impl.configureroom.avatar.AvatarActionListState
+import io.element.android.features.createroom.impl.configureroom.avatar.AvatarAction
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
+import kotlinx.collections.immutable.ImmutableList
 
 data class ConfigureRoomState(
     val config: CreateRoomConfig,
     val isCreateButtonEnabled: Boolean,
-    val avatarActionListState: AvatarActionListState,
+    val avatarActions: ImmutableList<AvatarAction>,
     val createRoomAction: Async<RoomId>,
     val eventSink: (ConfigureRoomEvents) -> Unit
 )

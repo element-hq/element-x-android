@@ -17,6 +17,7 @@
 package io.element.android.features.createroom.impl.configureroom
 
 import io.element.android.features.createroom.impl.CreateRoomConfig
+import io.element.android.features.createroom.impl.configureroom.avatar.AvatarAction
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
 sealed interface ConfigureRoomEvents {
@@ -25,5 +26,6 @@ sealed interface ConfigureRoomEvents {
     data class RoomPrivacyChanged(val privacy: RoomPrivacy?) : ConfigureRoomEvents
     data class RemoveFromSelection(val matrixUser: MatrixUser) : ConfigureRoomEvents
     data class CreateRoom(val config: CreateRoomConfig) : ConfigureRoomEvents
+    data class HandleAvatarAction(val action: AvatarAction) : ConfigureRoomEvents
     object CancelCreateRoom : ConfigureRoomEvents
 }
