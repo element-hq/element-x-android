@@ -24,7 +24,7 @@ import org.matrix.rustcomponents.sdk.RoomMember as RustRoomMember
 
 object RoomMemberMapper {
 
-    fun map(roomMember: RustRoomMember): RoomMember =
+    fun map(roomMember: RustRoomMember): RoomMember = roomMember.use {
         RoomMember(
             UserId(roomMember.userId()),
             roomMember.displayName(),
@@ -35,6 +35,7 @@ object RoomMemberMapper {
             roomMember.normalizedPowerLevel(),
             roomMember.isIgnored(),
         )
+    }
 
     fun mapMembership(membershipState: RustMembershipState): RoomMembershipState =
         when (membershipState) {

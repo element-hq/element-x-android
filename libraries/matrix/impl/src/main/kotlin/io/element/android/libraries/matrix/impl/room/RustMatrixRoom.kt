@@ -33,7 +33,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.SlidingSyncRoom
@@ -156,9 +155,10 @@ class RustMatrixRoom(
 
     override suspend fun sendMessage(message: String): Result<Unit> = withContext(coroutineDispatchers.io) {
         val transactionId = genTransactionId()
-        val content = messageEventContentFromMarkdown(message)
-        runCatching {
-            innerRoom.send(content, transactionId)
+        messageEventContentFromMarkdown(message).use { content ->
+            runCatching {
+                innerRoom.send(content, transactionId)
+            }
         }
     }
 

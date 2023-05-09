@@ -80,6 +80,7 @@ class RoomListScreen(
                     initialize()
                     paginateBackwards(20, 50)
                     dispose()
+                    room.close()
                 }
             }
         }
