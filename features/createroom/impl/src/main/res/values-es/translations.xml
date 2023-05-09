@@ -5,4 +5,5 @@
   <string name="screen_create_room_add_people_title">"Añadir personas"</string>
   <string name="screen_start_chat_error_starting_chat">"Se ha producido un error al intentar iniciar un chat"</string>
   <string name="screen_start_chat_unknown_profile">"No podemos validar el ID de Matrix de este usuario. Es posible que no reciba la invitación."</string>
+  <string name="screen_create_room_title">"Crear una sala"</string>
 </resources>
