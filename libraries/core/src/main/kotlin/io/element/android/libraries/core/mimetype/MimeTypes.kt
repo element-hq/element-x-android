@@ -39,7 +39,6 @@ object MimeTypes {
 
     const val PlainText = "text/plain"
 
-
     fun String?.normalizeMimeType() = if (this == BadJpg) Jpeg else this
 
     fun String?.isMimeTypeImage() = this?.startsWith("image/").orFalse()

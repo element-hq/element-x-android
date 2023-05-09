@@ -23,6 +23,7 @@ import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.androidutils.file.createTmpFile
+import io.element.android.libraries.androidutils.media.runAndRelease
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAudio
@@ -99,7 +100,6 @@ class MediaPreProcessorImpl @Inject constructor(
             MediaType.Audio -> MimeTypes.Audio
             else -> originalMimeType
         }
-        // TODO: return Result instead of null
         val compressBeforeSending = mediaType in sequenceOf(MediaType.Image, MediaType.Video)
         val result = if (compressBeforeSending && mimeType != MimeTypes.Gif) {
             when {
@@ -151,9 +151,6 @@ class MediaPreProcessorImpl @Inject constructor(
             .onEach {
                 // TODO handle progress
             }
-            .catch {
-                // TODO: handle errors
-            }
             .filterIsInstance<VideoTranscodingEvent.Completed>()
             .first()
             .file
@@ -164,11 +161,11 @@ class MediaPreProcessorImpl @Inject constructor(
 
     private suspend fun processAudio(uri: Uri): MediaUploadInfo {
         val file = copyToTmpFile(uri)
-        return MediaMetadataRetriever().use { metadataRetriever ->
-            metadataRetriever.setDataSource(context, Uri.fromFile(file))
+        return MediaMetadataRetriever().runAndRelease {
+            setDataSource(context, Uri.fromFile(file))
 
             val info = AudioInfo(
-                duration = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L,
+                duration = extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L,
                 size = file.length()
             )
 
@@ -176,14 +173,14 @@ class MediaPreProcessorImpl @Inject constructor(
         }
     }
 
-    private suspend fun generateImageThumbnail(inputStream: InputStream): ThumbnailProcessingInfo {
+    private suspend fun generateImageThumbnail(inputStream: InputStream): ThumbnailProcessingInfo? {
         val thumbnailResult = imageCompressor
             .compressToTmpFile(
                 inputStream = inputStream,
                 resizeMode = ResizeMode.Strict(THUMB_MAX_WIDTH, THUMB_MAX_HEIGHT),
-            ).getOrThrow()
+            ).getOrNull()
 
-        return thumbnailResult.toThumbnailProcessingInfo(MimeTypes.Jpeg)
+        return thumbnailResult?.toThumbnailProcessingInfo(MimeTypes.Jpeg)
     }
 
     private fun removeSensitiveImageMetadata(file: File) {
@@ -207,13 +204,13 @@ class MediaPreProcessorImpl @Inject constructor(
     }
 
     private fun extractVideoMetadata(file: File, mimeType: String?, thumbnailUrl: String?, thumbnailInfo: ThumbnailInfo?): VideoInfo =
-        MediaMetadataRetriever().use { metadataRetriever ->
-            metadataRetriever.setDataSource(context, Uri.fromFile(file))
+        MediaMetadataRetriever().runAndRelease {
+            setDataSource(context, Uri.fromFile(file))
 
             VideoInfo(
-                duration = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L,
-                width = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toLong() ?: 0L,
-                height = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toLong() ?: 0L,
+                duration = extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L,
+                width = extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toLong() ?: 0L,
+                height = extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toLong() ?: 0L,
                 mimetype = mimeType,
                 size = file.length(),
                 thumbnailInfo = thumbnailInfo,
@@ -223,9 +220,9 @@ class MediaPreProcessorImpl @Inject constructor(
         }
 
     private suspend fun extractVideoThumbnail(uri: Uri): ThumbnailProcessingInfo? =
-        MediaMetadataRetriever().use { metadataRetriever ->
-            metadataRetriever.setDataSource(context, uri)
-            val bitmap = metadataRetriever.getFrameAtTime(VIDEO_THUMB_FRAME) ?: return null
+        MediaMetadataRetriever().runAndRelease {
+            setDataSource(context, uri)
+            val bitmap = getFrameAtTime(VIDEO_THUMB_FRAME) ?: return@runAndRelease null
             val inputStream = ByteArrayOutputStream().use {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 80, it)
                 ByteArrayInputStream(it.toByteArray())
@@ -236,7 +233,7 @@ class MediaPreProcessorImpl @Inject constructor(
                 resizeMode = ResizeMode.Strict(THUMB_MAX_WIDTH, THUMB_MAX_HEIGHT),
             )
 
-            return result.getOrThrow().toThumbnailProcessingInfo(MimeTypes.Jpeg)
+            result.getOrThrow().toThumbnailProcessingInfo(MimeTypes.Jpeg)
         }
 
     private suspend fun copyToTmpFile(uri: Uri): File {
