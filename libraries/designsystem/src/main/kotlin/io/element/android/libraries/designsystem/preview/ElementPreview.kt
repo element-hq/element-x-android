@@ -96,8 +96,8 @@ fun ElementThemedPreview(
     }
 }
 
-@Preview(name = "Light theme")
-@Preview(name = "Dark theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Day theme")
+@Preview(name = "Night theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
 annotation class ElementPreviews
 
 @Composable
