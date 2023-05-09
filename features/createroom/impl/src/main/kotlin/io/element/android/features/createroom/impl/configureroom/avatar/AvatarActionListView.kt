@@ -29,21 +29,23 @@ import androidx.compose.material.ListItem
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheetLayout
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 
 @Composable
 fun AvatarActionListView(
-    state: AvatarActionListState,
+    actions: ImmutableList<AvatarAction>,
     modalBottomSheetState: ModalBottomSheetState,
     modifier: Modifier = Modifier,
     onActionSelected: (action: AvatarAction) -> Unit = {},
@@ -61,7 +63,7 @@ fun AvatarActionListView(
         sheetState = modalBottomSheetState,
         sheetContent = {
             SheetContent(
-                state = state,
+                actions = actions,
                 onActionClicked = ::onItemActionClicked,
                 modifier = Modifier
                     .navigationBarsPadding()
@@ -73,11 +75,10 @@ fun AvatarActionListView(
 
 @Composable
 private fun SheetContent(
-    state: AvatarActionListState,
+    actions: ImmutableList<AvatarAction>,
     modifier: Modifier = Modifier,
     onActionClicked: (AvatarAction) -> Unit = { },
 ) {
-    val actions = state.actions
     LazyColumn(
         modifier = modifier.fillMaxWidth()
     ) {
@@ -87,12 +88,16 @@ private fun SheetContent(
             ListItem(
                 modifier = Modifier.clickable { onActionClicked(action) },
                 text = {
-                    Text(text = stringResource(action.titleResId))
+                    Text(
+                        text = stringResource(action.titleResId),
+                        color = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                    )
                 },
                 icon = {
                     Icon(
                         imageVector = action.icon,
                         contentDescription = stringResource(action.titleResId),
+                        tint = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
                     )
                 }
             )
@@ -102,18 +107,18 @@ private fun SheetContent(
 
 @Preview
 @Composable
-fun SheetContentLightPreview(@PreviewParameter(ActionListStateProvider::class) state: AvatarActionListState) =
-    ElementPreviewLight { ContentToPreview(state) }
+fun SheetContentLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun SheetContentDarkPreview(@PreviewParameter(ActionListStateProvider::class) state: AvatarActionListState) =
-    ElementPreviewDark { ContentToPreview(state) }
+fun SheetContentDarkPreview() =
+    ElementPreviewDark { ContentToPreview() }
 
 @Composable
-private fun ContentToPreview(state: AvatarActionListState) {
+private fun ContentToPreview() {
     AvatarActionListView(
-        state = state,
+        actions = persistentListOf(AvatarAction.ChoosePhoto, AvatarAction.TakePhoto, AvatarAction.Remove),
         modalBottomSheetState = ModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Expanded
         ),

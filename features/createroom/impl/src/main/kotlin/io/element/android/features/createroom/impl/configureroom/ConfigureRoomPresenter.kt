@@ -27,8 +27,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.features.createroom.impl.configureroom.avatar.AvatarAction
-import io.element.android.features.createroom.impl.configureroom.avatar.AvatarActionListEvents
-import io.element.android.features.createroom.impl.configureroom.avatar.AvatarActionListState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.execute
@@ -38,7 +36,7 @@ import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.createroom.RoomVisibility
 import io.element.android.libraries.mediapickers.PickerProvider
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -65,6 +63,19 @@ class ConfigureRoomPresenter @Inject constructor(
             if (uri != null) dataStore.setAvatarUrl(uri.toString())
         })
 
+        val avatarActions by remember(createRoomConfig.value.avatarUrl) {
+            derivedStateOf {
+                mutableListOf(
+                    AvatarAction.TakePhoto,
+                    AvatarAction.ChoosePhoto,
+                ).apply {
+                    if (createRoomConfig.value.avatarUrl != null) {
+                        add(AvatarAction.Remove)
+                    }
+                }.toImmutableList()
+            }
+        }
+
         val localCoroutineScope = rememberCoroutineScope()
         val createRoomAction: MutableState<Async<RoomId>> = remember { mutableStateOf(Async.Uninitialized) }
 
@@ -80,31 +91,22 @@ class ConfigureRoomPresenter @Inject constructor(
                 is ConfigureRoomEvents.RoomPrivacyChanged -> dataStore.setPrivacy(event.privacy)
                 is ConfigureRoomEvents.RemoveFromSelection -> dataStore.selectedUserListDataStore.removeUserFromSelection(event.matrixUser)
                 is ConfigureRoomEvents.CreateRoom -> createRoom(event.config)
+                is ConfigureRoomEvents.HandleAvatarAction -> {
+                    when (event.action) {
+                        AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
+                        AvatarAction.TakePhoto -> cameraPhotoPicker.launch()
+                        AvatarAction.Remove -> dataStore.setAvatarUrl(null)
+                    }
+                }
+
                 ConfigureRoomEvents.CancelCreateRoom -> createRoomAction.value = Async.Uninitialized
             }
         }
 
-        fun handleAvatarEvents(event: AvatarActionListEvents) {
-            when (event) {
-                is AvatarActionListEvents.HandleAction -> when (event.action) {
-                    AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
-                    AvatarAction.TakePhoto -> cameraPhotoPicker.launch()
-                }
-            }
-        }
-
-        val avatarActionListState = AvatarActionListState(
-            actions = persistentListOf(
-                AvatarAction.ChoosePhoto,
-                AvatarAction.TakePhoto,
-            ),
-            eventSink = ::handleAvatarEvents,
-        )
-
         return ConfigureRoomState(
             config = createRoomConfig.value,
             isCreateButtonEnabled = isCreateButtonEnabled,
-            avatarActionListState = avatarActionListState,
+            avatarActions = avatarActions,
             createRoomAction = createRoomAction.value,
             eventSink = ::handleEvents,
         )

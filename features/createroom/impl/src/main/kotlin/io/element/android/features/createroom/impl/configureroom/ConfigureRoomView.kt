@@ -46,7 +46,6 @@ import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.Avatar
 import io.element.android.features.createroom.impl.components.LabelledTextField
 import io.element.android.features.createroom.impl.components.RoomPrivacyOption
-import io.element.android.features.createroom.impl.configureroom.avatar.AvatarActionListEvents
 import io.element.android.features.createroom.impl.configureroom.avatar.AvatarActionListView
 import io.element.android.features.userlist.api.components.SelectedUsersList
 import io.element.android.libraries.architecture.Async
@@ -130,9 +129,9 @@ fun ConfigureRoomView(
     }
 
     AvatarActionListView(
-        state = state.avatarActionListState,
+        actions = state.avatarActions,
         modalBottomSheetState = itemActionsBottomSheetState,
-        onActionSelected = { state.avatarActionListState.eventSink(AvatarActionListEvents.HandleAction(it)) }
+        onActionSelected = { state.eventSink(ConfigureRoomEvents.HandleAvatarAction(it)) }
     )
 
     when (state.createRoomAction) {
