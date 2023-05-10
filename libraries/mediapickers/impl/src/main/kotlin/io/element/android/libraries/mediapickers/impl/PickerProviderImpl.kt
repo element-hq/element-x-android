@@ -64,7 +64,7 @@ class PickerProviderImpl constructor(private val isInTest: Boolean) : PickerProv
      * [onResult] will be called with either the selected file's [Uri] or `null` if nothing was selected.
      */
     @Composable
-    fun registerGalleryImagePicker(onResult: (Uri?) -> Unit): PickerLauncher<PickVisualMediaRequest, Uri?> {
+    override fun registerGalleryImagePicker(onResult: (Uri?) -> Unit): PickerLauncher<PickVisualMediaRequest, Uri?> {
         // Tests and UI preview can't handle Contexts, so we might as well disable the whole picker
         return if (LocalInspectionMode.current || isInTest) {
             NoOpPickerLauncher { onResult(null) }

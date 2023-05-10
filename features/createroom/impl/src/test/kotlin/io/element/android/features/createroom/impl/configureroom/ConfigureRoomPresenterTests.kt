@@ -35,7 +35,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
-import io.element.android.libraries.mediapickers.PickerProvider
+import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -52,16 +52,18 @@ class ConfigureRoomPresenterTests {
     private lateinit var userListDataStore: UserListDataStore
     private lateinit var createRoomDataStore: CreateRoomDataStore
     private lateinit var fakeMatrixClient: FakeMatrixClient
+    private lateinit var fakePickerProvider: FakePickerProvider
 
     @Before
     fun setup() {
         fakeMatrixClient = FakeMatrixClient()
         userListDataStore = UserListDataStore()
         createRoomDataStore = CreateRoomDataStore(userListDataStore)
+        fakePickerProvider = FakePickerProvider()
         presenter = ConfigureRoomPresenter(
             dataStore = createRoomDataStore,
             matrixClient = fakeMatrixClient,
-            mediaPickerProvider = PickerProvider(isInTest = true),
+            mediaPickerProvider = fakePickerProvider,
         )
     }
 
@@ -146,7 +148,8 @@ class ConfigureRoomPresenterTests {
             // Room avatar
             // Add
             val anUri = Uri.parse(AN_AVATAR_URL)
-            createRoomDataStore.setAvatarUri(anUri)
+            fakePickerProvider.givenResult(anUri)
+            newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
             newState = awaitItem()
             expectedConfig = expectedConfig.copy(avatarUri = anUri)
             assertThat(newState.config).isEqualTo(expectedConfig)
