@@ -93,6 +93,10 @@ fun aRoomMemberList() = listOf(
     aRoomMember(UserId("@justin:server.org"), "Justin"),
     aRoomMember(UserId("@mallory:server.org"), "Mallory"),
     aRoomMember(UserId("@susie:server.org"), "Susie"),
-    aRoomMember(UserId("@victor:server.org"), "Victor"),
-    aRoomMember(UserId("@walter:server.org"), "Walter"),
+    aVictor(),
+    aWalter(),
 )
+
+fun aVictor() = aRoomMember(UserId("@victor:server.org"), "Victor", membership = RoomMembershipState.INVITE)
+
+fun aWalter() = aRoomMember(UserId("@walter:server.org"), "Walter", membership = RoomMembershipState.INVITE)

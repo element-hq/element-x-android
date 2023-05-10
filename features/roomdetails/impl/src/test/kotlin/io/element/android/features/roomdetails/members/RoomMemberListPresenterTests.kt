@@ -20,62 +20,94 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
+import io.element.android.features.roomdetails.aMatrixRoom
+import io.element.android.features.roomdetails.impl.members.RoomMemberListDataSource
+import io.element.android.features.roomdetails.impl.members.RoomMemberListEvents
 import io.element.android.features.roomdetails.impl.members.RoomMemberListPresenter
-import io.element.android.features.userlist.api.SelectionMode
-import io.element.android.features.userlist.api.UserListDataSource
-import io.element.android.features.userlist.api.UserListDataStore
-import io.element.android.features.userlist.api.UserListPresenter
-import io.element.android.features.userlist.api.UserListPresenterArgs
-import io.element.android.features.userlist.api.UserSearchResultState
-import io.element.android.features.userlist.impl.DefaultUserListPresenter
-import io.element.android.features.userlist.test.FakeUserListDataSource
+import io.element.android.features.roomdetails.impl.members.RoomMemberSearchResultState
+import io.element.android.features.roomdetails.impl.members.RoomMembers
+import io.element.android.features.roomdetails.impl.members.aRoomMember
+import io.element.android.features.roomdetails.impl.members.aRoomMemberList
+import io.element.android.features.roomdetails.impl.members.aVictor
+import io.element.android.features.roomdetails.impl.members.aWalter
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
-import io.element.android.libraries.matrix.ui.components.aMatrixUser
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import okhttp3.internal.toImmutableList
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class RoomMemberListPresenterTests {
 
-    private val testCoroutineDispatchers = testCoroutineDispatchers()
-
     @Test
     fun `present - search is done automatically on start, but is async`() = runTest {
-        val searchResult = listOf(aMatrixUser())
-        val userListDataSource = FakeUserListDataSource().apply {
-            givenSearchResult(searchResult)
-        }
-        val userListDataStore = UserListDataStore()
-        val userListFactory = object : UserListPresenter.Factory {
-            override fun create(
-                args: UserListPresenterArgs,
-                userListDataSource: UserListDataSource,
-                userListDataStore: UserListDataStore,
-            ) = DefaultUserListPresenter(args, userListDataSource, userListDataStore)
-        }
-        val fakeRoom = FakeMatrixRoom()
         val presenter = RoomMemberListPresenter(
-            memberListPresenterFactory = userListFactory,
-            roomMemberListDataSource = userListDataSource,
-            roomMemberListDataStore = userListDataStore,
-            room = fakeRoom,
-            coroutineDispatchers = testCoroutineDispatchers
+            roomMemberListDataSource = RoomMemberListDataSource(
+                room = aMatrixRoom().apply {
+                    givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
+                },
+                coroutineDispatchers = testCoroutineDispatchers()
+            ),
+            coroutineDispatchers = testCoroutineDispatchers()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             Truth.assertThat(initialState.roomMembers).isInstanceOf(Async.Loading::class.java)
-            Truth.assertThat(initialState.memberListState.isSearchActive).isFalse()
-            Truth.assertThat(initialState.memberListState.searchResults).isEqualTo(UserSearchResultState.NotSearching)
-            Truth.assertThat(initialState.memberListState.selectionMode).isEqualTo(SelectionMode.Single)
+            Truth.assertThat(initialState.searchQuery).isEmpty()
+            Truth.assertThat(initialState.searchResults).isEqualTo(RoomMemberSearchResultState.NotSearching)
+            Truth.assertThat(initialState.isSearchActive).isFalse()
 
             val loadedState = awaitItem()
-            Truth.assertThat((loadedState.roomMembers as? Async.Success)?.state).isEqualTo(searchResult.toImmutableList())
+            Truth.assertThat(loadedState.roomMembers).isInstanceOf(Async.Success::class.java)
+            Truth.assertThat((loadedState.roomMembers as Async.Success).state.invited).isEqualTo(listOf(aVictor(), aWalter()))
+            Truth.assertThat((loadedState.roomMembers as Async.Success).state.joined).isNotEmpty()
+        }
+    }
+
+    @Test
+    fun `present - open search`() = runTest {
+        val presenter = RoomMemberListPresenter(
+            roomMemberListDataSource = RoomMemberListDataSource(
+                room = aMatrixRoom().apply {
+                    givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
+                },
+                coroutineDispatchers = testCoroutineDispatchers()
+            ),
+            coroutineDispatchers = testCoroutineDispatchers()
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val loadedState = awaitItem()
+
+            loadedState.eventSink(RoomMemberListEvents.OnSearchActiveChanged(true))
+
+            val searchActiveState = awaitItem()
+            Truth.assertThat((searchActiveState.isSearchActive)).isTrue()
         }
     }
 }
+
+fun someRoomMembers() = listOf(
+    someInviteMember(),
+    someJoinMember()
+)
+
+fun someInviteMember() = aRoomMember(
+    userId = UserId("@invite:server.org"),
+    displayName = "Invite",
+    membership = RoomMembershipState.INVITE
+)
+
+fun someJoinMember() = aRoomMember(
+    userId = UserId("@join:server.org"),
+    displayName = "Join",
+    membership = RoomMembershipState.JOIN
+)

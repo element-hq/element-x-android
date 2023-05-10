@@ -39,11 +39,11 @@ class RoomMemberListPresenter @Inject constructor(
     @Composable
     override fun present(): RoomMemberListState {
         var roomMembers by remember { mutableStateOf<Async<RoomMembers>>(Async.Loading()) }
-        var isSearchActive by rememberSaveable { mutableStateOf(false) }
         var searchQuery by rememberSaveable { mutableStateOf("") }
         var searchResults by remember {
             mutableStateOf<RoomMemberSearchResultState>(RoomMemberSearchResultState.NotSearching)
         }
+        var isSearchActive by rememberSaveable { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
             withContext(coroutineDispatchers.io) {
