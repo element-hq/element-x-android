@@ -36,7 +36,6 @@ internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMember
                 )
             ),
             aRoomMemberListState(roomMembers = Async.Loading()),
-            aRoomMemberListState(),
             aRoomMemberListState().copy(isSearchActive = false),
             aRoomMemberListState().copy(isSearchActive = true),
             aRoomMemberListState().copy(isSearchActive = true, searchQuery = "someone"),
