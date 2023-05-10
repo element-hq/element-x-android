@@ -102,6 +102,7 @@ fun RoomMemberListView(
                     active = state.isSearchActive,
                     onActiveChanged = { state.eventSink(RoomMemberListEvents.OnSearchActiveChanged(it)) },
                     onTextChanged = { state.eventSink(RoomMemberListEvents.UpdateSearchQuery(it)) },
+                    onUserSelected = { onUserSelected(it) }
                 )
             }
 
