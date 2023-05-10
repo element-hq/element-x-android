@@ -25,6 +25,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
+import io.element.android.features.createroom.impl.configureroom.avatar.AvatarAction
 import io.element.android.features.userlist.api.UserListDataStore
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -34,6 +35,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
+import io.element.android.libraries.mediapickers.PickerProvider
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -48,15 +50,18 @@ class ConfigureRoomPresenterTests {
 
     private lateinit var presenter: ConfigureRoomPresenter
     private lateinit var userListDataStore: UserListDataStore
+    private lateinit var createRoomDataStore: CreateRoomDataStore
     private lateinit var fakeMatrixClient: FakeMatrixClient
 
     @Before
     fun setup() {
         fakeMatrixClient = FakeMatrixClient()
         userListDataStore = UserListDataStore()
+        createRoomDataStore = CreateRoomDataStore(userListDataStore)
         presenter = ConfigureRoomPresenter(
-            dataStore = CreateRoomDataStore(userListDataStore),
-            matrixClient = fakeMatrixClient
+            dataStore = createRoomDataStore,
+            matrixClient = fakeMatrixClient,
+            mediaPickerProvider = PickerProvider(isInTest = true),
         )
     }
 
@@ -70,7 +75,7 @@ class ConfigureRoomPresenterTests {
             assertThat(initialState.config.roomName).isNull()
             assertThat(initialState.config.topic).isNull()
             assertThat(initialState.config.invites).isEmpty()
-            assertThat(initialState.config.avatarUrl).isNull()
+            assertThat(initialState.config.avatarUri).isNull()
             assertThat(initialState.config.privacy).isNull()
         }
     }
@@ -139,10 +144,16 @@ class ConfigureRoomPresenterTests {
             assertThat(newState.config).isEqualTo(expectedConfig)
 
             // Room avatar
+            // Add
             val anUri = Uri.parse(AN_AVATAR_URL)
-            newState.eventSink(ConfigureRoomEvents.AvatarUriChanged(anUri))
+            createRoomDataStore.setAvatarUri(anUri)
             newState = awaitItem()
-            expectedConfig = expectedConfig.copy(avatarUrl = anUri.toString())
+            expectedConfig = expectedConfig.copy(avatarUri = anUri)
+            assertThat(newState.config).isEqualTo(expectedConfig)
+            // Remove
+            newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.Remove))
+            newState = awaitItem()
+            expectedConfig = expectedConfig.copy(avatarUri = null)
             assertThat(newState.config).isEqualTo(expectedConfig)
 
             // Room privacy

@@ -56,20 +56,21 @@ class ConfigureRoomPresenter @Inject constructor(
             }
         }
 
-        val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(onResult = { uri ->
-            if (uri != null) dataStore.setAvatarUrl(uri.toString())
-        })
-        val galleryImagePicker = mediaPickerProvider.registerGalleryImagePicker(onResult = { uri ->
-            if (uri != null) dataStore.setAvatarUrl(uri.toString())
-        })
+        val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
+            onResult = { uri -> if (uri != null) dataStore.setAvatarUri(uri = uri, cached = true) },
+            deleteAfter = false,
+        )
+        val galleryImagePicker = mediaPickerProvider.registerGalleryImagePicker(
+            onResult = { uri -> if (uri != null) dataStore.setAvatarUri(uri = uri) }
+        )
 
-        val avatarActions by remember(createRoomConfig.value.avatarUrl) {
+        val avatarActions by remember(createRoomConfig.value.avatarUri) {
             derivedStateOf {
                 mutableListOf(
                     AvatarAction.TakePhoto,
                     AvatarAction.ChoosePhoto,
                 ).apply {
-                    if (createRoomConfig.value.avatarUrl != null) {
+                    if (createRoomConfig.value.avatarUri != null) {
                         add(AvatarAction.Remove)
                     }
                 }.toImmutableList()
@@ -95,7 +96,7 @@ class ConfigureRoomPresenter @Inject constructor(
                     when (event.action) {
                         AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
                         AvatarAction.TakePhoto -> cameraPhotoPicker.launch()
-                        AvatarAction.Remove -> dataStore.setAvatarUrl(null)
+                        AvatarAction.Remove -> dataStore.setAvatarUri(uri = null)
                     }
                 }
 
@@ -122,7 +123,7 @@ class ConfigureRoomPresenter @Inject constructor(
                 visibility = if (config.privacy == RoomPrivacy.Public) RoomVisibility.PUBLIC else RoomVisibility.PRIVATE,
                 preset = if (config.privacy == RoomPrivacy.Public) RoomPreset.PUBLIC_CHAT else RoomPreset.PRIVATE_CHAT,
                 invite = config.invites.map { it.userId },
-                avatar = config.avatarUrl,
+                avatar = config.avatarUri?.toString(),
             )
             matrixClient.createRoom(params).getOrThrow()
         }.execute(createRoomAction)
