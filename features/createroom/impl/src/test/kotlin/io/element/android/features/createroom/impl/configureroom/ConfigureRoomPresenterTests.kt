@@ -29,7 +29,6 @@ import io.element.android.features.createroom.impl.configureroom.avatar.AvatarAc
 import io.element.android.features.userlist.api.UserListDataStore
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_THROWABLE
@@ -44,6 +43,9 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+
+private const val AN_URI_FROM_CAMERA = "content://uri_from_camera"
+private const val AN_URI_FROM_GALLERY = "content://uri_from_gallery"
 
 @RunWith(RobolectricTestRunner::class)
 class ConfigureRoomPresenterTests {
@@ -146,12 +148,23 @@ class ConfigureRoomPresenterTests {
             assertThat(newState.config).isEqualTo(expectedConfig)
 
             // Room avatar
-            // Add
-            val anUri = Uri.parse(AN_AVATAR_URL)
-            fakePickerProvider.givenResult(anUri)
+            // Pick avatar
+            fakePickerProvider.givenResult(null)
+            newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
+            newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.TakePhoto))
+            // From gallery
+            val uriFromGallery = Uri.parse(AN_URI_FROM_GALLERY)
+            fakePickerProvider.givenResult(uriFromGallery)
             newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
             newState = awaitItem()
-            expectedConfig = expectedConfig.copy(avatarUri = anUri)
+            expectedConfig = expectedConfig.copy(avatarUri = uriFromGallery)
+            assertThat(newState.config).isEqualTo(expectedConfig)
+            // From camera
+            val uriFromCamera = Uri.parse(AN_URI_FROM_CAMERA)
+            fakePickerProvider.givenResult(uriFromCamera)
+            newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.TakePhoto))
+            newState = awaitItem()
+            expectedConfig = expectedConfig.copy(avatarUri = uriFromCamera)
             assertThat(newState.config).isEqualTo(expectedConfig)
             // Remove
             newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.Remove))
