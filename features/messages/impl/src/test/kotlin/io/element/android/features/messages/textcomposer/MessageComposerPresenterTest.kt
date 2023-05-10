@@ -22,23 +22,30 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
-import com.google.common.truth.Truth
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.textcomposer.AttachmentSourcePicker
 import io.element.android.features.messages.impl.textcomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.textcomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.textcomposer.MessageComposerState
 import io.element.android.libraries.core.data.StableCharSequence
+import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.ANOTHER_MESSAGE
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_REPLY
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
-import io.element.android.libraries.mediapickers.PickerProvider
+import io.element.android.libraries.mediapickers.api.PickerProvider
+import io.element.android.libraries.mediapickers.test.FakePickerProvider
+import io.element.android.libraries.mediaupload.api.MediaPreProcessor
+import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.mockk.mockk
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
@@ -46,21 +53,19 @@ import org.junit.Test
 
 class MessageComposerPresenterTest {
 
-    private val pickerProvider = PickerProvider(isInTest = true)
+    private val pickerProvider = FakePickerProvider().apply {
+        givenResult(mockk()) // Uri is not available in JVM, so the only way to have a non-null Uri is using Mockk
+    }
     private val featureFlagService = FakeFeatureFlagService().apply {
         runBlocking {
             setFeatureEnabled(FeatureFlags.ShowMediaUploadingFlow, true)
         }
     }
+    private val mediaPreProcessor = FakeMediaPreProcessor()
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = MessageComposerPresenter(
-            this,
-            FakeMatrixRoom(),
-            pickerProvider,
-            featureFlagService,
-        )
+        val presenter = createPresenter(this)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -74,12 +79,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - toggle fullscreen`() = runTest {
-        val presenter = MessageComposerPresenter(
-            this,
-            FakeMatrixRoom(),
-            pickerProvider,
-            featureFlagService,
-        )
+        val presenter = createPresenter(this)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -95,12 +95,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - change message`() = runTest {
-        val presenter = MessageComposerPresenter(
-            this,
-            FakeMatrixRoom(),
-            pickerProvider,
-            featureFlagService,
-        )
+        val presenter = createPresenter(this)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -118,12 +113,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - change mode to edit`() = runTest {
-        val presenter = MessageComposerPresenter(
-            this,
-            FakeMatrixRoom(),
-            pickerProvider,
-            featureFlagService,
-        )
+        val presenter = createPresenter(this)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -139,23 +129,9 @@ class MessageComposerPresenterTest {
         }
     }
 
-    private suspend fun ReceiveTurbine<MessageComposerState>.backToNormalMode(state: MessageComposerState, skipCount: Int = 0) {
-        state.eventSink.invoke(MessageComposerEvents.CloseSpecialMode)
-        skipItems(skipCount)
-        val normalState = awaitItem()
-        assertThat(normalState.mode).isEqualTo(MessageComposerMode.Normal(""))
-        assertThat(normalState.text).isEqualTo(StableCharSequence(""))
-        assertThat(normalState.isSendButtonVisible).isFalse()
-    }
-
     @Test
     fun `present - change mode to reply`() = runTest {
-        val presenter = MessageComposerPresenter(
-            this,
-            FakeMatrixRoom(),
-            pickerProvider,
-            featureFlagService,
-        )
+        val presenter = createPresenter(this)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -172,12 +148,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - change mode to quote`() = runTest {
-        val presenter = MessageComposerPresenter(
-            this,
-            FakeMatrixRoom(),
-            pickerProvider,
-            featureFlagService,
-        )
+        val presenter = createPresenter(this)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -194,12 +165,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - send message`() = runTest {
-        val presenter = MessageComposerPresenter(
-            this,
-            FakeMatrixRoom(),
-            pickerProvider,
-            featureFlagService,
-        )
+        val presenter = createPresenter(this)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -218,11 +184,9 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - edit message`() = runTest {
         val fakeMatrixRoom = FakeMatrixRoom()
-        val presenter = MessageComposerPresenter(
+        val presenter = createPresenter(
             this,
             fakeMatrixRoom,
-            pickerProvider,
-            featureFlagService,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -251,11 +215,9 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - reply message`() = runTest {
         val fakeMatrixRoom = FakeMatrixRoom()
-        val presenter = MessageComposerPresenter(
+        val presenter = createPresenter(
             this,
             fakeMatrixRoom,
-            pickerProvider,
-            featureFlagService,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -283,13 +245,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Open attachments menu`() = runTest {
-        val fakeMatrixRoom = FakeMatrixRoom()
-        val presenter = MessageComposerPresenter(
-            this,
-            fakeMatrixRoom,
-            pickerProvider,
-            featureFlagService,
-        )
+        val presenter = createPresenter(this)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -302,13 +258,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Open camera attachments menu`() = runTest {
-        val fakeMatrixRoom = FakeMatrixRoom()
-        val presenter = MessageComposerPresenter(
-            this,
-            fakeMatrixRoom,
-            pickerProvider,
-            featureFlagService,
-        )
+        val presenter = createPresenter(this)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -321,13 +271,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Dismiss attachments menu`() = runTest {
-        val fakeMatrixRoom = FakeMatrixRoom()
-        val presenter = MessageComposerPresenter(
-            this,
-            fakeMatrixRoom,
-            pickerProvider,
-            featureFlagService,
-        )
+        val presenter = createPresenter(this)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -342,13 +286,8 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Pick media from gallery`() = runTest {
-        val fakeMatrixRoom = FakeMatrixRoom()
-        val presenter = MessageComposerPresenter(
-            this,
-            fakeMatrixRoom,
-            pickerProvider,
-            featureFlagService,
-        )
+        val presenter = createPresenter(this)
+        pickerProvider.givenMimeType(MimeTypes.Images)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -360,14 +299,37 @@ class MessageComposerPresenterTest {
     }
 
     @Test
+    fun `present - Pick media from gallery fails if returned mimetype is not video or image`() = runTest {
+        val presenter = createPresenter(this)
+        pickerProvider.givenMimeType(MimeTypes.Audio)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery)
+            assertThat(awaitError()).isInstanceOf(IllegalStateException::class.java)
+        }
+    }
+
+    @Test
+    fun `present - Pick media from gallery & cancel does nothing`() = runTest {
+        val presenter = createPresenter(this)
+        with(pickerProvider){
+            givenResult(null) // Simulate a user canceling the flow
+            givenMimeType(MimeTypes.Images)
+        }
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery)
+            // No crashes here, otherwise it fails
+        }
+    }
+
+    @Test
     fun `present - Pick file from storage`() = runTest {
-        val fakeMatrixRoom = FakeMatrixRoom()
-        val presenter = MessageComposerPresenter(
-            this,
-            fakeMatrixRoom,
-            pickerProvider,
-            featureFlagService,
-        )
+        val presenter = createPresenter(this)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -380,13 +342,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Take photo`() = runTest {
-        val fakeMatrixRoom = FakeMatrixRoom()
-        val presenter = MessageComposerPresenter(
-            this,
-            fakeMatrixRoom,
-            pickerProvider,
-            featureFlagService,
-        )
+        val presenter = createPresenter(this)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -399,13 +355,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Record video`() = runTest {
-        val fakeMatrixRoom = FakeMatrixRoom()
-        val presenter = MessageComposerPresenter(
-            this,
-            fakeMatrixRoom,
-            pickerProvider,
-            featureFlagService,
-        )
+        val presenter = createPresenter(this)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -415,6 +365,25 @@ class MessageComposerPresenterTest {
             // TODO verify some post processing of the captured video is done
         }
     }
+
+    private suspend fun ReceiveTurbine<MessageComposerState>.backToNormalMode(state: MessageComposerState, skipCount: Int = 0) {
+        state.eventSink.invoke(MessageComposerEvents.CloseSpecialMode)
+        skipItems(skipCount)
+        val normalState = awaitItem()
+        assertThat(normalState.mode).isEqualTo(MessageComposerMode.Normal(""))
+        assertThat(normalState.text).isEqualTo(StableCharSequence(""))
+        assertThat(normalState.isSendButtonVisible).isFalse()
+    }
+
+    private fun createPresenter(
+        coroutineScope: CoroutineScope,
+        room: MatrixRoom = FakeMatrixRoom(),
+        pickerProvider: PickerProvider = this.pickerProvider,
+        featureFlagService: FeatureFlagService = this.featureFlagService,
+        mediaPreProcessor: MediaPreProcessor = this.mediaPreProcessor,
+    ) = MessageComposerPresenter(
+        coroutineScope, room, pickerProvider, featureFlagService, mediaPreProcessor
+    )
 }
 
 fun anEditMode() = MessageComposerMode.Edit(AN_EVENT_ID, A_MESSAGE)

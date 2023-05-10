@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.textcomposer
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -28,12 +29,17 @@ import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.core.data.toStableCharSequence
+import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
+import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.mediapickers.PickerProvider
+import io.element.android.libraries.mediapickers.api.PickerProvider
+import io.element.android.libraries.mediaupload.api.MediaPreProcessor
+import io.element.android.libraries.mediaupload.api.MediaType
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -46,27 +52,38 @@ class MessageComposerPresenter @Inject constructor(
     private val room: MatrixRoom,
     private val mediaPickerProvider: PickerProvider,
     private val featureFlagService: FeatureFlagService,
+    private val mediaPreProcessor: MediaPreProcessor,
 ) : Presenter<MessageComposerState> {
 
     @Composable
     override fun present(): MessageComposerState {
         val localCoroutineScope = rememberCoroutineScope()
 
-        val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker(onResult = { uri ->
+        val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker(onResult = { uri, mimeType ->
             Timber.d("Media picked from $uri")
+            // We don't know which type of media was retrieved, so we need this check
+            val mediaType = when {
+                mimeType.isMimeTypeImage() -> MediaType.Image
+                mimeType.isMimeTypeVideo() -> MediaType.Video
+                else -> error("MimeType must be either image/* or video/*")
+            }
+            localCoroutineScope.handleMediaPreProcessing(uri, mediaType)
         })
 
-        val filesPicker = mediaPickerProvider.registerFilePicker(onResult = { uri ->
+        val filesPicker = mediaPickerProvider.registerFilePicker(mimeType = MimeTypes.Any) { uri ->
             Timber.d("File picked from $uri")
-        })
+            localCoroutineScope.handleMediaPreProcessing(uri, MediaType.File)
+        }
 
-        val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(onResult = { uri ->
+        val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker { uri ->
             Timber.d("Photo saved at $uri")
-        })
+            localCoroutineScope.handleMediaPreProcessing(uri, MediaType.Image, deleteOriginal = true)
+        }
 
-        val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker(onResult = { uri ->
+        val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker { uri ->
             Timber.d("Video saved at $uri")
-        })
+            localCoroutineScope.handleMediaPreProcessing(uri, MediaType.Video, deleteOriginal = true)
+        }
 
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
@@ -163,4 +180,15 @@ class MessageComposerPresenter @Inject constructor(
                 )
             }
         }
+
+    private fun CoroutineScope.handleMediaPreProcessing(
+        uri: Uri?,
+        mediaType: MediaType,
+        deleteOriginal: Boolean = false
+    ) = launch {
+        if (uri == null) return@launch
+
+        val result = mediaPreProcessor.process(uri, mediaType,  deleteOriginal = deleteOriginal)
+        Timber.d("Pre-processed media result: $result")
+    }
 }
