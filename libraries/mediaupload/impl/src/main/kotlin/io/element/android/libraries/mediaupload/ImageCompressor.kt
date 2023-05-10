@@ -23,14 +23,16 @@ import io.element.android.libraries.androidutils.bitmap.calculateInSampleSize
 import io.element.android.libraries.androidutils.bitmap.resizeToMax
 import io.element.android.libraries.androidutils.bitmap.rotateToMetadataOrientation
 import io.element.android.libraries.androidutils.file.createTmpFile
+import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.InputStream
+import javax.inject.Inject
 
-class ImageCompressor(
-    private val context: Context,
+class ImageCompressor @Inject constructor(
+    @ApplicationContext private val context: Context,
 ) {
 
     /**

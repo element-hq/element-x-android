@@ -56,6 +56,8 @@ import kotlin.time.Duration.Companion.seconds
 @ContributesBinding(AppScope::class)
 class MediaPreProcessorImpl @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val imageCompressor: ImageCompressor,
+    private val videoCompressor: VideoCompressor,
 ) : MediaPreProcessor {
     companion object {
         /**
@@ -84,8 +86,6 @@ class MediaPreProcessorImpl @Inject constructor(
     }
 
     private val contentResolver = context.contentResolver
-    private val imageCompressor = ImageCompressor(context)
-    private val videoCompressor = VideoCompressor(context)
 
     override suspend fun process(
         uri: Uri,

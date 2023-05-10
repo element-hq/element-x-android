@@ -21,12 +21,14 @@ import android.net.Uri
 import com.otaliastudios.transcoder.Transcoder
 import com.otaliastudios.transcoder.TranscoderListener
 import io.element.android.libraries.androidutils.file.createTmpFile
+import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import java.io.File
+import javax.inject.Inject
 
-class VideoCompressor(
-    private val context: Context,
+class VideoCompressor @Inject constructor(
+    @ApplicationContext private val context: Context,
 ) {
 
     fun compress(uri: Uri) = callbackFlow {
