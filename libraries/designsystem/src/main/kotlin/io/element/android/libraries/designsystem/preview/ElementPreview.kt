@@ -82,24 +82,28 @@ fun ElementThemedPreview(
     ) {
         if (vertical) {
             Column {
-                ElementPreviewLight(
+                ElementPreview(
+                    darkTheme = false,
                     showBackground = showBackground,
-                    content = content,
+                    content = content
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                ElementPreviewDark(
+                ElementPreview(
+                    darkTheme = true,
                     showBackground = showBackground,
                     content = content
                 )
             }
         } else {
             Row {
-                ElementPreviewLight(
+                ElementPreview(
+                    darkTheme = false,
                     showBackground = showBackground,
                     content = content,
                 )
                 Spacer(modifier = Modifier.width(4.dp))
-                ElementPreviewDark(
+                ElementPreview(
+                    darkTheme = true,
                     showBackground = showBackground,
                     content = content
                 )
