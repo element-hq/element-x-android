@@ -22,31 +22,39 @@ import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.sync.roomListDiff
 import io.element.android.libraries.matrix.impl.sync.state
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.RoomListEntry
 import org.matrix.rustcomponents.sdk.SlidingSync
 import org.matrix.rustcomponents.sdk.SlidingSyncList
+import org.matrix.rustcomponents.sdk.SlidingSyncListBuilder
+import org.matrix.rustcomponents.sdk.SlidingSyncListOnceBuilt
 import org.matrix.rustcomponents.sdk.SlidingSyncListRoomsListDiff
 import org.matrix.rustcomponents.sdk.SlidingSyncState
 import org.matrix.rustcomponents.sdk.UpdateSummary
 import timber.log.Timber
 import java.io.Closeable
 import java.util.UUID
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 internal class RustRoomSummaryDataSource(
     private val slidingSyncUpdateFlow: Flow<UpdateSummary>,
     private val slidingSync: SlidingSync,
-    private val slidingSyncList: SlidingSyncList,
+    private val slidingSyncListFlow: Flow<SlidingSyncList>,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val onRestartSync: () -> Unit,
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
 ) : RoomSummaryDataSource, Closeable {
 
@@ -57,30 +65,30 @@ internal class RustRoomSummaryDataSource(
 
     fun init() {
         coroutineScope.launch {
+            val slidingSyncList = slidingSyncListFlow.first()
+            val summaries = slidingSyncList.currentRoomList().map(::buildSummaryForRoomListEntry)
             updateRoomSummaries {
-                addAll(
-                    slidingSyncList.currentRoomList().map(::buildSummaryForRoomListEntry)
-                )
+                addAll(summaries)
             }
+
+            slidingSyncList.roomListDiff(this)
+                .onEach { diffs ->
+                    updateRoomSummaries {
+                        applyDiff(diffs)
+                    }
+                }
+                .launchIn(this)
+
+            slidingSyncList.state(this)
+                .onEach { slidingSyncState ->
+                    Timber.v("New sliding sync state: $slidingSyncState")
+                    state.value = slidingSyncState
+                }.launchIn(this)
         }
 
         slidingSyncUpdateFlow
             .onEach {
                 didReceiveSyncUpdate(it)
-            }.launchIn(coroutineScope)
-
-        slidingSyncList.roomListDiff(coroutineScope)
-            .onEach { diffs ->
-                updateRoomSummaries {
-                    applyDiff(diffs)
-                }
-            }
-            .launchIn(coroutineScope)
-
-        slidingSyncList.state(coroutineScope)
-            .onEach { slidingSyncState ->
-                Timber.v("New sliding sync state: $slidingSyncState")
-                state.value = slidingSyncState
             }.launchIn(coroutineScope)
     }
 
@@ -95,8 +103,9 @@ internal class RustRoomSummaryDataSource(
 
     override fun setSlidingSyncRange(range: IntRange) {
         Timber.v("setVisibleRange=$range")
-        slidingSyncList.setRange(range.first.toUInt(), range.last.toUInt())
-        onRestartSync()
+        coroutineScope.launch {
+            slidingSyncListFlow.first().setRange(range.first.toUInt(), range.last.toUInt())
+        }
     }
 
     private suspend fun didReceiveSyncUpdate(summary: UpdateSummary) {

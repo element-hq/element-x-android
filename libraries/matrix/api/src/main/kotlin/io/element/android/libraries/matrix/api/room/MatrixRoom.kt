@@ -20,10 +20,15 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.media.AudioInfo
+import io.element.android.libraries.matrix.api.media.FileInfo
+import io.element.android.libraries.matrix.api.media.ImageInfo
+import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.io.Closeable
+import java.io.File
 
 interface MatrixRoom : Closeable {
     val sessionId: SessionId
@@ -66,6 +71,14 @@ interface MatrixRoom : Closeable {
     suspend fun replyMessage(eventId: EventId, message: String): Result<Unit>
 
     suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>
+
+    suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo): Result<Unit>
+
+    suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo): Result<Unit>
+
+    suspend fun sendAudio(file: File, audioInfo: AudioInfo): Result<Unit>
+
+    suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit>
 
     suspend fun leave(): Result<Unit>
 
