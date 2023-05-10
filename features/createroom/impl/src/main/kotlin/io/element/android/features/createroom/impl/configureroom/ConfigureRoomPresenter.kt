@@ -114,6 +114,7 @@ class ConfigureRoomPresenter @Inject constructor(
 
     private fun CoroutineScope.createRoom(config: CreateRoomConfig, createRoomAction: MutableState<Async<RoomId>>) = launch {
         suspend {
+            // TODO pre-process and upload the avatar before creating the room
             val params = CreateRoomParameters(
                 name = config.roomName,
                 topic = config.topic,
