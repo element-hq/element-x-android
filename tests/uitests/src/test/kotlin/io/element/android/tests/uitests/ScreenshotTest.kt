@@ -60,10 +60,25 @@ import java.util.Locale
 @RunWith(TestParameterInjector::class)
 class ScreenshotTest {
 
-    object PreviewProvider : TestParameter.TestParameterValuesProvider {
+    object ScreensPreviewProvider : TestParameter.TestParameterValuesProvider {
         override fun provideValues(): List<TestPreview> {
             val metadata = Showkase.getMetadata()
-            val components = metadata.componentList.map(::ComponentTestPreview)
+            val components = metadata.componentList.filterNot {
+                it.componentKey.startsWith("io.element.android.libraries.designsystem")
+            }.map(::ComponentTestPreview)
+            val colors = metadata.colorList.map(::ColorTestPreview)
+            val typography = metadata.typographyList.map(::TypographyTestPreview)
+
+            return components + colors + typography
+        }
+    }
+
+    object DesignSystemPreviewProvider : TestParameter.TestParameterValuesProvider {
+        override fun provideValues(): List<TestPreview> {
+            val metadata = Showkase.getMetadata()
+            val components = metadata.componentList.filter {
+                it.componentKey.startsWith("io.element.android.libraries.designsystem")
+            }.map(::ComponentTestPreview)
             val colors = metadata.colorList.map(::ColorTestPreview)
             val typography = metadata.typographyList.map(::TypographyTestPreview)
 
@@ -78,51 +93,84 @@ class ScreenshotTest {
     )
 
     @Test
-    fun preview_tests(
-        @TestParameter(valuesProvider = PreviewProvider::class) componentTestPreview: TestPreview,
+    fun preview_tests_screens(
+        @TestParameter(valuesProvider = ScreensPreviewProvider::class) componentTestPreview: TestPreview,
         @TestParameter baseDeviceConfig: BaseDeviceConfig,
         @TestParameter(value = ["1.0"/*, "1.5"*/]) fontScale: Float,
         @TestParameter(value = ["en" /*"fr", "de", "ru"*/]) localeStr: String,
         @TestParameter(value = ["false", "true"]) darkMode: Boolean,
     ) {
-        val needsScrolling = componentTestPreview.needsScroll
-        val screenHeight = componentTestPreview.customHeightDp.takeIf { it != null }
-        paparazzi.unsafeUpdateConfig(
-            deviceConfig = baseDeviceConfig.deviceConfig.copy(
-                softButtons = false,
-                screenHeight = screenHeight ?: baseDeviceConfig.deviceConfig.screenHeight
-            ),
-            renderingMode = if (needsScrolling) SessionParams.RenderingMode.V_SCROLL else SessionParams.RenderingMode.SHRINK
+        paparazzi.screenshotTest(
+            componentTestPreview = componentTestPreview,
+            baseDeviceConfig = baseDeviceConfig,
+            fontScale = fontScale,
+            localeStr = localeStr,
+            darkMode = darkMode
         )
-        paparazzi.snapshot {
-            val lifecycleOwner = LocalLifecycleOwner.current
-            CompositionLocalProvider(
-                LocalInspectionMode provides true,
-                LocalDensity provides Density(
-                    density = LocalDensity.current.density,
-                    fontScale = fontScale
-                ),
-                LocalConfiguration provides Configuration().apply {
-                    setLocales(LocaleList(localeStr.toLocale()))
-                    if (darkMode) uiMode = Configuration.UI_MODE_NIGHT_YES
-                },
-                // Needed so that UI that uses it don't crash during screenshot tests
-                LocalOnBackPressedDispatcherOwner provides object : OnBackPressedDispatcherOwner {
-                    override val lifecycle: Lifecycle get() = lifecycleOwner.lifecycle
-                    override val onBackPressedDispatcher: OnBackPressedDispatcher get() = OnBackPressedDispatcher()
-                }
-            ) {
-                ElementTheme {
-                    Box(
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.background)
-                            .sizeIn(minWidth = 1.dp, minHeight = 1.dp)
-                            .applyIf(needsScrolling, ifTrue = {
-                                heightIn(max = 1000.dp)
-                            })
-                    ) {
-                        componentTestPreview.Content()
-                    }
+    }
+
+    @Test
+    fun preview_tests_design_system(
+        @TestParameter(valuesProvider = DesignSystemPreviewProvider::class) componentTestPreview: TestPreview,
+        @TestParameter baseDeviceConfig: BaseDeviceConfig,
+        @TestParameter(value = ["1.0"/*, "1.5"*/]) fontScale: Float,
+        @TestParameter(value = ["en" /*"fr", "de", "ru"*/]) localeStr: String,
+        @TestParameter(value = ["false"]) darkMode: Boolean,
+    ) {
+        paparazzi.screenshotTest(
+            componentTestPreview = componentTestPreview,
+            baseDeviceConfig = baseDeviceConfig,
+            fontScale = fontScale,
+            localeStr = localeStr,
+            darkMode = darkMode
+        )
+    }
+}
+
+private fun Paparazzi.screenshotTest(
+    componentTestPreview: TestPreview,
+    baseDeviceConfig: BaseDeviceConfig,
+    fontScale: Float,
+    localeStr: String,
+    darkMode: Boolean,
+) {
+    val needsScrolling = componentTestPreview.needsScroll
+    val screenHeight = componentTestPreview.customHeightDp.takeIf { it != null }
+    unsafeUpdateConfig(
+        deviceConfig = baseDeviceConfig.deviceConfig.copy(
+            softButtons = false,
+            screenHeight = screenHeight ?: baseDeviceConfig.deviceConfig.screenHeight
+        ),
+        renderingMode = if (needsScrolling) SessionParams.RenderingMode.V_SCROLL else SessionParams.RenderingMode.SHRINK
+    )
+    snapshot {
+        val lifecycleOwner = LocalLifecycleOwner.current
+        CompositionLocalProvider(
+            LocalInspectionMode provides true,
+            LocalDensity provides Density(
+                density = LocalDensity.current.density,
+                fontScale = fontScale
+            ),
+            LocalConfiguration provides Configuration().apply {
+                setLocales(LocaleList(localeStr.toLocale()))
+                if (darkMode) uiMode = Configuration.UI_MODE_NIGHT_YES
+            },
+            // Needed so that UI that uses it don't crash during screenshot tests
+            LocalOnBackPressedDispatcherOwner provides object : OnBackPressedDispatcherOwner {
+                override val lifecycle: Lifecycle get() = lifecycleOwner.lifecycle
+                override val onBackPressedDispatcher: OnBackPressedDispatcher get() = OnBackPressedDispatcher()
+            }
+        ) {
+            ElementTheme {
+                Box(
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.background)
+                        .sizeIn(minWidth = 1.dp, minHeight = 1.dp)
+                        .applyIf(needsScrolling, ifTrue = {
+                            heightIn(max = 1000.dp)
+                        })
+                ) {
+                    componentTestPreview.Content()
                 }
             }
         }
