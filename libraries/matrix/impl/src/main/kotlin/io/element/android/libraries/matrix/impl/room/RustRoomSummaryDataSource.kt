@@ -22,33 +22,27 @@ import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.sync.roomListDiff
 import io.element.android.libraries.matrix.impl.sync.state
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.RoomListEntry
 import org.matrix.rustcomponents.sdk.SlidingSync
 import org.matrix.rustcomponents.sdk.SlidingSyncList
-import org.matrix.rustcomponents.sdk.SlidingSyncListBuilder
-import org.matrix.rustcomponents.sdk.SlidingSyncListOnceBuilt
 import org.matrix.rustcomponents.sdk.SlidingSyncListRoomsListDiff
 import org.matrix.rustcomponents.sdk.SlidingSyncState
 import org.matrix.rustcomponents.sdk.UpdateSummary
 import timber.log.Timber
 import java.io.Closeable
 import java.util.UUID
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 internal class RustRoomSummaryDataSource(
     private val slidingSyncUpdateFlow: Flow<UpdateSummary>,
@@ -93,6 +87,7 @@ internal class RustRoomSummaryDataSource(
     }
 
     override fun close() {
+        runBlocking { slidingSyncListFlow.firstOrNull() }?.close()
         coroutineScope.cancel()
     }
 
