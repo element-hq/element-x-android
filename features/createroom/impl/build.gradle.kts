@@ -46,9 +46,9 @@ dependencies {
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
     implementation(projects.features.userlist.api)
+    implementation(projects.libraries.mediapickers.api)
+    implementation(libs.coil.compose)
     api(projects.features.createroom.api)
-    implementation(libs.coil.compose) // FIXME temp
-    implementation(projects.libraries.mediapickers)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
@@ -59,6 +59,7 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.features.userlist.impl)
     testImplementation(projects.features.userlist.test)
+    testImplementation(projects.libraries.mediapickers.test)
 
     androidTestImplementation(libs.test.junitext)
 
