@@ -41,7 +41,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.Avatar
 import io.element.android.features.createroom.impl.components.LabelledTextField
@@ -104,7 +103,7 @@ fun ConfigureRoomView(
         ) {
             RoomNameWithAvatar(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                avatarUri = state.config.avatarUrl?.toUri(),
+                avatarUri = state.config.avatarUri,
                 roomName = state.config.roomName.orEmpty(),
                 onAvatarClick = ::onAvatarClicked,
                 onRoomNameChanged = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
