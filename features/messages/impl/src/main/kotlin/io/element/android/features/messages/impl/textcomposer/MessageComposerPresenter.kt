@@ -40,8 +40,10 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaType
+import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -60,6 +62,7 @@ class MessageComposerPresenter @Inject constructor(
         val localCoroutineScope = rememberCoroutineScope()
 
         val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker(onResult = { uri, mimeType ->
+            if (uri == null) return@registerGalleryPicker
             Timber.d("Media picked from $uri")
             // We don't know which type of media was retrieved, so we need this check
             val mediaType = when {
@@ -67,22 +70,25 @@ class MessageComposerPresenter @Inject constructor(
                 mimeType.isMimeTypeVideo() -> MediaType.Video
                 else -> error("MimeType must be either image/* or video/*")
             }
-            localCoroutineScope.handleMediaPreProcessing(uri, mediaType)
+            appCoroutineScope.uploadMedia(uri, mediaType)
         })
 
         val filesPicker = mediaPickerProvider.registerFilePicker(mimeType = MimeTypes.Any) { uri ->
+            if (uri == null) return@registerFilePicker
             Timber.d("File picked from $uri")
-            localCoroutineScope.handleMediaPreProcessing(uri, MediaType.File)
+            appCoroutineScope.uploadMedia(uri, MediaType.File)
         }
 
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker { uri ->
+            if (uri == null) return@registerCameraPhotoPicker
             Timber.d("Photo saved at $uri")
-            localCoroutineScope.handleMediaPreProcessing(uri, MediaType.Image, deleteOriginal = true)
+            appCoroutineScope.uploadMedia(uri, MediaType.Image, deleteOriginal = true)
         }
 
         val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker { uri ->
+            if (uri == null) return@registerCameraVideoPicker
             Timber.d("Video saved at $uri")
-            localCoroutineScope.handleMediaPreProcessing(uri, MediaType.Video, deleteOriginal = true)
+            appCoroutineScope.uploadMedia(uri, MediaType.Video, deleteOriginal = true)
         }
 
         val isFullScreen = rememberSaveable {
@@ -181,14 +187,44 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
-    private fun CoroutineScope.handleMediaPreProcessing(
-        uri: Uri?,
+    private fun CoroutineScope.uploadMedia(
+        uri: Uri,
         mediaType: MediaType,
         deleteOriginal: Boolean = false
     ) = launch {
-        if (uri == null) return@launch
+        runCatching {
+            val info = handleMediaPreProcessing(uri, mediaType, deleteOriginal).getOrThrow()
+            when (info) {
+                is MediaUploadInfo.Image -> {
+                    room.sendImage(info.file, info.thumbnailInfo.file, info.info)
+                }
 
-        val result = mediaPreProcessor.process(uri, mediaType,  deleteOriginal = deleteOriginal)
+                is MediaUploadInfo.Video -> {
+                    room.sendVideo(info.file, info.thumbnailInfo.file, info.info)
+                }
+
+                is MediaUploadInfo.AnyFile -> {
+                    room.sendFile(info.file, info.info)
+                }
+
+                is MediaUploadInfo.Audio -> {
+                    room.sendAudio(info.file, info.info)
+                }
+            }.getOrThrow()
+        }.onFailure {
+            Timber.e(it, "Couldn't upload media")
+        }.onSuccess {
+            Timber.d("Media uploaded")
+        }
+    }
+
+    private suspend fun handleMediaPreProcessing(
+        uri: Uri,
+        mediaType: MediaType,
+        deleteOriginal: Boolean = false
+    ): Result<MediaUploadInfo> {
+        val result = mediaPreProcessor.process(uri, mediaType, deleteOriginal = deleteOriginal)
         Timber.d("Pre-processed media result: $result")
+        return result
     }
 }

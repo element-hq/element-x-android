@@ -138,6 +138,7 @@ sqlite = "androidx.sqlite:sqlite:2.3.1"
 unifiedpush = "com.github.UnifiedPush:android-connector:2.1.1"
 gujun_span = "me.gujun.android:span:1.7"
 otaliastudios_transcoder = "com.otaliastudios:transcoder:0.10.5"
+vanniktech_blurhash = "com.vanniktech:blurhash:0.1.0"
 
 # Di
 inject = "javax.inject:javax.inject:1"
