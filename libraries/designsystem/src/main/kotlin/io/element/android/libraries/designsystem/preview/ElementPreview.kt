@@ -35,24 +35,34 @@ import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Surface
 
 @Composable
+@Deprecated(
+    message = "ElementPreviewLight is deprecated. Use ElementPreview directly instead.",
+    replaceWith = ReplaceWith("ElementPreview(darkTheme, showBackground, content)")
+)
 fun ElementPreviewLight(
+    darkTheme: Boolean = isSystemInDarkTheme(),
     showBackground: Boolean = true,
     content: @Composable () -> Unit
 ) {
     ElementPreview(
-        darkTheme = false,
+        darkTheme = darkTheme,
         showBackground = showBackground,
         content = content
     )
 }
 
 @Composable
+@Deprecated(
+    message = "ElementPreviewDark is deprecated. Use ElementPreview directly instead.",
+    replaceWith = ReplaceWith("ElementPreview(darkTheme, showBackground, content)")
+)
 fun ElementPreviewDark(
+    darkTheme: Boolean = isSystemInDarkTheme(),
     showBackground: Boolean = true,
     content: @Composable () -> Unit
 ) {
     ElementPreview(
-        darkTheme = true,
+        darkTheme = darkTheme,
         showBackground = showBackground,
         content = content
     )
@@ -65,9 +75,11 @@ fun ElementThemedPreview(
     vertical: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-    Box(modifier = Modifier
-        .background(Color.Gray)
-        .padding(4.dp)) {
+    Box(
+        modifier = Modifier
+            .background(Color.Gray)
+            .padding(4.dp)
+    ) {
         if (vertical) {
             Column {
                 ElementPreviewLight(
