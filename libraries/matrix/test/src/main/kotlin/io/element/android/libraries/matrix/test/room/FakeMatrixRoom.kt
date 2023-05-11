@@ -60,6 +60,8 @@ class FakeMatrixRoom(
     private var acceptInviteResult = Result.success(Unit)
     private var rejectInviteResult = Result.success(Unit)
     private var sendMediaResult = Result.success(Unit)
+    var sendMediaCount = 0
+        private set
 
     var isInviteAccepted: Boolean = false
         private set
@@ -134,13 +136,13 @@ class FakeMatrixRoom(
         return rejectInviteResult
     }
 
-    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo): Result<Unit> = sendMediaResult
+    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo): Result<Unit> = sendMediaResult.also { sendMediaCount++ }
 
-    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo): Result<Unit> = sendMediaResult
+    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo): Result<Unit> = sendMediaResult.also { sendMediaCount++ }
 
-    override suspend fun sendAudio(file: File, audioInfo: AudioInfo): Result<Unit> = sendMediaResult
+    override suspend fun sendAudio(file: File, audioInfo: AudioInfo): Result<Unit> = sendMediaResult.also { sendMediaCount++ }
 
-    override suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit> = sendMediaResult
+    override suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit> = sendMediaResult.also { sendMediaCount++ }
 
     override fun close() = Unit
 
