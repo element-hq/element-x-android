@@ -59,6 +59,7 @@ class FakeMatrixClient(
     private val getRoomResults = mutableMapOf<RoomId, MatrixRoom>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
     private val getProfileResults = mutableMapOf<UserId, Result<MatrixUser>>()
+    private var uploadMediaResult: Result<String> = Result.success(AN_AVATAR_URL)
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
         return getRoomResults[roomId]
@@ -127,7 +128,7 @@ class FakeMatrixClient(
     }
 
     override suspend fun uploadMedia(mimeType: String, data: ByteArray): Result<String> {
-        return Result.success("")
+        return uploadMediaResult
     }
 
     override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService
@@ -182,5 +183,9 @@ class FakeMatrixClient(
 
     fun givenGetProfileResult(userId: UserId, result: Result<MatrixUser>) {
         getProfileResults[userId] = result
+    }
+
+    fun givenUploadMediaResult(result: Result<String>) {
+        uploadMediaResult = result
     }
 }

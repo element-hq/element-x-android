@@ -52,6 +52,7 @@ dependencies {
     api(projects.features.createroom.api)
 
     testImplementation(libs.test.junit)
+    testImplementation(libs.test.mockk)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
