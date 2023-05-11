@@ -60,7 +60,7 @@ class CreateRoomDataStore @Inject constructor(
         createRoomConfigFlow.tryEmit(createRoomConfigFlow.value.copy(avatarUri = uri))
     }
 
-    fun setPrivacy(privacy: RoomPrivacy?) {
+    fun setPrivacy(privacy: RoomPrivacy) {
         createRoomConfigFlow.tryEmit(createRoomConfigFlow.value.copy(privacy = privacy))
     }
 

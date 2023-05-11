@@ -31,16 +31,14 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
                     roomName = "Room 101",
                     topic = "Room topic for this room when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",
                     invites = aListOfSelectedUsers(),
-                    privacy = RoomPrivacy.Private,
+                    privacy = RoomPrivacy.Public,
                 ),
-                isCreateButtonEnabled = true,
             ),
         )
 }
 
 fun aConfigureRoomState() = ConfigureRoomState(
     config = CreateRoomConfig(),
-    isCreateButtonEnabled = false,
     avatarActions = persistentListOf(),
     createRoomAction = Async.Uninitialized,
     eventSink = { },

@@ -24,8 +24,9 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class ConfigureRoomState(
     val config: CreateRoomConfig,
-    val isCreateButtonEnabled: Boolean,
     val avatarActions: ImmutableList<AvatarAction>,
     val createRoomAction: Async<RoomId>,
     val eventSink: (ConfigureRoomEvents) -> Unit
-)
+) {
+    val isCreateButtonEnabled: Boolean = config.roomName.isNullOrEmpty().not()
+}

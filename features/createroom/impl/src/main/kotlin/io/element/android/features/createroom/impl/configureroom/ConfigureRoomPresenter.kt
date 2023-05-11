@@ -56,11 +56,6 @@ class ConfigureRoomPresenter @Inject constructor(
     @Composable
     override fun present(): ConfigureRoomState {
         val createRoomConfig = dataStore.getCreateRoomConfig().collectAsState(CreateRoomConfig())
-        val isCreateButtonEnabled by remember(createRoomConfig.value.roomName, createRoomConfig.value.privacy) {
-            derivedStateOf {
-                createRoomConfig.value.roomName.isNullOrEmpty().not() && createRoomConfig.value.privacy != null
-            }
-        }
 
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
             onResult = { uri -> if (uri != null) dataStore.setAvatarUri(uri = uri, cached = true) },
@@ -108,7 +103,6 @@ class ConfigureRoomPresenter @Inject constructor(
 
         return ConfigureRoomState(
             config = createRoomConfig.value,
-            isCreateButtonEnabled = isCreateButtonEnabled,
             avatarActions = avatarActions,
             createRoomAction = createRoomAction.value,
             eventSink = ::handleEvents,
