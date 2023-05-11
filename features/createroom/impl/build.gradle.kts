@@ -61,6 +61,7 @@ dependencies {
     testImplementation(projects.features.userlist.impl)
     testImplementation(projects.features.userlist.test)
     testImplementation(projects.libraries.mediapickers.test)
+    testImplementation(projects.libraries.mediaupload.test)
 
     androidTestImplementation(libs.test.junitext)
 

@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
+import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -66,6 +67,7 @@ class ConfigureRoomPresenterTests {
             dataStore = createRoomDataStore,
             matrixClient = fakeMatrixClient,
             mediaPickerProvider = fakePickerProvider,
+            mediaPreProcessor = FakeMediaPreProcessor(),
         )
     }
 
