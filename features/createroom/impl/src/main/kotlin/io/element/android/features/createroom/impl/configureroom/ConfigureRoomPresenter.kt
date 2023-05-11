@@ -71,14 +71,11 @@ class ConfigureRoomPresenter @Inject constructor(
 
         val avatarActions by remember(createRoomConfig.value.avatarUri) {
             derivedStateOf {
-                mutableListOf(
+                listOfNotNull(
                     AvatarAction.TakePhoto,
                     AvatarAction.ChoosePhoto,
-                ).apply {
-                    if (createRoomConfig.value.avatarUri != null) {
-                        add(AvatarAction.Remove)
-                    }
-                }.toImmutableList()
+                    AvatarAction.Remove.takeIf { createRoomConfig.value.avatarUri != null },
+                ).toImmutableList()
             }
         }
 
