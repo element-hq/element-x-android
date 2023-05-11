@@ -37,6 +37,7 @@ fun File.safeDelete() {
     )
 }
 
-suspend fun Context.createTmpFile(baseDir: File = cacheDir): File = withContext(Dispatchers.IO) {
-    File.createTempFile(UUID.randomUUID().toString(), null, baseDir).apply { mkdirs() }
+suspend fun Context.createTmpFile(baseDir: File = cacheDir, extension: String? = null): File = withContext(Dispatchers.IO) {
+    val suffix = extension?.let { ".$extension" }
+    File.createTempFile(UUID.randomUUID().toString(), suffix, baseDir).apply { mkdirs() }
 }

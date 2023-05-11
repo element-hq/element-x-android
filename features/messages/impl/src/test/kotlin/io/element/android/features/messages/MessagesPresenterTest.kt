@@ -31,6 +31,7 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.textcomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
+import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -136,6 +137,7 @@ class MessagesPresenterTest {
             mediaPickerProvider = FakePickerProvider(),
             featureFlagService = FakeFeatureFlagService(),
             mediaPreProcessor = FakeMediaPreProcessor(),
+            snackbarDispatcher = SnackbarDispatcher(),
         )
         val timelinePresenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
@@ -148,6 +150,7 @@ class MessagesPresenterTest {
             timelinePresenter = timelinePresenter,
             actionListPresenter = actionListPresenter,
             networkMonitor = FakeNetworkMonitor(),
+            snackbarDispatcher = SnackbarDispatcher(),
         )
     }
 }
