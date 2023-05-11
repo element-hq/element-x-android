@@ -67,14 +67,15 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
+import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoomMemberListView(
     state: RoomMemberListState,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
-    onMemberSelected: (UserId) -> Unit = {},
+    onBackPressed: () -> Unit,
+    onMemberSelected: (UserId) -> Unit,
 ) {
 
     fun onUserSelected(roomMember: RoomMember) {
@@ -102,7 +103,7 @@ fun RoomMemberListView(
                     active = state.isSearchActive,
                     onActiveChanged = { state.eventSink(RoomMemberListEvents.OnSearchActiveChanged(it)) },
                     onTextChanged = { state.eventSink(RoomMemberListEvents.UpdateSearchQuery(it)) },
-                    onUserSelected = { onUserSelected(it) }
+                    onUserSelected = ::onUserSelected
                 )
             }
 
@@ -181,10 +182,10 @@ private fun RoomMemberSearchBar(
     state: RoomMemberSearchResultState,
     active: Boolean,
     modifier: Modifier = Modifier,
-    placeHolderTitle: String = stringResource(io.element.android.libraries.ui.strings.R.string.common_search_for_someone),
-    onActiveChanged: (Boolean) -> Unit = {},
-    onTextChanged: (String) -> Unit = {},
-    onUserSelected: (RoomMember) -> Unit = {},
+    placeHolderTitle: String = stringResource(StringR.string.common_search_for_someone),
+    onActiveChanged: (Boolean) -> Unit,
+    onTextChanged: (String) -> Unit,
+    onUserSelected: (RoomMember) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -216,7 +217,7 @@ private fun RoomMemberSearchBar(
             active && query.isNotEmpty() -> {
                 {
                     IconButton(onClick = { onTextChanged("") }) {
-                        Icon(Icons.Default.Close, stringResource(io.element.android.libraries.ui.strings.R.string.action_clear))
+                        Icon(Icons.Default.Close, stringResource(StringR.string.action_clear))
                     }
                 }
             }
@@ -225,7 +226,7 @@ private fun RoomMemberSearchBar(
                 {
                     Icon(
                         imageVector = Icons.Default.Search,
-                        contentDescription = stringResource(io.element.android.libraries.ui.strings.R.string.action_search),
+                        contentDescription = stringResource(StringR.string.action_search),
                         modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
                     )
                 }
@@ -249,7 +250,7 @@ private fun RoomMemberSearchBar(
                 Spacer(Modifier.size(80.dp))
 
                 Text(
-                    text = stringResource(io.element.android.libraries.ui.strings.R.string.common_no_results),
+                    text = stringResource(StringR.string.common_no_results),
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.tertiary,
                     modifier = Modifier.fillMaxWidth()
@@ -288,5 +289,9 @@ fun RoomMemberListDarkPreview(@PreviewParameter(RoomMemberListStateProvider::cla
 
 @Composable
 private fun ContentToPreview(state: RoomMemberListState) {
-    RoomMemberListView(state)
+    RoomMemberListView(
+        state = state,
+        onBackPressed = {},
+        onMemberSelected = {}
+    )
 }

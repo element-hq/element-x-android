@@ -25,17 +25,14 @@ import io.element.android.features.roomdetails.impl.members.RoomMemberListDataSo
 import io.element.android.features.roomdetails.impl.members.RoomMemberListEvents
 import io.element.android.features.roomdetails.impl.members.RoomMemberListPresenter
 import io.element.android.features.roomdetails.impl.members.RoomMemberSearchResultState
-import io.element.android.features.roomdetails.impl.members.RoomMembers
-import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.aRoomMemberList
 import io.element.android.features.roomdetails.impl.members.aVictor
 import io.element.android.features.roomdetails.impl.members.aWalter
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
-import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.tests.testutils.testCoroutineDispatchers
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -45,15 +42,7 @@ class RoomMemberListPresenterTests {
 
     @Test
     fun `search is done automatically on start, but is async`() = runTest {
-        val presenter = RoomMemberListPresenter(
-            roomMemberListDataSource = RoomMemberListDataSource(
-                room = aMatrixRoom().apply {
-                    givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
-                },
-                coroutineDispatchers = testCoroutineDispatchers()
-            ),
-            coroutineDispatchers = testCoroutineDispatchers()
-        )
+        val presenter = createPresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -72,15 +61,7 @@ class RoomMemberListPresenterTests {
 
     @Test
     fun `open search`() = runTest {
-        val presenter = RoomMemberListPresenter(
-            roomMemberListDataSource = RoomMemberListDataSource(
-                room = aMatrixRoom().apply {
-                    givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
-                },
-                coroutineDispatchers = testCoroutineDispatchers()
-            ),
-            coroutineDispatchers = testCoroutineDispatchers()
-        )
+        val presenter = createPresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -96,15 +77,7 @@ class RoomMemberListPresenterTests {
 
     @Test
     fun `search for something which is not found`() = runTest {
-        val presenter = RoomMemberListPresenter(
-            roomMemberListDataSource = RoomMemberListDataSource(
-                room = aMatrixRoom().apply {
-                    givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
-                },
-                coroutineDispatchers = testCoroutineDispatchers()
-            ),
-            coroutineDispatchers = testCoroutineDispatchers()
-        )
+        val presenter = createPresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -122,15 +95,7 @@ class RoomMemberListPresenterTests {
 
     @Test
     fun `search for something which is found`() = runTest {
-        val presenter = RoomMemberListPresenter(
-            roomMemberListDataSource = RoomMemberListDataSource(
-                room = aMatrixRoom().apply {
-                    givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
-                },
-                coroutineDispatchers = testCoroutineDispatchers()
-            ),
-            coroutineDispatchers = testCoroutineDispatchers()
-        )
+        val presenter = createPresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -149,3 +114,17 @@ class RoomMemberListPresenterTests {
         }
     }
 }
+
+@ExperimentalCoroutinesApi
+private fun createDataSource(
+    matrixRoom: MatrixRoom = aMatrixRoom().apply {
+        givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
+    },
+    coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers()
+) = RoomMemberListDataSource(matrixRoom, coroutineDispatchers)
+
+@ExperimentalCoroutinesApi
+private fun createPresenter(
+    roomMemberListDataSource: RoomMemberListDataSource = createDataSource(),
+    coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers()
+) = RoomMemberListPresenter(roomMemberListDataSource, coroutineDispatchers)
