@@ -17,24 +17,30 @@
 package io.element.android.appnav.root
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import io.element.android.features.rageshake.api.crash.CrashDetectionPresenter
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionPresenter
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.services.apperror.api.AppErrorStateService
 import javax.inject.Inject
 
 class RootPresenter @Inject constructor(
     private val crashDetectionPresenter: CrashDetectionPresenter,
     private val rageshakeDetectionPresenter: RageshakeDetectionPresenter,
+    private val appErrorStateService: AppErrorStateService,
 ) : Presenter<RootState> {
 
     @Composable
     override fun present(): RootState {
         val rageshakeDetectionState = rageshakeDetectionPresenter.present()
         val crashDetectionState = crashDetectionPresenter.present()
+        val appErrorState by appErrorStateService.appErrorStateFlow.collectAsState()
 
         return RootState(
             rageshakeDetectionState = rageshakeDetectionState,
             crashDetectionState = crashDetectionState,
+            errorState = appErrorState,
         )
     }
 }

@@ -40,6 +40,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 import org.matrix.rustcomponents.sdk.UpdateSummary
 import org.matrix.rustcomponents.sdk.genTransactionId
@@ -206,6 +207,18 @@ class RustMatrixRoom(
     override suspend fun rejectInvitation(): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {
             innerRoom.rejectInvitation()
+        }
+    }
+
+    override suspend fun inviteUserById(id: UserId): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            innerRoom.inviteUserById(id.value)
+        }
+    }
+
+    override suspend fun canInvite(): Result<Boolean> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            innerRoom.member(sessionId.value).use(RoomMember::canInvite)
         }
     }
 
