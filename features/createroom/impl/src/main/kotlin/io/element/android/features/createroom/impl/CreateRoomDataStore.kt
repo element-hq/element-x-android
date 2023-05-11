@@ -63,4 +63,8 @@ class CreateRoomDataStore @Inject constructor(
     fun setPrivacy(privacy: RoomPrivacy?) {
         createRoomConfigFlow.tryEmit(createRoomConfigFlow.value.copy(privacy = privacy))
     }
+
+    fun clearCachedData() {
+        cachedAvatarUri = null
+    }
 }
