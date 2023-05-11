@@ -73,25 +73,25 @@ class MessageComposerPresenter @Inject constructor(
                 mimeType.isMimeTypeVideo() -> MediaType.Video
                 else -> error("MimeType must be either image/* or video/*")
             }
-            appCoroutineScope.uploadMedia(uri, mediaType)
+            appCoroutineScope.sendMedia(uri, mediaType)
         })
 
         val filesPicker = mediaPickerProvider.registerFilePicker(mimeType = MimeTypes.Any) { uri ->
             if (uri == null) return@registerFilePicker
             Timber.d("File picked from $uri")
-            appCoroutineScope.uploadMedia(uri, MediaType.File)
+            appCoroutineScope.sendMedia(uri, MediaType.File)
         }
 
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker { uri ->
             if (uri == null) return@registerCameraPhotoPicker
             Timber.d("Photo saved at $uri")
-            appCoroutineScope.uploadMedia(uri, MediaType.Image, deleteOriginal = true)
+            appCoroutineScope.sendMedia(uri, MediaType.Image, deleteOriginal = true)
         }
 
         val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker { uri ->
             if (uri == null) return@registerCameraVideoPicker
             Timber.d("Video saved at $uri")
-            appCoroutineScope.uploadMedia(uri, MediaType.Video, deleteOriginal = true)
+            appCoroutineScope.sendMedia(uri, MediaType.Video, deleteOriginal = true)
         }
 
         val isFullScreen = rememberSaveable {
@@ -190,7 +190,7 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
-    private fun CoroutineScope.uploadMedia(
+    private fun CoroutineScope.sendMedia(
         uri: Uri,
         mediaType: MediaType,
         deleteOriginal: Boolean = false

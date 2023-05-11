@@ -57,6 +57,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Test
@@ -331,7 +332,7 @@ class MessageComposerPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery)
             // Wait for the launched upload coroutine to run
-            delay(1)
+            runCurrent()
             assertThat(room.sendMediaCount).isEqualTo(1)
         }
     }
@@ -372,7 +373,7 @@ class MessageComposerPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery)
             // Wait for the launched upload coroutine to run
-            delay(1)
+            runCurrent()
             assertThat(room.sendMediaCount).isEqualTo(1)
         }
     }
@@ -416,7 +417,7 @@ class MessageComposerPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles)
             // Wait for the launched upload coroutine to run
-            delay(1)
+            runCurrent()
             assertThat(room.sendMediaCount).isEqualTo(1)
         }
     }
@@ -431,7 +432,7 @@ class MessageComposerPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickCameraAttachmentSource.Photo)
             // Wait for the launched upload coroutine to run
-            delay(1)
+            runCurrent()
             assertThat(room.sendMediaCount).isEqualTo(1)
         }
     }
@@ -446,7 +447,7 @@ class MessageComposerPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickCameraAttachmentSource.Video)
             // Wait for the launched upload coroutine to run
-            delay(1)
+            runCurrent()
             assertThat(room.sendMediaCount).isEqualTo(1)
         }
     }
