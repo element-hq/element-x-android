@@ -19,6 +19,7 @@ package io.element.android.libraries.mediaupload
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import com.vanniktech.blurhash.BlurHash
 import io.element.android.libraries.androidutils.bitmap.calculateInSampleSize
 import io.element.android.libraries.androidutils.bitmap.resizeToMax
 import io.element.android.libraries.androidutils.bitmap.rotateToMetadataOrientation
@@ -48,14 +49,21 @@ class ImageCompressor @Inject constructor(
     ): Result<ImageCompressionResult> = withContext(Dispatchers.IO) {
         runCatching {
             val compressedBitmap = compressToBitmap(inputStream, resizeMode).getOrThrow()
+            val blurhash = BlurHash.encode(compressedBitmap, 3, 3)
 
             // Encode bitmap to the destination temporary file
-            val tmpFile = context.createTmpFile()
+            val tmpFile = context.createTmpFile(extension = "jpeg")
             tmpFile.outputStream().use {
                 compressedBitmap.compress(format, desiredQuality, it)
             }
 
-            ImageCompressionResult(tmpFile, compressedBitmap.width, compressedBitmap.height, tmpFile.length())
+            ImageCompressionResult(
+                file = tmpFile,
+                width = compressedBitmap.width,
+                height = compressedBitmap.height,
+                size = tmpFile.length(),
+                blurhash = blurhash
+            )
         }
     }
 
@@ -108,6 +116,7 @@ data class ImageCompressionResult(
     val width: Int,
     val height: Int,
     val size: Long,
+    val blurhash: String,
 )
 
 sealed interface ResizeMode {

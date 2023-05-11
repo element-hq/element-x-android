@@ -41,6 +41,7 @@ android {
         implementation(libs.androidx.exifinterface)
         implementation(libs.coroutines.core)
         implementation(libs.otaliastudios.transcoder)
+        implementation(libs.vanniktech.blurhash)
 
         testImplementation(libs.test.junit)
         testImplementation(libs.coroutines.test)

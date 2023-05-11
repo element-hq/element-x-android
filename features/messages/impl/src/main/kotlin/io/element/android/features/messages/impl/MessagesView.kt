@@ -46,6 +46,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -94,7 +95,6 @@ fun MessagesView(
     val itemActionsBottomSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
     )
-    val snackbarHostState = remember { SnackbarHostState() }
     val composerState = state.composerState
     val initialBottomSheetState = if (LocalInspectionMode.current && composerState.attachmentSourcePicker != null) {
         ModalBottomSheetValue.Expanded
@@ -107,6 +107,19 @@ fun MessagesView(
     BackHandler(enabled = bottomSheetState.isVisible) {
         coroutineScope.launch {
             bottomSheetState.hide()
+        }
+    }
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarMessageText = state.snackbarMessage?.let { stringResource(it.messageResId) }
+    if (snackbarMessageText != null) {
+        SideEffect {
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(
+                    message = snackbarMessageText,
+                    duration = state.snackbarMessage.duration
+                )
+            }
         }
     }
 

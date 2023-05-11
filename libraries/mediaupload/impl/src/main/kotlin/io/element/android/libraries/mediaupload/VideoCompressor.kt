@@ -32,7 +32,7 @@ class VideoCompressor @Inject constructor(
 ) {
 
     fun compress(uri: Uri) = callbackFlow {
-        val tmpFile = context.createTmpFile()
+        val tmpFile = context.createTmpFile(extension = "mp4")
         val future = Transcoder.into(tmpFile.path)
             .addDataSource(context, uri)
             .setListener(object : TranscoderListener {

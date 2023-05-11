@@ -32,6 +32,8 @@ import io.element.android.libraries.core.data.toStableCharSequence
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
+import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -40,11 +42,13 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaType
+import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import io.element.android.libraries.ui.strings.R as StringR
 
 @SingleIn(RoomScope::class)
 class MessageComposerPresenter @Inject constructor(
@@ -53,6 +57,7 @@ class MessageComposerPresenter @Inject constructor(
     private val mediaPickerProvider: PickerProvider,
     private val featureFlagService: FeatureFlagService,
     private val mediaPreProcessor: MediaPreProcessor,
+    private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<MessageComposerState> {
 
     @Composable
@@ -60,6 +65,7 @@ class MessageComposerPresenter @Inject constructor(
         val localCoroutineScope = rememberCoroutineScope()
 
         val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker(onResult = { uri, mimeType ->
+            if (uri == null) return@registerGalleryPicker
             Timber.d("Media picked from $uri")
             // We don't know which type of media was retrieved, so we need this check
             val mediaType = when {
@@ -67,22 +73,25 @@ class MessageComposerPresenter @Inject constructor(
                 mimeType.isMimeTypeVideo() -> MediaType.Video
                 else -> error("MimeType must be either image/* or video/*")
             }
-            localCoroutineScope.handleMediaPreProcessing(uri, mediaType)
+            appCoroutineScope.sendMedia(uri, mediaType)
         })
 
         val filesPicker = mediaPickerProvider.registerFilePicker(mimeType = MimeTypes.Any) { uri ->
+            if (uri == null) return@registerFilePicker
             Timber.d("File picked from $uri")
-            localCoroutineScope.handleMediaPreProcessing(uri, MediaType.File)
+            appCoroutineScope.sendMedia(uri, MediaType.File)
         }
 
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker { uri ->
+            if (uri == null) return@registerCameraPhotoPicker
             Timber.d("Photo saved at $uri")
-            localCoroutineScope.handleMediaPreProcessing(uri, MediaType.Image, deleteOriginal = true)
+            appCoroutineScope.sendMedia(uri, MediaType.Image, deleteOriginal = true)
         }
 
         val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker { uri ->
+            if (uri == null) return@registerCameraVideoPicker
             Timber.d("Video saved at $uri")
-            localCoroutineScope.handleMediaPreProcessing(uri, MediaType.Video, deleteOriginal = true)
+            appCoroutineScope.sendMedia(uri, MediaType.Video, deleteOriginal = true)
         }
 
         val isFullScreen = rememberSaveable {
@@ -181,14 +190,44 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
-    private fun CoroutineScope.handleMediaPreProcessing(
-        uri: Uri?,
+    private fun CoroutineScope.sendMedia(
+        uri: Uri,
         mediaType: MediaType,
         deleteOriginal: Boolean = false
     ) = launch {
-        if (uri == null) return@launch
+        runCatching {
+            val info = handleMediaPreProcessing(uri, mediaType, deleteOriginal).getOrNull() ?: return@runCatching
+            when (info) {
+                is MediaUploadInfo.Image -> {
+                    room.sendImage(info.file, info.thumbnailInfo.file, info.info)
+                }
 
-        val result = mediaPreProcessor.process(uri, mediaType,  deleteOriginal = deleteOriginal)
+                is MediaUploadInfo.Video -> {
+                    room.sendVideo(info.file, info.thumbnailInfo.file, info.info)
+                }
+
+                is MediaUploadInfo.AnyFile -> {
+                    room.sendFile(info.file, info.info)
+                }
+                else -> error("Unexpected MediaUploadInfo format: $info")
+            }.getOrThrow()
+        }.onFailure {
+            snackbarDispatcher.post(SnackbarMessage(StringR.string.screen_media_upload_preview_error_failed_sending))
+            Timber.e(it, "Couldn't upload media")
+        }.onSuccess {
+            Timber.d("Media uploaded")
+        }
+    }
+
+    private suspend fun handleMediaPreProcessing(
+        uri: Uri,
+        mediaType: MediaType,
+        deleteOriginal: Boolean,
+    ): Result<MediaUploadInfo> {
+        val result = mediaPreProcessor.process(uri, mediaType, deleteOriginal = deleteOriginal)
         Timber.d("Pre-processed media result: $result")
+        return result.onFailure {
+            snackbarDispatcher.post(SnackbarMessage(StringR.string.screen_media_upload_preview_error_failed_processing))
+        }
     }
 }
