@@ -119,8 +119,8 @@ class ConfigureRoomPresenter @Inject constructor(
         config: CreateRoomConfig,
         createRoomAction: MutableState<Async<RoomId>>
     ) = launch {
-        val mxc = config.avatarUri?.let { uploadAvatar(it) }
         suspend {
+            val mxc = config.avatarUri?.let { uploadAvatar(it) }
             val params = CreateRoomParameters(
                 name = config.roomName,
                 topic = config.topic,

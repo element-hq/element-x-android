@@ -29,21 +29,29 @@ import io.element.android.features.createroom.impl.configureroom.avatar.AvatarAc
 import io.element.android.features.userlist.api.UserListDataStore
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
+import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import java.io.File
 
 private const val AN_URI_FROM_CAMERA = "content://uri_from_camera"
 private const val AN_URI_FROM_GALLERY = "content://uri_from_gallery"
@@ -56,6 +64,7 @@ class ConfigureRoomPresenterTests {
     private lateinit var createRoomDataStore: CreateRoomDataStore
     private lateinit var fakeMatrixClient: FakeMatrixClient
     private lateinit var fakePickerProvider: FakePickerProvider
+    private lateinit var fakeMediaPreProcessor: FakeMediaPreProcessor
 
     @Before
     fun setup() {
@@ -63,12 +72,21 @@ class ConfigureRoomPresenterTests {
         userListDataStore = UserListDataStore()
         createRoomDataStore = CreateRoomDataStore(userListDataStore)
         fakePickerProvider = FakePickerProvider()
+        fakeMediaPreProcessor = FakeMediaPreProcessor()
         presenter = ConfigureRoomPresenter(
             dataStore = createRoomDataStore,
             matrixClient = fakeMatrixClient,
             mediaPickerProvider = fakePickerProvider,
-            mediaPreProcessor = FakeMediaPreProcessor(),
+            mediaPreProcessor = fakeMediaPreProcessor,
         )
+
+        mockkStatic(File::readBytes)
+        every { any<File>().readBytes() } returns byteArrayOf()
+    }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
     }
 
     @Test
@@ -203,6 +221,30 @@ class ConfigureRoomPresenterTests {
             val stateAfterCreateRoom = awaitItem()
             assertThat(stateAfterCreateRoom.createRoomAction).isInstanceOf(Async.Success::class.java)
             assertThat(stateAfterCreateRoom.createRoomAction.dataOrNull()).isEqualTo(createRoomResult.getOrNull())
+        }
+    }
+
+    @Test
+    fun `present - trigger create room with upload error and retry`() = runTest {
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            createRoomDataStore.setAvatarUri(Uri.parse(AN_URI_FROM_GALLERY))
+            fakeMediaPreProcessor.givenResult(Result.success(MediaUploadInfo.Image(mockk(), mockk(), null)))
+            fakeMatrixClient.givenUploadMediaResult(Result.failure(A_THROWABLE))
+
+            val initialState = awaitItem()
+            initialState.eventSink(ConfigureRoomEvents.CreateRoom(initialState.config))
+            val stateAfterCreateRoom = awaitItem()
+            assertThat(stateAfterCreateRoom.createRoomAction).isInstanceOf(Async.Failure::class.java)
+
+            fakeMatrixClient.givenUploadMediaResult(Result.success(AN_AVATAR_URL))
+            stateAfterCreateRoom.eventSink(ConfigureRoomEvents.CreateRoom(initialState.config))
+            assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Uninitialized::class.java)
+            assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Loading::class.java)
+            assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Success::class.java)
+
         }
     }
 
