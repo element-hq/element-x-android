@@ -21,8 +21,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
@@ -96,33 +96,42 @@ fun ConfigureRoomView(
             )
         }
     ) { padding ->
-        Column(
+        LazyColumn(
             modifier = Modifier.padding(padding),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            RoomNameWithAvatar(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                avatarUri = state.config.avatarUri,
-                roomName = state.config.roomName.orEmpty(),
-                onAvatarClick = ::onAvatarClicked,
-                onRoomNameChanged = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
-            )
-            RoomTopic(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                topic = state.config.topic.orEmpty(),
-                onTopicChanged = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
-            )
-            SelectedUsersList(
-                contentPadding = PaddingValues(horizontal = 24.dp),
-                selectedUsers = state.config.invites,
-                onUserRemoved = { state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it)) },
-            )
-            Spacer(Modifier.weight(1f))
-            RoomPrivacyOptions(
-                modifier = Modifier.padding(bottom = 40.dp),
-                selected = state.config.privacy,
-                onOptionSelected = { state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it.privacy)) },
-            )
+            item {
+                RoomNameWithAvatar(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    avatarUri = state.config.avatarUri,
+                    roomName = state.config.roomName.orEmpty(),
+                    onAvatarClick = ::onAvatarClicked,
+                    onRoomNameChanged = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
+                )
+            }
+            item {
+                RoomTopic(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    topic = state.config.topic.orEmpty(),
+                    onTopicChanged = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
+                )
+            }
+            if (state.config.invites.isNotEmpty()) {
+                item {
+                    SelectedUsersList(
+                        contentPadding = PaddingValues(horizontal = 24.dp),
+                        selectedUsers = state.config.invites,
+                        onUserRemoved = { state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it)) },
+                    )
+                }
+            }
+            item {
+                RoomPrivacyOptions(
+                    modifier = Modifier.padding(bottom = 40.dp),
+                    selected = state.config.privacy,
+                    onOptionSelected = { state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it.privacy)) },
+                )
+            }
         }
     }
 
