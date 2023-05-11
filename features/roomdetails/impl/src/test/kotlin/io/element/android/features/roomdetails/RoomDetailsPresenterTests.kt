@@ -25,6 +25,7 @@ import io.element.android.features.roomdetails.impl.RoomDetailsEvent
 import io.element.android.features.roomdetails.impl.RoomDetailsPresenter
 import io.element.android.features.roomdetails.impl.RoomDetailsType
 import io.element.android.features.roomdetails.impl.members.aRoomMember
+import io.element.android.features.roomdetails.impl.members.aRoomMemberList
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -91,7 +92,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom()
         val roomMembers = listOf(
             aRoomMember(A_USER_ID),
-            aRoomMember(A_USER_ID_2),
+            aRoomMember(A_USER_ID_2, membership = RoomMembershipState.INVITE),
         )
         val presenter = aRoomDetailsPresenter(room)
         moleculeFlow(RecompositionClock.Immediate) {
@@ -113,7 +114,7 @@ class RoomDetailsPresenterTests {
             room.givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
             //skipItems(1)
             val successState = awaitItem()
-            Truth.assertThat(successState.memberCount).isEqualTo(Async.Success(roomMembers.size))
+            Truth.assertThat(successState.memberCount).isEqualTo(Async.Success(1))
 
             cancelAndIgnoreRemainingEvents()
         }

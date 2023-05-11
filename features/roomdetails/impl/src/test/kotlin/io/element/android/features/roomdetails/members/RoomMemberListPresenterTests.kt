@@ -149,20 +149,3 @@ class RoomMemberListPresenterTests {
         }
     }
 }
-
-fun someRoomMembers() = listOf(
-    someInviteMember(),
-    someJoinMember()
-)
-
-fun someInviteMember() = aRoomMember(
-    userId = UserId("@invite:server.org"),
-    displayName = "Invite",
-    membership = RoomMembershipState.INVITE
-)
-
-fun someJoinMember() = aRoomMember(
-    userId = UserId("@join:server.org"),
-    displayName = "Join",
-    membership = RoomMembershipState.JOIN
-)

@@ -34,6 +34,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -124,7 +125,7 @@ class RoomDetailsPresenter @Inject constructor(
                     MatrixRoomMembersState.Unknown -> Async.Uninitialized
                     is MatrixRoomMembersState.Pending -> Async.Loading(prevState = membersState.prevRoomMembers?.size)
                     is MatrixRoomMembersState.Error -> Async.Failure(membersState.failure, prevState = membersState.prevRoomMembers?.size)
-                    is MatrixRoomMembersState.Ready -> Async.Success(membersState.roomMembers.size)
+                    is MatrixRoomMembersState.Ready -> Async.Success(membersState.roomMembers.filter { it.membership == RoomMembershipState.JOIN }.size)
                 }
             }
         }
