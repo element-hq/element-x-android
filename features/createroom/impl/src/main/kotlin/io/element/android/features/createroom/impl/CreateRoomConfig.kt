@@ -27,5 +27,5 @@ data class CreateRoomConfig(
     val topic: String? = null,
     val avatarUri: Uri? = null,
     val invites: ImmutableList<MatrixUser> = persistentListOf(),
-    val privacy: RoomPrivacy? = null,
+    val privacy: RoomPrivacy = RoomPrivacy.Private,
 )
