@@ -91,6 +91,10 @@ class FakeMatrixClient(
         return getProfileResults[userId] ?: Result.failure(IllegalStateException("No profile found for $userId"))
     }
 
+    override suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults> {
+        return searchUserResults[searchTerm] ?: Result.failure(IllegalStateException("No response defined for $searchTerm"))
+    }
+
     override fun startSync() = Unit
 
     override fun stopSync() = Unit
@@ -122,6 +126,10 @@ class FakeMatrixClient(
         return Result.success(ByteArray(0))
     }
 
+    override suspend fun uploadMedia(mimeType: String, data: ByteArray): Result<String> {
+        return Result.success("")
+    }
+
     override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService
 
     override fun pushersService(): PushersService = pushersService
@@ -132,10 +140,6 @@ class FakeMatrixClient(
 
     override fun roomMembershipObserver(): RoomMembershipObserver {
         return RoomMembershipObserver()
-    }
-
-    override suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults> {
-        return searchUserResults[searchTerm] ?: Result.failure(IllegalStateException("No response defined for $searchTerm"))
     }
 
     // Mocks

@@ -16,6 +16,7 @@
 
 package io.element.android.features.createroom.impl.configureroom
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
@@ -30,12 +31,16 @@ import io.element.android.features.createroom.impl.configureroom.avatar.AvatarAc
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.execute
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.createroom.RoomVisibility
 import io.element.android.libraries.mediapickers.api.PickerProvider
+import io.element.android.libraries.mediaupload.api.MediaPreProcessor
+import io.element.android.libraries.mediaupload.api.MediaType
+import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -45,6 +50,7 @@ class ConfigureRoomPresenter @Inject constructor(
     private val dataStore: CreateRoomDataStore,
     private val matrixClient: MatrixClient,
     private val mediaPickerProvider: PickerProvider,
+    private val mediaPreProcessor: MediaPreProcessor,
 ) : Presenter<ConfigureRoomState> {
 
     @Composable
@@ -112,9 +118,12 @@ class ConfigureRoomPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.createRoom(config: CreateRoomConfig, createRoomAction: MutableState<Async<RoomId>>) = launch {
+    private fun CoroutineScope.createRoom(
+        config: CreateRoomConfig,
+        createRoomAction: MutableState<Async<RoomId>>
+    ) = launch {
+        val mxc = config.avatarUri?.let { uploadAvatar(it) }
         suspend {
-            // TODO pre-process and upload the avatar before creating the room
             val params = CreateRoomParameters(
                 name = config.roomName,
                 topic = config.topic,
@@ -123,9 +132,15 @@ class ConfigureRoomPresenter @Inject constructor(
                 visibility = if (config.privacy == RoomPrivacy.Public) RoomVisibility.PUBLIC else RoomVisibility.PRIVATE,
                 preset = if (config.privacy == RoomPrivacy.Public) RoomPreset.PUBLIC_CHAT else RoomPreset.PRIVATE_CHAT,
                 invite = config.invites.map { it.userId },
-                avatar = config.avatarUri?.toString(),
+                avatar = mxc,
             )
             matrixClient.createRoom(params).getOrThrow()
         }.execute(createRoomAction)
+    }
+
+    private suspend fun uploadAvatar(avatarUri: Uri): String? {
+        val preprocessed = mediaPreProcessor.process(avatarUri, MediaType.Image).getOrThrow() as? MediaUploadInfo.Image
+        val byteArray = preprocessed?.file?.readBytes()
+        return byteArray?.let { matrixClient.uploadMedia(MimeTypes.Jpeg, it) }?.getOrThrow()
     }
 }

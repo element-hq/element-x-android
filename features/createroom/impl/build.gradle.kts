@@ -47,6 +47,7 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(projects.features.userlist.api)
     implementation(projects.libraries.mediapickers.api)
+    implementation(projects.libraries.mediaupload.api)
     implementation(libs.coil.compose)
     api(projects.features.createroom.api)
 
