@@ -135,6 +135,7 @@ class ConfigureRoomPresenter @Inject constructor(
                 avatar = mxc,
             )
             matrixClient.createRoom(params).getOrThrow()
+                .also { dataStore.clearCachedData() }
         }.execute(createRoomAction)
     }
 
