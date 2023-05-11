@@ -15,13 +15,27 @@
  */
 plugins {
     id("io.element.android-library")
+    alias(libs.plugins.anvil)
 }
 
 android {
-    namespace = "io.element.android.services.analytics.api"
+    namespace = "io.element.android.services.analyticsproviders.impl"
+}
+
+anvil {
+    generateDaggerFactories.set(true)
 }
 
 dependencies {
+    implementation(libs.dagger)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.sentry.android)
+    implementation(libs.posthog) {
+        exclude("com.android.support", "support-annotations")
+    }
+    implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.core)
+    implementation(projects.libraries.di)
     implementation(projects.services.analyticsproviders.api)
-    implementation(libs.coroutines.core)
+    implementation(projects.services.toolbox.api)
 }

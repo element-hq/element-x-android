@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-}
 
-android {
-    namespace = "io.element.android.services.analytics.api"
-}
+package io.element.android.services.analytics.providers.posthog.extensions
 
-dependencies {
-    implementation(projects.services.analyticsproviders.api)
-    implementation(libs.coroutines.core)
-}
+import im.vector.app.features.analytics.plan.Interaction
+
+fun Interaction.Name.toAnalyticsInteraction(interactionType: Interaction.InteractionType = Interaction.InteractionType.Touch) =
+        Interaction(
+                name = this,
+                interactionType = interactionType
+        )

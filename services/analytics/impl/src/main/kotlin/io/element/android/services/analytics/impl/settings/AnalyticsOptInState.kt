@@ -13,15 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-}
 
-android {
-    namespace = "io.element.android.services.analytics.api"
-}
+package io.element.android.services.analytics.impl.settings
 
-dependencies {
-    implementation(projects.services.analyticsproviders.api)
-    implementation(libs.coroutines.core)
-}
+data class AnalyticsOptInState(
+    val applicationName: String,
+    val eventSink: (AnalyticsOptInEvents) -> Unit
+)

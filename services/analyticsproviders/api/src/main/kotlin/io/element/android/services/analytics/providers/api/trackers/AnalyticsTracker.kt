@@ -13,15 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-}
 
-android {
-    namespace = "io.element.android.services.analytics.api"
-}
+package io.element.android.services.analytics.providers.api.trackers
 
-dependencies {
-    implementation(projects.services.analyticsproviders.api)
-    implementation(libs.coroutines.core)
+import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
+import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
+import im.vector.app.features.analytics.plan.UserProperties
+
+interface AnalyticsTracker {
+    /**
+     * Capture an Event.
+     */
+    fun capture(event: VectorAnalyticsEvent)
+
+    /**
+     * Track a displayed screen.
+     */
+    fun screen(screen: VectorAnalyticsScreen)
+
+    /**
+     * Update user specific properties.
+     */
+    fun updateUserProperties(userProperties: UserProperties)
 }

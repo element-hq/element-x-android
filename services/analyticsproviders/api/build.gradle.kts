@@ -18,10 +18,9 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.services.analytics.api"
+    namespace = "io.element.android.services.analytics.providers.api"
 }
 
 dependencies {
-    implementation(projects.services.analyticsproviders.api)
-    implementation(libs.coroutines.core)
+    api("com.github.matrix-org:matrix-analytics-events:PR82-SNAPSHOT")
 }

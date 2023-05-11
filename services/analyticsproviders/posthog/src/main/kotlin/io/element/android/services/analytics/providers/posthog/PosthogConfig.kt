@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-}
 
-android {
-    namespace = "io.element.android.services.analytics.api"
-}
+package io.element.android.services.analytics.providers.posthog
 
-dependencies {
-    implementation(projects.services.analyticsproviders.api)
-    implementation(libs.coroutines.core)
+object PosthogConfig {
+    const val index = 0
+    const val name = "Posthog"
+    const val postHogHost = "https://posthog.element.dev"
+    const val postHogApiKey = "phc_VtA1L35nw3aeAtHIx1ayrGdzGkss7k1xINeXcoIQzXN"
 }
