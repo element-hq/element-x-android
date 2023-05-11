@@ -17,6 +17,7 @@
 package io.element.android.features.createroom.impl.configureroom
 
 import android.net.Uri
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,6 +34,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -68,6 +73,7 @@ fun ConfigureRoomView(
     onRoomCreated: (RoomId) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
     val itemActionsBottomSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
     )
@@ -79,18 +85,20 @@ fun ConfigureRoomView(
     }
 
     fun onAvatarClicked() {
+        focusManager.clearFocus()
         coroutineScope.launch {
             itemActionsBottomSheetState.show()
         }
     }
 
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.clearFocusOnTap(focusManager),
         topBar = {
             ConfigureRoomToolbar(
                 isNextActionEnabled = state.isCreateButtonEnabled,
                 onBackPressed = onBackPressed,
                 onNextPressed = {
+                    focusManager.clearFocus()
                     state.eventSink(ConfigureRoomEvents.CreateRoom(state.config))
                 },
             )
@@ -121,7 +129,10 @@ fun ConfigureRoomView(
                     SelectedUsersList(
                         contentPadding = PaddingValues(horizontal = 24.dp),
                         selectedUsers = state.config.invites,
-                        onUserRemoved = { state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it)) },
+                        onUserRemoved = {
+                            focusManager.clearFocus()
+                            state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it))
+                        },
                     )
                 }
             }
@@ -129,7 +140,10 @@ fun ConfigureRoomView(
                 RoomPrivacyOptions(
                     modifier = Modifier.padding(bottom = 40.dp),
                     selected = state.config.privacy,
-                    onOptionSelected = { state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it.privacy)) },
+                    onOptionSelected = {
+                        focusManager.clearFocus()
+                        state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it.privacy))
+                    },
                 )
             }
         }
@@ -267,4 +281,12 @@ private fun ContentToPreview(state: ConfigureRoomState) {
     ConfigureRoomView(
         state = state,
     )
+}
+
+private fun Modifier.clearFocusOnTap(focusManager: FocusManager) = composed {
+    pointerInput(Unit) {
+        detectTapGestures(onTap = {
+            focusManager.clearFocus()
+        })
+    }
 }
