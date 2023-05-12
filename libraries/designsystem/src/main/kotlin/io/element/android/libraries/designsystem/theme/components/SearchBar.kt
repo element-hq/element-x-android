@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.Dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar(
     query: String,
@@ -73,7 +72,7 @@ fun SearchBar(
 
 @Preview(group = PreviewGroup.Search)
 @Composable
-internal fun DockedSearchBarPreview() = ElementThemedPreview { ContentToPreview() }
+internal fun SearchBarPreview() = ElementThemedPreview { ContentToPreview() }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
