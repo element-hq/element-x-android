@@ -63,6 +63,7 @@
   <string name="common_developer_options">"Developer options"</string>
   <string name="common_edited_suffix">"(edited)"</string>
   <string name="common_editing">"Editing"</string>
+  <string name="common_emote">"* %1$@ %2$@"</string>
   <string name="common_encryption_enabled">"Encryption enabled"</string>
   <string name="common_error">"Error"</string>
   <string name="common_file">"File"</string>
@@ -90,6 +91,7 @@
   <string name="common_server_not_supported">"Server not supported"</string>
   <string name="common_server_url">"Server URL"</string>
   <string name="common_settings">"Settings"</string>
+    <string name="common_starting_chat">"Starting chat…"</string>
   <string name="common_sticker">"Sticker"</string>
   <string name="common_success">"Success"</string>
   <string name="common_suggestions">"Suggestions"</string>
