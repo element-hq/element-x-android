@@ -23,7 +23,7 @@ compose_bom = "2023.04.01"
 composecompiler = "1.4.7"
 
 # Coroutines
-coroutines = "1.7.0"
+coroutines = "1.7.1"
 
 # Accompanist
 accompanist = "0.30.1"
