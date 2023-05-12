@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalCoroutinesApi::class)
-
 package io.element.android.services.appnavstate.impl
 
 import com.google.common.truth.Truth.assertThat
@@ -28,11 +26,11 @@ import io.element.android.services.appnavstate.test.A_ROOM_OWNER
 import io.element.android.services.appnavstate.test.A_SESSION_OWNER
 import io.element.android.services.appnavstate.test.A_SPACE_OWNER
 import io.element.android.services.appnavstate.test.A_THREAD_OWNER
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertThrows
 import org.junit.Test
+
 class DefaultAppNavigationStateServiceTest {
 
     @Test

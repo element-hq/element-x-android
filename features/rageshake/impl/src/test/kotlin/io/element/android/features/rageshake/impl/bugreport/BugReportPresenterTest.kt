@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalCoroutinesApi::class)
-
 package io.element.android.features.rageshake.impl.bugreport
 
 import app.cash.molecule.RecompositionClock
@@ -28,7 +26,6 @@ import io.element.android.features.rageshake.test.screenshot.A_SCREENSHOT_URI
 import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolder
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.test.A_FAILURE_REASON
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
