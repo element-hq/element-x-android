@@ -21,5 +21,6 @@ import io.element.android.libraries.architecture.Async
 
 data class MediaViewerState(
     val name: String,
-    val downloadedMedia: Async<LocalMedia>
+    val downloadedMedia: Async<LocalMedia>,
+    val eventSink: (MediaViewerEvents) -> Unit
 )

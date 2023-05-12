@@ -62,7 +62,11 @@ class MessagesFlowNode @AssistedInject constructor(
         object Messages : NavTarget
 
         @Parcelize
-        data class MediaViewer(val title: String, val mediaSource: MatrixMediaSource) : NavTarget
+        data class MediaViewer(
+            val title: String,
+            val mediaSource: MatrixMediaSource,
+            val mimeType: String?
+        ) : NavTarget
 
         @Parcelize
         data class AttachmentPreview(val attachment: Attachment) : NavTarget
@@ -89,7 +93,7 @@ class MessagesFlowNode @AssistedInject constructor(
                 createNode<MessagesNode>(buildContext, listOf(callback))
             }
             is NavTarget.MediaViewer -> {
-                val inputs = MediaViewerNode.Inputs(navTarget.title, navTarget.mediaSource)
+                val inputs = MediaViewerNode.Inputs(navTarget.title, navTarget.mediaSource, navTarget.mimeType)
                 createNode<MediaViewerNode>(buildContext, listOf(inputs))
             }
             is NavTarget.AttachmentPreview -> {
@@ -103,12 +107,12 @@ class MessagesFlowNode @AssistedInject constructor(
         when (event.content) {
             is TimelineItemImageContent -> {
                 val mediaSource = event.content.mediaSource
-                val navTarget = NavTarget.MediaViewer(event.content.body, mediaSource)
+                val navTarget = NavTarget.MediaViewer(event.content.body, mediaSource, event.content.mimeType)
                 backstack.push(navTarget)
             }
             is TimelineItemVideoContent -> {
                 val mediaSource = event.content.videoSource
-                val navTarget = NavTarget.MediaViewer(event.content.body, mediaSource)
+                val navTarget = NavTarget.MediaViewer(event.content.body, mediaSource, event.content.mimeType)
                 backstack.push(navTarget)
             }
             else -> Unit

@@ -52,6 +52,7 @@ class TimelineItemContentMessageFactory @Inject constructor() {
                     body = messageType.body,
                     height = messageType.info?.height?.toInt(),
                     width = messageType.info?.width?.toInt(),
+                    mimeType = messageType.info?.mimetype,
                     mediaSource = messageType.source,
                     blurhash = messageType.info?.blurhash,
                     aspectRatio = aspectRatio
@@ -69,7 +70,7 @@ class TimelineItemContentMessageFactory @Inject constructor() {
                     body = messageType.body,
                     thumbnailSource = messageType.info?.thumbnailSource,
                     videoSource = messageType.source,
-                    mimetype = messageType.info?.mimetype,
+                    mimeType = messageType.info?.mimetype,
                     width = messageType.info?.width?.toInt(),
                     height = messageType.info?.height?.toInt(),
                     duration = messageType.info?.duration ?: 0L,

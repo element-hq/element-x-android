@@ -19,42 +19,76 @@
 package io.element.android.features.messages.impl.media.viewer
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.media.local.LocalMediaView
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.ui.strings.R.string as StringR
 
 @Composable
 fun MediaViewerView(
     state: MediaViewerState,
     modifier: Modifier = Modifier,
 ) {
+
+    fun onRetry() {
+        state.eventSink(MediaViewerEvents.RetryLoading)
+    }
+
     Scaffold(modifier) {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it),
             contentAlignment = Alignment.Center
         ) {
             when (state.downloadedMedia) {
                 is Async.Success -> LocalMediaView(state.downloadedMedia.state)
-                is Async.Failure -> ErrorDialog(
-                    content = "Error while downloading the media",
-                )
+                is Async.Failure -> ErrorView("Error while downloading", ::onRetry)
                 else -> CircularProgressIndicator(
                     strokeWidth = 2.dp,
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun ErrorView(
+    errorMessage: String,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(text = errorMessage)
+        Spacer(modifier = Modifier.size(8.dp))
+        Button(
+            onClick = onRetry
+        ) {
+            Text(text = stringResource(id = StringR.action_retry))
+        }
+
     }
 }
 

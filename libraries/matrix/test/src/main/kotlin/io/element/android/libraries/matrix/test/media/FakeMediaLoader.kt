@@ -16,10 +16,9 @@
 
 package io.element.android.libraries.matrix.test.media
 
-import android.net.Uri
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MatrixMediaSource
-import java.io.File
+import io.element.android.libraries.matrix.api.media.MediaFile
 
 class FakeMediaLoader : MatrixMediaLoader {
 
@@ -41,11 +40,11 @@ class FakeMediaLoader : MatrixMediaLoader {
         }
     }
 
-    override suspend fun loadMediaFile(source: MatrixMediaSource, mimeType: String?): Result<Uri> {
+    override suspend fun loadMediaFile(source: MatrixMediaSource, mimeType: String?): Result<MediaFile> {
         return if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
-            return Result.success(Uri.fromFile(File("path")))
+            return Result.success(FakeMediaFile(""))
         }
     }
 }

@@ -29,5 +29,6 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
 
 fun aMediaViewerState() = MediaViewerState(
     name = "A media",
-    downloadedMedia = Async.Uninitialized
+    downloadedMedia = Async.Uninitialized,
+    eventSink = {}
 )
