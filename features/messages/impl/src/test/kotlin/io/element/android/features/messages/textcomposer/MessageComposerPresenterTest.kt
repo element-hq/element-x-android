@@ -52,14 +52,10 @@ import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.android.awaitFrame
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.Test
 import java.io.File
 
@@ -302,30 +298,32 @@ class MessageComposerPresenterTest {
         val room = FakeMatrixRoom()
         val presenter = createPresenter(this, room = room)
         pickerProvider.givenMimeType(MimeTypes.Images)
-        mediaPreProcessor.givenResult(Result.success(
-            MediaUploadInfo.Image(
-                file = File("/some/path"),
-                info = ImageInfo(
-                    width = null,
-                    height = null,
-                    mimetype = null,
-                    size = null,
-                    thumbnailInfo = null,
-                    thumbnailUrl = null,
-                    blurhash = null,
-                ),
-                thumbnailInfo = ThumbnailProcessingInfo(
+        mediaPreProcessor.givenResult(
+            Result.success(
+                MediaUploadInfo.Image(
                     file = File("/some/path"),
-                    info = ThumbnailInfo(
+                    info = ImageInfo(
                         width = null,
                         height = null,
                         mimetype = null,
                         size = null,
+                        thumbnailInfo = null,
+                        thumbnailUrl = null,
+                        blurhash = null,
                     ),
-                    blurhash = "",
+                    thumbnailInfo = ThumbnailProcessingInfo(
+                        file = File("/some/path"),
+                        info = ThumbnailInfo(
+                            width = null,
+                            height = null,
+                            mimetype = null,
+                            size = null,
+                        ),
+                        blurhash = "",
+                    )
                 )
             )
-        ))
+        )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -342,31 +340,33 @@ class MessageComposerPresenterTest {
         val room = FakeMatrixRoom()
         val presenter = createPresenter(this, room = room)
         pickerProvider.givenMimeType(MimeTypes.Videos)
-        mediaPreProcessor.givenResult(Result.success(
-            MediaUploadInfo.Video(
-                file = File("/some/path"),
-                info = VideoInfo(
-                    width = null,
-                    height = null,
-                    mimetype = null,
-                    duration = null,
-                    size = null,
-                    thumbnailInfo = null,
-                    thumbnailUrl = null,
-                    blurhash = null,
-                ),
-                thumbnailInfo = ThumbnailProcessingInfo(
+        mediaPreProcessor.givenResult(
+            Result.success(
+                MediaUploadInfo.Video(
                     file = File("/some/path"),
-                    info = ThumbnailInfo(
+                    info = VideoInfo(
                         width = null,
                         height = null,
                         mimetype = null,
+                        duration = null,
                         size = null,
+                        thumbnailInfo = null,
+                        thumbnailUrl = null,
+                        blurhash = null,
                     ),
-                    blurhash = "",
+                    thumbnailInfo = ThumbnailProcessingInfo(
+                        file = File("/some/path"),
+                        info = ThumbnailInfo(
+                            width = null,
+                            height = null,
+                            mimetype = null,
+                            size = null,
+                        ),
+                        blurhash = "",
+                    )
                 )
             )
-        ))
+        )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -394,7 +394,7 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - Pick media from gallery & cancel does nothing`() = runTest {
         val presenter = createPresenter(this)
-        with(pickerProvider){
+        with(pickerProvider) {
             givenResult(null) // Simulate a user canceling the flow
             givenMimeType(MimeTypes.Images)
         }

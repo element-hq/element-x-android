@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package io.element.android.libraries.matrix.impl
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -300,7 +302,6 @@ class RustMatrixClient constructor(
         }
     }
 
-    @ExperimentalCoroutinesApi
     override fun close() {
         slidingSyncUpdateJob?.cancel()
         stopSync()

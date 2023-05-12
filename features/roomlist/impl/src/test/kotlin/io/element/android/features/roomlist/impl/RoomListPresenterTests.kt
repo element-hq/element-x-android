@@ -38,12 +38,11 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class) class RoomListPresenterTests {
+class RoomListPresenterTests {
 
     @Test
     fun `present - should start with no user and then load user with success`() = runTest {

@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalCoroutinesApi::class)
-
 package io.element.android.features.login.impl.changeserver
 
 import app.cash.molecule.RecompositionClock
@@ -28,11 +26,9 @@ import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL_2
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ChangeServerPresenterTest {
     @Test
     fun `present - should start with default homeserver`() = runTest {
