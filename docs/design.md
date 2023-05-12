@@ -56,7 +56,16 @@ Some of them depend on the theme, so ensure to use theme attributes and not colo
 
 ### Icons
 
-#### Export drawable from Figma
+Most icons should be available as part of the [Compound icon library](https://compound.element.io/?path=/docs/tokens-icons--docs)
+
+All drawable are auto-generated as part of the design tokens library. You can find
+all assets in [`vector-im/compound-design-tokens#assets/android`](https://github.com/vector-im/compound-design-tokens/tree/develop/assets/android)
+
+If you are missing an icon, follow to [contribution guidelines for icons](https://www.figma.com/file/gkNXqPoiJhEv2wt0EJpew4/Compound-Icons?type=design&node-id=178-3119&t=j2uSJD9xPXJn5aRM-0)
+
+#### Custom icons
+
+##### Export drawable from Figma
 
  - click on the element to export
  - ensure that the correct layer is selected. Sometimes the parent layer has to be selected on the left panel
@@ -68,7 +77,7 @@ Some of them depend on the theme, so ensure to use theme attributes and not colo
 
 It's also possible for any icon to go to the main component by right-clicking on the icon.
 
-#### Import in Android Studio
+##### Import in Android Studio
 
  - right click on the drawable folder where the drawable will be created
  - click on "New"/"Vector Asset"
