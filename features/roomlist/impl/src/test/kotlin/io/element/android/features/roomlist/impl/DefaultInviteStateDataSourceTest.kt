@@ -27,11 +27,9 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.tests.testutils.testCoroutineDispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class DefaultInviteStateDataSourceTest {
 
     @Test
@@ -133,5 +131,4 @@ internal class DefaultInviteStateDataSourceTest {
             Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NoInvites)
         }
     }
-
 }

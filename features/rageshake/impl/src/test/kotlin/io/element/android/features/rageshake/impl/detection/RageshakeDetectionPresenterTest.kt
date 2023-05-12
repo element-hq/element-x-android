@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalCoroutinesApi::class)
-
 package io.element.android.features.rageshake.impl.detection
 
 import android.graphics.Bitmap
@@ -31,7 +29,6 @@ import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataSto
 import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolder
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test

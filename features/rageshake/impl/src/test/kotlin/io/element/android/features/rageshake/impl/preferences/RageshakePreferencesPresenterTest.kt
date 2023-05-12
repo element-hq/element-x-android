@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalCoroutinesApi::class)
-
 package io.element.android.features.rageshake.impl.preferences
 
 import app.cash.molecule.RecompositionClock
@@ -26,7 +24,6 @@ import io.element.android.features.rageshake.api.preferences.RageshakePreference
 import io.element.android.features.rageshake.test.rageshake.A_SENSITIVITY
 import io.element.android.features.rageshake.test.rageshake.FakeRageShake
 import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 

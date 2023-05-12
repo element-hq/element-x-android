@@ -33,11 +33,9 @@ import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.mockk.coJustRun
 import io.mockk.mockkConstructor
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class DefaultUserListPresenterTests {
 
     private val userListDataSource = FakeUserListDataSource()
