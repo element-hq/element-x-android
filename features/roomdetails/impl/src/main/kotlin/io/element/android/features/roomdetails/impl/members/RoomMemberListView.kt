@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -67,6 +68,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
+import kotlinx.collections.immutable.ImmutableList
 import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -131,40 +133,41 @@ private fun RoomMemberList(
 ) {
     LazyColumn(modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()) {
         if (roomMembers.state.invited.isNotEmpty()) {
-            item {
-                Text(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                    text = stringResource(id = R.string.screen_room_member_list_pending_header_title),
-                    style = ElementTextStyles.Regular.callout,
-                    color = MaterialTheme.colorScheme.secondary,
-                    textAlign = TextAlign.Start,
-                )
-            }
-            items(roomMembers.state.invited) { matrixUser ->
-                RoomMemberSearchResultItem(
-                    modifier = Modifier.fillMaxWidth(),
-                    roomMember = matrixUser,
-                    onClick = { onUserSelected(matrixUser) }
-                )
-            }
-        }
-        item {
-            val memberCount = roomMembers.state.joined.count()
-            Text(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                text = pluralStringResource(id = R.plurals.screen_room_member_list_header_title, count = memberCount, memberCount),
-                style = ElementTextStyles.Regular.callout,
-                color = MaterialTheme.colorScheme.secondary,
-                textAlign = TextAlign.Start,
+            roomMemberListSection(
+                headerText = { stringResource(id = R.string.screen_room_member_list_pending_header_title) },
+                members = roomMembers.state.invited,
+                onMemberSelected = { onUserSelected(it) }
             )
         }
-        items(roomMembers.state.joined) { matrixUser ->
-            RoomMemberSearchResultItem(
-                modifier = Modifier.fillMaxWidth(),
-                roomMember = matrixUser,
-                onClick = { onUserSelected(matrixUser) }
-            )
-        }
+        val memberCount = roomMembers.state.joined.count()
+        roomMemberListSection(
+            headerText = { pluralStringResource(id = R.plurals.screen_room_member_list_header_title, count = memberCount, memberCount) },
+            members = roomMembers.state.joined,
+            onMemberSelected = { onUserSelected(it) }
+        )
+    }
+}
+
+private fun LazyListScope.roomMemberListSection(
+    headerText: @Composable () -> String,
+    members: ImmutableList<RoomMember>,
+    onMemberSelected: (RoomMember) -> Unit,
+) {
+    item {
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            text = headerText(),
+            style = ElementTextStyles.Regular.callout,
+            color = MaterialTheme.colorScheme.secondary,
+            textAlign = TextAlign.Start,
+        )
+    }
+    items(members) { matrixUser ->
+        RoomMemberSearchResultItem(
+            modifier = Modifier.fillMaxWidth(),
+            roomMember = matrixUser,
+            onClick = { onMemberSelected(matrixUser) }
+        )
     }
 }
 
