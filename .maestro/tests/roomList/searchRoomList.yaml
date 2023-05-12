@@ -1,5 +1,6 @@
 appId: ${APP_ID}
 ---
+- runFlow: ../assertions/assertRoomListSynced.yaml
 - tapOn: "search"
 - inputText: ${ROOM_NAME.substring(0, 3)}
 - takeScreenshot: build/maestro/400-SearchRoom
