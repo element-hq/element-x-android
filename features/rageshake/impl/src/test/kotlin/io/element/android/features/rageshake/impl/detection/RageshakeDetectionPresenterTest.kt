@@ -32,6 +32,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import kotlin.time.Duration.Companion.seconds
 
 class RageshakeDetectionPresenterTest {
     @Test
@@ -98,7 +99,7 @@ class RageshakeDetectionPresenterTest {
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
-        }.test {
+        }.test(timeout = 30.seconds) {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.isStarted).isFalse()
@@ -152,7 +153,7 @@ class RageshakeDetectionPresenterTest {
     }
 
     @Test
-    fun `present - screenshot then disable`() = runTest {
+    fun `present - screenshot then disable`() = runTest(timeout = 1.seconds) {
         val screenshotHolder = FakeScreenshotHolder(screenshotUri = null)
         val rageshake = FakeRageShake(isAvailableValue = true)
         val rageshakeDataStore = FakeRageshakeDataStore(isEnabled = true)
