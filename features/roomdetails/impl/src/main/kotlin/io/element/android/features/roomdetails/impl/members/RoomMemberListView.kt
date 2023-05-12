@@ -73,9 +73,9 @@ import io.element.android.libraries.ui.strings.R as StringR
 @Composable
 fun RoomMemberListView(
     state: RoomMemberListState,
-    modifier: Modifier = Modifier,
     onBackPressed: () -> Unit,
     onMemberSelected: (UserId) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
 
     fun onUserSelected(roomMember: RoomMember) {
@@ -97,13 +97,14 @@ fun RoomMemberListView(
         ) {
             Column {
                 RoomMemberSearchBar(
-                    modifier = Modifier.fillMaxWidth(),
                     query = state.searchQuery,
                     state = state.searchResults,
                     active = state.isSearchActive,
+                    placeHolderTitle = stringResource(StringR.string.common_search_for_someone),
                     onActiveChanged = { state.eventSink(RoomMemberListEvents.OnSearchActiveChanged(it)) },
                     onTextChanged = { state.eventSink(RoomMemberListEvents.UpdateSearchQuery(it)) },
-                    onUserSelected = ::onUserSelected
+                    onUserSelected = ::onUserSelected,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
 
@@ -181,11 +182,11 @@ private fun RoomMemberSearchBar(
     query: String,
     state: RoomMemberSearchResultState,
     active: Boolean,
-    modifier: Modifier = Modifier,
-    placeHolderTitle: String = stringResource(StringR.string.common_search_for_someone),
+    placeHolderTitle: String,
     onActiveChanged: (Boolean) -> Unit,
     onTextChanged: (String) -> Unit,
     onUserSelected: (RoomMember) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
 
