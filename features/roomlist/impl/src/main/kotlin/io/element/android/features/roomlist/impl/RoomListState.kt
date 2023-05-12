@@ -17,8 +17,10 @@
 package io.element.android.features.roomlist.impl
 
 import androidx.compose.runtime.Immutable
+import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.designsystem.utils.SnackbarMessage
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
@@ -33,11 +35,21 @@ data class RoomListState(
     val snackbarMessage: SnackbarMessage?,
     val invitesState: InvitesState,
     val displaySearchResults: Boolean,
-    val eventSink: (RoomListEvents) -> Unit
+    val roomContextMenuState: RoomContextMenuState,
+    val leaveRoomState: LeaveRoomState,
+    val eventSink: (RoomListEvents) -> Unit,
 )
 
 enum class InvitesState {
     NoInvites,
     SeenInvites,
     NewInvites,
+}
+
+sealed interface RoomContextMenuState {
+    object Hidden : RoomContextMenuState
+    data class Shown(
+        val roomId: RoomId,
+        val roomName: String,
+    ) : RoomContextMenuState
 }

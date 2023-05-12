@@ -59,7 +59,7 @@ class RoomFlowNode @AssistedInject constructor(
     roomMembershipObserver: RoomMembershipObserver,
 ) : BackstackNode<RoomFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Messages,
+        initialElement = plugins.filterIsInstance(Inputs::class.java).first().initialElement,
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -73,6 +73,7 @@ class RoomFlowNode @AssistedInject constructor(
 
     data class Inputs(
         val room: MatrixRoom,
+        val initialElement: NavTarget = NavTarget.Messages,
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
@@ -98,6 +99,7 @@ class RoomFlowNode @AssistedInject constructor(
                 navigateUp()
             }
             .launchIn(lifecycleScope)
+        inputs<Inputs>()
     }
 
     private fun fetchRoomMembers() = lifecycleScope.launch {

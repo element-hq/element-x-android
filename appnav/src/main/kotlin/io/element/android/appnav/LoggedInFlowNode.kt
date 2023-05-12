@@ -135,7 +135,10 @@ class LoggedInFlowNode @AssistedInject constructor(
         object RoomList : NavTarget
 
         @Parcelize
-        data class Room(val roomId: RoomId) : NavTarget
+        data class Room(
+            val roomId: RoomId,
+            val initialElement: RoomFlowNode.NavTarget = RoomFlowNode.NavTarget.Messages
+        ) : NavTarget
 
         @Parcelize
         object Settings : NavTarget
@@ -176,6 +179,10 @@ class LoggedInFlowNode @AssistedInject constructor(
                     override fun onInvitesClicked() {
                         backstack.push(NavTarget.InviteList)
                     }
+
+                    override fun onRoomSettingsClicked(roomId: RoomId) {
+                        backstack.push(NavTarget.Room(roomId, initialElement = RoomFlowNode.NavTarget.RoomDetails))
+                    }
                 }
                 roomListEntryPoint
                     .nodeBuilder(this, buildContext)
@@ -193,7 +200,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
                 } else {
                     val nodeLifecycleCallbacks = plugins<NodeLifecycleCallback>()
-                    val inputs = RoomFlowNode.Inputs(room)
+                    val inputs = RoomFlowNode.Inputs(room, initialElement = navTarget.initialElement)
                     createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs) + nodeLifecycleCallbacks)
                 }
             }

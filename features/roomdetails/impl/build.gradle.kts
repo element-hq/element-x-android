@@ -45,6 +45,7 @@ dependencies {
     api(projects.libraries.usersearch.api)
     api(projects.services.apperror.api)
     implementation(libs.coil.compose)
+    implementation(projects.features.leaveroom.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
@@ -54,6 +55,7 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.usersearch.test)
     testImplementation(projects.tests.testutils)
+    testImplementation(projects.features.leaveroom.fake)
 
     ksp(libs.showkase.processor)
 }

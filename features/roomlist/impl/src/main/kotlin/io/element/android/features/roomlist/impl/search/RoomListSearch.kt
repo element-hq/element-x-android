@@ -70,6 +70,7 @@ import io.element.android.libraries.ui.strings.R
 internal fun RoomListSearchResultView(
     state: RoomListState,
     onRoomClicked: (RoomId) -> Unit,
+    onRoomLongClicked: (RoomListRoomSummary) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     AnimatedVisibility(
@@ -85,7 +86,11 @@ internal fun RoomListSearchResultView(
                 })
         ) {
             if (state.displaySearchResults) {
-                RoomListSearchResultContent(state = state, onRoomClicked = onRoomClicked)
+                RoomListSearchResultContent(
+                    state = state,
+                    onRoomClicked = onRoomClicked,
+                    onRoomLongClicked = onRoomLongClicked,
+                )
             }
         }
     }
@@ -96,6 +101,7 @@ internal fun RoomListSearchResultView(
 internal fun RoomListSearchResultContent(
     state: RoomListState,
     onRoomClicked: (RoomId) -> Unit,
+    onRoomLongClicked: (RoomListRoomSummary) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val borderColor = MaterialTheme.colorScheme.tertiary
@@ -197,7 +203,11 @@ internal fun RoomListSearchResultContent(
                     items = state.filteredRoomList,
                     contentType = { room -> room.contentType() },
                 ) { room ->
-                    RoomSummaryRow(room = room, onClick = ::onRoomClicked)
+                    RoomSummaryRow(
+                        room = room,
+                        onClick = ::onRoomClicked,
+                        onLongClick = onRoomLongClicked,
+                    )
                 }
             }
         }

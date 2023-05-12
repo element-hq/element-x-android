@@ -28,6 +28,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.features.leaveroom.api.LeaveRoomEvent
+import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryPlaceholders
 import io.element.android.libraries.architecture.Presenter
@@ -62,10 +64,12 @@ class RoomListPresenter @Inject constructor(
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val inviteStateDataSource: InviteStateDataSource,
+    private val leaveRoomPresenter: LeaveRoomPresenter,
 ) : Presenter<RoomListState> {
 
     @Composable
     override fun present(): RoomListState {
+        val leaveRoomState = leaveRoomPresenter.present()
         val matrixUser: MutableState<MatrixUser?> = rememberSaveable {
             mutableStateOf(null)
         }
@@ -97,6 +101,8 @@ class RoomListPresenter @Inject constructor(
 
         var displaySearchResults by rememberSaveable { mutableStateOf(false) }
 
+        var roomContextMenuState by remember { mutableStateOf<RoomContextMenuState>(RoomContextMenuState.Hidden) }
+
         fun handleEvents(event: RoomListEvents) {
             when (event) {
                 is RoomListEvents.UpdateFilter -> filter = event.newFilter
@@ -108,6 +114,18 @@ class RoomListPresenter @Inject constructor(
                     }
                     displaySearchResults = !displaySearchResults
                 }
+                is RoomListEvents.ShowContextMenu -> {
+                    roomContextMenuState = if (event.roomListRoomSummary.roomId == null) {
+                        RoomContextMenuState.Hidden
+                    } else {
+                        RoomContextMenuState.Shown(
+                            roomId = event.roomListRoomSummary.roomId,
+                            roomName = event.roomListRoomSummary.name
+                        )
+                    }
+                }
+                is RoomListEvents.HideContextMenu -> roomContextMenuState = RoomContextMenuState.Hidden
+                is RoomListEvents.LeaveRoom -> leaveRoomState.eventSink(LeaveRoomEvent.ShowConfirmation(event.roomId))
             }
         }
 
@@ -132,6 +150,8 @@ class RoomListPresenter @Inject constructor(
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             invitesState = inviteStateDataSource.inviteState(),
             displaySearchResults = displaySearchResults,
+            roomContextMenuState = roomContextMenuState,
+            leaveRoomState = leaveRoomState,
             eventSink = ::handleEvents
         )
     }
