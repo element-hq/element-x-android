@@ -65,11 +65,12 @@ class CreateRoomRootPresenter @Inject constructor(
 
         fun startDm(matrixUser: MatrixUser) {
             startDmAction.value = Async.Uninitialized
-            val existingDM = matrixClient.findDM(matrixUser.userId)
-            if (existingDM == null) {
-                localCoroutineScope.createDM(matrixUser, startDmAction)
-            } else {
-                startDmAction.value = Async.Success(existingDM.roomId)
+            matrixClient.findDM(matrixUser.userId).use { existingDM ->
+                if (existingDM == null) {
+                    localCoroutineScope.createDM(matrixUser, startDmAction)
+                } else {
+                    startDmAction.value = Async.Success(existingDM.roomId)
+                }
             }
         }
 

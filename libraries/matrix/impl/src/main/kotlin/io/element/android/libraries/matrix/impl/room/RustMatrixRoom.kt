@@ -161,9 +161,10 @@ class RustMatrixRoom(
 
     override suspend fun sendMessage(message: String): Result<Unit> = withContext(coroutineDispatchers.io) {
         val transactionId = genTransactionId()
-        val content = messageEventContentFromMarkdown(message)
-        runCatching {
-            innerRoom.send(content, transactionId)
+        messageEventContentFromMarkdown(message).use { content ->
+            runCatching {
+                innerRoom.send(content, transactionId)
+            }
         }
     }
 
