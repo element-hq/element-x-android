@@ -97,11 +97,15 @@ Main entry point: https://www.figma.com/files/project/5612863/Element?fuid=77937
 
 Note: all the Figma links are not publicly available.
 
-### Coumpound
+### Compound
 
-Coumpound contains the theme of the application, with all the components, in Light and Dark theme: palette (colors), typography, iconography, etc.
+Compound is Element's design system where you'll find styles and documentation
+regarding user interfaces.
 
-https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound
+-   Documentation: [https://compound.element.io](https://compound.element.io)
+-   [Compound Android – Figma document](https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components)
+-   [Compound Styles - Figma document](https://www.figma.com/file/PpKepmHKGikp33Ql7iivbn/Compound-Styles?type=design)
+-   [Compound Icons - Figma document](https://www.figma.com/file/gkNXqPoiJhEv2wt0EJpew4/Compound-Icons)
 
 ### Login
 
