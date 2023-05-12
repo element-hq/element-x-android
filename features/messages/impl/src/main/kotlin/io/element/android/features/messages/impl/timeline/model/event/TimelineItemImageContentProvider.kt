@@ -34,6 +34,7 @@ fun aTimelineItemImageContent() = TimelineItemImageContent(
     mediaSource = MatrixMediaSource(""),
     blurhash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
     aspectRatio = 0.5f,
+    mimeType = "null",
     height = null,
     width = null
 )

@@ -22,6 +22,8 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -84,13 +86,17 @@ fun MediaVideoView(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
-    val exoPlayer = ExoPlayer.Builder(LocalContext.current).build()
-    val mediaItem = MediaItem.Builder()
-        .setUri(uri)
-        .build()
-    exoPlayer.playWhenReady
-    exoPlayer.setMediaItem(mediaItem)
-    exoPlayer.prepare()
+    val exoPlayer = remember {
+        ExoPlayer.Builder(context).build()
+            .apply {
+                this.playWhenReady = true
+                this.prepare()
+            }
+    }
+    LaunchedEffect(uri) {
+        val mediaItem = MediaItem.fromUri(uri)
+        exoPlayer.setMediaItem(mediaItem)
+    }
 
     AndroidView(
         factory = {
@@ -98,8 +104,10 @@ fun MediaVideoView(
                 player = exoPlayer
                 resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
                 layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+                controllerShowTimeoutMs = 3000
             }
-        }, modifier = modifier.fillMaxSize()
+        },
+        modifier = modifier.fillMaxSize()
     )
 
     OnLifecycleEvent { _, event ->

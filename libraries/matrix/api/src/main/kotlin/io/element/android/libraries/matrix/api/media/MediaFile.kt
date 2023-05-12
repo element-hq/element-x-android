@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.model.event
+package io.element.android.libraries.matrix.api.media
 
-import io.element.android.libraries.matrix.api.media.MatrixMediaSource
+import java.io.Closeable
 
-data class TimelineItemImageContent(
-    val body: String,
-    val mediaSource: MatrixMediaSource,
-    val mimeType: String?,
-    val blurhash: String?,
-    val width: Int?,
-    val height: Int?,
-    val aspectRatio: Float
-) : TimelineItemEventContent {
-    override val type: String = "TimelineItemImageContent"
+/**
+ * A wrapper around a media file on the disk.
+ * When closed the file will be removed from the disk.
+ */
+interface MediaFile : Closeable {
+    fun path(): String
 }

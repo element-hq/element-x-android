@@ -39,11 +39,12 @@ class MediaViewerNode @AssistedInject constructor(
     data class Inputs(
         val name: String,
         val mediaSource: MatrixMediaSource,
+        val mimeType: String?
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
 
-    private val presenter = presenterFactory.create(inputs.name, inputs.mediaSource)
+    private val presenter = presenterFactory.create(inputs)
 
     @Composable
     override fun View(modifier: Modifier) {

@@ -16,15 +16,14 @@
 
 package io.element.android.libraries.matrix.impl.media
 
-import android.net.Uri
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MatrixMediaSource
+import io.element.android.libraries.matrix.api.media.MediaFile
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
 import org.matrix.rustcomponents.sdk.use
-import java.io.File
 
 class RustMediaLoader(
     private val dispatchers: CoroutineDispatchers,
@@ -59,19 +58,16 @@ class RustMediaLoader(
             }
         }
 
-    override suspend fun loadMediaFile(source: MatrixMediaSource, mimeType: String?): Result<Uri> =
+    override suspend fun loadMediaFile(source: MatrixMediaSource, mimeType: String?): Result<MediaFile> =
         withContext(dispatchers.io) {
             runCatching {
                 mediaSourceFromUrl(source.url).use { mediaSource ->
-                    innerClient.getMediaFile(
+                    val mediaFile = innerClient.getMediaFile(
                         mediaSource = mediaSource,
                         mimeType = mimeType ?: "application/octet-stream"
-                    ).use {
-                        val file = File(it.path())
-                        Uri.fromFile(file)
-                    }
+                    )
+                    RustMediaFile(mediaFile)
                 }
             }
-
         }
 }

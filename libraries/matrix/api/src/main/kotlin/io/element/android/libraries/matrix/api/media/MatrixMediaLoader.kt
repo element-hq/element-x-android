@@ -16,8 +16,6 @@
 
 package io.element.android.libraries.matrix.api.media
 
-import android.net.Uri
-
 interface MatrixMediaLoader {
     /**
      * @param url to fetch the content for.
@@ -36,7 +34,7 @@ interface MatrixMediaLoader {
     /**
      * @param url to fetch the data for.
      * @param mimeType: optional mime type
-     * @return a [Result] of [Uri]. It's the uri of the downloaded file.
+     * @return a [Result] of [MediaFile]
      */
-    suspend fun loadMediaFile(source: MatrixMediaSource, mimeType: String?): Result<Uri>
+    suspend fun loadMediaFile(source: MatrixMediaSource, mimeType: String?): Result<MediaFile>
 }

@@ -17,8 +17,14 @@
 package io.element.android.features.messages.impl.media.viewer
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.produceState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.core.net.toUri
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -27,37 +33,65 @@ import io.element.android.features.messages.impl.media.local.LocalMediaFactory
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.media.MatrixMediaSource
+import io.element.android.libraries.matrix.api.media.MediaFile
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class MediaViewerPresenter @AssistedInject constructor(
-    @Assisted private val name: String,
-    @Assisted private val mediaSource: MatrixMediaSource,
+    @Assisted private val inputs: MediaViewerNode.Inputs,
     private val localMediaFactory: LocalMediaFactory,
     private val client: MatrixClient,
 ) : Presenter<MediaViewerState> {
 
     @AssistedFactory
     interface Factory {
-        fun create(name: String, mediaSource: MatrixMediaSource): MediaViewerPresenter
+        fun create(inputs: MediaViewerNode.Inputs): MediaViewerPresenter
     }
 
     @Composable
     override fun present(): MediaViewerState {
-        val localMedia by produceState<Async<LocalMedia>>(initialValue = Async.Uninitialized) {
-            value = Async.Loading(null)
-            //TODO we are missing some permissions to use this API
-            client.mediaLoader.loadMediaFile(mediaSource, null)
-                .onSuccess {
-                    val localMedia = localMediaFactory.createFromUri(uri = it, null)
-                    Async.Success(localMedia)
-                }.onFailure {
-                    Async.Failure(it, null)
-                }
+        val coroutineScope = rememberCoroutineScope()
+        var loadMediaTrigger by remember { mutableStateOf(0) }
+        val mediaFile: MutableState<MediaFile?> = remember {
+            mutableStateOf(null)
+        }
+        val localMedia: MutableState<Async<LocalMedia>> = remember {
+            mutableStateOf(Async.Uninitialized)
+        }
+        DisposableEffect(loadMediaTrigger) {
+            coroutineScope.loadMedia(mediaFile, localMedia)
+            onDispose {
+                mediaFile.value?.close()
+            }
+        }
+
+        fun handleEvents(mediaViewerEvents: MediaViewerEvents) {
+            when (mediaViewerEvents) {
+                MediaViewerEvents.RetryLoading -> loadMediaTrigger++
+                MediaViewerEvents.SaveOnDisk -> TODO()
+            }
         }
 
         return MediaViewerState(
-            name = name,
-            downloadedMedia = localMedia,
+            name = inputs.name,
+            downloadedMedia = localMedia.value,
+            eventSink = ::handleEvents
         )
+    }
+
+    private fun CoroutineScope.loadMedia(mediaFile: MutableState<MediaFile?>, localMedia: MutableState<Async<LocalMedia>>) = launch {
+        mediaFile.value = null
+        localMedia.value = Async.Loading()
+        client.mediaLoader.loadMediaFile(inputs.mediaSource, inputs.mimeType)
+            .onSuccess {
+                mediaFile.value = it
+            }.mapCatching {
+                val uri = it.path().toUri()
+                localMediaFactory.createFromUri(uri, inputs.mimeType)!!
+            }.onSuccess {
+                localMedia.value = Async.Success(it)
+            }.onFailure {
+                localMedia.value = Async.Failure(it)
+            }
     }
 }
