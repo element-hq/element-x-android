@@ -125,7 +125,7 @@ class RoomDetailsPresenter @Inject constructor(
                     MatrixRoomMembersState.Unknown -> Async.Uninitialized
                     is MatrixRoomMembersState.Pending -> Async.Loading(prevState = membersState.prevRoomMembers?.size)
                     is MatrixRoomMembersState.Error -> Async.Failure(membersState.failure, prevState = membersState.prevRoomMembers?.size)
-                    is MatrixRoomMembersState.Ready -> Async.Success(membersState.roomMembers.filter { it.membership == RoomMembershipState.JOIN }.size)
+                    is MatrixRoomMembersState.Ready -> Async.Success(membersState.roomMembers.count { it.membership == RoomMembershipState.JOIN })
                 }
             }
         }

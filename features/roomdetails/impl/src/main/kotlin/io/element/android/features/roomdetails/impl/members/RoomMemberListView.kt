@@ -110,49 +110,60 @@ fun RoomMemberListView(
 
             if (!state.isSearchActive) {
                 if (state.roomMembers is Async.Success) {
-                    LazyColumn(modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()) {
-                        if (state.roomMembers.state.invited.isNotEmpty()) {
-                            item {
-                                Text(
-                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                                    text = stringResource(id = R.string.screen_room_member_list_pending_header_title),
-                                    style = ElementTextStyles.Regular.callout,
-                                    color = MaterialTheme.colorScheme.secondary,
-                                    textAlign = TextAlign.Start,
-                                )
-                            }
-                            items(state.roomMembers.state.invited) { matrixUser ->
-                                RoomMemberSearchResultItem(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    roomMember = matrixUser,
-                                    onClick = { onUserSelected(matrixUser) }
-                                )
-                            }
-                        }
-                        item {
-                            val memberCount = state.roomMembers.state.joined.count()
-                            Text(
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                                text = pluralStringResource(id = R.plurals.screen_room_member_list_header_title, count = memberCount, memberCount),
-                                style = ElementTextStyles.Regular.callout,
-                                color = MaterialTheme.colorScheme.secondary,
-                                textAlign = TextAlign.Start,
-                            )
-                        }
-                        items(state.roomMembers.state.joined) { matrixUser ->
-                            RoomMemberSearchResultItem(
-                                modifier = Modifier.fillMaxWidth(),
-                                roomMember = matrixUser,
-                                onClick = { onUserSelected(matrixUser) }
-                            )
-                        }
-                    }
+                    RoomMemberList(
+                        roomMembers = state.roomMembers,
+                        onUserSelected = ::onUserSelected,
+                    )
                 } else if (state.roomMembers.isLoading()) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun RoomMemberList(
+    roomMembers: Async.Success<RoomMembers>,
+    onUserSelected: (RoomMember) -> Unit,
+) {
+    LazyColumn(modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()) {
+        if (roomMembers.state.invited.isNotEmpty()) {
+            item {
+                Text(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    text = stringResource(id = R.string.screen_room_member_list_pending_header_title),
+                    style = ElementTextStyles.Regular.callout,
+                    color = MaterialTheme.colorScheme.secondary,
+                    textAlign = TextAlign.Start,
+                )
+            }
+            items(roomMembers.state.invited) { matrixUser ->
+                RoomMemberSearchResultItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    roomMember = matrixUser,
+                    onClick = { onUserSelected(matrixUser) }
+                )
+            }
+        }
+        item {
+            val memberCount = roomMembers.state.joined.count()
+            Text(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                text = pluralStringResource(id = R.plurals.screen_room_member_list_header_title, count = memberCount, memberCount),
+                style = ElementTextStyles.Regular.callout,
+                color = MaterialTheme.colorScheme.secondary,
+                textAlign = TextAlign.Start,
+            )
+        }
+        items(roomMembers.state.joined) { matrixUser ->
+            RoomMemberSearchResultItem(
+                modifier = Modifier.fillMaxWidth(),
+                roomMember = matrixUser,
+                onClick = { onUserSelected(matrixUser) }
+            )
         }
     }
 }
