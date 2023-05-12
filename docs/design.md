@@ -31,6 +31,7 @@
 ## Introduction
 
 Design at element.io is done using Figma - https://www.figma.com
+You will find guidance to build using interface on the [Compound documentation – Element's design system](https://compound.element.io)
 
 ## How to import from Figma to the Element Android project
 
@@ -40,6 +41,9 @@ Integration should be done using the Android development best practice, and shou
 
 Element Android already contains all the colors which can be used by the designer, in the module `ui-style`.
 Some of them depend on the theme, so ensure to use theme attributes and not colors directly.
+
+A comprehensive [color definition documentation](https://compound.element.io/?path=/docs/tokens-color-palettes--docs) is available in Compound.
+
 
 ### Text
 
