@@ -34,7 +34,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
@@ -283,10 +282,10 @@ private fun ContentToPreview(state: ConfigureRoomState) {
     )
 }
 
-private fun Modifier.clearFocusOnTap(focusManager: FocusManager) = composed {
+private fun Modifier.clearFocusOnTap(focusManager: FocusManager): Modifier =
     pointerInput(Unit) {
         detectTapGestures(onTap = {
             focusManager.clearFocus()
         })
     }
-}
+
