@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalCoroutinesApi::class)
-
 package io.element.android.features.createroom.impl.addpeople
 
 import app.cash.molecule.RecompositionClock
@@ -26,7 +24,6 @@ import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.features.userlist.api.UserListDataStore
 import io.element.android.features.userlist.test.FakeUserListDataSource
 import io.element.android.features.userlist.test.FakeUserListPresenterFactory
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test

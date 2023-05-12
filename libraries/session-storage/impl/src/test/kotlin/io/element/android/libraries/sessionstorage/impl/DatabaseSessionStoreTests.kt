@@ -20,12 +20,10 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import io.element.android.libraries.matrix.session.SessionData
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class DatabaseSessionStoreTests {
 
     private lateinit var database: SessionDatabase
