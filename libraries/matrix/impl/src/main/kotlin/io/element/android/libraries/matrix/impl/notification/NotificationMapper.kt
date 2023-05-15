@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.notification
 
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -36,7 +37,7 @@ class NotificationMapper @Inject constructor() {
                 senderDisplayName = it.senderDisplayName,
                 roomAvatarUrl = it.roomAvatarUrl,
                 isDirect = it.isDirect,
-                isEncrypted = it.isEncrypted,
+                isEncrypted = it.isEncrypted.orFalse(),
                 isNoisy = it.isNoisy
             )
         }
