@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterialApi::class)
-
 package io.element.android.features.messages.impl.actionlist
 
 import androidx.compose.foundation.clickable
@@ -49,6 +47,7 @@ import io.element.android.libraries.designsystem.theme.components.ModalBottomShe
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ActionListView(
     state: ActionListState,
@@ -90,6 +89,7 @@ fun ActionListView(
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun SheetContent(
     state: ActionListState,
@@ -145,6 +145,7 @@ fun SheetContentLightPreview(@PreviewParameter(ActionListStateProvider::class) s
 fun SheetContentDarkPreview(@PreviewParameter(ActionListStateProvider::class) state: ActionListState) =
     ElementPreviewDark { ContentToPreview(state) }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun ContentToPreview(state: ActionListState) {
     ActionListView(

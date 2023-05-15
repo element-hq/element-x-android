@@ -49,7 +49,7 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.utils.allBooleans
 import io.element.android.libraries.designsystem.utils.asInt
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OutlinedTextField(
     value: String,
