@@ -42,7 +42,12 @@ internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMember
             aRoomMemberListState().copy(
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
-                searchResults = RoomMemberSearchResultState.Results(aRoomMemberList().toImmutableList()),
+                searchResults = RoomMemberSearchResultState.Results(
+                    RoomMembers(
+                        invited = persistentListOf(aVictor()),
+                        joined = persistentListOf(anAlice()),
+                    )
+                ),
             ),
             aRoomMemberListState().copy(
                 isSearchActive = true,

@@ -41,5 +41,5 @@ sealed interface RoomMemberSearchResultState {
     object NoResults : RoomMemberSearchResultState
 
     /** The search has completed, and some matching users were found. */
-    data class Results(val results: ImmutableList<RoomMember>) : RoomMemberSearchResultState
+    data class Results(val results: RoomMembers) : RoomMemberSearchResultState
 }

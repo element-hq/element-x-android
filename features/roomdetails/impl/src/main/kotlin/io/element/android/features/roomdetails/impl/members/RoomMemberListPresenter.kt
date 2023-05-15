@@ -62,9 +62,14 @@ class RoomMemberListPresenter @Inject constructor(
                 searchResults = if (searchQuery.isEmpty()) {
                     RoomMemberSearchResultState.NotSearching
                 } else {
-                    val results = roomMemberListDataSource.search(searchQuery)
+                    val results = roomMemberListDataSource.search(searchQuery).groupBy { it.membership }
                     if (results.isEmpty()) RoomMemberSearchResultState.NoResults
-                    else RoomMemberSearchResultState.Results(results.toImmutableList())
+                    else RoomMemberSearchResultState.Results(
+                        RoomMembers(
+                            invited = results.getOrDefault(RoomMembershipState.INVITE, emptyList()).toImmutableList(),
+                            joined = results.getOrDefault(RoomMembershipState.JOIN, emptyList()).toImmutableList(),
+                        )
+                    )
                 }
             }
         }

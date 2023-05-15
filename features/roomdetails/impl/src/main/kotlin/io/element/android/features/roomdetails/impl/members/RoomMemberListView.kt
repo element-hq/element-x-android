@@ -113,7 +113,7 @@ fun RoomMemberListView(
             if (!state.isSearchActive) {
                 if (state.roomMembers is Async.Success) {
                     RoomMemberList(
-                        roomMembers = state.roomMembers,
+                        roomMembers = state.roomMembers.state,
                         onUserSelected = ::onUserSelected,
                     )
                 } else if (state.roomMembers.isLoading()) {
@@ -128,23 +128,25 @@ fun RoomMemberListView(
 
 @Composable
 private fun RoomMemberList(
-    roomMembers: Async.Success<RoomMembers>,
+    roomMembers: RoomMembers,
     onUserSelected: (RoomMember) -> Unit,
 ) {
     LazyColumn(modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()) {
-        if (roomMembers.state.invited.isNotEmpty()) {
+        if (roomMembers.invited.isNotEmpty()) {
             roomMemberListSection(
                 headerText = { stringResource(id = R.string.screen_room_member_list_pending_header_title) },
-                members = roomMembers.state.invited,
+                members = roomMembers.invited,
                 onMemberSelected = { onUserSelected(it) }
             )
         }
-        val memberCount = roomMembers.state.joined.count()
-        roomMemberListSection(
-            headerText = { pluralStringResource(id = R.plurals.screen_room_member_list_header_title, count = memberCount, memberCount) },
-            members = roomMembers.state.joined,
-            onMemberSelected = { onUserSelected(it) }
-        )
+        if (roomMembers.joined.isNotEmpty()) {
+            val memberCount = roomMembers.joined.count()
+            roomMemberListSection(
+                headerText = { pluralStringResource(id = R.plurals.screen_room_member_list_header_title, count = memberCount, memberCount) },
+                members = roomMembers.joined,
+                onMemberSelected = { onUserSelected(it) }
+            )
+        }
     }
 }
 
@@ -163,12 +165,29 @@ private fun LazyListScope.roomMemberListSection(
         )
     }
     items(members) { matrixUser ->
-        RoomMemberSearchResultItem(
+        RoomMemberListItem(
             modifier = Modifier.fillMaxWidth(),
             roomMember = matrixUser,
             onClick = { onMemberSelected(matrixUser) }
         )
     }
+}
+
+@Composable
+private fun RoomMemberListItem(
+    roomMember: RoomMember,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+) {
+    MatrixUserRow(
+        modifier = modifier.clickable(onClick = onClick),
+        matrixUser = MatrixUser(
+            userId = roomMember.userId,
+            displayName = roomMember.displayName,
+            avatarUrl = roomMember.avatarUrl
+        ),
+        avatarSize = AvatarSize.Custom(36.dp),
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -252,15 +271,10 @@ private fun RoomMemberSearchBar(
         colors = if (!active) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
         content = {
             if (state is RoomMemberSearchResultState.Results) {
-                LazyColumn {
-                    items(state.results) { matrixUser ->
-                        RoomMemberSearchResultItem(
-                            modifier = Modifier.fillMaxWidth(),
-                            roomMember = matrixUser,
-                            onClick = { onUserSelected(matrixUser) }
-                        )
-                    }
-                }
+                RoomMemberList(
+                    roomMembers = state.results,
+                    onUserSelected = { onUserSelected(it) }
+                )
             } else if (state is RoomMemberSearchResultState.NoResults) {
                 Spacer(Modifier.size(80.dp))
 
@@ -272,23 +286,6 @@ private fun RoomMemberSearchBar(
                 )
             }
         },
-    )
-}
-
-@Composable
-private fun RoomMemberSearchResultItem(
-    roomMember: RoomMember,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
-) {
-    MatrixUserRow(
-        modifier = modifier.clickable(onClick = onClick),
-        matrixUser = MatrixUser(
-            userId = roomMember.userId,
-            displayName = roomMember.displayName,
-            avatarUrl = roomMember.avatarUrl
-        ),
-        avatarSize = AvatarSize.Custom(36.dp),
     )
 }
 
