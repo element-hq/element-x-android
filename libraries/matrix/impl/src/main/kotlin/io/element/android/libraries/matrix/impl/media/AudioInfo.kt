@@ -21,5 +21,12 @@ import org.matrix.rustcomponents.sdk.AudioInfo as RustAudioInfo
 
 fun RustAudioInfo.map(): AudioInfo = AudioInfo(
     duration = duration?.toLong(),
-    size = size?.toLong()
+    size = size?.toLong(),
+    mimeType = mimetype
+)
+
+fun AudioInfo.map(): RustAudioInfo = RustAudioInfo(
+    duration = duration?.toULong(),
+    size = size?.toULong(),
+    mimetype = mimeType,
 )

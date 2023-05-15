@@ -41,6 +41,8 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.handleSnackbarMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -52,6 +54,7 @@ class MessagesPresenter @Inject constructor(
     private val timelinePresenter: TimelinePresenter,
     private val actionListPresenter: ActionListPresenter,
     private val networkMonitor: NetworkMonitor,
+    private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<MessagesState> {
 
     @Composable
@@ -70,6 +73,8 @@ class MessagesPresenter @Inject constructor(
         }
 
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState(initial = networkMonitor.currentConnectivityStatus)
+
+        val snackbarMessage = handleSnackbarMessage(snackbarDispatcher)
 
         LaunchedEffect(syncUpdateFlow) {
             roomAvatar.value =
@@ -97,6 +102,7 @@ class MessagesPresenter @Inject constructor(
             timelineState = timelineState,
             actionListState = actionListState,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
+            snackbarMessage = snackbarMessage,
             eventSink = ::handleEvents
         )
     }

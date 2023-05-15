@@ -16,7 +16,6 @@
 
 package io.element.android.appnav
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
@@ -24,7 +23,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
@@ -53,7 +51,6 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.tests.uitests.openShowkase
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -140,17 +137,11 @@ class RootFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        val activity = LocalContext.current as Activity
-        fun openShowkase() {
-            openShowkase(activity)
-        }
-
         val state = presenter.present()
         RootView(
             state = state,
             modifier = modifier,
             onOpenBugReport = this::onOpenBugReport,
-            onOpenShowkase = ::openShowkase
         ) {
             Children(
                 navModel = backstack,

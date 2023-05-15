@@ -39,10 +39,8 @@ class ConfigureRoomNode @AssistedInject constructor(
         fun onCreateRoomSuccess(roomId: RoomId)
     }
 
-    private val callback = object : Callback {
-        override fun onCreateRoomSuccess(roomId: RoomId) {
-            plugins<Callback>().forEach { it.onCreateRoomSuccess(roomId) }
-        }
+    private fun onRoomCreated(roomId: RoomId) {
+        plugins<Callback>().forEach { it.onCreateRoomSuccess(roomId) }
     }
 
     @Composable
@@ -52,7 +50,7 @@ class ConfigureRoomNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onBackPressed = this::navigateUp,
-            onRoomCreated = callback::onCreateRoomSuccess
+            onRoomCreated = this::onRoomCreated
         )
     }
 }

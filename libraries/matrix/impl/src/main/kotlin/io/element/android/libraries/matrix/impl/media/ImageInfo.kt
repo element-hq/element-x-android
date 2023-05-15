@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.impl.media
 
 import io.element.android.libraries.matrix.api.media.ImageInfo
+import org.matrix.rustcomponents.sdk.MediaSource
 import org.matrix.rustcomponents.sdk.ImageInfo as RustImageInfo
 
 fun RustImageInfo.map(): ImageInfo = ImageInfo(
@@ -27,4 +28,14 @@ fun RustImageInfo.map(): ImageInfo = ImageInfo(
     thumbnailInfo = thumbnailInfo?.map(),
     thumbnailSource = thumbnailSource?.map(),
     blurhash = blurhash
+)
+
+fun ImageInfo.map(): RustImageInfo = RustImageInfo(
+    height = height?.toULong(),
+    width = width?.toULong(),
+    mimetype = mimetype,
+    size = size?.toULong(),
+    thumbnailInfo = thumbnailInfo?.map(),
+    thumbnailSource = null,
+    blurhash = blurhash,
 )

@@ -27,9 +27,12 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.RoomListEntry
 import org.matrix.rustcomponents.sdk.SlidingSync
@@ -44,9 +47,8 @@ import java.util.UUID
 internal class RustRoomSummaryDataSource(
     private val slidingSyncUpdateFlow: Flow<UpdateSummary>,
     private val slidingSync: SlidingSync,
-    private val slidingSyncList: SlidingSyncList,
+    private val slidingSyncListFlow: Flow<SlidingSyncList>,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val onRestartSync: () -> Unit,
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
 ) : RoomSummaryDataSource, Closeable {
 
@@ -57,34 +59,35 @@ internal class RustRoomSummaryDataSource(
 
     fun init() {
         coroutineScope.launch {
+            val slidingSyncList = slidingSyncListFlow.first()
+            val summaries = slidingSyncList.currentRoomList().map(::buildSummaryForRoomListEntry)
             updateRoomSummaries {
-                addAll(
-                    slidingSyncList.currentRoomList().map(::buildSummaryForRoomListEntry)
-                )
+                addAll(summaries)
             }
+
+            slidingSyncList.roomListDiff(this)
+                .onEach { diffs ->
+                    updateRoomSummaries {
+                        applyDiff(diffs)
+                    }
+                }
+                .launchIn(this)
+
+            slidingSyncList.state(this)
+                .onEach { slidingSyncState ->
+                    Timber.v("New sliding sync state: $slidingSyncState")
+                    state.value = slidingSyncState
+                }.launchIn(this)
         }
 
         slidingSyncUpdateFlow
             .onEach {
                 didReceiveSyncUpdate(it)
             }.launchIn(coroutineScope)
-
-        slidingSyncList.roomListDiff(coroutineScope)
-            .onEach { diffs ->
-                updateRoomSummaries {
-                    applyDiff(diffs)
-                }
-            }
-            .launchIn(coroutineScope)
-
-        slidingSyncList.state(coroutineScope)
-            .onEach { slidingSyncState ->
-                Timber.v("New sliding sync state: $slidingSyncState")
-                state.value = slidingSyncState
-            }.launchIn(coroutineScope)
     }
 
     override fun close() {
+        runBlocking { slidingSyncListFlow.firstOrNull() }?.close()
         coroutineScope.cancel()
     }
 
@@ -95,8 +98,9 @@ internal class RustRoomSummaryDataSource(
 
     override fun setSlidingSyncRange(range: IntRange) {
         Timber.v("setVisibleRange=$range")
-        slidingSyncList.setRange(range.first.toUInt(), range.last.toUInt())
-        onRestartSync()
+        coroutineScope.launch {
+            slidingSyncListFlow.first().setRange(range.first.toUInt(), range.last.toUInt())
+        }
     }
 
     private suspend fun didReceiveSyncUpdate(summary: UpdateSummary) {

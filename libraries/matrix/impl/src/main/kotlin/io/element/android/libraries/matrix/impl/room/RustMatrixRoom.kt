@@ -21,10 +21,15 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.media.AudioInfo
+import io.element.android.libraries.matrix.api.media.FileInfo
+import io.element.android.libraries.matrix.api.media.ImageInfo
+import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -33,13 +38,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 import org.matrix.rustcomponents.sdk.UpdateSummary
 import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
+import java.io.File
 
 class RustMatrixRoom(
     override val sessionId: SessionId,
@@ -156,9 +161,10 @@ class RustMatrixRoom(
 
     override suspend fun sendMessage(message: String): Result<Unit> = withContext(coroutineDispatchers.io) {
         val transactionId = genTransactionId()
-        val content = messageEventContentFromMarkdown(message)
-        runCatching {
-            innerRoom.send(content, transactionId)
+        messageEventContentFromMarkdown(message).use { content ->
+            runCatching {
+                innerRoom.send(content, transactionId)
+            }
         }
     }
 
@@ -200,6 +206,30 @@ class RustMatrixRoom(
     override suspend fun rejectInvitation(): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {
             innerRoom.rejectInvitation()
+        }
+    }
+
+    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo): Result<Unit> {
+        return runCatching {
+            innerRoom.sendImage(file.path, thumbnailFile.path, imageInfo.map())
+        }
+    }
+
+    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo): Result<Unit> {
+        return runCatching {
+            innerRoom.sendVideo(file.path, thumbnailFile.path, videoInfo.map())
+        }
+    }
+
+    override suspend fun sendAudio(file: File, audioInfo: AudioInfo): Result<Unit> {
+        return runCatching {
+            innerRoom.sendAudio(file.path, audioInfo.map())
+        }
+    }
+
+    override suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit> {
+        return runCatching {
+            innerRoom.sendFile(file.path, fileInfo.map())
         }
     }
 

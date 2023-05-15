@@ -64,6 +64,7 @@ class RustMediaLoader(
                 mediaSourceFromUrl(source.url).use { mediaSource ->
                     val mediaFile = innerClient.getMediaFile(
                         mediaSource = mediaSource,
+                        body = null,
                         mimeType = mimeType ?: "application/octet-stream"
                     )
                     RustMediaFile(mediaFile)

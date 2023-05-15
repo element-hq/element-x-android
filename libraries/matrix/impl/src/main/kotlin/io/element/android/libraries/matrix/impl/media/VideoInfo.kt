@@ -29,3 +29,14 @@ fun RustVideoInfo.map(): VideoInfo = VideoInfo(
     thumbnailSource = thumbnailSource?.map(),
     blurhash = blurhash
 )
+
+fun VideoInfo.map(): RustVideoInfo = RustVideoInfo(
+    duration = duration?.toULong(),
+    height = height?.toULong(),
+    width = width?.toULong(),
+    mimetype = mimetype,
+    size = size?.toULong(),
+    thumbnailInfo = thumbnailInfo?.map(),
+    thumbnailSource = null,
+    blurhash = blurhash
+)

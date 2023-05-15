@@ -39,7 +39,7 @@ import org.matrix.rustcomponents.sdk.OtherState as RustOtherState
 class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMapper = EventMessageMapper()) {
 
     fun map(content: TimelineItemContent): EventContent = content.use {
-        when (val kind = content.kind()) {
+        when (val kind = it.kind()) {
             is TimelineItemContentKind.FailedToParseMessageLike -> {
                 FailedToParseMessageLikeContent(
                     eventType = kind.eventType,
@@ -54,7 +54,7 @@ class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMap
                 )
             }
             TimelineItemContentKind.Message -> {
-                val message = content.asMessage()
+                val message = it.asMessage()
                 if (message == null) {
                     UnknownContent
                 } else {

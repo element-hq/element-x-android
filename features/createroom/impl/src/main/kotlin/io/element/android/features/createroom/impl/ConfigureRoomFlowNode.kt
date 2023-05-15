@@ -23,6 +23,7 @@ import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
@@ -76,10 +77,11 @@ class ConfigureRoomFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.ConfigureRoom)
                     }
                 }
-                createNode<AddPeopleNode>(context = buildContext, plugins = plugins.plus(callback))
+                createNode<AddPeopleNode>(context = buildContext, plugins = listOf(callback))
             }
             NavTarget.ConfigureRoom -> {
-                createNode<ConfigureRoomNode>(context = buildContext, plugins = plugins)
+                val callbacks = plugins<ConfigureRoomNode.Callback>()
+                createNode<ConfigureRoomNode>(context = buildContext, plugins = callbacks)
             }
         }
     }

@@ -31,6 +31,11 @@ object MimeTypes {
     const val Jpeg = "image/jpeg"
     const val Gif = "image/gif"
 
+    const val Videos = "video/*"
+    const val Mp4 = "video/mp4"
+
+    const val Audio = "audio/*"
+
     const val Ogg = "audio/ogg"
 
     const val PlainText = "text/plain"

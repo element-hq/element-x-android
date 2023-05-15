@@ -31,18 +31,18 @@ class EventTimelineItemMapper(private val contentMapper: TimelineEventContentMap
 
     fun map(eventTimelineItem: RustEventTimelineItem): EventTimelineItem = eventTimelineItem.use {
         EventTimelineItem(
-            uniqueIdentifier = eventTimelineItem.uniqueIdentifier(),
-            eventId = eventTimelineItem.eventId()?.let { EventId(it) },
-            isEditable = eventTimelineItem.isEditable(),
-            isLocal = eventTimelineItem.isLocal(),
-            isOwn = eventTimelineItem.isOwn(),
-            isRemote = eventTimelineItem.isRemote(),
-            localSendState = eventTimelineItem.localSendState()?.map(),
-            reactions = eventTimelineItem.reactions().map(),
-            sender = UserId(eventTimelineItem.sender()),
-            senderProfile = eventTimelineItem.senderProfile().map(),
-            timestamp = eventTimelineItem.timestamp().toLong(),
-            content = contentMapper.map(eventTimelineItem.content())
+            uniqueIdentifier = it.uniqueIdentifier(),
+            eventId = it.eventId()?.let { EventId(it) },
+            isEditable = it.isEditable(),
+            isLocal = it.isLocal(),
+            isOwn = it.isOwn(),
+            isRemote = it.isRemote(),
+            localSendState = it.localSendState()?.map(),
+            reactions = it.reactions().map(),
+            sender = UserId(it.sender()),
+            senderProfile = it.senderProfile().map(),
+            timestamp = it.timestamp().toLong(),
+            content = contentMapper.map(it.content())
         )
     }
 }

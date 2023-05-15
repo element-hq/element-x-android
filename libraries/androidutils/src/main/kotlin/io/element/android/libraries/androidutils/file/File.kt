@@ -16,9 +16,13 @@
 
 package io.element.android.libraries.androidutils.file
 
+import android.content.Context
 import io.element.android.libraries.core.data.tryOrNull
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
+import java.util.UUID
 
 fun File.safeDelete() {
     tryOrNull(
@@ -31,4 +35,9 @@ fun File.safeDelete() {
             }
         }
     )
+}
+
+suspend fun Context.createTmpFile(baseDir: File = cacheDir, extension: String? = null): File = withContext(Dispatchers.IO) {
+    val suffix = extension?.let { ".$extension" }
+    File.createTempFile(UUID.randomUUID().toString(), suffix, baseDir).apply { mkdirs() }
 }

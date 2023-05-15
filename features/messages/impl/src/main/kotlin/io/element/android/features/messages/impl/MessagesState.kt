@@ -21,6 +21,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.textcomposer.MessageComposerState
 import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
 
 @Immutable
@@ -32,5 +33,6 @@ data class MessagesState(
     val timelineState: TimelineState,
     val actionListState: ActionListState,
     val hasNetworkConnection: Boolean,
+    val snackbarMessage: SnackbarMessage?,
     val eventSink: (MessagesEvents) -> Unit
 )
