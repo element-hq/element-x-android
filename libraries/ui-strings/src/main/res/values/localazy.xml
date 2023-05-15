@@ -63,7 +63,7 @@
   <string name="common_developer_options">"Developer options"</string>
   <string name="common_edited_suffix">"(edited)"</string>
   <string name="common_editing">"Editing"</string>
-  <string name="common_emote">"* %1$@ %2$@"</string>
+  <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Encryption enabled"</string>
   <string name="common_error">"Error"</string>
   <string name="common_file">"File"</string>
@@ -85,6 +85,7 @@
   <string name="common_report_a_bug">"Report a bug"</string>
   <string name="common_report_submitted">"Report submitted"</string>
   <string name="common_search_for_someone">"Search for someone"</string>
+    <string name="common_search_results">"Search results"</string>
   <string name="common_security">"Security"</string>
   <string name="common_select_your_server">"Select your server"</string>
   <string name="common_sending">"Sending…"</string>
