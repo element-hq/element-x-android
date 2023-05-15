@@ -20,62 +20,111 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
+import io.element.android.features.roomdetails.aMatrixRoom
+import io.element.android.features.roomdetails.impl.members.RoomMemberListDataSource
+import io.element.android.features.roomdetails.impl.members.RoomMemberListEvents
 import io.element.android.features.roomdetails.impl.members.RoomMemberListPresenter
-import io.element.android.features.userlist.api.SelectionMode
-import io.element.android.features.userlist.api.UserListDataSource
-import io.element.android.features.userlist.api.UserListDataStore
-import io.element.android.features.userlist.api.UserListPresenter
-import io.element.android.features.userlist.api.UserListPresenterArgs
-import io.element.android.features.userlist.api.UserSearchResultState
-import io.element.android.features.userlist.impl.DefaultUserListPresenter
-import io.element.android.features.userlist.test.FakeUserListDataSource
+import io.element.android.features.roomdetails.impl.members.RoomMemberSearchResultState
+import io.element.android.features.roomdetails.impl.members.aRoomMemberList
+import io.element.android.features.roomdetails.impl.members.aVictor
+import io.element.android.features.roomdetails.impl.members.aWalter
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
-import io.element.android.libraries.matrix.ui.components.aMatrixUser
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import okhttp3.internal.toImmutableList
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class RoomMemberListPresenterTests {
 
-    private val testCoroutineDispatchers = testCoroutineDispatchers()
-
     @Test
-    fun `present - search is done automatically on start, but is async`() = runTest {
-        val searchResult = listOf(aMatrixUser())
-        val userListDataSource = FakeUserListDataSource().apply {
-            givenSearchResult(searchResult)
-        }
-        val userListDataStore = UserListDataStore()
-        val userListFactory = object : UserListPresenter.Factory {
-            override fun create(
-                args: UserListPresenterArgs,
-                userListDataSource: UserListDataSource,
-                userListDataStore: UserListDataStore,
-            ) = DefaultUserListPresenter(args, userListDataSource, userListDataStore)
-        }
-        val fakeRoom = FakeMatrixRoom()
-        val presenter = RoomMemberListPresenter(
-            userListPresenterFactory = userListFactory,
-            userListDataSource = userListDataSource,
-            userListDataStore = userListDataStore,
-            room = fakeRoom,
-            coroutineDispatchers = testCoroutineDispatchers
-        )
+    fun `search is done automatically on start, but is async`() = runTest {
+        val presenter = createPresenter()
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.allUsers).isInstanceOf(Async.Loading::class.java)
-            Truth.assertThat(initialState.userListState.isSearchActive).isFalse()
-            Truth.assertThat(initialState.userListState.searchResults).isEqualTo(UserSearchResultState.NotSearching)
-            Truth.assertThat(initialState.userListState.selectionMode).isEqualTo(SelectionMode.Single)
+            Truth.assertThat(initialState.roomMembers).isInstanceOf(Async.Loading::class.java)
+            Truth.assertThat(initialState.searchQuery).isEmpty()
+            Truth.assertThat(initialState.searchResults).isEqualTo(RoomMemberSearchResultState.NotSearching)
+            Truth.assertThat(initialState.isSearchActive).isFalse()
 
             val loadedState = awaitItem()
-            Truth.assertThat((loadedState.allUsers as? Async.Success)?.state).isEqualTo(searchResult.toImmutableList())
+            Truth.assertThat(loadedState.roomMembers).isInstanceOf(Async.Success::class.java)
+            Truth.assertThat((loadedState.roomMembers as Async.Success).state.invited).isEqualTo(listOf(aVictor(), aWalter()))
+            Truth.assertThat((loadedState.roomMembers as Async.Success).state.joined).isNotEmpty()
+        }
+    }
+
+    @Test
+    fun `open search`() = runTest {
+        val presenter = createPresenter()
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val loadedState = awaitItem()
+
+            loadedState.eventSink(RoomMemberListEvents.OnSearchActiveChanged(true))
+
+            val searchActiveState = awaitItem()
+            Truth.assertThat((searchActiveState.isSearchActive)).isTrue()
+        }
+    }
+
+    @Test
+    fun `search for something which is not found`() = runTest {
+        val presenter = createPresenter()
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val loadedState = awaitItem()
+            loadedState.eventSink(RoomMemberListEvents.OnSearchActiveChanged(true))
+            val searchActiveState = awaitItem()
+            loadedState.eventSink(RoomMemberListEvents.UpdateSearchQuery("something"))
+            val searchQueryUpdatedState = awaitItem()
+            Truth.assertThat((searchQueryUpdatedState.searchQuery)).isEqualTo("something")
+            val searchSearchResultDelivered = awaitItem()
+            Truth.assertThat((searchSearchResultDelivered.searchResults)).isInstanceOf(RoomMemberSearchResultState.NoResults::class.java)
+        }
+    }
+
+    @Test
+    fun `search for something which is found`() = runTest {
+        val presenter = createPresenter()
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val loadedState = awaitItem()
+            loadedState.eventSink(RoomMemberListEvents.OnSearchActiveChanged(true))
+            val searchActiveState = awaitItem()
+            loadedState.eventSink(RoomMemberListEvents.UpdateSearchQuery("Alice"))
+            val searchQueryUpdatedState = awaitItem()
+            Truth.assertThat((searchQueryUpdatedState.searchQuery)).isEqualTo("Alice")
+            val searchSearchResultDelivered = awaitItem()
+            Truth.assertThat((searchSearchResultDelivered.searchResults)).isInstanceOf(RoomMemberSearchResultState.Results::class.java)
+            Truth.assertThat((searchSearchResultDelivered.searchResults as RoomMemberSearchResultState.Results).results.joined.first().displayName)
+                .isEqualTo("Alice")
+
         }
     }
 }
+
+@ExperimentalCoroutinesApi
+private fun createDataSource(
+    matrixRoom: MatrixRoom = aMatrixRoom().apply {
+        givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
+    },
+    coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers()
+) = RoomMemberListDataSource(matrixRoom, coroutineDispatchers)
+
+@ExperimentalCoroutinesApi
+private fun createPresenter(
+    roomMemberListDataSource: RoomMemberListDataSource = createDataSource(),
+    coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers()
+) = RoomMemberListPresenter(roomMemberListDataSource, coroutineDispatchers)
