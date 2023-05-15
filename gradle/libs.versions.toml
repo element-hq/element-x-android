@@ -43,7 +43,7 @@ stem = "2.3.0"
 sqldelight = "1.5.5"
 
 # DI
-dagger = "2.46"
+dagger = "2.46.1"
 anvil = "2.4.5"
 
 # quality
