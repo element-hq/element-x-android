@@ -33,17 +33,16 @@ import io.element.android.libraries.dateformatter.impl.LocalDateTimeProvider
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import java.util.Locale
-import java.util.concurrent.Executors
 
 class RoomListScreen(
     context: Context,
     private val matrixClient: MatrixClient,
+    private val coroutineDispatchers: CoroutineDispatchers = Singleton.coroutineDispatchers,
 ) {
     private val clock = Clock.System
     private val locale = Locale.getDefault()
@@ -58,28 +57,24 @@ class RoomListScreen(
         sessionVerificationService = sessionVerificationService,
         networkMonitor = NetworkMonitorImpl(context),
         snackbarDispatcher = SnackbarDispatcher(),
-        inviteStateDataSource = DefaultInviteStateDataSource(
-            matrixClient,
-            DefaultSeenInvitesStore(context),
-            CoroutineDispatchers(
-                io = Dispatchers.IO,
-                computation = Dispatchers.Default,
-                main = Dispatchers.Main,
-                diffUpdateDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-            )
-        )
+        inviteStateDataSource = DefaultInviteStateDataSource(matrixClient, DefaultSeenInvitesStore(context), coroutineDispatchers)
     )
 
     @Composable
     fun Content(modifier: Modifier = Modifier) {
         fun onRoomClicked(roomId: RoomId) {
-            val room = matrixClient.getRoom(roomId)!!
-            val timeline = room.timeline()
             Singleton.appScope.launch {
-                timeline.apply {
-                    initialize()
-                    paginateBackwards(20, 50)
-                    dispose()
+                withContext(coroutineDispatchers.io) {
+                    matrixClient.getRoom(roomId)!!.use { room ->
+                        val timeline = room.timeline()
+
+                        timeline.apply {
+                            // TODO This doesn't work reliably as initialize is asynchronous, and the timeline can't be used until it's finished
+                            initialize()
+                            paginateBackwards(20, 50)
+                            dispose()
+                        }
+                    }
                 }
             }
         }

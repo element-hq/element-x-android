@@ -16,7 +16,6 @@
 
 package io.element.android.features.userlist.impl
 
-import androidx.compose.foundation.lazy.LazyListState
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
@@ -30,14 +29,10 @@ import io.element.android.features.userlist.test.FakeUserListDataSource
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
-import io.mockk.coJustRun
-import io.mockk.mockkConstructor
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class DefaultUserListPresenterTests {
 
     private val userListDataSource = FakeUserListDataSource()
@@ -136,9 +131,6 @@ class DefaultUserListPresenterTests {
 
     @Test
     fun `present - select a user`() = runTest {
-        mockkConstructor(LazyListState::class)
-        coJustRun { anyConstructed<LazyListState>().scrollToItem(index = any()) }
-
         val presenter = DefaultUserListPresenter(
             UserListPresenterArgs(selectionMode = SelectionMode.Single),
             userListDataSource,
@@ -158,16 +150,15 @@ class DefaultUserListPresenterTests {
             assertThat(awaitItem().selectedUsers).containsExactly(userA)
 
             initialState.eventSink(UserListEvents.AddToSelection(userB))
-            // the last added user should be presented first
-            assertThat(awaitItem().selectedUsers).containsExactly(userB, userA)
+            assertThat(awaitItem().selectedUsers).containsExactly(userA, userB)
 
             initialState.eventSink(UserListEvents.AddToSelection(userABis))
             initialState.eventSink(UserListEvents.AddToSelection(userC))
             // duplicated users should be ignored
-            assertThat(awaitItem().selectedUsers).containsExactly(userC, userB, userA)
+            assertThat(awaitItem().selectedUsers).containsExactly(userA, userB, userC)
 
             initialState.eventSink(UserListEvents.RemoveFromSelection(userB))
-            assertThat(awaitItem().selectedUsers).containsExactly(userC, userA)
+            assertThat(awaitItem().selectedUsers).containsExactly(userA, userC)
             initialState.eventSink(UserListEvents.RemoveFromSelection(userA))
             assertThat(awaitItem().selectedUsers).containsExactly(userC)
             initialState.eventSink(UserListEvents.RemoveFromSelection(userC))

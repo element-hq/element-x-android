@@ -38,11 +38,9 @@ import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class InviteListPresenterTests {
 
     @Test
@@ -509,5 +507,4 @@ class InviteListPresenterTests {
             unreadNotificationCount = 0,
         )
     )
-
 }

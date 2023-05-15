@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalCoroutinesApi::class)
-
 package io.element.android.libraries.pushstore.impl.clientsecret
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.SessionId
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
