@@ -28,6 +28,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.roomdetails.impl.edition.RoomDetailsEditionNode
 import io.element.android.features.roomdetails.impl.members.RoomMemberListNode
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsNode
 import io.element.android.libraries.architecture.BackstackNode
@@ -35,7 +36,6 @@ import io.element.android.libraries.architecture.animation.rememberDefaultTransi
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
@@ -59,6 +59,9 @@ class RoomDetailsFlowNode @AssistedInject constructor(
         object RoomMemberList : NavTarget
 
         @Parcelize
+        object RoomDetailsEdition : NavTarget
+
+        @Parcelize
         data class RoomMemberDetails(val roomMemberId: UserId) : NavTarget
     }
 
@@ -69,9 +72,14 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                     override fun openRoomMemberList() {
                         backstack.push(NavTarget.RoomMemberList)
                     }
+
+                    override fun openRoomDetailsEdition() {
+                        backstack.push(NavTarget.RoomDetailsEdition)
+                    }
                 }
                 createNode<RoomDetailsNode>(buildContext, listOf(roomDetailsCallback))
             }
+
             NavTarget.RoomMemberList -> {
                 val roomMemberListCallback = object : RoomMemberListNode.Callback {
                     override fun openRoomMemberDetails(roomMemberId: UserId) {
@@ -80,6 +88,11 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                 }
                 createNode<RoomMemberListNode>(buildContext, listOf(roomMemberListCallback))
             }
+
+            NavTarget.RoomDetailsEdition -> {
+                createNode<RoomDetailsEditionNode>(buildContext)
+            }
+
             is NavTarget.RoomMemberDetails -> {
                 createNode<RoomMemberDetailsNode>(buildContext, listOf(RoomMemberDetailsNode.Inputs(navTarget.roomMemberId)))
             }
