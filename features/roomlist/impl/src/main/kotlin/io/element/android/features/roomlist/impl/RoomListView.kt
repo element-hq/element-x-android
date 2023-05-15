@@ -116,7 +116,7 @@ fun RoomListView(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoomListContent(
     state: RoomListState,
