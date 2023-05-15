@@ -20,6 +20,10 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.media.AudioInfo
+import io.element.android.libraries.matrix.api.media.FileInfo
+import io.element.android.libraries.matrix.api.media.ImageInfo
+import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
@@ -30,6 +34,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
+import java.io.File
 
 class FakeMatrixRoom(
     override val sessionId: SessionId = A_SESSION_ID,
@@ -54,6 +59,9 @@ class FakeMatrixRoom(
     private var updateMembersResult: Result<Unit> = Result.success(Unit)
     private var acceptInviteResult = Result.success(Unit)
     private var rejectInviteResult = Result.success(Unit)
+    private var sendMediaResult = Result.success(Unit)
+    var sendMediaCount = 0
+        private set
 
     var isInviteAccepted: Boolean = false
         private set
@@ -128,6 +136,14 @@ class FakeMatrixRoom(
         return rejectInviteResult
     }
 
+    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo): Result<Unit> = sendMediaResult.also { sendMediaCount++ }
+
+    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo): Result<Unit> = sendMediaResult.also { sendMediaCount++ }
+
+    override suspend fun sendAudio(file: File, audioInfo: AudioInfo): Result<Unit> = sendMediaResult.also { sendMediaCount++ }
+
+    override suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit> = sendMediaResult.also { sendMediaCount++ }
+
     override fun close() = Unit
 
     fun givenLeaveRoomError(throwable: Throwable?) {
@@ -164,5 +180,9 @@ class FakeMatrixRoom(
 
     fun givenUnIgnoreResult(result: Result<Unit>) {
         unignoreResult = result
+    }
+
+    fun givenSendMediaResult(result: Result<Unit>) {
+        sendMediaResult = result
     }
 }

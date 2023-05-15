@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalCoroutinesApi::class)
-
 package io.element.android.features.rageshake.impl.crash.ui
 
 import app.cash.molecule.RecompositionClock
@@ -26,7 +24,6 @@ import io.element.android.features.rageshake.api.crash.CrashDetectionEvents
 import io.element.android.features.rageshake.impl.crash.DefaultCrashDetectionPresenter
 import io.element.android.features.rageshake.test.crash.A_CRASH_DATA
 import io.element.android.features.rageshake.test.crash.FakeCrashDataStore
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 

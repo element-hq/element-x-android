@@ -27,23 +27,30 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.media3.common.MimeTypes
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.core.data.toStableCharSequence
+import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.mediapickers.PickerProvider
+import io.element.android.libraries.mediapickers.api.PickerProvider
+import io.element.android.libraries.mediaupload.api.MediaPreProcessor
+import io.element.android.libraries.mediaupload.api.MediaType
+import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
+import io.element.android.libraries.ui.strings.R as StringR
 
 @SingleIn(RoomScope::class)
 class MessageComposerPresenter @Inject constructor(
@@ -52,6 +59,8 @@ class MessageComposerPresenter @Inject constructor(
     private val mediaPickerProvider: PickerProvider,
     private val featureFlagService: FeatureFlagService,
     private val localMediaFactory: LocalMediaFactory,
+    private val mediaPreProcessor: MediaPreProcessor,
+    private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<MessageComposerState> {
 
     @SuppressLint("UnsafeOptInUsageError")
@@ -73,10 +82,12 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
-        val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker(onResult = { handlePickedMedia(it) })
-        val filesPicker = mediaPickerProvider.registerFilePicker(onResult = { handlePickedMedia(it) })
-        val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(onResult = { handlePickedMedia(it, MimeTypes.IMAGE_JPEG) }, deleteAfter = false)
-        val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker(onResult = { handlePickedMedia(it, MimeTypes.VIDEO_MP4) }, deleteAfter = false)
+        val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker(onResult = { uri, mimeType ->
+            handlePickedMedia(uri, mimeType)
+        })
+        val filesPicker = mediaPickerProvider.registerFilePicker(MimeTypes.Any, onResult = { handlePickedMedia(it) })
+        val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(onResult = { handlePickedMedia(it, MimeTypes.Jpeg) })
+        val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker(onResult = { handlePickedMedia(it, MimeTypes.Mp4) })
 
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
@@ -174,4 +185,45 @@ class MessageComposerPresenter @Inject constructor(
                 )
             }
         }
+
+    private fun CoroutineScope.sendMedia(
+        uri: Uri,
+        mediaType: MediaType,
+        deleteOriginal: Boolean = false
+    ) = launch {
+        runCatching {
+            val info = handleMediaPreProcessing(uri, mediaType, deleteOriginal).getOrNull() ?: return@runCatching
+            when (info) {
+                is MediaUploadInfo.Image -> {
+                    room.sendImage(info.file, info.thumbnailInfo.file, info.info)
+                }
+
+                is MediaUploadInfo.Video -> {
+                    room.sendVideo(info.file, info.thumbnailInfo.file, info.info)
+                }
+
+                is MediaUploadInfo.AnyFile -> {
+                    room.sendFile(info.file, info.info)
+                }
+                else -> error("Unexpected MediaUploadInfo format: $info")
+            }.getOrThrow()
+        }.onFailure {
+            snackbarDispatcher.post(SnackbarMessage(StringR.string.screen_media_upload_preview_error_failed_sending))
+            Timber.e(it, "Couldn't upload media")
+        }.onSuccess {
+            Timber.d("Media uploaded")
+        }
+    }
+
+    private suspend fun handleMediaPreProcessing(
+        uri: Uri,
+        mediaType: MediaType,
+        deleteOriginal: Boolean,
+    ): Result<MediaUploadInfo> {
+        val result = mediaPreProcessor.process(uri, mediaType, deleteOriginal = deleteOriginal)
+        Timber.d("Pre-processed media result: $result")
+        return result.onFailure {
+            snackbarDispatcher.post(SnackbarMessage(StringR.string.screen_media_upload_preview_error_failed_processing))
+        }
+    }
 }

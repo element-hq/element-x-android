@@ -38,7 +38,7 @@ import org.matrix.rustcomponents.sdk.MessageFormat as RustMessageFormat
 class EventMessageMapper {
 
     fun map(message: Message): MessageContent = message.use {
-        val type = message.msgtype().use { type ->
+        val type = it.msgtype().use { type ->
             when (type) {
                 is MessageType.Audio -> {
                     AudioMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
@@ -67,9 +67,9 @@ class EventMessageMapper {
             }
         }
         MessageContent(
-            body = message.body(),
-            inReplyTo = message.inReplyTo()?.eventId?.let(::EventId),
-            isEdited = message.isEdited(),
+            body = it.body(),
+            inReplyTo = it.inReplyTo()?.eventId?.let(::EventId),
+            isEdited = it.isEdited(),
             type = type
         )
     }

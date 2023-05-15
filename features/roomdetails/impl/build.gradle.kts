@@ -40,7 +40,6 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
-    implementation(projects.features.userlist.api)
     implementation(projects.libraries.androidutils)
     api(projects.features.roomdetails.api)
     implementation(libs.coil.compose)
@@ -51,7 +50,6 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.features.userlist.impl)
     testImplementation(projects.features.userlist.test)
     testImplementation(projects.tests.testutils)
 

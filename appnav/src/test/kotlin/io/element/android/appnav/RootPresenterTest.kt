@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalCoroutinesApi::class)
-
 package io.element.android.appnav
 
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.appnav.root.RootEvents
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.features.rageshake.impl.crash.DefaultCrashDetectionPresenter
 import io.element.android.features.rageshake.impl.detection.DefaultRageshakeDetectionPresenter
@@ -31,7 +28,6 @@ import io.element.android.features.rageshake.test.crash.FakeCrashDataStore
 import io.element.android.features.rageshake.test.rageshake.FakeRageShake
 import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
 import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolder
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -44,21 +40,7 @@ class RootPresenterTest {
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.isShowkaseButtonVisible).isTrue()
-        }
-    }
-
-    @Test
-    fun `present - hide showkase button`() = runTest {
-        val presenter = createPresenter()
-        moleculeFlow(RecompositionClock.Immediate) {
-            presenter.present()
-        }.test {
-            skipItems(1)
-            val initialState = awaitItem()
-            assertThat(initialState.isShowkaseButtonVisible).isTrue()
-            initialState.eventSink.invoke(RootEvents.HideShowkaseButton)
-            assertThat(awaitItem().isShowkaseButtonVisible).isFalse()
+            assertThat(initialState.crashDetectionState.crashDetected).isFalse()
         }
     }
 

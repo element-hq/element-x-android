@@ -25,3 +25,10 @@ fun RustFileInfo.map(): FileInfo = FileInfo(
     thumbnailInfo = thumbnailInfo?.map(),
     thumbnailSource = thumbnailSource?.map()
 )
+
+fun FileInfo.map(): RustFileInfo = RustFileInfo(
+    mimetype = mimetype,
+    size = size?.toULong(),
+    thumbnailInfo = thumbnailInfo?.map(),
+    thumbnailSource = null
+)
