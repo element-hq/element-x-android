@@ -108,7 +108,7 @@ class RoomMemberListPresenterTests {
             Truth.assertThat((searchQueryUpdatedState.searchQuery)).isEqualTo("Alice")
             val searchSearchResultDelivered = awaitItem()
             Truth.assertThat((searchSearchResultDelivered.searchResults)).isInstanceOf(RoomMemberSearchResultState.Results::class.java)
-            Truth.assertThat((searchSearchResultDelivered.searchResults as RoomMemberSearchResultState.Results).results.first().displayName)
+            Truth.assertThat((searchSearchResultDelivered.searchResults as RoomMemberSearchResultState.Results).results.joined.first().displayName)
                 .isEqualTo("Alice")
 
         }
