@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalCoroutinesApi::class)
-
 package io.element.android.features.messages.fixtures
 
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
@@ -34,7 +32,6 @@ import io.element.android.features.messages.impl.timeline.factories.virtual.Time
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
 import io.element.android.libraries.dateformatter.test.FakeDaySeparatorFormatter
 import io.element.android.tests.testutils.testCoroutineDispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 internal fun aTimelineItemsFactory() = TimelineItemsFactory(
     dispatchers = testCoroutineDispatchers(),

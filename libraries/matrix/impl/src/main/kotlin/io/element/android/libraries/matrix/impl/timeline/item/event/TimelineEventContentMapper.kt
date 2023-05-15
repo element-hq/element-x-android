@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.impl.timeline.item.event
 
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
@@ -26,7 +27,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.RedactedConte
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
-import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.impl.media.map
@@ -39,7 +39,7 @@ import org.matrix.rustcomponents.sdk.OtherState as RustOtherState
 class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMapper = EventMessageMapper()) {
 
     fun map(content: TimelineItemContent): EventContent = content.use {
-        when (val kind = content.kind()) {
+        when (val kind = it.kind()) {
             is TimelineItemContentKind.FailedToParseMessageLike -> {
                 FailedToParseMessageLikeContent(
                     eventType = kind.eventType,
@@ -54,7 +54,7 @@ class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMap
                 )
             }
             TimelineItemContentKind.Message -> {
-                val message = content.asMessage()
+                val message = it.asMessage()
                 if (message == null) {
                     UnknownContent
                 } else {
