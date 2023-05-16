@@ -26,6 +26,13 @@ sealed interface PickerType<Input, Output> {
     fun getContract(): ActivityResultContract<Input, Output>
     fun getDefaultRequest(): Input
 
+    object Image : PickerType<PickVisualMediaRequest, Uri?> {
+        override fun getContract() = ActivityResultContracts.PickVisualMedia()
+        override fun getDefaultRequest(): PickVisualMediaRequest {
+            return PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+        }
+    }
+
     object ImageAndVideo : PickerType<PickVisualMediaRequest, Uri?> {
         override fun getContract() = ActivityResultContracts.PickVisualMedia()
         override fun getDefaultRequest(): PickVisualMediaRequest {

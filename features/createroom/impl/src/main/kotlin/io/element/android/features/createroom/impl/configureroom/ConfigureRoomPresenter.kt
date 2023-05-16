@@ -16,6 +16,7 @@
 
 package io.element.android.features.createroom.impl.configureroom
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
@@ -26,14 +27,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
+import io.element.android.features.createroom.impl.configureroom.avatar.AvatarAction
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.execute
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.createroom.RoomVisibility
+import io.element.android.libraries.mediapickers.api.PickerProvider
+import io.element.android.libraries.mediaupload.api.MediaPreProcessor
+import io.element.android.libraries.mediaupload.api.MediaType
+import io.element.android.libraries.mediaupload.api.MediaUploadInfo
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -41,6 +49,8 @@ import javax.inject.Inject
 class ConfigureRoomPresenter @Inject constructor(
     private val dataStore: CreateRoomDataStore,
     private val matrixClient: MatrixClient,
+    private val mediaPickerProvider: PickerProvider,
+    private val mediaPreProcessor: MediaPreProcessor,
 ) : Presenter<ConfigureRoomState> {
 
     @Composable
@@ -49,6 +59,23 @@ class ConfigureRoomPresenter @Inject constructor(
         val isCreateButtonEnabled by remember(createRoomConfig.value.roomName, createRoomConfig.value.privacy) {
             derivedStateOf {
                 createRoomConfig.value.roomName.isNullOrEmpty().not() && createRoomConfig.value.privacy != null
+            }
+        }
+
+        val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
+            onResult = { uri -> if (uri != null) dataStore.setAvatarUri(uri = uri, cached = true) },
+        )
+        val galleryImagePicker = mediaPickerProvider.registerGalleryImagePicker(
+            onResult = { uri -> if (uri != null) dataStore.setAvatarUri(uri = uri) }
+        )
+
+        val avatarActions by remember(createRoomConfig.value.avatarUri) {
+            derivedStateOf {
+                listOfNotNull(
+                    AvatarAction.TakePhoto,
+                    AvatarAction.ChoosePhoto,
+                    AvatarAction.Remove.takeIf { createRoomConfig.value.avatarUri != null },
+                ).toImmutableList()
             }
         }
 
@@ -62,12 +89,19 @@ class ConfigureRoomPresenter @Inject constructor(
 
         fun handleEvents(event: ConfigureRoomEvents) {
             when (event) {
-                is ConfigureRoomEvents.AvatarUriChanged -> dataStore.setAvatarUrl(event.uri?.toString())
                 is ConfigureRoomEvents.RoomNameChanged -> dataStore.setRoomName(event.name)
                 is ConfigureRoomEvents.TopicChanged -> dataStore.setTopic(event.topic)
                 is ConfigureRoomEvents.RoomPrivacyChanged -> dataStore.setPrivacy(event.privacy)
                 is ConfigureRoomEvents.RemoveFromSelection -> dataStore.selectedUserListDataStore.removeUserFromSelection(event.matrixUser)
                 is ConfigureRoomEvents.CreateRoom -> createRoom(event.config)
+                is ConfigureRoomEvents.HandleAvatarAction -> {
+                    when (event.action) {
+                        AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
+                        AvatarAction.TakePhoto -> cameraPhotoPicker.launch()
+                        AvatarAction.Remove -> dataStore.setAvatarUri(uri = null)
+                    }
+                }
+
                 ConfigureRoomEvents.CancelCreateRoom -> createRoomAction.value = Async.Uninitialized
             }
         }
@@ -75,13 +109,18 @@ class ConfigureRoomPresenter @Inject constructor(
         return ConfigureRoomState(
             config = createRoomConfig.value,
             isCreateButtonEnabled = isCreateButtonEnabled,
+            avatarActions = avatarActions,
             createRoomAction = createRoomAction.value,
             eventSink = ::handleEvents,
         )
     }
 
-    private fun CoroutineScope.createRoom(config: CreateRoomConfig, createRoomAction: MutableState<Async<RoomId>>) = launch {
+    private fun CoroutineScope.createRoom(
+        config: CreateRoomConfig,
+        createRoomAction: MutableState<Async<RoomId>>
+    ) = launch {
         suspend {
+            val mxc = config.avatarUri?.let { uploadAvatar(it) }
             val params = CreateRoomParameters(
                 name = config.roomName,
                 topic = config.topic,
@@ -90,9 +129,16 @@ class ConfigureRoomPresenter @Inject constructor(
                 visibility = if (config.privacy == RoomPrivacy.Public) RoomVisibility.PUBLIC else RoomVisibility.PRIVATE,
                 preset = if (config.privacy == RoomPrivacy.Public) RoomPreset.PUBLIC_CHAT else RoomPreset.PRIVATE_CHAT,
                 invite = config.invites.map { it.userId },
-                avatar = config.avatarUrl,
+                avatar = mxc,
             )
             matrixClient.createRoom(params).getOrThrow()
+                .also { dataStore.clearCachedData() }
         }.execute(createRoomAction)
+    }
+
+    private suspend fun uploadAvatar(avatarUri: Uri): String? {
+        val preprocessed = mediaPreProcessor.process(avatarUri, MediaType.Image).getOrThrow() as? MediaUploadInfo.Image
+        val byteArray = preprocessed?.file?.readBytes()
+        return byteArray?.let { matrixClient.uploadMedia(MimeTypes.Jpeg, it) }?.getOrThrow()
     }
 }
