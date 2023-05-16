@@ -228,7 +228,7 @@ class ConfigureRoomPresenterTests {
         }.test {
             skipItems(1)
             createRoomDataStore.setAvatarUri(Uri.parse(AN_URI_FROM_GALLERY))
-            fakeMediaPreProcessor.givenResult(Result.success(MediaUploadInfo.Image(mockk(), mockk(), null)))
+            fakeMediaPreProcessor.givenResult(Result.success(MediaUploadInfo.Image(mockk(), mockk(), mockk())))
             fakeMatrixClient.givenUploadMediaResult(Result.failure(A_THROWABLE))
 
             val initialState = awaitItem()
