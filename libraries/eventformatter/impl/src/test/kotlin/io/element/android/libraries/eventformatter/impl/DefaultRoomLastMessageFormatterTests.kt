@@ -48,6 +48,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.aProfileChangeMessageContent
 import io.element.android.libraries.matrix.test.room.anEventTimelineItem
+import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -66,7 +67,7 @@ class DefaultRoomLastMessageFormatterTests {
     fun setup() {
         context = RuntimeEnvironment.getApplication() as Context
         fakeMatrixClient = FakeMatrixClient()
-        formatter = DefaultRoomLastMessageFormatter(context, fakeMatrixClient)
+        formatter = DefaultRoomLastMessageFormatter(AndroidStringProvider(context.resources), fakeMatrixClient)
     }
 
     @Test
@@ -145,6 +146,7 @@ class DefaultRoomLastMessageFormatterTests {
         fun createMessageContent(type: MessageType): MessageContent {
             return MessageContent(body, null, false, type)
         }
+
         val sharedContentMessagesTypes = arrayOf(
             TextMessageType(body, null),
             VideoMessageType(body, "url", null),
