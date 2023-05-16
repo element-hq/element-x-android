@@ -16,7 +16,9 @@
 
 package io.element.android.features.roomdetails.impl.edition
 
-// TODO Add your events or remove the file completely if no events
+import io.element.android.features.createroom.api.ui.AvatarAction
+
 sealed interface RoomDetailsEditionEvents {
-    object MyEvent : RoomDetailsEditionEvents
+    object Save : RoomDetailsEditionEvents
+    data class HandleAvatarAction(val action: AvatarAction) : RoomDetailsEditionEvents
 }

@@ -24,6 +24,7 @@ import io.element.android.libraries.designsystem.Azure
 import io.element.android.libraries.designsystem.Black_800
 import io.element.android.libraries.designsystem.Black_950
 import io.element.android.libraries.designsystem.DarkGrey
+import io.element.android.libraries.designsystem.Gray_1400_Dark
 import io.element.android.libraries.designsystem.Gray_300
 import io.element.android.libraries.designsystem.Gray_400
 import io.element.android.libraries.designsystem.Gray_400_Dark
@@ -40,6 +41,7 @@ fun elementColorsDark() = ElementColors(
     quaternary = Gray_400,
     quinary = Gray_450,
     gray400 = Gray_400_Dark,
+    gray1400 = Gray_1400_Dark,
     textActionCritical = TextColorCriticalDark,
     isLight = false,
 )

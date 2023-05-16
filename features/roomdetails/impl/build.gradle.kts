@@ -41,6 +41,8 @@ dependencies {
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.androidutils)
+    implementation(projects.libraries.mediapickers.api)
+    implementation(projects.features.createroom.api)
     api(projects.features.roomdetails.api)
     implementation(libs.coil.compose)
 

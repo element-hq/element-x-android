@@ -30,6 +30,7 @@ class ElementColors(
     quaternary: Color,
     quinary: Color,
     gray400: Color,
+    gray1400: Color,
     textActionCritical: Color,
     isLight: Boolean
 ) {
@@ -49,6 +50,9 @@ class ElementColors(
     var gray400 by mutableStateOf(gray400)
         private set
 
+    var gray1400 by mutableStateOf(gray1400)
+        private set
+
     var textActionCritical by mutableStateOf(textActionCritical)
         private set
 
@@ -62,6 +66,7 @@ class ElementColors(
         quaternary: Color = this.quaternary,
         quinary: Color = this.quinary,
         gray400: Color = this.gray400,
+        gray1400: Color = this.gray1400,
         textActionCritical: Color = this.textActionCritical,
         isLight: Boolean = this.isLight,
     ) = ElementColors(
@@ -71,6 +76,7 @@ class ElementColors(
         quaternary = quaternary,
         quinary = quinary,
         gray400 = gray400,
+        gray1400 = gray1400,
         textActionCritical = textActionCritical,
         isLight = isLight,
     )
@@ -82,6 +88,7 @@ class ElementColors(
         quaternary = other.quaternary
         quinary = other.quinary
         gray400 = other.gray400
+        gray1400 = other.gray1400
         textActionCritical = other.textActionCritical
         isLight = other.isLight
     }

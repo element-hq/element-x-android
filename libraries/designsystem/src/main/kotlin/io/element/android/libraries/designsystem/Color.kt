@@ -77,3 +77,6 @@ val TextColorCriticalDark = Color(0xfffd3e3c)
 
 val Gray_400_Light = Color(0xFFE1E6EC)
 val Gray_400_Dark = Color(0xFF26282D)
+
+val Gray_1400_Light = Color(0xFF1B1D22)
+val Gray_1400_Dark = Color(0xFFEBEEF2)

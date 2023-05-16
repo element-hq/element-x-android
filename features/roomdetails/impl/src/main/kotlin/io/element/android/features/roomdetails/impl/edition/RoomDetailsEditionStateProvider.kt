@@ -17,15 +17,20 @@
 package io.element.android.features.roomdetails.impl.edition
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import kotlinx.collections.immutable.persistentListOf
 
 open class RoomDetailsEditionStateProvider : PreviewParameterProvider<RoomDetailsEditionState> {
     override val values: Sequence<RoomDetailsEditionState>
         get() = sequenceOf(
             aRoomDetailsEditionState(),
-            // Add other state here
         )
 }
 
 fun aRoomDetailsEditionState() = RoomDetailsEditionState(
+    roomId = "a room id",
+    roomName = "Marketing",
+    roomAvatarUrl = null,
+    avatarActions = persistentListOf(),
+    saveButtonVisible = true,
     eventSink = {}
 )

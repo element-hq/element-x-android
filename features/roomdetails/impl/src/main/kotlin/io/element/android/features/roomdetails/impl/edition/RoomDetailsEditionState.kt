@@ -16,8 +16,14 @@
 
 package io.element.android.features.roomdetails.impl.edition
 
-// TODO add your ui models. Remove the eventSink if you don't have events.
-// Do not use default value, so no member get forgotten in the presenters.
+import io.element.android.features.createroom.api.ui.AvatarAction
+import kotlinx.collections.immutable.ImmutableList
+
 data class RoomDetailsEditionState(
+    val roomId: String,
+    val roomName: String,
+    val roomAvatarUrl: String?,
+    val avatarActions: ImmutableList<AvatarAction>,
+    val saveButtonVisible: Boolean,
     val eventSink: (RoomDetailsEditionEvents) -> Unit
 )
