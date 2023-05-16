@@ -17,13 +17,18 @@
 package io.element.android.features.messages.impl.timeline.factories.event
 
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
-import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRoomMembershipContent
+import io.element.android.libraries.core.extensions.orEmpty
+import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
+import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import javax.inject.Inject
 
-class TimelineItemContentRoomMembershipFactory @Inject constructor() {
+class TimelineItemContentRoomMembershipFactory @Inject constructor(
+    private val timelineEventFormatter: TimelineEventFormatter,
+) {
 
-    fun create(content: RoomMembershipContent): TimelineItemEventContent {
-        return TimelineItemUnknownContent
+    fun create(eventTimelineItem: EventTimelineItem): TimelineItemEventContent {
+        val text = timelineEventFormatter.format(eventTimelineItem)
+        return TimelineItemRoomMembershipContent(text.orEmpty().toString())
     }
 }
