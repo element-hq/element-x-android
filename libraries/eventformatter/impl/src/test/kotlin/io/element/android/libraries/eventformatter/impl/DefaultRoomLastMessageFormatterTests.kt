@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist.impl
+package io.element.android.libraries.eventformatter.impl
 
 import android.content.Context
 import androidx.compose.ui.text.AnnotatedString

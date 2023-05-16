@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist.impl
+plugins {
+    id("io.element.android-library")
+}
 
-import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+android {
+    namespace = "io.element.android.libraries.eventformatter.test"
+}
 
-class FakeRoomLastMessageFormatter : RoomLastMessageFormatter {
-
-    private var processMessageItemResult: CharSequence? = null
-    override fun processMessageItem(event: EventTimelineItem, isDmRoom: Boolean): CharSequence? {
-        return processMessageItemResult
-    }
-
-    fun givenRoomSummaryResult(result: CharSequence?) {
-        processMessageItemResult = result
-    }
+dependencies {
+    implementation(projects.libraries.eventformatter.api)
+    implementation(projects.libraries.matrix.api)
 }
