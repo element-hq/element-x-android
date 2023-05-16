@@ -43,9 +43,7 @@ fun DependencyHandlerScope.composeDependencies(libs: LibrariesForLibs) {
     androidTestImplementation(composeBom)
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material:material")
-    // Override BOM version, SearchBar is not available in the actual version
-    // do not use latest version because of clashes on androidx lifecycle dependency
-    implementation("androidx.compose.material3:material3:1.1.0-alpha04")
+    implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation(libs.androidx.activity.compose)

@@ -45,7 +45,6 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PreferenceView(
     title: String,

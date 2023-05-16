@@ -71,7 +71,6 @@ import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import kotlinx.collections.immutable.ImmutableList
 import io.element.android.libraries.ui.strings.R as StringR
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoomMemberListView(
     state: RoomMemberListState,
