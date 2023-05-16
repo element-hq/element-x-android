@@ -42,6 +42,7 @@ interface MatrixClient : Closeable {
     suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId>
     suspend fun createDM(userId: UserId): Result<RoomId>
     suspend fun getProfile(userId: UserId): Result<MatrixUser>
+    suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults>
     fun startSync()
     fun stopSync()
     fun mediaResolver(): MediaResolver
@@ -58,9 +59,10 @@ interface MatrixClient : Closeable {
         height: Long
     ): Result<ByteArray>
 
+    suspend fun uploadMedia(mimeType: String, data: ByteArray): Result<String>
+
     fun onSlidingSyncUpdate()
 
     fun roomMembershipObserver(): RoomMembershipObserver
 
-    suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults>
 }
