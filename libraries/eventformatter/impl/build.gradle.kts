@@ -40,8 +40,10 @@ dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.services.toolbox.api)
     api(projects.libraries.eventformatter.api)
 
+    testImplementation(projects.services.toolbox.impl)
     testImplementation(libs.test.junit)
     testImplementation(libs.test.robolectric)
     testImplementation(libs.test.truth)
