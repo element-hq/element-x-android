@@ -29,4 +29,7 @@ interface MediaPreProcessor {
         mediaType: MediaType,
         deleteOriginal: Boolean = false
     ): Result<MediaUploadInfo>
+
+    data class Failure(override val cause: Throwable?) : RuntimeException(cause)
 }
+
