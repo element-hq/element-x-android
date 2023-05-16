@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.services.analytics.providers.posthog.store
+package io.element.android.services.analytics.impl.store
 
 import android.content.Context
 import androidx.datastore.core.DataStore

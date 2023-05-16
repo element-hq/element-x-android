@@ -22,7 +22,7 @@ import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.impl.log.analyticsTag
 import io.element.android.services.analytics.providers.api.AnalyticsProvider
-import io.element.android.services.analytics.providers.posthog.store.AnalyticsStore
+import io.element.android.services.analytics.impl.store.AnalyticsStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
