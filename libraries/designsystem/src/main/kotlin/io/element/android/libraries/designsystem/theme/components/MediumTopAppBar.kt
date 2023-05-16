@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.layout.RowScope
@@ -57,6 +55,7 @@ fun MediumTopAppBar(
 internal fun MediumTopAppBarPreview() =
     ElementThemedPreview { ContentToPreview() }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ContentToPreview() {
     MediumTopAppBar(title = { Text(text = "Title") })

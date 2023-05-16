@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalCoroutinesApi::class)
-
 package io.element.android.features.rageshake.impl.detection
 
 import android.graphics.Bitmap
@@ -31,10 +29,10 @@ import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataSto
 import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolder
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import kotlin.time.Duration.Companion.seconds
 
 class RageshakeDetectionPresenterTest {
     @Test
@@ -101,7 +99,7 @@ class RageshakeDetectionPresenterTest {
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
-        }.test {
+        }.test(timeout = 30.seconds) {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.isStarted).isFalse()
@@ -155,7 +153,7 @@ class RageshakeDetectionPresenterTest {
     }
 
     @Test
-    fun `present - screenshot then disable`() = runTest {
+    fun `present - screenshot then disable`() = runTest(timeout = 1.seconds) {
         val screenshotHolder = FakeScreenshotHolder(screenshotUri = null)
         val rageshake = FakeRageShake(isAvailableValue = true)
         val rageshakeDataStore = FakeRageshakeDataStore(isEnabled = true)

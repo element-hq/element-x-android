@@ -19,11 +19,11 @@ activity = "1.7.1"
 startup = "1.1.1"
 
 # Compose
-compose_bom = "2023.04.01"
+compose_bom = "2023.05.01"
 composecompiler = "1.4.7"
 
 # Coroutines
-coroutines = "1.6.4"
+coroutines = "1.7.1"
 
 # Accompanist
 accompanist = "0.30.1"
@@ -43,7 +43,7 @@ stem = "2.3.0"
 sqldelight = "1.5.5"
 
 # DI
-dagger = "2.46"
+dagger = "2.46.1"
 anvil = "2.4.5"
 
 # quality
@@ -129,7 +129,7 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.12"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.14"
 sqldelight-driver-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
@@ -138,6 +138,7 @@ sqlite = "androidx.sqlite:sqlite:2.3.1"
 unifiedpush = "com.github.UnifiedPush:android-connector:2.1.1"
 gujun_span = "me.gujun.android:span:1.7"
 otaliastudios_transcoder = "com.otaliastudios:transcoder:0.10.5"
+vanniktech_blurhash = "com.vanniktech:blurhash:0.1.0"
 
 # Di
 inject = "javax.inject:javax.inject:1"

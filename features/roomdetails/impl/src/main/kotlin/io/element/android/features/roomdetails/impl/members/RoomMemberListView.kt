@@ -16,20 +16,31 @@
 
 package io.element.android.features.roomdetails.impl.members
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -39,37 +50,42 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.roomdetails.impl.R
-import io.element.android.features.userlist.api.components.SearchSingleUserResultItem
-import io.element.android.features.userlist.api.components.UserListView
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.isLoading
 import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.MatrixUserRow
+import kotlinx.collections.immutable.ImmutableList
+import io.element.android.libraries.ui.strings.R as StringR
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoomMemberListView(
     state: RoomMemberListState,
+    onBackPressed: () -> Unit,
+    onMemberSelected: (UserId) -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
-    onMemberSelected: (UserId) -> Unit = {},
 ) {
 
-    fun onUserSelected(user: MatrixUser) {
-        onMemberSelected(user.userId)
+    fun onUserSelected(roomMember: RoomMember) {
+        onMemberSelected(roomMember.userId)
     }
 
     Scaffold(
         topBar = {
-            if (!state.userListState.isSearchActive) {
+            if (!state.isSearchActive) {
                 RoomMemberListTopBar(onBackPressed = onBackPressed)
             }
         }
@@ -80,33 +96,26 @@ fun RoomMemberListView(
                 .padding(padding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            UserListView(
-                state = state.userListState,
-                onUserSelected = ::onUserSelected,
-            )
+            Column {
+                RoomMemberSearchBar(
+                    query = state.searchQuery,
+                    state = state.searchResults,
+                    active = state.isSearchActive,
+                    placeHolderTitle = stringResource(StringR.string.common_search_for_someone),
+                    onActiveChanged = { state.eventSink(RoomMemberListEvents.OnSearchActiveChanged(it)) },
+                    onTextChanged = { state.eventSink(RoomMemberListEvents.UpdateSearchQuery(it)) },
+                    onUserSelected = ::onUserSelected,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
 
-            if (!state.userListState.isSearchActive) {
-                if (state.allUsers is Async.Success) {
-                    LazyColumn(modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()) {
-                        item {
-                            val memberCount = state.allUsers.state.count()
-                            Text(
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                                text = pluralStringResource(id = R.plurals.screen_room_member_list_header_title, count = memberCount, memberCount),
-                                style = ElementTextStyles.Regular.callout,
-                                color = MaterialTheme.colorScheme.secondary,
-                                textAlign = TextAlign.Start,
-                            )
-                        }
-                        items(state.allUsers.state) { matrixUser ->
-                            SearchSingleUserResultItem(
-                                modifier = Modifier.fillMaxWidth(),
-                                matrixUser = matrixUser,
-                                onClick = { onUserSelected(matrixUser) }
-                            )
-                        }
-                    }
-                } else if (state.allUsers.isLoading()) {
+            if (!state.isSearchActive) {
+                if (state.roomMembers is Async.Success) {
+                    RoomMemberList(
+                        roomMembers = state.roomMembers.state,
+                        onUserSelected = ::onUserSelected,
+                    )
+                } else if (state.roomMembers.isLoading()) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }
@@ -116,9 +125,73 @@ fun RoomMemberListView(
     }
 }
 
+@Composable
+private fun RoomMemberList(
+    roomMembers: RoomMembers,
+    onUserSelected: (RoomMember) -> Unit,
+) {
+    LazyColumn(modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()) {
+        if (roomMembers.invited.isNotEmpty()) {
+            roomMemberListSection(
+                headerText = { stringResource(id = R.string.screen_room_member_list_pending_header_title) },
+                members = roomMembers.invited,
+                onMemberSelected = { onUserSelected(it) }
+            )
+        }
+        if (roomMembers.joined.isNotEmpty()) {
+            val memberCount = roomMembers.joined.count()
+            roomMemberListSection(
+                headerText = { pluralStringResource(id = R.plurals.screen_room_member_list_header_title, count = memberCount, memberCount) },
+                members = roomMembers.joined,
+                onMemberSelected = { onUserSelected(it) }
+            )
+        }
+    }
+}
+
+private fun LazyListScope.roomMemberListSection(
+    headerText: @Composable () -> String,
+    members: ImmutableList<RoomMember>,
+    onMemberSelected: (RoomMember) -> Unit,
+) {
+    item {
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            text = headerText(),
+            style = ElementTextStyles.Regular.callout,
+            color = MaterialTheme.colorScheme.secondary,
+            textAlign = TextAlign.Start,
+        )
+    }
+    items(members) { matrixUser ->
+        RoomMemberListItem(
+            modifier = Modifier.fillMaxWidth(),
+            roomMember = matrixUser,
+            onClick = { onMemberSelected(matrixUser) }
+        )
+    }
+}
+
+@Composable
+private fun RoomMemberListItem(
+    roomMember: RoomMember,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+) {
+    MatrixUserRow(
+        modifier = modifier.clickable(onClick = onClick),
+        matrixUser = MatrixUser(
+            userId = roomMember.userId,
+            displayName = roomMember.displayName,
+            avatarUrl = roomMember.avatarUrl
+        ),
+        avatarSize = AvatarSize.Custom(36.dp),
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoomMemberListTopBar(
+private fun RoomMemberListTopBar(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
 ) {
@@ -135,6 +208,86 @@ fun RoomMemberListTopBar(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun RoomMemberSearchBar(
+    query: String,
+    state: RoomMemberSearchResultState,
+    active: Boolean,
+    placeHolderTitle: String,
+    onActiveChanged: (Boolean) -> Unit,
+    onTextChanged: (String) -> Unit,
+    onUserSelected: (RoomMember) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val focusManager = LocalFocusManager.current
+
+    if (!active) {
+        onTextChanged("")
+        focusManager.clearFocus()
+    }
+
+    SearchBar(
+        query = query,
+        onQueryChange = onTextChanged,
+        onSearch = { focusManager.clearFocus() },
+        active = active,
+        onActiveChange = onActiveChanged,
+        modifier = modifier
+            .padding(horizontal = if (!active) 16.dp else 0.dp),
+        placeholder = {
+            Text(
+                text = placeHolderTitle,
+                modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
+            )
+        },
+        leadingIcon = if (active) {
+            { BackButton(onClick = { onActiveChanged(false) }) }
+        } else {
+            null
+        },
+        trailingIcon = when {
+            active && query.isNotEmpty() -> {
+                {
+                    IconButton(onClick = { onTextChanged("") }) {
+                        Icon(Icons.Default.Close, stringResource(StringR.string.action_clear))
+                    }
+                }
+            }
+
+            !active -> {
+                {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = stringResource(StringR.string.action_search),
+                        modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
+                    )
+                }
+            }
+
+            else -> null
+        },
+        colors = if (!active) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
+        content = {
+            if (state is RoomMemberSearchResultState.Results) {
+                RoomMemberList(
+                    roomMembers = state.results,
+                    onUserSelected = { onUserSelected(it) }
+                )
+            } else if (state is RoomMemberSearchResultState.NoResults) {
+                Spacer(Modifier.size(80.dp))
+
+                Text(
+                    text = stringResource(StringR.string.common_no_results),
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        },
+    )
+}
+
 @Preview
 @Composable
 fun RoomMemberListLightPreview(@PreviewParameter(RoomMemberListStateProvider::class) state: RoomMemberListState) =
@@ -147,5 +300,9 @@ fun RoomMemberListDarkPreview(@PreviewParameter(RoomMemberListStateProvider::cla
 
 @Composable
 private fun ContentToPreview(state: RoomMemberListState) {
-    RoomMemberListView(state)
+    RoomMemberListView(
+        state = state,
+        onBackPressed = {},
+        onMemberSelected = {}
+    )
 }
