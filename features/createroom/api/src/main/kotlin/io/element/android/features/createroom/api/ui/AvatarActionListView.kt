@@ -16,7 +16,7 @@
 
 @file:OptIn(ExperimentalMaterialApi::class)
 
-package io.element.android.features.createroom.impl.configureroom.avatar
+package io.element.android.features.createroom.api.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
