@@ -27,7 +27,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.matrix.api.media.MatrixMediaSource
+import io.element.android.libraries.matrix.api.media.MediaSource
 
 @ContributesNode(RoomScope::class)
 class MediaViewerNode @AssistedInject constructor(
@@ -38,7 +38,7 @@ class MediaViewerNode @AssistedInject constructor(
 
     data class Inputs(
         val name: String,
-        val mediaSource: MatrixMediaSource,
+        val mediaSource: MediaSource,
         val mimeType: String?
     ) : NodeInputs
 

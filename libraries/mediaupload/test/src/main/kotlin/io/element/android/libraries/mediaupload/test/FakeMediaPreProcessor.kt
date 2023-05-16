@@ -32,10 +32,11 @@ class FakeMediaPreProcessor : MediaPreProcessor {
                 mimetype = "*/*",
                 size = 999L,
                 thumbnailInfo = null,
-                thumbnailUrl = null,
+                thumbnailSource = null,
             )
         )
     )
+
     override suspend fun process(uri: Uri, mediaType: MediaType, deleteOriginal: Boolean): Result<MediaUploadInfo> = result
 
     fun givenResult(value: Result<MediaUploadInfo>) {

@@ -21,7 +21,7 @@ interface MatrixMediaLoader {
      * @param url to fetch the content for.
      * @return a [Result] of ByteArray. It contains the binary data for the media.
      */
-    suspend fun loadMediaContent(source: MatrixMediaSource): Result<ByteArray>
+    suspend fun loadMediaContent(source: MediaSource): Result<ByteArray>
 
     /**
      * @param url to fetch the data for.
@@ -29,12 +29,12 @@ interface MatrixMediaLoader {
      * @param height: the desired height for rescaling the media as thumbnail
      * @return a [Result] of ByteArray. It contains the binary data for the media.
      */
-    suspend fun loadMediaThumbnail(source: MatrixMediaSource, width: Long, height: Long): Result<ByteArray>
+    suspend fun loadMediaThumbnail(source: MediaSource, width: Long, height: Long): Result<ByteArray>
 
     /**
      * @param url to fetch the data for.
      * @param mimeType: optional mime type
      * @return a [Result] of [MediaFile]
      */
-    suspend fun loadMediaFile(source: MatrixMediaSource, mimeType: String?): Result<MediaFile>
+    suspend fun loadMediaFile(source: MediaSource, mimeType: String?): Result<MediaFile>
 }

@@ -20,5 +20,5 @@ data class FileInfo(
     val mimetype: String?,
     val size: Long?,
     val thumbnailInfo: ThumbnailInfo?,
-    val thumbnailSource: MatrixMediaSource?
+    val thumbnailSource: MediaSource?
 )

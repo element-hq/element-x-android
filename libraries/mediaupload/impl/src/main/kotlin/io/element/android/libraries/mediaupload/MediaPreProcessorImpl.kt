@@ -33,7 +33,7 @@ import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
-import io.element.android.libraries.matrix.api.media.MatrixMediaSource
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.ThumbnailInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
@@ -217,7 +217,7 @@ class MediaPreProcessorImpl @Inject constructor(
                 mimetype = mimeType,
                 size = file.length(),
                 thumbnailInfo = thumbnailInfo?.info,
-                thumbnailSource = thumbnailUrl?.let { MatrixMediaSource(it) },
+                thumbnailSource = thumbnailUrl?.let { MediaSource(it) },
                 blurhash = thumbnailInfo?.blurhash,
             )
         }
@@ -251,7 +251,7 @@ fun ImageCompressionResult.toImageInfo(mimeType: String, thumbnailUrl: String?, 
     mimetype = mimeType,
     size = size,
     thumbnailInfo = thumbnailInfo,
-    thumbnailSource = thumbnailUrl?.let { MatrixMediaSource(it) },
+    thumbnailSource = thumbnailUrl?.let { MediaSource(it) },
     blurhash = blurhash,
 )
 

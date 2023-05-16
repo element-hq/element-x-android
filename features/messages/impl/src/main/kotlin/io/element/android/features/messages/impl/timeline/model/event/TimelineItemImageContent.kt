@@ -16,11 +16,11 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
-import io.element.android.libraries.matrix.api.media.MatrixMediaSource
+import io.element.android.libraries.matrix.api.media.MediaSource
 
 data class TimelineItemImageContent(
     val body: String,
-    val mediaSource: MatrixMediaSource,
+    val mediaSource: MediaSource,
     val mimeType: String?,
     val blurhash: String?,
     val width: Int?,
