@@ -37,6 +37,7 @@ dependencies {
     anvil(projects.anvilcodegen)
     implementation(projects.anvilannotations)
 
+    implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.uiStrings)

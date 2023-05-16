@@ -17,26 +17,62 @@
 package io.element.android.libraries.eventformatter.impl
 
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
+import io.element.android.libraries.eventformatter.impl.mode.RenderingMode
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
+import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
+import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
+import io.element.android.libraries.ui.strings.R
+import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
 
-/**
- * For now use the same formatter than for the room list using [RoomLastMessageFormatter].
- * We will change this if we want to have a different rendering in the timeline.
- */
 @ContributesBinding(SessionScope::class)
 class DefaultTimelineEventFormatter @Inject constructor(
-    private val roomLastMessageFormatter: RoomLastMessageFormatter,
+    private val sp: StringProvider,
+    private val matrixClient: MatrixClient,
+    private val buildMeta: BuildMeta,
+    private val roomMembershipContentFormatter: RoomMembershipContentFormatter,
+    private val profileChangeContentFormatter: ProfileChangeContentFormatter,
+    private val stateContentFormatter: StateContentFormatter,
 ) : TimelineEventFormatter {
 
     override fun format(event: EventTimelineItem): CharSequence? {
-        return roomLastMessageFormatter.format(
-            event,
-            /* We do not want to distinguish DM and room here */
-            isDmRoom = false,
-        )
+        val isOutgoing = event.sender == matrixClient.sessionId
+        val senderDisplayName = (event.senderProfile as? ProfileTimelineDetails.Ready)?.displayName ?: event.sender.value
+        return when (val content = event.content) {
+            is RoomMembershipContent -> {
+                roomMembershipContentFormatter.format(content, senderDisplayName, isOutgoing)
+            }
+            is ProfileChangeContent -> {
+                profileChangeContentFormatter.format(content, senderDisplayName, isOutgoing)
+            }
+            is StateContent -> {
+                stateContentFormatter.format(content, senderDisplayName, isOutgoing, RenderingMode.Timeline)
+            }
+            RedactedContent,
+            is StickerContent,
+            is UnableToDecryptContent,
+            is MessageContent,
+            is FailedToParseMessageLikeContent,
+            is FailedToParseStateContent,
+            is UnknownContent -> {
+                if (buildMeta.isDebuggable) {
+                    error("You should not use this formatter for this event: $event")
+                }
+                sp.getString(R.string.common_unsupported_event)
+            }
+        }
     }
 }
