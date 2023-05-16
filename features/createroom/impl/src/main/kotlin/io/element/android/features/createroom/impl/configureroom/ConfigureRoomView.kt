@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.features.createroom.impl.configureroom
 
 import android.net.Uri
@@ -129,6 +127,7 @@ fun ConfigureRoomView(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConfigureRoomToolbar(
     isNextActionEnabled: Boolean,
