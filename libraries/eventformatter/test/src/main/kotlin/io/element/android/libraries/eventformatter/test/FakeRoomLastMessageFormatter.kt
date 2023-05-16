@@ -21,12 +21,13 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventTimeline
 
 class FakeRoomLastMessageFormatter : RoomLastMessageFormatter {
 
-    private var processMessageItemResult: CharSequence? = null
-    override fun processMessageItem(event: EventTimelineItem, isDmRoom: Boolean): CharSequence? {
-        return processMessageItemResult
+    private var result: CharSequence? = null
+
+    override fun format(event: EventTimelineItem, isDmRoom: Boolean): CharSequence? {
+        return result
     }
 
-    fun givenRoomSummaryResult(result: CharSequence?) {
-        processMessageItemResult = result
+    fun givenFormatResult(result: CharSequence?) {
+        this.result = result
     }
 }
