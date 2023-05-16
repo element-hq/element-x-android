@@ -17,7 +17,7 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.matrix.api.media.MatrixMediaSource
+import io.element.android.libraries.matrix.api.media.MediaSource
 
 open class TimelineItemVideoContentProvider : PreviewParameterProvider<TimelineItemVideoContent> {
     override val values: Sequence<TimelineItemVideoContent>
@@ -30,11 +30,11 @@ open class TimelineItemVideoContentProvider : PreviewParameterProvider<TimelineI
 
 fun aTimelineItemVideoContent() = TimelineItemVideoContent(
     body = "a video",
-    thumbnailSource = MatrixMediaSource(url = ""),
+    thumbnailSource = MediaSource(url = ""),
     blurhash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
     aspectRatio = 0.5f,
     duration = 0,
-    videoSource = MatrixMediaSource(""),
+    videoSource = MediaSource(""),
     height = null,
     width = null,
     mimeType = null

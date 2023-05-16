@@ -21,7 +21,7 @@ import androidx.compose.ui.text.AnnotatedString
 import com.google.common.truth.Truth
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.ImageInfo
-import io.element.android.libraries.matrix.api.media.MatrixMediaSource
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
@@ -149,10 +149,10 @@ class DefaultRoomLastMessageFormatterTests {
 
         val sharedContentMessagesTypes = arrayOf(
             TextMessageType(body, null),
-            VideoMessageType(body, MatrixMediaSource("url"), null),
-            AudioMessageType(body, MatrixMediaSource("url"), null),
-            ImageMessageType(body, MatrixMediaSource("url"), null),
-            FileMessageType(body, MatrixMediaSource("url"), null),
+            VideoMessageType(body, MediaSource("url"), null),
+            AudioMessageType(body, MediaSource("url"), null),
+            ImageMessageType(body, MediaSource("url"), null),
+            FileMessageType(body, MediaSource("url"), null),
             NoticeMessageType(body, null),
             EmoteMessageType(body, null),
         )

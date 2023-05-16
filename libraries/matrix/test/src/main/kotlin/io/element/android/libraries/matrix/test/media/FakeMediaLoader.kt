@@ -17,14 +17,14 @@
 package io.element.android.libraries.matrix.test.media
 
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
-import io.element.android.libraries.matrix.api.media.MatrixMediaSource
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.MediaFile
 
 class FakeMediaLoader : MatrixMediaLoader {
 
     var shouldFail = false
 
-    override suspend fun loadMediaContent(source: MatrixMediaSource): Result<ByteArray> {
+    override suspend fun loadMediaContent(source: MediaSource): Result<ByteArray> {
         return if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
@@ -32,7 +32,7 @@ class FakeMediaLoader : MatrixMediaLoader {
         }
     }
 
-    override suspend fun loadMediaThumbnail(source: MatrixMediaSource, width: Long, height: Long): Result<ByteArray> {
+    override suspend fun loadMediaThumbnail(source: MediaSource, width: Long, height: Long): Result<ByteArray> {
         return if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
@@ -40,7 +40,7 @@ class FakeMediaLoader : MatrixMediaLoader {
         }
     }
 
-    override suspend fun loadMediaFile(source: MatrixMediaSource, mimeType: String?): Result<MediaFile> {
+    override suspend fun loadMediaFile(source: MediaSource, mimeType: String?): Result<MediaFile> {
         return if (shouldFail) {
             Result.failure(RuntimeException())
         } else {

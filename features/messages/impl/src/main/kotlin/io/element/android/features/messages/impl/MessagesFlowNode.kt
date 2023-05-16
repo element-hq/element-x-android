@@ -40,7 +40,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.matrix.api.media.MatrixMediaSource
+import io.element.android.libraries.matrix.api.media.MediaSource
 import kotlinx.android.parcel.Parcelize
 import kotlinx.collections.immutable.ImmutableList
 
@@ -64,7 +64,7 @@ class MessagesFlowNode @AssistedInject constructor(
         @Parcelize
         data class MediaViewer(
             val title: String,
-            val mediaSource: MatrixMediaSource,
+            val mediaSource: MediaSource,
             val mimeType: String?
         ) : NavTarget
 

@@ -18,12 +18,13 @@ package io.element.android.libraries.matrix.impl.media
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
-import io.element.android.libraries.matrix.api.media.MatrixMediaSource
 import io.element.android.libraries.matrix.api.media.MediaFile
+import io.element.android.libraries.matrix.api.media.MediaSource
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
 import org.matrix.rustcomponents.sdk.use
+import org.matrix.rustcomponents.sdk.MediaSource as RustMediaSource
 
 class RustMediaLoader(
     private val dispatchers: CoroutineDispatchers,
@@ -31,10 +32,10 @@ class RustMediaLoader(
 ) : MatrixMediaLoader {
 
     @OptIn(ExperimentalUnsignedTypes::class)
-    override suspend fun loadMediaContent(source: MatrixMediaSource): Result<ByteArray> =
+    override suspend fun loadMediaContent(source: MediaSource): Result<ByteArray> =
         withContext(dispatchers.io) {
             runCatching {
-                mediaSourceFromUrl(source.url).use { source ->
+                source.toRustMediaSource().use { source ->
                     innerClient.getMediaContent(source).toUByteArray().toByteArray()
                 }
             }
@@ -42,13 +43,13 @@ class RustMediaLoader(
 
     @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun loadMediaThumbnail(
-        source: MatrixMediaSource,
+        source: MediaSource,
         width: Long,
         height: Long
     ): Result<ByteArray> =
         withContext(dispatchers.io) {
             runCatching {
-                mediaSourceFromUrl(source.url).use { mediaSource ->
+                source.toRustMediaSource().use { mediaSource ->
                     innerClient.getMediaThumbnail(
                         mediaSource = mediaSource,
                         width = width.toULong(),
@@ -58,10 +59,10 @@ class RustMediaLoader(
             }
         }
 
-    override suspend fun loadMediaFile(source: MatrixMediaSource, mimeType: String?): Result<MediaFile> =
+    override suspend fun loadMediaFile(source: MediaSource, mimeType: String?): Result<MediaFile> =
         withContext(dispatchers.io) {
             runCatching {
-                mediaSourceFromUrl(source.url).use { mediaSource ->
+                source.toRustMediaSource().use { mediaSource ->
                     val mediaFile = innerClient.getMediaFile(
                         mediaSource = mediaSource,
                         body = null,
@@ -71,4 +72,13 @@ class RustMediaLoader(
                 }
             }
         }
+
+    private fun MediaSource.toRustMediaSource(): RustMediaSource {
+        val json = this.json
+        return if (json != null) {
+            RustMediaSource.fromJson(json)
+        } else {
+            mediaSourceFromUrl(url)
+        }
+    }
 }
