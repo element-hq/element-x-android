@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.services.analytics.impl.settings
+package io.element.android.features.analytics.impl
 
-data class AnalyticsOptInState(
-    val applicationName: String,
-    val eventSink: (AnalyticsOptInEvents) -> Unit
-)
+sealed interface AnalyticsOptInEvents {
+    data class EnableAnalytics(val isEnable: Boolean) : AnalyticsOptInEvents
+}

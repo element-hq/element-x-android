@@ -30,32 +30,16 @@ anvil {
 }
 
 dependencies {
-    implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
+
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.elementresources)
-    implementation(projects.libraries.uiStrings)
-    api(libs.squareup.seismic)
+
     api(projects.services.analyticsproviders.api)
     api(projects.services.analytics.api)
     implementation(libs.androidx.datastore.preferences)
-    implementation(platform(libs.network.okhttp.bom))
-    implementation("com.squareup.okhttp3:okhttp")
-    implementation(libs.coil)
-    implementation(libs.coil.compose)
-    ksp(libs.showkase.processor)
 
-    testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
-    testImplementation(libs.molecule.runtime)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
     testImplementation(libs.test.mockk)
-    testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.features.rageshake.test)
-
-    androidTestImplementation(libs.test.junitext)
 }

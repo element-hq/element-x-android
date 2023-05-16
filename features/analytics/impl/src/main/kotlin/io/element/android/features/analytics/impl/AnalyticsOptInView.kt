@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.services.analytics.impl.settings
+package io.element.android.features.analytics.impl
 
 import android.graphics.Typeface
 import android.text.SpannableString
@@ -61,7 +61,7 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.utils.LogCompositions
-import io.element.android.services.analytics.impl.R
+import io.element.android.features.analytics.impl.R
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable

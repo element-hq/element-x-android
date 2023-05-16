@@ -14,29 +14,22 @@
  * limitations under the License.
  */
 
-package io.element.android.services.analytics.impl.settings
+package io.element.android.features.analytics.impl
 
-import androidx.compose.runtime.Composable
-import io.element.android.libraries.architecture.Presenter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.meta.BuildMeta
 import javax.inject.Inject
 
-class AnalyticsOptInPresenter @Inject constructor(
-    private val buildMeta: BuildMeta,
-) : Presenter<AnalyticsOptInState> {
-
-    @Composable
-    override fun present(): AnalyticsOptInState {
-        fun handleEvents(event: AnalyticsOptInEvents) {
-            when (event) {
-                is AnalyticsOptInEvents.EnableAnalytics -> TODO()
-            }
-        }
-
-        return AnalyticsOptInState(
-            applicationName = buildMeta.applicationName,
-            eventSink = ::handleEvents
+open class AnalyticsOptInStateProvider @Inject constructor(
+) : PreviewParameterProvider<AnalyticsOptInState> {
+    override val values: Sequence<AnalyticsOptInState>
+        get() = sequenceOf(
+            aAnalyticsOptInState(),
         )
-    }
-
 }
+
+fun aAnalyticsOptInState() = AnalyticsOptInState(
+    applicationName = "ElementX",
+    eventSink = {}
+)

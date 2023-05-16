@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.services.analytics.impl.settings
+package io.element.android.features.analytics.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
