@@ -26,6 +26,7 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.media.MediaSource
 
@@ -49,9 +50,11 @@ class MediaViewerNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        MediaViewerView(
-            state = state,
-            modifier = modifier
-        )
+        ElementTheme(darkTheme = true) {
+            MediaViewerView(
+                state = state,
+                modifier = modifier
+            )
+        }
     }
 }

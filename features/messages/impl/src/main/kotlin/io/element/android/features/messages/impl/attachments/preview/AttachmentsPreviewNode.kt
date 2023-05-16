@@ -27,6 +27,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.di.RoomScope
 
 @ContributesNode(RoomScope::class)
@@ -45,9 +46,12 @@ class AttachmentsPreviewNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        AttachmentsPreviewView(
-            state = state,
-            modifier = modifier
-        )
+        ElementTheme(darkTheme = true) {
+            AttachmentsPreviewView(
+                state = state,
+                onDismiss = this::navigateUp,
+                modifier = modifier
+            )
+        }
     }
 }

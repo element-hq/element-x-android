@@ -18,40 +18,88 @@
 
 package io.element.android.features.messages.impl.attachments.preview
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.media.local.LocalMediaView
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.ui.strings.R as StringsR
 
 @Composable
 fun AttachmentsPreviewView(
     state: AttachmentsPreviewState,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+
+    fun onSendClicked() {
+    }
+
     Scaffold(modifier) {
-        Box(
-            modifier = Modifier,
-            contentAlignment = Alignment.Center
+        Column(
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            when (state.attachment) {
-                is Attachment.Media -> LocalMediaView(localMedia = state.attachment.localMedia)
+            Spacer(
+                modifier = Modifier.height(80.dp)
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                when (state.attachment) {
+                    is Attachment.Media -> LocalMediaView(
+                        localMedia = state.attachment.localMedia
+                    )
+                }
             }
+            AttachmentsPreviewBottomActions(
+                onCancelClicked = onDismiss,
+                onSendClicked = ::onSendClicked,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .defaultMinSize(minHeight = 120.dp)
+                    .padding(all = 24.dp)
+            )
         }
     }
 }
 
-@Preview
 @Composable
-fun AttachmentsPreviewViewLightPreview(@PreviewParameter(AttachmentsPreviewStateProvider::class) state: AttachmentsPreviewState) =
-    ElementPreviewLight { ContentToPreview(state) }
+private fun AttachmentsPreviewBottomActions(
+    onCancelClicked: () -> Unit,
+    onSendClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        TextButton(onClick = onCancelClicked) {
+            Text(stringResource(id = StringsR.string.action_cancel))
+        }
+        TextButton(onClick = onSendClicked) {
+            Text(stringResource(id = StringsR.string.action_send))
+        }
+    }
+}
 
 @Preview
 @Composable
@@ -62,5 +110,6 @@ fun AttachmentsPreviewViewDarkPreview(@PreviewParameter(AttachmentsPreviewStateP
 private fun ContentToPreview(state: AttachmentsPreviewState) {
     AttachmentsPreviewView(
         state = state,
+        onDismiss = {},
     )
 }
