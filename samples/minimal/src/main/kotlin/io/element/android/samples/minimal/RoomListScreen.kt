@@ -32,6 +32,9 @@ import io.element.android.libraries.dateformatter.impl.DefaultLastMessageTimesta
 import io.element.android.libraries.dateformatter.impl.LocalDateTimeProvider
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.eventformatter.impl.DefaultRoomLastMessageFormatter
+import io.element.android.libraries.eventformatter.impl.ProfileChangeContentFormatter
+import io.element.android.libraries.eventformatter.impl.RoomMembershipContentFormatter
+import io.element.android.libraries.eventformatter.impl.StateContentFormatter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -53,10 +56,17 @@ class RoomListScreen(
     private val dateTimeProvider = LocalDateTimeProvider(clock, timeZone)
     private val dateFormatters = DateFormatters(locale, clock, timeZone)
     private val sessionVerificationService = matrixClient.sessionVerificationService()
+    private val stringProvider = AndroidStringProvider(context.resources)
     private val presenter = RoomListPresenter(
         client = matrixClient,
         lastMessageTimestampFormatter = DefaultLastMessageTimestampFormatter(dateTimeProvider, dateFormatters),
-        roomLastMessageFormatter = DefaultRoomLastMessageFormatter(AndroidStringProvider(context.resources), matrixClient),
+        roomLastMessageFormatter = DefaultRoomLastMessageFormatter(
+            sp = stringProvider,
+            matrixClient = matrixClient,
+            roomMembershipContentFormatter = RoomMembershipContentFormatter(matrixClient, stringProvider),
+            profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
+            stateContentFormatter = StateContentFormatter(stringProvider),
+        ),
         sessionVerificationService = sessionVerificationService,
         networkMonitor = NetworkMonitorImpl(context),
         snackbarDispatcher = SnackbarDispatcher(),
