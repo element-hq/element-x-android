@@ -52,5 +52,6 @@ fun aMessagesState() = MessagesState(
     ),
     actionListState = anActionListState(),
     hasNetworkConnection = true,
+    snackbarMessage = null,
     eventSink = {}
 )

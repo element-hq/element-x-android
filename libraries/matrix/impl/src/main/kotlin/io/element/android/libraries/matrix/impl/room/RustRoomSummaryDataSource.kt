@@ -91,7 +91,6 @@ internal class RustRoomSummaryDataSource(
         coroutineScope.cancel()
     }
 
-    //@OptIn(FlowPreview::class)
     override fun roomSummaries(): StateFlow<List<RoomSummary>> {
         return roomSummaries
     }

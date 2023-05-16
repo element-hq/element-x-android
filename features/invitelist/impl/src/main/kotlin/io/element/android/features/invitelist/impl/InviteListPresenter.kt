@@ -131,14 +131,18 @@ class InviteListPresenter @Inject constructor(
 
     private fun CoroutineScope.acceptInvite(roomId: RoomId, acceptedAction: MutableState<Async<RoomId>>) = launch {
         suspend {
-            client.getRoom(roomId)?.acceptInvitation()?.getOrThrow()
+            client.getRoom(roomId)?.use {
+                it.acceptInvitation().getOrThrow()
+            }
             roomId
         }.execute(acceptedAction)
     }
 
     private fun CoroutineScope.declineInvite(roomId: RoomId, declinedAction: MutableState<Async<Unit>>) = launch {
         suspend {
-            client.getRoom(roomId)?.rejectInvitation()?.getOrThrow() ?: Unit
+            client.getRoom(roomId)?.use {
+                it.rejectInvitation().getOrThrow()
+            } ?: Unit
         }.execute(declinedAction)
     }
 
