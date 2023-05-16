@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialApi::class)
+@file:OptIn(ExperimentalMaterialApi::class)
 
 package io.element.android.features.createroom.impl.configureroom.avatar
 
@@ -25,10 +25,10 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ListItem
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -87,13 +87,13 @@ private fun SheetContent(
         ) { action ->
             ListItem(
                 modifier = Modifier.clickable { onActionClicked(action) },
-                text = {
+                headlineContent = {
                     Text(
                         text = stringResource(action.titleResId),
                         color = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
                     )
                 },
-                icon = {
+                leadingContent = {
                     Icon(
                         imageVector = action.icon,
                         contentDescription = stringResource(action.titleResId),
@@ -118,7 +118,7 @@ fun SheetContentDarkPreview() =
 @Composable
 private fun ContentToPreview() {
     AvatarActionListView(
-        actions = persistentListOf(AvatarAction.ChoosePhoto, AvatarAction.TakePhoto, AvatarAction.Remove),
+        actions = persistentListOf(AvatarAction.TakePhoto, AvatarAction.ChoosePhoto, AvatarAction.Remove),
         modalBottomSheetState = ModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Expanded
         ),
