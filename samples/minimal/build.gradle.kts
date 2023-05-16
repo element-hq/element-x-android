@@ -55,6 +55,7 @@ dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
     implementation(projects.libraries.dateformatter.impl)
+    implementation(projects.libraries.eventformatter.impl)
     implementation(projects.features.invitelist.impl)
     implementation(projects.features.roomlist.impl)
     implementation(projects.features.leaveroom.impl)

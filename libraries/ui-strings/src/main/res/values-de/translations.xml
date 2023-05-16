@@ -61,8 +61,11 @@
   <string name="common_offline">"Offline"</string>
   <string name="common_password">"Passwort"</string>
   <string name="common_reactions">"Reaktionen"</string>
+  <string name="common_search_results">"Suchergebnisse"</string>
   <string name="common_security">"Sicherheit"</string>
+  <string name="common_server_not_supported">"Server wird nicht unterstützt"</string>
   <string name="common_settings">"Einstellungen"</string>
+  <string name="common_starting_chat">"Chat wird gestartet…"</string>
   <string name="common_sticker">"Sticker"</string>
   <string name="common_success">"Erfolg"</string>
   <string name="common_suggestions">"Vorschläge"</string>

@@ -57,6 +57,12 @@
       ]
     },
     {
+      "name": ":libraries:messageformatter:impl",
+      "includeRegex": [
+        "state_event_.*"
+      ]
+    },
+    {
       "name": ":libraries:push:impl",
       "includeRegex": [
         "push_.*",
@@ -73,7 +79,6 @@
     {
       "name": ":features:roomlist:impl",
       "includeRegex": [
-        "state_event_.*",
         "screen_roomlist_.*",
         "session_verification_banner_.*"
       ]

@@ -29,6 +29,7 @@ import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormat
 import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EXCEPTION

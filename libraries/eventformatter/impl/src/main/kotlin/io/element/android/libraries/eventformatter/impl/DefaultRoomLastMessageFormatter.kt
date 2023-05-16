@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist.impl
+package io.element.android.libraries.eventformatter.impl
 
 import android.content.Context
 import androidx.compose.ui.text.AnnotatedString
@@ -49,6 +49,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecry
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
+import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import timber.log.Timber
 import javax.inject.Inject
 import io.element.android.libraries.ui.strings.R as StringR
