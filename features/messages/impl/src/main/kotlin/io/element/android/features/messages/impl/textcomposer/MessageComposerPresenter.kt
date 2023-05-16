@@ -43,7 +43,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaType
-import io.element.android.libraries.mediaupload.api.MediaUploadInfo
+import io.element.android.libraries.mediaupload.api.sendMedia
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
@@ -191,39 +191,21 @@ class MessageComposerPresenter @Inject constructor(
         mediaType: MediaType,
         deleteOriginal: Boolean = false
     ) = launch {
-        runCatching {
-            val info = handleMediaPreProcessing(uri, mediaType, deleteOriginal).getOrNull() ?: return@runCatching
-            when (info) {
-                is MediaUploadInfo.Image -> {
-                    room.sendImage(info.file, info.thumbnailInfo.file, info.info)
+        mediaPreProcessor.process(uri, mediaType, deleteOriginal)
+            .map { info ->
+                room.sendMedia(info)
+            }
+            .onSuccess {
+                Timber.d("onSuccess sending media")
+            }.onFailure { failure ->
+                Timber.e(failure, "onfailure sending media: $failure")
+                val snackbarMessage = if (failure is MediaPreProcessor.Failure) {
+                    StringR.string.screen_media_upload_preview_error_failed_processing
+                } else {
+                    StringR.string.screen_media_upload_preview_error_failed_sending
                 }
+                snackbarDispatcher.post(SnackbarMessage(snackbarMessage))
+            }
 
-                is MediaUploadInfo.Video -> {
-                    room.sendVideo(info.file, info.thumbnailInfo.file, info.info)
-                }
-
-                is MediaUploadInfo.AnyFile -> {
-                    room.sendFile(info.file, info.info)
-                }
-                else -> error("Unexpected MediaUploadInfo format: $info")
-            }.getOrThrow()
-        }.onFailure {
-            snackbarDispatcher.post(SnackbarMessage(StringR.string.screen_media_upload_preview_error_failed_sending))
-            Timber.e(it, "Couldn't upload media")
-        }.onSuccess {
-            Timber.d("Media uploaded")
-        }
-    }
-
-    private suspend fun handleMediaPreProcessing(
-        uri: Uri,
-        mediaType: MediaType,
-        deleteOriginal: Boolean,
-    ): Result<MediaUploadInfo> {
-        val result = mediaPreProcessor.process(uri, mediaType, deleteOriginal = deleteOriginal)
-        Timber.d("Pre-processed media result: $result")
-        return result.onFailure {
-            snackbarDispatcher.post(SnackbarMessage(StringR.string.screen_media_upload_preview_error_failed_processing))
-        }
     }
 }

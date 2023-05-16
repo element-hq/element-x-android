@@ -25,6 +25,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.androidutils.media.runAndRelease
 import io.element.android.libraries.core.data.tryOrNull
+import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
 import io.element.android.libraries.di.AppScope
@@ -71,6 +72,7 @@ class MediaPreProcessorImpl @Inject constructor(
          * See [the Matrix spec](https://spec.matrix.org/latest/client-server-api/?ref=blog.gitter.im#thumbnails).
          */
         private const val THUMB_MAX_WIDTH = 800
+
         /**
          * Max height of thumbnail images.
          * See [the Matrix spec](https://spec.matrix.org/latest/client-server-api/?ref=blog.gitter.im#thumbnails).
@@ -93,7 +95,7 @@ class MediaPreProcessorImpl @Inject constructor(
         // Camera returns an 'octet-stream' mimetype, so it needs to be overridden
         val mimeType = contentResolver.getType(uri)
         val mimeTypeOrDefault = if (mimeType == MimeTypes.OctetStream) {
-            when(mediaType) {
+            when (mediaType) {
                 MediaType.Image -> MimeTypes.Jpeg
                 MediaType.Video -> MimeTypes.Mp4
                 MediaType.Audio -> MimeTypes.Ogg
@@ -104,7 +106,7 @@ class MediaPreProcessorImpl @Inject constructor(
         }
         val compressBeforeSending = mediaType in sequenceOf(MediaType.Image, MediaType.Video)
         val result = if (compressBeforeSending && mimeType != MimeTypes.Gif) {
-            when(mediaType) {
+            when (mediaType) {
                 MediaType.Image -> processImage(uri)
                 MediaType.Video -> processVideo(uri, mimeTypeOrDefault)
                 MediaType.Audio -> processAudio(uri, mimeTypeOrDefault)
@@ -124,13 +126,11 @@ class MediaPreProcessorImpl @Inject constructor(
             )
             MediaUploadInfo.AnyFile(file, info)
         }
-
         if (deleteOriginal) {
             contentResolver.delete(uri, null, null)
         }
-
         result
-    }
+    }.mapFailure { MediaPreProcessor.Failure(it) }
 
     private suspend fun processImage(uri: Uri): MediaUploadInfo {
         val compressedFileResult = contentResolver.openInputStream(uri).use { input ->
