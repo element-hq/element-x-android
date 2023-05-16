@@ -59,7 +59,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
     private val matrixClient: MatrixClient,
 ) : RoomLastMessageFormatter {
 
-    override fun processMessageItem(event: EventTimelineItem, isDmRoom: Boolean): CharSequence? {
+    override fun format(event: EventTimelineItem, isDmRoom: Boolean): CharSequence? {
         val isOutgoing = event.sender == matrixClient.sessionId
         val senderDisplayName = (event.senderProfile as? ProfileTimelineDetails.Ready)?.displayName ?: event.sender.value
         return when (val content = event.content) {

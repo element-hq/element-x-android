@@ -200,7 +200,7 @@ class RoomListPresenter @Inject constructor(
                         hasUnread = roomSummary.details.unreadNotificationCount > 0,
                         timestamp = lastMessageTimestampFormatter.format(roomSummary.details.lastMessageTimestamp),
                         lastMessage = roomSummary.details.lastMessage?.let { message ->
-                            roomLastMessageFormatter.processMessageItem(message.event, roomSummary.details.isDirect)
+                            roomLastMessageFormatter.format(message.event, roomSummary.details.isDirect)
                         }.orEmpty(),
                         avatarData = avatarData,
                     )
