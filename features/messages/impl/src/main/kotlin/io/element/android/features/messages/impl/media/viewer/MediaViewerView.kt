@@ -41,7 +41,7 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.ui.strings.R.string as StringR
+import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun MediaViewerView(
@@ -62,7 +62,7 @@ fun MediaViewerView(
         ) {
             when (state.downloadedMedia) {
                 is Async.Success -> LocalMediaView(state.downloadedMedia.state)
-                is Async.Failure -> ErrorView("Error while downloading", ::onRetry)
+                is Async.Failure -> ErrorView(stringResource(id = StringR.string.error_unknown), ::onRetry)
                 else -> CircularProgressIndicator(
                     strokeWidth = 2.dp,
                 )
@@ -82,11 +82,11 @@ private fun ErrorView(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(text = errorMessage)
-        Spacer(modifier = Modifier.size(8.dp))
+        Spacer(modifier = Modifier.size(16.dp))
         Button(
             onClick = onRetry
         ) {
-            Text(text = stringResource(id = StringR.action_retry))
+            Text(text = stringResource(id = StringR.string.action_retry))
         }
 
     }

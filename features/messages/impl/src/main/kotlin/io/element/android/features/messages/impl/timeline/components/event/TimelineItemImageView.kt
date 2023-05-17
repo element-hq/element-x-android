@@ -16,37 +16,31 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
+import io.element.android.features.messages.impl.timeline.components.blurhash.BlurHashAsyncImage
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContentProvider
-import io.element.android.libraries.designsystem.components.blurhash.BlurHashAsyncImage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
-import kotlin.math.min
 
 @Composable
 fun TimelineItemImageView(
     content: TimelineItemImageContent,
     modifier: Modifier = Modifier,
 ) {
-    val maxHeight = min(300, content.height ?: Int.MAX_VALUE)
-    Box(
+    TimelineItemAspectRatioBox(
+        height = content.height,
+        aspectRatio = content.aspectRatio,
         modifier = modifier
-            .heightIn(max = maxHeight.dp)
-            .aspectRatio(content.aspectRatio),
-        contentAlignment = Alignment.Center,
     ) {
         BlurHashAsyncImage(
+            modifier = Modifier.fillMaxSize(),
             blurHash = content.blurhash,
             model = MediaRequestData(content.mediaSource, MediaRequestData.Kind.Content),
             contentScale = ContentScale.Fit,

@@ -49,8 +49,8 @@ class MediaViewerNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        val state = presenter.present()
         ElementTheme(darkTheme = true) {
+            val state = presenter.present()
             MediaViewerView(
                 state = state,
                 modifier = modifier

@@ -22,14 +22,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -70,7 +70,10 @@ fun AttachmentsPreviewView(
     }
 
     Scaffold(modifier) {
-        Box {
+        Box(
+            modifier = Modifier.padding(it),
+            contentAlignment = Alignment.Center
+        ) {
             AttachmentPreviewContent(
                 attachment = state.attachment,
                 onSendClicked = ::postSendAttachment,
@@ -115,11 +118,10 @@ private fun AttachmentPreviewContent(
     onDismiss: () -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 24.dp)
     ) {
-        Spacer(
-            modifier = Modifier.height(80.dp)
-        )
         Box(
             modifier = Modifier
                 .fillMaxWidth()

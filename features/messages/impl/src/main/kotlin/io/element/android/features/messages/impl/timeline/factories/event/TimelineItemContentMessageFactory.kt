@@ -41,13 +41,7 @@ class TimelineItemContentMessageFactory @Inject constructor() {
                 htmlDocument = messageType.formatted?.toHtmlDocument()
             )
             is ImageMessageType -> {
-                val height = messageType.info?.height?.toFloat()
-                val width = messageType.info?.width?.toFloat()
-                val aspectRatio = if (height != null && width != null) {
-                    width / height
-                } else {
-                    0.7f
-                }
+                val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
                 TimelineItemImageContent(
                     body = messageType.body,
                     height = messageType.info?.height?.toInt(),
@@ -59,13 +53,7 @@ class TimelineItemContentMessageFactory @Inject constructor() {
                 )
             }
             is VideoMessageType -> {
-                val height = messageType.info?.height?.toFloat()
-                val width = messageType.info?.width?.toFloat()
-                val aspectRatio = if (height != null && width != null) {
-                    width / height
-                } else {
-                    0.7f
-                }
+                val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
                 TimelineItemVideoContent(
                     body = messageType.body,
                     thumbnailSource = messageType.info?.thumbnailSource,
@@ -87,6 +75,14 @@ class TimelineItemContentMessageFactory @Inject constructor() {
                 htmlDocument = messageType.formatted?.toHtmlDocument()
             )
             else -> TimelineItemUnknownContent
+        }
+    }
+
+    private fun aspectRatioOf(width: Long?, height: Long?): Float {
+        return if (height != null && width != null) {
+            width.toFloat() / height.toFloat()
+        } else {
+            0.7f
         }
     }
 }
