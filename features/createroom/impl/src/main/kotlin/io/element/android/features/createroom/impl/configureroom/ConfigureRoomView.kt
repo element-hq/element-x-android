@@ -22,9 +22,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
@@ -103,48 +105,43 @@ fun ConfigureRoomView(
             )
         }
     ) { padding ->
-        LazyColumn(
-            modifier = Modifier.padding(padding),
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .imePadding()
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            item {
-                RoomNameWithAvatar(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    avatarUri = state.config.avatarUri,
-                    roomName = state.config.roomName.orEmpty(),
-                    onAvatarClick = ::onAvatarClicked,
-                    onRoomNameChanged = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
-                )
-            }
-            item {
-                RoomTopic(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    topic = state.config.topic.orEmpty(),
-                    onTopicChanged = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
-                )
-            }
+            RoomNameWithAvatar(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                avatarUri = state.config.avatarUri,
+                roomName = state.config.roomName.orEmpty(),
+                onAvatarClick = ::onAvatarClicked,
+                onRoomNameChanged = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
+            )
+            RoomTopic(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                topic = state.config.topic.orEmpty(),
+                onTopicChanged = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
+            )
             if (state.config.invites.isNotEmpty()) {
-                item {
-                    SelectedUsersList(
-                        contentPadding = PaddingValues(horizontal = 24.dp),
-                        selectedUsers = state.config.invites,
-                        onUserRemoved = {
-                            focusManager.clearFocus()
-                            state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it))
-                        },
-                    )
-                }
-            }
-            item {
-                RoomPrivacyOptions(
-                    modifier = Modifier.padding(bottom = 40.dp),
-                    selected = state.config.privacy,
-                    onOptionSelected = {
+                SelectedUsersList(
+                    contentPadding = PaddingValues(horizontal = 24.dp),
+                    selectedUsers = state.config.invites,
+                    onUserRemoved = {
                         focusManager.clearFocus()
-                        state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it.privacy))
+                        state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it))
                     },
                 )
             }
+            RoomPrivacyOptions(
+                modifier = Modifier.padding(bottom = 40.dp),
+                selected = state.config.privacy,
+                onOptionSelected = {
+                    focusManager.clearFocus()
+                    state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it.privacy))
+                },
+            )
         }
     }
 
