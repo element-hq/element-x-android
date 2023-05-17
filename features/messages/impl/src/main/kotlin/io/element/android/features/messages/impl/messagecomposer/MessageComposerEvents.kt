@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.textcomposer
+package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.textcomposer.MessageComposerMode

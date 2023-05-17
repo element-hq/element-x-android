@@ -68,7 +68,6 @@ class MediaViewerPresenter @AssistedInject constructor(
         fun handleEvents(mediaViewerEvents: MediaViewerEvents) {
             when (mediaViewerEvents) {
                 MediaViewerEvents.RetryLoading -> loadMediaTrigger++
-                MediaViewerEvents.SaveOnDisk -> TODO()
             }
         }
 

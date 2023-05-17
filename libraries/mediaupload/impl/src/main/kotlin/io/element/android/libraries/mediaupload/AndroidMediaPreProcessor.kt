@@ -119,7 +119,9 @@ class AndroidMediaPreProcessor @Inject constructor(
             MediaUploadInfo.AnyFile(file, info)
         }
         if (deleteOriginal) {
-            contentResolver.delete(uri, null, null)
+            tryOrNull {
+                contentResolver.delete(uri, null, null)
+            }
         }
         result
     }.mapFailure { MediaPreProcessor.Failure(it) }

@@ -23,10 +23,10 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.messages.impl.textcomposer.AttachmentSourcePicker
-import io.element.android.features.messages.impl.textcomposer.MessageComposerEvents
-import io.element.android.features.messages.impl.textcomposer.MessageComposerPresenter
-import io.element.android.features.messages.impl.textcomposer.MessageComposerState
+import io.element.android.features.messages.impl.messagecomposer.AttachmentSourcePicker
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher

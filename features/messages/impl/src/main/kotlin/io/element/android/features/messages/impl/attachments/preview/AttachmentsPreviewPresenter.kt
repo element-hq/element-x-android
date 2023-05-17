@@ -29,19 +29,13 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.executeResult
-import io.element.android.libraries.core.extensions.flatMap
-import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.mediaupload.api.MediaPreProcessor
-import io.element.android.libraries.mediaupload.api.sendMedia
+import io.element.android.libraries.mediaupload.api.MediaSender
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class AttachmentsPreviewPresenter @AssistedInject constructor(
     @Assisted private val attachment: Attachment,
-    private val room: MatrixRoom,
-    private val mediaPreProcessor: MediaPreProcessor,
-    private val snackbarDispatcher: SnackbarDispatcher,
+    private val mediaSender: MediaSender,
 ) : Presenter<AttachmentsPreviewState> {
 
     @AssistedFactory
@@ -81,7 +75,6 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
                 sendMedia(
                     uri = attachment.localMedia.uri,
                     mimeType = attachment.localMedia.mimeType,
-                    deleteOriginal = false,
                     sendActionState = sendActionState
                 )
             }
@@ -91,15 +84,10 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     private suspend fun sendMedia(
         uri: Uri,
         mimeType: String,
-        deleteOriginal: Boolean = false,
         sendActionState: MutableState<Async<Unit>>,
     ) {
         suspend {
-            mediaPreProcessor
-                .process(uri, mimeType, deleteOriginal)
-                .flatMap { info ->
-                    room.sendMedia(info)
-                }
+            mediaSender.sendMedia(uri, mimeType)
         }.executeResult(sendActionState)
     }
 }

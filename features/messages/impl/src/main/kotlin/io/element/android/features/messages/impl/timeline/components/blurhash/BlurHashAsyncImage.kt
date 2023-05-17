@@ -45,7 +45,7 @@ fun BlurHashAsyncImage(
         loading = {
             BlurHashImage(
                 blurHash = blurHash,
-                contentScale = contentScale,
+                contentScale = ContentScale.FillBounds,
                 contentDescription = "Loading placeholder"
             )
         },
