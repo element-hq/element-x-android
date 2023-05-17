@@ -27,7 +27,9 @@ import io.element.android.libraries.androidutils.media.runAndRelease
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAudio
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
+import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.media.AudioInfo
@@ -37,7 +39,6 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.ThumbnailInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
-import io.element.android.libraries.mediaupload.api.MediaType
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.api.ThumbnailProcessingInfo
 import kotlinx.coroutines.Dispatchers
@@ -53,7 +54,7 @@ import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 @ContributesBinding(AppScope::class)
-class MediaPreProcessorImpl @Inject constructor(
+class AndroidMediaPreProcessor @Inject constructor(
     @ApplicationContext private val context: Context,
     private val imageCompressor: ImageCompressor,
     private val videoCompressor: VideoCompressor,
@@ -89,27 +90,18 @@ class MediaPreProcessorImpl @Inject constructor(
 
     override suspend fun process(
         uri: Uri,
-        mediaType: MediaType,
+        mimeType: String,
         deleteOriginal: Boolean,
     ): Result<MediaUploadInfo> = runCatching {
-        // Camera returns an 'octet-stream' mimetype, so it needs to be overridden
-        val mimeType = contentResolver.getType(uri)
-        val mimeTypeOrDefault = if (mimeType == MimeTypes.OctetStream) {
-            when (mediaType) {
-                MediaType.Image -> MimeTypes.Jpeg
-                MediaType.Video -> MimeTypes.Mp4
-                MediaType.Audio -> MimeTypes.Ogg
-                else -> mimeType
-            }
-        } else {
-            mimeType
-        }
-        val compressBeforeSending = mediaType in sequenceOf(MediaType.Image, MediaType.Video)
-        val result = if (compressBeforeSending && mimeType != MimeTypes.Gif) {
-            when (mediaType) {
-                MediaType.Image -> processImage(uri)
-                MediaType.Video -> processVideo(uri, mimeTypeOrDefault)
-                MediaType.Audio -> processAudio(uri, mimeTypeOrDefault)
+        val compressBeforeSending = (
+            mimeType.isMimeTypeImage() && mimeType != MimeTypes.Gif) ||
+            mimeType.isMimeTypeVideo()
+
+        val result = if (compressBeforeSending) {
+            when {
+                mimeType.isMimeTypeImage() -> processImage(uri)
+                mimeType.isMimeTypeVideo() -> processVideo(uri, mimeType)
+                mimeType.isMimeTypeAudio() -> processAudio(uri, mimeType)
                 else -> error("Cannot compress file of type: $mimeType")
             }
         } else {

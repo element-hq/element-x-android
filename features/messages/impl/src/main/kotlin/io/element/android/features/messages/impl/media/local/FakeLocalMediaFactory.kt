@@ -17,13 +17,14 @@
 package io.element.android.features.messages.impl.media.local
 
 import android.net.Uri
+import io.element.android.libraries.core.mimetype.MimeTypes
 
 class FakeLocalMediaFactory() : LocalMediaFactory {
 
-    var mimeType: String? = null
+    var fallbackMimeType: String = MimeTypes.OctetStream
 
     override fun createFromUri(uri: Uri?, mimeType: String?): LocalMedia? {
         if (uri == null) return null
-        return LocalMedia(uri, mimeType)
+        return LocalMedia(uri, mimeType ?: fallbackMimeType)
     }
 }

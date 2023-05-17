@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.mediaupload.api
+package io.element.android.features.messages.impl.attachments.preview
 
-sealed interface MediaType {
-    object Image : MediaType
-    object Video : MediaType
-    object Audio : MediaType
-    object File : MediaType
+import androidx.compose.runtime.Immutable
+
+@Immutable
+sealed interface AttachmentsPreviewEvents {
+    object SendAttachment : AttachmentsPreviewEvents
+    object ClearSendState : AttachmentsPreviewEvents
 }

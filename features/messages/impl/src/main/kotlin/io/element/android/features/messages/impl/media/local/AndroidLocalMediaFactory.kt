@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.media.local
 import android.content.Context
 import android.net.Uri
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import javax.inject.Inject
@@ -30,7 +31,7 @@ class AndroidLocalMediaFactory @Inject constructor(
 
     override fun createFromUri(uri: Uri?, mimeType: String?): LocalMedia? {
         if (uri == null) return null
-        val resolvedMimeType = mimeType ?: context.contentResolver.getType(uri)
+        val resolvedMimeType = mimeType ?: context.contentResolver.getType(uri) ?: MimeTypes.OctetStream
         return LocalMedia(uri, resolvedMimeType)
     }
 }

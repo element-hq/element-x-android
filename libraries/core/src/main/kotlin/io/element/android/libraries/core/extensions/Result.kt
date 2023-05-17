@@ -25,3 +25,16 @@ inline fun <R, T : R> Result<T>.mapFailure(transform: (exception: Throwable) -> 
         else -> Result.failure(transform(exception))
     }
 }
+
+/**
+ * Can be used to transform some Throwable into some other.
+ */
+inline fun <R, T> Result<R>.flatMap(transform: (R) -> Result<T>): Result<T> {
+    return when (val exception = exceptionOrNull()) {
+        null -> mapCatching(transform).fold(
+            onSuccess = { it },
+            onFailure = { Result.failure(it) }
+        )
+        else -> Result.failure(exception)
+    }
+}

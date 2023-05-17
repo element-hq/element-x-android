@@ -19,5 +19,10 @@ package io.element.android.features.messages.impl.media.local
 import android.net.Uri
 
 interface LocalMediaFactory {
+    /**
+     * This method will create a [LocalMedia] with the given [uri] and [mimeType]
+     * If the [mimeType] is null, it'll try to read it from the content.
+     *
+     */
     fun createFromUri(uri: Uri?, mimeType: String?): LocalMedia?
 }
