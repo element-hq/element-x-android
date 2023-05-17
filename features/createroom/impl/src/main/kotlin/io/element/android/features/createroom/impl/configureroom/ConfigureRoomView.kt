@@ -226,7 +226,8 @@ fun RoomNameWithAvatar(
             label = stringResource(R.string.screen_create_room_room_name_label),
             value = roomName,
             placeholder = stringResource(R.string.screen_create_room_room_name_placeholder),
-            onValueChange = onRoomNameChanged
+            singleLine = true,
+            onValueChange = onRoomNameChanged,
         )
     }
 }

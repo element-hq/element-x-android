@@ -36,8 +36,9 @@ fun LabelledTextField(
     label: String,
     value: String,
     modifier: Modifier = Modifier,
-    placeholder: String = "",
-    maxLines: Int = 1,
+    placeholder: String? = null,
+    maxLines: Int = Int.MAX_VALUE,
+    singleLine: Boolean = false,
     onValueChange: (String) -> Unit = {},
 ) {
     Column(
@@ -52,9 +53,9 @@ fun LabelledTextField(
         TextField(
             modifier = Modifier.fillMaxWidth(),
             value = value,
-            placeholder = { Text(placeholder) },
+            placeholder = placeholder?.let { { Text(placeholder) } },
             onValueChange = onValueChange,
-            singleLine = maxLines == 1,
+            singleLine = singleLine,
             maxLines = maxLines,
         )
     }
