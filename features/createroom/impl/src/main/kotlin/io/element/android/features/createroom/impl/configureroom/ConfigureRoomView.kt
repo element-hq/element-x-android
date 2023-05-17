@@ -17,6 +17,7 @@
 package io.element.android.features.createroom.impl.configureroom
 
 import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -46,8 +47,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.createroom.api.ui.AvatarActionListView
+import io.element.android.features.createroom.api.ui.LocalAvatar
 import io.element.android.features.createroom.impl.R
-import io.element.android.features.createroom.impl.components.Avatar
 import io.element.android.features.createroom.impl.components.RoomPrivacyOption
 import io.element.android.features.userlist.api.components.SelectedUsersList
 import io.element.android.libraries.architecture.Async
@@ -214,9 +215,9 @@ fun RoomNameWithAvatar(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Avatar(
+        LocalAvatar(
             avatarUri = avatarUri,
-            onClick = onAvatarClick,
+            modifier = Modifier.clickable(onClick = onAvatarClick),
         )
 
         LabelledTextField(

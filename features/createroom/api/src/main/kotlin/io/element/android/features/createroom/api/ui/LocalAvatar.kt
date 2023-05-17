@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.components
+package io.element.android.features.createroom.api.ui
 
 import android.net.Uri
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -44,15 +43,13 @@ import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Icon
 
 @Composable
-fun Avatar(
+fun LocalAvatar(
     avatarUri: Uri?,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
 ) {
     val commonModifier = modifier
         .size(70.dp)
         .clip(CircleShape)
-        .clickable(onClick = onClick)
 
     if (avatarUri != null) {
         val context = LocalContext.current
@@ -91,7 +88,7 @@ fun AvatarDarkPreview() = ElementPreviewDark { ContentToPreview() }
 @Composable
 private fun ContentToPreview() {
     Row {
-        Avatar(null)
-        Avatar(Uri.EMPTY)
+        LocalAvatar(null)
+        LocalAvatar(Uri.EMPTY)
     }
 }
