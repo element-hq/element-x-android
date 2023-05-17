@@ -16,15 +16,32 @@
 
 package io.element.android.features.messages.impl.attachments.preview
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.executeResult
+import io.element.android.libraries.core.extensions.flatMap
+import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.mediaupload.api.MediaPreProcessor
+import io.element.android.libraries.mediaupload.api.sendMedia
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class AttachmentsPreviewPresenter @AssistedInject constructor(
     @Assisted private val attachment: Attachment,
+    private val room: MatrixRoom,
+    private val mediaPreProcessor: MediaPreProcessor,
+    private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<AttachmentsPreviewState> {
 
     @AssistedFactory
@@ -35,8 +52,54 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     @Composable
     override fun present(): AttachmentsPreviewState {
 
+        val coroutineScope = rememberCoroutineScope()
+
+        val sendActionState = remember {
+            mutableStateOf<Async<Unit>>(Async.Uninitialized)
+        }
+
+        fun handleEvents(attachmentsPreviewEvents: AttachmentsPreviewEvents) {
+            when (attachmentsPreviewEvents) {
+                AttachmentsPreviewEvents.SendAttachment -> coroutineScope.sendAttachment(attachment, sendActionState)
+                AttachmentsPreviewEvents.ClearSendState -> sendActionState.value = Async.Uninitialized
+            }
+        }
+
         return AttachmentsPreviewState(
             attachment = attachment,
+            sendActionState = sendActionState.value,
+            eventSink = ::handleEvents
         )
+    }
+
+    private fun CoroutineScope.sendAttachment(
+        attachment: Attachment,
+        sendActionState: MutableState<Async<Unit>>,
+    ) = launch {
+        when (attachment) {
+            is Attachment.Media -> {
+                sendMedia(
+                    uri = attachment.localMedia.uri,
+                    mimeType = attachment.localMedia.mimeType,
+                    deleteOriginal = false,
+                    sendActionState = sendActionState
+                )
+            }
+        }
+    }
+
+    private suspend fun sendMedia(
+        uri: Uri,
+        mimeType: String,
+        deleteOriginal: Boolean = false,
+        sendActionState: MutableState<Async<Unit>>,
+    ) {
+        suspend {
+            mediaPreProcessor
+                .process(uri, mimeType, deleteOriginal)
+                .flatMap { info ->
+                    room.sendMedia(info)
+                }
+        }.executeResult(sendActionState)
     }
 }

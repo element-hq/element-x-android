@@ -34,7 +34,6 @@ import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.core.data.toStableCharSequence
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
-import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -42,15 +41,11 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
-import io.element.android.libraries.mediaupload.api.MediaType
-import io.element.android.libraries.mediaupload.api.sendMedia
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
-import io.element.android.libraries.ui.strings.R as StringR
 
 @SingleIn(RoomScope::class)
 class MessageComposerPresenter @Inject constructor(
@@ -59,8 +54,6 @@ class MessageComposerPresenter @Inject constructor(
     private val mediaPickerProvider: PickerProvider,
     private val featureFlagService: FeatureFlagService,
     private val localMediaFactory: LocalMediaFactory,
-    private val mediaPreProcessor: MediaPreProcessor,
-    private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<MessageComposerState> {
 
     @SuppressLint("UnsafeOptInUsageError")
@@ -186,26 +179,4 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
-    private fun CoroutineScope.sendMedia(
-        uri: Uri,
-        mediaType: MediaType,
-        deleteOriginal: Boolean = false
-    ) = launch {
-        mediaPreProcessor.process(uri, mediaType, deleteOriginal)
-            .map { info ->
-                room.sendMedia(info)
-            }
-            .onSuccess {
-                Timber.d("onSuccess sending media")
-            }.onFailure { failure ->
-                Timber.e(failure, "onfailure sending media: $failure")
-                val snackbarMessage = if (failure is MediaPreProcessor.Failure) {
-                    StringR.string.screen_media_upload_preview_error_failed_processing
-                } else {
-                    StringR.string.screen_media_upload_preview_error_failed_sending
-                }
-                snackbarDispatcher.post(SnackbarMessage(snackbarMessage))
-            }
-
-    }
 }

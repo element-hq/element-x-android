@@ -20,17 +20,23 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.core.net.toUri
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.media.local.LocalMedia
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.core.mimetype.MimeTypes
 
 open class AttachmentsPreviewStateProvider : PreviewParameterProvider<AttachmentsPreviewState> {
     override val values: Sequence<AttachmentsPreviewState>
         get() = sequenceOf(
-            aAttachmentsPreviewState(),
+            anAttachmentsPreviewState(),
+            anAttachmentsPreviewState(sendActionState = Async.Loading()),
+            anAttachmentsPreviewState(sendActionState = Async.Failure(RuntimeException())),
             // Add other states here
         )
 }
 
-fun aAttachmentsPreviewState() = AttachmentsPreviewState(
+fun anAttachmentsPreviewState(sendActionState: Async<Unit> = Async.Uninitialized) = AttachmentsPreviewState(
     attachment = Attachment.Media(
-        localMedia = LocalMedia("".toUri(), mimeType = null)
-    )
+        localMedia = LocalMedia("".toUri(), mimeType = MimeTypes.OctetStream),
+    ),
+    sendActionState = sendActionState,
+    eventSink = {}
 )

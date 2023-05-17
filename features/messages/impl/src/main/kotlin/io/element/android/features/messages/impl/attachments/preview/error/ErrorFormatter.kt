@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.attachments.preview
+package io.element.android.features.messages.impl.attachments.preview.error
 
-import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.mediaupload.api.MediaPreProcessor
+import io.element.android.libraries.ui.strings.R
 
-data class AttachmentsPreviewState(
-    val attachment: Attachment,
-    val sendActionState: Async<Unit>,
-    val eventSink: (AttachmentsPreviewEvents) -> Unit
-)
+fun sendAttachmentError(
+    throwable: Throwable
+): Int {
+    return if (throwable is MediaPreProcessor.Failure) {
+        R.string.screen_media_upload_preview_error_failed_processing
+    } else {
+        R.string.screen_media_upload_preview_error_failed_sending
+    }
+}
