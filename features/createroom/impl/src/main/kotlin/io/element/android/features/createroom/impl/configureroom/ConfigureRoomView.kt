@@ -46,10 +46,10 @@ import androidx.compose.ui.unit.sp
 import io.element.android.features.createroom.api.ui.AvatarActionListView
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.Avatar
-import io.element.android.features.createroom.impl.components.LabelledTextField
 import io.element.android.features.createroom.impl.components.RoomPrivacyOption
 import io.element.android.features.userlist.api.components.SelectedUsersList
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.designsystem.components.LabelledTextField
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
