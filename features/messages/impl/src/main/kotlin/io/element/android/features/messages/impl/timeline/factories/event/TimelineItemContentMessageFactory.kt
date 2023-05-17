@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline.factories.event
 
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEmoteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemNoticeContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
@@ -25,6 +26,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.util.toHtmlDocument
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
@@ -66,6 +68,13 @@ class TimelineItemContentMessageFactory @Inject constructor() {
                     aspectRatio = aspectRatio
                 )
             }
+            is FileMessageType -> TimelineItemFileContent(
+                body = messageType.body,
+                thumbnailSource = messageType.info?.thumbnailSource,
+                fileSource = messageType.source,
+                mimeType = messageType.info?.mimetype,
+                size = messageType.info?.size,
+            )
             is NoticeMessageType -> TimelineItemNoticeContent(
                 body = messageType.body,
                 htmlDocument = messageType.formatted?.toHtmlDocument()

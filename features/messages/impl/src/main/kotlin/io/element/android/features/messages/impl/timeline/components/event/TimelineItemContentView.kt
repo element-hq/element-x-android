@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
@@ -68,6 +69,10 @@ fun TimelineItemEventContentView(
         is TimelineItemVideoContent -> TimelineItemVideoView(
             content = content,
             modifier = modifier
+        )
+        is TimelineItemFileContent -> TimelineItemFileView(
+            content = content,
+            modifier = modifier.defaultContentPadding()
         )
     }
 }
