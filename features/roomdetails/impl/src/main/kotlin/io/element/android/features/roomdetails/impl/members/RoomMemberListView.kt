@@ -113,7 +113,8 @@ fun RoomMemberListView(
                 if (state.roomMembers is Async.Success) {
                     RoomMemberList(
                         roomMembers = state.roomMembers.state,
-                        onUserSelected = ::onUserSelected,
+                        showMembersCount = true,
+                        onUserSelected = ::onUserSelected
                     )
                 } else if (state.roomMembers.isLoading()) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -128,6 +129,7 @@ fun RoomMemberListView(
 @Composable
 private fun RoomMemberList(
     roomMembers: RoomMembers,
+    showMembersCount: Boolean,
     onUserSelected: (RoomMember) -> Unit,
 ) {
     LazyColumn(modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()) {
@@ -139,9 +141,15 @@ private fun RoomMemberList(
             )
         }
         if (roomMembers.joined.isNotEmpty()) {
-            val memberCount = roomMembers.joined.count()
             roomMemberListSection(
-                headerText = { pluralStringResource(id = R.plurals.screen_room_member_list_header_title, count = memberCount, memberCount) },
+                headerText = {
+                    if (showMembersCount) {
+                        val memberCount = roomMembers.joined.count()
+                        pluralStringResource(id = R.plurals.screen_room_member_list_header_title, count = memberCount, memberCount)
+                    } else {
+                        stringResource(id = R.string.screen_room_member_list_room_members_header_title)
+                    }
+                },
                 members = roomMembers.joined,
                 onMemberSelected = { onUserSelected(it) }
             )
@@ -272,7 +280,8 @@ private fun RoomMemberSearchBar(
             if (state is RoomMemberSearchResultState.Results) {
                 RoomMemberList(
                     roomMembers = state.results,
-                    onUserSelected = { onUserSelected(it) }
+                    showMembersCount = false,
+                    onUserSelected = onUserSelected
                 )
             } else if (state is RoomMemberSearchResultState.NoResults) {
                 Spacer(Modifier.size(80.dp))
