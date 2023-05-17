@@ -50,6 +50,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.createroom.api.ui.AvatarActionListView
+import io.element.android.features.createroom.api.ui.LocalAvatar
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.designsystem.components.LabelledTextField
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -149,10 +150,17 @@ private fun EditableAvatarView(
                 .size(70.dp)
                 .clickable(onClick = onAvatarClicked)
         ) {
-            Avatar(
-                avatarData = AvatarData(state.roomId, state.roomName, state.roomAvatarUrl, size = AvatarSize.HUGE),
-                modifier = Modifier.fillMaxSize()
-            )
+            if (state.localAvatarUri != null) {
+                LocalAvatar(
+                    avatarUri = state.localAvatarUri,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            } else {
+                Avatar(
+                    avatarData = AvatarData(state.roomId, state.roomName, state.roomAvatarUrl, size = AvatarSize.HUGE),
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
             Box(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)

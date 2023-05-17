@@ -16,6 +16,7 @@
 
 package io.element.android.features.roomdetails.impl.edition
 
+import android.net.Uri
 import io.element.android.features.createroom.api.ui.AvatarAction
 import kotlinx.collections.immutable.ImmutableList
 
@@ -24,6 +25,7 @@ data class RoomDetailsEditionState(
     val roomName: String,
     val roomTopic: String,
     val roomAvatarUrl: String?,
+    val localAvatarUri: Uri?,
     val avatarActions: ImmutableList<AvatarAction>,
     val saveButtonVisible: Boolean,
     val eventSink: (RoomDetailsEditionEvents) -> Unit

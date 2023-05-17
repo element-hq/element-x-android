@@ -16,6 +16,7 @@
 
 package io.element.android.features.roomdetails.impl.edition
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -37,30 +38,43 @@ class RoomDetailsEditionPresenter @Inject constructor(
 
     @Composable
     override fun present(): RoomDetailsEditionState {
-        var avatarUrl by rememberSaveable { mutableStateOf(room.avatarUrl?.trim()) }
+        // Fixme had to distinguish local uri from mxc because we currently can't pass the uri to the AvatarData composable,
+        //  this is a temporary workaround
+        var roomAvatarUrl by rememberSaveable { mutableStateOf(room.avatarUrl) }
+        var localAvatarUri: Uri? by rememberSaveable { mutableStateOf(null) }
         var roomName by rememberSaveable { mutableStateOf((room.name ?: room.displayName).trim()) }
         var roomTopic by rememberSaveable { mutableStateOf(room.topic?.trim()) }
-        val saveButtonVisible by rememberSaveable(avatarUrl, roomName, roomTopic) {
+        val saveButtonVisible by rememberSaveable(localAvatarUri, roomName, roomTopic) {
             mutableStateOf(
-                avatarUrl != room.avatarUrl?.trim()
+                localAvatarUri.toString() != room.avatarUrl?.trim()
                     || roomName != (room.name ?: room.displayName).trim()
                     || roomTopic != room.topic?.trim()
             )
         }
 
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
-            onResult = { uri -> if (uri?.path != null) avatarUrl = uri.path }
+            onResult = { uri ->
+                if (uri != null) {
+                    localAvatarUri = uri
+                    roomAvatarUrl = null
+                }
+            }
         )
         val galleryImagePicker = mediaPickerProvider.registerGalleryImagePicker(
-            onResult = { uri -> if (uri?.path != null) avatarUrl = uri.path }
+            onResult = { uri ->
+                if (uri != null) {
+                    localAvatarUri = uri
+                    roomAvatarUrl = null
+                }
+            }
         )
 
-        val avatarActions by remember(avatarUrl) {
+        val avatarActions by remember(localAvatarUri) {
             derivedStateOf {
                 listOfNotNull(
                     AvatarAction.TakePhoto,
                     AvatarAction.ChoosePhoto,
-                    AvatarAction.Remove.takeIf { avatarUrl != null },
+                    AvatarAction.Remove.takeIf { localAvatarUri != null },
                 ).toImmutableList()
             }
         }
@@ -72,7 +86,10 @@ class RoomDetailsEditionPresenter @Inject constructor(
                     when (event.action) {
                         AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
                         AvatarAction.TakePhoto -> cameraPhotoPicker.launch()
-                        AvatarAction.Remove -> avatarUrl = null
+                        AvatarAction.Remove -> {
+                            roomAvatarUrl = null
+                            localAvatarUri = null
+                        }
                     }
                 }
 
@@ -85,7 +102,8 @@ class RoomDetailsEditionPresenter @Inject constructor(
             roomId = room.roomId.value,
             roomName = roomName,
             roomTopic = roomTopic.orEmpty(),
-            roomAvatarUrl = avatarUrl,
+            roomAvatarUrl = roomAvatarUrl,
+            localAvatarUri = localAvatarUri,
             avatarActions = avatarActions,
             saveButtonVisible = saveButtonVisible,
             eventSink = ::handleEvents,
