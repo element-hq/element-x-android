@@ -45,8 +45,8 @@ class AttachmentsPreviewNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        val state = presenter.present()
         ElementTheme(darkTheme = true) {
+            val state = presenter.present()
             AttachmentsPreviewView(
                 state = state,
                 onDismiss = this::navigateUp,
