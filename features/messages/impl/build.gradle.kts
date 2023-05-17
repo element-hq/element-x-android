@@ -54,6 +54,8 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.ui)
     implementation(libs.accompanist.systemui)
+    implementation(libs.vanniktech.blurhash)
+    implementation(libs.telephoto.zoomableimage)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
