@@ -38,6 +38,9 @@ class RoomDetailsEditionPresenter @Inject constructor(
     @Composable
     override fun present(): RoomDetailsEditionState {
         var avatarUrl by rememberSaveable { mutableStateOf(room.avatarUrl) }
+        var roomName by rememberSaveable { mutableStateOf(room.name ?: room.displayName) }
+        var roomTopic by rememberSaveable { mutableStateOf(room.topic.orEmpty()) }
+
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
             onResult = { uri -> if (uri?.path != null) avatarUrl = uri.path }
         )
@@ -65,12 +68,16 @@ class RoomDetailsEditionPresenter @Inject constructor(
                         AvatarAction.Remove -> avatarUrl = null
                     }
                 }
+
+                is RoomDetailsEditionEvents.UpdateRoomName -> roomName = event.name
+                is RoomDetailsEditionEvents.UpdateRoomTopic -> roomTopic = event.topic
             }
         }
 
         return RoomDetailsEditionState(
             roomId = room.roomId.value,
-            roomName = room.name ?: room.displayName,
+            roomName = roomName,
+            roomTopic = roomTopic,
             roomAvatarUrl = avatarUrl,
             avatarActions = avatarActions,
             saveButtonVisible = true,

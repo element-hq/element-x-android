@@ -21,4 +21,6 @@ import io.element.android.features.createroom.api.ui.AvatarAction
 sealed interface RoomDetailsEditionEvents {
     object Save : RoomDetailsEditionEvents
     data class HandleAvatarAction(val action: AvatarAction) : RoomDetailsEditionEvents
+    data class UpdateRoomName(val name: String) : RoomDetailsEditionEvents
+    data class UpdateRoomTopic(val topic: String) : RoomDetailsEditionEvents
 }

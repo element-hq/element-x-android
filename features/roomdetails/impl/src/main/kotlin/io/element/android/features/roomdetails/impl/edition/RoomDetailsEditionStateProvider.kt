@@ -29,6 +29,7 @@ open class RoomDetailsEditionStateProvider : PreviewParameterProvider<RoomDetail
 fun aRoomDetailsEditionState() = RoomDetailsEditionState(
     roomId = "a room id",
     roomName = "Marketing",
+    roomTopic = "a room topic",
     roomAvatarUrl = null,
     avatarActions = persistentListOf(),
     saveButtonVisible = true,

@@ -22,6 +22,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class RoomDetailsEditionState(
     val roomId: String,
     val roomName: String,
+    val roomTopic: String,
     val roomAvatarUrl: String?,
     val avatarActions: ImmutableList<AvatarAction>,
     val saveButtonVisible: Boolean,

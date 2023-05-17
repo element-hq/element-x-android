@@ -22,8 +22,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -46,6 +50,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.createroom.api.ui.AvatarActionListView
+import io.element.android.features.roomdetails.impl.R
+import io.element.android.libraries.designsystem.components.LabelledTextField
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -57,8 +63,8 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.ui.strings.R
 import kotlinx.coroutines.launch
+import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun RoomDetailsEditionView(
@@ -89,7 +95,7 @@ fun RoomDetailsEditionView(
                             modifier = Modifier
                                 .padding(end = 16.dp)
                                 .clickable { state.eventSink(RoomDetailsEditionEvents.Save) },
-                            text = stringResource(R.string.action_save),
+                            text = stringResource(StringR.string.action_save),
                         )
                     }
                 }
@@ -99,9 +105,28 @@ fun RoomDetailsEditionView(
         Column(
             modifier = Modifier
                 .padding(padding)
+                .padding(horizontal = 16.dp)
+                .navigationBarsPadding()
+                .imePadding()
                 .verticalScroll(rememberScrollState())
         ) {
             EditableAvatarView(state, ::onAvatarClicked)
+            Spacer(modifier = Modifier.height(60.dp))
+            LabelledTextField(
+                label = stringResource(id = R.string.screen_create_room_room_name_label),
+                value = state.roomName,
+                placeholder = stringResource(id = R.string.screen_create_room_room_name_placeholder),
+                singleLine = true,
+                onValueChange = { state.eventSink(RoomDetailsEditionEvents.UpdateRoomName(it)) },
+            )
+            Spacer(modifier = Modifier.height(28.dp))
+            LabelledTextField(
+                label = stringResource(id = R.string.screen_create_room_topic_label),
+                value = state.roomTopic,
+                placeholder = stringResource(id = R.string.screen_create_room_topic_placeholder),
+                maxLines = 10,
+                onValueChange = { state.eventSink(RoomDetailsEditionEvents.UpdateRoomTopic(it)) },
+            )
         }
     }
 
