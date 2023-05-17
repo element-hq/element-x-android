@@ -55,6 +55,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import io.element.android.features.messages.impl.timeline.components.MessageEventBubble
+import io.element.android.features.messages.impl.timeline.components.MessageStateEventContainer
 import io.element.android.features.messages.impl.timeline.components.TimelineItemReactionsView
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemDaySeparatorView
@@ -63,6 +64,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingModel
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -130,11 +132,12 @@ fun TimelineItemRow(
     onLongClick: (TimelineItem.Event) -> Unit,
 ) {
     when (timelineItem) {
-        is TimelineItem.Virtual -> TimelineItemVirtualRow(
-            virtual = timelineItem
-        )
+        is TimelineItem.Virtual -> {
+            TimelineItemVirtualRow(
+                virtual = timelineItem
+            )
+        }
         is TimelineItem.Event -> {
-
             fun onClick() {
                 onClick(timelineItem)
             }
@@ -143,12 +146,21 @@ fun TimelineItemRow(
                 onLongClick(timelineItem)
             }
 
-            TimelineItemEventRow(
-                event = timelineItem,
-                isHighlighted = isHighlighted,
-                onClick = ::onClick,
-                onLongClick = ::onLongClick
-            )
+            if (timelineItem.content is TimelineItemStateContent) {
+                TimelineItemStateEventRow(
+                    event = timelineItem,
+                    isHighlighted = isHighlighted,
+                    onClick = ::onClick,
+                    onLongClick = ::onLongClick
+                )
+            } else {
+                TimelineItemEventRow(
+                    event = timelineItem,
+                    isHighlighted = isHighlighted,
+                    onClick = ::onClick,
+                    onLongClick = ::onLongClick
+                )
+            }
         }
     }
 }
@@ -229,6 +241,42 @@ fun TimelineItemEventRow(
         Spacer(modifier = modifier.height(8.dp))
     } else {
         Spacer(modifier = modifier.height(2.dp))
+    }
+}
+
+@Composable
+fun TimelineItemStateEventRow(
+    event: TimelineItem.Event,
+    isHighlighted: Boolean,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
+        contentAlignment = Alignment.Center
+    ) {
+        MessageStateEventContainer(
+            isHighlighted = isHighlighted,
+            interactionSource = interactionSource,
+            onClick = onClick,
+            onLongClick = onLongClick,
+            modifier = Modifier
+                .zIndex(-1f)
+                .widthIn(max = 320.dp)
+        ) {
+            val contentModifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+            TimelineItemEventContentView(
+                content = event.content,
+                interactionSource = interactionSource,
+                onClick = onClick,
+                onLongClick = onLongClick,
+                modifier = contentModifier
+            )
+        }
     }
 }
 

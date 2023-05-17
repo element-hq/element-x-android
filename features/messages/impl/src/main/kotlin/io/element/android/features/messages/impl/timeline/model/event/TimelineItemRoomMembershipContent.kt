@@ -16,11 +16,8 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
-import org.jsoup.nodes.Document
-
 data class TimelineItemRoomMembershipContent(
     override val body: String,
-    override val htmlDocument: Document? = null
-) : TimelineItemTextBasedContent {
+) : TimelineItemStateContent {
     override val type: String = "TimelineItemRoomMembershipContent"
 }

@@ -65,3 +65,7 @@ fun aTimelineItemTextContent() = TimelineItemTextContent(
 )
 
 fun aTimelineItemUnknownContent() = TimelineItemUnknownContent
+
+fun aTimelineItemStateEventContent() = TimelineItemStateEventContent(
+    body = "A state event",
+)

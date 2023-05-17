@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
-data class TimelineItemStateEventContent(
-    override val body: String,
-) : TimelineItemStateContent {
-    override val type: String = "TimelineItemStateEventContent"
+sealed interface TimelineItemStateContent : TimelineItemEventContent {
+    val body: String
 }

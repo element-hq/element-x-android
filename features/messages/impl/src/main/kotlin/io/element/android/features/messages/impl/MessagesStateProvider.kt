@@ -20,9 +20,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.textcomposer.AttachmentSourcePicker
 import io.element.android.features.messages.impl.textcomposer.aMessageComposerState
-import io.element.android.features.messages.impl.timeline.aTimelineItemContent
 import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineState
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -48,7 +48,7 @@ fun aMessagesState() = MessagesState(
         mode = MessageComposerMode.Normal("Hello"),
     ),
     timelineState = aTimelineState().copy(
-        timelineItems = aTimelineItemList(aTimelineItemContent()),
+        timelineItems = aTimelineItemList(aTimelineItemTextContent()),
     ),
     actionListState = anActionListState(),
     hasNetworkConnection = true,
