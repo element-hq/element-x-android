@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.textcomposer
+package io.element.android.features.messages.impl.messagecomposer
 
 import android.annotation.SuppressLint
 import android.net.Uri
@@ -33,14 +33,12 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.core.data.toStableCharSequence
 import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediapickers.api.PickerProvider
-import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope

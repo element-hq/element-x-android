@@ -64,10 +64,10 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.features.messages.impl.textcomposer.AttachmentSourcePicker
-import io.element.android.features.messages.impl.textcomposer.AttachmentsState
-import io.element.android.features.messages.impl.textcomposer.MessageComposerEvents
-import io.element.android.features.messages.impl.textcomposer.MessageComposerView
+import io.element.android.features.messages.impl.messagecomposer.AttachmentSourcePicker
+import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
