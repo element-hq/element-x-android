@@ -37,9 +37,16 @@ class RoomDetailsEditionPresenter @Inject constructor(
 
     @Composable
     override fun present(): RoomDetailsEditionState {
-        var avatarUrl by rememberSaveable { mutableStateOf(room.avatarUrl) }
-        var roomName by rememberSaveable { mutableStateOf(room.name ?: room.displayName) }
-        var roomTopic by rememberSaveable { mutableStateOf(room.topic.orEmpty()) }
+        var avatarUrl by rememberSaveable { mutableStateOf(room.avatarUrl?.trim()) }
+        var roomName by rememberSaveable { mutableStateOf((room.name ?: room.displayName).trim()) }
+        var roomTopic by rememberSaveable { mutableStateOf(room.topic?.trim()) }
+        val saveButtonVisible by rememberSaveable(avatarUrl, roomName, roomTopic) {
+            mutableStateOf(
+                avatarUrl != room.avatarUrl?.trim()
+                    || roomName != (room.name ?: room.displayName).trim()
+                    || roomTopic != room.topic?.trim()
+            )
+        }
 
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
             onResult = { uri -> if (uri?.path != null) avatarUrl = uri.path }
@@ -70,17 +77,17 @@ class RoomDetailsEditionPresenter @Inject constructor(
                 }
 
                 is RoomDetailsEditionEvents.UpdateRoomName -> roomName = event.name
-                is RoomDetailsEditionEvents.UpdateRoomTopic -> roomTopic = event.topic
+                is RoomDetailsEditionEvents.UpdateRoomTopic -> roomTopic = event.topic.takeUnless { it.isEmpty() }
             }
         }
 
         return RoomDetailsEditionState(
             roomId = room.roomId.value,
             roomName = roomName,
-            roomTopic = roomTopic,
+            roomTopic = roomTopic.orEmpty(),
             roomAvatarUrl = avatarUrl,
             avatarActions = avatarActions,
-            saveButtonVisible = true,
+            saveButtonVisible = saveButtonVisible,
             eventSink = ::handleEvents,
         )
     }
