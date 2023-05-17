@@ -84,6 +84,7 @@ fun MessageEventBubble(
 
     fun Modifier.offsetForItem(): Modifier {
         return if (state.isMine) {
+            // FIXME setting y offset to -12.dp can overlap a state event displayed above.
             offset(y = -(12.dp))
         } else {
             offset(x = 20.dp, y = -(12.dp))
