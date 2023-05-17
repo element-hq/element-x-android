@@ -101,33 +101,7 @@ fun RoomDetailsEditionView(
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
         ) {
-            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    modifier = Modifier
-                        .size(70.dp)
-                        .clickable(onClick = ::onAvatarClicked)
-                ) {
-                    Avatar(
-                        avatarData = AvatarData(state.roomId, state.roomName, state.roomAvatarUrl, size = AvatarSize.HUGE),
-                        modifier = Modifier.fillMaxSize()
-                    )
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .clip(CircleShape)
-                            .background(LocalColors.current.gray1400)
-                            .size(24.dp),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(16.dp),
-                            imageVector = Icons.Outlined.AddAPhoto,
-                            contentDescription = "",
-                            tint = MaterialTheme.colorScheme.onPrimary,
-                        )
-                    }
-                }
-            }
+            EditableAvatarView(state, ::onAvatarClicked)
         }
     }
 
@@ -136,6 +110,41 @@ fun RoomDetailsEditionView(
         modalBottomSheetState = itemActionsBottomSheetState,
         onActionSelected = { state.eventSink(RoomDetailsEditionEvents.HandleAvatarAction(it)) }
     )
+}
+
+@Composable
+private fun EditableAvatarView(
+    state: RoomDetailsEditionState,
+    onAvatarClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(
+            modifier = Modifier
+                .size(70.dp)
+                .clickable(onClick = onAvatarClicked)
+        ) {
+            Avatar(
+                avatarData = AvatarData(state.roomId, state.roomName, state.roomAvatarUrl, size = AvatarSize.HUGE),
+                modifier = Modifier.fillMaxSize()
+            )
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .clip(CircleShape)
+                    .background(LocalColors.current.gray1400)
+                    .size(24.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    modifier = Modifier.size(16.dp),
+                    imageVector = Icons.Outlined.AddAPhoto,
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                )
+            }
+        }
+    }
 }
 
 @Preview
