@@ -54,6 +54,7 @@ fun LabelledTextField(
             value = value,
             placeholder = { Text(placeholder) },
             onValueChange = onValueChange,
+            singleLine = maxLines == 1,
             maxLines = maxLines,
         )
     }

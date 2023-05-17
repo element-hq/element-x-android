@@ -97,7 +97,7 @@ class ConfigureRoomPresenterTests {
             assertThat(initialState.config.topic).isNull()
             assertThat(initialState.config.invites).isEmpty()
             assertThat(initialState.config.avatarUri).isNull()
-            assertThat(initialState.config.privacy).isNull()
+            assertThat(initialState.config.privacy).isEqualTo(RoomPrivacy.Private)
         }
     }
 
@@ -114,13 +114,6 @@ class ConfigureRoomPresenterTests {
             initialState.eventSink(ConfigureRoomEvents.RoomNameChanged(A_ROOM_NAME))
             var newState: ConfigureRoomState = awaitItem()
             config = config.copy(roomName = A_ROOM_NAME)
-            assertThat(newState.config).isEqualTo(config)
-            assertThat(newState.isCreateButtonEnabled).isFalse()
-
-            // Select privacy
-            newState.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(RoomPrivacy.Private))
-            newState = awaitItem()
-            config = config.copy(privacy = RoomPrivacy.Private)
             assertThat(newState.config).isEqualTo(config)
             assertThat(newState.isCreateButtonEnabled).isTrue()
 

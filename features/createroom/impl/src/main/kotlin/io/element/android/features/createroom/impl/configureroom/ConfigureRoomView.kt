@@ -17,12 +17,13 @@
 package io.element.android.features.createroom.impl.configureroom
 
 import android.net.Uri
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
@@ -33,6 +34,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -68,6 +72,7 @@ fun ConfigureRoomView(
     onRoomCreated: (RoomId) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
     val itemActionsBottomSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
     )
@@ -79,50 +84,67 @@ fun ConfigureRoomView(
     }
 
     fun onAvatarClicked() {
+        focusManager.clearFocus()
         coroutineScope.launch {
             itemActionsBottomSheetState.show()
         }
     }
 
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.clearFocusOnTap(focusManager),
         topBar = {
             ConfigureRoomToolbar(
                 isNextActionEnabled = state.isCreateButtonEnabled,
                 onBackPressed = onBackPressed,
                 onNextPressed = {
+                    focusManager.clearFocus()
                     state.eventSink(ConfigureRoomEvents.CreateRoom(state.config))
                 },
             )
         }
     ) { padding ->
-        Column(
+        LazyColumn(
             modifier = Modifier.padding(padding),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            RoomNameWithAvatar(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                avatarUri = state.config.avatarUri,
-                roomName = state.config.roomName.orEmpty(),
-                onAvatarClick = ::onAvatarClicked,
-                onRoomNameChanged = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
-            )
-            RoomTopic(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                topic = state.config.topic.orEmpty(),
-                onTopicChanged = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
-            )
-            SelectedUsersList(
-                contentPadding = PaddingValues(horizontal = 24.dp),
-                selectedUsers = state.config.invites,
-                onUserRemoved = { state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it)) },
-            )
-            Spacer(Modifier.weight(1f))
-            RoomPrivacyOptions(
-                modifier = Modifier.padding(bottom = 40.dp),
-                selected = state.config.privacy,
-                onOptionSelected = { state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it.privacy)) },
-            )
+            item {
+                RoomNameWithAvatar(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    avatarUri = state.config.avatarUri,
+                    roomName = state.config.roomName.orEmpty(),
+                    onAvatarClick = ::onAvatarClicked,
+                    onRoomNameChanged = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
+                )
+            }
+            item {
+                RoomTopic(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    topic = state.config.topic.orEmpty(),
+                    onTopicChanged = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
+                )
+            }
+            if (state.config.invites.isNotEmpty()) {
+                item {
+                    SelectedUsersList(
+                        contentPadding = PaddingValues(horizontal = 24.dp),
+                        selectedUsers = state.config.invites,
+                        onUserRemoved = {
+                            focusManager.clearFocus()
+                            state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it))
+                        },
+                    )
+                }
+            }
+            item {
+                RoomPrivacyOptions(
+                    modifier = Modifier.padding(bottom = 40.dp),
+                    selected = state.config.privacy,
+                    onOptionSelected = {
+                        focusManager.clearFocus()
+                        state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it.privacy))
+                    },
+                )
+            }
         }
     }
 
@@ -259,3 +281,11 @@ private fun ContentToPreview(state: ConfigureRoomState) {
         state = state,
     )
 }
+
+private fun Modifier.clearFocusOnTap(focusManager: FocusManager): Modifier =
+    pointerInput(Unit) {
+        detectTapGestures(onTap = {
+            focusManager.clearFocus()
+        })
+    }
+
