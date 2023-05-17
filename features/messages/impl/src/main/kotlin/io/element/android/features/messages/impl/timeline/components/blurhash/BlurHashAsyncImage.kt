@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.components.blurhash
+package io.element.android.features.messages.impl.timeline.components.blurhash
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.SubcomposeAsyncImage
+import com.vanniktech.blurhash.BlurHash
 
 @Composable
 fun BlurHashAsyncImage(
@@ -58,12 +59,13 @@ fun BlurHashImage(
     contentDescription: String? = null,
     contentScale: ContentScale = ContentScale.Fit,
 ) {
+    if (blurHash == null) return
     val bitmapState = remember {
         mutableStateOf<Bitmap?>(null)
     }
     DisposableEffect(blurHash) {
         // Build a small blurhash image so that it's fast
-        bitmapState.value = BlurHashDecoder.decode(blurHash, 10, 10)
+        bitmapState.value = BlurHash.decode(blurHash, 10, 10)
         onDispose {
             bitmapState.value?.recycle()
         }
