@@ -73,7 +73,7 @@ fun SearchBar(
 
 @Preview(group = PreviewGroup.Search)
 @Composable
-internal fun DockedSearchBarPreview() = ElementThemedPreview { ContentToPreview() }
+internal fun SearchBarPreview() = ElementThemedPreview { ContentToPreview() }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
