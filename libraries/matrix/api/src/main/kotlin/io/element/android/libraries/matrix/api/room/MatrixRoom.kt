@@ -85,4 +85,12 @@ interface MatrixRoom : Closeable {
     suspend fun acceptInvitation(): Result<Unit>
 
     suspend fun rejectInvitation(): Result<Unit>
+
+    suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit>
+
+    suspend fun removeAvatar(): Result<Unit>
+
+    suspend fun setName(name: String): Result<Unit>
+
+    suspend fun setTopic(topic: String): Result<Unit>
 }

@@ -32,6 +32,7 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -233,4 +234,32 @@ class RustMatrixRoom(
         }
     }
 
+    @OptIn(ExperimentalUnsignedTypes::class)
+    override suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                innerRoom.uploadAvatar(mimeType, data.toUByteArray().toList())
+            }
+        }
+
+    override suspend fun removeAvatar(): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                innerRoom.removeAvatar()
+            }
+        }
+
+    override suspend fun setName(name: String): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                // innerRoom.setName(name) TODO add FFI binding
+            }
+        }
+
+    override suspend fun setTopic(topic: String): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                innerRoom.setTopic(topic)
+            }
+        }
 }
