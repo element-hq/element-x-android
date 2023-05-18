@@ -18,11 +18,11 @@ package io.element.android.features.roomdetails.impl.members
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 
 internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMemberListState> {
     override val values: Sequence<RoomMemberListState>
@@ -42,7 +42,7 @@ internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMember
             aRoomMemberListState().copy(
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
-                searchResults = RoomMemberSearchResultState.Results(
+                searchResults = SearchBarResultState.Results(
                     RoomMembers(
                         invited = persistentListOf(aVictor()),
                         joined = persistentListOf(anAlice()),
@@ -52,14 +52,14 @@ internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMember
             aRoomMemberListState().copy(
                 isSearchActive = true,
                 searchQuery = "something-with-no-results",
-                searchResults = RoomMemberSearchResultState.NoResults
+                searchResults = SearchBarResultState.NoResults()
             ),
         )
 }
 
 internal fun aRoomMemberListState(
     roomMembers: Async<RoomMembers> = Async.Uninitialized,
-    searchResults: RoomMemberSearchResultState = RoomMemberSearchResultState.NotSearching,
+    searchResults: SearchBarResultState<RoomMembers> = SearchBarResultState.NotSearching(),
 ) = RoomMemberListState(
     roomMembers = roomMembers,
     searchQuery = "",

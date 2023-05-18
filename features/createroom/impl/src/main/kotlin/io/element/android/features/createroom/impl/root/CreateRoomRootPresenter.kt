@@ -21,25 +21,24 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import io.element.android.features.userlist.api.SelectionMode
-import io.element.android.features.userlist.api.UserListDataSource
-import io.element.android.features.userlist.api.UserListDataStore
-import io.element.android.features.userlist.api.UserListPresenter
-import io.element.android.features.userlist.api.UserListPresenterArgs
+import io.element.android.features.createroom.impl.userlist.SelectionMode
+import io.element.android.features.createroom.impl.userlist.UserListDataStore
+import io.element.android.features.createroom.impl.userlist.UserListPresenter
+import io.element.android.features.createroom.impl.userlist.UserListPresenterArgs
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.execute
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.usersearch.api.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Named
 
 class CreateRoomRootPresenter @Inject constructor(
     private val presenterFactory: UserListPresenter.Factory,
-    @Named("AllUsers") private val userListDataSource: UserListDataSource,
+    private val userRepository: UserRepository,
     private val userListDataStore: UserListDataStore,
     private val matrixClient: MatrixClient,
 ) : Presenter<CreateRoomRootState> {
@@ -48,10 +47,8 @@ class CreateRoomRootPresenter @Inject constructor(
         presenterFactory.create(
             UserListPresenterArgs(
                 selectionMode = SelectionMode.Single,
-                minimumSearchLength = 3,
-                searchDebouncePeriodMillis = UserListPresenterArgs.DEFAULT_DEBOUNCE,
             ),
-            userListDataSource,
+            userRepository,
             userListDataStore,
         )
     }
