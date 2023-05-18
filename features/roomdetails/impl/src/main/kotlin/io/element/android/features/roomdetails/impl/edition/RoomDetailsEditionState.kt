@@ -24,8 +24,7 @@ data class RoomDetailsEditionState(
     val roomId: String,
     val roomName: String,
     val roomTopic: String,
-    val roomAvatarUrl: String?,
-    val localAvatarUri: Uri?,
+    val roomAvatarUrl: Uri?,
     val avatarActions: ImmutableList<AvatarAction>,
     val saveButtonVisible: Boolean,
     val eventSink: (RoomDetailsEditionEvents) -> Unit

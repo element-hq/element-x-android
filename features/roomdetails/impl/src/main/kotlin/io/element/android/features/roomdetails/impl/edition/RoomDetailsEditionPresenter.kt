@@ -16,14 +16,15 @@
 
 package io.element.android.features.roomdetails.impl.edition
 
-import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.core.net.toUri
 import io.element.android.features.createroom.api.ui.AvatarAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -38,43 +39,30 @@ class RoomDetailsEditionPresenter @Inject constructor(
 
     @Composable
     override fun present(): RoomDetailsEditionState {
-        // Fixme had to distinguish local uri from mxc because we currently can't pass the uri to the AvatarData composable,
-        //  this is a temporary workaround
-        var roomAvatarUrl by rememberSaveable { mutableStateOf(room.avatarUrl) }
-        var localAvatarUri: Uri? by rememberSaveable { mutableStateOf(null) }
+        var roomAvatarUrl by rememberSaveable { mutableStateOf(room.avatarUrl?.toUri()) }
         var roomName by rememberSaveable { mutableStateOf((room.name ?: room.displayName).trim()) }
         var roomTopic by rememberSaveable { mutableStateOf(room.topic?.trim()) }
-        val saveButtonVisible by rememberSaveable(localAvatarUri, roomName, roomTopic) {
-            mutableStateOf(
-                localAvatarUri.toString() != room.avatarUrl?.trim()
+        val saveButtonVisible by remember(roomAvatarUrl, roomName, roomTopic) {
+            derivedStateOf {
+                roomAvatarUrl?.toString()?.trim() != room.avatarUrl?.toUri()?.toString()?.trim()
                     || roomName != (room.name ?: room.displayName).trim()
                     || roomTopic != room.topic?.trim()
-            )
+            }
         }
 
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
-            onResult = { uri ->
-                if (uri != null) {
-                    localAvatarUri = uri
-                    roomAvatarUrl = null
-                }
-            }
+            onResult = { uri -> if (uri != null) roomAvatarUrl = uri }
         )
         val galleryImagePicker = mediaPickerProvider.registerGalleryImagePicker(
-            onResult = { uri ->
-                if (uri != null) {
-                    localAvatarUri = uri
-                    roomAvatarUrl = null
-                }
-            }
+            onResult = { uri -> if (uri != null) roomAvatarUrl = uri }
         )
 
-        val avatarActions by remember(localAvatarUri) {
+        val avatarActions by remember(roomAvatarUrl) {
             derivedStateOf {
                 listOfNotNull(
                     AvatarAction.TakePhoto,
                     AvatarAction.ChoosePhoto,
-                    AvatarAction.Remove.takeIf { localAvatarUri != null },
+                    AvatarAction.Remove.takeIf { roomAvatarUrl != null },
                 ).toImmutableList()
             }
         }
@@ -86,10 +74,7 @@ class RoomDetailsEditionPresenter @Inject constructor(
                     when (event.action) {
                         AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
                         AvatarAction.TakePhoto -> cameraPhotoPicker.launch()
-                        AvatarAction.Remove -> {
-                            roomAvatarUrl = null
-                            localAvatarUri = null
-                        }
+                        AvatarAction.Remove -> roomAvatarUrl = null
                     }
                 }
 
@@ -103,7 +88,6 @@ class RoomDetailsEditionPresenter @Inject constructor(
             roomName = roomName,
             roomTopic = roomTopic.orEmpty(),
             roomAvatarUrl = roomAvatarUrl,
-            localAvatarUri = localAvatarUri,
             avatarActions = avatarActions,
             saveButtonVisible = saveButtonVisible,
             eventSink = ::handleEvents,

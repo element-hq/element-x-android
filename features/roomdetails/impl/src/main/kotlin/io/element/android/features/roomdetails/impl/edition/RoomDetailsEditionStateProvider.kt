@@ -31,7 +31,6 @@ fun aRoomDetailsEditionState() = RoomDetailsEditionState(
     roomName = "Marketing",
     roomTopic = "a room topic",
     roomAvatarUrl = null,
-    localAvatarUri = null,
     avatarActions = persistentListOf(),
     saveButtonVisible = true,
     eventSink = {}

@@ -150,16 +150,21 @@ private fun EditableAvatarView(
                 .size(70.dp)
                 .clickable(onClick = onAvatarClicked)
         ) {
-            if (state.localAvatarUri != null) {
-                LocalAvatar(
-                    avatarUri = state.localAvatarUri,
-                    modifier = Modifier.fillMaxSize(),
-                )
-            } else {
-                Avatar(
-                    avatarData = AvatarData(state.roomId, state.roomName, state.roomAvatarUrl, size = AvatarSize.HUGE),
-                    modifier = Modifier.fillMaxSize(),
-                )
+            // Fixme cannot render local files using Avatar
+            when (state.roomAvatarUrl?.scheme) {
+                null, "mxc" -> {
+                    Avatar(
+                        avatarData = AvatarData(state.roomId, state.roomName, state.roomAvatarUrl?.toString(), size = AvatarSize.HUGE),
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
+
+                else -> {
+                    LocalAvatar(
+                        avatarUri = state.roomAvatarUrl,
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
             }
             Box(
                 modifier = Modifier
