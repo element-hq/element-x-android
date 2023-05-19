@@ -45,6 +45,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.androidutils)
     implementation(projects.features.userlist.api)
     implementation(projects.libraries.mediapickers.api)
     implementation(projects.libraries.mediaupload.api)
