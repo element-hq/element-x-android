@@ -125,7 +125,7 @@ fun RoomDetailsEditionView(
             )
             Spacer(modifier = Modifier.height(28.dp))
             LabelledTextField(
-                label = stringResource(id = R.string.screen_create_room_topic_label),
+                label = stringResource(id = StringR.string.common_topic),
                 value = state.roomTopic,
                 placeholder = stringResource(id = R.string.screen_create_room_topic_placeholder),
                 maxLines = 10,
