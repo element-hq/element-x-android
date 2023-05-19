@@ -64,7 +64,7 @@ import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.LocalColors
@@ -154,14 +154,13 @@ fun RoomDetailsEditionView(
 
     when (state.saveAction) {
         is Async.Loading -> {
-            ProgressDialog(text = "Updating room...") // Fixme hardcoded string
+            ProgressDialog(text = stringResource(R.string.screen_room_details_updating_room))
         }
 
         is Async.Failure -> {
-            RetryDialog(
-                content = "an error occurred when updating the room",
+            ErrorDialog(
+                content = stringResource(R.string.screen_room_details_edition_error),
                 onDismiss = { state.eventSink(RoomDetailsEditionEvents.CancelSaveChanges) },
-                onRetry = { state.eventSink(RoomDetailsEditionEvents.Save(state)) },
             )
         }
 
