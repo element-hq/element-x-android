@@ -52,7 +52,10 @@ dependencies {
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
+    testImplementation(libs.test.mockk)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.mediaupload.test)
+    testImplementation(projects.libraries.mediapickers.test)
     testImplementation(projects.features.userlist.test)
     testImplementation(projects.tests.testutils)
 

@@ -144,6 +144,22 @@ class FakeMatrixRoom(
 
     override suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit> = sendMediaResult.also { sendMediaCount++ }
 
+    override suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit> {
+        return Result.success(Unit)
+    }
+
+    override suspend fun removeAvatar(): Result<Unit> {
+        return Result.success(Unit)
+    }
+
+    override suspend fun setName(name: String): Result<Unit> {
+        return Result.success(Unit)
+    }
+
+    override suspend fun setTopic(topic: String): Result<Unit> {
+        return Result.success(Unit)
+    }
+
     override fun close() = Unit
 
     fun givenLeaveRoomError(throwable: Throwable?) {
