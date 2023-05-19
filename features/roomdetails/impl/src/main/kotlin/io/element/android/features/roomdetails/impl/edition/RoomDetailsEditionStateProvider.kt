@@ -17,6 +17,7 @@
 package io.element.android.features.roomdetails.impl.edition
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.Async
 import kotlinx.collections.immutable.persistentListOf
 
 open class RoomDetailsEditionStateProvider : PreviewParameterProvider<RoomDetailsEditionState> {
@@ -33,5 +34,6 @@ fun aRoomDetailsEditionState() = RoomDetailsEditionState(
     roomAvatarUrl = null,
     avatarActions = persistentListOf(),
     saveButtonVisible = true,
+    saveAction = Async.Uninitialized,
     eventSink = {}
 )

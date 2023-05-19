@@ -16,70 +16,95 @@
 
 package io.element.android.features.roomdetails.impl.edition
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import io.element.android.features.createroom.api.ui.AvatarAction
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.execute
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediapickers.api.PickerProvider
+import io.element.android.libraries.mediaupload.api.MediaPreProcessor
+import io.element.android.libraries.mediaupload.api.MediaType
+import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RoomDetailsEditionPresenter @Inject constructor(
     private val room: MatrixRoom,
     private val mediaPickerProvider: PickerProvider,
+    private val mediaPreProcessor: MediaPreProcessor,
 ) : Presenter<RoomDetailsEditionState> {
 
     @Composable
     override fun present(): RoomDetailsEditionState {
-        var roomAvatarUrl by rememberSaveable { mutableStateOf(room.avatarUrl?.toUri()) }
+        val roomSyncUpdateFlow = room.syncUpdateFlow().collectAsState(0L)
+
+        // Since there is no way to obtain the new avatar uri after uploading a new avatar,
+        // just erase the local value when the room field has changed
+        var roomAvatarUri by rememberSaveable(room.avatarUrl) { mutableStateOf(room.avatarUrl?.toUri()) }
+
         var roomName by rememberSaveable { mutableStateOf((room.name ?: room.displayName).trim()) }
         var roomTopic by rememberSaveable { mutableStateOf(room.topic?.trim()) }
-        val saveButtonVisible by remember(roomAvatarUrl, roomName, roomTopic) {
+        val saveButtonVisible by remember(
+            roomSyncUpdateFlow.value,
+            roomName,
+            roomTopic,
+            roomAvatarUri,
+        ) {
             derivedStateOf {
-                roomAvatarUrl?.toString()?.trim() != room.avatarUrl?.toUri()?.toString()?.trim()
+                roomAvatarUri?.toString()?.trim() != room.avatarUrl?.toUri()?.toString()?.trim()
                     || roomName != (room.name ?: room.displayName).trim()
                     || roomTopic != room.topic?.trim()
             }
         }
 
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
-            onResult = { uri -> if (uri != null) roomAvatarUrl = uri }
+            onResult = { uri -> if (uri != null) roomAvatarUri = uri }
         )
         val galleryImagePicker = mediaPickerProvider.registerGalleryImagePicker(
-            onResult = { uri -> if (uri != null) roomAvatarUrl = uri }
+            onResult = { uri -> if (uri != null) roomAvatarUri = uri }
         )
 
-        val avatarActions by remember(roomAvatarUrl) {
+        val avatarActions by remember(roomAvatarUri) {
             derivedStateOf {
                 listOfNotNull(
                     AvatarAction.TakePhoto,
                     AvatarAction.ChoosePhoto,
-                    AvatarAction.Remove.takeIf { roomAvatarUrl != null },
+                    AvatarAction.Remove.takeIf { roomAvatarUri != null },
                 ).toImmutableList()
             }
         }
 
+        val saveAction: MutableState<Async<Unit>> = remember { mutableStateOf(Async.Uninitialized) }
+        val localCoroutineScope = rememberCoroutineScope()
         fun handleEvents(event: RoomDetailsEditionEvents) {
             when (event) {
-                RoomDetailsEditionEvents.Save -> Unit
+                is RoomDetailsEditionEvents.Save -> localCoroutineScope.saveChanges(event.state, saveAction)
                 is RoomDetailsEditionEvents.HandleAvatarAction -> {
                     when (event.action) {
                         AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
                         AvatarAction.TakePhoto -> cameraPhotoPicker.launch()
-                        AvatarAction.Remove -> roomAvatarUrl = null
+                        AvatarAction.Remove -> roomAvatarUri = null
                     }
                 }
 
                 is RoomDetailsEditionEvents.UpdateRoomName -> roomName = event.name
                 is RoomDetailsEditionEvents.UpdateRoomTopic -> roomTopic = event.topic.takeUnless { it.isEmpty() }
+                RoomDetailsEditionEvents.CancelSaveChanges -> saveAction.value = Async.Uninitialized
             }
         }
 
@@ -87,10 +112,37 @@ class RoomDetailsEditionPresenter @Inject constructor(
             roomId = room.roomId.value,
             roomName = roomName,
             roomTopic = roomTopic.orEmpty(),
-            roomAvatarUrl = roomAvatarUrl,
+            roomAvatarUrl = roomAvatarUri,
             avatarActions = avatarActions,
             saveButtonVisible = saveButtonVisible,
+            saveAction = saveAction.value,
             eventSink = ::handleEvents,
         )
+    }
+
+    private fun CoroutineScope.saveChanges(state: RoomDetailsEditionState, action: MutableState<Async<Unit>>) = launch {
+        val results = mutableListOf<Result<Unit>>()
+        suspend {
+            if (state.roomTopic.trim() != room.topic.orEmpty().trim()) {
+                results.add(room.setTopic(state.roomTopic))
+            }
+            if (state.roomName.isNotEmpty() && state.roomName.trim() != room.name.orEmpty().trim()) {
+                results.add(room.setName(state.roomName))
+            }
+            if (state.roomAvatarUrl?.toString()?.trim() != room.avatarUrl?.trim()) {
+                results.add(updateAvatar(state.roomAvatarUrl))
+            }
+            if (results.all { it.isSuccess }) Unit else results.first { it.isFailure }.getOrThrow()
+        }.execute(action)
+    }
+
+    private suspend fun updateAvatar(avatarUri: Uri?): Result<Unit> {
+        return if (avatarUri != null) {
+            val preprocessed = mediaPreProcessor.process(avatarUri, MediaType.Image).getOrThrow() as? MediaUploadInfo.Image
+            val byteArray = preprocessed?.file?.readBytes()
+            byteArray?.let { room.updateAvatar(MimeTypes.Jpeg, it) } ?: error("Could not process the given uri ($avatarUri)")
+        } else {
+            room.removeAvatar()
+        }
     }
 }

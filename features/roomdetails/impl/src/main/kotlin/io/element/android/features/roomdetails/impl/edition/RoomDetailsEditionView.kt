@@ -52,11 +52,14 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.createroom.api.ui.AvatarActionListView
 import io.element.android.features.createroom.api.ui.LocalAvatar
 import io.element.android.features.roomdetails.impl.R
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.LabelledTextField
+import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.LocalColors
@@ -95,7 +98,7 @@ fun RoomDetailsEditionView(
                         Text(
                             modifier = Modifier
                                 .padding(end = 16.dp)
-                                .clickable { state.eventSink(RoomDetailsEditionEvents.Save) },
+                                .clickable { state.eventSink(RoomDetailsEditionEvents.Save(state)) },
                             text = stringResource(StringR.string.action_save),
                         )
                     }
@@ -136,6 +139,22 @@ fun RoomDetailsEditionView(
         modalBottomSheetState = itemActionsBottomSheetState,
         onActionSelected = { state.eventSink(RoomDetailsEditionEvents.HandleAvatarAction(it)) }
     )
+
+    when (state.saveAction) {
+        is Async.Loading -> {
+            ProgressDialog(text = "Updating room...") // Fixme hardcoded string
+        }
+
+        is Async.Failure -> {
+            RetryDialog(
+                content = "an error occurred when updating the room",
+                onDismiss = { state.eventSink(RoomDetailsEditionEvents.CancelSaveChanges) },
+                onRetry = { state.eventSink(RoomDetailsEditionEvents.Save(state)) },
+            )
+        }
+
+        else -> Unit
+    }
 }
 
 @Composable
