@@ -45,10 +45,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.element.android.features.createroom.api.ui.AvatarActionListView
 import io.element.android.features.createroom.api.ui.LocalAvatar
 import io.element.android.features.roomdetails.impl.R
@@ -66,6 +68,7 @@ import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import kotlinx.coroutines.launch
 import io.element.android.libraries.ui.strings.R as StringR
@@ -77,11 +80,13 @@ fun RoomDetailsEditionView(
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
     val itemActionsBottomSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
     )
 
     fun onAvatarClicked() {
+        focusManager.clearFocus()
         coroutineScope.launch {
             itemActionsBottomSheetState.show()
         }
@@ -94,12 +99,13 @@ fun RoomDetailsEditionView(
                 title = { },
                 navigationIcon = { BackButton(onClick = onBackPressed) },
                 actions = {
-                    if (state.saveButtonVisible) {
+                    TextButton(
+                        enabled = state.saveButtonEnabled,
+                        onClick = { state.eventSink(RoomDetailsEditionEvents.Save(state)) },
+                    ) {
                         Text(
-                            modifier = Modifier
-                                .padding(end = 16.dp)
-                                .clickable { state.eventSink(RoomDetailsEditionEvents.Save(state)) },
                             text = stringResource(StringR.string.action_save),
+                            fontSize = 16.sp,
                         )
                     }
                 }

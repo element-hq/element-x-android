@@ -59,7 +59,7 @@ class RoomDetailsEditionPresenter @Inject constructor(
 
         var roomName by rememberSaveable { mutableStateOf((room.name ?: room.displayName).trim()) }
         var roomTopic by rememberSaveable { mutableStateOf(room.topic?.trim()) }
-        val saveButtonVisible by remember(
+        val saveButtonEnabled by remember(
             roomSyncUpdateFlow.value,
             roomName,
             roomTopic,
@@ -114,7 +114,7 @@ class RoomDetailsEditionPresenter @Inject constructor(
             roomTopic = roomTopic.orEmpty(),
             roomAvatarUrl = roomAvatarUri,
             avatarActions = avatarActions,
-            saveButtonVisible = saveButtonVisible,
+            saveButtonEnabled = saveButtonEnabled,
             saveAction = saveAction.value,
             eventSink = ::handleEvents,
         )

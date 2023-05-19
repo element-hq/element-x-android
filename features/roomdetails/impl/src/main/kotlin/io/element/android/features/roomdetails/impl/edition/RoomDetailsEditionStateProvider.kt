@@ -33,7 +33,7 @@ fun aRoomDetailsEditionState() = RoomDetailsEditionState(
     roomTopic = "a room topic",
     roomAvatarUrl = null,
     avatarActions = persistentListOf(),
-    saveButtonVisible = true,
+    saveButtonEnabled = true,
     saveAction = Async.Uninitialized,
     eventSink = {}
 )
