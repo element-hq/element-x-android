@@ -264,6 +264,13 @@ fun RoomPrivacyOptions(
     }
 }
 
+private fun Modifier.clearFocusOnTap(focusManager: FocusManager): Modifier =
+    pointerInput(Unit) {
+        detectTapGestures(onTap = {
+            focusManager.clearFocus()
+        })
+    }
+
 @Preview
 @Composable
 fun ConfigureRoomViewLightPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) =
@@ -280,11 +287,4 @@ private fun ContentToPreview(state: ConfigureRoomState) {
         state = state,
     )
 }
-
-private fun Modifier.clearFocusOnTap(focusManager: FocusManager): Modifier =
-    pointerInput(Unit) {
-        detectTapGestures(onTap = {
-            focusManager.clearFocus()
-        })
-    }
 

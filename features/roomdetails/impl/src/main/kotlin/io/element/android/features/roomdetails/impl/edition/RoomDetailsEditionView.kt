@@ -20,6 +20,7 @@ package io.element.android.features.roomdetails.impl.edition
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -45,6 +46,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -93,7 +96,7 @@ fun RoomDetailsEditionView(
     }
 
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.clearFocusOnTap(focusManager),
         topBar = {
             TopAppBar(
                 title = { },
@@ -101,7 +104,10 @@ fun RoomDetailsEditionView(
                 actions = {
                     TextButton(
                         enabled = state.saveButtonEnabled,
-                        onClick = { state.eventSink(RoomDetailsEditionEvents.Save(state)) },
+                        onClick = {
+                            focusManager.clearFocus()
+                            state.eventSink(RoomDetailsEditionEvents.Save(state))
+                        },
                     ) {
                         Text(
                             text = stringResource(StringR.string.action_save),
@@ -209,6 +215,13 @@ private fun EditableAvatarView(
         }
     }
 }
+
+private fun Modifier.clearFocusOnTap(focusManager: FocusManager): Modifier =
+    pointerInput(Unit) {
+        detectTapGestures(onTap = {
+            focusManager.clearFocus()
+        })
+    }
 
 @Preview
 @Composable
