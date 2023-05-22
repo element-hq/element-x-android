@@ -38,6 +38,7 @@ data class MessageComposerState(
 sealed interface AttachmentsState {
     object None : AttachmentsState
     data class Previewing(val attachments: ImmutableList<Attachment>) : AttachmentsState
+    data class Sending(val attachments: ImmutableList<Attachment>) : AttachmentsState
 }
 
 sealed interface AttachmentSourcePicker {

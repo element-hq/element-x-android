@@ -72,6 +72,7 @@ import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.androidutils.ui.hideKeyboard
+import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -86,6 +87,8 @@ import io.element.android.libraries.designsystem.utils.LogCompositions
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import timber.log.Timber
+
+import io.element.android.libraries.ui.strings.R as StringsR
 
 @Composable
 fun MessagesView(
@@ -109,12 +112,7 @@ fun MessagesView(
     val bottomSheetState = rememberModalBottomSheetState(initialValue = initialBottomSheetState)
     val coroutineScope = rememberCoroutineScope()
 
-    val attachmentsState = state.composerState.attachmentsState
-    if (attachmentsState is AttachmentsState.Previewing) {
-        LaunchedEffect(attachmentsState) {
-            onPreviewAttachments(attachmentsState.attachments)
-        }
-    }
+    AttachmentStateView(state.composerState.attachmentsState, onPreviewAttachments)
 
     BackHandler(enabled = bottomSheetState.isVisible) {
         coroutineScope.launch {
@@ -218,6 +216,20 @@ fun MessagesView(
             modalBottomSheetState = itemActionsBottomSheetState,
             onActionSelected = ::onActionSelected
         )
+    }
+}
+
+@Composable
+private fun AttachmentStateView(
+    state: AttachmentsState,
+    onPreviewAttachments: (ImmutableList<Attachment>) -> Unit
+) {
+    when (state) {
+        AttachmentsState.None -> Unit
+        is AttachmentsState.Previewing -> LaunchedEffect(state) {
+            onPreviewAttachments(state.attachments)
+        }
+        is AttachmentsState.Sending -> ProgressDialog(text = stringResource(id = StringsR.string.common_loading))
     }
 }
 
