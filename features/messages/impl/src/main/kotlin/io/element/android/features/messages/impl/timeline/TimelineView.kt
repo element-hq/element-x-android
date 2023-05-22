@@ -18,7 +18,6 @@ package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -100,8 +99,6 @@ fun TimelineView(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = lazyListState,
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Bottom,
             reverseLayout = true
         ) {
             itemsIndexed(
