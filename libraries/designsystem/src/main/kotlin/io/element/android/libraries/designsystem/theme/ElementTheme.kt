@@ -33,6 +33,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import io.element.android.libraries.designsystem.theme.compound.CompoundColors
+import io.element.android.libraries.designsystem.theme.compound.compoundColorsDark
+import io.element.android.libraries.designsystem.theme.compound.compoundColorsLight
 
 /**
  * Inspired from https://medium.com/@lucasyujideveloper/54cbcbde1ace
@@ -46,12 +49,14 @@ object ElementTheme {
 
 /* Global variables (application level) */
 val LocalColors = staticCompositionLocalOf { elementColorsLight() }
+val LocalCompoundColors = staticCompositionLocalOf { compoundColorsLight() }
 
 @Composable
 fun ElementTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false, /* true to enable MaterialYou */
     colors: ElementColors = if (darkTheme) elementColorsDark() else elementColorsLight(),
+    compoundColors: CompoundColors = if (darkTheme) compoundColorsDark() else compoundColorsLight(),
     materialLightColors: ColorScheme = materialColorSchemeLight,
     materialDarkColors: ColorScheme = materialColorSchemeDark,
     content: @Composable () -> Unit,
@@ -60,6 +65,9 @@ fun ElementTheme(
     val currentColor = remember(darkTheme) {
         colors.copy()
     }.apply { updateColorsFrom(colors) }
+    val currentCompoundColor = remember(darkTheme) {
+        compoundColors.copy()
+    }.apply { updateColorsFrom(compoundColors) }
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
@@ -73,6 +81,7 @@ fun ElementTheme(
     }
     CompositionLocalProvider(
         LocalColors provides currentColor,
+        LocalCompoundColors provides compoundColors,
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
