@@ -30,11 +30,8 @@ sealed interface MessageComposerEvents {
     object DismissAttachmentMenu : MessageComposerEvents
     sealed interface PickAttachmentSource : MessageComposerEvents {
         object FromGallery : PickAttachmentSource
-        object FromCamera : PickAttachmentSource
         object FromFiles : PickAttachmentSource
-    }
-    sealed interface PickCameraAttachmentSource : MessageComposerEvents {
-        object Photo : PickCameraAttachmentSource
-        object Video : PickCameraAttachmentSource
+        object PhotoFromCamera : PickAttachmentSource
+        object VideoFromCamera : PickAttachmentSource
     }
 }

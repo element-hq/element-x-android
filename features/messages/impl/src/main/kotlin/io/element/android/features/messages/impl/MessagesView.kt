@@ -37,6 +37,11 @@ import androidx.compose.material.ListItem
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.AttachFile
+import androidx.compose.material.icons.filled.Collections
+import androidx.compose.material.icons.filled.LocalLibrary
+import androidx.compose.material.icons.filled.PhotoCamera
+import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHost
@@ -61,7 +66,6 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.features.messages.impl.messagecomposer.AttachmentSourcePicker
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
@@ -102,7 +106,7 @@ fun MessagesView(
         initialValue = ModalBottomSheetValue.Hidden,
     )
     val composerState = state.composerState
-    val initialBottomSheetState = if (LocalInspectionMode.current && composerState.attachmentSourcePicker != null) {
+    val initialBottomSheetState = if (LocalInspectionMode.current && composerState.showAttachmentSourcePicker != null) {
         ModalBottomSheetValue.Expanded
     } else {
         ModalBottomSheetValue.Hidden
@@ -154,8 +158,8 @@ fun MessagesView(
         state.eventSink(MessagesEvents.HandleAction(action, event))
     }
 
-    LaunchedEffect(composerState.attachmentSourcePicker) {
-        if (composerState.attachmentSourcePicker != null) {
+    LaunchedEffect(composerState.showAttachmentSourcePicker) {
+        if (composerState.showAttachmentSourcePicker) {
             // We need to use this instead of `LocalFocusManager.clearFocus()` to hide the keyboard when focus is on an Android View
             localView.hideKeyboard()
             bottomSheetState.show()
@@ -173,8 +177,7 @@ fun MessagesView(
         sheetState = bottomSheetState,
         displayHandle = true,
         sheetContent = {
-            MediaPickerMenu(
-                addAttachmentSourcePicker = composerState.attachmentSourcePicker,
+            AttachmentSourcePickerMenu(
                 eventSink = composerState.eventSink
             )
         }
@@ -305,50 +308,33 @@ fun MessagesViewTopBar(
     )
 }
 
-@Composable
-internal fun MediaPickerMenu(
-    addAttachmentSourcePicker: AttachmentSourcePicker?,
-    eventSink: (MessageComposerEvents) -> Unit,
-) {
-    when (addAttachmentSourcePicker) {
-        null -> return
-        AttachmentSourcePicker.AllMedia -> AllMediaSourcePickerMenu(eventSink = eventSink)
-        AttachmentSourcePicker.Camera -> CameraSourcePickerMenu(eventSink = eventSink)
-    }
-}
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-internal fun AllMediaSourcePickerMenu(
+internal fun AttachmentSourcePickerMenu(
     eventSink: (MessageComposerEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier) {
-        ListItem(Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery) }) {
-            Text(stringResource(R.string.screen_room_attachment_source_gallery))
-        }
-        ListItem(Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles) }) {
-            Text(stringResource(R.string.screen_room_attachment_source_files))
-        }
-        ListItem(Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.FromCamera) }) {
-            Text(stringResource(R.string.screen_room_attachment_source_camera))
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-internal fun CameraSourcePickerMenu(
-    eventSink: (MessageComposerEvents) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(modifier) {
-        ListItem(Modifier.clickable { eventSink(MessageComposerEvents.PickCameraAttachmentSource.Photo) }) {
-            Text(stringResource(R.string.screen_room_attachment_source_camera_photo))
-        }
-        ListItem(Modifier.clickable { eventSink(MessageComposerEvents.PickCameraAttachmentSource.Video) }) {
-            Text(stringResource(R.string.screen_room_attachment_source_camera_video))
-        }
+        ListItem(
+            modifier = Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery) },
+            icon = { Icon(Icons.Default.Collections, null) },
+            text = { Text(stringResource(R.string.screen_room_attachment_source_gallery)) },
+        )
+        ListItem(
+            modifier = Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles) },
+            icon = { Icon(Icons.Default.AttachFile, null) },
+            text = { Text(stringResource(R.string.screen_room_attachment_source_files)) },
+        )
+        ListItem(
+            modifier = Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera) },
+            icon = { Icon(Icons.Default.PhotoCamera, null) },
+            text = { Text(stringResource(R.string.screen_room_attachment_source_camera_photo)) },
+        )
+        ListItem(
+            modifier = Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera) },
+            icon = { Icon(Icons.Default.Videocam, null) },
+            text = { Text(stringResource(R.string.screen_room_attachment_source_camera_video)) },
+        )
     }
 }
 

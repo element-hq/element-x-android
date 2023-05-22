@@ -107,7 +107,7 @@ class MessageComposerPresenter @Inject constructor(
             mutableStateOf(MessageComposerMode.Normal(""))
         }
 
-        var attachmentSourcePicker: AttachmentSourcePicker? by remember { mutableStateOf(null) }
+    var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
 
         LaunchedEffect(composerMode.value) {
             when (val modeValue = composerMode.value) {
@@ -135,26 +135,23 @@ class MessageComposerPresenter @Inject constructor(
                 is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(event.message, composerMode, text)
                 is MessageComposerEvents.SetMode -> composerMode.value = event.composerMode
                 MessageComposerEvents.AddAttachment -> localCoroutineScope.ifMediaPickersEnabled {
-                    attachmentSourcePicker = AttachmentSourcePicker.AllMedia
+                    showAttachmentSourcePicker = true
                 }
-                MessageComposerEvents.DismissAttachmentMenu -> attachmentSourcePicker = null
+                MessageComposerEvents.DismissAttachmentMenu -> showAttachmentSourcePicker = false
                 MessageComposerEvents.PickAttachmentSource.FromGallery -> localCoroutineScope.ifMediaPickersEnabled {
-                    attachmentSourcePicker = null
+                    showAttachmentSourcePicker = false
                     galleryMediaPicker.launch()
                 }
                 MessageComposerEvents.PickAttachmentSource.FromFiles -> localCoroutineScope.ifMediaPickersEnabled {
-                    attachmentSourcePicker = null
+                    showAttachmentSourcePicker = false
                     filesPicker.launch()
                 }
-                MessageComposerEvents.PickAttachmentSource.FromCamera -> localCoroutineScope.ifMediaPickersEnabled {
-                    attachmentSourcePicker = AttachmentSourcePicker.Camera
-                }
-                MessageComposerEvents.PickCameraAttachmentSource.Photo -> localCoroutineScope.ifMediaPickersEnabled {
-                    attachmentSourcePicker = null
+                MessageComposerEvents.PickAttachmentSource.PhotoFromCamera -> localCoroutineScope.ifMediaPickersEnabled {
+                    showAttachmentSourcePicker = false
                     cameraPhotoPicker.launch()
                 }
-                MessageComposerEvents.PickCameraAttachmentSource.Video -> localCoroutineScope.ifMediaPickersEnabled {
-                    attachmentSourcePicker = null
+                MessageComposerEvents.PickAttachmentSource.VideoFromCamera -> localCoroutineScope.ifMediaPickersEnabled {
+                    showAttachmentSourcePicker = false
                     cameraVideoPicker.launch()
                 }
             }
@@ -164,7 +161,7 @@ class MessageComposerPresenter @Inject constructor(
             text = text.value,
             isFullScreen = isFullScreen.value,
             mode = composerMode.value,
-            attachmentSourcePicker = attachmentSourcePicker,
+            showAttachmentSourcePicker = showAttachmentSourcePicker,
             attachmentsState = attachmentsState.value,
             eventSink = ::handleEvents
         )

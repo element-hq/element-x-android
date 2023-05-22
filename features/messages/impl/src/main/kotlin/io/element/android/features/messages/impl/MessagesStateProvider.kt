@@ -18,7 +18,6 @@ package io.element.android.features.messages.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.actionlist.anActionListState
-import io.element.android.features.messages.impl.messagecomposer.AttachmentSourcePicker
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.timeline.aTimelineItemContent
 import io.element.android.features.messages.impl.timeline.aTimelineItemList
@@ -33,8 +32,7 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
         get() = sequenceOf(
             aMessagesState(),
             aMessagesState().copy(hasNetworkConnection = false),
-            aMessagesState().copy(composerState = aMessageComposerState().copy(attachmentSourcePicker = AttachmentSourcePicker.AllMedia)),
-            aMessagesState().copy(composerState = aMessageComposerState().copy(attachmentSourcePicker = AttachmentSourcePicker.Camera)),
+            aMessagesState().copy(composerState = aMessageComposerState().copy(showAttachmentSourcePicker = true)),
         )
 }
 
