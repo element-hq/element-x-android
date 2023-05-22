@@ -204,12 +204,12 @@ private fun RoomInviteMembersSearchBar(
 
 @Preview
 @Composable
-fun RoomMemberListLightPreview(@PreviewParameter(RoomInviteMembersStateProvider::class) state: RoomInviteMembersState) =
+fun RoomInviteMembersLightPreview(@PreviewParameter(RoomInviteMembersStateProvider::class) state: RoomInviteMembersState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun RoomMemberListDarkPreview(@PreviewParameter(RoomInviteMembersStateProvider::class) state: RoomInviteMembersState) =
+fun RoomInviteMembersDarkPreview(@PreviewParameter(RoomInviteMembersStateProvider::class) state: RoomInviteMembersState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
