@@ -63,7 +63,7 @@ fun RustProfileDetails.map(): ProfileTimelineDetails {
 fun RustEventSendState?.map(): EventSendState? {
     return when (this) {
         null -> null
-        RustEventSendState.NotSendYet -> EventSendState.NotSendYet
+        RustEventSendState.NotSentYet -> EventSendState.NotSentYet
         is RustEventSendState.SendingFailed -> EventSendState.SendingFailed(error)
         is RustEventSendState.Sent -> EventSendState.Sent(EventId(eventId))
     }
