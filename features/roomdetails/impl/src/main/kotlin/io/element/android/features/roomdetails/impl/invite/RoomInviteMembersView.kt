@@ -63,13 +63,17 @@ fun RoomInviteMembersView(
 ) {
     Scaffold(
         topBar = {
-            if (!state.isSearchActive) {
-                RoomInviteMembersTopBar(
-                    onBackPressed = onBackPressed,
-                    onSendPressed = { onSendPressed(state.selectedUsers) },
-                    canSend = state.canInvite,
-                )
-            }
+            RoomInviteMembersTopBar(
+                onBackPressed = {
+                    if (state.isSearchActive) {
+                        state.eventSink(RoomInviteMembersEvents.OnSearchActiveChanged(false))
+                    } else {
+                        onBackPressed()
+                    }
+                },
+                onSendPressed = { onSendPressed(state.selectedUsers) },
+                canSend = state.canInvite,
+            )
         }
     ) { padding ->
         Column(
@@ -163,6 +167,7 @@ private fun RoomInviteMembersSearchBar(
                 )
             }
         },
+        showBackButton = false,
         resultState = state,
         resultHandler = { results ->
             Text(

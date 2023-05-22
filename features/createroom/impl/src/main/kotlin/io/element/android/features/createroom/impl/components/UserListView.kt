@@ -36,6 +36,7 @@ import io.element.android.libraries.matrix.ui.components.SelectedUsersList
 fun UserListView(
     state: UserListState,
     modifier: Modifier = Modifier,
+    showBackButton: Boolean = true,
     onUserSelected: (MatrixUser) -> Unit = {},
     onUserDeselected: (MatrixUser) -> Unit = {},
 ) {
@@ -49,6 +50,7 @@ fun UserListView(
             selectedUsers = state.selectedUsers,
             active = state.isSearchActive,
             isMultiSelectionEnabled = state.isMultiSelectionEnabled,
+            showBackButton = showBackButton,
             onActiveChanged = { state.eventSink(UserListEvents.OnSearchActiveChanged(it)) },
             onTextChanged = { state.eventSink(UserListEvents.UpdateSearchQuery(it)) },
             onUserSelected = {

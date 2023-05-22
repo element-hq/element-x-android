@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.UserListView
+import io.element.android.features.createroom.impl.userlist.UserListEvents
 import io.element.android.features.createroom.impl.userlist.UserListState
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -54,13 +55,17 @@ fun AddPeopleView(
     Scaffold(
         modifier = modifier,
         topBar = {
-            if (!state.isSearchActive) {
-                AddPeopleViewTopBar(
-                    hasSelectedUsers = state.selectedUsers.isNotEmpty(),
-                    onBackPressed = onBackPressed,
-                    onNextPressed = onNextPressed,
-                )
-            }
+            AddPeopleViewTopBar(
+                hasSelectedUsers = state.selectedUsers.isNotEmpty(),
+                onBackPressed = {
+                    if (state.isSearchActive) {
+                        state.eventSink(UserListEvents.OnSearchActiveChanged(false))
+                    } else {
+                        onBackPressed()
+                    }
+                },
+                onNextPressed = onNextPressed,
+            )
         }
     ) { padding ->
         Column(
@@ -73,6 +78,7 @@ fun AddPeopleView(
                 modifier = Modifier
                     .fillMaxWidth(),
                 state = state,
+                showBackButton = false,
             )
         }
     }
