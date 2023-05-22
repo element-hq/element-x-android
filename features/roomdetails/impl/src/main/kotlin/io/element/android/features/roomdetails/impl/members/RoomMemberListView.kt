@@ -20,27 +20,20 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -59,10 +52,9 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
+import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -71,7 +63,7 @@ import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import kotlinx.collections.immutable.ImmutableList
 import io.element.android.libraries.ui.strings.R as StringR
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RoomMemberListView(
     state: RoomMemberListState,
@@ -94,27 +86,27 @@ fun RoomMemberListView(
         Column(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(padding),
+                .padding(padding)
+                .consumeWindowInsets(padding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Column {
-                RoomMemberSearchBar(
-                    query = state.searchQuery,
-                    state = state.searchResults,
-                    active = state.isSearchActive,
-                    placeHolderTitle = stringResource(StringR.string.common_search_for_someone),
-                    onActiveChanged = { state.eventSink(RoomMemberListEvents.OnSearchActiveChanged(it)) },
-                    onTextChanged = { state.eventSink(RoomMemberListEvents.UpdateSearchQuery(it)) },
-                    onUserSelected = ::onUserSelected,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
+            RoomMemberSearchBar(
+                query = state.searchQuery,
+                state = state.searchResults,
+                active = state.isSearchActive,
+                placeHolderTitle = stringResource(StringR.string.common_search_for_someone),
+                onActiveChanged = { state.eventSink(RoomMemberListEvents.OnSearchActiveChanged(it)) },
+                onTextChanged = { state.eventSink(RoomMemberListEvents.UpdateSearchQuery(it)) },
+                onUserSelected = ::onUserSelected,
+                modifier = Modifier.fillMaxWidth()
+            )
 
             if (!state.isSearchActive) {
                 if (state.roomMembers is Async.Success) {
                     RoomMemberList(
                         roomMembers = state.roomMembers.state,
-                        onUserSelected = ::onUserSelected,
+                        showMembersCount = true,
+                        onUserSelected = ::onUserSelected
                     )
                 } else if (state.roomMembers.isLoading()) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -129,6 +121,7 @@ fun RoomMemberListView(
 @Composable
 private fun RoomMemberList(
     roomMembers: RoomMembers,
+    showMembersCount: Boolean,
     onUserSelected: (RoomMember) -> Unit,
 ) {
     LazyColumn(modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()) {
@@ -140,9 +133,15 @@ private fun RoomMemberList(
             )
         }
         if (roomMembers.joined.isNotEmpty()) {
-            val memberCount = roomMembers.joined.count()
             roomMemberListSection(
-                headerText = { pluralStringResource(id = R.plurals.screen_room_member_list_header_title, count = memberCount, memberCount) },
+                headerText = {
+                    if (showMembersCount) {
+                        val memberCount = roomMembers.joined.count()
+                        pluralStringResource(id = R.plurals.screen_room_member_list_header_title, count = memberCount, memberCount)
+                    } else {
+                        stringResource(id = R.string.screen_room_member_list_room_members_header_title)
+                    }
+                },
                 members = roomMembers.joined,
                 onMemberSelected = { onUserSelected(it) }
             )
@@ -209,11 +208,10 @@ private fun RoomMemberListTopBar(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RoomMemberSearchBar(
     query: String,
-    state: RoomMemberSearchResultState,
+    state: SearchBarResultState<RoomMembers>,
     active: Boolean,
     placeHolderTitle: String,
     onActiveChanged: (Boolean) -> Unit,
@@ -221,70 +219,20 @@ private fun RoomMemberSearchBar(
     onUserSelected: (RoomMember) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val focusManager = LocalFocusManager.current
-
-    if (!active) {
-        onTextChanged("")
-        focusManager.clearFocus()
-    }
-
     SearchBar(
         query = query,
         onQueryChange = onTextChanged,
-        onSearch = { focusManager.clearFocus() },
         active = active,
         onActiveChange = onActiveChanged,
-        modifier = modifier
-            .padding(horizontal = if (!active) 16.dp else 0.dp),
-        placeholder = {
-            Text(
-                text = placeHolderTitle,
-                modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
+        modifier = modifier,
+        placeHolderTitle = placeHolderTitle,
+        resultState = state,
+        resultHandler = { results ->
+            RoomMemberList(
+                roomMembers = results,
+                showMembersCount = false,
+                onUserSelected = { onUserSelected(it) }
             )
-        },
-        leadingIcon = if (active) {
-            { BackButton(onClick = { onActiveChanged(false) }) }
-        } else {
-            null
-        },
-        trailingIcon = when {
-            active && query.isNotEmpty() -> {
-                {
-                    IconButton(onClick = { onTextChanged("") }) {
-                        Icon(Icons.Default.Close, stringResource(StringR.string.action_clear))
-                    }
-                }
-            }
-
-            !active -> {
-                {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = stringResource(StringR.string.action_search),
-                        modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
-                    )
-                }
-            }
-
-            else -> null
-        },
-        colors = if (!active) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
-        content = {
-            if (state is RoomMemberSearchResultState.Results) {
-                RoomMemberList(
-                    roomMembers = state.results,
-                    onUserSelected = { onUserSelected(it) }
-                )
-            } else if (state is RoomMemberSearchResultState.NoResults) {
-                Spacer(Modifier.size(80.dp))
-
-                Text(
-                    text = stringResource(StringR.string.common_no_results),
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.tertiary,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
         },
     )
 }

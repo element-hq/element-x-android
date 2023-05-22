@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialApi::class)
-
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.background
@@ -107,6 +105,7 @@ internal fun ModalBottomSheetLayoutLightPreview() =
 internal fun ModalBottomSheetLayoutDarkPreview() =
     ElementPreviewDark { ContentToPreview() }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun ContentToPreview() {
     ModalBottomSheetLayout(

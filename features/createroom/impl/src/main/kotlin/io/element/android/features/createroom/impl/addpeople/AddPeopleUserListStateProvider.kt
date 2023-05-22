@@ -17,11 +17,11 @@
 package io.element.android.features.createroom.impl.addpeople
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.userlist.api.SelectionMode
-import io.element.android.features.userlist.api.UserListState
-import io.element.android.features.userlist.api.UserSearchResultState
-import io.element.android.features.userlist.api.aListOfSelectedUsers
-import io.element.android.features.userlist.api.aUserListState
+import io.element.android.features.createroom.impl.userlist.SelectionMode
+import io.element.android.features.createroom.impl.userlist.UserListState
+import io.element.android.features.createroom.impl.userlist.aListOfSelectedUsers
+import io.element.android.features.createroom.impl.userlist.aUserListState
+import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import kotlinx.collections.immutable.toImmutableList
 
@@ -30,13 +30,13 @@ open class AddPeopleUserListStateProvider : PreviewParameterProvider<UserListSta
         get() = sequenceOf(
             aUserListState(),
             aUserListState().copy(
-                searchResults = UserSearchResultState.Results(aMatrixUserList().toImmutableList()),
+                searchResults = SearchBarResultState.Results(aMatrixUserList().toImmutableList()),
                 selectedUsers = aListOfSelectedUsers(),
                 isSearchActive = false,
                 selectionMode = SelectionMode.Multiple,
             ),
             aUserListState().copy(
-                searchResults = UserSearchResultState.Results(aMatrixUserList().toImmutableList()),
+                searchResults = SearchBarResultState.Results(aMatrixUserList().toImmutableList()),
                 selectedUsers = aListOfSelectedUsers(),
                 isSearchActive = true,
                 selectionMode = SelectionMode.Multiple,

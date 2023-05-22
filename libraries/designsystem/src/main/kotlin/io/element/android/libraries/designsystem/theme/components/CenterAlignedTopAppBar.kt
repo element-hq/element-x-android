@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.layout.RowScope

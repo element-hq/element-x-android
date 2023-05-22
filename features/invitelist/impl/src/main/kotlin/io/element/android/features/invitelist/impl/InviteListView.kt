@@ -17,7 +17,9 @@
 package io.element.android.features.invitelist.impl
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -103,7 +105,7 @@ fun InviteListView(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun InviteListContent(
     state: InviteListState,
@@ -124,7 +126,9 @@ fun InviteListContent(
         },
         content = { padding ->
             Column(
-                modifier = Modifier.padding(padding)
+                modifier = Modifier
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
             ) {
                 if (state.inviteList.isEmpty()) {
                     Spacer(Modifier.size(80.dp))

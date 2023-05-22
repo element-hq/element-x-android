@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalCoroutinesApi::class)
-
 package io.element.android.features.messages.textcomposer
 
 import app.cash.molecule.RecompositionClock
@@ -46,13 +44,13 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
+import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.api.ThumbnailProcessingInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -308,7 +306,7 @@ class MessageComposerPresenterTest {
                         mimetype = null,
                         size = null,
                         thumbnailInfo = null,
-                        thumbnailUrl = null,
+                        thumbnailSource = null,
                         blurhash = null,
                     ),
                     thumbnailInfo = ThumbnailProcessingInfo(
@@ -351,7 +349,7 @@ class MessageComposerPresenterTest {
                         duration = null,
                         size = null,
                         thumbnailInfo = null,
-                        thumbnailUrl = null,
+                        thumbnailSource = null,
                         blurhash = null,
                     ),
                     thumbnailInfo = ThumbnailProcessingInfo(
@@ -490,7 +488,12 @@ class MessageComposerPresenterTest {
         mediaPreProcessor: MediaPreProcessor = this.mediaPreProcessor,
         snackbarDispatcher: SnackbarDispatcher = this.snackbarDispatcher,
     ) = MessageComposerPresenter(
-        coroutineScope, room, pickerProvider, featureFlagService, mediaPreProcessor, snackbarDispatcher
+        coroutineScope,
+        room,
+        pickerProvider,
+        featureFlagService,
+        mediaPreProcessor,
+        snackbarDispatcher
     )
 }
 

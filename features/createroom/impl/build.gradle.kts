@@ -45,19 +45,23 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
-    implementation(projects.features.userlist.api)
+    implementation(projects.libraries.mediapickers.api)
+    implementation(projects.libraries.mediaupload.api)
+    implementation(libs.coil.compose)
+    implementation(projects.libraries.usersearch.impl)
     api(projects.features.createroom.api)
-    implementation(libs.coil.compose) // FIXME temp
 
     testImplementation(libs.test.junit)
+    testImplementation(libs.test.mockk)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(libs.test.robolectric)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.features.userlist.impl)
-    testImplementation(projects.features.userlist.test)
+    testImplementation(projects.libraries.mediapickers.test)
+    testImplementation(projects.libraries.mediaupload.test)
+    testImplementation(projects.libraries.usersearch.test)
 
     androidTestImplementation(libs.test.junitext)
 

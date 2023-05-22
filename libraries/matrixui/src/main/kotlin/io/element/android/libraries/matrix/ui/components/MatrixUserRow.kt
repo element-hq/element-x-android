@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -46,6 +47,19 @@ fun MatrixUserRow(
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
     avatarSize: AvatarSize = AvatarSize.MEDIUM,
+) = UserRow(
+    avatarData = matrixUser.getAvatarData(avatarSize),
+    name = matrixUser.getBestName(),
+    subtext = if (matrixUser.displayName.isNullOrEmpty()) null else matrixUser.userId.value,
+    modifier = modifier,
+)
+
+@Composable
+fun UserRow(
+    avatarData: AvatarData,
+    name: String,
+    subtext: String?,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
@@ -54,9 +68,7 @@ fun MatrixUserRow(
             .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Avatar(
-            matrixUser.getAvatarData(size = avatarSize),
-        )
+        Avatar(avatarData)
         Column(
             modifier = Modifier
                 .padding(start = 12.dp),
@@ -65,15 +77,15 @@ fun MatrixUserRow(
             Text(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                text = matrixUser.getBestName(),
+                text = name,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colorScheme.primary,
             )
             // Id
-            if (matrixUser.displayName.isNullOrEmpty().not()) {
+            subtext?.let {
                 Text(
-                    text = matrixUser.userId.value,
+                    text = subtext,
                     color = MaterialTheme.colorScheme.secondary,
                     fontSize = 14.sp,
                     maxLines = 1,
