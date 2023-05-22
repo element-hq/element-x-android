@@ -19,9 +19,11 @@ package io.element.android.features.messages.impl
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -79,7 +81,7 @@ import io.element.android.libraries.designsystem.utils.LogCompositions
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun MessagesView(
     state: MessagesState,
@@ -183,7 +185,9 @@ fun MessagesView(
             content = { padding ->
                 MessagesViewContent(
                     state = state,
-                    modifier = Modifier.padding(padding),
+                    modifier = Modifier
+                        .padding(padding)
+                        .consumeWindowInsets(padding),
                     onMessageClicked = ::onMessageClicked,
                     onMessageLongClicked = ::onMessageLongClicked
                 )

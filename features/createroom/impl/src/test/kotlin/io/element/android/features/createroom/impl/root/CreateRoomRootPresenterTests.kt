@@ -20,11 +20,10 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.userlist.api.UserListDataStore
-import io.element.android.features.userlist.api.aUserListState
-import io.element.android.features.userlist.test.FakeUserListDataSource
-import io.element.android.features.userlist.test.FakeUserListPresenter
-import io.element.android.features.userlist.test.FakeUserListPresenterFactory
+import io.element.android.features.createroom.impl.userlist.FakeUserListPresenter
+import io.element.android.features.createroom.impl.userlist.FakeUserListPresenterFactory
+import io.element.android.features.createroom.impl.userlist.UserListDataStore
+import io.element.android.features.createroom.impl.userlist.aUserListState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -32,6 +31,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.usersearch.test.FakeUserRepository
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -39,7 +39,7 @@ import org.junit.Test
 
 class CreateRoomRootPresenterTests {
 
-    private lateinit var userListDataSource: FakeUserListDataSource
+    private lateinit var userRepository: FakeUserRepository
     private lateinit var presenter: CreateRoomRootPresenter
     private lateinit var fakeUserListPresenter: FakeUserListPresenter
     private lateinit var fakeMatrixClient: FakeMatrixClient
@@ -48,8 +48,8 @@ class CreateRoomRootPresenterTests {
     fun setup() {
         fakeUserListPresenter = FakeUserListPresenter()
         fakeMatrixClient = FakeMatrixClient()
-        userListDataSource = FakeUserListDataSource()
-        presenter = CreateRoomRootPresenter(FakeUserListPresenterFactory(fakeUserListPresenter), userListDataSource, UserListDataStore(), fakeMatrixClient)
+        userRepository = FakeUserRepository()
+        presenter = CreateRoomRootPresenter(FakeUserListPresenterFactory(fakeUserListPresenter), userRepository, UserListDataStore(), fakeMatrixClient)
     }
 
     @Test

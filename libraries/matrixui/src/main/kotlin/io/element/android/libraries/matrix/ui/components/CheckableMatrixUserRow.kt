@@ -26,11 +26,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.model.getAvatarData
+import io.element.android.libraries.matrix.ui.model.getBestName
 
 @Composable
 fun CheckableMatrixUserRow(
@@ -40,18 +43,39 @@ fun CheckableMatrixUserRow(
     avatarSize: AvatarSize = AvatarSize.MEDIUM,
     onCheckedChange: (Boolean) -> Unit = {},
     enabled: Boolean = true,
-) {
+) = CheckableUserRow(
+    checked = checked,
+    avatarData = matrixUser.getAvatarData(avatarSize),
+    name = matrixUser.getBestName(),
+    subtext = if (matrixUser.displayName.isNullOrEmpty()) null else matrixUser.userId.value,
+    modifier = modifier,
+    onCheckedChange = onCheckedChange,
+    enabled = enabled,
+)
 
+@Composable
+fun CheckableUserRow(
+    checked: Boolean,
+    avatarData: AvatarData,
+    name: String,
+    subtext: String?,
+    modifier: Modifier = Modifier,
+    onCheckedChange: (Boolean) -> Unit = {},
+    enabled: Boolean = true,
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(role = Role.Checkbox) { onCheckedChange(!checked) },
+            .clickable(role = Role.Checkbox, enabled = enabled) {
+                onCheckedChange(!checked)
+            },
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        MatrixUserRow(
+        UserRow(
             modifier = Modifier.weight(1f),
-            matrixUser = matrixUser,
-            avatarSize = avatarSize,
+            avatarData = avatarData,
+            name = name,
+            subtext = subtext,
         )
 
         Checkbox(
@@ -77,5 +101,7 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
     Column {
         CheckableMatrixUserRow(checked = true, matrixUser)
         CheckableMatrixUserRow(checked = false, matrixUser)
+        CheckableMatrixUserRow(checked = true, matrixUser, enabled = false)
+        CheckableMatrixUserRow(checked = false, matrixUser, enabled = false)
     }
 }
