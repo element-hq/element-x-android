@@ -22,7 +22,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth
 import io.element.android.features.roomdetails.aMatrixClient
 import io.element.android.features.roomdetails.aMatrixRoom
-import io.element.android.features.roomdetails.aRoomMember
+import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsEvents
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState

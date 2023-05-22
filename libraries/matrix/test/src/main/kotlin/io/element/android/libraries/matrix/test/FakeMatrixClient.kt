@@ -59,6 +59,7 @@ class FakeMatrixClient(
     private val getRoomResults = mutableMapOf<RoomId, MatrixRoom>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
     private val getProfileResults = mutableMapOf<UserId, Result<MatrixUser>>()
+    private var uploadMediaResult: Result<String> = Result.success(AN_AVATAR_URL)
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
         return getRoomResults[roomId]
@@ -89,6 +90,10 @@ class FakeMatrixClient(
 
     override suspend fun getProfile(userId: UserId): Result<MatrixUser> {
         return getProfileResults[userId] ?: Result.failure(IllegalStateException("No profile found for $userId"))
+    }
+
+    override suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults> {
+        return searchUserResults[searchTerm] ?: Result.failure(IllegalStateException("No response defined for $searchTerm"))
     }
 
     override fun startSync() = Unit
@@ -122,6 +127,10 @@ class FakeMatrixClient(
         return Result.success(ByteArray(0))
     }
 
+    override suspend fun uploadMedia(mimeType: String, data: ByteArray): Result<String> {
+        return uploadMediaResult
+    }
+
     override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService
 
     override fun pushersService(): PushersService = pushersService
@@ -132,10 +141,6 @@ class FakeMatrixClient(
 
     override fun roomMembershipObserver(): RoomMembershipObserver {
         return RoomMembershipObserver()
-    }
-
-    override suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults> {
-        return searchUserResults[searchTerm] ?: Result.failure(IllegalStateException("No response defined for $searchTerm"))
     }
 
     // Mocks
@@ -178,5 +183,9 @@ class FakeMatrixClient(
 
     fun givenGetProfileResult(userId: UserId, result: Result<MatrixUser>) {
         getProfileResults[userId] = result
+    }
+
+    fun givenUploadMediaResult(result: Result<String>) {
+        uploadMediaResult = result
     }
 }

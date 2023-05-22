@@ -28,6 +28,11 @@ interface PickerProvider {
     ): PickerLauncher<PickVisualMediaRequest, Uri?>
 
     @Composable
+    fun registerGalleryImagePicker(
+        onResult: (Uri?) -> Unit
+    ): PickerLauncher<PickVisualMediaRequest, Uri?>
+
+    @Composable
     fun registerFilePicker(
         mimeType: String,
         onResult: (Uri?) -> Unit
@@ -38,5 +43,4 @@ interface PickerProvider {
 
     @Composable
     fun registerCameraVideoPicker(onResult: (Uri?) -> Unit): PickerLauncher<Uri, Boolean>
-
 }
