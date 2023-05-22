@@ -90,6 +90,7 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:statemachine"))
     implementation(project(":libraries:mediapickers:impl"))
     implementation(project(":libraries:mediaupload:impl"))
+    implementation(project(":libraries:usersearch:impl"))
 }
 
 fun DependencyHandlerScope.allServicesImpl() {
