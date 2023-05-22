@@ -26,6 +26,7 @@
   <string name="action_leave_room">"Raum verlassen"</string>
   <string name="action_next">"Weiter"</string>
   <string name="action_no">"Nein"</string>
+  <string name="action_not_now">"Nicht jetzt"</string>
   <string name="action_ok">"OK"</string>
   <string name="action_quick_reply">"Schnellantwort"</string>
   <string name="action_quote">"Zitieren"</string>
@@ -41,10 +42,11 @@
   <string name="action_share">"Teilen"</string>
   <string name="action_share_link">"Link teilen"</string>
   <string name="action_skip">"Überspringen"</string>
+  <string name="action_start_chat">"Chat starten"</string>
   <string name="action_take_photo">"Foto aufnehmen"</string>
   <string name="action_yes">"Ja"</string>
   <string name="common_about">"Über"</string>
-  <string name="common_analytics">"Analytik"</string>
+  <string name="common_analytics">"Analyse"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_bubbles">"Blasen"</string>
   <string name="common_decryption_error">"Entschlüsselungsfehler"</string>
@@ -61,8 +63,12 @@
   <string name="common_offline">"Offline"</string>
   <string name="common_password">"Passwort"</string>
   <string name="common_reactions">"Reaktionen"</string>
+  <string name="common_report_a_bug">"Fehler melden"</string>
+  <string name="common_search_results">"Suchergebnisse"</string>
   <string name="common_security">"Sicherheit"</string>
+  <string name="common_server_not_supported">"Server wird nicht unterstützt"</string>
   <string name="common_settings">"Einstellungen"</string>
+  <string name="common_starting_chat">"Chat wird gestartet…"</string>
   <string name="common_sticker">"Sticker"</string>
   <string name="common_success">"Erfolg"</string>
   <string name="common_suggestions">"Vorschläge"</string>
@@ -84,6 +90,7 @@
   <string name="emoji_picker_category_places">"Reisen &amp; Orte"</string>
   <string name="emoji_picker_category_symbols">"Symbole"</string>
   <string name="error_failed_loading_messages">"Fehler beim Laden der Nachrichten"</string>
+  <string name="error_some_messages_have_not_been_sent">"Einige Nachrichten wurden nicht gesendet"</string>
   <string name="error_unknown">"Entschuldigung, ein Fehler ist aufgetreten."</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <plurals name="common_member_count">
@@ -93,6 +100,9 @@
   <string name="report_content_hint">"Grund für die Meldung dieses Inhalts"</string>
   <string name="room_timeline_beginning_of_room">"Dies ist der Anfang von %1$s."</string>
   <string name="room_timeline_read_marker_title">"Neu"</string>
+  <string name="screen_analytics_prompt_data_usage">"Wir erfassen und analysieren "<b>"keine"</b>" Account-Daten"</string>
+  <string name="screen_analytics_prompt_settings">"Sie können die Analyse jederzeit in den Einstellungen deaktivieren"</string>
+  <string name="screen_analytics_prompt_third_party_sharing">"Wir geben "<b>"keine"</b>" Informationen an Dritte weiter"</string>
   <string name="screen_analytics_settings_share_data">"Teile Analyse-Daten"</string>
   <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
   <string name="settings_rageshake_detection_threshold">"Erkennungsschwelle"</string>
