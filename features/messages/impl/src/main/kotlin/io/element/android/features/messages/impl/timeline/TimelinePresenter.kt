@@ -17,15 +17,18 @@
 package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
+import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
@@ -42,6 +45,7 @@ private const val backPaginationPageSize = 50
 
 class TimelinePresenter @Inject constructor(
     private val timelineItemsFactory: TimelineItemsFactory,
+    private val timelineItemGrouper: TimelineItemGrouper,
     room: MatrixRoom,
 ) : Presenter<TimelineState> {
 
@@ -53,6 +57,8 @@ class TimelinePresenter @Inject constructor(
         val highlightedEventId: MutableState<EventId?> = rememberSaveable {
             mutableStateOf(null)
         }
+        val expandedGroups = remember { mutableStateMapOf<String, Boolean>() }
+
         val timelineItems = timelineItemsFactory
             .flow()
             .collectAsState()
@@ -65,6 +71,9 @@ class TimelinePresenter @Inject constructor(
             when (event) {
                 TimelineEvents.LoadMore -> localCoroutineScope.loadMore(paginationState.value)
                 is TimelineEvents.SetHighlightedEvent -> highlightedEventId.value = event.eventId
+                is TimelineEvents.ToggleExpandGroup -> {
+                    expandedGroups[event.event.identifier()] = expandedGroups[event.event.identifier()].orFalse().not()
+                }
             }
         }
 
@@ -83,7 +92,7 @@ class TimelinePresenter @Inject constructor(
         return TimelineState(
             highlightedEventId = highlightedEventId.value,
             paginationState = paginationState.value,
-            timelineItems = timelineItems.value.toImmutableList(),
+            timelineItems = timelineItemGrouper.group(timelineItems.value, expandedGroups).toImmutableList(),
             eventSink = ::handleEvents
         )
     }

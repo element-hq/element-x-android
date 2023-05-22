@@ -116,10 +116,6 @@
     <item quantity="one">"%1$d miembro"</item>
     <item quantity="other">"%1$d miembros"</item>
   </plurals>
-  <plurals name="room_timeline_state_changes">
-    <item quantity="one">"%1$d cambio en la sala"</item>
-    <item quantity="other">"%1$d cambios en la sala"</item>
-  </plurals>
   <string name="preference_rageshake">"Agitar con fuerza para informar de un error"</string>
   <string name="rageshake_dialog_content">"Parece que sacudes el teléfono con frustración. ¿Quieres abrir la pantalla de informe de errores?"</string>
   <string name="report_content_explanation">"Este mensaje se notificará al administrador de su homeserver. No podrán leer ningún mensaje cifrado."</string>
