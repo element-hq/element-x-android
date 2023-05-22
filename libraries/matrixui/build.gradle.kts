@@ -37,6 +37,7 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.core)
+    implementation(projects.libraries.uiStrings)
     implementation(libs.coil.compose)
 
     ksp(libs.showkase.processor)

@@ -130,19 +130,15 @@ class AndroidMediaPreProcessor @Inject constructor(
     }.mapFailure { MediaPreProcessor.Failure(it) }
 
     private fun MediaUploadInfo.postProcess(uri: Uri): MediaUploadInfo {
-
-        fun File.rename(name: String): File {
-            return File(context.cacheDir, name).also {
-                renameTo(it)
-            }
-        }
-
         val name = context.getFileName(uri) ?: return this
+        val renamedFile = File(context.cacheDir, name).also {
+            file.renameTo(it)
+        }
         return when (this) {
-            is MediaUploadInfo.AnyFile -> copy(file = file.rename(name))
-            is MediaUploadInfo.Audio -> copy(file = file.rename(name))
-            is MediaUploadInfo.Image -> copy(file = file.rename(name))
-            is MediaUploadInfo.Video -> copy(file = file.rename(name))
+            is MediaUploadInfo.AnyFile -> copy(file = renamedFile)
+            is MediaUploadInfo.Audio -> copy(file = renamedFile)
+            is MediaUploadInfo.Image -> copy(file = renamedFile)
+            is MediaUploadInfo.Video -> copy(file = renamedFile)
         }
     }
 

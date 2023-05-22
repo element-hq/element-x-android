@@ -43,6 +43,7 @@ interface MatrixClient : Closeable {
     suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId>
     suspend fun createDM(userId: UserId): Result<RoomId>
     suspend fun getProfile(userId: UserId): Result<MatrixUser>
+    suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults>
     fun startSync()
     fun stopSync()
     fun sessionVerificationService(): SessionVerificationService
@@ -51,10 +52,7 @@ interface MatrixClient : Closeable {
     suspend fun logout()
     suspend fun loadUserDisplayName(): Result<String>
     suspend fun loadUserAvatarURLString(): Result<String?>
-
+    suspend fun uploadMedia(mimeType: String, data: ByteArray): Result<String>
     fun onSlidingSyncUpdate()
-
     fun roomMembershipObserver(): RoomMembershipObserver
-
-    suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults>
 }

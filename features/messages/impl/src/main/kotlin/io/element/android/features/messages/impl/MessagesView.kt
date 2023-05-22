@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-@file:OptIn(
-    ExperimentalMaterial3Api::class,
-    ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class,
-)
-
 package io.element.android.features.messages.impl
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -90,6 +87,7 @@ import timber.log.Timber
 
 import io.element.android.libraries.ui.strings.R as StringsR
 
+@OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun MessagesView(
     state: MessagesState,
@@ -198,7 +196,9 @@ fun MessagesView(
             content = { padding ->
                 MessagesViewContent(
                     state = state,
-                    modifier = Modifier.padding(padding),
+                    modifier = Modifier
+                        .padding(padding)
+                        .consumeWindowInsets(padding),
                     onMessageClicked = ::onMessageClicked,
                     onMessageLongClicked = ::onMessageLongClicked
                 )
@@ -264,6 +264,7 @@ fun MessagesViewContent(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MessagesViewTopBar(
     roomTitle: String?,

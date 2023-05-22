@@ -23,10 +23,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextFieldColors
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -49,7 +48,6 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.utils.allBooleans
 import io.element.android.libraries.designsystem.utils.asInt
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun OutlinedTextField(
     value: String,
@@ -70,8 +68,8 @@ fun OutlinedTextField(
     singleLine: Boolean = false,
     maxLines: Int = Int.MAX_VALUE,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    shape: Shape = TextFieldDefaults.outlinedShape,
-    colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors()
+    shape: Shape = OutlinedTextFieldDefaults.shape,
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
 ) {
     androidx.compose.material3.OutlinedTextField(
         value = value,

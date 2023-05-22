@@ -18,8 +18,9 @@ package io.element.android.features.createroom.impl.configureroom
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.createroom.impl.CreateRoomConfig
-import io.element.android.features.userlist.api.aListOfSelectedUsers
+import io.element.android.features.createroom.impl.userlist.aListOfSelectedUsers
 import io.element.android.libraries.architecture.Async
+import kotlinx.collections.immutable.persistentListOf
 
 open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomState> {
     override val values: Sequence<ConfigureRoomState>
@@ -30,16 +31,15 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
                     roomName = "Room 101",
                     topic = "Room topic for this room when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",
                     invites = aListOfSelectedUsers(),
-                    privacy = RoomPrivacy.Private,
+                    privacy = RoomPrivacy.Public,
                 ),
-                isCreateButtonEnabled = true,
             ),
         )
 }
 
 fun aConfigureRoomState() = ConfigureRoomState(
     config = CreateRoomConfig(),
-    isCreateButtonEnabled = false,
+    avatarActions = persistentListOf(),
     createRoomAction = Async.Uninitialized,
-    eventSink = {}
+    eventSink = { },
 )

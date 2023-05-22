@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.withContext
@@ -41,7 +42,7 @@ class RoomMemberListPresenter @Inject constructor(
         var roomMembers by remember { mutableStateOf<Async<RoomMembers>>(Async.Loading()) }
         var searchQuery by rememberSaveable { mutableStateOf("") }
         var searchResults by remember {
-            mutableStateOf<RoomMemberSearchResultState>(RoomMemberSearchResultState.NotSearching)
+            mutableStateOf<SearchBarResultState<RoomMembers>>(SearchBarResultState.NotSearching())
         }
         var isSearchActive by rememberSaveable { mutableStateOf(false) }
 
@@ -60,11 +61,11 @@ class RoomMemberListPresenter @Inject constructor(
         LaunchedEffect(searchQuery) {
             withContext(coroutineDispatchers.io) {
                 searchResults = if (searchQuery.isEmpty()) {
-                    RoomMemberSearchResultState.NotSearching
+                    SearchBarResultState.NotSearching()
                 } else {
                     val results = roomMemberListDataSource.search(searchQuery).groupBy { it.membership }
-                    if (results.isEmpty()) RoomMemberSearchResultState.NoResults
-                    else RoomMemberSearchResultState.Results(
+                    if (results.isEmpty()) SearchBarResultState.NoResults()
+                    else SearchBarResultState.Results(
                         RoomMembers(
                             invited = results.getOrDefault(RoomMembershipState.INVITE, emptyList()).toImmutableList(),
                             joined = results.getOrDefault(RoomMembershipState.JOIN, emptyList()).toImmutableList(),

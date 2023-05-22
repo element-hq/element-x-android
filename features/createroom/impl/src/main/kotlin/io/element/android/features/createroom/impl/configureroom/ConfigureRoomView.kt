@@ -14,37 +14,42 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.features.createroom.impl.configureroom
 
 import android.net.Uri
-import android.widget.Toast
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.Avatar
 import io.element.android.features.createroom.impl.components.LabelledTextField
 import io.element.android.features.createroom.impl.components.RoomPrivacyOption
-import io.element.android.features.userlist.api.components.SelectedUsersList
+import io.element.android.features.createroom.impl.configureroom.avatar.AvatarActionListView
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -56,8 +61,11 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.ui.components.SelectedUsersList
+import kotlinx.coroutines.launch
 import io.element.android.libraries.ui.strings.R as StringR
 
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun ConfigureRoomView(
     state: ConfigureRoomState,
@@ -65,59 +73,96 @@ fun ConfigureRoomView(
     onBackPressed: () -> Unit = {},
     onRoomCreated: (RoomId) -> Unit = {},
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
+    val itemActionsBottomSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+    )
+
     if (state.createRoomAction is Async.Success) {
         LaunchedEffect(state.createRoomAction) {
             onRoomCreated(state.createRoomAction.state)
         }
     }
 
-    val context = LocalContext.current
+    fun onAvatarClicked() {
+        focusManager.clearFocus()
+        coroutineScope.launch {
+            itemActionsBottomSheetState.show()
+        }
+    }
+
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.clearFocusOnTap(focusManager),
         topBar = {
             ConfigureRoomToolbar(
                 isNextActionEnabled = state.isCreateButtonEnabled,
                 onBackPressed = onBackPressed,
                 onNextPressed = {
+                    focusManager.clearFocus()
                     state.eventSink(ConfigureRoomEvents.CreateRoom(state.config))
                 },
             )
         }
     ) { padding ->
-        Column(
-            modifier = Modifier.padding(padding),
+        LazyColumn(
+            modifier = Modifier
+                .padding(padding)
+                .consumeWindowInsets(padding),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            RoomNameWithAvatar(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                avatarUri = state.config.avatarUrl?.toUri(),
-                roomName = state.config.roomName.orEmpty(),
-                onAvatarClick = { Toast.makeText(context, "not implemented yet", Toast.LENGTH_SHORT).show() },
-                onRoomNameChanged = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
-            )
-            RoomTopic(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                topic = state.config.topic.orEmpty(),
-                onTopicChanged = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
-            )
-            SelectedUsersList(
-                contentPadding = PaddingValues(horizontal = 24.dp),
-                selectedUsers = state.config.invites,
-                onUserRemoved = { state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it)) },
-            )
-            Spacer(Modifier.weight(1f))
-            RoomPrivacyOptions(
-                modifier = Modifier.padding(bottom = 40.dp),
-                selected = state.config.privacy,
-                onOptionSelected = { state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it.privacy)) },
-            )
+            item {
+                RoomNameWithAvatar(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    avatarUri = state.config.avatarUri,
+                    roomName = state.config.roomName.orEmpty(),
+                    onAvatarClick = ::onAvatarClicked,
+                    onRoomNameChanged = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
+                )
+            }
+            item {
+                RoomTopic(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    topic = state.config.topic.orEmpty(),
+                    onTopicChanged = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
+                )
+            }
+            if (state.config.invites.isNotEmpty()) {
+                item {
+                    SelectedUsersList(
+                        contentPadding = PaddingValues(horizontal = 24.dp),
+                        selectedUsers = state.config.invites,
+                        onUserRemoved = {
+                            focusManager.clearFocus()
+                            state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it))
+                        },
+                    )
+                }
+            }
+            item {
+                RoomPrivacyOptions(
+                    modifier = Modifier.padding(bottom = 40.dp),
+                    selected = state.config.privacy,
+                    onOptionSelected = {
+                        focusManager.clearFocus()
+                        state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it.privacy))
+                    },
+                )
+            }
         }
     }
+
+    AvatarActionListView(
+        actions = state.avatarActions,
+        modalBottomSheetState = itemActionsBottomSheetState,
+        onActionSelected = { state.eventSink(ConfigureRoomEvents.HandleAvatarAction(it)) }
+    )
 
     when (state.createRoomAction) {
         is Async.Loading -> {
             ProgressDialog(text = stringResource(StringR.string.common_creating_room))
         }
+
         is Async.Failure -> {
             RetryDialog(
                 content = stringResource(R.string.screen_create_room_error_creating_room),
@@ -125,10 +170,12 @@ fun ConfigureRoomView(
                 onRetry = { state.eventSink(ConfigureRoomEvents.CreateRoom(state.config)) },
             )
         }
+
         else -> Unit
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConfigureRoomToolbar(
     isNextActionEnabled: Boolean,
@@ -238,3 +285,11 @@ private fun ContentToPreview(state: ConfigureRoomState) {
         state = state,
     )
 }
+
+private fun Modifier.clearFocusOnTap(focusManager: FocusManager): Modifier =
+    pointerInput(Unit) {
+        detectTapGestures(onTap = {
+            focusManager.clearFocus()
+        })
+    }
+
