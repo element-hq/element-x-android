@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="room_timeline_state_changes">
+    <item quantity="one">"%1$d modifica alla stanza"</item>
+    <item quantity="other">"%1$d modifiche alla stanza"</item>
+  </plurals>
+</resources>

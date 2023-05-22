@@ -50,14 +50,17 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.LastBaseline
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.components.MessageEventBubble
 import io.element.android.features.messages.impl.timeline.components.MessageStateEventContainer
 import io.element.android.features.messages.impl.timeline.components.TimelineItemReactionsView
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
+import io.element.android.features.messages.impl.timeline.components.group.GroupHeaderView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemDaySeparatorView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineLoadingMoreIndicator
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -84,6 +87,7 @@ fun TimelineView(
     modifier: Modifier = Modifier,
     onMessageClicked: (TimelineItem.Event) -> Unit = {},
     onMessageLongClicked: (TimelineItem.Event) -> Unit = {},
+    onExpandGroupClick: (TimelineItem.GroupedEvents) -> Unit = {},
 ) {
 
     fun onReachedLoadMore() {
@@ -106,9 +110,10 @@ fun TimelineView(
             ) { index, timelineItem ->
                 TimelineItemRow(
                     timelineItem = timelineItem,
-                    isHighlighted = timelineItem.identifier() == state.highlightedEventId?.value,
+                    highlightedItem = state.highlightedEventId?.value,
                     onClick = onMessageClicked,
-                    onLongClick = onMessageLongClicked
+                    onLongClick = onMessageLongClicked,
+                    onExpandGroupClick = onExpandGroupClick,
                 )
                 if (index == state.timelineItems.lastIndex) {
                     onReachedLoadMore()
@@ -127,9 +132,10 @@ fun TimelineView(
 @Composable
 fun TimelineItemRow(
     timelineItem: TimelineItem,
-    isHighlighted: Boolean,
+    highlightedItem: String?,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
+    onExpandGroupClick: (TimelineItem.GroupedEvents) -> Unit,
 ) {
     when (timelineItem) {
         is TimelineItem.Virtual -> {
@@ -149,18 +155,47 @@ fun TimelineItemRow(
             if (timelineItem.content is TimelineItemStateContent) {
                 TimelineItemStateEventRow(
                     event = timelineItem,
-                    isHighlighted = isHighlighted,
+                    isHighlighted = highlightedItem == timelineItem.identifier(),
                     onClick = ::onClick,
                     onLongClick = ::onLongClick
                 )
             } else {
                 TimelineItemEventRow(
                     event = timelineItem,
-                    isHighlighted = isHighlighted,
+                    isHighlighted = highlightedItem == timelineItem.identifier(),
                     onClick = ::onClick,
                     onLongClick = ::onLongClick
                 )
             }
+        }
+        is TimelineItem.GroupedEvents -> {
+            fun onExpandGroupClick() {
+                onExpandGroupClick(timelineItem)
+            }
+
+            if (timelineItem.expanded) {
+                Column {
+                    timelineItem.events.forEach { subGroupEvent ->
+                        TimelineItemRow(
+                            timelineItem = subGroupEvent,
+                            highlightedItem = highlightedItem,
+                            onClick = onClick,
+                            onLongClick = onLongClick,
+                            onExpandGroupClick = {}
+                        )
+                    }
+                }
+            }
+            GroupHeaderView(
+                text = pluralStringResource(
+                    id = R.plurals.room_timeline_state_changes,
+                    count = timelineItem.events.size,
+                    timelineItem.events.size
+                ),
+                isExpanded = timelineItem.expanded,
+                isHighlighted = !timelineItem.expanded && timelineItem.events.any { it.identifier() == highlightedItem },
+                onClick = ::onExpandGroupClick,
+            )
         }
     }
 }

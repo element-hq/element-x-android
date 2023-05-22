@@ -22,6 +22,7 @@ import io.element.android.features.messages.impl.timeline.model.virtual.Timeline
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 sealed interface TimelineItem {
@@ -29,11 +30,13 @@ sealed interface TimelineItem {
     fun identifier(): String = when (this) {
         is Event -> id
         is Virtual -> id
+        is GroupedEvents -> id
     }
 
     fun contentType(): String = when (this) {
         is Event -> content.type
         is Virtual -> model.type
+        is GroupedEvents -> "groupedEvent"
     }
 
     @Immutable
@@ -59,5 +62,14 @@ sealed interface TimelineItem {
         val showSenderInformation = groupPosition.isNew() && !isMine
 
         val safeSenderName: String = senderDisplayName ?: senderId.value
+    }
+
+    @Immutable
+    data class GroupedEvents(
+        val expanded: Boolean,
+        val events: ImmutableList<Event>,
+    ) : TimelineItem {
+        // use first id with a suffix
+        val id = events.first().id + "_group"
     }
 }
