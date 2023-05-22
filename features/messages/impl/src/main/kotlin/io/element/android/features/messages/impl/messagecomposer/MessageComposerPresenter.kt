@@ -27,23 +27,28 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.media3.common.MimeTypes
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.core.data.toStableCharSequence
-import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediapickers.api.PickerProvider
+import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 
 @SingleIn(RoomScope::class)
 class MessageComposerPresenter @Inject constructor(
@@ -52,6 +57,8 @@ class MessageComposerPresenter @Inject constructor(
     private val mediaPickerProvider: PickerProvider,
     private val featureFlagService: FeatureFlagService,
     private val localMediaFactory: LocalMediaFactory,
+    private val mediaSender: MediaSender,
+    private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<MessageComposerState> {
 
     @SuppressLint("UnsafeOptInUsageError")
@@ -69,16 +76,26 @@ class MessageComposerPresenter @Inject constructor(
                 AttachmentsState.None
             } else {
                 val mediaAttachment = Attachment.Media(localMedia)
-                AttachmentsState.Previewing(persistentListOf(mediaAttachment))
+                val isPreviewable = when {
+                    MimeTypes.isImage(mimeType) -> true
+                    MimeTypes.isVideo(mimeType) -> true
+                    MimeTypes.isAudio(mimeType) -> true
+                    else -> false
+                }
+                if (isPreviewable) {
+                    AttachmentsState.Previewing(persistentListOf(mediaAttachment))
+                } else {
+                    AttachmentsState.Sending(persistentListOf(mediaAttachment))
+                }
             }
         }
 
         val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker(onResult = { uri, mimeType ->
             handlePickedMedia(uri, mimeType)
         })
-        val filesPicker = mediaPickerProvider.registerFilePicker(MimeTypes.Any, onResult = { handlePickedMedia(it) })
-        val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(onResult = { handlePickedMedia(it, MimeTypes.Jpeg) })
-        val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker(onResult = { handlePickedMedia(it, MimeTypes.Mp4) })
+        val filesPicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes, onResult = { handlePickedMedia(it) })
+        val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(onResult = { handlePickedMedia(it, MimeTypes.IMAGE_JPEG) })
+        val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker(onResult = { handlePickedMedia(it, MimeTypes.VIDEO_MP4) })
 
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
@@ -95,6 +112,13 @@ class MessageComposerPresenter @Inject constructor(
         LaunchedEffect(composerMode.value) {
             when (val modeValue = composerMode.value) {
                 is MessageComposerMode.Edit -> text.value = modeValue.defaultContent.toStableCharSequence()
+                else -> Unit
+            }
+        }
+
+        LaunchedEffect(attachmentsState.value) {
+            when (val attachmentStateValue = attachmentsState.value) {
+                is AttachmentsState.Sending -> localCoroutineScope.sendAttachment(attachmentStateValue.attachments.first(), attachmentsState)
                 else -> Unit
             }
         }
@@ -177,4 +201,33 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
+    private fun CoroutineScope.sendAttachment(
+        attachment: Attachment,
+        attachmentState: MutableState<AttachmentsState>,
+    ) = launch {
+        when (attachment) {
+            is Attachment.Media -> {
+                sendMedia(
+                    uri = attachment.localMedia.uri,
+                    mimeType = attachment.localMedia.mimeType,
+                    attachmentState = attachmentState
+                )
+            }
+        }
+    }
+
+    private suspend fun sendMedia(
+        uri: Uri,
+        mimeType: String,
+        attachmentState: MutableState<AttachmentsState>,
+    ) {
+        mediaSender.sendMedia(uri, mimeType)
+            .onSuccess {
+                attachmentState.value = AttachmentsState.None
+            }.onFailure {
+                val snackbarMessage = SnackbarMessage(sendAttachmentError(it))
+                snackbarDispatcher.post(snackbarMessage)
+                attachmentState.value = AttachmentsState.None
+            }
+    }
 }
