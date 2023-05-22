@@ -21,9 +21,9 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.createroom.impl.CreateRoomDataStore
-import io.element.android.features.userlist.api.UserListDataStore
-import io.element.android.features.userlist.test.FakeUserListDataSource
-import io.element.android.features.userlist.test.FakeUserListPresenterFactory
+import io.element.android.features.createroom.impl.userlist.FakeUserListPresenterFactory
+import io.element.android.features.createroom.impl.userlist.UserListDataStore
+import io.element.android.libraries.usersearch.test.FakeUserRepository
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -34,7 +34,11 @@ class AddPeoplePresenterTests {
 
     @Before
     fun setup() {
-        presenter = AddPeoplePresenter(FakeUserListPresenterFactory(), FakeUserListDataSource(), CreateRoomDataStore(UserListDataStore()))
+        presenter = AddPeoplePresenter(
+            FakeUserListPresenterFactory(),
+            FakeUserRepository(),
+            CreateRoomDataStore(UserListDataStore())
+        )
     }
 
     @Test
@@ -42,6 +46,7 @@ class AddPeoplePresenterTests {
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
+            // TODO This doesn't actually test anything...
             val initialState = awaitItem()
             assertThat(initialState)
         }

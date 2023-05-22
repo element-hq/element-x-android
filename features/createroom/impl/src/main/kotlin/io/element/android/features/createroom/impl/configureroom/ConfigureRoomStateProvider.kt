@@ -18,7 +18,7 @@ package io.element.android.features.createroom.impl.configureroom
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.createroom.impl.CreateRoomConfig
-import io.element.android.features.userlist.api.aListOfSelectedUsers
+import io.element.android.features.createroom.impl.userlist.aListOfSelectedUsers
 import io.element.android.libraries.architecture.Async
 import kotlinx.collections.immutable.persistentListOf
 

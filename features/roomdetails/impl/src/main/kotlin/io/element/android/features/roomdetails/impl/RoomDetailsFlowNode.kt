@@ -35,7 +35,6 @@ import io.element.android.libraries.architecture.animation.rememberDefaultTransi
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
