@@ -25,8 +25,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.ArrowRight
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -83,9 +83,9 @@ fun GroupHeaderView(
                     fontSize = 13.sp
                 )
                 val icon = if (isExpanded) {
-                    Icons.Default.ArrowDropDown
+                    Icons.Default.ExpandLess
                 } else {
-                    Icons.Default.ArrowRight
+                    Icons.Default.ExpandMore
                 }
                 Icon(icon, "", tint = MaterialTheme.colorScheme.secondary)
             }
