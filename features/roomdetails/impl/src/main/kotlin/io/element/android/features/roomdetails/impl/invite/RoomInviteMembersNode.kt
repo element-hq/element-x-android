@@ -31,7 +31,6 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.services.apperror.api.AppErrorStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -60,16 +59,19 @@ class RoomInviteMembersNode @AssistedInject constructor(
                 navigateUp()
 
                 coroutineScope.launch {
+                    var shownError = false
+
                     users.forEach {
                         runCatching {
                             room.inviteUserById(it.userId)
-                            delay(5000)
-                            throw IllegalStateException("Whoops")
                         }.onFailure {
-                            appErrorStateService.showError(
-                                title = context.getString(StringR.string.common_unable_to_invite_title),
-                                body = context.getString(StringR.string.common_unable_to_invite_message),
-                            )
+                            if (!shownError) {
+                                shownError = true
+                                appErrorStateService.showError(
+                                    title = context.getString(StringR.string.common_unable_to_invite_title),
+                                    body = context.getString(StringR.string.common_unable_to_invite_message),
+                                )
+                            }
                         }
                     }
 
