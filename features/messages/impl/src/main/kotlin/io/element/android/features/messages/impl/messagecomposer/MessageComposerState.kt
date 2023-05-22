@@ -27,7 +27,7 @@ data class MessageComposerState(
     val text: StableCharSequence?,
     val isFullScreen: Boolean,
     val mode: MessageComposerMode,
-    val attachmentSourcePicker: AttachmentSourcePicker?,
+    val showAttachmentSourcePicker: Boolean,
     val attachmentsState: AttachmentsState,
     val eventSink: (MessageComposerEvents) -> Unit
 ) {
@@ -39,9 +39,4 @@ sealed interface AttachmentsState {
     object None : AttachmentsState
     data class Previewing(val attachments: ImmutableList<Attachment>) : AttachmentsState
     data class Sending(val attachments: ImmutableList<Attachment>) : AttachmentsState
-}
-
-sealed interface AttachmentSourcePicker {
-    object AllMedia : AttachmentSourcePicker
-    object Camera : AttachmentSourcePicker
 }

@@ -44,7 +44,6 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
-import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.api.ThumbnailProcessingInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
@@ -259,7 +258,7 @@ class MessageComposerPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.AddAttachment)
 
-            assertThat(awaitItem().attachmentSourcePicker).isEqualTo(AttachmentSourcePicker.AllMedia)
+            assertThat(awaitItem().showAttachmentSourcePicker).isEqualTo(AttachmentSourcePicker.AllMedia)
         }
     }
 
@@ -272,7 +271,7 @@ class MessageComposerPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromCamera)
 
-            assertThat(awaitItem().attachmentSourcePicker).isEqualTo(AttachmentSourcePicker.Camera)
+            assertThat(awaitItem().showAttachmentSourcePicker).isEqualTo(AttachmentSourcePicker.Camera)
         }
     }
 
@@ -287,7 +286,7 @@ class MessageComposerPresenterTest {
             skipItems(1)
 
             initialState.eventSink(MessageComposerEvents.DismissAttachmentMenu)
-            assertThat(awaitItem().attachmentSourcePicker).isNull()
+            assertThat(awaitItem().showAttachmentSourcePicker).isNull()
         }
     }
 

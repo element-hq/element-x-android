@@ -31,7 +31,7 @@ fun aMessageComposerState() = MessageComposerState(
     text = StableCharSequence(""),
     isFullScreen = false,
     mode = MessageComposerMode.Normal(content = ""),
-    attachmentSourcePicker = null,
+    showAttachmentSourcePicker = false,
     attachmentsState = AttachmentsState.None,
     eventSink = {}
 )
