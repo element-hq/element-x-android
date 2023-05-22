@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.features.roomlist.impl.components
 
 import androidx.activity.compose.BackHandler

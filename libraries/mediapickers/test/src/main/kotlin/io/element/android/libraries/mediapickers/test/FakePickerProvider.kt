@@ -34,6 +34,11 @@ class FakePickerProvider : PickerProvider {
     }
 
     @Composable
+    override fun registerGalleryImagePicker(onResult: (uri: Uri?) -> Unit): PickerLauncher<PickVisualMediaRequest, Uri?> {
+        return NoOpPickerLauncher { onResult(result) }
+    }
+
+    @Composable
     override fun registerFilePicker(mimeType: String, onResult: (Uri?) -> Unit): PickerLauncher<String, Uri?> {
         return NoOpPickerLauncher { onResult(result) }
     }

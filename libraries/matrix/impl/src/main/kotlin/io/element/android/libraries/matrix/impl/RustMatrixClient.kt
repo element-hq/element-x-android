@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalCoroutinesApi::class)
-
 package io.element.android.libraries.matrix.impl
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -46,7 +44,6 @@ import io.element.android.libraries.matrix.impl.verification.RustSessionVerifica
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filter
@@ -282,6 +279,13 @@ class RustMatrixClient constructor(
         }
     }
 
+    override suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults> =
+        withContext(dispatchers.io) {
+            runCatching {
+                client.searchUsers(searchTerm, limit.toULong()).let(UserSearchResultMapper::map)
+            }
+        }
+
     override fun mediaResolver(): MediaResolver = mediaResolver
 
     override fun sessionVerificationService(): SessionVerificationService = verificationService
@@ -369,6 +373,13 @@ class RustMatrixClient constructor(
             }
         }
 
+    @OptIn(ExperimentalUnsignedTypes::class)
+    override suspend fun uploadMedia(mimeType: String, data: ByteArray): Result<String> = withContext(dispatchers.io) {
+        runCatching {
+            client.uploadMedia(mimeType, data.toUByteArray().toList())
+        }
+    }
+
     override fun onSlidingSyncUpdate() {
         if (!verificationService.isReady.value) {
             try {
@@ -380,13 +391,6 @@ class RustMatrixClient constructor(
     }
 
     override fun roomMembershipObserver(): RoomMembershipObserver = roomMembershipObserver
-
-    override suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults> =
-        withContext(dispatchers.io) {
-            runCatching {
-                client.searchUsers(searchTerm, limit.toULong()).let(UserSearchResultMapper::map)
-            }
-        }
 
     private fun File.deleteSessionDirectory(userID: String): Boolean {
         // Rust sanitises the user ID replacing invalid characters with an _

@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -75,8 +73,9 @@ fun SearchBar(
 
 @Preview(group = PreviewGroup.Search)
 @Composable
-internal fun DockedSearchBarPreview() = ElementThemedPreview { ContentToPreview() }
+internal fun SearchBarPreview() = ElementThemedPreview { ContentToPreview() }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ContentToPreview() {
     SearchBar(

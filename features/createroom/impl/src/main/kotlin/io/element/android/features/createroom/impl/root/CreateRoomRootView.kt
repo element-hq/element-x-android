@@ -55,7 +55,6 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.designsystem.R as DrawableR
 import io.element.android.libraries.ui.strings.R as StringR
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateRoomRootView(
     state: CreateRoomRootState,
@@ -102,7 +101,7 @@ fun CreateRoomRootView(
 
     when (state.startDmAction) {
         is Async.Loading -> {
-            ProgressDialog(text = stringResource(id = StringR.string.common_creating_room))
+            ProgressDialog(text = stringResource(id = StringR.string.common_starting_chat))
         }
 
         is Async.Failure -> {

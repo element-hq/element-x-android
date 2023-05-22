@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(
-    ExperimentalMaterial3Api::class,
-    ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class,
-)
-
 package io.element.android.features.messages.impl
 
 import androidx.activity.compose.BackHandler
@@ -84,6 +79,7 @@ import io.element.android.libraries.designsystem.utils.LogCompositions
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MessagesView(
     state: MessagesState,
@@ -239,6 +235,7 @@ fun MessagesViewContent(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MessagesViewTopBar(
     roomTitle: String?,
