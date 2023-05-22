@@ -20,6 +20,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -89,7 +91,7 @@ internal fun RoomListSearchResultView(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 internal fun RoomListSearchResultContent(
     state: RoomListState,
@@ -183,6 +185,7 @@ internal fun RoomListSearchResultContent(
         Column(
             modifier = Modifier
                 .padding(padding)
+                .consumeWindowInsets(padding)
         ) {
             LazyColumn(
                 modifier = Modifier

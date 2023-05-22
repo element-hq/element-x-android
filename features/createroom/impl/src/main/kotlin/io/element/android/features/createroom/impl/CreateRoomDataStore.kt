@@ -19,7 +19,7 @@ package io.element.android.features.createroom.impl
 import android.net.Uri
 import io.element.android.features.createroom.impl.configureroom.RoomPrivacy
 import io.element.android.features.createroom.impl.di.CreateRoomScope
-import io.element.android.features.userlist.api.UserListDataStore
+import io.element.android.features.createroom.impl.userlist.UserListDataStore
 import io.element.android.libraries.di.SingleIn
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
