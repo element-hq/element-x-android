@@ -23,7 +23,9 @@ import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.androidutils.file.createTmpFile
+import io.element.android.libraries.androidutils.file.getFileName
 import io.element.android.libraries.androidutils.media.runAndRelease
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.mimetype.MimeTypes
@@ -41,7 +43,6 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.api.ThumbnailProcessingInfo
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
@@ -58,6 +59,7 @@ class AndroidMediaPreProcessor @Inject constructor(
     @ApplicationContext private val context: Context,
     private val imageCompressor: ImageCompressor,
     private val videoCompressor: VideoCompressor,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) : MediaPreProcessor {
     companion object {
         /**
@@ -92,12 +94,13 @@ class AndroidMediaPreProcessor @Inject constructor(
         uri: Uri,
         mimeType: String,
         deleteOriginal: Boolean,
+        compressIfPossible: Boolean,
     ): Result<MediaUploadInfo> = runCatching {
-        val compressBeforeSending = (
-            mimeType.isMimeTypeImage() && mimeType != MimeTypes.Gif) ||
+        val shouldBeCompressed = compressIfPossible &&
+            (mimeType.isMimeTypeImage() && mimeType != MimeTypes.Gif) ||
             mimeType.isMimeTypeVideo()
 
-        val result = if (compressBeforeSending) {
+        val result = if (shouldBeCompressed) {
             when {
                 mimeType.isMimeTypeImage() -> processImage(uri)
                 mimeType.isMimeTypeVideo() -> processVideo(uri, mimeType)
@@ -123,8 +126,25 @@ class AndroidMediaPreProcessor @Inject constructor(
                 contentResolver.delete(uri, null, null)
             }
         }
-        result
+        result.postProcess(uri)
     }.mapFailure { MediaPreProcessor.Failure(it) }
+
+    private fun MediaUploadInfo.postProcess(uri: Uri): MediaUploadInfo {
+
+        fun File.rename(name: String): File {
+            return File(context.cacheDir, name).also {
+                renameTo(it)
+            }
+        }
+
+        val name = context.getFileName(uri) ?: return this
+        return when (this) {
+            is MediaUploadInfo.AnyFile -> copy(file = file.rename(name))
+            is MediaUploadInfo.Audio -> copy(file = file.rename(name))
+            is MediaUploadInfo.Image -> copy(file = file.rename(name))
+            is MediaUploadInfo.Video -> copy(file = file.rename(name))
+        }
+    }
 
     private suspend fun processImage(uri: Uri): MediaUploadInfo {
         val compressedFileResult = contentResolver.openInputStream(uri).use { input ->
@@ -176,7 +196,6 @@ class AndroidMediaPreProcessor @Inject constructor(
                 inputStream = inputStream,
                 resizeMode = ResizeMode.Strict(THUMB_MAX_WIDTH, THUMB_MAX_HEIGHT),
             ).getOrThrow()
-
         return thumbnailResult.toThumbnailProcessingInfo(MimeTypes.Jpeg)
     }
 
@@ -191,7 +210,7 @@ class AndroidMediaPreProcessor @Inject constructor(
     }
 
     private suspend fun createTmpFileWithInput(inputStream: InputStream): File? {
-        return withContext(Dispatchers.IO) {
+        return withContext(coroutineDispatchers.io) {
             tryOrNull {
                 val tmpFile = context.createTmpFile()
                 tmpFile.outputStream().use { inputStream.copyTo(it) }
@@ -203,7 +222,6 @@ class AndroidMediaPreProcessor @Inject constructor(
     private fun extractVideoMetadata(file: File, mimeType: String?, thumbnailUrl: String?, thumbnailInfo: ThumbnailProcessingInfo?): VideoInfo =
         MediaMetadataRetriever().runAndRelease {
             setDataSource(context, Uri.fromFile(file))
-
             VideoInfo(
                 duration = extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L,
                 width = extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toLong() ?: 0L,
@@ -229,7 +247,6 @@ class AndroidMediaPreProcessor @Inject constructor(
                 inputStream = inputStream,
                 resizeMode = ResizeMode.Strict(THUMB_MAX_WIDTH, THUMB_MAX_HEIGHT),
             )
-
             result.getOrThrow().toThumbnailProcessingInfo(MimeTypes.Jpeg)
         }
 

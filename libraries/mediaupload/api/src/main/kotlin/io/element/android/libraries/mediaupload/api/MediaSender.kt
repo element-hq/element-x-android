@@ -26,9 +26,14 @@ class MediaSender @Inject constructor(
     private val room: MatrixRoom,
 ) {
 
-    suspend fun sendMedia(uri: Uri, mimeType: String): Result<Unit> {
+    suspend fun sendMedia(uri: Uri, mimeType: String, compressIfPossible: Boolean): Result<Unit> {
         return preProcessor
-            .process(uri, mimeType, deleteOriginal = true)
+            .process(
+                uri = uri,
+                mimeType = mimeType,
+                deleteOriginal = true,
+                compressIfPossible = compressIfPossible
+            )
             .flatMap { info ->
                 room.sendMedia(info)
             }

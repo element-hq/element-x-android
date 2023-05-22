@@ -16,7 +16,6 @@
 
 package io.element.android.features.messages.impl.attachments.preview
 
-import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -73,8 +72,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         when (attachment) {
             is Attachment.Media -> {
                 sendMedia(
-                    uri = attachment.localMedia.uri,
-                    mimeType = attachment.localMedia.mimeType,
+                    mediaAttachment = attachment,
                     sendActionState = sendActionState
                 )
             }
@@ -82,12 +80,11 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     }
 
     private suspend fun sendMedia(
-        uri: Uri,
-        mimeType: String,
+        mediaAttachment: Attachment.Media,
         sendActionState: MutableState<Async<Unit>>,
     ) {
         suspend {
-            mediaSender.sendMedia(uri, mimeType)
+            mediaSender.sendMedia(mediaAttachment.localMedia.uri, mediaAttachment.localMedia.mimeType, mediaAttachment.compressIfPossible)
         }.executeResult(sendActionState)
     }
 }

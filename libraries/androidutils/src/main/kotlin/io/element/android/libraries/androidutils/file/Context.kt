@@ -16,26 +16,20 @@
 
 package io.element.android.libraries.androidutils.file
 
+import android.content.ContentResolver
 import android.content.Context
-import io.element.android.libraries.core.data.tryOrNull
-import timber.log.Timber
+import android.net.Uri
+import android.provider.OpenableColumns
 import java.io.File
-import java.util.UUID
 
-fun File.safeDelete() {
-    tryOrNull(
-        onError = {
-            Timber.e(it, "Error, unable to delete file $path")
-        },
-        operation = {
-            if (delete().not()) {
-                Timber.w("Warning, unable to delete file $path")
-            }
-        }
-    )
+fun Context.getFileName(uri: Uri): String? = when (uri.scheme) {
+    ContentResolver.SCHEME_CONTENT -> getContentFileName(uri)
+    else -> uri.path?.let(::File)?.name
 }
 
-fun Context.createTmpFile(baseDir: File = cacheDir, extension: String? = null): File {
-    val suffix = extension?.let { ".$extension" }
-    return File.createTempFile(UUID.randomUUID().toString(), suffix, baseDir).apply { mkdirs() }
-}
+private fun Context.getContentFileName(uri: Uri): String? = runCatching {
+    contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+        cursor.moveToFirst()
+        return@use cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME).let(cursor::getString)
+    }
+}.getOrNull()
