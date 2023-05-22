@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -173,29 +174,31 @@ fun TimelineItemRow(
                 onExpandGroupClick(timelineItem)
             }
 
-            if (timelineItem.expanded) {
-                Column {
-                    timelineItem.events.forEach { subGroupEvent ->
-                        TimelineItemRow(
-                            timelineItem = subGroupEvent,
-                            highlightedItem = highlightedItem,
-                            onClick = onClick,
-                            onLongClick = onLongClick,
-                            onExpandGroupClick = {}
-                        )
+            Column(modifier = Modifier.animateContentSize()) {
+                GroupHeaderView(
+                    text = pluralStringResource(
+                        id = R.plurals.room_timeline_state_changes,
+                        count = timelineItem.events.size,
+                        timelineItem.events.size
+                    ),
+                    isExpanded = timelineItem.expanded,
+                    isHighlighted = !timelineItem.expanded && timelineItem.events.any { it.identifier() == highlightedItem },
+                    onClick = ::onExpandGroupClick,
+                )
+                if (timelineItem.expanded) {
+                    Column {
+                        timelineItem.events.forEach { subGroupEvent ->
+                            TimelineItemRow(
+                                timelineItem = subGroupEvent,
+                                highlightedItem = highlightedItem,
+                                onClick = onClick,
+                                onLongClick = onLongClick,
+                                onExpandGroupClick = {}
+                            )
+                        }
                     }
                 }
             }
-            GroupHeaderView(
-                text = pluralStringResource(
-                    id = R.plurals.room_timeline_state_changes,
-                    count = timelineItem.events.size,
-                    timelineItem.events.size
-                ),
-                isExpanded = timelineItem.expanded,
-                isHighlighted = !timelineItem.expanded && timelineItem.events.any { it.identifier() == highlightedItem },
-                onClick = ::onExpandGroupClick,
-            )
         }
     }
 }
