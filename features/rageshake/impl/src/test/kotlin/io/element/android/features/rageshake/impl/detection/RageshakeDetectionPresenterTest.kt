@@ -85,7 +85,7 @@ class RageshakeDetectionPresenterTest {
     }
 
     @Test
-    fun `present - screenshot with success then dismiss`() = runTest {
+    fun `present - screenshot with success then dismiss`() = runTest(timeout = 30.seconds) {
         val screenshotHolder = FakeScreenshotHolder(screenshotUri = null)
         val rageshake = FakeRageShake(isAvailableValue = true)
         val rageshakeDataStore = FakeRageshakeDataStore(isEnabled = true)
@@ -99,7 +99,7 @@ class RageshakeDetectionPresenterTest {
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
-        }.test(timeout = 30.seconds) {
+        }.test {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.isStarted).isFalse()
