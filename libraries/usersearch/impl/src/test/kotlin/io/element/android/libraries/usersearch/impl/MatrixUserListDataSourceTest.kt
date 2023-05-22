@@ -20,6 +20,10 @@ import com.google.common.truth.Truth
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.test.AN_AVATAR_URL
+import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.A_USER_ID_2
+import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -35,7 +39,7 @@ internal class MatrixUserListDataSourceTest {
                 MatrixSearchUserResults(
                     results = listOf(
                         aMatrixUserProfile(),
-                        aMatrixUserProfile(userId = io.element.android.libraries.matrix.test.A_USER_ID_2)
+                        aMatrixUserProfile(userId = A_USER_ID_2)
                     ),
                     limited = false
                 )
@@ -46,7 +50,7 @@ internal class MatrixUserListDataSourceTest {
         val results = dataSource.search("test")
         Truth.assertThat(results).containsExactly(
             aMatrixUserProfile(),
-            aMatrixUserProfile(userId = io.element.android.libraries.matrix.test.A_USER_ID_2)
+            aMatrixUserProfile(userId = A_USER_ID_2)
         )
     }
 
@@ -67,12 +71,12 @@ internal class MatrixUserListDataSourceTest {
     fun `get profile - returns user on success`() = runTest {
         val matrixClient = FakeMatrixClient()
         matrixClient.givenGetProfileResult(
-            userId = io.element.android.libraries.matrix.test.A_USER_ID,
+            userId = A_USER_ID,
             result = Result.success(aMatrixUserProfile())
         )
         val dataSource = MatrixUserListDataSource(matrixClient)
 
-        val result = dataSource.getProfile(io.element.android.libraries.matrix.test.A_USER_ID)
+        val result = dataSource.getProfile(A_USER_ID)
         Truth.assertThat(result).isEqualTo(aMatrixUserProfile())
     }
 
@@ -80,18 +84,18 @@ internal class MatrixUserListDataSourceTest {
     fun `get profile - returns null on error`() = runTest {
         val matrixClient = FakeMatrixClient()
         matrixClient.givenGetProfileResult(
-            userId = io.element.android.libraries.matrix.test.A_USER_ID,
+            userId = A_USER_ID,
             result = Result.failure(Throwable("Ruhroh"))
         )
         val dataSource = MatrixUserListDataSource(matrixClient)
 
-        val result = dataSource.getProfile(io.element.android.libraries.matrix.test.A_USER_ID)
+        val result = dataSource.getProfile(A_USER_ID)
         Truth.assertThat(result).isNull()
     }
 
     private fun aMatrixUserProfile(
-        userId: UserId = io.element.android.libraries.matrix.test.A_USER_ID,
-        displayName: String = io.element.android.libraries.matrix.test.A_USER_NAME,
-        avatarUrl: String = io.element.android.libraries.matrix.test.AN_AVATAR_URL
+        userId: UserId = A_USER_ID,
+        displayName: String = A_USER_NAME,
+        avatarUrl: String = AN_AVATAR_URL
     ) = MatrixUser(userId, displayName, avatarUrl)
 }
