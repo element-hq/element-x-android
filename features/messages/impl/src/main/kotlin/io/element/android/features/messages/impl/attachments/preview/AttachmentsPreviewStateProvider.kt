@@ -36,6 +36,7 @@ open class AttachmentsPreviewStateProvider : PreviewParameterProvider<Attachment
 fun anAttachmentsPreviewState(sendActionState: Async<Unit> = Async.Uninitialized) = AttachmentsPreviewState(
     attachment = Attachment.Media(
         localMedia = LocalMedia("".toUri(), mimeType = MimeTypes.OctetStream),
+        compressIfPossible = true
     ),
     sendActionState = sendActionState,
     eventSink = {}

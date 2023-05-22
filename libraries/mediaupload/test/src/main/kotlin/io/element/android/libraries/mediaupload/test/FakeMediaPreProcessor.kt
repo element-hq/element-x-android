@@ -36,7 +36,12 @@ class FakeMediaPreProcessor : MediaPreProcessor {
         )
     )
 
-    override suspend fun process(uri: Uri, mimeType: String, deleteOriginal: Boolean): Result<MediaUploadInfo> = result
+    override suspend fun process(
+        uri: Uri,
+        mimeType: String,
+        deleteOriginal: Boolean,
+        compressIfPossible: Boolean
+    ): Result<MediaUploadInfo> = result
 
     fun givenResult(value: Result<MediaUploadInfo>) {
         this.result = value

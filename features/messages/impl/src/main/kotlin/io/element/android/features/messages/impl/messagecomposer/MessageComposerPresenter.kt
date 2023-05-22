@@ -70,16 +70,16 @@ class MessageComposerPresenter @Inject constructor(
             mutableStateOf<AttachmentsState>(AttachmentsState.None)
         }
 
-        fun handlePickedMedia(uri: Uri?, mimeType: String? = null) {
+        fun handlePickedMedia(uri: Uri?, mimeType: String? = null, compressIfPossible: Boolean = true) {
             val localMedia = localMediaFactory.createFromUri(uri, mimeType)
             attachmentsState.value = if (localMedia == null) {
                 AttachmentsState.None
             } else {
-                val mediaAttachment = Attachment.Media(localMedia)
+                val mediaAttachment = Attachment.Media(localMedia, compressIfPossible)
                 val isPreviewable = when {
-                    MimeTypes.isImage(mimeType) -> true
-                    MimeTypes.isVideo(mimeType) -> true
-                    MimeTypes.isAudio(mimeType) -> true
+                    MimeTypes.isImage(localMedia.mimeType) -> true
+                    MimeTypes.isVideo(localMedia.mimeType) -> true
+                    MimeTypes.isAudio(localMedia.mimeType) -> true
                     else -> false
                 }
                 if (isPreviewable) {
@@ -93,7 +93,7 @@ class MessageComposerPresenter @Inject constructor(
         val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker(onResult = { uri, mimeType ->
             handlePickedMedia(uri, mimeType)
         })
-        val filesPicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes, onResult = { handlePickedMedia(it) })
+        val filesPicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes, onResult = { handlePickedMedia(it, compressIfPossible = false) })
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(onResult = { handlePickedMedia(it, MimeTypes.IMAGE_JPEG) })
         val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker(onResult = { handlePickedMedia(it, MimeTypes.VIDEO_MP4) })
 
@@ -221,7 +221,7 @@ class MessageComposerPresenter @Inject constructor(
         mimeType: String,
         attachmentState: MutableState<AttachmentsState>,
     ) {
-        mediaSender.sendMedia(uri, mimeType)
+        mediaSender.sendMedia(uri, mimeType, compressIfPossible = false)
             .onSuccess {
                 attachmentState.value = AttachmentsState.None
             }.onFailure {
