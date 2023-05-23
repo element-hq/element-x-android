@@ -26,5 +26,5 @@ dependencies {
     implementation("com.squareup:kotlinpoet:1.13.2")
     implementation(libs.dagger)
     compileOnly("com.google.auto.service:auto-service-annotations:1.0.1")
-    kapt("com.google.auto.service:auto-service:1.0.1")
+    kapt("com.google.auto.service:auto-service:1.1.0")
 }
