@@ -134,11 +134,13 @@ fun TimelineItemRow(
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
     onExpandGroupClick: (TimelineItem.GroupedEvents) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     when (timelineItem) {
         is TimelineItem.Virtual -> {
             TimelineItemVirtualRow(
-                virtual = timelineItem
+                virtual = timelineItem,
+                modifier = modifier,
             )
         }
         is TimelineItem.Event -> {
@@ -155,14 +157,16 @@ fun TimelineItemRow(
                     event = timelineItem,
                     isHighlighted = highlightedItem == timelineItem.identifier(),
                     onClick = ::onClick,
-                    onLongClick = ::onLongClick
+                    onLongClick = ::onLongClick,
+                    modifier = modifier,
                 )
             } else {
                 TimelineItemEventRow(
                     event = timelineItem,
                     isHighlighted = highlightedItem == timelineItem.identifier(),
                     onClick = ::onClick,
-                    onLongClick = ::onLongClick
+                    onLongClick = ::onLongClick,
+                    modifier = modifier,
                 )
             }
         }
@@ -171,7 +175,7 @@ fun TimelineItemRow(
                 onExpandGroupClick(timelineItem)
             }
 
-            Column(modifier = Modifier.animateContentSize()) {
+            Column(modifier = modifier.animateContentSize()) {
                 GroupHeaderView(
                     text = pluralStringResource(
                         id = R.plurals.room_timeline_state_changes,
