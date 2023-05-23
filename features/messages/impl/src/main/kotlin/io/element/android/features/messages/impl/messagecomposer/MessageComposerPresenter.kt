@@ -28,6 +28,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.media3.common.MimeTypes
+import androidx.media3.common.util.UnstableApi
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
@@ -70,33 +71,18 @@ class MessageComposerPresenter @Inject constructor(
             mutableStateOf<AttachmentsState>(AttachmentsState.None)
         }
 
-        fun handlePickedMedia(uri: Uri?, mimeType: String? = null, compressIfPossible: Boolean = true) {
-            val localMedia = localMediaFactory.createFromUri(uri, mimeType)
-            attachmentsState.value = if (localMedia == null) {
-                AttachmentsState.None
-            } else {
-                val mediaAttachment = Attachment.Media(localMedia, compressIfPossible)
-                val isPreviewable = when {
-                    MimeTypes.isImage(localMedia.mimeType) -> true
-                    MimeTypes.isVideo(localMedia.mimeType) -> true
-                    MimeTypes.isAudio(localMedia.mimeType) -> true
-                    else -> false
-                }
-                if (isPreviewable) {
-                    AttachmentsState.Previewing(persistentListOf(mediaAttachment))
-                } else {
-                    AttachmentsState.Sending(persistentListOf(mediaAttachment))
-                }
-            }
+        val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker { uri, mimeType ->
+            handlePickedMedia(attachmentsState, uri, mimeType)
         }
-
-        val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker(onResult = { uri, mimeType ->
-            handlePickedMedia(uri, mimeType)
-        })
-        val filesPicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes, onResult = { handlePickedMedia(it, compressIfPossible = false) })
-        val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(onResult = { handlePickedMedia(it, MimeTypes.IMAGE_JPEG) })
-        val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker(onResult = { handlePickedMedia(it, MimeTypes.VIDEO_MP4) })
-
+        val filesPicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes) { uri ->
+            handlePickedMedia(attachmentsState, uri, compressIfPossible = false)
+        }
+        val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker { uri ->
+            handlePickedMedia(attachmentsState, uri, MimeTypes.IMAGE_JPEG)
+        }
+        val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker { uri ->
+            handlePickedMedia(attachmentsState, uri, MimeTypes.VIDEO_MP4)
+        }
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
         }
@@ -107,7 +93,7 @@ class MessageComposerPresenter @Inject constructor(
             mutableStateOf(MessageComposerMode.Normal(""))
         }
 
-    var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
+        var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
 
         LaunchedEffect(composerMode.value) {
             when (val modeValue = composerMode.value) {
@@ -134,23 +120,23 @@ class MessageComposerPresenter @Inject constructor(
 
                 is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(event.message, composerMode, text)
                 is MessageComposerEvents.SetMode -> composerMode.value = event.composerMode
-                MessageComposerEvents.AddAttachment -> localCoroutineScope.ifMediaPickersEnabled {
+                MessageComposerEvents.AddAttachment -> localCoroutineScope.launchIfMediaPickerEnabled {
                     showAttachmentSourcePicker = true
                 }
                 MessageComposerEvents.DismissAttachmentMenu -> showAttachmentSourcePicker = false
-                MessageComposerEvents.PickAttachmentSource.FromGallery -> localCoroutineScope.ifMediaPickersEnabled {
+                MessageComposerEvents.PickAttachmentSource.FromGallery -> localCoroutineScope.launchIfMediaPickerEnabled {
                     showAttachmentSourcePicker = false
                     galleryMediaPicker.launch()
                 }
-                MessageComposerEvents.PickAttachmentSource.FromFiles -> localCoroutineScope.ifMediaPickersEnabled {
+                MessageComposerEvents.PickAttachmentSource.FromFiles -> localCoroutineScope.launchIfMediaPickerEnabled {
                     showAttachmentSourcePicker = false
                     filesPicker.launch()
                 }
-                MessageComposerEvents.PickAttachmentSource.PhotoFromCamera -> localCoroutineScope.ifMediaPickersEnabled {
+                MessageComposerEvents.PickAttachmentSource.PhotoFromCamera -> localCoroutineScope.launchIfMediaPickerEnabled {
                     showAttachmentSourcePicker = false
                     cameraPhotoPicker.launch()
                 }
-                MessageComposerEvents.PickAttachmentSource.VideoFromCamera -> localCoroutineScope.ifMediaPickersEnabled {
+                MessageComposerEvents.PickAttachmentSource.VideoFromCamera -> localCoroutineScope.launchIfMediaPickerEnabled {
                     showAttachmentSourcePicker = false
                     cameraVideoPicker.launch()
                 }
@@ -167,7 +153,7 @@ class MessageComposerPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.ifMediaPickersEnabled(action: suspend () -> Unit) = launch {
+    private fun CoroutineScope.launchIfMediaPickerEnabled(action: suspend () -> Unit) = launch {
         if (featureFlagService.isFeatureEnabled(FeatureFlags.ShowMediaUploadingFlow)) {
             action()
         }
@@ -209,6 +195,32 @@ class MessageComposerPresenter @Inject constructor(
                     mimeType = attachment.localMedia.mimeType,
                     attachmentState = attachmentState
                 )
+            }
+        }
+    }
+
+    @UnstableApi
+    private fun handlePickedMedia(
+        attachmentsState: MutableState<AttachmentsState>,
+        uri: Uri?,
+        mimeType: String? = null,
+        compressIfPossible: Boolean = true,
+    ) {
+        val localMedia = localMediaFactory.createFromUri(uri, mimeType)
+        attachmentsState.value = if (localMedia == null) {
+            AttachmentsState.None
+        } else {
+            val mediaAttachment = Attachment.Media(localMedia, compressIfPossible)
+            val isPreviewable = when {
+                MimeTypes.isImage(localMedia.mimeType) -> true
+                MimeTypes.isVideo(localMedia.mimeType) -> true
+                MimeTypes.isAudio(localMedia.mimeType) -> true
+                else -> false
+            }
+            if (isPreviewable) {
+                AttachmentsState.Previewing(persistentListOf(mediaAttachment))
+            } else {
+                AttachmentsState.Sending(persistentListOf(mediaAttachment))
             }
         }
     }

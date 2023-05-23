@@ -21,7 +21,8 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.messages.impl.messagecomposer.AttachmentSourcePicker
+import io.element.android.features.messages.impl.media.local.FakeLocalMediaFactory
+import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
@@ -44,13 +45,13 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
+import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.api.ThumbnailProcessingInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -61,13 +62,12 @@ class MessageComposerPresenterTest {
     private val pickerProvider = FakePickerProvider().apply {
         givenResult(mockk()) // Uri is not available in JVM, so the only way to have a non-null Uri is using Mockk
     }
-    private val featureFlagService = FakeFeatureFlagService().apply {
-        runBlocking {
-            setFeatureEnabled(FeatureFlags.ShowMediaUploadingFlow, true)
-        }
-    }
+    private val featureFlagService = FakeFeatureFlagService(
+        mapOf(FeatureFlags.ShowMediaUploadingFlow.key to true)
+    )
     private val mediaPreProcessor = FakeMediaPreProcessor()
     private val snackbarDispatcher = SnackbarDispatcher()
+    private val localMediaFactory = FakeLocalMediaFactory()
 
     @Test
     fun `present - initial state`() = runTest {
@@ -79,6 +79,8 @@ class MessageComposerPresenterTest {
             assertThat(initialState.isFullScreen).isFalse()
             assertThat(initialState.text).isEqualTo(StableCharSequence(""))
             assertThat(initialState.mode).isEqualTo(MessageComposerMode.Normal(""))
+            assertThat(initialState.showAttachmentSourcePicker).isFalse()
+            assertThat(initialState.attachmentsState).isEqualTo(AttachmentsState.None)
             assertThat(initialState.isSendButtonVisible).isFalse()
         }
     }
@@ -256,22 +258,9 @@ class MessageComposerPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            assertThat(initialState.showAttachmentSourcePicker).isEqualTo(false)
             initialState.eventSink(MessageComposerEvents.AddAttachment)
-
-            assertThat(awaitItem().showAttachmentSourcePicker).isEqualTo(AttachmentSourcePicker.AllMedia)
-        }
-    }
-
-    @Test
-    fun `present - Open camera attachments menu`() = runTest {
-        val presenter = createPresenter(this)
-        moleculeFlow(RecompositionClock.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromCamera)
-
-            assertThat(awaitItem().showAttachmentSourcePicker).isEqualTo(AttachmentSourcePicker.Camera)
+            assertThat(awaitItem().showAttachmentSourcePicker).isEqualTo(true)
         }
     }
 
@@ -286,7 +275,7 @@ class MessageComposerPresenterTest {
             skipItems(1)
 
             initialState.eventSink(MessageComposerEvents.DismissAttachmentMenu)
-            assertThat(awaitItem().showAttachmentSourcePicker).isNull()
+            assertThat(awaitItem().showAttachmentSourcePicker).isFalse()
         }
     }
 
@@ -326,9 +315,9 @@ class MessageComposerPresenterTest {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery)
-            // Wait for the launched upload coroutine to run
-            runCurrent()
-            assertThat(room.sendMediaCount).isEqualTo(1)
+            val previewingState = awaitItem()
+            assertThat(previewingState.showAttachmentSourcePicker).isFalse()
+            assertThat(previewingState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
         }
     }
 
@@ -369,22 +358,9 @@ class MessageComposerPresenterTest {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery)
-            // Wait for the launched upload coroutine to run
-            runCurrent()
-            assertThat(room.sendMediaCount).isEqualTo(1)
-        }
-    }
-
-    @Test
-    fun `present - Pick media from gallery fails if returned mimetype is not video or image`() = runTest {
-        val presenter = createPresenter(this)
-        pickerProvider.givenMimeType(MimeTypes.Audio)
-        moleculeFlow(RecompositionClock.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery)
-            assertThat(awaitError()).isInstanceOf(IllegalStateException::class.java)
+            val previewingState = awaitItem()
+            assertThat(previewingState.showAttachmentSourcePicker).isFalse()
+            assertThat(previewingState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
         }
     }
 
@@ -413,9 +389,10 @@ class MessageComposerPresenterTest {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles)
-            // Wait for the launched upload coroutine to run
-            runCurrent()
-            assertThat(room.sendMediaCount).isEqualTo(1)
+            val sendingState = awaitItem()
+            assertThat(sendingState.showAttachmentSourcePicker).isFalse()
+            assertThat(sendingState.attachmentsState).isInstanceOf(AttachmentsState.Sending::class.java)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -427,10 +404,11 @@ class MessageComposerPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(MessageComposerEvents.PickCameraAttachmentSource.Photo)
-            // Wait for the launched upload coroutine to run
-            runCurrent()
-            assertThat(room.sendMediaCount).isEqualTo(1)
+            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera)
+            val previewingState = awaitItem()
+            assertThat(previewingState.showAttachmentSourcePicker).isFalse()
+            assertThat(previewingState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -442,10 +420,10 @@ class MessageComposerPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(MessageComposerEvents.PickCameraAttachmentSource.Video)
-            // Wait for the launched upload coroutine to run
-            runCurrent()
-            assertThat(room.sendMediaCount).isEqualTo(1)
+            initialState.eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera)
+            val previewingState = awaitItem()
+            assertThat(previewingState.showAttachmentSourcePicker).isFalse()
+            assertThat(previewingState.attachmentsState).isInstanceOf(AttachmentsState.Previewing::class.java)
         }
     }
 
@@ -460,10 +438,11 @@ class MessageComposerPresenterTest {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles)
-
+            val sendingState = awaitItem()
+            assertThat(sendingState.attachmentsState).isInstanceOf(AttachmentsState.Sending::class.java)
+            val finalState= awaitItem()
+            assertThat(finalState.attachmentsState).isInstanceOf(AttachmentsState.None::class.java)
             snackbarDispatcher.snackbarMessage.test {
-                // Initial value is always null
-                skipItems(1)
                 // Assert error message received
                 assertThat(awaitItem()).isNotNull()
             }
@@ -491,7 +470,8 @@ class MessageComposerPresenterTest {
         room,
         pickerProvider,
         featureFlagService,
-        mediaPreProcessor,
+        localMediaFactory,
+        MediaSender(mediaPreProcessor, room),
         snackbarDispatcher
     )
 }
