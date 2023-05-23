@@ -252,9 +252,7 @@ class RustMatrixRoom(
     override suspend fun setName(name: String): Result<Unit> =
         withContext(Dispatchers.IO) {
             runCatching {
-                // TODO add FFI binding
-                // innerRoom.setName(name)
-                error("Missing room.setName FFI binding")
+                innerRoom.setName(name)
             }
         }
 
