@@ -32,10 +32,10 @@ import kotlinx.collections.immutable.toImmutableList
 
 import javax.inject.Inject
 
-/**
- * Create a new list of [TimelineItem] by grouping some of them into [TimelineItem.GroupedEvents].
- */
 class TimelineItemGrouper @Inject constructor() {
+    /**
+     * Create a new list of [TimelineItem] by grouping some of them into [TimelineItem.GroupedEvents].
+     */
     fun group(from: List<TimelineItem>, expandedGroups: Map<String, Boolean>): List<TimelineItem> {
         val result = mutableListOf<TimelineItem>()
         val currentGroup = mutableListOf<TimelineItem.Event>()

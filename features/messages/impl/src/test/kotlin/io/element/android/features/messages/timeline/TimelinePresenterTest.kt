@@ -23,6 +23,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
+import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import kotlinx.coroutines.test.runTest
@@ -33,6 +34,7 @@ class TimelinePresenterTest {
     fun `present - initial state`() = runTest {
         val presenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
+            timelineItemGrouper = TimelineItemGrouper(),
             room = FakeMatrixRoom(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -49,6 +51,7 @@ class TimelinePresenterTest {
     fun `present - load more`() = runTest {
         val presenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
+            timelineItemGrouper = TimelineItemGrouper(),
             room = FakeMatrixRoom(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -71,6 +74,7 @@ class TimelinePresenterTest {
     fun `present - set highlighted event`() = runTest {
         val presenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
+            timelineItemGrouper = TimelineItemGrouper(),
             room = FakeMatrixRoom(),
         )
         moleculeFlow(RecompositionClock.Immediate) {

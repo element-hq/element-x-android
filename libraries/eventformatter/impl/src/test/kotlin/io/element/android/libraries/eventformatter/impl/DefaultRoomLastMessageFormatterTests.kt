@@ -67,7 +67,14 @@ class DefaultRoomLastMessageFormatterTests {
     fun setup() {
         context = RuntimeEnvironment.getApplication() as Context
         fakeMatrixClient = FakeMatrixClient()
-        formatter = DefaultRoomLastMessageFormatter(AndroidStringProvider(context.resources), fakeMatrixClient)
+        val stringProvider = AndroidStringProvider(context.resources)
+        formatter = DefaultRoomLastMessageFormatter(
+            sp = AndroidStringProvider(context.resources),
+            matrixClient = fakeMatrixClient,
+            roomMembershipContentFormatter = RoomMembershipContentFormatter(fakeMatrixClient, stringProvider),
+            profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
+            stateContentFormatter = StateContentFormatter(stringProvider)
+        )
     }
 
     @Test
