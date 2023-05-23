@@ -42,7 +42,7 @@ jobs:
           name: elementx-debug
           path: |
             app/build/outputs/apk/debug/*.apk
-      - uses: mobile-dev-inc/action-maestro-cloud@v1.3.1
+      - uses: mobile-dev-inc/action-maestro-cloud@v1.3.2
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
           app-file: app/build/outputs/apk/debug/app-universal-debug.apk
