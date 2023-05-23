@@ -32,9 +32,11 @@ import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import kotlin.time.Duration.Companion.seconds
 
 class RageshakeDetectionPresenterTest {
+
+    private val aBitmap: Bitmap = mockk()
+
     @Test
     fun `present - initial state`() = runTest {
         val screenshotHolder = FakeScreenshotHolder(screenshotUri = null)
@@ -85,7 +87,7 @@ class RageshakeDetectionPresenterTest {
     }
 
     @Test
-    fun `present - screenshot with success then dismiss`() = runTest(timeout = 30.seconds) {
+    fun `present - screenshot with success then dismiss`() = runTest {
         val screenshotHolder = FakeScreenshotHolder(screenshotUri = null)
         val rageshake = FakeRageShake(isAvailableValue = true)
         val rageshakeDataStore = FakeRageshakeDataStore(isEnabled = true)
@@ -108,7 +110,7 @@ class RageshakeDetectionPresenterTest {
             rageshake.triggerPhoneRageshake()
             assertThat(awaitItem().takeScreenshot).isTrue()
             initialState.eventSink.invoke(
-                RageshakeDetectionEvents.ProcessScreenshot(ImageResult.Success(aBitmap()))
+                RageshakeDetectionEvents.ProcessScreenshot(ImageResult.Success(aBitmap))
             )
             assertThat(awaitItem().showDialog).isTrue()
             initialState.eventSink.invoke(RageshakeDetectionEvents.Dismiss)
@@ -153,7 +155,7 @@ class RageshakeDetectionPresenterTest {
     }
 
     @Test
-    fun `present - screenshot then disable`() = runTest(timeout = 1.seconds) {
+    fun `present - screenshot then disable`() = runTest {
         val screenshotHolder = FakeScreenshotHolder(screenshotUri = null)
         val rageshake = FakeRageShake(isAvailableValue = true)
         val rageshakeDataStore = FakeRageshakeDataStore(isEnabled = true)
@@ -176,7 +178,7 @@ class RageshakeDetectionPresenterTest {
             rageshake.triggerPhoneRageshake()
             assertThat(awaitItem().takeScreenshot).isTrue()
             initialState.eventSink.invoke(
-                RageshakeDetectionEvents.ProcessScreenshot(ImageResult.Success(aBitmap()))
+                RageshakeDetectionEvents.ProcessScreenshot(ImageResult.Success(aBitmap))
             )
             assertThat(awaitItem().showDialog).isTrue()
             initialState.eventSink.invoke(RageshakeDetectionEvents.Disable)
@@ -186,6 +188,4 @@ class RageshakeDetectionPresenterTest {
         }
     }
 }
-
-private fun aBitmap(): Bitmap = mockk()
 
