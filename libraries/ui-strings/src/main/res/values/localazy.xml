@@ -23,6 +23,7 @@
   <string name="action_edit">"Edit"</string>
   <string name="action_enable">"Enable"</string>
   <string name="action_invite">"Invite"</string>
+  <string name="action_invite_friends">"Invite friends"</string>
   <string name="action_invite_friends_to_app">"Invite friends to %1$s"</string>
   <string name="action_invites_list">"Invites"</string>
   <string name="action_learn_more">"Learn more"</string>
@@ -121,6 +122,7 @@
   <string name="error_failed_loading_messages">"Failed loading messages"</string>
   <string name="error_some_messages_have_not_been_sent">"Some messages have not been sent"</string>
   <string name="error_unknown">"Sorry, an error occurred"</string>
+    <string name="invite_friends_rich_title">"🔐️ Join me on %1$s"</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
   <string name="leave_room_alert_empty_subtitle">"Are you sure that you want to leave this room? You are the only person here. If you leave, no one will be able to join in the future, including you."</string>
   <string name="leave_room_alert_private_subtitle">"Are you sure that you want to leave this room? This room is not public and you will not be able to rejoin without an invite."</string>

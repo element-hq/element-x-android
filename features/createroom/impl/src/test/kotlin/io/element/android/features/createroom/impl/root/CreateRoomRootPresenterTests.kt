@@ -63,16 +63,6 @@ class CreateRoomRootPresenterTests {
     }
 
     @Test
-    fun `present - trigger action buttons`() = runTest {
-        moleculeFlow(RecompositionClock.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            initialState.eventSink(CreateRoomRootEvents.InvitePeople) // Not implemented yet
-        }
-    }
-
-    @Test
     fun `present - trigger create DM action`() = runTest {
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
