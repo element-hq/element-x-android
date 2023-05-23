@@ -18,10 +18,17 @@ package io.element.android.features.messages.impl.media.local
 
 import android.net.Uri
 import android.os.Parcelable
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class LocalMedia(
     val uri: Uri,
     val mimeType: String,
-) : Parcelable
+) : Parcelable {
+
+    /**
+     * This tries to convert the uri to a file if applicable, otherwise keep it as uri.
+     */
+    @IgnoredOnParcel val model: Any = UriToFileMapper.map(uri) ?: uri
+}
