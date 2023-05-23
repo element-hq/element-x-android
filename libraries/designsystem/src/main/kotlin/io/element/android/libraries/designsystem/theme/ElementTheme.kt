@@ -20,6 +20,7 @@ import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
@@ -36,6 +37,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import io.element.android.libraries.designsystem.theme.compound.CompoundColors
 import io.element.android.libraries.designsystem.theme.compound.compoundColorsDark
 import io.element.android.libraries.designsystem.theme.compound.compoundColorsLight
+import io.element.android.libraries.designsystem.theme.compound.compoundTypography
 
 /**
  * Inspired from https://medium.com/@lucasyujideveloper/54cbcbde1ace
@@ -49,16 +51,17 @@ object ElementTheme {
 
 /* Global variables (application level) */
 val LocalColors = staticCompositionLocalOf { elementColorsLight() }
-val LocalCompoundColors = staticCompositionLocalOf { compoundColorsLight() }
+val LocalCompoundColors = staticCompositionLocalOf { compoundColorsLight }
 
 @Composable
 fun ElementTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false, /* true to enable MaterialYou */
     colors: ElementColors = if (darkTheme) elementColorsDark() else elementColorsLight(),
-    compoundColors: CompoundColors = if (darkTheme) compoundColorsDark() else compoundColorsLight(),
+    compoundColors: CompoundColors = if (darkTheme) compoundColorsDark else compoundColorsLight,
     materialLightColors: ColorScheme = materialColorSchemeLight,
     materialDarkColors: ColorScheme = materialColorSchemeDark,
+    typography: Typography = compoundTypography,
     content: @Composable () -> Unit,
 ) {
     val systemUiController = rememberSystemUiController()
@@ -85,7 +88,7 @@ fun ElementTheme(
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
-            // TODO typography =
+            typography = typography,
             content = content
         )
     }

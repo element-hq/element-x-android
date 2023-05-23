@@ -409,7 +409,7 @@ Elevation: Default (Level 0) */
     }
 }
 
-fun compoundColorsLight() = CompoundColors(
+val compoundColorsLight = CompoundColors(
     colorTextPrimary = LightDesignTokens.colorGray1400,
     colorTextSecondary = LightDesignTokens.colorGray900,
     colorTextPlaceholder = LightDesignTokens.colorGray800,
@@ -465,7 +465,7 @@ fun compoundColorsLight() = CompoundColors(
     isLight = true,
 )
 
-fun compoundColorsDark() = CompoundColors(
+val compoundColorsDark = CompoundColors(
     colorTextPrimary = DarkDesignTokens.colorGray1400,
     colorTextSecondary = DarkDesignTokens.colorGray900,
     colorTextPlaceholder = DarkDesignTokens.colorGray800,

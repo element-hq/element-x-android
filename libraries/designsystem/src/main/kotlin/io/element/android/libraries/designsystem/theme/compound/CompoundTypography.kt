@@ -16,152 +16,81 @@
 
 package io.element.android.libraries.designsystem.theme.compound
 
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.airbnb.android.showkase.annotation.ShowkaseTypography
 
-object CompoundTypography {
-    val fontLetterSpacingHeadingXl = 0.em
-    val fontLetterSpacingHeadingLg = 0.em
-    val fontLetterSpacingHeadingMd = 0.em
-    val fontLetterSpacingHeadingSm = 0.em
-    val fontLetterSpacingBodyLg = 0.015629999999999998.em
-    val fontLetterSpacingBodyMd = 0.01786.em
-    val fontLetterSpacingBodySm = 0.03333.em
-    val fontLetterSpacingBodyXs = 0.04545.em
-    val fontSizeHeadingXl = 34.sp
-    val fontSizeHeadingLg = 28.sp
-    val fontSizeHeadingMd = 22.sp
-    val fontSizeHeadingSm = 20.sp
-    val fontSizeBodyLg = 16.sp
-    val fontSizeBodyMd = 14.sp
-    val fontSizeBodySm = 12.sp
-    val fontSizeBodyXs = 11.sp
-    val fontLineHeightHeadingXlRegular = 41.sp
-    val fontLineHeightHeadingLgRegular = 34.sp
-    val fontLineHeightHeadingMdRegular = 27.sp
-    val fontLineHeightHeadingSmRegular = 25.sp
-    val fontLineHeightBodyLgRegular = 22.sp
-    val fontLineHeightBodyMdRegular = 20.sp
-    val fontLineHeightBodySmRegular = 17.sp
-    val fontLineHeightBodyXsRegular = 15.sp
-    val fontWeightBold = FontWeight.W700
-    val fontWeightMedium = FontWeight.W500
-    val fontWeightRegular = FontWeight.W400
-    const val fontFamilyMono = "Roboto Mono"
-    const val fontFamilySans = "Roboto"
-    val fontHeadingXlBold = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = fontWeightBold,
-        lineHeight = fontLineHeightHeadingXlRegular,
-        fontSize = fontSizeHeadingXl,
-        letterSpacing = fontLetterSpacingHeadingXl,
-    )
-    val fontHeadingXlRegular = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = fontWeightRegular,
-        lineHeight = fontLineHeightHeadingXlRegular,
-        fontSize = fontSizeHeadingXl,
-        letterSpacing = fontLetterSpacingHeadingXl,
-    )
-    val fontHeadingLgBold = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = fontWeightBold,
-        lineHeight = fontLineHeightHeadingLgRegular,
-        fontSize = fontSizeHeadingLg,
-        letterSpacing = fontLetterSpacingHeadingLg,
-    )
-    val fontHeadingLgRegular = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = fontWeightRegular,
-        lineHeight = fontLineHeightHeadingLgRegular,
-        fontSize = fontSizeHeadingLg,
-        letterSpacing = fontLetterSpacingHeadingLg,
-    )
-    val fontHeadingMdBold = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = fontWeightBold,
-        lineHeight = fontLineHeightHeadingMdRegular,
-        fontSize = fontSizeHeadingMd,
-        letterSpacing = fontLetterSpacingHeadingMd,
-    )
-    val fontHeadingMdRegular = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = fontWeightRegular,
-        lineHeight = fontLineHeightHeadingMdRegular,
-        fontSize = fontSizeHeadingMd,
-        letterSpacing = fontLetterSpacingHeadingMd,
-    )
-    val fontHeadingSmMedium = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = fontWeightMedium,
-        lineHeight = fontLineHeightHeadingSmRegular,
-        fontSize = fontSizeHeadingSm,
-        letterSpacing = fontLetterSpacingHeadingSm,
-    )
-    val fontHeadingSmRegular = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = fontWeightRegular,
-        lineHeight = fontLineHeightHeadingSmRegular,
-        fontSize = fontSizeHeadingSm,
-        letterSpacing = fontLetterSpacingHeadingSm,
-    )
-    val fontBodyLgMedium = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = fontWeightMedium,
-        lineHeight = fontLineHeightBodyLgRegular,
-        fontSize = fontSizeBodyLg,
-        letterSpacing = fontLetterSpacingBodyLg,
-    )
-    val fontBodyLgRegular = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = fontWeightRegular,
-        lineHeight = fontLineHeightBodyLgRegular,
-        fontSize = fontSizeBodyLg,
-        letterSpacing = fontLetterSpacingBodyLg,
-    )
-    val fontBodyMdMedium = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = fontWeightMedium,
-        lineHeight = fontLineHeightBodyMdRegular,
-        fontSize = fontSizeBodyMd,
-        letterSpacing = fontLetterSpacingBodyMd,
-    )
-    val fontBodyMdRegular = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = fontWeightRegular,
-        lineHeight = fontLineHeightBodyMdRegular,
-        fontSize = fontSizeBodyMd,
-        letterSpacing = fontLetterSpacingBodyMd,
-    )
-    val fontBodySmMedium = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = fontWeightMedium,
-        lineHeight = fontLineHeightBodySmRegular,
-        fontSize = fontSizeBodySm,
-        letterSpacing = fontLetterSpacingBodySm,
-    )
-    val fontBodySmRegular = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = fontWeightRegular,
-        lineHeight = fontLineHeightBodySmRegular,
-        fontSize = fontSizeBodySm,
-        letterSpacing = fontLetterSpacingBodySm,
-    )
-    val fontBodyXsMedium = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = fontWeightMedium,
-        lineHeight = fontLineHeightBodyXsRegular,
-        fontSize = fontSizeBodyXs,
-        letterSpacing = fontLetterSpacingBodyXs,
-    )
-    val fontBodyXsRegular = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = fontWeightRegular,
-        lineHeight = fontLineHeightBodyXsRegular,
-        fontSize = fontSizeBodyXs,
-        letterSpacing = fontLetterSpacingBodyXs,
-    )
-}
+// 32px (Material) vs 34px, it's the closest one
+@ShowkaseTypography(name = "M3 Headline Large", group = "Compound")
+internal val headlineLarge = TypographyTokens.fontHeadingXlRegular
+
+// both are 28px
+@ShowkaseTypography(name = "M3 Headline Medium", group = "Compound")
+internal val headlineMedium = TypographyTokens.fontHeadingLgRegular
+
+// These are the default M3 values, but we're setting them manually so a update in M3 doesn't break our designs
+@ShowkaseTypography(name = "M3 Headline Small", group = "Compound")
+internal val headlineSmall = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = TypographyTokens.fontWeightRegular,
+    lineHeight = 32.sp,
+    fontSize = 24.sp,
+    letterSpacing = 0.em,
+)
+
+// 22px (Material) vs 20px, it's the closest one
+@ShowkaseTypography(name = "M3 Title Large", group = "Compound")
+internal val titleLarge = TypographyTokens.fontHeadingMdRegular
+
+// 16px both
+@ShowkaseTypography(name = "M3 Title Medium", group = "Compound")
+internal val titleMedium = TypographyTokens.fontBodyLgMedium
+
+// 14px both
+@ShowkaseTypography(name = "M3 Title Small", group = "Compound")
+internal val titleSmall = TypographyTokens.fontBodyMdMedium
+
+// 16px both
+@ShowkaseTypography(name = "M3 Body Large", group = "Compound")
+internal val bodyLarge = TypographyTokens.fontBodyLgRegular
+
+// 14px both
+@ShowkaseTypography(name = "M3 Body Medium", group = "Compound")
+internal val bodyMedium = TypographyTokens.fontBodyMdRegular
+
+// 12px both
+@ShowkaseTypography(name = "M3 Body Small", group = "Compound")
+internal val bodySmall = TypographyTokens.fontBodySmRegular
+
+// 14px both
+@ShowkaseTypography(name = "M3 Label Large", group = "Compound")
+internal val labelLarge = TypographyTokens.fontBodyMdMedium
+
+// 12px both
+@ShowkaseTypography(name = "M3 Label Medium", group = "Compound")
+internal val labelMedium = TypographyTokens.fontBodySmMedium
+
+// 11px both
+@ShowkaseTypography(name = "M3 Label Small", group = "Compound")
+internal val labelSmall = TypographyTokens.fontBodyXsMedium
+
+val compoundTypography = Typography(
+    // displayLarge = , 57px (Material) size. We have no equivalent
+    // displayMedium = , 45px (Material) size. We have no equivalent
+    // displaySmall = , 36px (Material) size. We have no equivalent
+    headlineLarge = headlineLarge,
+    headlineMedium = headlineMedium,
+    headlineSmall = headlineSmall,
+    titleLarge = titleLarge,
+    titleMedium = titleMedium,
+    titleSmall = titleSmall,
+    bodyLarge = bodyLarge,
+    bodyMedium = bodyMedium,
+    bodySmall = bodySmall,
+    labelLarge = labelLarge,
+    labelMedium = labelMedium,
+    labelSmall = labelSmall,
+)
