@@ -17,7 +17,6 @@
 package io.element.android.features.messages.impl.media.local
 
 import android.annotation.SuppressLint
-import android.net.Uri
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,7 +35,10 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
+import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
+import me.saket.telephoto.zoomable.rememberZoomableImageState
+import me.saket.telephoto.zoomable.rememberZoomableState
 
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
@@ -46,11 +48,11 @@ fun LocalMediaView(
 ) {
     when {
         MimeTypes.isImage(localMedia.mimeType) -> MediaImageView(
-            uri = localMedia.uri,
+            localMedia = localMedia,
             modifier = modifier
         )
         MimeTypes.isVideo(localMedia.mimeType) -> MediaVideoView(
-            uri = localMedia.uri,
+            localMedia = localMedia,
             modifier = modifier
         )
         else -> Unit
@@ -59,12 +61,16 @@ fun LocalMediaView(
 
 @Composable
 private fun MediaImageView(
-    uri: Uri,
+    localMedia: LocalMedia,
     modifier: Modifier = Modifier,
 ) {
+    val zoomableState = rememberZoomableState(
+        zoomSpec = ZoomSpec(maxZoomFactor = 3f)
+    )
     ZoomableAsyncImage(
         modifier = modifier.fillMaxSize(),
-        model = uri,
+        state = rememberZoomableImageState(zoomableState),
+        model = localMedia.model,
         contentDescription = "Image",
         contentScale = ContentScale.Fit,
     )
@@ -73,7 +79,7 @@ private fun MediaImageView(
 @UnstableApi
 @Composable
 fun MediaVideoView(
-    uri: Uri,
+    localMedia: LocalMedia,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
@@ -84,8 +90,8 @@ fun MediaVideoView(
                 this.prepare()
             }
     }
-    LaunchedEffect(uri) {
-        val mediaItem = MediaItem.fromUri(uri)
+    LaunchedEffect(localMedia.uri) {
+        val mediaItem = MediaItem.fromUri(localMedia.uri)
         exoPlayer.setMediaItem(mediaItem)
     }
 
