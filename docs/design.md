@@ -8,11 +8,12 @@
   * [Text](#text)
   * [Dimension, position and margin](#dimension-position-and-margin)
   * [Icons](#icons)
-    * [Export drawable from Figma](#export-drawable-from-figma)
-    * [Import in Android Studio](#import-in-android-studio)
+    * [Custom icons](#custom-icons)
+      * [Export drawable from Figma](#export-drawable-from-figma)
+      * [Import in Android Studio](#import-in-android-studio)
   * [Images](#images)
 * [Figma links](#figma-links)
-  * [Coumpound](#coumpound)
+  * [Compound](#compound)
   * [Login](#login)
     * [Login v2](#login-v2)
   * [Room list](#room-list)
@@ -31,6 +32,7 @@
 ## Introduction
 
 Design at element.io is done using Figma - https://www.figma.com
+You will find guidance to build using interface on the [Compound documentation – Element's design system](https://compound.element.io)
 
 ## How to import from Figma to the Element Android project
 
@@ -40,6 +42,9 @@ Integration should be done using the Android development best practice, and shou
 
 Element Android already contains all the colors which can be used by the designer, in the module `ui-style`.
 Some of them depend on the theme, so ensure to use theme attributes and not colors directly.
+
+A comprehensive [color definition documentation](https://compound.element.io/?path=/docs/tokens-color-palettes--docs) is available in Compound.
+
 
 ### Text
 
@@ -56,7 +61,16 @@ Some of them depend on the theme, so ensure to use theme attributes and not colo
 
 ### Icons
 
-#### Export drawable from Figma
+Most icons should be available as part of the [Compound icon library](https://compound.element.io/?path=/docs/tokens-icons--docs)
+
+All drawable are auto-generated as part of the design tokens library. You can find
+all assets in [`vector-im/compound-design-tokens#assets/android`](https://github.com/vector-im/compound-design-tokens/tree/develop/assets/android)
+
+If you are missing an icon, follow to [contribution guidelines for icons](https://www.figma.com/file/gkNXqPoiJhEv2wt0EJpew4/Compound-Icons?type=design&node-id=178-3119&t=j2uSJD9xPXJn5aRM-0)
+
+#### Custom icons
+
+##### Export drawable from Figma
 
  - click on the element to export
  - ensure that the correct layer is selected. Sometimes the parent layer has to be selected on the left panel
@@ -68,7 +82,7 @@ Some of them depend on the theme, so ensure to use theme attributes and not colo
 
 It's also possible for any icon to go to the main component by right-clicking on the icon.
 
-#### Import in Android Studio
+##### Import in Android Studio
 
  - right click on the drawable folder where the drawable will be created
  - click on "New"/"Vector Asset"
@@ -97,11 +111,15 @@ Main entry point: https://www.figma.com/files/project/5612863/Element?fuid=77937
 
 Note: all the Figma links are not publicly available.
 
-### Coumpound
+### Compound
 
-Coumpound contains the theme of the application, with all the components, in Light and Dark theme: palette (colors), typography, iconography, etc.
+Compound is Element's design system where you'll find styles and documentation
+regarding user interfaces.
 
-https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound
+-   Documentation: [https://compound.element.io](https://compound.element.io)
+-   [Compound Android – Figma document](https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components)
+-   [Compound Styles - Figma document](https://www.figma.com/file/PpKepmHKGikp33Ql7iivbn/Compound-Styles?type=design)
+-   [Compound Icons - Figma document](https://www.figma.com/file/gkNXqPoiJhEv2wt0EJpew4/Compound-Icons)
 
 ### Login
 
