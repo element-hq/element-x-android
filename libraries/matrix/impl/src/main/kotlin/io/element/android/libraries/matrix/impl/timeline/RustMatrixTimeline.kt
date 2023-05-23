@@ -156,7 +156,8 @@ class RustMatrixTimeline(
                 ),
                 timelineLimit = null
             )
-            val result = slidingSyncRoom.subscribeAndAddTimelineListener(timelineListener, settings)
+            listenerTokens += slidingSyncRoom.subscribeToRoom(settings)
+            val result = slidingSyncRoom.addTimelineListener(timelineListener)
             launch {
                 fetchMembers()
             }
