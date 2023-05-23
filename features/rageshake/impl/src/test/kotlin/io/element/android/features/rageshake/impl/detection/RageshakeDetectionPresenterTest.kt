@@ -31,11 +31,20 @@ import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import org.junit.BeforeClass
 import org.junit.Test
 
 class RageshakeDetectionPresenterTest {
 
-    private val aBitmap: Bitmap = mockk()
+    companion object {
+        private lateinit var aBitmap: Bitmap
+
+        @BeforeClass
+        @JvmStatic
+        fun initBitmap() {
+            aBitmap = mockk()
+        }
+    }
 
     @Test
     fun `present - initial state`() = runTest {
