@@ -59,20 +59,15 @@ class RoomInviteMembersNode @AssistedInject constructor(
                 navigateUp()
 
                 coroutineScope.launch {
-                    var shownError = false
+                    val anyInviteFailed = users
+                        .map { room.inviteUserById(it.userId) }
+                        .any { it.isFailure }
 
-                    users.forEach {
-                        runCatching {
-                            room.inviteUserById(it.userId)
-                        }.onFailure {
-                            if (!shownError) {
-                                shownError = true
-                                appErrorStateService.showError(
-                                    title = context.getString(StringR.string.common_unable_to_invite_title),
-                                    body = context.getString(StringR.string.common_unable_to_invite_message),
-                                )
-                            }
-                        }
+                    if (anyInviteFailed) {
+                        appErrorStateService.showError(
+                            title = context.getString(StringR.string.common_unable_to_invite_title),
+                            body = context.getString(StringR.string.common_unable_to_invite_message),
+                        )
                     }
 
                     room.updateMembers()
