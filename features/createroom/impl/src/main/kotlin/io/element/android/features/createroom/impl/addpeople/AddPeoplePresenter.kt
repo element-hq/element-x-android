@@ -18,18 +18,17 @@ package io.element.android.features.createroom.impl.addpeople
 
 import androidx.compose.runtime.Composable
 import io.element.android.features.createroom.impl.CreateRoomDataStore
-import io.element.android.features.userlist.api.SelectionMode
-import io.element.android.features.userlist.api.UserListDataSource
-import io.element.android.features.userlist.api.UserListPresenter
-import io.element.android.features.userlist.api.UserListPresenterArgs
-import io.element.android.features.userlist.api.UserListState
+import io.element.android.features.createroom.impl.userlist.SelectionMode
+import io.element.android.features.createroom.impl.userlist.UserListPresenter
+import io.element.android.features.createroom.impl.userlist.UserListPresenterArgs
+import io.element.android.features.createroom.impl.userlist.UserListState
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.usersearch.api.UserRepository
 import javax.inject.Inject
-import javax.inject.Named
 
 class AddPeoplePresenter @Inject constructor(
     private val userListPresenterFactory: UserListPresenter.Factory,
-    @Named("AllUsers") private val userListDataSource: UserListDataSource,
+    private val userRepository: UserRepository,
     private val dataStore: CreateRoomDataStore,
 ) : Presenter<UserListState> {
 
@@ -37,10 +36,8 @@ class AddPeoplePresenter @Inject constructor(
         userListPresenterFactory.create(
             UserListPresenterArgs(
                 selectionMode = SelectionMode.Multiple,
-                minimumSearchLength = 3,
-                searchDebouncePeriodMillis = UserListPresenterArgs.DEFAULT_DEBOUNCE
             ),
-            userListDataSource,
+            userRepository,
             dataStore.selectedUserListDataStore,
         )
     }

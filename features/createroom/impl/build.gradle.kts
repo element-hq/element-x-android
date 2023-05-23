@@ -45,9 +45,10 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
-    implementation(projects.features.userlist.api)
     implementation(projects.libraries.mediapickers.api)
     implementation(projects.libraries.mediaupload.api)
+    implementation(projects.libraries.usersearch.impl)
+    implementation(libs.coil.compose)
     api(projects.features.createroom.api)
 
     testImplementation(libs.test.junit)
@@ -58,10 +59,9 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(libs.test.robolectric)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.features.userlist.impl)
-    testImplementation(projects.features.userlist.test)
     testImplementation(projects.libraries.mediapickers.test)
     testImplementation(projects.libraries.mediaupload.test)
+    testImplementation(projects.libraries.usersearch.test)
 
     androidTestImplementation(libs.test.junitext)
 

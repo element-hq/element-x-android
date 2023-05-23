@@ -24,14 +24,15 @@ import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.impl.members.RoomMemberListDataSource
 import io.element.android.features.roomdetails.impl.members.RoomMemberListEvents
 import io.element.android.features.roomdetails.impl.members.RoomMemberListPresenter
-import io.element.android.features.roomdetails.impl.members.RoomMemberSearchResultState
 import io.element.android.features.roomdetails.impl.members.aRoomMemberList
 import io.element.android.features.roomdetails.impl.members.aVictor
 import io.element.android.features.roomdetails.impl.members.aWalter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -49,7 +50,7 @@ class RoomMemberListPresenterTests {
             val initialState = awaitItem()
             Truth.assertThat(initialState.roomMembers).isInstanceOf(Async.Loading::class.java)
             Truth.assertThat(initialState.searchQuery).isEmpty()
-            Truth.assertThat(initialState.searchResults).isEqualTo(RoomMemberSearchResultState.NotSearching)
+            Truth.assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.NotSearching::class.java)
             Truth.assertThat(initialState.isSearchActive).isFalse()
 
             val loadedState = awaitItem()
@@ -89,7 +90,7 @@ class RoomMemberListPresenterTests {
             val searchQueryUpdatedState = awaitItem()
             Truth.assertThat((searchQueryUpdatedState.searchQuery)).isEqualTo("something")
             val searchSearchResultDelivered = awaitItem()
-            Truth.assertThat((searchSearchResultDelivered.searchResults)).isInstanceOf(RoomMemberSearchResultState.NoResults::class.java)
+            Truth.assertThat(searchSearchResultDelivered.searchResults).isInstanceOf(SearchBarResultState.NoResults::class.java)
         }
     }
 
@@ -107,10 +108,58 @@ class RoomMemberListPresenterTests {
             val searchQueryUpdatedState = awaitItem()
             Truth.assertThat((searchQueryUpdatedState.searchQuery)).isEqualTo("Alice")
             val searchSearchResultDelivered = awaitItem()
-            Truth.assertThat((searchSearchResultDelivered.searchResults)).isInstanceOf(RoomMemberSearchResultState.Results::class.java)
-            Truth.assertThat((searchSearchResultDelivered.searchResults as RoomMemberSearchResultState.Results).results.joined.first().displayName)
+            Truth.assertThat((searchSearchResultDelivered.searchResults)).isInstanceOf(SearchBarResultState.Results::class.java)
+            Truth.assertThat((searchSearchResultDelivered.searchResults as SearchBarResultState.Results).results.joined.first().displayName)
                 .isEqualTo("Alice")
 
+        }
+    }
+
+    @Test
+    fun `present - asynchronously sets canInvite when user has correct power level`() = runTest {
+        val presenter = createPresenter(
+            matrixRoom = FakeMatrixRoom().apply {
+                givenCanInviteResult(Result.success(true))
+            }
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val loadedState = awaitItem()
+            Truth.assertThat(loadedState.canInvite).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - asynchronously sets canInvite when user does not have correct power level`() = runTest {
+        val presenter = createPresenter(
+            matrixRoom = FakeMatrixRoom().apply {
+                givenCanInviteResult(Result.success(false))
+            }
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val loadedState = awaitItem()
+            Truth.assertThat(loadedState.canInvite).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - asynchronously sets canInvite when power level check fails`() = runTest {
+        val presenter = createPresenter(
+            matrixRoom = FakeMatrixRoom().apply {
+                givenCanInviteResult(Result.failure(Throwable("Eek")))
+            }
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val loadedState = awaitItem()
+            Truth.assertThat(loadedState.canInvite).isFalse()
         }
     }
 }
@@ -125,6 +174,7 @@ private fun createDataSource(
 
 @ExperimentalCoroutinesApi
 private fun createPresenter(
+    matrixRoom: MatrixRoom = FakeMatrixRoom(),
     roomMemberListDataSource: RoomMemberListDataSource = createDataSource(),
     coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers()
-) = RoomMemberListPresenter(roomMemberListDataSource, coroutineDispatchers)
+) = RoomMemberListPresenter(matrixRoom, roomMemberListDataSource, coroutineDispatchers)

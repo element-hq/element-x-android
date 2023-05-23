@@ -19,7 +19,7 @@ package io.element.android.libraries.matrix.api.timeline.item.event
 import io.element.android.libraries.matrix.api.core.EventId
 
 sealed interface EventSendState {
-    object NotSendYet : EventSendState
+    object NotSentYet : EventSendState
 
     data class SendingFailed(
         val error: String

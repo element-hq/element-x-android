@@ -16,74 +16,229 @@
 
 package io.element.android.libraries.designsystem.theme.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SearchBarColors
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.ui.strings.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar(
+fun <T> SearchBar(
     query: String,
     onQueryChange: (String) -> Unit,
-    onSearch: (String) -> Unit,
     active: Boolean,
     onActiveChange: (Boolean) -> Unit,
+    placeHolderTitle: String,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    placeholder: @Composable (() -> Unit)? = null,
-    leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = null,
+    showBackButton: Boolean = true,
+    resultState: SearchBarResultState<T> = SearchBarResultState.NotSearching(),
     shape: Shape = SearchBarDefaults.inputFieldShape,
-    colors: SearchBarColors = SearchBarDefaults.colors(),
     tonalElevation: Dp = SearchBarDefaults.Elevation,
     windowInsets: WindowInsets = SearchBarDefaults.windowInsets,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    content: @Composable ColumnScope.() -> Unit,
+    contentPrefix: @Composable ColumnScope.() -> Unit = {},
+    contentSuffix: @Composable ColumnScope.() -> Unit = {},
+    resultHandler: @Composable ColumnScope.(T) -> Unit = {},
 ) {
+    val focusManager = LocalFocusManager.current
+
+    if (!active) {
+        onQueryChange("")
+        focusManager.clearFocus()
+    }
+
     androidx.compose.material3.SearchBar(
         query = query,
         onQueryChange = onQueryChange,
-        onSearch = onSearch,
+        onSearch = { focusManager.clearFocus() },
         active = active,
         onActiveChange = onActiveChange,
-        modifier = modifier,
+        modifier = modifier.padding(horizontal = if (!active) 16.dp else 0.dp),
         enabled = enabled,
-        placeholder = placeholder,
-        leadingIcon = leadingIcon,
-        trailingIcon = trailingIcon,
+        placeholder = {
+            Text(
+                text = placeHolderTitle,
+                modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
+            )
+        },
+        leadingIcon = if (showBackButton && active) {
+            { BackButton(onClick = { onActiveChange(false) }) }
+        } else {
+            null
+        },
+        trailingIcon = when {
+            active && query.isNotEmpty() -> {
+                {
+                    IconButton(onClick = { onQueryChange("") }) {
+                        Icon(Icons.Default.Close, stringResource(R.string.action_clear))
+                    }
+                }
+            }
+
+            !active -> {
+                {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = stringResource(R.string.action_search),
+                        modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
+                    )
+                }
+            }
+
+            else -> null
+        },
         shape = shape,
-        colors = colors,
+        colors = if (!active) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
         tonalElevation = tonalElevation,
         windowInsets = windowInsets,
         interactionSource = interactionSource,
-        content = content,
+        content = {
+            contentPrefix()
+            when (resultState) {
+                is SearchBarResultState.Results<T> -> {
+                    resultHandler(resultState.results)
+                }
+
+                is SearchBarResultState.NoResults<T> -> {
+                    // No results found, show a message
+                    Spacer(Modifier.size(80.dp))
+
+                    Text(
+                        text = stringResource(R.string.common_no_results),
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.tertiary,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
+                else -> {
+                    // Not searching - nothing to show.
+                }
+            }
+            contentSuffix()
+        },
+    )
+}
+
+sealed interface SearchBarResultState<in T> {
+    /** No search results are available yet (e.g. because the user hasn't entered a search term). */
+    class NotSearching<T> : SearchBarResultState<T>
+
+    /** The search has completed, but no results were found. */
+    class NoResults<T> : SearchBarResultState<T>
+
+    /** The search has completed, and some matching users were found. */
+    data class Results<T>(val results: T) : SearchBarResultState<T>
+}
+
+@Preview(group = PreviewGroup.Search)
+@Composable
+internal fun SearchBarPreviewInactive() = ElementThemedPreview { ContentToPreview() }
+
+@Preview(group = PreviewGroup.Search)
+@Composable
+internal fun SearchBarPreviewActiveEmptyQuery() = ElementThemedPreview {
+    ContentToPreview(
+        query = "",
+        active = true,
     )
 }
 
 @Preview(group = PreviewGroup.Search)
 @Composable
-internal fun SearchBarPreview() = ElementThemedPreview { ContentToPreview() }
+internal fun SearchBarPreviewActiveWithQuery() = ElementThemedPreview {
+    ContentToPreview(
+        query = "search term",
+        active = true,
+    )
+}
 
-@OptIn(ExperimentalMaterial3Api::class)
+@Preview(group = PreviewGroup.Search)
 @Composable
-private fun ContentToPreview() {
+internal fun SearchBarPreviewActiveWithQueryNoBackButton() = ElementThemedPreview {
+    ContentToPreview(
+        query = "search term",
+        active = true,
+        showBackButton = false,
+    )
+}
+
+@Preview(group = PreviewGroup.Search)
+@Composable
+internal fun SearchBarPreviewActiveWithNoResults() = ElementThemedPreview {
+    ContentToPreview(
+        query = "search term",
+        active = true,
+        resultState = SearchBarResultState.NoResults(),
+    )
+}
+
+@Preview(group = PreviewGroup.Search)
+@Composable
+internal fun SearchBarPreviewActiveWithContent() = ElementThemedPreview {
+    ContentToPreview(
+        query = "search term",
+        active = true,
+        resultState = SearchBarResultState.Results("result!"),
+        contentPrefix = {
+            Text(text = "Content that goes before the search results", modifier = Modifier.background(color = Color.Red).fillMaxWidth())
+        },
+        contentSuffix = {
+            Text(text = "Content that goes after the search results", modifier = Modifier.background(color = Color.Blue).fillMaxWidth())
+        },
+        resultHandler = {
+            Text(text = "Results go here", modifier = Modifier.background(color = Color.Green).fillMaxWidth())
+        }
+    )
+}
+
+@Composable
+private fun ContentToPreview(
+    query: String = "",
+    active: Boolean = false,
+    showBackButton: Boolean = true,
+    resultState: SearchBarResultState<String> = SearchBarResultState.NotSearching(),
+    contentPrefix: @Composable ColumnScope.() -> Unit = {},
+    contentSuffix: @Composable ColumnScope.() -> Unit = {},
+    resultHandler: @Composable ColumnScope.(String) -> Unit = {},
+) {
     SearchBar(
-        query = "Some text",
+        query = query,
+        active = active,
+        resultState = resultState,
+        showBackButton = showBackButton,
         onQueryChange = {},
-        onSearch = {},
-        active = false,
         onActiveChange = {},
-        content = {},
+        placeHolderTitle = "Search for things",
+        contentPrefix = contentPrefix,
+        contentSuffix = contentSuffix,
+        resultHandler = resultHandler,
     )
 }

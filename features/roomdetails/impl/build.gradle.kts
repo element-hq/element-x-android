@@ -45,6 +45,8 @@ dependencies {
     implementation(projects.libraries.mediaupload.api)
     implementation(projects.features.createroom.api)
     api(projects.features.roomdetails.api)
+    api(projects.libraries.usersearch.api)
+    api(projects.services.apperror.api)
     implementation(libs.coil.compose)
 
     testImplementation(libs.test.junit)
@@ -56,7 +58,7 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.mediaupload.test)
     testImplementation(projects.libraries.mediapickers.test)
-    testImplementation(projects.features.userlist.test)
+    testImplementation(projects.libraries.usersearch.test)
     testImplementation(projects.tests.testutils)
 
     ksp(libs.showkase.processor)

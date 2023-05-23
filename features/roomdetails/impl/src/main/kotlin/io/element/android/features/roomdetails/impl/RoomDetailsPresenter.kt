@@ -62,6 +62,7 @@ class RoomDetailsPresenter @Inject constructor(
 
         val membersState by room.membersStateFlow.collectAsState()
         val memberCount by getMemberCount(membersState)
+        val canInvite by getCanInvite(membersState)
         val dmMember by room.getDirectRoomMember(membersState)
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
         val roomType = getRoomType(dmMember)
@@ -76,7 +77,7 @@ class RoomDetailsPresenter @Inject constructor(
                         error = error,
                     )
                 }
-                is RoomDetailsEvent.ClearLeaveRoomWarning -> leaveRoomWarning.value = null
+                RoomDetailsEvent.ClearLeaveRoomWarning -> leaveRoomWarning.value = null
                 RoomDetailsEvent.ClearError -> error.value = null
             }
         }
@@ -91,6 +92,7 @@ class RoomDetailsPresenter @Inject constructor(
             roomTopic = room.topic,
             memberCount = memberCount,
             isEncrypted = room.isEncrypted,
+            canInvite = canInvite,
             displayLeaveRoomWarning = leaveRoomWarning.value,
             error = error.value,
             roomType = roomType.value,
@@ -115,6 +117,15 @@ class RoomDetailsPresenter @Inject constructor(
                 RoomDetailsType.Room
             }
         }
+    }
+
+    @Composable
+    private fun getCanInvite(membersState: MatrixRoomMembersState): State<Boolean> {
+        val canInvite = remember(membersState) { mutableStateOf(false) }
+        LaunchedEffect(membersState) {
+            canInvite.value = room.canInvite().getOrElse { false }
+        }
+        return canInvite
     }
 
     @Composable

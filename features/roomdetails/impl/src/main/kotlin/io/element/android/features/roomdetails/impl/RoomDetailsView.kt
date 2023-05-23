@@ -21,8 +21,10 @@ package io.element.android.features.roomdetails.impl
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -53,8 +55,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.features.roomdetails.blockuser.BlockUserDialogs
-import io.element.android.features.roomdetails.blockuser.BlockUserSection
+import io.element.android.features.roomdetails.impl.blockuser.BlockUserDialogs
+import io.element.android.features.roomdetails.impl.blockuser.BlockUserSection
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberHeaderSection
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberMainActionsSection
 import io.element.android.libraries.architecture.isLoading
@@ -80,6 +82,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.ui.strings.R as StringR
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RoomDetailsView(
     state: RoomDetailsState,
@@ -88,6 +91,7 @@ fun RoomDetailsView(
     onShareRoom: () -> Unit,
     onShareMember: (RoomMember) -> Unit,
     openRoomMemberList: () -> Unit,
+    invitePeople: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onShareMember() {
@@ -107,6 +111,7 @@ fun RoomDetailsView(
             modifier = Modifier
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
+                .consumeWindowInsets(padding)
         ) {
             when (state.roomType) {
                 RoomDetailsType.Room -> {
@@ -140,7 +145,9 @@ fun RoomDetailsView(
                 MembersSection(
                     memberCount = memberCount,
                     isLoading = state.memberCount.isLoading(),
-                    openRoomMemberList = openRoomMemberList
+                    showInvite = state.canInvite,
+                    openRoomMemberList = openRoomMemberList,
+                    invitePeople = invitePeople,
                 )
             }
 
@@ -254,8 +261,10 @@ internal fun TopicSection(roomTopic: String, modifier: Modifier = Modifier) {
 internal fun MembersSection(
     memberCount: Int?,
     isLoading: Boolean,
+    showInvite: Boolean,
+    invitePeople: () -> Unit,
+    openRoomMemberList: () -> Unit,
     modifier: Modifier = Modifier,
-    openRoomMemberList: () -> Unit
 ) {
     PreferenceCategory(modifier = modifier) {
         PreferenceText(
@@ -265,10 +274,13 @@ internal fun MembersSection(
             onClick = openRoomMemberList,
             loadingCurrentValue = isLoading,
         )
-        PreferenceText(
-            title = stringResource(R.string.screen_room_details_invite_people_title),
-            icon = Icons.Outlined.PersonAddAlt,
-        )
+        if (showInvite) {
+            PreferenceText(
+                title = stringResource(R.string.screen_room_details_invite_people_title),
+                icon = Icons.Outlined.PersonAddAlt,
+                onClick = invitePeople,
+            )
+        }
     }
 }
 
@@ -335,5 +347,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         onShareRoom = {},
         onShareMember = {},
         openRoomMemberList = {},
+        invitePeople = {},
     )
 }

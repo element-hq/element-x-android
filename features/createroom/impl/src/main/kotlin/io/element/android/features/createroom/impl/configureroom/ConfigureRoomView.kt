@@ -21,9 +21,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
@@ -50,7 +52,6 @@ import io.element.android.features.createroom.api.ui.AvatarActionListView
 import io.element.android.features.createroom.api.ui.LocalAvatar
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.RoomPrivacyOption
-import io.element.android.features.userlist.api.components.SelectedUsersList
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.LabelledTextField
 import io.element.android.libraries.designsystem.components.ProgressDialog
@@ -63,10 +64,11 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.ui.components.SelectedUsersList
 import kotlinx.coroutines.launch
 import io.element.android.libraries.ui.strings.R as StringR
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun ConfigureRoomView(
     state: ConfigureRoomState,
@@ -110,7 +112,8 @@ fun ConfigureRoomView(
             modifier = Modifier
                 .padding(padding)
                 .imePadding()
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .consumeWindowInsets(padding),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             RoomNameWithAvatar(
