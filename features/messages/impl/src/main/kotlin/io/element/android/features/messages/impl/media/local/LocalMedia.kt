@@ -30,5 +30,7 @@ data class LocalMedia(
     /**
      * This tries to convert the uri to a file if applicable, otherwise keep it as uri.
      */
-    @IgnoredOnParcel val model: Any = UriToFileMapper.map(uri) ?: uri
+    @IgnoredOnParcel val model: Any by lazy {
+        UriToFileMapper.map(uri) ?: uri
+    }
 }
