@@ -75,7 +75,6 @@ class CreateRoomRootPresenter @Inject constructor(
             when (event) {
                 is CreateRoomRootEvents.StartDM -> startDm(event.matrixUser)
                 CreateRoomRootEvents.CancelStartDM -> startDmAction.value = Async.Uninitialized
-                CreateRoomRootEvents.InvitePeople -> Unit // Todo Handle invite people action
             }
         }
 
