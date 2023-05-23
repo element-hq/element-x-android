@@ -19,6 +19,8 @@ package io.element.android.appnav.root
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.rageshake.api.crash.aCrashDetectionState
 import io.element.android.features.rageshake.api.detection.aRageshakeDetectionState
+import io.element.android.services.apperror.api.AppErrorState
+import io.element.android.services.apperror.api.aAppErrorState
 
 open class RootStateProvider : PreviewParameterProvider<RootState> {
     override val values: Sequence<RootState>
@@ -30,6 +32,9 @@ open class RootStateProvider : PreviewParameterProvider<RootState> {
             aRootState().copy(
                 rageshakeDetectionState = aRageshakeDetectionState().copy(showDialog = true),
                 crashDetectionState = aCrashDetectionState().copy(crashDetected = false),
+            ),
+            aRootState().copy(
+                errorState = aAppErrorState(),
             )
         )
 }
@@ -37,4 +42,5 @@ open class RootStateProvider : PreviewParameterProvider<RootState> {
 fun aRootState() = RootState(
     rageshakeDetectionState = aRageshakeDetectionState(),
     crashDetectionState = aCrashDetectionState(),
+    errorState = AppErrorState.NoError,
 )

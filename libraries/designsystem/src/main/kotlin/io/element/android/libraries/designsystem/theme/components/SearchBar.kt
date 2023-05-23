@@ -57,6 +57,7 @@ fun <T> SearchBar(
     placeHolderTitle: String,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    showBackButton: Boolean = true,
     resultState: SearchBarResultState<T> = SearchBarResultState.NotSearching(),
     shape: Shape = SearchBarDefaults.inputFieldShape,
     tonalElevation: Dp = SearchBarDefaults.Elevation,
@@ -87,7 +88,7 @@ fun <T> SearchBar(
                 modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
             )
         },
-        leadingIcon = if (active) {
+        leadingIcon = if (showBackButton && active) {
             { BackButton(onClick = { onActiveChange(false) }) }
         } else {
             null
@@ -181,6 +182,16 @@ internal fun SearchBarPreviewActiveWithQuery() = ElementThemedPreview {
 
 @Preview(group = PreviewGroup.Search)
 @Composable
+internal fun SearchBarPreviewActiveWithQueryNoBackButton() = ElementThemedPreview {
+    ContentToPreview(
+        query = "search term",
+        active = true,
+        showBackButton = false,
+    )
+}
+
+@Preview(group = PreviewGroup.Search)
+@Composable
 internal fun SearchBarPreviewActiveWithNoResults() = ElementThemedPreview {
     ContentToPreview(
         query = "search term",
@@ -212,6 +223,7 @@ internal fun SearchBarPreviewActiveWithContent() = ElementThemedPreview {
 private fun ContentToPreview(
     query: String = "",
     active: Boolean = false,
+    showBackButton: Boolean = true,
     resultState: SearchBarResultState<String> = SearchBarResultState.NotSearching(),
     contentPrefix: @Composable ColumnScope.() -> Unit = {},
     contentSuffix: @Composable ColumnScope.() -> Unit = {},
@@ -221,6 +233,7 @@ private fun ContentToPreview(
         query = query,
         active = active,
         resultState = resultState,
+        showBackButton = showBackButton,
         onQueryChange = {},
         onActiveChange = {},
         placeHolderTitle = "Search for things",

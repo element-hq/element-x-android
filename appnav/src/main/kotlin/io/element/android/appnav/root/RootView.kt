@@ -31,6 +31,7 @@ import io.element.android.features.rageshake.api.detection.RageshakeDetectionVie
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.services.apperror.impl.AppErrorView
 
 @Composable
 fun RootView(
@@ -59,6 +60,9 @@ fun RootView(
         CrashDetectionView(
             state = state.crashDetectionState,
             onOpenBugReport = ::onOpenBugReport,
+        )
+        AppErrorView(
+            state = state.errorState,
         )
     }
 }

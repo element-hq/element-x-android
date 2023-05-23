@@ -39,6 +39,7 @@ fun SearchUserBar(
     active: Boolean,
     isMultiSelectionEnabled: Boolean,
     modifier: Modifier = Modifier,
+    showBackButton: Boolean = true,
     placeHolderTitle: String = stringResource(R.string.common_search_for_someone),
     onActiveChanged: (Boolean) -> Unit = {},
     onTextChanged: (String) -> Unit = {},
@@ -52,6 +53,7 @@ fun SearchUserBar(
         onActiveChange = onActiveChanged,
         modifier = modifier,
         placeHolderTitle = placeHolderTitle,
+        showBackButton = showBackButton,
         contentPrefix = {
             if (isMultiSelectionEnabled && active && selectedUsers.isNotEmpty()) {
                 SelectedUsersList(
