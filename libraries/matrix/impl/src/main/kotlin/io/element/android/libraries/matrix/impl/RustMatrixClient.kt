@@ -58,7 +58,6 @@ import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.SlidingSyncList
 import org.matrix.rustcomponents.sdk.SlidingSyncListBuilder
 import org.matrix.rustcomponents.sdk.SlidingSyncListOnceBuilt
-import org.matrix.rustcomponents.sdk.SlidingSyncMode
 import org.matrix.rustcomponents.sdk.SlidingSyncRequestListFilters
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
@@ -119,7 +118,7 @@ class RustMatrixClient constructor(
             )
         )
         .filters(visibleRoomsSlidingSyncFilters)
-        .syncMode(mode = SlidingSyncMode.SELECTIVE)
+        .syncModeSelective()
         .addRange(0u, 20u)
         .onceBuilt(object : SlidingSyncListOnceBuilt {
             override fun updateList(list: SlidingSyncList): SlidingSyncList {
@@ -141,7 +140,7 @@ class RustMatrixClient constructor(
             )
         )
         .filters(invitesSlidingSyncFilters)
-        .syncMode(mode = SlidingSyncMode.SELECTIVE)
+        .syncModeSelective()
         .addRange(0u, 20u)
         .onceBuilt(object : SlidingSyncListOnceBuilt {
             override fun updateList(list: SlidingSyncList): SlidingSyncList {
