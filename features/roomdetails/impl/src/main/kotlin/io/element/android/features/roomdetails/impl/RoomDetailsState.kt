@@ -32,6 +32,7 @@ data class RoomDetailsState(
     val error: RoomDetailsError?,
     val roomType: RoomDetailsType,
     val roomMemberDetailsState: RoomMemberDetailsState?,
+    val canInvite: Boolean,
     val eventSink: (RoomDetailsEvent) -> Unit
 )
 

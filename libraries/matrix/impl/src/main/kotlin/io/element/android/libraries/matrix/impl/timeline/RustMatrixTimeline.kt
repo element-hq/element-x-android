@@ -152,6 +152,7 @@ class RustMatrixTimeline(
                     RequiredState(key = "m.room.canonical_alias", value = ""),
                     RequiredState(key = "m.room.topic", value = ""),
                     RequiredState(key = "m.room.join_rules", value = ""),
+                    RequiredState(key = "m.room.power_levels", value = ""),
                 ),
                 timelineLimit = null
             )

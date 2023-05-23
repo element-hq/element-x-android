@@ -28,6 +28,9 @@ import io.element.android.features.rageshake.test.crash.FakeCrashDataStore
 import io.element.android.features.rageshake.test.rageshake.FakeRageShake
 import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
 import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolder
+import io.element.android.services.apperror.api.AppErrorState
+import io.element.android.services.apperror.api.AppErrorStateService
+import io.element.android.services.apperror.impl.DefaultAppErrorStateService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -44,7 +47,32 @@ class RootPresenterTest {
         }
     }
 
-    private fun createPresenter(): RootPresenter {
+    @Test
+    fun `present - passes app error state`() = runTest {
+        val presenter = createPresenter(
+            appErrorService = DefaultAppErrorStateService().apply {
+                showError("Bad news", "Something bad happened")
+            }
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+
+            val initialState = awaitItem()
+            assertThat(initialState.errorState).isInstanceOf(AppErrorState.Error::class.java)
+            val initialErrorState = initialState.errorState as AppErrorState.Error
+            assertThat(initialErrorState.title).isEqualTo("Bad news")
+            assertThat(initialErrorState.body).isEqualTo("Something bad happened")
+
+            initialErrorState.dismiss()
+            assertThat(awaitItem().errorState).isInstanceOf(AppErrorState.NoError::class.java)
+        }
+    }
+
+    private fun createPresenter(
+        appErrorService: AppErrorStateService = DefaultAppErrorStateService()
+    ): RootPresenter {
         val crashDataStore = FakeCrashDataStore()
         val rageshakeDataStore = FakeRageshakeDataStore()
         val rageshake = FakeRageShake()
@@ -63,6 +91,7 @@ class RootPresenterTest {
         return RootPresenter(
             crashDetectionPresenter = crashDetectionPresenter,
             rageshakeDetectionPresenter = rageshakeDetectionPresenter,
+            appErrorStateService = appErrorService,
         )
     }
 }

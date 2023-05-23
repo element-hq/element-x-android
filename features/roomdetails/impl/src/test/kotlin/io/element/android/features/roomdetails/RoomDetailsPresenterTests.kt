@@ -25,7 +25,6 @@ import io.element.android.features.roomdetails.impl.RoomDetailsEvent
 import io.element.android.features.roomdetails.impl.RoomDetailsPresenter
 import io.element.android.features.roomdetails.impl.RoomDetailsType
 import io.element.android.features.roomdetails.impl.members.aRoomMember
-import io.element.android.features.roomdetails.impl.members.aRoomMemberList
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -33,7 +32,6 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
-import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
@@ -101,18 +99,19 @@ class RoomDetailsPresenterTests {
             room.givenRoomMembersState(MatrixRoomMembersState.Unknown)
             val initialState = awaitItem()
             Truth.assertThat(initialState.memberCount).isEqualTo(Async.Uninitialized)
+            skipItems(1)
 
             room.givenRoomMembersState(MatrixRoomMembersState.Pending(null))
             val loadingState = awaitItem()
             Truth.assertThat(loadingState.memberCount).isEqualTo(Async.Loading(null))
 
             room.givenRoomMembersState(MatrixRoomMembersState.Error(error))
-            //skipItems(1)
+            skipItems(1)
             val failureState = awaitItem()
             Truth.assertThat(failureState.memberCount).isEqualTo(Async.Failure(error, null))
 
             room.givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
-            //skipItems(1)
+            skipItems(1)
             val successState = awaitItem()
             Truth.assertThat(successState.memberCount).isEqualTo(Async.Success(1))
 
@@ -166,6 +165,8 @@ class RoomDetailsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            skipItems(1)
+
             initialState.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
             val confirmationState = awaitItem()
             Truth.assertThat(confirmationState.displayLeaveRoomWarning).isEqualTo(LeaveRoomWarning.PrivateRoom)
@@ -182,6 +183,8 @@ class RoomDetailsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            skipItems(1)
+
             initialState.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
             val confirmationState = awaitItem()
             Truth.assertThat(confirmationState.displayLeaveRoomWarning).isEqualTo(LeaveRoomWarning.LastUserInRoom)
@@ -198,6 +201,8 @@ class RoomDetailsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            skipItems(1)
+
             initialState.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
             val confirmationState = awaitItem()
             Truth.assertThat(confirmationState.displayLeaveRoomWarning).isEqualTo(LeaveRoomWarning.Generic)
@@ -214,6 +219,8 @@ class RoomDetailsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            skipItems(1)
+
             initialState.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = false))
 
             cancelAndIgnoreRemainingEvents()
@@ -235,11 +242,57 @@ class RoomDetailsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            skipItems(1)
+
             initialState.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = false))
             val errorState = awaitItem()
             Truth.assertThat(errorState.error).isNotNull()
             errorState.eventSink(RoomDetailsEvent.ClearError)
             Truth.assertThat(awaitItem().error).isNull()
+        }
+    }
+
+    @Test
+    fun `present - initial state when user can invite others to room`() = runTest {
+        val room = aMatrixRoom().apply {
+            givenCanInviteResult(Result.success(true))
+        }
+        val presenter = aRoomDetailsPresenter(room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            // Initially false
+            Truth.assertThat(awaitItem().canInvite).isFalse()
+            // Then the asynchronous check completes and it becomes true
+            Truth.assertThat(awaitItem().canInvite).isTrue()
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - initial state when user can not invite others to room`() = runTest {
+        val room = aMatrixRoom().apply {
+            givenCanInviteResult(Result.success(false))
+        }
+        val presenter = aRoomDetailsPresenter(room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            Truth.assertThat(awaitItem().canInvite).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - initial state when canInvite errors`() = runTest {
+        val room = aMatrixRoom().apply {
+            givenCanInviteResult(Result.failure(Throwable("Whoops")))
+        }
+        val presenter = aRoomDetailsPresenter(room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            Truth.assertThat(awaitItem().canInvite).isFalse()
         }
     }
 }

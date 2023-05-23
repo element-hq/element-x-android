@@ -69,6 +69,7 @@
   <string name="common_file">"File"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Image"</string>
+  <string name="common_leaving_room">"Leaving room"</string>
   <string name="common_link_copied_to_clipboard">"Link copied to clipboard"</string>
   <string name="common_loading">"Loading…"</string>
   <string name="common_message">"Message"</string>
@@ -98,6 +99,8 @@
   <string name="common_suggestions">"Suggestions"</string>
   <string name="common_topic">"Topic"</string>
   <string name="common_unable_to_decrypt">"Unable to decrypt"</string>
+  <string name="common_unable_to_invite_message">"We were unable to successfully send invites to one or more users."</string>
+  <string name="common_unable_to_invite_title">"Unable to send invite(s)"</string>
   <string name="common_unsupported_event">"Unsupported event"</string>
   <string name="common_username">"Username"</string>
   <string name="common_verification_cancelled">"Verification cancelled"</string>
