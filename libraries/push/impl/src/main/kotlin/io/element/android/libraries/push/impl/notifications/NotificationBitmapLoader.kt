@@ -51,7 +51,7 @@ class NotificationBitmapLoader @Inject constructor(
     private fun loadRoomBitmap(path: String): Bitmap? {
         return try {
             val imageRequest = ImageRequest.Builder(context)
-                .data(MediaResolver.Meta(path, MediaResolver.Kind.Thumbnail(512)))
+                .data(MediaResolver.Meta(path, MediaResolver.Kind.Thumbnail(1024)))
                 .build()
             runBlocking {
                 val result = context.imageLoader.execute(imageRequest)
@@ -81,7 +81,7 @@ class NotificationBitmapLoader @Inject constructor(
     private fun loadUserIcon(path: String): IconCompat? {
         return try {
             val imageRequest = ImageRequest.Builder(context)
-                .data(MediaResolver.Meta(path, MediaResolver.Kind.Thumbnail(512)))
+                .data(MediaResolver.Meta(path, MediaResolver.Kind.Thumbnail(1024)))
                 .transformations(CircleCropTransformation())
                 .build()
             val bitmap = runBlocking {
