@@ -21,7 +21,13 @@ import android.graphics.Bitmap
 import android.os.Build
 import androidx.annotation.WorkerThread
 import androidx.core.graphics.drawable.IconCompat
+import androidx.core.graphics.drawable.toBitmap
+import coil.imageLoader
+import coil.request.ImageRequest
+import coil.transform.CircleCropTransformation
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.matrix.api.media.MediaResolver
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -31,6 +37,7 @@ class NotificationBitmapLoader @Inject constructor(
 
     /**
      * Get icon of a room.
+     * @param path mxc url
      */
     @WorkerThread
     fun getRoomBitmap(path: String?): Bitmap? {
@@ -43,18 +50,15 @@ class NotificationBitmapLoader @Inject constructor(
     @WorkerThread
     private fun loadRoomBitmap(path: String): Bitmap? {
         return try {
-            null
-            /* TODO Notification
-            Glide.with(context)
-                    .asBitmap()
-                    .load(path)
-                    .format(DecodeFormat.PREFER_ARGB_8888)
-                    .signature(ObjectKey("room-icon-notification"))
-                    .submit()
-                    .get()
-             */
+            val imageRequest = ImageRequest.Builder(context)
+                .data(MediaResolver.Meta(path, MediaResolver.Kind.Thumbnail(128)))
+                .build()
+            runBlocking {
+                val result = context.imageLoader.execute(imageRequest)
+                result.drawable?.toBitmap()
+            }
         } catch (e: Exception) {
-            Timber.e(e, "decodeFile failed")
+            Timber.e(e, "Unable to load room bitmap")
             null
         }
     }
@@ -62,6 +66,7 @@ class NotificationBitmapLoader @Inject constructor(
     /**
      * Get icon of a user.
      * Before Android P, this does nothing because the icon won't be used
+     * @param path mxc url
      */
     @WorkerThread
     fun getUserIcon(path: String?): IconCompat? {
@@ -75,20 +80,17 @@ class NotificationBitmapLoader @Inject constructor(
     @WorkerThread
     private fun loadUserIcon(path: String): IconCompat? {
         return try {
-            null
-            /* TODO Notification
-            val bitmap = Glide.with(context)
-                    .asBitmap()
-                    .load(path)
-                    .transform(CircleCrop())
-                    .format(DecodeFormat.PREFER_ARGB_8888)
-                    .signature(ObjectKey("user-icon-notification"))
-                    .submit()
-                    .get()
-            IconCompat.createWithBitmap(bitmap)
-             */
+            val imageRequest = ImageRequest.Builder(context)
+                .data(MediaResolver.Meta(path, MediaResolver.Kind.Thumbnail(128)))
+                .transformations(CircleCropTransformation())
+                .build()
+            val bitmap = runBlocking {
+                val result = context.imageLoader.execute(imageRequest)
+                result.drawable?.toBitmap()
+            }
+            return bitmap?.let { IconCompat.createWithBitmap(it) }
         } catch (e: Exception) {
-            Timber.e(e, "decodeFile failed")
+            Timber.e(e, "Unable to load user bitmap")
             null
         }
     }
