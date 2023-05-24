@@ -150,7 +150,6 @@ fun RoomListContent(
     onInvitesClicked: () -> Unit = {},
 ) {
     fun onRoomClicked(room: RoomListRoomSummary) {
-        if (room.roomId == null) return
         onRoomClicked(room.roomId)
     }
 
@@ -259,8 +258,8 @@ fun RoomListContent(
                     ) { room ->
                         RoomSummaryRow(
                             room = room,
-                            onClick = { onRoomClicked(it) },
-                            onLongClick = { onRoomLongClicked(it) },
+                            onClick = ::onRoomClicked,
+                            onLongClick = onRoomLongClicked,
                         )
                     }
                 }

@@ -115,14 +115,10 @@ class RoomListPresenter @Inject constructor(
                     displaySearchResults = !displaySearchResults
                 }
                 is RoomListEvents.ShowContextMenu -> {
-                    contextMenu = if (event.roomListRoomSummary.roomId == null) {
-                        RoomListState.ContextMenu.Hidden
-                    } else {
-                        RoomListState.ContextMenu.Shown(
-                            roomId = event.roomListRoomSummary.roomId,
-                            roomName = event.roomListRoomSummary.name
-                        )
-                    }
+                    contextMenu = RoomListState.ContextMenu.Shown(
+                        roomId = event.roomListRoomSummary.roomId,
+                        roomName = event.roomListRoomSummary.name
+                    )
                 }
                 is RoomListEvents.HideContextMenu -> contextMenu = RoomListState.ContextMenu.Hidden
                 is RoomListEvents.LeaveRoom -> leaveRoomState.eventSink(LeaveRoomEvent.ShowConfirmation(event.roomId))

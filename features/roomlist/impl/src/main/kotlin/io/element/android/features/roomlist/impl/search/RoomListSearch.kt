@@ -110,7 +110,6 @@ internal fun RoomListSearchResultContent(
         state.eventSink(RoomListEvents.ToggleSearchResults)
     }
     fun onRoomClicked(room: RoomListRoomSummary) {
-        if (room.roomId == null) return
         onRoomClicked(room.roomId)
     }
     Scaffold(

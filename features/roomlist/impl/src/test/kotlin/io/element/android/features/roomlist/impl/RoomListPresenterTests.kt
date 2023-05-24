@@ -331,32 +331,7 @@ class RoomListPresenterTests {
 
             val shownState = awaitItem()
             Truth.assertThat(shownState.contextMenu)
-                .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId!!, summary.name))
-        }
-    }
-
-    @Test
-    fun `present - don't show context menu if roomId is null`() = runTest {
-        val presenter = RoomListPresenter(
-            FakeMatrixClient(A_SESSION_ID),
-            createDateFormatter(),
-            FakeRoomLastMessageFormatter(),
-            FakeSessionVerificationService(),
-            FakeNetworkMonitor(),
-            SnackbarDispatcher(),
-            FakeInviteDataSource(),
-            LeaveRoomPresenterFake(),
-        )
-        moleculeFlow(RecompositionClock.Immediate) {
-            presenter.present()
-        }.test {
-            skipItems(1)
-
-            val initialState = awaitItem()
-            val summary = aRoomListRoomSummary.copy(roomId = null)
-            initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
-
-            expectNoEvents()
+                .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name))
         }
     }
 
@@ -383,7 +358,7 @@ class RoomListPresenterTests {
 
             val shownState = awaitItem()
             Truth.assertThat(shownState.contextMenu)
-                .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId!!, summary.name))
+                .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name))
             shownState.eventSink(RoomListEvents.HideContextMenu)
 
             val hiddenState = awaitItem()
