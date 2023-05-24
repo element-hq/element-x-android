@@ -106,7 +106,7 @@ fun RoomListView(
             }
 
             if (state.contextMenu is RoomListState.ContextMenu.Shown) {
-                RoomContextMenu(
+                RoomListContextMenu(
                     contextMenu = state.contextMenu,
                     eventSink = state.eventSink,
                     onRoomSettingsClicked = onRoomSettingsClicked,

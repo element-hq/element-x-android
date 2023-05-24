@@ -42,7 +42,7 @@ import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoomContextMenu(
+fun RoomListContextMenu(
     contextMenu: RoomListState.ContextMenu.Shown,
     eventSink: (RoomListEvents) -> Unit,
     onRoomSettingsClicked: (roomId: RoomId) -> Unit,
@@ -50,7 +50,7 @@ fun RoomContextMenu(
     ModalBottomSheet(
         onDismissRequest = { eventSink(RoomListEvents.HideContextMenu) },
     ) {
-        RoomModalBottomSheetContent(
+        RoomListModalBottomSheetContent(
             contextMenu = contextMenu,
             onRoomSettingsClicked = {
                 eventSink(RoomListEvents.HideContextMenu)
@@ -65,7 +65,7 @@ fun RoomContextMenu(
 }
 
 @Composable
-private fun RoomModalBottomSheetContent(
+private fun RoomListModalBottomSheetContent(
     contextMenu: RoomListState.ContextMenu.Shown,
     onRoomSettingsClicked: (roomId: RoomId) -> Unit,
     onLeaveRoomClicked: (roomId: RoomId) -> Unit,
@@ -117,18 +117,20 @@ private fun RoomModalBottomSheetContent(
 // Remove this preview when the issue is fixed.
 @Preview
 @Composable
-internal fun RoomModalBottomSheetContentLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun RoomListModalBottomSheetContentLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
 
 // TODO This component should be seen in [RoomListView] @Preview but it doesn't show up.
 // see: https://issuetracker.google.com/issues/283843380
 // Remove this preview when the issue is fixed.
 @Preview
 @Composable
-internal fun RoomModalBottomSheetContentDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun RoomListModalBottomSheetContentDarkPreview() =
+    ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
-    RoomModalBottomSheetContent(
+    RoomListModalBottomSheetContent(
         contextMenu = RoomListState.ContextMenu.Shown(
             roomId = RoomId(value = "!aRoom:aDomain"),
             roomName = "aRoom"
