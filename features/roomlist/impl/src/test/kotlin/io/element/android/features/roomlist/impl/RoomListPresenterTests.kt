@@ -330,8 +330,8 @@ class RoomListPresenterTests {
             initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
 
             val shownState = awaitItem()
-            Truth.assertThat(shownState.roomContextMenuState)
-                .isEqualTo(RoomContextMenuState.Shown(summary.roomId!!, summary.name))
+            Truth.assertThat(shownState.contextMenu)
+                .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId!!, summary.name))
         }
     }
 
@@ -382,12 +382,12 @@ class RoomListPresenterTests {
             initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
 
             val shownState = awaitItem()
-            Truth.assertThat(shownState.roomContextMenuState)
-                .isEqualTo(RoomContextMenuState.Shown(summary.roomId!!, summary.name))
+            Truth.assertThat(shownState.contextMenu)
+                .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId!!, summary.name))
             shownState.eventSink(RoomListEvents.HideContextMenu)
 
             val hiddenState = awaitItem()
-            Truth.assertThat(hiddenState.roomContextMenuState).isEqualTo(RoomContextMenuState.Hidden)
+            Truth.assertThat(hiddenState.contextMenu).isEqualTo(RoomListState.ContextMenu.Hidden)
         }
     }
 

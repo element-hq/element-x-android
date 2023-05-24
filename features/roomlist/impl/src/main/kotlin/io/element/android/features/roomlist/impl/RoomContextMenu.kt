@@ -43,7 +43,7 @@ import io.element.android.libraries.ui.strings.R as StringR
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoomContextMenu(
-    roomContextMenuState: RoomContextMenuState.Shown,
+    contextMenu: RoomListState.ContextMenu.Shown,
     eventSink: (RoomListEvents) -> Unit,
     onRoomSettingsClicked: (roomId: RoomId) -> Unit,
 ) {
@@ -51,14 +51,14 @@ fun RoomContextMenu(
         onDismissRequest = { eventSink(RoomListEvents.HideContextMenu) },
     ) {
         RoomModalBottomSheetContent(
-            roomContextMenuState = roomContextMenuState,
+            contextMenu = contextMenu,
             onRoomSettingsClicked = {
                 eventSink(RoomListEvents.HideContextMenu)
                 onRoomSettingsClicked(it)
             },
             onLeaveRoomClicked = {
                 eventSink(RoomListEvents.HideContextMenu)
-                eventSink(RoomListEvents.LeaveRoom(roomContextMenuState.roomId))
+                eventSink(RoomListEvents.LeaveRoom(contextMenu.roomId))
             }
         )
     }
@@ -66,7 +66,7 @@ fun RoomContextMenu(
 
 @Composable
 private fun RoomModalBottomSheetContent(
-    roomContextMenuState: RoomContextMenuState.Shown,
+    contextMenu: RoomListState.ContextMenu.Shown,
     onRoomSettingsClicked: (roomId: RoomId) -> Unit,
     onLeaveRoomClicked: (roomId: RoomId) -> Unit,
 ) {
@@ -76,7 +76,7 @@ private fun RoomModalBottomSheetContent(
         DropdownMenuItem(
             text = {
                 Text(
-                    text = roomContextMenuState.roomName,
+                    text = contextMenu.roomName,
                     fontWeight = FontWeight.Bold
                 )
             },
@@ -84,7 +84,7 @@ private fun RoomModalBottomSheetContent(
         )
         DropdownMenuItem(
             text = { Text(text = stringResource(id = StringR.string.common_settings)) },
-            onClick = { onRoomSettingsClicked(roomContextMenuState.roomId) },
+            onClick = { onRoomSettingsClicked(contextMenu.roomId) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Settings,
@@ -99,7 +99,7 @@ private fun RoomModalBottomSheetContent(
                     color = ElementTheme.colors.textActionCritical
                 )
             },
-            onClick = { onLeaveRoomClicked(roomContextMenuState.roomId) },
+            onClick = { onLeaveRoomClicked(contextMenu.roomId) },
             leadingIcon = {
                 Icon(
                     resourceId = VectorIcons.DoorOpen,
@@ -129,7 +129,7 @@ internal fun RoomModalBottomSheetContentDarkPreview() = ElementPreviewDark { Con
 @Composable
 private fun ContentToPreview() {
     RoomModalBottomSheetContent(
-        roomContextMenuState = RoomContextMenuState.Shown(
+        contextMenu = RoomListState.ContextMenu.Shown(
             roomId = RoomId(value = "!aRoom:aDomain"),
             roomName = "aRoom"
         ),

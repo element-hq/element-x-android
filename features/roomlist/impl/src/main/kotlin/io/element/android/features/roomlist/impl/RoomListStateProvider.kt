@@ -40,7 +40,7 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState().copy(invitesState = InvitesState.NewInvites),
             aRoomListState().copy(displaySearchResults = true, filter = "", filteredRoomList = persistentListOf()),
             aRoomListState().copy(displaySearchResults = true),
-            aRoomListState().copy(roomContextMenuState = RoomContextMenuState.Shown(
+            aRoomListState().copy(contextMenu = RoomListState.ContextMenu.Shown(
                 roomId = RoomId("!aRoom:aDomain"), roomName = "A nice room name"
             ))
         )
@@ -56,7 +56,7 @@ internal fun aRoomListState() = RoomListState(
     displayVerificationPrompt = false,
     invitesState = InvitesState.NoInvites,
     displaySearchResults = false,
-    roomContextMenuState = RoomContextMenuState.Hidden,
+    contextMenu = RoomListState.ContextMenu.Hidden,
     leaveRoomState = LeaveRoomState(),
     eventSink = {}
 )

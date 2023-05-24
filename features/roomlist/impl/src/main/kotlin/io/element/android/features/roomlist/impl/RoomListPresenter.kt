@@ -101,7 +101,7 @@ class RoomListPresenter @Inject constructor(
 
         var displaySearchResults by rememberSaveable { mutableStateOf(false) }
 
-        var roomContextMenuState by remember { mutableStateOf<RoomContextMenuState>(RoomContextMenuState.Hidden) }
+        var contextMenu by remember { mutableStateOf<RoomListState.ContextMenu>(RoomListState.ContextMenu.Hidden) }
 
         fun handleEvents(event: RoomListEvents) {
             when (event) {
@@ -115,16 +115,16 @@ class RoomListPresenter @Inject constructor(
                     displaySearchResults = !displaySearchResults
                 }
                 is RoomListEvents.ShowContextMenu -> {
-                    roomContextMenuState = if (event.roomListRoomSummary.roomId == null) {
-                        RoomContextMenuState.Hidden
+                    contextMenu = if (event.roomListRoomSummary.roomId == null) {
+                        RoomListState.ContextMenu.Hidden
                     } else {
-                        RoomContextMenuState.Shown(
+                        RoomListState.ContextMenu.Shown(
                             roomId = event.roomListRoomSummary.roomId,
                             roomName = event.roomListRoomSummary.name
                         )
                     }
                 }
-                is RoomListEvents.HideContextMenu -> roomContextMenuState = RoomContextMenuState.Hidden
+                is RoomListEvents.HideContextMenu -> contextMenu = RoomListState.ContextMenu.Hidden
                 is RoomListEvents.LeaveRoom -> leaveRoomState.eventSink(LeaveRoomEvent.ShowConfirmation(event.roomId))
             }
         }
@@ -150,7 +150,7 @@ class RoomListPresenter @Inject constructor(
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             invitesState = inviteStateDataSource.inviteState(),
             displaySearchResults = displaySearchResults,
-            roomContextMenuState = roomContextMenuState,
+            contextMenu = contextMenu,
             leaveRoomState = leaveRoomState,
             eventSink = ::handleEvents
         )

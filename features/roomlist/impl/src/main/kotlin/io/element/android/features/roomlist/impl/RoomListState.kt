@@ -35,21 +35,21 @@ data class RoomListState(
     val snackbarMessage: SnackbarMessage?,
     val invitesState: InvitesState,
     val displaySearchResults: Boolean,
-    val roomContextMenuState: RoomContextMenuState,
+    val contextMenu: ContextMenu,
     val leaveRoomState: LeaveRoomState,
     val eventSink: (RoomListEvents) -> Unit,
-)
+) {
+    sealed interface ContextMenu {
+        object Hidden : ContextMenu
+        data class Shown(
+            val roomId: RoomId,
+            val roomName: String,
+        ) : ContextMenu
+    }
+}
 
 enum class InvitesState {
     NoInvites,
     SeenInvites,
     NewInvites,
-}
-
-sealed interface RoomContextMenuState {
-    object Hidden : RoomContextMenuState
-    data class Shown(
-        val roomId: RoomId,
-        val roomName: String,
-    ) : RoomContextMenuState
 }
