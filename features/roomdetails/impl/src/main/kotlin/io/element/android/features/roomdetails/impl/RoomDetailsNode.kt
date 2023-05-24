@@ -111,6 +111,7 @@ class RoomDetailsNode @AssistedInject constructor(
         fun onActionClicked(action: RoomDetailsAction) {
             when (action) {
                 RoomDetailsAction.Edit -> onEditRoomDetails()
+                RoomDetailsAction.AddTopic -> onEditRoomDetails()
             }
         }
 

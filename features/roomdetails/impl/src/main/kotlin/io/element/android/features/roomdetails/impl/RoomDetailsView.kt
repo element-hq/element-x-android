@@ -33,6 +33,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.PersonAddAlt
@@ -135,8 +136,11 @@ fun RoomDetailsView(
             }
             Spacer(Modifier.height(26.dp))
 
-            if (state.roomTopic != null) {
-                TopicSection(roomTopic = state.roomTopic)
+            if (state.roomTopic !is RoomTopicState.Hidden) {
+                TopicSection(
+                    roomTopic = state.roomTopic,
+                    onActionClicked = onActionClicked,
+                )
             }
 
             if (state.roomType is RoomDetailsType.Room) {
@@ -254,14 +258,26 @@ internal fun RoomHeaderSection(
 }
 
 @Composable
-internal fun TopicSection(roomTopic: String, modifier: Modifier = Modifier) {
+internal fun TopicSection(
+    roomTopic: RoomTopicState,
+    onActionClicked: (RoomDetailsAction) -> Unit,
+    modifier: Modifier = Modifier
+) {
     PreferenceCategory(title = stringResource(R.string.screen_room_details_topic_title), modifier = modifier) {
-        Text(
-            roomTopic,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.tertiary
-        )
+        if (roomTopic is RoomTopicState.CanAddTopic) {
+            PreferenceText(
+                title = stringResource(R.string.screen_room_details_add_topic_title),
+                icon = Icons.Outlined.Add,
+                onClick = { onActionClicked(RoomDetailsAction.AddTopic) },
+            )
+        } else if (roomTopic is RoomTopicState.ExistingTopic) {
+            Text(
+                roomTopic.topic,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.tertiary
+            )
+        }
     }
 }
 

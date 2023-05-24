@@ -27,7 +27,8 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
     override val values: Sequence<RoomDetailsState>
         get() = sequenceOf(
             aRoomDetailsState(),
-            aRoomDetailsState().copy(roomTopic = null),
+            aRoomDetailsState().copy(roomTopic = RoomTopicState.Hidden),
+            aRoomDetailsState().copy(roomTopic = RoomTopicState.CanAddTopic),
             aRoomDetailsState().copy(isEncrypted = false),
             aRoomDetailsState().copy(roomAlias = null),
             aRoomDetailsState().copy(memberCount = Async.Failure(Throwable())),
@@ -64,11 +65,13 @@ fun aRoomDetailsState() = RoomDetailsState(
     roomName = "Marketing",
     roomAlias = "#marketing:domain.com",
     roomAvatarUrl = null,
-    roomTopic = "Welcome to #marketing, home of the Marketing team " +
-        "|| WIKI PAGE: https://domain.org/wiki/Marketing " +
-        "|| MAIL iki/Marketing " +
-        "|| MAI iki/Marketing " +
-        "|| MAI iki/Marketing...",
+    roomTopic = RoomTopicState.ExistingTopic(
+        "Welcome to #marketing, home of the Marketing team " +
+            "|| WIKI PAGE: https://domain.org/wiki/Marketing " +
+            "|| MAIL iki/Marketing " +
+            "|| MAI iki/Marketing " +
+            "|| MAI iki/Marketing..."
+    ),
     memberCount = Async.Success(32),
     isEncrypted = true,
     displayLeaveRoomWarning = null,

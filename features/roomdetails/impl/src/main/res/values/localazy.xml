@@ -16,6 +16,7 @@
   <string name="screen_create_room_room_name_placeholder">"e.g. Product Sprint"</string>
   <string name="screen_create_room_topic_label">"Topic (optional)"</string>
   <string name="screen_create_room_topic_placeholder">"What is this room about?"</string>
+  <string name="screen_room_details_add_topic_title">"Add topic"</string>
   <string name="screen_room_details_already_a_member">"Already a member"</string>
   <string name="screen_room_details_already_invited">"Already invited"</string>
   <string name="screen_room_details_edition_error">"An error occurred when updating the room details"</string>
