@@ -74,17 +74,18 @@ private fun MediaImageView(
             modifier = modifier.fillMaxSize(),
             contentDescription = null,
         )
+    } else {
+        val zoomableState = rememberZoomableState(
+            zoomSpec = ZoomSpec(maxZoomFactor = 3f)
+        )
+        ZoomableAsyncImage(
+            modifier = modifier.fillMaxSize(),
+            state = rememberZoomableImageState(zoomableState),
+            model = localMedia.model,
+            contentDescription = "Image",
+            contentScale = ContentScale.Fit,
+        )
     }
-    val zoomableState = rememberZoomableState(
-        zoomSpec = ZoomSpec(maxZoomFactor = 3f)
-    )
-    ZoomableAsyncImage(
-        modifier = modifier.fillMaxSize(),
-        state = rememberZoomableImageState(zoomableState),
-        model = localMedia.model,
-        contentDescription = "Image",
-        contentScale = ContentScale.Fit,
-    )
 }
 
 @UnstableApi
