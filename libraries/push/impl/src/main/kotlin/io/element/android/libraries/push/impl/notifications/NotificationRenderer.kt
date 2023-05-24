@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import androidx.annotation.WorkerThread
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
@@ -32,8 +31,7 @@ class NotificationRenderer @Inject constructor(
     private val notificationFactory: NotificationFactory,
 ) {
 
-    @WorkerThread
-    fun render(
+    suspend fun render(
         currentUser: MatrixUser,
         useCompleteNotificationFormat: Boolean,
         eventsToProcess: List<ProcessedEvent<NotifiableEvent>>

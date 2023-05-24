@@ -37,7 +37,7 @@ class RoomGroupMessageCreator @Inject constructor(
     private val notificationFactory: NotificationFactory
 ) {
 
-    fun createRoomMessage(
+    suspend fun createRoomMessage(
         currentUser: MatrixUser,
         events: List<NotifiableMessageEvent>,
         roomId: RoomId,
@@ -98,7 +98,7 @@ class RoomGroupMessageCreator @Inject constructor(
         )
     }
 
-    private fun NotificationCompat.MessagingStyle.addMessagesFromEvents(events: List<NotifiableMessageEvent>) {
+    private suspend fun NotificationCompat.MessagingStyle.addMessagesFromEvents(events: List<NotifiableMessageEvent>) {
         events.forEach { event ->
             val senderPerson = if (event.outGoingMessage) {
                 null
@@ -171,7 +171,7 @@ class RoomGroupMessageCreator @Inject constructor(
         }
     }
 
-    private fun getRoomBitmap(events: List<NotifiableMessageEvent>): Bitmap? {
+    private suspend fun getRoomBitmap(events: List<NotifiableMessageEvent>): Bitmap? {
         // Use the last event (most recent?)
         return events.lastOrNull()
             ?.roomAvatarPath

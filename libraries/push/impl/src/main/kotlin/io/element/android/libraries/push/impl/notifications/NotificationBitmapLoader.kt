@@ -19,7 +19,6 @@ package io.element.android.libraries.push.impl.notifications
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
-import androidx.annotation.WorkerThread
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.toBitmap
 import coil.imageLoader
@@ -27,7 +26,6 @@ import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.media.MediaResolver
-import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,24 +37,20 @@ class NotificationBitmapLoader @Inject constructor(
      * Get icon of a room.
      * @param path mxc url
      */
-    @WorkerThread
-    fun getRoomBitmap(path: String?): Bitmap? {
+    suspend fun getRoomBitmap(path: String?): Bitmap? {
         if (path == null) {
             return null
         }
         return loadRoomBitmap(path)
     }
 
-    @WorkerThread
-    private fun loadRoomBitmap(path: String): Bitmap? {
+    private suspend fun loadRoomBitmap(path: String): Bitmap? {
         return try {
             val imageRequest = ImageRequest.Builder(context)
                 .data(MediaResolver.Meta(path, MediaResolver.Kind.Thumbnail(1024)))
                 .build()
-            runBlocking {
-                val result = context.imageLoader.execute(imageRequest)
-                result.drawable?.toBitmap()
-            }
+            val result = context.imageLoader.execute(imageRequest)
+            result.drawable?.toBitmap()
         } catch (e: Throwable) {
             Timber.e(e, "Unable to load room bitmap")
             null
@@ -68,8 +62,7 @@ class NotificationBitmapLoader @Inject constructor(
      * Before Android P, this does nothing because the icon won't be used
      * @param path mxc url
      */
-    @WorkerThread
-    fun getUserIcon(path: String?): IconCompat? {
+    suspend fun getUserIcon(path: String?): IconCompat? {
         if (path == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             return null
         }
@@ -77,17 +70,14 @@ class NotificationBitmapLoader @Inject constructor(
         return loadUserIcon(path)
     }
 
-    @WorkerThread
-    private fun loadUserIcon(path: String): IconCompat? {
+    private suspend fun loadUserIcon(path: String): IconCompat? {
         return try {
             val imageRequest = ImageRequest.Builder(context)
                 .data(MediaResolver.Meta(path, MediaResolver.Kind.Thumbnail(1024)))
                 .transformations(CircleCropTransformation())
                 .build()
-            val bitmap = runBlocking {
-                val result = context.imageLoader.execute(imageRequest)
-                result.drawable?.toBitmap()
-            }
+            val result = context.imageLoader.execute(imageRequest)
+            val bitmap = result.drawable?.toBitmap()
             return bitmap?.let { IconCompat.createWithBitmap(it) }
         } catch (e: Throwable) {
             Timber.e(e, "Unable to load user bitmap")
