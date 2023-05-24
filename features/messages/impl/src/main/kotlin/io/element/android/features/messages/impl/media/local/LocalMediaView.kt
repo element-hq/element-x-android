@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.media.local
 import android.annotation.SuppressLint
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +27,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.MediaItem
@@ -34,6 +37,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
+import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
@@ -64,6 +68,13 @@ private fun MediaImageView(
     localMedia: LocalMedia,
     modifier: Modifier = Modifier,
 ) {
+    if (LocalInspectionMode.current) {
+        Image(
+            painter = painterResource(id = R.drawable.sample_background),
+            modifier = modifier.fillMaxSize(),
+            contentDescription = null,
+        )
+    }
     val zoomableState = rememberZoomableState(
         zoomSpec = ZoomSpec(maxZoomFactor = 3f)
     )

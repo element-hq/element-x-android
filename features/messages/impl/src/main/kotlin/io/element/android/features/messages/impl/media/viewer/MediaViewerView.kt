@@ -63,9 +63,7 @@ fun MediaViewerView(
             when (state.downloadedMedia) {
                 is Async.Success -> LocalMediaView(state.downloadedMedia.state)
                 is Async.Failure -> ErrorView(stringResource(id = StringR.string.error_unknown), ::onRetry)
-                else -> CircularProgressIndicator(
-                    strokeWidth = 2.dp,
-                )
+                else -> CircularProgressIndicator()
             }
         }
     }
@@ -91,11 +89,6 @@ private fun ErrorView(
 
     }
 }
-
-@Preview
-@Composable
-fun MediaViewerViewLightPreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) =
-    ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable

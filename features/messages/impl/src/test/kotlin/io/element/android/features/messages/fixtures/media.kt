@@ -22,11 +22,15 @@ import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.mockk.mockk
 
 fun aLocalMedia(
+    mimeType: String,
     uri: Uri = mockk("localMediaUri"),
-    mimeType: String
+    name: String = "a media",
+    size: Long = 1000,
 ) = LocalMedia(
     uri = uri,
-    mimeType = mimeType
+    mimeType = mimeType,
+    name = name,
+    size = size,
 )
 
 fun aMediaAttachment(localMedia: LocalMedia, compressIfPossible: Boolean = true) = Attachment.Media(

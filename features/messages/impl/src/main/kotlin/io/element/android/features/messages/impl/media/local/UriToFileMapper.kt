@@ -40,7 +40,8 @@ object UriToFileMapper {
     }
 
     private fun isApplicable(data: Uri): Boolean {
-        return data.scheme.let { it == null || it == ContentResolver.SCHEME_FILE } &&
+        return !isAssetUri(data) &&
+            data.scheme.let { it == null || it == ContentResolver.SCHEME_FILE } &&
             data.path.orEmpty().startsWith('/') && data.firstPathSegment != null
     }
 

@@ -79,13 +79,13 @@ fun AttachmentsPreviewView(
                 onSendClicked = ::postSendAttachment,
                 onDismiss = onDismiss
             )
-            AttachmentSendStateView(
-                sendActionState = state.sendActionState,
-                onRetryClicked = ::postSendAttachment,
-                onRetryDismissed = ::postClearSendState
-            )
         }
     }
+    AttachmentSendStateView(
+        sendActionState = state.sendActionState,
+        onRetryClicked = ::postSendAttachment,
+        onRetryDismissed = ::postClearSendState
+    )
 }
 
 @Composable
@@ -106,7 +106,6 @@ private fun AttachmentSendStateView(
                 onRetry = onRetryClicked
             )
         }
-
         else -> Unit
     }
 }
@@ -115,10 +114,11 @@ private fun AttachmentSendStateView(
 private fun AttachmentPreviewContent(
     attachment: Attachment,
     onSendClicked: () -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(top = 24.dp)
     ) {

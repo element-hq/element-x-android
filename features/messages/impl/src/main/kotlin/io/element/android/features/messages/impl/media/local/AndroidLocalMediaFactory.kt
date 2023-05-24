@@ -20,6 +20,8 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.androidutils.file.getFileName
+import io.element.android.libraries.androidutils.file.getFileSize
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
@@ -32,13 +34,19 @@ class AndroidLocalMediaFactory @Inject constructor(
 ) : LocalMediaFactory {
 
     override fun createFromMediaFile(mediaFile: MediaFile, mimeType: String?): LocalMedia {
-        val resolvedMimeType = mimeType ?: MimeTypes.OctetStream
         val uri = mediaFile.path().toUri()
-        return LocalMedia(uri, resolvedMimeType)
+        return createFromUri(uri, mimeType)
     }
 
     override fun createFromUri(uri: Uri, mimeType: String?): LocalMedia {
         val resolvedMimeType = mimeType ?: context.contentResolver.getType(uri) ?: MimeTypes.OctetStream
-        return LocalMedia(uri, resolvedMimeType)
+        val fileName = context.getFileName(uri)
+        val fileSize = context.getFileSize(uri)
+        return LocalMedia(
+            uri = uri,
+            mimeType = resolvedMimeType,
+            name = fileName,
+            size = fileSize
+        )
     }
 }
