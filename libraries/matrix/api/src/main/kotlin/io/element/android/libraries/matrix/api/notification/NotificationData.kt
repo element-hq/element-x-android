@@ -35,8 +35,6 @@ data class NotificationData(
 )
 
 data class NotificationEvent(
-    val eventId: EventId,
-    val senderId: UserId,
     val timestamp: Long,
     val content: String,
     // For images for instance

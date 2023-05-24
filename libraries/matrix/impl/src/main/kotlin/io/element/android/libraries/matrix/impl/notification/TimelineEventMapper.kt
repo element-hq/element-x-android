@@ -32,8 +32,6 @@ class TimelineEventMapper @Inject constructor() {
     fun map(timelineEvent: TimelineEvent): NotificationEvent {
         return timelineEvent.use {
             NotificationEvent(
-                eventId = EventId(it.eventId()),
-                senderId = UserId(it.senderId()),
                 timestamp = it.timestamp().toLong(),
                 content = it.eventType().toContent(),
                 contentUrl = null // TODO it.eventType().toContentUrl(),
