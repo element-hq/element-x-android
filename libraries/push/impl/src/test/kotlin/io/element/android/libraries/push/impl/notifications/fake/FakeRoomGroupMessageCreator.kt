@@ -21,7 +21,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.notifications.RoomGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.RoomNotification
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockk
 
 class FakeRoomGroupMessageCreator {
@@ -34,7 +34,7 @@ class FakeRoomGroupMessageCreator {
         roomId: RoomId,
     ): RoomNotification.Message {
         val mockMessage = mockk<RoomNotification.Message>()
-        every {
+        coEvery {
             instance.createRoomMessage(
                 currentUser = matrixUser,
                 events = events,

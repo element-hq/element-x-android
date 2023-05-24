@@ -22,6 +22,7 @@ import io.element.android.libraries.push.impl.notifications.NotificationFactory
 import io.element.android.libraries.push.impl.notifications.OneShotNotification
 import io.element.android.libraries.push.impl.notifications.RoomNotification
 import io.element.android.libraries.push.impl.notifications.SummaryNotification
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 
@@ -38,7 +39,7 @@ class FakeNotificationFactory {
         summaryNotification: SummaryNotification
     ) {
         with(instance) {
-            every { groupedEvents.roomEvents.toNotifications(matrixUser) } returns roomNotifications
+            coEvery { groupedEvents.roomEvents.toNotifications(matrixUser) } returns roomNotifications
             every { groupedEvents.invitationEvents.toNotifications() } returns invitationNotifications
             every { groupedEvents.simpleEvents.toNotifications() } returns simpleNotifications
 

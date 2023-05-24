@@ -28,6 +28,7 @@ import io.element.android.libraries.push.impl.notifications.fake.FakeSummaryGrou
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aSimpleNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.anInviteNotifiableEvent
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 private val MY_AVATAR_URL: String? = null
@@ -196,6 +197,8 @@ class NotificationFactoryTest {
     }
 }
 
-fun <T> testWith(receiver: T, block: T.() -> Unit) {
-    receiver.block()
+fun <T> testWith(receiver: T, block: suspend T.() -> Unit) {
+    runTest {
+        receiver.block()
+    }
 }

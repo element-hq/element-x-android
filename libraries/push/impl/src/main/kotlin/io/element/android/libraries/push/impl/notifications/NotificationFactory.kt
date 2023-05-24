@@ -34,7 +34,7 @@ class NotificationFactory @Inject constructor(
     private val summaryGroupMessageCreator: SummaryGroupMessageCreator
 ) {
 
-    fun Map<RoomId, ProcessedMessageEvents>.toNotifications(
+    suspend fun Map<RoomId, ProcessedMessageEvents>.toNotifications(
         currentUser: MatrixUser,
     ): List<RoomNotification> {
         return map { (roomId, events) ->

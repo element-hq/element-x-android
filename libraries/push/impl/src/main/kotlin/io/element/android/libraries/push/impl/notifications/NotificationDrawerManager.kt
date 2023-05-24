@@ -16,11 +16,9 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import android.os.Handler
-import android.os.HandlerThread
-import androidx.annotation.WorkerThread
 import io.element.android.libraries.androidutils.throttler.FirstThrottler
 import io.element.android.libraries.core.cache.CircularCache
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
@@ -37,8 +35,9 @@ import io.element.android.libraries.push.impl.notifications.model.shouldIgnoreMe
 import io.element.android.services.appnavstate.api.AppNavigationState
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -56,13 +55,10 @@ class NotificationDrawerManager @Inject constructor(
     private val filteredEventDetector: FilteredEventDetector,
     private val appNavigationStateService: AppNavigationStateService,
     private val coroutineScope: CoroutineScope,
+    private val dispatchers: CoroutineDispatchers,
     private val buildMeta: BuildMeta,
     private val matrixAuthenticationService: MatrixAuthenticationService,
 ) {
-
-    private val handlerThread: HandlerThread = HandlerThread("NotificationDrawerManager", Thread.MIN_PRIORITY)
-    private var backgroundHandler: Handler
-
     /**
      * Lazily initializes the NotificationState as we rely on having a current session in order to fetch the persisted queue of events.
      */
@@ -74,8 +70,6 @@ class NotificationDrawerManager @Inject constructor(
     private var useCompleteNotificationFormat = true
 
     init {
-        handlerThread.start()
-        backgroundHandler = Handler(handlerThread.looper)
         // Observe application state
         coroutineScope.launch {
             appNavigationStateService.appNavigationStateFlow
@@ -193,30 +187,25 @@ class NotificationDrawerManager @Inject constructor(
         notificationState.updateQueuedEvents(this) { queuedEvents, _ ->
             action(queuedEvents)
         }
-        refreshNotificationDrawer()
+        coroutineScope.refreshNotificationDrawer()
     }
 
-    private fun refreshNotificationDrawer() {
+    private fun CoroutineScope.refreshNotificationDrawer() = launch {
         // Implement last throttler
         val canHandle = firstThrottler.canHandle()
         Timber.v("refreshNotificationDrawer(), delay: ${canHandle.waitMillis()} ms")
-        backgroundHandler.removeCallbacksAndMessages(null)
-
-        backgroundHandler.postDelayed(
-            {
-                try {
-                    refreshNotificationDrawerBg()
-                } catch (throwable: Throwable) {
-                    // It can happen if for instance session has been destroyed. It's a bit ugly to try catch like this, but it's safer
-                    Timber.w(throwable, "refreshNotificationDrawerBg failure")
-                }
-            },
-            canHandle.waitMillis()
-        )
+        withContext(dispatchers.io) {
+            delay(canHandle.waitMillis())
+            try {
+                refreshNotificationDrawerBg()
+            } catch (throwable: Throwable) {
+                // It can happen if for instance session has been destroyed. It's a bit ugly to try catch like this, but it's safer
+                Timber.w(throwable, "refreshNotificationDrawerBg failure")
+            }
+        }
     }
 
-    @WorkerThread
-    private fun refreshNotificationDrawerBg() {
+    private suspend fun refreshNotificationDrawerBg() {
         Timber.v("refreshNotificationDrawerBg()")
         val eventsToRender = notificationState.updateQueuedEvents(this) { queuedEvents, renderedEvents ->
             notifiableEventProcessor.process(queuedEvents.rawEvents(), currentAppNavigationState, renderedEvents).also {
@@ -239,8 +228,7 @@ class NotificationDrawerManager @Inject constructor(
         }
     }
 
-    @WorkerThread
-    private fun renderEvents(eventsToRender: List<ProcessedEvent<NotifiableEvent>>) {
+    private suspend fun renderEvents(eventsToRender: List<ProcessedEvent<NotifiableEvent>>) {
         // Group by sessionId
         val eventsForSessions = eventsToRender.groupBy {
             it.event.sessionId
@@ -250,18 +238,16 @@ class NotificationDrawerManager @Inject constructor(
             val currentUser = tryOrNull(
                 onError = { Timber.e(it, "Unable to retrieve info for user ${sessionId.value}") },
                 operation = {
-                    runBlocking {
-                        val client = matrixAuthenticationService.restoreSession(sessionId).getOrNull()
+                    val client = matrixAuthenticationService.restoreSession(sessionId).getOrNull()
 
-                        // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
-                        val myUserDisplayName = client?.loadUserDisplayName()?.getOrNull() ?: sessionId.value
-                        val userAvatarUrl = client?.loadUserAvatarURLString()?.getOrNull()
-                        MatrixUser(
-                            userId = sessionId,
-                            displayName = myUserDisplayName,
-                            avatarUrl = userAvatarUrl
-                        )
-                    }
+                    // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
+                    val myUserDisplayName = client?.loadUserDisplayName()?.getOrNull() ?: sessionId.value
+                    val userAvatarUrl = client?.loadUserAvatarURLString()?.getOrNull()
+                    MatrixUser(
+                        userId = sessionId,
+                        displayName = myUserDisplayName,
+                        avatarUrl = userAvatarUrl
+                    )
                 }
             ) ?: MatrixUser(
                 userId = sessionId,
