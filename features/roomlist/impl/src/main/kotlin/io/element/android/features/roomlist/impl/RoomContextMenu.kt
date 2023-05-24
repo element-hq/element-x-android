@@ -112,14 +112,14 @@ private fun RoomModalBottomSheetContent(
     }
 }
 
-// This component should be seen in [RoomListView] @Preview but it doesn't show up.
+// TODO This component should be seen in [RoomListView] @Preview but it doesn't show up.
 // see: https://issuetracker.google.com/issues/283843380
 // Remove this preview when the issue is fixed.
 @Preview
 @Composable
 internal fun RoomModalBottomSheetContentLightPreview() = ElementPreviewLight { ContentToPreview() }
 
-// This component should be seen in [RoomListView] @Preview but it doesn't show up.
+// TODO This component should be seen in [RoomListView] @Preview but it doesn't show up.
 // see: https://issuetracker.google.com/issues/283843380
 // Remove this preview when the issue is fixed.
 @Preview
