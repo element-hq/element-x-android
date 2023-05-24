@@ -26,6 +26,7 @@ data class RoomMemberListState(
     val searchQuery: String,
     val searchResults: SearchBarResultState<RoomMembers>,
     val isSearchActive: Boolean,
+    val canInvite: Boolean,
     val eventSink: (RoomMemberListEvents) -> Unit,
 )
 

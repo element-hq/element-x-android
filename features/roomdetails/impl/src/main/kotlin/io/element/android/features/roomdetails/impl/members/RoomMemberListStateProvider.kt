@@ -36,6 +36,7 @@ internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMember
                 )
             ),
             aRoomMemberListState(roomMembers = Async.Loading()),
+            aRoomMemberListState().copy(canInvite = true),
             aRoomMemberListState().copy(isSearchActive = false),
             aRoomMemberListState().copy(isSearchActive = true),
             aRoomMemberListState().copy(isSearchActive = true, searchQuery = "someone"),
@@ -65,6 +66,7 @@ internal fun aRoomMemberListState(
     searchQuery = "",
     searchResults = searchResults,
     isSearchActive = false,
+    canInvite = false,
     eventSink = {}
 )
 

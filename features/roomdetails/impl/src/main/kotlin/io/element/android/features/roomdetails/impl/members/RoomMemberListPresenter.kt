@@ -18,6 +18,8 @@ package io.element.android.features.roomdetails.impl.members
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,12 +29,15 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RoomMemberListPresenter @Inject constructor(
+    private val room: MatrixRoom,
     private val roomMemberListDataSource: RoomMemberListDataSource,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : Presenter<RoomMemberListState> {
@@ -45,6 +50,9 @@ class RoomMemberListPresenter @Inject constructor(
             mutableStateOf<SearchBarResultState<RoomMembers>>(SearchBarResultState.NotSearching())
         }
         var isSearchActive by rememberSaveable { mutableStateOf(false) }
+
+        val membersState by room.membersStateFlow.collectAsState()
+        val canInvite by getCanInvite(membersState = membersState)
 
         LaunchedEffect(Unit) {
             withContext(coroutineDispatchers.io) {
@@ -80,6 +88,7 @@ class RoomMemberListPresenter @Inject constructor(
             searchQuery = searchQuery,
             searchResults = searchResults,
             isSearchActive = isSearchActive,
+            canInvite = canInvite,
             eventSink = { event ->
                 when (event) {
                     is RoomMemberListEvents.OnSearchActiveChanged -> isSearchActive = event.active
@@ -87,6 +96,15 @@ class RoomMemberListPresenter @Inject constructor(
                 }
             },
         )
+    }
+
+    @Composable
+    private fun getCanInvite(membersState: MatrixRoomMembersState): State<Boolean> {
+        val canInvite = remember(membersState) { mutableStateOf(false) }
+        LaunchedEffect(membersState) {
+            canInvite.value = room.canInvite().getOrElse { false }
+        }
+        return canInvite
     }
 }
 
