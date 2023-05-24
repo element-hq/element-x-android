@@ -51,8 +51,6 @@ dependencies {
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.permissions.noop)
 
-    implementation(projects.features.verifysession.api)
-    implementation(projects.features.roomdetails.api)
     implementation(projects.tests.uitests)
     implementation(libs.coil)
 

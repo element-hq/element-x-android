@@ -19,9 +19,6 @@ package io.element.android.services.analytics.providers.api
 import io.element.android.services.analytics.providers.api.trackers.AnalyticsTracker
 import io.element.android.services.analytics.providers.api.trackers.ErrorTracker
 
-/**
- * This is the main API for this module.
- */
 interface AnalyticsProvider: AnalyticsTracker, ErrorTracker {
     /**
      * Allow to sort providers, from lower index to higher index.
@@ -33,14 +30,7 @@ interface AnalyticsProvider: AnalyticsTracker, ErrorTracker {
      */
     val name: String
 
-    fun getDistributors(): List<Distributor>
-
     suspend fun init()
 
     fun stop()
-
-    /**
-     * Attempt to troubleshoot the analytics provider.
-     */
-    suspend fun troubleshoot(): Result<Unit>
 }

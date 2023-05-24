@@ -39,11 +39,6 @@ class AnalyticsOptInNode @AssistedInject constructor(
         AnalyticsOptInView(
             state = state,
             modifier = modifier,
-            onDone = this::onDone
         )
-    }
-
-    private fun onDone() {
-//        plugins<BugReportEntryPoint.Callback>().forEach { it.onBugReportSent() }
     }
 }

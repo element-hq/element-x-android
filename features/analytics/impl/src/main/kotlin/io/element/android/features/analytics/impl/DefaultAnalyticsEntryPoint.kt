@@ -18,7 +18,6 @@ package io.element.android.features.analytics.impl
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.plugin.Plugin
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.analytics.api.AnalyticsEntryPoint
 import io.element.android.libraries.architecture.createNode
@@ -27,19 +26,7 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultAnalyticsEntryPoint @Inject constructor() : AnalyticsEntryPoint {
-    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): AnalyticsEntryPoint.NodeBuilder {
-
-        val plugins = ArrayList<Plugin>()
-
-        return object : AnalyticsEntryPoint.NodeBuilder {
-            override fun callback(callback: AnalyticsEntryPoint.Callback): AnalyticsEntryPoint.NodeBuilder {
-                plugins += callback
-                return this
-            }
-
-            override fun build(): Node {
-                return parentNode.createNode<AnalyticsOptInNode>(buildContext)
-            }
-        }
+    override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
+        return parentNode.createNode<AnalyticsOptInNode>(buildContext)
     }
 }

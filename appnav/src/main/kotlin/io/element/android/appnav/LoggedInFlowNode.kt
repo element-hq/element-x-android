@@ -40,6 +40,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.loggedin.LoggedInNode
+import io.element.android.features.analytics.api.AnalyticsEntryPoint
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.invitelist.api.InviteListEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
@@ -59,10 +60,10 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
+import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
@@ -74,11 +75,11 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val roomListEntryPoint: RoomListEntryPoint,
     private val preferencesEntryPoint: PreferencesEntryPoint,
     private val createRoomEntryPoint: CreateRoomEntryPoint,
-   // private val analyticsOptInEntryPoint: AnalyticsEntryPoint,
+    private val analyticsOptInEntryPoint: AnalyticsEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
     private val verifySessionEntryPoint: VerifySessionEntryPoint,
     private val inviteListEntryPoint: InviteListEntryPoint,
-  //  private val analyticsService: AnalyticsService,
+    private val analyticsService: AnalyticsService,
     private val coroutineScope: CoroutineScope,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
@@ -91,8 +92,7 @@ class LoggedInFlowNode @AssistedInject constructor(
 ) {
 
     private fun observeAnalyticsState() {
-         //analyticsService.didAskUserConsent()
-            flowOf(true)
+        analyticsService.didAskUserConsent()
             .distinctUntilChanged()
             .onEach { isConsentAsked ->
                 if (isConsentAsked) {
@@ -184,10 +184,10 @@ class LoggedInFlowNode @AssistedInject constructor(
         object VerifySession : NavTarget
 
         @Parcelize
-        object InviteList: NavTarget
+        object InviteList : NavTarget
 
-   //     @Parcelize
-  //      object AnalyticsSettings: NavTarget
+        @Parcelize
+        object AnalyticsSettings : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -289,10 +289,9 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .build()
             }
 
-//            NavTarget.AnalyticsSettings -> { TODO()
-//                analyticsOptInEntryPoint.nodeBuilder(this, buildContext).build()
-//            }
-
+            NavTarget.AnalyticsSettings -> {
+                analyticsOptInEntryPoint.createNode(this, buildContext)
+            }
         }
     }
 

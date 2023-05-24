@@ -25,7 +25,6 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.libraries.di.AppScope
 import io.element.android.services.analytics.providers.api.AnalyticsProvider
-import io.element.android.services.analytics.providers.api.Distributor
 import io.element.android.services.analytics.providers.posthog.impl.PostHogFactory
 import io.element.android.services.analytics.providers.posthog.log.analyticsTag
 import timber.log.Timber
@@ -44,15 +43,6 @@ class PosthogAnalyticsProvider @Inject constructor(
     private var posthog: PostHog? = null
     private var analyticsId: String? = null
 
-    override fun getDistributors(): List<Distributor> {
-        return listOf(
-            Distributor(
-                "Posthog",
-                "Posthog"
-            )
-        )
-    }
-
     override suspend fun init() {
         posthog = createPosthog()
         posthog?.optOut(false)
@@ -66,10 +56,6 @@ class PosthogAnalyticsProvider @Inject constructor(
         posthog?.shutdown()
         posthog = null
         analyticsId = null
-    }
-
-    override suspend fun troubleshoot(): Result<Unit> {
-        TODO("Not yet implemented")
     }
 
     override fun capture(event: VectorAnalyticsEvent) {

@@ -61,14 +61,12 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.utils.LogCompositions
-import io.element.android.features.analytics.impl.R
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun AnalyticsOptInView(
     state: AnalyticsOptInState,
     modifier: Modifier = Modifier,
-    onDone: () -> Unit = { },
 ) {
     LogCompositions(tag = "Analytics", msg = "Root")
     val eventSink = state.eventSink
@@ -127,8 +125,10 @@ fun AnalyticsOptInView(
                 color = MaterialTheme.colorScheme.secondary,
             )
 
-            Row(modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Image(
                     painterResource(id = R.drawable.ic_list_item_bullet),
                     contentDescription = null,
@@ -139,8 +139,10 @@ fun AnalyticsOptInView(
                     color = MaterialTheme.colorScheme.secondary,
                 )
             }
-            Row(modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Image(
                     painterResource(id = R.drawable.ic_list_item_bullet),
                     contentDescription = null,
@@ -151,8 +153,10 @@ fun AnalyticsOptInView(
                     color = MaterialTheme.colorScheme.secondary,
                 )
             }
-            Row(modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Image(
                     painterResource(id = R.drawable.ic_list_item_bullet),
                     contentDescription = null,
@@ -174,7 +178,7 @@ fun AnalyticsOptInView(
                 ) {
                     Text(text = stringResource(id = StringR.string.action_enable))
                 }
-                    Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                 TextButton(
                     onClick = { eventSink(AnalyticsOptInEvents.EnableAnalytics(false)) },
                     modifier = Modifier.fillMaxWidth(),
@@ -219,7 +223,7 @@ fun buildAnnotatedStringWithColoredPart(
     addStyle(
         style = SpanStyle(
             color = color,
-            textDecoration = if(underline) TextDecoration.Underline else null
+            textDecoration = if (underline) TextDecoration.Underline else null
         ), start = startIndex, end = startIndex + coloredPart.length
     )
 }

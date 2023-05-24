@@ -38,13 +38,8 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
-    api(libs.squareup.seismic)
     api(projects.features.analytics.api)
     implementation(libs.androidx.datastore.preferences)
-    implementation(platform(libs.network.okhttp.bom))
-    implementation("com.squareup.okhttp3:okhttp")
-    implementation(libs.coil)
-    implementation(libs.coil.compose)
     ksp(libs.showkase.processor)
 
     testImplementation(libs.test.junit)

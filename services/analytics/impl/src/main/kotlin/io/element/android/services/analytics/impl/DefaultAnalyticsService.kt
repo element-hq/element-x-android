@@ -21,19 +21,19 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.SingleIn
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.impl.log.analyticsTag
-import io.element.android.services.analytics.providers.api.AnalyticsProvider
 import io.element.android.services.analytics.impl.store.AnalyticsStore
+import io.element.android.services.analytics.providers.api.AnalyticsProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
+@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultAnalyticsService @Inject constructor(
     private val analyticsProviders: Set<@JvmSuppressWildcards AnalyticsProvider>,
@@ -43,9 +43,9 @@ class DefaultAnalyticsService @Inject constructor(
 ) : AnalyticsService {
     // Cache for the store values
     private var userConsent: Boolean? = null
+
     // Cache for the properties to send
     private var pendingUserProperties: UserProperties? = null
-
 
     override fun init() {
         observeUserConsent()
@@ -90,24 +90,22 @@ class DefaultAnalyticsService @Inject constructor(
 
     private fun observeAnalyticsId() {
         getAnalyticsId()
-                .onEach { id ->
-                    Timber.tag(analyticsTag.value).d("Analytics Id updated to '$id'")
+            .onEach { id ->
+                Timber.tag(analyticsTag.value).d("Analytics Id updated to '$id'")
 //                    analyticsId = id
 //                    identifyPostHog()
-                }
-                .launchIn(coroutineScope)
+            }
+            .launchIn(coroutineScope)
     }
-
-
 
     private fun observeUserConsent() {
         getUserConsent()
-                .onEach { consent ->
-                    Timber.tag(analyticsTag.value).d("User consent updated to $consent")
-                    userConsent = consent
-                    initOrStop()
-                }
-                .launchIn(coroutineScope)
+            .onEach { consent ->
+                Timber.tag(analyticsTag.value).d("User consent updated to $consent")
+                userConsent = consent
+                initOrStop()
+            }
+            .launchIn(coroutineScope)
     }
 
     private fun initOrStop() {
@@ -129,7 +127,6 @@ class DefaultAnalyticsService @Inject constructor(
         if (userConsent == true) {
             analyticsProviders.onEach { it.capture(event) }
         }
-
     }
 
     override fun screen(screen: VectorAnalyticsScreen) {
