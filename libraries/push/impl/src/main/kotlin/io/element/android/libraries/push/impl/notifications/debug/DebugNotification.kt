@@ -16,6 +16,6 @@
 
 package io.element.android.libraries.push.impl.notifications.debug
 
-fun CharSequence.annotateForDebug(prefix: Int): CharSequence {
-    return "$prefix-$this"
+fun CharSequence.annotateForDebug(@Suppress("UNUSED_PARAMETER") prefix: Int): CharSequence {
+    return this // "$prefix-$this"
 }
