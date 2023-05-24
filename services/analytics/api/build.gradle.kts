@@ -22,6 +22,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.services.analyticsproviders.api)
+    api(projects.services.analyticsproviders.api)
     implementation(libs.coroutines.core)
 }

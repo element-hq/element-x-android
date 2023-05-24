@@ -16,9 +16,11 @@
 
 package io.element.android.services.analytics.impl
 
+import com.squareup.anvil.annotations.ContributesBinding
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.plan.UserProperties
+import io.element.android.libraries.di.AppScope
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.impl.log.analyticsTag
 import io.element.android.services.analytics.providers.api.AnalyticsProvider
@@ -32,6 +34,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
+@ContributesBinding(AppScope::class)
 class DefaultAnalyticsService @Inject constructor(
     private val analyticsProviders: Set<@JvmSuppressWildcards AnalyticsProvider>,
     private val analyticsStore: AnalyticsStore,

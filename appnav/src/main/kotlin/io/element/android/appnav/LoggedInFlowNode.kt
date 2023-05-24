@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import coil.Coil
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.lifecycle.subscribe
@@ -50,6 +51,7 @@ import io.element.android.libraries.architecture.animation.rememberDefaultTransi
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
@@ -59,6 +61,10 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
@@ -68,19 +74,43 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val roomListEntryPoint: RoomListEntryPoint,
     private val preferencesEntryPoint: PreferencesEntryPoint,
     private val createRoomEntryPoint: CreateRoomEntryPoint,
+   // private val analyticsOptInEntryPoint: AnalyticsEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
     private val verifySessionEntryPoint: VerifySessionEntryPoint,
     private val inviteListEntryPoint: InviteListEntryPoint,
+  //  private val analyticsService: AnalyticsService,
     private val coroutineScope: CoroutineScope,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.RoomList,
+        initialElement = NavTarget.SplashScreen,
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
     plugins = plugins
 ) {
+
+    private fun observeAnalyticsState() {
+         //analyticsService.didAskUserConsent()
+            flowOf(true)
+            .distinctUntilChanged()
+            .onEach { isConsentAsked ->
+                if (isConsentAsked) {
+                    switchToRoomList()
+                } else {
+                    switchToAnalytics()
+                }
+            }
+            .launchIn(lifecycleScope)
+    }
+
+    private fun switchToRoomList() {
+        backstack.safeRoot(NavTarget.RoomList)
+    }
+
+    private fun switchToAnalytics() {
+        backstack.safeRoot(NavTarget.Settings)
+    }
 
     interface Callback : Plugin {
         fun onOpenBugReport() = Unit
@@ -105,6 +135,7 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     override fun onBuilt() {
         super.onBuilt()
+        observeAnalyticsState()
         lifecycle.subscribe(
             onCreate = {
                 plugins<LifecycleCallback>().forEach { it.onFlowCreated(inputs.matrixClient) }
@@ -129,6 +160,9 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
+        object SplashScreen : NavTarget
+
+        @Parcelize
         object Permanent : NavTarget
 
         @Parcelize
@@ -151,13 +185,18 @@ class LoggedInFlowNode @AssistedInject constructor(
 
         @Parcelize
         object InviteList: NavTarget
+
+   //     @Parcelize
+  //      object AnalyticsSettings: NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
+            NavTarget.SplashScreen -> splashNode(buildContext)
             NavTarget.Permanent -> {
                 createNode<LoggedInNode>(buildContext)
             }
+
             NavTarget.RoomList -> {
                 val callback = object : RoomListEntryPoint.Callback {
                     override fun onRoomClicked(roomId: RoomId) {
@@ -189,6 +228,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .callback(callback)
                     .build()
             }
+
             is NavTarget.Room -> {
                 val room = inputs.matrixClient.getRoom(roomId = navTarget.roomId)
                 if (room == null) {
@@ -204,6 +244,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs) + nodeLifecycleCallbacks)
                 }
             }
+
             NavTarget.Settings -> {
                 val callback = object : PreferencesEntryPoint.Callback {
                     override fun onOpenBugReport() {
@@ -214,6 +255,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .callback(callback)
                     .build()
             }
+
             NavTarget.CreateRoom -> {
                 val callback = object : CreateRoomEntryPoint.Callback {
                     override fun onSuccess(roomId: RoomId) {
@@ -226,9 +268,11 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .callback(callback)
                     .build()
             }
+
             NavTarget.VerifySession -> {
                 verifySessionEntryPoint.createNode(this, buildContext)
             }
+
             NavTarget.InviteList -> {
                 val callback = object : InviteListEntryPoint.Callback {
                     override fun onBackClicked() {
@@ -244,6 +288,11 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .callback(callback)
                     .build()
             }
+
+//            NavTarget.AnalyticsSettings -> { TODO()
+//                analyticsOptInEntryPoint.nodeBuilder(this, buildContext).build()
+//            }
+
         }
     }
 
@@ -257,6 +306,12 @@ class LoggedInFlowNode @AssistedInject constructor(
         return attachChild {
             backstack.singleTop(NavTarget.RoomList)
             backstack.push(NavTarget.Room(roomId))
+        }
+    }
+
+    private fun splashNode(buildContext: BuildContext) = node(buildContext) {
+        Box(modifier = it.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
         }
     }
 

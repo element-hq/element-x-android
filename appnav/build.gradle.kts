@@ -58,6 +58,7 @@ dependencies {
 
     implementation(projects.services.apperror.impl)
     implementation(projects.services.appnavstate.api)
+    implementation(projects.services.analytics.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
