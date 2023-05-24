@@ -114,8 +114,6 @@ private fun NotificationData?.orDefault(roomId: RoomId, eventId: EventId): Notif
         isEncrypted = false,
         isDirect = false,
         event = NotificationEvent(
-            eventId = eventId,
-            senderId = UserId("@user:domain"),
             timestamp = System.currentTimeMillis(),
             content = "Message ${eventId.value.take(8)}… in room ${roomId.value.take(8)}…",
             contentUrl = null
