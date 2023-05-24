@@ -56,6 +56,7 @@ dependencies {
     implementation(projects.tests.uitests)
     implementation(libs.coil)
 
+    implementation(projects.services.apperror.impl)
     implementation(projects.services.appnavstate.api)
 
     testImplementation(libs.test.junit)

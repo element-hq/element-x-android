@@ -56,6 +56,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -68,6 +69,7 @@ import io.element.android.libraries.ui.strings.R as StringR
 fun RoomMemberListView(
     state: RoomMemberListState,
     onBackPressed: () -> Unit,
+    onInvitePressed: () -> Unit,
     onMemberSelected: (UserId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -79,7 +81,11 @@ fun RoomMemberListView(
     Scaffold(
         topBar = {
             if (!state.isSearchActive) {
-                RoomMemberListTopBar(onBackPressed = onBackPressed)
+                RoomMemberListTopBar(
+                    canInvite = state.canInvite,
+                    onBackPressed = onBackPressed,
+                    onInvitePressed = onInvitePressed,
+                )
             }
         }
     ) { padding ->
@@ -192,8 +198,10 @@ private fun RoomMemberListItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RoomMemberListTopBar(
+    canInvite: Boolean,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
+    onInvitePressed: () -> Unit = {},
 ) {
     CenterAlignedTopAppBar(
         modifier = modifier,
@@ -205,6 +213,19 @@ private fun RoomMemberListTopBar(
             )
         },
         navigationIcon = { BackButton(onClick = onBackPressed) },
+        actions = {
+            if (canInvite) {
+                TextButton(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    onClick = onInvitePressed,
+                ) {
+                    Text(
+                        text = stringResource(StringR.string.action_invite),
+                        fontSize = 16.sp,
+                    )
+                }
+            }
+        }
     )
 }
 
@@ -252,6 +273,7 @@ private fun ContentToPreview(state: RoomMemberListState) {
     RoomMemberListView(
         state = state,
         onBackPressed = {},
-        onMemberSelected = {}
+        onMemberSelected = {},
+        onInvitePressed = {},
     )
 }

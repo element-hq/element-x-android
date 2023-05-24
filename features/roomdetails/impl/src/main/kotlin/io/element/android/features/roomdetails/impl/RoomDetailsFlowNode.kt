@@ -28,6 +28,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.roomdetails.impl.invite.RoomInviteMembersNode
 import io.element.android.features.roomdetails.impl.members.RoomMemberListNode
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsNode
 import io.element.android.libraries.architecture.BackstackNode
@@ -58,6 +59,9 @@ class RoomDetailsFlowNode @AssistedInject constructor(
         object RoomMemberList : NavTarget
 
         @Parcelize
+        object InviteMembers : NavTarget
+
+        @Parcelize
         data class RoomMemberDetails(val roomMemberId: UserId) : NavTarget
     }
 
@@ -68,6 +72,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                     override fun openRoomMemberList() {
                         backstack.push(NavTarget.RoomMemberList)
                     }
+
+                    override fun openInviteMembers() {
+                        backstack.push(NavTarget.InviteMembers)
+                    }
                 }
                 createNode<RoomDetailsNode>(buildContext, listOf(roomDetailsCallback))
             }
@@ -76,8 +84,15 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                     override fun openRoomMemberDetails(roomMemberId: UserId) {
                         backstack.push(NavTarget.RoomMemberDetails(roomMemberId))
                     }
+
+                    override fun openInviteMembers() {
+                        backstack.push(NavTarget.InviteMembers)
+                    }
                 }
                 createNode<RoomMemberListNode>(buildContext, listOf(roomMemberListCallback))
+            }
+            NavTarget.InviteMembers -> {
+                createNode<RoomInviteMembersNode>(buildContext)
             }
             is NavTarget.RoomMemberDetails -> {
                 createNode<RoomMemberDetailsNode>(buildContext, listOf(RoomMemberDetailsNode.Inputs(navTarget.roomMemberId)))

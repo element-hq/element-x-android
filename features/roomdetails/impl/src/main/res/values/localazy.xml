@@ -6,9 +6,11 @@
   </plurals>
   <string name="screen_room_details_already_a_member">"Already a member"</string>
   <string name="screen_room_details_already_invited">"Already invited"</string>
+  <string name="screen_room_details_edition_error">"An error occurred when updating the room details"</string>
   <string name="screen_room_details_encryption_enabled_subtitle">"Messages are secured with locks. Only you and the recipients have the unique keys to unlock them."</string>
   <string name="screen_room_details_encryption_enabled_title">"Message encryption enabled"</string>
   <string name="screen_room_details_share_room_title">"Share room"</string>
+  <string name="screen_room_details_updating_room">"Updating room…"</string>
   <string name="screen_room_member_list_pending_header_title">"Pending"</string>
   <string name="screen_room_member_list_room_members_header_title">"Room members"</string>
   <string name="screen_dm_details_block_alert_action">"Block"</string>

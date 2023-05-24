@@ -45,12 +45,17 @@ class RoomDetailsNode @AssistedInject constructor(
 
     interface Callback : Plugin {
         fun openRoomMemberList()
+        fun openInviteMembers()
     }
 
     private val callbacks = plugins<Callback>()
 
     private fun openRoomMemberList() {
         callbacks.forEach { it.openRoomMemberList() }
+    }
+
+    private fun invitePeople() {
+        callbacks.forEach { it.openInviteMembers() }
     }
 
     private fun onShareRoom(context: Context) {
@@ -105,6 +110,7 @@ class RoomDetailsNode @AssistedInject constructor(
             onShareRoom = ::onShareRoom,
             onShareMember = ::onShareMember,
             openRoomMemberList = ::openRoomMemberList,
+            invitePeople = ::invitePeople,
         )
     }
 }

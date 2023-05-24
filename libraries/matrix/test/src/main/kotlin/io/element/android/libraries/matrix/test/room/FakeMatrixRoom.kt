@@ -60,6 +60,8 @@ class FakeMatrixRoom(
     private var updateMembersResult: Result<Unit> = Result.success(Unit)
     private var acceptInviteResult = Result.success(Unit)
     private var rejectInviteResult = Result.success(Unit)
+    private var inviteUserResult = Result.success(Unit)
+    private var canInviteResult = Result.success(true)
     private var sendMediaResult = Result.success(Unit)
     var sendMediaCount = 0
         private set
@@ -68,6 +70,9 @@ class FakeMatrixRoom(
         private set
 
     var isInviteRejected: Boolean = false
+        private set
+
+    var invitedUserId: UserId? = null
         private set
 
     private var leaveRoomError: Throwable? = null
@@ -137,6 +142,15 @@ class FakeMatrixRoom(
         return rejectInviteResult
     }
 
+    override suspend fun inviteUserById(id: UserId): Result<Unit> {
+        invitedUserId = id
+        return inviteUserResult
+    }
+
+    override suspend fun canInvite(): Result<Boolean> {
+        return canInviteResult
+    }
+
     override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo): Result<Unit> = fakeSendMedia()
 
     override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo): Result<Unit> = fakeSendMedia()
@@ -180,6 +194,14 @@ class FakeMatrixRoom(
 
     fun givenRejectInviteResult(result: Result<Unit>) {
         rejectInviteResult = result
+    }
+
+    fun givenInviteUserResult(result: Result<Unit>) {
+        inviteUserResult = result
+    }
+
+    fun givenCanInviteResult(result: Result<Boolean>) {
+        canInviteResult = result
     }
 
     fun givenIgnoreResult(result: Result<Unit>) {

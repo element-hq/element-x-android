@@ -43,6 +43,7 @@ dependencies {
     implementation(projects.libraries.androidutils)
     api(projects.features.roomdetails.api)
     api(projects.libraries.usersearch.api)
+    api(projects.services.apperror.api)
     implementation(libs.coil.compose)
 
     testImplementation(libs.test.junit)
@@ -51,6 +52,7 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.usersearch.test)
     testImplementation(projects.tests.testutils)
 
     ksp(libs.showkase.processor)

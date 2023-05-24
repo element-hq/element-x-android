@@ -78,6 +78,7 @@ fun RoomDetailsView(
     onShareRoom: () -> Unit,
     onShareMember: (RoomMember) -> Unit,
     openRoomMemberList: () -> Unit,
+    invitePeople: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
@@ -127,7 +128,9 @@ fun RoomDetailsView(
                 MembersSection(
                     memberCount = memberCount,
                     isLoading = state.memberCount.isLoading(),
-                    openRoomMemberList = openRoomMemberList
+                    showInvite = state.canInvite,
+                    openRoomMemberList = openRoomMemberList,
+                    invitePeople = invitePeople,
                 )
             }
 
@@ -211,8 +214,10 @@ internal fun TopicSection(roomTopic: String, modifier: Modifier = Modifier) {
 internal fun MembersSection(
     memberCount: Int?,
     isLoading: Boolean,
+    showInvite: Boolean,
+    invitePeople: () -> Unit,
+    openRoomMemberList: () -> Unit,
     modifier: Modifier = Modifier,
-    openRoomMemberList: () -> Unit
 ) {
     PreferenceCategory(modifier = modifier) {
         PreferenceText(
@@ -222,10 +227,13 @@ internal fun MembersSection(
             onClick = openRoomMemberList,
             loadingCurrentValue = isLoading,
         )
-        PreferenceText(
-            title = stringResource(R.string.screen_room_details_invite_people_title),
-            icon = Icons.Outlined.PersonAddAlt,
-        )
+        if (showInvite) {
+            PreferenceText(
+                title = stringResource(R.string.screen_room_details_invite_people_title),
+                icon = Icons.Outlined.PersonAddAlt,
+                onClick = invitePeople,
+            )
+        }
     }
 }
 
@@ -291,5 +299,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         onShareRoom = {},
         onShareMember = {},
         openRoomMemberList = {},
+        invitePeople = {},
     )
 }
