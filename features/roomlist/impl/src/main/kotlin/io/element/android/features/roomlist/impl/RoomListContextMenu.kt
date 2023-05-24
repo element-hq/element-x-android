@@ -16,14 +16,17 @@
 
 package io.element.android.features.roomlist.impl
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -73,38 +76,42 @@ private fun RoomListModalBottomSheetContent(
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        DropdownMenuItem(
-            text = {
+        ListItem(
+            headlineContent = {
                 Text(
                     text = contextMenu.roomName,
-                    fontWeight = FontWeight.Bold
-                )
-            },
-            onClick = {},
-        )
-        DropdownMenuItem(
-            text = { Text(text = stringResource(id = StringR.string.common_settings)) },
-            onClick = { onRoomSettingsClicked(contextMenu.roomId) },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Outlined.Settings,
-                    contentDescription = stringResource(id = StringR.string.common_settings)
+                    fontWeight = FontWeight.Bold,
                 )
             }
         )
-        DropdownMenuItem(
-            text = {
+        ListItem(
+            headlineContent = {
+                Text(text = stringResource(id = StringR.string.common_settings))
+            },
+            modifier = Modifier.clickable { onRoomSettingsClicked(contextMenu.roomId) },
+            leadingContent = {
+                Icon(
+                    imageVector = Icons.Outlined.Settings,
+                    contentDescription = stringResource(id = StringR.string.common_settings),
+                    modifier = Modifier.size(20.dp),
+                    tint = MaterialTheme.colorScheme.onSurface,
+                )
+            }
+        )
+        ListItem(
+            headlineContent = {
                 Text(
                     text = stringResource(id = StringR.string.action_leave_room),
-                    color = ElementTheme.colors.textActionCritical
+                    color = ElementTheme.colors.textActionCritical,
                 )
             },
-            onClick = { onLeaveRoomClicked(contextMenu.roomId) },
-            leadingIcon = {
+            modifier = Modifier.clickable { onLeaveRoomClicked(contextMenu.roomId) },
+            leadingContent = {
                 Icon(
                     resourceId = VectorIcons.DoorOpen,
                     contentDescription = stringResource(id = StringR.string.action_leave_room),
-                    tint = ElementTheme.colors.textActionCritical
+                    modifier = Modifier.size(20.dp),
+                    tint = ElementTheme.colors.textActionCritical,
                 )
             }
         )
