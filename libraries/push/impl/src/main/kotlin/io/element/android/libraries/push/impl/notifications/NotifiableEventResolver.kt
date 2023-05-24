@@ -86,7 +86,7 @@ class NotifiableEventResolver @Inject constructor(
             imageUriString = event.contentUrl,
             threadId = null,
             roomName = roomDisplayName,
-            roomIsDirect = false,
+            roomIsDirect = isDirect,
             roomAvatarPath = roomAvatarUrl,
             senderAvatarPath = senderAvatarUrl,
             soundName = null,

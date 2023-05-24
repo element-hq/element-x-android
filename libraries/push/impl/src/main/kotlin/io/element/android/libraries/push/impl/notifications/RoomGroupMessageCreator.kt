@@ -22,6 +22,7 @@ import androidx.core.app.Person
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.R
+import io.element.android.libraries.push.impl.notifications.debug.annotateForDebug
 import io.element.android.libraries.push.impl.notifications.factories.NotificationFactory
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -46,12 +47,12 @@ class RoomGroupMessageCreator @Inject constructor(
         val roomIsGroup = !lastKnownRoomEvent.roomIsDirect
         val style = NotificationCompat.MessagingStyle(
             Person.Builder()
-                .setName(currentUser.displayName)
+                .setName(currentUser.displayName?.annotateForDebug(50))
                 .setIcon(bitmapLoader.getUserIcon(currentUser.avatarUrl))
                 .setKey(lastKnownRoomEvent.sessionId.value)
                 .build()
         ).also {
-            it.conversationTitle = roomName.takeIf { roomIsGroup }
+            it.conversationTitle = roomName.takeIf { roomIsGroup }?.annotateForDebug(51)
             it.isGroupConversation = roomIsGroup
             it.addMessagesFromEvents(events)
         }
@@ -103,7 +104,7 @@ class RoomGroupMessageCreator @Inject constructor(
                 null
             } else {
                 Person.Builder()
-                    .setName(event.senderName)
+                    .setName(event.senderName?.annotateForDebug(70))
                     .setIcon(bitmapLoader.getUserIcon(event.senderAvatarPath))
                     .setKey(event.senderId)
                     .build()
@@ -115,7 +116,11 @@ class RoomGroupMessageCreator @Inject constructor(
                     senderPerson
                 )
                 else -> {
-                    val message = NotificationCompat.MessagingStyle.Message(event.body, event.timestamp, senderPerson).also { message ->
+                    val message = NotificationCompat.MessagingStyle.Message(
+                        event.body?.annotateForDebug(71),
+                        event.timestamp,
+                        senderPerson
+                    ).also { message ->
                         event.imageUri?.let {
                             message.setData("image/", it)
                         }

@@ -20,6 +20,7 @@ import android.app.Notification
 import androidx.core.app.NotificationCompat
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.R
+import io.element.android.libraries.push.impl.notifications.debug.annotateForDebug
 import io.element.android.libraries.push.impl.notifications.factories.NotificationFactory
 import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
@@ -40,7 +41,7 @@ import javax.inject.Inject
  */
 class SummaryGroupMessageCreator @Inject constructor(
     private val stringProvider: StringProvider,
-    private val notificationFactory: NotificationFactory
+    private val notificationFactory: NotificationFactory,
 ) {
 
     fun createSummaryNotification(
@@ -51,9 +52,9 @@ class SummaryGroupMessageCreator @Inject constructor(
         useCompleteNotificationFormat: Boolean
     ): Notification {
         val summaryInboxStyle = NotificationCompat.InboxStyle().also { style ->
-            roomNotifications.forEach { style.addLine(it.summaryLine) }
-            invitationNotifications.forEach { style.addLine(it.summaryLine) }
-            simpleNotifications.forEach { style.addLine(it.summaryLine) }
+            roomNotifications.forEach { style.addLine(it.summaryLine.annotateForDebug(40)) }
+            invitationNotifications.forEach { style.addLine(it.summaryLine.annotateForDebug(41)) }
+            simpleNotifications.forEach { style.addLine(it.summaryLine.annotateForDebug(42)) }
         }
 
         val summaryIsNoisy = roomNotifications.any { it.shouldBing } ||
@@ -69,9 +70,10 @@ class SummaryGroupMessageCreator @Inject constructor(
         // FIXME roomIdToEventMap.size is not correct, this is the number of rooms
         val nbEvents = roomNotifications.size + simpleNotifications.size
         val sumTitle = stringProvider.getQuantityString(R.plurals.notification_compat_summary_title, nbEvents, nbEvents)
-        summaryInboxStyle.setBigContentTitle(sumTitle)
-            // TODO get latest event?
-            .setSummaryText(stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages, nbEvents, nbEvents))
+        summaryInboxStyle.setBigContentTitle(sumTitle.annotateForDebug(43))
+            //.setSummaryText(stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages, nbEvents, nbEvents).annotateForDebug(44))
+            // Use account name now, for multi-session
+            .setSummaryText(currentUser.userId.value.annotateForDebug(44))
         return if (useCompleteNotificationFormat) {
             notificationFactory.createSummaryListNotification(
                 currentUser,
