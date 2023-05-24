@@ -17,6 +17,7 @@
 package io.element.android.libraries.push.impl.notifications
 
 import android.app.Notification
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -193,9 +194,7 @@ class NotificationRendererTest {
 
     private fun renderEventsAsNotifications() {
         notificationRenderer.render(
-            sessionId = A_SESSION_ID,
-            myUserDisplayName = MY_USER_DISPLAY_NAME,
-            myUserAvatarUrl = MY_USER_AVATAR_URL,
+            MatrixUser(A_SESSION_ID, MY_USER_DISPLAY_NAME, MY_USER_AVATAR_URL),
             useCompleteNotificationFormat = USE_COMPLETE_NOTIFICATION_FORMAT,
             eventsToProcess = AN_EVENT_LIST
         )
@@ -214,9 +213,7 @@ class NotificationRendererTest {
     ) {
         notificationFactory.givenNotificationsFor(
             groupedEvents = A_PROCESSED_EVENTS,
-            sessionId = A_SESSION_ID,
-            myUserDisplayName = MY_USER_DISPLAY_NAME,
-            myUserAvatarUrl = MY_USER_AVATAR_URL,
+            matrixUser = MatrixUser(A_SESSION_ID, MY_USER_DISPLAY_NAME, MY_USER_AVATAR_URL),
             useCompleteNotificationFormat = useCompleteNotificationFormat,
             roomNotifications = roomNotifications,
             invitationNotifications = invitationNotifications,
