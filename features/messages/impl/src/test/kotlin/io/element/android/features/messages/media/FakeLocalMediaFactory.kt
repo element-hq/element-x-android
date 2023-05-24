@@ -23,7 +23,7 @@ import io.element.android.features.messages.impl.media.local.LocalMediaFactory
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MediaFile
 
-class FakeLocalMediaFactory() : LocalMediaFactory {
+class FakeLocalMediaFactory : LocalMediaFactory {
 
     var fallbackMimeType: String = MimeTypes.OctetStream
 

@@ -22,7 +22,7 @@ import io.element.android.libraries.matrix.api.media.MediaFile
 interface LocalMediaFactory {
 
     /**
-     * This method will create a [LocalMedia] with the given [MediaFile] and [mimeType]
+     * This method will create a [LocalMedia] with the given [MediaFile] and [mimeType].
      *
      */
     fun createFromMediaFile(mediaFile: MediaFile, mimeType: String?): LocalMedia

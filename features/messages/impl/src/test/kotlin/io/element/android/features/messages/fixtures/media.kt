@@ -17,13 +17,14 @@
 package io.element.android.features.messages.fixtures
 
 import android.net.Uri
+import androidx.media3.common.MimeTypes
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.mockk.mockk
 
 fun aLocalMedia(
-    mimeType: String,
     uri: Uri = mockk("localMediaUri"),
+    mimeType: String = MimeTypes.IMAGE_JPEG,
     name: String = "a media",
     size: Long = 1000,
 ) = LocalMedia(
