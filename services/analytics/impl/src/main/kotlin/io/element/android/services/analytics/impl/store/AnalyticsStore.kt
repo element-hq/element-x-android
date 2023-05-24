@@ -23,6 +23,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.core.bool.orFalse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -41,7 +42,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
  * - analytics Id (String).
  */
 class AnalyticsStore @Inject constructor(
-        private val context: Context
+        @ApplicationContext private val context: Context
 ) {
     private val userConsent = booleanPreferencesKey("user_consent")
     private val didAskUserConsent = booleanPreferencesKey("did_ask_user_consent")
