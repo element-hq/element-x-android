@@ -20,7 +20,7 @@ import android.graphics.Bitmap
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.factories.NotificationFactory
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
@@ -37,19 +37,17 @@ class RoomGroupMessageCreator @Inject constructor(
 ) {
 
     fun createRoomMessage(
-        sessionId: SessionId,
+        currentUser: MatrixUser,
         events: List<NotifiableMessageEvent>,
         roomId: RoomId,
-        userDisplayName: String,
-        userAvatarUrl: String?
     ): RoomNotification.Message {
         val lastKnownRoomEvent = events.last()
         val roomName = lastKnownRoomEvent.roomName ?: lastKnownRoomEvent.senderName ?: "Room name (${roomId.value.take(8)}…)"
         val roomIsGroup = !lastKnownRoomEvent.roomIsDirect
         val style = NotificationCompat.MessagingStyle(
             Person.Builder()
-                .setName(userDisplayName)
-                .setIcon(bitmapLoader.getUserIcon(userAvatarUrl))
+                .setName(currentUser.displayName)
+                .setIcon(bitmapLoader.getUserIcon(currentUser.avatarUrl))
                 .setKey(lastKnownRoomEvent.sessionId.value)
                 .build()
         ).also {
@@ -80,7 +78,7 @@ class RoomGroupMessageCreator @Inject constructor(
             notificationFactory.createMessagesListNotification(
                 style,
                 RoomEventGroupInfo(
-                    sessionId = sessionId,
+                    sessionId = currentUser.userId,
                     roomId = roomId,
                     roomDisplayName = roomName,
                     isDirect = !roomIsGroup,

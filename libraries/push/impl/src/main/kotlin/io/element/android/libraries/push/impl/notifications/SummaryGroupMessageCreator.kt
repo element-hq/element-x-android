@@ -18,7 +18,7 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.app.Notification
 import androidx.core.app.NotificationCompat
-import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.factories.NotificationFactory
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -44,7 +44,7 @@ class SummaryGroupMessageCreator @Inject constructor(
 ) {
 
     fun createSummaryNotification(
-        sessionId: SessionId,
+        currentUser: MatrixUser,
         roomNotifications: List<RoomNotification.Message.Meta>,
         invitationNotifications: List<OneShotNotification.Append.Meta>,
         simpleNotifications: List<OneShotNotification.Append.Meta>,
@@ -74,7 +74,7 @@ class SummaryGroupMessageCreator @Inject constructor(
             .setSummaryText(stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages, nbEvents, nbEvents))
         return if (useCompleteNotificationFormat) {
             notificationFactory.createSummaryListNotification(
-                sessionId,
+                currentUser,
                 summaryInboxStyle,
                 sumTitle,
                 noisy = summaryIsNoisy,
@@ -82,7 +82,7 @@ class SummaryGroupMessageCreator @Inject constructor(
             )
         } else {
             processSimpleGroupSummary(
-                sessionId,
+                currentUser,
                 summaryIsNoisy,
                 messageCount,
                 simpleNotifications.size,
@@ -94,7 +94,7 @@ class SummaryGroupMessageCreator @Inject constructor(
     }
 
     private fun processSimpleGroupSummary(
-        sessionId: SessionId,
+        currentUser: MatrixUser,
         summaryIsNoisy: Boolean,
         messageEventsCount: Int,
         simpleEventsCount: Int,
@@ -167,7 +167,7 @@ class SummaryGroupMessageCreator @Inject constructor(
             }
         }
         return notificationFactory.createSummaryListNotification(
-            sessionId = sessionId,
+            currentUser = currentUser,
             style = null,
             compatSummary = privacyTitle,
             noisy = summaryIsNoisy,
