@@ -105,9 +105,6 @@ class DefaultPushHandler @Inject constructor(
                 Timber.tag(loggerTag.value).d("## handleInternal()")
             }
 
-            pushData.roomId ?: return
-            pushData.eventId ?: return
-
             val clientSecret = pushData.clientSecret
             val userId = if (clientSecret == null) {
                 // Should not happen. In this case, restore default session
