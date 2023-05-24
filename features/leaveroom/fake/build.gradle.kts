@@ -17,7 +17,6 @@
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
-//    alias(libs.plugins.ksp)
 }
 
 android {
@@ -34,13 +33,7 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
-//    implementation(projects.libraries.matrixui)
-//    implementation(projects.libraries.designsystem)
-//    implementation(projects.libraries.elementresources)
-//    implementation(projects.libraries.testtags)
-//    implementation(projects.libraries.uiStrings)
     api(projects.features.leaveroom.api)
-//    ksp(libs.showkase.processor)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
@@ -48,8 +41,4 @@ dependencies {
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
-//    testImplementation(libs.test.mockk)
-//    testImplementation(projects.libraries.matrix.test)
-
-//    androidTestImplementation(libs.test.junitext)
 }
