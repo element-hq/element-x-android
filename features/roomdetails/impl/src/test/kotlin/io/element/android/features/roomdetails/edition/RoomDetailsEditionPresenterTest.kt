@@ -551,6 +551,32 @@ class RoomDetailsEditionPresenterTest {
         saveAndAssertFailure(room, RoomDetailsEditionEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
     }
 
+    @Test
+    fun `present - CancelSaveChanges resets save action state`() = runTest {
+        givenPickerReturnsFile()
+
+        val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL).apply {
+            givenSetTopicResult(Result.failure(Throwable("!")))
+        }
+
+        val presenter = aRoomDetailsEditionPresenter(room)
+
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+
+            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomTopic("foo"))
+            initialState.eventSink(RoomDetailsEditionEvents.Save)
+            skipItems(1)
+
+            assertThat(awaitItem().saveAction).isInstanceOf(Async.Failure::class.java)
+
+            initialState.eventSink(RoomDetailsEditionEvents.CancelSaveChanges)
+            assertThat(awaitItem().saveAction).isInstanceOf(Async.Uninitialized::class.java)
+        }
+    }
+
     private suspend fun saveAndAssertFailure(room: MatrixRoom, event: RoomDetailsEditionEvents) {
         val presenter = aRoomDetailsEditionPresenter(room)
 
