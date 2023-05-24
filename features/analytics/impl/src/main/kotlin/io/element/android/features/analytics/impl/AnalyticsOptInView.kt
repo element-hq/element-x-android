@@ -226,11 +226,15 @@ fun buildAnnotatedStringWithColoredPart(
 
 @Preview
 @Composable
-fun AnalyticsOptInViewLightPreview(@PreviewParameter(AnalyticsOptInStateProvider::class) state: AnalyticsOptInState) = ElementPreviewLight { ContentToPreview(state) }
+fun AnalyticsOptInViewLightPreview(@PreviewParameter(AnalyticsOptInStateProvider::class) state: AnalyticsOptInState) = ElementPreviewLight {
+    ContentToPreview(state)
+}
 
 @Preview
 @Composable
-fun AnalyticsOptInViewDarkPreview(@PreviewParameter(AnalyticsOptInStateProvider::class) state: AnalyticsOptInState) = ElementPreviewDark { ContentToPreview(state) }
+fun AnalyticsOptInViewDarkPreview(@PreviewParameter(AnalyticsOptInStateProvider::class) state: AnalyticsOptInState) = ElementPreviewDark {
+    ContentToPreview(state)
+}
 
 @Composable
 private fun ContentToPreview(state: AnalyticsOptInState) {

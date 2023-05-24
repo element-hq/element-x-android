@@ -13,33 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
-    id("kotlin-parcelize")
 }
 
 android {
-    namespace = "io.element.android.services.analytics.impl"
-}
-
-anvil {
-    generateDaggerFactories.set(true)
+    namespace = "io.element.android.features.analytics.api"
 }
 
 dependencies {
-    anvil(projects.anvilcodegen)
-
-    implementation(projects.libraries.androidutils)
-    implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
+    implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.androidutils)
+    implementation(projects.libraries.uiStrings)
 
-    api(projects.services.analyticsproviders.api)
-    api(projects.services.analytics.api)
-    implementation(libs.androidx.datastore.preferences)
-
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.test.mockk)
+    ksp(libs.showkase.processor)
 }

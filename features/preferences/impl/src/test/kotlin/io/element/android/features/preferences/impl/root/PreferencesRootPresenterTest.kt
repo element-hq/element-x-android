@@ -20,6 +20,8 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.analytics.impl.preferences.DefaultAnalyticsPreferencesPresenter
+import io.element.android.features.analytics.test.FakeAnalyticsDataStore
 import io.element.android.features.logout.impl.DefaultLogoutPreferencePresenter
 import io.element.android.features.rageshake.impl.preferences.DefaultRageshakePreferencesPresenter
 import io.element.android.features.rageshake.test.rageshake.FakeRageShake
@@ -35,9 +37,11 @@ class PreferencesRootPresenterTest {
     fun `present - initial state`() = runTest {
         val logoutPresenter = DefaultLogoutPreferencePresenter(FakeMatrixClient())
         val rageshakePresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore())
+        val analyticsPresenter = DefaultAnalyticsPreferencesPresenter(FakeAnalyticsDataStore())
         val presenter = PreferencesRootPresenter(
             logoutPresenter,
             rageshakePresenter,
+            analyticsPresenter,
             BuildType.DEBUG
         )
         moleculeFlow(RecompositionClock.Immediate) {

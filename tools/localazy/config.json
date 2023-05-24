@@ -107,7 +107,7 @@
     {
       "name": ":features:analytics:impl",
       "includeRegex": [
-        "screen_analytics_.*"
+        "screen_analytics_prompt.*"
       ]
     }
   ]

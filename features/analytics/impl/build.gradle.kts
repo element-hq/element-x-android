@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.features.preferences.impl"
+    namespace = "io.element.android.features.analytics.impl"
 }
 
 anvil {
@@ -32,22 +32,19 @@ anvil {
 dependencies {
     implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
+    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.featureflag.api)
-    implementation(projects.libraries.featureflag.ui)
     implementation(projects.libraries.elementresources)
-    implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
-    implementation(projects.features.rageshake.api)
-    implementation(projects.features.analytics.api)
-    implementation(projects.libraries.matrixui)
-    implementation(projects.features.logout.api)
-    implementation(libs.datetime)
-    implementation(libs.accompanist.placeholder)
-    api(projects.features.preferences.api)
+    api(libs.squareup.seismic)
+    api(projects.features.analytics.api)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(platform(libs.network.okhttp.bom))
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
     ksp(libs.showkase.processor)
 
     testImplementation(libs.test.junit)
@@ -55,13 +52,9 @@ dependencies {
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
+    testImplementation(libs.test.mockk)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.libraries.featureflag.test)
-    testImplementation(projects.features.rageshake.test)
-    testImplementation(projects.features.rageshake.impl)
-    testImplementation(projects.features.logout.impl)
     testImplementation(projects.features.analytics.test)
-    testImplementation(projects.features.analytics.impl)
 
     androidTestImplementation(libs.test.junitext)
 }
