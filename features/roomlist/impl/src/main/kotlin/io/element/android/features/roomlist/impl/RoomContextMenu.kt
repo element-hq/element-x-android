@@ -16,24 +16,23 @@
 
 package io.element.android.features.roomlist.impl
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.VectorIcons
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
@@ -72,39 +71,69 @@ private fun RoomModalBottomSheetContent(
     onLeaveRoomClicked: (roomId: RoomId) -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(40.dp)
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Text(
-            text = roomContextMenuState.roomName,
-            fontWeight = FontWeight.Bold
+        DropdownMenuItem(
+            text = {
+                Text(
+                    text = roomContextMenuState.roomName,
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            onClick = {},
         )
-        Row(
-            modifier = Modifier.clickable { onRoomSettingsClicked(roomContextMenuState.roomId) }
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.Settings,
-                contentDescription = stringResource(id = StringR.string.common_settings)
-            )
-            Spacer(modifier = Modifier.width(14.dp))
-            Text(text = stringResource(id = StringR.string.common_settings))
-        }
-        Row(
-            modifier = Modifier.clickable { onLeaveRoomClicked(roomContextMenuState.roomId) }
-        ) {
-            Icon(
-                resourceId = VectorIcons.DoorOpen,
-                contentDescription = stringResource(id = StringR.string.action_leave_room),
-                tint = ElementTheme.colors.textActionCritical
-            )
-            Spacer(modifier = Modifier.width(14.dp))
-            Text(
-                text = stringResource(id = StringR.string.action_leave_room),
-                color = ElementTheme.colors.textActionCritical
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
+        DropdownMenuItem(
+            text = { Text(text = stringResource(id = StringR.string.common_settings)) },
+            onClick = { onRoomSettingsClicked(roomContextMenuState.roomId) },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Outlined.Settings,
+                    contentDescription = stringResource(id = StringR.string.common_settings)
+                )
+            }
+        )
+        DropdownMenuItem(
+            text = {
+                Text(
+                    text = stringResource(id = StringR.string.action_leave_room),
+                    color = ElementTheme.colors.textActionCritical
+                )
+            },
+            onClick = { onLeaveRoomClicked(roomContextMenuState.roomId) },
+            leadingIcon = {
+                Icon(
+                    resourceId = VectorIcons.DoorOpen,
+                    contentDescription = stringResource(id = StringR.string.action_leave_room),
+                    tint = ElementTheme.colors.textActionCritical
+                )
+            }
+        )
+        Spacer(modifier = Modifier.height(32.dp))
     }
+}
+
+// This component should be seen in [RoomListView] @Preview but it doesn't show up.
+// see: https://issuetracker.google.com/issues/283843380
+// Remove this preview when the issue is fixed.
+@Preview
+@Composable
+internal fun RoomModalBottomSheetContentLightPreview() = ElementPreviewLight { ContentToPreview() }
+
+// This component should be seen in [RoomListView] @Preview but it doesn't show up.
+// see: https://issuetracker.google.com/issues/283843380
+// Remove this preview when the issue is fixed.
+@Preview
+@Composable
+internal fun RoomModalBottomSheetContentDarkPreview() = ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
+    RoomModalBottomSheetContent(
+        roomContextMenuState = RoomContextMenuState.Shown(
+            roomId = RoomId(value = "!aRoom:aDomain"),
+            roomName = "aRoom"
+        ),
+        onRoomSettingsClicked = {},
+        onLeaveRoomClicked = {}
+    )
 }
