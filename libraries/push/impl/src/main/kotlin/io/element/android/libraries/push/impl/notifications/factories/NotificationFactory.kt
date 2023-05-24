@@ -26,8 +26,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.RoomEventGroupInfo
 import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
@@ -226,7 +226,7 @@ class NotificationFactory @Inject constructor(
      * Create the summary notification.
      */
     fun createSummaryListNotification(
-        sessionId: SessionId,
+        currentUser: MatrixUser,
         style: NotificationCompat.InboxStyle?,
         compatSummary: String,
         noisy: Boolean,
@@ -240,12 +240,12 @@ class NotificationFactory @Inject constructor(
             // used in compat < N, after summary is built based on child notifications
             .setWhen(lastMessageTimestamp)
             .setStyle(style)
-            .setContentTitle(sessionId.value)
+            .setContentTitle(currentUser.userId.value)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setSmallIcon(smallIcon)
             // set content text to support devices running API level < 24
             .setContentText(compatSummary)
-            .setGroup(sessionId.value)
+            .setGroup(currentUser.userId.value)
             // set this notification as the summary for the group
             .setGroupSummary(true)
             .setColor(accentColor)
@@ -264,8 +264,8 @@ class NotificationFactory @Inject constructor(
                     priority = NotificationCompat.PRIORITY_LOW
                 }
             }
-            .setContentIntent(pendingIntentFactory.createOpenSessionPendingIntent(sessionId))
-            .setDeleteIntent(pendingIntentFactory.createDismissSummaryPendingIntent(sessionId))
+            .setContentIntent(pendingIntentFactory.createOpenSessionPendingIntent(currentUser.userId))
+            .setDeleteIntent(pendingIntentFactory.createDismissSummaryPendingIntent(currentUser.userId))
             .build()
     }
 

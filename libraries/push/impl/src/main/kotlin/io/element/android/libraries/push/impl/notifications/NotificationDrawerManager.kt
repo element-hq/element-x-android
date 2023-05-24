@@ -16,21 +16,21 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import android.content.Context
 import android.os.Handler
 import android.os.HandlerThread
 import androidx.annotation.WorkerThread
 import io.element.android.libraries.androidutils.throttler.FirstThrottler
 import io.element.android.libraries.core.cache.CircularCache
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.api.store.PushDataStore
-import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.shouldIgnoreMessageEventInRoom
@@ -38,6 +38,7 @@ import io.element.android.services.appnavstate.api.AppNavigationState
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -48,7 +49,6 @@ import javax.inject.Inject
  */
 @SingleIn(AppScope::class)
 class NotificationDrawerManager @Inject constructor(
-    @ApplicationContext context: Context,
     private val pushDataStore: PushDataStore,
     private val notifiableEventProcessor: NotifiableEventProcessor,
     private val notificationRenderer: NotificationRenderer,
@@ -57,6 +57,7 @@ class NotificationDrawerManager @Inject constructor(
     private val appNavigationStateService: AppNavigationStateService,
     private val coroutineScope: CoroutineScope,
     private val buildMeta: BuildMeta,
+    private val matrixAuthenticationService: MatrixAuthenticationService,
 ) {
 
     private val handlerThread: HandlerThread = HandlerThread("NotificationDrawerManager", Thread.MIN_PRIORITY)
@@ -66,7 +67,6 @@ class NotificationDrawerManager @Inject constructor(
      * Lazily initializes the NotificationState as we rely on having a current session in order to fetch the persisted queue of events.
      */
     private val notificationState by lazy { createInitialNotificationState() }
-    private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
     private var currentAppNavigationState: AppNavigationState? = null
     private val firstThrottler = FirstThrottler(200)
 
@@ -239,6 +239,7 @@ class NotificationDrawerManager @Inject constructor(
         }
     }
 
+    @WorkerThread
     private fun renderEvents(eventsToRender: List<ProcessedEvent<NotifiableEvent>>) {
         // Group by sessionId
         val eventsForSessions = eventsToRender.groupBy {
@@ -246,17 +247,29 @@ class NotificationDrawerManager @Inject constructor(
         }
 
         eventsForSessions.forEach { (sessionId, notifiableEvents) ->
-            // TODO EAx val user = session.getUserOrDefault(session.myUserId)
-            // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
-            val myUserDisplayName = "Todo display name" // user.toMatrixItem().getBestName()
-            // TODO EAx avatar URL
-            val myUserAvatarUrl = null // session.contentUrlResolver().resolveThumbnail(
-            //    contentUrl = user.avatarUrl,
-            //    width = avatarSize,
-            //    height = avatarSize,
-            //    method = ContentUrlResolver.ThumbnailMethod.SCALE
-            //)
-            notificationRenderer.render(sessionId, myUserDisplayName, myUserAvatarUrl, useCompleteNotificationFormat, notifiableEvents)
+            val currentUser = tryOrNull(
+                onError = { Timber.e(it, "Unable to retrieve info for user ${sessionId.value}") },
+                operation = {
+                    runBlocking {
+                        val client = matrixAuthenticationService.restoreSession(sessionId).getOrNull()
+
+                        // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
+                        val myUserDisplayName = client?.loadUserDisplayName()?.getOrNull() ?: sessionId.value
+                        val userAvatarUrl = client?.loadUserAvatarURLString()?.getOrNull()
+                        MatrixUser(
+                            userId = sessionId,
+                            displayName = myUserDisplayName,
+                            avatarUrl = userAvatarUrl
+                        )
+                    }
+                }
+            ) ?: MatrixUser(
+                userId = sessionId,
+                displayName = sessionId.value,
+                avatarUrl = null
+            )
+
+            notificationRenderer.render(currentUser, useCompleteNotificationFormat, notifiableEvents)
         }
     }
 
