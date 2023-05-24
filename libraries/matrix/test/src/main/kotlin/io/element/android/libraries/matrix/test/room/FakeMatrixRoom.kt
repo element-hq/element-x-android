@@ -64,6 +64,10 @@ class FakeMatrixRoom(
     private var canInviteResult = Result.success(true)
     private val canSendStateResults = mutableMapOf<StateEventType, Result<Boolean>>()
     private var sendMediaResult = Result.success(Unit)
+    private var setNameResult = Result.success(Unit)
+    private var setTopicResult = Result.success(Unit)
+    private var updateAvatarResult = Result.success(Unit)
+    private var removeAvatarResult = Result.success(Unit)
 
     var sendMediaCount = 0
         private set
@@ -75,6 +79,18 @@ class FakeMatrixRoom(
         private set
 
     var invitedUserId: UserId? = null
+        private set
+
+    var newTopic: String? = null
+        private set
+
+    var newName: String? = null
+        private set
+
+    var newAvatarData: ByteArray? = null
+        private set
+
+    var removedAvatar: Boolean = false
         private set
 
     private var leaveRoomError: Throwable? = null
@@ -154,7 +170,7 @@ class FakeMatrixRoom(
     }
 
     override suspend fun canSendStateEvent(type: StateEventType): Result<Boolean> {
-        return canSendStateResults[type]!!
+        return canSendStateResults[type] ?: Result.failure(IllegalStateException("No fake answer"))
     }
 
     override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo): Result<Unit> = sendMediaResult.also { sendMediaCount++ }
@@ -166,19 +182,23 @@ class FakeMatrixRoom(
     override suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit> = sendMediaResult.also { sendMediaCount++ }
 
     override suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit> {
-        return Result.success(Unit)
+        newAvatarData = data
+        return updateAvatarResult
     }
 
     override suspend fun removeAvatar(): Result<Unit> {
-        return Result.success(Unit)
+        removedAvatar = true
+        return removeAvatarResult
     }
 
     override suspend fun setName(name: String): Result<Unit> {
-        return Result.success(Unit)
+        newName = name
+        return setNameResult
     }
 
     override suspend fun setTopic(topic: String): Result<Unit> {
-        return Result.success(Unit)
+        newTopic = topic
+        return setTopicResult
     }
 
     override fun close() = Unit
@@ -233,5 +253,21 @@ class FakeMatrixRoom(
 
     fun givenSendMediaResult(result: Result<Unit>) {
         sendMediaResult = result
+    }
+
+    fun givenUpdateAvatarResult(result: Result<Unit>) {
+        updateAvatarResult = result
+    }
+
+    fun givenRemoveAvatarResult(result: Result<Unit>) {
+        removeAvatarResult = result
+    }
+
+    fun givenSetNameResult(result: Result<Unit>) {
+        setNameResult = result
+    }
+
+    fun givenSetTopicResult(result: Result<Unit>) {
+        setTopicResult = result
     }
 }

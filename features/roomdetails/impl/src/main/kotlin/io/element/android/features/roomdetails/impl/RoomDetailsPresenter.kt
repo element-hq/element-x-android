@@ -143,7 +143,7 @@ class RoomDetailsPresenter @Inject constructor(
 
             canEdit.value = eventTypes
                 .map { room.canSendStateEvent(it).getOrElse { false } }
-                .any()
+                .any { it }
         }
         return canEdit
     }

@@ -19,9 +19,9 @@ package io.element.android.features.roomdetails.impl.edition
 import io.element.android.features.createroom.api.ui.AvatarAction
 
 sealed interface RoomDetailsEditionEvents {
-    data class Save(val state: RoomDetailsEditionState) : RoomDetailsEditionEvents
     data class HandleAvatarAction(val action: AvatarAction) : RoomDetailsEditionEvents
     data class UpdateRoomName(val name: String) : RoomDetailsEditionEvents
     data class UpdateRoomTopic(val topic: String) : RoomDetailsEditionEvents
+    object Save : RoomDetailsEditionEvents
     object CancelSaveChanges : RoomDetailsEditionEvents
 }

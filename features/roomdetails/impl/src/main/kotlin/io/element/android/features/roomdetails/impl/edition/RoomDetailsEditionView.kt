@@ -108,7 +108,7 @@ fun RoomDetailsEditionView(
                         enabled = state.saveButtonEnabled,
                         onClick = {
                             focusManager.clearFocus()
-                            state.eventSink(RoomDetailsEditionEvents.Save(state))
+                            state.eventSink(RoomDetailsEditionEvents.Save)
                         },
                     ) {
                         Text(

@@ -16,6 +16,7 @@
 
 package io.element.android.features.roomdetails.impl.edition
 
+import android.net.Uri
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.Async
 import kotlinx.collections.immutable.persistentListOf
@@ -25,8 +26,11 @@ open class RoomDetailsEditionStateProvider : PreviewParameterProvider<RoomDetail
         get() = sequenceOf(
             aRoomDetailsEditionState(),
             aRoomDetailsEditionState().copy(roomTopic = ""),
+            aRoomDetailsEditionState().copy(roomAvatarUrl = Uri.EMPTY),
             aRoomDetailsEditionState().copy(canChangeName = true, canChangeTopic = false, canChangeAvatar = true, saveButtonEnabled = false),
             aRoomDetailsEditionState().copy(canChangeName = false, canChangeTopic = true, canChangeAvatar = false, saveButtonEnabled = false),
+            aRoomDetailsEditionState().copy(saveAction = Async.Loading()),
+            aRoomDetailsEditionState().copy(saveAction = Async.Failure(Throwable("Whelp")))
         )
 }
 

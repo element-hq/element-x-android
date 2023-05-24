@@ -105,7 +105,7 @@ class RoomDetailsEditionPresenter @Inject constructor(
         val localCoroutineScope = rememberCoroutineScope()
         fun handleEvents(event: RoomDetailsEditionEvents) {
             when (event) {
-                is RoomDetailsEditionEvents.Save -> localCoroutineScope.saveChanges(event.state, saveAction)
+                is RoomDetailsEditionEvents.Save -> localCoroutineScope.saveChanges(roomName, roomTopic, roomAvatarUri, saveAction)
                 is RoomDetailsEditionEvents.HandleAvatarAction -> {
                     when (event.action) {
                         AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
@@ -135,17 +135,17 @@ class RoomDetailsEditionPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.saveChanges(state: RoomDetailsEditionState, action: MutableState<Async<Unit>>) = launch {
+    private fun CoroutineScope.saveChanges(name: String, topic: String?, avatarUri: Uri?, action: MutableState<Async<Unit>>) = launch {
         val results = mutableListOf<Result<Unit>>()
         suspend {
-            if (state.roomTopic.trim() != room.topic.orEmpty().trim()) {
-                results.add(room.setTopic(state.roomTopic))
+            if (topic.orEmpty().trim() != room.topic.orEmpty().trim()) {
+                results.add(room.setTopic(topic.orEmpty()))
             }
-            if (state.roomName.isNotEmpty() && state.roomName.trim() != room.name.orEmpty().trim()) {
-                results.add(room.setName(state.roomName))
+            if (name.isNotEmpty() && name.trim() != room.name.orEmpty().trim()) {
+                results.add(room.setName(name))
             }
-            if (state.roomAvatarUrl?.toString()?.trim() != room.avatarUrl?.trim()) {
-                results.add(updateAvatar(state.roomAvatarUrl))
+            if (avatarUri?.toString()?.trim() != room.avatarUrl?.trim()) {
+                results.add(updateAvatar(avatarUri))
             }
             if (results.all { it.isSuccess }) Unit else results.first { it.isFailure }.getOrThrow()
         }.execute(action)

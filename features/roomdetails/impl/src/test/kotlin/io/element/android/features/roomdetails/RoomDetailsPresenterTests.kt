@@ -34,6 +34,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
@@ -293,6 +294,65 @@ class RoomDetailsPresenterTests {
             presenter.present()
         }.test {
             Truth.assertThat(awaitItem().canInvite).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - initial state when user can edit one attribute`() = runTest {
+        val room = aMatrixRoom().apply {
+            givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))
+            givenCanSendStateResult(StateEventType.ROOM_NAME, Result.success(false))
+            givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.failure(Throwable("Whelp")))
+            givenCanInviteResult(Result.success(false))
+        }
+        val presenter = aRoomDetailsPresenter(room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            // Initially false
+            Truth.assertThat(awaitItem().canEdit).isFalse()
+            // Then the asynchronous check completes and it becomes true
+            Truth.assertThat(awaitItem().canEdit).isTrue()
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - initial state when user can edit all attributes`() = runTest {
+        val room = aMatrixRoom().apply {
+            givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))
+            givenCanSendStateResult(StateEventType.ROOM_NAME, Result.success(true))
+            givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.success(true))
+            givenCanInviteResult(Result.success(false))
+        }
+        val presenter = aRoomDetailsPresenter(room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            // Initially false
+            Truth.assertThat(awaitItem().canEdit).isFalse()
+            // Then the asynchronous check completes and it becomes true
+            Truth.assertThat(awaitItem().canEdit).isTrue()
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - initial state when user can edit no attributes`() = runTest {
+        val room = aMatrixRoom().apply {
+            givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(false))
+            givenCanSendStateResult(StateEventType.ROOM_NAME, Result.success(false))
+            givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.success(false))
+            givenCanInviteResult(Result.success(false))
+        }
+        val presenter = aRoomDetailsPresenter(room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            // Initially false, and no further events
+            Truth.assertThat(awaitItem().canEdit).isFalse()
         }
     }
 }
