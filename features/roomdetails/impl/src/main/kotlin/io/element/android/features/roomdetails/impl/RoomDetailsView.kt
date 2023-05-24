@@ -148,10 +148,14 @@ fun RoomDetailsView(
                 MembersSection(
                     memberCount = memberCount,
                     isLoading = state.memberCount.isLoading(),
-                    showInvite = state.canInvite,
                     openRoomMemberList = openRoomMemberList,
-                    invitePeople = invitePeople,
                 )
+
+                if (state.canInvite) {
+                    InviteSection(
+                        invitePeople = invitePeople
+                    )
+                }
             }
 
             if (state.isEncrypted) {
@@ -285,8 +289,6 @@ internal fun TopicSection(
 internal fun MembersSection(
     memberCount: Int?,
     isLoading: Boolean,
-    showInvite: Boolean,
-    invitePeople: () -> Unit,
     openRoomMemberList: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -298,13 +300,20 @@ internal fun MembersSection(
             onClick = openRoomMemberList,
             loadingCurrentValue = isLoading,
         )
-        if (showInvite) {
-            PreferenceText(
-                title = stringResource(R.string.screen_room_details_invite_people_title),
-                icon = Icons.Outlined.PersonAddAlt,
-                onClick = invitePeople,
-            )
-        }
+    }
+}
+
+@Composable
+internal fun InviteSection(
+    invitePeople: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    PreferenceCategory(modifier = modifier) {
+        PreferenceText(
+            title = stringResource(R.string.screen_room_details_invite_people_title),
+            icon = Icons.Outlined.PersonAddAlt,
+            onClick = invitePeople,
+        )
     }
 }
 
