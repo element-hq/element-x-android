@@ -61,6 +61,7 @@ class RoomDetailsEditionPresenter @Inject constructor(
 
         var roomName by rememberSaveable { mutableStateOf((room.name ?: room.displayName).trim()) }
         var roomTopic by rememberSaveable { mutableStateOf(room.topic?.trim()) }
+
         val saveButtonEnabled by remember(
             roomSyncUpdateFlow.value,
             roomName,
@@ -69,8 +70,8 @@ class RoomDetailsEditionPresenter @Inject constructor(
         ) {
             derivedStateOf {
                 roomAvatarUri?.toString()?.trim() != room.avatarUrl?.toUri()?.toString()?.trim()
-                    || roomName != (room.name ?: room.displayName).trim()
-                    || roomTopic != room.topic?.trim()
+                    || roomName.trim() != (room.name ?: room.displayName).trim()
+                    || roomTopic.orEmpty().trim() != room.topic.orEmpty().trim()
             }
         }
 

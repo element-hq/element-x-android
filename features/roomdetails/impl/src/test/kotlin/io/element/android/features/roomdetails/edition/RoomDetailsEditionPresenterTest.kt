@@ -316,6 +316,58 @@ class RoomDetailsEditionPresenterTest {
     }
 
     @Test
+    fun `present - updates save button state when initial values are null`() = runTest {
+        val room = aMatrixRoom(topic = null, name = null, displayName = "fallback", avatarUrl = null)
+
+        fakePickerProvider.givenResult(roomAvatarUri)
+
+        val presenter = aRoomDetailsEditionPresenter(room)
+
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.saveButtonEnabled).isEqualTo(false)
+
+            // Once a change is made, the save button is enabled
+            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomName("Name II"))
+            awaitItem().apply {
+                assertThat(saveButtonEnabled).isEqualTo(true)
+            }
+
+            // If it's reverted then the save disables again
+            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomName("fallback"))
+            awaitItem().apply {
+                assertThat(saveButtonEnabled).isEqualTo(false)
+            }
+
+            // Make a change...
+            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomTopic("Another topic"))
+            awaitItem().apply {
+                assertThat(saveButtonEnabled).isEqualTo(true)
+            }
+
+            // Revert it...
+            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomTopic(""))
+            awaitItem().apply {
+                assertThat(saveButtonEnabled).isEqualTo(false)
+            }
+
+            // Make a change...
+            initialState.eventSink(RoomDetailsEditionEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
+            awaitItem().apply {
+                assertThat(saveButtonEnabled).isEqualTo(true)
+            }
+
+            // Revert it...
+            initialState.eventSink(RoomDetailsEditionEvents.HandleAvatarAction(AvatarAction.Remove))
+            awaitItem().apply {
+                assertThat(saveButtonEnabled).isEqualTo(false)
+            }
+        }
+    }
+
+    @Test
     fun `present - save changes room details if different`() = runTest {
         val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
 
