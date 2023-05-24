@@ -59,9 +59,10 @@ class LeaveRoomPresenterImpl @Inject constructor(
         ) { event ->
             when (event) {
                 is LeaveRoomEvent.ShowConfirmation -> scope.launch(dispatchers.io) {
-                    client.showLeaveRoomAlert(
+                    showLeaveRoomAlert(
+                        matrixClient = client,
                         roomId = event.roomId,
-                        confirmation = confirmation
+                        confirmation = confirmation,
                     )
                 }
 
@@ -82,11 +83,12 @@ class LeaveRoomPresenterImpl @Inject constructor(
     }
 }
 
-private suspend fun MatrixClient.showLeaveRoomAlert(
+private suspend fun showLeaveRoomAlert(
+    matrixClient: MatrixClient,
     roomId: RoomId,
     confirmation: MutableState<LeaveRoomState.Confirmation>,
 ) {
-    getRoom(roomId)?.use { room ->
+    matrixClient.getRoom(roomId)?.use { room ->
         confirmation.value = when {
             !room.isPublic -> PrivateRoom(roomId)
             (room.memberCount() as? Async.Success<Int>)?.state == 1 -> LastUserInRoom(roomId)
