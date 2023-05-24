@@ -64,6 +64,7 @@ fun CreateRoomRootView(
     onClosePressed: () -> Unit = {},
     onNewRoomClicked: () -> Unit = {},
     onOpenDM: (RoomId) -> Unit = {},
+    onInviteFriendsClicked: () -> Unit = {},
 ) {
     if (state.startDmAction is Async.Success) {
         LaunchedEffect(state.startDmAction) {
@@ -96,7 +97,7 @@ fun CreateRoomRootView(
             if (!state.userListState.isSearchActive) {
                 CreateRoomActionButtonsList(
                     onNewRoomClicked = onNewRoomClicked,
-                    onInvitePeopleClicked = { state.eventSink(CreateRoomRootEvents.InvitePeople) },
+                    onInvitePeopleClicked = onInviteFriendsClicked,
                 )
             }
         }
