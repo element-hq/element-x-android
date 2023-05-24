@@ -208,7 +208,12 @@ internal fun RoomDetailsTopBar(
                 ) {
                     DropdownMenuItem(
                         text = { Text(stringResource(id = StringR.string.action_edit)) },
-                        onClick = { onActionClicked.invoke(RoomDetailsAction.Edit) },
+                        onClick = {
+                            // Explicitly close the menu before handling the action, as otherwise it stays open during the
+                            // transition and renders really badly.
+                            showMenu = false
+                            onActionClicked(RoomDetailsAction.Edit)
+                        },
                     )
                 }
             }

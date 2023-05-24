@@ -199,7 +199,7 @@ private fun EditableAvatarView(
                 .size(70.dp)
                 .clickable(onClick = onAvatarClicked, enabled = state.canChangeAvatar)
         ) {
-            // Fixme cannot render local files using Avatar
+            // TODO this might be able to be simplified into a single component once send/receive media is done
             when (state.roomAvatarUrl?.scheme) {
                 null, "mxc" -> {
                     Avatar(
