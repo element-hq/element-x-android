@@ -25,6 +25,8 @@ import kotlinx.parcelize.Parcelize
 data class LocalMedia(
     val uri: Uri,
     val mimeType: String,
+    val name: String?,
+    val size: Long,
 ) : Parcelable {
 
     /**

@@ -16,19 +16,30 @@
 
 package io.element.android.features.messages.impl.media.viewer
 
+import android.net.Uri
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.media3.common.MimeTypes
+import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.libraries.architecture.Async
 
 open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState> {
     override val values: Sequence<MediaViewerState>
         get() = sequenceOf(
             aMediaViewerState(),
-            // Add other states here
+            aMediaViewerState(Async.Loading()),
+            aMediaViewerState(Async.Failure(IllegalStateException())),
+            aMediaViewerState(
+                Async.Success(
+                    LocalMedia(
+                        Uri.EMPTY, MimeTypes.IMAGE_JPEG, "a file", 100L
+                    )
+                ),
+            )
         )
 }
 
-fun aMediaViewerState() = MediaViewerState(
+fun aMediaViewerState(downloadedMedia: Async<LocalMedia> = Async.Uninitialized) = MediaViewerState(
     name = "A media",
-    downloadedMedia = Async.Uninitialized,
+    downloadedMedia = downloadedMedia,
     eventSink = {}
 )

@@ -27,6 +27,20 @@ fun Context.getFileName(uri: Uri): String? = when (uri.scheme) {
     else -> uri.path?.let(::File)?.name
 }
 
+fun Context.getFileSize(uri: Uri): Long {
+    return when (uri.scheme) {
+        ContentResolver.SCHEME_CONTENT -> getContentFileSize(uri)
+        else -> uri.path?.let(::File)?.length()
+    } ?: 0
+}
+
+private fun Context.getContentFileSize(uri: Uri): Long? = runCatching {
+    contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+        cursor.moveToFirst()
+        return@use cursor.getColumnIndexOrThrow(OpenableColumns.SIZE).let(cursor::getLong)
+    }
+}.getOrNull()
+
 private fun Context.getContentFileName(uri: Uri): String? = runCatching {
     contentResolver.query(uri, null, null, null, null)?.use { cursor ->
         cursor.moveToFirst()

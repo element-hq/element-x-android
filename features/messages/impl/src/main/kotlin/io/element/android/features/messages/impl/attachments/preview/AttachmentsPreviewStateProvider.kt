@@ -29,13 +29,12 @@ open class AttachmentsPreviewStateProvider : PreviewParameterProvider<Attachment
             anAttachmentsPreviewState(),
             anAttachmentsPreviewState(sendActionState = Async.Loading()),
             anAttachmentsPreviewState(sendActionState = Async.Failure(RuntimeException())),
-            // Add other states here
         )
 }
 
 fun anAttachmentsPreviewState(sendActionState: Async<Unit> = Async.Uninitialized) = AttachmentsPreviewState(
     attachment = Attachment.Media(
-        localMedia = LocalMedia("".toUri(), mimeType = MimeTypes.OctetStream),
+        localMedia = LocalMedia("path".toUri(), MimeTypes.Jpeg, "an image", 1000L),
         compressIfPossible = true
     ),
     sendActionState = sendActionState,
