@@ -35,6 +35,7 @@ dependencies {
     implementation(libs.androidx.security.crypto)
     implementation(libs.network.retrofit)
     implementation(libs.serialization.json)
+    implementation(libs.coil)
 
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
