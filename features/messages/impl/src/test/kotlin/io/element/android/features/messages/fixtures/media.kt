@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.media.local
+package io.element.android.features.messages.fixtures
 
 import android.net.Uri
-import io.element.android.libraries.matrix.api.media.MediaFile
+import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.media.local.LocalMedia
+import io.mockk.mockk
 
-interface LocalMediaFactory {
+fun aLocalMedia(
+    uri: Uri = mockk("localMediaUri"),
+    mimeType: String
+) = LocalMedia(
+    uri = uri,
+    mimeType = mimeType
+)
 
-    /**
-     * This method will create a [LocalMedia] with the given [MediaFile] and [mimeType]
-     *
-     */
-    fun createFromMediaFile(mediaFile: MediaFile, mimeType: String?): LocalMedia
+fun aMediaAttachment(localMedia: LocalMedia, compressIfPossible: Boolean = true) = Attachment.Media(
+    localMedia = localMedia,
+    compressIfPossible = compressIfPossible,
+)
 
-    /**
-     * This method will create a [LocalMedia] with the given [uri] and [mimeType]
-     * If the [mimeType] is null, it'll try to read it from the content.
-     *
-     */
-    fun createFromUri(uri: Uri, mimeType: String?): LocalMedia
-}

@@ -206,22 +206,22 @@ class MessageComposerPresenter @Inject constructor(
         mimeType: String? = null,
         compressIfPossible: Boolean = true,
     ) {
+        if (uri == null) {
+            attachmentsState.value = AttachmentsState.None
+            return
+        }
         val localMedia = localMediaFactory.createFromUri(uri, mimeType)
-        attachmentsState.value = if (localMedia == null) {
-            AttachmentsState.None
+        val mediaAttachment = Attachment.Media(localMedia, compressIfPossible)
+        val isPreviewable = when {
+            MimeTypes.isImage(localMedia.mimeType) -> true
+            MimeTypes.isVideo(localMedia.mimeType) -> true
+            MimeTypes.isAudio(localMedia.mimeType) -> true
+            else -> false
+        }
+        attachmentsState.value = if (isPreviewable) {
+            AttachmentsState.Previewing(persistentListOf(mediaAttachment))
         } else {
-            val mediaAttachment = Attachment.Media(localMedia, compressIfPossible)
-            val isPreviewable = when {
-                MimeTypes.isImage(localMedia.mimeType) -> true
-                MimeTypes.isVideo(localMedia.mimeType) -> true
-                MimeTypes.isAudio(localMedia.mimeType) -> true
-                else -> false
-            }
-            if (isPreviewable) {
-                AttachmentsState.Previewing(persistentListOf(mediaAttachment))
-            } else {
-                AttachmentsState.Sending(persistentListOf(mediaAttachment))
-            }
+            AttachmentsState.Sending(persistentListOf(mediaAttachment))
         }
     }
 

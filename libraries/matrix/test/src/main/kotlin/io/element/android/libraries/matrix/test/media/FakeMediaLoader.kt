@@ -17,14 +17,17 @@
 package io.element.android.libraries.matrix.test.media
 
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
-import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.MediaFile
+import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.test.FAKE_DELAY_IN_MS
+import kotlinx.coroutines.delay
 
 class FakeMediaLoader : MatrixMediaLoader {
 
     var shouldFail = false
 
     override suspend fun loadMediaContent(source: MediaSource): Result<ByteArray> {
+        delay(FAKE_DELAY_IN_MS)
         return if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
@@ -33,6 +36,7 @@ class FakeMediaLoader : MatrixMediaLoader {
     }
 
     override suspend fun loadMediaThumbnail(source: MediaSource, width: Long, height: Long): Result<ByteArray> {
+        delay(FAKE_DELAY_IN_MS)
         return if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
@@ -41,6 +45,7 @@ class FakeMediaLoader : MatrixMediaLoader {
     }
 
     override suspend fun loadMediaFile(source: MediaSource, mimeType: String?): Result<MediaFile> {
+        delay(FAKE_DELAY_IN_MS)
         return if (shouldFail) {
             Result.failure(RuntimeException())
         } else {

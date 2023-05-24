@@ -14,31 +14,24 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.media.local
+package io.element.android.features.messages.media
 
-import android.content.Context
 import android.net.Uri
-import androidx.core.net.toUri
-import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.messages.fixtures.aLocalMedia
+import io.element.android.features.messages.impl.media.local.LocalMedia
+import io.element.android.features.messages.impl.media.local.LocalMediaFactory
 import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.media.MediaFile
-import javax.inject.Inject
 
-@ContributesBinding(AppScope::class)
-class AndroidLocalMediaFactory @Inject constructor(
-    @ApplicationContext private val context: Context
-) : LocalMediaFactory {
+class FakeLocalMediaFactory() : LocalMediaFactory {
+
+    var fallbackMimeType: String = MimeTypes.OctetStream
 
     override fun createFromMediaFile(mediaFile: MediaFile, mimeType: String?): LocalMedia {
-        val resolvedMimeType = mimeType ?: MimeTypes.OctetStream
-        val uri = mediaFile.path().toUri()
-        return LocalMedia(uri, resolvedMimeType)
+        return aLocalMedia(mimeType = mimeType ?: fallbackMimeType)
     }
 
     override fun createFromUri(uri: Uri, mimeType: String?): LocalMedia {
-        val resolvedMimeType = mimeType ?: context.contentResolver.getType(uri) ?: MimeTypes.OctetStream
-        return LocalMedia(uri, resolvedMimeType)
+        return aLocalMedia(uri, mimeType ?: fallbackMimeType)
     }
 }

@@ -24,7 +24,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.core.net.toUri
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -32,7 +31,7 @@ import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -40,7 +39,7 @@ import kotlinx.coroutines.launch
 class MediaViewerPresenter @AssistedInject constructor(
     @Assisted private val inputs: MediaViewerNode.Inputs,
     private val localMediaFactory: LocalMediaFactory,
-    private val client: MatrixClient,
+    private val mediaLoader: MatrixMediaLoader,
 ) : Presenter<MediaViewerState> {
 
     @AssistedFactory
@@ -79,14 +78,12 @@ class MediaViewerPresenter @AssistedInject constructor(
     }
 
     private fun CoroutineScope.loadMedia(mediaFile: MutableState<MediaFile?>, localMedia: MutableState<Async<LocalMedia>>) = launch {
-        mediaFile.value = null
         localMedia.value = Async.Loading()
-        client.mediaLoader.loadMediaFile(inputs.mediaSource, inputs.mimeType)
+        mediaLoader.loadMediaFile(inputs.mediaSource, inputs.mimeType)
             .onSuccess {
                 mediaFile.value = it
             }.mapCatching {
-                val uri = it.path().toUri()
-                localMediaFactory.createFromUri(uri, inputs.mimeType)!!
+                localMediaFactory.createFromMediaFile(it, inputs.mimeType)
             }.onSuccess {
                 localMedia.value = Async.Success(it)
             }.onFailure {
