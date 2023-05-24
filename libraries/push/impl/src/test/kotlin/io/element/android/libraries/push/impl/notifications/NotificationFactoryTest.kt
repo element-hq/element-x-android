@@ -18,6 +18,7 @@ package io.element.android.libraries.push.impl.notifications
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -124,11 +125,13 @@ class NotificationFactoryTest {
     fun `given room with message when mapping to notification then delegates to room group message creator`() = testWith(notificationFactory) {
         val events = listOf(A_MESSAGE_EVENT)
         val expectedNotification = roomGroupMessageCreator.givenCreatesRoomMessageFor(
-            A_SESSION_ID, events, A_ROOM_ID, A_SESSION_ID.value, MY_AVATAR_URL
+            MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL), events, A_ROOM_ID
         )
         val roomWithMessage = mapOf(A_ROOM_ID to listOf(ProcessedEvent(ProcessedEvent.Type.KEEP, A_MESSAGE_EVENT)))
 
-        val result = roomWithMessage.toNotifications(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL)
+        val result = roomWithMessage.toNotifications(
+            MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL)
+        )
 
         assertThat(result).isEqualTo(listOf(expectedNotification))
     }
@@ -138,7 +141,9 @@ class NotificationFactoryTest {
         val events = listOf(ProcessedEvent(ProcessedEvent.Type.REMOVE, A_MESSAGE_EVENT))
         val emptyRoom = mapOf(A_ROOM_ID to events)
 
-        val result = emptyRoom.toNotifications(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL)
+        val result = emptyRoom.toNotifications(
+            MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL)
+        )
 
         assertThat(result).isEqualTo(
             listOf(
@@ -153,7 +158,9 @@ class NotificationFactoryTest {
     fun `given a room with only redacted events when mapping to notification then is Empty`() = testWith(notificationFactory) {
         val redactedRoom = mapOf(A_ROOM_ID to listOf(ProcessedEvent(ProcessedEvent.Type.KEEP, A_MESSAGE_EVENT.copy(isRedacted = true))))
 
-        val result = redactedRoom.toNotifications(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL)
+        val result = redactedRoom.toNotifications(
+            MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL)
+        )
 
         assertThat(result).isEqualTo(
             listOf(
@@ -176,14 +183,14 @@ class NotificationFactoryTest {
         )
         val withRedactedRemoved = listOf(A_MESSAGE_EVENT.copy(eventId = EventId("\$not-redacted")))
         val expectedNotification = roomGroupMessageCreator.givenCreatesRoomMessageFor(
-            A_SESSION_ID,
+            MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
             withRedactedRemoved,
             A_ROOM_ID,
-            A_SESSION_ID.value,
-            MY_AVATAR_URL
         )
 
-        val result = roomWithRedactedMessage.toNotifications(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL)
+        val result = roomWithRedactedMessage.toNotifications(
+            MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL)
+        )
 
         assertThat(result).isEqualTo(listOf(expectedNotification))
     }
