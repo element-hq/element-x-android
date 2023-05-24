@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -63,6 +64,7 @@ class RoomDetailsPresenter @Inject constructor(
         val membersState by room.membersStateFlow.collectAsState()
         val memberCount by getMemberCount(membersState)
         val canInvite by getCanInvite(membersState)
+        val canEdit by getCanEdit(membersState)
         val dmMember by room.getDirectRoomMember(membersState)
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
         val roomType = getRoomType(dmMember)
@@ -93,6 +95,7 @@ class RoomDetailsPresenter @Inject constructor(
             memberCount = memberCount,
             isEncrypted = room.isEncrypted,
             canInvite = canInvite,
+            canEdit = canEdit,
             displayLeaveRoomWarning = leaveRoomWarning.value,
             error = error.value,
             roomType = roomType.value,
@@ -126,6 +129,23 @@ class RoomDetailsPresenter @Inject constructor(
             canInvite.value = room.canInvite().getOrElse { false }
         }
         return canInvite
+    }
+
+    @Composable
+    private fun getCanEdit(membersState: MatrixRoomMembersState): State<Boolean> {
+        val canEdit = remember(membersState) { mutableStateOf(false) }
+        LaunchedEffect(membersState) {
+            val eventTypes = listOf(
+                StateEventType.ROOM_AVATAR,
+                StateEventType.ROOM_NAME,
+                StateEventType.ROOM_TOPIC,
+            )
+
+            canEdit.value = eventTypes
+                .map { room.canSendStateEvent(it).getOrElse { false } }
+                .any()
+        }
+        return canEdit
     }
 
     @Composable

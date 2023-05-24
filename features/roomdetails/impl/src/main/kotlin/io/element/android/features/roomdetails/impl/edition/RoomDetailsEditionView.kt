@@ -21,6 +21,7 @@ package io.element.android.features.roomdetails.impl.edition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -76,6 +77,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import kotlinx.coroutines.launch
 import io.element.android.libraries.ui.strings.R as StringR
 
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun RoomDetailsEditionView(
     state: RoomDetailsEditionState,
@@ -128,21 +130,38 @@ fun RoomDetailsEditionView(
         ) {
             EditableAvatarView(state, ::onAvatarClicked)
             Spacer(modifier = Modifier.height(60.dp))
-            LabelledTextField(
-                label = stringResource(id = R.string.screen_create_room_room_name_label),
-                value = state.roomName,
-                placeholder = stringResource(id = R.string.screen_create_room_room_name_placeholder),
-                singleLine = true,
-                onValueChange = { state.eventSink(RoomDetailsEditionEvents.UpdateRoomName(it)) },
-            )
+
+            if (state.canChangeName) {
+                LabelledTextField(
+                    label = stringResource(id = R.string.screen_create_room_room_name_label),
+                    value = state.roomName,
+                    placeholder = stringResource(id = R.string.screen_create_room_room_name_placeholder),
+                    singleLine = true,
+                    onValueChange = { state.eventSink(RoomDetailsEditionEvents.UpdateRoomName(it)) },
+                )
+            } else {
+                LabelledReadOnlyField(
+                    title = stringResource(R.string.screen_create_room_room_name_label),
+                    value = state.roomName
+                )
+            }
+
             Spacer(modifier = Modifier.height(28.dp))
-            LabelledTextField(
-                label = stringResource(id = StringR.string.common_topic),
-                value = state.roomTopic,
-                placeholder = stringResource(id = R.string.screen_create_room_topic_placeholder),
-                maxLines = 10,
-                onValueChange = { state.eventSink(RoomDetailsEditionEvents.UpdateRoomTopic(it)) },
-            )
+
+            if (state.canChangeTopic) {
+                LabelledTextField(
+                    label = stringResource(id = StringR.string.common_topic),
+                    value = state.roomTopic,
+                    placeholder = stringResource(id = R.string.screen_create_room_topic_placeholder),
+                    maxLines = 10,
+                    onValueChange = { state.eventSink(RoomDetailsEditionEvents.UpdateRoomTopic(it)) },
+                )
+            } else {
+                LabelledReadOnlyField(
+                    title = stringResource(R.string.screen_room_details_topic_title),
+                    value = state.roomTopic
+                )
+            }
         }
     }
 
@@ -178,7 +197,7 @@ private fun EditableAvatarView(
         Box(
             modifier = Modifier
                 .size(70.dp)
-                .clickable(onClick = onAvatarClicked)
+                .clickable(onClick = onAvatarClicked, enabled = state.canChangeAvatar)
         ) {
             // Fixme cannot render local files using Avatar
             when (state.roomAvatarUrl?.scheme) {
@@ -196,22 +215,51 @@ private fun EditableAvatarView(
                     )
                 }
             }
-            Box(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .clip(CircleShape)
-                    .background(LocalColors.current.gray1400)
-                    .size(24.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    modifier = Modifier.size(16.dp),
-                    imageVector = Icons.Outlined.AddAPhoto,
-                    contentDescription = "",
-                    tint = MaterialTheme.colorScheme.onPrimary,
-                )
+
+            if (state.canChangeAvatar) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .clip(CircleShape)
+                        .background(LocalColors.current.gray1400)
+                        .size(24.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        modifier = Modifier.size(16.dp),
+                        imageVector = Icons.Outlined.AddAPhoto,
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                    )
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun LabelledReadOnlyField(
+    title: String,
+    value: String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.primary,
+            text = title,
+        )
+
+        Text(
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.primary,
+            text = value,
+        )
     }
 }
 

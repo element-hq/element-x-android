@@ -34,6 +34,7 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aDmRoomDetailsState().copy(roomName = "Daniel"),
             aDmRoomDetailsState(isDmMemberIgnored = true).copy(roomName = "Daniel"),
             aRoomDetailsState().copy(canInvite = true),
+            aRoomDetailsState().copy(canEdit = true),
             // Add other state here
         )
 }
@@ -73,6 +74,7 @@ fun aRoomDetailsState() = RoomDetailsState(
     displayLeaveRoomWarning = null,
     error = null,
     canInvite = false,
+    canEdit = false,
     roomType = RoomDetailsType.Room,
     roomMemberDetailsState = null,
     eventSink = {}

@@ -24,8 +24,11 @@ import kotlinx.collections.immutable.ImmutableList
 data class RoomDetailsEditionState(
     val roomId: String,
     val roomName: String,
+    val canChangeName: Boolean,
     val roomTopic: String,
+    val canChangeTopic: Boolean,
     val roomAvatarUrl: Uri?,
+    val canChangeAvatar: Boolean,
     val avatarActions: ImmutableList<AvatarAction>,
     val saveButtonEnabled: Boolean,
     val saveAction: Async<Unit>,

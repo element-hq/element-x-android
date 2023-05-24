@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.features.roomdetails.impl
 
 import androidx.compose.foundation.layout.Arrangement
@@ -103,6 +101,7 @@ fun RoomDetailsView(
         topBar = {
             RoomDetailsTopBar(
                 goBack = goBack,
+                showEdit = state.canEdit,
                 onActionClicked = onActionClicked
             )
         },
@@ -183,10 +182,12 @@ fun RoomDetailsView(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun RoomDetailsTopBar(
     goBack: () -> Unit,
     onActionClicked: (RoomDetailsAction) -> Unit,
+    showEdit: Boolean,
     modifier: Modifier = Modifier,
 ) {
     var showMenu by remember { mutableStateOf(false) }
@@ -196,18 +197,20 @@ internal fun RoomDetailsTopBar(
         title = { },
         navigationIcon = { BackButton(onClick = goBack) },
         actions = {
-            IconButton(onClick = { showMenu = !showMenu }) {
-                Icon(Icons.Default.MoreVert, "")
-            }
-            DropdownMenu(
-                modifier = Modifier.widthIn(200.dp),
-                expanded = showMenu,
-                onDismissRequest = { showMenu = false },
-            ) {
-                DropdownMenuItem(
-                    text = { Text(stringResource(id = StringR.string.action_edit)) },
-                    onClick = { onActionClicked.invoke(RoomDetailsAction.Edit) },
-                )
+            if (showEdit) {
+                IconButton(onClick = { showMenu = !showMenu }) {
+                    Icon(Icons.Default.MoreVert, "")
+                }
+                DropdownMenu(
+                    modifier = Modifier.widthIn(200.dp),
+                    expanded = showMenu,
+                    onDismissRequest = { showMenu = false },
+                ) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(id = StringR.string.action_edit)) },
+                        onClick = { onActionClicked.invoke(RoomDetailsAction.Edit) },
+                    )
+                }
             }
         },
     )

@@ -90,6 +90,8 @@ interface MatrixRoom : Closeable {
 
     suspend fun canInvite(): Result<Boolean>
 
+    suspend fun canSendStateEvent(type: StateEventType): Result<Boolean>
+
     suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit>
 
     suspend fun removeAvatar(): Result<Unit>

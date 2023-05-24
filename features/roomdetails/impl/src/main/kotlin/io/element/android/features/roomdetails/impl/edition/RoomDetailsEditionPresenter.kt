@@ -18,6 +18,7 @@ package io.element.android.features.roomdetails.impl.edition
 
 import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -34,6 +35,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.execute
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaType
@@ -70,6 +72,16 @@ class RoomDetailsEditionPresenter @Inject constructor(
                     || roomName != (room.name ?: room.displayName).trim()
                     || roomTopic != room.topic?.trim()
             }
+        }
+
+        var canChangeName by remember { mutableStateOf(false) }
+        var canChangeTopic by remember { mutableStateOf(false) }
+        var canChangeAvatar by remember { mutableStateOf(false) }
+
+        LaunchedEffect(Unit) {
+            canChangeName = room.canSendStateEvent(StateEventType.ROOM_NAME).getOrElse { false }
+            canChangeTopic = room.canSendStateEvent(StateEventType.ROOM_TOPIC).getOrElse { false }
+            canChangeAvatar = room.canSendStateEvent(StateEventType.ROOM_AVATAR).getOrElse { false }
         }
 
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
@@ -111,8 +123,11 @@ class RoomDetailsEditionPresenter @Inject constructor(
         return RoomDetailsEditionState(
             roomId = room.roomId.value,
             roomName = roomName,
+            canChangeName = canChangeName,
             roomTopic = roomTopic.orEmpty(),
+            canChangeTopic = canChangeTopic,
             roomAvatarUrl = roomAvatarUri,
+            canChangeAvatar = canChangeAvatar,
             avatarActions = avatarActions,
             saveButtonEnabled = saveButtonEnabled,
             saveAction = saveAction.value,

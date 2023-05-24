@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.impl.media.map
@@ -220,6 +221,12 @@ class RustMatrixRoom(
     override suspend fun canInvite(): Result<Boolean> = withContext(coroutineDispatchers.io) {
         runCatching {
             innerRoom.member(sessionId.value).use(RoomMember::canInvite)
+        }
+    }
+
+    override suspend fun canSendStateEvent(type: StateEventType): Result<Boolean> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            innerRoom.member(sessionId.value).use { it.canSendState(type.map()) }
         }
     }
 

@@ -24,14 +24,20 @@ open class RoomDetailsEditionStateProvider : PreviewParameterProvider<RoomDetail
     override val values: Sequence<RoomDetailsEditionState>
         get() = sequenceOf(
             aRoomDetailsEditionState(),
+            aRoomDetailsEditionState().copy(roomTopic = ""),
+            aRoomDetailsEditionState().copy(canChangeName = true, canChangeTopic = false, canChangeAvatar = true, saveButtonEnabled = false),
+            aRoomDetailsEditionState().copy(canChangeName = false, canChangeTopic = true, canChangeAvatar = false, saveButtonEnabled = false),
         )
 }
 
 fun aRoomDetailsEditionState() = RoomDetailsEditionState(
     roomId = "a room id",
     roomName = "Marketing",
-    roomTopic = "a room topic",
+    canChangeName = true,
+    roomTopic = "a room topic that is quite long so should wrap onto multiple lines",
+    canChangeTopic = true,
     roomAvatarUrl = null,
+    canChangeAvatar = true,
     avatarActions = persistentListOf(),
     saveButtonEnabled = true,
     saveAction = Async.Uninitialized,

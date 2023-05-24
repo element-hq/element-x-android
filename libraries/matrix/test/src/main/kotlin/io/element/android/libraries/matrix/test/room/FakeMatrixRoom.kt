@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -61,7 +62,9 @@ class FakeMatrixRoom(
     private var rejectInviteResult = Result.success(Unit)
     private var inviteUserResult = Result.success(Unit)
     private var canInviteResult = Result.success(true)
+    private val canSendStateResults = mutableMapOf<StateEventType, Result<Boolean>>()
     private var sendMediaResult = Result.success(Unit)
+
     var sendMediaCount = 0
         private set
 
@@ -150,6 +153,10 @@ class FakeMatrixRoom(
         return canInviteResult
     }
 
+    override suspend fun canSendStateEvent(type: StateEventType): Result<Boolean> {
+        return canSendStateResults[type]!!
+    }
+
     override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo): Result<Unit> = sendMediaResult.also { sendMediaCount++ }
 
     override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo): Result<Unit> = sendMediaResult.also { sendMediaCount++ }
@@ -210,6 +217,10 @@ class FakeMatrixRoom(
 
     fun givenCanInviteResult(result: Result<Boolean>) {
         canInviteResult = result
+    }
+
+    fun givenCanSendStateResult(type: StateEventType, result: Result<Boolean>) {
+        canSendStateResults[type] = result
     }
 
     fun givenIgnoreResult(result: Result<Unit>) {
