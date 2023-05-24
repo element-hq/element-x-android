@@ -23,6 +23,8 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.SpaceId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 const val A_USER_NAME = "alice"
 const val A_PASSWORD = "password"
@@ -52,6 +54,9 @@ val A_HOMESERVER = MatrixHomeServerDetails(A_HOMESERVER_URL, true, null)
 const val AN_AVATAR_URL = "mxc://data"
 
 const val A_FAILURE_REASON = "There has been a failure"
+
+const val FAKE_DELAY_IN_MS = 100L
+
 val A_THROWABLE = Throwable(A_FAILURE_REASON)
 val AN_EXCEPTION = Exception(A_FAILURE_REASON)
 

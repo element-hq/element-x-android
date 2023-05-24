@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.media.local
+package io.element.android.libraries.matrix.test.media
 
-import android.net.Uri
-import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.matrix.api.media.MediaSource
 
-class FakeLocalMediaFactory() : LocalMediaFactory {
-
-    var fallbackMimeType: String = MimeTypes.OctetStream
-
-    override fun createFromUri(uri: Uri?, mimeType: String?): LocalMedia? {
-        if (uri == null) return null
-        return LocalMedia(uri, mimeType ?: fallbackMimeType)
-    }
-}
+fun aMediaSource(url: String = "") = MediaSource(
+    url = url,
+    json = null
+)

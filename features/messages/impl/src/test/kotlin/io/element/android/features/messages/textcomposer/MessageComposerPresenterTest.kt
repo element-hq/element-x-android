@@ -21,7 +21,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.messages.impl.media.local.FakeLocalMediaFactory
+import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
@@ -52,7 +52,6 @@ import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import java.io.File
@@ -392,7 +391,9 @@ class MessageComposerPresenterTest {
             val sendingState = awaitItem()
             assertThat(sendingState.showAttachmentSourcePicker).isFalse()
             assertThat(sendingState.attachmentsState).isInstanceOf(AttachmentsState.Sending::class.java)
-            cancelAndIgnoreRemainingEvents()
+            val sentState = awaitItem()
+            assertThat(sentState.attachmentsState).isEqualTo(AttachmentsState.None)
+            assertThat(room.sendMediaCount).isEqualTo(1)
         }
     }
 
@@ -440,7 +441,7 @@ class MessageComposerPresenterTest {
             initialState.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles)
             val sendingState = awaitItem()
             assertThat(sendingState.attachmentsState).isInstanceOf(AttachmentsState.Sending::class.java)
-            val finalState= awaitItem()
+            val finalState = awaitItem()
             assertThat(finalState.attachmentsState).isInstanceOf(AttachmentsState.None::class.java)
             snackbarDispatcher.snackbarMessage.test {
                 // Assert error message received
