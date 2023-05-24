@@ -51,13 +51,13 @@ class NotificationBitmapLoader @Inject constructor(
     private fun loadRoomBitmap(path: String): Bitmap? {
         return try {
             val imageRequest = ImageRequest.Builder(context)
-                .data(MediaResolver.Meta(path, MediaResolver.Kind.Thumbnail(128)))
+                .data(MediaResolver.Meta(path, MediaResolver.Kind.Thumbnail(512)))
                 .build()
             runBlocking {
                 val result = context.imageLoader.execute(imageRequest)
                 result.drawable?.toBitmap()
             }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             Timber.e(e, "Unable to load room bitmap")
             null
         }
@@ -81,7 +81,7 @@ class NotificationBitmapLoader @Inject constructor(
     private fun loadUserIcon(path: String): IconCompat? {
         return try {
             val imageRequest = ImageRequest.Builder(context)
-                .data(MediaResolver.Meta(path, MediaResolver.Kind.Thumbnail(128)))
+                .data(MediaResolver.Meta(path, MediaResolver.Kind.Thumbnail(512)))
                 .transformations(CircleCropTransformation())
                 .build()
             val bitmap = runBlocking {
@@ -89,7 +89,7 @@ class NotificationBitmapLoader @Inject constructor(
                 result.drawable?.toBitmap()
             }
             return bitmap?.let { IconCompat.createWithBitmap(it) }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             Timber.e(e, "Unable to load user bitmap")
             null
         }
