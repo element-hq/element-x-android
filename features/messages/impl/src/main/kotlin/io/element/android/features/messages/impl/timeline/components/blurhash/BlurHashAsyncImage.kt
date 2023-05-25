@@ -50,6 +50,7 @@ fun BlurHashAsyncImage(
         contentAlignment = Alignment.Center,
     ) {
         AsyncImage(
+            modifier = Modifier.fillMaxSize(),
             model = model,
             contentScale = contentScale,
             contentDescription = contentDescription,
