@@ -77,4 +77,10 @@ class AnalyticsStore @Inject constructor(
             settings[analyticsId] = newAnalyticsId
         }
     }
+
+    suspend fun reset() {
+        context.dataStore.edit {
+            it.clear()
+        }
+    }
 }

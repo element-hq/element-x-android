@@ -22,6 +22,8 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.sessionstorage.api.observer.SessionListener
+import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.impl.log.analyticsTag
 import io.element.android.services.analytics.impl.store.AnalyticsStore
@@ -34,22 +36,24 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @SingleIn(AppScope::class)
-@ContributesBinding(AppScope::class)
+@ContributesBinding(AppScope::class, boundType = AnalyticsService::class)
 class DefaultAnalyticsService @Inject constructor(
     private val analyticsProviders: Set<@JvmSuppressWildcards AnalyticsProvider>,
     private val analyticsStore: AnalyticsStore,
 //    private val lateInitUserPropertiesFactory: LateInitUserPropertiesFactory,
-    private val coroutineScope: CoroutineScope
-) : AnalyticsService {
+    private val coroutineScope: CoroutineScope,
+    private val sessionObserver: SessionObserver,
+) : AnalyticsService, SessionListener {
     // Cache for the store values
     private var userConsent: Boolean? = null
 
     // Cache for the properties to send
     private var pendingUserProperties: UserProperties? = null
 
-    override fun init() {
+    init {
         observeUserConsent()
         observeAnalyticsId()
+        observeSessions()
     }
 
     override fun getAvailableAnalyticsProviders(): List<AnalyticsProvider> {
@@ -88,6 +92,15 @@ class DefaultAnalyticsService @Inject constructor(
         analyticsProviders.onEach { it.stop() }
     }
 
+    override suspend fun onSessionCreated(userId: String) {
+        // Nothing to do
+    }
+
+    override suspend fun onSessionDeleted(userId: String) {
+        // Delete the store
+        analyticsStore.reset()
+    }
+
     private fun observeAnalyticsId() {
         getAnalyticsId()
             .onEach { id ->
@@ -106,6 +119,10 @@ class DefaultAnalyticsService @Inject constructor(
                 initOrStop()
             }
             .launchIn(coroutineScope)
+    }
+
+    private fun observeSessions() {
+        sessionObserver.addListener(this)
     }
 
     private fun initOrStop() {

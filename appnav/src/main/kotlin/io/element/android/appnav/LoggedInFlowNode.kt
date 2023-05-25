@@ -93,9 +93,7 @@ class LoggedInFlowNode @AssistedInject constructor(
 ) {
 
     private fun observeAnalyticsState() {
-        //TODO check user consent to display analytics settings screen
-        //analyticsService.didAskUserConsent()
-        flowOf(true)
+        analyticsService.didAskUserConsent()
             .distinctUntilChanged()
             .onEach { isConsentAsked ->
                 if (isConsentAsked) {
@@ -199,7 +197,6 @@ class LoggedInFlowNode @AssistedInject constructor(
             NavTarget.Permanent -> {
                 createNode<LoggedInNode>(buildContext)
             }
-
             NavTarget.RoomList -> {
                 val callback = object : RoomListEntryPoint.Callback {
                     override fun onRoomClicked(roomId: RoomId) {
@@ -231,7 +228,6 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .callback(callback)
                     .build()
             }
-
             is NavTarget.Room -> {
                 val room = inputs.matrixClient.getRoom(roomId = navTarget.roomId)
                 if (room == null) {
@@ -247,7 +243,6 @@ class LoggedInFlowNode @AssistedInject constructor(
                     createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs) + nodeLifecycleCallbacks)
                 }
             }
-
             NavTarget.Settings -> {
                 val callback = object : PreferencesEntryPoint.Callback {
                     override fun onOpenBugReport() {
@@ -258,7 +253,6 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .callback(callback)
                     .build()
             }
-
             NavTarget.CreateRoom -> {
                 val callback = object : CreateRoomEntryPoint.Callback {
                     override fun onSuccess(roomId: RoomId) {
@@ -271,11 +265,9 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .callback(callback)
                     .build()
             }
-
             NavTarget.VerifySession -> {
                 verifySessionEntryPoint.createNode(this, buildContext)
             }
-
             NavTarget.InviteList -> {
                 val callback = object : InviteListEntryPoint.Callback {
                     override fun onBackClicked() {
@@ -291,7 +283,6 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .callback(callback)
                     .build()
             }
-
             NavTarget.AnalyticsSettings -> {
                 analyticsOptInEntryPoint.createNode(this, buildContext)
             }

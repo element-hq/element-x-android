@@ -58,9 +58,4 @@ interface AnalyticsService: AnalyticsTracker, ErrorTracker {
      * To be called when a session is destroyed.
      */
     suspend fun onSignOut()
-
-    /**
-     * To be called when application is started.
-     */
-    fun init()
 }

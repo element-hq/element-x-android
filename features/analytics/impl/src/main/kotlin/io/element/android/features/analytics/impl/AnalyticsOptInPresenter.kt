@@ -40,6 +40,9 @@ class AnalyticsOptInPresenter @Inject constructor(
                     }
                 }
             }
+            coroutineScope.launch {
+                analyticsService.setDidAskUserConsent()
+            }
         }
 
         return AnalyticsOptInState(
