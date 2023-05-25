@@ -161,12 +161,12 @@ fun InviteListContent(
 
 @Preview
 @Composable
-internal fun RoomListViewLightPreview(@PreviewParameter(InviteListStateProvider::class) state: InviteListState) =
+internal fun InviteListViewLightPreview(@PreviewParameter(InviteListStateProvider::class) state: InviteListState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-internal fun RoomListViewDarkPreview(@PreviewParameter(InviteListStateProvider::class) state: InviteListState) =
+internal fun InviteListViewDarkPreview(@PreviewParameter(InviteListStateProvider::class) state: InviteListState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
