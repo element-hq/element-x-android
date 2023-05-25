@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-}
 
-android {
-    namespace = "io.element.android.services.analytics.api"
-}
+package io.element.android.libraries.pushproviders.unifiedpush
 
-dependencies {
-    api(projects.services.analyticsproviders.api)
-    implementation(libs.coroutines.core)
+object UnifiedPushConfig {
+    /**
+     * It is the push gateway for UnifiedPush.
+     * Note: default_push_gateway_http_url should have path '/_matrix/push/v1/notify'
+     */
+    const val default_push_gateway_http_url: String = "https://matrix.gateway.unifiedpush.org/_matrix/push/v1/notify"
+
+    const val index = 1
+    const val name = "UnifiedPush"
 }

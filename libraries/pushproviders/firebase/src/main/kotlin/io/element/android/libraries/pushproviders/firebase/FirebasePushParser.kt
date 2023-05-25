@@ -13,15 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-}
 
-android {
-    namespace = "io.element.android.services.analytics.api"
-}
+package io.element.android.libraries.pushproviders.firebase
 
-dependencies {
-    api(projects.services.analyticsproviders.api)
-    implementation(libs.coroutines.core)
+import io.element.android.libraries.pushproviders.api.PushData
+import javax.inject.Inject
+
+class FirebasePushParser @Inject constructor() {
+    fun parse(message: Map<String, String?>): PushData? {
+        val pushDataFirebase = PushDataFirebase(
+            eventId = message["event_id"],
+            roomId = message["room_id"],
+            unread = message["unread"]?.toIntOrNull(),
+            clientSecret = message["cs"],
+        )
+        return pushDataFirebase.toPushData()
+    }
 }

@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-}
 
-android {
-    namespace = "io.element.android.services.analytics.api"
-}
+package io.element.android.libraries.pushproviders.firebase
 
-dependencies {
-    api(projects.services.analyticsproviders.api)
-    implementation(libs.coroutines.core)
+object FirebaseConfig {
+    /**
+     * It is the push gateway for firebase.
+     * Note: pusher_http_url should have path '/_matrix/push/v1/notify' -->
+     */
+    const val pusher_http_url: String = "https://matrix.org/_matrix/push/v1/notify"
+
+    const val index = 0
+    const val name = "Firebase"
 }

@@ -16,13 +16,12 @@
 
 package io.element.android.services.analytics.api
 
-import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
-import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
-import im.vector.app.features.analytics.plan.UserProperties
-import io.element.android.services.analytics.providers.api.AnalyticsProvider
+import io.element.android.services.analyticsproviders.api.AnalyticsProvider
+import io.element.android.services.analyticsproviders.api.trackers.AnalyticsTracker
+import io.element.android.services.analyticsproviders.api.trackers.ErrorTracker
 import kotlinx.coroutines.flow.Flow
 
-interface AnalyticsService {
+interface AnalyticsService: AnalyticsTracker, ErrorTracker {
     fun getAvailableAnalyticsProviders(): List<AnalyticsProvider>
 
     /**
@@ -64,21 +63,4 @@ interface AnalyticsService {
      * To be called when application is started.
      */
     fun init()
-
-    /**
-     * Capture an Event.
-     */
-    fun capture(event: VectorAnalyticsEvent)
-
-    /**
-     * Track a displayed screen.
-     */
-    fun screen(screen: VectorAnalyticsScreen)
-
-    /**
-     * Update user specific properties.
-     */
-    fun updateUserProperties(userProperties: UserProperties)
-
-    fun trackError(throwable: Throwable)
 }

@@ -13,15 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-}
 
-android {
-    namespace = "io.element.android.services.analytics.api"
-}
+package io.element.android.libraries.pushproviders.unifiedpush
 
-dependencies {
-    api(projects.services.analyticsproviders.api)
-    implementation(libs.coroutines.core)
+import io.element.android.libraries.core.data.tryOrNull
+import io.element.android.libraries.pushproviders.api.PushData
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import javax.inject.Inject
+
+class UnifiedPushParser @Inject constructor() {
+    private val json by lazy { Json { ignoreUnknownKeys = true } }
+
+    fun parse(message: ByteArray, clientSecret: String): PushData? {
+        return tryOrNull { json.decodeFromString<PushDataUnifiedPush>(String(message)) }?.toPushData(clientSecret)
+    }
 }

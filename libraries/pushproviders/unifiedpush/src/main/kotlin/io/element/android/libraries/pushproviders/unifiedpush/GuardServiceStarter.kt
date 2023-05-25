@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
+
+package io.element.android.libraries.pushproviders.unifiedpush
+
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.AppScope
+import javax.inject.Inject
+
+interface GuardServiceStarter {
+    fun start() {}
+    fun stop() {}
 }
 
-android {
-    namespace = "io.element.android.services.analytics.api"
-}
-
-dependencies {
-    api(projects.services.analyticsproviders.api)
-    implementation(libs.coroutines.core)
-}
+@ContributesBinding(AppScope::class)
+class NoopGuardServiceStarter @Inject constructor() : GuardServiceStarter

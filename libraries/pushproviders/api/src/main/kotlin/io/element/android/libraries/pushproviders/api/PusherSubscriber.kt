@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-}
 
-android {
-    namespace = "io.element.android.services.analytics.api"
-}
+package io.element.android.libraries.pushproviders.api
 
-dependencies {
-    api(projects.services.analyticsproviders.api)
-    implementation(libs.coroutines.core)
+import io.element.android.libraries.matrix.api.MatrixClient
+
+interface PusherSubscriber {
+    suspend fun registerPusher(matrixClient: MatrixClient, pushKey: String, gateway: String)
+    suspend fun unregisterPusher(matrixClient: MatrixClient, pushKey: String, gateway: String)
 }

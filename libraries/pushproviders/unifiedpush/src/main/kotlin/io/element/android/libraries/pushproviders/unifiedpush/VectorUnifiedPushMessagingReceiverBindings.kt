@@ -13,15 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-}
 
-android {
-    namespace = "io.element.android.services.analytics.api"
-}
+package io.element.android.libraries.pushproviders.unifiedpush
 
-dependencies {
-    api(projects.services.analyticsproviders.api)
-    implementation(libs.coroutines.core)
+import com.squareup.anvil.annotations.ContributesTo
+import io.element.android.libraries.di.AppScope
+
+@ContributesTo(AppScope::class)
+interface VectorUnifiedPushMessagingReceiverBindings {
+    fun inject(receiver: VectorUnifiedPushMessagingReceiver)
 }

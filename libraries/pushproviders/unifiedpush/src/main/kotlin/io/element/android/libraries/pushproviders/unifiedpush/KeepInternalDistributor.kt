@@ -13,15 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-}
 
-android {
-    namespace = "io.element.android.services.analytics.api"
-}
+package io.element.android.libraries.pushproviders.unifiedpush
 
-dependencies {
-    api(projects.services.analyticsproviders.api)
-    implementation(libs.coroutines.core)
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+
+/**
+ * UnifiedPush lib tracks an action to check installed and uninstalled distributors.
+ * We declare it to keep the background sync as an internal unifiedpush distributor.
+ * This class is used to declare this action.
+ */
+class KeepInternalDistributor : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {}
 }

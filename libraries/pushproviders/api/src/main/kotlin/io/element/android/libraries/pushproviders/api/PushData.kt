@@ -13,15 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-}
 
-android {
-    namespace = "io.element.android.services.analytics.api"
-}
+package io.element.android.libraries.pushproviders.api
 
-dependencies {
-    api(projects.services.analyticsproviders.api)
-    implementation(libs.coroutines.core)
-}
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+
+/**
+ * Represent parsed data that the app has received from a Push content.
+ *
+ * @property eventId The Event Id.
+ * @property roomId The Room Id.
+ * @property unread Number of unread message.
+ * @property clientSecret data used when the pusher was configured, to be able to determine the session.
+ */
+data class PushData(
+    val eventId: EventId,
+    val roomId: RoomId,
+    val unread: Int?,
+    val clientSecret: String?,
+)

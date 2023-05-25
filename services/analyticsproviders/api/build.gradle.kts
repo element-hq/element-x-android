@@ -18,7 +18,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.services.analytics.providers.api"
+    namespace = "io.element.android.services.analyticsproviders.api"
 }
 
 dependencies {

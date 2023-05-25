@@ -13,15 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-}
 
-android {
-    namespace = "io.element.android.services.analytics.api"
-}
+package io.element.android.services.analyticsproviders.api
 
-dependencies {
-    api(projects.services.analyticsproviders.api)
-    implementation(libs.coroutines.core)
+import io.element.android.services.analyticsproviders.api.trackers.AnalyticsTracker
+import io.element.android.services.analyticsproviders.api.trackers.ErrorTracker
+
+interface AnalyticsProvider: AnalyticsTracker, ErrorTracker {
+    /**
+     * Allow to sort providers, from lower index to higher index.
+     */
+    val index: Int
+
+    /**
+     * User friendly name.
+     */
+    val name: String
+
+    suspend fun init()
+
+    fun stop()
 }

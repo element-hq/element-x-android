@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-}
 
-android {
-    namespace = "io.element.android.services.analytics.api"
-}
+package io.element.android.libraries.pushproviders.unifiedpush.network
 
-dependencies {
-    api(projects.services.analyticsproviders.api)
-    implementation(libs.coroutines.core)
+import retrofit2.http.GET
+
+interface UnifiedPushApi {
+    @GET("_matrix/push/v1/notify")
+    suspend fun discover(): DiscoveryResponse
 }

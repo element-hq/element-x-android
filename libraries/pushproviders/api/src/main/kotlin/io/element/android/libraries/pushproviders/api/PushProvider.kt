@@ -14,25 +14,38 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.api
+package io.element.android.libraries.pushproviders.api
 
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.pushproviders.api.Distributor
-import io.element.android.libraries.pushproviders.api.PushProvider
 
-interface PushService {
-    // TODO Move away
-    fun notificationStyleChanged()
-
-    fun getAvailablePushProviders(): List<PushProvider>
+/**
+ * This is the main API for this module.
+ */
+interface PushProvider {
+    /**
+     * Allow to sort providers, from lower index to higher index.
+     */
+    val index: Int
 
     /**
-     * Will unregister any previous pusher and register a new one with the provided [PushProvider].
-     *
-     * The method has effect only if the [PushProvider] is different than the current one.
+     * User friendly name.
      */
-    suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributor: Distributor)
+    val name: String
 
-    // TODO Move away
-    suspend fun testPush()
+    fun getDistributors(): List<Distributor>
+
+    /**
+     * Register the pusher to the homeserver.
+     */
+    suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor)
+
+    /**
+     * Unregister the pusher.
+     */
+    suspend fun unregister(matrixClient: MatrixClient)
+
+    /**
+     * Attempt to troubleshoot the push provider.
+     */
+    suspend fun troubleshoot(): Result<Unit>
 }

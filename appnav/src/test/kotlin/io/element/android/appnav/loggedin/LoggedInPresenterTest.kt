@@ -25,8 +25,8 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.noop.NoopPermissionsPresenter
 import io.element.android.libraries.push.api.PushService
-import io.element.android.libraries.push.providers.api.Distributor
-import io.element.android.libraries.push.providers.api.PushProvider
+import io.element.android.libraries.pushproviders.api.Distributor
+import io.element.android.libraries.pushproviders.api.PushProvider
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 

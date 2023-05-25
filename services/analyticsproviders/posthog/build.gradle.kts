@@ -19,7 +19,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.services.analytics.providers.posthog"
+    namespace = "io.element.android.services.analyticsproviders.posthog"
 }
 
 anvil {

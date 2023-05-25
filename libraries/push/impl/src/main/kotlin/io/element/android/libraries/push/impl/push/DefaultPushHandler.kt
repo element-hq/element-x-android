@@ -33,8 +33,8 @@ import io.element.android.libraries.push.impl.notifications.NotifiableEventResol
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
 import io.element.android.libraries.push.impl.notifications.NotificationDrawerManager
 import io.element.android.libraries.push.impl.store.DefaultPushDataStore
-import io.element.android.libraries.push.providers.api.PushData
-import io.element.android.libraries.push.providers.api.PushHandler
+import io.element.android.libraries.pushproviders.api.PushData
+import io.element.android.libraries.pushproviders.api.PushHandler
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import kotlinx.coroutines.CoroutineScope

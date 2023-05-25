@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.providers.unifiedpush
+package io.element.android.libraries.pushproviders.unifiedpush
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
-import io.element.android.libraries.push.providers.api.PushData
+import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.tests.testutils.assertThrowsInDebug
 import org.junit.Test
 
