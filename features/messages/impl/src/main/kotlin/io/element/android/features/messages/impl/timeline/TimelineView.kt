@@ -332,8 +332,6 @@ fun TimelineViewDarkPreview(
 private fun ContentToPreview(content: TimelineItemEventContent) {
     val timelineItems = aTimelineItemList(content)
     TimelineView(
-        state = aTimelineState().copy(
-            timelineItems = timelineItems,
-        )
+        state = aTimelineState(timelineItems)
     )
 }
