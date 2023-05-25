@@ -19,16 +19,16 @@ package io.element.android.services.analytics.providers.posthog
 import android.content.Context
 import com.posthog.android.PostHog
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.di.ApplicationContext
 import javax.inject.Inject
 
 class PostHogFactory @Inject constructor(
-    private val context: Context,
-    private val posthogConfig: PosthogConfig,
+    @ApplicationContext private val context: Context,
     private val buildMeta: BuildMeta,
 ) {
 
     fun createPosthog(): PostHog {
-        return PostHog.Builder(context, posthogConfig.postHogApiKey, posthogConfig.postHogHost)
+        return PostHog.Builder(context, PosthogConfig.postHogApiKey, PosthogConfig.postHogHost)
                 // Record certain application events automatically! (off/false by default)
                 // .captureApplicationLifecycleEvents()
                 // Record screen views automatically! (off/false by default)
