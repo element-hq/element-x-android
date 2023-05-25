@@ -16,7 +16,9 @@
 
 package io.element.android.features.analytics.api.preferences
 
+import io.element.android.features.analytics.api.AnalyticsOptInEvents
+
 data class AnalyticsPreferencesState(
     val isEnabled: Boolean,
-    val eventSink: (AnalyticsPreferencesEvents) -> Unit,
+    val eventSink: (AnalyticsOptInEvents) -> Unit,
 )

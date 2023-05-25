@@ -20,30 +20,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.analytics.api.AnalyticsDataStore
-import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesEvents
+import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesPresenter
 import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesState
 import io.element.android.libraries.di.AppScope
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultAnalyticsPreferencesPresenter @Inject constructor(
-    private val analyticsDataStore: AnalyticsDataStore,
+    private val analyticsService: AnalyticsService
 ) : AnalyticsPreferencesPresenter {
 
     @Composable
     override fun present(): AnalyticsPreferencesState {
         val localCoroutineScope = rememberCoroutineScope()
-        val isEnabled = analyticsDataStore
-            .isEnabled()
+        val isEnabled = analyticsService.getUserConsent()
             .collectAsState(initial = false)
 
-        fun handleEvents(event: AnalyticsPreferencesEvents) {
+        fun handleEvents(event: AnalyticsOptInEvents) {
             when (event) {
-                is AnalyticsPreferencesEvents.SetIsEnabled -> localCoroutineScope.setIsEnabled(event.isEnabled)
+                is AnalyticsOptInEvents.EnableAnalytics -> localCoroutineScope.setIsEnabled(event.isEnabled)
             }
         }
 
@@ -54,6 +53,6 @@ class DefaultAnalyticsPreferencesPresenter @Inject constructor(
     }
 
     private fun CoroutineScope.setIsEnabled(enabled: Boolean) = launch {
-        analyticsDataStore.setIsEnabled(enabled)
+        analyticsService.setUserConsent(enabled)
     }
 }

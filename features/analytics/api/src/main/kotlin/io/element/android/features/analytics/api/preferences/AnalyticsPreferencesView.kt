@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -34,7 +35,7 @@ fun AnalyticsPreferencesView(
     modifier: Modifier = Modifier,
 ) {
     fun onEnabledChanged(isEnabled: Boolean) {
-        state.eventSink(AnalyticsPreferencesEvents.SetIsEnabled(isEnabled = isEnabled))
+        state.eventSink(AnalyticsOptInEvents.EnableAnalytics(isEnabled = isEnabled))
     }
 
     PreferenceCategory(title = stringResource(id = StringR.string.screen_analytics_settings_share_data)) {

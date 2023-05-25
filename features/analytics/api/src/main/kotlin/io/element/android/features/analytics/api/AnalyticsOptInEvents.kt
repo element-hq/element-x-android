@@ -16,12 +16,6 @@
 
 package io.element.android.features.analytics.api
 
-import kotlinx.coroutines.flow.Flow
-
-interface AnalyticsDataStore {
-    fun isEnabled(): Flow<Boolean>
-
-    suspend fun setIsEnabled(isEnabled: Boolean)
-
-    suspend fun reset()
+sealed interface AnalyticsOptInEvents {
+    data class EnableAnalytics(val isEnabled: Boolean) : AnalyticsOptInEvents
 }

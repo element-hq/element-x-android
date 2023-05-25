@@ -17,6 +17,7 @@
 package io.element.android.features.analytics.impl
 
 import androidx.compose.runtime.Composable
+import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.services.analytics.api.AnalyticsService
@@ -36,7 +37,7 @@ class AnalyticsOptInPresenter @Inject constructor(
             when (event) {
                 is AnalyticsOptInEvents.EnableAnalytics -> {
                     coroutineScope.launch {
-                        analyticsService.setUserConsent(event.isEnable)
+                        analyticsService.setUserConsent(event.isEnabled)
                     }
                 }
             }

@@ -16,6 +16,8 @@
 
 package io.element.android.features.analytics.impl
 
+import io.element.android.features.analytics.api.AnalyticsOptInEvents
+
 data class AnalyticsOptInState(
     val applicationName: String,
     val eventSink: (AnalyticsOptInEvents) -> Unit
