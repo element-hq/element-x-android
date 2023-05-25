@@ -54,7 +54,7 @@ fun DependencyHandlerScope.composeDependencies(libs: LibrariesForLibs) {
 }
 
 private fun DependencyHandlerScope.addImplementationProjects(directory: File, path: String, nameFilter: String) {
-    directory.listFiles().orEmpty().forEach { file ->
+    directory.listFiles().orEmpty().also { it.sort() }.forEach { file ->
         if (file.isDirectory) {
             val newPath = "$path:${file.name}"
             val buildFile = File(file, "build.gradle.kts")
@@ -104,6 +104,7 @@ fun DependencyHandlerScope.allFeaturesApi(rootDir: File) {
     val featuresDir = File(rootDir, "features")
     addImplementationProjects(featuresDir, ":features", "api")
 }
+
 fun DependencyHandlerScope.allFeaturesImpl(rootDir: File) {
     val featuresDir = File(rootDir, "features")
     addImplementationProjects(featuresDir, ":features", "impl")
