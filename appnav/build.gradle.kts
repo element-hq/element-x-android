@@ -36,7 +36,7 @@ dependencies {
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
 
-    allFeaturesApi(rootDir)
+    allFeaturesApi(rootDir, logger)
 
     implementation(projects.libraries.core)
     implementation(projects.libraries.androidutils)
