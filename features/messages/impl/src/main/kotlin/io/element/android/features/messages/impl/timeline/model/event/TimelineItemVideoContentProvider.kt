@@ -33,9 +33,9 @@ fun aTimelineItemVideoContent() = TimelineItemVideoContent(
     thumbnailSource = MediaSource(url = ""),
     blurhash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
     aspectRatio = 0.5f,
-    duration = 0,
+    duration = 100,
     videoSource = MediaSource(""),
-    height = null,
-    width = null,
+    height = 300,
+    width = 150,
     mimeType = null
 )
