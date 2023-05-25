@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.services.analytics.providers.posthog.impl
+package io.element.android.services.analytics.providers.posthog
 
 import android.content.Context
 import com.posthog.android.PostHog
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.services.analytics.providers.posthog.PosthogConfig
 import javax.inject.Inject
 
 class PostHogFactory @Inject constructor(

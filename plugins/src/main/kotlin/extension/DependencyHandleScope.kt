@@ -102,6 +102,7 @@ fun DependencyHandlerScope.allLibrariesImpl() {
 
 fun DependencyHandlerScope.allServicesImpl() {
     implementation(project(":services:analytics:impl"))
+    implementation(project(":services:analyticsproviders:posthog"))
     implementation(project(":services:apperror:impl"))
     implementation(project(":services:appnavstate:impl"))
     implementation(project(":services:toolbox:impl"))

@@ -25,7 +25,6 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.libraries.di.AppScope
 import io.element.android.services.analytics.providers.api.AnalyticsProvider
-import io.element.android.services.analytics.providers.posthog.impl.PostHogFactory
 import io.element.android.services.analytics.providers.posthog.log.analyticsTag
 import timber.log.Timber
 import javax.inject.Inject
@@ -36,7 +35,7 @@ private val IGNORED_OPTIONS: Options? = null
 @ContributesMultibinding(AppScope::class)
 class PosthogAnalyticsProvider @Inject constructor(
     private val postHogFactory: PostHogFactory,
-): AnalyticsProvider {
+) : AnalyticsProvider {
     override val index = PosthogConfig.index
     override val name = PosthogConfig.name
 
