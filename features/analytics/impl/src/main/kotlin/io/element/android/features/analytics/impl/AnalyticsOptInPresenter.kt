@@ -19,17 +19,26 @@ package io.element.android.features.analytics.impl
 import androidx.compose.runtime.Composable
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.services.analytics.api.AnalyticsService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AnalyticsOptInPresenter @Inject constructor(
     private val buildMeta: BuildMeta,
+    private val analyticsService: AnalyticsService,
+    private val coroutineScope: CoroutineScope,
 ) : Presenter<AnalyticsOptInState> {
 
     @Composable
     override fun present(): AnalyticsOptInState {
         fun handleEvents(event: AnalyticsOptInEvents) {
             when (event) {
-                is AnalyticsOptInEvents.EnableAnalytics -> TODO()
+                is AnalyticsOptInEvents.EnableAnalytics -> {
+                    coroutineScope.launch {
+                        analyticsService.setUserConsent(event.isEnable)
+                    }
+                }
             }
         }
 

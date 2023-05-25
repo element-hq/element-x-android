@@ -64,6 +64,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
@@ -92,7 +93,9 @@ class LoggedInFlowNode @AssistedInject constructor(
 ) {
 
     private fun observeAnalyticsState() {
-        analyticsService.didAskUserConsent()
+        //TODO check user consent to display analytics settings screen
+        //analyticsService.didAskUserConsent()
+        flowOf(true)
             .distinctUntilChanged()
             .onEach { isConsentAsked ->
                 if (isConsentAsked) {
@@ -109,7 +112,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     }
 
     private fun switchToAnalytics() {
-        backstack.safeRoot(NavTarget.Settings)
+        backstack.safeRoot(NavTarget.AnalyticsSettings)
     }
 
     interface Callback : Plugin {
