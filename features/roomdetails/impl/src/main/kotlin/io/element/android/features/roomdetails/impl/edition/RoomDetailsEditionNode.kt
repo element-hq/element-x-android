@@ -39,6 +39,7 @@ class RoomDetailsEditionNode @AssistedInject constructor(
         RoomDetailsEditionView(
             state = state,
             onBackPressed = ::navigateUp,
+            onRoomEdited = ::navigateUp,
             modifier = modifier,
         )
     }

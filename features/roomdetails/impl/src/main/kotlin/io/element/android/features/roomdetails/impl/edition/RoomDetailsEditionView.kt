@@ -43,6 +43,7 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,6 +52,7 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -69,11 +71,11 @@ import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.LocalColors
+import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
-import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import kotlinx.coroutines.launch
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -82,6 +84,7 @@ import io.element.android.libraries.ui.strings.R as StringR
 fun RoomDetailsEditionView(
     state: RoomDetailsEditionState,
     onBackPressed: () -> Unit,
+    onRoomEdited: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -100,8 +103,14 @@ fun RoomDetailsEditionView(
     Scaffold(
         modifier = modifier.clearFocusOnTap(focusManager),
         topBar = {
-            TopAppBar(
-                title = { },
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.screen_room_details_edit_room_title),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                },
                 navigationIcon = { BackButton(onClick = onBackPressed) },
                 actions = {
                     TextButton(
@@ -128,6 +137,7 @@ fun RoomDetailsEditionView(
                 .imePadding()
                 .verticalScroll(rememberScrollState())
         ) {
+            Spacer(modifier = Modifier.height(24.dp))
             EditableAvatarView(state, ::onAvatarClicked)
             Spacer(modifier = Modifier.height(60.dp))
 
@@ -181,6 +191,12 @@ fun RoomDetailsEditionView(
                 content = stringResource(R.string.screen_room_details_edition_error),
                 onDismiss = { state.eventSink(RoomDetailsEditionEvents.CancelSaveChanges) },
             )
+        }
+
+        is Async.Success -> {
+            LaunchedEffect(state.saveAction) {
+                onRoomEdited()
+            }
         }
 
         else -> Unit
@@ -285,5 +301,6 @@ private fun ContentToPreview(state: RoomDetailsEditionState) {
     RoomDetailsEditionView(
         state = state,
         onBackPressed = {},
+        onRoomEdited = {},
     )
 }
