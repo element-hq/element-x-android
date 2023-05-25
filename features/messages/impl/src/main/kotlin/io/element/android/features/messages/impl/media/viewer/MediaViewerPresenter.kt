@@ -67,11 +67,14 @@ class MediaViewerPresenter @AssistedInject constructor(
         fun handleEvents(mediaViewerEvents: MediaViewerEvents) {
             when (mediaViewerEvents) {
                 MediaViewerEvents.RetryLoading -> loadMediaTrigger++
+                MediaViewerEvents.ClearLoadingError -> localMedia.value = Async.Uninitialized
             }
         }
 
         return MediaViewerState(
             name = inputs.name,
+            mimeType = inputs.mimeType,
+            thumbnailSource = inputs.thumbnailSource,
             downloadedMedia = localMedia.value,
             eventSink = ::handleEvents
         )

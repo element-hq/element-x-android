@@ -26,7 +26,6 @@ import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
-import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackFader
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
@@ -41,8 +40,8 @@ import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.media.MediaSource
-import kotlinx.android.parcel.Parcelize
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
 class MessagesFlowNode @AssistedInject constructor(
@@ -65,7 +64,8 @@ class MessagesFlowNode @AssistedInject constructor(
         data class MediaViewer(
             val title: String,
             val mediaSource: MediaSource,
-            val mimeType: String?
+            val thumbnailSource: MediaSource?,
+            val mimeType: String?,
         ) : NavTarget
 
         @Parcelize
@@ -93,7 +93,12 @@ class MessagesFlowNode @AssistedInject constructor(
                 createNode<MessagesNode>(buildContext, listOf(callback))
             }
             is NavTarget.MediaViewer -> {
-                val inputs = MediaViewerNode.Inputs(navTarget.title, navTarget.mediaSource, navTarget.mimeType)
+                val inputs = MediaViewerNode.Inputs(
+                    name = navTarget.title,
+                    mediaSource = navTarget.mediaSource,
+                    thumbnailSource = navTarget.thumbnailSource,
+                    mimeType = navTarget.mimeType,
+                )
                 createNode<MediaViewerNode>(buildContext, listOf(inputs))
             }
             is NavTarget.AttachmentPreview -> {
@@ -106,13 +111,22 @@ class MessagesFlowNode @AssistedInject constructor(
     private fun processEventClicked(event: TimelineItem.Event) {
         when (event.content) {
             is TimelineItemImageContent -> {
-                val mediaSource = event.content.mediaSource
-                val navTarget = NavTarget.MediaViewer(event.content.body, mediaSource, event.content.mimeType)
+                val navTarget = NavTarget.MediaViewer(
+                    title = event.content.body,
+                    mediaSource = event.content.mediaSource,
+                    thumbnailSource = event.content.mediaSource,
+                    mimeType = event.content.mimeType
+                )
                 backstack.push(navTarget)
             }
             is TimelineItemVideoContent -> {
                 val mediaSource = event.content.videoSource
-                val navTarget = NavTarget.MediaViewer(event.content.body, mediaSource, event.content.mimeType)
+                val navTarget = NavTarget.MediaViewer(
+                    title = event.content.body,
+                    mediaSource = mediaSource,
+                    thumbnailSource = event.content.thumbnailSource,
+                    mimeType = event.content.mimeType,
+                )
                 backstack.push(navTarget)
             }
             else -> Unit
@@ -124,7 +138,6 @@ class MessagesFlowNode @AssistedInject constructor(
         Children(
             navModel = backstack,
             modifier = modifier,
-            transitionHandler = rememberBackstackFader()
         )
     }
 }

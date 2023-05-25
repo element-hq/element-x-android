@@ -40,6 +40,7 @@ class MediaViewerNode @AssistedInject constructor(
     data class Inputs(
         val name: String,
         val mediaSource: MediaSource,
+        val thumbnailSource: MediaSource?,
         val mimeType: String?
     ) : NodeInputs
 

@@ -31,7 +31,14 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
             aMediaViewerState(
                 Async.Success(
                     LocalMedia(
-                        Uri.EMPTY, MimeTypes.IMAGE_JPEG, "a file", 100L
+                        Uri.EMPTY, MimeTypes.IMAGE_JPEG, "an image file", 100L
+                    )
+                ),
+            ),
+            aMediaViewerState(
+                Async.Success(
+                    LocalMedia(
+                        Uri.EMPTY, MimeTypes.VIDEO_MP4, "a video file", 100L
                     )
                 ),
             )
@@ -40,6 +47,7 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
 
 fun aMediaViewerState(downloadedMedia: Async<LocalMedia> = Async.Uninitialized) = MediaViewerState(
     name = "A media",
+    mimeType = MimeTypes.IMAGE_JPEG,
+    thumbnailSource = null,
     downloadedMedia = downloadedMedia,
-    eventSink = {}
-)
+) {}

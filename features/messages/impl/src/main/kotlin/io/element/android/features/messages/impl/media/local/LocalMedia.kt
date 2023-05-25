@@ -18,10 +18,12 @@ package io.element.android.features.messages.impl.media.local
 
 import android.net.Uri
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
+@Immutable
 data class LocalMedia(
     val uri: Uri,
     val mimeType: String,

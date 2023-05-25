@@ -23,8 +23,6 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.SpaceId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
 const val A_USER_NAME = "alice"
 const val A_PASSWORD = "password"

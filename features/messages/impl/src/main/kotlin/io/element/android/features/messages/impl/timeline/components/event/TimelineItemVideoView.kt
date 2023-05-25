@@ -17,26 +17,22 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.timeline.components.blurhash.BlurHashAsyncImage
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContentProvider
+import io.element.android.libraries.designsystem.modifiers.roundedBackground
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
@@ -54,15 +50,12 @@ fun TimelineItemVideoView(
     ) {
         BlurHashAsyncImage(
             model = MediaRequestData(content.thumbnailSource, MediaRequestData.Kind.Content),
-            blurHash = content.blurhash,
+            blurHash = content.blurHash,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Fit,
         )
         Box(
-            modifier = Modifier
-                .size(50.dp)
-                .clip(CircleShape)
-                .background(color = Color.Black.copy(alpha = 0.5f)),
+            modifier = Modifier.roundedBackground(),
             contentAlignment = Alignment.Center,
         ) {
             Image(
