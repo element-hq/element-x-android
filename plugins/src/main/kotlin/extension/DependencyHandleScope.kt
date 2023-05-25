@@ -19,6 +19,7 @@ package extension
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.project
+import org.gradle.api.logging.Logger
 import java.io.File
 
 private fun DependencyHandlerScope.implementation(dependency: Any) = dependencies.add("implementation", dependency)
@@ -53,16 +54,21 @@ fun DependencyHandlerScope.composeDependencies(libs: LibrariesForLibs) {
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 }
 
-private fun DependencyHandlerScope.addImplementationProjects(directory: File, path: String, nameFilter: String) {
+private fun DependencyHandlerScope.addImplementationProjects(
+    directory: File,
+    path: String,
+    nameFilter: String,
+    logger: Logger,
+) {
     directory.listFiles().orEmpty().also { it.sort() }.forEach { file ->
         if (file.isDirectory) {
             val newPath = "$path:${file.name}"
             val buildFile = File(file, "build.gradle.kts")
             if (buildFile.exists() && file.name == nameFilter) {
                 implementation(project(newPath))
-                println("Added implementation(project($newPath))")
+                logger.lifecycle("Added implementation(project($newPath))")
             } else {
-                addImplementationProjects(file, newPath, nameFilter)
+                addImplementationProjects(file, newPath, nameFilter, logger)
             }
         }
     }
@@ -100,12 +106,12 @@ fun DependencyHandlerScope.allServicesImpl() {
     implementation(project(":services:toolbox:impl"))
 }
 
-fun DependencyHandlerScope.allFeaturesApi(rootDir: File) {
+fun DependencyHandlerScope.allFeaturesApi(rootDir: File, logger: Logger) {
     val featuresDir = File(rootDir, "features")
-    addImplementationProjects(featuresDir, ":features", "api")
+    addImplementationProjects(featuresDir, ":features", "api", logger)
 }
 
-fun DependencyHandlerScope.allFeaturesImpl(rootDir: File) {
+fun DependencyHandlerScope.allFeaturesImpl(rootDir: File, logger: Logger) {
     val featuresDir = File(rootDir, "features")
-    addImplementationProjects(featuresDir, ":features", "impl")
+    addImplementationProjects(featuresDir, ":features", "impl", logger)
 }

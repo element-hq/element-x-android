@@ -62,7 +62,7 @@ fun includeProjects(directory: File, path: String, maxDepth: Int = 1) {
             val buildFile = File(file, "build.gradle.kts")
             if (buildFile.exists()) {
                 include(newPath)
-                println("Included project: $newPath")
+                logger.lifecycle("Included project: $newPath")
             } else if (maxDepth > 0) {
                 includeProjects(file, newPath, maxDepth - 1)
             }

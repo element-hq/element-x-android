@@ -37,5 +37,5 @@ dependencies {
     implementation(libs.showkase)
 
     allLibrariesImpl()
-    allFeaturesImpl(rootDir)
+    allFeaturesImpl(rootDir, logger)
 }

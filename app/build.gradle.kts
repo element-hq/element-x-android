@@ -206,7 +206,7 @@ knit {
 dependencies {
     allLibrariesImpl()
     allServicesImpl()
-    allFeaturesImpl(rootDir)
+    allFeaturesImpl(rootDir, logger)
     implementation(projects.libraries.deeplink)
     implementation(projects.tests.uitests)
     implementation(projects.anvilannotations)
