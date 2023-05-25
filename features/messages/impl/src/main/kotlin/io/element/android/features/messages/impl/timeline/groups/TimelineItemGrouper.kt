@@ -46,21 +46,14 @@ class TimelineItemGrouper @Inject constructor() {
                 // timelineItem cannot be grouped
                 if (currentGroup.isNotEmpty()) {
                     // There is a pending group, create a TimelineItem.GroupedEvents if there is more than 1 Event in the pending group.
-                    if (currentGroup.size == 1) {
-                        // Do not create a group with just 1 item, just add the item to the result
-                        result.add(currentGroup.first())
-                    } else {
-                        result.add(
-                            TimelineItem.GroupedEvents(
-                                expanded = expandedGroups[currentGroup.first().id + "_group"].orFalse(),
-                                events = currentGroup.toImmutableList()
-                            )
-                        )
-                    }
+                    result.addGroup(currentGroup, expandedGroups)
                     currentGroup.clear()
                 }
                 result.add(timelineItem)
             }
+        }
+        if (currentGroup.isNotEmpty()) {
+            result.addGroup(currentGroup, expandedGroups)
         }
         return result
     }
@@ -78,5 +71,25 @@ class TimelineItemGrouper @Inject constructor() {
             is TimelineItemRoomMembershipContent,
             is TimelineItemStateEventContent -> true
         }
+    }
+}
+
+/**
+ * Will add a group if there is more than 1 item, else add the item to the list.
+ */
+private fun MutableList<TimelineItem>.addGroup(
+    group: MutableList<TimelineItem.Event>,
+    expandedGroups: Map<String, Boolean>,
+) {
+    if (group.size == 1) {
+        // Do not create a group with just 1 item, just add the item to the result
+        add(group.first())
+    } else {
+        add(
+            TimelineItem.GroupedEvents(
+                expanded = expandedGroups[group.first().id + "_group"].orFalse(),
+                events = group.toImmutableList()
+            )
+        )
     }
 }
