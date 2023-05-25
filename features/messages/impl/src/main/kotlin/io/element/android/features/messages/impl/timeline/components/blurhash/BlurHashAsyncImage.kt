@@ -16,17 +16,24 @@
 
 package io.element.android.features.messages.impl.timeline.components.blurhash
 
-import android.graphics.Bitmap
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import coil.compose.SubcomposeAsyncImage
+import coil.compose.AsyncImage
 import com.vanniktech.blurhash.BlurHash
 
 @Composable
@@ -37,19 +44,29 @@ fun BlurHashAsyncImage(
     contentScale: ContentScale = ContentScale.Fit,
     contentDescription: String? = null,
 ) {
-    SubcomposeAsyncImage(
-        model = model,
+    var isLoading by rememberSaveable(model) { mutableStateOf(true) }
+    Box(
         modifier = modifier,
-        contentScale = contentScale,
-        contentDescription = contentDescription,
-        loading = {
+        contentAlignment = Alignment.Center,
+    ) {
+        AsyncImage(
+            model = model,
+            contentScale = contentScale,
+            contentDescription = contentDescription,
+            onSuccess = { isLoading = false }
+        )
+        AnimatedVisibility(
+            visible = isLoading,
+            enter = fadeIn(),
+            exit = fadeOut(),
+        ) {
             BlurHashImage(
                 blurHash = blurHash,
+                contentDescription = contentDescription,
                 contentScale = ContentScale.FillBounds,
-                contentDescription = "Loading placeholder"
             )
-        },
-    )
+        }
+    }
 }
 
 @Composable
@@ -60,12 +77,13 @@ fun BlurHashImage(
     contentScale: ContentScale = ContentScale.Fit,
 ) {
     if (blurHash == null) return
-    val bitmapState = remember {
-        mutableStateOf<Bitmap?>(null)
+    val bitmapState = remember(blurHash) {
+        mutableStateOf(
+            // Build a small blurhash image so that it's fast
+            BlurHash.decode(blurHash, 10, 10)
+        )
     }
     DisposableEffect(blurHash) {
-        // Build a small blurhash image so that it's fast
-        bitmapState.value = BlurHash.decode(blurHash, 10, 10)
         onDispose {
             bitmapState.value?.recycle()
         }
