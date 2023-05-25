@@ -206,15 +206,14 @@ knit {
 dependencies {
     allLibrariesImpl()
     allServicesImpl()
-    allFeaturesImpl(rootDir)
+    allFeaturesImpl(rootDir, logger)
     implementation(projects.libraries.deeplink)
     implementation(projects.tests.uitests)
     implementation(projects.anvilannotations)
     implementation(projects.appnav)
     anvil(projects.anvilcodegen)
 
-    // https://developer.android.com/studio/write/java8-support#library-desugaring-versions
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+    coreLibraryDesugaring(libs.android.desugar)
     implementation(libs.appyx.core)
     implementation(libs.androidx.splash)
     implementation(libs.androidx.core)
