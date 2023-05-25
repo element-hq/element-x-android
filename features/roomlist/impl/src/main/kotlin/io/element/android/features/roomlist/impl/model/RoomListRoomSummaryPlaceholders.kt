@@ -17,13 +17,14 @@
 package io.element.android.features.roomlist.impl.model
 
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.matrix.api.core.RoomId
 
 object RoomListRoomSummaryPlaceholders {
 
     fun create(id: String): RoomListRoomSummary {
         return RoomListRoomSummary(
             id = id,
-            roomId = null,
+            roomId = RoomId("!aRoom:domain"),
             isPlaceholder = true,
             name = "Short name",
             timestamp = "hh:mm",

@@ -47,7 +47,7 @@ import io.element.android.libraries.textcomposer.databinding.ComposerRichTextLay
 import io.element.android.libraries.textcomposer.databinding.ViewRichTextMenuButtonBinding
 import io.element.android.libraries.textcomposer.tools.setTextIfDifferent
 import io.element.android.wysiwyg.EditorEditText
-import io.element.android.wysiwyg.inputhandlers.models.InlineFormat
+import io.element.android.wysiwyg.view.models.InlineFormat
 import uniffi.wysiwyg_composer.ActionState
 import uniffi.wysiwyg_composer.ComposerAction
 import io.element.android.libraries.resources.R as ElementR

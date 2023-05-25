@@ -17,6 +17,7 @@
 package io.element.android.features.roomlist.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryPlaceholders
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -39,6 +40,9 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState().copy(invitesState = InvitesState.NewInvites),
             aRoomListState().copy(displaySearchResults = true, filter = "", filteredRoomList = persistentListOf()),
             aRoomListState().copy(displaySearchResults = true),
+            aRoomListState().copy(contextMenu = RoomListState.ContextMenu.Shown(
+                roomId = RoomId("!aRoom:aDomain"), roomName = "A nice room name"
+            ))
         )
 }
 
@@ -52,6 +56,8 @@ internal fun aRoomListState() = RoomListState(
     displayVerificationPrompt = false,
     invitesState = InvitesState.NoInvites,
     displaySearchResults = false,
+    contextMenu = RoomListState.ContextMenu.Hidden,
+    leaveRoomState = LeaveRoomState(),
     eventSink = {}
 )
 

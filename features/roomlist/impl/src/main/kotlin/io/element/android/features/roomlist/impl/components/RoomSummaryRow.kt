@@ -16,8 +16,9 @@
 
 package io.element.android.features.roomlist.impl.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -70,17 +71,20 @@ import io.element.android.libraries.designsystem.theme.roomListUnreadIndicator
 
 private val minHeight = 72.dp
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun RoomSummaryRow(
     room: RoomListRoomSummary,
+    onClick: (RoomListRoomSummary) -> Unit,
+    onLongClick: (RoomListRoomSummary) -> Unit,
     modifier: Modifier = Modifier,
-    onClick: (RoomListRoomSummary) -> Unit = {},
 ) {
     val clickModifier = if (room.isPlaceholder) {
         modifier
     } else {
-        modifier.clickable(
+        modifier.combinedClickable(
             onClick = { onClick(room) },
+            onLongClick = { onLongClick(room) },
             indication = rememberRipple(),
             interactionSource = remember { MutableInteractionSource() }
         )
@@ -214,5 +218,9 @@ internal fun RoomSummaryRowDarkPreview(@PreviewParameter(RoomListRoomSummaryProv
 
 @Composable
 private fun ContentToPreview(data: RoomListRoomSummary) {
-    RoomSummaryRow(data)
+    RoomSummaryRow(
+        room = data,
+        onClick = {},
+        onLongClick = {}
+    )
 }
