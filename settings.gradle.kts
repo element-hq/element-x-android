@@ -56,7 +56,7 @@ include(":anvilcodegen")
 include(":samples:minimal")
 
 fun includeProjects(directory: File, path: String, maxDepth: Int = 1) {
-    directory.listFiles().orEmpty().forEach { file ->
+    directory.listFiles().orEmpty().also { it.sort() }.forEach { file ->
         if (file.isDirectory) {
             val newPath = "$path:${file.name}"
             val buildFile = File(file, "build.gradle.kts")
