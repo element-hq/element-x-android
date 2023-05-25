@@ -18,13 +18,14 @@ package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.components.blurhash.BlurHashAsyncImage
@@ -46,13 +47,13 @@ fun TimelineItemVideoView(
         modifier = modifier
     ) {
         BlurHashAsyncImage(
-            modifier = Modifier.fillMaxSize(),
-            blurHash = content.blurhash,
             model = MediaRequestData(content.thumbnailSource, MediaRequestData.Kind.Content),
+            blurHash = content.blurhash,
+            modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Fit,
         )
         Image(
-            painterResource(id = androidx.media3.ui.R.drawable.exo_ic_play_circle_filled),
+            Icons.Default.PlayCircle,
             contentDescription = null,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
             modifier = Modifier.align(Alignment.Center),
