@@ -32,11 +32,12 @@ fun TimelineItemAspectRatioBox(
     modifier: Modifier = Modifier,
     content: @Composable BoxScope.() -> Unit,
 ) {
+    // TODO should probably be moved to an ElementTheme.dimensions
     val maxHeight = min(300, height ?: 0)
     Box(
         modifier = modifier
             .heightIn(max = maxHeight.dp)
-            .aspectRatio(aspectRatio),
+            .aspectRatio(aspectRatio, matchHeightConstraintsFirst = true),
         content = content
     )
 }

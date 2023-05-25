@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.media3.common.MimeTypes
 import io.element.android.libraries.matrix.api.media.MediaSource
 
 open class TimelineItemImageContentProvider : PreviewParameterProvider<TimelineItemImageContent> {
@@ -33,7 +34,7 @@ fun aTimelineItemImageContent() = TimelineItemImageContent(
     mediaSource = MediaSource(""),
     blurhash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
     aspectRatio = 0.5f,
-    mimeType = "null",
-    height = null,
+    mimeType = MimeTypes.IMAGE_JPEG,
+    height = 300,
     width = null
 )
