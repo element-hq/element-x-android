@@ -31,7 +31,7 @@ open class TimelineItemVideoContentProvider : PreviewParameterProvider<TimelineI
 fun aTimelineItemVideoContent() = TimelineItemVideoContent(
     body = "a video",
     thumbnailSource = MediaSource(url = ""),
-    blurhash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
+    blurHash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
     aspectRatio = 0.5f,
     duration = 100,
     videoSource = MediaSource(""),

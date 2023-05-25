@@ -32,9 +32,9 @@ open class TimelineItemImageContentProvider : PreviewParameterProvider<TimelineI
 fun aTimelineItemImageContent() = TimelineItemImageContent(
     body = "a body",
     mediaSource = MediaSource(""),
-    blurhash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
-    aspectRatio = 0.5f,
     mimeType = MimeTypes.IMAGE_JPEG,
+    blurhash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
+    width = null,
     height = 300,
-    width = null
+    aspectRatio = 0.5f
 )

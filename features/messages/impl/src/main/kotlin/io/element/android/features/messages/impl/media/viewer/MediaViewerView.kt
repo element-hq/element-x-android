@@ -14,33 +14,36 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
 
 package io.element.android.features.messages.impl.media.viewer
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import io.element.android.features.messages.impl.media.local.LocalMediaView
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.isLoading
+import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
+import io.element.android.libraries.designsystem.modifiers.roundedBackground
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
-import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import kotlinx.coroutines.delay
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
@@ -53,6 +56,32 @@ fun MediaViewerView(
         state.eventSink(MediaViewerEvents.RetryLoading)
     }
 
+    fun onDismissError() {
+        state.eventSink(MediaViewerEvents.ClearLoadingError)
+    }
+
+    var showProgress by remember {
+        mutableStateOf(false)
+    }
+
+    // Trick to avoid showing progress indicator if the media is already on disk.
+    // When sdk will expose download progress we'll be able to remove this.
+    LaunchedEffect(state.downloadedMedia) {
+        showProgress = false
+        delay(100)
+        if (state.downloadedMedia.isLoading()) {
+            showProgress = true
+        }
+    }
+
+    var showThumbnail by remember {
+        mutableStateOf(true)
+    }
+
+    fun onMediaReady() {
+        showThumbnail = false
+    }
+
     Scaffold(modifier) {
         Box(
             modifier = Modifier
@@ -60,10 +89,55 @@ fun MediaViewerView(
                 .padding(it),
             contentAlignment = Alignment.Center
         ) {
-            when (state.downloadedMedia) {
-                is Async.Success -> LocalMediaView(state.downloadedMedia.state)
-                is Async.Failure -> ErrorView(stringResource(id = StringR.string.error_unknown), ::onRetry)
-                else -> CircularProgressIndicator()
+            if (state.downloadedMedia is Async.Failure) {
+                ErrorView(
+                    errorMessage = stringResource(id = StringR.string.error_unknown),
+                    onRetry = ::onRetry,
+                    onDismiss = ::onDismissError
+                )
+            }
+            LocalMediaView(
+                localMedia = state.downloadedMedia.dataOrNull(),
+                mimeType = state.mimeType,
+                onReady = ::onMediaReady
+            )
+            ThumbnailView(
+                thumbnailSource = state.thumbnailSource,
+                showThumbnail = showThumbnail,
+                showProgress = showProgress,
+            )
+        }
+    }
+}
+
+@Composable
+private fun ThumbnailView(
+    thumbnailSource: MediaSource?,
+    showThumbnail: Boolean,
+    showProgress: Boolean,
+) {
+    if (!showThumbnail) return
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        val mediaRequestData = MediaRequestData(
+            source = thumbnailSource,
+            kind = MediaRequestData.Kind.Content
+        )
+        AsyncImage(
+            modifier = Modifier.fillMaxSize(),
+            model = mediaRequestData,
+            contentScale = ContentScale.Fit,
+            contentDescription = null,
+        )
+        if (showProgress) {
+            Box(
+                modifier = Modifier.roundedBackground(),
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator()
             }
         }
     }
@@ -73,21 +147,15 @@ fun MediaViewerView(
 private fun ErrorView(
     errorMessage: String,
     onRetry: () -> Unit,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Text(text = errorMessage)
-        Spacer(modifier = Modifier.size(16.dp))
-        Button(
-            onClick = onRetry
-        ) {
-            Text(text = stringResource(id = StringR.string.action_retry))
-        }
-
-    }
+    RetryDialog(
+        modifier = modifier,
+        content = errorMessage,
+        onRetry = onRetry,
+        onDismiss = onDismiss
+    )
 }
 
 @Preview

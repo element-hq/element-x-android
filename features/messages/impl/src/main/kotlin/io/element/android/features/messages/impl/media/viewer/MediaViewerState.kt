@@ -18,9 +18,12 @@ package io.element.android.features.messages.impl.media.viewer
 
 import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.api.media.MediaSource
 
 data class MediaViewerState(
     val name: String,
+    val mimeType: String?,
+    val thumbnailSource: MediaSource?,
     val downloadedMedia: Async<LocalMedia>,
-    val eventSink: (MediaViewerEvents) -> Unit
+    val eventSink: (MediaViewerEvents) -> Unit,
 )

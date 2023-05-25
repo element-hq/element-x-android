@@ -46,11 +46,11 @@ class TimelineItemContentMessageFactory @Inject constructor() {
                 val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
                 TimelineItemImageContent(
                     body = messageType.body,
-                    height = messageType.info?.height?.toInt(),
-                    width = messageType.info?.width?.toInt(),
-                    mimeType = messageType.info?.mimetype,
                     mediaSource = messageType.source,
+                    mimeType = messageType.info?.mimetype,
                     blurhash = messageType.info?.blurhash,
+                    width = messageType.info?.width?.toInt(),
+                    height = messageType.info?.height?.toInt(),
                     aspectRatio = aspectRatio
                 )
             }
@@ -64,7 +64,7 @@ class TimelineItemContentMessageFactory @Inject constructor() {
                     width = messageType.info?.width?.toInt(),
                     height = messageType.info?.height?.toInt(),
                     duration = messageType.info?.duration ?: 0L,
-                    blurhash = messageType.info?.blurhash,
+                    blurHash = messageType.info?.blurhash,
                     aspectRatio = aspectRatio
                 )
             }
