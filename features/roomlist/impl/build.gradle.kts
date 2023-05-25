@@ -50,6 +50,7 @@ dependencies {
     implementation(projects.libraries.dateformatter.api)
     implementation(projects.features.invitelist.api)
     implementation(projects.features.networkmonitor.api)
+    implementation(projects.features.leaveroom.api)
     implementation(libs.accompanist.placeholder)
     api(projects.features.roomlist.api)
     ksp(libs.showkase.processor)
@@ -66,6 +67,7 @@ dependencies {
     testImplementation(projects.features.invitelist.test)
     testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.tests.testutils)
+    testImplementation(projects.features.leaveroom.fake)
 
     androidTestImplementation(libs.test.junitext)
 }

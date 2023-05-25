@@ -16,9 +16,15 @@
 
 package io.element.android.features.roomlist.impl
 
+import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.libraries.matrix.api.core.RoomId
+
 sealed interface RoomListEvents {
     data class UpdateFilter(val newFilter: String) : RoomListEvents
     data class UpdateVisibleRange(val range: IntRange) : RoomListEvents
     object DismissRequestVerificationPrompt : RoomListEvents
     object ToggleSearchResults : RoomListEvents
+    data class ShowContextMenu(val roomListRoomSummary: RoomListRoomSummary) : RoomListEvents
+    object HideContextMenu : RoomListEvents
+    data class LeaveRoom(val roomId: RoomId) : RoomListEvents
 }

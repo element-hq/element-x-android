@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import io.element.android.features.invitelist.impl.DefaultSeenInvitesStore
+import io.element.android.features.leaveroom.impl.LeaveRoomPresenterImpl
 import io.element.android.features.networkmonitor.impl.NetworkMonitorImpl
 import io.element.android.features.roomlist.impl.DefaultInviteStateDataSource
 import io.element.android.features.roomlist.impl.DefaultRoomLastMessageFormatter
@@ -33,6 +34,7 @@ import io.element.android.libraries.dateformatter.impl.LocalDateTimeProvider
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
@@ -57,7 +59,8 @@ class RoomListScreen(
         sessionVerificationService = sessionVerificationService,
         networkMonitor = NetworkMonitorImpl(context),
         snackbarDispatcher = SnackbarDispatcher(),
-        inviteStateDataSource = DefaultInviteStateDataSource(matrixClient, DefaultSeenInvitesStore(context), coroutineDispatchers)
+        inviteStateDataSource = DefaultInviteStateDataSource(matrixClient, DefaultSeenInvitesStore(context), coroutineDispatchers),
+        leaveRoomPresenter = LeaveRoomPresenterImpl(matrixClient, RoomMembershipObserver() ,coroutineDispatchers)
     )
 
     @Composable
@@ -82,8 +85,13 @@ class RoomListScreen(
         val state = presenter.present()
         RoomListView(
             state = state,
-            modifier = modifier,
             onRoomClicked = ::onRoomClicked,
+            onSettingsClicked = {},
+            onVerifyClicked = {},
+            onCreateRoomClicked = {},
+            onInvitesClicked = {},
+            onRoomSettingsClicked = {},
+            modifier = modifier,
         )
 
         DisposableEffect(Unit) {

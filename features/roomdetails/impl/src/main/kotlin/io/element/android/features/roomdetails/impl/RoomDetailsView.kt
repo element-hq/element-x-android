@@ -47,6 +47,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserDialogs
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserSection
+import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberHeaderSection
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberMainActionsSection
 import io.element.android.libraries.architecture.isLoading
@@ -56,8 +57,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.button.MainActionButton
-import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -68,7 +67,6 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -97,6 +95,8 @@ fun RoomDetailsView(
             .consumeWindowInsets(padding)
             .verticalScroll(rememberScrollState())
         ) {
+            LeaveRoomView(state = state.leaveRoomState)
+
             when (state.roomType) {
                 RoomDetailsType.Room -> {
                     RoomHeaderSection(
@@ -145,23 +145,8 @@ fun RoomDetailsView(
             }
 
             OtherActionsSection(onLeaveRoom = {
-                state.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true))
+                state.eventSink(RoomDetailsEvent.LeaveRoom)
             })
-
-            if (state.displayLeaveRoomWarning != null) {
-                ConfirmLeaveRoomDialog(
-                    leaveRoomWarning = state.displayLeaveRoomWarning,
-                    onConfirmLeave = { state.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = false)) },
-                    onDismiss = { state.eventSink(RoomDetailsEvent.ClearLeaveRoomWarning) }
-                )
-            }
-
-            if (state.error != null) {
-                ErrorDialog(
-                    content = stringResource(StringR.string.error_unknown),
-                    onDismiss = { state.eventSink(RoomDetailsEvent.ClearError) }
-                )
-            }
         }
     }
 }
@@ -258,27 +243,6 @@ internal fun OtherActionsSection(onLeaveRoom: () -> Unit, modifier: Modifier = M
             onClick = onLeaveRoom,
         )
     }
-}
-
-@Composable
-internal fun ConfirmLeaveRoomDialog(
-    leaveRoomWarning: LeaveRoomWarning,
-    onConfirmLeave: () -> Unit,
-    onDismiss: () -> Unit
-) {
-    val content = stringResource(
-            when (leaveRoomWarning) {
-            LeaveRoomWarning.PrivateRoom -> StringR.string.leave_room_alert_private_subtitle
-            LeaveRoomWarning.LastUserInRoom -> StringR.string.leave_room_alert_empty_subtitle
-            LeaveRoomWarning.Generic -> StringR.string.leave_room_alert_subtitle
-        }
-    )
-    ConfirmationDialog(
-        content = content,
-        submitText = stringResource(StringR.string.action_leave),
-        onSubmitClicked = onConfirmLeave,
-        onDismiss = onDismiss,
-    )
 }
 
 @LargeHeightPreview

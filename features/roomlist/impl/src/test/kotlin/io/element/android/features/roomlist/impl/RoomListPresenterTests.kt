@@ -20,8 +20,11 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
+import io.element.android.features.leaveroom.api.LeaveRoomEvent
+import io.element.android.features.leaveroom.fake.LeaveRoomPresenterFake
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.features.roomlist.impl.model.aRoomListRoomSummary
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -54,6 +57,7 @@ class RoomListPresenterTests {
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
             FakeInviteDataSource(),
+            LeaveRoomPresenterFake(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -82,6 +86,7 @@ class RoomListPresenterTests {
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
             FakeInviteDataSource(),
+            LeaveRoomPresenterFake(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -103,6 +108,7 @@ class RoomListPresenterTests {
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
             FakeInviteDataSource(),
+            LeaveRoomPresenterFake(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -132,6 +138,7 @@ class RoomListPresenterTests {
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
             FakeInviteDataSource(),
+            LeaveRoomPresenterFake(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -164,6 +171,7 @@ class RoomListPresenterTests {
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
             FakeInviteDataSource(),
+            LeaveRoomPresenterFake(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -202,6 +210,7 @@ class RoomListPresenterTests {
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
             FakeInviteDataSource(),
+            LeaveRoomPresenterFake(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -253,6 +262,7 @@ class RoomListPresenterTests {
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
             FakeInviteDataSource(),
+            LeaveRoomPresenterFake(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -278,6 +288,7 @@ class RoomListPresenterTests {
             FakeNetworkMonitor(),
             SnackbarDispatcher(),
             FakeInviteDataSource(inviteStateFlow),
+            LeaveRoomPresenterFake(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -294,6 +305,89 @@ class RoomListPresenterTests {
 
             inviteStateFlow.value = InvitesState.NoInvites
             Truth.assertThat(awaitItem().invitesState).isEqualTo(InvitesState.NoInvites)
+        }
+    }
+
+    @Test
+    fun `present - show context menu`() = runTest {
+        val presenter = RoomListPresenter(
+            FakeMatrixClient(A_SESSION_ID),
+            createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
+            FakeSessionVerificationService(),
+            FakeNetworkMonitor(),
+            SnackbarDispatcher(),
+            FakeInviteDataSource(),
+            LeaveRoomPresenterFake(),
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+
+            val initialState = awaitItem()
+            val summary = aRoomListRoomSummary()
+            initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
+
+            val shownState = awaitItem()
+            Truth.assertThat(shownState.contextMenu)
+                .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name))
+        }
+    }
+
+    @Test
+    fun `present - hide context menu`() = runTest {
+        val presenter = RoomListPresenter(
+            FakeMatrixClient(A_SESSION_ID),
+            createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
+            FakeSessionVerificationService(),
+            FakeNetworkMonitor(),
+            SnackbarDispatcher(),
+            FakeInviteDataSource(),
+            LeaveRoomPresenterFake(),
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+
+            val initialState = awaitItem()
+            val summary = aRoomListRoomSummary()
+            initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
+
+            val shownState = awaitItem()
+            Truth.assertThat(shownState.contextMenu)
+                .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name))
+            shownState.eventSink(RoomListEvents.HideContextMenu)
+
+            val hiddenState = awaitItem()
+            Truth.assertThat(hiddenState.contextMenu).isEqualTo(RoomListState.ContextMenu.Hidden)
+        }
+    }
+
+    @Test
+    fun `present - leave room calls into leave room presenter`() = runTest {
+        val leaveRoomPresenter = LeaveRoomPresenterFake()
+        val presenter = RoomListPresenter(
+            FakeMatrixClient(A_SESSION_ID),
+            createDateFormatter(),
+            FakeRoomLastMessageFormatter(),
+            FakeSessionVerificationService(),
+            FakeNetworkMonitor(),
+            SnackbarDispatcher(),
+            FakeInviteDataSource(),
+            leaveRoomPresenter,
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+
+            val initialState = awaitItem()
+            initialState.eventSink(RoomListEvents.LeaveRoom(A_ROOM_ID))
+
+            Truth.assertThat(leaveRoomPresenter.events).containsExactly(LeaveRoomEvent.ShowConfirmation(A_ROOM_ID))
         }
     }
 

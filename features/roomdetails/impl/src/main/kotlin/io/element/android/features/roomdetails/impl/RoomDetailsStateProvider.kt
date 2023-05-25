@@ -17,6 +17,7 @@
 package io.element.android.features.roomdetails.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomdetails.impl.members.details.aRoomMemberDetailsState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.UserId
@@ -70,11 +71,10 @@ fun aRoomDetailsState() = RoomDetailsState(
         "|| MAI iki/Marketing...",
     memberCount = Async.Success(32),
     isEncrypted = true,
-    displayLeaveRoomWarning = null,
-    error = null,
     canInvite = false,
     roomType = RoomDetailsType.Room,
     roomMemberDetailsState = null,
+    leaveRoomState = LeaveRoomState(),
     eventSink = {}
 )
 

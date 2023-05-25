@@ -57,6 +57,7 @@ dependencies {
     implementation(projects.libraries.dateformatter.impl)
     implementation(projects.features.invitelist.impl)
     implementation(projects.features.roomlist.impl)
+    implementation(projects.features.leaveroom.impl)
     implementation(projects.features.login.impl)
     implementation(projects.features.networkmonitor.impl)
     implementation(libs.coroutines.core)
