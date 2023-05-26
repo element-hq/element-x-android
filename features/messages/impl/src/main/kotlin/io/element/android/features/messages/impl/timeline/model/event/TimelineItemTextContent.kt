@@ -20,7 +20,8 @@ import org.jsoup.nodes.Document
 
 data class TimelineItemTextContent(
     override val body: String,
-    override val htmlDocument: Document?
+    override val htmlDocument: Document?,
+    override val isEdited: Boolean,
 ) : TimelineItemTextBasedContent{
     override val type: String = "TimelineItemTextContent"
 }

@@ -23,8 +23,11 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemReac
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import kotlinx.collections.immutable.toImmutableList
+import java.text.DateFormat
+import java.util.Date
 import javax.inject.Inject
 
 class TimelineItemEventFactory @Inject constructor(
@@ -55,6 +58,9 @@ class TimelineItemEventFactory @Inject constructor(
             }
         }
 
+        val timeFormatter = DateFormat.getTimeInstance(DateFormat.SHORT)
+        val sentTime = timeFormatter.format(Date(currentTimelineItem.event.timestamp))
+
         val senderAvatarData = AvatarData(
             id = currentSender.value,
             name = senderDisplayName ?: currentSender.value,
@@ -69,8 +75,10 @@ class TimelineItemEventFactory @Inject constructor(
             senderAvatar = senderAvatarData,
             content = contentFactory.create(currentTimelineItem.event.content),
             isMine = currentTimelineItem.event.isOwn,
+            sentTime = sentTime,
             groupPosition = groupPosition,
-            reactionsState = currentTimelineItem.computeReactionsState()
+            reactionsState = currentTimelineItem.computeReactionsState(),
+            sendState = currentTimelineItem.event.localSendState ?: EventSendState.NotSentYet,
         )
     }
 
