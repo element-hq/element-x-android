@@ -274,9 +274,9 @@ fun TimelineItemEventRow(
                         val contentModifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 6.dp)
                         TimelineItemEventContentView(event.content, interactionSource, onClick, onLongClick, contentModifier)
                         TimestampView(
-                            sentTime = event.sentTime,
-                            sendingFailed = event.sendState is EventSendState.SendingFailed,
-                            isEdited = (event.content as? TimelineItemTextBasedContent)?.isEdited.orFalse(),
+                            formattedTime = event.sentTime,
+                            hasMessageSendingFailed = event.sendState is EventSendState.SendingFailed,
+                            isMessageEdited = (event.content as? TimelineItemTextBasedContent)?.isEdited.orFalse(),
                             onClick = {
                                 // TODO trigger either resending the message or opening the message edition history. This will be implemented later
                             },
@@ -343,15 +343,15 @@ fun TimelineItemStateEventRow(
 
 @Composable
 private fun TimestampView(
-    sentTime: String,
-    isEdited: Boolean,
-    sendingFailed: Boolean,
+    formattedTime: String,
+    isMessageEdited: Boolean,
+    hasMessageSendingFailed: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val tint = if (sendingFailed) ElementTheme.colors.textActionCritical else null
-    Row(modifier = modifier.clickable(enabled = sendingFailed, onClick = onClick)){
-        if (isEdited) {
+    val tint = if (hasMessageSendingFailed) ElementTheme.colors.textActionCritical else null
+    Row(modifier = modifier.clickable(onClick = onClick)){
+        if (isMessageEdited) {
             Text(
                 stringResource(StringR.string.common_edited_suffix),
                 style = ElementTextStyles.Regular.caption2,
@@ -360,11 +360,11 @@ private fun TimestampView(
             Spacer(modifier = Modifier.width(4.dp))
         }
         Text(
-            sentTime,
+            formattedTime,
             style = ElementTextStyles.Regular.caption1,
             color = tint ?: MaterialTheme.colorScheme.secondary,
         )
-        if (sendingFailed && tint != null) {
+        if (hasMessageSendingFailed && tint != null) {
             Spacer(modifier = Modifier.width(2.dp))
             Icon(imageVector = Icons.Default.Error, contentDescription = "Error sending message", tint = tint, modifier = Modifier.size(15.dp, 18.dp))
         }
