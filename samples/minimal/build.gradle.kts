@@ -55,11 +55,13 @@ dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
     implementation(projects.libraries.dateformatter.impl)
+    implementation(projects.libraries.eventformatter.impl)
     implementation(projects.features.invitelist.impl)
     implementation(projects.features.roomlist.impl)
     implementation(projects.features.leaveroom.impl)
     implementation(projects.features.login.impl)
     implementation(projects.features.networkmonitor.impl)
+    implementation(projects.services.toolbox.impl)
     implementation(libs.coroutines.core)
     coreLibraryDesugaring(libs.android.desugar)
 }

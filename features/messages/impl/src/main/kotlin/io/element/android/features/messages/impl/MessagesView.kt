@@ -63,6 +63,7 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.textcomposer.AttachmentSourcePicker
 import io.element.android.features.messages.impl.textcomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.textcomposer.MessageComposerView
+import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
@@ -139,6 +140,11 @@ fun MessagesView(
         }
     }
 
+    fun onExpandGroupClick(event: TimelineItem.GroupedEvents) {
+        Timber.v("onExpandGroupClick= ${event.id}")
+        state.timelineState.eventSink(TimelineEvents.ToggleExpandGroup(event))
+    }
+
     fun onActionSelected(action: TimelineItemAction, event: TimelineItem.Event) {
         state.eventSink(MessagesEvents.HandleAction(action, event))
     }
@@ -189,7 +195,8 @@ fun MessagesView(
                         .padding(padding)
                         .consumeWindowInsets(padding),
                     onMessageClicked = ::onMessageClicked,
-                    onMessageLongClicked = ::onMessageLongClicked
+                    onMessageLongClicked = ::onMessageLongClicked,
+                    onExpandGroupClick = ::onExpandGroupClick,
                 )
             },
             snackbarHost = {
@@ -214,6 +221,7 @@ fun MessagesViewContent(
     modifier: Modifier = Modifier,
     onMessageClicked: (TimelineItem.Event) -> Unit = {},
     onMessageLongClicked: (TimelineItem.Event) -> Unit = {},
+    onExpandGroupClick: (TimelineItem.GroupedEvents) -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -227,7 +235,8 @@ fun MessagesViewContent(
                 state = state.timelineState,
                 modifier = Modifier.weight(1f),
                 onMessageClicked = onMessageClicked,
-                onMessageLongClicked = onMessageLongClicked
+                onMessageLongClicked = onMessageLongClicked,
+                onExpandGroupClick = onExpandGroupClick,
             )
         }
         MessageComposerView(

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_room_action_create_room">"Neuer Raum"</string>
+  <string name="screen_create_room_action_invite_people">"Personen einladen"</string>
   <string name="screen_create_room_add_people_title">"Personen hinzufügen"</string>
   <string name="screen_create_room_private_option_title">"Privater Raum (nur auf Einladung)"</string>
   <string name="screen_create_room_room_name_label">"Raumname"</string>
