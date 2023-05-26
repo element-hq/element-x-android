@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -33,11 +34,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.Error
@@ -51,6 +54,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -70,8 +74,11 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingModel
 import io.element.android.libraries.core.bool.orFalse
@@ -234,6 +241,7 @@ fun TimelineItemEventRow(
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+
     val (parentAlignment, contentAlignment) = if (event.isMine) {
         Pair(Alignment.CenterEnd, Alignment.End)
     } else {
@@ -271,25 +279,7 @@ fun TimelineItemEventRow(
                         .zIndex(-1f)
                         .widthIn(max = 320.dp)
                 ) {
-                    Column {
-                        TimelineItemEventContentView(
-                            content = event.content,
-                            interactionSource = interactionSource,
-                            onClick = onClick,
-                            onLongClick = onLongClick,
-                        )
-                        TimestampView(
-                            formattedTime = event.sentTime,
-                            hasMessageSendingFailed = event.sendState is EventSendState.SendingFailed,
-                            isMessageEdited = (event.content as? TimelineItemTextBasedContent)?.isEdited.orFalse(),
-                            onClick = {
-                                // TODO trigger either resending the message or opening the message edition history. This will be implemented later
-                            },
-                            modifier = Modifier
-                                .padding(horizontal = 8.dp, vertical = 4.dp)
-                                .align(Alignment.End),
-                        )
-                    }
+                    MessageEventLayout(event = event, onMessageClick = onClick, onMessageLongClick = onLongClick)
                 }
                 TimelineItemReactionsView(
                     reactionsState = event.reactionsState,
@@ -307,6 +297,92 @@ fun TimelineItemEventRow(
         Spacer(modifier = modifier.height(8.dp))
     } else {
         Spacer(modifier = modifier.height(2.dp))
+    }
+}
+
+@Composable
+fun MessageEventLayout(
+    event: TimelineItem.Event,
+    onMessageClick: () -> Unit,
+    onMessageLongClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val isTextBasedMessage = event.content is TimelineItemTextBasedContent
+    val isMediaMessage = event.content is TimelineItemImageContent
+        || event.content is TimelineItemVideoContent
+        || event.content is TimelineItemFileContent
+    val isStateMessage = event.content is TimelineItemStateContent
+
+    val interactionSource = remember { MutableInteractionSource() }
+
+    @Composable
+    fun ContentView(
+        modifier: Modifier = Modifier
+    ) {
+        TimelineItemEventContentView(
+            content = event.content,
+            interactionSource = interactionSource,
+            onClick = onMessageClick,
+            onLongClick = onMessageLongClick,
+            modifier = modifier,
+        )
+    }
+
+    @Composable
+    fun TimestampView(
+        modifier: Modifier = Modifier
+    ) {
+        val formattedTime = event.sentTime
+        val hasMessageSendingFailed = event.sendState is EventSendState.SendingFailed
+        val isMessageEdited = (event.content as? TimelineItemTextBasedContent)?.isEdited.orFalse()
+        val tint = if (hasMessageSendingFailed) ElementTheme.colors.textActionCritical else null
+        Row(modifier = modifier.clickable(onClick = onMessageClick)) {
+            if (isMessageEdited) {
+                Text(
+                    stringResource(StringR.string.common_edited_suffix),
+                    style = ElementTextStyles.Regular.caption2,
+                    color = tint ?: MaterialTheme.colorScheme.secondary,
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+            }
+            Text(
+                formattedTime,
+                style = ElementTextStyles.Regular.caption2,
+                color = tint ?: MaterialTheme.colorScheme.secondary,
+            )
+            if (hasMessageSendingFailed && tint != null) {
+                Spacer(modifier = Modifier.width(2.dp))
+                Icon(imageVector = Icons.Default.Error, contentDescription = "Error sending message", tint = tint, modifier = Modifier.size(15.dp, 18.dp))
+            }
+        }
+    }
+
+    when {
+        isMediaMessage -> {
+            Box(modifier.wrapContentSize()) {
+                ContentView()
+                Box(
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .padding(horizontal = 4.dp, vertical = 2.dp)
+                        .background(Color(0xFFF0F2F5), RoundedCornerShape(10.0.dp)) // TODO: add the color with its dark variant
+                        .align(Alignment.BottomEnd)
+                ) {
+                    TimestampView(Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
+                }
+            }
+        }
+        isTextBasedMessage -> {
+            Column {
+                ContentView(modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 6.dp))
+                TimestampView(modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(horizontal = 8.dp, vertical = 4.dp))
+            }
+        }
+        isStateMessage -> {
+            ContentView(modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp))
+        }
     }
 }
 
@@ -340,36 +416,6 @@ fun TimelineItemStateEventRow(
                 onClick = onClick,
                 onLongClick = onLongClick,
             )
-        }
-    }
-}
-
-@Composable
-private fun TimestampView(
-    formattedTime: String,
-    isMessageEdited: Boolean,
-    hasMessageSendingFailed: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val tint = if (hasMessageSendingFailed) ElementTheme.colors.textActionCritical else null
-    Row(modifier = modifier.clickable(onClick = onClick)) {
-        if (isMessageEdited) {
-            Text(
-                stringResource(StringR.string.common_edited_suffix),
-                style = ElementTextStyles.Regular.caption2,
-                color = tint ?: MaterialTheme.colorScheme.secondary,
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-        }
-        Text(
-            formattedTime,
-            style = ElementTextStyles.Regular.caption1,
-            color = tint ?: MaterialTheme.colorScheme.secondary,
-        )
-        if (hasMessageSendingFailed && tint != null) {
-            Spacer(modifier = Modifier.width(2.dp))
-            Icon(imageVector = Icons.Default.Error, contentDescription = "Error sending message", tint = tint, modifier = Modifier.size(15.dp, 18.dp))
         }
     }
 }
