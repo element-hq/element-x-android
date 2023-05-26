@@ -58,7 +58,7 @@ class MediaViewerPresenter @AssistedInject constructor(
             mutableStateOf(Async.Uninitialized)
         }
         DisposableEffect(loadMediaTrigger) {
-            coroutineScope.loadMedia(mediaFile, localMedia)
+            coroutineScope.downloadMedia(mediaFile, localMedia)
             onDispose {
                 mediaFile.value?.close()
             }
@@ -80,9 +80,9 @@ class MediaViewerPresenter @AssistedInject constructor(
         )
     }
 
-    private fun CoroutineScope.loadMedia(mediaFile: MutableState<MediaFile?>, localMedia: MutableState<Async<LocalMedia>>) = launch {
+    private fun CoroutineScope.downloadMedia(mediaFile: MutableState<MediaFile?>, localMedia: MutableState<Async<LocalMedia>>) = launch {
         localMedia.value = Async.Loading()
-        mediaLoader.loadMediaFile(inputs.mediaSource, inputs.mimeType)
+        mediaLoader.downloadMediaFile(inputs.mediaSource, inputs.mimeType)
             .onSuccess {
                 mediaFile.value = it
             }.mapCatching {

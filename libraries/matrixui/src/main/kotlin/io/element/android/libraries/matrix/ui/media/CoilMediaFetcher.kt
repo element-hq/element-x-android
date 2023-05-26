@@ -35,8 +35,7 @@ internal class CoilMediaFetcher(
     override suspend fun fetch(): FetchResult? {
         return loadMedia()
             .map { data ->
-                ByteBuffer.wrap(data)
-            }.map { byteBuffer ->
+                val byteBuffer = ByteBuffer.wrap(data)
                 imageLoader.components.newFetcher(byteBuffer, options, imageLoader)?.first?.fetch()
             }.getOrThrow()
     }

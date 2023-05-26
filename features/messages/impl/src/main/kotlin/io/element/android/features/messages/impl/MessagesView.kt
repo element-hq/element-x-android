@@ -105,7 +105,7 @@ fun MessagesView(
         initialValue = ModalBottomSheetValue.Hidden,
     )
     val composerState = state.composerState
-    val initialBottomSheetState = if (LocalInspectionMode.current && composerState.showAttachmentSourcePicker != null) {
+    val initialBottomSheetState = if (LocalInspectionMode.current && composerState.showAttachmentSourcePicker) {
         ModalBottomSheetValue.Expanded
     } else {
         ModalBottomSheetValue.Hidden
