@@ -53,13 +53,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import io.element.android.features.messages.impl.timeline.components.MessageEventBubble
 import io.element.android.features.messages.impl.timeline.components.TimelineItemReactionsView
@@ -230,7 +226,9 @@ fun TimelineItemEventRow(
                             sentTime = event.sentTime,
                             sendingFailed = event.sendState is EventSendState.SendingFailed,
                             isEdited = (event.content as? TimelineItemTextBasedContent)?.isEdited.orFalse(),
-                            onResendClicked = { /* TODO trigger resending message. This will be implemented later */ },
+                            onClick = {
+                                // TODO trigger either resending the message or opening the message edition history. This will be implemented later
+                            },
                             modifier = Modifier
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                                 .align(Alignment.End),
@@ -261,11 +259,11 @@ private fun TimestampView(
     sentTime: String,
     isEdited: Boolean,
     sendingFailed: Boolean,
-    onResendClicked: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val tint = if (sendingFailed) ElementTheme.colors.textActionCritical else null
-    Row(modifier = modifier.clickable(enabled = sendingFailed, onClick = onResendClicked)){
+    Row(modifier = modifier.clickable(enabled = sendingFailed, onClick = onClick)){
         if (isEdited) {
             Text(
                 stringResource(StringR.string.common_edited_suffix),
