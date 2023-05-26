@@ -24,7 +24,17 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
+import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
+import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import kotlinx.collections.immutable.toImmutableList
 import java.text.DateFormat
 import java.util.Date
@@ -102,11 +112,56 @@ class TimelineItemEventFactory @Inject constructor(
         val previousSender = prevTimelineItem?.event?.sender
         val nextSender = nextTimelineItem?.event?.sender
 
+        val previousIsGroupable = prevTimelineItem.isGroupable()
+        val nextIsGroupable = nextTimelineItem.isGroupable()
+
         return when {
-            previousSender != currentSender && nextSender == currentSender -> TimelineItemGroupPosition.First
-            previousSender == currentSender && nextSender == currentSender -> TimelineItemGroupPosition.Middle
-            previousSender == currentSender /* && nextSender != currentSender (== true) */ -> TimelineItemGroupPosition.Last
+            previousSender != currentSender && nextSender == currentSender -> {
+                if (nextIsGroupable) {
+                    TimelineItemGroupPosition.First
+                } else {
+                    TimelineItemGroupPosition.None
+                }
+            }
+            previousSender == currentSender && nextSender == currentSender -> {
+                if (previousIsGroupable) {
+                    if (nextIsGroupable) {
+                        TimelineItemGroupPosition.Middle
+                    } else {
+                        TimelineItemGroupPosition.Last
+                    }
+                } else {
+                    if (nextIsGroupable) {
+                        TimelineItemGroupPosition.First
+                    } else {
+                        TimelineItemGroupPosition.None
+                    }
+                }
+            }
+            previousSender == currentSender /* && nextSender != currentSender (== true) */ -> {
+                if (previousIsGroupable) {
+                    TimelineItemGroupPosition.Last
+                } else {
+                    TimelineItemGroupPosition.None
+                }
+            }
             else -> TimelineItemGroupPosition.None
         }
+    }
+}
+
+private fun MatrixTimelineItem.Event?.isGroupable(): Boolean {
+    if (this == null) return true
+    return when (event.content) {
+        is FailedToParseStateContent,
+        is ProfileChangeContent,
+        is RoomMembershipContent,
+        UnknownContent,
+        is StateContent -> false
+        is FailedToParseMessageLikeContent,
+        is MessageContent,
+        RedactedContent,
+        is StickerContent,
+        is UnableToDecryptContent -> true
     }
 }
