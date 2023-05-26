@@ -22,6 +22,7 @@ import io.element.android.features.messages.impl.timeline.model.virtual.Timeline
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
@@ -56,7 +57,8 @@ sealed interface TimelineItem {
         val sentTime: String = "",
         val isMine: Boolean = false,
         val groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
-        val reactionsState: TimelineItemReactions
+        val reactionsState: TimelineItemReactions,
+        val sendState: EventSendState,
     ) : TimelineItem {
 
         val showSenderInformation = groupPosition.isNew() && !isMine
