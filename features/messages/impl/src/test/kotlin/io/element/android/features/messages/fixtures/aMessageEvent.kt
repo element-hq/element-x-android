@@ -21,6 +21,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemReac
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -29,7 +30,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 internal fun aMessageEvent(
     isMine: Boolean = true,
-    content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null),
+    content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false),
 ) = TimelineItem.Event(
     id = AN_EVENT_ID.value,
     eventId = AN_EVENT_ID,
@@ -39,5 +40,6 @@ internal fun aMessageEvent(
     content = content,
     sentTime = "",
     isMine = isMine,
-    reactionsState = TimelineItemReactions(persistentListOf())
+    reactionsState = TimelineItemReactions(persistentListOf()),
+    sendState = EventSendState.Sent(AN_EVENT_ID)
 )

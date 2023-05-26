@@ -40,7 +40,8 @@ class TimelineItemContentMessageFactory @Inject constructor() {
         return when (val messageType = content.type) {
             is EmoteMessageType -> TimelineItemEmoteContent(
                 body = messageType.body,
-                htmlDocument = messageType.formatted?.toHtmlDocument()
+                htmlDocument = messageType.formatted?.toHtmlDocument(),
+                isEdited = content.isEdited,
             )
             is ImageMessageType -> {
                 val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
@@ -77,11 +78,13 @@ class TimelineItemContentMessageFactory @Inject constructor() {
             )
             is NoticeMessageType -> TimelineItemNoticeContent(
                 body = messageType.body,
-                htmlDocument = messageType.formatted?.toHtmlDocument()
+                htmlDocument = messageType.formatted?.toHtmlDocument(),
+                isEdited = content.isEdited,
             )
             is TextMessageType -> TimelineItemTextContent(
                 body = messageType.body,
-                htmlDocument = messageType.formatted?.toHtmlDocument()
+                htmlDocument = messageType.formatted?.toHtmlDocument(),
+                isEdited = content.isEdited,
             )
             else -> TimelineItemUnknownContent
         }
