@@ -35,9 +35,9 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
+import io.element.android.features.messages.impl.media.local.exoplayer.ExoPlayerWrapper
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import me.saket.telephoto.zoomable.ZoomSpec
@@ -114,8 +114,7 @@ fun MediaVideoView(
         }
     }
     val exoPlayer = remember {
-        ExoPlayer.Builder(context)
-            .build()
+        ExoPlayerWrapper.create(context)
             .apply {
                 addListener(playerListener)
                 this.prepare()
@@ -133,6 +132,8 @@ fun MediaVideoView(
         factory = {
             PlayerView(context).apply {
                 player = exoPlayer
+                setShowPreviousButton(false)
+                setShowNextButton(false)
                 resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
                 layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
                 controllerShowTimeoutMs = 3000
@@ -145,7 +146,10 @@ fun MediaVideoView(
         when (event) {
             Lifecycle.Event.ON_RESUME -> exoPlayer.play()
             Lifecycle.Event.ON_PAUSE -> exoPlayer.pause()
-            Lifecycle.Event.ON_DESTROY -> exoPlayer.release()
+            Lifecycle.Event.ON_DESTROY -> {
+                exoPlayer.release()
+                exoPlayer.removeListener(playerListener)
+            }
             else -> Unit
         }
     }

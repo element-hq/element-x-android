@@ -17,6 +17,9 @@
 
 package io.element.android.features.messages.impl.media.viewer
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -116,28 +119,33 @@ private fun ThumbnailView(
     showThumbnail: Boolean,
     showProgress: Boolean,
 ) {
-    if (!showThumbnail) return
-
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+    AnimatedVisibility(
+        visible = showThumbnail,
+        enter = fadeIn(),
+        exit = fadeOut()
     ) {
-        val mediaRequestData = MediaRequestData(
-            source = thumbnailSource,
-            kind = MediaRequestData.Kind.Content
-        )
-        AsyncImage(
+        Box(
             modifier = Modifier.fillMaxSize(),
-            model = mediaRequestData,
-            contentScale = ContentScale.Fit,
-            contentDescription = null,
-        )
-        if (showProgress) {
-            Box(
-                modifier = Modifier.roundedBackground(),
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator()
+            contentAlignment = Alignment.Center
+        ) {
+            val mediaRequestData = MediaRequestData(
+                source = thumbnailSource,
+                kind = MediaRequestData.Kind.Content
+            )
+            AsyncImage(
+                modifier = Modifier.fillMaxSize(),
+                model = mediaRequestData,
+                alpha = 0.8f,
+                contentScale = ContentScale.Fit,
+                contentDescription = null,
+            )
+            if (showProgress) {
+                Box(
+                    modifier = Modifier.roundedBackground(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator()
+                }
             }
         }
     }
