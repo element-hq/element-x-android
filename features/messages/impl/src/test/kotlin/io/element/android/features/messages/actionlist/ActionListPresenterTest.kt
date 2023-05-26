@@ -108,7 +108,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = false,
-                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null)
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false)
             )
             initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent))
             // val loadingState = awaitItem()
@@ -138,7 +138,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = true,
-                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null)
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false)
             )
             initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent))
             // val loadingState = awaitItem()

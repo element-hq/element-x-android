@@ -30,7 +30,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 internal fun aMessageEvent(
     isMine: Boolean = true,
-    content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null),
+    content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false),
 ) = TimelineItem.Event(
     id = AN_EVENT_ID.value,
     eventId = AN_EVENT_ID,
