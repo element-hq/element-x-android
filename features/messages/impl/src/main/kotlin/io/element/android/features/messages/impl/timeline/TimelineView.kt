@@ -87,7 +87,9 @@ import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.ElementColors
 import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -363,12 +365,11 @@ fun MessageEventLayout(
                 ContentView()
                 Box(
                     modifier = Modifier
-                        .wrapContentSize()
-                        .padding(horizontal = 4.dp, vertical = 2.dp)
-                        .background(Color(0xFFF0F2F5), RoundedCornerShape(10.0.dp)) // TODO: add the color with its dark variant
+                        .padding(horizontal = 4.dp, vertical = 4.dp)
+                        .background(LocalColors.current.gray300, RoundedCornerShape(10.0.dp))
                         .align(Alignment.BottomEnd)
                 ) {
-                    TimestampView(Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
+                    TimestampView(Modifier.padding(horizontal = 4.dp, vertical = 2.dp))
                 }
             }
         }
