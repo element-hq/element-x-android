@@ -21,9 +21,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import io.element.android.features.invitelist.impl.DefaultSeenInvitesStore
+import io.element.android.features.leaveroom.impl.LeaveRoomPresenterImpl
 import io.element.android.features.networkmonitor.impl.NetworkMonitorImpl
 import io.element.android.features.roomlist.impl.DefaultInviteStateDataSource
-import io.element.android.features.roomlist.impl.DefaultRoomLastMessageFormatter
 import io.element.android.features.roomlist.impl.RoomListPresenter
 import io.element.android.features.roomlist.impl.RoomListView
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -31,8 +31,14 @@ import io.element.android.libraries.dateformatter.impl.DateFormatters
 import io.element.android.libraries.dateformatter.impl.DefaultLastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.impl.LocalDateTimeProvider
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.eventformatter.impl.DefaultRoomLastMessageFormatter
+import io.element.android.libraries.eventformatter.impl.ProfileChangeContentFormatter
+import io.element.android.libraries.eventformatter.impl.RoomMembershipContentFormatter
+import io.element.android.libraries.eventformatter.impl.StateContentFormatter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
@@ -50,14 +56,22 @@ class RoomListScreen(
     private val dateTimeProvider = LocalDateTimeProvider(clock, timeZone)
     private val dateFormatters = DateFormatters(locale, clock, timeZone)
     private val sessionVerificationService = matrixClient.sessionVerificationService()
+    private val stringProvider = AndroidStringProvider(context.resources)
     private val presenter = RoomListPresenter(
         client = matrixClient,
         lastMessageTimestampFormatter = DefaultLastMessageTimestampFormatter(dateTimeProvider, dateFormatters),
-        roomLastMessageFormatter = DefaultRoomLastMessageFormatter(context, matrixClient),
+        roomLastMessageFormatter = DefaultRoomLastMessageFormatter(
+            sp = stringProvider,
+            matrixClient = matrixClient,
+            roomMembershipContentFormatter = RoomMembershipContentFormatter(matrixClient, stringProvider),
+            profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
+            stateContentFormatter = StateContentFormatter(stringProvider),
+        ),
         sessionVerificationService = sessionVerificationService,
         networkMonitor = NetworkMonitorImpl(context),
         snackbarDispatcher = SnackbarDispatcher(),
-        inviteStateDataSource = DefaultInviteStateDataSource(matrixClient, DefaultSeenInvitesStore(context), coroutineDispatchers)
+        inviteStateDataSource = DefaultInviteStateDataSource(matrixClient, DefaultSeenInvitesStore(context), coroutineDispatchers),
+        leaveRoomPresenter = LeaveRoomPresenterImpl(matrixClient, RoomMembershipObserver() ,coroutineDispatchers)
     )
 
     @Composable
@@ -82,8 +96,13 @@ class RoomListScreen(
         val state = presenter.present()
         RoomListView(
             state = state,
-            modifier = modifier,
             onRoomClicked = ::onRoomClicked,
+            onSettingsClicked = {},
+            onVerifyClicked = {},
+            onCreateRoomClicked = {},
+            onInvitesClicked = {},
+            onRoomSettingsClicked = {},
+            modifier = modifier,
         )
 
         DisposableEffect(Unit) {

@@ -31,26 +31,39 @@ import io.element.android.features.messages.impl.timeline.factories.event.Timeli
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemDaySeparatorFactory
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
 import io.element.android.libraries.dateformatter.test.FakeDaySeparatorFormatter
+import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
+import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.tests.testutils.testCoroutineDispatchers
 
-internal fun aTimelineItemsFactory() = TimelineItemsFactory(
-    dispatchers = testCoroutineDispatchers(),
-    eventItemFactory = TimelineItemEventFactory(
-        TimelineItemContentFactory(
-            messageFactory = TimelineItemContentMessageFactory(),
-            redactedMessageFactory = TimelineItemContentRedactedFactory(),
-            stickerFactory = TimelineItemContentStickerFactory(),
-            utdFactory = TimelineItemContentUTDFactory(),
-            roomMembershipFactory = TimelineItemContentRoomMembershipFactory(),
-            profileChangeFactory = TimelineItemContentProfileChangeFactory(),
-            stateFactory = TimelineItemContentStateFactory(),
-            failedToParseMessageFactory = TimelineItemContentFailedToParseMessageFactory(),
-            failedToParseStateFactory = TimelineItemContentFailedToParseStateFactory()
-        )
-    ),
-    virtualItemFactory = TimelineItemVirtualFactory(
-        daySeparatorFactory = TimelineItemDaySeparatorFactory(
-            FakeDaySeparatorFormatter()
+internal fun aTimelineItemsFactory(): TimelineItemsFactory {
+    val timelineEventFormatter = aTimelineEventFormatter()
+    return TimelineItemsFactory(
+        dispatchers = testCoroutineDispatchers(),
+        eventItemFactory = TimelineItemEventFactory(
+            TimelineItemContentFactory(
+                messageFactory = TimelineItemContentMessageFactory(),
+                redactedMessageFactory = TimelineItemContentRedactedFactory(),
+                stickerFactory = TimelineItemContentStickerFactory(),
+                utdFactory = TimelineItemContentUTDFactory(),
+                roomMembershipFactory = TimelineItemContentRoomMembershipFactory(timelineEventFormatter),
+                profileChangeFactory = TimelineItemContentProfileChangeFactory(timelineEventFormatter),
+                stateFactory = TimelineItemContentStateFactory(timelineEventFormatter),
+                failedToParseMessageFactory = TimelineItemContentFailedToParseMessageFactory(),
+                failedToParseStateFactory = TimelineItemContentFailedToParseStateFactory()
+            )
         ),
+        virtualItemFactory = TimelineItemVirtualFactory(
+            daySeparatorFactory = TimelineItemDaySeparatorFactory(
+                FakeDaySeparatorFormatter()
+            ),
+        )
     )
-)
+}
+
+internal fun aTimelineEventFormatter(): TimelineEventFormatter {
+    return object : TimelineEventFormatter {
+        override fun format(event: EventTimelineItem): CharSequence {
+            return ""
+        }
+    }
+}

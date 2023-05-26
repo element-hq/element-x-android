@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist.impl
+package io.element.android.libraries.eventformatter.api
 
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 
-class FakeRoomLastMessageFormatter : RoomLastMessageFormatter {
-
-    private var processMessageItemResult: CharSequence? = null
-    override fun processMessageItem(event: EventTimelineItem, isDmRoom: Boolean): CharSequence? {
-        return processMessageItemResult
-    }
-
-    fun givenRoomSummaryResult(result: CharSequence?) {
-        processMessageItemResult = result
-    }
+interface RoomLastMessageFormatter {
+    fun format(event: EventTimelineItem, isDmRoom: Boolean): CharSequence?
 }

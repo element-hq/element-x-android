@@ -42,6 +42,7 @@ dependencies {
     implementation(projects.libraries.textcomposer)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.dateformatter.api)
+    implementation(projects.libraries.eventformatter.api)
     implementation(projects.libraries.mediapickers.api)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.mediaupload.api)
