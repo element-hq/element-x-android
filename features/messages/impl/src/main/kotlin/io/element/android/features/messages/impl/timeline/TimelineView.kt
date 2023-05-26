@@ -311,13 +311,11 @@ fun TimelineItemStateEventRow(
                 .zIndex(-1f)
                 .widthIn(max = 320.dp)
         ) {
-            val contentModifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
             TimelineItemEventContentView(
                 content = event.content,
                 interactionSource = interactionSource,
                 onClick = onClick,
                 onLongClick = onLongClick,
-                modifier = contentModifier
             )
         }
     }

@@ -77,7 +77,7 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemStateContent -> TimelineItemStateView(
             content = content,
-            modifier = modifier
+            modifier = modifier.defaultContentPadding()
         )
     }
 }
