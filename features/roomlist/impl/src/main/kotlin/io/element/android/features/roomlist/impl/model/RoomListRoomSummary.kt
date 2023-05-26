@@ -24,7 +24,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 @Immutable
 data class RoomListRoomSummary(
     val id: String,
-    val roomId: RoomId?,
+    val roomId: RoomId,
     val name: String = "",
     val hasUnread: Boolean = false,
     val timestamp: String? = null,

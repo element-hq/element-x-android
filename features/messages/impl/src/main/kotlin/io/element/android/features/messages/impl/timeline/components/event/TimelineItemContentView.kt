@@ -26,6 +26,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
@@ -73,6 +74,10 @@ fun TimelineItemEventContentView(
         is TimelineItemFileContent -> TimelineItemFileView(
             content = content,
             modifier = modifier.defaultContentPadding()
+        )
+        is TimelineItemStateContent -> TimelineItemStateView(
+            content = content,
+            modifier = modifier
         )
     }
 }

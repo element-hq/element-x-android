@@ -60,6 +60,7 @@ class StateMachine<Event : Any, State : Any>(
         currentStateConfig?.onEnter?.invoke(nextState)
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun <E : Event> findMatchingRoute(event: E): StateMachineRoute<E, State, State>? {
         val routesForEvent = routes.filter { it.eventType.isInstance(event) }
 

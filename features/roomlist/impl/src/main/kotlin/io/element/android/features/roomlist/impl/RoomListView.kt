@@ -16,7 +16,6 @@
 
 package io.element.android.features.roomlist.impl
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -62,6 +61,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.features.roomlist.impl.components.RoomListTopBar
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
@@ -88,20 +88,38 @@ import io.element.android.libraries.ui.strings.R as StringR
 @Composable
 fun RoomListView(
     state: RoomListState,
+    onRoomClicked: (RoomId) -> Unit,
+    onSettingsClicked: () -> Unit,
+    onVerifyClicked: () -> Unit,
+    onCreateRoomClicked: () -> Unit,
+    onInvitesClicked: () -> Unit,
+    onRoomSettingsClicked: (roomId: RoomId) -> Unit,
     modifier: Modifier = Modifier,
-    onRoomClicked: (RoomId) -> Unit = {},
-    onOpenSettings: () -> Unit = {},
-    onVerifyClicked: () -> Unit = {},
-    onCreateRoomClicked: () -> Unit = {},
-    onInvitesClicked: () -> Unit = {},
 ) {
     Column(modifier = modifier) {
         ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
         Box {
+            fun onRoomLongClicked(
+                roomListRoomSummary: RoomListRoomSummary
+            ) {
+                state.eventSink(RoomListEvents.ShowContextMenu(roomListRoomSummary))
+            }
+
+            if (state.contextMenu is RoomListState.ContextMenu.Shown) {
+                RoomListContextMenu(
+                    contextMenu = state.contextMenu,
+                    eventSink = state.eventSink,
+                    onRoomSettingsClicked = onRoomSettingsClicked,
+                )
+            }
+
+            LeaveRoomView(state = state.leaveRoomState)
+
             RoomListContent(
                 state = state,
                 onRoomClicked = onRoomClicked,
-                onOpenSettings = onOpenSettings,
+                onRoomLongClicked = { onRoomLongClicked(it) },
+                onOpenSettings = onSettingsClicked,
                 onVerifyClicked = onVerifyClicked,
                 onCreateRoomClicked = onCreateRoomClicked,
                 onInvitesClicked = onInvitesClicked,
@@ -110,6 +128,7 @@ fun RoomListView(
             RoomListSearchResultView(
                 state = state,
                 onRoomClicked = onRoomClicked,
+                onRoomLongClicked = { onRoomLongClicked(it) },
                 modifier = Modifier
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background)
@@ -125,12 +144,12 @@ fun RoomListContent(
     modifier: Modifier = Modifier,
     onVerifyClicked: () -> Unit = {},
     onRoomClicked: (RoomId) -> Unit = {},
+    onRoomLongClicked: (RoomListRoomSummary) -> Unit = {},
     onOpenSettings: () -> Unit = {},
     onCreateRoomClicked: () -> Unit = {},
     onInvitesClicked: () -> Unit = {},
 ) {
     fun onRoomClicked(room: RoomListRoomSummary) {
-        if (room.roomId == null) return
         onRoomClicked(room.roomId)
     }
 
@@ -237,7 +256,11 @@ fun RoomListContent(
                         items = state.roomList,
                         contentType = { room -> room.contentType() },
                     ) { room ->
-                        RoomSummaryRow(room = room, onClick = ::onRoomClicked)
+                        RoomSummaryRow(
+                            room = room,
+                            onClick = ::onRoomClicked,
+                            onLongClick = onRoomLongClicked,
+                        )
                     }
                 }
             }
@@ -339,13 +362,25 @@ internal fun RoomListViewDarkPreview(@PreviewParameter(RoomListStateProvider::cl
 
 @Composable
 private fun ContentToPreview(state: RoomListState) {
-    RoomListView(state)
+    RoomListView(
+        state = state,
+        onRoomClicked = {},
+        onSettingsClicked = {},
+        onVerifyClicked = {},
+        onCreateRoomClicked = {},
+        onInvitesClicked = {},
+        onRoomSettingsClicked = {}
+    )
 }
 
 @Preview
 @Composable
 internal fun RoomListSearchResultContentPreview() {
     ElementPreviewLight {
-        RoomListSearchResultContent(state = aRoomListState(), onRoomClicked = {})
+        RoomListSearchResultContent(
+            state = aRoomListState(),
+            onRoomClicked = {},
+            onRoomLongClicked = {}
+        )
     }
 }

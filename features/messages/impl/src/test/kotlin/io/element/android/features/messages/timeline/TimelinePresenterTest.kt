@@ -23,8 +23,13 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
+import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
+import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.anEventTimelineItem
+import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -33,6 +38,7 @@ class TimelinePresenterTest {
     fun `present - initial state`() = runTest {
         val presenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
+            timelineItemGrouper = TimelineItemGrouper(),
             room = FakeMatrixRoom(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -49,6 +55,7 @@ class TimelinePresenterTest {
     fun `present - load more`() = runTest {
         val presenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
+            timelineItemGrouper = TimelineItemGrouper(),
             room = FakeMatrixRoom(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -71,6 +78,7 @@ class TimelinePresenterTest {
     fun `present - set highlighted event`() = runTest {
         val presenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
+            timelineItemGrouper = TimelineItemGrouper(),
             room = FakeMatrixRoom(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -85,6 +93,39 @@ class TimelinePresenterTest {
             initialState.eventSink.invoke(TimelineEvents.SetHighlightedEvent(null))
             val withoutHighlightedState = awaitItem()
             assertThat(withoutHighlightedState.highlightedEventId).isNull()
+        }
+    }
+
+    @Test
+    fun `present - expand and collapse grouped events`() = runTest {
+        val fakeTimeline = FakeMatrixTimeline(
+            initialTimelineItems = listOf(
+                MatrixTimelineItem.Event(anEventTimelineItem() /* This is a groupable event */),
+                MatrixTimelineItem.Event(anEventTimelineItem() /* This is a groupable event */),
+            )
+        )
+        val fakeRoom = FakeMatrixRoom(matrixTimeline = fakeTimeline)
+        val presenter = TimelinePresenter(
+            timelineItemsFactory = aTimelineItemsFactory(),
+            timelineItemGrouper = TimelineItemGrouper(),
+            room = fakeRoom,
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            fakeTimeline.updateTimelineItems { it }
+            val loadedState = awaitItem()
+            val group1 = loadedState.timelineItems.first() as TimelineItem.GroupedEvents
+            assertThat(group1.expanded).isFalse()
+            loadedState.eventSink.invoke(TimelineEvents.ToggleExpandGroup(group1))
+            val withExpandedGroup = awaitItem()
+            val group2 = withExpandedGroup.timelineItems.first() as TimelineItem.GroupedEvents
+            assertThat(group2.expanded).isTrue()
+            withExpandedGroup.eventSink.invoke(TimelineEvents.ToggleExpandGroup(group2))
+            val withCollapsedGroup = awaitItem()
+            val group3 = withCollapsedGroup.timelineItems.first() as TimelineItem.GroupedEvents
+            assertThat(group3.expanded).isFalse()
         }
     }
 }

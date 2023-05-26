@@ -39,7 +39,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.Collections
-import androidx.compose.material.icons.filled.LocalLibrary
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material.rememberModalBottomSheetState
@@ -69,6 +68,7 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
+import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
@@ -88,7 +88,6 @@ import io.element.android.libraries.designsystem.utils.LogCompositions
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import timber.log.Timber
-
 import io.element.android.libraries.ui.strings.R as StringsR
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
@@ -154,6 +153,11 @@ fun MessagesView(
         }
     }
 
+    fun onExpandGroupClick(event: TimelineItem.GroupedEvents) {
+        Timber.v("onExpandGroupClick= ${event.id}")
+        state.timelineState.eventSink(TimelineEvents.ToggleExpandGroup(event))
+    }
+
     fun onActionSelected(action: TimelineItemAction, event: TimelineItem.Event) {
         state.eventSink(MessagesEvents.HandleAction(action, event))
     }
@@ -203,7 +207,8 @@ fun MessagesView(
                         .padding(padding)
                         .consumeWindowInsets(padding),
                     onMessageClicked = ::onMessageClicked,
-                    onMessageLongClicked = ::onMessageLongClicked
+                    onMessageLongClicked = ::onMessageLongClicked,
+                    onExpandGroupClick = ::onExpandGroupClick,
                 )
             },
             snackbarHost = {
@@ -242,6 +247,7 @@ fun MessagesViewContent(
     modifier: Modifier = Modifier,
     onMessageClicked: (TimelineItem.Event) -> Unit = {},
     onMessageLongClicked: (TimelineItem.Event) -> Unit = {},
+    onExpandGroupClick: (TimelineItem.GroupedEvents) -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -255,7 +261,8 @@ fun MessagesViewContent(
                 state = state.timelineState,
                 modifier = Modifier.weight(1f),
                 onMessageClicked = onMessageClicked,
-                onMessageLongClicked = onMessageLongClicked
+                onMessageLongClicked = onMessageLongClicked,
+                onExpandGroupClick = onExpandGroupClick,
             )
         }
         MessageComposerView(
