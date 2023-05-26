@@ -247,14 +247,16 @@ fun TimelineItemEventRow(
     ) {
         Row {
             if (!event.isMine) {
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(4.dp))
             }
             Column(horizontalAlignment = contentAlignment) {
                 if (event.showSenderInformation) {
                     MessageSenderInformation(
                         event.safeSenderName,
                         event.senderAvatar,
-                        Modifier.zIndex(1f)
+                        Modifier
+                            .zIndex(1f)
+                            .offset(y = 12.dp)
                     )
                 }
                 val bubbleState = BubbleState(
@@ -282,7 +284,7 @@ fun TimelineItemEventRow(
                     reactionsState = event.reactionsState,
                     modifier = Modifier
                         .zIndex(1f)
-                        .offset(x = if (event.isMine) 0.dp else 20.dp, y = -(16.dp))
+                        .offset(x = if (event.isMine) 0.dp else 20.dp, y = -(4.dp))
                 )
             }
             if (event.isMine) {

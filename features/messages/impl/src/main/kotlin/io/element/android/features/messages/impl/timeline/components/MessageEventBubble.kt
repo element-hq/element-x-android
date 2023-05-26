@@ -86,10 +86,9 @@ fun MessageEventBubble(
 
     fun Modifier.offsetForItem(): Modifier {
         return if (state.isMine) {
-            // FIXME setting y offset to -12.dp can overlap a state event displayed above.
-            offset(y = -(12.dp))
+            this
         } else {
-            offset(x = 20.dp, y = -(12.dp))
+            offset(x = 20.dp)
         }
     }
 
@@ -132,7 +131,7 @@ internal fun MessageEventBubbleDarkPreview(@PreviewParameter(BubbleStateProvider
 
 @Composable
 private fun ContentToPreview(state: BubbleState) {
-    // Due to y offset, surround with a Box
+    // Due to position offset, surround with a Box
     Box(
         modifier = Modifier
             .size(width = 240.dp, height = 64.dp)
