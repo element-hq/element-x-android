@@ -105,7 +105,7 @@ class TimelineItemEventFactory @Inject constructor(
         return when {
             previousSender != currentSender && nextSender == currentSender -> TimelineItemGroupPosition.First
             previousSender == currentSender && nextSender == currentSender -> TimelineItemGroupPosition.Middle
-            previousSender == currentSender && nextSender != currentSender -> TimelineItemGroupPosition.Last
+            previousSender == currentSender /* && nextSender != currentSender (== true) */ -> TimelineItemGroupPosition.Last
             else -> TimelineItemGroupPosition.None
         }
     }
