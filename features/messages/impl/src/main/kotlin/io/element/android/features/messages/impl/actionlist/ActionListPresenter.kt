@@ -24,6 +24,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -53,20 +54,25 @@ class ActionListPresenter @Inject constructor() : Presenter<ActionListState> {
         )
     }
 
-    fun CoroutineScope.computeForMessage(timelineItem: TimelineItem.Event, target: MutableState<ActionListState.Target>) = launch {
+    private fun CoroutineScope.computeForMessage(timelineItem: TimelineItem.Event, target: MutableState<ActionListState.Target>) = launch {
         target.value = ActionListState.Target.Loading(timelineItem)
         val actions =
-            if (timelineItem.content is TimelineItemRedactedContent) {
-                emptyList()
-            } else {
-                mutableListOf(
-                    TimelineItemAction.Reply,
-                    TimelineItemAction.Forward,
-                    TimelineItemAction.Copy,
-                ).also {
-                    if (timelineItem.isMine) {
-                        it.add(TimelineItemAction.Edit)
-                        it.add(TimelineItemAction.Redact)
+            when (timelineItem.content) {
+                is TimelineItemRedactedContent,
+                is TimelineItemStateContent -> {
+                    // TODO Add Share action (also) here, and developer options
+                    emptyList()
+                }
+                else -> {
+                    mutableListOf(
+                        TimelineItemAction.Reply,
+                        TimelineItemAction.Forward,
+                        TimelineItemAction.Copy,
+                    ).also {
+                        if (timelineItem.isMine) {
+                            it.add(TimelineItemAction.Edit)
+                            it.add(TimelineItemAction.Redact)
+                        }
                     }
                 }
             }

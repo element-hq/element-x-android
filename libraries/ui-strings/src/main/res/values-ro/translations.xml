@@ -125,11 +125,6 @@
     <item quantity="few">"%1$d membri"</item>
     <item quantity="other">"%1$d membri"</item>
   </plurals>
-  <plurals name="room_timeline_state_changes">
-    <item quantity="one">"%1$d schimbare a camerii"</item>
-    <item quantity="few">"%1$d schimbări ale camerei"</item>
-    <item quantity="other">"%1$d schimbări ale camerei"</item>
-  </plurals>
   <string name="preference_rageshake">"Rageshake pentru a raporta erori"</string>
   <string name="rageshake_dialog_content">"Se pare că scuturați telefonul de frustrare. Doriți să deschdeți ecranul de raportare a unei erori?"</string>
   <string name="report_content_explanation">"Acest mesaj va fi raportat administratorilor homeserver-ului tau. Ei nu vor putea citi niciun mesaj criptat."</string>

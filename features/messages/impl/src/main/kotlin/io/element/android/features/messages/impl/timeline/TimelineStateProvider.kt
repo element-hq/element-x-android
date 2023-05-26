@@ -21,7 +21,8 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -57,6 +58,12 @@ internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList
             content = content,
             groupPosition = TimelineItemGroupPosition.First
         ),
+        // A state event on top of it
+        aTimelineItemEvent(
+            isMine = false,
+            content = aTimelineItemStateEventContent(),
+            groupPosition = TimelineItemGroupPosition.None
+        ),
         // 3 items (First Middle Last) with isMine = true
         aTimelineItemEvent(
             isMine = true,
@@ -74,13 +81,19 @@ internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList
             content = content,
             groupPosition = TimelineItemGroupPosition.First
         ),
+        // A state event on top of it
+        aTimelineItemEvent(
+            isMine = true,
+            content = aTimelineItemStateEventContent(),
+            groupPosition = TimelineItemGroupPosition.None
+        ),
     )
 }
 
 internal fun aTimelineItemEvent(
     eventId: EventId = EventId("\$" + Random.nextInt().toString()),
     isMine: Boolean = false,
-    content: TimelineItemEventContent = aTimelineItemContent(),
+    content: TimelineItemEventContent = aTimelineItemTextContent(),
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.First,
     sendState: EventSendState = EventSendState.Sent(eventId),
 ): TimelineItem.Event {
@@ -100,13 +113,5 @@ internal fun aTimelineItemEvent(
         senderDisplayName = "sender",
         groupPosition = groupPosition,
         sendState = sendState,
-    )
-}
-
-internal fun aTimelineItemContent(): TimelineItemEventContent {
-    return TimelineItemTextContent(
-        body = "Text",
-        htmlDocument = null,
-        isEdited = false,
     )
 }

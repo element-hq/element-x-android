@@ -23,7 +23,6 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.api.LeaveRoomState
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -35,11 +34,9 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.tests.testutils.testCoroutineDispatchers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
-import org.junit.Ignore
 import org.junit.Test
 
 class LeaveRoomPresenterImplTest {
@@ -151,13 +148,10 @@ class LeaveRoomPresenterImplTest {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(LeaveRoomEvent.LeaveRoom(A_ROOM_ID))
+            // Membership observer should receive a 'left room' change
+            assertThat(roomMembershipObserver.updates.first().change).isEqualTo(MembershipChange.LEFT)
             cancelAndIgnoreRemainingEvents()
         }
-
-        // Membership observer should receive a 'left room' change
-        roomMembershipObserver.updates.take(1)
-            .onEach { update -> assertThat(update.change).isEqualTo(MembershipChange.LEFT) }
-            .collect()
     }
 
     @Test
@@ -177,15 +171,15 @@ class LeaveRoomPresenterImplTest {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(LeaveRoomEvent.LeaveRoom(A_ROOM_ID))
+            skipItems(1) // Skip show progress state
             val errorState = awaitItem()
             assertThat(errorState.error).isEqualTo(LeaveRoomState.Error.Shown)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    @Ignore("TODO(Test the hiding/showing of the progress indicator too)")
     fun `present - show progress indicator while leaving a room`() = runTest {
-        val roomMembershipObserver = RoomMembershipObserver()
         val presenter = createPresenter(
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
@@ -204,11 +198,6 @@ class LeaveRoomPresenterImplTest {
             val finalState = awaitItem()
             assertThat(finalState.progress).isEqualTo(LeaveRoomState.Progress.Hidden)
         }
-
-        // Membership observer should receive a 'left room' change
-        roomMembershipObserver.updates.take(1)
-            .onEach { update -> assertThat(update.change).isEqualTo(MembershipChange.LEFT) }
-            .collect()
     }
 
     @Test
@@ -228,8 +217,10 @@ class LeaveRoomPresenterImplTest {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(LeaveRoomEvent.LeaveRoom(A_ROOM_ID))
+            skipItems(1) // Skip show progress state
             val errorState = awaitItem()
             assertThat(errorState.error).isEqualTo(LeaveRoomState.Error.Shown)
+            skipItems(1) // Skip hide progress state
             errorState.eventSink(LeaveRoomEvent.HideError)
             val hiddenErrorState = awaitItem()
             assertThat(hiddenErrorState.error).isEqualTo(LeaveRoomState.Error.Hidden)
@@ -237,12 +228,11 @@ class LeaveRoomPresenterImplTest {
     }
 }
 
-private fun createPresenter(
+private fun TestScope.createPresenter(
     client: MatrixClient = FakeMatrixClient(),
     roomMembershipObserver: RoomMembershipObserver = RoomMembershipObserver(),
-    dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
 ): LeaveRoomPresenter = LeaveRoomPresenterImpl(
     client = client,
     roomMembershipObserver = roomMembershipObserver,
-    dispatchers = dispatchers,
+    dispatchers = testCoroutineDispatchers(testScheduler, false),
 )

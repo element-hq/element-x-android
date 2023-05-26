@@ -23,6 +23,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 
@@ -55,6 +56,10 @@ fun TimelineItemEventContentView(
             modifier = modifier
         )
         is TimelineItemImageContent -> TimelineItemImageView(
+            content = content,
+            modifier = modifier
+        )
+        is TimelineItemStateContent -> TimelineItemStateView(
             content = content,
             modifier = modifier
         )

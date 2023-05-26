@@ -4,11 +4,13 @@
     <item quantity="one">"1 Person"</item>
     <item quantity="other">"%1$d Personen"</item>
   </plurals>
+  <string name="screen_room_details_already_invited">"Bereits eingeladen"</string>
   <string name="screen_room_details_share_room_title">"Raum teilen"</string>
   <string name="screen_dm_details_block_alert_action">"Blockieren"</string>
   <string name="screen_dm_details_block_user">"Nutzer blockieren"</string>
   <string name="screen_dm_details_unblock_alert_action">"Blockierung aufheben"</string>
   <string name="screen_dm_details_unblock_user">"Nutzer entblockieren"</string>
+  <string name="screen_room_details_invite_people_title">"Personen einladen"</string>
   <string name="screen_room_details_leave_room_title">"Raum verlassen"</string>
   <string name="screen_room_details_security_title">"Sicherheit"</string>
   <string name="screen_room_details_topic_title">"Thema"</string>
