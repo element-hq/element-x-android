@@ -32,6 +32,7 @@ class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEv
         aTimelineItemRedactedContent(),
         aTimelineItemTextContent(),
         aTimelineItemUnknownContent(),
+        aTimelineItemTextContent().copy(isEdited = true),
     )
 }
 
@@ -48,7 +49,8 @@ class TimelineItemTextBasedContentProvider : PreviewParameterProvider<TimelineIt
 
 fun aTimelineItemEmoteContent() = TimelineItemEmoteContent(
     body = "Emote",
-    htmlDocument = null
+    htmlDocument = null,
+    isEdited = false,
 )
 
 fun aTimelineItemEncryptedContent() = TimelineItemEncryptedContent(
@@ -57,14 +59,16 @@ fun aTimelineItemEncryptedContent() = TimelineItemEncryptedContent(
 
 fun aTimelineItemNoticeContent() = TimelineItemNoticeContent(
     body = "Notice",
-    htmlDocument = null
+    htmlDocument = null,
+    isEdited = false,
 )
 
 fun aTimelineItemRedactedContent() = TimelineItemRedactedContent
 
 fun aTimelineItemTextContent() = TimelineItemTextContent(
     body = "Text",
-    htmlDocument = null
+    htmlDocument = null,
+    isEdited = false,
 )
 
 fun aTimelineItemUnknownContent() = TimelineItemUnknownContent

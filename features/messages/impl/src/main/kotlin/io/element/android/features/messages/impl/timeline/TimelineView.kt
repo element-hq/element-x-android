@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -27,6 +28,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -38,6 +40,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -50,6 +53,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -67,18 +71,24 @@ import io.element.android.features.messages.impl.timeline.model.bubble.BubbleSta
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingModel
+import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun TimelineView(
@@ -261,12 +271,25 @@ fun TimelineItemEventRow(
                         .zIndex(-1f)
                         .widthIn(max = 320.dp)
                 ) {
-                    TimelineItemEventContentView(
-                        content = event.content,
-                        interactionSource = interactionSource,
-                        onClick = onClick,
-                        onLongClick = onLongClick,
-                    )
+                    Column {
+                        TimelineItemEventContentView(
+                            content = event.content,
+                            interactionSource = interactionSource,
+                            onClick = onClick,
+                            onLongClick = onLongClick,
+                        )
+                        TimestampView(
+                            formattedTime = event.sentTime,
+                            hasMessageSendingFailed = event.sendState is EventSendState.SendingFailed,
+                            isMessageEdited = (event.content as? TimelineItemTextBasedContent)?.isEdited.orFalse(),
+                            onClick = {
+                                // TODO trigger either resending the message or opening the message edition history. This will be implemented later
+                            },
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                                .align(Alignment.End),
+                        )
+                    }
                 }
                 TimelineItemReactionsView(
                     reactionsState = event.reactionsState,
@@ -317,6 +340,36 @@ fun TimelineItemStateEventRow(
                 onClick = onClick,
                 onLongClick = onLongClick,
             )
+        }
+    }
+}
+
+@Composable
+private fun TimestampView(
+    formattedTime: String,
+    isMessageEdited: Boolean,
+    hasMessageSendingFailed: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val tint = if (hasMessageSendingFailed) ElementTheme.colors.textActionCritical else null
+    Row(modifier = modifier.clickable(onClick = onClick)) {
+        if (isMessageEdited) {
+            Text(
+                stringResource(StringR.string.common_edited_suffix),
+                style = ElementTextStyles.Regular.caption2,
+                color = tint ?: MaterialTheme.colorScheme.secondary,
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+        }
+        Text(
+            formattedTime,
+            style = ElementTextStyles.Regular.caption1,
+            color = tint ?: MaterialTheme.colorScheme.secondary,
+        )
+        if (hasMessageSendingFailed && tint != null) {
+            Spacer(modifier = Modifier.width(2.dp))
+            Icon(imageVector = Icons.Default.Error, contentDescription = "Error sending message", tint = tint, modifier = Modifier.size(15.dp, 18.dp))
         }
     }
 }
