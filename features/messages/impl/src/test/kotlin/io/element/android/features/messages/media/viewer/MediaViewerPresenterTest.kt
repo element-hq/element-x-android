@@ -93,7 +93,8 @@ class MediaViewerPresenterTest {
             inputs = MediaViewerNode.Inputs(
                 name = TESTED_MEDIA_NAME,
                 mediaSource = aMediaSource(),
-                mimeType = mimeType
+                mimeType = mimeType,
+                thumbnailSource = null
             ),
             localMediaFactory = localMediaFactory,
             mediaLoader = mediaLoader
