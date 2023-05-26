@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.timeline.groups
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEmoteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemNoticeContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemProfileChangeContent
@@ -27,6 +28,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.libraries.core.bool.orFalse
 import kotlinx.collections.immutable.toImmutableList
 
@@ -66,6 +68,8 @@ class TimelineItemGrouper @Inject constructor() {
             is TimelineItemEmoteContent,
             is TimelineItemNoticeContent,
             is TimelineItemTextContent,
+            is TimelineItemFileContent,
+            is TimelineItemVideoContent,
             TimelineItemUnknownContent -> false
             is TimelineItemProfileChangeContent,
             is TimelineItemRoomMembershipContent,
