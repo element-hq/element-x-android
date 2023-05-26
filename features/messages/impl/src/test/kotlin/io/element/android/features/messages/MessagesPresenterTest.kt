@@ -28,6 +28,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.textcomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
+import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -138,6 +139,7 @@ class MessagesPresenterTest {
         )
         val timelinePresenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
+            timelineItemGrouper = TimelineItemGrouper(),
             room = matrixRoom,
         )
         val actionListPresenter = ActionListPresenter()

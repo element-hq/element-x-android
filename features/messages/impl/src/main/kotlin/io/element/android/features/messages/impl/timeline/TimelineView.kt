@@ -16,8 +16,8 @@
 
 package io.element.android.features.messages.impl.timeline
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -50,19 +50,24 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.LastBaseline
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.components.MessageEventBubble
+import io.element.android.features.messages.impl.timeline.components.MessageStateEventContainer
 import io.element.android.features.messages.impl.timeline.components.TimelineItemReactionsView
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
+import io.element.android.features.messages.impl.timeline.components.group.GroupHeaderView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemDaySeparatorView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineLoadingMoreIndicator
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingModel
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -82,6 +87,7 @@ fun TimelineView(
     modifier: Modifier = Modifier,
     onMessageClicked: (TimelineItem.Event) -> Unit = {},
     onMessageLongClicked: (TimelineItem.Event) -> Unit = {},
+    onExpandGroupClick: (TimelineItem.GroupedEvents) -> Unit = {},
 ) {
 
     fun onReachedLoadMore() {
@@ -93,8 +99,6 @@ fun TimelineView(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = lazyListState,
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Bottom,
             reverseLayout = true
         ) {
             itemsIndexed(
@@ -104,9 +108,10 @@ fun TimelineView(
             ) { index, timelineItem ->
                 TimelineItemRow(
                     timelineItem = timelineItem,
-                    isHighlighted = timelineItem.identifier() == state.highlightedEventId?.value,
+                    highlightedItem = state.highlightedEventId?.value,
                     onClick = onMessageClicked,
-                    onLongClick = onMessageLongClicked
+                    onLongClick = onMessageLongClicked,
+                    onExpandGroupClick = onExpandGroupClick,
                 )
                 if (index == state.timelineItems.lastIndex) {
                     onReachedLoadMore()
@@ -125,16 +130,20 @@ fun TimelineView(
 @Composable
 fun TimelineItemRow(
     timelineItem: TimelineItem,
-    isHighlighted: Boolean,
+    highlightedItem: String?,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
+    onExpandGroupClick: (TimelineItem.GroupedEvents) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     when (timelineItem) {
-        is TimelineItem.Virtual -> TimelineItemVirtualRow(
-            virtual = timelineItem
-        )
+        is TimelineItem.Virtual -> {
+            TimelineItemVirtualRow(
+                virtual = timelineItem,
+                modifier = modifier,
+            )
+        }
         is TimelineItem.Event -> {
-
             fun onClick() {
                 onClick(timelineItem)
             }
@@ -143,12 +152,54 @@ fun TimelineItemRow(
                 onLongClick(timelineItem)
             }
 
-            TimelineItemEventRow(
-                event = timelineItem,
-                isHighlighted = isHighlighted,
-                onClick = ::onClick,
-                onLongClick = ::onLongClick
-            )
+            if (timelineItem.content is TimelineItemStateContent) {
+                TimelineItemStateEventRow(
+                    event = timelineItem,
+                    isHighlighted = highlightedItem == timelineItem.identifier(),
+                    onClick = ::onClick,
+                    onLongClick = ::onLongClick,
+                    modifier = modifier,
+                )
+            } else {
+                TimelineItemEventRow(
+                    event = timelineItem,
+                    isHighlighted = highlightedItem == timelineItem.identifier(),
+                    onClick = ::onClick,
+                    onLongClick = ::onLongClick,
+                    modifier = modifier,
+                )
+            }
+        }
+        is TimelineItem.GroupedEvents -> {
+            fun onExpandGroupClick() {
+                onExpandGroupClick(timelineItem)
+            }
+
+            Column(modifier = modifier.animateContentSize()) {
+                GroupHeaderView(
+                    text = pluralStringResource(
+                        id = R.plurals.room_timeline_state_changes,
+                        count = timelineItem.events.size,
+                        timelineItem.events.size
+                    ),
+                    isExpanded = timelineItem.expanded,
+                    isHighlighted = !timelineItem.expanded && timelineItem.events.any { it.identifier() == highlightedItem },
+                    onClick = ::onExpandGroupClick,
+                )
+                if (timelineItem.expanded) {
+                    Column {
+                        timelineItem.events.forEach { subGroupEvent ->
+                            TimelineItemRow(
+                                timelineItem = subGroupEvent,
+                                highlightedItem = highlightedItem,
+                                onClick = onClick,
+                                onLongClick = onLongClick,
+                                onExpandGroupClick = {}
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -229,6 +280,42 @@ fun TimelineItemEventRow(
         Spacer(modifier = modifier.height(8.dp))
     } else {
         Spacer(modifier = modifier.height(2.dp))
+    }
+}
+
+@Composable
+fun TimelineItemStateEventRow(
+    event: TimelineItem.Event,
+    isHighlighted: Boolean,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
+        contentAlignment = Alignment.Center
+    ) {
+        MessageStateEventContainer(
+            isHighlighted = isHighlighted,
+            interactionSource = interactionSource,
+            onClick = onClick,
+            onLongClick = onLongClick,
+            modifier = Modifier
+                .zIndex(-1f)
+                .widthIn(max = 320.dp)
+        ) {
+            val contentModifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+            TimelineItemEventContentView(
+                content = event.content,
+                interactionSource = interactionSource,
+                onClick = onClick,
+                onLongClick = onLongClick,
+                modifier = contentModifier
+            )
+        }
     }
 }
 

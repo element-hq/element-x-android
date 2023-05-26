@@ -116,10 +116,6 @@
     <item quantity="one">"%1$d membro"</item>
     <item quantity="other">"%1$d membri"</item>
   </plurals>
-  <plurals name="room_timeline_state_changes">
-    <item quantity="one">"%1$d modifica alla stanza"</item>
-    <item quantity="other">"%1$d modifiche alla stanza"</item>
-  </plurals>
   <string name="preference_rageshake">"Scuoti per segnalare un problema"</string>
   <string name="rageshake_dialog_content">"Sembra che tu stia scuotendo il telefono per la frustrazione. Vuoi aprire la schermata di segnalazione dei problemi?"</string>
   <string name="report_content_explanation">"Questo messaggio verrà segnalato all\'amministratore dell\'homeserver. Questi non sarà in grado di leggere i messaggi criptati."</string>
