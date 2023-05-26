@@ -30,6 +30,7 @@ import io.element.android.features.messages.impl.timeline.factories.event.Timeli
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemEventFactory
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemDaySeparatorFactory
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
+import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
 import io.element.android.libraries.dateformatter.test.FakeDaySeparatorFormatter
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
@@ -56,7 +57,8 @@ internal fun aTimelineItemsFactory(): TimelineItemsFactory {
             daySeparatorFactory = TimelineItemDaySeparatorFactory(
                 FakeDaySeparatorFormatter()
             ),
-        )
+        ),
+        timelineItemGrouper = TimelineItemGrouper(),
     )
 }
 

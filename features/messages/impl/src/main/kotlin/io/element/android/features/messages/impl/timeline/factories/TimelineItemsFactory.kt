@@ -21,9 +21,13 @@ import io.element.android.features.messages.impl.timeline.diff.CacheInvalidator
 import io.element.android.features.messages.impl.timeline.diff.MatrixTimelineItemsDiffCallback
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemEventFactory
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
+import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,9 +42,10 @@ class TimelineItemsFactory @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val eventItemFactory: TimelineItemEventFactory,
     private val virtualItemFactory: TimelineItemVirtualFactory,
+    private val timelineItemGrouper: TimelineItemGrouper,
 ) {
 
-    private val timelineItems = MutableStateFlow<List<TimelineItem>>(emptyList())
+    private val timelineItems = MutableStateFlow(emptyList<TimelineItem>().toImmutableList())
     private val timelineItemsCache = arrayListOf<TimelineItem?>()
 
     // Items from rust sdk, used for diffing
@@ -49,7 +54,7 @@ class TimelineItemsFactory @Inject constructor(
     private val lock = Mutex()
     private val cacheInvalidator = CacheInvalidator(timelineItemsCache)
 
-    fun flow(): StateFlow<List<TimelineItem>> = timelineItems.asStateFlow()
+    fun flow(): StateFlow<ImmutableList<TimelineItem>> = timelineItems.asStateFlow()
 
     suspend fun replaceWith(
         timelineItems: List<MatrixTimelineItem>,
@@ -72,7 +77,8 @@ class TimelineItemsFactory @Inject constructor(
                 newTimelineItemStates.add(cacheItem)
             }
         }
-        this.timelineItems.emit(newTimelineItemStates)
+        val result = timelineItemGrouper.group(newTimelineItemStates).toPersistentList()
+        this.timelineItems.emit(result)
     }
 
     private fun calculateAndApplyDiff(newTimelineItems: List<MatrixTimelineItem>) {

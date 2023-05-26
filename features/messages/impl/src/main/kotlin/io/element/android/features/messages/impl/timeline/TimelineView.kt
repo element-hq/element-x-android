@@ -47,8 +47,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -95,7 +97,6 @@ fun TimelineView(
     modifier: Modifier = Modifier,
     onMessageClicked: (TimelineItem.Event) -> Unit = {},
     onMessageLongClicked: (TimelineItem.Event) -> Unit = {},
-    onExpandGroupClick: (TimelineItem.GroupedEvents) -> Unit = {},
 ) {
 
     fun onReachedLoadMore() {
@@ -119,7 +120,6 @@ fun TimelineView(
                     highlightedItem = state.highlightedEventId?.value,
                     onClick = onMessageClicked,
                     onLongClick = onMessageLongClicked,
-                    onExpandGroupClick = onExpandGroupClick,
                 )
                 if (index == state.timelineItems.lastIndex) {
                     onReachedLoadMore()
@@ -141,7 +141,6 @@ fun TimelineItemRow(
     highlightedItem: String?,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
-    onExpandGroupClick: (TimelineItem.GroupedEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (timelineItem) {
@@ -179,8 +178,10 @@ fun TimelineItemRow(
             }
         }
         is TimelineItem.GroupedEvents -> {
+            val isExpanded = rememberSaveable(key = timelineItem.identifier()) { mutableStateOf(false) }
+
             fun onExpandGroupClick() {
-                onExpandGroupClick(timelineItem)
+                isExpanded.value = !isExpanded.value
             }
 
             Column(modifier = modifier.animateContentSize()) {
@@ -190,11 +191,11 @@ fun TimelineItemRow(
                         count = timelineItem.events.size,
                         timelineItem.events.size
                     ),
-                    isExpanded = timelineItem.expanded,
-                    isHighlighted = !timelineItem.expanded && timelineItem.events.any { it.identifier() == highlightedItem },
+                    isExpanded = isExpanded.value,
+                    isHighlighted = !isExpanded.value && timelineItem.events.any { it.identifier() == highlightedItem },
                     onClick = ::onExpandGroupClick,
                 )
-                if (timelineItem.expanded) {
+                if (isExpanded.value) {
                     Column {
                         timelineItem.events.forEach { subGroupEvent ->
                             TimelineItemRow(
@@ -202,7 +203,6 @@ fun TimelineItemRow(
                                 highlightedItem = highlightedItem,
                                 onClick = onClick,
                                 onLongClick = onLongClick,
-                                onExpandGroupClick = {}
                             )
                         }
                     }

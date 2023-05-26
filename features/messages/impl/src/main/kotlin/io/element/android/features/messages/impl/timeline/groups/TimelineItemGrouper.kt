@@ -29,16 +29,14 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
-import io.element.android.libraries.core.bool.orFalse
 import kotlinx.collections.immutable.toImmutableList
-
 import javax.inject.Inject
 
 class TimelineItemGrouper @Inject constructor() {
     /**
      * Create a new list of [TimelineItem] by grouping some of them into [TimelineItem.GroupedEvents].
      */
-    fun group(from: List<TimelineItem>, expandedGroups: Map<String, Boolean>): List<TimelineItem> {
+    fun group(from: List<TimelineItem>): List<TimelineItem> {
         val result = mutableListOf<TimelineItem>()
         val currentGroup = mutableListOf<TimelineItem.Event>()
         from.forEach { timelineItem ->
@@ -48,14 +46,14 @@ class TimelineItemGrouper @Inject constructor() {
                 // timelineItem cannot be grouped
                 if (currentGroup.isNotEmpty()) {
                     // There is a pending group, create a TimelineItem.GroupedEvents if there is more than 1 Event in the pending group.
-                    result.addGroup(currentGroup, expandedGroups)
+                    result.addGroup(currentGroup)
                     currentGroup.clear()
                 }
                 result.add(timelineItem)
             }
         }
         if (currentGroup.isNotEmpty()) {
-            result.addGroup(currentGroup, expandedGroups)
+            result.addGroup(currentGroup)
         }
         return result
     }
@@ -82,8 +80,7 @@ class TimelineItemGrouper @Inject constructor() {
  * Will add a group if there is more than 1 item, else add the item to the list.
  */
 private fun MutableList<TimelineItem>.addGroup(
-    group: MutableList<TimelineItem.Event>,
-    expandedGroups: Map<String, Boolean>,
+    group: MutableList<TimelineItem.Event>
 ) {
     if (group.size == 1) {
         // Do not create a group with just 1 item, just add the item to the result
@@ -91,7 +88,6 @@ private fun MutableList<TimelineItem>.addGroup(
     } else {
         add(
             TimelineItem.GroupedEvents(
-                expanded = expandedGroups[group.first().id + "_group"].orFalse(),
                 events = group.toImmutableList()
             )
         )
