@@ -59,7 +59,7 @@ class RustMediaLoader(
             }
         }
 
-    override suspend fun loadMediaFile(source: MediaSource, mimeType: String?): Result<MediaFile> =
+    override suspend fun downloadMediaFile(source: MediaSource, mimeType: String?): Result<MediaFile> =
         withContext(dispatchers.io) {
             runCatching {
                 source.toRustMediaSource().use { mediaSource ->

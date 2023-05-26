@@ -36,5 +36,5 @@ interface MatrixMediaLoader {
      * @param mimeType: optional mime type
      * @return a [Result] of [MediaFile]
      */
-    suspend fun loadMediaFile(source: MediaSource, mimeType: String?): Result<MediaFile>
+    suspend fun downloadMediaFile(source: MediaSource, mimeType: String?): Result<MediaFile>
 }
