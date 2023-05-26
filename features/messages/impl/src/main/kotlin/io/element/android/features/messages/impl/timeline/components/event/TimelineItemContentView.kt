@@ -31,10 +31,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 
-private fun Modifier.defaultContentPadding(): Modifier = padding(
-    horizontal = 12.dp, vertical = 6.dp
-)
-
 @Composable
 fun TimelineItemEventContentView(
     content: TimelineItemEventContent,
@@ -46,22 +42,22 @@ fun TimelineItemEventContentView(
     when (content) {
         is TimelineItemEncryptedContent -> TimelineItemEncryptedView(
             content = content,
-            modifier = modifier.defaultContentPadding()
+            modifier = modifier
         )
         is TimelineItemRedactedContent -> TimelineItemRedactedView(
             content = content,
-            modifier = modifier.defaultContentPadding()
+            modifier = modifier
         )
         is TimelineItemTextBasedContent -> TimelineItemTextView(
             content = content,
             interactionSource = interactionSource,
-            modifier = modifier.defaultContentPadding(),
+            modifier = modifier,
             onTextClicked = onClick,
             onTextLongClicked = onLongClick
         )
         is TimelineItemUnknownContent -> TimelineItemUnknownView(
             content = content,
-            modifier = modifier.defaultContentPadding()
+            modifier = modifier
         )
         is TimelineItemImageContent -> TimelineItemImageView(
             content = content,
@@ -73,11 +69,11 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemFileContent -> TimelineItemFileView(
             content = content,
-            modifier = modifier.defaultContentPadding()
+            modifier = modifier
         )
         is TimelineItemStateContent -> TimelineItemStateView(
             content = content,
-            modifier = modifier.defaultContentPadding()
+            modifier = modifier
         )
     }
 }
