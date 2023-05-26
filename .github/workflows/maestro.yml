@@ -50,4 +50,6 @@ jobs:
             USERNAME=maestroelement
             PASSWORD=${{ secrets.MATRIX_MAESTRO_ACCOUNT_PASSWORD }}
             ROOM_NAME=MyRoom
+            INVITEE1_MXID=maestroelement2
+            INVITEE2_MXID=maestroelement3
             APP_ID=io.element.android.x.debug
