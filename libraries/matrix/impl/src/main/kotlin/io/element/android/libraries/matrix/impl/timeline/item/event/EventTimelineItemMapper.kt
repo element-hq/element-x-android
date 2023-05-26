@@ -32,7 +32,7 @@ class EventTimelineItemMapper(private val contentMapper: TimelineEventContentMap
     fun map(eventTimelineItem: RustEventTimelineItem): EventTimelineItem = eventTimelineItem.use {
         EventTimelineItem(
             uniqueIdentifier = it.uniqueIdentifier(),
-            eventId = it.eventId()?.let { EventId(it) },
+            eventId = it.eventId()?.let(::EventId),
             isEditable = it.isEditable(),
             isLocal = it.isLocal(),
             isOwn = it.isOwn(),

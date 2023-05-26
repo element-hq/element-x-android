@@ -25,6 +25,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemReac
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.virtual.aTimelineItemDaySeparatorModel
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
+import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -40,7 +41,8 @@ class TimelineItemGrouperTest {
         senderAvatar = anAvatarData(),
         senderDisplayName = "",
         content = TimelineItemStateEventContent(body = "a state event"),
-        reactionsState = TimelineItemReactions(emptyList<AggregatedReaction>().toImmutableList())
+        reactionsState = TimelineItemReactions(emptyList<AggregatedReaction>().toImmutableList()),
+        sendState = EventSendState.Sent(AN_EVENT_ID)
     )
     private val aNonGroupableItem = aMessageEvent()
     private val aNonGroupableItemNoEvent = TimelineItem.Virtual("virtual", aTimelineItemDaySeparatorModel("Today"))
