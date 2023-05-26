@@ -17,18 +17,6 @@
 package io.element.android.features.messages.impl.timeline.groups
 
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEmoteContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemNoticeContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemProfileChangeContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRoomMembershipContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateEventContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
@@ -56,23 +44,6 @@ class TimelineItemGrouper @Inject constructor() {
             result.addGroup(currentGroup)
         }
         return result
-    }
-
-    private fun TimelineItem.Event.canBeGrouped(): Boolean {
-        return when (content) {
-            is TimelineItemEncryptedContent,
-            is TimelineItemImageContent,
-            TimelineItemRedactedContent,
-            is TimelineItemEmoteContent,
-            is TimelineItemNoticeContent,
-            is TimelineItemTextContent,
-            is TimelineItemFileContent,
-            is TimelineItemVideoContent,
-            TimelineItemUnknownContent -> false
-            is TimelineItemProfileChangeContent,
-            is TimelineItemRoomMembershipContent,
-            is TimelineItemStateEventContent -> true
-        }
     }
 }
 
