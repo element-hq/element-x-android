@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Joindre une capture d\'écran"</string>
+  <string name="screen_bug_report_contact_me">"Vous pouvez me contacter si vous avez des questions complémentaires"</string>
+  <string name="screen_bug_report_edit_screenshot">"Modifier la capture d\'écran"</string>
+  <string name="screen_bug_report_editor_description">"S\'il vous plait, veuillez décrire le bogue. Qu\'avez-vous fait ? À quoi vous attendiez-vous ? Que s\'est-il réellement passé. Veuillez ajouter le plus de détails possible."</string>
+  <string name="screen_bug_report_editor_placeholder">"Décrire le bogue"</string>
+  <string name="screen_bug_report_editor_supporting">"Si possible, veuillez rédiger la description en anglais."</string>
+  <string name="screen_bug_report_include_crash_logs">"Envoyer des journaux d’incident"</string>
+  <string name="screen_bug_report_include_logs">"Envoyer le journal pour nous aider"</string>
+  <string name="screen_bug_report_include_screenshot">"Envoyer une capture d’écran"</string>
+  <string name="screen_bug_report_logs_description">"Pour vérifier que les choses fonctionnent comme prévu, les journaux seront envoyés avec votre message. Ceux-ci seront privées. Pour simplement envoyer votre message, désactivez ce paramètre."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s a planté la dernière fois qu\'il a été utilisé. Souhaitez-vous partager un rapport de crash avec nous ?"</string>
+</resources>

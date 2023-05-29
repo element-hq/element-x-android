@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Nouvelle salle"</string>
+  <string name="screen_create_room_action_invite_people">"Inviter des personnes"</string>
+  <string name="screen_create_room_add_people_title">"Ajouter des personnes"</string>
+  <string name="screen_create_room_error_creating_room">"Une erreur s\'est produite lors de la création de la salle"</string>
+  <string name="screen_create_room_private_option_description">"Les messages dans cette salle sont chiffrés. Le chiffrement ne peut pas être désactivé par la suite."</string>
+  <string name="screen_create_room_private_option_title">"Salle privée (sur invitation uniquement)"</string>
+  <string name="screen_create_room_public_option_description">"Les messages ne sont pas chiffrés et n\'importe qui peut les lire. Vous pouvez activer le chiffrement ultérieurement."</string>
+  <string name="screen_create_room_public_option_title">"Salle publique (n’importe qui)"</string>
+  <string name="screen_create_room_room_name_label">"Nom de la salle"</string>
+  <string name="screen_create_room_room_name_placeholder">"Ex: Sprint Produit"</string>
+  <string name="screen_create_room_topic_label">"Sujet (optionnel)"</string>
+  <string name="screen_create_room_topic_placeholder">"De quoi parle cette salle ?"</string>
+  <string name="screen_start_chat_error_starting_chat">"Une erreur s\'est produite lors de la tentative de démarrage d\'une discussion"</string>
+  <string name="screen_create_room_title">"Créer une salle"</string>
+</resources>

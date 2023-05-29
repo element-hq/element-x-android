@@ -5,13 +5,18 @@
     <item quantity="other">"%1$d Personen"</item>
   </plurals>
   <string name="screen_room_details_already_invited">"Bereits eingeladen"</string>
+  <string name="screen_room_details_encryption_enabled_subtitle">"Nachrichten sind mit Schlössern gesichert. Nur du und der Empfänger haben die eindeutigen Schlüssel, um sie zu entsperren."</string>
+  <string name="screen_room_details_encryption_enabled_title">"Nachrichtenverschlüsselung aktiviert"</string>
   <string name="screen_room_details_share_room_title">"Raum teilen"</string>
   <string name="screen_dm_details_block_alert_action">"Blockieren"</string>
+  <string name="screen_dm_details_block_alert_description">"Blockierte Benutzer können dir keine Nachrichten senden und alle Nachrichten von ihnen werden ausgeblendet. Du kannst diese Aktion jederzeit rückgängig machen."</string>
   <string name="screen_dm_details_block_user">"Nutzer blockieren"</string>
   <string name="screen_dm_details_unblock_alert_action">"Blockierung aufheben"</string>
+  <string name="screen_dm_details_unblock_alert_description">"Wenn du den Benutzer entsperrst, kannst du wieder alle Nachrichten von ihm sehen."</string>
   <string name="screen_dm_details_unblock_user">"Nutzer entblockieren"</string>
   <string name="screen_room_details_invite_people_title">"Personen einladen"</string>
   <string name="screen_room_details_leave_room_title">"Raum verlassen"</string>
+  <string name="screen_room_details_people_title">"Personen"</string>
   <string name="screen_room_details_security_title">"Sicherheit"</string>
   <string name="screen_room_details_topic_title">"Thema"</string>
 </resources>

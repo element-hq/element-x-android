@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s havaroval při posledním použití. Chcete se s námi podělit o zprávu o selhání?"</string>
+</resources>
