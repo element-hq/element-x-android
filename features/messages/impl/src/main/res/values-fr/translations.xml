@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="room_timeline_state_changes">
+    <item quantity="zero">"Aucun changement dans la salle"</item>
+    <item quantity="one">"%1$d changement dans la salle"</item>
+    <item quantity="two">"%1$d changements dans la salle"</item>
+    <item quantity="few">"%1$d changements dans la salle"</item>
+    <item quantity="many">"%1$d changements dans la salle"</item>
+    <item quantity="other">"%1$d changements dans la salle"</item>
+  </plurals>
+  <string name="screen_room_attachment_source_camera_photo">"Prendre une photo"</string>
+</resources>

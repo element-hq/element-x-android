@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_call">"Appel"</string>
+  <string name="notification_channel_listening_for_events">"À l\'écoute d\'événements"</string>
+  <string name="notification_channel_noisy">"Notifications bruyantes"</string>
+  <string name="notification_channel_silent">"Notifications silencieuses"</string>
+  <string name="notification_inline_reply_failed">"** Échec de l\'envoi - veuillez ouvrir la salle"</string>
+  <string name="notification_invitation_action_join">"Rejoindre"</string>
+  <string name="notification_invitation_action_reject">"Refuser"</string>
+  <string name="notification_new_messages">"Nouveaux messages"</string>
+  <string name="notification_room_action_mark_as_read">"Marquer comme lu"</string>
+  <string name="notification_sender_me">"Moi"</string>
+  <string name="notification_test_push_notification_content">"Vous êtes en train de consulter la notification ! Cliquez-moi !"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s et %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s dans %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s dans %2$s et %3$s"</string>
+  <plurals name="notification_compat_summary_line_for_room">
+    <item quantity="zero">"%1$s: %2$d message"</item>
+    <item quantity="one">"%1$s: %2$d message"</item>
+    <item quantity="two">"%1$s: %2$d messages"</item>
+    <item quantity="few">"%1$s: %2$d messages"</item>
+    <item quantity="many">"%1$s: %2$d messages"</item>
+    <item quantity="other">"%1$s: %2$d messages"</item>
+  </plurals>
+  <plurals name="notification_compat_summary_title">
+    <item quantity="zero">"%d notification"</item>
+    <item quantity="one">"%d notification"</item>
+    <item quantity="two">"%d notifications"</item>
+    <item quantity="few">"%d notification"</item>
+    <item quantity="many">"%d notification"</item>
+    <item quantity="other">"%d notification"</item>
+  </plurals>
+  <plurals name="notification_invitations">
+    <item quantity="zero">"%d invitation"</item>
+    <item quantity="one">"%d invitation"</item>
+    <item quantity="two">"%d invitations"</item>
+    <item quantity="few">"%d invitations"</item>
+    <item quantity="many">"%d invitations"</item>
+    <item quantity="other">"%d invitations"</item>
+  </plurals>
+  <plurals name="notification_new_messages_for_room">
+    <item quantity="zero">"Aucun nouveau message"</item>
+    <item quantity="one">"%d nouveaux message"</item>
+    <item quantity="two">"%d nouveaux message"</item>
+    <item quantity="few">"%d nouveaux message"</item>
+    <item quantity="many">"%d nouveaux message"</item>
+    <item quantity="other">"%d nouveaux message"</item>
+  </plurals>
+  <plurals name="notification_unread_notified_messages">
+    <item quantity="zero">"Aucun message notifié non lu"</item>
+    <item quantity="one">"%d message notifié non lu"</item>
+    <item quantity="two">"%d messages notifiés non lus"</item>
+    <item quantity="few">"%d messages notifiés non lus"</item>
+    <item quantity="many">"%d messages notifiés non lus"</item>
+    <item quantity="other">"%d messages notifiés non lus"</item>
+  </plurals>
+  <plurals name="notification_unread_notified_messages_in_room_rooms">
+    <item quantity="zero">"%d salle"</item>
+    <item quantity="one">"%d salle"</item>
+    <item quantity="two">"%d salles"</item>
+    <item quantity="few">"%d salles"</item>
+    <item quantity="many">"%d salles"</item>
+    <item quantity="other">"%d salles"</item>
+  </plurals>
+  <string name="push_choose_distributor_dialog_title_android">"Choisissez comment recevoir les notifications"</string>
+  <string name="push_distributor_background_sync_android">"Synchronisation en arrière-plan"</string>
+  <string name="push_distributor_firebase_android">"Services Google"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"Aucun service Google Play valide n\'a été trouvé. Les notifications peuvent ne pas fonctionner correctement."</string>
+  <string name="notification_room_action_quick_reply">"Réponse rapide"</string>
+</resources>
