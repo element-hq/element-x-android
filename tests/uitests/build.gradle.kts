@@ -35,6 +35,12 @@ android {
     }
 }
 
+tasks.withType<Test> {
+    testLogging {
+        showStandardStreams = true
+    }
+}
+
 dependencies {
     testImplementation(libs.test.junit)
     testImplementation(libs.test.parameter.injector)

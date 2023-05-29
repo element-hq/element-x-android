@@ -17,26 +17,25 @@
 
 package io.element.android.tests.uitests
 
-import android.content.res.Configuration
-import android.os.LocaleList
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onRoot
-import androidx.compose.ui.unit.Density
+import androidx.compose.ui.test.printToLog
+import androidx.compose.ui.test.printToString
 import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ActivityScenario
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.airbnb.android.showkase.models.Showkase
 import com.github.takahirom.roborazzi.DEFAULT_ROBORAZZI_OUTPUT_DIR_PATH
-import com.github.takahirom.roborazzi.RoborazziRule
+import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.google.testing.junit.testparameterinjector.TestParameter
 import io.element.android.libraries.designsystem.theme.ElementTheme
@@ -44,6 +43,7 @@ import io.element.android.tests.uitests.test.TestActivity
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.ParameterizedRobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import java.io.File
@@ -59,10 +59,18 @@ import java.util.Locale
  * my own needs for this sample.
  */
 //@RunWith(TestParameterInjector::class)
-@Config(sdk = [30])
-@RunWith(AndroidJUnit4::class)
+@Config(sdk = [30], qualifiers = RobolectricDeviceQualifiers.Pixel5)
+@RunWith(ParameterizedRobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class ScreenshotTest {
+class ScreenshotTest(
+    private val componentTestPreview: TestPreview,
+) {
+
+    companion object {
+        @JvmStatic
+        @ParameterizedRobolectricTestRunner.Parameters(name = "Input: {0}")
+        fun params() = PreviewProvider.provideValues()
+    }
 
     object PreviewProvider : TestParameter.TestParameterValuesProvider {
         override fun provideValues(): List<TestPreview> {
@@ -124,26 +132,27 @@ class ScreenshotTest {
         val fontScale = 1.0f
         val locale = "en"
 
-        for (componentTestPreview in PreviewProvider.provideValues()) {
-            val scenario = ActivityScenario.launch(TestActivity::class.java)
-            composeTestRule.setContent {
-                CompositionLocalProvider(
-                    LocalInspectionMode provides true,
-                ) {
-                    ElementTheme {
-                        Box(
-                            modifier = Modifier
-                                .background(MaterialTheme.colorScheme.background)
-                                .sizeIn(minWidth = 1.dp, minHeight = 1.dp, maxHeight = 1000.dp)
-                        ) {
-                            componentTestPreview.Content()
-                        }
+        val scenario = ActivityScenario.launch(TestActivity::class.java)
+        composeTestRule.setContent {
+            CompositionLocalProvider(
+                LocalInspectionMode provides true,
+            ) {
+                ElementTheme {
+                    Box(
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.background)
+                            .sizeIn(minWidth = 1.dp, minHeight = 1.dp, maxHeight = 1000.dp)
+                    ) {
+                        componentTestPreview.Content()
                     }
                 }
             }
-            composeTestRule.onRoot().captureRoboImage(File(DEFAULT_ROBORAZZI_OUTPUT_DIR_PATH, componentTestPreview.toString() + ".png"))
-            scenario.close()
         }
+        val onAllRootNodes = composeTestRule.onAllNodes(isRoot())
+        val allNodes = onAllRootNodes.fetchSemanticsNodes()
+        allNodes.forEachIndexed { index, node -> println("Node #$index: ${node.boundsInWindow}") }
+        onAllRootNodes.onLast().captureRoboImage(File(DEFAULT_ROBORAZZI_OUTPUT_DIR_PATH, componentTestPreview.toString() + ".png"))
+        scenario.close()
     }
 }
 
