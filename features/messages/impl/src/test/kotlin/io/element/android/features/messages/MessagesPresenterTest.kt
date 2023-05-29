@@ -26,9 +26,10 @@ import io.element.android.features.messages.impl.MessagesEvents
 import io.element.android.features.messages.impl.MessagesPresenter
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.impl.textcomposer.MessageComposerPresenter
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
+import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -37,6 +38,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
+import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.coroutines.test.TestScope
@@ -134,7 +136,8 @@ class MessagesPresenterTest {
             room = matrixRoom,
             mediaPickerProvider = FakePickerProvider(),
             featureFlagService = FakeFeatureFlagService(),
-            mediaPreProcessor = FakeMediaPreProcessor(),
+            localMediaFactory = FakeLocalMediaFactory(),
+            mediaSender = MediaSender(FakeMediaPreProcessor(),matrixRoom),
             snackbarDispatcher = SnackbarDispatcher(),
         )
         val timelinePresenter = TimelinePresenter(
@@ -153,4 +156,3 @@ class MessagesPresenterTest {
         )
     }
 }
-

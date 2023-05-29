@@ -17,7 +17,6 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.runtime.Composable

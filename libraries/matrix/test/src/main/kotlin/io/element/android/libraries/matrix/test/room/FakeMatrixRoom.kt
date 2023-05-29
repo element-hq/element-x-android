@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.FAKE_DELAY_IN_MS
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -99,7 +100,7 @@ class FakeMatrixRoom(
     }
 
     override suspend fun sendMessage(message: String): Result<Unit> {
-        delay(100)
+        delay(FAKE_DELAY_IN_MS)
         return Result.success(Unit)
     }
 
@@ -108,7 +109,7 @@ class FakeMatrixRoom(
 
     override suspend fun editMessage(originalEventId: EventId, message: String): Result<Unit> {
         editMessageParameter = message
-        delay(100)
+        delay(FAKE_DELAY_IN_MS)
         return Result.success(Unit)
     }
 
@@ -117,7 +118,7 @@ class FakeMatrixRoom(
 
     override suspend fun replyMessage(eventId: EventId, message: String): Result<Unit> {
         replyMessageParameter = message
-        delay(100)
+        delay(FAKE_DELAY_IN_MS)
         return Result.success(Unit)
     }
 
@@ -126,7 +127,7 @@ class FakeMatrixRoom(
 
     override suspend fun redactEvent(eventId: EventId, reason: String?): Result<Unit> {
         redactEventEventIdParam = eventId
-        delay(100)
+        delay(FAKE_DELAY_IN_MS)
         return Result.success(Unit)
     }
 
@@ -150,13 +151,20 @@ class FakeMatrixRoom(
         return canInviteResult
     }
 
-    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo): Result<Unit> = sendMediaResult.also { sendMediaCount++ }
+    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo): Result<Unit> = fakeSendMedia()
 
-    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo): Result<Unit> = sendMediaResult.also { sendMediaCount++ }
+    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo): Result<Unit> = fakeSendMedia()
 
-    override suspend fun sendAudio(file: File, audioInfo: AudioInfo): Result<Unit> = sendMediaResult.also { sendMediaCount++ }
+    override suspend fun sendAudio(file: File, audioInfo: AudioInfo): Result<Unit> = fakeSendMedia()
 
-    override suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit> = sendMediaResult.also { sendMediaCount++ }
+    override suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit> = fakeSendMedia()
+
+    private suspend fun fakeSendMedia(): Result<Unit> {
+        delay(FAKE_DELAY_IN_MS)
+        return sendMediaResult.onSuccess {
+            sendMediaCount++
+        }
+    }
 
     override fun close() = Unit
 

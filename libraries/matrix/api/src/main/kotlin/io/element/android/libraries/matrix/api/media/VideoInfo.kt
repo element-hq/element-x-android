@@ -23,6 +23,6 @@ data class VideoInfo(
     val mimetype: String?,
     val size: Long?,
     val thumbnailInfo: ThumbnailInfo?,
-    val thumbnailUrl: String?,
+    val thumbnailSource: MediaSource?,
     val blurhash: String?
 )

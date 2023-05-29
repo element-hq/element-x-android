@@ -16,13 +16,16 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
-import io.element.android.libraries.matrix.api.media.MediaResolver
+import io.element.android.libraries.matrix.api.media.MediaSource
 
 data class TimelineItemImageContent(
     val body: String,
-    val imageMeta: MediaResolver.Meta,
+    val mediaSource: MediaSource,
+    val mimeType: String?,
     val blurhash: String?,
+    val width: Int?,
+    val height: Int?,
     val aspectRatio: Float
-) : TimelineItemEventContent{
+) : TimelineItemEventContent {
     override val type: String = "TimelineItemImageContent"
 }

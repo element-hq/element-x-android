@@ -22,16 +22,16 @@ import dagger.Provides
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 
 @Module
 @ContributesTo(SessionScope::class)
 object SessionMatrixModule {
     @Provides
     @SingleIn(SessionScope::class)
-    fun providesRustSessionVerificationService(matrixClient: MatrixClient): SessionVerificationService {
+    fun providesSessionVerificationService(matrixClient: MatrixClient): SessionVerificationService {
         return matrixClient.sessionVerificationService()
     }
 
@@ -39,5 +39,11 @@ object SessionMatrixModule {
     @SingleIn(SessionScope::class)
     fun provideRoomMembershipObserver(matrixClient: MatrixClient): RoomMembershipObserver {
         return matrixClient.roomMembershipObserver()
+    }
+
+    @Provides
+    @SingleIn(SessionScope::class)
+    fun provideMediaLoader(matrixClient: MatrixClient): MatrixMediaLoader {
+        return matrixClient.mediaLoader
     }
 }

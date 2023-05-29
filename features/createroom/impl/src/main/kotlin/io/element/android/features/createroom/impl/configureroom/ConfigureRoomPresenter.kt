@@ -39,8 +39,6 @@ import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.createroom.RoomVisibility
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
-import io.element.android.libraries.mediaupload.api.MediaType
-import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -114,7 +112,7 @@ class ConfigureRoomPresenter @Inject constructor(
         createRoomAction: MutableState<Async<RoomId>>
     ) = launch {
         suspend {
-            val mxc = config.avatarUri?.let { uploadAvatar(it) }
+            val avatarUrl = config.avatarUri?.let { uploadAvatar(it) }
             val params = CreateRoomParameters(
                 name = config.roomName,
                 topic = config.topic,
@@ -123,16 +121,16 @@ class ConfigureRoomPresenter @Inject constructor(
                 visibility = if (config.privacy == RoomPrivacy.Public) RoomVisibility.PUBLIC else RoomVisibility.PRIVATE,
                 preset = if (config.privacy == RoomPrivacy.Public) RoomPreset.PUBLIC_CHAT else RoomPreset.PRIVATE_CHAT,
                 invite = config.invites.map { it.userId },
-                avatar = mxc,
+                avatar = avatarUrl,
             )
             matrixClient.createRoom(params).getOrThrow()
                 .also { dataStore.clearCachedData() }
         }.execute(createRoomAction)
     }
 
-    private suspend fun uploadAvatar(avatarUri: Uri): String? {
-        val preprocessed = mediaPreProcessor.process(avatarUri, MediaType.Image).getOrThrow() as? MediaUploadInfo.Image
-        val byteArray = preprocessed?.file?.readBytes()
-        return byteArray?.let { matrixClient.uploadMedia(MimeTypes.Jpeg, it) }?.getOrThrow()
+    private suspend fun uploadAvatar(avatarUri: Uri): String {
+        val preprocessed = mediaPreProcessor.process(avatarUri, MimeTypes.Jpeg, compressIfPossible = false).getOrThrow()
+        val byteArray = preprocessed.file.readBytes()
+        return matrixClient.uploadMedia(MimeTypes.Jpeg, byteArray).getOrThrow()
     }
 }

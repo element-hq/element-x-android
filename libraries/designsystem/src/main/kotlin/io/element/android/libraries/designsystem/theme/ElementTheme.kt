@@ -24,12 +24,14 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 /**
@@ -55,7 +57,6 @@ fun ElementTheme(
     content: @Composable () -> Unit,
 ) {
     val systemUiController = rememberSystemUiController()
-    val useDarkIcons = !darkTheme
     val currentColor = remember(darkTheme) {
         colors.copy()
     }.apply { updateColorsFrom(colors) }
@@ -68,13 +69,7 @@ fun ElementTheme(
         else -> materialLightColors
     }
     SideEffect {
-        systemUiController.setStatusBarColor(
-            color = colorScheme.background
-        )
-        systemUiController.setSystemBarsColor(
-            color = Color.Transparent,
-            darkIcons = useDarkIcons
-        )
+        systemUiController.applyTheme(colorScheme = colorScheme, darkTheme = darkTheme)
     }
     CompositionLocalProvider(
         LocalColors provides currentColor,
@@ -85,4 +80,37 @@ fun ElementTheme(
             content = content
         )
     }
+}
+
+/**
+ * Can be used to force a composable in dark theme.
+ * It will automatically change the system ui colors back to normal when leaving the composition.
+ */
+@Composable
+fun ForcedDarkElementTheme(
+    content: @Composable () -> Unit,
+) {
+    val systemUiController = rememberSystemUiController()
+    val colorScheme = MaterialTheme.colorScheme
+    val wasDarkTheme = !ElementTheme.colors.isLight
+    DisposableEffect(Unit) {
+        onDispose {
+            systemUiController.applyTheme(colorScheme, wasDarkTheme)
+        }
+    }
+    ElementTheme(darkTheme = true, content = content)
+}
+
+private fun SystemUiController.applyTheme(
+    colorScheme: ColorScheme,
+    darkTheme: Boolean,
+) {
+    val useDarkIcons = !darkTheme
+    setStatusBarColor(
+        color = colorScheme.background
+    )
+    setSystemBarsColor(
+        color = Color.Transparent,
+        darkIcons = useDarkIcons
+    )
 }
