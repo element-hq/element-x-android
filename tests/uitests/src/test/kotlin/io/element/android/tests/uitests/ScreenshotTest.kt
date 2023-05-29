@@ -19,30 +19,34 @@ package io.element.android.tests.uitests
 
 import android.content.res.Configuration
 import android.os.LocaleList
-import androidx.activity.OnBackPressedDispatcher
-import androidx.activity.OnBackPressedDispatcherOwner
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.Density
-import androidx.lifecycle.Lifecycle
-import app.cash.paparazzi.Paparazzi
+import androidx.compose.ui.unit.dp
+import androidx.test.core.app.ActivityScenario
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.airbnb.android.showkase.models.Showkase
-import com.android.ide.common.rendering.api.SessionParams
+import com.github.takahirom.roborazzi.DEFAULT_ROBORAZZI_OUTPUT_DIR_PATH
+import com.github.takahirom.roborazzi.RoborazziRule
+import com.github.takahirom.roborazzi.captureRoboImage
 import com.google.testing.junit.testparameterinjector.TestParameter
-import com.google.testing.junit.testparameterinjector.TestParameterInjector
-import io.element.android.libraries.designsystem.preview.NIGHT_MODE_NAME
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.tests.uitests.test.TestActivity
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
+import org.robolectric.annotation.GraphicsMode
+import java.io.File
 import java.util.Locale
 
 /**
@@ -54,7 +58,10 @@ import java.util.Locale
  * PR here - https://github.com/android/nowinandroid/pull/101. Modified the test from that PR to
  * my own needs for this sample.
  */
-@RunWith(TestParameterInjector::class)
+//@RunWith(TestParameterInjector::class)
+@Config(sdk = [30])
+@RunWith(AndroidJUnit4::class)
+@GraphicsMode(GraphicsMode.Mode.NATIVE)
 class ScreenshotTest {
 
     object PreviewProvider : TestParameter.TestParameterValuesProvider {
@@ -69,53 +76,73 @@ class ScreenshotTest {
     }
 
     @get:Rule
-    val paparazzi = Paparazzi(
-        maxPercentDifference = 0.01,
-        renderingMode = SessionParams.RenderingMode.NORMAL,
-    )
+    val composeTestRule = createAndroidComposeRule<TestActivity>()
 
     @Test
-    fun preview_tests(
-        @TestParameter(valuesProvider = PreviewProvider::class) componentTestPreview: TestPreview,
-        @TestParameter baseDeviceConfig: BaseDeviceConfig,
-        @TestParameter(value = ["1.0"/*, "1.5"*/]) fontScale: Float,
-        @TestParameter(value = ["en" /*"fr", "de", "ru"*/]) localeStr: String,
-    ) {
-        paparazzi.unsafeUpdateConfig(
-            deviceConfig = baseDeviceConfig.deviceConfig.copy(
-                softButtons = false
-            ),
-        )
-        paparazzi.snapshot {
-            val lifecycleOwner = LocalLifecycleOwner.current
-            CompositionLocalProvider(
-                LocalInspectionMode provides true,
-                LocalDensity provides Density(
-                    density = LocalDensity.current.density,
-                    fontScale = fontScale
-                ),
-                LocalConfiguration provides Configuration().apply {
-                    setLocales(LocaleList(localeStr.toLocale()))
-                    // Dark mode previews have name "N" so their component name contains "- N"
-                    if (componentTestPreview.name.contains("- $NIGHT_MODE_NAME")){
-                        uiMode = Configuration.UI_MODE_NIGHT_YES
-                    }
-                },
-                // Needed so that UI that uses it don't crash during screenshot tests
-                LocalOnBackPressedDispatcherOwner provides object : OnBackPressedDispatcherOwner {
-                    override val lifecycle: Lifecycle get() = lifecycleOwner.lifecycle
-                    override val onBackPressedDispatcher: OnBackPressedDispatcher get() = OnBackPressedDispatcher()
-                }
-            ) {
-                ElementTheme {
-                    Box(
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.background)
-                    ) {
-                        componentTestPreview.Content()
+    fun preview_tests() {
+//        val needsScrolling = componentTestPreview.needsScroll
+//        val screenHeight = componentTestPreview.customHeightDp.takeIf { it != null }
+//        roborazzi.unsafeUpdateConfig(
+//            deviceConfig = baseDeviceConfig.deviceConfig.copy(
+//                softButtons = false,
+//                screenHeight = screenHeight ?: baseDeviceConfig.deviceConfig.screenHeight
+//            ),
+//            renderingMode = if (needsScrolling) SessionParams.RenderingMode.V_SCROLL else SessionParams.RenderingMode.SHRINK
+//        )
+//        roborazzi.snapshot {
+//            val lifecycleOwner = LocalLifecycleOwner.current
+//            CompositionLocalProvider(
+//                LocalInspectionMode provides true,
+//                LocalDensity provides Density(
+//                    density = LocalDensity.current.density,
+//                    fontScale = fontScale
+//                ),
+//                LocalConfiguration provides Configuration().apply {
+//                    setLocales(LocaleList(localeStr.toLocale()))
+//                },
+//                // Needed so that UI that uses it don't crash during screenshot tests
+//                LocalOnBackPressedDispatcherOwner provides object : OnBackPressedDispatcherOwner {
+//                    override val lifecycle: Lifecycle get() = lifecycleOwner.lifecycle
+//                    override val onBackPressedDispatcher: OnBackPressedDispatcher get() = OnBackPressedDispatcher()
+//                }
+//            ) {
+//                ElementTheme {
+//                    Box(
+//                        modifier = Modifier
+//                            .background(MaterialTheme.colorScheme.background)
+//                            .sizeIn(minWidth = 1.dp, minHeight = 1.dp)
+//                            .applyIf(needsScrolling, ifTrue = {
+//                                heightIn(max = 1000.dp)
+//                            })
+//                    ) {
+//                        componentTestPreview.Content()
+//                    }
+//                }
+//            }
+//        }
+
+        val fontScale = 1.0f
+        val locale = "en"
+
+        for (componentTestPreview in PreviewProvider.provideValues()) {
+            val scenario = ActivityScenario.launch(TestActivity::class.java)
+            composeTestRule.setContent {
+                CompositionLocalProvider(
+                    LocalInspectionMode provides true,
+                ) {
+                    ElementTheme {
+                        Box(
+                            modifier = Modifier
+                                .background(MaterialTheme.colorScheme.background)
+                                .sizeIn(minWidth = 1.dp, minHeight = 1.dp, maxHeight = 1000.dp)
+                        ) {
+                            componentTestPreview.Content()
+                        }
                     }
                 }
             }
+            composeTestRule.onRoot().captureRoboImage(File(DEFAULT_ROBORAZZI_OUTPUT_DIR_PATH, componentTestPreview.toString() + ".png"))
+            scenario.close()
         }
     }
 }

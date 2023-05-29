@@ -21,11 +21,18 @@ import extension.allServicesImpl
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.ksp)
-    alias(libs.plugins.paparazzi)
+//    alias(libs.plugins.paparazzi)
+    id("io.github.takahirom.roborazzi")
 }
 
 android {
     namespace = "io.element.android.tests.uitests"
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -37,6 +44,14 @@ dependencies {
     kspTest(libs.showkase.processor)
 
     implementation(libs.showkase)
+
+    // Core functions
+    testImplementation("io.github.takahirom.roborazzi:roborazzi:1.3.0-alpha-3")
+    // JUnit rules
+    testImplementation("io.github.takahirom.roborazzi:roborazzi-junit-rule:1.3.0-alpha-3")
+    testImplementation("org.robolectric:robolectric:4.10.3")
+    testImplementation("org.robolectric:annotations:4.10.3")
+    testImplementation("androidx.compose.ui:ui-test-junit4:1.4.3")
 
     allLibrariesImpl()
     allServicesImpl()

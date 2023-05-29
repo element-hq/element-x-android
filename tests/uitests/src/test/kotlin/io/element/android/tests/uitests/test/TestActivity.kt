@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.tests.uitests
+package io.element.android.tests.uitests.test
 
-//import app.cash.paparazzi.DeviceConfig
-//
-//enum class BaseDeviceConfig(
-//    val deviceConfig: DeviceConfig,
-//) {
-//    NEXUS_5(DeviceConfig.NEXUS_5),
-//    // PIXEL_C(DeviceConfig.PIXEL_C),
-//}
+import androidx.activity.ComponentActivity
+
+class TestActivity : ComponentActivity()

@@ -39,6 +39,8 @@ plugins {
     alias(libs.plugins.dependencygraph)
     alias(libs.plugins.sonarqube)
     alias(libs.plugins.kover)
+
+    id("io.github.takahirom.roborazzi") version "1.3.0-alpha-3" apply false
 }
 
 tasks.register<Delete>("clean").configure {
