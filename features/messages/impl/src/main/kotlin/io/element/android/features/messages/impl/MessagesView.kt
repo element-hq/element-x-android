@@ -357,5 +357,11 @@ internal fun MessagesViewDarkPreview(@PreviewParameter(MessagesStateProvider::cl
 
 @Composable
 private fun ContentToPreview(state: MessagesState) {
-    MessagesView(state, {}, {}, {}, {})
+    MessagesView(
+        state = state,
+        onBackPressed = {},
+        onRoomDetailsClicked = {},
+        onEventClicked = {},
+        onPreviewAttachments = {}
+    )
 }

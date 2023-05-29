@@ -51,7 +51,7 @@ class MediaViewerPresenterTest {
             assertThat(initialState.name).isEqualTo(TESTED_MEDIA_NAME)
             val loadingState = awaitItem()
             assertThat(loadingState.downloadedMedia).isInstanceOf(Async.Loading::class.java)
-            testScheduler.advanceTimeBy(FAKE_DELAY_IN_MS)
+            testScheduler.advanceTimeBy(FAKE_DELAY_IN_MS + 1)
             val successState = awaitItem()
             val successData = successState.downloadedMedia.dataOrNull()
             assertThat(successState.downloadedMedia).isInstanceOf(Async.Success::class.java)

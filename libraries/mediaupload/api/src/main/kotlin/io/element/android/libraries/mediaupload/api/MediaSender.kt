@@ -54,7 +54,7 @@ class MediaSender @Inject constructor(
             is MediaUploadInfo.AnyFile -> {
                 sendFile(info.file, info.info)
             }
-            else -> error("Unexpected MediaUploadInfo format: $info")
+            else -> Result.failure(IllegalStateException("Unexpected MediaUploadInfo format: $info"))
         }
     }
 }
