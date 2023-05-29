@@ -25,7 +25,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.createroom.RoomVisibility
-import io.element.android.libraries.matrix.api.media.MediaResolver
+import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -34,7 +34,7 @@ import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.impl.media.RustMediaResolver
+import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
@@ -63,7 +63,6 @@ import org.matrix.rustcomponents.sdk.SlidingSyncListBuilder
 import org.matrix.rustcomponents.sdk.SlidingSyncListOnceBuilt
 import org.matrix.rustcomponents.sdk.SlidingSyncRequestListFilters
 import org.matrix.rustcomponents.sdk.TaskHandle
-import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
@@ -186,9 +185,12 @@ class RustMatrixClient constructor(
     override val invitesDataSource: RoomSummaryDataSource
         get() = rustInvitesDataSource
 
+    private val rustMediaLoader = RustMediaLoader(dispatchers, client)
+    override val mediaLoader: MatrixMediaLoader
+        get() = rustMediaLoader
+
     private var slidingSyncObserverToken: TaskHandle? = null
 
-    private val mediaResolver = RustMediaResolver(this)
     private val isSyncing = AtomicBoolean(false)
 
     private val roomMembershipObserver = RoomMembershipObserver()
@@ -288,8 +290,6 @@ class RustMatrixClient constructor(
             }
         }
 
-    override fun mediaResolver(): MediaResolver = mediaResolver
-
     override fun sessionVerificationService(): SessionVerificationService = verificationService
 
     override fun pushersService(): PushersService = pushersService
@@ -346,34 +346,6 @@ class RustMatrixClient constructor(
             client.avatarUrl()
         }
     }
-
-    @OptIn(ExperimentalUnsignedTypes::class)
-    override suspend fun loadMediaContent(url: String): Result<ByteArray> =
-        withContext(dispatchers.io) {
-            runCatching {
-                mediaSourceFromUrl(url).use { source ->
-                    client.getMediaContent(source).toUByteArray().toByteArray()
-                }
-            }
-        }
-
-    @OptIn(ExperimentalUnsignedTypes::class)
-    override suspend fun loadMediaThumbnail(
-        url: String,
-        width: Long,
-        height: Long
-    ): Result<ByteArray> =
-        withContext(dispatchers.io) {
-            runCatching {
-                mediaSourceFromUrl(url).use { mediaSource ->
-                    client.getMediaThumbnail(
-                        mediaSource = mediaSource,
-                        width = width.toULong(),
-                        height = height.toULong()
-                    ).toUByteArray().toByteArray()
-                }
-            }
-        }
 
     @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun uploadMedia(mimeType: String, data: ByteArray): Result<String> = withContext(dispatchers.io) {

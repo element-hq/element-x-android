@@ -20,13 +20,17 @@ import android.net.Uri
 
 interface MediaPreProcessor {
     /**
-     * Given a [uri] and [mediaType], pre-processes the media before it's uploaded, resizing, transcoding, and removing sensitive info from its metadata.
+     * Given a [uri] and [mimeType], pre-processes the media before it's uploaded, resizing, transcoding, and removing sensitive info from its metadata.
      * If [deleteOriginal] is `true`, the file reference by the [uri] will be automatically deleted too when this process finishes.
      * @return a [Result] with the [MediaUploadInfo] containing all the info needed to begin the upload.
      */
     suspend fun process(
         uri: Uri,
-        mediaType: MediaType,
-        deleteOriginal: Boolean = false
+        mimeType: String,
+        deleteOriginal: Boolean = false,
+        compressIfPossible: Boolean
     ): Result<MediaUploadInfo>
+
+    data class Failure(override val cause: Throwable?) : RuntimeException(cause)
 }
+

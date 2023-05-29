@@ -19,7 +19,6 @@ package io.element.android.libraries.mediaupload.test
 import android.net.Uri
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
-import io.element.android.libraries.mediaupload.api.MediaType
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import java.io.File
 
@@ -32,11 +31,17 @@ class FakeMediaPreProcessor : MediaPreProcessor {
                 mimetype = "*/*",
                 size = 999L,
                 thumbnailInfo = null,
-                thumbnailUrl = null,
+                thumbnailSource = null,
             )
         )
     )
-    override suspend fun process(uri: Uri, mediaType: MediaType, deleteOriginal: Boolean): Result<MediaUploadInfo> = result
+
+    override suspend fun process(
+        uri: Uri,
+        mimeType: String,
+        deleteOriginal: Boolean,
+        compressIfPossible: Boolean
+    ): Result<MediaUploadInfo> = result
 
     fun givenResult(value: Result<MediaUploadInfo>) {
         this.result = value

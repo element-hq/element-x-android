@@ -24,7 +24,10 @@ class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEv
     override val values = sequenceOf(
         aTimelineItemEmoteContent(),
         aTimelineItemEncryptedContent(),
-        // TODO MessagesTimelineItemImageContent(),
+        aTimelineItemImageContent(),
+        aTimelineItemVideoContent(),
+        aTimelineItemFileContent("A file.pdf"),
+        aTimelineItemFileContent("A bigger file name which doesn't fit.pdf"),
         aTimelineItemNoticeContent(),
         aTimelineItemRedactedContent(),
         aTimelineItemTextContent(),

@@ -32,8 +32,8 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlin.random.Random
 
-fun aTimelineState() = TimelineState(
-    timelineItems = persistentListOf(),
+fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf()) = TimelineState(
+    timelineItems = timelineItems,
     paginationState = MatrixTimeline.PaginationState(isBackPaginating = false, canBackPaginate = true),
     highlightedEventId = null,
     eventSink = {}

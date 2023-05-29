@@ -17,6 +17,7 @@ recyclerview = "1.3.0"
 lifecycle = "2.6.1"
 activity = "1.7.2"
 startup = "1.1.1"
+media3 = "1.0.2"
 
 # Compose
 compose_bom = "2023.05.01"
@@ -41,6 +42,7 @@ appyx = "1.2.0"
 dependencycheck = "8.2.1"
 stem = "2.3.0"
 sqldelight = "1.5.5"
+telephoto = "0.3.0"
 
 # DI
 dagger = "2.46.1"
@@ -72,6 +74,8 @@ androidx_lifecycle_runtime = { module = "androidx.lifecycle:lifecycle-runtime-kt
 androidx_lifecycle_process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
 androidx_splash = "androidx.core:core-splashscreen:1.0.1"
 androidx_security_crypto = "androidx.security:security-crypto:1.0.0"
+androidx_media3_exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
+androidx_media3_ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
 
 androidx_activity_activity = { module = "androidx.activity:activity", version.ref = "activity" }
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
@@ -141,6 +145,7 @@ unifiedpush = "com.github.UnifiedPush:android-connector:2.1.1"
 gujun_span = "me.gujun.android:span:1.7"
 otaliastudios_transcoder = "com.otaliastudios:transcoder:0.10.5"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.1.0"
+telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 
 # Di
 inject = "javax.inject:javax.inject:1"

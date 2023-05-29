@@ -17,15 +17,19 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 
 @Composable
 fun TimelineItemEventContentView(
@@ -56,6 +60,14 @@ fun TimelineItemEventContentView(
             modifier = modifier
         )
         is TimelineItemImageContent -> TimelineItemImageView(
+            content = content,
+            modifier = modifier,
+        )
+        is TimelineItemVideoContent -> TimelineItemVideoView(
+            content = content,
+            modifier = modifier
+        )
+        is TimelineItemFileContent -> TimelineItemFileView(
             content = content,
             modifier = modifier
         )

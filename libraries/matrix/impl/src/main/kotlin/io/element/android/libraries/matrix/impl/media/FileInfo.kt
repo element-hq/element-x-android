@@ -17,15 +17,13 @@
 package io.element.android.libraries.matrix.impl.media
 
 import io.element.android.libraries.matrix.api.media.FileInfo
-import io.element.android.libraries.matrix.api.media.ThumbnailInfo
 import org.matrix.rustcomponents.sdk.FileInfo as RustFileInfo
-import org.matrix.rustcomponents.sdk.ThumbnailInfo as RustThumbnailInfo
 
 fun RustFileInfo.map(): FileInfo = FileInfo(
     mimetype = mimetype,
     size = size?.toLong(),
     thumbnailInfo = thumbnailInfo?.map(),
-    thumbnailUrl = thumbnailSource?.useUrl()
+    thumbnailSource = thumbnailSource?.map()
 )
 
 fun FileInfo.map(): RustFileInfo = RustFileInfo(
