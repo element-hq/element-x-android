@@ -65,5 +65,4 @@ class ResultTests {
         assertThat(mapErrorToError.exceptionOrNull()?.message).isEqualTo("initial error")
         assertThat(mapErrorAndCatch.exceptionOrNull()?.message).isEqualTo("initial error")
     }
-
 }

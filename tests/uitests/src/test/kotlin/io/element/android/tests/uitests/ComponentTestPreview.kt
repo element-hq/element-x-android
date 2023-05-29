@@ -25,10 +25,5 @@ class ComponentTestPreview(
     @Composable
     override fun Content() = showkaseBrowserComponent.component()
 
-    override val needsScroll: Boolean = showkaseBrowserComponent.heightDp != null
-
-    override val customHeightDp: Int? = showkaseBrowserComponent.heightDp.takeIf { it != null }
-
-
     override fun toString(): String = showkaseBrowserComponent.componentKey
 }
