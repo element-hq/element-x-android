@@ -38,7 +38,6 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
-import io.element.android.libraries.mediaupload.api.MediaType
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -155,7 +154,7 @@ class RoomDetailsEditionPresenter @Inject constructor(
     private suspend fun updateAvatar(avatarUri: Uri?): Result<Unit> {
         return runCatching {
             val result = if (avatarUri != null) {
-                val preprocessed = mediaPreProcessor.process(avatarUri, MediaType.Image).getOrThrow() as? MediaUploadInfo.Image
+                val preprocessed = mediaPreProcessor.process(avatarUri, MimeTypes.Jpeg, compressIfPossible = false).getOrThrow() as? MediaUploadInfo.Image
                 val byteArray = preprocessed?.file?.readBytes()
                 byteArray?.let { room.updateAvatar(MimeTypes.Jpeg, it) } ?: error("Could not process the given uri ($avatarUri)")
             } else {
