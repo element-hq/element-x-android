@@ -160,7 +160,7 @@ class FakeMatrixRoom(
     override suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit> = fakeSendMedia()
 
     private suspend fun fakeSendMedia(): Result<Unit> {
-        delay(FAKE_DELAY_IN_MS)
+//        delay(FAKE_DELAY_IN_MS)
         return sendMediaResult.onSuccess {
             sendMediaCount++
         }
