@@ -151,6 +151,7 @@ telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", v
 # Analytics
 posthog = "com.posthog.android:posthog:2.0.3"
 sentry_android = "io.sentry:sentry-android:6.17.0"
+matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:main-SNAPSHOT"
 
 # Di
 inject = "javax.inject:javax.inject:1"

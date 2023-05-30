@@ -22,5 +22,5 @@ android {
 }
 
 dependencies {
-    api("com.github.matrix-org:matrix-analytics-events:PR82-SNAPSHOT")
+    api(libs.matrix.analytics.events)
 }
