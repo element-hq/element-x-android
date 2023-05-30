@@ -30,6 +30,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.executeResult
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.mediaupload.api.MediaSender
+import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -47,7 +48,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     @Composable
     override fun present(): AttachmentsPreviewState {
 
-        val coroutineScope = rememberCoroutineScope()
+        val coroutineScope = rememberCoroutineScope { CoroutineName("AttachmentsViewPresenterCoroutine") }
 
         val sendActionState = remember {
             mutableStateOf<Async<Unit>>(Async.Uninitialized)
@@ -70,7 +71,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     private fun CoroutineScope.sendAttachment(
         attachment: Attachment,
         sendActionState: MutableState<Async<Unit>>,
-    ) = launch(dispatchers.io) {
+    ) = launch(dispatchers.io + CoroutineName("SendAttachmentCoroutine")) {
         when (attachment) {
             is Attachment.Media -> {
                 sendMedia(
