@@ -17,8 +17,10 @@
 package io.element.android.libraries.matrix.impl.auth
 
 import io.element.android.libraries.matrix.api.auth.OidcConfig
-import org.matrix.rustcomponents.sdk.OidcClientMetadata
+// TODO Oidc
+// import org.matrix.rustcomponents.sdk.OidcClientMetadata
 
+/*
 val oidcClientMetadata: OidcClientMetadata = OidcClientMetadata(
     clientName = "Element",
     redirectUri = OidcConfig.redirectUri,
@@ -26,4 +28,5 @@ val oidcClientMetadata: OidcClientMetadata = OidcClientMetadata(
     tosUri = "https://element.io/user-terms-of-service",
     policyUri = "https://element.io/privacy"
 )
+ */
 
