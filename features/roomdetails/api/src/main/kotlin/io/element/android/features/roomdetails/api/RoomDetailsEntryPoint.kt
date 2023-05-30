@@ -20,7 +20,16 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.matrix.api.core.UserId
 
 interface RoomDetailsEntryPoint : FeatureEntryPoint {
-    fun createNode(parentNode: Node, buildContext: BuildContext, plugins: List<Plugin>): Node
+    fun createRoomDetailsNode(parentNode: Node, buildContext: BuildContext, plugins: List<Plugin>): Node
+
+    fun createRoomMemberDetailsNode(parentNode: Node, buildContext: BuildContext, plugins: List<Plugin>): Node
+
 }
+
+data class RoomMemberDetailsInput(
+    val roomMemberId: UserId,
+) : NodeInputs

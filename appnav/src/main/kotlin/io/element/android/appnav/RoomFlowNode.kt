@@ -34,11 +34,13 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
+import io.element.android.features.roomdetails.api.RoomMemberDetailsInput
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.services.appnavstate.api.AppNavigationStateService
@@ -119,11 +121,19 @@ class RoomFlowNode @AssistedInject constructor(
                     override fun onRoomDetailsClicked() {
                         backstack.push(NavTarget.RoomDetails)
                     }
+
+                    override fun onUserDataClicked(userId: UserId) {
+                        backstack.push(NavTarget.RoomMemberDetails(userId))
+                    }
                 }
                 messagesEntryPoint.createNode(this, buildContext, callback)
             }
             NavTarget.RoomDetails -> {
-                roomDetailsEntryPoint.createNode(this, buildContext, emptyList())
+                roomDetailsEntryPoint.createRoomDetailsNode(this, buildContext, emptyList())
+            }
+            is NavTarget.RoomMemberDetails -> {
+                val plugins = listOf(RoomMemberDetailsInput(navTarget.userId))
+                roomDetailsEntryPoint.createRoomMemberDetailsNode(this, buildContext, plugins)
             }
         }
     }
@@ -134,6 +144,9 @@ class RoomFlowNode @AssistedInject constructor(
 
         @Parcelize
         object RoomDetails : NavTarget
+
+        @Parcelize
+        data class RoomMemberDetails(val userId: UserId) : NavTarget
     }
 
     private val timeline = inputs.room.timeline()

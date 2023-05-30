@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -85,6 +86,7 @@ import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -93,6 +95,7 @@ import kotlinx.coroutines.launch
 fun TimelineView(
     state: TimelineState,
     modifier: Modifier = Modifier,
+    onUserDataClicked: (UserId) -> Unit = {},
     onMessageClicked: (TimelineItem.Event) -> Unit = {},
     onMessageLongClicked: (TimelineItem.Event) -> Unit = {},
     onExpandGroupClick: (TimelineItem.GroupedEvents) -> Unit = {},
@@ -120,6 +123,7 @@ fun TimelineView(
                     onClick = onMessageClicked,
                     onLongClick = onMessageLongClicked,
                     onExpandGroupClick = onExpandGroupClick,
+                    onUserDataClick = onUserDataClicked,
                 )
                 if (index == state.timelineItems.lastIndex) {
                     onReachedLoadMore()
@@ -139,6 +143,7 @@ fun TimelineView(
 fun TimelineItemRow(
     timelineItem: TimelineItem,
     highlightedItem: String?,
+    onUserDataClick: (UserId) -> Unit,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
     onExpandGroupClick: (TimelineItem.GroupedEvents) -> Unit,
@@ -174,6 +179,7 @@ fun TimelineItemRow(
                     isHighlighted = highlightedItem == timelineItem.identifier(),
                     onClick = ::onClick,
                     onLongClick = ::onLongClick,
+                    onUserDataClick = onUserDataClick,
                     modifier = modifier,
                 )
             }
@@ -202,6 +208,7 @@ fun TimelineItemRow(
                                 highlightedItem = highlightedItem,
                                 onClick = onClick,
                                 onLongClick = onLongClick,
+                                onUserDataClick = onUserDataClick,
                                 onExpandGroupClick = {}
                             )
                         }
@@ -230,15 +237,21 @@ fun TimelineItemEventRow(
     isHighlighted: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
+    onUserDataClick: (UserId) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+
+    fun onUserDataClicked() {
+        onUserDataClick(event.senderId)
+    }
 
     val (parentAlignment, contentAlignment) = if (event.isMine) {
         Pair(Alignment.CenterEnd, Alignment.End)
     } else {
         Pair(Alignment.CenterStart, Alignment.Start)
     }
+
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -255,6 +268,7 @@ fun TimelineItemEventRow(
                         event.safeSenderName,
                         event.senderAvatar,
                         Modifier.zIndex(1f)
+                            .clickable(onClick = ::onUserDataClicked)
                     )
                 }
                 val bubbleState = BubbleState(

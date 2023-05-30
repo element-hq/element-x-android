@@ -21,13 +21,18 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
+import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultRoomDetailsEntryPoint @Inject constructor() : RoomDetailsEntryPoint {
-    override fun createNode(parentNode: Node, buildContext: BuildContext, plugins: List<Plugin>): Node {
+    override fun createRoomDetailsNode(parentNode: Node, buildContext: BuildContext, plugins: List<Plugin>): Node {
         return parentNode.createNode<RoomDetailsFlowNode>(buildContext, plugins)
+    }
+
+    override fun createRoomMemberDetailsNode(parentNode: Node, buildContext: BuildContext, plugins: List<Plugin>): Node {
+        return parentNode.createNode<RoomMemberDetailsNode>(buildContext, plugins)
     }
 }

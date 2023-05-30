@@ -60,7 +60,7 @@ class RoomFlowNodeTest {
 
         var nodeId: String? = null
 
-        override fun createNode(parentNode: Node, buildContext: BuildContext, plugins: List<Plugin>): Node {
+        override fun createRoomDetailsNode(parentNode: Node, buildContext: BuildContext, plugins: List<Plugin>): Node {
             return node(buildContext) {}.also {
                 nodeId = it.id
             }

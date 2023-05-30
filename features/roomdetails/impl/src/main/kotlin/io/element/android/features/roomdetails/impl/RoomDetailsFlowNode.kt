@@ -28,6 +28,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.roomdetails.api.RoomMemberDetailsInput
 import io.element.android.features.roomdetails.impl.invite.RoomInviteMembersNode
 import io.element.android.features.roomdetails.impl.members.RoomMemberListNode
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsNode
@@ -95,7 +96,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                 createNode<RoomInviteMembersNode>(buildContext)
             }
             is NavTarget.RoomMemberDetails -> {
-                createNode<RoomMemberDetailsNode>(buildContext, listOf(RoomMemberDetailsNode.Inputs(navTarget.roomMemberId)))
+                createNode<RoomMemberDetailsNode>(buildContext, listOf(RoomMemberDetailsInput(navTarget.roomMemberId)))
             }
         }
     }

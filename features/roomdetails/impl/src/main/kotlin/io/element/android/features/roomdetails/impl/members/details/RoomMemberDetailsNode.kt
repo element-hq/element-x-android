@@ -25,12 +25,11 @@ import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.roomdetails.api.RoomMemberDetailsInput
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
-import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import timber.log.Timber
 import io.element.android.libraries.androidutils.R as AndroidUtilsR
@@ -42,11 +41,7 @@ class RoomMemberDetailsNode @AssistedInject constructor(
     presenterFactory: RoomMemberDetailsPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
 
-    data class Inputs(
-        val roomMemberId: UserId,
-    ) : NodeInputs
-
-    private val inputs = inputs<Inputs>()
+    private val inputs = inputs<RoomMemberDetailsInput>()
     private val presenter = presenterFactory.create(inputs.roomMemberId)
 
     @Composable
