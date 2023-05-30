@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline.groups
 
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemProfileChangeContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
@@ -25,6 +26,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
@@ -47,6 +49,8 @@ internal fun TimelineItem.Event.canBeGrouped(): Boolean {
         is TimelineItemTextBasedContent,
         is TimelineItemEncryptedContent,
         is TimelineItemImageContent,
+        is TimelineItemFileContent,
+        is TimelineItemVideoContent,
         TimelineItemRedactedContent,
         TimelineItemUnknownContent -> false
         is TimelineItemProfileChangeContent,
