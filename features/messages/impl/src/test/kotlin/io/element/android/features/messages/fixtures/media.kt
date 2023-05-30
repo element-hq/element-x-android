@@ -23,7 +23,7 @@ import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.mockk.mockk
 
 fun aLocalMedia(
-    uri: Uri = mockk("localMediaUri"),
+    uri: Uri,
     mimeType: String = MimeTypes.IMAGE_JPEG,
     name: String = "a media",
     size: Long = 1000,
