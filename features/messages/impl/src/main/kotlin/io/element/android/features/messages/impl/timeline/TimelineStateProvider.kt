@@ -94,7 +94,7 @@ internal fun aTimelineItemEvent(
     eventId: EventId = EventId("\$" + Random.nextInt().toString()),
     isMine: Boolean = false,
     content: TimelineItemEventContent = aTimelineItemTextContent(),
-    groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.First,
+    groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
     sendState: EventSendState = EventSendState.Sent(eventId),
 ): TimelineItem.Event {
     return TimelineItem.Event(

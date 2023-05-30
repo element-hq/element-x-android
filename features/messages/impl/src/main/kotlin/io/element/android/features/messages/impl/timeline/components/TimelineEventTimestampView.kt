@@ -25,13 +25,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -48,7 +53,10 @@ fun TimelineEventTimestampView(
     val hasMessageSendingFailed = event.sendState is EventSendState.SendingFailed
     val isMessageEdited = (event.content as? TimelineItemTextBasedContent)?.isEdited.orFalse()
     val tint = if (hasMessageSendingFailed) ElementTheme.colors.textActionCritical else null
-    Row(modifier = modifier.clickable(onClick = onClick)) {
+    Row(
+        modifier = modifier.clickable(onClick = onClick),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         if (isMessageEdited) {
             Text(
                 stringResource(R.string.common_edited_suffix),
@@ -67,4 +75,22 @@ fun TimelineEventTimestampView(
             Icon(imageVector = Icons.Default.Error, contentDescription = "Error sending message", tint = tint, modifier = Modifier.size(15.dp, 18.dp))
         }
     }
+}
+
+@Preview
+@Composable
+internal fun TimelineEventTimestampViewLightPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) =
+    ElementPreviewLight { ContentToPreview(event) }
+
+@Preview
+@Composable
+internal fun TimelineEventTimestampViewDarkPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) =
+    ElementPreviewDark { ContentToPreview(event) }
+
+@Composable
+private fun ContentToPreview(event: TimelineItem.Event) {
+    TimelineEventTimestampView(
+        event = event,
+        onClick = {}
+    )
 }

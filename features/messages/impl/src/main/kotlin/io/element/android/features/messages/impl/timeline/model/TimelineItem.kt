@@ -68,10 +68,9 @@ sealed interface TimelineItem {
 
     @Immutable
     data class GroupedEvents(
-        val expanded: Boolean,
         val events: ImmutableList<Event>,
     ) : TimelineItem {
-        // use first id with a suffix
-        val id = events.first().id + "_group"
+        // use last id with a suffix. Last will not change in cas of new event from backpagination.
+        val id = events.last().id + "_group"
     }
 }

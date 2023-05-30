@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_change_server_error_invalid_homeserver">"Nous n\'avons pas pu atteindre ce serveur domestique. Vérifiez que vous avez correctement saisi l\'URL du serveur d\'accueil. Si l\'URL est correcte, contactez l\'administrateur de votre serveur domestique pour obtenir de l\'aide."</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Ce serveur ne prend actuellement pas en charge la synchronisation glissante."</string>
+  <string name="screen_change_server_form_header">"URL du serveur d\'accueil"</string>
+  <string name="screen_change_server_form_notice">"Vous ne pouvez vous connecter qu\'à un serveur existant qui prend en charge la synchronisation glissante. L\'administrateur de votre serveur domestique devra la configurer. %1$s"</string>
+  <string name="screen_change_server_subtitle">"Quelle est l\'adresse de votre serveur ?"</string>
+  <string name="screen_login_error_deactivated_account">"Ce compte a été désactivé."</string>
+  <string name="screen_login_error_invalid_credentials">"Nom d\'utilisateur et/ou mot de passe incorrect"</string>
+  <string name="screen_login_error_invalid_user_id">"Il ne s\'agit pas d\'un identifiant utilisateur valide. Format attendu : « @user:homeserver.org »"</string>
+  <string name="screen_login_error_unsupported_authentication">"Le serveur domestique sélectionné ne prend pas en charge le mot de passe ou la connexion OIDC. Contactez votre administrateur ou choisissez un autre serveur domestique."</string>
+  <string name="screen_login_form_header">"Saisir vos informations personnelles"</string>
+  <string name="screen_login_server_header">"Où se déroulent vos conversations"</string>
+  <string name="screen_login_title">"Heureux de vous revoir!"</string>
   <string name="screen_change_server_submit">"Continuer"</string>
+  <string name="screen_change_server_title">"Sélectionnez votre serveur"</string>
+  <string name="screen_login_password_hint">"Mot de passe"</string>
   <string name="screen_login_submit">"Continuer"</string>
+  <string name="screen_login_username_hint">"Nom d\'utilisateur"</string>
 </resources>

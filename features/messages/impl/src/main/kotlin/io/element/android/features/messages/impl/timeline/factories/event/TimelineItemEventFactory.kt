@@ -16,10 +16,12 @@
 
 package io.element.android.features.messages.impl.timeline.factories.event
 
+import io.element.android.features.messages.impl.timeline.groups.canBeDisplayedInBubbleBlock
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
+import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
@@ -102,10 +104,39 @@ class TimelineItemEventFactory @Inject constructor(
         val previousSender = prevTimelineItem?.event?.sender
         val nextSender = nextTimelineItem?.event?.sender
 
+        val previousIsGroupable = prevTimelineItem?.canBeDisplayedInBubbleBlock().orTrue()
+        val nextIsGroupable = nextTimelineItem?.canBeDisplayedInBubbleBlock().orTrue()
+
         return when {
-            previousSender != currentSender && nextSender == currentSender -> TimelineItemGroupPosition.First
-            previousSender == currentSender && nextSender == currentSender -> TimelineItemGroupPosition.Middle
-            previousSender == currentSender && nextSender != currentSender -> TimelineItemGroupPosition.Last
+            previousSender != currentSender && nextSender == currentSender -> {
+                if (nextIsGroupable) {
+                    TimelineItemGroupPosition.First
+                } else {
+                    TimelineItemGroupPosition.None
+                }
+            }
+            previousSender == currentSender && nextSender == currentSender -> {
+                if (previousIsGroupable) {
+                    if (nextIsGroupable) {
+                        TimelineItemGroupPosition.Middle
+                    } else {
+                        TimelineItemGroupPosition.Last
+                    }
+                } else {
+                    if (nextIsGroupable) {
+                        TimelineItemGroupPosition.First
+                    } else {
+                        TimelineItemGroupPosition.None
+                    }
+                }
+            }
+            previousSender == currentSender /* && nextSender != currentSender (== true) */ -> {
+                if (previousIsGroupable) {
+                    TimelineItemGroupPosition.Last
+                } else {
+                    TimelineItemGroupPosition.None
+                }
+            }
             else -> TimelineItemGroupPosition.None
         }
     }
