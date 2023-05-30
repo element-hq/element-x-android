@@ -71,6 +71,7 @@ class AttachmentsPreviewPresenterTest {
         fun log(msg: String) {
             println("[${Thread.currentThread().name}] $msg")
         }
+        log("Starting flaky test")
         val room = FakeMatrixRoom()
         val failure = MediaPreProcessor.Failure(null)
         room.givenSendMediaResult(Result.failure(failure))
@@ -78,6 +79,7 @@ class AttachmentsPreviewPresenterTest {
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
+            log("Starting Turbine test")
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(Async.Uninitialized)
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
