@@ -49,7 +49,7 @@ dagger = "2.46.1"
 anvil = "2.4.6"
 
 # quality
-detekt = "1.22.0"
+detekt = "1.23.0"
 dependencygraph = "0.10"
 
 [libraries]
