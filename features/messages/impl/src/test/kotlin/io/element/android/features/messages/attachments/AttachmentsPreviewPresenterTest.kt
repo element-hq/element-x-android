@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package io.element.android.features.messages.attachments
 
 import androidx.media3.common.MimeTypes
@@ -33,6 +35,7 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
