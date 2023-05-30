@@ -18,6 +18,7 @@
 
 package io.element.android.features.messages.attachments
 
+import android.net.Uri
 import androidx.media3.common.MimeTypes
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
@@ -35,6 +36,7 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -42,6 +44,7 @@ import org.junit.Test
 class AttachmentsPreviewPresenterTest {
 
     private val mediaPreProcessor = FakeMediaPreProcessor()
+    private val mockMediaUrl: Uri = mockk("localMediaUri")
 
     @Test
     fun `present - send media success scenario`() = runTest {
@@ -87,7 +90,10 @@ class AttachmentsPreviewPresenterTest {
     }
 
     private fun anAttachmentsPreviewPresenter(
-        localMedia: LocalMedia = aLocalMedia(mimeType = MimeTypes.IMAGE_JPEG),
+        localMedia: LocalMedia = aLocalMedia(
+            uri = mockMediaUrl,
+            mimeType = MimeTypes.IMAGE_JPEG
+        ),
         room: MatrixRoom = FakeMatrixRoom()
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
