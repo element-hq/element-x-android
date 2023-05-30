@@ -153,11 +153,6 @@ fun MessagesView(
         }
     }
 
-    fun onExpandGroupClick(event: TimelineItem.GroupedEvents) {
-        Timber.v("onExpandGroupClick= ${event.id}")
-        state.timelineState.eventSink(TimelineEvents.ToggleExpandGroup(event))
-    }
-
     fun onActionSelected(action: TimelineItemAction, event: TimelineItem.Event) {
         state.eventSink(MessagesEvents.HandleAction(action, event))
     }
@@ -208,7 +203,6 @@ fun MessagesView(
                         .consumeWindowInsets(padding),
                     onMessageClicked = ::onMessageClicked,
                     onMessageLongClicked = ::onMessageLongClicked,
-                    onExpandGroupClick = ::onExpandGroupClick,
                 )
             },
             snackbarHost = {
@@ -247,7 +241,6 @@ fun MessagesViewContent(
     modifier: Modifier = Modifier,
     onMessageClicked: (TimelineItem.Event) -> Unit = {},
     onMessageLongClicked: (TimelineItem.Event) -> Unit = {},
-    onExpandGroupClick: (TimelineItem.GroupedEvents) -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -262,7 +255,6 @@ fun MessagesViewContent(
                 modifier = Modifier.weight(1f),
                 onMessageClicked = onMessageClicked,
                 onMessageLongClicked = onMessageLongClicked,
-                onExpandGroupClick = onExpandGroupClick,
             )
         }
         MessageComposerView(

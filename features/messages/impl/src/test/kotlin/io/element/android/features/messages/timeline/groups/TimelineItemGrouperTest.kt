@@ -49,7 +49,7 @@ class TimelineItemGrouperTest {
 
     @Test
     fun `test empty`() {
-        val result = sut.group(emptyList(), emptyMap())
+        val result = sut.group(emptyList())
         assertThat(result).isEmpty()
     }
 
@@ -60,7 +60,6 @@ class TimelineItemGrouperTest {
                 aNonGroupableItem,
                 aNonGroupableItem,
             ),
-            emptyMap()
         )
         assertThat(result).isEqualTo(
             listOf(
@@ -77,37 +76,13 @@ class TimelineItemGrouperTest {
                 aGroupableItem.copy(id = AN_EVENT_ID_2.value),
                 aGroupableItem,
             ),
-            emptyMap()
         )
         assertThat(result).isEqualTo(
             listOf(
                 TimelineItem.GroupedEvents(
-                    expanded = false,
                     events = listOf(
                         aGroupableItem,
                         aGroupableItem.copy(id = AN_EVENT_ID_2.value),
-                    ).toImmutableList()
-                ),
-            )
-        )
-    }
-
-    @Test
-    fun `test groupables expanded`() {
-        val result = sut.group(
-            listOf(
-                aGroupableItem,
-                aGroupableItem.copy(id = AN_EVENT_ID_2.value),
-            ),
-            mapOf("${AN_EVENT_ID_2.value}_group" to true)
-        )
-        assertThat(result).isEqualTo(
-            listOf(
-                TimelineItem.GroupedEvents(
-                    expanded = true,
-                    events = listOf(
-                        aGroupableItem.copy(id = AN_EVENT_ID_2.value),
-                        aGroupableItem,
                     ).toImmutableList()
                 ),
             )
@@ -130,7 +105,7 @@ class TimelineItemGrouperTest {
             listOf(aNonGroupableItemNoEvent),
         )
         listsToTest.forEach { listToTest ->
-            val result = sut.group(listToTest, emptyMap())
+            val result = sut.group(listToTest)
             assertThat(result).isEqualTo(listToTest)
         }
     }
@@ -146,12 +121,10 @@ class TimelineItemGrouperTest {
                 aGroupableItem,
                 aGroupableItem,
             ),
-            emptyMap()
         )
         assertThat(result).isEqualTo(
             listOf(
                 TimelineItem.GroupedEvents(
-                    expanded = false,
                     events = listOf(
                         aGroupableItem,
                         aGroupableItem,
@@ -159,7 +132,6 @@ class TimelineItemGrouperTest {
                 ),
                 aNonGroupableItem,
                 TimelineItem.GroupedEvents(
-                    expanded = false,
                     events = listOf(
                         aGroupableItem,
                         aGroupableItem,
