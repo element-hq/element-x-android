@@ -45,7 +45,7 @@ jobs:
           name: elementx-debug
           path: |
             app/build/outputs/apk/debug/*.apk
-      - uses: rnkdsh/action-upload-diawi@v1.3.2
+      - uses: rnkdsh/action-upload-diawi@v1.5.0
         id: diawi
         env:
           token: ${{ secrets.DIAWI_TOKEN }}
