@@ -80,6 +80,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
                 )
             }
         }
+        println("[${Thread.currentThread().name}] Presenter: Finished sendAttachment")
     }
 
     private suspend fun sendMedia(
@@ -87,7 +88,11 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         sendActionState: MutableState<Async<Unit>>,
     ) {
         suspend {
-            mediaSender.sendMedia(mediaAttachment.localMedia.uri, mediaAttachment.localMedia.mimeType, mediaAttachment.compressIfPossible)
-        }.executeResult(sendActionState)
+            mediaSender.sendMedia(mediaAttachment.localMedia.uri, mediaAttachment.localMedia.mimeType, mediaAttachment.compressIfPossible).also {
+                println("[${Thread.currentThread().name}] Presenter: Sent media")
+            }
+        }.executeResult(sendActionState).also {
+            println("[${Thread.currentThread().name}] Presenter: Updated result")
+        }
     }
 }
