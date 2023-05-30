@@ -65,6 +65,9 @@ class AttachmentsPreviewPresenterTest {
 
     @Test
     fun `present - send media failure scenario`() = runTest {
+        fun log(msg: String) {
+            println("[${Thread.currentThread().name}] $msg")
+        }
         val room = FakeMatrixRoom()
         val failure = MediaPreProcessor.Failure(null)
         room.givenSendMediaResult(Result.failure(failure))
@@ -75,17 +78,24 @@ class AttachmentsPreviewPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(Async.Uninitialized)
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
+            log("Sent attachment event")
             val loadingState = awaitItem()
             assertThat(loadingState.sendActionState).isEqualTo(Async.Loading<Unit>())
+            log("Asserted loading state")
             testScheduler.advanceTimeBy(FAKE_DELAY_IN_MS + 1)
             runCurrent()
+            log("Moved time forwards")
             val failureState = awaitItem()
             assertThat(failureState.sendActionState).isEqualTo(Async.Failure<Unit>(failure))
             assertThat(room.sendMediaCount).isEqualTo(0)
+            log("Asserted failing state")
             failureState.eventSink(AttachmentsPreviewEvents.ClearSendState)
+            log("Sent clear state")
             val clearedState = awaitItem()
             assertThat(clearedState.sendActionState).isEqualTo(Async.Uninitialized)
+            log("Asserted state reset")
             cancelAndIgnoreRemainingEvents()
+            log("Canceled turbine")
         }
     }
 

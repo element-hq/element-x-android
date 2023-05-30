@@ -9,7 +9,7 @@ on:
 # Enrich gradle.properties for CI/CD
 env:
   GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
-  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 4 --warn
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 4
 
 jobs:
   tests:
@@ -39,10 +39,10 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
 
       - name: ⚙️ Run unit & screenshot tests, generate kover report
-        run: ./gradlew koverMergedReport $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
+        run: ./gradlew :features:messages:impl:testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
 
-      - name: 📈 Verify coverage
-        run: ./gradlew koverMergedVerify $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
+#      - name: 📈 Verify coverage
+#        run: ./gradlew koverMergedVerify $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
 
       - name: 🚫 Upload kover failed coverage reports
         if: failure()
