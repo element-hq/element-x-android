@@ -83,6 +83,7 @@ class AttachmentsPreviewPresenterTest {
             failureState.eventSink(AttachmentsPreviewEvents.ClearSendState)
             val clearedState = awaitItem()
             assertThat(clearedState.sendActionState).isEqualTo(Async.Uninitialized)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
