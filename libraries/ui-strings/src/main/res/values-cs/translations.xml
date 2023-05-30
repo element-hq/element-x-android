@@ -63,7 +63,7 @@
   <string name="common_developer_options">"Možnosti pro vývojáře"</string>
   <string name="common_edited_suffix">"(upraveno)"</string>
   <string name="common_editing">"Úpravy"</string>
-  <string name="common_emote">"* %1$@ %2$@"</string>
+  <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Šifrování povoleno"</string>
   <string name="common_error">"Chyba"</string>
   <string name="common_file">"Soubor"</string>

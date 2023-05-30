@@ -121,11 +121,7 @@
   <string name="leave_room_alert_subtitle">"Êtes-vous sûr de vouloir quitter la salle ?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <plurals name="common_member_count">
-    <item quantity="zero">"Aucun membre"</item>
     <item quantity="one">"%1$d membre"</item>
-    <item quantity="two">"%1$d membres"</item>
-    <item quantity="few">"%1$d membres"</item>
-    <item quantity="many">"%1$d membres"</item>
     <item quantity="other">"%1$d membres"</item>
   </plurals>
   <string name="preference_rageshake">"Rageshake pour signaler un bug"</string>
