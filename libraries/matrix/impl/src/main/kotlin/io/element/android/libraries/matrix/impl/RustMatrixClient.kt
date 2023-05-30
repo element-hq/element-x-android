@@ -153,7 +153,7 @@ class RustMatrixClient constructor(
 
     private val slidingSync = client
         .slidingSync()
-        .homeserver("https://slidingsync.lab.matrix.org")
+        // .homeserver("https://slidingsync.lab.matrix.org")
         .withCommonExtensions()
         .storageKey("ElementX")
         .addList(visibleRoomsSlidingSyncListBuilder)
