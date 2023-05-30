@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"1 osoba"</item>
+    <item quantity="few">"%1$d osoby"</item>
+    <item quantity="other">"%1$d osob"</item>
+  </plurals>
+  <string name="screen_room_details_encryption_enabled_subtitle">"Zprávy jsou zabezpečeny zámky. Pouze vy a příjemci máte jedinečné klíče k jejich odemčení."</string>
+  <string name="screen_room_details_encryption_enabled_title">"Šifrování zpráv povoleno"</string>
+  <string name="screen_room_details_share_room_title">"Sdílet místnost"</string>
+  <string name="screen_room_member_list_pending_header_title">"Nevyřízeno"</string>
+  <string name="screen_dm_details_block_alert_action">"Zablokovat"</string>
+  <string name="screen_dm_details_block_alert_description">"Blokovaní uživatelé vám nebudou moci posílat zprávy a všechny zprávy od nich budou skryty. Tuto akci můžete kdykoli vrátit zpět."</string>
+  <string name="screen_dm_details_block_user">"Zablokovat uživatele"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Odblokovat"</string>
+  <string name="screen_dm_details_unblock_alert_description">"Po odblokování uživatele budete moci opět zobrazit všechny jeho zprávy."</string>
+  <string name="screen_dm_details_unblock_user">"Odblokovat uživatele"</string>
+  <string name="screen_room_details_invite_people_title">"Pozvat lidi"</string>
+  <string name="screen_room_details_leave_room_title">"Opustit místnost"</string>
+  <string name="screen_room_details_people_title">"Lidé"</string>
+  <string name="screen_room_details_security_title">"Zabezpečení"</string>
+  <string name="screen_room_details_topic_title">"Téma"</string>
+</resources>

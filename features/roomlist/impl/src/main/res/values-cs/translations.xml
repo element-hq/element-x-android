@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_roomlist_a11y_create_message">"Vytvořte novou konverzaci nebo místnost"</string>
+  <string name="screen_roomlist_main_space_title">"Všechny chaty"</string>
+  <string name="session_verification_banner_message">"Zdá se, že používáte nové zařízení. Ověřte přihlášení, abyste měli přístup k zašifrovaným zprávám."</string>
+  <string name="session_verification_banner_title">"Přístup k historii zpráv"</string>
+</resources>

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="room_timeline_state_changes">
+    <item quantity="one">"%1$d Raumänderung"</item>
+    <item quantity="other">"%1$d Raumänderungen"</item>
+  </plurals>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Foto aufnehmen"</string>
   <string name="screen_room_attachment_source_camera_video">"Video aufnehmen"</string>

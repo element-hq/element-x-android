@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_bullet_list">"Aufzählungsliste ein-/ausschalten"</string>
+  <string name="rich_text_editor_code_block">"Codeblock umschalten"</string>
   <string name="rich_text_editor_composer_placeholder">"Nachricht…"</string>
+  <string name="rich_text_editor_format_bold">"Fettformatierung anwenden"</string>
+  <string name="rich_text_editor_format_italic">"Kursivformat anwenden"</string>
+  <string name="rich_text_editor_format_strikethrough">"Durchgestrichenes Format anwenden"</string>
+  <string name="rich_text_editor_format_underline">"Unterstreichungsformat anwenden"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Vollbildmodus umschalten"</string>
+  <string name="rich_text_editor_indent">"Einrücken"</string>
+  <string name="rich_text_editor_inline_code">"Inline-Codeformat anwenden"</string>
   <string name="rich_text_editor_link">"Link setzen"</string>
+  <string name="rich_text_editor_numbered_list">"Nummerierte Liste ein-/ausschalten"</string>
+  <string name="rich_text_editor_quote">"Zitat umschalten"</string>
+  <string name="rich_text_editor_unindent">"Einrücken aufheben"</string>
 </resources>

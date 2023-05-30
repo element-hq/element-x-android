@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crash_detection_dialog_content">"%1$s ist bei der letzten Verwendung abgestürzt. Möchtest du uns einen Absturzbericht senden?"</string>
+  <string name="rageshake_detection_dialog_content">"Du scheinst frustriert das Telefon zu schütteln. Möchtest du den Fehlerberichtsbildschirm öffnen?"</string>
+</resources>
