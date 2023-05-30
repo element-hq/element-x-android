@@ -23,6 +23,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesPresenter
 import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesState
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
@@ -31,7 +32,8 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultAnalyticsPreferencesPresenter @Inject constructor(
-    private val analyticsService: AnalyticsService
+    private val analyticsService: AnalyticsService,
+    private val buildMeta: BuildMeta,
 ) : AnalyticsPreferencesPresenter {
 
     @Composable
@@ -47,6 +49,7 @@ class DefaultAnalyticsPreferencesPresenter @Inject constructor(
         }
 
         return AnalyticsPreferencesState(
+            applicationName = buildMeta.applicationName,
             isEnabled = isEnabled.value,
             eventSink = ::handleEvents
         )

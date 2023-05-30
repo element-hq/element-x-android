@@ -23,6 +23,7 @@ import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,6 +37,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -59,6 +64,7 @@ import io.element.android.libraries.designsystem.LinkColor
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.utils.LogCompositions
@@ -77,117 +83,108 @@ fun AnalyticsOptInView(
             .systemBarsPadding()
             .imePadding()
     ) {
-        val scrollState = rememberScrollState()
         Column(
-            modifier = Modifier
-                .verticalScroll(
-                    state = scrollState,
-                )
-                .padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
         ) {
-            Image(
-                painterResource(id = R.drawable.element_logo_stars),
-                contentDescription = null,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(16.dp)
-            )
-            Text(
-
-                text = stringResource(id = R.string.screen_analytics_prompt_title, state.applicationName),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp,
-                color = MaterialTheme.colorScheme.primary,
-            )
-            Text(
-                text = stringResource(id = R.string.screen_analytics_prompt_help_us_improve, state.applicationName),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.secondary,
-            )
-
-            Text(
-                text = buildAnnotatedStringWithColoredPart(
-                    R.string.screen_analytics_prompt_read_terms,
-                    R.string.screen_analytics_prompt_read_terms_content_link
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.secondary,
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Column(modifier = Modifier.weight(1f)) {
                 Image(
-                    painterResource(id = R.drawable.ic_list_item_bullet),
+                    painterResource(id = R.drawable.element_logo_stars),
                     contentDescription = null,
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(16.dp)
                 )
                 Text(
-                    text = stringResource(id = R.string.screen_analytics_prompt_data_usage).toAnnotatedString(),
-                    color = MaterialTheme.colorScheme.secondary,
-                )
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painterResource(id = R.drawable.ic_list_item_bullet),
-                    contentDescription = null,
-                    Modifier.size(20.dp),
+                    text = stringResource(id = R.string.screen_analytics_prompt_title, state.applicationName),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 16.dp),
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    color = MaterialTheme.colorScheme.primary,
                 )
                 Text(
-                    text = stringResource(id = R.string.screen_analytics_prompt_third_party_sharing).toAnnotatedString(),
+                    text = stringResource(id = R.string.screen_analytics_prompt_help_us_improve, state.applicationName),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 16.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.secondary,
                 )
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painterResource(id = R.drawable.ic_list_item_bullet),
-                    contentDescription = null,
-                    Modifier.size(20.dp),
-                )
-                Text(
-                    text = stringResource(id = R.string.screen_analytics_prompt_settings),
-                    color = MaterialTheme.colorScheme.secondary,
-                )
-            }
 
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Button(
-                    onClick = { eventSink(AnalyticsOptInEvents.EnableAnalytics(true)) },
-                    modifier = Modifier.fillMaxWidth(),
+                Text(
+                    text = buildAnnotatedStringWithColoredPart(
+                        R.string.screen_analytics_prompt_read_terms,
+                        R.string.screen_analytics_prompt_read_terms_content_link
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 16.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.secondary,
+                )
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = stringResource(id = StringR.string.action_enable))
+                    Icon(imageVector = Icons.Outlined.CheckCircle,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary)
+                    Text(
+                        text = stringResource(id = R.string.screen_analytics_prompt_data_usage).toAnnotatedString(),
+                        color = MaterialTheme.colorScheme.secondary,
+                    )
                 }
-                Spacer(modifier = Modifier.height(16.dp))
-                TextButton(
-                    onClick = { eventSink(AnalyticsOptInEvents.EnableAnalytics(false)) },
-                    modifier = Modifier.fillMaxWidth(),
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = stringResource(id = StringR.string.action_not_now))
+                    Icon(imageVector = Icons.Outlined.CheckCircle,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary)
+                    Text(
+                        text = stringResource(id = R.string.screen_analytics_prompt_third_party_sharing).toAnnotatedString(),
+                        color = MaterialTheme.colorScheme.secondary,
+                    )
                 }
-                Spacer(Modifier.height(40.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(imageVector = Icons.Outlined.CheckCircle,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary)
+                    Text(
+                        text = stringResource(id = R.string.screen_analytics_prompt_settings),
+                        color = MaterialTheme.colorScheme.secondary,
+                    )
+                }
             }
+
+            Button(
+                onClick = { eventSink(AnalyticsOptInEvents.EnableAnalytics(true)) },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(text = stringResource(id = StringR.string.action_enable))
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            TextButton(
+                onClick = { eventSink(AnalyticsOptInEvents.EnableAnalytics(false)) },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(text = stringResource(id = StringR.string.action_not_now))
+            }
+            Spacer(Modifier.height(40.dp))
         }
     }
 }

@@ -16,17 +16,22 @@
 
 package io.element.android.features.analytics.api.preferences
 
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
+import io.element.android.libraries.designsystem.LinkColor
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
@@ -39,14 +44,38 @@ fun AnalyticsPreferencesView(
     }
 
     PreferenceCategory(title = stringResource(id = StringR.string.screen_analytics_settings_share_data)) {
+        val firstPart = stringResource(id = StringR.string.screen_analytics_settings_help_us_improve, state.applicationName)
+        val secondPart = buildAnnotatedStringWithColoredPart(
+            StringR.string.screen_analytics_settings_read_terms,
+            StringR.string.screen_analytics_settings_read_terms_content_link
+        )
+        val title =  "$firstPart\n\n$secondPart"
+
         PreferenceSwitch(
-            title = stringResource(id = StringR.string.screen_analytics_settings_help_us_improve),
+            title = title,
             isChecked = state.isEnabled,
             onCheckedChange = ::onEnabledChanged
         )
-
-        Text(text = stringResource(StringR.string.screen_analytics_settings_read_terms))
     }
+}
+
+@Composable
+fun buildAnnotatedStringWithColoredPart(
+    @StringRes fullTextRes: Int,
+    @StringRes coloredTextRes: Int,
+    color: Color = LinkColor,
+    underline: Boolean = true,
+) = buildAnnotatedString {
+    val coloredPart = stringResource(coloredTextRes)
+    val fullText = stringResource(fullTextRes, coloredPart)
+    val startIndex = fullText.indexOf(coloredPart)
+    append(fullText)
+    addStyle(
+        style = SpanStyle(
+            color = color,
+            textDecoration = if (underline) TextDecoration.Underline else null
+        ), start = startIndex, end = startIndex + coloredPart.length
+    )
 }
 
 @Preview

@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+plugins {
+    id("io.element.android-library")
+}
 
-package io.element.android.features.analytics.api.preferences
+android {
+    namespace = "io.element.android.features.analytics.test"
+}
 
-import io.element.android.features.analytics.api.AnalyticsOptInEvents
-
-data class AnalyticsPreferencesState(
-    val applicationName: String,
-    val isEnabled: Boolean,
-    val eventSink: (AnalyticsOptInEvents) -> Unit,
-)
+dependencies {
+    implementation(projects.services.analytics.api)
+    implementation(libs.coroutines.core)
+}

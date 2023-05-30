@@ -60,6 +60,7 @@ dependencies {
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.features.rageshake.impl)
     testImplementation(projects.features.logout.impl)
+    testImplementation(projects.features.analytics.test)
     testImplementation(projects.features.analytics.impl)
 
     androidTestImplementation(libs.test.junitext)
