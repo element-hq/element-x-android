@@ -29,12 +29,6 @@ anvil {
     generateDaggerFactories.set(true)
 }
 
-tasks.withType<Test> {
-    testLogging {
-        showStandardStreams = true
-    }
-}
-
 dependencies {
     implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
