@@ -39,6 +39,7 @@ import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormat
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.handleSnackbarMessage
+import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -199,7 +200,7 @@ class RoomListPresenter @Inject constructor(
                         hasUnread = roomSummary.details.unreadNotificationCount > 0,
                         timestamp = lastMessageTimestampFormatter.format(roomSummary.details.lastMessageTimestamp),
                         lastMessage = roomSummary.details.lastMessage?.let { message ->
-                            roomLastMessageFormatter.processMessageItem(message.event, roomSummary.details.isDirect)
+                            roomLastMessageFormatter.format(message.event, roomSummary.details.isDirect)
                         }.orEmpty(),
                         avatarData = avatarData,
                     )

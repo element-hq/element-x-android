@@ -18,6 +18,7 @@ plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -41,6 +42,7 @@ dependencies {
     implementation(projects.libraries.textcomposer)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.dateformatter.api)
+    implementation(projects.libraries.eventformatter.api)
     implementation(projects.libraries.mediapickers.api)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.mediaupload.api)
@@ -50,6 +52,11 @@ dependencies {
     implementation(libs.accompanist.flowlayout)
     implementation(libs.androidx.recyclerview)
     implementation(libs.jsoup)
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
+    implementation(libs.accompanist.systemui)
+    implementation(libs.vanniktech.blurhash)
+    implementation(libs.telephoto.zoomableimage)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

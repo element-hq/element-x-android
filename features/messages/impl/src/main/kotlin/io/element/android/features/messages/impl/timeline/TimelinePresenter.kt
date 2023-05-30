@@ -17,7 +17,6 @@
 package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
@@ -29,7 +28,6 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -53,6 +51,7 @@ class TimelinePresenter @Inject constructor(
         val highlightedEventId: MutableState<EventId?> = rememberSaveable {
             mutableStateOf(null)
         }
+
         val timelineItems = timelineItemsFactory
             .flow()
             .collectAsState()
@@ -83,7 +82,7 @@ class TimelinePresenter @Inject constructor(
         return TimelineState(
             highlightedEventId = highlightedEventId.value,
             paginationState = paginationState.value,
-            timelineItems = timelineItems.value.toImmutableList(),
+            timelineItems = timelineItems.value,
             eventSink = ::handleEvents
         )
     }

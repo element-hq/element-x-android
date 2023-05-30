@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="room_timeline_state_changes">
+    <item quantity="one">"%1$d schimbare a camerii"</item>
+    <item quantity="few">"%1$d schimbări ale camerei"</item>
+    <item quantity="other">"%1$d schimbări ale camerei"</item>
+  </plurals>
+  <string name="screen_room_attachment_source_camera">"Cameră foto"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Faceți o fotografie"</string>
+  <string name="screen_room_attachment_source_camera_video">"Înregistrați un videoclip"</string>
+  <string name="screen_room_attachment_source_files">"Atașament"</string>
+  <string name="screen_room_attachment_source_gallery">"Bibliotecă foto și video"</string>
+  <string name="screen_room_error_failed_processing_media">"Procesarea datelor media a eșuat, vă rugăm să încercați din nou."</string>
+</resources>

@@ -17,7 +17,8 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.matrix.api.media.MediaResolver
+import androidx.media3.common.MimeTypes
+import io.element.android.libraries.matrix.api.media.MediaSource
 
 open class TimelineItemImageContentProvider : PreviewParameterProvider<TimelineItemImageContent> {
     override val values: Sequence<TimelineItemImageContent>
@@ -30,7 +31,10 @@ open class TimelineItemImageContentProvider : PreviewParameterProvider<TimelineI
 
 fun aTimelineItemImageContent() = TimelineItemImageContent(
     body = "a body",
-    imageMeta = MediaResolver.Meta(url = null, kind = MediaResolver.Kind.Content),
-    blurhash = null,
-    aspectRatio = 0.5f,
+    mediaSource = MediaSource(""),
+    mimeType = MimeTypes.IMAGE_JPEG,
+    blurhash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
+    width = null,
+    height = 300,
+    aspectRatio = 0.5f
 )

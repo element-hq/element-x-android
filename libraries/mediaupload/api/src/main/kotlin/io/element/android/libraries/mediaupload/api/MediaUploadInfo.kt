@@ -24,10 +24,13 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import java.io.File
 
 sealed interface MediaUploadInfo {
-    data class Image(val file: File, val info: ImageInfo, val thumbnailInfo: ThumbnailProcessingInfo) : MediaUploadInfo
-    data class Video(val file: File, val info: VideoInfo, val thumbnailInfo: ThumbnailProcessingInfo) : MediaUploadInfo
-    data class Audio(val file: File, val info: AudioInfo) : MediaUploadInfo
-    data class AnyFile(val file: File, val info: FileInfo) : MediaUploadInfo
+
+    val file: File
+
+    data class Image(override val file: File, val info: ImageInfo, val thumbnailInfo: ThumbnailProcessingInfo) : MediaUploadInfo
+    data class Video(override val file: File, val info: VideoInfo, val thumbnailInfo: ThumbnailProcessingInfo) : MediaUploadInfo
+    data class Audio(override val file: File, val info: AudioInfo) : MediaUploadInfo
+    data class AnyFile(override val file: File, val info: FileInfo) : MediaUploadInfo
 }
 
 data class ThumbnailProcessingInfo(

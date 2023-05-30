@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"1 membre"</item>
+    <item quantity="other">"%1$d membres"</item>
+  </plurals>
+  <string name="screen_room_details_encryption_enabled_subtitle">"Les messages sont sécurisés par des verrous. Seuls vous et les destinataires possédez les clés uniques pour les déverrouiller."</string>
+  <string name="screen_room_details_encryption_enabled_title">"Chiffrement des messages activé"</string>
+  <string name="screen_room_details_share_room_title">"Partager la salle"</string>
+  <string name="screen_dm_details_block_alert_action">"Bloquer"</string>
+  <string name="screen_dm_details_block_alert_description">"Les utilisateurs bloqués ne pourront pas vous envoyer de messages et tous leurs messages seront masqués. Vous pouvez annuler cette action à tout moment."</string>
+  <string name="screen_dm_details_block_user">"Bloquer l\'utilisateur"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Débloquer"</string>
+  <string name="screen_dm_details_unblock_alert_description">"Lorsque vous débloquez l\'utilisateur, vous pourrez à nouveau voir tous leur messages."</string>
+  <string name="screen_dm_details_unblock_user">"Débloquer l\'utilisateur"</string>
+  <string name="screen_room_details_invite_people_title">"Inviter des personnes"</string>
+  <string name="screen_room_details_leave_room_title">"Quitter la salle"</string>
+  <string name="screen_room_details_people_title">"Personnes"</string>
+  <string name="screen_room_details_security_title">"Sécurité"</string>
+  <string name="screen_room_details_topic_title">"Sujet"</string>
+</resources>

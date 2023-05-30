@@ -16,56 +16,34 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import io.element.android.features.messages.impl.timeline.components.blurhash.BlurHashAsyncImage
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContentProvider
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
+import io.element.android.libraries.matrix.ui.media.MediaRequestData
 
 @Composable
 fun TimelineItemImageView(
     content: TimelineItemImageContent,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    val widthPercent = if (content.aspectRatio > 1f) {
-        1f
-    } else {
-        0.7f
-    }
-    Box(
+    TimelineItemAspectRatioBox(
+        height = content.height,
+        aspectRatio = content.aspectRatio,
         modifier = modifier
-            .fillMaxWidth(widthPercent)
-            .aspectRatio(content.aspectRatio),
-        contentAlignment = Alignment.Center,
     ) {
-        val isLoading = rememberSaveable(content.imageMeta) { mutableStateOf(true) }
-        val context = LocalContext.current
-        val model = ImageRequest.Builder(context)
-            .data(content.imageMeta)
-            .build()
-
-        AsyncImage(
-            model = model,
-            contentDescription = null,
-            placeholder = debugPlaceholderBackground(ColorPainter(MaterialTheme.colorScheme.surfaceVariant)),
-            contentScale = ContentScale.Crop,
-            onSuccess = { isLoading.value = false },
+        BlurHashAsyncImage(
+            model = MediaRequestData(content.mediaSource, MediaRequestData.Kind.Content),
+            blurHash = content.blurhash,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Fit,
         )
     }
 }

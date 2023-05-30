@@ -18,7 +18,7 @@ package io.element.android.features.messages.impl
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.actionlist.ActionListState
-import io.element.android.features.messages.impl.textcomposer.MessageComposerState
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.utils.SnackbarMessage

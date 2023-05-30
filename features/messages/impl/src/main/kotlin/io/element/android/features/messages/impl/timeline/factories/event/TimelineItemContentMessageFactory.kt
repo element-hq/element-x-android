@@ -18,17 +18,20 @@ package io.element.android.features.messages.impl.timeline.factories.event
 
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEmoteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemNoticeContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.util.toHtmlDocument
-import io.element.android.libraries.matrix.api.media.MediaResolver
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import javax.inject.Inject
 
 class TimelineItemContentMessageFactory @Inject constructor() {
@@ -37,35 +40,61 @@ class TimelineItemContentMessageFactory @Inject constructor() {
         return when (val messageType = content.type) {
             is EmoteMessageType -> TimelineItemEmoteContent(
                 body = messageType.body,
-                htmlDocument = messageType.formatted?.toHtmlDocument()
+                htmlDocument = messageType.formatted?.toHtmlDocument(),
+                isEdited = content.isEdited,
             )
             is ImageMessageType -> {
-                val height = messageType.info?.height?.toFloat()
-                val width = messageType.info?.width?.toFloat()
-                val aspectRatio = if (height != null && width != null) {
-                    width / height
-                } else {
-                    0.7f
-                }
+                val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
                 TimelineItemImageContent(
                     body = messageType.body,
-                    imageMeta = MediaResolver.Meta(
-                        url = messageType.url,
-                        kind = MediaResolver.Kind.Content
-                    ),
+                    mediaSource = messageType.source,
+                    mimeType = messageType.info?.mimetype,
                     blurhash = messageType.info?.blurhash,
+                    width = messageType.info?.width?.toInt(),
+                    height = messageType.info?.height?.toInt(),
                     aspectRatio = aspectRatio
                 )
             }
+            is VideoMessageType -> {
+                val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
+                TimelineItemVideoContent(
+                    body = messageType.body,
+                    thumbnailSource = messageType.info?.thumbnailSource,
+                    videoSource = messageType.source,
+                    mimeType = messageType.info?.mimetype,
+                    width = messageType.info?.width?.toInt(),
+                    height = messageType.info?.height?.toInt(),
+                    duration = messageType.info?.duration ?: 0L,
+                    blurHash = messageType.info?.blurhash,
+                    aspectRatio = aspectRatio
+                )
+            }
+            is FileMessageType -> TimelineItemFileContent(
+                body = messageType.body,
+                thumbnailSource = messageType.info?.thumbnailSource,
+                fileSource = messageType.source,
+                mimeType = messageType.info?.mimetype,
+                size = messageType.info?.size,
+            )
             is NoticeMessageType -> TimelineItemNoticeContent(
                 body = messageType.body,
-                htmlDocument = messageType.formatted?.toHtmlDocument()
+                htmlDocument = messageType.formatted?.toHtmlDocument(),
+                isEdited = content.isEdited,
             )
             is TextMessageType -> TimelineItemTextContent(
                 body = messageType.body,
-                htmlDocument = messageType.formatted?.toHtmlDocument()
+                htmlDocument = messageType.formatted?.toHtmlDocument(),
+                isEdited = content.isEdited,
             )
             else -> TimelineItemUnknownContent
+        }
+    }
+
+    private fun aspectRatioOf(width: Long?, height: Long?): Float {
+        return if (height != null && width != null) {
+            width.toFloat() / height.toFloat()
+        } else {
+            0.7f
         }
     }
 }

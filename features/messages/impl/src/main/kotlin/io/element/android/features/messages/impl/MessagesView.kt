@@ -37,6 +37,10 @@ import androidx.compose.material.ListItem
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.AttachFile
+import androidx.compose.material.icons.filled.Collections
+import androidx.compose.material.icons.filled.PhotoCamera
+import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHost
@@ -60,13 +64,16 @@ import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.impl.textcomposer.AttachmentSourcePicker
-import io.element.android.features.messages.impl.textcomposer.MessageComposerEvents
-import io.element.android.features.messages.impl.textcomposer.MessageComposerView
+import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
+import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.androidutils.ui.hideKeyboard
+import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -78,29 +85,35 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import io.element.android.libraries.ui.strings.R as StringsR
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun MessagesView(
     state: MessagesState,
+    onBackPressed: () -> Unit,
+    onRoomDetailsClicked: () -> Unit,
+    onEventClicked: (event: TimelineItem.Event) -> Unit,
+    onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
-    onRoomDetailsClicked: () -> Unit = {},
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
     val itemActionsBottomSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
     )
     val composerState = state.composerState
-    val initialBottomSheetState = if (LocalInspectionMode.current && composerState.attachmentSourcePicker != null) {
+    val initialBottomSheetState = if (LocalInspectionMode.current && composerState.showAttachmentSourcePicker) {
         ModalBottomSheetValue.Expanded
     } else {
         ModalBottomSheetValue.Hidden
     }
     val bottomSheetState = rememberModalBottomSheetState(initialValue = initialBottomSheetState)
     val coroutineScope = rememberCoroutineScope()
+
+    AttachmentStateView(state.composerState.attachmentsState, onPreviewAttachments)
 
     BackHandler(enabled = bottomSheetState.isVisible) {
         coroutineScope.launch {
@@ -128,6 +141,7 @@ fun MessagesView(
 
     fun onMessageClicked(event: TimelineItem.Event) {
         Timber.v("OnMessageClicked= ${event.id}")
+        onEventClicked(event)
     }
 
     fun onMessageLongClicked(event: TimelineItem.Event) {
@@ -143,8 +157,8 @@ fun MessagesView(
         state.eventSink(MessagesEvents.HandleAction(action, event))
     }
 
-    LaunchedEffect(composerState.attachmentSourcePicker) {
-        if (composerState.attachmentSourcePicker != null) {
+    LaunchedEffect(composerState.showAttachmentSourcePicker) {
+        if (composerState.showAttachmentSourcePicker) {
             // We need to use this instead of `LocalFocusManager.clearFocus()` to hide the keyboard when focus is on an Android View
             localView.hideKeyboard()
             bottomSheetState.show()
@@ -162,8 +176,7 @@ fun MessagesView(
         sheetState = bottomSheetState,
         displayHandle = true,
         sheetContent = {
-            MediaPickerMenu(
-                addAttachmentSourcePicker = composerState.attachmentSourcePicker,
+            AttachmentSourcePickerMenu(
                 eventSink = composerState.eventSink
             )
         }
@@ -189,7 +202,7 @@ fun MessagesView(
                         .padding(padding)
                         .consumeWindowInsets(padding),
                     onMessageClicked = ::onMessageClicked,
-                    onMessageLongClicked = ::onMessageLongClicked
+                    onMessageLongClicked = ::onMessageLongClicked,
                 )
             },
             snackbarHost = {
@@ -205,6 +218,20 @@ fun MessagesView(
             modalBottomSheetState = itemActionsBottomSheetState,
             onActionSelected = ::onActionSelected
         )
+    }
+}
+
+@Composable
+private fun AttachmentStateView(
+    state: AttachmentsState,
+    onPreviewAttachments: (ImmutableList<Attachment>) -> Unit
+) {
+    when (state) {
+        AttachmentsState.None -> Unit
+        is AttachmentsState.Previewing -> LaunchedEffect(state) {
+            onPreviewAttachments(state.attachments)
+        }
+        is AttachmentsState.Sending -> ProgressDialog(text = stringResource(id = StringsR.string.common_loading))
     }
 }
 
@@ -227,7 +254,7 @@ fun MessagesViewContent(
                 state = state.timelineState,
                 modifier = Modifier.weight(1f),
                 onMessageClicked = onMessageClicked,
-                onMessageLongClicked = onMessageLongClicked
+                onMessageLongClicked = onMessageLongClicked,
             )
         }
         MessageComposerView(
@@ -280,50 +307,33 @@ fun MessagesViewTopBar(
     )
 }
 
-@Composable
-internal fun MediaPickerMenu(
-    addAttachmentSourcePicker: AttachmentSourcePicker?,
-    eventSink: (MessageComposerEvents) -> Unit,
-) {
-    when (addAttachmentSourcePicker) {
-        null -> return
-        AttachmentSourcePicker.AllMedia -> AllMediaSourcePickerMenu(eventSink = eventSink)
-        AttachmentSourcePicker.Camera -> CameraSourcePickerMenu(eventSink = eventSink)
-    }
-}
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-internal fun AllMediaSourcePickerMenu(
+internal fun AttachmentSourcePickerMenu(
     eventSink: (MessageComposerEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier) {
-        ListItem(Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery) }) {
-            Text(stringResource(R.string.screen_room_attachment_source_gallery))
-        }
-        ListItem(Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles) }) {
-            Text(stringResource(R.string.screen_room_attachment_source_files))
-        }
-        ListItem(Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.FromCamera) }) {
-            Text(stringResource(R.string.screen_room_attachment_source_camera))
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-internal fun CameraSourcePickerMenu(
-    eventSink: (MessageComposerEvents) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(modifier) {
-        ListItem(Modifier.clickable { eventSink(MessageComposerEvents.PickCameraAttachmentSource.Photo) }) {
-            Text(stringResource(R.string.screen_room_attachment_source_camera_photo))
-        }
-        ListItem(Modifier.clickable { eventSink(MessageComposerEvents.PickCameraAttachmentSource.Video) }) {
-            Text(stringResource(R.string.screen_room_attachment_source_camera_video))
-        }
+        ListItem(
+            modifier = Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery) },
+            icon = { Icon(Icons.Default.Collections, null) },
+            text = { Text(stringResource(R.string.screen_room_attachment_source_gallery)) },
+        )
+        ListItem(
+            modifier = Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles) },
+            icon = { Icon(Icons.Default.AttachFile, null) },
+            text = { Text(stringResource(R.string.screen_room_attachment_source_files)) },
+        )
+        ListItem(
+            modifier = Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera) },
+            icon = { Icon(Icons.Default.PhotoCamera, null) },
+            text = { Text(stringResource(R.string.screen_room_attachment_source_camera_photo)) },
+        )
+        ListItem(
+            modifier = Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera) },
+            icon = { Icon(Icons.Default.Videocam, null) },
+            text = { Text(stringResource(R.string.screen_room_attachment_source_camera_video)) },
+        )
     }
 }
 
@@ -339,5 +349,11 @@ internal fun MessagesViewDarkPreview(@PreviewParameter(MessagesStateProvider::cl
 
 @Composable
 private fun ContentToPreview(state: MessagesState) {
-    MessagesView(state)
+    MessagesView(
+        state = state,
+        onBackPressed = {},
+        onRoomDetailsClicked = {},
+        onEventClicked = {},
+        onPreviewAttachments = {}
+    )
 }

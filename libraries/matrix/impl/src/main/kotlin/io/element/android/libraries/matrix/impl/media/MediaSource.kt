@@ -16,7 +16,10 @@
 
 package io.element.android.libraries.matrix.impl.media
 
-import org.matrix.rustcomponents.sdk.MediaSource
+import io.element.android.libraries.matrix.api.media.MediaSource
 import org.matrix.rustcomponents.sdk.use
+import org.matrix.rustcomponents.sdk.MediaSource as RustMediaSource
 
-fun MediaSource.useUrl(): String = use { it.url() }
+fun RustMediaSource.map(): MediaSource = use {
+    MediaSource(it.url(), it.toJson())
+}
