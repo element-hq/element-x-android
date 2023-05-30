@@ -43,9 +43,21 @@ jobs:
     name: Add labelled issues to QA project
     runs-on: ubuntu-latest
     if: >
-      contains(github.event.issue.labels.*.name, 'Team: QA')
+      contains(github.event.issue.labels.*.name, 'Team: QA') ||
+      contains(github.event.issue.labels.*.name, 'X-Needs-Signoff')
     steps:
       - uses: actions/add-to-project@main
         with:
           project-url: https://github.com/orgs/vector-im/projects/69
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  signoff:
+    name: Add labelled issues to signoff project
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.issue.labels.*.name, 'X-Needs-Signoff')
+    steps:
+      - uses: actions/add-to-project@main
+        with:
+          project-url: https://github.com/orgs/vector-im/projects/89
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
