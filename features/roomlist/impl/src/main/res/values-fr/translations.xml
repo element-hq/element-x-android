@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_roomlist_a11y_create_message">"Créer une nouvelle conversation ou une nouvelle salle"</string>
+  <string name="screen_roomlist_main_space_title">"Toutes les conversations"</string>
+  <string name="session_verification_banner_message">"Il semblerait que vous utilisiez un nouvel appareil. Vérifiez que vous êtes bien autorisé à accéder à vos messages cryptés."</string>
+  <string name="session_verification_banner_title">"Accédez à l\'historique de vos messages"</string>
+</resources>

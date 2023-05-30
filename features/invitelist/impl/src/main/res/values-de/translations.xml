@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_invites_decline_chat_message">"Möchten Sie den Beitritt zu %1$s wirklich ablehnen?"</string>
+  <string name="screen_invites_decline_chat_title">"Einladung ablehnen"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Möchten Sie den Chat mit %1$s wirklich ablehnen?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Chat ablehnen"</string>
   <string name="screen_invites_empty_list">"Keine Einladungen"</string>
   <string name="screen_invites_invited_you">"%1$s hat dich eingeladen"</string>
