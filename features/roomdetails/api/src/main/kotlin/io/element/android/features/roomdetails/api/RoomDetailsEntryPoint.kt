@@ -16,11 +16,26 @@
 
 package io.element.android.features.roomdetails.api
 
+import android.os.Parcelable
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.matrix.api.core.UserId
+import kotlinx.parcelize.Parcelize
 
 interface RoomDetailsEntryPoint : FeatureEntryPoint {
-    fun createNode(parentNode: Node, buildContext: BuildContext, plugins: List<Plugin>): Node
+
+    sealed interface InitialTarget : Parcelable {
+        @Parcelize
+        object RoomDetails : InitialTarget
+
+        @Parcelize
+        data class RoomMemberDetails(val roomMemberId: UserId) : InitialTarget
+    }
+
+    data class Inputs(val initialElement: InitialTarget) : NodeInputs
+
+    fun createNode(parentNode: Node, buildContext: BuildContext, inputs: Inputs, plugins: List<Plugin>): Node
 }
