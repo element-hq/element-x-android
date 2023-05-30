@@ -13,16 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-}
 
-android {
-    namespace = "io.element.android.features.analytics.test"
-}
+package io.element.android.features.analytics.test
 
-dependencies {
-    implementation(projects.services.analytics.api)
-    implementation(projects.libraries.core)
-    implementation(libs.coroutines.core)
-}
+import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.meta.BuildType
+
+val A_BUILD_META = BuildMeta(
+    isDebuggable = true,
+    buildType = BuildType.DEBUG,
+    applicationName = "Element X test",
+    applicationId = "",
+    lowPrivacyLoggingEnabled = false,
+    versionName = "",
+    gitRevision = "",
+    gitRevisionDate = "",
+    gitBranchName = "",
+    flavorDescription = "",
+    flavorShortDescription = "",
+)
+

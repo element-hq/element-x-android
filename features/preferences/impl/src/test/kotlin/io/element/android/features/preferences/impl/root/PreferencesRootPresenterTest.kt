@@ -21,13 +21,13 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.analytics.impl.preferences.DefaultAnalyticsPreferencesPresenter
+import io.element.android.features.analytics.test.A_BUILD_META
 import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.features.logout.impl.DefaultLogoutPreferencePresenter
 import io.element.android.features.rageshake.impl.preferences.DefaultRageshakePreferencesPresenter
 import io.element.android.features.rageshake.test.rageshake.FakeRageShake
 import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -37,12 +37,12 @@ class PreferencesRootPresenterTest {
     fun `present - initial state`() = runTest {
         val logoutPresenter = DefaultLogoutPreferencePresenter(FakeMatrixClient())
         val rageshakePresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore())
-        val analyticsPresenter = DefaultAnalyticsPreferencesPresenter(FakeAnalyticsService())
+        val analyticsPresenter = DefaultAnalyticsPreferencesPresenter(FakeAnalyticsService(), A_BUILD_META)
         val presenter = PreferencesRootPresenter(
             logoutPresenter,
             rageshakePresenter,
             analyticsPresenter,
-            BuildType.DEBUG
+            A_BUILD_META.buildType
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -50,6 +50,7 @@ class PreferencesRootPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.logoutState.logoutAction).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.analyticsState.isEnabled).isTrue()
             assertThat(initialState.rageshakeState.isEnabled).isTrue()
             assertThat(initialState.rageshakeState.isSupported).isTrue()
             assertThat(initialState.rageshakeState.sensitivity).isEqualTo(1.0f)
