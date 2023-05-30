@@ -25,6 +25,7 @@ import io.element.android.libraries.push.impl.notifications.fake.FakeNotificatio
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationFactory
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 private const val MY_USER_DISPLAY_NAME = "display-name"
@@ -54,7 +55,7 @@ class NotificationRendererTest {
     )
 
     @Test
-    fun `given no notifications when rendering then cancels summary notification`() {
+    fun `given no notifications when rendering then cancels summary notification`() = runTest {
         givenNoNotifications()
 
         renderEventsAsNotifications()
@@ -64,7 +65,7 @@ class NotificationRendererTest {
     }
 
     @Test
-    fun `given last room message group notification is removed when rendering then remove the summary and then remove message notification`() {
+    fun `given last room message group notification is removed when rendering then remove the summary and then remove message notification`() = runTest {
         givenNotifications(roomNotifications = listOf(RoomNotification.Removed(A_ROOM_ID)), summaryNotification = A_REMOVE_SUMMARY_NOTIFICATION)
 
         renderEventsAsNotifications()
@@ -76,7 +77,7 @@ class NotificationRendererTest {
     }
 
     @Test
-    fun `given a room message group notification is removed when rendering then remove the message notification and update summary`() {
+    fun `given a room message group notification is removed when rendering then remove the message notification and update summary`() = runTest {
         givenNotifications(roomNotifications = listOf(RoomNotification.Removed(A_ROOM_ID)))
 
         renderEventsAsNotifications()
@@ -88,7 +89,7 @@ class NotificationRendererTest {
     }
 
     @Test
-    fun `given a room message group notification is added when rendering then show the message notification and update summary`() {
+    fun `given a room message group notification is added when rendering then show the message notification and update summary`() = runTest {
         givenNotifications(
             roomNotifications = listOf(
                 RoomNotification.Message(
@@ -107,7 +108,7 @@ class NotificationRendererTest {
     }
 
     @Test
-    fun `given last simple notification is removed when rendering then remove the summary and then remove simple notification`() {
+    fun `given last simple notification is removed when rendering then remove the summary and then remove simple notification`() = runTest {
         givenNotifications(simpleNotifications = listOf(OneShotNotification.Removed(AN_EVENT_ID.value)), summaryNotification = A_REMOVE_SUMMARY_NOTIFICATION)
 
         renderEventsAsNotifications()
@@ -119,7 +120,7 @@ class NotificationRendererTest {
     }
 
     @Test
-    fun `given a simple notification is removed when rendering then remove the simple notification and update summary`() {
+    fun `given a simple notification is removed when rendering then remove the simple notification and update summary`() = runTest {
         givenNotifications(simpleNotifications = listOf(OneShotNotification.Removed(AN_EVENT_ID.value)))
 
         renderEventsAsNotifications()
@@ -131,7 +132,7 @@ class NotificationRendererTest {
     }
 
     @Test
-    fun `given a simple notification is added when rendering then show the simple notification and update summary`() {
+    fun `given a simple notification is added when rendering then show the simple notification and update summary`() = runTest {
         givenNotifications(
             simpleNotifications = listOf(
                 OneShotNotification.Append(
@@ -150,7 +151,7 @@ class NotificationRendererTest {
     }
 
     @Test
-    fun `given last invitation notification is removed when rendering then remove the summary and then remove invitation notification`() {
+    fun `given last invitation notification is removed when rendering then remove the summary and then remove invitation notification`() = runTest {
         givenNotifications(invitationNotifications = listOf(OneShotNotification.Removed(A_ROOM_ID.value)), summaryNotification = A_REMOVE_SUMMARY_NOTIFICATION)
 
         renderEventsAsNotifications()
@@ -162,7 +163,7 @@ class NotificationRendererTest {
     }
 
     @Test
-    fun `given an invitation notification is removed when rendering then remove the invitation notification and update summary`() {
+    fun `given an invitation notification is removed when rendering then remove the invitation notification and update summary`() = runTest {
         givenNotifications(invitationNotifications = listOf(OneShotNotification.Removed(A_ROOM_ID.value)))
 
         renderEventsAsNotifications()
@@ -174,7 +175,7 @@ class NotificationRendererTest {
     }
 
     @Test
-    fun `given an invitation notification is added when rendering then show the invitation notification and update summary`() {
+    fun `given an invitation notification is added when rendering then show the invitation notification and update summary`() = runTest {
         givenNotifications(
             simpleNotifications = listOf(
                 OneShotNotification.Append(
@@ -192,7 +193,7 @@ class NotificationRendererTest {
         }
     }
 
-    private fun renderEventsAsNotifications() {
+    private suspend fun renderEventsAsNotifications() {
         notificationRenderer.render(
             MatrixUser(A_SESSION_ID, MY_USER_DISPLAY_NAME, MY_USER_AVATAR_URL),
             useCompleteNotificationFormat = USE_COMPLETE_NOTIFICATION_FORMAT,
