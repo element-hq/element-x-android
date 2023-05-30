@@ -143,13 +143,17 @@ private fun ContentToPreview(state: BubbleState) {
             interactionSource = MutableInteractionSource(),
         ) {
             // Render the state as a text to better understand the previews
-            Text(
+            Box(
                 modifier = Modifier
                     .size(width = 120.dp, height = 32.dp)
                     .padding(horizontal = 12.dp, vertical = 6.dp),
-                fontSize = 10.sp,
-                text = "${state.groupPosition.javaClass.simpleName} m:${state.isMine.to01()} h:${state.isHighlighted.to01()}"
-            )
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    fontSize = 10.sp,
+                    text = "${state.groupPosition.javaClass.simpleName} m:${state.isMine.to01()} h:${state.isHighlighted.to01()}"
+                )
+            }
         }
     }
 }
