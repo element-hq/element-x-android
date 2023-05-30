@@ -18,6 +18,7 @@
 
 package io.element.android.features.messages.textcomposer
 
+import android.net.Uri
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
@@ -69,7 +70,8 @@ class MessageComposerPresenterTest {
     )
     private val mediaPreProcessor = FakeMediaPreProcessor()
     private val snackbarDispatcher = SnackbarDispatcher()
-    private val localMediaFactory = FakeLocalMediaFactory()
+    private val mockMediaUrl: Uri = mockk("localMediaUri")
+    private val localMediaFactory = FakeLocalMediaFactory(mockMediaUrl)
 
     @Test
     fun `present - initial state`() = runTest {

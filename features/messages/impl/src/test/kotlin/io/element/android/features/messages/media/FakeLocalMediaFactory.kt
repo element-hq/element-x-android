@@ -23,12 +23,12 @@ import io.element.android.features.messages.impl.media.local.LocalMediaFactory
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MediaFile
 
-class FakeLocalMediaFactory : LocalMediaFactory {
+class FakeLocalMediaFactory(private val localMediaUri: Uri) : LocalMediaFactory {
 
     var fallbackMimeType: String = MimeTypes.OctetStream
 
     override fun createFromMediaFile(mediaFile: MediaFile, mimeType: String?): LocalMedia {
-        return aLocalMedia(mimeType = mimeType ?: fallbackMimeType)
+        return aLocalMedia(uri = localMediaUri, mimeType = mimeType ?: fallbackMimeType)
     }
 
     override fun createFromUri(uri: Uri, mimeType: String?): LocalMedia {
