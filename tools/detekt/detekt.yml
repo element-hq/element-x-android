@@ -15,6 +15,12 @@ style:
   UnusedPrivateMember:
     # TODO Enable it
     active: false
+  UnusedParameter:
+    # TODO Enable it
+    active: false
+  UnusedPrivateProperty:
+    # TODO Enable it
+    active: false
   ThrowsCount:
     active: false
   LoopWithTooManyJumpStatements:
