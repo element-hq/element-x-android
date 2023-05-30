@@ -30,7 +30,6 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.executeResult
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.mediaupload.api.MediaSender
-import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -48,7 +47,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     @Composable
     override fun present(): AttachmentsPreviewState {
 
-        val coroutineScope = rememberCoroutineScope { CoroutineName("AttachmentsViewPresenterCoroutine") }
+        val coroutineScope = rememberCoroutineScope()
 
         val sendActionState = remember {
             mutableStateOf<Async<Unit>>(Async.Uninitialized)
@@ -71,7 +70,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     private fun CoroutineScope.sendAttachment(
         attachment: Attachment,
         sendActionState: MutableState<Async<Unit>>,
-    ) = launch(dispatchers.io + CoroutineName("SendAttachmentCoroutine")) {
+    ) = launch(dispatchers.io) {
         when (attachment) {
             is Attachment.Media -> {
                 sendMedia(
@@ -80,7 +79,6 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
                 )
             }
         }
-        println("[${Thread.currentThread().name}] Presenter: Finished sendAttachment")
     }
 
     private suspend fun sendMedia(
@@ -88,11 +86,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         sendActionState: MutableState<Async<Unit>>,
     ) {
         suspend {
-            mediaSender.sendMedia(mediaAttachment.localMedia.uri, mediaAttachment.localMedia.mimeType, mediaAttachment.compressIfPossible).also {
-                println("[${Thread.currentThread().name}] Presenter: Sent media")
-            }
-        }.executeResult(sendActionState).also {
-            println("[${Thread.currentThread().name}] Presenter: Updated result")
-        }
+            mediaSender.sendMedia(mediaAttachment.localMedia.uri, mediaAttachment.localMedia.mimeType, mediaAttachment.compressIfPossible)
+        }.executeResult(sendActionState)
     }
 }
