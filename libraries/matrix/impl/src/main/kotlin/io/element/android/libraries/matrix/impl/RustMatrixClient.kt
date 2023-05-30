@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -114,9 +115,9 @@ class RustMatrixClient constructor(
         .timelineLimit(limit = 1u)
         .requiredState(
             requiredState = listOf(
-                RequiredState(key = "m.room.avatar", value = ""),
-                RequiredState(key = "m.room.encryption", value = ""),
-                RequiredState(key = "m.room.join_rules", value = ""),
+                RequiredState(key = EventType.STATE_ROOM_AVATAR, value = ""),
+                RequiredState(key = EventType.STATE_ROOM_ENCRYPTION, value = ""),
+                RequiredState(key = EventType.STATE_ROOM_JOIN_RULES, value = ""),
             )
         )
         .filters(visibleRoomsSlidingSyncFilters)
@@ -136,9 +137,9 @@ class RustMatrixClient constructor(
         .timelineLimit(limit = 1u)
         .requiredState(
             requiredState = listOf(
-                RequiredState(key = "m.room.avatar", value = ""),
-                RequiredState(key = "m.room.encryption", value = ""),
-                RequiredState(key = "m.room.canonical_alias", value = ""),
+                RequiredState(key = EventType.STATE_ROOM_AVATAR, value = ""),
+                RequiredState(key = EventType.STATE_ROOM_ENCRYPTION, value = ""),
+                RequiredState(key = EventType.STATE_ROOM_CANONICAL_ALIAS, value = ""),
             )
         )
         .filters(invitesSlidingSyncFilters)

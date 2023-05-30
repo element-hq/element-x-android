@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.push.impl.notifications
 
+import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
@@ -49,7 +50,7 @@ class NotifiableEventProcessor @Inject constructor(
                     else -> ProcessedEvent.Type.KEEP
                 }
                 is SimpleNotifiableEvent -> when (it.type) {
-                    /*EventType.REDACTION*/ "m.room.redaction" -> ProcessedEvent.Type.REMOVE
+                    EventType.REDACTION -> ProcessedEvent.Type.REMOVE
                     else -> ProcessedEvent.Type.KEEP
                 }
             }
