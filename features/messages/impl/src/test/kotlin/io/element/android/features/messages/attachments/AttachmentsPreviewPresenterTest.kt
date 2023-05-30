@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -53,6 +54,7 @@ class AttachmentsPreviewPresenterTest {
             val loadingState = awaitItem()
             assertThat(loadingState.sendActionState).isEqualTo(Async.Loading<Unit>())
             testScheduler.advanceTimeBy(FAKE_DELAY_IN_MS)
+            runCurrent()
             val successState = awaitItem()
             assertThat(successState.sendActionState).isEqualTo(Async.Success(Unit))
             assertThat(room.sendMediaCount).isEqualTo(1)
@@ -74,6 +76,7 @@ class AttachmentsPreviewPresenterTest {
             val loadingState = awaitItem()
             assertThat(loadingState.sendActionState).isEqualTo(Async.Loading<Unit>())
             testScheduler.advanceTimeBy(FAKE_DELAY_IN_MS)
+            runCurrent()
             val failureState = awaitItem()
             assertThat(failureState.sendActionState).isEqualTo(Async.Failure<Unit>(failure))
             assertThat(room.sendMediaCount).isEqualTo(0)

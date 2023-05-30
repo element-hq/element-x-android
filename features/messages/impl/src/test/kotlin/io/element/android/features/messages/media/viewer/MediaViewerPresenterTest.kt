@@ -29,6 +29,7 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.test.FAKE_DELAY_IN_MS
 import io.element.android.libraries.matrix.test.media.FakeMediaLoader
 import io.element.android.libraries.matrix.test.media.aMediaSource
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -51,7 +52,8 @@ class MediaViewerPresenterTest {
             assertThat(initialState.name).isEqualTo(TESTED_MEDIA_NAME)
             val loadingState = awaitItem()
             assertThat(loadingState.downloadedMedia).isInstanceOf(Async.Loading::class.java)
-            testScheduler.advanceTimeBy(FAKE_DELAY_IN_MS + 1)
+            testScheduler.advanceTimeBy(FAKE_DELAY_IN_MS)
+            runCurrent()
             val successState = awaitItem()
             val successData = successState.downloadedMedia.dataOrNull()
             assertThat(successState.downloadedMedia).isInstanceOf(Async.Success::class.java)
@@ -72,6 +74,7 @@ class MediaViewerPresenterTest {
             val loadingState = awaitItem()
             assertThat(loadingState.downloadedMedia).isInstanceOf(Async.Loading::class.java)
             testScheduler.advanceTimeBy(FAKE_DELAY_IN_MS)
+            runCurrent()
             val failureState = awaitItem()
             assertThat(failureState.downloadedMedia).isInstanceOf(Async.Failure::class.java)
             mediaLoader.shouldFail = false
@@ -81,6 +84,7 @@ class MediaViewerPresenterTest {
             val retryLoadingState = awaitItem()
             assertThat(retryLoadingState.downloadedMedia).isInstanceOf(Async.Loading::class.java)
             testScheduler.advanceTimeBy(FAKE_DELAY_IN_MS)
+            runCurrent()
             val successState = awaitItem()
             val successData = successState.downloadedMedia.dataOrNull()
             assertThat(successState.downloadedMedia).isInstanceOf(Async.Success::class.java)
