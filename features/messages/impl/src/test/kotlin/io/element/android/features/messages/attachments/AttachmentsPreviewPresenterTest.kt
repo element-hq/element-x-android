@@ -33,6 +33,8 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -86,13 +88,14 @@ class AttachmentsPreviewPresenterTest {
         }
     }
 
-    private fun anAttachmentsPreviewPresenter(
+    private fun TestScope.anAttachmentsPreviewPresenter(
         localMedia: LocalMedia = aLocalMedia(mimeType = MimeTypes.IMAGE_JPEG),
         room: MatrixRoom = FakeMatrixRoom()
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
             attachment = Attachment.Media(localMedia, compressIfPossible = false),
-            mediaSender = MediaSender(mediaPreProcessor, room)
+            mediaSender = MediaSender(mediaPreProcessor, room),
+            dispatchers = testCoroutineDispatchers(testScheduler, useUnconfinedTestDispatcher = false),
         )
     }
 }

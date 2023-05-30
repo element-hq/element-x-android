@@ -28,6 +28,7 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.executeResult
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.mediaupload.api.MediaSender
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -35,6 +36,7 @@ import kotlinx.coroutines.launch
 class AttachmentsPreviewPresenter @AssistedInject constructor(
     @Assisted private val attachment: Attachment,
     private val mediaSender: MediaSender,
+    private val dispatchers: CoroutineDispatchers,
 ) : Presenter<AttachmentsPreviewState> {
 
     @AssistedFactory
@@ -68,7 +70,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     private fun CoroutineScope.sendAttachment(
         attachment: Attachment,
         sendActionState: MutableState<Async<Unit>>,
-    ) = launch {
+    ) = launch(dispatchers.io) {
         when (attachment) {
             is Attachment.Media -> {
                 sendMedia(
