@@ -23,6 +23,7 @@
   <string name="action_edit">"Editați"</string>
   <string name="action_enable">"Activați"</string>
   <string name="action_invite">"Invitați"</string>
+  <string name="action_invite_friends">"Invitați prieteni"</string>
   <string name="action_invite_friends_to_app">"Invitați prieteni în %1$s"</string>
   <string name="action_invites_list">"Invitații"</string>
   <string name="action_learn_more">"Aflați mai multe"</string>
@@ -63,11 +64,13 @@
   <string name="common_developer_options">"Opțiuni programator"</string>
   <string name="common_edited_suffix">"(editat)"</string>
   <string name="common_editing">"Editare"</string>
+  <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Criptare activată"</string>
   <string name="common_error">"Eroare"</string>
   <string name="common_file">"Fişier"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Imagine"</string>
+  <string name="common_leaving_room">"Se părăsește conversația"</string>
   <string name="common_link_copied_to_clipboard">"Linkul a fost copiat în clipboard"</string>
   <string name="common_loading">"Se încarcă…"</string>
   <string name="common_message">"Mesaj"</string>
@@ -83,18 +86,23 @@
   <string name="common_replying_to">"Răspuns pentru %1$s"</string>
   <string name="common_report_a_bug">"Raportați o eroare"</string>
   <string name="common_report_submitted">"Raport trimis"</string>
+  <string name="common_room_name">"Numele camerei"</string>
   <string name="common_search_for_someone">"Căutați pe cineva"</string>
+  <string name="common_search_results">"Rezultatele căutării"</string>
   <string name="common_security">"Securitate"</string>
   <string name="common_select_your_server">"Selectați serverul"</string>
   <string name="common_sending">"Se trimite…"</string>
   <string name="common_server_not_supported">"Serverul nu este compatibil"</string>
   <string name="common_server_url">"Adresa URL a serverului"</string>
   <string name="common_settings">"Setări"</string>
+  <string name="common_starting_chat">"Se începe conversația…"</string>
   <string name="common_sticker">"Autocolant"</string>
   <string name="common_success">"Succes"</string>
   <string name="common_suggestions">"Sugestii"</string>
   <string name="common_topic">"Subiect"</string>
   <string name="common_unable_to_decrypt">"Nu s-a putut decripta"</string>
+  <string name="common_unable_to_invite_message">"Nu am putut trimite cu succes invitații unuia sau mai multor utilizatori."</string>
+  <string name="common_unable_to_invite_title">"Nu s-a putut trimite invitația (invitațiile)"</string>
   <string name="common_unsupported_event">"Eveniment neacceptat"</string>
   <string name="common_username">"Utilizator"</string>
   <string name="common_verification_cancelled">"Verificare anulată"</string>
@@ -115,6 +123,7 @@
   <string name="error_failed_loading_messages">"Încărcarea mesajelor a eșuat"</string>
   <string name="error_some_messages_have_not_been_sent">"Unele mesaje nu au fost trimise"</string>
   <string name="error_unknown">"Ne pare rău, a apărut o eroare"</string>
+  <string name="invite_friends_rich_title">"🔐️ Alăturați-vă mie pe %1$s"</string>
   <string name="invite_friends_text">"Hei, vorbește cu mine pe %1$s: %2$s"</string>
   <string name="leave_room_alert_empty_subtitle">"Sunteți sigur că vreți să părăsiți această cameră? Sunteți singura persoană de aici. Dacă o părasiți, nimeni nu se va mai putea alătura în viitor, inclusiv dumneavoastra."</string>
   <string name="leave_room_alert_private_subtitle">"Sunteți sigur că vrei să părăsiți această cameră? Această cameră nu este publică și nu va veti putea alătura din nou fără o invitație."</string>
@@ -124,11 +133,6 @@
     <item quantity="one">"%1$d membru"</item>
     <item quantity="few">"%1$d membri"</item>
     <item quantity="other">"%1$d membri"</item>
-  </plurals>
-  <plurals name="room_timeline_state_changes">
-    <item quantity="one">"%1$d schimbare a camerii"</item>
-    <item quantity="few">"%1$d schimbări ale camerei"</item>
-    <item quantity="other">"%1$d schimbări ale camerei"</item>
   </plurals>
   <string name="preference_rageshake">"Rageshake pentru a raporta erori"</string>
   <string name="rageshake_dialog_content">"Se pare că scuturați telefonul de frustrare. Doriți să deschdeți ecranul de raportare a unei erori?"</string>
@@ -144,6 +148,10 @@
   <string name="screen_analytics_prompt_settings">"Puteți dezactiva această opțiune oricând din setări"</string>
   <string name="screen_analytics_prompt_third_party_sharing"><b>"Nu"</b>" împărtășim informații cu terți"</string>
   <string name="screen_analytics_prompt_title">"Ajutați la îmbunătățirea %1$s"</string>
+  <string name="screen_analytics_settings_share_data">"Partajați datele analitice"</string>
+  <string name="screen_media_picker_error_failed_selection">"Selectarea fișierelor media a eșuat, încercați din nou."</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"Procesarea datelor media a eșuat, vă rugăm să încercați din nou."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Încărcarea fișierelor media a eșuat, încercați din nou."</string>
   <string name="screen_report_content_block_user_hint">"Confirmați că doriți să ascundeți toate mesajele curente și viitoare de la acest utilizator"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Prag de detecție"</string>

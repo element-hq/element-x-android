@@ -17,13 +17,18 @@
 package io.element.android.features.messages.impl.timeline.factories.event
 
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
-import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateEventContent
+import io.element.android.libraries.core.extensions.orEmpty
+import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
+import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import javax.inject.Inject
 
-class TimelineItemContentStateFactory @Inject constructor() {
+class TimelineItemContentStateFactory @Inject constructor(
+    private val timelineEventFormatter: TimelineEventFormatter,
+) {
 
-    fun create(content: StateContent): TimelineItemEventContent {
-        return TimelineItemUnknownContent
+    fun create(eventTimelineItem: EventTimelineItem): TimelineItemEventContent {
+        val text = timelineEventFormatter.format(eventTimelineItem)
+        return TimelineItemStateEventContent(text.orEmpty().toString())
     }
 }

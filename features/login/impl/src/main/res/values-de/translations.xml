@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_change_server_error_invalid_homeserver">"Wir konnten diesen Homeserver nicht erreichen. Bitte überprüfen Sie, ob Sie die Homeserver-URL korrekt eingegeben haben. Wenn die URL korrekt ist, wenden Sie sich an Ihren Homeserver-Administrator, um weitere Hilfe zu erhalten."</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Dieser Server unterstützt derzeit keine Sliding Sync."</string>
+  <string name="screen_change_server_form_header">"Homeserver-URL"</string>
+  <string name="screen_change_server_form_notice">"Du kannst dich nur mit einem existierenden Server verbinden, der Sliding Sync unterstützt. Dein Homeserver-Administrator muss es konfigurieren. %1$s"</string>
   <string name="screen_change_server_subtitle">"Wie lautet die Adresse deines Servers?"</string>
+  <string name="screen_login_error_deactivated_account">"Dieses Konto wurde deaktiviert."</string>
+  <string name="screen_login_error_invalid_credentials">"Falscher Benutzername und/oder Passwort"</string>
+  <string name="screen_login_error_invalid_user_id">"Dies ist kein gültiger Benutzeridentifikator. Erwartetes Format: \'@user:homeserver.org\'"</string>
+  <string name="screen_login_error_unsupported_authentication">"Der ausgewählte Homeserver unterstützt kein Passwort- oder OIDC-Login. Bitte kontaktiere deinen Admin oder wähle einen anderen Homeserver."</string>
+  <string name="screen_login_form_header">"Gib deine Daten ein"</string>
+  <string name="screen_login_server_header">"Wo deine Gespräche leben"</string>
   <string name="screen_login_title">"Willkommen zurück!"</string>
+  <string name="screen_change_server_submit">"Weiter"</string>
+  <string name="screen_change_server_title">"Wählen deinen Server"</string>
   <string name="screen_login_password_hint">"Passwort"</string>
+  <string name="screen_login_submit">"Weiter"</string>
   <string name="screen_login_username_hint">"Benutzername"</string>
 </resources>

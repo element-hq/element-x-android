@@ -26,7 +26,7 @@ fun RustImageInfo.map(): ImageInfo = ImageInfo(
     mimetype = mimetype,
     size = size?.toLong(),
     thumbnailInfo = thumbnailInfo?.map(),
-    thumbnailUrl = thumbnailSource?.useUrl(),
+    thumbnailSource = thumbnailSource?.map(),
     blurhash = blurhash
 )
 

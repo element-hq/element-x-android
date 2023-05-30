@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.VideoInfo
 
 sealed interface EventContent
@@ -106,25 +107,25 @@ data class EmoteMessageType(
 
 data class ImageMessageType(
     val body: String,
-    val url: String,
+    val source: MediaSource,
     val info: ImageInfo?
 ) : MessageType
 
 data class AudioMessageType(
-    var body: String,
-    var url: String,
-    var info: AudioInfo?
+    val body: String,
+    val source: MediaSource,
+    val info: AudioInfo?
 ) : MessageType
 
 data class VideoMessageType(
     val body: String,
-    val url: String,
+    val source: MediaSource,
     val info: VideoInfo?
 ) : MessageType
 
 data class FileMessageType(
     val body: String,
-    val url: String,
+    val source: MediaSource,
     val info: FileInfo?
 ) : MessageType
 

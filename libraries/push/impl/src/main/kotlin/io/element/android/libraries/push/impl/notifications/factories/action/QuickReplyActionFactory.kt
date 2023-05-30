@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.push.impl.notifications.factories.action
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -70,6 +71,8 @@ class QuickReplyActionFactory @Inject constructor(
      * However, for Android devices running Marshmallow and below (API level 23 and below),
      * it will be more appropriate to use an activity. Since you have to provide your own UI.
      */
+    //TODO remove when minSdk will be back to 23
+    @SuppressLint("ObsoleteSdkInt")
     private fun buildQuickReplyIntent(
         sessionId: SessionId,
         roomId: RoomId,

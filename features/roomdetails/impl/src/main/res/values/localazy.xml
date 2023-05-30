@@ -4,18 +4,6 @@
     <item quantity="one">"1 person"</item>
     <item quantity="other">"%1$d people"</item>
   </plurals>
-  <string name="screen_create_room_action_create_room">"New room"</string>
-  <string name="screen_create_room_action_invite_people">"Invite people"</string>
-  <string name="screen_create_room_add_people_title">"Add people"</string>
-  <string name="screen_create_room_error_creating_room">"An error occurred when creating the room"</string>
-  <string name="screen_create_room_private_option_description">"Messages in this room are encrypted. Encryption can’t be disabled afterwards."</string>
-  <string name="screen_create_room_private_option_title">"Private room (invite only)"</string>
-  <string name="screen_create_room_public_option_description">"Messages are not encrypted and anyone can read them. You can enable encryption at a later date."</string>
-  <string name="screen_create_room_public_option_title">"Public room (anyone)"</string>
-  <string name="screen_create_room_room_name_label">"Room name"</string>
-  <string name="screen_create_room_room_name_placeholder">"e.g. Product Sprint"</string>
-  <string name="screen_create_room_topic_label">"Topic (optional)"</string>
-  <string name="screen_create_room_topic_placeholder">"What is this room about?"</string>
   <string name="screen_room_details_add_topic_title">"Add topic"</string>
   <string name="screen_room_details_already_a_member">"Already a member"</string>
   <string name="screen_room_details_already_invited">"Already invited"</string>
@@ -28,7 +16,6 @@
   <string name="screen_room_details_updating_room">"Updating room…"</string>
   <string name="screen_room_member_list_pending_header_title">"Pending"</string>
   <string name="screen_room_member_list_room_members_header_title">"Room members"</string>
-  <string name="screen_create_room_title">"Create a room"</string>
   <string name="screen_dm_details_block_alert_action">"Block"</string>
   <string name="screen_dm_details_block_alert_description">"Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime."</string>
   <string name="screen_dm_details_block_user">"Block user"</string>

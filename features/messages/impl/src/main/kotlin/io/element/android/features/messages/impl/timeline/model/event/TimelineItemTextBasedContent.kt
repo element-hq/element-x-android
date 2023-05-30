@@ -21,4 +21,5 @@ import org.jsoup.nodes.Document
 sealed interface TimelineItemTextBasedContent : TimelineItemEventContent {
     val body: String
     val htmlDocument: Document?
+    val isEdited: Boolean
 }

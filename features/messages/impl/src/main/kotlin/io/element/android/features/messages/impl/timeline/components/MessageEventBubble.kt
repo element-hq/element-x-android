@@ -20,7 +20,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -35,13 +34,16 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleStateProvider
+import io.element.android.libraries.core.extensions.to01
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Surface
+import io.element.android.libraries.designsystem.theme.components.Text
 
 private val BUBBLE_RADIUS = 16.dp
 
@@ -84,9 +86,9 @@ fun MessageEventBubble(
 
     fun Modifier.offsetForItem(): Modifier {
         return if (state.isMine) {
-            offset(y = -(12.dp))
+            this
         } else {
-            offset(x = 20.dp, y = -(12.dp))
+            offset(x = 20.dp)
         }
     }
 
@@ -129,7 +131,7 @@ internal fun MessageEventBubbleDarkPreview(@PreviewParameter(BubbleStateProvider
 
 @Composable
 private fun ContentToPreview(state: BubbleState) {
-    // Due to y offset, surround with a Box
+    // Due to position offset, surround with a Box
     Box(
         modifier = Modifier
             .size(width = 240.dp, height = 64.dp)
@@ -140,7 +142,18 @@ private fun ContentToPreview(state: BubbleState) {
             state = state,
             interactionSource = MutableInteractionSource(),
         ) {
-            Spacer(modifier = Modifier.size(width = 120.dp, height = 32.dp))
+            // Render the state as a text to better understand the previews
+            Box(
+                modifier = Modifier
+                    .size(width = 120.dp, height = 32.dp)
+                    .padding(horizontal = 12.dp, vertical = 6.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    fontSize = 10.sp,
+                    text = "${state.groupPosition.javaClass.simpleName} m:${state.isMine.to01()} h:${state.isHighlighted.to01()}"
+                )
+            }
         }
     }
 }

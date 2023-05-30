@@ -22,12 +22,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.Azure
 import io.element.android.libraries.designsystem.Black_900
+import io.element.android.libraries.designsystem.Compound_Gray_300_Light
+import io.element.android.libraries.designsystem.Compound_Gray_400_Light
 import io.element.android.libraries.designsystem.Gray_100
 import io.element.android.libraries.designsystem.Gray_1400_Light
 import io.element.android.libraries.designsystem.Gray_150
 import io.element.android.libraries.designsystem.Gray_200
 import io.element.android.libraries.designsystem.Gray_25
-import io.element.android.libraries.designsystem.Gray_400_Light
 import io.element.android.libraries.designsystem.Gray_50
 import io.element.android.libraries.designsystem.SystemGrey5Light
 import io.element.android.libraries.designsystem.SystemGrey6Light
@@ -40,7 +41,8 @@ fun elementColorsLight() = ElementColors(
     messageHighlightedBackground = Azure,
     quaternary = Gray_100,
     quinary = Gray_50,
-    gray400 = Gray_400_Light,
+    gray300 = Compound_Gray_300_Light,
+    gray400 = Compound_Gray_400_Light,
     gray1400 = Gray_1400_Light,
     textActionCritical = TextColorCriticalLight,
     isLight = true,

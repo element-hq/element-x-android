@@ -230,26 +230,26 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo): Result<Unit> {
-        return runCatching {
+    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
             innerRoom.sendImage(file.path, thumbnailFile.path, imageInfo.map())
         }
     }
 
-    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo): Result<Unit> {
-        return runCatching {
+    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
             innerRoom.sendVideo(file.path, thumbnailFile.path, videoInfo.map())
         }
     }
 
-    override suspend fun sendAudio(file: File, audioInfo: AudioInfo): Result<Unit> {
-        return runCatching {
+    override suspend fun sendAudio(file: File, audioInfo: AudioInfo): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
             innerRoom.sendAudio(file.path, audioInfo.map())
         }
     }
 
-    override suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit> {
-        return runCatching {
+    override suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
             innerRoom.sendFile(file.path, fileInfo.map())
         }
     }

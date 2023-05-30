@@ -30,6 +30,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -107,7 +108,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = false,
-                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null)
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false)
             )
             initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent))
             // val loadingState = awaitItem()
@@ -137,7 +138,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = true,
-                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null)
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false)
             )
             initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent))
             // val loadingState = awaitItem()
@@ -173,5 +174,6 @@ private fun aMessageEvent(
     content = content,
     sentTime = "",
     isMine = isMine,
-    reactionsState = TimelineItemReactions(persistentListOf())
+    reactionsState = TimelineItemReactions(persistentListOf()),
+    sendState = EventSendState.Sent(AN_EVENT_ID)
 )

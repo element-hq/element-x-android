@@ -29,6 +29,7 @@ class ElementColors(
     messageHighlightedBackground: Color,
     quaternary: Color,
     quinary: Color,
+    gray300: Color,
     gray400: Color,
     gray1400: Color,
     textActionCritical: Color,
@@ -45,6 +46,9 @@ class ElementColors(
         private set
 
     var quinary by mutableStateOf(quinary)
+        private set
+
+    var gray300 by mutableStateOf(gray400)
         private set
 
     var gray400 by mutableStateOf(gray400)
@@ -65,6 +69,7 @@ class ElementColors(
         messageHighlightedBackground: Color = this.messageHighlightedBackground,
         quaternary: Color = this.quaternary,
         quinary: Color = this.quinary,
+        gray300: Color = this.gray300,
         gray400: Color = this.gray400,
         gray1400: Color = this.gray1400,
         textActionCritical: Color = this.textActionCritical,
@@ -75,6 +80,7 @@ class ElementColors(
         messageHighlightedBackground = messageHighlightedBackground,
         quaternary = quaternary,
         quinary = quinary,
+        gray300 = gray300,
         gray400 = gray400,
         gray1400 = gray1400,
         textActionCritical = textActionCritical,
@@ -87,6 +93,7 @@ class ElementColors(
         messageHighlightedBackground = other.messageHighlightedBackground
         quaternary = other.quaternary
         quinary = other.quinary
+        gray300 = other.gray300
         gray400 = other.gray400
         gray1400 = other.gray1400
         textActionCritical = other.textActionCritical

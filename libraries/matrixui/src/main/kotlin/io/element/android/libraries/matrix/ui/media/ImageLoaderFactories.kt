@@ -34,10 +34,10 @@ class LoggedInImageLoaderFactory @Inject constructor(
             .Builder(context)
             .okHttpClient(okHttpClient)
             .components {
-                add(AvatarKeyer())
-                add(MediaKeyer())
-                add(MediaFetcher.AvatarFactory(matrixClient))
-                add(MediaFetcher.MetaFactory(matrixClient))
+                add(AvatarDataKeyer())
+                add(MediaRequestDataKeyer())
+                add(CoilMediaFetcher.AvatarFactory(matrixClient))
+                add(CoilMediaFetcher.MediaRequestDataFactory(matrixClient))
             }
             .build()
     }

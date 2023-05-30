@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline.factories.event
 
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
+import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
@@ -26,7 +27,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.RedactedConte
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
-import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import javax.inject.Inject
@@ -43,15 +43,15 @@ class TimelineItemContentFactory @Inject constructor(
     private val failedToParseStateFactory: TimelineItemContentFailedToParseStateFactory
 ) {
 
-    fun create(itemContent: EventContent): TimelineItemEventContent {
-        return when (itemContent) {
+    fun create(eventTimelineItem: EventTimelineItem): TimelineItemEventContent {
+        return when (val itemContent = eventTimelineItem.content) {
             is FailedToParseMessageLikeContent -> failedToParseMessageFactory.create(itemContent)
             is FailedToParseStateContent -> failedToParseStateFactory.create(itemContent)
             is MessageContent -> messageFactory.create(itemContent)
-            is ProfileChangeContent -> profileChangeFactory.create(itemContent)
+            is ProfileChangeContent -> profileChangeFactory.create(eventTimelineItem)
             is RedactedContent -> redactedMessageFactory.create(itemContent)
-            is RoomMembershipContent -> roomMembershipFactory.create(itemContent)
-            is StateContent -> stateFactory.create(itemContent)
+            is RoomMembershipContent -> roomMembershipFactory.create(eventTimelineItem)
+            is StateContent -> stateFactory.create(eventTimelineItem)
             is StickerContent -> stickerFactory.create(itemContent)
             is UnableToDecryptContent -> utdFactory.create(itemContent)
             is UnknownContent -> TimelineItemUnknownContent

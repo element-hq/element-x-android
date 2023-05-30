@@ -15,8 +15,9 @@ datastore = "1.0.0"
 constraintlayout = "2.1.4"
 recyclerview = "1.3.0"
 lifecycle = "2.6.1"
-activity = "1.7.1"
+activity = "1.7.2"
 startup = "1.1.1"
+media3 = "1.0.2"
 
 # Compose
 compose_bom = "2023.05.01"
@@ -41,21 +42,24 @@ appyx = "1.2.0"
 dependencycheck = "8.2.1"
 stem = "2.3.0"
 sqldelight = "1.5.5"
+telephoto = "0.3.0"
 
 # DI
 dagger = "2.46.1"
-anvil = "2.4.5"
+anvil = "2.4.6"
 
 # quality
-detekt = "1.22.0"
+detekt = "1.23.0"
 dependencygraph = "0.10"
 
 [libraries]
 # Project
 android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "android_gradle_plugin" }
+# https://developer.android.com/studio/write/java8-support#library-desugaring-versions
+android_desugar = "com.android.tools:desugar_jdk_libs:2.0.3"
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:32.0.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:32.1.0"
 
 # AndroidX
 androidx_material = { module = "com.google.android.material:material", version.ref = "material" }
@@ -70,6 +74,8 @@ androidx_lifecycle_runtime = { module = "androidx.lifecycle:lifecycle-runtime-kt
 androidx_lifecycle_process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
 androidx_splash = "androidx.core:core-splashscreen:1.0.1"
 androidx_security_crypto = "androidx.security:security-crypto:1.0.0"
+androidx_media3_exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
+androidx_media3_ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
 
 androidx_activity_activity = { module = "androidx.activity:activity", version.ref = "activity" }
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
@@ -112,7 +118,7 @@ test_mockk = "io.mockk:mockk:1.13.5"
 test_barista = "com.adevinta.android:barista:4.3.0"
 test_hamcrest = "org.hamcrest:hamcrest:2.2"
 test_orchestrator = "androidx.test:orchestrator:1.4.2"
-test_turbine = "app.cash.turbine:turbine:0.12.3"
+test_turbine = "app.cash.turbine:turbine:0.13.0"
 test_truth = "com.google.truth:truth:1.1.3"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.12"
 test_robolectric = "org.robolectric:robolectric:4.10.3"
@@ -139,6 +145,7 @@ unifiedpush = "com.github.UnifiedPush:android-connector:2.1.1"
 gujun_span = "me.gujun.android:span:1.7"
 otaliastudios_transcoder = "com.otaliastudios:transcoder:0.10.5"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.1.0"
+telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 
 # Di
 inject = "javax.inject:javax.inject:1"
@@ -148,7 +155,7 @@ anvil_compiler_api = { module = "com.squareup.anvil:compiler-api", version.ref =
 anvil_compiler_utils = { module = "com.squareup.anvil:compiler-utils", version.ref = "anvil" }
 
 # Composer
-wysiwyg = "io.element.android:wysiwyg:2.2.0"
+wysiwyg = "io.element.android:wysiwyg:2.2.1"
 
 # Miscellaneous
 # Add unused dependency to androidx.compose.compiler:compiler to let Renovate create PR to change the
@@ -171,6 +178,6 @@ ktlint = "org.jlleitschuh.gradle.ktlint:11.3.2"
 dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.ref = "dependencygraph" }
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
 paparazzi = "app.cash.paparazzi:1.2.0"
-sonarqube = "org.sonarqube:4.0.0.2929"
+sonarqube = "org.sonarqube:4.1.0.3113"
 kover = "org.jetbrains.kotlinx.kover:0.6.1"
 sqldelight = { id = "com.squareup.sqldelight", version.ref = "sqldelight" }

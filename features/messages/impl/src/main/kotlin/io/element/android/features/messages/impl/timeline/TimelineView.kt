@@ -16,8 +16,9 @@
 
 package io.element.android.features.messages.impl.timeline
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -32,11 +33,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material3.MaterialTheme
@@ -44,31 +47,43 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.LastBaseline
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.components.MessageEventBubble
+import io.element.android.features.messages.impl.timeline.components.MessageStateEventContainer
+import io.element.android.features.messages.impl.timeline.components.TimelineEventTimestampView
 import io.element.android.features.messages.impl.timeline.components.TimelineItemReactionsView
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
+import io.element.android.features.messages.impl.timeline.components.group.GroupHeaderView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemDaySeparatorView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineLoadingMoreIndicator
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingModel
+import io.element.android.features.messages.impl.timeline.util.defaultTimelineContentPadding
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -93,8 +108,6 @@ fun TimelineView(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = lazyListState,
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Bottom,
             reverseLayout = true
         ) {
             itemsIndexed(
@@ -104,9 +117,9 @@ fun TimelineView(
             ) { index, timelineItem ->
                 TimelineItemRow(
                     timelineItem = timelineItem,
-                    isHighlighted = timelineItem.identifier() == state.highlightedEventId?.value,
+                    highlightedItem = state.highlightedEventId?.value,
                     onClick = onMessageClicked,
-                    onLongClick = onMessageLongClicked
+                    onLongClick = onMessageLongClicked,
                 )
                 if (index == state.timelineItems.lastIndex) {
                     onReachedLoadMore()
@@ -125,16 +138,19 @@ fun TimelineView(
 @Composable
 fun TimelineItemRow(
     timelineItem: TimelineItem,
-    isHighlighted: Boolean,
+    highlightedItem: String?,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     when (timelineItem) {
-        is TimelineItem.Virtual -> TimelineItemVirtualRow(
-            virtual = timelineItem
-        )
+        is TimelineItem.Virtual -> {
+            TimelineItemVirtualRow(
+                virtual = timelineItem,
+                modifier = modifier,
+            )
+        }
         is TimelineItem.Event -> {
-
             fun onClick() {
                 onClick(timelineItem)
             }
@@ -143,12 +159,55 @@ fun TimelineItemRow(
                 onLongClick(timelineItem)
             }
 
-            TimelineItemEventRow(
-                event = timelineItem,
-                isHighlighted = isHighlighted,
-                onClick = ::onClick,
-                onLongClick = ::onLongClick
-            )
+            if (timelineItem.content is TimelineItemStateContent) {
+                TimelineItemStateEventRow(
+                    event = timelineItem,
+                    isHighlighted = highlightedItem == timelineItem.identifier(),
+                    onClick = ::onClick,
+                    onLongClick = ::onLongClick,
+                    modifier = modifier,
+                )
+            } else {
+                TimelineItemEventRow(
+                    event = timelineItem,
+                    isHighlighted = highlightedItem == timelineItem.identifier(),
+                    onClick = ::onClick,
+                    onLongClick = ::onLongClick,
+                    modifier = modifier,
+                )
+            }
+        }
+        is TimelineItem.GroupedEvents -> {
+            val isExpanded = rememberSaveable(key = timelineItem.identifier()) { mutableStateOf(false) }
+
+            fun onExpandGroupClick() {
+                isExpanded.value = !isExpanded.value
+            }
+
+            Column(modifier = modifier.animateContentSize()) {
+                GroupHeaderView(
+                    text = pluralStringResource(
+                        id = R.plurals.room_timeline_state_changes,
+                        count = timelineItem.events.size,
+                        timelineItem.events.size
+                    ),
+                    isExpanded = isExpanded.value,
+                    isHighlighted = !isExpanded.value && timelineItem.events.any { it.identifier() == highlightedItem },
+                    onClick = ::onExpandGroupClick,
+                )
+                if (isExpanded.value) {
+                    Column {
+                        timelineItem.events.forEach { subGroupEvent ->
+                            TimelineItemRow(
+                                timelineItem = subGroupEvent,
+                                highlightedItem = highlightedItem,
+                                onClick = onClick,
+                                onLongClick = onLongClick,
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -174,6 +233,7 @@ fun TimelineItemEventRow(
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+
     val (parentAlignment, contentAlignment) = if (event.isMine) {
         Pair(Alignment.CenterEnd, Alignment.End)
     } else {
@@ -187,22 +247,25 @@ fun TimelineItemEventRow(
     ) {
         Row {
             if (!event.isMine) {
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(4.dp))
             }
             Column(horizontalAlignment = contentAlignment) {
                 if (event.showSenderInformation) {
                     MessageSenderInformation(
                         event.safeSenderName,
                         event.senderAvatar,
-                        Modifier.zIndex(1f)
+                        Modifier
+                            .zIndex(1f)
+                            .offset(y = 12.dp)
                     )
                 }
+                val bubbleState = BubbleState(
+                    groupPosition = event.groupPosition,
+                    isMine = event.isMine,
+                    isHighlighted = isHighlighted,
+                )
                 MessageEventBubble(
-                    state = BubbleState(
-                        groupPosition = event.groupPosition,
-                        isMine = event.isMine,
-                        isHighlighted = isHighlighted,
-                    ),
+                    state = bubbleState,
                     interactionSource = interactionSource,
                     onClick = onClick,
                     onLongClick = onLongClick,
@@ -210,14 +273,18 @@ fun TimelineItemEventRow(
                         .zIndex(-1f)
                         .widthIn(max = 320.dp)
                 ) {
-                    val contentModifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
-                    TimelineItemEventContentView(event.content, interactionSource, onClick, onLongClick, contentModifier)
+                    MessageEventBubbleContent(
+                        event = event,
+                        interactionSource = interactionSource,
+                        onMessageClick = onClick,
+                        onMessageLongClick = onLongClick
+                    )
                 }
                 TimelineItemReactionsView(
                     reactionsState = event.reactionsState,
                     modifier = Modifier
                         .zIndex(1f)
-                        .offset(x = if (event.isMine) 0.dp else 20.dp, y = -(16.dp))
+                        .offset(x = if (event.isMine) 0.dp else 20.dp, y = -(4.dp))
                 )
             }
             if (event.isMine) {
@@ -229,6 +296,94 @@ fun TimelineItemEventRow(
         Spacer(modifier = modifier.height(8.dp))
     } else {
         Spacer(modifier = modifier.height(2.dp))
+    }
+}
+
+@Composable
+fun TimelineItemStateEventRow(
+    event: TimelineItem.Event,
+    isHighlighted: Boolean,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
+        contentAlignment = Alignment.Center
+    ) {
+        MessageStateEventContainer(
+            isHighlighted = isHighlighted,
+            interactionSource = interactionSource,
+            onClick = onClick,
+            onLongClick = onLongClick,
+            modifier = Modifier
+                .zIndex(-1f)
+                .widthIn(max = 320.dp)
+        ) {
+            TimelineItemEventContentView(
+                content = event.content,
+                interactionSource = interactionSource,
+                onClick = onClick,
+                onLongClick = onLongClick,
+                modifier = Modifier.defaultTimelineContentPadding()
+            )
+        }
+    }
+}
+
+@Composable
+fun MessageEventBubbleContent(
+    event: TimelineItem.Event,
+    interactionSource: MutableInteractionSource,
+    onMessageClick: () -> Unit,
+    onMessageLongClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val showTimestampWithOverlay = event.content is TimelineItemImageContent || event.content is TimelineItemVideoContent
+
+    @Composable
+    fun ContentView(
+        modifier: Modifier = Modifier
+    ) {
+        TimelineItemEventContentView(
+            content = event.content,
+            interactionSource = interactionSource,
+            onClick = onMessageClick,
+            onLongClick = onMessageLongClick,
+            modifier = modifier,
+        )
+    }
+
+    if (showTimestampWithOverlay) {
+        Box(modifier.wrapContentSize()) {
+            ContentView()
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 4.dp, vertical = 4.dp)
+                    .background(LocalColors.current.gray300, RoundedCornerShape(10.0.dp))
+                    .align(Alignment.BottomEnd)
+            ) {
+                TimelineEventTimestampView(
+                    event = event,
+                    onClick = onMessageClick,
+                    modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
+                )
+            }
+        }
+    } else {
+        Column {
+            ContentView(modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 8.dp))
+            TimelineEventTimestampView(
+                event = event,
+                onClick = onMessageClick,
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(horizontal = 8.dp, vertical = 2.dp)
+            )
+        }
     }
 }
 
@@ -328,8 +483,6 @@ fun TimelineViewDarkPreview(
 private fun ContentToPreview(content: TimelineItemEventContent) {
     val timelineItems = aTimelineItemList(content)
     TimelineView(
-        state = aTimelineState().copy(
-            timelineItems = timelineItems,
-        )
+        state = aTimelineState(timelineItems)
     )
 }

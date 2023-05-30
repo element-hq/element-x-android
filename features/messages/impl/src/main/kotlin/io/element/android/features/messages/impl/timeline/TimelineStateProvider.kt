@@ -21,17 +21,19 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlin.random.Random
 
-fun aTimelineState() = TimelineState(
-    timelineItems = persistentListOf(),
+fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf()) = TimelineState(
+    timelineItems = timelineItems,
     paginationState = MatrixTimeline.PaginationState(isBackPaginating = false, canBackPaginate = true),
     highlightedEventId = null,
     eventSink = {}
@@ -48,12 +50,19 @@ internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList
         aTimelineItemEvent(
             isMine = false,
             content = content,
-            groupPosition = TimelineItemGroupPosition.Middle
+            groupPosition = TimelineItemGroupPosition.Middle,
+            sendState = EventSendState.SendingFailed("Message failed to send"),
         ),
         aTimelineItemEvent(
             isMine = false,
             content = content,
             groupPosition = TimelineItemGroupPosition.First
+        ),
+        // A state event on top of it
+        aTimelineItemEvent(
+            isMine = false,
+            content = aTimelineItemStateEventContent(),
+            groupPosition = TimelineItemGroupPosition.None
         ),
         // 3 items (First Middle Last) with isMine = true
         aTimelineItemEvent(
@@ -64,25 +73,33 @@ internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList
         aTimelineItemEvent(
             isMine = true,
             content = content,
-            groupPosition = TimelineItemGroupPosition.Middle
+            groupPosition = TimelineItemGroupPosition.Middle,
+            sendState = EventSendState.SendingFailed("Message failed to send"),
         ),
         aTimelineItemEvent(
             isMine = true,
             content = content,
             groupPosition = TimelineItemGroupPosition.First
         ),
+        // A state event on top of it
+        aTimelineItemEvent(
+            isMine = true,
+            content = aTimelineItemStateEventContent(),
+            groupPosition = TimelineItemGroupPosition.None
+        ),
     )
 }
 
 internal fun aTimelineItemEvent(
+    eventId: EventId = EventId("\$" + Random.nextInt().toString()),
     isMine: Boolean = false,
-    content: TimelineItemEventContent = aTimelineItemContent(),
-    groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.First
+    content: TimelineItemEventContent = aTimelineItemTextContent(),
+    groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
+    sendState: EventSendState = EventSendState.Sent(eventId),
 ): TimelineItem.Event {
-    val randomId = "\$" + Random.nextInt().toString()
     return TimelineItem.Event(
-        id = randomId,
-        eventId = EventId(randomId),
+        id = eventId.value,
+        eventId = eventId,
         senderId = UserId("@senderId:domain"),
         senderAvatar = AvatarData("@senderId:domain", "sender"),
         content = content,
@@ -91,15 +108,10 @@ internal fun aTimelineItemEvent(
                 AggregatedReaction("👍", "1")
             )
         ),
+        sentTime = "12:34",
         isMine = isMine,
         senderDisplayName = "sender",
         groupPosition = groupPosition,
-    )
-}
-
-internal fun aTimelineItemContent(): TimelineItemEventContent {
-    return TimelineItemTextContent(
-        body = "Text",
-        htmlDocument = null
+        sendState = sendState,
     )
 }
