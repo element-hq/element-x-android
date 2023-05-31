@@ -21,6 +21,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,10 +49,10 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.MediaItem
-import androidx.media3.common.MimeTypes
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.AspectRatioFrameLayout
@@ -60,14 +61,19 @@ import io.element.android.features.messages.impl.media.local.exoplayer.ExoPlayer
 import io.element.android.features.messages.impl.media.local.pdf.ParcelFileDescriptorFactory
 import io.element.android.features.messages.impl.media.local.pdf.PdfPage
 import io.element.android.features.messages.impl.media.local.pdf.PdfRendererManager
+import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
+import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import me.saket.telephoto.zoomable.ZoomSpec
+import me.saket.telephoto.zoomable.ZoomableState
 import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
 import me.saket.telephoto.zoomable.rememberZoomableImageState
 import me.saket.telephoto.zoomable.rememberZoomableState
+import me.saket.telephoto.zoomable.zoomable
 
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
@@ -77,19 +83,28 @@ fun LocalMediaView(
     mimeType: String? = localMedia?.mimeType,
     onReady: () -> Unit = {},
 ) {
+    val zoomableState = rememberZoomableState(
+        zoomSpec = ZoomSpec(maxZoomFactor = 3f)
+    )
     when {
-        MimeTypes.isImage(mimeType) -> MediaImageView(
+        mimeType.isMimeTypeImage() -> MediaImageView(
+            localMedia = localMedia,
+            zoomableState = zoomableState,
+            onReady = onReady,
+            modifier = modifier
+        )
+        mimeType.isMimeTypeVideo() -> MediaVideoView(
             localMedia = localMedia,
             onReady = onReady,
             modifier = modifier
         )
-        MimeTypes.isVideo(mimeType) -> MediaVideoView(
-            localMedia = localMedia,
-            onReady = onReady,
-            modifier = modifier
-        )
-        mimeType == io.element.android.libraries.core.mimetype.MimeTypes.Pdf -> {
-            MediaPDFView(localMedia = localMedia, onReady = onReady, modifier = modifier)
+        mimeType == MimeTypes.Pdf -> {
+            MediaPDFView(
+                localMedia = localMedia,
+                zoomableState = zoomableState,
+                onReady = onReady,
+                modifier = modifier
+            )
         }
         else -> Unit
     }
@@ -98,6 +113,7 @@ fun LocalMediaView(
 @Composable
 private fun MediaImageView(
     localMedia: LocalMedia?,
+    zoomableState: ZoomableState,
     onReady: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -108,9 +124,6 @@ private fun MediaImageView(
             contentDescription = null,
         )
     } else {
-        val zoomableState = rememberZoomableState(
-            zoomSpec = ZoomSpec(maxZoomFactor = 3f)
-        )
         val zoomableImageState = rememberZoomableImageState(zoomableState)
         LaunchedEffect(zoomableImageState.isImageDisplayed) {
             if (zoomableImageState.isImageDisplayed) {
@@ -186,15 +199,16 @@ fun MediaVideoView(
 @Composable
 fun MediaPDFView(
     localMedia: LocalMedia?,
+    zoomableState: ZoomableState,
     onReady: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BoxWithConstraints(
-        modifier = modifier,
-        contentAlignment = Alignment.TopCenter
+        modifier = modifier.zoomable(zoomableState),
+        contentAlignment = Alignment.Center
     ) {
         val maxWidth = this.maxWidth.dpToPx()
-        val lazyState = rememberLazyListState()
+        val lazyListState = rememberLazyListState()
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
         var pdfRendererManager by remember {
@@ -214,7 +228,7 @@ fun MediaPDFView(
         }
         pdfRendererManager?.run {
             val pdfPages = pdfPages.collectAsState().value
-            PdfPagesView(pdfPages.toImmutableList(), lazyState)
+            PdfPagesView(pdfPages.toImmutableList(), lazyListState)
         }
     }
 }
@@ -227,7 +241,9 @@ private fun PdfPagesView(
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        state = lazyListState
+        state = lazyListState,
+        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)
+
     ) {
         items(pdfPages.size) { index ->
             val pdfPage = pdfPages[index]
