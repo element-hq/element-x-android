@@ -16,7 +16,6 @@
 
 package io.element.android.features.messages.impl.actionlist
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,24 +35,17 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Attachment
 import androidx.compose.material.icons.outlined.AddReaction
-import androidx.compose.material.icons.outlined.AttachFile
 import androidx.compose.material.icons.outlined.Attachment
-import androidx.compose.material.icons.outlined.VideoFile
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -87,6 +79,7 @@ import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Suppress("MutableParams") // False positive
 @Composable
 fun ActionListView(
     state: ActionListState,
@@ -295,6 +288,7 @@ internal fun EmojiReactionsRow(modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier.padding(horizontal = 28.dp, vertical = 16.dp)
     ) {
+        // TODO use real emojis, have real interaction
         Text("\uD83D\uDC4D", fontSize = 28.dpToSp())
         Text("\uD83D\uDC4E", fontSize = 28.dpToSp())
         Text("\uD83D\uDD25", fontSize = 28.dpToSp())
@@ -328,10 +322,5 @@ fun SheetContentDarkPreview(@PreviewParameter(ActionListStateProvider::class) st
 
 @Composable
 private fun ContentToPreview(state: ActionListState) {
-    val isVisible = remember { mutableStateOf(true) }
-    ActionListView(
-        state = state,
-        isVisible = isVisible,
-        onActionSelected = { _, _ -> }
-    )
+    SheetContent(state = state)
 }

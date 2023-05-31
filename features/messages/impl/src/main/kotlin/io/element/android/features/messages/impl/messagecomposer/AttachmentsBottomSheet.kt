@@ -51,7 +51,7 @@ internal fun AttachmentsBottomSheet(
     modifier: Modifier = Modifier,
 ) {
     val localView = LocalView.current
-    var isVisible by rememberSaveable { mutableStateOf(false) }
+    var isVisible by rememberSaveable { mutableStateOf(state.showAttachmentSourcePicker) }
 
     BackHandler(enabled = isVisible) {
         isVisible = false
