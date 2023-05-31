@@ -71,32 +71,32 @@ class NotifiableEventResolver @Inject constructor(
 
         return notificationData.asNotifiableEvent(sessionId)
     }
-}
 
-private fun NotificationData.asNotifiableEvent(userId: SessionId): NotifiableEvent {
-    return NotifiableMessageEvent(
-        sessionId = userId,
-        roomId = roomId,
-        eventId = eventId,
-        editedEventId = null,
-        canBeReplaced = true,
-        noisy = isNoisy,
-        timestamp = System.currentTimeMillis(),
-        senderName = senderDisplayName,
-        senderId = senderId.value,
-        body = "Message ${eventId.value.take(8)}… in room ${roomId.value.take(8)}…",
-        imageUriString = null,
-        threadId = null,
-        roomName = null,
-        roomIsDirect = false,
-        roomAvatarPath = roomAvatarUrl,
-        senderAvatarPath = senderAvatarUrl,
-        soundName = null,
-        outGoingMessage = false,
-        outGoingMessageFailed = false,
-        isRedacted = false,
-        isUpdated = false
-    )
+    private fun NotificationData.asNotifiableEvent(userId: SessionId): NotifiableEvent {
+        return NotifiableMessageEvent(
+            sessionId = userId,
+            roomId = roomId,
+            eventId = eventId,
+            editedEventId = null,
+            canBeReplaced = true,
+            noisy = isNoisy,
+            timestamp = clock.epochMillis(),
+            senderName = senderDisplayName,
+            senderId = senderId.value,
+            body = "Message ${eventId.value.take(8)}… in room ${roomId.value.take(8)}…",
+            imageUriString = null,
+            threadId = null,
+            roomName = null,
+            roomIsDirect = false,
+            roomAvatarPath = roomAvatarUrl,
+            senderAvatarPath = senderAvatarUrl,
+            soundName = null,
+            outGoingMessage = false,
+            outGoingMessageFailed = false,
+            isRedacted = false,
+            isUpdated = false
+        )
+    }
 }
 
 /**

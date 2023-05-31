@@ -25,10 +25,10 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.impl.RustMatrixClient
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,6 +49,7 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val sessionStore: SessionStore,
+    private val clock: SystemClock,
 ) : MatrixAuthenticationService {
 
     private val authService: RustAuthenticationService = RustAuthenticationService(baseDirectory.absolutePath, null, null)
@@ -115,6 +116,7 @@ class RustMatrixAuthenticationService @Inject constructor(
             coroutineScope = coroutineScope,
             dispatchers = coroutineDispatchers,
             baseDirectory = baseDirectory,
+            clock = clock,
         )
     }
 }
