@@ -24,8 +24,8 @@ import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
+import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.impl.RustMatrixClient
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -36,6 +36,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
+// TODO Oidc
+// import org.matrix.rustcomponents.sdk.OidcAuthenticationUrl
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.use
 import java.io.File
@@ -51,7 +53,13 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val sessionStore: SessionStore,
 ) : MatrixAuthenticationService {
 
-    private val authService: RustAuthenticationService = RustAuthenticationService(baseDirectory.absolutePath, null, null)
+    private val authService: RustAuthenticationService = RustAuthenticationService(
+        basePath = baseDirectory.absolutePath,
+        passphrase = null,
+        // TODO Oidc
+        // oidcClientMetadata = oidcClientMetadata,
+        customSlidingSyncProxy = null
+    )
     private var currentHomeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
 
     override fun isLoggedIn(): Flow<Boolean> {
@@ -91,9 +99,9 @@ class RustMatrixAuthenticationService @Inject constructor(
                 if (homeServerDetails != null) {
                     currentHomeserver.value = homeServerDetails.copy(url = homeserver)
                 }
+            }.mapFailure { failure ->
+                failure.mapAuthenticationException()
             }
-        }.mapFailure { failure ->
-            failure.mapAuthenticationException()
         }
 
     override suspend fun login(username: String, password: String): Result<SessionId> =
@@ -103,10 +111,64 @@ class RustMatrixAuthenticationService @Inject constructor(
                 val sessionData = client.use { it.session().toSessionData() }
                 sessionStore.storeData(sessionData)
                 SessionId(sessionData.userId)
+            }.mapFailure { failure ->
+                failure.mapAuthenticationException()
             }
-        }.mapFailure { failure ->
-            failure.mapAuthenticationException()
         }
+
+    // TODO Oidc
+    //  private var pendingUrlForOidcLogin: OidcAuthenticationUrl? = null
+
+    override suspend fun getOidcUrl(): Result<OidcDetails> {
+        TODO("Oidc")
+        /*
+        return withContext(coroutineDispatchers.io) {
+            runCatching {
+                val urlForOidcLogin = authService.urlForOidcLogin()
+                val url = urlForOidcLogin.loginUrl()
+                pendingUrlForOidcLogin = urlForOidcLogin
+                OidcDetails(url)
+            }.mapFailure { failure ->
+                failure.mapAuthenticationException()
+            }
+        }
+         */
+    }
+
+    override suspend fun cancelOidcLogin(): Result<Unit> {
+        TODO("Oidc")
+        /*
+        return withContext(coroutineDispatchers.io) {
+            runCatching {
+                pendingUrlForOidcLogin?.close()
+                pendingUrlForOidcLogin = null
+            }.mapFailure { failure ->
+                failure.mapAuthenticationException()
+            }
+        }
+         */
+    }
+
+    /**
+     * callbackUrl should be the uriRedirect from OidcClientMetadata (with all the parameters).
+     */
+    override suspend fun loginWithOidc(callbackUrl: String): Result<SessionId> {
+        TODO("Oidc")
+        /*
+        return withContext(coroutineDispatchers.io) {
+            runCatching {
+                val urlForOidcLogin = pendingUrlForOidcLogin ?: error("You need to call `getOidcUrl()` first")
+                val client = authService.loginWithOidcCallback(urlForOidcLogin, callbackUrl)
+                val sessionData = client.use { it.session().toSessionData() }
+                pendingUrlForOidcLogin = null
+                sessionStore.storeData(sessionData)
+                SessionId(sessionData.userId)
+            }.mapFailure { failure ->
+                failure.mapAuthenticationException()
+            }
+        }
+         */
+    }
 
     private fun createMatrixClient(client: Client): MatrixClient {
         return RustMatrixClient(

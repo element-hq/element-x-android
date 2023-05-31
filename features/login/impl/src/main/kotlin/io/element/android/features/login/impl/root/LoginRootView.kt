@@ -68,7 +68,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.error.loginError
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.components.async.AsyncFailure
+import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
@@ -83,7 +86,7 @@ import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.components.autofill
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
-import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.R as StringR
@@ -94,7 +97,7 @@ fun LoginRootView(
     state: LoginRootState,
     modifier: Modifier = Modifier,
     onChangeServer: () -> Unit = {},
-    onLoginWithSuccess: (SessionId) -> Unit = {},
+    onOidcDetails: (OidcDetails) -> Unit = {},
     onBackPressed: () -> Unit,
 ) {
     val isLoading by remember(state.loggedInState) {
@@ -102,6 +105,15 @@ fun LoginRootView(
             state.loggedInState == LoggedInState.LoggingIn
         }
     }
+    val focusManager = LocalFocusManager.current
+
+    fun submit() {
+        // Clear focus to prevent keyboard issues with textfields
+        focusManager.clearFocus(force = true)
+
+        state.eventSink(LoginRootEvents.Submit)
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -137,19 +149,26 @@ fun LoginRootView(
 
                 ChangeServerSection(
                     interactionEnabled = !isLoading,
-                    homeserver = state.homeserverDetails.url,
+                    homeserver = state.homeserverUrl,
                     onChangeServer = onChangeServer
                 )
 
                 Spacer(Modifier.height(32.dp))
 
-                LoginForm(state = state, isLoading = isLoading)
-
-                Spacer(modifier = Modifier.height(32.dp))
-
+                when (state.homeserverDetails) {
+                    Async.Uninitialized,
+                    is Async.Loading -> AsyncLoading()
+                    is Async.Failure -> AsyncFailure(
+                        throwable = state.homeserverDetails.error,
+                        onRetry = {
+                            state.eventSink.invoke(LoginRootEvents.RetryFetchServerInfo)
+                        }
+                    )
+                    is Async.Success -> ServerDetailForm(state, isLoading, ::submit)
+                }
             }
             when (val loggedInState = state.loggedInState) {
-                is LoggedInState.LoggedIn -> onLoginWithSuccess(loggedInState.sessionId)
+                is LoggedInState.OidcStarted -> onOidcDetails(loggedInState.oidcDetail)
                 else -> Unit
             }
         }
@@ -159,6 +178,43 @@ fun LoginRootView(
         LoginErrorDialog(error = state.loggedInState.failure, onDismiss = {
             state.eventSink(LoginRootEvents.ClearError)
         })
+    }
+}
+
+@Composable
+fun ServerDetailForm(
+    state: LoginRootState,
+    isLoading: Boolean,
+    submit: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    when {
+        state.supportOidcLogin -> {
+            // Oidc, in this case, just display a Spacer and the submit button
+            Spacer(modifier.height(28.dp))
+        }
+        state.supportPasswordLogin -> {
+            LoginForm(state = state, isLoading = isLoading, onSubmit = submit, modifier = modifier)
+        }
+        else -> {
+            Text(modifier = modifier, text = "No supported login flow")
+        }
+    }
+
+    Spacer(Modifier.height(28.dp))
+
+    if (state.supportOidcLogin || state.supportPasswordLogin) {
+        // Submit
+        ButtonWithProgress(
+            text = stringResource(R.string.screen_login_submit),
+            showProgress = isLoading,
+            onClick = submit,
+            enabled = state.submitEnabled,
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(TestTags.loginContinue)
+        )
+        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
@@ -217,6 +273,7 @@ internal fun ChangeServerSection(
 internal fun LoginForm(
     state: LoginRootState,
     isLoading: Boolean,
+    onSubmit: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var loginFieldState by textFieldState(stateValue = state.formState.login)
@@ -224,13 +281,6 @@ internal fun LoginForm(
 
     val focusManager = LocalFocusManager.current
     val eventSink = state.eventSink
-
-    fun submit() {
-        // Clear focus to prevent keyboard issues with textfields
-        focusManager.clearFocus(force = true)
-
-        eventSink(LoginRootEvents.Submit)
-    }
 
     Column(modifier) {
         Text(
@@ -318,22 +368,10 @@ internal fun LoginForm(
                 imeAction = ImeAction.Done,
             ),
             keyboardActions = KeyboardActions(
-                onDone = { submit() }
+                onDone = { onSubmit() }
             ),
             singleLine = true,
             maxLines = 1,
-        )
-        Spacer(Modifier.height(28.dp))
-
-        // Submit
-        ButtonWithProgress(
-            text = stringResource(R.string.screen_login_submit),
-            showProgress = isLoading,
-            onClick = ::submit,
-            enabled = state.submitEnabled,
-            modifier = Modifier
-                .fillMaxWidth()
-                .testTag(TestTags.loginContinue)
         )
     }
 }
