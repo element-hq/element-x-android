@@ -3,9 +3,7 @@ name: Test Screenshot
 ## Run screenshots test, in case of error, create a branch and record the screenshot, then comment the Pull Request.
 
 on:
-  pull_request:
-    branches:
-      - main
+  pull_request: { }
 
 concurrency:
   group: pr-main-${{ github.head_ref }}
