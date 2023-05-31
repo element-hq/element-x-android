@@ -20,15 +20,34 @@ import android.annotation.SuppressLint
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.MediaItem
@@ -38,8 +57,13 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import io.element.android.features.messages.impl.media.local.exoplayer.ExoPlayerWrapper
+import io.element.android.features.messages.impl.media.local.pdf.ParcelFileDescriptorFactory
+import io.element.android.features.messages.impl.media.local.pdf.PdfPage
+import io.element.android.features.messages.impl.media.local.pdf.PdfRendererManager
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
 import me.saket.telephoto.zoomable.rememberZoomableImageState
@@ -64,6 +88,9 @@ fun LocalMediaView(
             onReady = onReady,
             modifier = modifier
         )
+        mimeType == io.element.android.libraries.core.mimetype.MimeTypes.Pdf -> {
+            MediaPDFView(localMedia = localMedia, onReady = onReady, modifier = modifier)
+        }
         else -> Unit
     }
 }
@@ -154,3 +181,95 @@ fun MediaVideoView(
         }
     }
 }
+
+@UnstableApi
+@Composable
+fun MediaPDFView(
+    localMedia: LocalMedia?,
+    onReady: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    BoxWithConstraints(
+        modifier = modifier,
+        contentAlignment = Alignment.TopCenter
+    ) {
+        val maxWidth = this.maxWidth.dpToPx()
+        val lazyState = rememberLazyListState()
+        val context = LocalContext.current
+        val coroutineScope = rememberCoroutineScope()
+        var pdfRendererManager by remember {
+            mutableStateOf<PdfRendererManager?>(null)
+        }
+        DisposableEffect(localMedia) {
+            ParcelFileDescriptorFactory(context).create(localMedia?.model)
+                .onSuccess {
+                    pdfRendererManager = PdfRendererManager(it, maxWidth, coroutineScope).apply {
+                        open()
+                    }
+                    onReady()
+                }
+            onDispose {
+                pdfRendererManager?.close()
+            }
+        }
+        pdfRendererManager?.run {
+            val pdfPages = pdfPages.collectAsState().value
+            PdfPagesView(pdfPages.toImmutableList(), lazyState)
+        }
+    }
+}
+
+@Composable
+private fun PdfPagesView(
+    pdfPages: ImmutableList<PdfPage>,
+    lazyListState: LazyListState,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        state = lazyListState
+    ) {
+        items(pdfPages.size) { index ->
+            val pdfPage = pdfPages[index]
+            PdfPageView(pdfPage)
+        }
+    }
+}
+
+@Composable
+private fun PdfPageView(
+    pdfPage: PdfPage,
+    modifier: Modifier = Modifier,
+) {
+    val pdfPageState by pdfPage.stateFlow.collectAsState()
+    DisposableEffect(pdfPage) {
+        pdfPage.load()
+        onDispose {
+            pdfPage.close()
+        }
+    }
+    when (val state = pdfPageState) {
+        is PdfPage.State.Loaded -> {
+            Image(
+                bitmap = state.bitmap.asImageBitmap(),
+                contentDescription = "Page ${pdfPage.pageIndex}",
+                contentScale = ContentScale.FillWidth,
+                modifier = modifier.fillMaxWidth()
+            )
+        }
+        is PdfPage.State.Loading -> {
+            Box(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .height(state.height.pxToDp())
+                    .background(color = Color.White)
+            )
+        }
+    }
+}
+
+@Composable
+private fun Int.pxToDp() = with(LocalDensity.current) { this@pxToDp.toDp() }
+
+@Composable
+private fun Dp.dpToPx() = with(LocalDensity.current) { this@dpToPx.roundToPx() }

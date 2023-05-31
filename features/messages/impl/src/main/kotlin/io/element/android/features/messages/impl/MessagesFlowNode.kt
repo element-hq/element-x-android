@@ -34,6 +34,7 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
 import io.element.android.features.messages.impl.media.viewer.MediaViewerNode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.libraries.architecture.BackstackNode
@@ -121,6 +122,16 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             is TimelineItemVideoContent -> {
                 val mediaSource = event.content.videoSource
+                val navTarget = NavTarget.MediaViewer(
+                    title = event.content.body,
+                    mediaSource = mediaSource,
+                    thumbnailSource = event.content.thumbnailSource,
+                    mimeType = event.content.mimeType,
+                )
+                backstack.push(navTarget)
+            }
+            is TimelineItemFileContent -> {
+                val mediaSource = event.content.fileSource
                 val navTarget = NavTarget.MediaViewer(
                     title = event.content.body,
                     mediaSource = mediaSource,
