@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
+import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -54,6 +55,7 @@ class RustMatrixRoom(
     private val innerRoom: Room,
     private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
+    private val clock: SystemClock,
 ) : MatrixRoom {
 
     override val membersStateFlow: StateFlow<MatrixRoomMembersState>
@@ -77,9 +79,9 @@ class RustMatrixRoom(
                 it.rooms.contains(roomId.value)
             }
             .map {
-                System.currentTimeMillis()
+                clock.epochMillis()
             }
-            .onStart { emit(System.currentTimeMillis()) }
+            .onStart { emit(clock.epochMillis()) }
     }
 
     override fun timeline(): MatrixTimeline {
