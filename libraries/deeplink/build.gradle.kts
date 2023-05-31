@@ -31,6 +31,7 @@ dependencies {
     implementation(libs.dagger)
     implementation(libs.androidx.corektx)
     implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.architecture)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)

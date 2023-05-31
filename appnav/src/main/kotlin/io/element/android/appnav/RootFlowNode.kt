@@ -38,14 +38,17 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.di.MatrixClientsHolder
+import io.element.android.appnav.intent.IntentResolver
+import io.element.android.appnav.intent.ResolvedIntent
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.root.RootView
+import io.element.android.features.login.api.oidc.OidcAction
+import io.element.android.features.login.api.oidc.OidcActionFlow
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.deeplink.DeeplinkData
-import io.element.android.libraries.deeplink.DeeplinkParser
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -65,7 +68,8 @@ class RootFlowNode @AssistedInject constructor(
     private val matrixClientsHolder: MatrixClientsHolder,
     private val presenter: RootPresenter,
     private val bugReportEntryPoint: BugReportEntryPoint,
-    private val deeplinkParser: DeeplinkParser,
+    private val intentResolver: IntentResolver,
+    private val oidcActionFlow: OidcActionFlow,
 ) :
     BackstackNode<RootFlowNode.NavTarget>(
         backstack = BackStack(
@@ -204,8 +208,11 @@ class RootFlowNode @AssistedInject constructor(
     }
 
     suspend fun handleIntent(intent: Intent) {
-        deeplinkParser.getFromIntent(intent)
-            ?.let { navigateTo(it) }
+        val resolvedIntent = intentResolver.resolve(intent) ?: return
+        when (resolvedIntent) {
+            is ResolvedIntent.Navigation -> navigateTo(resolvedIntent.deeplinkData)
+            is ResolvedIntent.Oidc -> onOidcAction(resolvedIntent.oidcAction)
+        }
     }
 
     private suspend fun navigateTo(deeplinkData: DeeplinkData) {
@@ -221,6 +228,10 @@ class RootFlowNode @AssistedInject constructor(
                     // TODO .attachThread(deeplinkData.threadId)
                 }
             }
+    }
+
+    private fun onOidcAction(oidcAction: OidcAction) {
+        oidcActionFlow.post(oidcAction)
     }
 
     private suspend fun attachSession(sessionId: SessionId): LoggedInFlowNode {
