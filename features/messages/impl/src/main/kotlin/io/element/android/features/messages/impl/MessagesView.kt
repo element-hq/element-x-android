@@ -16,7 +16,6 @@
 
 package io.element.android.features.messages.impl
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -32,27 +31,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ListItem
-import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.AttachFile
-import androidx.compose.material.icons.filled.Collections
-import androidx.compose.material.icons.filled.PhotoCamera
-import androidx.compose.material.icons.filled.Videocam
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -66,9 +58,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
-import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
-import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
@@ -80,7 +70,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
-import io.element.android.libraries.designsystem.theme.components.ModalBottomSheetLayout
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -91,7 +80,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import io.element.android.libraries.ui.strings.R as StringsR
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MessagesView(
     state: MessagesState,
@@ -103,25 +92,10 @@ fun MessagesView(
     modifier: Modifier = Modifier,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
-    val itemActionsBottomSheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-    )
-    val composerState = state.composerState
-    val initialBottomSheetState = if (LocalInspectionMode.current && composerState.showAttachmentSourcePicker) {
-        ModalBottomSheetValue.Expanded
-    } else {
-        ModalBottomSheetValue.Hidden
-    }
-    val bottomSheetState = rememberModalBottomSheetState(initialValue = initialBottomSheetState)
     val coroutineScope = rememberCoroutineScope()
+    var isMessageActionsBottomSheetVisible = rememberSaveable { mutableStateOf(false) }
 
     AttachmentStateView(state.composerState.attachmentsState, onPreviewAttachments)
-
-    BackHandler(enabled = bottomSheetState.isVisible) {
-        coroutineScope.launch {
-            bottomSheetState.hide()
-        }
-    }
 
     val snackbarHostState = remember { SnackbarHostState() }
     val snackbarMessageText = state.snackbarMessage?.let { stringResource(it.messageResId) }
@@ -150,9 +124,7 @@ fun MessagesView(
         Timber.v("OnMessageLongClicked= ${event.id}")
         localView.hideKeyboard()
         state.actionListState.eventSink(ActionListEvents.ComputeForMessage(event))
-        coroutineScope.launch {
-            itemActionsBottomSheetState.show()
-        }
+        isMessageActionsBottomSheetVisible.value = true
     }
 
     fun onActionSelected(action: TimelineItemAction, event: TimelineItem.Event) {
@@ -216,12 +188,11 @@ fun MessagesView(
             },
         )
 
-        ActionListView(
-            state = state.actionListState,
-            modalBottomSheetState = itemActionsBottomSheetState,
-            onActionSelected = ::onActionSelected
-        )
-    }
+    ActionListView(
+        state = state.actionListState,
+        isVisible = isMessageActionsBottomSheetVisible,
+        onActionSelected = ::onActionSelected
+    )
 }
 
 @Composable
@@ -310,36 +281,6 @@ fun MessagesViewTopBar(
         },
         windowInsets = WindowInsets(0.dp)
     )
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-internal fun AttachmentSourcePickerMenu(
-    eventSink: (MessageComposerEvents) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(modifier) {
-        ListItem(
-            modifier = Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery) },
-            icon = { Icon(Icons.Default.Collections, null) },
-            text = { Text(stringResource(R.string.screen_room_attachment_source_gallery)) },
-        )
-        ListItem(
-            modifier = Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles) },
-            icon = { Icon(Icons.Default.AttachFile, null) },
-            text = { Text(stringResource(R.string.screen_room_attachment_source_files)) },
-        )
-        ListItem(
-            modifier = Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera) },
-            icon = { Icon(Icons.Default.PhotoCamera, null) },
-            text = { Text(stringResource(R.string.screen_room_attachment_source_camera_photo)) },
-        )
-        ListItem(
-            modifier = Modifier.clickable { eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera) },
-            icon = { Icon(Icons.Default.Videocam, null) },
-            text = { Text(stringResource(R.string.screen_room_attachment_source_camera_video)) },
-        )
-    }
 }
 
 @Preview

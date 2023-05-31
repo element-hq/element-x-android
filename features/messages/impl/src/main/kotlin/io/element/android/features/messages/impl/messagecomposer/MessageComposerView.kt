@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.messagecomposer
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,21 +47,25 @@ fun MessageComposerView(
         state.eventSink(MessageComposerEvents.UpdateText(text))
     }
 
-    TextComposer(
-        onSendMessage = ::sendMessage,
-        fullscreen = state.isFullScreen,
-        onFullscreenToggle = ::onFullscreenToggle,
-        composerMode = state.mode,
-        onCloseSpecialMode = ::onCloseSpecialMode,
-        onComposerTextChange = ::onComposerTextChange,
-        onAddAttachment = {
-            state.eventSink(MessageComposerEvents.AddAttachment)
-        },
-        composerCanSendMessage = state.isSendButtonVisible,
-        composerText = state.text?.charSequence?.toString(),
-        isInDarkMode = !ElementTheme.colors.isLight,
-        modifier = modifier
-    )
+    Box {
+        AttachmentsBottomSheet(state = state)
+
+        TextComposer(
+            onSendMessage = ::sendMessage,
+            fullscreen = state.isFullScreen,
+            onFullscreenToggle = ::onFullscreenToggle,
+            composerMode = state.mode,
+            onCloseSpecialMode = ::onCloseSpecialMode,
+            onComposerTextChange = ::onComposerTextChange,
+            onAddAttachment = {
+                state.eventSink(MessageComposerEvents.AddAttachment)
+            },
+            composerCanSendMessage = state.isSendButtonVisible,
+            composerText = state.text?.charSequence?.toString(),
+            isInDarkMode = !ElementTheme.colors.isLight,
+            modifier = modifier
+        )
+    }
 }
 
 @Preview
