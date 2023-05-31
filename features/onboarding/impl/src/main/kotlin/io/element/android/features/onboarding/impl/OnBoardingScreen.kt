@@ -17,151 +17,159 @@
 package io.element.android.features.onboarding.impl
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.HorizontalPagerIndicator
-import com.google.accompanist.pager.rememberPagerState
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
-    onPageChanged: (Int) -> Unit = {},
-    onSignUp: () -> Unit = {},
+    onSignInWithQrCode: () -> Unit = {},
     onSignIn: () -> Unit = {},
+    onCreateAccount: () -> Unit = {},
 ) {
-    val carrouselData = remember { SplashCarouselDataFactory().create() }
-    val nbOfPages = carrouselData.items.size
-    var key by remember { mutableStateOf(false) }
     Box(
         modifier = modifier
             .fillMaxSize()
-            .systemBarsPadding()
-            .padding(vertical = 16.dp)
     ) {
+        // BG
+        Image(
+            modifier = modifier
+                .fillMaxSize(),
+            painter = painterResource(id = R.drawable.onboarding_bg),
+            contentScale = ContentScale.Crop,
+            contentDescription = null,
+        )
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .systemBarsPadding()
+                .padding(vertical = 16.dp),
         ) {
-            val pagerState = rememberPagerState()
-            LaunchedEffect(key) {
-                launch {
-                    delay(3_000)
-                    pagerState.animateScrollToPage((pagerState.currentPage + 1) % nbOfPages)
-                    // https://stackoverflow.com/questions/73714228/accompanist-pager-animatescrolltopage-doesnt-scroll-to-next-page-correctly
-                    key = !key
-                }
-            }
-            LaunchedEffect(pagerState) {
-                // Collect from the pager state a snapshotFlow reading the currentPage
-                snapshotFlow { pagerState.currentPage }.collect { page ->
-                    onPageChanged(page)
-                }
-            }
-            HorizontalPager(
-                modifier = Modifier.weight(1f),
-                count = nbOfPages,
-                state = pagerState,
-            ) { page ->
-                // Our page content
-                OnBoardingPage(carrouselData.items[page])
-            }
-            HorizontalPagerIndicator(
-                pagerState = pagerState,
+            Column(
                 modifier = Modifier
-                    .align(CenterHorizontally)
-                    .padding(16.dp),
-            )
-            Button(
-                onClick = {
-                    onSignIn()
-                },
-                enabled = true,
-                modifier = Modifier
-                    .align(CenterHorizontally)
-                    .testTag(TestTags.onBoardingSignIn)
-                    .padding(top = 16.dp)
+                    .weight(1f)
+                    .padding(horizontal = 24.dp)
+                    .fillMaxWidth(),
             ) {
-                Text(text = stringResource(id = R.string.login_splash_submit))
+                Spacer(modifier = Modifier.weight(2f))
+                OnBoardingHeader()
+                Spacer(modifier = Modifier.weight(3f))
             }
+            OnBoardingButtons(
+                onSignInWithQrCode = onSignInWithQrCode,
+                onSignIn = onSignIn,
+                onCreateAccount = onCreateAccount,
+            )
         }
     }
 }
 
 @Composable
-fun OnBoardingPage(
-    item: SplashCarouselData.Item,
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        modifier = modifier,
+private fun ColumnScope.OnBoardingHeader() {
+    Column(
+        modifier = Modifier
+            .weight(3f)
+            .fillMaxWidth(),
+        horizontalAlignment = CenterHorizontally,
     ) {
-        /*
         Image(
-            painterResource(id = item.pageBackground),
+            painter = painterResource(id = R.drawable.element_logo),
             contentDescription = null,
-            modifier = Modifier.fillMaxSize()
         )
-         */
-        Column(
-            modifier = Modifier.padding(vertical = 16.dp, horizontal = 32.dp)
+        Image(
+            modifier = Modifier.padding(top = 14.dp),
+            painter = painterResource(id = R.drawable.element),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+            contentDescription = null,
+        )
+        Text(
+            modifier = Modifier.padding(top = 24.dp),
+            text = stringResource(id = R.string.screen_onboarding_subtitle),
+            color = MaterialTheme.colorScheme.secondary,
+            fontSize = 20.sp,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+private fun OnBoardingButtons(
+    onSignInWithQrCode: () -> Unit,
+    onSignIn: () -> Unit,
+    onCreateAccount: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Button(
+            onClick = {
+                onSignInWithQrCode()
+            },
+            enabled = true,
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
-            Image(
-                painterResource(id = item.image),
-                contentDescription = null,
-                modifier = Modifier
-                    .align(CenterHorizontally)
-                    .size(192.dp)
-                    .padding(16.dp)
+            Icon(
+                imageVector = Icons.Default.QrCode, contentDescription = null,
+                tint = MaterialTheme.colorScheme.onPrimary
             )
-            Text(
-                text = stringResource(id = item.title),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(CenterHorizontally)
-                    .padding(8.dp),
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = 24.sp,
-            )
-            Text(
-                text = stringResource(id = item.body),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(CenterHorizontally),
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.primary,
-            )
+            Spacer(Modifier.width(14.dp))
+            Text(text = stringResource(id = R.string.screen_onboarding_sign_in_with_qr_code))
+        }
+        Button(
+            onClick = {
+                onSignIn()
+            },
+            enabled = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(TestTags.onBoardingSignIn)
+        ) {
+            Text(text = stringResource(id = R.string.screen_onboarding_sign_in_manually))
+        }
+        TextButton(
+            onClick = {
+                onCreateAccount()
+            },
+            enabled = true,
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text(text = stringResource(id = R.string.screen_onboarding_sign_up))
         }
     }
 }
