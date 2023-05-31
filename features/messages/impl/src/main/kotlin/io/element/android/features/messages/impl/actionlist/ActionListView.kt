@@ -140,7 +140,6 @@ fun SheetContentLightPreview(@PreviewParameter(ActionListStateProvider::class) s
 fun SheetContentDarkPreview(@PreviewParameter(ActionListStateProvider::class) state: ActionListState) =
     ElementPreviewDark { ContentToPreview(state) }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ContentToPreview(state: ActionListState) {
     val isVisible = remember { mutableStateOf(true) }

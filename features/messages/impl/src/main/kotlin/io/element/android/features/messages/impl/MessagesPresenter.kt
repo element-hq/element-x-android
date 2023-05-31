@@ -118,6 +118,8 @@ class MessagesPresenter @Inject constructor(
             TimelineItemAction.Redact -> handleActionRedact(targetEvent)
             TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState)
             TimelineItemAction.Reply -> handleActionReply(targetEvent, composerState)
+            TimelineItemAction.Developer -> handleOpenDeveloperInfo(targetEvent, composerState)
+            TimelineItemAction.ReportContent -> handleReportContent(targetEvent, composerState)
         }
     }
 
@@ -147,5 +149,13 @@ class MessagesPresenter @Inject constructor(
         composerState.eventSink(
             MessageComposerEvents.SetMode(composerMode)
         )
+    }
+
+    private fun handleOpenDeveloperInfo(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
+        TODO("Not yet implemented")
+    }
+
+    private fun handleReportContent(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
+        TODO("Not yet implemented")
     }
 }

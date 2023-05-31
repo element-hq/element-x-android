@@ -26,12 +26,15 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.meta.BuildMeta
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ActionListPresenter @Inject constructor() : Presenter<ActionListState> {
+class ActionListPresenter @Inject constructor(
+    private val buildMeta: BuildMeta,
+) : Presenter<ActionListState> {
 
     @Composable
     override fun present(): ActionListState {
@@ -60,19 +63,21 @@ class ActionListPresenter @Inject constructor() : Presenter<ActionListState> {
             when (timelineItem.content) {
                 is TimelineItemRedactedContent,
                 is TimelineItemStateContent -> {
-                    // TODO Add Share action (also) here, and developer options
-                    emptyList()
+                    listOf(TimelineItemAction.Copy, TimelineItemAction.Developer)
                 }
-                else -> {
-                    mutableListOf(
-                        TimelineItemAction.Reply,
-                        TimelineItemAction.Forward,
-                        TimelineItemAction.Copy,
-                    ).also {
-                        if (timelineItem.isMine) {
-                            it.add(TimelineItemAction.Edit)
-                            it.add(TimelineItemAction.Redact)
-                        }
+                else -> buildList<TimelineItemAction> {
+                    add(TimelineItemAction.Reply)
+                    add(TimelineItemAction.Forward)
+                    if (timelineItem.isMine) {
+                        add(TimelineItemAction.Edit)
+                    }
+                    add(TimelineItemAction.Copy)
+                    if (buildMeta.isDebuggable) {
+                        add(TimelineItemAction.Developer)
+                    }
+                    add(TimelineItemAction.ReportContent)
+                    if (timelineItem.isMine) {
+                        add(TimelineItemAction.Redact)
                     }
                 }
             }
