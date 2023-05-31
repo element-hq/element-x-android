@@ -180,6 +180,6 @@ ktlint = "org.jlleitschuh.gradle.ktlint:11.3.2"
 dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.ref = "dependencygraph" }
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
 paparazzi = "app.cash.paparazzi:1.2.0"
-sonarqube = "org.sonarqube:4.1.0.3113"
+sonarqube = "org.sonarqube:4.2.0.3129"
 kover = "org.jetbrains.kotlinx.kover:0.6.1"
 sqldelight = { id = "com.squareup.sqldelight", version.ref = "sqldelight" }
