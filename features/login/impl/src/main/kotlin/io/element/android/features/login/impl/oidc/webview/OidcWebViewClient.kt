@@ -22,9 +22,10 @@ import android.os.Build
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import timber.log.Timber
 
-class OidcWebViewClient(private val eventListener: WebViewEventListener) : WebViewClient() {
+class OidcWebViewClient(
+    private val eventListener: WebViewEventListener,
+) : WebViewClient() {
     // We will revert to API 23, in the mean time ignore the warning here.
     @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Build.VERSION_CODES.N)
@@ -38,7 +39,7 @@ class OidcWebViewClient(private val eventListener: WebViewEventListener) : WebVi
     }
 
     private fun shouldOverrideUrl(url: String): Boolean {
-        Timber.d("shouldOverrideUrl: $url")
+        // Timber.d("shouldOverrideUrl: $url")
         return eventListener.shouldOverrideUrlLoading(url)
     }
 }
