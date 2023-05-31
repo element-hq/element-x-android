@@ -45,11 +45,12 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 
+// Ref: https://www.figma.com/file/o9p34zmiuEpZRyvZXJZAYL/FTUE?type=design&node-id=133-5427&t=5SHVppfYzjvkEywR-0
 @Composable
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
@@ -161,7 +162,7 @@ private fun OnBoardingButtons(
         ) {
             Text(text = stringResource(id = R.string.screen_onboarding_sign_in_manually))
         }
-        TextButton(
+        OutlinedButton(
             onClick = {
                 onCreateAccount()
             },
