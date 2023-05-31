@@ -50,7 +50,6 @@ class OnBoardingNode @AssistedInject constructor(
         OnBoardingScreen(
             modifier = modifier,
             onSignIn = this::onSignIn,
-            onSignUp = this::onSignUp
         )
     }
 }
