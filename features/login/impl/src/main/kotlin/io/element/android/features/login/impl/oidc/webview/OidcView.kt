@@ -21,7 +21,10 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,7 +45,7 @@ fun OidcView(
     modifier: Modifier = Modifier,
 ) {
     val oidcUrlParser = remember { OidcUrlParser() }
-    var webView: WebView? = null
+    var webView by remember { mutableStateOf<WebView?>(null) }
     fun shouldOverrideUrl(url: String): Boolean {
         val action = oidcUrlParser.parse(url)
         if (action != null) {
@@ -53,11 +56,7 @@ fun OidcView(
     }
 
     val oidcWebViewClient = remember {
-        OidcWebViewClient(eventListener = object : WebViewEventListener {
-            override fun shouldOverrideUrlLoading(url: String): Boolean {
-                return shouldOverrideUrl(url)
-            }
-        })
+        OidcWebViewClient(::shouldOverrideUrl)
     }
 
     BackHandler {
@@ -71,8 +70,6 @@ fun OidcView(
 
     Box(modifier = modifier.statusBarsPadding()) {
         AndroidView(
-            modifier = Modifier
-                .statusBarsPadding(),
             factory = { context ->
                 WebView(context).apply {
                     webViewClient = oidcWebViewClient

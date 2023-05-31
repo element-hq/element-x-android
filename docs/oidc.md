@@ -1,3 +1,5 @@
+This file contains some rough notes about Oidc implementation, with some examples of actual data.
+
 [ios implementation](https://github.com/vector-im/element-x-ios/compare/develop...doug/oidc-temp)
 
 Rust sdk branch: https://github.com/matrix-org/matrix-rust-sdk/tree/oidc-ffi
