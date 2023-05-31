@@ -17,8 +17,11 @@
 package io.element.android.libraries.matrix.ui.media
 
 import android.content.Context
+import android.os.Build
 import coil.ImageLoader
 import coil.ImageLoaderFactory
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClient
 import okhttp3.OkHttpClient
@@ -34,6 +37,12 @@ class LoggedInImageLoaderFactory @Inject constructor(
             .Builder(context)
             .okHttpClient(okHttpClient)
             .components {
+                // Add gif support
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    add(ImageDecoderDecoder.Factory())
+                } else {
+                    add(GifDecoder.Factory())
+                }
                 add(AvatarDataKeyer())
                 add(MediaRequestDataKeyer())
                 add(CoilMediaFetcher.AvatarFactory(matrixClient))
