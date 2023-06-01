@@ -49,7 +49,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.createroom.api.ui.AvatarActionListView
-import io.element.android.features.createroom.api.ui.LocalAvatar
+import io.element.android.features.createroom.api.ui.UnsavedAvatar
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.RoomPrivacyOption
 import io.element.android.libraries.architecture.Async
@@ -218,7 +218,7 @@ fun RoomNameWithAvatar(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        LocalAvatar(
+        UnsavedAvatar(
             avatarUri = avatarUri,
             modifier = Modifier.clickable(onClick = onAvatarClick),
         )

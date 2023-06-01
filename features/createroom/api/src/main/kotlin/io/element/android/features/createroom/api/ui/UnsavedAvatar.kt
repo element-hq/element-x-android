@@ -42,8 +42,13 @@ import io.element.android.libraries.designsystem.preview.debugPlaceholderBackgro
 import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Icon
 
+/**
+ * An avatar that the user has selected, but which has not yet been uploaded to Matrix.
+ *
+ * The image is loaded from a local resource instead of from a MXC URI.
+ */
 @Composable
-fun LocalAvatar(
+fun UnsavedAvatar(
     avatarUri: Uri?,
     modifier: Modifier = Modifier,
 ) {
@@ -79,16 +84,16 @@ fun LocalAvatar(
 
 @Preview
 @Composable
-fun AvatarLightPreview() = ElementPreviewLight { ContentToPreview() }
+fun UnsavedAvatarLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun AvatarDarkPreview() = ElementPreviewDark { ContentToPreview() }
+fun UnsavedAvatarDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
     Row {
-        LocalAvatar(null)
-        LocalAvatar(Uri.EMPTY)
+        UnsavedAvatar(null)
+        UnsavedAvatar(Uri.EMPTY)
     }
 }

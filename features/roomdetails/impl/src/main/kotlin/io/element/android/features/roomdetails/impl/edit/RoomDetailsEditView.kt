@@ -58,7 +58,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.createroom.api.ui.AvatarActionListView
-import io.element.android.features.createroom.api.ui.LocalAvatar
+import io.element.android.features.createroom.api.ui.UnsavedAvatar
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.LabelledTextField
@@ -225,7 +225,7 @@ private fun EditableAvatarView(
                 }
 
                 else -> {
-                    LocalAvatar(
+                    UnsavedAvatar(
                         avatarUri = state.roomAvatarUrl,
                         modifier = Modifier.fillMaxSize(),
                     )
