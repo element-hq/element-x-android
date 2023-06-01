@@ -27,7 +27,7 @@ object ElementTextStyles {
 
     val Button = TextStyle(
         fontSize = 16.sp,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.Medium,
         lineHeight = 22.sp,
         fontStyle = FontStyle.Normal,
         textAlign = TextAlign.Center,
