@@ -97,7 +97,11 @@ fun <T> SearchBar(
             active && query.isNotEmpty() -> {
                 {
                     IconButton(onClick = { onQueryChange("") }) {
-                        Icon(Icons.Default.Close, stringResource(R.string.action_clear))
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = stringResource(R.string.action_clear),
+                            tint = MaterialTheme.colorScheme.primary,
+                        )
                     }
                 }
             }
