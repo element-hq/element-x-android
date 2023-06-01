@@ -28,6 +28,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.messages.impl.media.local.LocalMedia
+import io.element.android.features.messages.impl.media.local.LocalMediaActionsHandler
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
@@ -40,6 +41,7 @@ class MediaViewerPresenter @AssistedInject constructor(
     @Assisted private val inputs: MediaViewerNode.Inputs,
     private val localMediaFactory: LocalMediaFactory,
     private val mediaLoader: MatrixMediaLoader,
+    private val mediaActionsHandler: LocalMediaActionsHandler,
 ) : Presenter<MediaViewerState> {
 
     @AssistedFactory
@@ -68,6 +70,7 @@ class MediaViewerPresenter @AssistedInject constructor(
             when (mediaViewerEvents) {
                 MediaViewerEvents.RetryLoading -> loadMediaTrigger++
                 MediaViewerEvents.ClearLoadingError -> localMedia.value = Async.Uninitialized
+                MediaViewerEvents.SaveOnDisk -> coroutineScope.saveOnDisk(localMedia.value)
             }
         }
 
@@ -93,4 +96,12 @@ class MediaViewerPresenter @AssistedInject constructor(
                 localMedia.value = Async.Failure(it)
             }
     }
+
+    private fun CoroutineScope.saveOnDisk(value: Async<LocalMedia>) = launch {
+        when (value) {
+            is Async.Success -> mediaActionsHandler.saveOnDisk(value.state)
+            else -> Unit
+        }
+    }
 }
+
