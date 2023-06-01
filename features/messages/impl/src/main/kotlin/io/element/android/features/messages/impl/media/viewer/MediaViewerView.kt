@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package io.element.android.features.messages.impl.media.viewer
 
@@ -23,6 +24,10 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Save
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,19 +44,25 @@ import coil.compose.AsyncImage
 import io.element.android.features.messages.impl.media.local.LocalMediaView
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.isLoading
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.modifiers.roundedBackground
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.ui.strings.R.*
 import kotlinx.coroutines.delay
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun MediaViewerView(
     state: MediaViewerState,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
@@ -85,7 +96,11 @@ fun MediaViewerView(
         showThumbnail = false
     }
 
-    Scaffold(modifier) {
+    Scaffold(modifier,
+        topBar = {
+            MediaViewerTopBar(onBackPressed, state.eventSink)
+        }
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -111,6 +126,26 @@ fun MediaViewerView(
             )
         }
     }
+}
+
+@Composable
+private fun MediaViewerTopBar(
+    onBackPressed: () -> Unit,
+    eventSink: (MediaViewerEvents) -> Unit,
+) {
+    TopAppBar(
+        title = {},
+        navigationIcon = { BackButton(onClick = onBackPressed) },
+        actions = {
+            IconButton(
+                onClick = {
+                    eventSink(MediaViewerEvents.SaveOnDisk)
+                },
+            ) {
+                Icon(imageVector = Icons.Default.Download, contentDescription = stringResource(id = string.action_save))
+            }
+        }
+    )
 }
 
 @Composable
@@ -175,5 +210,6 @@ fun MediaViewerViewDarkPreview(@PreviewParameter(MediaViewerStateProvider::class
 private fun ContentToPreview(state: MediaViewerState) {
     MediaViewerView(
         state = state,
+        onBackPressed = {}
     )
 }

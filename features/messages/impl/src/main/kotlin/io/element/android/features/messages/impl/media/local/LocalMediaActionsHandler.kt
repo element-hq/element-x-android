@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.media.viewer
+package io.element.android.features.messages.impl.media.local
 
-sealed interface MediaViewerEvents {
-    object SaveOnDisk: MediaViewerEvents
-    object RetryLoading : MediaViewerEvents
-    object ClearLoadingError : MediaViewerEvents
+interface LocalMediaActionsHandler {
+    suspend fun saveOnDisk(localMedia: LocalMedia): Result<Unit>
+    suspend fun share(localMedia: LocalMedia): Result<Unit>
 }
+

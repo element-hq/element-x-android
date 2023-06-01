@@ -54,7 +54,8 @@ class MediaViewerNode @AssistedInject constructor(
             val state = presenter.present()
             MediaViewerView(
                 state = state,
-                modifier = modifier
+                modifier = modifier,
+                onBackPressed = this::navigateUp
             )
         }
     }
