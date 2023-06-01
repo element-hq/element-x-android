@@ -116,7 +116,7 @@ internal fun DefaultInviteSummaryRow(
             // Name
             Text(
                 fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Medium,
                 text = invite.roomName,
                 color = MaterialTheme.colorScheme.primary,
                 maxLines = 1,
@@ -192,7 +192,9 @@ private fun SenderRow(sender: InviteSender) {
             append(text.drop(nameIndex + placeholder.length))
         },
         color = MaterialTheme.colorScheme.secondary,
-        modifier = Modifier.padding(top = 6.dp),
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Normal,
+        modifier = Modifier.padding(top = 12.dp),
         inlineContent = persistentMapOf(
             "avatar" to InlineTextContent(
                 with(LocalDensity.current) {
