@@ -52,9 +52,9 @@ import io.element.android.libraries.testtags.testTag
 // Ref: https://www.figma.com/file/o9p34zmiuEpZRyvZXJZAYL/FTUE?type=design&node-id=133-5427&t=5SHVppfYzjvkEywR-0
 @Composable
 fun OnBoardingScreen(
-    modifier: Modifier = Modifier,
     canLoginWithQrCode: Boolean,
     canCreateAccount: Boolean,
+    modifier: Modifier = Modifier,
     onSignInWithQrCode: () -> Unit = {},
     onSignIn: () -> Unit = {},
     onCreateAccount: () -> Unit = {},
