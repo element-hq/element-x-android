@@ -23,9 +23,9 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import org.matrix.rustcomponents.sdk.NotificationItem
 import org.matrix.rustcomponents.sdk.use
-import javax.inject.Inject
 
-class NotificationMapper @Inject constructor() {
+class NotificationMapper {
+    private val timelineEventMapper = TimelineEventMapper()
 
     fun map(notificationItem: NotificationItem): NotificationData {
         return notificationItem.use {
@@ -36,9 +36,11 @@ class NotificationMapper @Inject constructor() {
                 senderAvatarUrl = it.senderAvatarUrl,
                 senderDisplayName = it.senderDisplayName,
                 roomAvatarUrl = it.roomAvatarUrl,
+                roomDisplayName = it.roomDisplayName,
                 isDirect = it.isDirect,
                 isEncrypted = it.isEncrypted.orFalse(),
-                isNoisy = it.isNoisy
+                isNoisy = it.isNoisy,
+                event = it.event.use { event -> timelineEventMapper.map(event) }
             )
         }
     }
