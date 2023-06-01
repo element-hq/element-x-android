@@ -44,7 +44,7 @@ class MatrixUserRepository @Inject constructor(
             // Debounce
             delay(DEBOUNCE_TIME_MILLIS)
 
-            val results = dataSource.search(query).toMutableList()
+            val results = dataSource.search(query, MAXIMUM_SEARCH_RESULTS).toMutableList()
 
             // If the query is a user ID and the result doesn't contain that user ID, query the profile information explicitly
             if (isUserId && results.none { it.userId.value == query }) {
@@ -60,5 +60,6 @@ class MatrixUserRepository @Inject constructor(
     companion object {
         private const val DEBOUNCE_TIME_MILLIS = 250L
         private const val MINIMUM_SEARCH_LENGTH = 3
+        private const val MAXIMUM_SEARCH_RESULTS = 10L
     }
 }

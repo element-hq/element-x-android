@@ -28,16 +28,12 @@ import javax.inject.Inject
 class MatrixUserListDataSource @Inject constructor(
     private val client: MatrixClient
 ) : UserListDataSource {
-    override suspend fun search(query: String): List<MatrixUser> {
-        val res = client.searchUsers(query, MAX_SEARCH_RESULTS)
+    override suspend fun search(query: String, count: Long): List<MatrixUser> {
+        val res = client.searchUsers(query, count)
         return res.getOrNull()?.results.orEmpty()
     }
 
     override suspend fun getProfile(userId: UserId): MatrixUser? {
         return client.getProfile(userId).getOrNull()
-    }
-
-    companion object {
-        private const val MAX_SEARCH_RESULTS = 5L
     }
 }
