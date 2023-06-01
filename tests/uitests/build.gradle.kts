@@ -25,6 +25,11 @@ plugins {
 
 android {
     namespace = "io.element.android.tests.uitests"
+    testOptions {
+        unitTests.all {
+            it.jvmArgs("-XX:+HeapDumpOnOutOfMemoryError")
+        }
+    }
 }
 
 dependencies {
