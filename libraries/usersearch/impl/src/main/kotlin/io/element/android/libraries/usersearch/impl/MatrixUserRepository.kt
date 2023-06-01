@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.usersearch.api.UserListDataSource
 import io.element.android.libraries.usersearch.api.UserRepository
+import io.element.android.libraries.usersearch.api.UserSearchResult
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -33,24 +34,26 @@ class MatrixUserRepository @Inject constructor(
     private val dataSource: UserListDataSource
 ) : UserRepository {
 
-    override suspend fun search(query: String): Flow<List<MatrixUser>> = flow {
+    override suspend fun search(query: String): Flow<List<UserSearchResult>> = flow {
         // Manually add a fake result with the matrixId, if any
         val isUserId = MatrixPatterns.isUserId(query)
         if (isUserId) {
-            emit(listOf(MatrixUser(UserId(query))))
+            emit(listOf(UserSearchResult(MatrixUser(UserId(query)))))
         }
 
         if (query.length >= MINIMUM_SEARCH_LENGTH) {
             // Debounce
             delay(DEBOUNCE_TIME_MILLIS)
 
-            val results = dataSource.search(query).toMutableList()
+            val results = dataSource.search(query).map { UserSearchResult(it) }.toMutableList()
 
             // If the query is a user ID and the result doesn't contain that user ID, query the profile information explicitly
-            if (isUserId && results.none { it.userId.value == query }) {
-                val getProfileResult: MatrixUser? = dataSource.getProfile(UserId(query))
-                val profile = getProfileResult ?: MatrixUser(UserId(query))
-                results.add(0, profile)
+            if (isUserId && results.none { it.matrixUser.userId.value == query }) {
+                results.add(
+                    0,
+                    dataSource.getProfile(UserId(query))
+                        ?.let { UserSearchResult(it) }
+                        ?: UserSearchResult(MatrixUser(UserId(query)), isUnresolved = true))
             }
 
             emit(results)

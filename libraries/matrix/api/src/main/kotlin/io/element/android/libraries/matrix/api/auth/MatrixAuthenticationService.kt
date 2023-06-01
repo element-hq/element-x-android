@@ -28,4 +28,23 @@ interface MatrixAuthenticationService {
     fun getHomeserverDetails(): StateFlow<MatrixHomeServerDetails?>
     suspend fun setHomeserver(homeserver: String): Result<Unit>
     suspend fun login(username: String, password: String): Result<SessionId>
+
+    /*
+     * OIDC part.
+     */
+
+    /**
+     * Get the Oidc url to display to the user.
+     */
+    suspend fun getOidcUrl(): Result<OidcDetails>
+
+    /**
+     * Cancel Oidc login sequence.
+     */
+    suspend fun cancelOidcLogin(): Result<Unit>
+
+    /**
+     * Attempt to login using the [callbackUrl] provided by the Oidc page.
+     */
+    suspend fun loginWithOidc(callbackUrl: String): Result<SessionId>
 }

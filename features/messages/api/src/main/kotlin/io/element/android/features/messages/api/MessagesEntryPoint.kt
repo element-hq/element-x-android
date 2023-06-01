@@ -20,6 +20,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.matrix.api.core.UserId
 
 interface MessagesEntryPoint : FeatureEntryPoint {
     fun createNode(
@@ -30,5 +31,6 @@ interface MessagesEntryPoint : FeatureEntryPoint {
 
     interface Callback : Plugin {
         fun onRoomDetailsClicked()
+        fun onUserDataClicked(userId: UserId)
     }
 }

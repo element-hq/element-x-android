@@ -29,10 +29,12 @@ import io.element.android.libraries.designsystem.theme.components.SearchBarResul
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import io.element.android.libraries.usersearch.api.UserSearchResult
 import io.element.android.libraries.usersearch.test.FakeUserRepository
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.ImmutableList
@@ -130,7 +132,7 @@ internal class RoomInviteMembersPresenterTest {
             skipItems(1)
 
             assertThat(repository.providedQuery).isEqualTo("some query")
-            repository.emitResult(aMatrixUserList())
+            repository.emitResult(aMatrixUserList().map { UserSearchResult(it) })
             skipItems(1)
 
             val resultState = awaitItem()
@@ -175,7 +177,7 @@ internal class RoomInviteMembersPresenterTest {
             skipItems(1)
 
             assertThat(repository.providedQuery).isEqualTo("some query")
-            repository.emitResult(aMatrixUserList())
+            repository.emitResult(aMatrixUserList().map { UserSearchResult(it) })
             skipItems(1)
 
             val resultState = awaitItem()
@@ -199,6 +201,53 @@ internal class RoomInviteMembersPresenterTest {
             val otherUsers = users.minus(userWhoShouldBeInvited!!).minus(userWhoShouldBeJoined!!)
             assertThat(otherUsers.none { it.isAlreadyInvited }).isTrue()
             assertThat(otherUsers.none { it.isAlreadyJoined }).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - performs search and handles unresolved results`() = runTest {
+        val userList = aMatrixUserList()
+        val joinedUser = userList[0]
+        val invitedUser = userList[1]
+
+        val repository = FakeUserRepository()
+        val presenter = RoomInviteMembersPresenter(
+            userRepository = repository,
+            roomMemberListDataSource = createDataSource(FakeMatrixRoom().apply {
+                givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(
+                    aRoomMember(userId = joinedUser.userId, membership = RoomMembershipState.JOIN),
+                    aRoomMember(userId = invitedUser.userId, membership = RoomMembershipState.INVITE),
+                )))
+            }),
+            coroutineDispatchers = testCoroutineDispatchers()
+        )
+
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            skipItems(1)
+
+            initialState.eventSink(RoomInviteMembersEvents.UpdateSearchQuery("some query"))
+            skipItems(1)
+
+            assertThat(repository.providedQuery).isEqualTo("some query")
+
+            val unresolvedUser = UserSearchResult(aMatrixUser(id = A_USER_ID.value), isUnresolved = true)
+            repository.emitResult(listOf(unresolvedUser) + aMatrixUserList().map { UserSearchResult(it) })
+            skipItems(1)
+
+            val resultState = awaitItem()
+            assertThat(resultState.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
+
+            val users = resultState.searchResults.users()
+
+            val userWhoShouldBeUnresolved = users.first()
+            assertThat(userWhoShouldBeUnresolved.isUnresolved).isTrue()
+
+            // All other users are neither joined nor invited
+            val otherUsers = users.minus(userWhoShouldBeUnresolved)
+            assertThat(otherUsers.none { it.isUnresolved }).isTrue()
         }
     }
 
@@ -254,7 +303,7 @@ internal class RoomInviteMembersPresenterTest {
             skipItems(1)
 
             assertThat(repository.providedQuery).isEqualTo("some query")
-            repository.emitResult(aMatrixUserList() + selectedUser)
+            repository.emitResult((aMatrixUserList() + selectedUser).map { UserSearchResult(it) })
             skipItems(2)
 
             val resultState = awaitItem()
@@ -296,7 +345,7 @@ internal class RoomInviteMembersPresenterTest {
             skipItems(1)
 
             assertThat(repository.providedQuery).isEqualTo("some query")
-            repository.emitResult(aMatrixUserList() + selectedUser)
+            repository.emitResult((aMatrixUserList() + selectedUser).map { UserSearchResult(it) })
             skipItems(2)
 
             // And then a user is toggled

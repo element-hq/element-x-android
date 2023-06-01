@@ -54,9 +54,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserDialogs
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserSection
-import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberHeaderSection
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberMainActionsSection
 import io.element.android.libraries.architecture.isLoading
@@ -253,7 +253,7 @@ internal fun TopicSection(
     onActionClicked: (RoomDetailsAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    PreferenceCategory(title = stringResource(R.string.screen_room_details_topic_title), modifier = modifier) {
+    PreferenceCategory(title = stringResource(StringR.string.common_topic), modifier = modifier) {
         if (roomTopic is RoomTopicState.CanAddTopic) {
             PreferenceText(
                 title = stringResource(R.string.screen_room_details_add_topic_title),

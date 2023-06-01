@@ -39,6 +39,7 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.uiStrings)
     implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
 
     ksp(libs.showkase.processor)
 }

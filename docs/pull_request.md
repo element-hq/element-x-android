@@ -79,7 +79,7 @@ Exceptions can occur:
 
 **Important notice 1:** Releases are created from the `develop` branch. So `develop` branch should always contain a "releasable" source code. So when a feature is being implemented with several PRs, it has to be disabled by default (using a feature flag for instance), until the feature is fully implemented. A last PR to enable the feature can then be created.
 
-**Important notice 2:** Database migration: some developers and some people from the community are using the nightly build from `develop`. Multiple database migrations should be properly handled for them. This is OK to have multiple migrations between 2 releases, this is not OK to add steps to the pending database migration on `develop`. So for instance `develop` users will migrate from version 11 to version 12, then 13, then 14, and `main` users will do all those steps after they get the app upgrade.
+**Important notice 2:** Database migration: some developers and some people from the community are using the nightly build from `develop`. Multiple database migrations should be properly handled for them. It is OK to have multiple migrations between 2 releases, It is not OK to add steps to existing database migrations on `develop`. So for instance `develop` users will migrate from version 11 to version 12, then 13, then 14, and `main` users will do all those steps after they get the app upgrade.
 
 ##### PR Review Assignment
 

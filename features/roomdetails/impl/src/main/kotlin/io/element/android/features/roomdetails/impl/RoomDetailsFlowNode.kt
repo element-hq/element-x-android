@@ -29,6 +29,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.roomdetails.impl.edition.RoomDetailsEditionNode
+import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.features.roomdetails.impl.invite.RoomInviteMembersNode
 import io.element.android.features.roomdetails.impl.members.RoomMemberListNode
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsNode
@@ -45,7 +46,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
 ) : BackstackNode<RoomDetailsFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.RoomDetails,
+        initialElement = plugins.filterIsInstance<RoomDetailsEntryPoint.Inputs>().first().initialElement.toNavTarget(),
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -110,7 +111,8 @@ class RoomDetailsFlowNode @AssistedInject constructor(
             }
 
             is NavTarget.RoomMemberDetails -> {
-                createNode<RoomMemberDetailsNode>(buildContext, listOf(RoomMemberDetailsNode.Inputs(navTarget.roomMemberId)))
+                val plugins = listOf(RoomMemberDetailsNode.RoomMemberDetailsInput(navTarget.roomMemberId))
+                createNode<RoomMemberDetailsNode>(buildContext, plugins)
             }
         }
     }
