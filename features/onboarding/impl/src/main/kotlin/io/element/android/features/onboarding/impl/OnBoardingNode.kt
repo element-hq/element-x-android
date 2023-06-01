@@ -49,6 +49,8 @@ class OnBoardingNode @AssistedInject constructor(
     override fun View(modifier: Modifier) {
         OnBoardingScreen(
             modifier = modifier,
+            canLoginWithQrCode = OnBoardingConfig.canLoginWithQrCode,
+            canCreateAccount = OnBoardingConfig.canCreateAccount,
             onSignIn = this::onSignIn,
         )
     }

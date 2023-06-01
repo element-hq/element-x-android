@@ -51,6 +51,8 @@ import io.element.android.libraries.testtags.testTag
 @Composable
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
+    canLoginWithQrCode: Boolean,
+    canCreateAccount: Boolean,
     onSignInWithQrCode: () -> Unit = {},
     onSignIn: () -> Unit = {},
     onCreateAccount: () -> Unit = {},
@@ -59,6 +61,8 @@ fun OnBoardingScreen(
         modifier = modifier,
         footer = {
             OnBoardingButtons(
+                canLoginWithQrCode = canLoginWithQrCode,
+                canCreateAccount = canCreateAccount,
                 onSignInWithQrCode = onSignInWithQrCode,
                 onSignIn = onSignIn,
                 onCreateAccount = onCreateAccount,
@@ -103,6 +107,8 @@ private fun ColumnScope.OnBoardingHeader() {
 
 @Composable
 private fun OnBoardingButtons(
+    canLoginWithQrCode: Boolean,
+    canCreateAccount: Boolean,
     onSignInWithQrCode: () -> Unit,
     onSignIn: () -> Unit,
     onCreateAccount: () -> Unit,
@@ -114,20 +120,22 @@ private fun OnBoardingButtons(
         horizontalAlignment = CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Button(
-            onClick = {
-                onSignInWithQrCode()
-            },
-            enabled = true,
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Icon(
-                imageVector = Icons.Default.QrCode, contentDescription = null,
-                tint = MaterialTheme.colorScheme.onPrimary
-            )
-            Spacer(Modifier.width(14.dp))
-            Text(text = stringResource(id = R.string.screen_onboarding_sign_in_with_qr_code))
+        if (canLoginWithQrCode) {
+            Button(
+                onClick = {
+                    onSignInWithQrCode()
+                },
+                enabled = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Icon(
+                    imageVector = Icons.Default.QrCode, contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
+                Spacer(Modifier.width(14.dp))
+                Text(text = stringResource(id = R.string.screen_onboarding_sign_in_with_qr_code))
+            }
         }
         Button(
             onClick = {
@@ -140,15 +148,17 @@ private fun OnBoardingButtons(
         ) {
             Text(text = stringResource(id = R.string.screen_onboarding_sign_in_manually))
         }
-        OutlinedButton(
-            onClick = {
-                onCreateAccount()
-            },
-            enabled = true,
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Text(text = stringResource(id = R.string.screen_onboarding_sign_up))
+        if (canCreateAccount) {
+            OutlinedButton(
+                onClick = {
+                    onCreateAccount()
+                },
+                enabled = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(text = stringResource(id = R.string.screen_onboarding_sign_up))
+            }
         }
     }
 }
@@ -165,5 +175,8 @@ internal fun OnBoardingScreenDarkPreview() =
 
 @Composable
 private fun ContentToPreview() {
-    OnBoardingScreen()
+    OnBoardingScreen(
+        canLoginWithQrCode = true,
+        canCreateAccount = true,
+    )
 }
