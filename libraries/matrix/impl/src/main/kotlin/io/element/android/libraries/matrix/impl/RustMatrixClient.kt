@@ -44,6 +44,7 @@ import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
 import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -77,6 +78,7 @@ class RustMatrixClient constructor(
     private val coroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
     private val baseDirectory: File,
+    private val clock: SystemClock,
 ) : MatrixClient {
 
     override val sessionId: UserId = UserId(client.userId())
@@ -215,6 +217,7 @@ class RustMatrixClient constructor(
             innerRoom = fullRoom,
             coroutineScope = coroutineScope,
             coroutineDispatchers = dispatchers,
+            clock = clock,
         )
     }
 

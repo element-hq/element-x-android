@@ -12,6 +12,14 @@ env:
   CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon --warn
 
 jobs:
+  checkScript:
+    name: Search for forbidden patterns
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run code quality check suite
+        run: ./tools/check/check_code_quality.sh
+
   check:
     name: Project Check Suite
     runs-on: ubuntu-latest
