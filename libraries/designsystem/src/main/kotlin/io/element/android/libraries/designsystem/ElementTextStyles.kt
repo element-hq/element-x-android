@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.designsystem
 
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -25,12 +26,14 @@ import androidx.compose.ui.unit.sp
 // TODO Remove
 object ElementTextStyles {
 
+    @Suppress("DEPRECATION")
     val Button = TextStyle(
         fontSize = 16.sp,
         fontWeight = FontWeight.Medium,
         lineHeight = 22.sp,
         fontStyle = FontStyle.Normal,
         textAlign = TextAlign.Center,
+        platformStyle = PlatformTextStyle(includeFontPadding = false)
     )
 
     object Bold {

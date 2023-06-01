@@ -145,8 +145,8 @@ internal fun DefaultInviteSummaryRow(
                 OutlinedButton(
                     content = { Text(stringResource(StringR.string.action_decline), style = ElementTextStyles.Button) },
                     onClick = onDeclineClicked,
-                    modifier = Modifier.weight(1f),
-                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 7.dp),
+                    modifier = Modifier.weight(1f).heightIn(max = 36.dp),
+                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 0.dp),
                 )
 
                 Spacer(modifier = Modifier.width(12.dp))
@@ -154,8 +154,8 @@ internal fun DefaultInviteSummaryRow(
                 Button(
                     content = { Text(stringResource(StringR.string.action_accept), style = ElementTextStyles.Button) },
                     onClick = onAcceptClicked,
-                    modifier = Modifier.weight(1f),
-                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 7.dp),
+                    modifier = Modifier.weight(1f).heightIn(max = 36.dp),
+                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 0.dp),
                 )
             }
         }
@@ -175,7 +175,7 @@ internal fun DefaultInviteSummaryRow(
 private fun SenderRow(sender: InviteSender) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
-        modifier = Modifier.padding(top = 12.dp),
+        modifier = Modifier.padding(top = 6.dp),
     ) {
         Avatar(
             avatarData = sender.avatarData.copy(size = AvatarSize.Custom(16.dp)),
