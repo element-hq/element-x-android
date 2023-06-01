@@ -37,6 +37,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddReaction
 import androidx.compose.material.icons.outlined.Attachment
+import androidx.compose.material.icons.outlined.VideoCameraBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -208,7 +209,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
                 BlurHashAsyncImage(
                     model = mediaRequestData,
                     blurHash = event.content.blurhash,
-                    contentDescription = "Image thumbnail",
+                    contentDescription = stringResource(StringR.string.common_image),
                     contentScale = ContentScale.Crop,
                     modifier = imageModifier,
                 )
@@ -226,7 +227,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
                     BlurHashAsyncImage(
                         model = mediaRequestData,
                         blurHash = event.content.blurHash,
-                        contentDescription = "Video thumbnail",
+                        contentDescription = stringResource(StringR.string.common_video),
                         contentScale = ContentScale.Crop,
                         modifier = imageModifier,
                     )
@@ -236,9 +237,8 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            imageVector = Icons.Outlined.Attachment,
-                            contentDescription = "Video thumbnail",
-                            modifier = Modifier.rotate(-45f)
+                            imageVector = Icons.Outlined.VideoCameraBack,
+                            contentDescription = stringResource(StringR.string.common_video),
                         )
                     }
                 }
@@ -253,7 +253,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Attachment,
-                        contentDescription = "File thumbnail",
+                        contentDescription = stringResource(StringR.string.common_file),
                         modifier = Modifier.rotate(-45f)
                     )
                 }

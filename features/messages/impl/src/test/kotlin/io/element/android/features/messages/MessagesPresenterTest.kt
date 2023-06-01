@@ -31,6 +31,8 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
+import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -148,7 +150,20 @@ class MessagesPresenterTest {
             timelineItemsFactory = aTimelineItemsFactory(),
             room = matrixRoom,
         )
-        val actionListPresenter = ActionListPresenter()
+        val buildMeta = BuildMeta(
+            buildType = BuildType.DEBUG,
+            isDebuggable = true,
+            applicationId = "",
+            applicationName = "",
+            lowPrivacyLoggingEnabled = true,
+            versionName = "",
+            gitRevision = "",
+            gitBranchName = "",
+            gitRevisionDate = "",
+            flavorDescription = "",
+            flavorShortDescription = "",
+        )
+        val actionListPresenter = ActionListPresenter(buildMeta = buildMeta)
         return MessagesPresenter(
             room = matrixRoom,
             composerPresenter = messageComposerPresenter,

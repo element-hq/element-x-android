@@ -29,6 +29,8 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemReac
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
+import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -42,7 +44,7 @@ import org.junit.Test
 class ActionListPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = ActionListPresenter()
+        val presenter = anActionListPresenter(isBuildDebuggable = true)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -53,7 +55,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for message from me redacted`() = runTest {
-        val presenter = ActionListPresenter()
+        val presenter = anActionListPresenter(isBuildDebuggable = true)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -67,6 +69,8 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     messageEvent,
                     persistentListOf(
+                        TimelineItemAction.Copy,
+                        TimelineItemAction.Developer,
                     )
                 )
             )
@@ -75,9 +79,10 @@ class ActionListPresenterTest {
         }
     }
 
+
     @Test
     fun `present - compute for message from others redacted`() = runTest {
-        val presenter = ActionListPresenter()
+        val presenter = anActionListPresenter(isBuildDebuggable = true)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -91,6 +96,8 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     messageEvent,
                     persistentListOf(
+                        TimelineItemAction.Copy,
+                        TimelineItemAction.Developer,
                     )
                 )
             )
@@ -101,7 +108,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for others message`() = runTest {
-        val presenter = ActionListPresenter()
+        val presenter = anActionListPresenter(isBuildDebuggable = true)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -121,6 +128,8 @@ class ActionListPresenterTest {
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Copy,
+                        TimelineItemAction.Developer,
+                        TimelineItemAction.ReportContent,
                     )
                 )
             )
@@ -131,7 +140,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for my message`() = runTest {
-        val presenter = ActionListPresenter()
+        val presenter = anActionListPresenter(isBuildDebuggable = true)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -150,8 +159,41 @@ class ActionListPresenterTest {
                     persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
-                        TimelineItemAction.Copy,
                         TimelineItemAction.Edit,
+                        TimelineItemAction.Copy,
+                        TimelineItemAction.Developer,
+                        TimelineItemAction.Redact,
+                    )
+                )
+            )
+            initialState.eventSink.invoke(ActionListEvents.Clear)
+            assertThat(awaitItem().target).isEqualTo(ActionListState.Target.None)
+        }
+    }
+
+    @Test
+    fun `present - compute message in non-debuggable build`() = runTest {
+        val presenter = anActionListPresenter(isBuildDebuggable = false)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = true,
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false)
+            )
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent))
+            // val loadingState = awaitItem()
+            // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    messageEvent,
+                    persistentListOf(
+                        TimelineItemAction.Reply,
+                        TimelineItemAction.Forward,
+                        TimelineItemAction.Edit,
+                        TimelineItemAction.Copy,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -161,6 +203,34 @@ class ActionListPresenterTest {
         }
     }
 }
+
+private fun aBuildMeta(
+    buildType: BuildType = BuildType.DEBUG,
+    isDebuggable: Boolean = true,
+    applicationName: String = "",
+    applicationId: String = "",
+    lowPrivacyLoggingEnabled: Boolean = true,
+    versionName: String = "",
+    gitRevision: String = "",
+    gitRevisionDate: String = "",
+    gitBranchName: String = "",
+    flavorDescription: String = "",
+    flavorShortDescription: String = "",
+) = BuildMeta(
+    buildType,
+    isDebuggable,
+    applicationName,
+    applicationId,
+    lowPrivacyLoggingEnabled,
+    versionName,
+    gitRevision,
+    gitRevisionDate,
+    gitBranchName,
+    flavorDescription,
+    flavorShortDescription
+)
+
+private fun anActionListPresenter(isBuildDebuggable: Boolean) = ActionListPresenter(buildMeta = aBuildMeta(isDebuggable = isBuildDebuggable))
 
 private fun aMessageEvent(
     isMine: Boolean,

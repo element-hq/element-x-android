@@ -75,7 +75,9 @@ class ActionListPresenter @Inject constructor(
                     if (buildMeta.isDebuggable) {
                         add(TimelineItemAction.Developer)
                     }
-                    add(TimelineItemAction.ReportContent)
+                    if (!timelineItem.isMine) {
+                        add(TimelineItemAction.ReportContent)
+                    }
                     if (timelineItem.isMine) {
                         add(TimelineItemAction.Redact)
                     }
