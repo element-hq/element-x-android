@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl.edition
+package io.element.android.features.roomdetails.impl.edit
 
 import io.element.android.features.createroom.api.ui.AvatarAction
 
-sealed interface RoomDetailsEditionEvents {
-    data class HandleAvatarAction(val action: AvatarAction) : RoomDetailsEditionEvents
-    data class UpdateRoomName(val name: String) : RoomDetailsEditionEvents
-    data class UpdateRoomTopic(val topic: String) : RoomDetailsEditionEvents
-    object Save : RoomDetailsEditionEvents
-    object CancelSaveChanges : RoomDetailsEditionEvents
+sealed interface RoomDetailsEditEvents {
+    data class HandleAvatarAction(val action: AvatarAction) : RoomDetailsEditEvents
+    data class UpdateRoomName(val name: String) : RoomDetailsEditEvents
+    data class UpdateRoomTopic(val topic: String) : RoomDetailsEditEvents
+    object Save : RoomDetailsEditEvents
+    object CancelSaveChanges : RoomDetailsEditEvents
 }

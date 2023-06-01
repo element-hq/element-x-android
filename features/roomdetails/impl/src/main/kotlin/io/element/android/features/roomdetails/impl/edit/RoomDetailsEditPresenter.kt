@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl.edition
+package io.element.android.features.roomdetails.impl.edit
 
 import android.net.Uri
 import androidx.compose.runtime.Composable
@@ -44,14 +44,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class RoomDetailsEditionPresenter @Inject constructor(
+class RoomDetailsEditPresenter @Inject constructor(
     private val room: MatrixRoom,
     private val mediaPickerProvider: PickerProvider,
     private val mediaPreProcessor: MediaPreProcessor,
-) : Presenter<RoomDetailsEditionState> {
+) : Presenter<RoomDetailsEditState> {
 
     @Composable
-    override fun present(): RoomDetailsEditionState {
+    override fun present(): RoomDetailsEditState {
         val roomSyncUpdateFlow = room.syncUpdateFlow().collectAsState(0L)
 
         // Since there is no way to obtain the new avatar uri after uploading a new avatar,
@@ -103,10 +103,10 @@ class RoomDetailsEditionPresenter @Inject constructor(
 
         val saveAction: MutableState<Async<Unit>> = remember { mutableStateOf(Async.Uninitialized) }
         val localCoroutineScope = rememberCoroutineScope()
-        fun handleEvents(event: RoomDetailsEditionEvents) {
+        fun handleEvents(event: RoomDetailsEditEvents) {
             when (event) {
-                is RoomDetailsEditionEvents.Save -> localCoroutineScope.saveChanges(roomName, roomTopic, roomAvatarUri, saveAction)
-                is RoomDetailsEditionEvents.HandleAvatarAction -> {
+                is RoomDetailsEditEvents.Save -> localCoroutineScope.saveChanges(roomName, roomTopic, roomAvatarUri, saveAction)
+                is RoomDetailsEditEvents.HandleAvatarAction -> {
                     when (event.action) {
                         AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
                         AvatarAction.TakePhoto -> cameraPhotoPicker.launch()
@@ -114,13 +114,13 @@ class RoomDetailsEditionPresenter @Inject constructor(
                     }
                 }
 
-                is RoomDetailsEditionEvents.UpdateRoomName -> roomName = event.name
-                is RoomDetailsEditionEvents.UpdateRoomTopic -> roomTopic = event.topic.takeUnless { it.isEmpty() }
-                RoomDetailsEditionEvents.CancelSaveChanges -> saveAction.value = Async.Uninitialized
+                is RoomDetailsEditEvents.UpdateRoomName -> roomName = event.name
+                is RoomDetailsEditEvents.UpdateRoomTopic -> roomTopic = event.topic.takeUnless { it.isEmpty() }
+                RoomDetailsEditEvents.CancelSaveChanges -> saveAction.value = Async.Uninitialized
             }
         }
 
-        return RoomDetailsEditionState(
+        return RoomDetailsEditState(
             roomId = room.roomId.value,
             roomName = roomName,
             canChangeName = canChangeName,

@@ -16,7 +16,7 @@
 
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 
-package io.element.android.features.roomdetails.impl.edition
+package io.element.android.features.roomdetails.impl.edit
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -81,8 +81,8 @@ import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun RoomDetailsEditionView(
-    state: RoomDetailsEditionState,
+fun RoomDetailsEditView(
+    state: RoomDetailsEditState,
     onBackPressed: () -> Unit,
     onRoomEdited: () -> Unit,
     modifier: Modifier = Modifier,
@@ -117,7 +117,7 @@ fun RoomDetailsEditionView(
                         enabled = state.saveButtonEnabled,
                         onClick = {
                             focusManager.clearFocus()
-                            state.eventSink(RoomDetailsEditionEvents.Save)
+                            state.eventSink(RoomDetailsEditEvents.Save)
                         },
                     ) {
                         Text(
@@ -147,7 +147,7 @@ fun RoomDetailsEditionView(
                     value = state.roomName,
                     placeholder = stringResource(id = R.string.screen_create_room_room_name_placeholder),
                     singleLine = true,
-                    onValueChange = { state.eventSink(RoomDetailsEditionEvents.UpdateRoomName(it)) },
+                    onValueChange = { state.eventSink(RoomDetailsEditEvents.UpdateRoomName(it)) },
                 )
             } else {
                 LabelledReadOnlyField(
@@ -164,7 +164,7 @@ fun RoomDetailsEditionView(
                     value = state.roomTopic,
                     placeholder = stringResource(id = R.string.screen_create_room_topic_placeholder),
                     maxLines = 10,
-                    onValueChange = { state.eventSink(RoomDetailsEditionEvents.UpdateRoomTopic(it)) },
+                    onValueChange = { state.eventSink(RoomDetailsEditEvents.UpdateRoomTopic(it)) },
                 )
             } else {
                 LabelledReadOnlyField(
@@ -178,7 +178,7 @@ fun RoomDetailsEditionView(
     AvatarActionListView(
         actions = state.avatarActions,
         modalBottomSheetState = itemActionsBottomSheetState,
-        onActionSelected = { state.eventSink(RoomDetailsEditionEvents.HandleAvatarAction(it)) }
+        onActionSelected = { state.eventSink(RoomDetailsEditEvents.HandleAvatarAction(it)) }
     )
 
     when (state.saveAction) {
@@ -189,7 +189,7 @@ fun RoomDetailsEditionView(
         is Async.Failure -> {
             ErrorDialog(
                 content = stringResource(R.string.screen_room_details_edition_error),
-                onDismiss = { state.eventSink(RoomDetailsEditionEvents.CancelSaveChanges) },
+                onDismiss = { state.eventSink(RoomDetailsEditEvents.CancelSaveChanges) },
             )
         }
 
@@ -205,7 +205,7 @@ fun RoomDetailsEditionView(
 
 @Composable
 private fun EditableAvatarView(
-    state: RoomDetailsEditionState,
+    state: RoomDetailsEditState,
     onAvatarClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -288,17 +288,17 @@ private fun Modifier.clearFocusOnTap(focusManager: FocusManager): Modifier =
 
 @Preview
 @Composable
-fun RoomDetailsEditionViewLightPreview(@PreviewParameter(RoomDetailsEditionStateProvider::class) state: RoomDetailsEditionState) =
+fun RoomDetailsEditViewLightPreview(@PreviewParameter(RoomDetailsEditStateProvider::class) state: RoomDetailsEditState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun RoomDetailsEditionViewDarkPreview(@PreviewParameter(RoomDetailsEditionStateProvider::class) state: RoomDetailsEditionState) =
+fun RoomDetailsEditViewDarkPreview(@PreviewParameter(RoomDetailsEditStateProvider::class) state: RoomDetailsEditState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
-private fun ContentToPreview(state: RoomDetailsEditionState) {
-    RoomDetailsEditionView(
+private fun ContentToPreview(state: RoomDetailsEditState) {
+    RoomDetailsEditView(
         state = state,
         onBackPressed = {},
         onRoomEdited = {},

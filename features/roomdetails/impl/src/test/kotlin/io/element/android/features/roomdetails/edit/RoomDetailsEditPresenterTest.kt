@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.edition
+package io.element.android.features.roomdetails.edit
 
 import android.net.Uri
 import app.cash.molecule.RecompositionClock
@@ -23,8 +23,8 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.createroom.api.ui.AvatarAction
 import io.element.android.features.roomdetails.aMatrixRoom
-import io.element.android.features.roomdetails.impl.edition.RoomDetailsEditionEvents
-import io.element.android.features.roomdetails.impl.edition.RoomDetailsEditionPresenter
+import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditEvents
+import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditPresenter
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.StateEventType
@@ -45,7 +45,7 @@ import org.junit.Test
 import java.io.File
 
 @ExperimentalCoroutinesApi
-class RoomDetailsEditionPresenterTest {
+class RoomDetailsEditPresenterTest {
 
     private lateinit var fakePickerProvider: FakePickerProvider
     private lateinit var fakeMediaPreProcessor: FakeMediaPreProcessor
@@ -70,8 +70,8 @@ class RoomDetailsEditionPresenterTest {
         unmockkAll()
     }
 
-    private fun aRoomDetailsEditionPresenter(room: MatrixRoom): RoomDetailsEditionPresenter {
-        return RoomDetailsEditionPresenter(
+    private fun aRoomDetailsEditPresenter(room: MatrixRoom): RoomDetailsEditPresenter {
+        return RoomDetailsEditPresenter(
             room = room,
             mediaPickerProvider = fakePickerProvider,
             mediaPreProcessor = fakeMediaPreProcessor,
@@ -81,7 +81,7 @@ class RoomDetailsEditionPresenterTest {
     @Test
     fun `present - initial state is created from room info`() = runTest {
         val room = aMatrixRoom(avatarUrl = AN_AVATAR_URL)
-        val presenter = aRoomDetailsEditionPresenter(room)
+        val presenter = aRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -107,7 +107,7 @@ class RoomDetailsEditionPresenterTest {
             givenCanSendStateResult(StateEventType.ROOM_NAME, Result.success(true))
             givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.success(false))
             givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.failure(Throwable("Oops")))        }
-        val presenter = aRoomDetailsEditionPresenter(room)
+        val presenter = aRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -133,7 +133,7 @@ class RoomDetailsEditionPresenterTest {
             givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.success(true))
             givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.failure(Throwable("Oops")))
         }
-        val presenter = aRoomDetailsEditionPresenter(room)
+        val presenter = aRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -159,7 +159,7 @@ class RoomDetailsEditionPresenterTest {
             givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.failure(Throwable("Oops")))
             givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))
         }
-        val presenter = aRoomDetailsEditionPresenter(room)
+        val presenter = aRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -181,7 +181,7 @@ class RoomDetailsEditionPresenterTest {
     @Test
     fun `present - updates state in response to changes`() = runTest {
         val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
-        val presenter = aRoomDetailsEditionPresenter(room)
+        val presenter = aRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -191,28 +191,28 @@ class RoomDetailsEditionPresenterTest {
             assertThat(initialState.roomName).isEqualTo("Name")
             assertThat(initialState.roomAvatarUrl).isEqualTo(roomAvatarUri)
 
-            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomName("Name II"))
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomName("Name II"))
             awaitItem().apply {
                 assertThat(roomTopic).isEqualTo("My topic")
                 assertThat(roomName).isEqualTo("Name II")
                 assertThat(roomAvatarUrl).isEqualTo(roomAvatarUri)
             }
 
-            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomName("Name III"))
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomName("Name III"))
             awaitItem().apply {
                 assertThat(roomTopic).isEqualTo("My topic")
                 assertThat(roomName).isEqualTo("Name III")
                 assertThat(roomAvatarUrl).isEqualTo(roomAvatarUri)
             }
 
-            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomTopic("Another topic"))
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomTopic("Another topic"))
             awaitItem().apply {
                 assertThat(roomTopic).isEqualTo("Another topic")
                 assertThat(roomName).isEqualTo("Name III")
                 assertThat(roomAvatarUrl).isEqualTo(roomAvatarUri)
             }
 
-            initialState.eventSink(RoomDetailsEditionEvents.HandleAvatarAction(AvatarAction.Remove))
+            initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.Remove))
             awaitItem().apply {
                 assertThat(roomTopic).isEqualTo("Another topic")
                 assertThat(roomName).isEqualTo("Name III")
@@ -227,7 +227,7 @@ class RoomDetailsEditionPresenterTest {
 
         fakePickerProvider.givenResult(anotherAvatarUri)
 
-        val presenter = aRoomDetailsEditionPresenter(room)
+        val presenter = aRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -235,7 +235,7 @@ class RoomDetailsEditionPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.roomAvatarUrl).isEqualTo(roomAvatarUri)
 
-            initialState.eventSink(RoomDetailsEditionEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
+            initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
             awaitItem().apply {
                 assertThat(roomAvatarUrl).isEqualTo(anotherAvatarUri)
             }
@@ -248,7 +248,7 @@ class RoomDetailsEditionPresenterTest {
 
         fakePickerProvider.givenResult(anotherAvatarUri)
 
-        val presenter = aRoomDetailsEditionPresenter(room)
+        val presenter = aRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -256,7 +256,7 @@ class RoomDetailsEditionPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.roomAvatarUrl).isEqualTo(roomAvatarUri)
 
-            initialState.eventSink(RoomDetailsEditionEvents.HandleAvatarAction(AvatarAction.TakePhoto))
+            initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.TakePhoto))
             awaitItem().apply {
                 assertThat(roomAvatarUrl).isEqualTo(anotherAvatarUri)
             }
@@ -269,7 +269,7 @@ class RoomDetailsEditionPresenterTest {
 
         fakePickerProvider.givenResult(roomAvatarUri)
 
-        val presenter = aRoomDetailsEditionPresenter(room)
+        val presenter = aRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -278,37 +278,37 @@ class RoomDetailsEditionPresenterTest {
             assertThat(initialState.saveButtonEnabled).isEqualTo(false)
 
             // Once a change is made, the save button is enabled
-            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomName("Name II"))
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomName("Name II"))
             awaitItem().apply {
                 assertThat(saveButtonEnabled).isEqualTo(true)
             }
 
             // If it's reverted then the save disables again
-            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomName("Name"))
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomName("Name"))
             awaitItem().apply {
                 assertThat(saveButtonEnabled).isEqualTo(false)
             }
 
             // Make a change...
-            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomTopic("Another topic"))
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomTopic("Another topic"))
             awaitItem().apply {
                 assertThat(saveButtonEnabled).isEqualTo(true)
             }
 
             // Revert it...
-            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomTopic("My topic"))
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomTopic("My topic"))
             awaitItem().apply {
                 assertThat(saveButtonEnabled).isEqualTo(false)
             }
 
             // Make a change...
-            initialState.eventSink(RoomDetailsEditionEvents.HandleAvatarAction(AvatarAction.Remove))
+            initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.Remove))
             awaitItem().apply {
                 assertThat(saveButtonEnabled).isEqualTo(true)
             }
 
             // Revert it...
-            initialState.eventSink(RoomDetailsEditionEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
+            initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
             awaitItem().apply {
                 assertThat(saveButtonEnabled).isEqualTo(false)
             }
@@ -321,7 +321,7 @@ class RoomDetailsEditionPresenterTest {
 
         fakePickerProvider.givenResult(roomAvatarUri)
 
-        val presenter = aRoomDetailsEditionPresenter(room)
+        val presenter = aRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -330,37 +330,37 @@ class RoomDetailsEditionPresenterTest {
             assertThat(initialState.saveButtonEnabled).isEqualTo(false)
 
             // Once a change is made, the save button is enabled
-            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomName("Name II"))
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomName("Name II"))
             awaitItem().apply {
                 assertThat(saveButtonEnabled).isEqualTo(true)
             }
 
             // If it's reverted then the save disables again
-            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomName("fallback"))
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomName("fallback"))
             awaitItem().apply {
                 assertThat(saveButtonEnabled).isEqualTo(false)
             }
 
             // Make a change...
-            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomTopic("Another topic"))
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomTopic("Another topic"))
             awaitItem().apply {
                 assertThat(saveButtonEnabled).isEqualTo(true)
             }
 
             // Revert it...
-            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomTopic(""))
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomTopic(""))
             awaitItem().apply {
                 assertThat(saveButtonEnabled).isEqualTo(false)
             }
 
             // Make a change...
-            initialState.eventSink(RoomDetailsEditionEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
+            initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
             awaitItem().apply {
                 assertThat(saveButtonEnabled).isEqualTo(true)
             }
 
             // Revert it...
-            initialState.eventSink(RoomDetailsEditionEvents.HandleAvatarAction(AvatarAction.Remove))
+            initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.Remove))
             awaitItem().apply {
                 assertThat(saveButtonEnabled).isEqualTo(false)
             }
@@ -371,17 +371,17 @@ class RoomDetailsEditionPresenterTest {
     fun `present - save changes room details if different`() = runTest {
         val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
 
-        val presenter = aRoomDetailsEditionPresenter(room)
+        val presenter = aRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
 
-            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomName("New name"))
-            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomTopic("New topic"))
-            initialState.eventSink(RoomDetailsEditionEvents.HandleAvatarAction(AvatarAction.Remove))
-            initialState.eventSink(RoomDetailsEditionEvents.Save)
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomName("New name"))
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomTopic("New topic"))
+            initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.Remove))
+            initialState.eventSink(RoomDetailsEditEvents.Save)
 
             assertThat(room.newName).isEqualTo("New name")
             assertThat(room.newTopic).isEqualTo("New topic")
@@ -396,16 +396,16 @@ class RoomDetailsEditionPresenterTest {
     fun `present - save doesn't change room details if they're the same trimmed`() = runTest {
         val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
 
-        val presenter = aRoomDetailsEditionPresenter(room)
+        val presenter = aRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
 
-            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomName("   Name   "))
-            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomTopic("  My topic  "))
-            initialState.eventSink(RoomDetailsEditionEvents.Save)
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomName("   Name   "))
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomTopic("  My topic  "))
+            initialState.eventSink(RoomDetailsEditEvents.Save)
 
             assertThat(room.newName).isNull()
             assertThat(room.newTopic).isNull()
@@ -420,15 +420,15 @@ class RoomDetailsEditionPresenterTest {
     fun `present - save doesn't change topic if it was unset and is now blank`() = runTest {
         val room = aMatrixRoom(topic = null, name = "Name", avatarUrl = AN_AVATAR_URL)
 
-        val presenter = aRoomDetailsEditionPresenter(room)
+        val presenter = aRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
 
-            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomTopic(""))
-            initialState.eventSink(RoomDetailsEditionEvents.Save)
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomTopic(""))
+            initialState.eventSink(RoomDetailsEditEvents.Save)
 
             assertThat(room.newName).isNull()
             assertThat(room.newTopic).isNull()
@@ -443,15 +443,15 @@ class RoomDetailsEditionPresenterTest {
     fun `present - save doesn't change name if it's now empty`() = runTest {
         val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
 
-        val presenter = aRoomDetailsEditionPresenter(room)
+        val presenter = aRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
 
-            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomName(""))
-            initialState.eventSink(RoomDetailsEditionEvents.Save)
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomName(""))
+            initialState.eventSink(RoomDetailsEditEvents.Save)
 
             assertThat(room.newName).isNull()
             assertThat(room.newTopic).isNull()
@@ -468,15 +468,15 @@ class RoomDetailsEditionPresenterTest {
 
         givenPickerReturnsFile()
 
-        val presenter = aRoomDetailsEditionPresenter(room)
+        val presenter = aRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
 
-            initialState.eventSink(RoomDetailsEditionEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
-            initialState.eventSink(RoomDetailsEditionEvents.Save)
+            initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
+            initialState.eventSink(RoomDetailsEditEvents.Save)
             skipItems(2)
 
             assertThat(room.newName).isNull()
@@ -493,15 +493,15 @@ class RoomDetailsEditionPresenterTest {
         fakePickerProvider.givenResult(anotherAvatarUri)
         fakeMediaPreProcessor.givenResult(Result.failure(Throwable("Oh no")))
 
-        val presenter = aRoomDetailsEditionPresenter(room)
+        val presenter = aRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
 
-            initialState.eventSink(RoomDetailsEditionEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
-            initialState.eventSink(RoomDetailsEditionEvents.Save)
+            initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
+            initialState.eventSink(RoomDetailsEditEvents.Save)
             skipItems(1)
 
             assertThat(room.newName).isNull()
@@ -519,7 +519,7 @@ class RoomDetailsEditionPresenterTest {
             givenSetNameResult(Result.failure(Throwable("!")))
         }
 
-        saveAndAssertFailure(room, RoomDetailsEditionEvents.UpdateRoomName("New name"))
+        saveAndAssertFailure(room, RoomDetailsEditEvents.UpdateRoomName("New name"))
     }
 
     @Test
@@ -528,7 +528,7 @@ class RoomDetailsEditionPresenterTest {
             givenSetTopicResult(Result.failure(Throwable("!")))
         }
 
-        saveAndAssertFailure(room, RoomDetailsEditionEvents.UpdateRoomTopic("New topic"))
+        saveAndAssertFailure(room, RoomDetailsEditEvents.UpdateRoomTopic("New topic"))
     }
 
     @Test
@@ -537,7 +537,7 @@ class RoomDetailsEditionPresenterTest {
             givenRemoveAvatarResult(Result.failure(Throwable("!")))
         }
 
-        saveAndAssertFailure(room, RoomDetailsEditionEvents.HandleAvatarAction(AvatarAction.Remove))
+        saveAndAssertFailure(room, RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.Remove))
     }
 
     @Test
@@ -548,7 +548,7 @@ class RoomDetailsEditionPresenterTest {
             givenUpdateAvatarResult(Result.failure(Throwable("!")))
         }
 
-        saveAndAssertFailure(room, RoomDetailsEditionEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
+        saveAndAssertFailure(room, RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
     }
 
     @Test
@@ -559,26 +559,26 @@ class RoomDetailsEditionPresenterTest {
             givenSetTopicResult(Result.failure(Throwable("!")))
         }
 
-        val presenter = aRoomDetailsEditionPresenter(room)
+        val presenter = aRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
 
-            initialState.eventSink(RoomDetailsEditionEvents.UpdateRoomTopic("foo"))
-            initialState.eventSink(RoomDetailsEditionEvents.Save)
+            initialState.eventSink(RoomDetailsEditEvents.UpdateRoomTopic("foo"))
+            initialState.eventSink(RoomDetailsEditEvents.Save)
             skipItems(1)
 
             assertThat(awaitItem().saveAction).isInstanceOf(Async.Failure::class.java)
 
-            initialState.eventSink(RoomDetailsEditionEvents.CancelSaveChanges)
+            initialState.eventSink(RoomDetailsEditEvents.CancelSaveChanges)
             assertThat(awaitItem().saveAction).isInstanceOf(Async.Uninitialized::class.java)
         }
     }
 
-    private suspend fun saveAndAssertFailure(room: MatrixRoom, event: RoomDetailsEditionEvents) {
-        val presenter = aRoomDetailsEditionPresenter(room)
+    private suspend fun saveAndAssertFailure(room: MatrixRoom, event: RoomDetailsEditEvents) {
+        val presenter = aRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -586,7 +586,7 @@ class RoomDetailsEditionPresenterTest {
             val initialState = awaitItem()
 
             initialState.eventSink(event)
-            initialState.eventSink(RoomDetailsEditionEvents.Save)
+            initialState.eventSink(RoomDetailsEditEvents.Save)
             skipItems(1)
 
             assertThat(awaitItem().saveAction).isInstanceOf(Async.Failure::class.java)

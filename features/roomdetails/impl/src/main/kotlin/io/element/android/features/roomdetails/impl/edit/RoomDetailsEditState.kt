@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl.edition
+package io.element.android.features.roomdetails.impl.edit
 
 import android.net.Uri
 import io.element.android.features.createroom.api.ui.AvatarAction
 import io.element.android.libraries.architecture.Async
 import kotlinx.collections.immutable.ImmutableList
 
-data class RoomDetailsEditionState(
+data class RoomDetailsEditState(
     val roomId: String,
     val roomName: String,
     val canChangeName: Boolean,
@@ -32,5 +32,5 @@ data class RoomDetailsEditionState(
     val avatarActions: ImmutableList<AvatarAction>,
     val saveButtonEnabled: Boolean,
     val saveAction: Async<Unit>,
-    val eventSink: (RoomDetailsEditionEvents) -> Unit
+    val eventSink: (RoomDetailsEditEvents) -> Unit
 )

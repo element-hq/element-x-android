@@ -28,8 +28,8 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.roomdetails.impl.edition.RoomDetailsEditionNode
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
+import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditNode
 import io.element.android.features.roomdetails.impl.invite.RoomInviteMembersNode
 import io.element.android.features.roomdetails.impl.members.RoomMemberListNode
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsNode
@@ -61,7 +61,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
         object RoomMemberList : NavTarget
 
         @Parcelize
-        object RoomDetailsEdition : NavTarget
+        object RoomDetailsEdit : NavTarget
 
         @Parcelize
         object InviteMembers : NavTarget
@@ -78,8 +78,8 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.RoomMemberList)
                     }
 
-                    override fun openRoomDetailsEdition() {
-                        backstack.push(NavTarget.RoomDetailsEdition)
+                    override fun editRoomDetails() {
+                        backstack.push(NavTarget.RoomDetailsEdit)
                     }
 
                     override fun openInviteMembers() {
@@ -102,8 +102,8 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                 createNode<RoomMemberListNode>(buildContext, listOf(roomMemberListCallback))
             }
 
-            NavTarget.RoomDetailsEdition -> {
-                createNode<RoomDetailsEditionNode>(buildContext)
+            NavTarget.RoomDetailsEdit -> {
+                createNode<RoomDetailsEditNode>(buildContext)
             }
 
             NavTarget.InviteMembers -> {

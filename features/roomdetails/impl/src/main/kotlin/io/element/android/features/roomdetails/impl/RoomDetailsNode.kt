@@ -46,7 +46,7 @@ class RoomDetailsNode @AssistedInject constructor(
     interface Callback : Plugin {
         fun openRoomMemberList()
         fun openInviteMembers()
-        fun openRoomDetailsEdition()
+        fun editRoomDetails()
     }
 
     private val callbacks = plugins<Callback>()
@@ -92,7 +92,7 @@ class RoomDetailsNode @AssistedInject constructor(
     }
 
     private fun onEditRoomDetails() {
-        callbacks.forEach { it.openRoomDetailsEdition() }
+        callbacks.forEach { it.editRoomDetails() }
     }
 
     @Composable

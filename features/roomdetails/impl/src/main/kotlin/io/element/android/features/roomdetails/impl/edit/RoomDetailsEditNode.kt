@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl.edition
+package io.element.android.features.roomdetails.impl.edit
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,16 +27,16 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.RoomScope
 
 @ContributesNode(RoomScope::class)
-class RoomDetailsEditionNode @AssistedInject constructor(
+class RoomDetailsEditNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: RoomDetailsEditionPresenter,
+    private val presenter: RoomDetailsEditPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        RoomDetailsEditionView(
+        RoomDetailsEditView(
             state = state,
             onBackPressed = ::navigateUp,
             onRoomEdited = ::navigateUp,

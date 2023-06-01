@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl.edition
+package io.element.android.features.roomdetails.impl.edit
 
 import android.net.Uri
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.Async
 import kotlinx.collections.immutable.persistentListOf
 
-open class RoomDetailsEditionStateProvider : PreviewParameterProvider<RoomDetailsEditionState> {
-    override val values: Sequence<RoomDetailsEditionState>
+open class RoomDetailsEditStateProvider : PreviewParameterProvider<RoomDetailsEditState> {
+    override val values: Sequence<RoomDetailsEditState>
         get() = sequenceOf(
-            aRoomDetailsEditionState(),
-            aRoomDetailsEditionState().copy(roomTopic = ""),
-            aRoomDetailsEditionState().copy(roomAvatarUrl = Uri.EMPTY),
-            aRoomDetailsEditionState().copy(canChangeName = true, canChangeTopic = false, canChangeAvatar = true, saveButtonEnabled = false),
-            aRoomDetailsEditionState().copy(canChangeName = false, canChangeTopic = true, canChangeAvatar = false, saveButtonEnabled = false),
-            aRoomDetailsEditionState().copy(saveAction = Async.Loading()),
-            aRoomDetailsEditionState().copy(saveAction = Async.Failure(Throwable("Whelp")))
+            aRoomDetailsEditState(),
+            aRoomDetailsEditState().copy(roomTopic = ""),
+            aRoomDetailsEditState().copy(roomAvatarUrl = Uri.EMPTY),
+            aRoomDetailsEditState().copy(canChangeName = true, canChangeTopic = false, canChangeAvatar = true, saveButtonEnabled = false),
+            aRoomDetailsEditState().copy(canChangeName = false, canChangeTopic = true, canChangeAvatar = false, saveButtonEnabled = false),
+            aRoomDetailsEditState().copy(saveAction = Async.Loading()),
+            aRoomDetailsEditState().copy(saveAction = Async.Failure(Throwable("Whelp")))
         )
 }
 
-fun aRoomDetailsEditionState() = RoomDetailsEditionState(
+fun aRoomDetailsEditState() = RoomDetailsEditState(
     roomId = "a room id",
     roomName = "Marketing",
     canChangeName = true,
