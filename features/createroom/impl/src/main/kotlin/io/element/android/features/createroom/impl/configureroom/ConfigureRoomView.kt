@@ -130,6 +130,7 @@ fun ConfigureRoomView(
             if (state.config.invites.isNotEmpty()) {
                 item {
                     SelectedUsersList(
+                        modifier = Modifier.padding(bottom = 16.dp),
                         contentPadding = PaddingValues(horizontal = 24.dp),
                         selectedUsers = state.config.invites,
                         onUserRemoved = {
