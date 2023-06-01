@@ -32,7 +32,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -72,6 +72,7 @@ import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -252,15 +253,18 @@ fun RoomListContent(
                         }
                     }
 
-                    items(
+                    itemsIndexed(
                         items = state.roomList,
-                        contentType = { room -> room.contentType() },
-                    ) { room ->
+                        contentType = { _, room -> room.contentType() },
+                    ) { index, room ->
                         RoomSummaryRow(
                             room = room,
                             onClick = ::onRoomClicked,
                             onLongClick = onRoomLongClicked,
                         )
+                        if (index != state.roomList.lastIndex) {
+                            Divider()
+                        }
                     }
                 }
             }
