@@ -32,6 +32,7 @@ import io.element.android.libraries.di.AppScope
 class OnBoardingNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val presenter: OnBoardingPresenter,
 ) : Node(
     buildContext = buildContext,
     plugins = plugins
@@ -47,11 +48,11 @@ class OnBoardingNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        OnBoardingScreen(
+        val state = presenter.present()
+        OnBoardingView(
+            state = state,
             modifier = modifier,
-            canLoginWithQrCode = OnBoardingConfig.canLoginWithQrCode,
-            canCreateAccount = OnBoardingConfig.canCreateAccount,
-            onSignIn = this::onSignIn,
+            onSignIn = ::onSignIn,
         )
     }
 }

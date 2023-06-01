@@ -37,6 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.atomic.pages.OnBoardingPage
@@ -51,9 +52,8 @@ import io.element.android.libraries.testtags.testTag
 
 // Ref: https://www.figma.com/file/o9p34zmiuEpZRyvZXJZAYL/FTUE?type=design&node-id=133-5427&t=5SHVppfYzjvkEywR-0
 @Composable
-fun OnBoardingScreen(
-    canLoginWithQrCode: Boolean,
-    canCreateAccount: Boolean,
+fun OnBoardingView(
+    state: OnBoardingState,
     modifier: Modifier = Modifier,
     onSignInWithQrCode: () -> Unit = {},
     onSignIn: () -> Unit = {},
@@ -63,20 +63,19 @@ fun OnBoardingScreen(
         modifier = modifier,
         footer = {
             OnBoardingButtons(
-                canLoginWithQrCode = canLoginWithQrCode,
-                canCreateAccount = canCreateAccount,
+                state = state,
                 onSignInWithQrCode = onSignInWithQrCode,
                 onSignIn = onSignIn,
                 onCreateAccount = onCreateAccount,
             )
         }
     ) {
-        OnBoardingHeader()
+        OnBoardingContent()
     }
 }
 
 @Composable
-private fun OnBoardingHeader(modifier: Modifier = Modifier) {
+private fun OnBoardingContent(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = BiasAlignment(
@@ -112,8 +111,7 @@ private fun OnBoardingHeader(modifier: Modifier = Modifier) {
 
 @Composable
 private fun OnBoardingButtons(
-    canLoginWithQrCode: Boolean,
-    canCreateAccount: Boolean,
+    state: OnBoardingState,
     onSignInWithQrCode: () -> Unit,
     onSignIn: () -> Unit,
     onCreateAccount: () -> Unit,
@@ -125,7 +123,7 @@ private fun OnBoardingButtons(
         horizontalAlignment = CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        if (canLoginWithQrCode) {
+        if (state.canLoginWithQrCode) {
             Button(
                 onClick = {
                     onSignInWithQrCode()
@@ -153,7 +151,7 @@ private fun OnBoardingButtons(
         ) {
             Text(text = stringResource(id = R.string.screen_onboarding_sign_in_manually))
         }
-        if (canCreateAccount) {
+        if (state.canCreateAccount) {
             OutlinedButton(
                 onClick = {
                     onCreateAccount()
@@ -170,18 +168,15 @@ private fun OnBoardingButtons(
 
 @Preview
 @Composable
-internal fun OnBoardingScreenLightPreview() =
-    ElementPreviewLight { ContentToPreview() }
+internal fun OnBoardingScreenLightPreview(@PreviewParameter(OnBoardingStateProvider::class) state: OnBoardingState) =
+    ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-internal fun OnBoardingScreenDarkPreview() =
-    ElementPreviewDark { ContentToPreview() }
+internal fun OnBoardingScreenDarkPreview(@PreviewParameter(OnBoardingStateProvider::class) state: OnBoardingState) =
+    ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
-private fun ContentToPreview() {
-    OnBoardingScreen(
-        canLoginWithQrCode = true,
-        canCreateAccount = true,
-    )
+private fun ContentToPreview(state: OnBoardingState) {
+    OnBoardingView(state)
 }
