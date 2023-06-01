@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.configureroom.avatar
+package io.element.android.libraries.matrix.ui.media
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
