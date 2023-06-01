@@ -82,6 +82,9 @@ fun InviteListView(
         ConfirmationDialog(
             content = stringResource(contentResource, state.declineConfirmationDialog.name),
             title = stringResource(titleResource),
+            submitText = stringResource(StringR.string.action_decline),
+            cancelText = stringResource(StringR.string.action_cancel),
+            emphasizeSubmitButton = true,
             onSubmitClicked = { state.eventSink(InviteListEvents.ConfirmDeclineInvite) },
             onDismiss = { state.eventSink(InviteListEvents.CancelDeclineInvite) }
         )
