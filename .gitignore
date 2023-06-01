@@ -48,7 +48,6 @@ captures/
 .idea/navEditor.xml
 .idea/tasks.xml
 .idea/workspace.xml
-.idea/dictionaries
 .idea/libraries
 # Android Studio 3 in .gitignore file.
 .idea/caches

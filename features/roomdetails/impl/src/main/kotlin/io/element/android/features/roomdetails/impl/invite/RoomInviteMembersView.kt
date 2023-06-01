@@ -46,6 +46,7 @@ import io.element.android.libraries.designsystem.theme.components.SearchBarResul
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.CheckableUnresolvedUserRow
 import io.element.android.libraries.matrix.ui.components.CheckableUserRow
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -180,22 +181,32 @@ private fun RoomInviteMembersSearchBar(
 
             LazyColumn {
                 items(results) { invitableUser ->
-                    CheckableUserRow(
-                        checked = invitableUser.isSelected,
-                        enabled = !invitableUser.isAlreadyInvited && !invitableUser.isAlreadyJoined,
-                        avatarData = invitableUser.matrixUser.getAvatarData(AvatarSize.MEDIUM),
-                        name = invitableUser.matrixUser.getBestName(),
-                        subtext = when {
-                            // If they're already invited or joined we show that information
-                            invitableUser.isAlreadyJoined -> stringResource(R.string.screen_room_details_already_a_member)
-                            invitableUser.isAlreadyInvited -> stringResource(R.string.screen_room_details_already_invited)
-                            // Otherwise show the ID, unless that's already used for their name
-                            invitableUser.matrixUser.displayName.isNullOrEmpty().not() -> invitableUser.matrixUser.userId.value
-                            else -> null
-                        },
-                        onCheckedChange = { onUserToggled(invitableUser.matrixUser) },
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    if (invitableUser.isUnresolved && !invitableUser.isAlreadyInvited && !invitableUser.isAlreadyJoined) {
+                        CheckableUnresolvedUserRow(
+                            checked = invitableUser.isSelected,
+                            avatarData = invitableUser.matrixUser.getAvatarData(AvatarSize.MEDIUM),
+                            id = invitableUser.matrixUser.userId.value,
+                            onCheckedChange = { onUserToggled(invitableUser.matrixUser) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    } else {
+                        CheckableUserRow(
+                            checked = invitableUser.isSelected,
+                            enabled = !invitableUser.isAlreadyInvited && !invitableUser.isAlreadyJoined,
+                            avatarData = invitableUser.matrixUser.getAvatarData(AvatarSize.MEDIUM),
+                            name = invitableUser.matrixUser.getBestName(),
+                            subtext = when {
+                                // If they're already invited or joined we show that information
+                                invitableUser.isAlreadyJoined -> stringResource(R.string.screen_room_details_already_a_member)
+                                invitableUser.isAlreadyInvited -> stringResource(R.string.screen_room_details_already_invited)
+                                // Otherwise show the ID, unless that's already used for their name
+                                invitableUser.matrixUser.displayName.isNullOrEmpty().not() -> invitableUser.matrixUser.userId.value
+                                else -> null
+                            },
+                            onCheckedChange = { onUserToggled(invitableUser.matrixUser) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
                 }
             }
         },

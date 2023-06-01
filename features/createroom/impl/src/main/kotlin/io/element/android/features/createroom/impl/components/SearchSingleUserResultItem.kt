@@ -17,39 +17,48 @@
 package io.element.android.features.createroom.impl.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
+import io.element.android.libraries.matrix.ui.components.UnresolvedUserRow
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
+import io.element.android.libraries.matrix.ui.model.getAvatarData
+import io.element.android.libraries.usersearch.api.UserSearchResult
 
 @Composable
 fun SearchSingleUserResultItem(
-    matrixUser: MatrixUser,
+    searchResult: UserSearchResult,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
-    MatrixUserRow(
-        modifier = modifier.clickable(onClick = onClick),
-        matrixUser = matrixUser,
-        avatarSize = AvatarSize.Custom(36.dp),
-    )
+    if (searchResult.isUnresolved) {
+        UnresolvedUserRow(
+            modifier = modifier.clickable(onClick = onClick),
+            avatarData = searchResult.matrixUser.getAvatarData(AvatarSize.Custom(36.dp)),
+            id = searchResult.matrixUser.userId.value,
+        )
+    } else {
+        MatrixUserRow(
+            modifier = modifier.clickable(onClick = onClick),
+            matrixUser = searchResult.matrixUser,
+            avatarSize = AvatarSize.Custom(36.dp),
+        )
+    }
 }
 
 @Preview
 @Composable
-internal fun SearchSingleUserResultItemLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun SearchSingleUserResultItemDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun SearchSingleUserResultItemPreview() = ElementThemedPreview{ ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
-    SearchSingleUserResultItem(matrixUser = aMatrixUser())
+    Column {
+        SearchSingleUserResultItem(searchResult = UserSearchResult(aMatrixUser(), isUnresolved = false))
+        SearchSingleUserResultItem(searchResult = UserSearchResult(aMatrixUser(), isUnresolved = true))
+    }
 }
