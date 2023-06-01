@@ -97,7 +97,7 @@ private fun SheetContent(
                     Icon(
                         imageVector = action.icon,
                         contentDescription = stringResource(action.titleResId),
-                        tint = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                        tint = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary,
                     )
                 }
             )
