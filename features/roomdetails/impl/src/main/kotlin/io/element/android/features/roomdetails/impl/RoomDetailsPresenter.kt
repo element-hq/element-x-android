@@ -53,9 +53,9 @@ class RoomDetailsPresenter @Inject constructor(
         val membersState by room.membersStateFlow.collectAsState()
         val memberCount by getMemberCount(membersState)
         val canInvite by getCanInvite(membersState)
-        val canEditName by getCanSendState(membersState, StateEventType.ROOM_NAME)
-        val canEditAvatar by getCanSendState(membersState, StateEventType.ROOM_AVATAR)
-        val canEditTopic by getCanSendState(membersState, StateEventType.ROOM_TOPIC)
+        val canEditName by getCanSendStateEvent(membersState, StateEventType.ROOM_NAME)
+        val canEditAvatar by getCanSendStateEvent(membersState, StateEventType.ROOM_AVATAR)
+        val canEditTopic by getCanSendStateEvent(membersState, StateEventType.ROOM_TOPIC)
         val dmMember by room.getDirectRoomMember(membersState)
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
         val roomType = getRoomType(dmMember)
@@ -124,12 +124,12 @@ class RoomDetailsPresenter @Inject constructor(
     }
 
     @Composable
-    private fun getCanSendState(membersState: MatrixRoomMembersState, type: StateEventType): State<Boolean> {
-        val canSend = remember(membersState) { mutableStateOf(false) }
+    private fun getCanSendStateEvent(membersState: MatrixRoomMembersState, type: StateEventType): State<Boolean> {
+        val canSendEvent = remember(membersState) { mutableStateOf(false) }
         LaunchedEffect(membersState) {
-            canSend.value = room.canSendStateEvent(type).getOrElse { false }
+            canSendEvent.value = room.canSendStateEvent(type).getOrElse { false }
         }
-        return canSend
+        return canSendEvent
     }
 
     @Composable
