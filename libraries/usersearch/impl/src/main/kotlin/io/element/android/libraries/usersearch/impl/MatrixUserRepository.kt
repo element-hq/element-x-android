@@ -58,7 +58,7 @@ class MatrixUserRepository @Inject constructor(
     }
 
     companion object {
-        private const val DEBOUNCE_TIME_MILLIS = 500L
+        private const val DEBOUNCE_TIME_MILLIS = 250L
         private const val MINIMUM_SEARCH_LENGTH = 3
     }
 }
