@@ -18,9 +18,10 @@ package io.element.android.features.onboarding.impl
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -29,6 +30,7 @@ import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -69,39 +71,42 @@ fun OnBoardingScreen(
             )
         }
     ) {
-        Column(modifier.fillMaxWidth()) {
-            Spacer(modifier = Modifier.weight(2f))
-            OnBoardingHeader()
-            Spacer(modifier = Modifier.weight(3f))
-        }
+        OnBoardingHeader()
     }
 }
 
 @Composable
-private fun ColumnScope.OnBoardingHeader() {
-    Column(
-        modifier = Modifier
-            .weight(3f)
-            .fillMaxWidth(),
-        horizontalAlignment = CenterHorizontally,
+private fun OnBoardingHeader(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = BiasAlignment(
+            horizontalBias = 0f,
+            verticalBias = -0.2f
+        )
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.element_logo),
-            contentDescription = null,
-        )
-        Image(
-            modifier = Modifier.padding(top = 14.dp),
-            painter = painterResource(id = R.drawable.element),
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-            contentDescription = null,
-        )
-        Text(
-            modifier = Modifier.padding(top = 24.dp),
-            text = stringResource(id = R.string.screen_onboarding_subtitle),
-            color = MaterialTheme.colorScheme.secondary,
-            fontSize = 20.sp,
-            textAlign = TextAlign.Center
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = CenterHorizontally,
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.element_logo),
+                contentDescription = null,
+            )
+            Image(
+                modifier = Modifier.padding(top = 14.dp),
+                painter = painterResource(id = R.drawable.element),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                contentDescription = null,
+            )
+            Text(
+                modifier = Modifier.padding(top = 24.dp),
+                text = stringResource(id = R.string.screen_onboarding_subtitle),
+                color = MaterialTheme.colorScheme.secondary,
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
 
