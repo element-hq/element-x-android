@@ -36,7 +36,7 @@ test_core = "1.5.0"
 #other
 coil = "2.4.0"
 datetime = "0.4.0"
-serialization_json = "1.5.0"
+serialization_json = "1.5.1"
 showkase = "1.0.0-beta18"
 jsoup = "1.16.1"
 appyx = "1.2.0"
@@ -182,5 +182,5 @@ dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
 paparazzi = "app.cash.paparazzi:1.2.0"
 sonarqube = "org.sonarqube:4.2.0.3129"
-kover = "org.jetbrains.kotlinx.kover:0.6.1"
+kover = "org.jetbrains.kotlinx.kover:0.7.0"
 sqldelight = { id = "com.squareup.sqldelight", version.ref = "sqldelight" }
