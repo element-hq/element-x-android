@@ -143,15 +143,15 @@ fun RoomDetailsEditView(
 
             if (state.canChangeName) {
                 LabelledTextField(
-                    label = stringResource(id = R.string.screen_create_room_room_name_label),
+                    label = stringResource(id = R.string.screen_room_details_room_name_label),
                     value = state.roomName,
-                    placeholder = stringResource(id = R.string.screen_create_room_room_name_placeholder),
+                    placeholder = stringResource(id = R.string.screen_room_details_room_name_placeholder),
                     singleLine = true,
                     onValueChange = { state.eventSink(RoomDetailsEditEvents.UpdateRoomName(it)) },
                 )
             } else {
                 LabelledReadOnlyField(
-                    title = stringResource(R.string.screen_create_room_room_name_label),
+                    title = stringResource(R.string.screen_room_details_room_name_label),
                     value = state.roomName
                 )
             }
@@ -162,7 +162,7 @@ fun RoomDetailsEditView(
                 LabelledTextField(
                     label = stringResource(id = StringR.string.common_topic),
                     value = state.roomTopic,
-                    placeholder = stringResource(id = R.string.screen_create_room_topic_placeholder),
+                    placeholder = stringResource(id = R.string.screen_room_details_topic_placeholder),
                     maxLines = 10,
                     onValueChange = { state.eventSink(RoomDetailsEditEvents.UpdateRoomTopic(it)) },
                 )
