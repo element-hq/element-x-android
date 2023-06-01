@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.api.ui
+package io.element.android.libraries.matrix.ui.components
 
 import android.net.Uri
 import androidx.compose.foundation.background

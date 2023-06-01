@@ -16,7 +16,7 @@
 
 package io.element.android.features.roomdetails.impl.edit
 
-import io.element.android.features.createroom.api.ui.AvatarAction
+import io.element.android.libraries.matrix.ui.media.AvatarAction
 
 sealed interface RoomDetailsEditEvents {
     data class HandleAvatarAction(val action: AvatarAction) : RoomDetailsEditEvents

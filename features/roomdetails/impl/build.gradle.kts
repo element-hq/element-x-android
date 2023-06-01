@@ -43,7 +43,6 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.mediapickers.api)
     implementation(projects.libraries.mediaupload.api)
-    implementation(projects.features.createroom.api)
     api(projects.features.roomdetails.api)
     api(projects.libraries.usersearch.api)
     api(projects.services.apperror.api)

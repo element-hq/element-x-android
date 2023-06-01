@@ -16,7 +16,7 @@
 
 package io.element.android.features.createroom.impl.configureroom
 
-import io.element.android.features.createroom.api.ui.AvatarAction
+import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId

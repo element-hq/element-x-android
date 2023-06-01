@@ -57,8 +57,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.element.android.features.createroom.api.ui.AvatarActionListView
-import io.element.android.features.createroom.api.ui.UnsavedAvatar
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.LabelledTextField
@@ -76,6 +74,8 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
+import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
 import kotlinx.coroutines.launch
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -175,7 +175,7 @@ fun RoomDetailsEditView(
         }
     }
 
-    AvatarActionListView(
+    AvatarActionBottomSheet(
         actions = state.avatarActions,
         modalBottomSheetState = itemActionsBottomSheetState,
         onActionSelected = { state.eventSink(RoomDetailsEditEvents.HandleAvatarAction(it)) }

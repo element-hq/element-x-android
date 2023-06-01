@@ -24,8 +24,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
@@ -48,8 +48,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.element.android.features.createroom.api.ui.AvatarActionListView
-import io.element.android.features.createroom.api.ui.UnsavedAvatar
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.RoomPrivacyOption
 import io.element.android.libraries.architecture.Async
@@ -64,7 +62,9 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
+import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
 import kotlinx.coroutines.launch
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -149,7 +149,7 @@ fun ConfigureRoomView(
         }
     }
 
-    AvatarActionListView(
+    AvatarActionBottomSheet(
         actions = state.avatarActions,
         modalBottomSheetState = itemActionsBottomSheetState,
         onActionSelected = { state.eventSink(ConfigureRoomEvents.HandleAvatarAction(it)) }

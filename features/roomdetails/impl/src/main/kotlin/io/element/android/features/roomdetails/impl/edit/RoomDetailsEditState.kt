@@ -17,7 +17,7 @@
 package io.element.android.features.roomdetails.impl.edit
 
 import android.net.Uri
-import io.element.android.features.createroom.api.ui.AvatarAction
+import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.architecture.Async
 import kotlinx.collections.immutable.ImmutableList
 
