@@ -16,9 +16,9 @@
 
 package io.element.android.libraries.usersearch.api
 
-import kotlinx.coroutines.flow.Flow
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
-interface UserRepository {
-
-    suspend fun search(query: String): Flow<List<UserSearchResult>>
-}
+data class UserSearchResult(
+    val matrixUser: MatrixUser,
+    val isUnresolved: Boolean = false,
+)

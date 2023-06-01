@@ -45,9 +45,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserDialogs
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserSection
-import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberHeaderSection
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberMainActionsSection
 import io.element.android.libraries.architecture.isLoading
@@ -67,6 +67,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -185,7 +186,7 @@ internal fun RoomHeaderSection(
 
 @Composable
 internal fun TopicSection(roomTopic: String, modifier: Modifier = Modifier) {
-    PreferenceCategory(title = stringResource(R.string.screen_room_details_topic_title), modifier = modifier) {
+    PreferenceCategory(title = stringResource(StringR.string.common_topic), modifier = modifier) {
         Text(
             roomTopic,
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp),

@@ -30,8 +30,8 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.usersearch.api.UserRepository
+import io.element.android.libraries.usersearch.api.UserSearchResult
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
@@ -56,7 +56,7 @@ class DefaultUserListPresenter @AssistedInject constructor(
         var isSearchActive by rememberSaveable { mutableStateOf(false) }
         val selectedUsers by userListDataStore.selectedUsers().collectAsState(emptyList())
         var searchQuery by rememberSaveable { mutableStateOf("") }
-        var searchResults: SearchBarResultState<ImmutableList<MatrixUser>> by remember {
+        var searchResults: SearchBarResultState<ImmutableList<UserSearchResult>> by remember {
             mutableStateOf(SearchBarResultState.NotSearching())
         }
 
