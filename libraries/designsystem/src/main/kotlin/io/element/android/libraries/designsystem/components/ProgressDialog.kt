@@ -19,7 +19,8 @@ package io.element.android.libraries.designsystem.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -46,29 +47,10 @@ fun ProgressDialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = modifier
-                .fillMaxWidth()
-                .background(
-                    color = MaterialTheme.colorScheme.surfaceVariant,
-                    shape = RoundedCornerShape(8.dp)
-                )
-        ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                CircularProgressIndicator(
-                    modifier = Modifier.padding(16.dp),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                if (!text.isNullOrBlank()) {
-                    Text(
-                        text = text,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                }
-            }
-        }
+        ProgressDialogContent(
+            modifier = modifier,
+            text = text,
+        )
     }
 }
 
@@ -80,22 +62,23 @@ private fun ProgressDialogContent(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .fillMaxWidth()
             .background(
                 color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = RoundedCornerShape(8.dp)
             )
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(top = 38.dp, bottom = 32.dp, start = 40.dp, end = 40.dp)
+        ) {
             CircularProgressIndicator(
-                modifier = Modifier.padding(16.dp),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             if (!text.isNullOrBlank()) {
+                Spacer(modifier = Modifier.height(22.dp))
                 Text(
                     text = text,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(16.dp)
                 )
             }
         }
