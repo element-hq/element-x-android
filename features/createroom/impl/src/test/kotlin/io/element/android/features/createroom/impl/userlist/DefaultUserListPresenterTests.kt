@@ -23,6 +23,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import io.element.android.libraries.usersearch.api.UserSearchResult
 import io.element.android.libraries.usersearch.test.FakeUserRepository
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
@@ -130,18 +131,18 @@ class DefaultUserListPresenterTests {
             skipItems(2)
 
             // When the user repository emits a result, it's copied to the state
-            userRepository.emitResult(listOf(aMatrixUser()))
+            userRepository.emitResult(listOf(UserSearchResult(aMatrixUser())))
             assertThat(awaitItem().searchResults).isEqualTo(
                 SearchBarResultState.Results(
-                    persistentListOf(aMatrixUser())
+                    persistentListOf(UserSearchResult(aMatrixUser()))
                 )
             )
 
             // When the user repository emits another result, it replaces the previous value
-            userRepository.emitResult(aMatrixUserList())
+            userRepository.emitResult(aMatrixUserList().map { UserSearchResult(it) })
             assertThat(awaitItem().searchResults).isEqualTo(
                 SearchBarResultState.Results(
-                    aMatrixUserList()
+                    aMatrixUserList().map { UserSearchResult(it) }
                 )
             )
         }

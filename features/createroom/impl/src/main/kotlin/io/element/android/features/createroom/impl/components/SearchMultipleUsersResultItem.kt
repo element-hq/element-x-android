@@ -22,40 +22,49 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.matrix.ui.components.CheckableMatrixUserRow
+import io.element.android.libraries.matrix.ui.components.CheckableUnresolvedUserRow
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
+import io.element.android.libraries.matrix.ui.model.getAvatarData
+import io.element.android.libraries.usersearch.api.UserSearchResult
 
 @Composable
 fun SearchMultipleUsersResultItem(
-    matrixUser: MatrixUser,
+    searchResult: UserSearchResult,
     isUserSelected: Boolean,
     modifier: Modifier = Modifier,
     onCheckedChange: (Boolean) -> Unit = {},
 ) {
-    CheckableMatrixUserRow(
-        checked = isUserSelected,
-        modifier = modifier,
-        matrixUser = matrixUser,
-        avatarSize = AvatarSize.Custom(36.dp),
-        onCheckedChange = onCheckedChange,
-    )
+    if (searchResult.isUnresolved) {
+        CheckableUnresolvedUserRow(
+            checked = isUserSelected,
+            modifier = modifier,
+            avatarData = searchResult.matrixUser.getAvatarData(AvatarSize.Custom(36.dp)),
+            id = searchResult.matrixUser.userId.value,
+            onCheckedChange = onCheckedChange,
+        )
+    } else {
+        CheckableMatrixUserRow(
+            checked = isUserSelected,
+            modifier = modifier,
+            matrixUser = searchResult.matrixUser,
+            avatarSize = AvatarSize.Custom(36.dp),
+            onCheckedChange = onCheckedChange,
+        )
+    }
 }
 
 @Preview
 @Composable
-internal fun SearchMultipleUsersResultItemLightPreview() = ElementPreviewLight { ContentToPreview() }
-
-@Preview
-@Composable
-internal fun SearchMultipleUsersResultItemDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun SearchMultipleUsersResultItemPreview() = ElementThemedPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
     Column {
-        SearchMultipleUsersResultItem(matrixUser = aMatrixUser(), isUserSelected = true)
-        SearchMultipleUsersResultItem(matrixUser = aMatrixUser(), isUserSelected = false)
+        SearchMultipleUsersResultItem(searchResult = UserSearchResult(aMatrixUser(), isUnresolved = false), isUserSelected = false)
+        SearchMultipleUsersResultItem(searchResult = UserSearchResult(aMatrixUser(), isUnresolved = false), isUserSelected = true)
+        SearchMultipleUsersResultItem(searchResult = UserSearchResult(aMatrixUser(), isUnresolved = true), isUserSelected = false)
+        SearchMultipleUsersResultItem(searchResult = UserSearchResult(aMatrixUser(), isUnresolved = true), isUserSelected = true)
     }
 }
