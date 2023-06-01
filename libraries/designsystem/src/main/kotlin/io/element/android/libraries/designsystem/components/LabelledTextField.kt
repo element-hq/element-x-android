@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.components
+package io.element.android.libraries.designsystem.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.element.android.features.createroom.impl.R
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -36,8 +35,9 @@ fun LabelledTextField(
     label: String,
     value: String,
     modifier: Modifier = Modifier,
-    placeholder: String = "",
-    maxLines: Int = 1,
+    placeholder: String? = null,
+    maxLines: Int = Int.MAX_VALUE,
+    singleLine: Boolean = false,
     onValueChange: (String) -> Unit = {},
 ) {
     Column(
@@ -46,15 +46,17 @@ fun LabelledTextField(
     ) {
         Text(
             modifier = Modifier.padding(horizontal = 16.dp),
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.primary,
             text = label
         )
 
         TextField(
             modifier = Modifier.fillMaxWidth(),
             value = value,
-            placeholder = { Text(placeholder) },
+            placeholder = placeholder?.let { { Text(placeholder) } },
             onValueChange = onValueChange,
-            singleLine = maxLines == 1,
+            singleLine = singleLine,
             maxLines = maxLines,
         )
     }
@@ -72,14 +74,14 @@ fun LabelledTextFieldDarkPreview() = ElementPreviewDark { ContentToPreview() }
 private fun ContentToPreview() {
     Column {
         LabelledTextField(
-            label = stringResource(R.string.screen_create_room_room_name_label),
+            label = "Room name",
             value = "",
-            placeholder = stringResource(R.string.screen_create_room_room_name_placeholder),
+            placeholder = "e.g. Product Sprint",
         )
         LabelledTextField(
-            label = stringResource(R.string.screen_create_room_room_name_label),
+            label = "Room name",
             value = "a room name",
-            placeholder = stringResource(R.string.screen_create_room_room_name_placeholder),
+            placeholder = "e.g. Product Sprint",
         )
     }
 }

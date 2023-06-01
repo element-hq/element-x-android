@@ -46,6 +46,7 @@ class RoomDetailsNode @AssistedInject constructor(
     interface Callback : Plugin {
         fun openRoomMemberList()
         fun openInviteMembers()
+        fun editRoomDetails()
     }
 
     private val callbacks = plugins<Callback>()
@@ -90,6 +91,10 @@ class RoomDetailsNode @AssistedInject constructor(
         }
     }
 
+    private fun onEditRoomDetails() {
+        callbacks.forEach { it.editRoomDetails() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val context = LocalContext.current
@@ -103,10 +108,18 @@ class RoomDetailsNode @AssistedInject constructor(
             this.onShareMember(context, roomMember)
         }
 
+        fun onActionClicked(action: RoomDetailsAction) {
+            when (action) {
+                RoomDetailsAction.Edit -> onEditRoomDetails()
+                RoomDetailsAction.AddTopic -> onEditRoomDetails()
+            }
+        }
+
         RoomDetailsView(
             state = state,
             modifier = modifier,
             goBack = this::navigateUp,
+            onActionClicked = ::onActionClicked,
             onShareRoom = ::onShareRoom,
             onShareMember = ::onShareMember,
             openRoomMemberList = ::openRoomMemberList,

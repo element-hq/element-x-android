@@ -17,8 +17,8 @@
 package io.element.android.features.createroom.impl.configureroom
 
 import io.element.android.features.createroom.impl.CreateRoomConfig
-import io.element.android.features.createroom.impl.configureroom.avatar.AvatarAction
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.media.AvatarAction
 
 sealed interface ConfigureRoomEvents {
     data class RoomNameChanged(val name: String) : ConfigureRoomEvents

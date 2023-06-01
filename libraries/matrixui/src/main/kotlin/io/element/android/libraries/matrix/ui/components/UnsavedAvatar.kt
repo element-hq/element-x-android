@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.createroom.impl.components
+package io.element.android.libraries.matrix.ui.components
 
 import android.net.Uri
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -43,16 +42,19 @@ import io.element.android.libraries.designsystem.preview.debugPlaceholderBackgro
 import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Icon
 
+/**
+ * An avatar that the user has selected, but which has not yet been uploaded to Matrix.
+ *
+ * The image is loaded from a local resource instead of from a MXC URI.
+ */
 @Composable
-fun Avatar(
+fun UnsavedAvatar(
     avatarUri: Uri?,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
 ) {
     val commonModifier = modifier
         .size(70.dp)
         .clip(CircleShape)
-        .clickable(onClick = onClick)
 
     if (avatarUri != null) {
         val context = LocalContext.current
@@ -82,16 +84,16 @@ fun Avatar(
 
 @Preview
 @Composable
-fun AvatarLightPreview() = ElementPreviewLight { ContentToPreview() }
+fun UnsavedAvatarLightPreview() = ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun AvatarDarkPreview() = ElementPreviewDark { ContentToPreview() }
+fun UnsavedAvatarDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
     Row {
-        Avatar(null)
-        Avatar(Uri.EMPTY)
+        UnsavedAvatar(null)
+        UnsavedAvatar(Uri.EMPTY)
     }
 }

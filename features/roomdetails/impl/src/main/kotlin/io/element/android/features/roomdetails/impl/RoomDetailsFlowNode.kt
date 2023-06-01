@@ -29,6 +29,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
+import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditNode
 import io.element.android.features.roomdetails.impl.invite.RoomInviteMembersNode
 import io.element.android.features.roomdetails.impl.members.RoomMemberListNode
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsNode
@@ -60,6 +61,9 @@ class RoomDetailsFlowNode @AssistedInject constructor(
         object RoomMemberList : NavTarget
 
         @Parcelize
+        object RoomDetailsEdit : NavTarget
+
+        @Parcelize
         object InviteMembers : NavTarget
 
         @Parcelize
@@ -74,12 +78,17 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.RoomMemberList)
                     }
 
+                    override fun editRoomDetails() {
+                        backstack.push(NavTarget.RoomDetailsEdit)
+                    }
+
                     override fun openInviteMembers() {
                         backstack.push(NavTarget.InviteMembers)
                     }
                 }
                 createNode<RoomDetailsNode>(buildContext, listOf(roomDetailsCallback))
             }
+
             NavTarget.RoomMemberList -> {
                 val roomMemberListCallback = object : RoomMemberListNode.Callback {
                     override fun openRoomMemberDetails(roomMemberId: UserId) {
@@ -92,9 +101,15 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                 }
                 createNode<RoomMemberListNode>(buildContext, listOf(roomMemberListCallback))
             }
+
+            NavTarget.RoomDetailsEdit -> {
+                createNode<RoomDetailsEditNode>(buildContext)
+            }
+
             NavTarget.InviteMembers -> {
                 createNode<RoomInviteMembersNode>(buildContext)
             }
+
             is NavTarget.RoomMemberDetails -> {
                 val plugins = listOf(RoomMemberDetailsNode.RoomMemberDetailsInput(navTarget.roomMemberId))
                 createNode<RoomMemberDetailsNode>(buildContext, plugins)
