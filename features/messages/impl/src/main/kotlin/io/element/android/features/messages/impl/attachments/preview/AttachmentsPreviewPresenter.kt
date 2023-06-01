@@ -25,6 +25,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.executeResult
@@ -84,7 +85,13 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         sendActionState: MutableState<Async<Unit>>,
     ) {
         suspend {
-            mediaSender.sendMedia(mediaAttachment.localMedia.uri, mediaAttachment.localMedia.mimeType, mediaAttachment.compressIfPossible)
+            when (mediaAttachment.localMedia.source) {
+                is LocalMedia.Source.FromUri -> {
+                    mediaSender.sendMedia(mediaAttachment.localMedia.source.uri, mediaAttachment.localMedia.mimeType, mediaAttachment.compressIfPossible)
+                }
+                else -> error("Attachment should be defined by a uri")
+            }
+
         }.executeResult(sendActionState)
     }
 }

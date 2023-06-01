@@ -31,6 +31,7 @@ import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
+import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.data.StableCharSequence
@@ -191,8 +192,7 @@ class MessageComposerPresenter @Inject constructor(
         when (attachment) {
             is Attachment.Media -> {
                 sendMedia(
-                    uri = attachment.localMedia.uri,
-                    mimeType = attachment.localMedia.mimeType,
+                    media = attachment.localMedia,
                     attachmentState = attachmentState
                 )
             }
@@ -226,11 +226,12 @@ class MessageComposerPresenter @Inject constructor(
     }
 
     private suspend fun sendMedia(
-        uri: Uri,
-        mimeType: String,
+        media: LocalMedia,
         attachmentState: MutableState<AttachmentsState>,
     ) {
-        mediaSender.sendMedia(uri, mimeType, compressIfPossible = false)
+        if (media.source !is LocalMedia.Source.FromUri) error("Attachment should use Uri")
+        val uri = media.source.uri
+        mediaSender.sendMedia(uri, media.mimeType, compressIfPossible = false)
             .onSuccess {
                 attachmentState.value = AttachmentsState.None
             }.onFailure {
