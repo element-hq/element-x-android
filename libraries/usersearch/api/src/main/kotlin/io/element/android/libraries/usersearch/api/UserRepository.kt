@@ -16,10 +16,9 @@
 
 package io.element.android.libraries.usersearch.api
 
-import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
 
-    suspend fun search(query: String): Flow<List<MatrixUser>>
+    suspend fun search(query: String): Flow<List<UserSearchResult>>
 }

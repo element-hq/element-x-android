@@ -17,6 +17,7 @@
 package io.element.android.features.login.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.core.SessionId
 
@@ -24,16 +25,51 @@ open class LoginRootStateProvider : PreviewParameterProvider<LoginRootState> {
     override val values: Sequence<LoginRootState>
         get() = sequenceOf(
             aLoginRootState(),
-            aLoginRootState().copy(homeserverDetails = MatrixHomeServerDetails("some-custom-server.com", true, null)),
+            aLoginRootState().copy(
+                homeserverDetails = Async.Success(
+                    MatrixHomeServerDetails(
+                        "some-custom-server.com",
+                        supportsPasswordLogin = true,
+                        supportsOidcLogin = false
+                    )
+                )
+            ),
             aLoginRootState().copy(formState = LoginFormState("user", "pass")),
             aLoginRootState().copy(formState = LoginFormState("user", "pass"), loggedInState = LoggedInState.LoggingIn),
             aLoginRootState().copy(formState = LoginFormState("user", "pass"), loggedInState = LoggedInState.ErrorLoggingIn(Throwable())),
             aLoginRootState().copy(formState = LoginFormState("user", "pass"), loggedInState = LoggedInState.LoggedIn(SessionId("@user:domain"))),
+            // Oidc
+            aLoginRootState().copy(
+                homeserverUrl = "server-with-oidc.org",
+                homeserverDetails = Async.Success(
+                    MatrixHomeServerDetails(
+                        "server-with-oidc.org",
+                        supportsPasswordLogin = false,
+                        supportsOidcLogin = true
+                    )
+                )
+            ),
+            // No password, no oidc support
+            aLoginRootState().copy(
+                homeserverUrl = "wrong.org",
+                homeserverDetails = Async.Success(
+                    MatrixHomeServerDetails(
+                        "wrong.org",
+                        supportsPasswordLogin = false,
+                        supportsOidcLogin = false
+                    )
+                )
+            ),
+            // Loading
+            aLoginRootState().copy(homeserverDetails = Async.Loading()),
+            //Error
+            aLoginRootState().copy(homeserverDetails = Async.Failure(Exception("An error occurred"))),
         )
 }
 
 fun aLoginRootState() = LoginRootState(
-    homeserverDetails = MatrixHomeServerDetails("matrix.org", true, null),
+    homeserverUrl = "matrix.org",
+    homeserverDetails = Async.Success(MatrixHomeServerDetails("matrix.org", supportsPasswordLogin = true, supportsOidcLogin = false)),
     loggedInState = LoggedInState.NotLoggedIn,
     formState = LoginFormState.Default,
     eventSink = {}

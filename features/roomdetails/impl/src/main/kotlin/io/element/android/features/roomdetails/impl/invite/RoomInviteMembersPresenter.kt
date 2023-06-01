@@ -126,15 +126,16 @@ class RoomInviteMembersPresenter @Inject constructor(
         userRepository.search(searchQuery).collect {
             searchResults.value = when {
                 it.isEmpty() -> SearchBarResultState.NoResults()
-                else -> SearchBarResultState.Results(it.map { user ->
-                    val existingMembership = joinedMembers.firstOrNull { j -> j.userId == user.userId }?.membership
+                else -> SearchBarResultState.Results(it.map { result ->
+                    val existingMembership = joinedMembers.firstOrNull { j -> j.userId == result.matrixUser.userId }?.membership
                     val isJoined = existingMembership == RoomMembershipState.JOIN
                     val isInvited = existingMembership == RoomMembershipState.INVITE
                     InvitableUser(
-                        matrixUser = user,
-                        isSelected = selectedUsers.value.contains(user) || isJoined || isInvited,
+                        matrixUser = result.matrixUser,
+                        isSelected = selectedUsers.value.contains(result.matrixUser) || isJoined || isInvited,
                         isAlreadyJoined = isJoined,
                         isAlreadyInvited = isInvited,
+                        isUnresolved = result.isUnresolved,
                     )
                 }.toImmutableList())
             }

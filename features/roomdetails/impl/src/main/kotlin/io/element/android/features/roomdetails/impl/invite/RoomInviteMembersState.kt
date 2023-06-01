@@ -35,4 +35,5 @@ data class InvitableUser(
     val isSelected: Boolean = false,
     val isAlreadyJoined: Boolean = false,
     val isAlreadyInvited: Boolean = false,
+    val isUnresolved: Boolean = false,
 )

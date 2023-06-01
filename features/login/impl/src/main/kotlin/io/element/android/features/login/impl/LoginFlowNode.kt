@@ -16,9 +16,13 @@
 
 package io.element.android.features.login.impl
 
+import android.app.Activity
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -29,17 +33,24 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.login.impl.changeserver.ChangeServerNode
+import io.element.android.features.login.impl.oidc.CustomTabAvailabilityChecker
+import io.element.android.features.login.impl.oidc.customtab.CustomTabHandler
+import io.element.android.features.login.impl.oidc.webview.OidcNode
 import io.element.android.features.login.impl.root.LoginRootNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.matrix.api.auth.OidcDetails
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
 class LoginFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val customTabAvailabilityChecker: CustomTabAvailabilityChecker,
+    private val customTabHandler: CustomTabHandler,
 ) : BackstackNode<LoginFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -48,6 +59,8 @@ class LoginFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins,
 ) {
+    private var activity: Activity? = null
+    private var darkTheme: Boolean = false
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
@@ -55,6 +68,9 @@ class LoginFlowNode @AssistedInject constructor(
 
         @Parcelize
         object ChangeServer : NavTarget
+
+        @Parcelize
+        data class OidcView(val oidcDetails: OidcDetails) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -64,15 +80,37 @@ class LoginFlowNode @AssistedInject constructor(
                     override fun onChangeHomeServer() {
                         backstack.push(NavTarget.ChangeServer)
                     }
+
+                    override fun onOidcDetails(oidcDetails: OidcDetails) {
+                        if (customTabAvailabilityChecker.supportCustomTab()) {
+                            // In this case open a Chrome Custom tab
+                            activity?.let { customTabHandler.open(it, darkTheme, oidcDetails.url) }
+                        } else {
+                            // Fallback to WebView mode
+                            backstack.push(NavTarget.OidcView(oidcDetails))
+                        }
+                    }
                 }
                 createNode<LoginRootNode>(buildContext, plugins = listOf(callback))
             }
+
             NavTarget.ChangeServer -> createNode<ChangeServerNode>(buildContext)
+            is NavTarget.OidcView -> {
+                val input = OidcNode.Inputs(navTarget.oidcDetails)
+                createNode<OidcNode>(buildContext, plugins = listOf(input))
+            }
         }
     }
 
     @Composable
     override fun View(modifier: Modifier) {
+        activity = LocalContext.current as? Activity
+        darkTheme = !ElementTheme.colors.isLight
+        DisposableEffect(Unit) {
+            onDispose {
+                activity = null
+            }
+        }
         Children(
             navModel = backstack,
             modifier = modifier,

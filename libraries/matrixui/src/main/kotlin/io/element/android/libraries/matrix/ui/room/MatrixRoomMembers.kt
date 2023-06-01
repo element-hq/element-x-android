@@ -29,13 +29,13 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.roomMembers
 
 @Composable
-fun MatrixRoom.getRoomMember(userId: UserId): State<RoomMember?> {
+fun MatrixRoom.getRoomMemberAsState(userId: UserId): State<RoomMember?> {
     val roomMembersState by membersStateFlow.collectAsState()
-    return getRoomMember(roomMembersState = roomMembersState, userId = userId)
+    return getRoomMemberAsState(roomMembersState = roomMembersState, userId = userId)
 }
 
 @Composable
-fun getRoomMember(roomMembersState: MatrixRoomMembersState, userId: UserId): State<RoomMember?> {
+fun getRoomMemberAsState(roomMembersState: MatrixRoomMembersState, userId: UserId): State<RoomMember?> {
     val roomMembers = roomMembersState.roomMembers()
     return remember(roomMembers) {
         derivedStateOf {
