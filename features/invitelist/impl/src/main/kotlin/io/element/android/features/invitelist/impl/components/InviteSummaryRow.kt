@@ -17,13 +17,13 @@
 package io.element.android.features.invitelist.impl.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -31,18 +31,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.Placeholder
-import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -64,8 +59,8 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.noFontPadding
 import io.element.android.libraries.designsystem.theme.roomListUnreadIndicator
-import kotlinx.collections.immutable.persistentMapOf
 import io.element.android.libraries.ui.strings.R as StringR
 
 private val minHeight = 72.dp
@@ -104,15 +99,17 @@ internal fun DefaultInviteSummaryRow(
         verticalAlignment = Alignment.Top
     ) {
         Avatar(
-            invite.roomAvatarData,
+            invite.roomAvatarData.copy(size = AvatarSize.Custom(52.dp)),
         )
 
         Column(
             modifier = Modifier
-                    .padding(start = 12.dp, end = 4.dp)
+                    .padding(start = 16.dp, end = 4.dp)
                     .alignByBaseline()
                     .weight(1f)
         ) {
+            val bonusPadding = if (invite.isNew) 12.dp else 0.dp
+
             // Name
             Text(
                 fontSize = 16.sp,
@@ -120,7 +117,9 @@ internal fun DefaultInviteSummaryRow(
                 text = invite.roomName,
                 color = MaterialTheme.colorScheme.primary,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                style = noFontPadding,
+                modifier = Modifier.padding(end = bonusPadding),
             )
 
             // ID or Alias
@@ -131,7 +130,8 @@ internal fun DefaultInviteSummaryRow(
                     text = it,
                     color = MaterialTheme.colorScheme.secondary,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(end = bonusPadding),
                 )
             }
 
@@ -173,47 +173,36 @@ internal fun DefaultInviteSummaryRow(
 
 @Composable
 private fun SenderRow(sender: InviteSender) {
-    Text(
-        text = buildAnnotatedString {
-            val placeholder = "$"
-            val text = stringResource(R.string.screen_invites_invited_you, placeholder)
-            val nameIndex = text.indexOf(placeholder)
-
-            // Text before the placeholder
-            append(text.take(nameIndex))
-
-            // Avatar and display name
-            appendInlineContent("avatar")
-            withStyle(SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)) {
-                append(sender.displayName)
-            }
-
-            // Text after the placeholder
-            append(text.drop(nameIndex + placeholder.length))
-        },
-        color = MaterialTheme.colorScheme.secondary,
-        fontSize = 14.sp,
-        fontWeight = FontWeight.Normal,
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
         modifier = Modifier.padding(top = 12.dp),
-        inlineContent = persistentMapOf(
-            "avatar" to InlineTextContent(
-                with(LocalDensity.current) {
-                    Placeholder(20.dp.toSp(), 20.dp.toSp(), PlaceholderVerticalAlign.Center)
-                }
-            ) {
-                Box(
-                        Modifier
-                                .fillMaxHeight()
-                                .padding(end = 4.dp)
-                ) {
-                    Avatar(
-                        avatarData = sender.avatarData.copy(size = AvatarSize.Custom(16.dp)),
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-            }
+    ) {
+        Avatar(
+            avatarData = sender.avatarData.copy(size = AvatarSize.Custom(16.dp)),
         )
-    )
+        Text(
+            text = buildAnnotatedString {
+                val placeholder = "$"
+                val text = stringResource(R.string.screen_invites_invited_you, placeholder, sender.userId.value)
+                val nameIndex = text.indexOf(placeholder)
+
+                // Text before the placeholder
+                append(text.take(nameIndex))
+
+                // Display name
+                withStyle(SpanStyle(fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.primary)) {
+                    append(sender.displayName)
+                }
+
+                // Text after the placeholder
+                append(text.drop(nameIndex + placeholder.length))
+            },
+            style = noFontPadding,
+            color = MaterialTheme.colorScheme.secondary,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Normal,
+        )
+    }
 }
 
 @Preview
