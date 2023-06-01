@@ -34,7 +34,7 @@ object MatrixPatterns {
     val PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER = MATRIX_USER_IDENTIFIER_REGEX.toRegex(RegexOption.IGNORE_CASE)
 
     // regex pattern to find room ids in a string.
-    private const val MATRIX_ROOM_IDENTIFIER_REGEX = "![A-Z0-9]+$DOMAIN_REGEX"
+    private const val MATRIX_ROOM_IDENTIFIER_REGEX = "![A-Z0-9-]+$DOMAIN_REGEX"
     private val PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER = MATRIX_ROOM_IDENTIFIER_REGEX.toRegex(RegexOption.IGNORE_CASE)
 
     // regex pattern to find room aliases in a string.
