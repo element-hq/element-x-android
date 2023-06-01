@@ -164,6 +164,7 @@ private fun LazyListScope.roomMemberListSection(
         Text(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
             text = headerText(),
+            fontSize = 16.sp,
             style = ElementTextStyles.Regular.callout,
             color = MaterialTheme.colorScheme.secondary,
             textAlign = TextAlign.Start,
