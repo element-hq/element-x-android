@@ -19,11 +19,12 @@ package io.element.android.features.createroom.impl.components
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -68,7 +69,7 @@ fun SearchUserBar(
         resultHandler = { users ->
             LazyColumn {
                 if (isMultiSelectionEnabled) {
-                    items(users) { matrixUser ->
+                    itemsIndexed(users) { index, matrixUser ->
                         SearchMultipleUsersResultItem(
                             modifier = Modifier.fillMaxWidth(),
                             matrixUser = matrixUser,
@@ -81,14 +82,20 @@ fun SearchUserBar(
                                 }
                             }
                         )
+                        if (index < users.lastIndex) {
+                            Divider()
+                        }
                     }
                 } else {
-                    items(users) { matrixUser ->
+                    itemsIndexed(users) { index, matrixUser ->
                         SearchSingleUserResultItem(
                             modifier = Modifier.fillMaxWidth(),
                             matrixUser = matrixUser,
                             onClick = { onUserSelected(matrixUser) }
                         )
+                        if (index < users.lastIndex) {
+                            Divider()
+                        }
                     }
                 }
             }
