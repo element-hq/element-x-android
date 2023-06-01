@@ -21,9 +21,9 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
-import io.element.android.features.createroom.impl.configureroom.avatar.AvatarAction
 import io.element.android.features.createroom.impl.userlist.UserListDataStore
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
