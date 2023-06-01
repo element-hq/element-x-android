@@ -115,8 +115,7 @@ class PushersManager @Inject constructor(
             appDisplayName = appName,
             deviceDisplayName = currentSession.sessionParams.deviceId ?: "MOBILE"
         )
-
-         */
+        */
     }
 
     fun getPusherForCurrentSession() {}/*: Pusher? {
