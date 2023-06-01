@@ -24,7 +24,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -42,6 +42,7 @@ import io.element.android.libraries.designsystem.components.dialogs.Confirmation
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -143,14 +144,18 @@ fun InviteListContent(
                     LazyColumn(
                         modifier = Modifier.weight(1f)
                     ) {
-                        items(
+                        itemsIndexed(
                             items = state.inviteList,
-                        ) { invite ->
+                        ) { index, invite ->
                             InviteSummaryRow(
                                 invite = invite,
                                 onAcceptClicked = { state.eventSink(InviteListEvents.AcceptInvite(invite)) },
                                 onDeclineClicked = { state.eventSink(InviteListEvents.DeclineInvite(invite)) },
                             )
+
+                            if (index != state.inviteList.lastIndex) {
+                                Divider()
+                            }
                         }
                     }
                 }
