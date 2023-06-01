@@ -16,12 +16,13 @@
 
 package io.element.android.libraries.push.impl.notifications.fake
 
-import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.notifications.GroupedNotificationEvents
 import io.element.android.libraries.push.impl.notifications.NotificationFactory
 import io.element.android.libraries.push.impl.notifications.OneShotNotification
 import io.element.android.libraries.push.impl.notifications.RoomNotification
 import io.element.android.libraries.push.impl.notifications.SummaryNotification
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 
@@ -30,9 +31,7 @@ class FakeNotificationFactory {
 
     fun givenNotificationsFor(
         groupedEvents: GroupedNotificationEvents,
-        sessionId: SessionId,
-        myUserDisplayName: String,
-        myUserAvatarUrl: String?,
+        matrixUser: MatrixUser,
         useCompleteNotificationFormat: Boolean,
         roomNotifications: List<RoomNotification>,
         invitationNotifications: List<OneShotNotification>,
@@ -40,13 +39,13 @@ class FakeNotificationFactory {
         summaryNotification: SummaryNotification
     ) {
         with(instance) {
-            every { groupedEvents.roomEvents.toNotifications(sessionId, myUserDisplayName, myUserAvatarUrl) } returns roomNotifications
+            coEvery { groupedEvents.roomEvents.toNotifications(matrixUser) } returns roomNotifications
             every { groupedEvents.invitationEvents.toNotifications() } returns invitationNotifications
             every { groupedEvents.simpleEvents.toNotifications() } returns simpleNotifications
 
             every {
                 createSummaryNotification(
-                    sessionId,
+                    matrixUser,
                     roomNotifications,
                     invitationNotifications,
                     simpleNotifications,
