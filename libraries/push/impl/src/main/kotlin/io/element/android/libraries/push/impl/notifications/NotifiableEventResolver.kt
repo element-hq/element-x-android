@@ -29,6 +29,7 @@ import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
+import io.element.android.services.toolbox.api.systemclock.SystemClock
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -46,6 +47,7 @@ class NotifiableEventResolver @Inject constructor(
     // private val displayableEventFormatter: DisplayableEventFormatter,
     private val matrixAuthenticationService: MatrixAuthenticationService,
     private val buildMeta: BuildMeta,
+    private val clock: SystemClock,
 ) {
 
     suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent? {
@@ -96,27 +98,27 @@ class NotifiableEventResolver @Inject constructor(
             isUpdated = false
         )
     }
-}
 
-/**
- * TODO This is a temporary method for EAx.
- */
-private fun NotificationData?.orDefault(roomId: RoomId, eventId: EventId): NotificationData {
-    return this ?: NotificationData(
-        eventId = eventId,
-        senderId = UserId("@user:domain"),
-        roomId = roomId,
-        senderAvatarUrl = null,
-        senderDisplayName = null,
-        roomAvatarUrl = null,
-        roomDisplayName = null,
-        isNoisy = false,
-        isEncrypted = false,
-        isDirect = false,
-        event = NotificationEvent(
-            timestamp = System.currentTimeMillis(),
-            content = "Message ${eventId.value.take(8)}… in room ${roomId.value.take(8)}…",
-            contentUrl = null
+    /**
+     * TODO This is a temporary method for EAx.
+     */
+    private fun NotificationData?.orDefault(roomId: RoomId, eventId: EventId): NotificationData {
+        return this ?: NotificationData(
+            eventId = eventId,
+            senderId = UserId("@user:domain"),
+            roomId = roomId,
+            senderAvatarUrl = null,
+            senderDisplayName = null,
+            roomAvatarUrl = null,
+            roomDisplayName = null,
+            isNoisy = false,
+            isEncrypted = false,
+            isDirect = false,
+            event = NotificationEvent(
+                timestamp = clock.epochMillis(),
+                content = "Message ${eventId.value.take(8)}… in room ${roomId.value.take(8)}…",
+                contentUrl = null
+            )
         )
-    )
+    }
 }
