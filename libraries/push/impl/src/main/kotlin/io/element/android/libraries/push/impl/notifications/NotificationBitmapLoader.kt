@@ -25,7 +25,8 @@ import coil.imageLoader
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.matrix.api.media.MediaResolver
+import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -47,7 +48,7 @@ class NotificationBitmapLoader @Inject constructor(
     private suspend fun loadRoomBitmap(path: String): Bitmap? {
         return try {
             val imageRequest = ImageRequest.Builder(context)
-                .data(MediaResolver.Meta(path, MediaResolver.Kind.Thumbnail(1024)))
+                .data(MediaRequestData(MediaSource(path), MediaRequestData.Kind.Thumbnail(1024)))
                 .build()
             val result = context.imageLoader.execute(imageRequest)
             result.drawable?.toBitmap()
@@ -73,7 +74,7 @@ class NotificationBitmapLoader @Inject constructor(
     private suspend fun loadUserIcon(path: String): IconCompat? {
         return try {
             val imageRequest = ImageRequest.Builder(context)
-                .data(MediaResolver.Meta(path, MediaResolver.Kind.Thumbnail(1024)))
+                .data(MediaRequestData(MediaSource(path), MediaRequestData.Kind.Thumbnail(1024)))
                 .transformations(CircleCropTransformation())
                 .build()
             val result = context.imageLoader.execute(imageRequest)
