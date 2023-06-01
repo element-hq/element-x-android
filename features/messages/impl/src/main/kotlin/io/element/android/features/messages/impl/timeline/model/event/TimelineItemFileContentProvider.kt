@@ -25,14 +25,14 @@ open class TimelineItemFileContentProvider : PreviewParameterProvider<TimelineIt
         get() = sequenceOf(
             aTimelineItemFileContent("A file.pdf"),
             aTimelineItemFileContent("A bigger name file.pdf"),
-            aTimelineItemFileContent("An even bigger file name which doesn't fit.pdf"),
+            aTimelineItemFileContent("An even bigger bigger bigger bigger bigger bigger bigger file name which doesn't fit .pdf"),
         )
 }
 
 fun aTimelineItemFileContent(fileName: String) = TimelineItemFileContent(
-    body = fileName,
+    name = fileName,
     thumbnailSource = MediaSource(url = ""),
     fileSource = MediaSource(url = ""),
     mimeType = MimeTypes.OctetStream,
-    size = 100
+    formattedFileSize = "100kB"
 )
