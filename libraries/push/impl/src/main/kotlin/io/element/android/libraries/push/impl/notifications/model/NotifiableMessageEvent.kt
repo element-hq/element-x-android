@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.services.appnavstate.api.AppNavigationState
 import io.element.android.services.appnavstate.api.currentRoomId
 import io.element.android.services.appnavstate.api.currentSessionId
@@ -52,7 +53,7 @@ data class NotifiableMessageEvent(
     override val isUpdated: Boolean = false
 ) : NotifiableEvent {
 
-    val type: String = /* EventType.MESSAGE */ "m.room.message"
+    val type: String = EventType.MESSAGE
     val description: String = body ?: ""
     val title: String = senderName ?: ""
 

@@ -17,6 +17,7 @@
 package io.element.android.libraries.push.impl.notifications
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -60,7 +61,7 @@ class NotifiableEventProcessorTest {
 
     @Test
     fun `given redacted simple event when processing then remove redaction event`() {
-        val events = listOf(aSimpleNotifiableEvent(eventId = AN_EVENT_ID, type = "m.room.redaction"))
+        val events = listOf(aSimpleNotifiableEvent(eventId = AN_EVENT_ID, type = EventType.REDACTION))
 
         val result = eventProcessor.process(events, appNavigationState = NOT_VIEWING_A_ROOM, renderedEvents = emptyList())
 
