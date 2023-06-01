@@ -42,11 +42,11 @@ class RoomMemberDetailsNode @AssistedInject constructor(
     presenterFactory: RoomMemberDetailsPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
 
-    data class Inputs(
-        val roomMemberId: UserId,
+    data class RoomMemberDetailsInput(
+        val roomMemberId: UserId
     ) : NodeInputs
 
-    private val inputs = inputs<Inputs>()
+    private val inputs = inputs<RoomMemberDetailsInput>()
     private val presenter = presenterFactory.create(inputs.roomMemberId)
 
     @Composable
