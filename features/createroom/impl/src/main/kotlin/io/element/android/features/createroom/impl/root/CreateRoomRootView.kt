@@ -26,9 +26,11 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -142,7 +144,11 @@ fun CreateRoomRootViewTopBar(
         },
         actions = {
             IconButton(onClick = onClosePressed) {
-                Icon(imageVector = Icons.Default.Close, contentDescription = stringResource(id = StringR.string.action_close))
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(id = StringR.string.action_close),
+                    tint = MaterialTheme.colorScheme.primary,
+                )
             }
         }
     )
@@ -157,7 +163,7 @@ fun CreateRoomActionButtonsList(
     Column(modifier = modifier) {
         CreateRoomActionButton(
             iconRes = DrawableR.drawable.ic_groups,
-            text = stringResource(id = StringR.string.action_create_a_room),
+            text = stringResource(id = R.string.screen_create_room_action_create_room),
             onClick = onNewRoomClicked,
         )
         CreateRoomActionButton(
@@ -185,11 +191,15 @@ fun CreateRoomActionButton(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            modifier = Modifier.alpha(0.5f), // FIXME align on Design system theme (removing alpha should be fine)
+            modifier = Modifier.size(24.dp).alpha(0.5f), // FIXME align on Design system theme (removing alpha should be fine)
             resourceId = iconRes,
             contentDescription = null,
         )
-        Text(text = text)
+        Text(
+            text = text,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Normal
+        )
     }
 }
 
