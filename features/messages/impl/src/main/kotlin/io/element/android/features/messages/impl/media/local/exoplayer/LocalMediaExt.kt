@@ -14,27 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.fixtures
+package io.element.android.features.messages.impl.media.local.exoplayer
 
-import android.net.Uri
-import androidx.media3.common.MimeTypes
-import io.element.android.features.messages.impl.attachments.Attachment
+import androidx.media3.common.MediaItem
 import io.element.android.features.messages.impl.media.local.LocalMedia
 
-fun aLocalMedia(
-    uri: Uri,
-    mimeType: String = MimeTypes.IMAGE_JPEG,
-    name: String = "a media",
-    size: Long = 1000,
-) = LocalMedia(
-    source = LocalMedia.Source.FromUri(uri),
-    mimeType = mimeType,
-    name = name,
-    size = size,
-)
-
-fun aMediaAttachment(localMedia: LocalMedia, compressIfPossible: Boolean = true) = Attachment.Media(
-    localMedia = localMedia,
-    compressIfPossible = compressIfPossible,
-)
-
+fun LocalMedia.toMediaItem(): MediaItem {
+    return when (source) {
+        is LocalMedia.Source.FromFile -> MediaItem.fromUri(source.file.path)
+        is LocalMedia.Source.FromUri -> MediaItem.fromUri(source.uri)
+    }
+}

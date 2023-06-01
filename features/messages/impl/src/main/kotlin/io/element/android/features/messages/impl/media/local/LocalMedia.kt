@@ -21,20 +21,27 @@ import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import java.io.File
 
 @Parcelize
 @Immutable
 data class LocalMedia(
-    val uri: Uri,
+    val source: Source,
     val mimeType: String,
     val name: String?,
     val size: Long,
 ) : Parcelable {
 
-    /**
-     * This tries to convert the uri to a file if applicable, otherwise keep it as uri.
-     */
-    @IgnoredOnParcel val model: Any by lazy {
-        UriToFileMapper.map(uri) ?: uri
+    sealed interface Source : Parcelable {
+        @Parcelize
+        data class FromUri(val uri: Uri) : Source
+
+        @Parcelize
+        data class FromFile(val file: File) : Source
+    }
+
+    @IgnoredOnParcel val model: Any = when (source) {
+        is Source.FromUri -> source.uri
+        is Source.FromFile -> source.file
     }
 }

@@ -16,11 +16,11 @@
 
 package io.element.android.features.messages.impl.media.viewer
 
-import android.net.Uri
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.media3.common.MimeTypes
 import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.libraries.architecture.Async
+import java.io.File
 
 open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState> {
     override val values: Sequence<MediaViewerState>
@@ -31,14 +31,14 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
             aMediaViewerState(
                 Async.Success(
                     LocalMedia(
-                        Uri.EMPTY, MimeTypes.IMAGE_JPEG, "an image file", 100L
+                        LocalMedia.Source.FromFile(File("")), MimeTypes.IMAGE_JPEG, "an image file", 100L
                     )
                 ),
             ),
             aMediaViewerState(
                 Async.Success(
                     LocalMedia(
-                        Uri.EMPTY, MimeTypes.VIDEO_MP4, "a video file", 100L
+                        LocalMedia.Source.FromFile(File("")), MimeTypes.VIDEO_MP4, "a video file", 100L
                     )
                 ),
             )
