@@ -204,7 +204,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
             icon = {
                 val mediaRequestData = MediaRequestData(
                     source = event.content.mediaSource,
-                    kind = MediaRequestData.Kind.Content
+                    kind = MediaRequestData.Kind.Thumbnail(32),
                 )
                 BlurHashAsyncImage(
                     model = mediaRequestData,
@@ -222,7 +222,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
                 if (thumbnailSource != null) {
                     val mediaRequestData = MediaRequestData(
                         source = event.content.thumbnailSource,
-                        kind = MediaRequestData.Kind.Content
+                        kind = MediaRequestData.Kind.Thumbnail(32),
                     )
                     BlurHashAsyncImage(
                         model = mediaRequestData,
@@ -267,7 +267,11 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
         Column {
             Row {
                 if (event.senderDisplayName != null) {
-                    Text(event.senderDisplayName, style = ElementTextStyles.Bold.caption1)
+                    Text(
+                        text = event.senderDisplayName,
+                        style = ElementTextStyles.Bold.caption1,
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 }
                 Text(
                     event.sentTime,

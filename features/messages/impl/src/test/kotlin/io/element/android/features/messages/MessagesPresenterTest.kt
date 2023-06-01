@@ -134,6 +134,32 @@ class MessagesPresenterTest {
         }
     }
 
+    @Test
+    fun `present - handle action report content`() = runTest {
+        val presenter = createMessagePresenter()
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.ReportContent, aMessageEvent()))
+            // Still a TODO in the code
+        }
+    }
+
+    @Test
+    fun `present - handle action show developer info`() = runTest {
+        val presenter = createMessagePresenter()
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Developer, aMessageEvent()))
+            // Still a TODO in the code
+        }
+    }
+
     private fun TestScope.createMessagePresenter(
         matrixRoom: MatrixRoom = FakeMatrixRoom()
     ): MessagesPresenter {
