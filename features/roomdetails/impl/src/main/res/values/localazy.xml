@@ -12,7 +12,10 @@
   <string name="screen_room_details_edition_error_title">"Unable to update room"</string>
   <string name="screen_room_details_encryption_enabled_subtitle">"Messages are secured with locks. Only you and the recipients have the unique keys to unlock them."</string>
   <string name="screen_room_details_encryption_enabled_title">"Message encryption enabled"</string>
+  <string name="screen_room_details_room_name_label">"Room name"</string>
+  <string name="screen_room_details_room_name_placeholder">"e.g. Product Sprint"</string>
   <string name="screen_room_details_share_room_title">"Share room"</string>
+  <string name="screen_room_details_topic_placeholder">"What is this room about?"</string>
   <string name="screen_room_details_updating_room">"Updating room…"</string>
   <string name="screen_room_member_list_pending_header_title">"Pending"</string>
   <string name="screen_room_member_list_room_members_header_title">"Room members"</string>
@@ -22,7 +25,7 @@
   <string name="screen_dm_details_unblock_alert_action">"Unblock"</string>
   <string name="screen_dm_details_unblock_alert_description">"On unblocking the user, you will be able to see all messages by them again."</string>
   <string name="screen_dm_details_unblock_user">"Unblock user"</string>
-  <string name="screen_room_details_invite_people_title">"Invite people"</string>
+  <string name="screen_room_details_invite_people_title">"Invite friends to Element"</string>
   <string name="screen_room_details_leave_room_title">"Leave room"</string>
   <string name="screen_room_details_people_title">"People"</string>
   <string name="screen_room_details_security_title">"Security"</string>

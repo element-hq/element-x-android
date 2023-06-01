@@ -16,7 +16,7 @@
 
 @file:OptIn(ExperimentalMaterialApi::class)
 
-package io.element.android.features.createroom.impl.configureroom.avatar
+package io.element.android.libraries.matrix.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,12 +39,13 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheetLayout
+import io.element.android.libraries.matrix.ui.media.AvatarAction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 
 @Composable
-fun AvatarActionListView(
+fun AvatarActionBottomSheet(
     actions: ImmutableList<AvatarAction>,
     modalBottomSheetState: ModalBottomSheetState,
     modifier: Modifier = Modifier,
@@ -62,7 +63,7 @@ fun AvatarActionListView(
         modifier = modifier,
         sheetState = modalBottomSheetState,
         sheetContent = {
-            SheetContent(
+            AvatarActionBottomSheetContent(
                 actions = actions,
                 onActionClicked = ::onItemActionClicked,
                 modifier = Modifier
@@ -74,7 +75,7 @@ fun AvatarActionListView(
 }
 
 @Composable
-private fun SheetContent(
+private fun AvatarActionBottomSheetContent(
     actions: ImmutableList<AvatarAction>,
     modifier: Modifier = Modifier,
     onActionClicked: (AvatarAction) -> Unit = { },
@@ -107,17 +108,17 @@ private fun SheetContent(
 
 @Preview
 @Composable
-fun SheetContentLightPreview() =
+fun AvatarActionBottomSheetLightPreview() =
     ElementPreviewLight { ContentToPreview() }
 
 @Preview
 @Composable
-fun SheetContentDarkPreview() =
+fun AvatarActionBottomSheetDarkPreview() =
     ElementPreviewDark { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
-    AvatarActionListView(
+    AvatarActionBottomSheet(
         actions = persistentListOf(AvatarAction.TakePhoto, AvatarAction.ChoosePhoto, AvatarAction.Remove),
         modalBottomSheetState = ModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Expanded

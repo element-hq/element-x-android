@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -62,7 +63,13 @@ class FakeMatrixRoom(
     private var rejectInviteResult = Result.success(Unit)
     private var inviteUserResult = Result.success(Unit)
     private var canInviteResult = Result.success(true)
+    private val canSendStateResults = mutableMapOf<StateEventType, Result<Boolean>>()
     private var sendMediaResult = Result.success(Unit)
+    private var setNameResult = Result.success(Unit)
+    private var setTopicResult = Result.success(Unit)
+    private var updateAvatarResult = Result.success(Unit)
+    private var removeAvatarResult = Result.success(Unit)
+
     var sendMediaCount = 0
         private set
 
@@ -73,6 +80,18 @@ class FakeMatrixRoom(
         private set
 
     var invitedUserId: UserId? = null
+        private set
+
+    var newTopic: String? = null
+        private set
+
+    var newName: String? = null
+        private set
+
+    var newAvatarData: ByteArray? = null
+        private set
+
+    var removedAvatar: Boolean = false
         private set
 
     private var leaveRoomError: Throwable? = null
@@ -151,6 +170,10 @@ class FakeMatrixRoom(
         return canInviteResult
     }
 
+    override suspend fun canSendStateEvent(type: StateEventType): Result<Boolean> {
+        return canSendStateResults[type] ?: Result.failure(IllegalStateException("No fake answer"))
+    }
+
     override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo): Result<Unit> = fakeSendMedia()
 
     override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo): Result<Unit> = fakeSendMedia()
@@ -164,6 +187,26 @@ class FakeMatrixRoom(
         return sendMediaResult.onSuccess {
             sendMediaCount++
         }
+    }
+
+    override suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit> {
+        newAvatarData = data
+        return updateAvatarResult
+    }
+
+    override suspend fun removeAvatar(): Result<Unit> {
+        removedAvatar = true
+        return removeAvatarResult
+    }
+
+    override suspend fun setName(name: String): Result<Unit> {
+        newName = name
+        return setNameResult
+    }
+
+    override suspend fun setTopic(topic: String): Result<Unit> {
+        newTopic = topic
+        return setTopicResult
     }
 
     override fun close() = Unit
@@ -204,6 +247,10 @@ class FakeMatrixRoom(
         canInviteResult = result
     }
 
+    fun givenCanSendStateResult(type: StateEventType, result: Result<Boolean>) {
+        canSendStateResults[type] = result
+    }
+
     fun givenIgnoreResult(result: Result<Unit>) {
         ignoreResult = result
     }
@@ -214,5 +261,21 @@ class FakeMatrixRoom(
 
     fun givenSendMediaResult(result: Result<Unit>) {
         sendMediaResult = result
+    }
+
+    fun givenUpdateAvatarResult(result: Result<Unit>) {
+        updateAvatarResult = result
+    }
+
+    fun givenRemoveAvatarResult(result: Result<Unit>) {
+        removeAvatarResult = result
+    }
+
+    fun givenSetNameResult(result: Result<Unit>) {
+        setNameResult = result
+    }
+
+    fun givenSetTopicResult(result: Result<Unit>) {
+        setTopicResult = result
     }
 }
