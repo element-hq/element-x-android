@@ -18,14 +18,11 @@ package io.element.android.features.onboarding.impl
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.QrCode
@@ -34,13 +31,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.element.android.libraries.designsystem.atomic.pages.OnBoardingPage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -58,39 +55,20 @@ fun OnBoardingScreen(
     onSignIn: () -> Unit = {},
     onCreateAccount: () -> Unit = {},
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
-        // BG
-        Image(
-            modifier = modifier
-                .fillMaxSize(),
-            painter = painterResource(id = R.drawable.onboarding_bg),
-            contentScale = ContentScale.Crop,
-            contentDescription = null,
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .systemBarsPadding()
-                .padding(vertical = 16.dp),
-        ) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 24.dp)
-                    .fillMaxWidth(),
-            ) {
-                Spacer(modifier = Modifier.weight(2f))
-                OnBoardingHeader()
-                Spacer(modifier = Modifier.weight(3f))
-            }
+    OnBoardingPage(
+        modifier = modifier,
+        footer = {
             OnBoardingButtons(
                 onSignInWithQrCode = onSignInWithQrCode,
                 onSignIn = onSignIn,
                 onCreateAccount = onCreateAccount,
             )
+        }
+    ) {
+        Column(modifier.fillMaxWidth()) {
+            Spacer(modifier = Modifier.weight(2f))
+            OnBoardingHeader()
+            Spacer(modifier = Modifier.weight(3f))
         }
     }
 }
@@ -128,11 +106,11 @@ private fun OnBoardingButtons(
     onSignInWithQrCode: () -> Unit,
     onSignIn: () -> Unit,
     onCreateAccount: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+        modifier = modifier
+            .fillMaxWidth(),
         horizontalAlignment = CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
