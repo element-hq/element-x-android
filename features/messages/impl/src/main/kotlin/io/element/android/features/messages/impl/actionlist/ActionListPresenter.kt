@@ -63,7 +63,12 @@ class ActionListPresenter @Inject constructor(
             when (timelineItem.content) {
                 is TimelineItemRedactedContent,
                 is TimelineItemStateContent -> {
-                    listOf(TimelineItemAction.Copy, TimelineItemAction.Developer)
+                    buildList {
+                        add(TimelineItemAction.Copy)
+                        if (buildMeta.isDebuggable) {
+                            add(TimelineItemAction.Developer)
+                        }
+                    }
                 }
                 else -> buildList<TimelineItemAction> {
                     add(TimelineItemAction.Reply)

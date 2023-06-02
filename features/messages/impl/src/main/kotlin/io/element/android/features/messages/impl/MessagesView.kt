@@ -39,10 +39,12 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
@@ -93,7 +95,7 @@ fun MessagesView(
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
     val coroutineScope = rememberCoroutineScope()
-    var isMessageActionsBottomSheetVisible = rememberSaveable { mutableStateOf(false) }
+    var isMessageActionsBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
 
     AttachmentStateView(state.composerState.attachmentsState, onPreviewAttachments)
 
@@ -124,73 +126,55 @@ fun MessagesView(
         Timber.v("OnMessageLongClicked= ${event.id}")
         localView.hideKeyboard()
         state.actionListState.eventSink(ActionListEvents.ComputeForMessage(event))
-        isMessageActionsBottomSheetVisible.value = true
+        isMessageActionsBottomSheetVisible = true
     }
 
     fun onActionSelected(action: TimelineItemAction, event: TimelineItem.Event) {
+        isMessageActionsBottomSheetVisible = false
         state.eventSink(MessagesEvents.HandleAction(action, event))
     }
 
-    LaunchedEffect(composerState.showAttachmentSourcePicker) {
-        if (composerState.showAttachmentSourcePicker) {
-            // We need to use this instead of `LocalFocusManager.clearFocus()` to hide the keyboard when focus is on an Android View
-            localView.hideKeyboard()
-            bottomSheetState.show()
-        } else {
-            bottomSheetState.hide()
-        }
+    fun onDismissActionListBottomSheet() {
+        isMessageActionsBottomSheetVisible = false
     }
-    // Send 'DismissAttachmentMenu' event when the bottomsheet was just hidden
-    LaunchedEffect(bottomSheetState.isVisible) {
-        if (!bottomSheetState.isVisible) {
-            composerState.eventSink(MessageComposerEvents.DismissAttachmentMenu)
-        }
-    }
-    ModalBottomSheetLayout(
-        sheetState = bottomSheetState,
-        displayHandle = true,
-        sheetContent = {
-            AttachmentSourcePickerMenu(
-                eventSink = composerState.eventSink
+
+    Scaffold(
+        modifier = modifier,
+        contentWindowInsets = WindowInsets.statusBars,
+        topBar = {
+            Column {
+                ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
+                MessagesViewTopBar(
+                    roomTitle = state.roomName,
+                    roomAvatar = state.roomAvatar,
+                    onBackPressed = onBackPressed,
+                    onRoomDetailsClicked = onRoomDetailsClicked,
+                )
+            }
+        },
+        content = { padding ->
+            MessagesViewContent(
+                state = state,
+                modifier = Modifier
+                    .padding(padding)
+                    .consumeWindowInsets(padding),
+                onMessageClicked = ::onMessageClicked,
+                onMessageLongClicked = ::onMessageLongClicked,
+                onUserDataClicked = onUserDataClicked,
             )
-        }
-    ) {
-        Scaffold(
-            modifier = modifier,
-            contentWindowInsets = WindowInsets.statusBars,
-            topBar = {
-                Column {
-                    ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
-                    MessagesViewTopBar(
-                        roomTitle = state.roomName,
-                        roomAvatar = state.roomAvatar,
-                        onBackPressed = onBackPressed,
-                        onRoomDetailsClicked = onRoomDetailsClicked,
-                    )
-                }
-            },
-            content = { padding ->
-                MessagesViewContent(
-                    state = state,
-                    modifier = Modifier
-                        .padding(padding)
-                        .consumeWindowInsets(padding),
-                    onMessageClicked = ::onMessageClicked,
-                    onMessageLongClicked = ::onMessageLongClicked,
-                    onUserDataClicked = onUserDataClicked,
-                )
-            },
-            snackbarHost = {
-                SnackbarHost(
-                    snackbarHostState,
-                    modifier = Modifier.navigationBarsPadding()
-                )
-            },
-        )
+        },
+        snackbarHost = {
+            SnackbarHost(
+                snackbarHostState,
+                modifier = Modifier.navigationBarsPadding()
+            )
+        },
+    )
 
     ActionListView(
         state = state.actionListState,
         isVisible = isMessageActionsBottomSheetVisible,
+        onDismiss = ::onDismissActionListBottomSheet,
         onActionSelected = ::onActionSelected
     )
 }

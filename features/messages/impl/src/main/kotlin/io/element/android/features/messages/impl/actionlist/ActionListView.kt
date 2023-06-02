@@ -42,7 +42,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -80,16 +79,16 @@ import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Suppress("MutableParams") // False positive
 @Composable
 fun ActionListView(
     state: ActionListState,
-    isVisible: MutableState<Boolean>,
+    isVisible: Boolean,
     onActionSelected: (action: TimelineItemAction, TimelineItem.Event) -> Unit,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LaunchedEffect(isVisible.value) {
-        if (!isVisible.value) {
+    LaunchedEffect(isVisible) {
+        if (!isVisible) {
             state.eventSink(ActionListEvents.Clear)
         }
     }
@@ -99,14 +98,11 @@ fun ActionListView(
         targetItem: TimelineItem.Event
     ) {
         onActionSelected(itemAction, targetItem)
-        isVisible.value = false
     }
 
-    if (isVisible.value) {
+    if (isVisible) {
         ModalBottomSheet(
-            onDismissRequest = {
-                isVisible.value = false
-            }
+            onDismissRequest = onDismiss
         ) {
             SheetContent(
                 state = state,
