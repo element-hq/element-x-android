@@ -20,17 +20,24 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
-import java.io.File
+import androidx.core.net.toFile
+
+fun Context.getMimeType(uri: Uri): String? = when (uri.scheme) {
+    ContentResolver.SCHEME_CONTENT -> contentResolver.getType(uri)
+    else -> null
+}
 
 fun Context.getFileName(uri: Uri): String? = when (uri.scheme) {
     ContentResolver.SCHEME_CONTENT -> getContentFileName(uri)
-    else -> uri.path?.let(::File)?.name
+    ContentResolver.SCHEME_FILE -> uri.toFile().name
+    else -> null
 }
 
 fun Context.getFileSize(uri: Uri): Long {
     return when (uri.scheme) {
         ContentResolver.SCHEME_CONTENT -> getContentFileSize(uri)
-        else -> uri.path?.let(::File)?.length()
+        ContentResolver.SCHEME_FILE -> uri.toFile().length()
+        else -> 0
     } ?: 0
 }
 

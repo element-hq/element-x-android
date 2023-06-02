@@ -210,7 +210,7 @@ class MessageComposerPresenter @Inject constructor(
             attachmentsState.value = AttachmentsState.None
             return
         }
-        val localMedia = localMediaFactory.createFromUri(uri, mimeType)
+        val localMedia = localMediaFactory.createFromUri(uri, mimeType, null)
         val mediaAttachment = Attachment.Media(localMedia, compressIfPossible)
         val isPreviewable = when {
             MimeTypes.isImage(localMedia.mimeType) -> true

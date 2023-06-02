@@ -30,6 +30,7 @@ import dagger.assisted.AssistedInject
 import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.features.messages.impl.media.local.LocalMediaActionsHandler
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
+import io.element.android.features.messages.impl.media.local.createFromMediaFile
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
@@ -88,8 +89,12 @@ class MediaViewerPresenter @AssistedInject constructor(
         mediaLoader.downloadMediaFile(inputs.mediaSource, inputs.mimeType)
             .onSuccess {
                 mediaFile.value = it
-            }.mapCatching {
-                localMediaFactory.createFromMediaFile(it, inputs.mimeType)
+            }.mapCatching { mediaFile ->
+                localMediaFactory.createFromMediaFile(
+                    mediaFile = mediaFile,
+                    mimeType = inputs.mimeType,
+                    name = inputs.name
+                )
             }.onSuccess {
                 localMedia.value = Async.Success(it)
             }.onFailure {
