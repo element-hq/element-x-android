@@ -63,6 +63,7 @@ fun AvatarActionBottomSheet(
     ModalBottomSheetLayout(
         modifier = modifier,
         sheetState = modalBottomSheetState,
+        displayHandle = true,
         sheetContent = {
             AvatarActionBottomSheetContent(
                 actions = actions,
