@@ -17,7 +17,16 @@
 package io.element.android.features.messages.impl.media.local
 
 interface LocalMediaActions {
+    /**
+     * Will save the current media to the Downloads directory.
+     * The [LocalMedia.uri] needs to have a file scheme.
+     */
     suspend fun saveOnDisk(localMedia: LocalMedia): Result<Unit>
+
+    /**
+     * Will try to find a suitable application to share the media with.
+     * The [LocalMedia.uri] needs to have a file scheme.
+     */
     suspend fun share(localMedia: LocalMedia): Result<Unit>
 }
 
