@@ -49,7 +49,7 @@ fun Avatar(
     val commonModifier = modifier
         .size(avatarData.size.dp)
         .clip(CircleShape)
-    if (avatarData.url == null) {
+    if (avatarData.url.isNullOrBlank()) {
         InitialsAvatar(
             avatarData = avatarData,
             modifier = commonModifier,
@@ -72,7 +72,7 @@ private fun ImageAvatar(
     AsyncImage(
         model = avatarData,
         onError = {
-            Timber.e("TAG", "Error $it\n${it.result}", it.result.throwable)
+            Timber.e(it.result.throwable, "Error loading avatar $it\n${it.result}")
         },
         contentDescription = contentDescription,
         contentScale = ContentScale.Crop,
