@@ -1,5 +1,5 @@
 appId: ${APP_ID}
 ---
 - extendedWaitUntil:
-    visible: "Own your conversations."
+    visible: "Communicate and collaborate securely"
     timeout: 10_000

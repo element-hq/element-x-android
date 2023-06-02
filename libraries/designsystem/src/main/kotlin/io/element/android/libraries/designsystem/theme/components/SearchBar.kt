@@ -29,11 +29,12 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SearchBarColors
 import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalFocusManager
@@ -45,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.ui.strings.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,6 +65,8 @@ fun <T> SearchBar(
     tonalElevation: Dp = SearchBarDefaults.Elevation,
     windowInsets: WindowInsets = SearchBarDefaults.windowInsets,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    inactiveColors: SearchBarColors = ElementSearchBarDefaults.inactiveColors(),
+    activeColors: SearchBarColors = ElementSearchBarDefaults.activeColors(),
     contentPrefix: @Composable ColumnScope.() -> Unit = {},
     contentSuffix: @Composable ColumnScope.() -> Unit = {},
     resultHandler: @Composable ColumnScope.(T) -> Unit = {},
@@ -83,10 +87,7 @@ fun <T> SearchBar(
         modifier = modifier.padding(horizontal = if (!active) 16.dp else 0.dp),
         enabled = enabled,
         placeholder = {
-            Text(
-                text = placeHolderTitle,
-                modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
-            )
+            Text(text = placeHolderTitle)
         },
         leadingIcon = if (showBackButton && active) {
             { BackButton(onClick = { onActiveChange(false) }) }
@@ -97,7 +98,10 @@ fun <T> SearchBar(
             active && query.isNotEmpty() -> {
                 {
                     IconButton(onClick = { onQueryChange("") }) {
-                        Icon(Icons.Default.Close, stringResource(R.string.action_clear))
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = stringResource(R.string.action_clear),
+                        )
                     }
                 }
             }
@@ -107,7 +111,7 @@ fun <T> SearchBar(
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = stringResource(R.string.action_search),
-                        modifier = Modifier.alpha(0.4f), // FIXME align on Design system theme (removing alpha should be fine)
+                        tint = MaterialTheme.colorScheme.tertiary,
                     )
                 }
             }
@@ -115,7 +119,7 @@ fun <T> SearchBar(
             else -> null
         },
         shape = shape,
-        colors = if (!active) SearchBarDefaults.colors() else SearchBarDefaults.colors(containerColor = Color.Transparent),
+        colors = if (active) activeColors else inactiveColors,
         tonalElevation = tonalElevation,
         windowInsets = windowInsets,
         interactionSource = interactionSource,
@@ -144,6 +148,37 @@ fun <T> SearchBar(
             }
             contentSuffix()
         },
+    )
+}
+
+object ElementSearchBarDefaults {
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun inactiveColors() = SearchBarDefaults.colors(
+        containerColor = LocalColors.current.gray300,
+        inputFieldColors = TextFieldDefaults.colors(
+            unfocusedPlaceholderColor = LocalColors.current.placeholder,
+            focusedPlaceholderColor = LocalColors.current.placeholder,
+            unfocusedLeadingIconColor = MaterialTheme.colorScheme.primary,
+            focusedLeadingIconColor = MaterialTheme.colorScheme.primary,
+            unfocusedTrailingIconColor = MaterialTheme.colorScheme.primary,
+            focusedTrailingIconColor = MaterialTheme.colorScheme.primary,
+        )
+    )
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun activeColors() = SearchBarDefaults.colors(
+        containerColor = Color.Transparent,
+        inputFieldColors = TextFieldDefaults.colors(
+            unfocusedPlaceholderColor = LocalColors.current.placeholder,
+            focusedPlaceholderColor = LocalColors.current.placeholder,
+            unfocusedLeadingIconColor = MaterialTheme.colorScheme.primary,
+            focusedLeadingIconColor = MaterialTheme.colorScheme.primary,
+            unfocusedTrailingIconColor = MaterialTheme.colorScheme.primary,
+            focusedTrailingIconColor = MaterialTheme.colorScheme.primary,
+        )
     )
 }
 
@@ -208,17 +243,24 @@ internal fun SearchBarPreviewActiveWithContent() = ElementThemedPreview {
         active = true,
         resultState = SearchBarResultState.Results("result!"),
         contentPrefix = {
-            Text(text = "Content that goes before the search results", modifier = Modifier.background(color = Color.Red).fillMaxWidth())
+            Text(text = "Content that goes before the search results", modifier = Modifier
+                .background(color = Color.Red)
+                .fillMaxWidth())
         },
         contentSuffix = {
-            Text(text = "Content that goes after the search results", modifier = Modifier.background(color = Color.Blue).fillMaxWidth())
+            Text(text = "Content that goes after the search results", modifier = Modifier
+                .background(color = Color.Blue)
+                .fillMaxWidth())
         },
         resultHandler = {
-            Text(text = "Results go here", modifier = Modifier.background(color = Color.Green).fillMaxWidth())
+            Text(text = "Results go here", modifier = Modifier
+                .background(color = Color.Green)
+                .fillMaxWidth())
         }
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ContentToPreview(
     query: String = "",

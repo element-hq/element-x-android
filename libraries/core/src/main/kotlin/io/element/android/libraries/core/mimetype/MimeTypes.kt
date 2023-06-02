@@ -23,6 +23,7 @@ object MimeTypes {
     const val Any: String = "*/*"
     const val OctetStream = "application/octet-stream"
     const val Apk = "application/vnd.android.package-archive"
+    const val Pdf = "application/pdf"
 
     const val Images = "image/*"
 
