@@ -29,8 +29,10 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -51,16 +53,19 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.features.roomlist.impl.components.RoomListTopBar
@@ -78,7 +83,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.theme.noFontPadding
 import io.element.android.libraries.designsystem.theme.roomListUnreadIndicator
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -231,24 +236,32 @@ fun RoomListContent(
 
                     if (state.invitesState != InvitesState.NoInvites) {
                         item {
-                            Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxSize()) {
-                                TextButton(
-                                    content = {
-                                        Text(stringResource(StringR.string.action_invites_list))
-
-                                        if (state.invitesState == InvitesState.NewInvites) {
-                                            Spacer(Modifier.size(8.dp))
-
-                                            Box(
-                                                modifier = Modifier
-                                                    .size(12.dp)
-                                                    .clip(CircleShape)
-                                                    .background(MaterialTheme.roomListUnreadIndicator())
-                                            )
-                                        }
-                                    },
-                                    onClick = onInvitesClicked,
+                            Row(
+                                horizontalArrangement = Arrangement.End,
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clickable(role = Role.Button, onClick = onInvitesClicked)
+                                    .heightIn(min = 48.dp),
+                            ) {
+                                Text(
+                                    text = stringResource(StringR.string.action_invites_list),
+                                    fontSize = 14.sp,
+                                    style = noFontPadding,
                                 )
+
+                                if (state.invitesState == InvitesState.NewInvites) {
+                                    Spacer(Modifier.width(8.dp))
+
+                                    Box(
+                                        modifier = Modifier
+                                            .size(12.dp)
+                                            .clip(CircleShape)
+                                            .background(MaterialTheme.roomListUnreadIndicator())
+                                    )
+                                }
+
+                                Spacer(Modifier.width(16.dp))
                             }
                         }
                     }
