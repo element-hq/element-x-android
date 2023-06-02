@@ -28,16 +28,25 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.PersonAddAlt
 import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -45,9 +54,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserDialogs
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserSection
-import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberHeaderSection
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberMainActionsSection
 import io.element.android.libraries.architecture.isLoading
@@ -63,23 +72,26 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.LargeHeightPreview
 import io.element.android.libraries.designsystem.theme.LocalColors
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.ui.strings.R as StringR
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RoomDetailsView(
     state: RoomDetailsState,
     goBack: () -> Unit,
+    onActionClicked: (RoomDetailsAction) -> Unit,
     onShareRoom: () -> Unit,
     onShareMember: (RoomMember) -> Unit,
     openRoomMemberList: () -> Unit,
     invitePeople: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     fun onShareMember() {
         onShareMember((state.roomType as RoomDetailsType.Dm).roomMember)
     }
@@ -87,13 +99,18 @@ fun RoomDetailsView(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(title = { }, navigationIcon = { BackButton(onClick = goBack) })
+            RoomDetailsTopBar(
+                goBack = goBack,
+                showEdit = state.canEdit,
+                onActionClicked = onActionClicked
+            )
         },
     ) { padding ->
-        Column(modifier = Modifier
-            .padding(padding)
-            .consumeWindowInsets(padding)
-            .verticalScroll(rememberScrollState())
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .verticalScroll(rememberScrollState())
+                .consumeWindowInsets(padding)
         ) {
             LeaveRoomView(state = state.leaveRoomState)
 
@@ -107,6 +124,7 @@ fun RoomDetailsView(
                     )
                     MainActionsSection(onShareRoom = onShareRoom)
                 }
+
                 is RoomDetailsType.Dm -> {
                     val member = state.roomType.roomMember
                     RoomMemberHeaderSection(
@@ -119,8 +137,11 @@ fun RoomDetailsView(
             }
             Spacer(Modifier.height(26.dp))
 
-            if (state.roomTopic != null) {
-                TopicSection(roomTopic = state.roomTopic)
+            if (state.roomTopic !is RoomTopicState.Hidden) {
+                TopicSection(
+                    roomTopic = state.roomTopic,
+                    onActionClicked = onActionClicked,
+                )
             }
 
             if (state.roomType is RoomDetailsType.Room) {
@@ -128,10 +149,14 @@ fun RoomDetailsView(
                 MembersSection(
                     memberCount = memberCount,
                     isLoading = state.memberCount.isLoading(),
-                    showInvite = state.canInvite,
                     openRoomMemberList = openRoomMemberList,
-                    invitePeople = invitePeople,
                 )
+
+                if (state.canInvite) {
+                    InviteSection(
+                        invitePeople = invitePeople
+                    )
+                }
             }
 
             if (state.isEncrypted) {
@@ -149,6 +174,45 @@ fun RoomDetailsView(
             })
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun RoomDetailsTopBar(
+    goBack: () -> Unit,
+    onActionClicked: (RoomDetailsAction) -> Unit,
+    showEdit: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    var showMenu by remember { mutableStateOf(false) }
+
+    TopAppBar(
+        modifier = modifier,
+        title = { },
+        navigationIcon = { BackButton(onClick = goBack) },
+        actions = {
+            if (showEdit) {
+                IconButton(onClick = { showMenu = !showMenu }) {
+                    Icon(Icons.Default.MoreVert, "")
+                }
+                DropdownMenu(
+                    modifier = Modifier.widthIn(200.dp),
+                    expanded = showMenu,
+                    onDismissRequest = { showMenu = false },
+                ) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(id = StringR.string.action_edit)) },
+                        onClick = {
+                            // Explicitly close the menu before handling the action, as otherwise it stays open during the
+                            // transition and renders really badly.
+                            showMenu = false
+                            onActionClicked(RoomDetailsAction.Edit)
+                        },
+                    )
+                }
+            }
+        },
+    )
 }
 
 @Composable
@@ -184,14 +248,26 @@ internal fun RoomHeaderSection(
 }
 
 @Composable
-internal fun TopicSection(roomTopic: String, modifier: Modifier = Modifier) {
-    PreferenceCategory(title = stringResource(R.string.screen_room_details_topic_title), modifier = modifier) {
-        Text(
-            roomTopic,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.tertiary
-        )
+internal fun TopicSection(
+    roomTopic: RoomTopicState,
+    onActionClicked: (RoomDetailsAction) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    PreferenceCategory(title = stringResource(StringR.string.common_topic), modifier = modifier) {
+        if (roomTopic is RoomTopicState.CanAddTopic) {
+            PreferenceText(
+                title = stringResource(R.string.screen_room_details_add_topic_title),
+                icon = Icons.Outlined.Add,
+                onClick = { onActionClicked(RoomDetailsAction.AddTopic) },
+            )
+        } else if (roomTopic is RoomTopicState.ExistingTopic) {
+            Text(
+                roomTopic.topic,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.tertiary
+            )
+        }
     }
 }
 
@@ -199,8 +275,6 @@ internal fun TopicSection(roomTopic: String, modifier: Modifier = Modifier) {
 internal fun MembersSection(
     memberCount: Int?,
     isLoading: Boolean,
-    showInvite: Boolean,
-    invitePeople: () -> Unit,
     openRoomMemberList: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -212,13 +286,20 @@ internal fun MembersSection(
             onClick = openRoomMemberList,
             loadingCurrentValue = isLoading,
         )
-        if (showInvite) {
-            PreferenceText(
-                title = stringResource(R.string.screen_room_details_invite_people_title),
-                icon = Icons.Outlined.PersonAddAlt,
-                onClick = invitePeople,
-            )
-        }
+    }
+}
+
+@Composable
+internal fun InviteSection(
+    invitePeople: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    PreferenceCategory(modifier = modifier) {
+        PreferenceText(
+            title = stringResource(R.string.screen_room_details_invite_people_title),
+            icon = Icons.Outlined.PersonAddAlt,
+            onClick = invitePeople,
+        )
     }
 }
 
@@ -260,6 +341,7 @@ private fun ContentToPreview(state: RoomDetailsState) {
     RoomDetailsView(
         state = state,
         goBack = {},
+        onActionClicked = {},
         onShareRoom = {},
         onShareMember = {},
         openRoomMemberList = {},

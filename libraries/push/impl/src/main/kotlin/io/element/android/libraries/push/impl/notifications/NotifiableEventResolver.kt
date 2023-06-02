@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationData
+import io.element.android.libraries.matrix.api.notification.NotificationEvent
 import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
@@ -44,9 +45,9 @@ class NotifiableEventResolver @Inject constructor(
     private val stringProvider: StringProvider,
     // private val noticeEventFormatter: NoticeEventFormatter,
     // private val displayableEventFormatter: DisplayableEventFormatter,
-    private val clock: SystemClock,
     private val matrixAuthenticationService: MatrixAuthenticationService,
     private val buildMeta: BuildMeta,
+    private val clock: SystemClock,
 ) {
 
     suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent? {
@@ -71,44 +72,53 @@ class NotifiableEventResolver @Inject constructor(
 
         return notificationData.asNotifiableEvent(sessionId)
     }
-}
 
-private fun NotificationData.asNotifiableEvent(userId: SessionId): NotifiableEvent {
-    return NotifiableMessageEvent(
-        sessionId = userId,
-        roomId = roomId,
-        eventId = eventId,
-        editedEventId = null,
-        canBeReplaced = true,
-        noisy = isNoisy,
-        timestamp = System.currentTimeMillis(),
-        senderName = senderDisplayName,
-        senderId = senderId.value,
-        body = "Message ${eventId.value.take(8)}… in room ${roomId.value.take(8)}…",
-        imageUriString = null,
-        threadId = null,
-        roomName = null,
-        roomIsDirect = false,
-        roomAvatarPath = roomAvatarUrl,
-        senderAvatarPath = senderAvatarUrl,
-        soundName = null,
-        outGoingMessage = false,
-        outGoingMessageFailed = false,
-        isRedacted = false,
-        isUpdated = false
-    )
-}
+    private fun NotificationData.asNotifiableEvent(userId: SessionId): NotifiableEvent {
+        return NotifiableMessageEvent(
+            sessionId = userId,
+            roomId = roomId,
+            eventId = eventId,
+            editedEventId = null,
+            canBeReplaced = true,
+            noisy = isNoisy,
+            timestamp = event.timestamp,
+            senderName = senderDisplayName,
+            senderId = senderId.value,
+            body = event.content,
+            imageUriString = event.contentUrl,
+            threadId = null,
+            roomName = roomDisplayName,
+            roomIsDirect = isDirect,
+            roomAvatarPath = roomAvatarUrl,
+            senderAvatarPath = senderAvatarUrl,
+            soundName = null,
+            outGoingMessage = false,
+            outGoingMessageFailed = false,
+            isRedacted = false,
+            isUpdated = false
+        )
+    }
 
-/**
- * TODO This is a temporary method for EAx.
- */
-private fun NotificationData?.orDefault(roomId: RoomId, eventId: EventId): NotificationData {
-    return this ?: NotificationData(
-        eventId = eventId,
-        senderId = UserId("@user:domain"),
-        roomId = roomId,
-        isNoisy = false,
-        isEncrypted = false,
-        isDirect = false
-    )
+    /**
+     * TODO This is a temporary method for EAx.
+     */
+    private fun NotificationData?.orDefault(roomId: RoomId, eventId: EventId): NotificationData {
+        return this ?: NotificationData(
+            eventId = eventId,
+            senderId = UserId("@user:domain"),
+            roomId = roomId,
+            senderAvatarUrl = null,
+            senderDisplayName = null,
+            roomAvatarUrl = null,
+            roomDisplayName = null,
+            isNoisy = false,
+            isEncrypted = false,
+            isDirect = false,
+            event = NotificationEvent(
+                timestamp = clock.epochMillis(),
+                content = "Message ${eventId.value.take(8)}… in room ${roomId.value.take(8)}…",
+                contentUrl = null
+            )
+        )
+    }
 }

@@ -26,6 +26,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.matrix.api.auth.OidcDetails
 
 @ContributesNode(AppScope::class)
 class LoginRootNode @AssistedInject constructor(
@@ -36,10 +37,15 @@ class LoginRootNode @AssistedInject constructor(
 
     interface Callback : Plugin {
         fun onChangeHomeServer()
+        fun onOidcDetails(oidcDetails: OidcDetails)
     }
 
     private fun onChangeHomeServer() {
         plugins<Callback>().forEach { it.onChangeHomeServer() }
+    }
+
+    private fun onOidcDetails(oidcDetails: OidcDetails) {
+        plugins<Callback>().forEach { it.onOidcDetails(oidcDetails) }
     }
 
     @Composable
@@ -48,8 +54,9 @@ class LoginRootNode @AssistedInject constructor(
         LoginRootView(
             state = state,
             modifier = modifier,
-            onChangeServer = this::onChangeHomeServer,
-            onBackPressed = this::navigateUp
+            onChangeServer = ::onChangeHomeServer,
+            onOidcDetails = ::onOidcDetails,
+            onBackPressed = ::navigateUp
         )
     }
 }

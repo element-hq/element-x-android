@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import io.element.android.libraries.usersearch.api.UserSearchResult
 import io.element.android.libraries.usersearch.test.FakeUserListDataSource
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -63,7 +64,7 @@ internal class MatrixUserRepositoryTest {
         val result = repository.search("some query")
 
         result.test {
-            assertThat(awaitItem()).isEqualTo(aMatrixUserList())
+            assertThat(awaitItem()).isEqualTo(aMatrixUserList().toUserSearchResults())
             awaitComplete()
         }
     }
@@ -76,7 +77,7 @@ internal class MatrixUserRepositoryTest {
         val result = repository.search(A_USER_ID.value)
 
         result.test {
-            assertThat(awaitItem()).isEqualTo(listOf(MatrixUser(userId = A_USER_ID)))
+            assertThat(awaitItem()).isEqualTo(listOf(placeholderResult()))
             skipItems(1)
             awaitComplete()
         }
@@ -93,7 +94,7 @@ internal class MatrixUserRepositoryTest {
 
         result.test {
             skipItems(1)
-            assertThat(awaitItem()).isEqualTo(searchResults)
+            assertThat(awaitItem()).isEqualTo(searchResults.toUserSearchResults())
             awaitComplete()
         }
     }
@@ -112,13 +113,13 @@ internal class MatrixUserRepositoryTest {
 
         result.test {
             skipItems(1)
-            assertThat(awaitItem()).isEqualTo(listOf(userProfile) + searchResults)
+            assertThat(awaitItem()).isEqualTo((listOf(userProfile) + searchResults).toUserSearchResults())
             awaitComplete()
         }
     }
 
     @Test
-    fun `search - just shows id if profile can't be loaded`() = runTest {
+    fun `search - returns unresolved user if profile can't be loaded`() = runTest {
         val searchResults = aMatrixUserListWithoutUserId(A_USER_ID)
 
         val dataSource = FakeUserListDataSource()
@@ -130,11 +131,15 @@ internal class MatrixUserRepositoryTest {
 
         result.test {
             skipItems(1)
-            assertThat(awaitItem()).isEqualTo(listOf(MatrixUser(userId = A_USER_ID)) + searchResults)
+            assertThat(awaitItem()).isEqualTo(listOf(placeholderResult(isUnresolved = true)) + searchResults.toUserSearchResults())
             awaitComplete()
         }
     }
 
     private fun aMatrixUserListWithoutUserId(userId: UserId) = aMatrixUserList().filterNot { it.userId == userId }
+
+    private fun List<MatrixUser>.toUserSearchResults() = map { UserSearchResult(it) }
+
+    private fun placeholderResult(id: UserId = A_USER_ID, isUnresolved: Boolean = false) = UserSearchResult(MatrixUser(id), isUnresolved = isUnresolved)
 
 }

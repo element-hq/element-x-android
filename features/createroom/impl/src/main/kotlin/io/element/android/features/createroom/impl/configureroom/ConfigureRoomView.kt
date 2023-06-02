@@ -17,6 +17,7 @@
 package io.element.android.features.createroom.impl.configureroom
 
 import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,9 +25,11 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
@@ -46,11 +49,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.createroom.impl.R
-import io.element.android.features.createroom.impl.components.Avatar
-import io.element.android.features.createroom.impl.components.LabelledTextField
 import io.element.android.features.createroom.impl.components.RoomPrivacyOption
-import io.element.android.features.createroom.impl.configureroom.avatar.AvatarActionListView
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.designsystem.components.LabelledTextField
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
@@ -61,7 +62,9 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
+import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
 import kotlinx.coroutines.launch
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -105,54 +108,48 @@ fun ConfigureRoomView(
             )
         }
     ) { padding ->
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .padding(padding)
+                .imePadding()
+                .verticalScroll(rememberScrollState())
                 .consumeWindowInsets(padding),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            item {
-                RoomNameWithAvatar(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    avatarUri = state.config.avatarUri,
-                    roomName = state.config.roomName.orEmpty(),
-                    onAvatarClick = ::onAvatarClicked,
-                    onRoomNameChanged = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
-                )
-            }
-            item {
-                RoomTopic(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    topic = state.config.topic.orEmpty(),
-                    onTopicChanged = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
-                )
-            }
+            RoomNameWithAvatar(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                avatarUri = state.config.avatarUri,
+                roomName = state.config.roomName.orEmpty(),
+                onAvatarClick = ::onAvatarClicked,
+                onRoomNameChanged = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
+            )
+            RoomTopic(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                topic = state.config.topic.orEmpty(),
+                onTopicChanged = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
+            )
             if (state.config.invites.isNotEmpty()) {
-                item {
-                    SelectedUsersList(
-                        contentPadding = PaddingValues(horizontal = 24.dp),
-                        selectedUsers = state.config.invites,
-                        onUserRemoved = {
-                            focusManager.clearFocus()
-                            state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it))
-                        },
-                    )
-                }
-            }
-            item {
-                RoomPrivacyOptions(
-                    modifier = Modifier.padding(bottom = 40.dp),
-                    selected = state.config.privacy,
-                    onOptionSelected = {
+                SelectedUsersList(
+                    contentPadding = PaddingValues(horizontal = 24.dp),
+                    selectedUsers = state.config.invites,
+                    onUserRemoved = {
                         focusManager.clearFocus()
-                        state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it.privacy))
+                        state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it))
                     },
                 )
             }
+            RoomPrivacyOptions(
+                modifier = Modifier.padding(bottom = 40.dp),
+                selected = state.config.privacy,
+                onOptionSelected = {
+                    focusManager.clearFocus()
+                    state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it.privacy))
+                },
+            )
         }
     }
 
-    AvatarActionListView(
+    AvatarActionBottomSheet(
         actions = state.avatarActions,
         modalBottomSheetState = itemActionsBottomSheetState,
         onActionSelected = { state.eventSink(ConfigureRoomEvents.HandleAvatarAction(it)) }
@@ -221,16 +218,17 @@ fun RoomNameWithAvatar(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Avatar(
+        UnsavedAvatar(
             avatarUri = avatarUri,
-            onClick = onAvatarClick,
+            modifier = Modifier.clickable(onClick = onAvatarClick),
         )
 
         LabelledTextField(
             label = stringResource(R.string.screen_create_room_room_name_label),
             value = roomName,
             placeholder = stringResource(R.string.screen_create_room_room_name_placeholder),
-            onValueChange = onRoomNameChanged
+            singleLine = true,
+            onValueChange = onRoomNameChanged,
         )
     }
 }
@@ -269,6 +267,13 @@ fun RoomPrivacyOptions(
     }
 }
 
+private fun Modifier.clearFocusOnTap(focusManager: FocusManager): Modifier =
+    pointerInput(Unit) {
+        detectTapGestures(onTap = {
+            focusManager.clearFocus()
+        })
+    }
+
 @Preview
 @Composable
 fun ConfigureRoomViewLightPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) =
@@ -285,11 +290,4 @@ private fun ContentToPreview(state: ConfigureRoomState) {
         state = state,
     )
 }
-
-private fun Modifier.clearFocusOnTap(focusManager: FocusManager): Modifier =
-    pointerInput(Unit) {
-        detectTapGestures(onTap = {
-            focusManager.clearFocus()
-        })
-    }
 

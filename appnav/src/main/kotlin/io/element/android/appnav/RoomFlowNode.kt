@@ -39,6 +39,7 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.services.appnavstate.api.AppNavigationStateService
@@ -119,11 +120,20 @@ class RoomFlowNode @AssistedInject constructor(
                     override fun onRoomDetailsClicked() {
                         backstack.push(NavTarget.RoomDetails)
                     }
+
+                    override fun onUserDataClicked(userId: UserId) {
+                        backstack.push(NavTarget.RoomMemberDetails(userId))
+                    }
                 }
                 messagesEntryPoint.createNode(this, buildContext, callback)
             }
             NavTarget.RoomDetails -> {
-                roomDetailsEntryPoint.createNode(this, buildContext, emptyList())
+                val inputs = RoomDetailsEntryPoint.Inputs(RoomDetailsEntryPoint.InitialTarget.RoomDetails)
+                roomDetailsEntryPoint.createNode(this, buildContext, inputs, emptyList())
+            }
+            is NavTarget.RoomMemberDetails -> {
+                val inputs = RoomDetailsEntryPoint.Inputs(RoomDetailsEntryPoint.InitialTarget.RoomMemberDetails(navTarget.userId))
+                roomDetailsEntryPoint.createNode(this, buildContext, inputs, emptyList())
             }
         }
     }
@@ -134,6 +144,9 @@ class RoomFlowNode @AssistedInject constructor(
 
         @Parcelize
         object RoomDetails : NavTarget
+
+        @Parcelize
+        data class RoomMemberDetails(val userId: UserId) : NavTarget
     }
 
     private val timeline = inputs.room.timeline()

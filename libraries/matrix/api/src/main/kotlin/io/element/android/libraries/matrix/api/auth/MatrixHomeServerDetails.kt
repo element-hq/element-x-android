@@ -23,5 +23,5 @@ import kotlinx.parcelize.Parcelize
 data class MatrixHomeServerDetails(
     val url: String,
     val supportsPasswordLogin: Boolean,
-    val authenticationIssuer: String?
+    val supportsOidcLogin: Boolean,
 ): Parcelable

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_bullet_list">"Afficher une liste à puces"</string>
+  <string name="rich_text_editor_code_block">"Afficher le bloc de code"</string>
+  <string name="rich_text_editor_composer_placeholder">"Envoyer un message…"</string>
+  <string name="rich_text_editor_format_bold">"Appliquer le format gras"</string>
+  <string name="rich_text_editor_format_italic">"Appliquer le format italique"</string>
+  <string name="rich_text_editor_format_strikethrough">"Appliquer le format barré"</string>
+  <string name="rich_text_editor_format_underline">"Appliquer le format souligné"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Afficher en mode plein écran"</string>
+  <string name="rich_text_editor_indent">"Décaler vers la droite"</string>
+  <string name="rich_text_editor_inline_code">"Appliquer le formatage de code en ligne"</string>
+  <string name="rich_text_editor_link">"Définir un lien"</string>
+  <string name="rich_text_editor_numbered_list">"Afficher une liste numérotée"</string>
+  <string name="rich_text_editor_quote">"Afficher une citation"</string>
+  <string name="rich_text_editor_unindent">"Décaler vers la gauche"</string>
+</resources>

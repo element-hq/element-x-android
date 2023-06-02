@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import javax.inject.Inject
 
@@ -52,9 +53,22 @@ class RoomDetailsPresenter @Inject constructor(
         val membersState by room.membersStateFlow.collectAsState()
         val memberCount by getMemberCount(membersState)
         val canInvite by getCanInvite(membersState)
+        val canEditName by getCanSendStateEvent(membersState, StateEventType.ROOM_NAME)
+        val canEditAvatar by getCanSendStateEvent(membersState, StateEventType.ROOM_AVATAR)
+        val canEditTopic by getCanSendStateEvent(membersState, StateEventType.ROOM_TOPIC)
         val dmMember by room.getDirectRoomMember(membersState)
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
         val roomType = getRoomType(dmMember)
+
+        val topicState = remember(canEditTopic, room.topic) {
+            val topic = room.topic
+
+            when {
+                !topic.isNullOrBlank() -> RoomTopicState.ExistingTopic(topic)
+                canEditTopic -> RoomTopicState.CanAddTopic
+                else -> RoomTopicState.Hidden
+            }
+        }
 
         fun handleEvents(event: RoomDetailsEvent) {
             when (event) {
@@ -70,10 +84,11 @@ class RoomDetailsPresenter @Inject constructor(
             roomName = room.name ?: room.displayName,
             roomAlias = room.alias,
             roomAvatarUrl = room.avatarUrl,
-            roomTopic = room.topic,
+            roomTopic = topicState,
             memberCount = memberCount,
             isEncrypted = room.isEncrypted,
             canInvite = canInvite,
+            canEdit = canEditAvatar || canEditName || canEditTopic,
             roomType = roomType.value,
             roomMemberDetailsState = roomMemberDetailsState,
             leaveRoomState = leaveRoomState,
@@ -106,6 +121,15 @@ class RoomDetailsPresenter @Inject constructor(
             canInvite.value = room.canInvite().getOrElse { false }
         }
         return canInvite
+    }
+
+    @Composable
+    private fun getCanSendStateEvent(membersState: MatrixRoomMembersState, type: StateEventType): State<Boolean> {
+        val canSendEvent = remember(membersState) { mutableStateOf(false) }
+        LaunchedEffect(membersState) {
+            canSendEvent.value = room.canSendStateEvent(type).getOrElse { false }
+        }
+        return canSendEvent
     }
 
     @Composable

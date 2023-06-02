@@ -27,11 +27,14 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
+import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -54,6 +57,7 @@ class RustMatrixRoom(
     private val innerRoom: Room,
     private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
+    private val clock: SystemClock,
 ) : MatrixRoom {
 
     override val membersStateFlow: StateFlow<MatrixRoomMembersState>
@@ -77,9 +81,9 @@ class RustMatrixRoom(
                 it.rooms.contains(roomId.value)
             }
             .map {
-                System.currentTimeMillis()
+                clock.epochMillis()
             }
-            .onStart { emit(System.currentTimeMillis()) }
+            .onStart { emit(clock.epochMillis()) }
     }
 
     override fun timeline(): MatrixTimeline {
@@ -222,6 +226,12 @@ class RustMatrixRoom(
         }
     }
 
+    override suspend fun canSendStateEvent(type: StateEventType): Result<Boolean> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            innerRoom.member(sessionId.value).use { it.canSendState(type.map()) }
+        }
+    }
+
     override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {
             innerRoom.sendImage(file.path, thumbnailFile.path, imageInfo.map())
@@ -245,4 +255,33 @@ class RustMatrixRoom(
             innerRoom.sendFile(file.path, fileInfo.map())
         }
     }
+
+    @OptIn(ExperimentalUnsignedTypes::class)
+    override suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                innerRoom.uploadAvatar(mimeType, data.toUByteArray().toList())
+            }
+        }
+
+    override suspend fun removeAvatar(): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                innerRoom.removeAvatar()
+            }
+        }
+
+    override suspend fun setName(name: String): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                innerRoom.setName(name)
+            }
+        }
+
+    override suspend fun setTopic(topic: String): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                innerRoom.setTopic(topic)
+            }
+        }
 }

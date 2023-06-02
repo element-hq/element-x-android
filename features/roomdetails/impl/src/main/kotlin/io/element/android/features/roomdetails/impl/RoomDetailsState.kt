@@ -26,11 +26,12 @@ data class RoomDetailsState(
     val roomName: String,
     val roomAlias: String?,
     val roomAvatarUrl: String?,
-    val roomTopic: String?,
+    val roomTopic: RoomTopicState,
     val memberCount: Async<Int>,
     val isEncrypted: Boolean,
     val roomType: RoomDetailsType,
     val roomMemberDetailsState: RoomMemberDetailsState?,
+    val canEdit: Boolean,
     val canInvite: Boolean,
     val leaveRoomState: LeaveRoomState,
     val eventSink: (RoomDetailsEvent) -> Unit
@@ -39,4 +40,10 @@ data class RoomDetailsState(
 sealed interface RoomDetailsType {
     object Room : RoomDetailsType
     data class Dm(val roomMember: RoomMember) : RoomDetailsType
+}
+
+sealed interface RoomTopicState {
+    object Hidden : RoomTopicState
+    object CanAddTopic : RoomTopicState
+    data class ExistingTopic(val topic: String) : RoomTopicState
 }

@@ -19,16 +19,22 @@ package io.element.android.libraries.matrix.test.auth
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
+import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.FAKE_DELAY_IN_MS
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOf
 
+val A_OIDC_DATA = OidcDetails(url = "a-url")
+
 class FakeAuthenticationService : MatrixAuthenticationService {
     private var homeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
+    private var oidcError: Throwable? = null
+    private var oidcCancelError: Throwable? = null
     private var loginError: Throwable? = null
     private var changeServerError: Throwable? = null
 
@@ -53,13 +59,34 @@ class FakeAuthenticationService : MatrixAuthenticationService {
     }
 
     override suspend fun setHomeserver(homeserver: String): Result<Unit> {
-        delay(100)
+        delay(FAKE_DELAY_IN_MS)
         return changeServerError?.let { Result.failure(it) } ?: Result.success(Unit)
     }
 
     override suspend fun login(username: String, password: String): Result<SessionId> {
-        delay(100)
+        delay(FAKE_DELAY_IN_MS)
         return loginError?.let { Result.failure(it) } ?: Result.success(A_USER_ID)
+    }
+
+    override suspend fun getOidcUrl(): Result<OidcDetails> {
+        return oidcError?.let { Result.failure(it) } ?: Result.success(A_OIDC_DATA)
+    }
+
+    override suspend fun cancelOidcLogin(): Result<Unit> {
+        return oidcCancelError?.let { Result.failure(it) } ?: Result.success(Unit)
+    }
+
+    override suspend fun loginWithOidc(callbackUrl: String): Result<SessionId> {
+        delay(FAKE_DELAY_IN_MS)
+        return loginError?.let { Result.failure(it) } ?: Result.success(A_USER_ID)
+    }
+
+    fun givenOidcError(throwable: Throwable?) {
+        oidcError = throwable
+    }
+
+    fun givenOidcCancelError(throwable: Throwable?) {
+        oidcCancelError = throwable
     }
 
     fun givenLoginError(throwable: Throwable?) {

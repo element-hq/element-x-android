@@ -19,10 +19,11 @@ package io.element.android.features.roomdetails
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.features.leaveroom.fake.LeaveRoomPresenterFake
 import io.element.android.features.roomdetails.impl.RoomDetailsPresenter
 import io.element.android.features.roomdetails.impl.RoomDetailsType
+import io.element.android.features.roomdetails.impl.RoomTopicState
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Async
@@ -31,8 +32,8 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
-import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -40,16 +41,12 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
-import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class RoomDetailsPresenterTests {
-
-    private val roomMembershipObserver = RoomMembershipObserver()
-    private val testCoroutineDispatchers = testCoroutineDispatchers()
 
     private fun aRoomDetailsPresenter(room: MatrixRoom): RoomDetailsPresenter {
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
@@ -68,12 +65,12 @@ class RoomDetailsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.roomId).isEqualTo(room.roomId.value)
-            Truth.assertThat(initialState.roomName).isEqualTo(room.name)
-            Truth.assertThat(initialState.roomAvatarUrl).isEqualTo(room.avatarUrl)
-            Truth.assertThat(initialState.roomTopic).isEqualTo(room.topic)
-            Truth.assertThat(initialState.memberCount).isEqualTo(Async.Uninitialized)
-            Truth.assertThat(initialState.isEncrypted).isEqualTo(room.isEncrypted)
+            assertThat(initialState.roomId).isEqualTo(room.roomId.value)
+            assertThat(initialState.roomName).isEqualTo(room.name)
+            assertThat(initialState.roomAvatarUrl).isEqualTo(room.avatarUrl)
+            assertThat(initialState.roomTopic).isEqualTo(RoomTopicState.ExistingTopic(room.topic!!))
+            assertThat(initialState.memberCount).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.isEncrypted).isEqualTo(room.isEncrypted)
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -93,22 +90,22 @@ class RoomDetailsPresenterTests {
         }.test {
             room.givenRoomMembersState(MatrixRoomMembersState.Unknown)
             val initialState = awaitItem()
-            Truth.assertThat(initialState.memberCount).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.memberCount).isEqualTo(Async.Uninitialized)
             skipItems(1)
 
             room.givenRoomMembersState(MatrixRoomMembersState.Pending(null))
             val loadingState = awaitItem()
-            Truth.assertThat(loadingState.memberCount).isEqualTo(Async.Loading(null))
+            assertThat(loadingState.memberCount).isEqualTo(Async.Loading(null))
 
             room.givenRoomMembersState(MatrixRoomMembersState.Error(error))
             skipItems(1)
             val failureState = awaitItem()
-            Truth.assertThat(failureState.memberCount).isEqualTo(Async.Failure(error, null))
+            assertThat(failureState.memberCount).isEqualTo(Async.Failure(error, null))
 
             room.givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
             skipItems(1)
             val successState = awaitItem()
-            Truth.assertThat(successState.memberCount).isEqualTo(Async.Success(1))
+            assertThat(successState.memberCount).isEqualTo(Async.Success(1))
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -122,7 +119,7 @@ class RoomDetailsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.roomName).isEqualTo(room.displayName)
+            assertThat(initialState.roomName).isEqualTo(room.displayName)
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -144,7 +141,7 @@ class RoomDetailsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.roomType).isEqualTo(RoomDetailsType.Dm(otherRoomMember))
+            assertThat(initialState.roomType).isEqualTo(RoomDetailsType.Dm(otherRoomMember))
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -160,9 +157,9 @@ class RoomDetailsPresenterTests {
             presenter.present()
         }.test {
             // Initially false
-            Truth.assertThat(awaitItem().canInvite).isFalse()
+            assertThat(awaitItem().canInvite).isFalse()
             // Then the asynchronous check completes and it becomes true
-            Truth.assertThat(awaitItem().canInvite).isTrue()
+            assertThat(awaitItem().canInvite).isTrue()
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -177,7 +174,7 @@ class RoomDetailsPresenterTests {
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
-            Truth.assertThat(awaitItem().canInvite).isFalse()
+            assertThat(awaitItem().canInvite).isFalse()
         }
     }
 
@@ -190,7 +187,103 @@ class RoomDetailsPresenterTests {
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
-            Truth.assertThat(awaitItem().canInvite).isFalse()
+            assertThat(awaitItem().canInvite).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - initial state when user can edit one attribute`() = runTest {
+        val room = aMatrixRoom().apply {
+            givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))
+            givenCanSendStateResult(StateEventType.ROOM_NAME, Result.success(false))
+            givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.failure(Throwable("Whelp")))
+            givenCanInviteResult(Result.success(false))
+        }
+        val presenter = aRoomDetailsPresenter(room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            // Initially false
+            assertThat(awaitItem().canEdit).isFalse()
+            // Then the asynchronous check completes and it becomes true
+            assertThat(awaitItem().canEdit).isTrue()
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - initial state when user can edit all attributes`() = runTest {
+        val room = aMatrixRoom().apply {
+            givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))
+            givenCanSendStateResult(StateEventType.ROOM_NAME, Result.success(true))
+            givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.success(true))
+            givenCanInviteResult(Result.success(false))
+        }
+        val presenter = aRoomDetailsPresenter(room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            // Initially false
+            assertThat(awaitItem().canEdit).isFalse()
+            // Then the asynchronous check completes and it becomes true
+            assertThat(awaitItem().canEdit).isTrue()
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - initial state when user can edit no attributes`() = runTest {
+        val room = aMatrixRoom().apply {
+            givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(false))
+            givenCanSendStateResult(StateEventType.ROOM_NAME, Result.success(false))
+            givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.success(false))
+            givenCanInviteResult(Result.success(false))
+        }
+        val presenter = aRoomDetailsPresenter(room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            // Initially false, and no further events
+            assertThat(awaitItem().canEdit).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - topic state is hidden when no topic and user has no permission`() = runTest {
+        val room = aMatrixRoom(topic = null).apply {
+            givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(false))
+            givenCanInviteResult(Result.success(false))
+        }
+
+        val presenter = aRoomDetailsPresenter(room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            // The initial state is "hidden" and no further state changes happen
+            assertThat(awaitItem().roomTopic).isEqualTo(RoomTopicState.Hidden)
+        }
+    }
+
+    @Test
+    fun `present - topic state is 'can add topic' when no topic and user has permission`() = runTest {
+        val room = aMatrixRoom(topic = null).apply {
+            givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))
+            givenCanInviteResult(Result.success(false))
+        }
+
+        val presenter = aRoomDetailsPresenter(room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            // Ignore the initial state
+            skipItems(1)
+
+            // When the async permission check finishes, the topic state will be updated
+            assertThat(awaitItem().roomTopic).isEqualTo(RoomTopicState.CanAddTopic)
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 }

@@ -25,6 +25,7 @@ open class BubbleStateProvider : PreviewParameterProvider<BubbleState> {
             TimelineItemGroupPosition.First,
             TimelineItemGroupPosition.Middle,
             TimelineItemGroupPosition.Last,
+            TimelineItemGroupPosition.None,
         ).map { groupPosition ->
             sequenceOf(false, true).map { isMine ->
                 sequenceOf(false, true).map { isHighlighted ->

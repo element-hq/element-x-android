@@ -16,8 +16,8 @@
 
 package io.element.android.libraries.usersearch.test
 
-import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.usersearch.api.UserRepository
+import io.element.android.libraries.usersearch.api.UserSearchResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
@@ -26,14 +26,14 @@ class FakeUserRepository : UserRepository {
     var providedQuery: String? = null
         private set
 
-    private val flow = MutableSharedFlow<List<MatrixUser>>()
+    private val flow = MutableSharedFlow<List<UserSearchResult>>()
 
-    override suspend fun search(query: String): Flow<List<MatrixUser>> {
+    override suspend fun search(query: String): Flow<List<UserSearchResult>> {
         providedQuery = query
         return flow
     }
 
-    suspend fun emitResult(result: List<MatrixUser>) {
+    suspend fun emitResult(result: List<UserSearchResult>) {
         flow.emit(result)
     }
 

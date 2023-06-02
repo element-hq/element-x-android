@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -47,8 +48,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -85,6 +88,7 @@ import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -93,9 +97,9 @@ import kotlinx.coroutines.launch
 fun TimelineView(
     state: TimelineState,
     modifier: Modifier = Modifier,
+    onUserDataClicked: (UserId) -> Unit = {},
     onMessageClicked: (TimelineItem.Event) -> Unit = {},
     onMessageLongClicked: (TimelineItem.Event) -> Unit = {},
-    onExpandGroupClick: (TimelineItem.GroupedEvents) -> Unit = {},
 ) {
 
     fun onReachedLoadMore() {
@@ -119,7 +123,7 @@ fun TimelineView(
                     highlightedItem = state.highlightedEventId?.value,
                     onClick = onMessageClicked,
                     onLongClick = onMessageLongClicked,
-                    onExpandGroupClick = onExpandGroupClick,
+                    onUserDataClick = onUserDataClicked,
                 )
                 if (index == state.timelineItems.lastIndex) {
                     onReachedLoadMore()
@@ -139,9 +143,9 @@ fun TimelineView(
 fun TimelineItemRow(
     timelineItem: TimelineItem,
     highlightedItem: String?,
+    onUserDataClick: (UserId) -> Unit,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
-    onExpandGroupClick: (TimelineItem.GroupedEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (timelineItem) {
@@ -174,13 +178,16 @@ fun TimelineItemRow(
                     isHighlighted = highlightedItem == timelineItem.identifier(),
                     onClick = ::onClick,
                     onLongClick = ::onLongClick,
+                    onUserDataClick = onUserDataClick,
                     modifier = modifier,
                 )
             }
         }
         is TimelineItem.GroupedEvents -> {
+            val isExpanded = rememberSaveable(key = timelineItem.identifier()) { mutableStateOf(false) }
+
             fun onExpandGroupClick() {
-                onExpandGroupClick(timelineItem)
+                isExpanded.value = !isExpanded.value
             }
 
             Column(modifier = modifier.animateContentSize()) {
@@ -190,11 +197,11 @@ fun TimelineItemRow(
                         count = timelineItem.events.size,
                         timelineItem.events.size
                     ),
-                    isExpanded = timelineItem.expanded,
-                    isHighlighted = !timelineItem.expanded && timelineItem.events.any { it.identifier() == highlightedItem },
+                    isExpanded = isExpanded.value,
+                    isHighlighted = !isExpanded.value && timelineItem.events.any { it.identifier() == highlightedItem },
                     onClick = ::onExpandGroupClick,
                 )
-                if (timelineItem.expanded) {
+                if (isExpanded.value) {
                     Column {
                         timelineItem.events.forEach { subGroupEvent ->
                             TimelineItemRow(
@@ -202,7 +209,7 @@ fun TimelineItemRow(
                                 highlightedItem = highlightedItem,
                                 onClick = onClick,
                                 onLongClick = onLongClick,
-                                onExpandGroupClick = {}
+                                onUserDataClick = onUserDataClick,
                             )
                         }
                     }
@@ -230,15 +237,21 @@ fun TimelineItemEventRow(
     isHighlighted: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
+    onUserDataClick: (UserId) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+
+    fun onUserDataClicked() {
+        onUserDataClick(event.senderId)
+    }
 
     val (parentAlignment, contentAlignment) = if (event.isMine) {
         Pair(Alignment.CenterEnd, Alignment.End)
     } else {
         Pair(Alignment.CenterStart, Alignment.Start)
     }
+
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -247,14 +260,17 @@ fun TimelineItemEventRow(
     ) {
         Row {
             if (!event.isMine) {
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(4.dp))
             }
             Column(horizontalAlignment = contentAlignment) {
                 if (event.showSenderInformation) {
                     MessageSenderInformation(
                         event.safeSenderName,
                         event.senderAvatar,
-                        Modifier.zIndex(1f)
+                        Modifier
+                            .zIndex(1f)
+                            .offset(y = 12.dp)
+                            .clickable(onClick = ::onUserDataClicked)
                     )
                 }
                 val bubbleState = BubbleState(
@@ -282,7 +298,7 @@ fun TimelineItemEventRow(
                     reactionsState = event.reactionsState,
                     modifier = Modifier
                         .zIndex(1f)
-                        .offset(x = if (event.isMine) 0.dp else 20.dp, y = -(16.dp))
+                        .offset(x = if (event.isMine) 0.dp else 20.dp, y = -(4.dp))
                 )
             }
             if (event.isMine) {
