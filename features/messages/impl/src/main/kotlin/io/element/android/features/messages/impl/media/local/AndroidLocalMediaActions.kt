@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.media.local
 
+import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -45,6 +46,7 @@ class AndroidLocalMediaActions @Inject constructor(
 ) : LocalMediaActions {
 
     override suspend fun saveOnDisk(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
+        require(localMedia.uri.scheme == ContentResolver.SCHEME_FILE)
         runCatching {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 saveOnDiskUsingMediaStore(localMedia)
@@ -59,6 +61,7 @@ class AndroidLocalMediaActions @Inject constructor(
     }
 
     override suspend fun share(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
+        require(localMedia.uri.scheme == ContentResolver.SCHEME_FILE)
         runCatching {
             val authority = "${buildMeta.applicationId}.fileprovider"
             val uriFromFileProvider = FileProvider.getUriForFile(context, authority, localMedia.toFile())
@@ -109,7 +112,17 @@ class AndroidLocalMediaActions @Inject constructor(
         return context.contentResolver.openInputStream(uri)
     }
 
+    /**
+     * Tries to extract a file from the uri and rename it using the local media name if defined.
+     */
     private fun LocalMedia.toFile(): File {
-        return uri.toFile()
+        val uriAsFile = uri.toFile()
+        return if (name != null) {
+            File(uriAsFile.parentFile, name).apply {
+                uriAsFile.renameTo(this)
+            }
+        } else {
+            uriAsFile
+        }
     }
 }
