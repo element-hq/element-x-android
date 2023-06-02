@@ -85,6 +85,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
+import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -97,6 +98,7 @@ fun MessagesView(
     onBackPressed: () -> Unit,
     onRoomDetailsClicked: () -> Unit,
     onEventClicked: (event: TimelineItem.Event) -> Unit,
+    onUserDataClicked: (UserId) -> Unit,
     onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -153,11 +155,6 @@ fun MessagesView(
         }
     }
 
-    fun onExpandGroupClick(event: TimelineItem.GroupedEvents) {
-        Timber.v("onExpandGroupClick= ${event.id}")
-        state.timelineState.eventSink(TimelineEvents.ToggleExpandGroup(event))
-    }
-
     fun onActionSelected(action: TimelineItemAction, event: TimelineItem.Event) {
         state.eventSink(MessagesEvents.HandleAction(action, event))
     }
@@ -208,7 +205,7 @@ fun MessagesView(
                         .consumeWindowInsets(padding),
                     onMessageClicked = ::onMessageClicked,
                     onMessageLongClicked = ::onMessageLongClicked,
-                    onExpandGroupClick = ::onExpandGroupClick,
+                    onUserDataClicked = onUserDataClicked,
                 )
             },
             snackbarHost = {
@@ -246,8 +243,8 @@ fun MessagesViewContent(
     state: MessagesState,
     modifier: Modifier = Modifier,
     onMessageClicked: (TimelineItem.Event) -> Unit = {},
+    onUserDataClicked: (UserId) -> Unit = {},
     onMessageLongClicked: (TimelineItem.Event) -> Unit = {},
-    onExpandGroupClick: (TimelineItem.GroupedEvents) -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -262,7 +259,7 @@ fun MessagesViewContent(
                 modifier = Modifier.weight(1f),
                 onMessageClicked = onMessageClicked,
                 onMessageLongClicked = onMessageLongClicked,
-                onExpandGroupClick = onExpandGroupClick,
+                onUserDataClicked = onUserDataClicked,
             )
         }
         MessageComposerView(
@@ -362,6 +359,7 @@ private fun ContentToPreview(state: MessagesState) {
         onBackPressed = {},
         onRoomDetailsClicked = {},
         onEventClicked = {},
-        onPreviewAttachments = {}
+        onPreviewAttachments = {},
+        onUserDataClicked = {},
     )
 }

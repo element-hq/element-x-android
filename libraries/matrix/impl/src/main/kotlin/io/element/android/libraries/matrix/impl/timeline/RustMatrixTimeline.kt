@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessageMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
@@ -149,10 +150,10 @@ class RustMatrixTimeline(
         runCatching {
             val settings = RoomSubscription(
                 requiredState = listOf(
-                    RequiredState(key = "m.room.canonical_alias", value = ""),
-                    RequiredState(key = "m.room.topic", value = ""),
-                    RequiredState(key = "m.room.join_rules", value = ""),
-                    RequiredState(key = "m.room.power_levels", value = ""),
+                    RequiredState(key = EventType.STATE_ROOM_CANONICAL_ALIAS, value = ""),
+                    RequiredState(key = EventType.STATE_ROOM_TOPIC, value = ""),
+                    RequiredState(key = EventType.STATE_ROOM_JOIN_RULES, value = ""),
+                    RequiredState(key = EventType.STATE_ROOM_POWER_LEVELS, value = ""),
                 ),
                 timelineLimit = null
             )

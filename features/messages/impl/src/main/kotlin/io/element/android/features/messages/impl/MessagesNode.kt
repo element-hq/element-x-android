@@ -28,6 +28,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.collections.immutable.ImmutableList
 
 @ContributesNode(RoomScope::class)
@@ -43,6 +44,7 @@ class MessagesNode @AssistedInject constructor(
         fun onRoomDetailsClicked()
         fun onEventClicked(event: TimelineItem.Event)
         fun onPreviewAttachments(attachments: ImmutableList<Attachment>)
+        fun onUserDataClicked(userId: UserId)
     }
 
     private fun onRoomDetailsClicked() {
@@ -57,6 +59,10 @@ class MessagesNode @AssistedInject constructor(
         callback?.onPreviewAttachments(attachments)
     }
 
+    private fun onUserDataClicked(userId: UserId) {
+        callback?.onUserDataClicked(userId)
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -66,6 +72,7 @@ class MessagesNode @AssistedInject constructor(
             onRoomDetailsClicked = this::onRoomDetailsClicked,
             onEventClicked = this::onEventClicked,
             onPreviewAttachments = this::onPreviewAttachments,
+            onUserDataClicked = this::onUserDataClicked,
             modifier = modifier,
         )
     }

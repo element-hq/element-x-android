@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_call">"Anruf"</string>
+  <string name="notification_channel_listening_for_events">"Warte auf Ereignisse"</string>
   <string name="notification_channel_noisy">"Laute Benachrichtigungen"</string>
+  <string name="notification_channel_silent">"Stumme Benachrichtigungen"</string>
+  <string name="notification_inline_reply_failed">"** Senden fehlgeschlagen - bitte Raum öffnen"</string>
   <string name="notification_invitation_action_join">"Beitreten"</string>
   <string name="notification_invitation_action_reject">"Ablehnen"</string>
   <string name="notification_new_messages">"Neue Nachrichten"</string>
   <string name="notification_room_action_mark_as_read">"Als gelesen markieren"</string>
+  <string name="notification_sender_me">"Ich"</string>
+  <string name="notification_test_push_notification_content">"Du siehst die Benachrichtigung an! Klick mich an!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <string name="notification_unread_notified_messages_and_invitation">"%1$s und %2$s"</string>
@@ -26,10 +32,16 @@
     <item quantity="one">"%d neue Nachricht"</item>
     <item quantity="other">"%d neue Nachrichten"</item>
   </plurals>
+  <plurals name="notification_unread_notified_messages">
+    <item quantity="one">"%d ungelesene benachrichtigte Nachricht"</item>
+    <item quantity="other">"%d ungelesene benachrichtigte Nachrichten"</item>
+  </plurals>
   <plurals name="notification_unread_notified_messages_in_room_rooms">
     <item quantity="one">"%d Raum"</item>
     <item quantity="other">"%d Räume"</item>
   </plurals>
+  <string name="push_choose_distributor_dialog_title_android">"Auswählen, wie Benachrichtigungen empfangen werden sollen"</string>
+  <string name="push_distributor_background_sync_android">"Hintergrundsynchronisation"</string>
   <string name="push_distributor_firebase_android">"Google-Dienste"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Keine gültigen Google Play-Dienste gefunden. Benachrichtigungen funktionieren möglicherweise nicht richtig."</string>
   <string name="notification_room_action_quick_reply">"Schnellantwort"</string>

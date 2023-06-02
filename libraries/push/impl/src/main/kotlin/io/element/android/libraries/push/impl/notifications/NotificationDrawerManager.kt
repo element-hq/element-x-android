@@ -16,28 +16,28 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import android.content.Context
-import android.os.Handler
-import android.os.HandlerThread
-import androidx.annotation.WorkerThread
 import io.element.android.libraries.androidutils.throttler.FirstThrottler
 import io.element.android.libraries.core.cache.CircularCache
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.api.store.PushDataStore
-import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.shouldIgnoreMessageEventInRoom
 import io.element.android.services.appnavstate.api.AppNavigationState
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -48,7 +48,6 @@ import javax.inject.Inject
  */
 @SingleIn(AppScope::class)
 class NotificationDrawerManager @Inject constructor(
-    @ApplicationContext context: Context,
     private val pushDataStore: PushDataStore,
     private val notifiableEventProcessor: NotifiableEventProcessor,
     private val notificationRenderer: NotificationRenderer,
@@ -56,17 +55,14 @@ class NotificationDrawerManager @Inject constructor(
     private val filteredEventDetector: FilteredEventDetector,
     private val appNavigationStateService: AppNavigationStateService,
     private val coroutineScope: CoroutineScope,
+    private val dispatchers: CoroutineDispatchers,
     private val buildMeta: BuildMeta,
+    private val matrixAuthenticationService: MatrixAuthenticationService,
 ) {
-
-    private val handlerThread: HandlerThread = HandlerThread("NotificationDrawerManager", Thread.MIN_PRIORITY)
-    private var backgroundHandler: Handler
-
     /**
      * Lazily initializes the NotificationState as we rely on having a current session in order to fetch the persisted queue of events.
      */
     private val notificationState by lazy { createInitialNotificationState() }
-    private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
     private var currentAppNavigationState: AppNavigationState? = null
     private val firstThrottler = FirstThrottler(200)
 
@@ -74,8 +70,6 @@ class NotificationDrawerManager @Inject constructor(
     private var useCompleteNotificationFormat = true
 
     init {
-        handlerThread.start()
-        backgroundHandler = Handler(handlerThread.looper)
         // Observe application state
         coroutineScope.launch {
             appNavigationStateService.appNavigationStateFlow
@@ -193,30 +187,25 @@ class NotificationDrawerManager @Inject constructor(
         notificationState.updateQueuedEvents(this) { queuedEvents, _ ->
             action(queuedEvents)
         }
-        refreshNotificationDrawer()
+        coroutineScope.refreshNotificationDrawer()
     }
 
-    private fun refreshNotificationDrawer() {
+    private fun CoroutineScope.refreshNotificationDrawer() = launch {
         // Implement last throttler
         val canHandle = firstThrottler.canHandle()
         Timber.v("refreshNotificationDrawer(), delay: ${canHandle.waitMillis()} ms")
-        backgroundHandler.removeCallbacksAndMessages(null)
-
-        backgroundHandler.postDelayed(
-            {
-                try {
-                    refreshNotificationDrawerBg()
-                } catch (throwable: Throwable) {
-                    // It can happen if for instance session has been destroyed. It's a bit ugly to try catch like this, but it's safer
-                    Timber.w(throwable, "refreshNotificationDrawerBg failure")
-                }
-            },
-            canHandle.waitMillis()
-        )
+        withContext(dispatchers.io) {
+            delay(canHandle.waitMillis())
+            try {
+                refreshNotificationDrawerBg()
+            } catch (throwable: Throwable) {
+                // It can happen if for instance session has been destroyed. It's a bit ugly to try catch like this, but it's safer
+                Timber.w(throwable, "refreshNotificationDrawerBg failure")
+            }
+        }
     }
 
-    @WorkerThread
-    private fun refreshNotificationDrawerBg() {
+    private suspend fun refreshNotificationDrawerBg() {
         Timber.v("refreshNotificationDrawerBg()")
         val eventsToRender = notificationState.updateQueuedEvents(this) { queuedEvents, renderedEvents ->
             notifiableEventProcessor.process(queuedEvents.rawEvents(), currentAppNavigationState, renderedEvents).also {
@@ -239,24 +228,34 @@ class NotificationDrawerManager @Inject constructor(
         }
     }
 
-    private fun renderEvents(eventsToRender: List<ProcessedEvent<NotifiableEvent>>) {
+    private suspend fun renderEvents(eventsToRender: List<ProcessedEvent<NotifiableEvent>>) {
         // Group by sessionId
         val eventsForSessions = eventsToRender.groupBy {
             it.event.sessionId
         }
 
         eventsForSessions.forEach { (sessionId, notifiableEvents) ->
-            // TODO EAx val user = session.getUserOrDefault(session.myUserId)
-            // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
-            val myUserDisplayName = "Todo display name" // user.toMatrixItem().getBestName()
-            // TODO EAx avatar URL
-            val myUserAvatarUrl = null // session.contentUrlResolver().resolveThumbnail(
-            //    contentUrl = user.avatarUrl,
-            //    width = avatarSize,
-            //    height = avatarSize,
-            //    method = ContentUrlResolver.ThumbnailMethod.SCALE
-            //)
-            notificationRenderer.render(sessionId, myUserDisplayName, myUserAvatarUrl, useCompleteNotificationFormat, notifiableEvents)
+            val currentUser = tryOrNull(
+                onError = { Timber.e(it, "Unable to retrieve info for user ${sessionId.value}") },
+                operation = {
+                    val client = matrixAuthenticationService.restoreSession(sessionId).getOrNull()
+
+                    // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
+                    val myUserDisplayName = client?.loadUserDisplayName()?.getOrNull() ?: sessionId.value
+                    val userAvatarUrl = client?.loadUserAvatarURLString()?.getOrNull()
+                    MatrixUser(
+                        userId = sessionId,
+                        displayName = myUserDisplayName,
+                        avatarUrl = userAvatarUrl
+                    )
+                }
+            ) ?: MatrixUser(
+                userId = sessionId,
+                displayName = sessionId.value,
+                avatarUrl = null
+            )
+
+            notificationRenderer.render(currentUser, useCompleteNotificationFormat, notifiableEvents)
         }
     }
 

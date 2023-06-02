@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages
 
+import android.net.Uri
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
@@ -28,7 +29,6 @@ import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
-import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
 import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
@@ -41,11 +41,15 @@ import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class MessagesPresenterTest {
+
+    private val mockMediaUrl: Uri = mockk("localMediaUri")
+
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createMessagePresenter()
@@ -136,13 +140,12 @@ class MessagesPresenterTest {
             room = matrixRoom,
             mediaPickerProvider = FakePickerProvider(),
             featureFlagService = FakeFeatureFlagService(),
-            localMediaFactory = FakeLocalMediaFactory(),
+            localMediaFactory = FakeLocalMediaFactory(mockMediaUrl),
             mediaSender = MediaSender(FakeMediaPreProcessor(),matrixRoom),
             snackbarDispatcher = SnackbarDispatcher(),
         )
         val timelinePresenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
-            timelineItemGrouper = TimelineItemGrouper(),
             room = matrixRoom,
         )
         val actionListPresenter = ActionListPresenter()

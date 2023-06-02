@@ -17,23 +17,31 @@
 package io.element.android.features.login.impl.root
 
 import android.os.Parcelable
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
+import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.parcelize.Parcelize
 
 data class LoginRootState(
-    val homeserverDetails: MatrixHomeServerDetails,
+    val homeserverUrl: String,
+    val homeserverDetails: Async<MatrixHomeServerDetails>,
     val loggedInState: LoggedInState,
     val formState: LoginFormState,
     val eventSink: (LoginRootEvents) -> Unit
 ) {
-    val submitEnabled: Boolean get() =
-        formState.login.isNotEmpty() && formState.password.isNotEmpty() && loggedInState !is LoggedInState.ErrorLoggingIn
+    val supportPasswordLogin = (homeserverDetails as? Async.Success)?.state?.supportsPasswordLogin.orFalse()
+    val supportOidcLogin = (homeserverDetails as? Async.Success)?.state?.supportsOidcLogin.orFalse()
+    val submitEnabled: Boolean
+        get() = loggedInState !is LoggedInState.ErrorLoggingIn &&
+            ((formState.login.isNotEmpty() && formState.password.isNotEmpty()) || supportOidcLogin)
 }
 
 sealed interface LoggedInState {
     object NotLoggedIn : LoggedInState
     object LoggingIn : LoggedInState
+    data class OidcStarted(val oidcDetail: OidcDetails) : LoggedInState
     data class ErrorLoggingIn(val failure: Throwable) : LoggedInState
     data class LoggedIn(val sessionId: SessionId) : LoggedInState
 }

@@ -17,6 +17,7 @@
 package io.element.android.features.login.impl.root
 
 sealed interface LoginRootEvents {
+    object RetryFetchServerInfo : LoginRootEvents
     data class SetLogin(val login: String) : LoginRootEvents
     data class SetPassword(val password: String) : LoginRootEvents
     object Submit : LoginRootEvents

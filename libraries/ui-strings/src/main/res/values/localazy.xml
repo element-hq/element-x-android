@@ -22,6 +22,7 @@
   <string name="action_done">"Done"</string>
   <string name="action_edit">"Edit"</string>
   <string name="action_enable">"Enable"</string>
+  <string name="action_forgot_password">"Forgot password?"</string>
   <string name="action_invite">"Invite"</string>
   <string name="action_invite_friends">"Invite friends"</string>
   <string name="action_invite_friends_to_app">"Invite friends to %1$s"</string>
@@ -70,6 +71,7 @@
   <string name="common_file">"File"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Image"</string>
+  <string name="common_invite_unknown_profile">"We can’t validate this user’s Matrix ID. The invite might not be received."</string>
   <string name="common_leaving_room">"Leaving room"</string>
   <string name="common_link_copied_to_clipboard">"Link copied to clipboard"</string>
   <string name="common_loading">"Loading…"</string>
@@ -86,6 +88,7 @@
   <string name="common_replying_to">"Replying to %1$s"</string>
   <string name="common_report_a_bug">"Report a bug"</string>
   <string name="common_report_submitted">"Report submitted"</string>
+  <string name="common_room_name">"Room name"</string>
   <string name="common_search_for_someone">"Search for someone"</string>
   <string name="common_search_results">"Search results"</string>
   <string name="common_security">"Security"</string>
@@ -151,6 +154,12 @@
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Failed uploading media, please try again."</string>
   <string name="screen_report_content_block_user_hint">"Check if you want to hide all current and future messages from this user"</string>
+  <string name="screen_server_confirmation_change_server">"Change account provider"</string>
+  <string name="screen_server_confirmation_message_login_element_dot_io">"A private server for Element employees."</string>
+  <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix is an open network for secure, decentralised communication."</string>
+  <string name="screen_server_confirmation_message_register">"This is where your conversations will live — just like you would use an email provider to keep your emails."</string>
+  <string name="screen_server_confirmation_title_login">"You’re about to sign in to %1$s"</string>
+  <string name="screen_server_confirmation_title_register">"You’re about to create an account on %1$s"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Detection threshold"</string>
   <string name="settings_title_general">"General"</string>
