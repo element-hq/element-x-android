@@ -28,7 +28,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.messages.impl.media.local.LocalMedia
-import io.element.android.features.messages.impl.media.local.LocalMediaActionsHandler
+import io.element.android.features.messages.impl.media.local.LocalMediaActions
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
 import io.element.android.features.messages.impl.media.local.createFromMediaFile
 import io.element.android.libraries.architecture.Async
@@ -42,7 +42,7 @@ class MediaViewerPresenter @AssistedInject constructor(
     @Assisted private val inputs: MediaViewerNode.Inputs,
     private val localMediaFactory: LocalMediaFactory,
     private val mediaLoader: MatrixMediaLoader,
-    private val mediaActionsHandler: LocalMediaActionsHandler,
+    private val mediaActionsHandler: LocalMediaActions,
 ) : Presenter<MediaViewerState> {
 
     @AssistedFactory
@@ -72,6 +72,7 @@ class MediaViewerPresenter @AssistedInject constructor(
                 MediaViewerEvents.RetryLoading -> loadMediaTrigger++
                 MediaViewerEvents.ClearLoadingError -> localMedia.value = Async.Uninitialized
                 MediaViewerEvents.SaveOnDisk -> coroutineScope.saveOnDisk(localMedia.value)
+                MediaViewerEvents.Share -> coroutineScope.share(localMedia.value)
             }
         }
 
@@ -102,11 +103,20 @@ class MediaViewerPresenter @AssistedInject constructor(
             }
     }
 
-    private fun CoroutineScope.saveOnDisk(value: Async<LocalMedia>) = launch {
-        when (value) {
-            is Async.Success -> mediaActionsHandler.saveOnDisk(value.state)
+    private fun CoroutineScope.saveOnDisk(localMedia: Async<LocalMedia>) = launch {
+        when (localMedia) {
+            is Async.Success -> mediaActionsHandler.saveOnDisk(localMedia.state)
+            else -> Unit
+        }
+    }
+
+    private fun CoroutineScope.share(localMedia: Async<LocalMedia>) = launch {
+        when (localMedia) {
+            is Async.Success -> mediaActionsHandler.share(localMedia.state)
             else -> Unit
         }
     }
 }
+
+
 
