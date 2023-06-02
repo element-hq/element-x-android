@@ -176,7 +176,7 @@ fun MediaPDFView(
     modifier: Modifier = Modifier,
 ) {
     val pdfViewerState = rememberPdfViewerState(
-        model = localMedia?.model,
+        model = localMedia?.uri,
         zoomableState = zoomableState
     )
     LaunchedEffect(pdfViewerState.isLoaded) {
