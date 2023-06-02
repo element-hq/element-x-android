@@ -34,6 +34,8 @@ inline fun <reified NODE : Node> Context.createNode(context: BuildContext, plugi
 inline fun <reified NODE : Node> NodeFactoriesBindings.createNode(context: BuildContext, plugins: List<Plugin> = emptyList()): NODE {
     val nodeClass = NODE::class.java
     val nodeFactoryMap = nodeFactories()
+    // Note to developers: If you got the error below, make sure to build again after
+    // clearing the cache (sometimes several times) to let Dagger generate the NodeFactory.
     val nodeFactory = nodeFactoryMap[nodeClass] ?: error("Cannot find NodeFactory for ${nodeClass.name}.")
 
     @Suppress("UNCHECKED_CAST")

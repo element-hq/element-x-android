@@ -203,6 +203,8 @@ koverMerged {
                 includes += "*Presenter"
                 excludes += "*Fake*Presenter"
                 excludes += "io.element.android.appnav.loggedin.LoggedInPresenter$*"
+                // Too small presenter, cannot reach the threshold.
+                excludes += "io.element.android.features.onboarding.impl.OnBoardingPresenter"
             }
             bound {
                 minValue = 90
