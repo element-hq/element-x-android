@@ -18,25 +18,31 @@ package io.element.android.features.messages.impl.media.local
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
+import androidx.core.content.FileProvider
+import androidx.core.net.toFile
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class AndroidLocalMediaActionsHandler @Inject constructor(
+class AndroidLocalMediaActions @Inject constructor(
     @ApplicationContext private val context: Context,
     private val coroutineDispatchers: CoroutineDispatchers,
-) : LocalMediaActionsHandler {
+    private val buildMeta: BuildMeta,
+) : LocalMediaActions {
 
     override suspend fun saveOnDisk(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {
@@ -45,11 +51,28 @@ class AndroidLocalMediaActionsHandler @Inject constructor(
             } else {
                 saveOnDiskUsingExternalStorageApi(localMedia)
             }
+        }.onSuccess {
+            Timber.v("Save on disk succeed")
+        }.onFailure {
+            Timber.e(it, "Save on disk failed")
         }
     }
 
-    override suspend fun share(localMedia: LocalMedia): Result<Unit> {
-        TODO("Not yet implemented")
+    override suspend fun share(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            val authority = "${buildMeta.applicationId}.fileprovider"
+            val uriFromFileProvider = FileProvider.getUriForFile(context, authority, localMedia.toFile())
+            val shareMediaIntent = Intent(Intent.ACTION_VIEW)
+                .setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+                .setDataAndType(uriFromFileProvider, localMedia.mimeType)
+            withContext(coroutineDispatchers.main) {
+                context.startActivity(shareMediaIntent, null)
+            }
+        }.onSuccess {
+            Timber.v("Share media succeed")
+        }.onFailure {
+            Timber.e(it, "Share media failed")
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -84,5 +107,9 @@ class AndroidLocalMediaActionsHandler @Inject constructor(
 
     private fun LocalMedia.openStream(): InputStream? {
         return context.contentResolver.openInputStream(uri)
+    }
+
+    private fun LocalMedia.toFile(): File {
+        return uri.toFile()
     }
 }

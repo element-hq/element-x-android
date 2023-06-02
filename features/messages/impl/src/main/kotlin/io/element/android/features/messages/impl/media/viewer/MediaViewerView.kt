@@ -26,7 +26,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.Save
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -137,6 +137,13 @@ private fun MediaViewerTopBar(
         title = {},
         navigationIcon = { BackButton(onClick = onBackPressed) },
         actions = {
+            IconButton(
+                onClick = {
+                    eventSink(MediaViewerEvents.Share)
+                },
+            ) {
+                Icon(imageVector = Icons.Default.Share, contentDescription = stringResource(id = string.action_share))
+            }
             IconButton(
                 onClick = {
                     eventSink(MediaViewerEvents.SaveOnDisk)

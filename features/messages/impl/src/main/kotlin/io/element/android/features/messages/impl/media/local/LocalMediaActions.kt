@@ -16,7 +16,7 @@
 
 package io.element.android.features.messages.impl.media.local
 
-interface LocalMediaActionsHandler {
+interface LocalMediaActions {
     suspend fun saveOnDisk(localMedia: LocalMedia): Result<Unit>
     suspend fun share(localMedia: LocalMedia): Result<Unit>
 }
