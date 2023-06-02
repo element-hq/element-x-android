@@ -96,8 +96,6 @@ accompanist_permission = { module = "com.google.accompanist:accompanist-permissi
 accompanist_material = { module = "com.google.accompanist:accompanist-navigation-material", version.ref = "accompanist" }
 accompanist_systemui = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanist_placeholder = { module = "com.google.accompanist:accompanist-placeholder-material", version.ref = "accompanist" }
-accompanist_pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
-accompanist_pagerindicator = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 accompanist_flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
 
 # Libraries
