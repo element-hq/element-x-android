@@ -17,6 +17,12 @@
         "^androidx.compose.compiler"
       ],
       "groupName" : "kotlin"
+    },
+    {
+      "matchPackageNames" : [
+        "org.jetbrains.kotlinx.kover"
+      ],
+      "enabled" : false
     }
   ]
 }
