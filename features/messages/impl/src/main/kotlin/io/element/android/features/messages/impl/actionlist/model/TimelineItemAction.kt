@@ -26,9 +26,11 @@ sealed class TimelineItemAction(
     @DrawableRes val icon: Int,
     val destructive: Boolean = false
 ) {
-    object Forward : TimelineItemAction("Forward", VectorIcons.ArrowForward)
+    object Forward : TimelineItemAction("Forward", VectorIcons.Forward)
     object Copy : TimelineItemAction("Copy", VectorIcons.Copy)
     object Redact : TimelineItemAction("Redact", VectorIcons.Delete, destructive = true)
     object Reply : TimelineItemAction("Reply", VectorIcons.Reply)
     object Edit : TimelineItemAction("Edit", VectorIcons.Edit)
+    object Developer : TimelineItemAction("Developer", VectorIcons.DeveloperMode)
+    object ReportContent : TimelineItemAction("Report content", VectorIcons.ReportContent, destructive = true)
 }

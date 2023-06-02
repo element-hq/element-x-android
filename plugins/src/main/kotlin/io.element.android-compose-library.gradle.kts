@@ -32,14 +32,6 @@ plugins {
 android {
     androidConfig(project)
     composeConfig(libs)
-    // Waiting for https://github.com/google/ksp/issues/37
-    libraryVariants.all {
-        kotlin.sourceSets {
-            getByName(name) {
-                kotlin.srcDir("build/generated/ksp/$name/kotlin")
-            }
-        }
-    }
 }
 
 dependencies {

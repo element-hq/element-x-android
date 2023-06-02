@@ -35,6 +35,7 @@ dependencies {
     implementation(libs.androidx.security.crypto)
     implementation(libs.network.retrofit)
     implementation(libs.serialization.json)
+    implementation(libs.coil)
 
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
@@ -42,6 +43,7 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.network)
     implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.matrixui)
     api(projects.libraries.pushproviders.api)
     api(projects.libraries.pushstore.api)
     api(projects.libraries.push.api)

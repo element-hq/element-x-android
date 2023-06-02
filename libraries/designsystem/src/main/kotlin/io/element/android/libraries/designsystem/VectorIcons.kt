@@ -18,9 +18,11 @@ package io.element.android.libraries.designsystem
 
 object VectorIcons {
     val Copy = R.drawable.ic_content_copy
-    val ArrowForward = R.drawable.ic_content_arrow_forward
-    val Delete = R.drawable.ic_baseline_delete_outline_24
-    val Reply = R.drawable.ic_baseline_reply_24
-    val Edit = R.drawable.ic_baseline_edit_24
+    val Forward = R.drawable.ic_forward
+    val Delete = R.drawable.ic_delete
+    val Reply = R.drawable.ic_reply
+    val Edit = R.drawable.ic_edit
     val DoorOpen = R.drawable.ic_door_open_24
+    val DeveloperMode = R.drawable.ic_developer_mode
+    val ReportContent = R.drawable.ic_report_content
 }

@@ -93,10 +93,10 @@ class RootFlowNode @AssistedInject constructor(
                 if (isLoggedIn) {
                     tryToRestoreLatestSession(
                         onSuccess = { switchToLoggedInFlow(it) },
-                        onFailure = { switchToLogoutFlow() }
+                        onFailure = { switchToNotLoggedInFlow() }
                     )
                 } else {
-                    switchToLogoutFlow()
+                    switchToNotLoggedInFlow()
                 }
             }
             .launchIn(lifecycleScope)
@@ -106,7 +106,7 @@ class RootFlowNode @AssistedInject constructor(
         backstack.safeRoot(NavTarget.LoggedInFlow(sessionId))
     }
 
-    private fun switchToLogoutFlow() {
+    private fun switchToNotLoggedInFlow() {
         matrixClientsHolder.removeAll()
         backstack.safeRoot(NavTarget.NotLoggedInFlow)
     }
