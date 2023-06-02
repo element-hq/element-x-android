@@ -31,6 +31,8 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
+import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -132,6 +134,32 @@ class MessagesPresenterTest {
         }
     }
 
+    @Test
+    fun `present - handle action report content`() = runTest {
+        val presenter = createMessagePresenter()
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.ReportContent, aMessageEvent()))
+            // Still a TODO in the code
+        }
+    }
+
+    @Test
+    fun `present - handle action show developer info`() = runTest {
+        val presenter = createMessagePresenter()
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Developer, aMessageEvent()))
+            // Still a TODO in the code
+        }
+    }
+
     private fun TestScope.createMessagePresenter(
         matrixRoom: MatrixRoom = FakeMatrixRoom()
     ): MessagesPresenter {
@@ -148,7 +176,20 @@ class MessagesPresenterTest {
             timelineItemsFactory = aTimelineItemsFactory(),
             room = matrixRoom,
         )
-        val actionListPresenter = ActionListPresenter()
+        val buildMeta = BuildMeta(
+            buildType = BuildType.DEBUG,
+            isDebuggable = true,
+            applicationId = "",
+            applicationName = "",
+            lowPrivacyLoggingEnabled = true,
+            versionName = "",
+            gitRevision = "",
+            gitBranchName = "",
+            gitRevisionDate = "",
+            flavorDescription = "",
+            flavorShortDescription = "",
+        )
+        val actionListPresenter = ActionListPresenter(buildMeta = buildMeta)
         return MessagesPresenter(
             room = matrixRoom,
             composerPresenter = messageComposerPresenter,

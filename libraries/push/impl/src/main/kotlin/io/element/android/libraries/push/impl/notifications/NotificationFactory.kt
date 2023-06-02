@@ -18,7 +18,7 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.app.Notification
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.notifications.factories.NotificationFactory
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
@@ -34,10 +34,8 @@ class NotificationFactory @Inject constructor(
     private val summaryGroupMessageCreator: SummaryGroupMessageCreator
 ) {
 
-    fun Map<RoomId, ProcessedMessageEvents>.toNotifications(
-        sessionId: SessionId,
-        myUserDisplayName: String,
-        myUserAvatarUrl: String?
+    suspend fun Map<RoomId, ProcessedMessageEvents>.toNotifications(
+        currentUser: MatrixUser,
     ): List<RoomNotification> {
         return map { (roomId, events) ->
             when {
@@ -45,11 +43,9 @@ class NotificationFactory @Inject constructor(
                 else -> {
                     val messageEvents = events.onlyKeptEvents().filterNot { it.isRedacted }
                     roomGroupMessageCreator.createRoomMessage(
-                        sessionId = sessionId,
+                        currentUser = currentUser,
                         events = messageEvents,
                         roomId = roomId,
-                        userDisplayName = myUserDisplayName,
-                        userAvatarUrl = myUserAvatarUrl
                     )
                 }
             }
@@ -99,7 +95,7 @@ class NotificationFactory @Inject constructor(
     }
 
     fun createSummaryNotification(
-        sessionId: SessionId,
+        currentUser: MatrixUser,
         roomNotifications: List<RoomNotification>,
         invitationNotifications: List<OneShotNotification>,
         simpleNotifications: List<OneShotNotification>,
@@ -112,7 +108,7 @@ class NotificationFactory @Inject constructor(
             roomMeta.isEmpty() && invitationMeta.isEmpty() && simpleMeta.isEmpty() -> SummaryNotification.Removed
             else -> SummaryNotification.Update(
                 summaryGroupMessageCreator.createSummaryNotification(
-                    sessionId = sessionId,
+                    currentUser = currentUser,
                     roomNotifications = roomMeta,
                     invitationNotifications = invitationMeta,
                     simpleNotifications = simpleMeta,

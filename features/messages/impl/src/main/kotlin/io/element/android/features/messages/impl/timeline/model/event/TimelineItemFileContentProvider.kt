@@ -30,7 +30,7 @@ open class TimelineItemFileContentProvider : PreviewParameterProvider<TimelineIt
 }
 
 fun aTimelineItemFileContent(fileName: String) = TimelineItemFileContent(
-    name = fileName,
+    body = fileName,
     thumbnailSource = MediaSource(url = ""),
     fileSource = MediaSource(url = ""),
     mimeType = MimeTypes.OctetStream,

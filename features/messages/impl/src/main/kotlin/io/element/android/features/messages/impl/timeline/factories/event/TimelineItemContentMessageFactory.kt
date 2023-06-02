@@ -73,7 +73,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 )
             }
             is FileMessageType -> TimelineItemFileContent(
-                name = messageType.body,
+                body = messageType.body,
                 thumbnailSource = messageType.info?.thumbnailSource,
                 fileSource = messageType.source,
                 mimeType = messageType.info?.mimetype,

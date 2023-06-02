@@ -26,11 +26,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.RoomEventGroupInfo
 import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
+import io.element.android.libraries.push.impl.notifications.debug.annotateForDebug
 import io.element.android.libraries.push.impl.notifications.factories.action.AcceptInvitationActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.MarkAsReadActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.QuickReplyActionFactory
@@ -84,16 +85,16 @@ class NotificationFactory @Inject constructor(
             // ID of the corresponding shortcut, for conversation features under API 30+
             .setShortcutId(roomInfo.roomId.value)
             // Title for API < 16 devices.
-            .setContentTitle(roomInfo.roomDisplayName)
+            .setContentTitle(roomInfo.roomDisplayName.annotateForDebug(1))
             // Content for API < 16 devices.
-            .setContentText(stringProvider.getString(R.string.notification_new_messages))
+            .setContentText(stringProvider.getString(R.string.notification_new_messages).annotateForDebug(2))
             // Number of new notifications for API <24 (M and below) devices.
             .setSubText(
                 stringProvider.getQuantityString(
                     R.plurals.notification_new_messages_for_room,
                     messageStyle.messages.size,
                     messageStyle.messages.size
-                )
+                ).annotateForDebug(3)
             )
             // Auto-bundling is enabled for 4 or more notifications on API 24+ (N+)
             // devices and all Wear devices. But we want a custom grouping, so we specify the groupID
@@ -135,7 +136,7 @@ class NotificationFactory @Inject constructor(
                 }
                 setDeleteIntent(pendingIntentFactory.createDismissRoomPendingIntent(roomInfo.sessionId, roomInfo.roomId))
             }
-            .setTicker(tickerText)
+            .setTicker(tickerText.annotateForDebug(4))
             .build()
     }
 
@@ -147,8 +148,8 @@ class NotificationFactory @Inject constructor(
         val channelId = notificationChannels.getChannelIdForMessage(inviteNotifiableEvent.noisy)
         return NotificationCompat.Builder(context, channelId)
             .setOnlyAlertOnce(true)
-            .setContentTitle(inviteNotifiableEvent.roomName ?: buildMeta.applicationName)
-            .setContentText(inviteNotifiableEvent.description)
+            .setContentTitle((inviteNotifiableEvent.roomName ?: buildMeta.applicationName).annotateForDebug(5))
+            .setContentText(inviteNotifiableEvent.description.annotateForDebug(6))
             .setGroup(inviteNotifiableEvent.sessionId.value)
             .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
             .setSmallIcon(smallIcon)
@@ -196,8 +197,8 @@ class NotificationFactory @Inject constructor(
         val channelId = notificationChannels.getChannelIdForMessage(simpleNotifiableEvent.noisy)
         return NotificationCompat.Builder(context, channelId)
             .setOnlyAlertOnce(true)
-            .setContentTitle(buildMeta.applicationName)
-            .setContentText(simpleNotifiableEvent.description)
+            .setContentTitle(buildMeta.applicationName.annotateForDebug(7))
+            .setContentText(simpleNotifiableEvent.description.annotateForDebug(8))
             .setGroup(simpleNotifiableEvent.sessionId.value)
             .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
             .setSmallIcon(smallIcon)
@@ -226,7 +227,7 @@ class NotificationFactory @Inject constructor(
      * Create the summary notification.
      */
     fun createSummaryListNotification(
-        sessionId: SessionId,
+        currentUser: MatrixUser,
         style: NotificationCompat.InboxStyle?,
         compatSummary: String,
         noisy: Boolean,
@@ -240,12 +241,12 @@ class NotificationFactory @Inject constructor(
             // used in compat < N, after summary is built based on child notifications
             .setWhen(lastMessageTimestamp)
             .setStyle(style)
-            .setContentTitle(sessionId.value)
+            .setContentTitle(currentUser.userId.value.annotateForDebug(9))
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setSmallIcon(smallIcon)
             // set content text to support devices running API level < 24
-            .setContentText(compatSummary)
-            .setGroup(sessionId.value)
+            .setContentText(compatSummary.annotateForDebug(10))
+            .setGroup(currentUser.userId.value)
             // set this notification as the summary for the group
             .setGroupSummary(true)
             .setColor(accentColor)
@@ -264,8 +265,8 @@ class NotificationFactory @Inject constructor(
                     priority = NotificationCompat.PRIORITY_LOW
                 }
             }
-            .setContentIntent(pendingIntentFactory.createOpenSessionPendingIntent(sessionId))
-            .setDeleteIntent(pendingIntentFactory.createDismissSummaryPendingIntent(sessionId))
+            .setContentIntent(pendingIntentFactory.createOpenSessionPendingIntent(currentUser.userId))
+            .setDeleteIntent(pendingIntentFactory.createDismissSummaryPendingIntent(currentUser.userId))
             .build()
     }
 
