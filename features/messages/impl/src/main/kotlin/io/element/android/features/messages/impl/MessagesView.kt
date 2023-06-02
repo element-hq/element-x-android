@@ -76,6 +76,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
+import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
@@ -94,23 +95,11 @@ fun MessagesView(
     modifier: Modifier = Modifier,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
-    val coroutineScope = rememberCoroutineScope()
     var isMessageActionsBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
 
     AttachmentStateView(state.composerState.attachmentsState, onPreviewAttachments)
 
-    val snackbarHostState = remember { SnackbarHostState() }
-    val snackbarMessageText = state.snackbarMessage?.let { stringResource(it.messageResId) }
-    if (snackbarMessageText != null) {
-        SideEffect {
-            coroutineScope.launch {
-                snackbarHostState.showSnackbar(
-                    message = snackbarMessageText,
-                    duration = state.snackbarMessage.duration
-                )
-            }
-        }
-    }
+    val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
     // This is needed because the composer is inside an AndroidView that can't be affected by the FocusManager in Compose
     val localView = LocalView.current

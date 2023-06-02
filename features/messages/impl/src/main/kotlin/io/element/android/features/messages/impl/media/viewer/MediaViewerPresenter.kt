@@ -33,16 +33,21 @@ import io.element.android.features.messages.impl.media.local.LocalMediaFactory
 import io.element.android.features.messages.impl.media.local.createFromMediaFile
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.SnackbarMessage
+import io.element.android.libraries.designsystem.utils.handleSnackbarMessage
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import io.element.android.libraries.ui.strings.R as StringR
 
 class MediaViewerPresenter @AssistedInject constructor(
     @Assisted private val inputs: MediaViewerNode.Inputs,
     private val localMediaFactory: LocalMediaFactory,
     private val mediaLoader: MatrixMediaLoader,
     private val mediaActionsHandler: LocalMediaActions,
+    private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<MediaViewerState> {
 
     @AssistedFactory
@@ -60,6 +65,7 @@ class MediaViewerPresenter @AssistedInject constructor(
         val localMedia: MutableState<Async<LocalMedia>> = remember {
             mutableStateOf(Async.Uninitialized)
         }
+        val snackbarMessage = handleSnackbarMessage(snackbarDispatcher)
         DisposableEffect(loadMediaTrigger) {
             coroutineScope.downloadMedia(mediaFile, localMedia)
             onDispose {
@@ -81,6 +87,7 @@ class MediaViewerPresenter @AssistedInject constructor(
             mimeType = inputs.mimeType,
             thumbnailSource = inputs.thumbnailSource,
             downloadedMedia = localMedia.value,
+            snackbarMessage = snackbarMessage,
             eventSink = ::handleEvents
         )
     }
@@ -105,7 +112,13 @@ class MediaViewerPresenter @AssistedInject constructor(
 
     private fun CoroutineScope.saveOnDisk(localMedia: Async<LocalMedia>) = launch {
         when (localMedia) {
-            is Async.Success -> mediaActionsHandler.saveOnDisk(localMedia.state)
+            is Async.Success -> {
+                mediaActionsHandler.saveOnDisk(localMedia.state)
+                    .onSuccess {
+                        val snackbarMessage = SnackbarMessage(StringR.string.common_file_saved_on_disk_android)
+                        snackbarDispatcher.post(snackbarMessage)
+                    }
+            }
             else -> Unit
         }
     }
