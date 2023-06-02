@@ -9,7 +9,7 @@ env:
 
 jobs:
   record:
-    name: Record screenshots on branch ${{ inputs.param_branch }}
+    name: Record screenshots on branch ${{ github.ref_name }}
     runs-on: ubuntu-latest
 
     steps:
