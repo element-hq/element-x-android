@@ -20,6 +20,10 @@ import androidx.compose.runtime.Composable
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 
+/**
+ * Note: this Presenter is ignored regarding code coverage because it cannot reach the coverage threshold.
+ * When this presenter get more code in it, please remove the ignore rule in the kover configuration.
+ */
 class OnBoardingPresenter @Inject constructor(
 ) : Presenter<OnBoardingState> {
     @Composable
