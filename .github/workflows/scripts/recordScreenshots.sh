@@ -26,18 +26,30 @@ if [[ -z ${GITHUB_REPOSITORY} ]]; then
   exit 1
 fi
 
-if [[ -z ${BRANCH} ]]; then
-  echo "Missing BRANCH variable"
+if [[ -z ${GITHUB_REF_NAME} ]]; then
+  echo "Missing GITHUB_REF_NAME variable"
   exit 1
 fi
 
-./gradlew recordPaparazziDebug --stacktrace -PpreDexEnable=false --max-workers 4 --warn
-
 git config user.name "ElementBot"
 git config user.email "benoitm+elementbot@element.io"
+
+echo "Git status"
+git status
+
+echo "Fetching..."
 git fetch --all
-git checkout --track "origin/$BRANCH"
+
+echo "Checkout origin/$GITHUB_REF_NAME"
+git checkout "origin/$GITHUB_REF_NAME"
+
+echo "Record screenshots"
+./gradlew recordPaparazziDebug --stacktrace -PpreDexEnable=false --max-workers 4 --warn
+
+echo "Committing changes"
 git add -A
 git commit -m "Update screenshots"
+
+echo "Pushing changes"
 git push "https://$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
 echo "Done!"

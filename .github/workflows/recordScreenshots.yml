@@ -2,11 +2,6 @@ name: Record screenshots
 
 on:
   workflow_dispatch:
-    inputs:
-      param_branch:
-        description: 'Branch to record the screenshots on'
-        required: true
-        type: string
 
 # Enrich gradle.properties for CI/CD
 env:
@@ -32,4 +27,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
-          BRANCH: ${{ inputs.param_branch }}
