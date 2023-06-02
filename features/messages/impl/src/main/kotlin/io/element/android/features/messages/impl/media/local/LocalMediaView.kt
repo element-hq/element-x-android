@@ -31,13 +31,13 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
+import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import io.element.android.features.messages.impl.media.local.exoplayer.ExoPlayerWrapper
-import io.element.android.features.messages.impl.media.local.exoplayer.toMediaItem
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import me.saket.telephoto.zoomable.ZoomSpec
@@ -93,7 +93,7 @@ private fun MediaImageView(
         ZoomableAsyncImage(
             modifier = modifier.fillMaxSize(),
             state = zoomableImageState,
-            model = localMedia?.model,
+            model = localMedia?.uri,
             contentDescription = "Image",
             contentScale = ContentScale.Fit,
         )
@@ -107,7 +107,6 @@ fun MediaVideoView(
     onReady: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     val context = LocalContext.current
     val playerListener = object : Player.Listener {
         override fun onRenderedFirstFrame() {
@@ -121,9 +120,9 @@ fun MediaVideoView(
                 this.prepare()
             }
     }
-    if (localMedia?.source != null) {
-        LaunchedEffect(localMedia.source) {
-            val mediaItem = localMedia.toMediaItem()
+    if (localMedia?.uri != null) {
+        LaunchedEffect(localMedia.uri) {
+            val mediaItem = MediaItem.fromUri(localMedia.uri)
             exoPlayer.setMediaItem(mediaItem)
         }
     } else {
