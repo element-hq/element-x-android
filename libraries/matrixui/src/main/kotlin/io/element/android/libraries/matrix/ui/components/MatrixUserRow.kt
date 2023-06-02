@@ -16,9 +16,11 @@
 
 package io.element.android.libraries.matrix.ui.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -47,7 +49,7 @@ import io.element.android.libraries.matrix.ui.model.getBestName
 fun MatrixUserRow(
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
-    avatarSize: AvatarSize = AvatarSize.MEDIUM,
+    avatarSize: AvatarSize = AvatarSize.Custom(36.dp),
 ) = UserRow(
     avatarData = matrixUser.getAvatarData(avatarSize),
     name = matrixUser.getBestName(),
@@ -72,7 +74,9 @@ fun UserRow(
         Avatar(avatarData)
         Column(
             modifier = Modifier
-                .padding(start = 12.dp),
+                .padding(start = 12.dp)
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
             // Name
             Text(
