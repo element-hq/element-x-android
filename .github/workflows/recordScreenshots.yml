@@ -1,0 +1,35 @@
+name: Record screenshots
+
+on:
+  workflow_dispatch:
+    inputs:
+      param_branch:
+        description: 'Branch to record the screenshots on'
+        required: true
+        type: string
+
+# Enrich gradle.properties for CI/CD
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
+
+jobs:
+  record:
+    name: Record screenshots on branch ${{ inputs.param_branch }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⏬ Checkout with LFS
+        uses: actions/checkout@v3
+        with:
+          lfs: 'true'
+      - name: ☕️ Use JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+      - name: Record screenshots
+        run: "./.github/workflows/scripts/recordScreenshots.sh"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
+          BRANCH: ${{ inputs.param_branch }}
