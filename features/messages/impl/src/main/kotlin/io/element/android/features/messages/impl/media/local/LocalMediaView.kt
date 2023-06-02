@@ -32,15 +32,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.MediaItem
-import androidx.media3.common.MimeTypes
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import io.element.android.features.messages.impl.media.local.exoplayer.ExoPlayerWrapper
+import io.element.android.features.messages.impl.media.local.pdf.PdfViewer
+import io.element.android.features.messages.impl.media.local.pdf.rememberPdfViewerState
+import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
+import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import me.saket.telephoto.zoomable.ZoomSpec
+import me.saket.telephoto.zoomable.ZoomableState
 import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
 import me.saket.telephoto.zoomable.rememberZoomableImageState
 import me.saket.telephoto.zoomable.rememberZoomableState
@@ -53,14 +58,24 @@ fun LocalMediaView(
     mimeType: String? = localMedia?.mimeType,
     onReady: () -> Unit = {},
 ) {
+    val zoomableState = rememberZoomableState(
+        zoomSpec = ZoomSpec(maxZoomFactor = 5f)
+    )
     when {
-        MimeTypes.isImage(mimeType) -> MediaImageView(
+        mimeType.isMimeTypeImage() -> MediaImageView(
+            localMedia = localMedia,
+            zoomableState = zoomableState,
+            onReady = onReady,
+            modifier = modifier
+        )
+        mimeType.isMimeTypeVideo() -> MediaVideoView(
             localMedia = localMedia,
             onReady = onReady,
             modifier = modifier
         )
-        MimeTypes.isVideo(mimeType) -> MediaVideoView(
+        mimeType == MimeTypes.Pdf -> MediaPDFView(
             localMedia = localMedia,
+            zoomableState = zoomableState,
             onReady = onReady,
             modifier = modifier
         )
@@ -71,6 +86,7 @@ fun LocalMediaView(
 @Composable
 private fun MediaImageView(
     localMedia: LocalMedia?,
+    zoomableState: ZoomableState,
     onReady: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -81,9 +97,6 @@ private fun MediaImageView(
             contentDescription = null,
         )
     } else {
-        val zoomableState = rememberZoomableState(
-            zoomSpec = ZoomSpec(maxZoomFactor = 3f)
-        )
         val zoomableImageState = rememberZoomableImageState(zoomableState)
         LaunchedEffect(zoomableImageState.isImageDisplayed) {
             if (zoomableImageState.isImageDisplayed) {
@@ -153,4 +166,23 @@ fun MediaVideoView(
             else -> Unit
         }
     }
+}
+
+@Composable
+fun MediaPDFView(
+    localMedia: LocalMedia?,
+    zoomableState: ZoomableState,
+    onReady: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val pdfViewerState = rememberPdfViewerState(
+        model = localMedia?.model,
+        zoomableState = zoomableState
+    )
+    LaunchedEffect(pdfViewerState.isLoaded) {
+        if (pdfViewerState.isLoaded) {
+            onReady()
+        }
+    }
+    PdfViewer(pdfViewerState = pdfViewerState, modifier = modifier)
 }

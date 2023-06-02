@@ -142,15 +142,6 @@ android {
         jvmTarget = "17"
     }
 
-    // Waiting for https://github.com/google/ksp/issues/37
-    applicationVariants.all {
-        kotlin.sourceSets {
-            getByName(name) {
-                kotlin.srcDir("build/generated/ksp/$name/kotlin")
-            }
-        }
-    }
-
     buildFeatures {
         buildConfig = true
     }

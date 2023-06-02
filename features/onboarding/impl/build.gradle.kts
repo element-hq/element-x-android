@@ -40,8 +40,6 @@ dependencies {
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.androidutils)
-    implementation(libs.accompanist.pager)
-    implementation(libs.accompanist.pagerindicator)
     api(projects.features.onboarding.api)
     ksp(libs.showkase.processor)
 

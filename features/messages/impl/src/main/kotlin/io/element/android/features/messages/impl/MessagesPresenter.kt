@@ -118,6 +118,8 @@ class MessagesPresenter @Inject constructor(
             TimelineItemAction.Redact -> handleActionRedact(targetEvent)
             TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState)
             TimelineItemAction.Reply -> handleActionReply(targetEvent, composerState)
+            TimelineItemAction.Developer -> notImplementedYet()
+            TimelineItemAction.ReportContent -> notImplementedYet()
         }
     }
 
