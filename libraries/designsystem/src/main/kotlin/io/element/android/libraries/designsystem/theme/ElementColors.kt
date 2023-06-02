@@ -33,6 +33,7 @@ class ElementColors(
     gray400: Color,
     gray1400: Color,
     textActionCritical: Color,
+    accentColor: Color,
     placeholder: Color,
     isLight: Boolean
 ) {
@@ -61,6 +62,9 @@ class ElementColors(
     var textActionCritical by mutableStateOf(textActionCritical)
         private set
 
+    var accentColor by mutableStateOf(accentColor)
+        private set
+
     var placeholder by mutableStateOf(placeholder)
         private set
 
@@ -77,6 +81,7 @@ class ElementColors(
         gray400: Color = this.gray400,
         gray1400: Color = this.gray1400,
         textActionCritical: Color = this.textActionCritical,
+        accentColor: Color = this.accentColor,
         placeholder: Color = this.placeholder,
         isLight: Boolean = this.isLight,
     ) = ElementColors(
@@ -89,6 +94,7 @@ class ElementColors(
         gray400 = gray400,
         gray1400 = gray1400,
         textActionCritical = textActionCritical,
+        accentColor = accentColor,
         placeholder = placeholder,
         isLight = isLight,
     )
@@ -103,6 +109,7 @@ class ElementColors(
         gray400 = other.gray400
         gray1400 = other.gray1400
         textActionCritical = other.textActionCritical
+        accentColor = other.accentColor
         placeholder = other.placeholder
         isLight = other.isLight
     }
