@@ -50,4 +50,5 @@ fun aMediaViewerState(downloadedMedia: Async<LocalMedia> = Async.Uninitialized) 
     mimeType = MimeTypes.IMAGE_JPEG,
     thumbnailSource = null,
     downloadedMedia = downloadedMedia,
+    snackbarMessage = null
 ) {}

@@ -18,10 +18,14 @@ package io.element.android.libraries.designsystem.utils
 
 import androidx.annotation.StringRes
 import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -62,6 +66,25 @@ fun handleSnackbarMessage(
         }
     }
     return snackbarMessage
+}
+
+@Composable
+fun rememberSnackbarHostState(snackbarMessage: SnackbarMessage?): SnackbarHostState {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+    val snackbarMessageText = snackbarMessage?.let {
+        stringResource(id = snackbarMessage.messageResId)
+    }
+    LaunchedEffect(snackbarMessage) {
+        if (snackbarMessageText == null) return@LaunchedEffect
+        coroutineScope.launch {
+            snackbarHostState.showSnackbar(
+                message = snackbarMessageText,
+                duration = snackbarMessage.duration,
+            )
+        }
+    }
+    return snackbarHostState
 }
 
 data class SnackbarMessage(

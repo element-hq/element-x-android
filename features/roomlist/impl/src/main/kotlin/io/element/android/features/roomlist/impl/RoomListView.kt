@@ -40,17 +40,13 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
@@ -80,8 +76,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.roomListUnreadIndicator
 import io.element.android.libraries.designsystem.utils.LogCompositions
+import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
-import kotlinx.coroutines.launch
 import io.element.android.libraries.designsystem.R as DrawableR
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -179,21 +175,7 @@ fun RoomListContent(
         }
     }
 
-    val snackbarHostState = remember { SnackbarHostState() }
-    val snackbarMessageText = if (state.snackbarMessage != null) {
-        stringResource(state.snackbarMessage.messageResId)
-    } else null
-    val coroutineScope = rememberCoroutineScope()
-    if (snackbarMessageText != null) {
-        SideEffect {
-            coroutineScope.launch {
-                snackbarHostState.showSnackbar(
-                    message = snackbarMessageText,
-                    duration = SnackbarDuration.Short,
-                )
-            }
-        }
-    }
+    val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
