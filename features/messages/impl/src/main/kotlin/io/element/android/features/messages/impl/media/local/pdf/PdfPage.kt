@@ -50,6 +50,7 @@ class PdfPage(
     private var loadJob: Job? = null
 
     init {
+        // We are just opening and closing the page to extract data so we can build the Loading state with the correct dimensions.
         pdfRenderer.openPage(pageIndex).use { page ->
             renderHeight = (page.height * (renderWidth.toFloat() / page.width)).toInt()
         }
