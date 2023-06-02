@@ -24,6 +24,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.util.FileSizeFormatter
 import io.element.android.features.messages.impl.timeline.util.toHtmlDocument
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
@@ -34,7 +35,9 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import javax.inject.Inject
 
-class TimelineItemContentMessageFactory @Inject constructor() {
+class TimelineItemContentMessageFactory @Inject constructor(
+    private val fileSizeFormatter: FileSizeFormatter
+) {
 
     fun create(content: MessageContent): TimelineItemEventContent {
         return when (val messageType = content.type) {
@@ -74,7 +77,9 @@ class TimelineItemContentMessageFactory @Inject constructor() {
                 thumbnailSource = messageType.info?.thumbnailSource,
                 fileSource = messageType.source,
                 mimeType = messageType.info?.mimetype,
-                size = messageType.info?.size,
+                formattedFileSize = messageType.info?.size?.let {
+                    fileSizeFormatter.format(it)
+                },
             )
             is NoticeMessageType -> TimelineItemNoticeContent(
                 body = messageType.body,
