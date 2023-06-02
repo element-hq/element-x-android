@@ -44,7 +44,7 @@ class FakeMediaLoader : MatrixMediaLoader {
         }
     }
 
-    override suspend fun downloadMediaFile(source: MediaSource, mimeType: String?): Result<MediaFile> {
+    override suspend fun downloadMediaFile(source: MediaSource, mimeType: String?, body: String?): Result<MediaFile> {
         delay(FAKE_DELAY_IN_MS)
         return if (shouldFail) {
             Result.failure(RuntimeException())

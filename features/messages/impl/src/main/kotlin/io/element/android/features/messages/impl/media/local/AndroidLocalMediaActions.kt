@@ -113,16 +113,9 @@ class AndroidLocalMediaActions @Inject constructor(
     }
 
     /**
-     * Tries to extract a file from the uri and rename it using the local media name if defined.
+     * Tries to extract a file from the uri.
      */
     private fun LocalMedia.toFile(): File {
-        val uriAsFile = uri.toFile()
-        return if (name != null) {
-            File(uriAsFile.parentFile, name).apply {
-                uriAsFile.renameTo(this)
-            }
-        } else {
-            uriAsFile
-        }
+        return uri.toFile()
     }
 }
