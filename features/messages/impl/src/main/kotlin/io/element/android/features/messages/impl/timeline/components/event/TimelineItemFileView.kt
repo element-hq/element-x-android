@@ -18,12 +18,12 @@ package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Attachment
 import androidx.compose.material.icons.outlined.Attachment
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContentProvider
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -49,7 +50,6 @@ fun TimelineItemFileView(
 ) {
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
@@ -64,12 +64,18 @@ fun TimelineItemFileView(
                 modifier = Modifier.size(16.dp).rotate(-45f),
             )
         }
-        Text(
-            text = content.body,
-            modifier = Modifier.padding(horizontal = 8.dp),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
+        Column(modifier = Modifier.padding(horizontal = 8.dp),) {
+            Text(
+                text = content.body,
+                maxLines = 2,
+                fontSize = 16.sp,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = content.fileExtensionAndSize,
+                color = MaterialTheme.colorScheme.secondary,
+            )
+        }
     }
 }
 
