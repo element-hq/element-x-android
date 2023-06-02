@@ -20,15 +20,23 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 
-//TODO add content
 data class NotificationData(
     val senderId: UserId,
     val eventId: EventId,
     val roomId: RoomId,
-    val senderAvatarUrl: String? = null,
-    val senderDisplayName: String? = null,
-    val roomAvatarUrl: String? = null,
+    val senderAvatarUrl: String?,
+    val senderDisplayName: String?,
+    val roomAvatarUrl: String?,
+    val roomDisplayName: String?,
     val isDirect: Boolean,
     val isEncrypted: Boolean,
     val isNoisy: Boolean,
+    val event: NotificationEvent,
+)
+
+data class NotificationEvent(
+    val timestamp: Long,
+    val content: String,
+    // For images for instance
+    val contentUrl: String?
 )
