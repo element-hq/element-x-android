@@ -21,13 +21,25 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
+import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint.InitialTarget
+import io.element.android.features.roomdetails.impl.RoomDetailsFlowNode.NavTarget
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultRoomDetailsEntryPoint @Inject constructor() : RoomDetailsEntryPoint {
-    override fun createNode(parentNode: Node, buildContext: BuildContext, plugins: List<Plugin>): Node {
-        return parentNode.createNode<RoomDetailsFlowNode>(buildContext, plugins)
+    override fun createNode(
+        parentNode: Node,
+        buildContext: BuildContext,
+        inputs: RoomDetailsEntryPoint.Inputs,
+        plugins: List<Plugin>
+    ): Node {
+        return parentNode.createNode<RoomDetailsFlowNode>(buildContext, plugins + inputs)
     }
+}
+
+internal fun InitialTarget.toNavTarget() = when (this) {
+    is InitialTarget.RoomDetails -> NavTarget.RoomDetails
+    is InitialTarget.RoomMemberDetails -> NavTarget.RoomMemberDetails(roomMemberId)
 }

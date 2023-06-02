@@ -39,6 +39,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.parcelize.Parcelize
@@ -88,6 +89,10 @@ class MessagesFlowNode @AssistedInject constructor(
 
                     override fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {
                         backstack.push(NavTarget.AttachmentPreview(attachments.first()))
+                    }
+
+                    override fun onUserDataClicked(userId: UserId) {
+                        callback?.onUserDataClicked(userId)
                     }
                 }
                 createNode<MessagesNode>(buildContext, listOf(callback))

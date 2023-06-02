@@ -171,11 +171,6 @@ if (hasPngs) {
     warn("You seem to have made changes to some images. Please consider using an vector drawable.")
 }
 
-// Check for reviewers
-if (github.requested_reviewers.users.length == 0 && !pr.draft) {
-    warn("Please add a reviewer to your PR.")
-}
-
 // Check that translations have not been modified by developers
 const translationAllowList = [
     "RiotTranslateBot",

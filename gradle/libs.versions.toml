@@ -3,7 +3,7 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.0.1"
+android_gradle_plugin = "8.0.2"
 kotlin = "1.8.21"
 ksp = "1.8.21-1.0.11"
 molecule = "0.9.0"
@@ -96,8 +96,6 @@ accompanist_permission = { module = "com.google.accompanist:accompanist-permissi
 accompanist_material = { module = "com.google.accompanist:accompanist-navigation-material", version.ref = "accompanist" }
 accompanist_systemui = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanist_placeholder = { module = "com.google.accompanist:accompanist-placeholder-material", version.ref = "accompanist" }
-accompanist_pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
-accompanist_pagerindicator = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 accompanist_flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
 
 # Libraries
@@ -129,6 +127,7 @@ test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "
 # Others
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+coil_gif = { module = "io.coil-kt:coil-gif", version.ref = "coil" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization_json" }
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
@@ -180,6 +179,6 @@ ktlint = "org.jlleitschuh.gradle.ktlint:11.3.2"
 dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.ref = "dependencygraph" }
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
 paparazzi = "app.cash.paparazzi:1.2.0"
-sonarqube = "org.sonarqube:4.1.0.3113"
+sonarqube = "org.sonarqube:4.2.0.3129"
 kover = "org.jetbrains.kotlinx.kover:0.6.1"
 sqldelight = { id = "com.squareup.sqldelight", version.ref = "sqldelight" }

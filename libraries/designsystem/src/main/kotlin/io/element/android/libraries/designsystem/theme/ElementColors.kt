@@ -31,6 +31,7 @@ class ElementColors(
     quinary: Color,
     gray300: Color,
     gray400: Color,
+    gray1400: Color,
     textActionCritical: Color,
     placeholder: Color,
     isLight: Boolean
@@ -54,6 +55,9 @@ class ElementColors(
     var gray400 by mutableStateOf(gray400)
         private set
 
+    var gray1400 by mutableStateOf(gray1400)
+        private set
+
     var textActionCritical by mutableStateOf(textActionCritical)
         private set
 
@@ -71,6 +75,7 @@ class ElementColors(
         quinary: Color = this.quinary,
         gray300: Color = this.gray300,
         gray400: Color = this.gray400,
+        gray1400: Color = this.gray1400,
         textActionCritical: Color = this.textActionCritical,
         placeholder: Color = this.placeholder,
         isLight: Boolean = this.isLight,
@@ -82,6 +87,7 @@ class ElementColors(
         quinary = quinary,
         gray300 = gray300,
         gray400 = gray400,
+        gray1400 = gray1400,
         textActionCritical = textActionCritical,
         placeholder = placeholder,
         isLight = isLight,
@@ -95,6 +101,7 @@ class ElementColors(
         quinary = other.quinary
         gray300 = other.gray300
         gray400 = other.gray400
+        gray1400 = other.gray1400
         textActionCritical = other.textActionCritical
         placeholder = other.placeholder
         isLight = other.isLight

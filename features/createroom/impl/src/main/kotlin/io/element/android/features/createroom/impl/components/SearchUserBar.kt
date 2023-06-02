@@ -30,13 +30,14 @@ import io.element.android.libraries.designsystem.theme.components.SearchBarResul
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
 import io.element.android.libraries.ui.strings.R
+import io.element.android.libraries.usersearch.api.UserSearchResult
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchUserBar(
     query: String,
-    state: SearchBarResultState<ImmutableList<MatrixUser>>,
+    state: SearchBarResultState<ImmutableList<UserSearchResult>>,
     selectedUsers: ImmutableList<MatrixUser>,
     active: Boolean,
     isMultiSelectionEnabled: Boolean,
@@ -70,26 +71,26 @@ fun SearchUserBar(
         resultHandler = { users ->
             LazyColumn {
                 if (isMultiSelectionEnabled) {
-                    items(users) { matrixUser ->
+                    items(users) { searchResult ->
                         SearchMultipleUsersResultItem(
                             modifier = Modifier.fillMaxWidth(),
-                            matrixUser = matrixUser,
-                            isUserSelected = selectedUsers.find { it.userId == matrixUser.userId } != null,
+                            searchResult = searchResult,
+                            isUserSelected = selectedUsers.find { it.userId == searchResult.matrixUser.userId } != null,
                             onCheckedChange = { checked ->
                                 if (checked) {
-                                    onUserSelected(matrixUser)
+                                    onUserSelected(searchResult.matrixUser)
                                 } else {
-                                    onUserDeselected(matrixUser)
+                                    onUserDeselected(searchResult.matrixUser)
                                 }
                             }
                         )
                     }
                 } else {
-                    items(users) { matrixUser ->
+                    items(users) { searchResult ->
                         SearchSingleUserResultItem(
                             modifier = Modifier.fillMaxWidth(),
-                            matrixUser = matrixUser,
-                            onClick = { onUserSelected(matrixUser) }
+                            searchResult = searchResult,
+                            onClick = { onUserSelected(searchResult.matrixUser) }
                         )
                     }
                 }
