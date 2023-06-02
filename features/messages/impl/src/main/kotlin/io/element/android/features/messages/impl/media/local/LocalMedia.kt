@@ -21,27 +21,12 @@ import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
-import java.io.File
 
 @Parcelize
 @Immutable
 data class LocalMedia(
-    val source: Source,
+    val uri: Uri,
     val mimeType: String,
     val name: String?,
     val size: Long,
-) : Parcelable {
-
-    sealed interface Source : Parcelable {
-        @Parcelize
-        data class FromUri(val uri: Uri) : Source
-
-        @Parcelize
-        data class FromFile(val file: File) : Source
-    }
-
-    @IgnoredOnParcel val model: Any = when (source) {
-        is Source.FromUri -> source.uri
-        is Source.FromFile -> source.file
-    }
-}
+) : Parcelable

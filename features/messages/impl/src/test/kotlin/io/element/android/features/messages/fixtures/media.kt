@@ -20,6 +20,7 @@ import android.net.Uri
 import androidx.media3.common.MimeTypes
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.media.local.LocalMedia
+import io.mockk.mockk
 
 fun aLocalMedia(
     uri: Uri,
@@ -27,7 +28,7 @@ fun aLocalMedia(
     name: String = "a media",
     size: Long = 1000,
 ) = LocalMedia(
-    source = LocalMedia.Source.FromUri(uri),
+    uri = uri,
     mimeType = mimeType,
     name = name,
     size = size,

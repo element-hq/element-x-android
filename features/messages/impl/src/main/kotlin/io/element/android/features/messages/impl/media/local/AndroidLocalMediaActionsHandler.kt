@@ -16,10 +16,8 @@
 
 package io.element.android.features.messages.impl.media.local
 
-import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
-import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -62,10 +60,10 @@ class AndroidLocalMediaActionsHandler @Inject constructor(
             put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
         }
         val resolver = context.contentResolver
-        val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
-        if (uri != null) {
-            localMedia.openStream(resolver)?.use { input ->
-                resolver.openOutputStream(uri).use { output ->
+        val outputUri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+        if (outputUri != null) {
+            localMedia.openStream()?.use { input ->
+                resolver.openOutputStream(outputUri).use { output ->
                     input.copyTo(output!!, DEFAULT_BUFFER_SIZE)
                 }
             }
@@ -77,18 +75,14 @@ class AndroidLocalMediaActionsHandler @Inject constructor(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
             localMedia.name ?: ""
         )
-        localMedia.openStream(context.contentResolver)?.use { input ->
+        localMedia.openStream()?.use { input ->
             FileOutputStream(target).use { output ->
                 input.copyTo(output)
             }
         }
     }
 
-    private fun LocalMedia.openStream(contentResolver: ContentResolver): InputStream? {
-        return when (val model = model) {
-            is File -> model.inputStream()
-            is Uri -> contentResolver.openInputStream(model)
-            else -> null
-        }
+    private fun LocalMedia.openStream(): InputStream? {
+        return context.contentResolver.openInputStream(uri)
     }
 }

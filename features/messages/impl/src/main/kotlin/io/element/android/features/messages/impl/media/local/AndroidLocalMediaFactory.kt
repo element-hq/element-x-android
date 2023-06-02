@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.media.local
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.androidutils.file.getFileName
 import io.element.android.libraries.androidutils.file.getFileSize
@@ -25,7 +26,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.media.MediaFile
-import java.io.File
+import io.element.android.libraries.matrix.api.media.toFile
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
@@ -34,16 +35,8 @@ class AndroidLocalMediaFactory @Inject constructor(
 ) : LocalMediaFactory {
 
     override fun createFromMediaFile(mediaFile: MediaFile, mimeType: String?): LocalMedia {
-        val resolvedMimeType = mimeType ?: MimeTypes.OctetStream
-        val file = File(mediaFile.path())
-        val fileName = file.name
-        val fileSize = file.length()
-        return LocalMedia(
-            source = LocalMedia.Source.FromFile(file),
-            mimeType = resolvedMimeType,
-            name = fileName,
-            size = fileSize
-        )
+        val uri = mediaFile.toFile().toUri()
+        return createFromUri(uri, mimeType)
     }
 
     override fun createFromUri(uri: Uri, mimeType: String?): LocalMedia {
@@ -51,7 +44,7 @@ class AndroidLocalMediaFactory @Inject constructor(
         val fileName = context.getFileName(uri)
         val fileSize = context.getFileSize(uri)
         return LocalMedia(
-            source = LocalMedia.Source.FromUri(uri),
+            uri = uri,
             mimeType = resolvedMimeType,
             name = fileName,
             size = fileSize
