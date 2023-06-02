@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -71,6 +72,34 @@ fun SelectedUsersList(
         }
     }
 
+    // Calculate spacing to show between each user. This is at least [minimumSpacing], and will grow to ensure that if the available space is filled with
+    // users, the last visible user will be precisely visible. This gives an obvious affordance that there are more entries and the list cna be scrolled.
+    // For efficiency, we assume that all the children are the same width. If they needed to be different sizes we'd have to do this calculation each time
+    // they needed to be measured.
+    val minimumSpacing = with(LocalDensity.current) { 24.dp.toPx() }
+    val userWidth = with(LocalDensity.current) { 56.dp.toPx() }
+    val userSpacing by remember {
+        derivedStateOf {
+            if (rowWidth == 0) {
+                // The row hasn't yet been measured yet, so we don't know how big it is
+                minimumSpacing
+            } else {
+                val userWidthWithSpacing = userWidth + minimumSpacing
+                val maxVisibleUsers = rowWidth / userWidthWithSpacing
+
+                // Round down the number of visible users to end with a state where one is half visible
+                val targetFraction = (userWidth / 2) / userWidthWithSpacing
+                val targetUsers = floor(maxVisibleUsers - targetFraction) + targetFraction
+
+                // Work out how much extra spacing we need to reduce the number of users that much, then split it evenly amongst the visible users
+                val extraSpacing = (maxVisibleUsers - targetUsers) * userWidthWithSpacing
+                val extraSpacingPerUser = extraSpacing / floor(targetUsers)
+
+                minimumSpacing + extraSpacingPerUser
+            }
+        }
+    }
+
     LazyRow(
         state = lazyListState,
         modifier = modifier
@@ -86,36 +115,12 @@ fun SelectedUsersList(
                     )
                 },
                 measurePolicy = { measurables, constraints ->
-                    // Measures out extra space between each user to ensure that the last visible user is exactly half visible, giving an affordance that
-                    // the user can scroll to see more.
-
                     val placeable = measurables.first().measure(constraints)
-                    val isLastItem = index == selectedUsers.lastIndex
-                    val width = if (isLastItem) {
-                        // Don't add any padding on the final item
-                        placeable.width
-                    } else {
-                        val minimumSpacing = 24.dp.toPx()
-                        val userWidth = placeable.width + minimumSpacing
-                        val maxVisibleUsers = rowWidth / userWidth
-                        if (maxVisibleUsers >= selectedUsers.size) {
-                            // If we can fit all the users in, don't do anything fancy
-                            (placeable.width + minimumSpacing).toInt()
-                        } else {
-                            // Round down the number of visible users to end with a state where one is half visible
-                            val targetFraction = (placeable.width / 2) / userWidth
-                            val targetUsers = floor(maxVisibleUsers - targetFraction) + targetFraction
-
-                            // Work out how much extra spacing we need to reduce the number of users that much, then split it evenly amongst the visible users
-                            val extraSpacing = (maxVisibleUsers - targetUsers) * userWidth
-                            val extraSpacingPerUser = (extraSpacing) / floor(targetUsers)
-
-                            (placeable.width + minimumSpacing + extraSpacingPerUser).toInt()
-                        }
-                    }
-
-
-                    layout(width, placeable.height) {
+                    val spacing = if (index == selectedUsers.lastIndex) 0f else userSpacing
+                    layout(
+                        width = (placeable.width + spacing).toInt(),
+                        height = placeable.height
+                    ) {
                         placeable.place(0, 0)
                     }
                 }
