@@ -32,6 +32,7 @@ class ElementColors(
     gray300: Color,
     gray400: Color,
     textActionCritical: Color,
+    placeholder: Color,
     isLight: Boolean
 ) {
     var messageFromMeBackground by mutableStateOf(messageFromMeBackground)
@@ -56,6 +57,9 @@ class ElementColors(
     var textActionCritical by mutableStateOf(textActionCritical)
         private set
 
+    var placeholder by mutableStateOf(placeholder)
+        private set
+
     var isLight by mutableStateOf(isLight)
         private set
 
@@ -68,6 +72,7 @@ class ElementColors(
         gray300: Color = this.gray300,
         gray400: Color = this.gray400,
         textActionCritical: Color = this.textActionCritical,
+        placeholder: Color = this.placeholder,
         isLight: Boolean = this.isLight,
     ) = ElementColors(
         messageFromMeBackground = messageFromMeBackground,
@@ -78,6 +83,7 @@ class ElementColors(
         gray300 = gray300,
         gray400 = gray400,
         textActionCritical = textActionCritical,
+        placeholder = placeholder,
         isLight = isLight,
     )
 
@@ -90,6 +96,7 @@ class ElementColors(
         gray300 = other.gray300
         gray400 = other.gray400
         textActionCritical = other.textActionCritical
+        placeholder = other.placeholder
         isLight = other.isLight
     }
 }

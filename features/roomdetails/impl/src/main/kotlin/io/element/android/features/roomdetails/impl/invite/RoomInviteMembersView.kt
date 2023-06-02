@@ -137,6 +137,7 @@ fun RoomInviteMembersTopBar(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RoomInviteMembersSearchBar(
     query: String,

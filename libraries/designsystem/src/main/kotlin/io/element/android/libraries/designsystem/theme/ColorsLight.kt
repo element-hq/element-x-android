@@ -28,6 +28,7 @@ import io.element.android.libraries.designsystem.Gray_200
 import io.element.android.libraries.designsystem.Gray_25
 import io.element.android.libraries.designsystem.Compound_Gray_300_Light
 import io.element.android.libraries.designsystem.Compound_Gray_400_Light
+import io.element.android.libraries.designsystem.Compound_Gray_800_Light
 import io.element.android.libraries.designsystem.Gray_50
 import io.element.android.libraries.designsystem.SystemGrey5Light
 import io.element.android.libraries.designsystem.SystemGrey6Light
@@ -43,6 +44,7 @@ fun elementColorsLight() = ElementColors(
     gray300 = Compound_Gray_300_Light,
     gray400 = Compound_Gray_400_Light,
     textActionCritical = TextColorCriticalLight,
+    placeholder = Compound_Gray_800_Light,
     isLight = true,
 )
 

@@ -28,6 +28,8 @@ import io.element.android.libraries.designsystem.DarkGrey
 import io.element.android.libraries.designsystem.Gray_300
 import io.element.android.libraries.designsystem.Gray_400
 import io.element.android.libraries.designsystem.Compound_Gray_400_Dark
+import io.element.android.libraries.designsystem.Compound_Gray_800_Dark
+import io.element.android.libraries.designsystem.Compound_Gray_800_Light
 import io.element.android.libraries.designsystem.Gray_450
 import io.element.android.libraries.designsystem.SystemGrey5Dark
 import io.element.android.libraries.designsystem.SystemGrey6Dark
@@ -43,6 +45,7 @@ fun elementColorsDark() = ElementColors(
     gray300 = Compound_Gray_300_Dark,
     gray400 = Compound_Gray_400_Dark,
     textActionCritical = TextColorCriticalDark,
+    placeholder = Compound_Gray_800_Dark,
     isLight = false,
 )
 
@@ -57,7 +60,7 @@ val materialColorSchemeDark = darkColorScheme(
     // TODO onSecondary = ColorDarkTokens.OnSecondary,
     // TODO secondaryContainer = ColorDarkTokens.SecondaryContainer,
     // TODO onSecondaryContainer = ColorDarkTokens.OnSecondaryContainer,
-    tertiary = Color.White,
+    tertiary = Gray_300,
     // TODO onTertiary = ColorDarkTokens.OnTertiary,
     // TODO tertiaryContainer = ColorDarkTokens.TertiaryContainer,
     // TODO onTertiaryContainer = ColorDarkTokens.OnTertiaryContainer,
