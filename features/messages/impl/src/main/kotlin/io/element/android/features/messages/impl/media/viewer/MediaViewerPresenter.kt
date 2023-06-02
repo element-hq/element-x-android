@@ -94,7 +94,11 @@ class MediaViewerPresenter @AssistedInject constructor(
 
     private fun CoroutineScope.downloadMedia(mediaFile: MutableState<MediaFile?>, localMedia: MutableState<Async<LocalMedia>>) = launch {
         localMedia.value = Async.Loading()
-        mediaLoader.downloadMediaFile(inputs.mediaSource, inputs.mimeType)
+        mediaLoader.downloadMediaFile(
+            source = inputs.mediaSource,
+            mimeType = inputs.mimeType,
+            body = inputs.name
+        )
             .onSuccess {
                 mediaFile.value = it
             }.mapCatching { mediaFile ->

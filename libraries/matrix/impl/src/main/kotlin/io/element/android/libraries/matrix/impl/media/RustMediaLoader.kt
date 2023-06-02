@@ -59,13 +59,13 @@ class RustMediaLoader(
             }
         }
 
-    override suspend fun downloadMediaFile(source: MediaSource, mimeType: String?): Result<MediaFile> =
+    override suspend fun downloadMediaFile(source: MediaSource, mimeType: String?, body: String?): Result<MediaFile> =
         withContext(dispatchers.io) {
             runCatching {
                 source.toRustMediaSource().use { mediaSource ->
                     val mediaFile = innerClient.getMediaFile(
                         mediaSource = mediaSource,
-                        body = null,
+                        body = body,
                         mimeType = mimeType ?: "application/octet-stream"
                     )
                     RustMediaFile(mediaFile)

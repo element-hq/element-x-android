@@ -104,7 +104,11 @@ fun MediaViewerView(
 
     Scaffold(modifier,
         topBar = {
-            MediaViewerTopBar(onBackPressed, state.eventSink)
+            MediaViewerTopBar(
+                actionsEnabled = state.downloadedMedia is Async.Success,
+                onBackPressed = onBackPressed,
+                eventSink = state.eventSink
+            )
         },
         snackbarHost = {
             SnackbarHost(snackbarHostState) { data ->
@@ -145,6 +149,7 @@ fun MediaViewerView(
 
 @Composable
 private fun MediaViewerTopBar(
+    actionsEnabled : Boolean,
     onBackPressed: () -> Unit,
     eventSink: (MediaViewerEvents) -> Unit,
 ) {
@@ -153,6 +158,7 @@ private fun MediaViewerTopBar(
         navigationIcon = { BackButton(onClick = onBackPressed) },
         actions = {
             IconButton(
+                enabled = actionsEnabled,
                 onClick = {
                     eventSink(MediaViewerEvents.Share)
                 },
@@ -160,6 +166,7 @@ private fun MediaViewerTopBar(
                 Icon(imageVector = Icons.Default.Share, contentDescription = stringResource(id = string.action_share))
             }
             IconButton(
+                enabled = actionsEnabled,
                 onClick = {
                     eventSink(MediaViewerEvents.SaveOnDisk)
                 },
