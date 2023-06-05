@@ -16,18 +16,26 @@
 
 package io.element.android.features.messages.media
 
-import android.net.Uri
-import io.element.android.features.messages.fixtures.aLocalMedia
+import androidx.compose.runtime.Composable
 import io.element.android.features.messages.impl.media.local.LocalMedia
-import io.element.android.features.messages.impl.media.local.LocalMediaFactory
-import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.libraries.matrix.api.media.MediaFile
+import io.element.android.features.messages.impl.media.local.LocalMediaActions
 
-class FakeLocalMediaFactory(private val localMediaUri: Uri) : LocalMediaFactory {
+class FakeLocalMediaActions: LocalMediaActions {
 
-    var fallbackMimeType: String = MimeTypes.OctetStream
+    @Composable
+    override fun Configure() {
+        //NOOP
+    }
 
-    override fun createFromUri(uri: Uri, mimeType: String?, name: String?, formattedFileSize: String?): LocalMedia {
-        return aLocalMedia(uri, mimeType ?: fallbackMimeType)
+    override suspend fun saveOnDisk(localMedia: LocalMedia): Result<Unit> {
+        return Result.success(Unit)
+    }
+
+    override suspend fun share(localMedia: LocalMedia): Result<Unit> {
+        return Result.success(Unit)
+    }
+
+    override suspend fun open(localMedia: LocalMedia): Result<Unit> {
+        return Result.success(Unit)
     }
 }
