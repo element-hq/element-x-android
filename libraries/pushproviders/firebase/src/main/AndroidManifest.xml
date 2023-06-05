@@ -21,7 +21,7 @@
             android:name="firebase_analytics_collection_deactivated"
             android:value="true" />
         <service
-            android:name="io.element.android.libraries.push.providers.firebase.VectorFirebaseMessagingService"
+            android:name="io.element.android.libraries.pushproviders.firebase.VectorFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

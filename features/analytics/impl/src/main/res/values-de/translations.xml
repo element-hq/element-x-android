@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_prompt_data_usage">"Wir erfassen und analysieren "<b>"keine"</b>" Account-Daten"</string>
+  <string name="screen_analytics_prompt_help_us_improve">"Helfen Sie uns, Probleme zu identifizieren und %1$s zu verbessern, indem Sie anonyme Nutzungsdaten weitergeben."</string>
+  <string name="screen_analytics_prompt_read_terms">"Sie können alle unsere Nutzerbedingungen %1$s lesen."</string>
+  <string name="screen_analytics_prompt_read_terms_content_link">"hier"</string>
+  <string name="screen_analytics_prompt_settings">"Sie können die Analyse jederzeit in den Einstellungen deaktivieren"</string>
+  <string name="screen_analytics_prompt_third_party_sharing">"Wir geben "<b>"keine"</b>" Informationen an Dritte weiter"</string>
+  <string name="screen_analytics_prompt_title">"Helfen Sie %1$s zu verbessern"</string>
+</resources>
