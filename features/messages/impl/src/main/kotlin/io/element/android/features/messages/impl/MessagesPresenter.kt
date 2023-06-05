@@ -33,7 +33,15 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.utils.MessageSummaryFormatter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -43,6 +51,9 @@ import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.handleSnackbarMessage
+import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
+import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
+import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -55,6 +66,7 @@ class MessagesPresenter @Inject constructor(
     private val actionListPresenter: ActionListPresenter,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
+    private val messageSummaryFormatter: MessageSummaryFormatter,
 ) : Presenter<MessagesState> {
 
     @Composable
@@ -145,7 +157,38 @@ class MessagesPresenter @Inject constructor(
 
     private fun handleActionReply(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
         if (targetEvent.eventId == null) return
-        val composerMode = MessageComposerMode.Reply(targetEvent.safeSenderName, targetEvent.eventId, "")
+        val textContent = messageSummaryFormatter.format(targetEvent)
+        val attachmentThumbnailInfo = when (targetEvent.content) {
+            is TimelineItemImageContent -> AttachmentThumbnailInfo(
+                mediaSource = targetEvent.content.mediaSource,
+                textContent = targetEvent.content.body,
+                type = AttachmentThumbnailType.Image,
+                blurHash = targetEvent.content.blurhash,
+            )
+            is TimelineItemVideoContent -> AttachmentThumbnailInfo(
+                mediaSource = targetEvent.content.thumbnailSource,
+                textContent = targetEvent.content.body,
+                type = AttachmentThumbnailType.Video,
+                blurHash = targetEvent.content.blurHash,
+            )
+            is TimelineItemFileContent -> AttachmentThumbnailInfo(
+                mediaSource = targetEvent.content.thumbnailSource,
+                textContent = targetEvent.content.body,
+                type = AttachmentThumbnailType.File,
+                blurHash = null,
+            )
+            is TimelineItemTextBasedContent,
+            is TimelineItemRedactedContent,
+            is TimelineItemStateContent,
+            is TimelineItemEncryptedContent,
+            is TimelineItemUnknownContent -> null
+        }
+        val composerMode = MessageComposerMode.Reply(
+            senderName = targetEvent.safeSenderName,
+            eventId = targetEvent.eventId,
+            attachmentThumbnailInfo = attachmentThumbnailInfo,
+            defaultContent = textContent,
+        )
         composerState.eventSink(
             MessageComposerEvents.SetMode(composerMode)
         )

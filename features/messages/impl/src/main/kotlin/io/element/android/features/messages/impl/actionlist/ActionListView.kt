@@ -16,7 +16,6 @@
 
 package io.element.android.features.messages.impl.actionlist
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,19 +35,16 @@ import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddReaction
-import androidx.compose.material.icons.outlined.Attachment
-import androidx.compose.material.icons.outlined.VideoCameraBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,7 +52,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.impl.timeline.components.blurhash.BlurHashAsyncImage
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
@@ -67,6 +62,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.utils.MessageSummaryFormatter
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -75,8 +71,9 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
-import io.element.android.libraries.matrix.ui.media.MediaRequestData
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
+import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
+import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -189,70 +186,56 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
         Text(body, style = contentStyle, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 
+    val context = LocalContext.current
+    val formatter = remember(context) { MessageSummaryFormatter(context) }
+    val textContent = remember(event.content) { formatter.format(event) }
+
     when (event.content) {
-        is TimelineItemTextBasedContent -> content = { ContentForBody(event.content.body) }
-        is TimelineItemStateContent -> content = { ContentForBody(event.content.body) }
-        is TimelineItemProfileChangeContent -> content = { ContentForBody(event.content.body) }
-        is TimelineItemEncryptedContent -> content = { ContentForBody(stringResource(StringR.string.common_unable_to_decrypt)) }
-        is TimelineItemRedactedContent -> content = { ContentForBody(stringResource(StringR.string.common_message_removed)) }
-        is TimelineItemUnknownContent -> content = { ContentForBody(stringResource(StringR.string.common_unsupported_event)) }
+        is TimelineItemTextBasedContent,
+        is TimelineItemStateContent,
+        is TimelineItemProfileChangeContent,
+        is TimelineItemEncryptedContent,
+        is TimelineItemRedactedContent,
+        is TimelineItemUnknownContent -> content = { ContentForBody(textContent) }
         is TimelineItemImageContent -> {
             icon = {
-                val mediaRequestData = MediaRequestData(
-                    source = event.content.mediaSource,
-                    kind = MediaRequestData.Kind.Thumbnail(32),
-                )
-                BlurHashAsyncImage(
-                    model = mediaRequestData,
-                    blurHash = event.content.blurhash,
-                    contentDescription = stringResource(StringR.string.common_image),
-                    contentScale = ContentScale.Crop,
+                AttachmentThumbnail(
                     modifier = imageModifier,
+                    info = AttachmentThumbnailInfo(
+                        mediaSource = event.content.mediaSource,
+                        textContent = textContent,
+                        type = AttachmentThumbnailType.File,
+                        blurHash = event.content.blurhash,
+                    )
                 )
             }
             content = { ContentForBody(event.content.body) }
         }
         is TimelineItemVideoContent -> {
             icon = {
-                val thumbnailSource = event.content.thumbnailSource
-                if (thumbnailSource != null) {
-                    val mediaRequestData = MediaRequestData(
-                        source = event.content.thumbnailSource,
-                        kind = MediaRequestData.Kind.Thumbnail(32),
-                    )
-                    BlurHashAsyncImage(
-                        model = mediaRequestData,
+                AttachmentThumbnail(
+                    modifier = imageModifier,
+                    info = AttachmentThumbnailInfo(
+                        mediaSource = event.content.thumbnailSource,
+                        textContent = textContent,
+                        type = AttachmentThumbnailType.Video,
                         blurHash = event.content.blurHash,
-                        contentDescription = stringResource(StringR.string.common_video),
-                        contentScale = ContentScale.Crop,
-                        modifier = imageModifier,
                     )
-                } else {
-                    Box(
-                        modifier = imageModifier.background(MaterialTheme.colorScheme.surface),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.VideoCameraBack,
-                            contentDescription = stringResource(StringR.string.common_video),
-                        )
-                    }
-                }
+                )
             }
             content = { ContentForBody(event.content.body) }
         }
         is TimelineItemFileContent -> {
             icon = {
-                Box(
-                    modifier = imageModifier.background(MaterialTheme.colorScheme.surface),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Attachment,
-                        contentDescription = stringResource(StringR.string.common_file),
-                        modifier = Modifier.rotate(-45f)
+                AttachmentThumbnail(
+                    modifier = imageModifier,
+                    info = AttachmentThumbnailInfo(
+                        mediaSource = null,
+                        textContent = textContent,
+                        type = AttachmentThumbnailType.File,
+                        blurHash = null
                     )
-                }
+                )
             }
             content = { ContentForBody(event.content.body) }
         }
