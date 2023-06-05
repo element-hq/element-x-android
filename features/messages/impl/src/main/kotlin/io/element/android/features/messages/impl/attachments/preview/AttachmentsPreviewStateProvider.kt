@@ -20,8 +20,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.core.net.toUri
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.media.local.LocalMedia
+import io.element.android.features.messages.impl.media.local.anImageInfo
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.core.mimetype.MimeTypes
 
 open class AttachmentsPreviewStateProvider : PreviewParameterProvider<AttachmentsPreviewState> {
     override val values: Sequence<AttachmentsPreviewState>
@@ -34,7 +34,7 @@ open class AttachmentsPreviewStateProvider : PreviewParameterProvider<Attachment
 
 fun anAttachmentsPreviewState(sendActionState: Async<Unit> = Async.Uninitialized) = AttachmentsPreviewState(
     attachment = Attachment.Media(
-        localMedia = LocalMedia("path".toUri(), MimeTypes.Jpeg, "an image", 1000L),
+        localMedia = LocalMedia("path".toUri(), anImageInfo()),
         compressIfPossible = true
     ),
     sendActionState = sendActionState,

@@ -24,6 +24,7 @@ import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.messages.impl.media.local.MediaInfo
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.theme.ForcedDarkElementTheme
@@ -38,10 +39,9 @@ class MediaViewerNode @AssistedInject constructor(
 ) : Node(buildContext, plugins = plugins) {
 
     data class Inputs(
-        val name: String,
+        val mediaInfo: MediaInfo,
         val mediaSource: MediaSource,
         val thumbnailSource: MediaSource?,
-        val mimeType: String?
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()

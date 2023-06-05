@@ -16,16 +16,30 @@
 
 package io.element.android.features.messages.impl.media.local
 
-import android.net.Uri
 import android.os.Parcelable
-import androidx.compose.runtime.Immutable
+import io.element.android.libraries.core.mimetype.MimeTypes
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-@Immutable
-data class LocalMedia(
-    val uri: Uri,
-    val info: MediaInfo,
-) : Parcelable {
+data class MediaInfo(
+    val name: String,
+    val mimeType: String,
+    val formattedFileSize: String,
+) : Parcelable
 
-}
+
+fun anImageInfo(): MediaInfo = MediaInfo(
+    "an image file", MimeTypes.Jpeg, "4MB"
+)
+
+fun aVideoInfo(): MediaInfo = MediaInfo(
+    "a video file", MimeTypes.Mp4, "14MB"
+)
+
+fun aPdfInfo(): MediaInfo = MediaInfo(
+    "a pdf file", MimeTypes.Pdf, "23MB"
+)
+
+fun aFileInfo(): MediaInfo = MediaInfo(
+    "an apk file", MimeTypes.Apk, "50MB"
+)

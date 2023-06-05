@@ -20,6 +20,7 @@ import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -60,16 +61,17 @@ class AndroidLocalMediaActions @Inject constructor(
         }
     }
 
-    override suspend fun share(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun share(activityContext: Context, localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
         require(localMedia.uri.scheme == ContentResolver.SCHEME_FILE)
         runCatching {
-            val authority = "${buildMeta.applicationId}.fileprovider"
-            val uriFromFileProvider = FileProvider.getUriForFile(context, authority, localMedia.toFile())
-            val shareMediaIntent = Intent(Intent.ACTION_VIEW)
-                .setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-                .setDataAndType(uriFromFileProvider, localMedia.mimeType)
+            val shareableUri = localMedia.toShareableUri()
+            val shareMediaIntent = Intent(Intent.ACTION_SEND)
+                .setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                .putExtra(Intent.EXTRA_STREAM, shareableUri)
+                .setTypeAndNormalize(localMedia.info.mimeType)
             withContext(coroutineDispatchers.main) {
-                context.startActivity(shareMediaIntent, null)
+                val intent = Intent.createChooser(shareMediaIntent, null)
+                activityContext.startActivity(intent)
             }
         }.onSuccess {
             Timber.v("Share media succeed")
@@ -78,11 +80,33 @@ class AndroidLocalMediaActions @Inject constructor(
         }
     }
 
+    override suspend fun open(activityContext: Context, localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
+        require(localMedia.uri.scheme == ContentResolver.SCHEME_FILE)
+        runCatching {
+            val openMediaIntent = Intent(Intent.ACTION_VIEW)
+                .setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                .setDataAndType(localMedia.toShareableUri(), localMedia.info.mimeType)
+            withContext(coroutineDispatchers.main) {
+                activityContext.startActivity(openMediaIntent)
+            }
+        }.onSuccess {
+            Timber.v("Open media succeed")
+        }.onFailure {
+            Timber.e(it, "Open media failed")
+        }
+    }
+
+    private fun LocalMedia.toShareableUri(): Uri {
+        val mediaAsFile = this.toFile()
+        val authority = "${buildMeta.applicationId}.fileprovider"
+        return FileProvider.getUriForFile(context, authority, mediaAsFile).normalizeScheme()
+    }
+
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun saveOnDiskUsingMediaStore(localMedia: LocalMedia) {
         val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, localMedia.name)
-            put(MediaStore.MediaColumns.MIME_TYPE, localMedia.mimeType)
+            put(MediaStore.MediaColumns.DISPLAY_NAME, localMedia.info.name)
+            put(MediaStore.MediaColumns.MIME_TYPE, localMedia.info.mimeType)
             put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
         }
         val resolver = context.contentResolver
@@ -99,7 +123,7 @@ class AndroidLocalMediaActions @Inject constructor(
     private fun saveOnDiskUsingExternalStorageApi(localMedia: LocalMedia) {
         val target = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-            localMedia.name ?: ""
+            localMedia.info.name
         )
         localMedia.openStream()?.use { input ->
             FileOutputStream(target).use { output ->

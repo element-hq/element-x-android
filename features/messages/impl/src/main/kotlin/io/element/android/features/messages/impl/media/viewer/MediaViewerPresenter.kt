@@ -16,6 +16,8 @@
 
 package io.element.android.features.messages.impl.media.viewer
 
+import android.content.ActivityNotFoundException
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
@@ -24,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -40,6 +43,7 @@ import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import io.element.android.libraries.androidutils.R as UtilsR
 import io.element.android.libraries.ui.strings.R as StringR
 
 class MediaViewerPresenter @AssistedInject constructor(
@@ -65,6 +69,7 @@ class MediaViewerPresenter @AssistedInject constructor(
         val localMedia: MutableState<Async<LocalMedia>> = remember {
             mutableStateOf(Async.Uninitialized)
         }
+        val context = LocalContext.current
         val snackbarMessage = handleSnackbarMessage(snackbarDispatcher)
         DisposableEffect(loadMediaTrigger) {
             coroutineScope.downloadMedia(mediaFile, localMedia)
@@ -78,13 +83,13 @@ class MediaViewerPresenter @AssistedInject constructor(
                 MediaViewerEvents.RetryLoading -> loadMediaTrigger++
                 MediaViewerEvents.ClearLoadingError -> localMedia.value = Async.Uninitialized
                 MediaViewerEvents.SaveOnDisk -> coroutineScope.saveOnDisk(localMedia.value)
-                MediaViewerEvents.Share -> coroutineScope.share(localMedia.value)
+                MediaViewerEvents.Share -> coroutineScope.share(context, localMedia.value)
+                MediaViewerEvents.OpenWith -> coroutineScope.open(context, localMedia.value)
             }
         }
 
         return MediaViewerState(
-            name = inputs.name,
-            mimeType = inputs.mimeType,
+            mediaInfo = inputs.mediaInfo,
             thumbnailSource = inputs.thumbnailSource,
             downloadedMedia = localMedia.value,
             snackbarMessage = snackbarMessage,
@@ -96,16 +101,15 @@ class MediaViewerPresenter @AssistedInject constructor(
         localMedia.value = Async.Loading()
         mediaLoader.downloadMediaFile(
             source = inputs.mediaSource,
-            mimeType = inputs.mimeType,
-            body = inputs.name
+            mimeType = inputs.mediaInfo.mimeType,
+            body = inputs.mediaInfo.name
         )
             .onSuccess {
                 mediaFile.value = it
             }.mapCatching { mediaFile ->
                 localMediaFactory.createFromMediaFile(
                     mediaFile = mediaFile,
-                    mimeType = inputs.mimeType,
-                    name = inputs.name
+                    mediaInfo = inputs.mediaInfo
                 )
             }.onSuccess {
                 localMedia.value = Async.Success(it)
@@ -127,10 +131,37 @@ class MediaViewerPresenter @AssistedInject constructor(
         }
     }
 
-    private fun CoroutineScope.share(localMedia: Async<LocalMedia>) = launch {
+    private fun CoroutineScope.share(activityContext: Context, localMedia: Async<LocalMedia>) = launch {
         when (localMedia) {
-            is Async.Success -> mediaActionsHandler.share(localMedia.state)
+            is Async.Success -> {
+                mediaActionsHandler.share(activityContext, localMedia.state)
+                    .onFailure {
+                        val snackbarMessage = SnackbarMessage(openShareError(it))
+                        snackbarDispatcher.post(snackbarMessage)
+                    }
+            }
             else -> Unit
+        }
+    }
+
+    private fun CoroutineScope.open(activityContext: Context, localMedia: Async<LocalMedia>) = launch {
+        when (localMedia) {
+            is Async.Success -> {
+                mediaActionsHandler.open(activityContext, localMedia.state)
+                    .onFailure {
+                        val snackbarMessage = SnackbarMessage(openShareError(it))
+                        snackbarDispatcher.post(snackbarMessage)
+                    }
+            }
+            else -> Unit
+        }
+    }
+
+    private fun openShareError(throwable: Throwable): Int {
+        return if (throwable is ActivityNotFoundException) {
+            UtilsR.string.error_no_compatible_app_found
+        } else {
+            StringR.string.error_unknown
         }
     }
 }

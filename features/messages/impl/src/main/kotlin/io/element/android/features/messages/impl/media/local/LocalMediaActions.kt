@@ -16,6 +16,8 @@
 
 package io.element.android.features.messages.impl.media.local
 
+import android.content.Context
+
 interface LocalMediaActions {
     /**
      * Will save the current media to the Downloads directory.
@@ -27,6 +29,12 @@ interface LocalMediaActions {
      * Will try to find a suitable application to share the media with.
      * The [LocalMedia.uri] needs to have a file scheme.
      */
-    suspend fun share(localMedia: LocalMedia): Result<Unit>
+    suspend fun share(activityContext: Context, localMedia: LocalMedia): Result<Unit>
+
+    /**
+     * Will try to find a suitable application to open the media with.
+     * The [LocalMedia.uri] needs to have a file scheme.
+     */
+    suspend fun open(activityContext: Context, localMedia: LocalMedia): Result<Unit>
 }
 
