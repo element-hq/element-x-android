@@ -36,7 +36,7 @@ test_core = "1.5.0"
 #other
 coil = "2.4.0"
 datetime = "0.4.0"
-serialization_json = "1.5.0"
+serialization_json = "1.5.1"
 showkase = "1.0.0-beta18"
 jsoup = "1.16.1"
 appyx = "1.2.0"
@@ -51,7 +51,7 @@ anvil = "2.4.6"
 
 # quality
 detekt = "1.23.0"
-dependencygraph = "0.10"
+dependencygraph = "0.12"
 
 [libraries]
 # Project
