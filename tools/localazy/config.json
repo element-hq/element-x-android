@@ -73,7 +73,8 @@
       "name": ":features:login:impl",
       "includeRegex": [
         "screen_login_.*",
-        "screen_change_server_.*"
+        "screen_change_server_.*",
+        "screen_change_account_provider_.*"
       ]
     },
     {

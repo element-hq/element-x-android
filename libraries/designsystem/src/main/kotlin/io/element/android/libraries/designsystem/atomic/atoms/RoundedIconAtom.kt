@@ -28,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -48,6 +49,7 @@ fun RoundedIconAtom(
     size: RoundedIconAtomSize = RoundedIconAtomSize.Large,
     resourceId: Int? = null,
     imageVector: ImageVector? = null,
+    tint: Color = MaterialTheme.colorScheme.secondary
 ) {
     Box(
         modifier = modifier
@@ -61,7 +63,7 @@ fun RoundedIconAtom(
             modifier = Modifier
                 .align(Alignment.Center)
                 .size(size.toIconSize()),
-            tint = MaterialTheme.colorScheme.secondary,
+            tint = tint,
             resourceId = resourceId,
             imageVector = imageVector,
             contentDescription = "",
