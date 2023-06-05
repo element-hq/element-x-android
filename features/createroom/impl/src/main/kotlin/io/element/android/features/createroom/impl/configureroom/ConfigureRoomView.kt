@@ -131,14 +131,13 @@ fun ConfigureRoomView(
             if (state.config.invites.isNotEmpty()) {
                 SelectedUsersList(
                     modifier = Modifier.padding(bottom = 16.dp),
-                        contentPadding = PaddingValues(horizontal = 24.dp),
-                        selectedUsers = state.config.invites,
-                        onUserRemoved = {
-                            focusManager.clearFocus()
-                            state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it))
-                        },
-                    )
-
+                    contentPadding = PaddingValues(horizontal = 24.dp),
+                    selectedUsers = state.config.invites,
+                    onUserRemoved = {
+                        focusManager.clearFocus()
+                        state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it))
+                    },
+                )
             }
             RoomPrivacyOptions(
                 modifier = Modifier.padding(bottom = 40.dp),

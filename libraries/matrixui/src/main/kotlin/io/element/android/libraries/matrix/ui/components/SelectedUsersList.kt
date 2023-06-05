@@ -73,7 +73,7 @@ fun SelectedUsersList(
     }
 
     // Calculate spacing to show between each user. This is at least [minimumSpacing], and will grow to ensure that if the available space is filled with
-    // users, the last visible user will be precisely visible. This gives an obvious affordance that there are more entries and the list cna be scrolled.
+    // users, the last visible user will be precisely half visible. This gives an obvious affordance that there are more entries and the list can be scrolled.
     // For efficiency, we assume that all the children are the same width. If they needed to be different sizes we'd have to do this calculation each time
     // they needed to be measured.
     val minimumSpacing = with(LocalDensity.current) { 24.dp.toPx() }
