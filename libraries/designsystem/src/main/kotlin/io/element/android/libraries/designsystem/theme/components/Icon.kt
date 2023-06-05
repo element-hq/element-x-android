@@ -32,6 +32,43 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @Composable
 fun Icon(
+    contentDescription: String?,
+    modifier: Modifier = Modifier,
+    tint: Color = LocalContentColor.current,
+    imageVector: ImageVector? = null,
+    bitmap: ImageBitmap? = null,
+    @DrawableRes resourceId: Int? = null,
+) {
+    when {
+        imageVector != null -> {
+            Icon(
+                imageVector = imageVector,
+                contentDescription = contentDescription,
+                modifier = modifier,
+                tint = tint
+            )
+        }
+        bitmap != null -> {
+            Icon(
+                bitmap = bitmap,
+                contentDescription = contentDescription,
+                modifier = modifier,
+                tint = tint
+            )
+        }
+        resourceId != null -> {
+            Icon(
+                resourceId = resourceId,
+                contentDescription = contentDescription,
+                modifier = modifier,
+                tint = tint
+            )
+        }
+    }
+}
+
+@Composable
+fun Icon(
     imageVector: ImageVector,
     contentDescription: String?,
     modifier: Modifier = Modifier,

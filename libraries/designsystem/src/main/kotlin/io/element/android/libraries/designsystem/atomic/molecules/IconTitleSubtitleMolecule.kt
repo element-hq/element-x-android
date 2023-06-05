@@ -16,55 +16,45 @@
 
 package io.element.android.libraries.designsystem.atomic.molecules
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.R
+import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
+import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.LocalColors
-import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 
+/**
+ * Provide either an `iconResourceId` or an `iconImageVector`
+ */
 @Composable
 fun IconTitleSubtitleMolecule(
-    iconResourceId: Int,
     title: String,
     subTitle: String,
     modifier: Modifier = Modifier,
+    iconResourceId: Int? = null,
+    iconImageVector: ImageVector? = null,
 ) {
     Column(modifier) {
-        Box(
+        RoundedIconAtom(
             modifier = Modifier
-                .size(width = 70.dp, height = 70.dp)
-                .align(Alignment.CenterHorizontally)
-                .background(
-                    color = LocalColors.current.quinary,
-                    shape = RoundedCornerShape(14.dp)
-                )
-        ) {
-            Icon(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(width = 48.dp, height = 48.dp),
-                tint = MaterialTheme.colorScheme.secondary,
-                resourceId = iconResourceId,
-                contentDescription = "",
-            )
-        }
+                .align(Alignment.CenterHorizontally),
+            size = RoundedIconAtomSize.Large,
+            resourceId = iconResourceId,
+            imageVector = iconImageVector,
+        )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = title,
