@@ -47,7 +47,7 @@ internal class MatrixUserListDataSourceTest {
         )
         val dataSource = MatrixUserListDataSource(matrixClient)
 
-        val results = dataSource.search("test")
+        val results = dataSource.search("test", 2)
         Truth.assertThat(results).containsExactly(
             aMatrixUserProfile(),
             aMatrixUserProfile(userId = A_USER_ID_2)
@@ -63,7 +63,7 @@ internal class MatrixUserListDataSourceTest {
         )
         val dataSource = MatrixUserListDataSource(matrixClient)
 
-        val results = dataSource.search("test")
+        val results = dataSource.search("test", 2)
         Truth.assertThat(results).isEmpty()
     }
 

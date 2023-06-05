@@ -138,13 +138,6 @@
   <string name="room_timeline_beginning_of_room">"Dies ist der Anfang von %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"Dies ist der Beginn dieser Konversation."</string>
   <string name="room_timeline_read_marker_title">"Neu"</string>
-  <string name="screen_analytics_prompt_data_usage">"Wir erfassen und analysieren "<b>"keine"</b>" Account-Daten"</string>
-  <string name="screen_analytics_prompt_help_us_improve">"Helfen Sie uns, Probleme zu identifizieren und %1$s zu verbessern, indem Sie anonyme Nutzungsdaten weitergeben."</string>
-  <string name="screen_analytics_prompt_read_terms">"Sie können alle unsere Nutzerbedingungen %1$s lesen."</string>
-  <string name="screen_analytics_prompt_read_terms_content_link">"hier"</string>
-  <string name="screen_analytics_prompt_settings">"Sie können die Analyse jederzeit in den Einstellungen deaktivieren"</string>
-  <string name="screen_analytics_prompt_third_party_sharing">"Wir geben "<b>"keine"</b>" Informationen an Dritte weiter"</string>
-  <string name="screen_analytics_prompt_title">"Helfen Sie %1$s zu verbessern"</string>
   <string name="screen_analytics_settings_share_data">"Teile Analyse-Daten"</string>
   <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Medien hochladen fehlgeschlagen. Bitte versuchen Sie es erneut."</string>

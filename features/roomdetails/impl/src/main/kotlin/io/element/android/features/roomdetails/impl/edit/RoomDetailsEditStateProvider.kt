@@ -26,7 +26,7 @@ open class RoomDetailsEditStateProvider : PreviewParameterProvider<RoomDetailsEd
         get() = sequenceOf(
             aRoomDetailsEditState(),
             aRoomDetailsEditState().copy(roomTopic = ""),
-            aRoomDetailsEditState().copy(roomAvatarUrl = Uri.EMPTY),
+            aRoomDetailsEditState().copy(roomAvatarUrl = Uri.parse("example://uri")),
             aRoomDetailsEditState().copy(canChangeName = true, canChangeTopic = false, canChangeAvatar = true, saveButtonEnabled = false),
             aRoomDetailsEditState().copy(canChangeName = false, canChangeTopic = true, canChangeAvatar = false, saveButtonEnabled = false),
             aRoomDetailsEditState().copy(saveAction = Async.Loading()),

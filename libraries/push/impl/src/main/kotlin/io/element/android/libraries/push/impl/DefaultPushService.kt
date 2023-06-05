@@ -22,8 +22,8 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.push.impl.notifications.NotificationDrawerManager
-import io.element.android.libraries.push.providers.api.Distributor
-import io.element.android.libraries.push.providers.api.PushProvider
+import io.element.android.libraries.pushproviders.api.Distributor
+import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import javax.inject.Inject
 

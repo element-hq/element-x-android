@@ -24,7 +24,8 @@ open class InviteListInviteSummaryProvider : PreviewParameterProvider<InviteList
     override val values: Sequence<InviteListInviteSummary>
         get() = sequenceOf(
             aInviteListInviteSummary(),
-            aInviteListInviteSummary().copy(roomAlias = "#someroom:example.com"),
+            aInviteListInviteSummary().copy(roomAlias = "#someroom-with-a-long-alias:example.com"),
+            aInviteListInviteSummary().copy(roomAlias = "#someroom-with-a-long-alias:example.com", isNew = true),
             aInviteListInviteSummary().copy(roomName = "Alice", sender = null),
             aInviteListInviteSummary().copy(isNew = true)
         )
@@ -32,9 +33,9 @@ open class InviteListInviteSummaryProvider : PreviewParameterProvider<InviteList
 
 fun aInviteListInviteSummary() = InviteListInviteSummary(
     roomId = RoomId("!room1:example.com"),
-    roomName = "Some room",
+    roomName = "Some room with a long name that will truncate",
     sender = InviteSender(
-        userId = UserId("@alice:example.org"),
-        displayName = "Alice"
+        userId = UserId("@alice-with-a-long-mxid:example.org"),
+        displayName = "Alice with a long name"
     ),
 )
