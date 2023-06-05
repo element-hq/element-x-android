@@ -51,7 +51,7 @@ anvil = "2.4.6"
 
 # quality
 detekt = "1.23.0"
-dependencygraph = "0.10"
+dependencygraph = "0.12"
 
 [libraries]
 # Project
