@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -131,13 +132,13 @@ private fun ContentToPreview() {
                 subtitle = "Some other text",
                 icon = Icons.Default.BugReport,
             )
-            PreferenceDivider()
+            Divider()
             PreferenceSwitch(
                 title = "Switch",
                 icon = Icons.Default.Announcement,
                 isChecked = true,
             )
-            PreferenceDivider()
+            Divider()
             PreferenceSlide(
                 title = "Slide",
                 summary = "Summary",
