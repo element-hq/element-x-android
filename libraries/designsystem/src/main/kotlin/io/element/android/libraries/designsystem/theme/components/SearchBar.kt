@@ -101,7 +101,6 @@ fun <T> SearchBar(
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = stringResource(R.string.action_clear),
-                            tint = MaterialTheme.colorScheme.primary,
                         )
                     }
                 }
