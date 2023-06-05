@@ -24,11 +24,7 @@ import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
-import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -100,24 +96,7 @@ class LeaveRoomPresenterImplTest {
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
-                    result = FakeMatrixRoom().apply {
-                        givenRoomMembersState(
-                            MatrixRoomMembersState.Ready(
-                                listOf(
-                                    RoomMember(
-                                        userId = UserId(value = "@aUserId:aDomain"),
-                                        displayName = null,
-                                        avatarUrl = null,
-                                        membership = RoomMembershipState.JOIN,
-                                        isNameAmbiguous = false,
-                                        powerLevel = 0,
-                                        normalizedPowerLevel = 0,
-                                        isIgnored = false
-                                    )
-                                )
-                            )
-                        )
-                    },
+                    result = FakeMatrixRoom(activeMemberCount = 1),
                 )
             }
         )

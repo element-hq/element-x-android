@@ -27,12 +27,10 @@ import androidx.compose.runtime.remember
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import javax.inject.Inject
@@ -51,7 +49,6 @@ class RoomDetailsPresenter @Inject constructor(
         }
 
         val membersState by room.membersStateFlow.collectAsState()
-        val memberCount by getMemberCount(membersState)
         val canInvite by getCanInvite(membersState)
         val canEditName by getCanSendStateEvent(membersState, StateEventType.ROOM_NAME)
         val canEditAvatar by getCanSendStateEvent(membersState, StateEventType.ROOM_AVATAR)
@@ -85,7 +82,7 @@ class RoomDetailsPresenter @Inject constructor(
             roomAlias = room.alias,
             roomAvatarUrl = room.avatarUrl,
             roomTopic = topicState,
-            memberCount = memberCount,
+            memberCount = room.activeMemberCount,
             isEncrypted = room.isEncrypted,
             canInvite = canInvite,
             canEdit = canEditAvatar || canEditName || canEditTopic,
@@ -130,19 +127,5 @@ class RoomDetailsPresenter @Inject constructor(
             canSendEvent.value = room.canSendStateEvent(type).getOrElse { false }
         }
         return canSendEvent
-    }
-
-    @Composable
-    private fun getMemberCount(membersState: MatrixRoomMembersState): State<Async<Int>> {
-        return remember(membersState) {
-            derivedStateOf {
-                when (membersState) {
-                    MatrixRoomMembersState.Unknown -> Async.Uninitialized
-                    is MatrixRoomMembersState.Pending -> Async.Loading(prevState = membersState.prevRoomMembers?.size)
-                    is MatrixRoomMembersState.Error -> Async.Failure(membersState.failure, prevState = membersState.prevRoomMembers?.size)
-                    is MatrixRoomMembersState.Ready -> Async.Success(membersState.roomMembers.count { it.membership == RoomMembershipState.JOIN })
-                }
-            }
-        }
     }
 }

@@ -27,15 +27,10 @@ import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.LeaveRoomState.Confirmation.Generic
 import io.element.android.features.leaveroom.api.LeaveRoomState.Confirmation.LastUserInRoom
 import io.element.android.features.leaveroom.api.LeaveRoomState.Confirmation.PrivateRoom
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.room.RoomMembershipState
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -83,7 +78,7 @@ class LeaveRoomPresenterImpl @Inject constructor(
     }
 }
 
-private suspend fun showLeaveRoomAlert(
+private fun showLeaveRoomAlert(
     matrixClient: MatrixClient,
     roomId: RoomId,
     confirmation: MutableState<LeaveRoomState.Confirmation>,
@@ -91,7 +86,7 @@ private suspend fun showLeaveRoomAlert(
     matrixClient.getRoom(roomId)?.use { room ->
         confirmation.value = when {
             !room.isPublic -> PrivateRoom(roomId)
-            (room.memberCount() as? Async.Success<Int>)?.state == 1 -> LastUserInRoom(roomId)
+            room.activeMemberCount == 1L -> LastUserInRoom(roomId)
             else -> Generic(roomId)
         }
     }
@@ -115,13 +110,4 @@ private suspend fun MatrixClient.leaveRoom(
         }
     }
     progress.value = LeaveRoomState.Progress.Hidden
-}
-
-private suspend fun MatrixRoom.memberCount(): Async<Int> = membersStateFlow.first().let { membersState ->
-    when (membersState) {
-        MatrixRoomMembersState.Unknown -> Async.Uninitialized
-        is MatrixRoomMembersState.Pending -> Async.Loading(prevState = membersState.prevRoomMembers?.size)
-        is MatrixRoomMembersState.Error -> Async.Failure(membersState.failure, prevState = membersState.prevRoomMembers?.size)
-        is MatrixRoomMembersState.Ready -> Async.Success(membersState.roomMembers.count { it.membership == RoomMembershipState.JOIN })
-    }
 }
