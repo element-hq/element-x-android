@@ -103,10 +103,11 @@ fun TextComposer(
                 RoundedCornerShape(28.dp)
             }
         }
+
+        val minHeight = 42.dp
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = 42.dp)
                 .clip(roundedCorners)
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .border(1.dp, MaterialTheme.colorScheme.outlineVariant, roundedCorners)
@@ -119,7 +120,7 @@ fun TextComposer(
                 BasicTextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(min = 42.dp)
+                        .heightIn(min = minHeight)
                         .focusRequester(focusRequester),
                     value = text,
                     onValueChange = { onComposerTextChange(it) },
