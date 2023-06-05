@@ -37,12 +37,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -181,21 +181,21 @@ private fun SenderRow(sender: InviteSender) {
             avatarData = sender.avatarData.copy(size = AvatarSize.Custom(16.dp)),
         )
         Text(
-            text = buildAnnotatedString {
-                val placeholder = "$"
-                val text = stringResource(R.string.screen_invites_invited_you, placeholder, sender.userId.value)
-                val nameIndex = text.indexOf(placeholder)
-
-                // Text before the placeholder
-                append(text.take(nameIndex))
-
-                // Display name
-                withStyle(SpanStyle(fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.primary)) {
-                    append(sender.displayName)
-                }
-
-                // Text after the placeholder
-                append(text.drop(nameIndex + placeholder.length))
+            text = stringResource(R.string.screen_invites_invited_you, sender.displayName, sender.userId.value).let { text ->
+                val senderNameStart = LocalContext.current.getString(R.string.screen_invites_invited_you).indexOf("%1\$s")
+                AnnotatedString(
+                    text = text,
+                    spanStyles = listOf(
+                        AnnotatedString.Range(
+                            SpanStyle(
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colorScheme.primary
+                            ),
+                            start = senderNameStart,
+                            end = senderNameStart + sender.displayName.length
+                        )
+                    )
+                )
             },
             style = noFontPadding,
             color = MaterialTheme.colorScheme.secondary,
