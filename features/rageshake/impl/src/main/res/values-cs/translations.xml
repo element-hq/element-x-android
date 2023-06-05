@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Připojit snímek obrazovky"</string>
+  <string name="screen_bug_report_contact_me">"V případě dalších dotazů se na mě můžete obrátit"</string>
+  <string name="screen_bug_report_edit_screenshot">"Upravit snímek obrazovky"</string>
+  <string name="screen_bug_report_editor_description">"Popište prosím chybu. Co jste udělali? Co jste očekávali, že se stane? Co se ve skutečnosti stalo? Uveďte co nejvíce podrobností."</string>
+  <string name="screen_bug_report_editor_placeholder">"Popište chybu…"</string>
+  <string name="screen_bug_report_editor_supporting">"Pokud je to možné, prosím, napište popis anglicky."</string>
+  <string name="screen_bug_report_include_crash_logs">"Odeslat záznamy o selhání"</string>
+  <string name="screen_bug_report_include_logs">"Odeslat protokoly pro pomoc"</string>
+  <string name="screen_bug_report_include_screenshot">"Odeslat snímek obrazovky"</string>
+  <string name="screen_bug_report_logs_description">"Aby bylo možné zkontrolovat, zda věci fungují podle očekávání, budou s vaší zprávou odeslány protokoly. Tyto budou soukromé. Chcete-li pouze odeslat zprávu, vypněte toto nastavení."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s havaroval při posledním použití. Chcete se s námi podělit o zprávu o selhání?"</string>
 </resources>
