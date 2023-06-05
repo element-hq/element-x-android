@@ -52,7 +52,6 @@ class DefaultAnalyticsService @Inject constructor(
 
     init {
         observeUserConsent()
-        observeAnalyticsId()
         observeSessions()
     }
 
@@ -99,16 +98,6 @@ class DefaultAnalyticsService @Inject constructor(
     override suspend fun onSessionDeleted(userId: String) {
         // Delete the store
         analyticsStore.reset()
-    }
-
-    private fun observeAnalyticsId() {
-        getAnalyticsId()
-            .onEach { id ->
-                Timber.tag(analyticsTag.value).d("Analytics Id updated to '$id'")
-//                    analyticsId = id
-//                    identifyPostHog()
-            }
-            .launchIn(coroutineScope)
     }
 
     private fun observeUserConsent() {

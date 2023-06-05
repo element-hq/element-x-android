@@ -17,6 +17,7 @@
 package io.element.android.features.analytics.impl
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
@@ -28,20 +29,17 @@ import javax.inject.Inject
 class AnalyticsOptInPresenter @Inject constructor(
     private val buildMeta: BuildMeta,
     private val analyticsService: AnalyticsService,
-    private val coroutineScope: CoroutineScope,
 ) : Presenter<AnalyticsOptInState> {
 
     @Composable
     override fun present(): AnalyticsOptInState {
+        val localCoroutineScope = rememberCoroutineScope()
+
         fun handleEvents(event: AnalyticsOptInEvents) {
             when (event) {
-                is AnalyticsOptInEvents.EnableAnalytics -> {
-                    coroutineScope.launch {
-                        analyticsService.setUserConsent(event.isEnabled)
-                    }
-                }
+                is AnalyticsOptInEvents.EnableAnalytics -> localCoroutineScope.setIsEnabled(event.isEnabled)
             }
-            coroutineScope.launch {
+            localCoroutineScope.launch {
                 analyticsService.setDidAskUserConsent()
             }
         }
@@ -52,4 +50,7 @@ class AnalyticsOptInPresenter @Inject constructor(
         )
     }
 
+    private fun CoroutineScope.setIsEnabled(enabled: Boolean) = launch {
+        analyticsService.setUserConsent(enabled)
+    }
 }
