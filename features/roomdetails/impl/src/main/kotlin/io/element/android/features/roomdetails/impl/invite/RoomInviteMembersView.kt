@@ -24,7 +24,7 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -40,6 +40,7 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
+import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -181,7 +182,7 @@ private fun RoomInviteMembersSearchBar(
             )
 
             LazyColumn {
-                items(results) { invitableUser ->
+                itemsIndexed(results) { index, invitableUser ->
                     if (invitableUser.isUnresolved && !invitableUser.isAlreadyInvited && !invitableUser.isAlreadyJoined) {
                         CheckableUnresolvedUserRow(
                             checked = invitableUser.isSelected,
@@ -207,6 +208,10 @@ private fun RoomInviteMembersSearchBar(
                             onCheckedChange = { onUserToggled(invitableUser.matrixUser) },
                             modifier = Modifier.fillMaxWidth()
                         )
+                    }
+
+                    if (index < results.lastIndex) {
+                        Divider()
                     }
                 }
             }
