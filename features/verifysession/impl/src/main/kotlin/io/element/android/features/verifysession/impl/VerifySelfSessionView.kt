@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -83,12 +84,15 @@ fun VerifySelfSessionView(
         derivedStateOf { verificationFlowStep != FlowStep.AwaitingOtherDeviceResponse && verificationFlowStep != FlowStep.Completed }
     }
     Surface {
-        Column(modifier = modifier.systemBarsPadding()) {
+        Column(
+            modifier = modifier
+                .systemBarsPadding()
+                .padding(horizontal = 20.dp)
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .padding(horizontal = 20.dp)
             ) {
                 HeaderContent(verificationFlowStep = verificationFlowStep)
                 Content(modifier = Modifier.weight(1f), flowState = verificationFlowStep)
@@ -259,11 +263,8 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
         else -> goBack
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    ButtonColumnMolecule(
+        modifier = Modifier.padding(bottom = 40.dp)
     ) {
         ButtonWithProgress(
             text = positiveButtonTitle?.let { stringResource(it) },
@@ -272,7 +273,6 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
             onClick = { positiveButtonEvent?.let { eventSink(it) } }
         )
         if (negativeButtonTitle != null) {
-            Spacer(modifier = Modifier.height(16.dp))
             TextButton(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = negativeButtonCallback,
@@ -281,7 +281,6 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
                 Text(stringResource(negativeButtonTitle), fontSize = 16.sp)
             }
         }
-        Spacer(Modifier.height(40.dp))
     }
 }
 
