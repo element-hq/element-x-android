@@ -22,12 +22,18 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.OpenInNew
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
@@ -43,15 +49,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import io.element.android.features.messages.impl.media.local.LocalMediaView
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.isLoading
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
-import io.element.android.libraries.designsystem.modifiers.roundedBackground
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -102,7 +107,8 @@ fun MediaViewerView(
 
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
-    Scaffold(modifier,
+    Scaffold(
+        modifier,
         topBar = {
             MediaViewerTopBar(
                 actionsEnabled = state.downloadedMedia is Async.Success,
@@ -120,36 +126,48 @@ fun MediaViewerView(
             }
         },
     ) {
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it),
-            contentAlignment = Alignment.Center
         ) {
-            if (state.downloadedMedia is Async.Failure) {
-                ErrorView(
-                    errorMessage = stringResource(id = StringR.string.error_unknown),
-                    onRetry = ::onRetry,
-                    onDismiss = ::onDismissError
+            if (showProgress) {
+                LinearProgressIndicator(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(2.dp)
+                )
+            } else {
+                Spacer(Modifier.height(2.dp))
+            }
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                if (state.downloadedMedia is Async.Failure) {
+                    ErrorView(
+                        errorMessage = stringResource(id = StringR.string.error_unknown),
+                        onRetry = ::onRetry,
+                        onDismiss = ::onDismissError
+                    )
+                }
+                LocalMediaView(
+                    localMedia = state.downloadedMedia.dataOrNull(),
+                    info = state.mediaInfo,
+                    onReady = ::onMediaReady
+                )
+                ThumbnailView(
+                    thumbnailSource = state.thumbnailSource,
+                    showThumbnail = showThumbnail,
                 )
             }
-            LocalMediaView(
-                localMedia = state.downloadedMedia.dataOrNull(),
-                mimeType = state.mimeType,
-                onReady = ::onMediaReady
-            )
-            ThumbnailView(
-                thumbnailSource = state.thumbnailSource,
-                showThumbnail = showThumbnail,
-                showProgress = showProgress,
-            )
         }
     }
 }
 
 @Composable
 private fun MediaViewerTopBar(
-    actionsEnabled : Boolean,
+    actionsEnabled: Boolean,
     onBackPressed: () -> Unit,
     eventSink: (MediaViewerEvents) -> Unit,
 ) {
@@ -160,10 +178,10 @@ private fun MediaViewerTopBar(
             IconButton(
                 enabled = actionsEnabled,
                 onClick = {
-                    eventSink(MediaViewerEvents.Share)
+                    eventSink(MediaViewerEvents.OpenWith)
                 },
             ) {
-                Icon(imageVector = Icons.Default.Share, contentDescription = stringResource(id = string.action_share))
+                Icon(imageVector = Icons.Default.OpenInNew, contentDescription = stringResource(id = string.action_share))
             }
             IconButton(
                 enabled = actionsEnabled,
@@ -173,6 +191,14 @@ private fun MediaViewerTopBar(
             ) {
                 Icon(imageVector = Icons.Default.Download, contentDescription = stringResource(id = string.action_save))
             }
+            IconButton(
+                enabled = actionsEnabled,
+                onClick = {
+                    eventSink(MediaViewerEvents.Share)
+                },
+            ) {
+                Icon(imageVector = Icons.Default.Share, contentDescription = stringResource(id = string.action_share))
+            }
         }
     )
 }
@@ -181,7 +207,6 @@ private fun MediaViewerTopBar(
 private fun ThumbnailView(
     thumbnailSource: MediaSource?,
     showThumbnail: Boolean,
-    showProgress: Boolean,
 ) {
     AnimatedVisibility(
         visible = showThumbnail,
@@ -203,14 +228,6 @@ private fun ThumbnailView(
                 contentScale = ContentScale.Fit,
                 contentDescription = null,
             )
-            if (showProgress) {
-                Box(
-                    modifier = Modifier.roundedBackground(),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
         }
     }
 }

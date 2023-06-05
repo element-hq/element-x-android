@@ -20,7 +20,7 @@ import android.net.Uri
 import androidx.media3.common.MimeTypes
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.media.local.LocalMedia
-import io.mockk.mockk
+import io.element.android.features.messages.impl.media.local.MediaInfo
 
 fun aLocalMedia(
     uri: Uri,
@@ -29,9 +29,11 @@ fun aLocalMedia(
     size: Long = 1000,
 ) = LocalMedia(
     uri = uri,
-    mimeType = mimeType,
-    name = name,
-    size = size,
+    info = MediaInfo(
+        mimeType = mimeType,
+        name = name,
+        formattedFileSize = "${size}B",
+    )
 )
 
 fun aMediaAttachment(localMedia: LocalMedia, compressIfPossible: Boolean = true) = Attachment.Media(

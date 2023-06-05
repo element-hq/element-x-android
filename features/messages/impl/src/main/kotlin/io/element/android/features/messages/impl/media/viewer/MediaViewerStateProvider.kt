@@ -18,8 +18,12 @@ package io.element.android.features.messages.impl.media.viewer
 
 import android.net.Uri
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import androidx.media3.common.MimeTypes
 import io.element.android.features.messages.impl.media.local.LocalMedia
+import io.element.android.features.messages.impl.media.local.MediaInfo
+import io.element.android.features.messages.impl.media.local.aFileInfo
+import io.element.android.features.messages.impl.media.local.aPdfInfo
+import io.element.android.features.messages.impl.media.local.aVideoInfo
+import io.element.android.features.messages.impl.media.local.anImageInfo
 import io.element.android.libraries.architecture.Async
 
 open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState> {
@@ -30,24 +34,36 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
             aMediaViewerState(Async.Failure(IllegalStateException())),
             aMediaViewerState(
                 Async.Success(
-                    LocalMedia(
-                        Uri.EMPTY, MimeTypes.IMAGE_JPEG, "an image file", 100L
-                    )
+                    LocalMedia(Uri.EMPTY, anImageInfo())
                 ),
+                anImageInfo(),
             ),
             aMediaViewerState(
                 Async.Success(
-                    LocalMedia(
-                        Uri.EMPTY, MimeTypes.VIDEO_MP4, "a video file", 100L
-                    )
+                    LocalMedia(Uri.EMPTY, aVideoInfo())
                 ),
+                aVideoInfo(),
+            ),
+            aMediaViewerState(
+                Async.Success(
+                    LocalMedia(Uri.EMPTY, aPdfInfo())
+                ),
+                aPdfInfo(),
+            ),
+            aMediaViewerState(
+                Async.Success(
+                    LocalMedia(Uri.EMPTY, aFileInfo())
+                ),
+                aFileInfo(),
             )
         )
 }
 
-fun aMediaViewerState(downloadedMedia: Async<LocalMedia> = Async.Uninitialized) = MediaViewerState(
-    name = "A media",
-    mimeType = MimeTypes.IMAGE_JPEG,
+fun aMediaViewerState(
+    downloadedMedia: Async<LocalMedia> = Async.Uninitialized,
+    mediaInfo: MediaInfo = anImageInfo(),
+) = MediaViewerState(
+    mediaInfo = mediaInfo,
     thumbnailSource = null,
     downloadedMedia = downloadedMedia,
     snackbarMessage = null

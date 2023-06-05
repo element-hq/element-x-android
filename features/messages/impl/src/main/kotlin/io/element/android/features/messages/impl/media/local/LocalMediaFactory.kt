@@ -24,22 +24,21 @@ import io.element.android.libraries.matrix.api.media.toFile
 interface LocalMediaFactory {
 
     /**
-     * This method will create a [LocalMedia] with the given [uri] and [mimeType]
-     * If the [mimeType] is null, it'll try to read it from the content.
-     * If the [name] is null, it'll try to read it from the content.
+     * This method will create a [LocalMedia] with the given mimeType, name and formattedFileSize
+     * If any of those params are null, it'll try to read them from the content.
      */
     fun createFromUri(
         uri: Uri,
         mimeType: String?,
         name: String?,
+        formattedFileSize: String?
     ): LocalMedia
 }
 
 fun LocalMediaFactory.createFromMediaFile(
     mediaFile: MediaFile,
-    mimeType: String?,
-    name: String?
+    mediaInfo: MediaInfo,
 ): LocalMedia {
     val uri = mediaFile.toFile().toUri()
-    return createFromUri(uri = uri, mimeType = mimeType, name = name)
+    return createFromUri(uri = uri, mimeType = mediaInfo.mimeType, name = mediaInfo.name, formattedFileSize = mediaInfo.formattedFileSize)
 }
