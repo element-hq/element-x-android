@@ -27,7 +27,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Text
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -35,10 +34,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheetLayout
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -62,6 +63,7 @@ fun AvatarActionBottomSheet(
     ModalBottomSheetLayout(
         modifier = modifier,
         sheetState = modalBottomSheetState,
+        displayHandle = true,
         sheetContent = {
             AvatarActionBottomSheetContent(
                 actions = actions,
@@ -91,6 +93,7 @@ private fun AvatarActionBottomSheetContent(
                 headlineContent = {
                     Text(
                         text = stringResource(action.titleResId),
+                        fontSize = 16.sp,
                         color = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
                     )
                 },
@@ -98,7 +101,7 @@ private fun AvatarActionBottomSheetContent(
                     Icon(
                         imageVector = action.icon,
                         contentDescription = stringResource(action.titleResId),
-                        tint = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                        tint = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary,
                     )
                 }
             )

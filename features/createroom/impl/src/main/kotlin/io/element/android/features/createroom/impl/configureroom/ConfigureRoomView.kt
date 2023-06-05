@@ -130,6 +130,7 @@ fun ConfigureRoomView(
             )
             if (state.config.invites.isNotEmpty()) {
                 SelectedUsersList(
+                    modifier = Modifier.padding(bottom = 16.dp),
                     contentPadding = PaddingValues(horizontal = 24.dp),
                     selectedUsers = state.config.invites,
                     onUserRemoved = {
@@ -226,7 +227,7 @@ fun RoomNameWithAvatar(
         LabelledTextField(
             label = stringResource(R.string.screen_create_room_room_name_label),
             value = roomName,
-            placeholder = stringResource(R.string.screen_create_room_room_name_placeholder),
+            placeholder = stringResource(StringR.string.common_room_name_placeholder),
             singleLine = true,
             onValueChange = onRoomNameChanged,
         )
@@ -243,7 +244,7 @@ fun RoomTopic(
         modifier = modifier,
         label = stringResource(R.string.screen_create_room_topic_label),
         value = topic,
-        placeholder = stringResource(R.string.screen_create_room_topic_placeholder),
+        placeholder = stringResource(StringR.string.common_topic_placeholder),
         onValueChange = onTopicChanged,
         maxLines = 3,
     )

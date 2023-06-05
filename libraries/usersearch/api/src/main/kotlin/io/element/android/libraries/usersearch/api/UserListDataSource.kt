@@ -21,6 +21,6 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 
 interface UserListDataSource {
     //TODO should probably have a flow
-    suspend fun search(query: String): List<MatrixUser>
+    suspend fun search(query: String, count: Long): List<MatrixUser>
     suspend fun getProfile(userId: UserId): MatrixUser?
 }

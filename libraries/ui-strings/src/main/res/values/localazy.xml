@@ -69,6 +69,7 @@
   <string name="common_encryption_enabled">"Encryption enabled"</string>
   <string name="common_error">"Error"</string>
   <string name="common_file">"File"</string>
+  <string name="common_file_saved_on_disk_android">"File saved to Downloads"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Image"</string>
   <string name="common_invite_unknown_profile">"We can’t validate this user’s Matrix ID. The invite might not be received."</string>
@@ -89,6 +90,7 @@
   <string name="common_report_a_bug">"Report a bug"</string>
   <string name="common_report_submitted">"Report submitted"</string>
   <string name="common_room_name">"Room name"</string>
+  <string name="common_room_name_placeholder">"e.g. your project name"</string>
   <string name="common_search_for_someone">"Search for someone"</string>
   <string name="common_search_results">"Search results"</string>
   <string name="common_security">"Security"</string>
@@ -102,6 +104,7 @@
   <string name="common_success">"Success"</string>
   <string name="common_suggestions">"Suggestions"</string>
   <string name="common_topic">"Topic"</string>
+  <string name="common_topic_placeholder">"What is this room about?"</string>
   <string name="common_unable_to_decrypt">"Unable to decrypt"</string>
   <string name="common_unable_to_invite_message">"We were unable to successfully send invites to one or more users."</string>
   <string name="common_unable_to_invite_title">"Unable to send invite(s)"</string>
