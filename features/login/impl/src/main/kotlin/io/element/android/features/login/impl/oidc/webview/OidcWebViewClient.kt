@@ -16,7 +16,6 @@
 
 package io.element.android.features.login.impl.oidc.webview
 
-import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.os.Build
 import android.webkit.WebResourceRequest
@@ -26,8 +25,6 @@ import android.webkit.WebViewClient
 class OidcWebViewClient(
     private val eventListener: WebViewEventListener,
 ) : WebViewClient() {
-    // We will revert to API 23, in the mean time ignore the warning here.
-    @SuppressLint("ObsoleteSdkInt")
     @TargetApi(Build.VERSION_CODES.N)
     override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
         return shouldOverrideUrl(request.url.toString())

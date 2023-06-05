@@ -43,7 +43,7 @@ appyx = "1.2.0"
 dependencycheck = "8.2.1"
 stem = "2.3.0"
 sqldelight = "1.5.5"
-telephoto = "0.3.0"
+telephoto = "0.4.0"
 
 # DI
 dagger = "2.46.1"
