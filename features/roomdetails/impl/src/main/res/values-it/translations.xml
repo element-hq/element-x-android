@@ -6,6 +6,7 @@
   </plurals>
   <string name="screen_room_details_encryption_enabled_subtitle">"I messaggi sono protetti da lucchetti. Solo tu e i destinatari avete le chiavi univoche per sbloccarli."</string>
   <string name="screen_room_details_encryption_enabled_title">"Crittografia messaggi abilitata"</string>
+  <string name="screen_room_details_invite_people_title">"Invita persone"</string>
   <string name="screen_room_details_share_room_title">"Condividi stanza"</string>
   <string name="screen_dm_details_block_alert_action">"Blocca"</string>
   <string name="screen_dm_details_block_alert_description">"Gli utenti bloccati non saranno in grado di inviarti nuovi messaggi e tutti quelli già esistenti saranno nascosti. Potrai annullare questa azione in qualsiasi momento."</string>
@@ -13,7 +14,6 @@
   <string name="screen_dm_details_unblock_alert_action">"Sblocca"</string>
   <string name="screen_dm_details_unblock_alert_description">"Dopo aver sbloccato l\'utente, potrai vedere nuovamente tutti i suoi messaggi."</string>
   <string name="screen_dm_details_unblock_user">"Sblocca utente"</string>
-  <string name="screen_room_details_invite_people_title">"Invita persone"</string>
   <string name="screen_room_details_leave_room_title">"Esci dalla stanza"</string>
   <string name="screen_room_details_people_title">"Persone"</string>
   <string name="screen_room_details_security_title">"Sicurezza"</string>

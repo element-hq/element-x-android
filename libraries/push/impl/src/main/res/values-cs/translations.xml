@@ -4,6 +4,7 @@
   <string name="notification_channel_listening_for_events">"Naslouchání událostem"</string>
   <string name="notification_channel_noisy">"Hlasitá oznámení"</string>
   <string name="notification_channel_silent">"Tichá oznámení"</string>
+  <string name="notification_inline_reply_failed">"** Nepodařilo se odeslat - otevřete prosím místnost"</string>
   <string name="notification_invitation_action_join">"Vstoupit"</string>
   <string name="notification_invitation_action_reject">"Odmítnout"</string>
   <string name="notification_new_messages">"Nové zprávy"</string>
@@ -19,6 +20,31 @@
     <item quantity="one">"%1$s: %2$d zpráva"</item>
     <item quantity="few">"%1$s: %2$d zprávy"</item>
     <item quantity="other">"%1$s: %2$d zpráv"</item>
+  </plurals>
+  <plurals name="notification_compat_summary_title">
+    <item quantity="one">"%d oznámení"</item>
+    <item quantity="few">"%d oznámení"</item>
+    <item quantity="other">"%d oznámení"</item>
+  </plurals>
+  <plurals name="notification_invitations">
+    <item quantity="one">"%d pozvánka"</item>
+    <item quantity="few">"%d pozvánky"</item>
+    <item quantity="other">"%d pozvánek"</item>
+  </plurals>
+  <plurals name="notification_new_messages_for_room">
+    <item quantity="one">"%d nová zpráva"</item>
+    <item quantity="few">"%d nové zprávy"</item>
+    <item quantity="other">"%d nových zpráv"</item>
+  </plurals>
+  <plurals name="notification_unread_notified_messages">
+    <item quantity="one">"%d nepřečtená oznámená zpráva"</item>
+    <item quantity="few">"%d nepřečtené oznámené zprávy"</item>
+    <item quantity="other">"%d nepřečtených oznámených zpráv"</item>
+  </plurals>
+  <plurals name="notification_unread_notified_messages_in_room_rooms">
+    <item quantity="one">"%d místnost"</item>
+    <item quantity="few">"%d místnosti"</item>
+    <item quantity="other">"%d místností"</item>
   </plurals>
   <string name="push_choose_distributor_dialog_title_android">"Vyberte, jak chcete přijímat oznámení"</string>
   <string name="push_distributor_background_sync_android">"Synchronizace na pozadí"</string>

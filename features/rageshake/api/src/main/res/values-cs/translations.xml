@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crash_detection_dialog_content">"%1$s havaroval při posledním použití. Chcete se s námi podělit o zprávu o selhání?"</string>
+  <string name="rageshake_detection_dialog_content">"Zdá se, že jste frustrovaně třásli telefonem. Chcete otevřít obrazovku pro nahlášení chyby?"</string>
 </resources>
