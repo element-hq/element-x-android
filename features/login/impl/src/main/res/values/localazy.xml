@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org is an open network for secure, decentralized communication."</string>
+  <string name="screen_change_account_provider_other">"Other"</string>
+  <string name="screen_change_account_provider_subtitle">"Use a different account provider, such as your own private server or a work account."</string>
+  <string name="screen_change_account_provider_title">"Change account provider"</string>
   <string name="screen_change_server_error_invalid_homeserver">"We couldn\'t reach this homeserver. Please check that you have entered the homeserver URL correctly. If the URL is correct, contact your homeserver administrator for further help."</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"This server currently doesn’t support sliding sync."</string>
   <string name="screen_change_server_form_header">"Homeserver URL"</string>
