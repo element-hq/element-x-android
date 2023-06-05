@@ -21,10 +21,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextButton
@@ -34,24 +34,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep as FlowStep
@@ -77,24 +74,18 @@ fun VerifySelfSessionView(
     val buttonsVisible by remember(verificationFlowStep) {
         derivedStateOf { verificationFlowStep != FlowStep.AwaitingOtherDeviceResponse && verificationFlowStep != FlowStep.Completed }
     }
-    Surface {
-        Column(
-            modifier = modifier
-                .systemBarsPadding()
-                .padding(horizontal = 20.dp)
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            ) {
-                HeaderContent(verificationFlowStep = verificationFlowStep)
-                Content(modifier = Modifier.weight(1f), flowState = verificationFlowStep)
-            }
+    HeaderFooterPage(
+        modifier = modifier,
+        header = {
+            HeaderContent(verificationFlowStep = verificationFlowStep)
+        },
+        footer = {
             if (buttonsVisible) {
                 BottomMenu(screenState = state, goBack = ::goBackAndCancelIfNeeded)
             }
         }
+    ) {
+        Content(flowState = verificationFlowStep)
     }
 }
 
@@ -120,7 +111,7 @@ internal fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = 
     }
 
     IconTitleSubtitleMolecule(
-        modifier = modifier.padding(top = 80.dp),
+        modifier = modifier.padding(top = 60.dp),
         iconResourceId = iconResourceId,
         title = stringResource(id = titleTextId),
         subTitle = stringResource(id = subtitleTextId)
@@ -129,14 +120,12 @@ internal fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = 
 
 @Composable
 internal fun Content(flowState: FlowStep, modifier: Modifier = Modifier) {
-    Column(modifier, verticalArrangement = Arrangement.Center) {
-        Spacer(Modifier.shrinkableHeight(min = 20.dp, max = 56.dp))
+    Column(modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
         when (flowState) {
             FlowStep.Initial, FlowStep.Ready, FlowStep.Canceled, FlowStep.Completed -> Unit
             FlowStep.AwaitingOtherDeviceResponse -> ContentWaiting()
             is FlowStep.Verifying -> ContentVerifying(flowState)
         }
-        Spacer(Modifier.shrinkableHeight(min = 20.dp, max = 56.dp))
     }
 }
 
@@ -224,7 +213,7 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
     }
 
     ButtonColumnMolecule(
-        modifier = Modifier.padding(bottom = 40.dp)
+        modifier = Modifier.padding(bottom = 20.dp)
     ) {
         ButtonWithProgress(
             text = positiveButtonTitle?.let { stringResource(it) },
@@ -260,16 +249,4 @@ private fun ContentToPreview(state: VerifySelfSessionState) {
         state = state,
         goBack = {},
     )
-}
-
-private fun Modifier.shrinkableHeight(
-    min: Dp,
-    max: Dp,
-    minScreenHeight: Int = 720
-): Modifier = composed {
-    if (LocalConfiguration.current.screenHeightDp >= minScreenHeight) {
-        then(Modifier.height(max))
-    } else {
-        then(Modifier.height(min))
-    }
 }
