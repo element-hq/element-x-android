@@ -24,11 +24,14 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.messages.impl.media.local.MediaInfo
 import io.element.android.features.messages.impl.media.viewer.MediaViewerEvents
 import io.element.android.features.messages.impl.media.viewer.MediaViewerNode
 import io.element.android.features.messages.impl.media.viewer.MediaViewerPresenter
+import io.element.android.features.messages.media.FakeLocalMediaActions
 import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.matrix.test.FAKE_DELAY_IN_MS
 import io.element.android.libraries.matrix.test.media.FakeMediaLoader
 import io.element.android.libraries.matrix.test.media.aMediaSource
@@ -54,7 +57,7 @@ class MediaViewerPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.downloadedMedia).isEqualTo(Async.Uninitialized)
-            assertThat(initialState.name).isEqualTo(TESTED_MEDIA_NAME)
+            assertThat(initialState.mediaInfo.name).isEqualTo(TESTED_MEDIA_NAME)
             val loadingState = awaitItem()
             assertThat(loadingState.downloadedMedia).isInstanceOf(Async.Loading::class.java)
             testScheduler.advanceTimeBy(FAKE_DELAY_IN_MS + 1)
@@ -74,7 +77,7 @@ class MediaViewerPresenterTest {
             mediaLoader.shouldFail = true
             val initialState = awaitItem()
             assertThat(initialState.downloadedMedia).isEqualTo(Async.Uninitialized)
-            assertThat(initialState.name).isEqualTo(TESTED_MEDIA_NAME)
+            assertThat(initialState.mediaInfo.name).isEqualTo(TESTED_MEDIA_NAME)
             val loadingState = awaitItem()
             assertThat(loadingState.downloadedMedia).isInstanceOf(Async.Loading::class.java)
             testScheduler.advanceTimeBy(FAKE_DELAY_IN_MS)
@@ -97,13 +100,17 @@ class MediaViewerPresenterTest {
     private fun aMediaViewerPresenter(mimeType: String = TESTED_MIME_TYPE): MediaViewerPresenter {
         return MediaViewerPresenter(
             inputs = MediaViewerNode.Inputs(
-                name = TESTED_MEDIA_NAME,
+                mediaInfo = MediaInfo(name = TESTED_MEDIA_NAME,
+                    mimeType = mimeType,
+                    formattedFileSize = "14MB"
+                ),
                 mediaSource = aMediaSource(),
-                mimeType = mimeType,
                 thumbnailSource = null
             ),
             localMediaFactory = localMediaFactory,
-            mediaLoader = mediaLoader
+            mediaLoader = mediaLoader,
+            localMediaActions = FakeLocalMediaActions(),
+            snackbarDispatcher = SnackbarDispatcher()
         )
     }
 }

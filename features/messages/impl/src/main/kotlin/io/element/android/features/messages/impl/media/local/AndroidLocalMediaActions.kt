@@ -25,6 +25,9 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
 import androidx.core.net.toFile
 import com.squareup.anvil.annotations.ContributesBinding
@@ -46,6 +49,19 @@ class AndroidLocalMediaActions @Inject constructor(
     private val buildMeta: BuildMeta,
 ) : LocalMediaActions {
 
+    private var activityContext: Context? = null
+
+    @Composable
+    override fun Configure() {
+        val context = LocalContext.current
+        return DisposableEffect(Unit) {
+            activityContext = context
+            onDispose {
+                activityContext = null
+            }
+        }
+    }
+
     override suspend fun saveOnDisk(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
         require(localMedia.uri.scheme == ContentResolver.SCHEME_FILE)
         runCatching {
@@ -61,7 +77,7 @@ class AndroidLocalMediaActions @Inject constructor(
         }
     }
 
-    override suspend fun share(activityContext: Context, localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun share(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
         require(localMedia.uri.scheme == ContentResolver.SCHEME_FILE)
         runCatching {
             val shareableUri = localMedia.toShareableUri()
@@ -71,7 +87,7 @@ class AndroidLocalMediaActions @Inject constructor(
                 .setTypeAndNormalize(localMedia.info.mimeType)
             withContext(coroutineDispatchers.main) {
                 val intent = Intent.createChooser(shareMediaIntent, null)
-                activityContext.startActivity(intent)
+                activityContext!!.startActivity(intent)
             }
         }.onSuccess {
             Timber.v("Share media succeed")
@@ -80,14 +96,14 @@ class AndroidLocalMediaActions @Inject constructor(
         }
     }
 
-    override suspend fun open(activityContext: Context, localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun open(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
         require(localMedia.uri.scheme == ContentResolver.SCHEME_FILE)
         runCatching {
             val openMediaIntent = Intent(Intent.ACTION_VIEW)
                 .setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 .setDataAndType(localMedia.toShareableUri(), localMedia.info.mimeType)
             withContext(coroutineDispatchers.main) {
-                activityContext.startActivity(openMediaIntent)
+                activityContext!!.startActivity(openMediaIntent)
             }
         }.onSuccess {
             Timber.v("Open media succeed")

@@ -17,7 +17,6 @@
 package io.element.android.features.messages.impl.media.viewer
 
 import android.content.ActivityNotFoundException
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
@@ -26,7 +25,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -50,7 +48,7 @@ class MediaViewerPresenter @AssistedInject constructor(
     @Assisted private val inputs: MediaViewerNode.Inputs,
     private val localMediaFactory: LocalMediaFactory,
     private val mediaLoader: MatrixMediaLoader,
-    private val mediaActionsHandler: LocalMediaActions,
+    private val localMediaActions: LocalMediaActions,
     private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<MediaViewerState> {
 
@@ -69,8 +67,8 @@ class MediaViewerPresenter @AssistedInject constructor(
         val localMedia: MutableState<Async<LocalMedia>> = remember {
             mutableStateOf(Async.Uninitialized)
         }
-        val context = LocalContext.current
         val snackbarMessage = handleSnackbarMessage(snackbarDispatcher)
+        localMediaActions.Configure()
         DisposableEffect(loadMediaTrigger) {
             coroutineScope.downloadMedia(mediaFile, localMedia)
             onDispose {
@@ -83,8 +81,8 @@ class MediaViewerPresenter @AssistedInject constructor(
                 MediaViewerEvents.RetryLoading -> loadMediaTrigger++
                 MediaViewerEvents.ClearLoadingError -> localMedia.value = Async.Uninitialized
                 MediaViewerEvents.SaveOnDisk -> coroutineScope.saveOnDisk(localMedia.value)
-                MediaViewerEvents.Share -> coroutineScope.share(context, localMedia.value)
-                MediaViewerEvents.OpenWith -> coroutineScope.open(context, localMedia.value)
+                MediaViewerEvents.Share -> coroutineScope.share(localMedia.value)
+                MediaViewerEvents.OpenWith -> coroutineScope.open(localMedia.value)
             }
         }
 
@@ -121,7 +119,7 @@ class MediaViewerPresenter @AssistedInject constructor(
     private fun CoroutineScope.saveOnDisk(localMedia: Async<LocalMedia>) = launch {
         when (localMedia) {
             is Async.Success -> {
-                mediaActionsHandler.saveOnDisk(localMedia.state)
+                localMediaActions.saveOnDisk(localMedia.state)
                     .onSuccess {
                         val snackbarMessage = SnackbarMessage(StringR.string.common_file_saved_on_disk_android)
                         snackbarDispatcher.post(snackbarMessage)
@@ -131,10 +129,10 @@ class MediaViewerPresenter @AssistedInject constructor(
         }
     }
 
-    private fun CoroutineScope.share(activityContext: Context, localMedia: Async<LocalMedia>) = launch {
+    private fun CoroutineScope.share(localMedia: Async<LocalMedia>) = launch {
         when (localMedia) {
             is Async.Success -> {
-                mediaActionsHandler.share(activityContext, localMedia.state)
+                localMediaActions.share(localMedia.state)
                     .onFailure {
                         val snackbarMessage = SnackbarMessage(openShareError(it))
                         snackbarDispatcher.post(snackbarMessage)
@@ -144,10 +142,10 @@ class MediaViewerPresenter @AssistedInject constructor(
         }
     }
 
-    private fun CoroutineScope.open(activityContext: Context, localMedia: Async<LocalMedia>) = launch {
+    private fun CoroutineScope.open(localMedia: Async<LocalMedia>) = launch {
         when (localMedia) {
             is Async.Success -> {
-                mediaActionsHandler.open(activityContext, localMedia.state)
+                localMediaActions.open(localMedia.state)
                     .onFailure {
                         val snackbarMessage = SnackbarMessage(openShareError(it))
                         snackbarDispatcher.post(snackbarMessage)
