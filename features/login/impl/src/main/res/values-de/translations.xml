@@ -12,6 +12,7 @@
   <string name="screen_login_form_header">"Gib deine Daten ein"</string>
   <string name="screen_login_server_header">"Wo deine Gespräche leben"</string>
   <string name="screen_login_title">"Willkommen zurück!"</string>
+  <string name="screen_login_title_with_homeserver">"Bei %1$s anmelden"</string>
   <string name="screen_change_server_submit">"Weiter"</string>
   <string name="screen_change_server_title">"Wählen deinen Server"</string>
   <string name="screen_login_password_hint">"Passwort"</string>

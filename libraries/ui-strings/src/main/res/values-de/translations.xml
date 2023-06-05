@@ -22,7 +22,9 @@
   <string name="action_done">"Fertig"</string>
   <string name="action_edit">"Bearbeiten"</string>
   <string name="action_enable">"Aktivieren"</string>
+  <string name="action_forgot_password">"Passwort vergessen?"</string>
   <string name="action_invite">"Einladen"</string>
+  <string name="action_invite_friends">"Freunde einladen"</string>
   <string name="action_invite_friends_to_app">"Freunde zu %1$s einladen"</string>
   <string name="action_invites_list">"Einladungen"</string>
   <string name="action_learn_more">"Mehr erfahren"</string>
@@ -68,6 +70,7 @@
   <string name="common_file">"Datei"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Bild"</string>
+  <string name="common_leaving_room">"Raum verlassen"</string>
   <string name="common_link_copied_to_clipboard">"Link in Zwischenablage kopiert"</string>
   <string name="common_loading">"Wird geladen…"</string>
   <string name="common_message">"Nachricht"</string>
@@ -118,6 +121,7 @@
   <string name="error_failed_loading_messages">"Fehler beim Laden der Nachrichten"</string>
   <string name="error_some_messages_have_not_been_sent">"Einige Nachrichten wurden nicht gesendet"</string>
   <string name="error_unknown">"Entschuldigung, ein Fehler ist aufgetreten."</string>
+  <string name="invite_friends_rich_title">"🔐️ Besuchen Sie mich auf %1$s"</string>
   <string name="invite_friends_text">"Hey, sprich mit mir auf %1$s: %2$s"</string>
   <string name="leave_room_alert_empty_subtitle">"Bist du sicher, dass du diesen Raum verlassen willst? Du bist die einzige Person hier. Wenn du gehst, kann in Zukunft niemand mehr beitreten, auch du nicht."</string>
   <string name="leave_room_alert_private_subtitle">"Bist du dir sicher, dass du den Raum verlassen möchtest? Dieser Raum ist nicht öffentlich und du kannst ihm ohne eine Einladung nicht mehr beitreten."</string>
@@ -143,7 +147,11 @@
   <string name="screen_analytics_prompt_title">"Helfen Sie %1$s zu verbessern"</string>
   <string name="screen_analytics_settings_share_data">"Teile Analyse-Daten"</string>
   <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Medien hochladen fehlgeschlagen. Bitte versuchen Sie es erneut."</string>
   <string name="screen_report_content_block_user_hint">"Prüfe, ob du alle aktuellen und zukünftigen Nachrichten dieses Benutzers ausblenden möchtest"</string>
+  <string name="screen_server_confirmation_change_server">"Kontoanbieter wechseln"</string>
+  <string name="screen_server_confirmation_message_login_element_dot_io">"Ein privater Server für Element-Mitarbeiter."</string>
+  <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix ist ein offenes Netzwerk für sichere, dezentrale Kommunikation"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Erkennungsschwelle"</string>
   <string name="settings_title_general">"Allgemein"</string>
