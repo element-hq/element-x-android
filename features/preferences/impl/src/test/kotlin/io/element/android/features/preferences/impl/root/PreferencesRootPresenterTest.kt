@@ -50,7 +50,7 @@ class PreferencesRootPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.logoutState.logoutAction).isEqualTo(Async.Uninitialized)
-            assertThat(initialState.analyticsState.isEnabled).isTrue()
+            assertThat(initialState.analyticsState.isEnabled).isFalse()
             assertThat(initialState.rageshakeState.isEnabled).isTrue()
             assertThat(initialState.rageshakeState.isSupported).isTrue()
             assertThat(initialState.rageshakeState.sensitivity).isEqualTo(1.0f)
