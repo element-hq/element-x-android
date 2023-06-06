@@ -85,7 +85,7 @@ fun PreferenceText(
                 }
                 if (subtitle != null) {
                     Text(
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         text = subtitle,
                         color = tintColor ?: MaterialTheme.colorScheme.tertiary,
                     )
