@@ -444,6 +444,42 @@ private fun ContentToPreview() {
                 senderName = "Alice",
                 eventId = EventId("$1234"),
                 attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                    mediaSource = MediaSource("https://domain.com/image.jpg"),
+                    textContent = "image.jpg",
+                    type = AttachmentThumbnailType.Image,
+                    blurHash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
+                ),
+                defaultContent = "image.jpg"
+            ),
+            onResetComposerMode = {},
+            composerCanSendMessage = true,
+            composerText = "A message",
+        )
+        TextComposer(
+            onSendMessage = {},
+            onComposerTextChange = {},
+            composerMode = MessageComposerMode.Reply(
+                senderName = "Alice",
+                eventId = EventId("$1234"),
+                attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                    mediaSource = MediaSource("https://domain.com/video.mp4"),
+                    textContent = "video.mp4",
+                    type = AttachmentThumbnailType.Video,
+                    blurHash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
+                ),
+                defaultContent = "video.mp4"
+            ),
+            onResetComposerMode = {},
+            composerCanSendMessage = true,
+            composerText = "A message",
+        )
+        TextComposer(
+            onSendMessage = {},
+            onComposerTextChange = {},
+            composerMode = MessageComposerMode.Reply(
+                senderName = "Alice",
+                eventId = EventId("$1234"),
+                attachmentThumbnailInfo = AttachmentThumbnailInfo(
                     mediaSource = null,
                     textContent = "logs.txt",
                     type = AttachmentThumbnailType.File,

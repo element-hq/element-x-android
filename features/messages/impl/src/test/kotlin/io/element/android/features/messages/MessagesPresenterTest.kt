@@ -29,15 +29,21 @@ import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatterImpl
 import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.features.messages.utils.messagesummary.FakeMessageSummaryFormatter
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -104,6 +110,105 @@ class MessagesPresenterTest {
             skipItems(1)
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
+        }
+    }
+
+    @Test
+    fun `present - handle action reply to an event with no id does nothing`() = runTest {
+        val presenter = createMessagePresenter()
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, aMessageEvent(eventId = null)))
+            skipItems(1)
+            // Otherwise we would have some extra items here
+            ensureAllEventsConsumed()
+        }
+    }
+
+    @Test
+    fun `present - handle action reply to an image media message`() = runTest {
+        val presenter = createMessagePresenter()
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            val mediaMessage = aMessageEvent(
+                content = TimelineItemImageContent(
+                    body = "image.jpg",
+                    mediaSource = MediaSource(AN_AVATAR_URL),
+                    mimeType = MimeTypes.Jpeg,
+                    blurhash = null,
+                    width = 20,
+                    height = 20,
+                    aspectRatio = 1.0f,
+                )
+            )
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, mediaMessage))
+            skipItems(1)
+            val finalState = awaitItem()
+            assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
+            val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
+            assertThat(replyMode.attachmentThumbnailInfo).isNotNull()
+        }
+    }
+
+    @Test
+    fun `present - handle action reply to a video media message`() = runTest {
+        val presenter = createMessagePresenter()
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            val mediaMessage = aMessageEvent(
+                content = TimelineItemVideoContent(
+                    body = "video.mp4",
+                    duration = 10L,
+                    videoSource = MediaSource(AN_AVATAR_URL),
+                    thumbnailSource = MediaSource(AN_AVATAR_URL),
+                    mimeType = MimeTypes.Mp4,
+                    blurHash = null,
+                    width = 20,
+                    height = 20,
+                    aspectRatio = 1.0f,
+                )
+            )
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, mediaMessage))
+            skipItems(1)
+            val finalState = awaitItem()
+            assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
+            val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
+            assertThat(replyMode.attachmentThumbnailInfo).isNotNull()
+        }
+    }
+
+    @Test
+    fun `present - handle action reply to a file media message`() = runTest {
+        val presenter = createMessagePresenter()
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            val mediaMessage = aMessageEvent(
+                content = TimelineItemFileContent(
+                    body = "video.mp4",
+                    fileSource = MediaSource(AN_AVATAR_URL),
+                    thumbnailSource = MediaSource(AN_AVATAR_URL),
+                    formattedFileSize = "10 MB",
+                    mimeType = MimeTypes.Pdf,
+                )
+            )
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, mediaMessage))
+            skipItems(1)
+            val finalState = awaitItem()
+            assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
+            val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
+            assertThat(replyMode.attachmentThumbnailInfo).isNotNull()
         }
     }
 
