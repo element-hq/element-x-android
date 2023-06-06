@@ -26,6 +26,4 @@ import kotlinx.parcelize.Parcelize
 data class LocalMedia(
     val uri: Uri,
     val info: MediaInfo,
-) : Parcelable {
-
-}
+) : Parcelable
