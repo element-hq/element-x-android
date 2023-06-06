@@ -123,6 +123,10 @@ class MediaViewerPresenter @AssistedInject constructor(
                         val snackbarMessage = SnackbarMessage(StringR.string.common_file_saved_on_disk_android)
                         snackbarDispatcher.post(snackbarMessage)
                     }
+                    .onFailure {
+                        val snackbarMessage = SnackbarMessage(mediaActionsError(it))
+                        snackbarDispatcher.post(snackbarMessage)
+                    }
             }
             else -> Unit
         }
@@ -133,7 +137,7 @@ class MediaViewerPresenter @AssistedInject constructor(
             is Async.Success -> {
                 localMediaActions.share(localMedia.state)
                     .onFailure {
-                        val snackbarMessage = SnackbarMessage(openShareError(it))
+                        val snackbarMessage = SnackbarMessage(mediaActionsError(it))
                         snackbarDispatcher.post(snackbarMessage)
                     }
             }
@@ -146,7 +150,7 @@ class MediaViewerPresenter @AssistedInject constructor(
             is Async.Success -> {
                 localMediaActions.open(localMedia.state)
                     .onFailure {
-                        val snackbarMessage = SnackbarMessage(openShareError(it))
+                        val snackbarMessage = SnackbarMessage(mediaActionsError(it))
                         snackbarDispatcher.post(snackbarMessage)
                     }
             }
@@ -154,7 +158,7 @@ class MediaViewerPresenter @AssistedInject constructor(
         }
     }
 
-    private fun openShareError(throwable: Throwable): Int {
+    private fun mediaActionsError(throwable: Throwable): Int {
         return if (throwable is ActivityNotFoundException) {
             UtilsR.string.error_no_compatible_app_found
         } else {
