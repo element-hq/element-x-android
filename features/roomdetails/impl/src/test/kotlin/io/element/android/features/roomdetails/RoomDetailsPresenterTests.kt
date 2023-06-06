@@ -66,7 +66,7 @@ class RoomDetailsPresenterTests {
             assertThat(initialState.roomName).isEqualTo(room.name)
             assertThat(initialState.roomAvatarUrl).isEqualTo(room.avatarUrl)
             assertThat(initialState.roomTopic).isEqualTo(RoomTopicState.ExistingTopic(room.topic!!))
-            assertThat(initialState.memberCount).isEqualTo(room.activeMemberCount)
+            assertThat(initialState.memberCount).isEqualTo(room.joinedMemberCount)
             assertThat(initialState.isEncrypted).isEqualTo(room.isEncrypted)
 
             cancelAndIgnoreRemainingEvents()

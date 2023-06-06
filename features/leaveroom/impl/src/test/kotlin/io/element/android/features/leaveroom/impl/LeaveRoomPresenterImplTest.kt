@@ -96,7 +96,7 @@ class LeaveRoomPresenterImplTest {
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
-                    result = FakeMatrixRoom(activeMemberCount = 1),
+                    result = FakeMatrixRoom(joinedMemberCount = 1),
                 )
             }
         )

@@ -82,7 +82,7 @@ class RoomDetailsPresenter @Inject constructor(
             roomAlias = room.alias,
             roomAvatarUrl = room.avatarUrl,
             roomTopic = topicState,
-            memberCount = room.activeMemberCount,
+            memberCount = room.joinedMemberCount,
             isEncrypted = room.isEncrypted,
             canInvite = canInvite,
             canEdit = canEditAvatar || canEditName || canEditTopic,
