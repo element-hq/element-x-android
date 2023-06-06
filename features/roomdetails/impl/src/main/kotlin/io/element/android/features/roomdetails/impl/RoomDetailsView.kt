@@ -59,7 +59,6 @@ import io.element.android.features.roomdetails.impl.blockuser.BlockUserDialogs
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserSection
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberHeaderSection
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberMainActionsSection
-import io.element.android.libraries.architecture.isLoading
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -145,10 +144,8 @@ fun RoomDetailsView(
             }
 
             if (state.roomType is RoomDetailsType.Room) {
-                val memberCount = state.memberCount.dataOrNull()
                 MembersSection(
-                    memberCount = memberCount,
-                    isLoading = state.memberCount.isLoading(),
+                    memberCount = state.memberCount,
                     openRoomMemberList = openRoomMemberList,
                 )
 
@@ -273,8 +270,7 @@ internal fun TopicSection(
 
 @Composable
 internal fun MembersSection(
-    memberCount: Int?,
-    isLoading: Boolean,
+    memberCount: Long,
     openRoomMemberList: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -282,9 +278,8 @@ internal fun MembersSection(
         PreferenceText(
             title = stringResource(R.string.screen_room_details_people_title),
             icon = Icons.Outlined.Person,
-            currentValue = memberCount?.toString(),
+            currentValue = memberCount.toString(),
             onClick = openRoomMemberList,
-            loadingCurrentValue = isLoading,
         )
     }
 }
