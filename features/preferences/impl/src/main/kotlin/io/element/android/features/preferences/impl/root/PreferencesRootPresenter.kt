@@ -17,6 +17,7 @@
 package io.element.android.features.preferences.impl.root
 
 import androidx.compose.runtime.Composable
+import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesPresenter
 import io.element.android.features.logout.api.LogoutPreferencePresenter
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
 import io.element.android.libraries.architecture.Async
@@ -27,6 +28,7 @@ import javax.inject.Inject
 class PreferencesRootPresenter @Inject constructor(
     private val logoutPresenter: LogoutPreferencePresenter,
     private val rageshakePresenter: RageshakePreferencesPresenter,
+    private val analyticsPresenter: AnalyticsPreferencesPresenter,
     private val buildType: BuildType,
 ) : Presenter<PreferencesRootState> {
 
@@ -34,10 +36,12 @@ class PreferencesRootPresenter @Inject constructor(
     override fun present(): PreferencesRootState {
         val logoutState = logoutPresenter.present()
         val rageshakeState = rageshakePresenter.present()
+        val analyticsState = analyticsPresenter.present()
         val showDeveloperSettings = buildType != BuildType.RELEASE
         return PreferencesRootState(
             logoutState = logoutState,
             rageshakeState = rageshakeState,
+            analyticsState = analyticsState,
             myUser = Async.Uninitialized,
             showDeveloperSettings = showDeveloperSettings
         )

@@ -145,7 +145,7 @@ fun RoomDetailsEditView(
                 LabelledTextField(
                     label = stringResource(id = R.string.screen_room_details_room_name_label),
                     value = state.roomName,
-                    placeholder = stringResource(id = StringR.string.common_room_name_placeholder),
+                    placeholder = stringResource(StringR.string.common_room_name_placeholder),
                     singleLine = true,
                     onValueChange = { state.eventSink(RoomDetailsEditEvents.UpdateRoomName(it)) },
                 )
@@ -160,9 +160,9 @@ fun RoomDetailsEditView(
 
             if (state.canChangeTopic) {
                 LabelledTextField(
-                    label = stringResource(id = StringR.string.common_topic),
+                    label = stringResource(StringR.string.common_topic),
                     value = state.roomTopic,
-                    placeholder = stringResource(id = StringR.string.common_topic_placeholder),
+                    placeholder = stringResource(StringR.string.common_topic_placeholder),
                     maxLines = 10,
                     onValueChange = { state.eventSink(RoomDetailsEditEvents.UpdateRoomTopic(it)) },
                 )

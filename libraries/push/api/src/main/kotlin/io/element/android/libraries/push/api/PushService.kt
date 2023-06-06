@@ -17,8 +17,8 @@
 package io.element.android.libraries.push.api
 
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.push.providers.api.Distributor
-import io.element.android.libraries.push.providers.api.PushProvider
+import io.element.android.libraries.pushproviders.api.Distributor
+import io.element.android.libraries.pushproviders.api.PushProvider
 
 interface PushService {
     // TODO Move away

@@ -43,6 +43,7 @@ interface MatrixRoom : Closeable {
     val isEncrypted: Boolean
     val isDirect: Boolean
     val isPublic: Boolean
+    val joinedMemberCount: Long
 
     /**
      * The current loaded members as a StateFlow.

@@ -17,9 +17,11 @@
 package io.element.android.libraries.matrix.ui.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -39,10 +41,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.noFontPadding
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.R
 
@@ -62,7 +66,9 @@ fun UnresolvedUserRow(
         Avatar(avatarData)
         Column(
             modifier = Modifier
-                .padding(start = 12.dp),
+                .padding(start = 12.dp)
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
             // ID
             Text(
@@ -72,10 +78,11 @@ fun UnresolvedUserRow(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colorScheme.primary,
+                style = noFontPadding,
             )
 
             // Warning
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(modifier = Modifier.fillMaxWidth().padding(top = 3.dp)) {
                 Icon(
                     imageVector = Icons.Filled.Error,
                     contentDescription = "",
@@ -121,8 +128,9 @@ fun CheckableUnresolvedUserRow(
         )
 
         Checkbox(
+            modifier = Modifier.padding(end = 16.dp),
             checked = checked,
-            onCheckedChange = onCheckedChange,
+            onCheckedChange = null,
             enabled = enabled,
         )
     }
@@ -142,9 +150,9 @@ internal fun CheckableUnresolvedUserRowPreview() =
     ElementThemedPreview {
         val matrixUser = aMatrixUser()
         Column {
-            CheckableUnresolvedUserRow(false, matrixUser.getAvatarData(), matrixUser.userId.value)
-            CheckableUnresolvedUserRow(true, matrixUser.getAvatarData(), matrixUser.userId.value)
-            CheckableUnresolvedUserRow(false, matrixUser.getAvatarData(), matrixUser.userId.value, enabled = false)
-            CheckableUnresolvedUserRow(true, matrixUser.getAvatarData(), matrixUser.userId.value, enabled = false)
+            CheckableUnresolvedUserRow(false, matrixUser.getAvatarData(AvatarSize.Custom(36.dp)), matrixUser.userId.value)
+            CheckableUnresolvedUserRow(true, matrixUser.getAvatarData(AvatarSize.Custom(36.dp)), matrixUser.userId.value)
+            CheckableUnresolvedUserRow(false, matrixUser.getAvatarData(AvatarSize.Custom(36.dp)), matrixUser.userId.value, enabled = false)
+            CheckableUnresolvedUserRow(true, matrixUser.getAvatarData(AvatarSize.Custom(36.dp)), matrixUser.userId.value, enabled = false)
         }
     }

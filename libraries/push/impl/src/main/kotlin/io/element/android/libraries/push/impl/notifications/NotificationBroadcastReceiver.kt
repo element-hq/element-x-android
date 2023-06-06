@@ -26,7 +26,6 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.impl.log.notificationLoggerTag
-import io.element.android.services.analytics.api.AnalyticsTracker
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import timber.log.Timber
 import javax.inject.Inject
@@ -41,7 +40,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
 
     //@Inject lateinit var activeSessionHolder: ActiveSessionHolder
-    @Inject lateinit var analyticsTracker: AnalyticsTracker
+    //@Inject lateinit var analyticsTracker: AnalyticsTracker
     @Inject lateinit var clock: SystemClock
     @Inject lateinit var actionIds: NotificationActionIds
 

@@ -103,6 +103,12 @@
         "screen_room_member.*",
         "screen_dm_.*"
       ]
+    },
+    {
+      "name": ":features:analytics:impl",
+      "includeRegex": [
+        "screen_analytics_prompt.*"
+      ]
     }
   ]
 }

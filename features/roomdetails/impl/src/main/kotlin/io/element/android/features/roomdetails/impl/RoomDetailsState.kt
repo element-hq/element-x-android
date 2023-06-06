@@ -18,7 +18,6 @@ package io.element.android.features.roomdetails.impl
 
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.room.RoomMember
 
 data class RoomDetailsState(
@@ -27,7 +26,7 @@ data class RoomDetailsState(
     val roomAlias: String?,
     val roomAvatarUrl: String?,
     val roomTopic: RoomTopicState,
-    val memberCount: Async<Int>,
+    val memberCount: Long,
     val isEncrypted: Boolean,
     val roomType: RoomDetailsType,
     val roomMemberDetailsState: RoomMemberDetailsState?,

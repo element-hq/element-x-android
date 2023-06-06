@@ -26,7 +26,7 @@ import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
 import io.element.android.libraries.push.impl.config.PushConfig
 import io.element.android.libraries.push.impl.log.pushLoggerTag
 import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest
-import io.element.android.libraries.push.providers.api.PusherSubscriber
+import io.element.android.libraries.pushproviders.api.PusherSubscriber
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.services.toolbox.api.appname.AppNameProvider

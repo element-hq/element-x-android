@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_change_server_error_invalid_homeserver">"Nepodařilo se nám připojit k tomuto domovskému serveru. Zkontrolujte prosím, zda jste správně zadali adresu URL domovského serveru. Pokud je adresa URL správná, obraťte se na správce domovského serveru, který vám poskytne další pomoc."</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Tento server v současné době nepodporuje klouzavou synchronizaci."</string>
   <string name="screen_change_server_form_header">"Adresa URL domovského serveru"</string>
+  <string name="screen_change_server_form_notice">"Můžete se připojit pouze k serveru, který podporuje klouzavou synchronizaci. Správce vašeho domovského serveru jej bude muset nakonfigurovat. %1$s"</string>
   <string name="screen_change_server_subtitle">"Jaká je adresa vašeho serveru?"</string>
   <string name="screen_login_error_deactivated_account">"Tento účet byl deaktivován."</string>
   <string name="screen_login_error_invalid_credentials">"Nesprávné uživatelské jméno nebo heslo"</string>
@@ -10,6 +12,7 @@
   <string name="screen_login_form_header">"Zadejte své údaje"</string>
   <string name="screen_login_server_header">"Kde budou vaše konverzace probíhat"</string>
   <string name="screen_login_title">"Vítejte zpět!"</string>
+  <string name="screen_login_title_with_homeserver">"Přihlaste se k %1$s"</string>
   <string name="screen_change_server_submit">"Pokračovat"</string>
   <string name="screen_change_server_title">"Vyberte svůj server"</string>
   <string name="screen_login_password_hint">"Heslo"</string>

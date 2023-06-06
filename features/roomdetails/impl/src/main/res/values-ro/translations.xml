@@ -10,6 +10,7 @@
   <string name="screen_room_details_edition_error">"A apărut o eroare la actualizarea detaliilor camerei"</string>
   <string name="screen_room_details_encryption_enabled_subtitle">"Mesajele sunt securizate cu încuietori. Doar dumneavoastră și destinatarii aveți cheile unice pentru a le debloca."</string>
   <string name="screen_room_details_encryption_enabled_title">"Criptarea mesajelor este activată"</string>
+  <string name="screen_room_details_invite_people_title">"Invitați persoane"</string>
   <string name="screen_room_details_share_room_title">"Partajați camera"</string>
   <string name="screen_room_details_updating_room">"Se actualizează camera…"</string>
   <string name="screen_room_member_list_pending_header_title">"În așteptare"</string>
@@ -20,7 +21,6 @@
   <string name="screen_dm_details_unblock_alert_action">"Deblocați"</string>
   <string name="screen_dm_details_unblock_alert_description">"La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta."</string>
   <string name="screen_dm_details_unblock_user">"Deblocați utilizatorul"</string>
-  <string name="screen_room_details_invite_people_title">"Invitați persoane"</string>
   <string name="screen_room_details_leave_room_title">"Părăsiți camera"</string>
   <string name="screen_room_details_people_title">"Persoane"</string>
   <string name="screen_room_details_security_title">"Securitate"</string>

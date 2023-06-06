@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.libraries.push.providers.unifiedpush"
+    namespace = "io.element.android.libraries.pushproviders.unifiedpush"
 }
 
 anvil {

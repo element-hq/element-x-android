@@ -19,7 +19,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.libraries.push.providers.firebase"
+    namespace = "io.element.android.libraries.pushproviders.firebase"
 }
 
 anvil {

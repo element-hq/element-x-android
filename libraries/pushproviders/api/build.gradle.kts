@@ -18,7 +18,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.libraries.push.providers.api"
+    namespace = "io.element.android.libraries.pushproviders.api"
 }
 
 dependencies {
