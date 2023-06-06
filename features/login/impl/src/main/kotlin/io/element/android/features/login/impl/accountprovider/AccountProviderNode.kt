@@ -16,8 +16,12 @@
 
 package io.element.android.features.login.impl.accountprovider
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -25,8 +29,10 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.login.impl.util.LoginConstants
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
@@ -37,41 +43,44 @@ class AccountProviderNode @AssistedInject constructor(
 ) : Node(buildContext, plugins = plugins) {
 
     data class Inputs(
-        val homeserver: String,
-        val isMatrixOrg: Boolean,
         val isAccountCreation: Boolean,
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
     private val presenter = presenterFactory.create(
         AccountProviderPresenterParams(
-            homeserver = inputs.homeserver,
-            isMatrixOrg = inputs.isMatrixOrg,
             isAccountCreation = inputs.isAccountCreation,
         )
     )
 
     interface Callback : Plugin {
-        fun onContinue()
+        fun onServerValidated()
         fun onChangeAccountProvider()
     }
 
-    private fun onContinue() {
-        plugins<Callback>().forEach { it.onContinue() }
+    private fun onServerValidated() {
+        plugins<Callback>().forEach { it.onServerValidated() }
     }
 
     private fun onChangeAccountProvider() {
         plugins<Callback>().forEach { it.onChangeAccountProvider() }
     }
 
+    private fun openLearnMorePage(context: Context) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(LoginConstants.SLIDING_SYNC_READ_MORE_URL))
+        tryOrNull { context.startActivity(intent) }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
+        val context = LocalContext.current
         AccountProviderView(
             state = state,
             modifier = modifier,
-            onContinue = ::onContinue,
+            onChangeServerSuccess = ::onServerValidated,
             onChange = ::onChangeAccountProvider,
+            onLearnMoreClicked = { openLearnMorePage(context) },
         )
     }
 }

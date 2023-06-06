@@ -28,6 +28,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
+import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
@@ -36,11 +37,11 @@ import io.element.android.features.login.impl.changeaccountprovider.ChangeAccoun
 import io.element.android.features.login.impl.changeaccountprovider.form.ChangeAccountProviderFormNode
 import io.element.android.features.login.impl.changeaccountprovider.item.AccountProviderItem
 import io.element.android.features.login.impl.changeserver.ChangeServerNode
+import io.element.android.features.login.impl.datasource.AccountProviderDataSource
 import io.element.android.features.login.impl.oidc.CustomTabAvailabilityChecker
 import io.element.android.features.login.impl.oidc.customtab.CustomTabHandler
 import io.element.android.features.login.impl.oidc.webview.OidcNode
 import io.element.android.features.login.impl.root.LoginRootNode
-import io.element.android.features.login.impl.util.LoginConstants
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -57,6 +58,7 @@ class LoginFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val customTabAvailabilityChecker: CustomTabAvailabilityChecker,
     private val customTabHandler: CustomTabHandler,
+    private val accountProviderDataSource: AccountProviderDataSource,
 ) : BackstackNode<LoginFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.AccountProvider, // NavTarget.Root,
@@ -124,12 +126,11 @@ class LoginFlowNode @AssistedInject constructor(
             }
             NavTarget.AccountProvider -> {
                 val inputs = AccountProviderNode.Inputs(
-                    homeserver = LoginConstants.DEFAULT_HOMESERVER_URL,
-                    isMatrixOrg = LoginConstants.DEFAULT_HOMESERVER_URL == "matrix.org",
                     isAccountCreation = inputs.isAccountCreation
                 )
                 val callback = object : AccountProviderNode.Callback {
-                    override fun onContinue() {
+                    override fun onServerValidated() {
+                        // TODO
                         TODO("Not yet implemented")
                     }
 
@@ -142,7 +143,9 @@ class LoginFlowNode @AssistedInject constructor(
             NavTarget.ChangeAccountProvider -> {
                 val callback = object : ChangeAccountProviderNode.Callback {
                     override fun onAccountProviderItemClicked(data: AccountProviderItem) {
-                        TODO("Not yet implemented")
+                        accountProviderDataSource.userSelection(data)
+                        // Go back to the Account Provider screen
+                        backstack.singleTop(NavTarget.AccountProvider)
                     }
 
                     override fun onOtherClicked() {
@@ -155,7 +158,9 @@ class LoginFlowNode @AssistedInject constructor(
             NavTarget.ChangeAccountProviderForm -> {
                 val callback = object : ChangeAccountProviderFormNode.Callback {
                     override fun onAccountProviderItemClicked(data: AccountProviderItem) {
-                        TODO("Not yet implemented")
+                        accountProviderDataSource.userSelection(data)
+                        // Go back to the Account Provider screen
+                        backstack.singleTop(NavTarget.AccountProvider)
                     }
                 }
 

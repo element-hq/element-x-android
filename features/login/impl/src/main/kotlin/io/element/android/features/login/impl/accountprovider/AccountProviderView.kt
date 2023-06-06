@@ -21,28 +21,49 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
+import io.element.android.features.login.impl.changeserver.ChangeServerError
+import io.element.android.features.login.impl.changeserver.ChangeServerEvents
+import io.element.android.features.login.impl.changeserver.SlidingSyncNotSupportedDialog
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
+import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 
 @Composable
 fun AccountProviderView(
     state: AccountProviderState,
     modifier: Modifier = Modifier,
-    onContinue: () -> Unit = {},
+    // TODO Rename
+    onChangeServerSuccess: () -> Unit = {},
+    onLearnMoreClicked: () -> Unit = {},
     onChange: () -> Unit = {},
 ) {
+    val isLoading by remember(state.changeServerAction) {
+        derivedStateOf {
+            state.changeServerAction is Async.Loading
+        }
+    }
+    val eventSink = state.eventSink
+    val invalidHomeserverError = (state.changeServerAction as? Async.Failure)?.error as? ChangeServerError.InlineErrorMessage
+    val slidingSyncNotSupportedError = (state.changeServerAction as? Async.Failure)?.error as? ChangeServerError.SlidingSyncAlert
+
     HeaderFooterPage(
         modifier = modifier,
         header = {
@@ -69,16 +90,15 @@ fun AccountProviderView(
         },
         footer = {
             ButtonColumnMolecule {
-                Button(
-                    onClick = {
-                        onContinue()
-                    },
-                    enabled = true,
+                ButtonWithProgress(
+                    text = stringResource(id = R.string.screen_account_provider_continue),
+                    showProgress = isLoading,
+                    onClick = { eventSink.invoke(AccountProviderEvents.Continue) },
+                    enabled = state.submitEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
-                ) {
-                    Text(text = stringResource(id = R.string.screen_account_provider_continue))
-                }
+                        .testTag(TestTags.changeServerContinue)
+                )
                 TextButton(
                     onClick = {
                         onChange()
@@ -92,7 +112,25 @@ fun AccountProviderView(
             }
         }
     ) {
-        // No content
+        if (slidingSyncNotSupportedError != null) {
+            SlidingSyncNotSupportedDialog(onLearnMoreClicked = {
+                onLearnMoreClicked()
+                eventSink(AccountProviderEvents.ClearError)
+            }, onDismiss = {
+                eventSink(AccountProviderEvents.ClearError)
+            })
+        }
+        if (invalidHomeserverError != null) {
+            ErrorDialog(
+                content = invalidHomeserverError.message(),
+                onDismiss = {
+                    eventSink.invoke(AccountProviderEvents.ClearError)
+                }
+            )
+        }
+    }
+    if (state.changeServerAction is Async.Success) {
+        onChangeServerSuccess()
     }
 }
 

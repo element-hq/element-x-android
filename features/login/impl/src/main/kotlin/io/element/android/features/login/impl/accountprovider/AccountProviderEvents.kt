@@ -16,7 +16,7 @@
 
 package io.element.android.features.login.impl.accountprovider
 
-// TODO Add your events or remove the file completely if no events
 sealed interface AccountProviderEvents {
-    object MyEvent : AccountProviderEvents
+    object Continue : AccountProviderEvents
+    object ClearError : AccountProviderEvents
 }
