@@ -38,6 +38,7 @@ import io.element.android.features.login.impl.changeaccountprovider.form.ChangeA
 import io.element.android.features.login.impl.changeaccountprovider.item.AccountProviderItem
 import io.element.android.features.login.impl.changeserver.ChangeServerNode
 import io.element.android.features.login.impl.datasource.AccountProviderDataSource
+import io.element.android.features.login.impl.loginpassword.LoginPasswordNode
 import io.element.android.features.login.impl.oidc.CustomTabAvailabilityChecker
 import io.element.android.features.login.impl.oidc.customtab.CustomTabHandler
 import io.element.android.features.login.impl.oidc.webview.OidcNode
@@ -90,6 +91,9 @@ class LoginFlowNode @AssistedInject constructor(
         @Parcelize
         object ChangeAccountProviderForm : NavTarget
 
+        @Parcelize
+        object LoginPasswordForm : NavTarget
+
         // Not used anymore
         @Parcelize
         object ChangeServer : NavTarget
@@ -129,9 +133,18 @@ class LoginFlowNode @AssistedInject constructor(
                     isAccountCreation = inputs.isAccountCreation
                 )
                 val callback = object : AccountProviderNode.Callback {
-                    override fun onServerValidated() {
-                        // TODO
-                        TODO("Not yet implemented")
+                    override fun onOidcDetails(oidcDetails: OidcDetails) {
+                        if (customTabAvailabilityChecker.supportCustomTab()) {
+                            // In this case open a Chrome Custom tab
+                            activity?.let { customTabHandler.open(it, darkTheme, oidcDetails.url) }
+                        } else {
+                            // Fallback to WebView mode
+                            backstack.push(NavTarget.OidcView(oidcDetails))
+                        }
+                    }
+
+                    override fun onLoginPasswordNeeded() {
+                        backstack.push(NavTarget.LoginPasswordForm)
                     }
 
                     override fun onChangeAccountProvider() {
@@ -165,6 +178,9 @@ class LoginFlowNode @AssistedInject constructor(
                 }
 
                 createNode<ChangeAccountProviderFormNode>(buildContext, plugins = listOf(callback))
+            }
+            NavTarget.LoginPasswordForm -> {
+                createNode<LoginPasswordNode>(buildContext, plugins = listOf())
             }
         }
     }

@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.accountprovider
+package io.element.android.features.login.impl.loginpassword
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.Async
 
-open class AccountProviderStateProvider : PreviewParameterProvider<AccountProviderState> {
-    override val values: Sequence<AccountProviderState>
+open class LoginPasswordStateProvider : PreviewParameterProvider<LoginPasswordState> {
+    override val values: Sequence<LoginPasswordState>
         get() = sequenceOf(
-            aAccountProviderState(),
-            // Add other state here
+            aLoginPasswordState(),
+            // Loading
+            aLoginPasswordState().copy(loginAction = Async.Loading()),
+            // Error
+            aLoginPasswordState().copy(loginAction = Async.Failure(Exception("An error occurred"))),
         )
 }
 
-fun aAccountProviderState() = AccountProviderState(
-    homeserver = "matrix.org",
-    isMatrix = true,
-    isAccountCreation = false,
-    loginFlow = Async.Uninitialized,
+fun aLoginPasswordState() = LoginPasswordState(
+    formState = LoginFormState.Default,
+    loginAction = Async.Uninitialized,
     eventSink = {}
 )
