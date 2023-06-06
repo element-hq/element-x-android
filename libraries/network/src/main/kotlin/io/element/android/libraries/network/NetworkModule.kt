@@ -23,41 +23,36 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.network.interceptors.FormattedJsonHttpLogger
+import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
-import okhttp3.Protocol
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
 @Module
 @ContributesTo(AppScope::class)
 object NetworkModule {
-
-    @Provides
-    @JvmStatic
-    fun providesHttpLoggingInterceptor(buildMeta: BuildMeta): HttpLoggingInterceptor {
-        val loggingLevel = if (buildMeta.isDebuggable) {
-            HttpLoggingInterceptor.Level.BODY
-        } else {
-            HttpLoggingInterceptor.Level.BASIC
-        }
-        val logger = FormattedJsonHttpLogger(loggingLevel)
-        val interceptor = HttpLoggingInterceptor(logger)
-        interceptor.level = loggingLevel
-        return interceptor
-    }
-
     @Provides
     @SingleIn(AppScope::class)
     fun providesOkHttpClient(
-        httpLoggingInterceptor: HttpLoggingInterceptor,
-    ): OkHttpClient {
-        return OkHttpClient.Builder()
-            // workaround for #4669
-            .protocols(listOf(Protocol.HTTP_1_1))
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .addInterceptor(httpLoggingInterceptor)
-            .build()
+        buildMeta: BuildMeta,
+    ): OkHttpClient = OkHttpClient.Builder().apply {
+        connectTimeout(30, TimeUnit.SECONDS)
+        readTimeout(60, TimeUnit.SECONDS)
+        writeTimeout(60, TimeUnit.SECONDS)
+        if (buildMeta.isDebuggable) addInterceptor(providesHttpLoggingInterceptor())
+    }.build()
+
+    @Provides
+    @SingleIn(AppScope::class)
+    fun providesJson(): Json = Json {
+        ignoreUnknownKeys = true
     }
+}
+
+private fun providesHttpLoggingInterceptor(): HttpLoggingInterceptor {
+    val loggingLevel = HttpLoggingInterceptor.Level.BODY
+    val logger = FormattedJsonHttpLogger(loggingLevel)
+    val interceptor = HttpLoggingInterceptor(logger)
+    interceptor.level = loggingLevel
+    return interceptor
 }
