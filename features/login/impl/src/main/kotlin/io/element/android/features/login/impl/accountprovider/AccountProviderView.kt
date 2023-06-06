@@ -31,18 +31,20 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.changeserver.ChangeServerError
-import io.element.android.features.login.impl.changeserver.ChangeServerEvents
 import io.element.android.features.login.impl.changeserver.SlidingSyncNotSupportedDialog
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
+import io.element.android.libraries.designsystem.components.async.AsyncFailure
+import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 
@@ -50,19 +52,19 @@ import io.element.android.libraries.testtags.testTag
 fun AccountProviderView(
     state: AccountProviderState,
     modifier: Modifier = Modifier,
-    // TODO Rename
-    onChangeServerSuccess: () -> Unit = {},
+    onOidcDetails: (OidcDetails) -> Unit = {},
+    onLoginPasswordNeeded: () -> Unit = {},
     onLearnMoreClicked: () -> Unit = {},
     onChange: () -> Unit = {},
 ) {
-    val isLoading by remember(state.changeServerAction) {
+    val isLoading by remember(state.loginFlow) {
         derivedStateOf {
-            state.changeServerAction is Async.Loading
+            state.loginFlow is Async.Loading
         }
     }
     val eventSink = state.eventSink
-    val invalidHomeserverError = (state.changeServerAction as? Async.Failure)?.error as? ChangeServerError.InlineErrorMessage
-    val slidingSyncNotSupportedError = (state.changeServerAction as? Async.Failure)?.error as? ChangeServerError.SlidingSyncAlert
+    val invalidHomeserverError = (state.loginFlow as? Async.Failure)?.error as? ChangeServerError.InlineErrorMessage
+    val slidingSyncNotSupportedError = (state.loginFlow as? Async.Failure)?.error as? ChangeServerError.SlidingSyncAlert
 
     HeaderFooterPage(
         modifier = modifier,
@@ -112,6 +114,24 @@ fun AccountProviderView(
             }
         }
     ) {
+        when (state.loginFlow) {
+            is Async.Failure -> {
+                AsyncFailure(
+                    throwable = state.loginFlow.error,
+                    onRetry = {
+                        state.eventSink.invoke(AccountProviderEvents.Continue)
+                    }
+                )
+            }
+            is Async.Loading -> AsyncLoading()
+            is Async.Success -> {
+                when (val loginFlowState = state.loginFlow.state) {
+                    is LoginFlow.OidcFlow -> onOidcDetails(loginFlowState.oidcDetails)
+                    LoginFlow.PasswordLogin -> onLoginPasswordNeeded()
+                }
+            }
+            Async.Uninitialized -> Unit
+        }
         if (slidingSyncNotSupportedError != null) {
             SlidingSyncNotSupportedDialog(onLearnMoreClicked = {
                 onLearnMoreClicked()
@@ -128,9 +148,6 @@ fun AccountProviderView(
                 }
             )
         }
-    }
-    if (state.changeServerAction is Async.Success) {
-        onChangeServerSuccess()
     }
 }
 

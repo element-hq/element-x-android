@@ -29,11 +29,13 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.login.impl.changeserver.ChangeServerError
 import io.element.android.features.login.impl.datasource.AccountProviderDataSource
+import io.element.android.features.login.impl.util.LoginConstants
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.execute
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.net.URL
@@ -56,22 +58,29 @@ class AccountProviderPresenter @AssistedInject constructor(
     @Composable
     override fun present(): AccountProviderState {
         val accountProvider by accountProviderDataSource.flow().collectAsState()
-
+        val currentHomeServerDetails = authenticationService.getHomeserverDetails().collectAsState().value
+        val getHomeServerDetailsAction: MutableState<Async<MatrixHomeServerDetails>> = remember {
+            if (currentHomeServerDetails != null) {
+                mutableStateOf(Async.Success(currentHomeServerDetails))
+            } else {
+                mutableStateOf(Async.Uninitialized)
+            }
+        }
         val localCoroutineScope = rememberCoroutineScope()
 
         val homeserver = rememberSaveable {
-            mutableStateOf(accountProvider.title /* TODO There is a mix of data and UI here, which is not nice */)
+            mutableStateOf(currentHomeServerDetails?.url ?: LoginConstants.DEFAULT_HOMESERVER_URL)
         }
-        val changeServerAction: MutableState<Async<Unit>> = remember {
+        val loginFlowAction: MutableState<Async<LoginFlow>> = remember {
             mutableStateOf(Async.Uninitialized)
         }
 
         fun handleEvents(event: AccountProviderEvents) {
             when (event) {
                 AccountProviderEvents.Continue -> {
-                    localCoroutineScope.submit(homeserver, changeServerAction)
+                    localCoroutineScope.submit(homeserver, loginFlowAction)
                 }
-                AccountProviderEvents.ClearError -> changeServerAction.value = Async.Uninitialized
+                AccountProviderEvents.ClearError -> loginFlowAction.value = Async.Uninitialized
             }
         }
 
@@ -79,16 +88,30 @@ class AccountProviderPresenter @AssistedInject constructor(
             homeserver = accountProvider.title,
             isMatrix = accountProvider.isMatrixOrg,
             isAccountCreation = params.isAccountCreation,
-            changeServerAction = changeServerAction.value,
+            loginFlow = loginFlowAction.value,
             eventSink = ::handleEvents
         )
     }
 
-    private fun CoroutineScope.submit(homeserverUrl: MutableState<String>, changeServerAction: MutableState<Async<Unit>>) = launch {
+    private fun CoroutineScope.submit(
+        homeserverUrl: MutableState<String>,
+        loginFlowAction: MutableState<Async<LoginFlow>>,
+    ) = launch {
         suspend {
             val domain = tryOrNull { URL(homeserverUrl.value) }?.host ?: homeserverUrl.value
-            authenticationService.setHomeserver(domain).getOrThrow()
             homeserverUrl.value = domain
-        }.execute(changeServerAction, errorMapping = ChangeServerError::from)
+            authenticationService.setHomeserver(domain).map {
+                authenticationService.getHomeserverDetails().value!!
+            }.map {
+                if (it.supportsOidcLogin) {
+                    // Retrieve the details right now
+                    LoginFlow.OidcFlow(authenticationService.getOidcUrl().getOrThrow())
+                } else if (it.supportsPasswordLogin) {
+                    LoginFlow.PasswordLogin
+                } else {
+                    throw IllegalStateException("Unsupported login flow")
+                }
+            }.getOrThrow()
+        }.execute(loginFlowAction, errorMapping = ChangeServerError::from)
     }
 }

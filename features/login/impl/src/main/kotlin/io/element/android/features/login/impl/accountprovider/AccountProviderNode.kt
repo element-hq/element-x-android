@@ -34,6 +34,7 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.matrix.api.auth.OidcDetails
 
 @ContributesNode(AppScope::class)
 class AccountProviderNode @AssistedInject constructor(
@@ -54,12 +55,17 @@ class AccountProviderNode @AssistedInject constructor(
     )
 
     interface Callback : Plugin {
-        fun onServerValidated()
+        fun onLoginPasswordNeeded()
+        fun onOidcDetails(oidcDetails: OidcDetails)
         fun onChangeAccountProvider()
     }
 
-    private fun onServerValidated() {
-        plugins<Callback>().forEach { it.onServerValidated() }
+    private fun onOidcDetails(data: OidcDetails) {
+        plugins<Callback>().forEach { it.onOidcDetails(data) }
+    }
+
+    private fun onLoginPasswordNeeded() {
+        plugins<Callback>().forEach { it.onLoginPasswordNeeded() }
     }
 
     private fun onChangeAccountProvider() {
@@ -78,7 +84,8 @@ class AccountProviderNode @AssistedInject constructor(
         AccountProviderView(
             state = state,
             modifier = modifier,
-            onChangeServerSuccess = ::onServerValidated,
+            onOidcDetails = ::onOidcDetails,
+            onLoginPasswordNeeded = ::onLoginPasswordNeeded,
             onChange = ::onChangeAccountProvider,
             onLearnMoreClicked = { openLearnMorePage(context) },
         )
