@@ -49,7 +49,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
  */
 @Composable
 fun ChangeAccountProviderItemView(
-    item: ChangeAccountProviderItem,
+    item: AccountProviderItem,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
@@ -68,7 +68,7 @@ fun ChangeAccountProviderItemView(
                     .heightIn(min = 44.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if (item.isMatrix) {
+                if (item.isMatrixOrg) {
                     RoundedIconAtom(
                         size = RoundedIconAtomSize.Medium,
                         resourceId = R.drawable.ic_matrix,
@@ -115,16 +115,16 @@ fun ChangeAccountProviderItemView(
 
 @Preview
 @Composable
-fun ChangeAccountProviderViewLightPreview(@PreviewParameter(ChangeAccountProviderItemProvider::class) item: ChangeAccountProviderItem) =
+fun ChangeAccountProviderViewLightPreview(@PreviewParameter(ChangeAccountProviderItemProvider::class) item: AccountProviderItem) =
     ElementPreviewLight { ContentToPreview(item) }
 
 @Preview
 @Composable
-fun ChangeAccountProviderViewDarkPreview(@PreviewParameter(ChangeAccountProviderItemProvider::class) item: ChangeAccountProviderItem) =
+fun ChangeAccountProviderViewDarkPreview(@PreviewParameter(ChangeAccountProviderItemProvider::class) item: AccountProviderItem) =
     ElementPreviewDark { ContentToPreview(item) }
 
 @Composable
-private fun ContentToPreview(item: ChangeAccountProviderItem) {
+private fun ContentToPreview(item: AccountProviderItem) {
     ChangeAccountProviderItemView(
         item = item,
         onClick = { }

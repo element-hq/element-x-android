@@ -34,21 +34,14 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
-import io.element.android.features.login.impl.changeaccountprovider.item.ChangeAccountProviderItem
+import io.element.android.features.login.impl.changeaccountprovider.item.AccountProviderItem
 import io.element.android.features.login.impl.changeaccountprovider.item.ChangeAccountProviderItemView
-import io.element.android.features.login.impl.changeserver.ChangeServerError
-import io.element.android.features.login.impl.changeserver.SlidingSyncNotSupportedDialog
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -64,26 +57,10 @@ fun ChangeAccountProviderView(
     state: ChangeAccountProviderState,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit,
+    onAccountProviderItemClicked: (AccountProviderItem) -> Unit = {},
     onOtherProviderClicked: () -> Unit = {},
-    onChangeServerSuccess: () -> Unit = {},
 ) {
-    val eventSink = state.eventSink
     val scrollState = rememberScrollState()
-    val isLoading by remember(state.changeServerAction) {
-        derivedStateOf {
-            state.changeServerAction is Async.Loading
-        }
-    }
-    val invalidHomeserverError = (state.changeServerAction as? Async.Failure)?.error as? ChangeServerError.InlineErrorMessage
-    val slidingSyncNotSupportedError = (state.changeServerAction as? Async.Failure)?.error as? ChangeServerError.SlidingSyncAlert
-    val focusManager = LocalFocusManager.current
-
-    fun submit() {
-        // Clear focus to prevent keyboard issues with textfields
-        focusManager.clearFocus(force = true)
-
-        eventSink(ChangeAccountProviderEvents.Submit)
-    }
 
     Scaffold(
         modifier = modifier,
@@ -115,34 +92,30 @@ fun ChangeAccountProviderView(
                     subTitle = stringResource(id = R.string.screen_change_account_provider_subtitle),
                 )
 
-                if (slidingSyncNotSupportedError != null) {
-                    SlidingSyncNotSupportedDialog(onLearnMoreClicked = {
-                        eventSink(ChangeAccountProviderEvents.ClearError)
-                    }, onDismiss = {
-                        eventSink(ChangeAccountProviderEvents.ClearError)
-                    })
-                }
-                ChangeAccountProviderItemView(
-                    item = ChangeAccountProviderItem(
-                        title = "matrix.org",
-                        subtitle = stringResource(id = R.string.screen_change_account_provider_matrix_org_subtitle),
-                        isPublic = true,
-                        isMatrix = true,
-                    ),
-                    onClick = {
-                        TODO()
+                state.accountProviderItems.forEach { item ->
+                    val alteredItem = if (item.isMatrixOrg) {
+                        // Set the subtitle from the resource
+                        item.copy(
+                            subtitle = stringResource(id = R.string.screen_change_account_provider_matrix_org_subtitle),
+                        )
+                    } else {
+                        item
                     }
-                )
+                    ChangeAccountProviderItemView(
+                        item = alteredItem,
+                        onClick = {
+                            onAccountProviderItemClicked(alteredItem)
+                        }
+                    )
+                }
+                // Other
                 ChangeAccountProviderItemView(
-                    item = ChangeAccountProviderItem(
+                    item = AccountProviderItem(
                         title = stringResource(id = R.string.screen_change_account_provider_other),
                     ),
                     onClick = onOtherProviderClicked
                 )
                 Spacer(Modifier.height(32.dp))
-                if (state.changeServerAction is Async.Success) {
-                    onChangeServerSuccess()
-                }
             }
         }
     }

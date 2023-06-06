@@ -14,7 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.changeaccountprovider
+package io.element.android.features.login.impl.changeaccountprovider.form
 
-sealed interface ChangeAccountProviderEvents {
-}
+data class HomeserverData(
+    // What the user has entered
+    val userInput: String,
+    // The computed homeserver url, for which a wellknown file has been retrieved, or just a valid Url
+    val homeserverUrl: String,
+    // True if a wellknown file has been found and is valid. If false, it means that the [homeserverUrl] is valid
+    val isWellknownValid: Boolean,
+)

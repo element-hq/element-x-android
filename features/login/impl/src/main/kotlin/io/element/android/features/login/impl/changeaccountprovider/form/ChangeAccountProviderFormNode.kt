@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.changeaccountprovider
+package io.element.android.features.login.impl.changeaccountprovider.form
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -29,34 +29,28 @@ import io.element.android.features.login.impl.changeaccountprovider.item.Account
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
-class ChangeAccountProviderNode @AssistedInject constructor(
+class ChangeAccountProviderFormNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: ChangeAccountProviderPresenter,
+    private val presenter: ChangeAccountProviderFormPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
     interface Callback : Plugin {
         fun onAccountProviderItemClicked(data: AccountProviderItem)
-        fun onOtherClicked()
     }
 
     private fun onAccountProviderItemClicked(data: AccountProviderItem) {
         plugins<Callback>().forEach { it.onAccountProviderItemClicked(data) }
     }
 
-    private fun onOtherClicked() {
-        plugins<Callback>().forEach { it.onOtherClicked() }
-    }
-
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        ChangeAccountProviderView(
+        ChangeAccountProviderFormView(
             state = state,
             modifier = modifier,
             onBackPressed = ::navigateUp,
-            onAccountProviderItemClicked = ::onAccountProviderItemClicked,
-            onOtherProviderClicked = ::onOtherClicked,
+            onProviderClicked = ::onAccountProviderItemClicked
         )
     }
 }

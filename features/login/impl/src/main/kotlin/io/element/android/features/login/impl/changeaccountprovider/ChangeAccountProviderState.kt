@@ -16,14 +16,9 @@
 
 package io.element.android.features.login.impl.changeaccountprovider
 
-import io.element.android.libraries.architecture.Async
+import io.element.android.features.login.impl.changeaccountprovider.item.AccountProviderItem
 
 // Do not use default value, so no member get forgotten in the presenters.
-data class ChangeAccountProviderState(
-    val homeserver: String,
-    val changeServerAction: Async<Unit>,
-    val eventSink: (ChangeAccountProviderEvents) -> Unit
-) {
-    // TODO Remove
-    val submitEnabled: Boolean get() = changeServerAction is Async.Uninitialized || changeServerAction is Async.Loading
-}
+data class ChangeAccountProviderState constructor(
+    val accountProviderItems: List<AccountProviderItem>,
+)

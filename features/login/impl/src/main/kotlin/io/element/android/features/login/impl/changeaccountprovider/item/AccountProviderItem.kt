@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.changeaccountprovider
+package io.element.android.features.login.impl.changeaccountprovider.item
 
-sealed interface ChangeAccountProviderEvents {
-}
+data class AccountProviderItem constructor(
+    val title: String,
+    val subtitle: String? = null,
+    val isPublic: Boolean = false,
+    val isMatrixOrg: Boolean = false,
+)

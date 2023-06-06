@@ -32,6 +32,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.login.impl.accountprovider.AccountProviderNode
+import io.element.android.features.login.impl.changeaccountprovider.ChangeAccountProviderNode
+import io.element.android.features.login.impl.changeaccountprovider.form.ChangeAccountProviderFormNode
+import io.element.android.features.login.impl.changeaccountprovider.item.AccountProviderItem
 import io.element.android.features.login.impl.changeserver.ChangeServerNode
 import io.element.android.features.login.impl.oidc.CustomTabAvailabilityChecker
 import io.element.android.features.login.impl.oidc.customtab.CustomTabHandler
@@ -81,6 +84,9 @@ class LoginFlowNode @AssistedInject constructor(
 
         @Parcelize
         object ChangeAccountProvider : NavTarget
+
+        @Parcelize
+        object ChangeAccountProviderForm : NavTarget
 
         // Not used anymore
         @Parcelize
@@ -134,7 +140,26 @@ class LoginFlowNode @AssistedInject constructor(
                 createNode<AccountProviderNode>(buildContext, plugins = listOf(inputs, callback))
             }
             NavTarget.ChangeAccountProvider -> {
-                TODO()
+                val callback = object : ChangeAccountProviderNode.Callback {
+                    override fun onAccountProviderItemClicked(data: AccountProviderItem) {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onOtherClicked() {
+                        backstack.push(NavTarget.ChangeAccountProviderForm)
+                    }
+                }
+
+                createNode<ChangeAccountProviderNode>(buildContext, plugins = listOf(callback))
+            }
+            NavTarget.ChangeAccountProviderForm -> {
+                val callback = object : ChangeAccountProviderFormNode.Callback {
+                    override fun onAccountProviderItemClicked(data: AccountProviderItem) {
+                        TODO("Not yet implemented")
+                    }
+                }
+
+                createNode<ChangeAccountProviderFormNode>(buildContext, plugins = listOf(callback))
             }
         }
     }
