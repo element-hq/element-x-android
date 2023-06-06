@@ -245,5 +245,6 @@ private fun aMessageEvent(
     sentTime = "",
     isMine = isMine,
     reactionsState = TimelineItemReactions(persistentListOf()),
-    sendState = EventSendState.Sent(AN_EVENT_ID)
+    sendState = EventSendState.Sent(AN_EVENT_ID),
+    inReplyTo = null,
 )

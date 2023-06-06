@@ -29,7 +29,9 @@ import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
+import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatterImpl
 import io.element.android.features.messages.media.FakeLocalMediaFactory
+import io.element.android.features.messages.utils.messagesummary.FakeMessageSummaryFormatter
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
@@ -197,6 +199,7 @@ class MessagesPresenterTest {
             actionListPresenter = actionListPresenter,
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),
+            messageSummaryFormatter = FakeMessageSummaryFormatter(),
         )
     }
 }

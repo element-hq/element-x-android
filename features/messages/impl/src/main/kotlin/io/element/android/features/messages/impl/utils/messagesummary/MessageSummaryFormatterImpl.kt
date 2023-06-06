@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.utils
+package io.element.android.features.messages.impl.utils.messagesummary
 
 import android.content.Context
-import androidx.compose.ui.res.stringResource
+import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
@@ -29,13 +29,15 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.ui.strings.R
 import javax.inject.Inject
 
-class MessageSummaryFormatter @Inject constructor(
+@ContributesBinding(RoomScope::class)
+class MessageSummaryFormatterImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-) {
-    fun format(event: TimelineItem.Event): String {
+) : MessageSummaryFormatter {
+    override fun format(event: TimelineItem.Event): String {
         return when (event.content) {
             is TimelineItemTextBasedContent -> event.content.body
             is TimelineItemStateContent -> event.content.body

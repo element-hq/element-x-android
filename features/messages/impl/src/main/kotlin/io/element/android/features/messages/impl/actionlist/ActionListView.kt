@@ -62,7 +62,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
-import io.element.android.features.messages.impl.utils.MessageSummaryFormatter
+import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatterImpl
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -187,7 +187,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
     }
 
     val context = LocalContext.current
-    val formatter = remember(context) { MessageSummaryFormatter(context) }
+    val formatter = remember(context) { MessageSummaryFormatterImpl(context) }
     val textContent = remember(event.content) { formatter.format(event) }
 
     when (event.content) {
