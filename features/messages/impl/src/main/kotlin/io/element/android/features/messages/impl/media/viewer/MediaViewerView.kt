@@ -64,7 +64,6 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
-import io.element.android.libraries.ui.strings.R.*
 import kotlinx.coroutines.delay
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -181,7 +180,7 @@ private fun MediaViewerTopBar(
                     eventSink(MediaViewerEvents.OpenWith)
                 },
             ) {
-                Icon(imageVector = Icons.Default.OpenInNew, contentDescription = stringResource(id = string.action_share))
+                Icon(imageVector = Icons.Default.OpenInNew, contentDescription = stringResource(id = StringR.string.action_open_with))
             }
             IconButton(
                 enabled = actionsEnabled,
@@ -189,7 +188,7 @@ private fun MediaViewerTopBar(
                     eventSink(MediaViewerEvents.SaveOnDisk)
                 },
             ) {
-                Icon(imageVector = Icons.Default.Download, contentDescription = stringResource(id = string.action_save))
+                Icon(imageVector = Icons.Default.Download, contentDescription = stringResource(id = StringR.string.action_save))
             }
             IconButton(
                 enabled = actionsEnabled,
@@ -197,7 +196,7 @@ private fun MediaViewerTopBar(
                     eventSink(MediaViewerEvents.Share)
                 },
             ) {
-                Icon(imageVector = Icons.Default.Share, contentDescription = stringResource(id = string.action_share))
+                Icon(imageVector = Icons.Default.Share, contentDescription = stringResource(id = StringR.string.action_share))
             }
         }
     )

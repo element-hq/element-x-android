@@ -34,6 +34,7 @@
   <string name="action_no">"No"</string>
   <string name="action_not_now">"Not now"</string>
   <string name="action_ok">"OK"</string>
+  <string name="action_open_with">"Open with"</string>
   <string name="action_quick_reply">"Quick reply"</string>
   <string name="action_quote">"Quote"</string>
   <string name="action_remove">"Remove"</string>
