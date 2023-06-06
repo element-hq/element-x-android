@@ -17,19 +17,35 @@
 package io.element.android.features.login.impl.accountprovider
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.element.android.features.login.impl.changeserver.ChangeServerError
+import io.element.android.features.login.impl.datasource.AccountProviderDataSource
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.execute
+import io.element.android.libraries.core.data.tryOrNull
+import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import java.net.URL
 
 data class AccountProviderPresenterParams(
-    val homeserver: String,
-    val isMatrixOrg: Boolean,
     val isAccountCreation: Boolean,
 )
 
 class AccountProviderPresenter @AssistedInject constructor(
     @Assisted private val params: AccountProviderPresenterParams,
+    private val accountProviderDataSource: AccountProviderDataSource,
+    private val authenticationService: MatrixAuthenticationService
 ) : Presenter<AccountProviderState> {
 
     @AssistedFactory
@@ -39,18 +55,40 @@ class AccountProviderPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): AccountProviderState {
+        val accountProvider by accountProviderDataSource.flow().collectAsState()
+
+        val localCoroutineScope = rememberCoroutineScope()
+
+        val homeserver = rememberSaveable {
+            mutableStateOf(accountProvider.title /* TODO There is a mix of data and UI here, which is not nice */)
+        }
+        val changeServerAction: MutableState<Async<Unit>> = remember {
+            mutableStateOf(Async.Uninitialized)
+        }
 
         fun handleEvents(event: AccountProviderEvents) {
             when (event) {
-                AccountProviderEvents.MyEvent -> Unit
+                AccountProviderEvents.Continue -> {
+                    localCoroutineScope.submit(homeserver, changeServerAction)
+                }
+                AccountProviderEvents.ClearError -> changeServerAction.value = Async.Uninitialized
             }
         }
 
         return AccountProviderState(
-            homeserver = params.homeserver,
-            isMatrix = params.isMatrixOrg,
+            homeserver = accountProvider.title,
+            isMatrix = accountProvider.isMatrixOrg,
             isAccountCreation = params.isAccountCreation,
+            changeServerAction = changeServerAction.value,
             eventSink = ::handleEvents
         )
+    }
+
+    private fun CoroutineScope.submit(homeserverUrl: MutableState<String>, changeServerAction: MutableState<Async<Unit>>) = launch {
+        suspend {
+            val domain = tryOrNull { URL(homeserverUrl.value) }?.host ?: homeserverUrl.value
+            authenticationService.setHomeserver(domain).getOrThrow()
+            homeserverUrl.value = domain
+        }.execute(changeServerAction, errorMapping = ChangeServerError::from)
     }
 }

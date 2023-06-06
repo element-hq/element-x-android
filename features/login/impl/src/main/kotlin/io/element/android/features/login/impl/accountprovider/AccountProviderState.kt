@@ -16,10 +16,16 @@
 
 package io.element.android.features.login.impl.accountprovider
 
+import io.element.android.libraries.architecture.Async
+
 // Do not use default value, so no member get forgotten in the presenters.
 data class AccountProviderState(
     val homeserver: String,
     val isMatrix: Boolean,
     val isAccountCreation: Boolean,
+    // TODO Rename
+    val changeServerAction: Async<Unit>,
     val eventSink: (AccountProviderEvents) -> Unit
-)
+) {
+    val submitEnabled: Boolean get() = homeserver.isNotEmpty() && (changeServerAction is Async.Uninitialized || changeServerAction is Async.Loading)
+}
