@@ -31,11 +31,11 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -59,6 +59,7 @@ import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.error.loginError
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
@@ -122,12 +123,14 @@ fun LoginPasswordView(
             ) {
                 Spacer(Modifier.height(16.dp))
                 // Title
-                Text(
-                    text = stringResource(id = R.string.screen_login_title),
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    style = ElementTextStyles.Bold.title1,
-                    color = MaterialTheme.colorScheme.primary,
+                IconTitleSubtitleMolecule(
+                    modifier = Modifier.padding(top = 60.dp),
+                    iconImageVector = Icons.Filled.AccountCircle,
+                    title = stringResource(
+                        id = R.string.screen_account_provider_signin_title,
+                        "state.homeserver" // TODO
+                    ),
+                    subTitle = stringResource(id = R.string.screen_login_form_header)
                 )
                 Spacer(Modifier.height(32.dp))
                 ServerDetailForm(
