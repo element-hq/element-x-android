@@ -26,18 +26,15 @@ import io.element.android.features.roomdetails.impl.RoomDetailsType
 import io.element.android.features.roomdetails.impl.RoomTopicState
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
-import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -69,43 +66,8 @@ class RoomDetailsPresenterTests {
             assertThat(initialState.roomName).isEqualTo(room.name)
             assertThat(initialState.roomAvatarUrl).isEqualTo(room.avatarUrl)
             assertThat(initialState.roomTopic).isEqualTo(RoomTopicState.ExistingTopic(room.topic!!))
-            assertThat(initialState.memberCount).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.memberCount).isEqualTo(room.joinedMemberCount)
             assertThat(initialState.isEncrypted).isEqualTo(room.isEncrypted)
-
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - room member count is calculated asynchronously`() = runTest {
-        val error = RuntimeException()
-        val room = aMatrixRoom()
-        val roomMembers = listOf(
-            aRoomMember(A_USER_ID),
-            aRoomMember(A_USER_ID_2, membership = RoomMembershipState.INVITE),
-        )
-        val presenter = aRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionClock.Immediate) {
-            presenter.present()
-        }.test {
-            room.givenRoomMembersState(MatrixRoomMembersState.Unknown)
-            val initialState = awaitItem()
-            assertThat(initialState.memberCount).isEqualTo(Async.Uninitialized)
-            skipItems(1)
-
-            room.givenRoomMembersState(MatrixRoomMembersState.Pending(null))
-            val loadingState = awaitItem()
-            assertThat(loadingState.memberCount).isEqualTo(Async.Loading(null))
-
-            room.givenRoomMembersState(MatrixRoomMembersState.Error(error))
-            skipItems(1)
-            val failureState = awaitItem()
-            assertThat(failureState.memberCount).isEqualTo(Async.Failure(error, null))
-
-            room.givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
-            skipItems(1)
-            val successState = awaitItem()
-            assertThat(successState.memberCount).isEqualTo(Async.Success(1))
 
             cancelAndIgnoreRemainingEvents()
         }

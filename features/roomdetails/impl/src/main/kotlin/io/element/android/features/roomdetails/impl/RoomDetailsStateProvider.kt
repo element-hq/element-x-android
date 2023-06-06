@@ -19,7 +19,6 @@ package io.element.android.features.roomdetails.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomdetails.impl.members.details.aRoomMemberDetailsState
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
@@ -32,7 +31,6 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState().copy(roomTopic = RoomTopicState.CanAddTopic),
             aRoomDetailsState().copy(isEncrypted = false),
             aRoomDetailsState().copy(roomAlias = null),
-            aRoomDetailsState().copy(memberCount = Async.Failure(Throwable())),
             aDmRoomDetailsState().copy(roomName = "Daniel"),
             aDmRoomDetailsState(isDmMemberIgnored = true).copy(roomName = "Daniel"),
             aRoomDetailsState().copy(canInvite = true),
@@ -73,7 +71,7 @@ fun aRoomDetailsState() = RoomDetailsState(
             "|| MAI iki/Marketing " +
             "|| MAI iki/Marketing..."
     ),
-    memberCount = Async.Success(32),
+    memberCount = 32,
     isEncrypted = true,
     canInvite = false,
     canEdit = false,
