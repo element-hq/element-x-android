@@ -28,10 +28,24 @@ sealed interface EventContent
 
 data class MessageContent(
     val body: String,
-    val inReplyTo: EventId?,
+    val inReplyTo: InReplyTo?,
     val isEdited: Boolean,
     val type: MessageType?
 ) : EventContent
+
+
+sealed interface InReplyTo {
+    data class NotLoaded(val eventId: EventId) : InReplyTo
+    data class Ready(
+        val eventId: EventId,
+        val content: MessageContent,
+        val senderId: UserId,
+        val senderDisplayName: String?,
+        val senderAvatarUrl: String?,
+    ) : InReplyTo
+
+    object Error : InReplyTo
+}
 
 object RedactedContent : EventContent
 

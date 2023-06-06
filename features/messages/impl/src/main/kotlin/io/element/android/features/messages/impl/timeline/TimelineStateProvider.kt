@@ -113,5 +113,6 @@ internal fun aTimelineItemEvent(
         senderDisplayName = "sender",
         groupPosition = groupPosition,
         sendState = sendState,
+        inReplyTo = null,
     )
 }

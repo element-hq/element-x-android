@@ -20,9 +20,11 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -55,8 +57,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -80,6 +86,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingModel
 import io.element.android.features.messages.impl.timeline.util.defaultTimelineContentPadding
+import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -88,7 +95,15 @@ import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
+import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
+import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
+import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
+import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -101,12 +116,25 @@ fun TimelineView(
     onMessageClicked: (TimelineItem.Event) -> Unit = {},
     onMessageLongClicked: (TimelineItem.Event) -> Unit = {},
 ) {
+    val coroutineScope = rememberCoroutineScope()
 
     fun onReachedLoadMore() {
         state.eventSink(TimelineEvents.LoadMore)
     }
 
     val lazyListState = rememberLazyListState()
+
+    fun inReplyToClicked(eventId: EventId) {
+        val index = state.timelineItems.indexOfFirst { it.identifier() == eventId.value }
+        if (index >= 0) {
+            coroutineScope.launch {
+                lazyListState.animateScrollToItem(index)
+            }
+        } else {
+            // TODO should we paginate first?
+        }
+    }
+
     Box(modifier = modifier) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -124,6 +152,7 @@ fun TimelineView(
                     onClick = onMessageClicked,
                     onLongClick = onMessageLongClicked,
                     onUserDataClick = onUserDataClicked,
+                    inReplyToClick = ::inReplyToClicked,
                 )
                 if (index == state.timelineItems.lastIndex) {
                     onReachedLoadMore()
@@ -146,6 +175,7 @@ fun TimelineItemRow(
     onUserDataClick: (UserId) -> Unit,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
+    inReplyToClick: (EventId) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (timelineItem) {
@@ -179,6 +209,7 @@ fun TimelineItemRow(
                     onClick = ::onClick,
                     onLongClick = ::onLongClick,
                     onUserDataClick = onUserDataClick,
+                    inReplyToClick = inReplyToClick,
                     modifier = modifier,
                 )
             }
@@ -209,6 +240,7 @@ fun TimelineItemRow(
                                 highlightedItem = highlightedItem,
                                 onClick = onClick,
                                 onLongClick = onLongClick,
+                                inReplyToClick = inReplyToClick,
                                 onUserDataClick = onUserDataClick,
                             )
                         }
@@ -238,12 +270,18 @@ fun TimelineItemEventRow(
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     onUserDataClick: (UserId) -> Unit,
+    inReplyToClick: (EventId) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
 
     fun onUserDataClicked() {
         onUserDataClick(event.senderId)
+    }
+
+    fun inReplayToClicked() {
+        val inReplyToEventId = (event.inReplyTo as? InReplyTo.Ready)?.eventId ?: return
+        inReplyToClick(inReplyToEventId)
     }
 
     val (parentAlignment, contentAlignment) = if (event.isMine) {
@@ -291,7 +329,8 @@ fun TimelineItemEventRow(
                         event = event,
                         interactionSource = interactionSource,
                         onMessageClick = onClick,
-                        onMessageLongClick = onLongClick
+                        onMessageLongClick = onLongClick,
+                        inReplyToClick = ::inReplayToClicked,
                     )
                 }
                 TimelineItemReactionsView(
@@ -354,6 +393,7 @@ fun MessageEventBubbleContent(
     interactionSource: MutableInteractionSource,
     onMessageClick: () -> Unit,
     onMessageLongClick: () -> Unit,
+    inReplyToClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val showTimestampWithOverlay = event.content is TimelineItemImageContent || event.content is TimelineItemVideoContent
@@ -373,7 +413,19 @@ fun MessageEventBubbleContent(
 
     if (showTimestampWithOverlay) {
         Box(modifier.wrapContentSize()) {
-            ContentView()
+            Column {
+                if (event.inReplyTo is InReplyTo.Ready) {
+                    val senderName = event.senderDisplayName ?: event.senderId.value
+                    val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(event.inReplyTo)
+                    ReplyToContent(
+                        senderName = senderName,
+                        text = event.inReplyTo.content.body,
+                        attachmentThumbnailInfo = attachmentThumbnailInfo,
+                        modifier = Modifier.clickable(enabled = true, onClick = inReplyToClick),
+                    )
+                }
+                ContentView()
+            }
             Box(
                 modifier = Modifier
                     .padding(horizontal = 4.dp, vertical = 4.dp)
@@ -389,6 +441,19 @@ fun MessageEventBubbleContent(
         }
     } else {
         Column {
+            if (event.inReplyTo is InReplyTo.Ready) {
+                val senderName = event.senderDisplayName.takeIf { !it.isNullOrBlank() } ?: event.senderId.value
+                val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(event.inReplyTo)
+                ReplyToContent(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 8.dp, end = 8.dp, top = 8.dp)
+                        .clickable(enabled = true, onClick = inReplyToClick),
+                    senderName = senderName,
+                    text = event.inReplyTo.content.body,
+                    attachmentThumbnailInfo = attachmentThumbnailInfo,
+                )
+            }
             ContentView(modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 8.dp))
             TimelineEventTimestampView(
                 event = event,
@@ -396,6 +461,56 @@ fun MessageEventBubbleContent(
                 modifier = Modifier
                     .align(Alignment.End)
                     .padding(horizontal = 8.dp, vertical = 2.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun ReplyToContent(
+    senderName: String,
+    text: String?,
+    attachmentThumbnailInfo: AttachmentThumbnailInfo?,
+    modifier: Modifier = Modifier,
+) {
+    val paddings = if (attachmentThumbnailInfo != null) {
+        PaddingValues(start = 4.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)
+    } else {
+        PaddingValues(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 4.dp)
+    }
+    Row(
+        modifier
+            .clip(RoundedCornerShape(6.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(paddings)
+    ) {
+        if (attachmentThumbnailInfo != null) {
+            AttachmentThumbnail(
+                info = attachmentThumbnailInfo,
+                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(RoundedCornerShape(4.dp))
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+        }
+        Column(verticalArrangement = Arrangement.SpaceBetween) {
+            Text(
+                senderName,
+                style = ElementTextStyles.Regular.caption2.copy(fontWeight = FontWeight.Medium),
+                textAlign = TextAlign.Start,
+                color = MaterialTheme.colorScheme.primary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+
+            Text(
+                text = text.orEmpty(),
+                style = ElementTextStyles.Regular.caption1,
+                textAlign = TextAlign.Start,
+                color = LocalColors.current.placeholder,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }
@@ -480,6 +595,29 @@ internal fun BoxScope.TimelineScrollHelper(
         }
     }
 }
+
+private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready) =
+    when (val type = inReplyTo.content.type) {
+        is ImageMessageType -> AttachmentThumbnailInfo(
+            mediaSource = type.info?.thumbnailSource,
+            textContent = inReplyTo.content.body,
+            type = AttachmentThumbnailType.Image,
+            blurHash = type.info?.blurhash,
+        )
+        is VideoMessageType -> AttachmentThumbnailInfo(
+            mediaSource = type.info?.thumbnailSource,
+            textContent = inReplyTo.content.body,
+            type = AttachmentThumbnailType.Video,
+            blurHash = type.info?.blurhash,
+        )
+        is FileMessageType -> AttachmentThumbnailInfo(
+            mediaSource = type.info?.thumbnailSource,
+            textContent = inReplyTo.content.body,
+            type = AttachmentThumbnailType.File,
+            blurHash = null,
+        )
+        else -> null
+    }
 
 @Preview
 @Composable
