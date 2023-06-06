@@ -26,27 +26,12 @@ if [[ -z ${GITHUB_REPOSITORY} ]]; then
   exit 1
 fi
 
-if [[ -z ${GITHUB_REF_NAME} ]]; then
-  echo "Missing GITHUB_REF_NAME variable"
-  exit 1
-fi
-
-git config user.name "ElementBot"
-git config user.email "benoitm+elementbot@element.io"
-
-echo "Git status"
-git status
-
-echo "Fetching..."
-git fetch --all
-
-echo "Checkout origin/$GITHUB_REF_NAME"
-git checkout "origin/$GITHUB_REF_NAME"
-
 echo "Record screenshots"
 ./gradlew recordPaparazziDebug --stacktrace -PpreDexEnable=false --max-workers 4 --warn
 
 echo "Committing changes"
+git config user.name "ElementBot"
+git config user.email "benoitm+elementbot@element.io"
 git add -A
 git commit -m "Update screenshots"
 

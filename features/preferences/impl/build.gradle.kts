@@ -42,6 +42,7 @@ dependencies {
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
     implementation(projects.features.rageshake.api)
+    implementation(projects.features.analytics.api)
     implementation(projects.libraries.matrixui)
     implementation(projects.features.logout.api)
     implementation(libs.datetime)
@@ -59,6 +60,8 @@ dependencies {
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.features.rageshake.impl)
     testImplementation(projects.features.logout.impl)
+    testImplementation(projects.features.analytics.test)
+    testImplementation(projects.features.analytics.impl)
 
     androidTestImplementation(libs.test.junitext)
 }

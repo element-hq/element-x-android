@@ -25,7 +25,7 @@ class FakeUserListDataSource : UserListDataSource {
     private var searchResult: List<MatrixUser> = emptyList()
     private var profile: MatrixUser? = null
 
-    override suspend fun search(query: String): List<MatrixUser> = searchResult
+    override suspend fun search(query: String, count: Long): List<MatrixUser> = searchResult.take(count.toInt())
 
     override suspend fun getProfile(userId: UserId): MatrixUser? = profile
 

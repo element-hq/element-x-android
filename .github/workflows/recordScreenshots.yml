@@ -9,7 +9,7 @@ env:
 
 jobs:
   record:
-    name: Record screenshots on branch ${{ inputs.param_branch }}
+    name: Record screenshots on branch ${{ github.ref_name }}
     runs-on: ubuntu-latest
 
     steps:
@@ -22,6 +22,11 @@ jobs:
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
+      # Add gradle cache, this should speed up the process
+      - name: Configure gradle
+        uses: gradle/gradle-build-action@v2.4.2
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Record screenshots
         run: "./.github/workflows/scripts/recordScreenshots.sh"
         env:

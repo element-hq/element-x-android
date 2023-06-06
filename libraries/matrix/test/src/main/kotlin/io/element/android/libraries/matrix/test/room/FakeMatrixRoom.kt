@@ -51,6 +51,7 @@ class FakeMatrixRoom(
     override val alternativeAliases: List<String> = emptyList(),
     override val isPublic: Boolean = true,
     override val isDirect: Boolean = false,
+    override val joinedMemberCount: Long = 123L,
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
 ) : MatrixRoom {
 

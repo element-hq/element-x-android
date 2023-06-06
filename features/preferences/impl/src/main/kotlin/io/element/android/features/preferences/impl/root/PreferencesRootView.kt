@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.logout.api.LogoutPreferenceView
 import io.element.android.features.preferences.impl.user.UserPreferences
+import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesView
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesView
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
@@ -52,6 +53,9 @@ fun PreferencesRootView(
         title = stringResource(id = StringR.string.common_settings)
     ) {
         UserPreferences(state.myUser)
+        AnalyticsPreferencesView(
+            state = state.analyticsState,
+        )
         RageshakePreferencesView(
             state = state.rageshakeState,
             onOpenRageshake = onOpenRageShake,

@@ -22,7 +22,9 @@
   <string name="action_done">"Hotovo"</string>
   <string name="action_edit">"Upravit"</string>
   <string name="action_enable">"Povolit"</string>
+  <string name="action_forgot_password">"Zapomněli jste heslo?"</string>
   <string name="action_invite">"Pozvat"</string>
+  <string name="action_invite_friends">"Pozvat přátele"</string>
   <string name="action_invite_friends_to_app">"Pozvat přátele do %1$s"</string>
   <string name="action_invites_list">"Pozvánky"</string>
   <string name="action_learn_more">"Zjistit více"</string>
@@ -69,6 +71,8 @@
   <string name="common_file">"Soubor"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Obrázek"</string>
+  <string name="common_invite_unknown_profile">"Nemůžeme ověřit Matrix ID tohoto uživatele. Pozvánka nemusí být přijata."</string>
+  <string name="common_leaving_room">"Opuštění místnosti"</string>
   <string name="common_link_copied_to_clipboard">"Odkaz zkopírován do schránky"</string>
   <string name="common_loading">"Načítání…"</string>
   <string name="common_message">"Zpráva"</string>
@@ -85,6 +89,7 @@
   <string name="common_report_a_bug">"Nahlásit chybu"</string>
   <string name="common_report_submitted">"Zpráva odeslána"</string>
   <string name="common_room_name">"Název místnosti"</string>
+  <string name="common_room_name_placeholder">"např. Produktový sprint"</string>
   <string name="common_search_for_someone">"Hledat někoho"</string>
   <string name="common_search_results">"Výsledky hledání"</string>
   <string name="common_security">"Zabezpečení"</string>
@@ -93,11 +98,15 @@
   <string name="common_server_not_supported">"Server není podporován"</string>
   <string name="common_server_url">"URL serveru"</string>
   <string name="common_settings">"Nastavení"</string>
+  <string name="common_starting_chat">"Zahajování chatu…"</string>
   <string name="common_sticker">"Nálepka"</string>
   <string name="common_success">"Úspěch"</string>
   <string name="common_suggestions">"Návrhy"</string>
   <string name="common_topic">"Téma"</string>
+  <string name="common_topic_placeholder">"O čem je tato místnost?"</string>
   <string name="common_unable_to_decrypt">"Nelze dešifrovat"</string>
+  <string name="common_unable_to_invite_message">"Nepodařilo se nám úspěšně odeslat pozvánky jednomu nebo více uživatelům."</string>
+  <string name="common_unable_to_invite_title">"Nelze odeslat pozvánky"</string>
   <string name="common_unsupported_event">"Nepodporovaná událost"</string>
   <string name="common_username">"Uživatelské jméno"</string>
   <string name="common_verification_cancelled">"Ověření zrušeno"</string>
@@ -118,6 +127,7 @@
   <string name="error_failed_loading_messages">"Načítání zpráv se nezdařilo"</string>
   <string name="error_some_messages_have_not_been_sent">"Některé zprávy nebyly odeslány"</string>
   <string name="error_unknown">"Omlouváme se, došlo k chybě"</string>
+  <string name="invite_friends_rich_title">"🔐️ Připojte se ke mně na %1$s"</string>
   <string name="invite_friends_text">"Ahoj, ozvi se mi na %1$s: %2$s"</string>
   <string name="leave_room_alert_empty_subtitle">"Opravdu chcete opustit tuto místnost? Jste tu jediná osoba. Pokud odejdete, nikdo se v budoucnu nebude moci připojit, včetně vás."</string>
   <string name="leave_room_alert_private_subtitle">"Opravdu chcete opustit tuto místnost? Tato místnost není veřejná a bez pozvánky se nebudete moci znovu připojit."</string>
@@ -128,16 +138,33 @@
     <item quantity="few">"%1$d členové"</item>
     <item quantity="other">"%1$d členů"</item>
   </plurals>
+  <string name="preference_rageshake">"Zatřeste zařízením pro nahlášení chyby"</string>
+  <string name="rageshake_dialog_content">"Zdá se, že jste frustrovaně třásli telefonem. Chcete otevřít obrazovku pro nahlášení chyby?"</string>
   <string name="report_content_explanation">"Tato zpráva bude nahlášena správci vašeho domovského serveru. Nebude si moci přečíst žádné šifrované zprávy."</string>
   <string name="report_content_hint">"Důvod nahlášení tohoto obsahu"</string>
   <string name="room_timeline_beginning_of_room">"Toto je začátek %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"Toto je začátek této konverzace."</string>
   <string name="room_timeline_read_marker_title">"Nové"</string>
+  <string name="screen_analytics_settings_share_data">"Sdílet analytická data"</string>
+  <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
+  <string name="screen_report_content_block_user_hint">"Zaškrtněte, pokud chcete skrýt všechny aktuální a budoucí zprávy od tohoto uživatele"</string>
+  <string name="screen_server_confirmation_change_server">"Změnit poskytovatele účtu"</string>
+  <string name="screen_server_confirmation_message_login_element_dot_io">"Soukromý server pro zaměstnance Elementu."</string>
+  <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix je otevřená síť pro bezpečnou a decentralizovanou komunikaci."</string>
+  <string name="screen_server_confirmation_message_register">"Zde budou uloženy vaše konverzace - podobně jako u poskytovatele e-mailových služeb uchováváte své e-maily."</string>
+  <string name="screen_server_confirmation_title_login">"Chystáte se přihlásit do služby %1$s"</string>
+  <string name="screen_server_confirmation_title_register">"Chystáte se vytvořit účet na %1$s"</string>
   <string name="settings_rageshake">"Rageshake"</string>
+  <string name="settings_rageshake_detection_threshold">"Práh detekce"</string>
   <string name="settings_title_general">"Obecné"</string>
   <string name="settings_version_number">"Verze: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
   <string name="dialog_title_error">"Chyba"</string>
   <string name="dialog_title_success">"Úspěch"</string>
+  <string name="screen_analytics_settings_help_us_improve">"Pomozte nám identifikovat problémy a vylepšit %1$s sdílením anonymních údajů o používání."</string>
+  <string name="screen_analytics_settings_read_terms">"Můžete si přečíst všechny naše podmínky %1$s."</string>
+  <string name="screen_analytics_settings_read_terms_content_link">"zde"</string>
   <string name="screen_report_content_block_user">"Zablokovat uživatele"</string>
 </resources>

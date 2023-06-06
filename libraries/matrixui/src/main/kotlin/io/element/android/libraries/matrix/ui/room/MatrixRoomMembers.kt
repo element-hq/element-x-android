@@ -55,7 +55,7 @@ fun MatrixRoom.getDirectRoomMember(): State<RoomMember?> {
 @Composable
 fun MatrixRoom.getDirectRoomMember(roomMembersState: MatrixRoomMembersState): State<RoomMember?> {
     val roomMembers = roomMembersState.roomMembers()
-    return remember(roomMembers) {
+    return remember(roomMembersState) {
         derivedStateOf {
             if (roomMembers == null) {
                 null

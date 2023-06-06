@@ -20,3 +20,8 @@ plugins {
 android {
     namespace = "io.element.android.services.analytics.api"
 }
+
+dependencies {
+    api(projects.services.analyticsproviders.api)
+    implementation(libs.coroutines.core)
+}
