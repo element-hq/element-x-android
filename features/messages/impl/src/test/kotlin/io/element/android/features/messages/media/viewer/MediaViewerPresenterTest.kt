@@ -19,7 +19,6 @@
 package io.element.android.features.messages.media.viewer
 
 import android.net.Uri
-import androidx.media3.common.MimeTypes
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
@@ -32,55 +31,110 @@ import io.element.android.features.messages.media.FakeLocalMediaActions
 import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
-import io.element.android.libraries.matrix.test.FAKE_DELAY_IN_MS
 import io.element.android.libraries.matrix.test.media.FakeMediaLoader
 import io.element.android.libraries.matrix.test.media.aMediaSource
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-private const val TESTED_MIME_TYPE = MimeTypes.IMAGE_JPEG
-private const val TESTED_MEDIA_NAME = "MediaName"
+private val TESTED_MEDIA_INFO = MediaInfo(
+    name = "",
+    mimeType = "",
+    formattedFileSize = ""
+)
 
 class MediaViewerPresenterTest {
 
     private val mockMediaUri: Uri = mockk("localMediaUri")
     private val localMediaFactory = FakeLocalMediaFactory(mockMediaUri)
-    private val mediaLoader = FakeMediaLoader()
 
     @Test
     fun `present - download media success scenario`() = runTest {
-        val presenter = aMediaViewerPresenter()
+        val coroutineDispatchers = testCoroutineDispatchers(testScheduler, useUnconfinedTestDispatcher = false)
+        val mediaLoader = FakeMediaLoader(coroutineDispatchers)
+        val mediaActions = FakeLocalMediaActions(coroutineDispatchers)
+        val presenter = aMediaViewerPresenter(mediaLoader, mediaActions)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
-            assertThat(initialState.downloadedMedia).isEqualTo(Async.Uninitialized)
-            assertThat(initialState.mediaInfo.name).isEqualTo(TESTED_MEDIA_NAME)
-            val loadingState = awaitItem()
-            assertThat(loadingState.downloadedMedia).isInstanceOf(Async.Loading::class.java)
-            testScheduler.advanceTimeBy(FAKE_DELAY_IN_MS + 1)
-            val successState = awaitItem()
-            val successData = successState.downloadedMedia.dataOrNull()
-            assertThat(successState.downloadedMedia).isInstanceOf(Async.Success::class.java)
+            var state = awaitItem()
+            assertThat(state.downloadedMedia).isEqualTo(Async.Uninitialized)
+            assertThat(state.mediaInfo).isEqualTo(TESTED_MEDIA_INFO)
+            state = awaitItem()
+            assertThat(state.downloadedMedia).isInstanceOf(Async.Loading::class.java)
+            state = awaitItem()
+            val successData = state.downloadedMedia.dataOrNull()
+            assertThat(state.downloadedMedia).isInstanceOf(Async.Success::class.java)
             assertThat(successData).isNotNull()
         }
     }
 
     @Test
+    fun `present - check all actions `() = runTest {
+        val coroutineDispatchers = testCoroutineDispatchers(testScheduler, useUnconfinedTestDispatcher = false)
+        val mediaLoader = FakeMediaLoader(coroutineDispatchers)
+        val mediaActions = FakeLocalMediaActions(coroutineDispatchers)
+        val presenter = aMediaViewerPresenter(mediaLoader, mediaActions)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            var state = awaitItem()
+            assertThat(state.downloadedMedia).isEqualTo(Async.Uninitialized)
+            state = awaitItem()
+            assertThat(state.downloadedMedia).isInstanceOf(Async.Loading::class.java)
+            // no state changes while media is loading
+            state.eventSink(MediaViewerEvents.OpenWith)
+            state.eventSink(MediaViewerEvents.Share)
+            state.eventSink(MediaViewerEvents.SaveOnDisk)
+            state = awaitItem()
+            assertThat(state.downloadedMedia).isInstanceOf(Async.Success::class.java)
+            // Should succeed without change of state
+            state.eventSink(MediaViewerEvents.OpenWith)
+            // Should succeed without change of state
+            state.eventSink(MediaViewerEvents.Share)
+            state.eventSink(MediaViewerEvents.SaveOnDisk)
+            state = awaitItem()
+            assertThat(state.snackbarMessage).isNotNull()
+            state = awaitItem()
+            assertThat(state.snackbarMessage).isNull()
+
+            // Check failures
+            mediaActions.shouldFail = true
+            state.eventSink(MediaViewerEvents.OpenWith)
+            state = awaitItem()
+            assertThat(state.snackbarMessage).isNotNull()
+            state = awaitItem()
+            assertThat(state.snackbarMessage).isNull()
+            state.eventSink(MediaViewerEvents.Share)
+            state = awaitItem()
+            assertThat(state.snackbarMessage).isNotNull()
+            state = awaitItem()
+            assertThat(state.snackbarMessage).isNull()
+            state.eventSink(MediaViewerEvents.SaveOnDisk)
+            state = awaitItem()
+            assertThat(state.snackbarMessage).isNotNull()
+            state = awaitItem()
+            assertThat(state.snackbarMessage).isNull()
+        }
+    }
+
+    @Test
     fun `present - download media failure then retry with success scenario`() = runTest {
-        val presenter = aMediaViewerPresenter()
+        val coroutineDispatchers = testCoroutineDispatchers(testScheduler, useUnconfinedTestDispatcher = false)
+        val mediaLoader = FakeMediaLoader(coroutineDispatchers)
+        val mediaActions = FakeLocalMediaActions(coroutineDispatchers)
+        val presenter = aMediaViewerPresenter(mediaLoader, mediaActions)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             mediaLoader.shouldFail = true
             val initialState = awaitItem()
             assertThat(initialState.downloadedMedia).isEqualTo(Async.Uninitialized)
-            assertThat(initialState.mediaInfo.name).isEqualTo(TESTED_MEDIA_NAME)
+            assertThat(initialState.mediaInfo).isEqualTo(TESTED_MEDIA_INFO)
             val loadingState = awaitItem()
             assertThat(loadingState.downloadedMedia).isInstanceOf(Async.Loading::class.java)
-            testScheduler.advanceTimeBy(FAKE_DELAY_IN_MS)
             val failureState = awaitItem()
             assertThat(failureState.downloadedMedia).isInstanceOf(Async.Failure::class.java)
             mediaLoader.shouldFail = false
@@ -89,7 +143,6 @@ class MediaViewerPresenterTest {
             skipItems(1)
             val retryLoadingState = awaitItem()
             assertThat(retryLoadingState.downloadedMedia).isInstanceOf(Async.Loading::class.java)
-            testScheduler.advanceTimeBy(FAKE_DELAY_IN_MS)
             val successState = awaitItem()
             val successData = successState.downloadedMedia.dataOrNull()
             assertThat(successState.downloadedMedia).isInstanceOf(Async.Success::class.java)
@@ -97,19 +150,19 @@ class MediaViewerPresenterTest {
         }
     }
 
-    private fun aMediaViewerPresenter(mimeType: String = TESTED_MIME_TYPE): MediaViewerPresenter {
+    private fun aMediaViewerPresenter(
+        mediaLoader: FakeMediaLoader,
+        localMediaActions: FakeLocalMediaActions,
+    ): MediaViewerPresenter {
         return MediaViewerPresenter(
             inputs = MediaViewerNode.Inputs(
-                mediaInfo = MediaInfo(name = TESTED_MEDIA_NAME,
-                    mimeType = mimeType,
-                    formattedFileSize = "14MB"
-                ),
+                mediaInfo = TESTED_MEDIA_INFO,
                 mediaSource = aMediaSource(),
                 thumbnailSource = null
             ),
             localMediaFactory = localMediaFactory,
             mediaLoader = mediaLoader,
-            localMediaActions = FakeLocalMediaActions(),
+            localMediaActions = localMediaActions,
             snackbarDispatcher = SnackbarDispatcher()
         )
     }

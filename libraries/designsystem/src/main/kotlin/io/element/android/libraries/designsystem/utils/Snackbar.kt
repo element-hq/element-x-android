@@ -26,7 +26,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -60,7 +59,7 @@ fun handleSnackbarMessage(
     val snackbarMessage by snackbarDispatcher.snackbarMessage.collectAsState(initial = null)
     LaunchedEffect(snackbarMessage) {
         if (snackbarMessage != null) {
-            launch(Dispatchers.Main) {
+            launch {
                 snackbarDispatcher.clear()
             }
         }
