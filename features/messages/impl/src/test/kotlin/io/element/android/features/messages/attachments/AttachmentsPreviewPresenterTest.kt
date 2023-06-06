@@ -92,7 +92,6 @@ class AttachmentsPreviewPresenterTest {
     private fun anAttachmentsPreviewPresenter(
         localMedia: LocalMedia = aLocalMedia(
             uri = mockMediaUrl,
-            mimeType = MimeTypes.IMAGE_JPEG
         ),
         room: MatrixRoom = FakeMatrixRoom()
     ): AttachmentsPreviewPresenter {

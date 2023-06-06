@@ -27,7 +27,6 @@ data class MediaInfo(
     val formattedFileSize: String,
 ) : Parcelable
 
-
 fun anImageInfo(): MediaInfo = MediaInfo(
     "an image file", MimeTypes.Jpeg, "4MB"
 )

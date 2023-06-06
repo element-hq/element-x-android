@@ -17,23 +17,18 @@
 package io.element.android.features.messages.fixtures
 
 import android.net.Uri
-import androidx.media3.common.MimeTypes
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.features.messages.impl.media.local.MediaInfo
+import io.element.android.features.messages.impl.media.local.anImageInfo
+import io.element.android.libraries.core.mimetype.MimeTypes
 
 fun aLocalMedia(
     uri: Uri,
-    mimeType: String = MimeTypes.IMAGE_JPEG,
-    name: String = "a media",
-    size: Long = 1000,
+    mediaInfo: MediaInfo = anImageInfo(),
 ) = LocalMedia(
     uri = uri,
-    info = MediaInfo(
-        mimeType = mimeType,
-        name = name,
-        formattedFileSize = "${size}B",
-    )
+    info = mediaInfo
 )
 
 fun aMediaAttachment(localMedia: LocalMedia, compressIfPossible: Boolean = true) = Attachment.Media(

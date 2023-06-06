@@ -45,8 +45,8 @@ private const val TESTED_MEDIA_NAME = "MediaName"
 
 class MediaViewerPresenterTest {
 
-    private val mockMediaUrl: Uri = mockk("localMediaUri")
-    private val localMediaFactory = FakeLocalMediaFactory(mockMediaUrl)
+    private val mockMediaUri: Uri = mockk("localMediaUri")
+    private val localMediaFactory = FakeLocalMediaFactory(mockMediaUri)
     private val mediaLoader = FakeMediaLoader()
 
     @Test
