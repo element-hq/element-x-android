@@ -17,7 +17,7 @@
 package io.element.android.features.login.impl.changeaccountprovider
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.features.login.impl.changeaccountprovider.item.AccountProviderItem
 
 open class ChangeAccountProviderStateProvider : PreviewParameterProvider<ChangeAccountProviderState> {
     override val values: Sequence<ChangeAccountProviderState>
@@ -28,7 +28,12 @@ open class ChangeAccountProviderStateProvider : PreviewParameterProvider<ChangeA
 }
 
 fun aChangeAccountProviderState() = ChangeAccountProviderState(
-    homeserver = "",
-    changeServerAction = Async.Uninitialized,
-    eventSink = {}
+    accountProviderItems = listOf(
+        AccountProviderItem(
+            title = "matrix.org",
+            subtitle = null,
+            isPublic = true,
+            isMatrixOrg = true,
+        )
+    ),
 )

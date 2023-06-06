@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,22 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.changeaccountprovider
+package io.element.android.features.login.impl.changeaccountprovider.form.network
 
-sealed interface ChangeAccountProviderEvents {
-}
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+/**
+ * https://matrix.org/docs/spec/client_server/r0.4.0.html#server-discovery
+ * <pre>
+ * {
+ *     "base_url": "https://element.io"
+ * }
+ * </pre>
+ * .
+ */
+@Serializable
+data class WellKnownBaseConfig(
+        @SerialName("base_url")
+        val baseURL: String? = null
+)

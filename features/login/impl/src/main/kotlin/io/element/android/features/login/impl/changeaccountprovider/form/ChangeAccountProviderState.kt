@@ -14,7 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.changeaccountprovider
+package io.element.android.features.login.impl.changeaccountprovider.form
 
-sealed interface ChangeAccountProviderEvents {
-}
+import io.element.android.libraries.architecture.Async
+
+// Do not use default value, so no member get forgotten in the presenters.
+data class ChangeAccountProviderFormState(
+    val userInput: String,
+    val userInputResult: Async<List<HomeserverData>>,
+    val eventSink: (ChangeAccountProviderFormEvents) -> Unit
+)

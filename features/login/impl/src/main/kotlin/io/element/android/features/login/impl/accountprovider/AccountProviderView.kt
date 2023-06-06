@@ -54,7 +54,8 @@ fun AccountProviderView(
                         R.string.screen_account_provider_signup_title
                     } else {
                         R.string.screen_account_provider_signin_title
-                    }
+                    },
+                    state.homeserver
                 ),
                 subTitle = stringResource(
                     id = if (state.isAccountCreation) {

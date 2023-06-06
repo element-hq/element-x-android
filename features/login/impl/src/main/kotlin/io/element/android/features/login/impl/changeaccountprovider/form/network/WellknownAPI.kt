@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.element.android.features.login.impl.changeaccountprovider.form.network
 
-package io.element.android.features.login.impl.changeaccountprovider.item
+import retrofit2.http.GET
 
-data class ChangeAccountProviderItem(
-    val title: String,
-    val subtitle: String? = null,
-    val isPublic: Boolean = false,
-    val isMatrix: Boolean = false,
-)
+internal interface WellknownAPI {
+    @GET(".well-known/matrix/client")
+    suspend fun getWellKnown(): WellKnown
+}

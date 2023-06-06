@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.changeaccountprovider
+package io.element.android.features.login.impl.changeaccountprovider.form
 
-sealed interface ChangeAccountProviderEvents {
+sealed interface ChangeAccountProviderFormEvents {
+    /**
+     * The user has typed something, expect to get a list of result in the state
+     */
+    data class UserInput(val input: String) : ChangeAccountProviderFormEvents
 }

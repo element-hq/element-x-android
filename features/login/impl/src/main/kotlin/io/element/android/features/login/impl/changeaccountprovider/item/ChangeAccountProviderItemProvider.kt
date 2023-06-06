@@ -18,19 +18,19 @@ package io.element.android.features.login.impl.changeaccountprovider.item
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
-open class ChangeAccountProviderItemProvider : PreviewParameterProvider<ChangeAccountProviderItem> {
-    override val values: Sequence<ChangeAccountProviderItem>
+open class ChangeAccountProviderItemProvider : PreviewParameterProvider<AccountProviderItem> {
+    override val values: Sequence<AccountProviderItem>
         get() = sequenceOf(
             aChangeAccountProviderItem(),
             aChangeAccountProviderItem().copy(subtitle = null),
-            aChangeAccountProviderItem().copy(title = "Other", subtitle = null, isPublic = false, isMatrix = false),
+            aChangeAccountProviderItem().copy(title = "Other", subtitle = null, isPublic = false, isMatrixOrg = false),
             // Add other state here
         )
 }
 
-fun aChangeAccountProviderItem() = ChangeAccountProviderItem(
+fun aChangeAccountProviderItem() = AccountProviderItem(
     title = "matrix.org",
     subtitle = "Matrix.org is an open network for secure, decentralized communication.",
     isPublic = true,
-    isMatrix = true,
+    isMatrixOrg = true,
 )
