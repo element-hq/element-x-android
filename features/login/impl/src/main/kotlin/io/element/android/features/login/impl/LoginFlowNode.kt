@@ -20,7 +20,6 @@ import android.app.Activity
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.composable.Children
@@ -32,14 +31,18 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.login.impl.accountprovider.AccountProviderNode
 import io.element.android.features.login.impl.changeserver.ChangeServerNode
 import io.element.android.features.login.impl.oidc.CustomTabAvailabilityChecker
 import io.element.android.features.login.impl.oidc.customtab.CustomTabHandler
 import io.element.android.features.login.impl.oidc.webview.OidcNode
 import io.element.android.features.login.impl.root.LoginRootNode
+import io.element.android.features.login.impl.util.LoginConstants
 import io.element.android.libraries.architecture.BackstackNode
+import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.OidcDetails
@@ -53,7 +56,7 @@ class LoginFlowNode @AssistedInject constructor(
     private val customTabHandler: CustomTabHandler,
 ) : BackstackNode<LoginFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Root,
+        initialElement = NavTarget.AccountProvider, // NavTarget.Root,
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -62,10 +65,24 @@ class LoginFlowNode @AssistedInject constructor(
     private var activity: Activity? = null
     private var darkTheme: Boolean = false
 
+    data class Inputs(
+        val isAccountCreation: Boolean,
+    ) : NodeInputs
+
+    private val inputs: Inputs = inputs()
+
     sealed interface NavTarget : Parcelable {
+        // Not used anymore
         @Parcelize
         object Root : NavTarget
 
+        @Parcelize
+        object AccountProvider : NavTarget
+
+        @Parcelize
+        object ChangeAccountProvider : NavTarget
+
+        // Not used anymore
         @Parcelize
         object ChangeServer : NavTarget
 
@@ -98,6 +115,26 @@ class LoginFlowNode @AssistedInject constructor(
             is NavTarget.OidcView -> {
                 val input = OidcNode.Inputs(navTarget.oidcDetails)
                 createNode<OidcNode>(buildContext, plugins = listOf(input))
+            }
+            NavTarget.AccountProvider -> {
+                val inputs = AccountProviderNode.Inputs(
+                    homeserver = LoginConstants.DEFAULT_HOMESERVER_URL,
+                    isMatrixOrg = LoginConstants.DEFAULT_HOMESERVER_URL == "matrix.org",
+                    isAccountCreation = inputs.isAccountCreation
+                )
+                val callback = object : AccountProviderNode.Callback {
+                    override fun onContinue() {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onChangeAccountProvider() {
+                        backstack.push(NavTarget.ChangeAccountProvider)
+                    }
+                }
+                createNode<AccountProviderNode>(buildContext, plugins = listOf(inputs, callback))
+            }
+            NavTarget.ChangeAccountProvider -> {
+                TODO()
             }
         }
     }

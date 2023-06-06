@@ -14,21 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.api
+package io.element.android.features.login.impl.accountprovider
 
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import io.element.android.libraries.architecture.FeatureEntryPoint
-
-interface LoginEntryPoint : FeatureEntryPoint {
-    data class Params(
-        val isAccountCreation: Boolean,
-    )
-
-    fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
-
-    interface NodeBuilder {
-        fun params(params: Params): NodeBuilder
-        fun build(): Node
-    }
-}
+// Do not use default value, so no member get forgotten in the presenters.
+data class AccountProviderState(
+    val homeserver: String,
+    val isMatrix: Boolean,
+    val isAccountCreation: Boolean,
+    val eventSink: (AccountProviderEvents) -> Unit
+)

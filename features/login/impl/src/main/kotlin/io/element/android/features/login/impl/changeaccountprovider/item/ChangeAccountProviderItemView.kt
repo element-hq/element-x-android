@@ -78,6 +78,7 @@ fun ChangeAccountProviderItemView(
                     RoundedIconAtom(
                         size = RoundedIconAtomSize.Medium,
                         imageVector = Icons.Filled.Search,
+                        tint = MaterialTheme.colorScheme.primary,
                     )
                 }
                 Text(
