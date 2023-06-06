@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.api
+package io.element.android.features.login.impl.accountprovider
 
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import io.element.android.libraries.architecture.FeatureEntryPoint
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
-interface LoginEntryPoint : FeatureEntryPoint {
-    data class Params(
-        val isAccountCreation: Boolean,
-    )
-
-    fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
-
-    interface NodeBuilder {
-        fun params(params: Params): NodeBuilder
-        fun build(): Node
-    }
+open class AccountProviderStateProvider : PreviewParameterProvider<AccountProviderState> {
+    override val values: Sequence<AccountProviderState>
+        get() = sequenceOf(
+            aAccountProviderState(),
+            // Add other state here
+        )
 }
+
+fun aAccountProviderState() = AccountProviderState(
+    homeserver = "matrix.org",
+    isMatrix = true,
+    isAccountCreation = false,
+    eventSink = {}
+)

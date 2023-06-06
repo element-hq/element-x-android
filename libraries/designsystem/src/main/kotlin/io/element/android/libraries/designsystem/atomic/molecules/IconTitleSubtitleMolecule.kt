@@ -24,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,6 +47,7 @@ fun IconTitleSubtitleMolecule(
     modifier: Modifier = Modifier,
     iconResourceId: Int? = null,
     iconImageVector: ImageVector? = null,
+    iconTint: Color = Color.Unspecified,
 ) {
     Column(modifier) {
         RoundedIconAtom(
@@ -54,6 +56,7 @@ fun IconTitleSubtitleMolecule(
             size = RoundedIconAtomSize.Large,
             resourceId = iconResourceId,
             imageVector = iconImageVector,
+            tint = iconTint,
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
