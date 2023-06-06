@@ -381,14 +381,30 @@ private fun BoxScope.SendButton(
 
 @Preview
 @Composable
-internal fun TextComposerLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun TextComposerSimpleLightPreview() = ElementPreviewLight { SimpleContentToPreview() }
 
 @Preview
 @Composable
-internal fun TextComposerDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun TextComposerSimpleDarkPreview() = ElementPreviewDark { SimpleContentToPreview() }
+
+@Preview
+@Composable
+internal fun TextComposerEditLightPreview() = ElementPreviewLight { EditContentToPreview() }
+
+@Preview
+@Composable
+internal fun TextComposerEditDarkPreview() = ElementPreviewDark { EditContentToPreview() }
+
+@Preview
+@Composable
+internal fun TextComposerReplyLightPreview() = ElementPreviewLight { ReplyContentToPreview() }
+
+@Preview
+@Composable
+internal fun TextComposerReplyDarkPreview() = ElementPreviewDark { ReplyContentToPreview() }
 
 @Composable
-private fun ContentToPreview() {
+private fun SimpleContentToPreview() {
     Column {
         TextComposer(
             onSendMessage = {},
@@ -414,14 +430,24 @@ private fun ContentToPreview() {
             composerCanSendMessage = true,
             composerText = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
         )
-        TextComposer(
-            onSendMessage = {},
-            onComposerTextChange = {},
-            composerMode = MessageComposerMode.Edit(EventId("$1234"), "Some text"),
-            onResetComposerMode = {},
-            composerCanSendMessage = true,
-            composerText = "A message",
-        )
+    }
+}
+
+@Composable
+private fun EditContentToPreview() {
+    TextComposer(
+        onSendMessage = {},
+        onComposerTextChange = {},
+        composerMode = MessageComposerMode.Edit(EventId("$1234"), "Some text"),
+        onResetComposerMode = {},
+        composerCanSendMessage = true,
+        composerText = "A message",
+    )
+}
+
+@Composable
+private fun ReplyContentToPreview() {
+    Column {
         TextComposer(
             onSendMessage = {},
             onComposerTextChange = {},
