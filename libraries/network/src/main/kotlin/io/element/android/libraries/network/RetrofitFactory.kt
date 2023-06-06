@@ -17,23 +17,21 @@
 package io.element.android.libraries.network
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import dagger.Lazy
 import io.element.android.libraries.core.uri.ensureTrailingSlash
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import javax.inject.Inject
+import javax.inject.Provider
 
 class RetrofitFactory @Inject constructor(
-    private val okHttpClient: Lazy<OkHttpClient>,
+    private val okHttpClient: Provider<OkHttpClient>,
+    private val json: Provider<Json>,
 ) {
-    fun create(baseUrl: String): Retrofit {
-        val contentType = "application/json".toMediaType()
-        return Retrofit.Builder()
-            .baseUrl(baseUrl.ensureTrailingSlash())
-            .addConverterFactory(Json.asConverterFactory(contentType))
-            .callFactory { request -> okHttpClient.get().newCall(request) }
-            .build()
-    }
+    fun create(baseUrl: String): Retrofit = Retrofit.Builder()
+        .baseUrl(baseUrl.ensureTrailingSlash())
+        .addConverterFactory(json.get().asConverterFactory("application/json".toMediaType()))
+        .callFactory(okHttpClient.get())
+        .build()
 }
