@@ -31,7 +31,6 @@ import dagger.assisted.AssistedInject
 import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.features.messages.impl.media.local.LocalMediaActions
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
-import io.element.android.features.messages.impl.media.local.createFromMediaFile
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher

@@ -17,11 +17,17 @@
 package io.element.android.features.messages.impl.media.local
 
 import android.net.Uri
-import androidx.core.net.toUri
 import io.element.android.libraries.matrix.api.media.MediaFile
-import io.element.android.libraries.matrix.api.media.toFile
 
 interface LocalMediaFactory {
+
+    /**
+     * This method will create a [LocalMedia] with the given [MediaFile] and [MediaInfo]
+     */
+    fun createFromMediaFile(
+        mediaFile: MediaFile,
+        mediaInfo: MediaInfo,
+    ): LocalMedia
 
     /**
      * This method will create a [LocalMedia] with the given mimeType, name and formattedFileSize
@@ -33,12 +39,4 @@ interface LocalMediaFactory {
         name: String?,
         formattedFileSize: String?
     ): LocalMedia
-}
-
-fun LocalMediaFactory.createFromMediaFile(
-    mediaFile: MediaFile,
-    mediaInfo: MediaInfo,
-): LocalMedia {
-    val uri = mediaFile.toFile().toUri()
-    return createFromUri(uri = uri, mimeType = mediaInfo.mimeType, name = mediaInfo.name, formattedFileSize = mediaInfo.formattedFileSize)
 }
