@@ -111,9 +111,9 @@ class DefaultHomeserverResolver @Inject constructor(
             if (s.contains(".")) {
                 // TLD detected?
             } else {
-                add("$s.org")
-                add("$s.com")
-                add("$s.io")
+                add("${s}.org")
+                add("${s}.com")
+                add("${s}.io")
             }
         }
     }
