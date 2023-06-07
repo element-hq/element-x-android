@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.features.messages.impl.attachments.preview
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -39,6 +34,7 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.media.local.LocalMediaView
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.designsystem.atomic.molecules.ButtonRowMolecule
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -151,9 +147,8 @@ private fun AttachmentsPreviewBottomActions(
     onSendClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
+    ButtonRowMolecule(
         modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         TextButton(onClick = onCancelClicked) {
             Text(stringResource(id = StringsR.string.action_cancel))

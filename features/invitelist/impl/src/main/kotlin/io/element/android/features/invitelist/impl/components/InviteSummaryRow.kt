@@ -94,7 +94,7 @@ internal fun DefaultInviteSummaryRow(
     Row(
         modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .padding(16.dp)
                 .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.Top
     ) {

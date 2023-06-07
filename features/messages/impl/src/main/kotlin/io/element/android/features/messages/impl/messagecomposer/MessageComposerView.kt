@@ -23,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.textcomposer.TextComposer
 
 @Composable
@@ -52,17 +51,14 @@ fun MessageComposerView(
 
         TextComposer(
             onSendMessage = ::sendMessage,
-            fullscreen = state.isFullScreen,
-            onFullscreenToggle = ::onFullscreenToggle,
             composerMode = state.mode,
-            onCloseSpecialMode = ::onCloseSpecialMode,
+            onResetComposerMode = ::onCloseSpecialMode,
             onComposerTextChange = ::onComposerTextChange,
             onAddAttachment = {
                 state.eventSink(MessageComposerEvents.AddAttachment)
             },
             composerCanSendMessage = state.isSendButtonVisible,
             composerText = state.text?.charSequence?.toString(),
-            isInDarkMode = !ElementTheme.colors.isLight,
             modifier = modifier
         )
     }
