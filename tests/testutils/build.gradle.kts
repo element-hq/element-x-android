@@ -28,12 +28,6 @@ android {
 
 dependencies {
     implementation(libs.test.junit)
-    implementation(libs.test.mockk)
-    implementation(libs.test.truth)
-    implementation(libs.test.turbine)
     implementation(libs.coroutines.test)
-    implementation(projects.libraries.matrix.test)
-    implementation(projects.services.appnavstate.test)
-    implementation(projects.services.appnavstate.test)
     implementation(projects.libraries.core)
 }

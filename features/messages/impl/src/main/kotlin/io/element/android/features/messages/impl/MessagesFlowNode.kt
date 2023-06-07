@@ -32,6 +32,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
+import io.element.android.features.messages.impl.media.local.MediaInfo
 import io.element.android.features.messages.impl.media.viewer.MediaViewerNode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
@@ -64,10 +65,9 @@ class MessagesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class MediaViewer(
-            val title: String,
+            val mediaInfo: MediaInfo,
             val mediaSource: MediaSource,
             val thumbnailSource: MediaSource?,
-            val mimeType: String?,
         ) : NavTarget
 
         @Parcelize
@@ -100,10 +100,9 @@ class MessagesFlowNode @AssistedInject constructor(
             }
             is NavTarget.MediaViewer -> {
                 val inputs = MediaViewerNode.Inputs(
-                    name = navTarget.title,
+                    mediaInfo = navTarget.mediaInfo,
                     mediaSource = navTarget.mediaSource,
                     thumbnailSource = navTarget.thumbnailSource,
-                    mimeType = navTarget.mimeType,
                 )
                 createNode<MediaViewerNode>(buildContext, listOf(inputs))
             }
@@ -118,30 +117,39 @@ class MessagesFlowNode @AssistedInject constructor(
         when (event.content) {
             is TimelineItemImageContent -> {
                 val navTarget = NavTarget.MediaViewer(
-                    title = event.content.body,
+                    mediaInfo = MediaInfo(
+                        name = event.content.body,
+                        mimeType = event.content.mimeType,
+                        formattedFileSize = event.content.formattedFileSize
+                    ),
                     mediaSource = event.content.mediaSource,
                     thumbnailSource = event.content.mediaSource,
-                    mimeType = event.content.mimeType
                 )
                 backstack.push(navTarget)
             }
             is TimelineItemVideoContent -> {
                 val mediaSource = event.content.videoSource
                 val navTarget = NavTarget.MediaViewer(
-                    title = event.content.body,
+                    mediaInfo = MediaInfo(
+                        name = event.content.body,
+                        mimeType = event.content.mimeType,
+                        formattedFileSize = event.content.formattedFileSize
+                    ),
                     mediaSource = mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
-                    mimeType = event.content.mimeType,
                 )
                 backstack.push(navTarget)
             }
             is TimelineItemFileContent -> {
                 val mediaSource = event.content.fileSource
                 val navTarget = NavTarget.MediaViewer(
-                    title = event.content.body,
+                    mediaInfo = MediaInfo(
+                        name = event.content.body,
+                        mimeType = event.content.mimeType,
+                        formattedFileSize = event.content.formattedFileSize
+                    ),
                     mediaSource = mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
-                    mimeType = event.content.mimeType,
                 )
                 backstack.push(navTarget)
             }

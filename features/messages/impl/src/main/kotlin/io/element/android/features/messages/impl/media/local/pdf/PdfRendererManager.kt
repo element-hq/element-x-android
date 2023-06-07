@@ -43,11 +43,11 @@ class PdfRendererManager(
             mutex.withLock {
                 withContext(Dispatchers.IO) {
                     pdfRenderer = PdfRenderer(parcelFileDescriptor).apply {
-                        (0 until pageCount).map { pageIndex ->
-                            PdfPage(width, pageIndex, mutex, this, coroutineScope)
-                        }.also {
-                            mutablePdfPages.value = it
-                        }
+                        // Preload just 3 pages so we can render faster
+                        val firstPages = loadPages(from = 0, to = 3)
+                        mutablePdfPages.value = firstPages
+                        val nextPages = loadPages(from = 3, to = pageCount)
+                        mutablePdfPages.value = firstPages + nextPages
                     }
                 }
             }
@@ -63,6 +63,12 @@ class PdfRendererManager(
                 pdfRenderer?.close()
                 parcelFileDescriptor.close()
             }
+        }
+    }
+
+    private fun PdfRenderer.loadPages(from: Int, to: Int): List<PdfPage> {
+        return (from until minOf(to, pageCount)).map { pageIndex ->
+            PdfPage(width, pageIndex, mutex, this, coroutineScope)
         }
     }
 }
