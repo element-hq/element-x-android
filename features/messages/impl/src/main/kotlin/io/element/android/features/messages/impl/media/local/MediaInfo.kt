@@ -28,17 +28,17 @@ data class MediaInfo(
 ) : Parcelable
 
 fun anImageInfo(): MediaInfo = MediaInfo(
-    "an image file", MimeTypes.Jpeg, "4MB"
+    "an image file.jpg", MimeTypes.Jpeg, "4MB"
 )
 
 fun aVideoInfo(): MediaInfo = MediaInfo(
-    "a video file", MimeTypes.Mp4, "14MB"
+    "a video file.mp4", MimeTypes.Mp4, "14MB"
 )
 
 fun aPdfInfo(): MediaInfo = MediaInfo(
-    "a pdf file", MimeTypes.Pdf, "23MB"
+    "a pdf file.pdf", MimeTypes.Pdf, "23MB"
 )
 
 fun aFileInfo(): MediaInfo = MediaInfo(
-    "an apk file", MimeTypes.Apk, "50MB"
+    "an apk file.apk", MimeTypes.Apk, "50MB"
 )

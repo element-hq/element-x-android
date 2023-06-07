@@ -20,6 +20,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.core.net.toUri
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.media.local.LocalMedia
+import io.element.android.features.messages.impl.media.local.MediaInfo
+import io.element.android.features.messages.impl.media.local.aFileInfo
+import io.element.android.features.messages.impl.media.local.aVideoInfo
 import io.element.android.features.messages.impl.media.local.anImageInfo
 import io.element.android.libraries.architecture.Async
 
@@ -27,14 +30,17 @@ open class AttachmentsPreviewStateProvider : PreviewParameterProvider<Attachment
     override val values: Sequence<AttachmentsPreviewState>
         get() = sequenceOf(
             anAttachmentsPreviewState(),
+            anAttachmentsPreviewState(mediaInfo = aFileInfo()),
             anAttachmentsPreviewState(sendActionState = Async.Loading()),
             anAttachmentsPreviewState(sendActionState = Async.Failure(RuntimeException())),
         )
 }
 
-fun anAttachmentsPreviewState(sendActionState: Async<Unit> = Async.Uninitialized) = AttachmentsPreviewState(
+fun anAttachmentsPreviewState(
+    mediaInfo: MediaInfo = anImageInfo(),
+    sendActionState: Async<Unit> = Async.Uninitialized) = AttachmentsPreviewState(
     attachment = Attachment.Media(
-        localMedia = LocalMedia("path".toUri(), anImageInfo()),
+        localMedia = LocalMedia("file://path".toUri(), mediaInfo),
         compressIfPossible = true
     ),
     sendActionState = sendActionState,
