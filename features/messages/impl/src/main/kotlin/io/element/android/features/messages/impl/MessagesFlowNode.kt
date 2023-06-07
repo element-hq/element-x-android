@@ -34,6 +34,7 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
 import io.element.android.features.messages.impl.media.local.MediaInfo
 import io.element.android.features.messages.impl.media.viewer.MediaViewerNode
+import io.element.android.features.messages.impl.timeline.debug.EventDebugInfoNode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
@@ -41,8 +42,10 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.parcelize.Parcelize
 
@@ -72,6 +75,9 @@ class MessagesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class AttachmentPreview(val attachment: Attachment) : NavTarget
+
+        @Parcelize
+        data class EventDebugInfo(val eventId: EventId, val debugInfo: TimelineItemDebugInfo) : NavTarget
     }
 
     private val callback = plugins<MessagesEntryPoint.Callback>().firstOrNull()
@@ -95,6 +101,10 @@ class MessagesFlowNode @AssistedInject constructor(
                     override fun onUserDataClicked(userId: UserId) {
                         callback?.onUserDataClicked(userId)
                     }
+
+                    override fun onShowEventDebugInfoClicked(eventId: EventId, debugInfo: TimelineItemDebugInfo) {
+                        backstack.push(NavTarget.EventDebugInfo(eventId, debugInfo))
+                    }
                 }
                 createNode<MessagesNode>(buildContext, listOf(callback))
             }
@@ -109,6 +119,10 @@ class MessagesFlowNode @AssistedInject constructor(
             is NavTarget.AttachmentPreview -> {
                 val inputs = AttachmentsPreviewNode.Inputs(navTarget.attachment)
                 createNode<AttachmentsPreviewNode>(buildContext, listOf(inputs))
+            }
+            is NavTarget.EventDebugInfo -> {
+                val inputs = EventDebugInfoNode.Inputs(navTarget.eventId, navTarget.debugInfo)
+                createNode<EventDebugInfoNode>(buildContext, listOf(inputs))
             }
         }
     }
