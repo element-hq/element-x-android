@@ -125,7 +125,8 @@ private fun AttachmentPreviewContent(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
+                .weight(1f),
+            contentAlignment = Alignment.Center,
         ) {
             when (attachment) {
                 is Attachment.Media -> LocalMediaView(
