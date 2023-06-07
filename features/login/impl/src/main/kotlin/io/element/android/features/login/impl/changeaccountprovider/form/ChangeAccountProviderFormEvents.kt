@@ -18,7 +18,7 @@ package io.element.android.features.login.impl.changeaccountprovider.form
 
 sealed interface ChangeAccountProviderFormEvents {
     /**
-     * The user has typed something, expect to get a list of result in the state
+     * The user has typed something, expect to get a list of result in the state.
      */
     data class UserInput(val input: String) : ChangeAccountProviderFormEvents
 }

@@ -19,7 +19,7 @@ package io.element.android.features.login.impl.changeaccountprovider.form
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.Async
 
-open class ChangeAccountProviderStateFormProvider : PreviewParameterProvider<ChangeAccountProviderFormState> {
+open class ChangeAccountProviderFormStateProvider : PreviewParameterProvider<ChangeAccountProviderFormState> {
     override val values: Sequence<ChangeAccountProviderFormState>
         get() = sequenceOf(
             aChangeAccountProviderFormState(),

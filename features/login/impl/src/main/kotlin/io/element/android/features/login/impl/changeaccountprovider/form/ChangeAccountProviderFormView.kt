@@ -185,12 +185,12 @@ fun ChangeAccountProviderFormView(
 
 @Preview
 @Composable
-fun ChangeAccountProviderFormViewLightPreview(@PreviewParameter(ChangeAccountProviderStateFormProvider::class) state: ChangeAccountProviderFormState) =
+fun ChangeAccountProviderFormViewLightPreview(@PreviewParameter(ChangeAccountProviderFormStateProvider::class) state: ChangeAccountProviderFormState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-fun ChangeAccountProviderFormViewDarkPreview(@PreviewParameter(ChangeAccountProviderStateFormProvider::class) state: ChangeAccountProviderFormState) =
+fun ChangeAccountProviderFormViewDarkPreview(@PreviewParameter(ChangeAccountProviderFormStateProvider::class) state: ChangeAccountProviderFormState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable
