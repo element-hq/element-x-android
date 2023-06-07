@@ -16,27 +16,29 @@
 
 package io.element.android.features.messages.impl.media.local
 
-import android.net.Uri
-import io.element.android.libraries.matrix.api.media.MediaFile
+import androidx.compose.runtime.Composable
 
-interface LocalMediaFactory {
+interface LocalMediaActions {
 
-    /**
-     * This method will create a [LocalMedia] with the given [MediaFile] and [MediaInfo].
-     */
-    fun createFromMediaFile(
-        mediaFile: MediaFile,
-        mediaInfo: MediaInfo,
-    ): LocalMedia
+    @Composable
+    fun Configure()
 
     /**
-     * This method will create a [LocalMedia] with the given mimeType, name and formattedFileSize
-     * If any of those params are null, it'll try to read them from the content.
+     * Will save the current media to the Downloads directory.
+     * The [LocalMedia.uri] needs to have a file scheme.
      */
-    fun createFromUri(
-        uri: Uri,
-        mimeType: String?,
-        name: String?,
-        formattedFileSize: String?
-    ): LocalMedia
+    suspend fun saveOnDisk(localMedia: LocalMedia): Result<Unit>
+
+    /**
+     * Will try to find a suitable application to share the media with.
+     * The [LocalMedia.uri] needs to have a file scheme.
+     */
+    suspend fun share(localMedia: LocalMedia): Result<Unit>
+
+    /**
+     * Will try to find a suitable application to open the media with.
+     * The [LocalMedia.uri] needs to have a file scheme.
+     */
+    suspend fun open(localMedia: LocalMedia): Result<Unit>
 }
+

@@ -20,18 +20,26 @@ import android.net.Uri
 import io.element.android.features.messages.fixtures.aLocalMedia
 import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
+import io.element.android.features.messages.impl.media.local.MediaInfo
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MediaFile
 
 class FakeLocalMediaFactory(private val localMediaUri: Uri) : LocalMediaFactory {
 
     var fallbackMimeType: String = MimeTypes.OctetStream
+    var fallbackName: String = "File name"
+    var fallbackFileSize = "0B"
 
-    override fun createFromMediaFile(mediaFile: MediaFile, mimeType: String?): LocalMedia {
-        return aLocalMedia(uri = localMediaUri, mimeType = mimeType ?: fallbackMimeType)
+    override fun createFromMediaFile(mediaFile: MediaFile, mediaInfo: MediaInfo): LocalMedia {
+        return aLocalMedia(uri = localMediaUri, mediaInfo = mediaInfo)
     }
 
-    override fun createFromUri(uri: Uri, mimeType: String?): LocalMedia {
-        return aLocalMedia(uri, mimeType ?: fallbackMimeType)
+    override fun createFromUri(uri: Uri, mimeType: String?, name: String?, formattedFileSize: String?): LocalMedia {
+        val mediaInfo = MediaInfo(
+            name = name ?: fallbackName,
+            mimeType = mimeType ?: fallbackMimeType,
+            formattedFileSize = formattedFileSize ?: fallbackFileSize
+        )
+        return aLocalMedia(uri, mediaInfo)
     }
 }

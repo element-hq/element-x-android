@@ -14,42 +14,44 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.test.media
+package io.element.android.features.messages.media
 
+import androidx.compose.runtime.Composable
+import io.element.android.features.messages.impl.media.local.LocalMedia
+import io.element.android.features.messages.impl.media.local.LocalMediaActions
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
-import io.element.android.libraries.matrix.api.media.MediaFile
-import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.matrix.test.FAKE_DELAY_IN_MS
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import kotlin.coroutines.coroutineContext
 
-class FakeMediaLoader(private val coroutineDispatchers: CoroutineDispatchers) : MatrixMediaLoader {
+class FakeLocalMediaActions(private val coroutineDispatchers: CoroutineDispatchers) : LocalMediaActions {
 
     var shouldFail = false
 
-    override suspend fun loadMediaContent(source: MediaSource): Result<ByteArray> = withContext(coroutineDispatchers.io){
+    @Composable
+    override fun Configure() {
+        //NOOP
+    }
+
+    override suspend fun saveOnDisk(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
         if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
-            Result.success(ByteArray(0))
+            Result.success(Unit)
         }
     }
 
-    override suspend fun loadMediaThumbnail(source: MediaSource, width: Long, height: Long): Result<ByteArray>  = withContext(coroutineDispatchers.io){
+    override suspend fun share(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
         if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
-            Result.success(ByteArray(0))
+            Result.success(Unit)
         }
     }
 
-    override suspend fun downloadMediaFile(source: MediaSource, mimeType: String?, body: String?): Result<MediaFile> = withContext(coroutineDispatchers.io){
+    override suspend fun open(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
         if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
-            Result.success(FakeMediaFile(""))
+            Result.success(Unit)
         }
     }
 }

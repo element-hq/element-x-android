@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity() {
         val baseDirectory = File(applicationContext.filesDir, "sessions")
 
         RustMatrixAuthenticationService(
+            context = applicationContext,
             baseDirectory = baseDirectory,
             coroutineScope = Singleton.appScope,
             coroutineDispatchers = Singleton.coroutineDispatchers,

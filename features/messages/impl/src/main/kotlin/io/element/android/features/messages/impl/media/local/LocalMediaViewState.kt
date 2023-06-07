@@ -16,27 +16,21 @@
 
 package io.element.android.features.messages.impl.media.local
 
-import android.net.Uri
-import io.element.android.libraries.matrix.api.media.MediaFile
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
-interface LocalMediaFactory {
+@Stable
+class LocalMediaViewState {
+    var isReady: Boolean by mutableStateOf(false)
+}
 
-    /**
-     * This method will create a [LocalMedia] with the given [MediaFile] and [MediaInfo].
-     */
-    fun createFromMediaFile(
-        mediaFile: MediaFile,
-        mediaInfo: MediaInfo,
-    ): LocalMedia
-
-    /**
-     * This method will create a [LocalMedia] with the given mimeType, name and formattedFileSize
-     * If any of those params are null, it'll try to read them from the content.
-     */
-    fun createFromUri(
-        uri: Uri,
-        mimeType: String?,
-        name: String?,
-        formattedFileSize: String?
-    ): LocalMedia
+@Composable
+fun rememberLocalMediaViewState(): LocalMediaViewState {
+    return remember {
+        LocalMediaViewState()
+    }
 }

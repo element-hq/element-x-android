@@ -14,25 +14,31 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.fixtures
+package io.element.android.features.messages.impl.media.local
 
-import android.net.Uri
-import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.features.messages.impl.media.local.LocalMedia
-import io.element.android.features.messages.impl.media.local.MediaInfo
-import io.element.android.features.messages.impl.media.local.anImageInfo
+import android.os.Parcelable
 import io.element.android.libraries.core.mimetype.MimeTypes
+import kotlinx.parcelize.Parcelize
 
-fun aLocalMedia(
-    uri: Uri,
-    mediaInfo: MediaInfo = anImageInfo(),
-) = LocalMedia(
-    uri = uri,
-    info = mediaInfo
+@Parcelize
+data class MediaInfo(
+    val name: String,
+    val mimeType: String,
+    val formattedFileSize: String,
+) : Parcelable
+
+fun anImageInfo(): MediaInfo = MediaInfo(
+    "an image file.jpg", MimeTypes.Jpeg, "4MB"
 )
 
-fun aMediaAttachment(localMedia: LocalMedia, compressIfPossible: Boolean = true) = Attachment.Media(
-    localMedia = localMedia,
-    compressIfPossible = compressIfPossible,
+fun aVideoInfo(): MediaInfo = MediaInfo(
+    "a video file.mp4", MimeTypes.Mp4, "14MB"
 )
 
+fun aPdfInfo(): MediaInfo = MediaInfo(
+    "a pdf file.pdf", MimeTypes.Pdf, "23MB"
+)
+
+fun aFileInfo(): MediaInfo = MediaInfo(
+    "an apk file.apk", MimeTypes.Apk, "50MB"
+)
