@@ -38,7 +38,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
 
 /**
- * Provide either an `iconResourceId` or an `iconImageVector`
+ * Provide either an `iconResourceId` or an `iconImageVector`.
  */
 @Composable
 fun IconTitleSubtitleMolecule(

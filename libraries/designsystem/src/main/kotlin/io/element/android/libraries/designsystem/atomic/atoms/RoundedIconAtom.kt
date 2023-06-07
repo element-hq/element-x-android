@@ -38,11 +38,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Icon
 
-enum class RoundedIconAtomSize {
-    Medium,
-    Large
-}
-
 @Composable
 fun RoundedIconAtom(
     modifier: Modifier = Modifier,
@@ -114,4 +109,9 @@ private fun ContentToPreview() {
             imageVector = Icons.Filled.Home,
         )
     }
+}
+
+enum class RoundedIconAtomSize {
+    Medium,
+    Large
 }
