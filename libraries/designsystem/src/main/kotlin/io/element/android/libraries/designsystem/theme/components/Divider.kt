@@ -32,7 +32,7 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 @Composable
 fun Divider(
     modifier: Modifier = Modifier,
-    thickness: Dp = DividerDefaults.Thickness,
+    thickness: Dp = ElementDividerDefaults.thickness,
     color: Color = DividerDefaults.color,
 ) {
     androidx.compose.material3.Divider(
@@ -40,6 +40,10 @@ fun Divider(
         thickness = thickness,
         color = color,
     )
+}
+
+object ElementDividerDefaults {
+    val thickness = 0.5.dp
 }
 
 @Preview(group = PreviewGroup.Dividers)

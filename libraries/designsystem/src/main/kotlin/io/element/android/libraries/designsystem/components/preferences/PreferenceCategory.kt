@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
@@ -48,7 +49,7 @@ fun PreferenceCategory(
         }
         content()
         if (showDivider) {
-            PreferenceDivider()
+            Divider()
         }
     }
 }
