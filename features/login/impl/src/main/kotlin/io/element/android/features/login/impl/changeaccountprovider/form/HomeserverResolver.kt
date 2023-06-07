@@ -17,12 +17,20 @@
 package io.element.android.features.login.impl.changeaccountprovider.form
 
 import io.element.android.features.login.impl.changeaccountprovider.form.network.WellknownRequest
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.core.uri.isValidUrl
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -33,45 +41,59 @@ class HomeserverResolver @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val wellknownRequest: WellknownRequest,
 ) {
+    private val mutableFlow: MutableStateFlow<Async<List<HomeserverData>>> = MutableStateFlow(Async.Uninitialized)
 
-    suspend fun resolve(userInput: String): List<HomeserverData> {
-        return withContext(dispatchers.io) {
-            val cleanedUpUserInput = userInput.trim()
-            if (cleanedUpUserInput.length < 4) {
-                // Wait for more chars
-                emptyList()
-            } else {
+    fun flow(): StateFlow<Async<List<HomeserverData>>> = mutableFlow
+
+    private var currentJob: Job? = null
+
+    suspend fun accept(userInput: String) {
+        currentJob?.cancel()
+        val cleanedUpUserInput = userInput.trim()
+        mutableFlow.tryEmit(Async.Uninitialized)
+        if (cleanedUpUserInput.length > 3) {
+            delay(300)
+            mutableFlow.tryEmit(Async.Loading())
+            withContext(dispatchers.io) {
                 val list = getUrlCandidate(cleanedUpUserInput)
-                val resolvedList = resolveList(userInput, list)
-
-                // If list is empty, and the user as entered an URL, do not block the user.
-                if (resolvedList.isEmpty() && userInput.isValidUrl()) {
-                    listOf(
-                        HomeserverData(
-                            userInput = userInput,
-                            homeserverUrl = userInput,
-                            isWellknownValid = false
-                        )
-                    )
-                } else {
-                    resolvedList
-                }
+                currentJob = resolveList(userInput, list)
             }
         }
     }
 
-    private suspend fun resolveList(userInput: String, list: List<String>): List<HomeserverData> {
-        return coroutineScope {
-            buildList {
-                list.map {
-                    async {
-                        val isValid = wellknownRequest.execute(it)
-                        if (isValid) {
-                            add(HomeserverData(userInput, it, true))
+    private fun CoroutineScope.resolveList(userInput: String, list: List<String>): Job {
+        val currentList = mutableListOf<HomeserverData>()
+        return launch {
+            list.map {
+                async {
+                    val isValid = tryOrNull { wellknownRequest.execute(it) }.orFalse()
+                    if (isValid) {
+                        // Emit the list as soon as possible
+                        currentList.add(HomeserverData(userInput, it, true))
+                        mutableFlow.tryEmit(Async.Success(currentList))
+                    }
+                }
+            }.joinAll()
+                .also {
+                    // If list is empty, and the user as entered an URL, do not block the user.
+                    if (currentList.isEmpty()) {
+                        if (userInput.isValidUrl()) {
+                            mutableFlow.tryEmit(
+                                Async.Success(
+                                    listOf(
+                                        HomeserverData(
+                                            userInput = userInput,
+                                            homeserverUrl = userInput,
+                                            isWellknownValid = false
+                                        )
+                                    )
+                                )
+                            )
+                        } else {
+                            mutableFlow.tryEmit(Async.Uninitialized)
                         }
                     }
-                }.joinAll()
-            }
+                }
         }
     }
 
