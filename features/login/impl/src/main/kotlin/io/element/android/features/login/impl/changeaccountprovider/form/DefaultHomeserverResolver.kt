@@ -37,7 +37,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
- * Resolve homeserver base on search terms
+ * Resolve homeserver base on search terms.
  */
 @ContributesBinding(AppScope::class)
 class DefaultHomeserverResolver @Inject constructor(
