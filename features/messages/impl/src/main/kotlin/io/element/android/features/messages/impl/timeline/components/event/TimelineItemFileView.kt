@@ -79,6 +79,8 @@ fun TimelineItemFileView(
                 text = content.fileExtensionAndSize,
                 color = MaterialTheme.colorScheme.secondary,
                 fontSize = 12.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }

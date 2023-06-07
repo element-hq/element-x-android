@@ -224,6 +224,7 @@ koverMerged {
                 excludes += "io.element.android.libraries.matrix.api.room.MatrixRoomMembersState*"
                 excludes += "io.element.android.libraries.push.impl.notifications.NotificationState*"
                 excludes += "io.element.android.features.messages.impl.media.local.pdf.PdfViewerState"
+                excludes += "io.element.android.features.messages.impl.media.local.LocalMediaViewState"
             }
             bound {
                 minValue = 90

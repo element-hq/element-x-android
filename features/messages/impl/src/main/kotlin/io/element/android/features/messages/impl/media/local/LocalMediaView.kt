@@ -34,7 +34,11 @@ import androidx.compose.material.icons.outlined.Attachment
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -70,40 +74,52 @@ import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
 import me.saket.telephoto.zoomable.rememberZoomableImageState
 import me.saket.telephoto.zoomable.rememberZoomableState
 
+@Stable
+class LocalMediaViewState {
+    var isReady: Boolean by mutableStateOf(false)
+}
+
+@Composable
+fun rememberLocalMediaViewState(): LocalMediaViewState {
+    return remember {
+        LocalMediaViewState()
+    }
+}
+
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
 fun LocalMediaView(
     localMedia: LocalMedia?,
     modifier: Modifier = Modifier,
-    info: MediaInfo? = localMedia?.info,
-    onReady: () -> Unit = {},
+    localMediaViewState: LocalMediaViewState = rememberLocalMediaViewState(),
+    mediaInfo: MediaInfo? = localMedia?.info,
 ) {
     val zoomableState = rememberZoomableState(
         zoomSpec = ZoomSpec(maxZoomFactor = 5f)
     )
-    val mimeType = info?.mimeType
+    val mimeType = mediaInfo?.mimeType
     when {
         mimeType.isMimeTypeImage() -> MediaImageView(
+            localMediaViewState = localMediaViewState,
             localMedia = localMedia,
             zoomableState = zoomableState,
-            onReady = onReady,
             modifier = modifier
         )
         mimeType.isMimeTypeVideo() -> MediaVideoView(
+            localMediaViewState = localMediaViewState,
             localMedia = localMedia,
-            onReady = onReady,
             modifier = modifier
         )
         mimeType == MimeTypes.Pdf -> MediaPDFView(
+            localMediaViewState = localMediaViewState,
             localMedia = localMedia,
             zoomableState = zoomableState,
-            onReady = onReady,
             modifier = modifier
         )
         else -> MediaFileView(
+            localMediaViewState = localMediaViewState,
             uri = localMedia?.uri,
-            info = info,
-            onReady = onReady,
+            info = mediaInfo,
             modifier = modifier
         )
     }
@@ -111,9 +127,9 @@ fun LocalMediaView(
 
 @Composable
 private fun MediaImageView(
+    localMediaViewState: LocalMediaViewState,
     localMedia: LocalMedia?,
     zoomableState: ZoomableState,
-    onReady: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (LocalInspectionMode.current) {
@@ -124,11 +140,7 @@ private fun MediaImageView(
         )
     } else {
         val zoomableImageState = rememberZoomableImageState(zoomableState)
-        LaunchedEffect(zoomableImageState.isImageDisplayed) {
-            if (zoomableImageState.isImageDisplayed) {
-                onReady()
-            }
-        }
+        localMediaViewState.isReady = zoomableImageState.isImageDisplayed
         ZoomableAsyncImage(
             modifier = modifier.fillMaxSize(),
             state = zoomableImageState,
@@ -142,14 +154,14 @@ private fun MediaImageView(
 @UnstableApi
 @Composable
 fun MediaVideoView(
+    localMediaViewState: LocalMediaViewState,
     localMedia: LocalMedia?,
-    onReady: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val playerListener = object : Player.Listener {
         override fun onRenderedFirstFrame() {
-            onReady()
+            localMediaViewState.isReady = true
         }
     }
     val exoPlayer = remember {
@@ -196,35 +208,27 @@ fun MediaVideoView(
 
 @Composable
 fun MediaPDFView(
+    localMediaViewState: LocalMediaViewState,
     localMedia: LocalMedia?,
     zoomableState: ZoomableState,
-    onReady: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val pdfViewerState = rememberPdfViewerState(
         model = localMedia?.uri,
         zoomableState = zoomableState
     )
-    LaunchedEffect(pdfViewerState.isLoaded) {
-        if (pdfViewerState.isLoaded) {
-            onReady()
-        }
-    }
+    localMediaViewState.isReady = pdfViewerState.isLoaded
     PdfViewer(pdfViewerState = pdfViewerState, modifier = modifier)
 }
 
 @Composable
 fun MediaFileView(
+    localMediaViewState: LocalMediaViewState,
     uri: Uri?,
     info: MediaInfo?,
-    onReady: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LaunchedEffect(Unit) {
-        if(uri != null) {
-            onReady()
-        }
-    }
+    localMediaViewState.isReady = uri != null
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Box(
@@ -236,26 +240,29 @@ fun MediaFileView(
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Attachment,
-                    contentDescription = "OpenFile",
+                    contentDescription = null,
                     tint = MaterialTheme.colorScheme.background,
                     modifier = Modifier
                         .size(32.dp)
                         .rotate(-45f),
                 )
             }
-            if(info == null) return
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = info.name,
-                maxLines = 2,
-                fontSize = 16.sp,
-                overflow = TextOverflow.Ellipsis
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = formatFileExtensionAndSize(info.name, info.formattedFileSize),
-                fontSize = 14.sp,
-            )
+            if (info != null) {
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = info.name,
+                    maxLines = 2,
+                    fontSize = 16.sp,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = formatFileExtensionAndSize(info.name, info.formattedFileSize),
+                    fontSize = 14.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
     }
 }
