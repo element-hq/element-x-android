@@ -51,3 +51,11 @@ fun aHomeserverDataList(): List<HomeserverData> {
         )
     )
 }
+
+fun aHomeserverData(): HomeserverData {
+    return HomeserverData(
+        userInput = "matrix",
+        homeserverUrl = "https://matrix.org",
+        isWellknownValid = true,
+    )
+}
