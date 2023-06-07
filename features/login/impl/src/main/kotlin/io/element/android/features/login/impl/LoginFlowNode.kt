@@ -36,13 +36,11 @@ import io.element.android.features.login.impl.accountprovider.AccountProviderNod
 import io.element.android.features.login.impl.accountprovider.item.AccountProvider
 import io.element.android.features.login.impl.changeaccountprovider.ChangeAccountProviderNode
 import io.element.android.features.login.impl.changeaccountprovider.form.ChangeAccountProviderFormNode
-import io.element.android.features.login.impl.changeserver.ChangeServerNode
 import io.element.android.features.login.impl.datasource.AccountProviderDataSource
 import io.element.android.features.login.impl.loginpassword.LoginPasswordNode
 import io.element.android.features.login.impl.oidc.CustomTabAvailabilityChecker
 import io.element.android.features.login.impl.oidc.customtab.CustomTabHandler
 import io.element.android.features.login.impl.oidc.webview.OidcNode
-import io.element.android.features.login.impl.root.LoginRootNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -78,10 +76,6 @@ class LoginFlowNode @AssistedInject constructor(
     private val inputs: Inputs = inputs()
 
     sealed interface NavTarget : Parcelable {
-        // Not used anymore
-        @Parcelize
-        object Root : NavTarget
-
         @Parcelize
         object AccountProvider : NavTarget
 
@@ -94,36 +88,12 @@ class LoginFlowNode @AssistedInject constructor(
         @Parcelize
         object LoginPasswordForm : NavTarget
 
-        // Not used anymore
-        @Parcelize
-        object ChangeServer : NavTarget
-
         @Parcelize
         data class OidcView(val oidcDetails: OidcDetails) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Root -> {
-                val callback = object : LoginRootNode.Callback {
-                    override fun onChangeHomeServer() {
-                        backstack.push(NavTarget.ChangeServer)
-                    }
-
-                    override fun onOidcDetails(oidcDetails: OidcDetails) {
-                        if (customTabAvailabilityChecker.supportCustomTab()) {
-                            // In this case open a Chrome Custom tab
-                            activity?.let { customTabHandler.open(it, darkTheme, oidcDetails.url) }
-                        } else {
-                            // Fallback to WebView mode
-                            backstack.push(NavTarget.OidcView(oidcDetails))
-                        }
-                    }
-                }
-                createNode<LoginRootNode>(buildContext, plugins = listOf(callback))
-            }
-
-            NavTarget.ChangeServer -> createNode<ChangeServerNode>(buildContext)
             is NavTarget.OidcView -> {
                 val input = OidcNode.Inputs(navTarget.oidcDetails)
                 createNode<OidcNode>(buildContext, plugins = listOf(input))
