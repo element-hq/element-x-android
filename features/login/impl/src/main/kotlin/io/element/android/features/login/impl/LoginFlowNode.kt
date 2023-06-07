@@ -192,6 +192,7 @@ class LoginFlowNode @AssistedInject constructor(
         DisposableEffect(Unit) {
             onDispose {
                 activity = null
+                accountProviderDataSource.reset()
             }
         }
         Children(

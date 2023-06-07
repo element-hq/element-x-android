@@ -24,9 +24,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.execute
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -63,9 +63,17 @@ class ChangeAccountProviderFormPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.userInput(userInput: String, userInputResult: MutableState<Async<List<HomeserverData>>>) = launch {
-        suspend {
-            homeserverResolver.resolve(userInput)
-        }.execute(userInputResult)
+    // Could be reworked using LaunchedEffect
+    private fun CoroutineScope.userInput(userInput: String, state: MutableState<Async<List<HomeserverData>>>) = launch {
+        state.value = Async.Uninitialized
+        // Debounce
+        delay(300)
+        state.value = Async.Loading()
+        try {
+            val result = homeserverResolver.resolve(userInput)
+            state.value = Async.Success(result)
+        } catch (error: Throwable) {
+            state.value = Async.Failure(error)
+        }
     }
 }

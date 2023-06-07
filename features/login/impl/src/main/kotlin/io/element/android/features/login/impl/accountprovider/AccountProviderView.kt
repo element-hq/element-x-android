@@ -114,14 +114,7 @@ fun AccountProviderView(
         }
     ) {
         when (state.loginFlow) {
-            is Async.Failure -> {
-                AsyncFailure(
-                    throwable = state.loginFlow.error,
-                    onRetry = {
-                        state.eventSink.invoke(AccountProviderEvents.Continue)
-                    }
-                )
-            }
+            is Async.Failure -> Unit // Error dialog will be displayed
             is Async.Loading -> Unit // The Continue button shows the loading state
             is Async.Success -> {
                 when (val loginFlowState = state.loginFlow.state) {

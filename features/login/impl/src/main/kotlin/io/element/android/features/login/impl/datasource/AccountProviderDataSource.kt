@@ -36,6 +36,10 @@ class AccountProviderDataSource @Inject constructor(
         return accountProvider.asStateFlow()
     }
 
+    fun reset() {
+        accountProvider.tryEmit(defaultAccountProvider)
+    }
+
     fun userSelection(data: AccountProvider) {
         accountProvider.tryEmit(data)
     }

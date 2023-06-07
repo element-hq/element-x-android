@@ -23,13 +23,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.login.impl.datasource.AccountProviderDataSource
-import io.element.android.features.login.impl.util.LoginConstants
+import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.execute
@@ -57,12 +55,8 @@ class AccountProviderPresenter @AssistedInject constructor(
     @Composable
     override fun present(): AccountProviderState {
         val accountProvider by accountProviderDataSource.flow().collectAsState()
-        val currentHomeServerDetails = authenticationService.getHomeserverDetails().collectAsState().value
         val localCoroutineScope = rememberCoroutineScope()
 
-        val homeserver = rememberSaveable {
-            mutableStateOf(currentHomeServerDetails?.url ?: LoginConstants.DEFAULT_HOMESERVER_URL)
-        }
         val loginFlowAction: MutableState<Async<LoginFlow>> = remember {
             mutableStateOf(Async.Uninitialized)
         }
@@ -70,7 +64,7 @@ class AccountProviderPresenter @AssistedInject constructor(
         fun handleEvents(event: AccountProviderEvents) {
             when (event) {
                 AccountProviderEvents.Continue -> {
-                    localCoroutineScope.submit(homeserver, loginFlowAction)
+                    localCoroutineScope.submit(accountProvider.title, loginFlowAction)
                 }
                 AccountProviderEvents.ClearError -> loginFlowAction.value = Async.Uninitialized
             }
@@ -85,12 +79,11 @@ class AccountProviderPresenter @AssistedInject constructor(
     }
 
     private fun CoroutineScope.submit(
-        homeserverUrl: MutableState<String>,
+        homeserverUrl: String,
         loginFlowAction: MutableState<Async<LoginFlow>>,
     ) = launch {
         suspend {
-            val domain = tryOrNull { URL(homeserverUrl.value) }?.host ?: homeserverUrl.value
-            homeserverUrl.value = domain
+            val domain = tryOrNull { URL(homeserverUrl) }?.host ?: homeserverUrl
             authenticationService.setHomeserver(domain).map {
                 authenticationService.getHomeserverDetails().value!!
             }.map {
