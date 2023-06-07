@@ -77,6 +77,7 @@ fun aRoomDetailsState() = RoomDetailsState(
     canEdit = false,
     roomType = RoomDetailsType.Room,
     roomMemberDetailsState = null,
+    isMutedNotification = true,
     leaveRoomState = LeaveRoomState(),
     eventSink = {}
 )

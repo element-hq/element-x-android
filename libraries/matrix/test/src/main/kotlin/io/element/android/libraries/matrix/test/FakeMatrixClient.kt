@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -63,6 +64,9 @@ class FakeMatrixClient(
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
     private val getProfileResults = mutableMapOf<UserId, Result<MatrixUser>>()
     private var uploadMediaResult: Result<String> = Result.success(AN_AVATAR_URL)
+    private val muteRoomResult: Result<Unit> = Result.success(Unit)
+    private val unmuteRoomResult: Result<Unit> = Result.success(Unit)
+    private val getRoomNotificationSettingsResult: Result<RoomNotificationSettings> = Result.success(A_ROOM_NOTIFICATION_SETTINGS)
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
         return getRoomResults[roomId]
