@@ -72,8 +72,6 @@ fun TimelineView(
     onMessageClicked: (TimelineItem.Event) -> Unit = {},
     onMessageLongClicked: (TimelineItem.Event) -> Unit = {},
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
     fun onReachedLoadMore() {
         state.eventSink(TimelineEvents.LoadMore)
     }
@@ -81,14 +79,7 @@ fun TimelineView(
     val lazyListState = rememberLazyListState()
 
     fun inReplyToClicked(eventId: EventId) {
-        val index = state.timelineItems.indexOfFirst { it.identifier() == eventId.value }
-        if (index >= 0) {
-            coroutineScope.launch {
-                lazyListState.animateScrollToItem(index)
-            }
-        } else {
-            // TODO should we paginate first?
-        }
+        // TODO implement this logic once we have support to 'jump to event X' in sliding sync
     }
 
     Box(modifier = modifier) {
