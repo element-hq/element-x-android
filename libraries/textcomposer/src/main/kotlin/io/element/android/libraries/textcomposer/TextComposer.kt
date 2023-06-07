@@ -275,8 +275,8 @@ private fun BoxScope.SendButton(
             else -> R.drawable.ic_send
         }
         val contentDescription = when (composerMode) {
-            is MessageComposerMode.Edit -> "Edit"
-            else -> "Send"
+            is MessageComposerMode.Edit -> stringResource(StringR.string.action_edit)
+            else -> stringResource(StringR.string.action_send)
         }
         Icon(
             modifier = Modifier.size(16.dp),
