@@ -43,6 +43,7 @@ class ChangeAccountProviderFormPresenter @Inject constructor(
         fun handleEvents(event: ChangeAccountProviderFormEvents) {
             when (event) {
                 is ChangeAccountProviderFormEvents.UserInput -> {
+                    userInput.value = event.input
                     localCoroutineScope.userInput(event.input)
                 }
             }
