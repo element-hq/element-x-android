@@ -18,10 +18,13 @@ package io.element.android.features.login.impl.loginpassword
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import io.element.android.features.login.impl.datasource.AccountProviderDataSource
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -32,6 +35,7 @@ import javax.inject.Inject
 
 class LoginPasswordPresenter @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
+    private val accountProviderDataSource: AccountProviderDataSource,
 ) : Presenter<LoginPasswordState> {
 
     @Composable
@@ -44,6 +48,7 @@ class LoginPasswordPresenter @Inject constructor(
         val formState = rememberSaveable {
             mutableStateOf(LoginFormState.Default)
         }
+        val accountProvider by accountProviderDataSource.flow().collectAsState()
 
         fun handleEvents(event: LoginPasswordEvents) {
             when (event) {
@@ -61,6 +66,7 @@ class LoginPasswordPresenter @Inject constructor(
         }
 
         return LoginPasswordState(
+            accountProvider = accountProvider,
             formState = formState.value,
             loginAction = loginAction.value,
             eventSink = ::handleEvents

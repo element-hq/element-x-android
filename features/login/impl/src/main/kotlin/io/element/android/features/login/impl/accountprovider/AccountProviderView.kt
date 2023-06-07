@@ -30,14 +30,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
-import io.element.android.features.login.impl.changeserver.ChangeServerError
+import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.login.impl.changeserver.SlidingSyncNotSupportedDialog
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.async.AsyncFailure
-import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -78,7 +77,7 @@ fun AccountProviderView(
                     } else {
                         R.string.screen_account_provider_signin_title
                     },
-                    state.homeserver
+                    state.accountProvider.title
                 ),
                 subTitle = stringResource(
                     id = if (state.isAccountCreation) {
@@ -123,7 +122,7 @@ fun AccountProviderView(
                     }
                 )
             }
-            is Async.Loading -> AsyncLoading()
+            is Async.Loading -> Unit // The Continue button shows the loading state
             is Async.Success -> {
                 when (val loginFlowState = state.loginFlow.state) {
                     is LoginFlow.OidcFlow -> onOidcDetails(loginFlowState.oidcDetails)

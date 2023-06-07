@@ -17,11 +17,13 @@
 package io.element.android.features.login.impl.loginpassword
 
 import android.os.Parcelable
+import io.element.android.features.login.impl.accountprovider.item.AccountProvider
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.parcelize.Parcelize
 
 data class LoginPasswordState(
+    val accountProvider: AccountProvider,
     val formState: LoginFormState,
     val loginAction: Async<SessionId>,
     val eventSink: (LoginPasswordEvents) -> Unit

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.changeaccountprovider.item
+package io.element.android.features.login.impl.accountprovider.item
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -48,8 +48,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
  * https://www.figma.com/file/o9p34zmiuEpZRyvZXJZAYL/FTUE?type=design&node-id=604-60817
  */
 @Composable
-fun ChangeAccountProviderItemView(
-    item: AccountProviderItem,
+fun AccountProviderView(
+    item: AccountProvider,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
@@ -115,17 +115,17 @@ fun ChangeAccountProviderItemView(
 
 @Preview
 @Composable
-fun ChangeAccountProviderViewLightPreview(@PreviewParameter(ChangeAccountProviderItemProvider::class) item: AccountProviderItem) =
+fun AccountProviderViewLightPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) =
     ElementPreviewLight { ContentToPreview(item) }
 
 @Preview
 @Composable
-fun ChangeAccountProviderViewDarkPreview(@PreviewParameter(ChangeAccountProviderItemProvider::class) item: AccountProviderItem) =
+fun AccountProviderViewDarkPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) =
     ElementPreviewDark { ContentToPreview(item) }
 
 @Composable
-private fun ContentToPreview(item: AccountProviderItem) {
-    ChangeAccountProviderItemView(
+private fun ContentToPreview(item: AccountProvider) {
+    AccountProviderView(
         item = item,
         onClick = { }
     )

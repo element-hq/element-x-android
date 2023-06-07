@@ -17,6 +17,7 @@
 package io.element.android.features.login.impl.loginpassword
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.login.impl.accountprovider.item.anAccountProvider
 import io.element.android.libraries.architecture.Async
 
 open class LoginPasswordStateProvider : PreviewParameterProvider<LoginPasswordState> {
@@ -31,6 +32,7 @@ open class LoginPasswordStateProvider : PreviewParameterProvider<LoginPasswordSt
 }
 
 fun aLoginPasswordState() = LoginPasswordState(
+    accountProvider = anAccountProvider(),
     formState = LoginFormState.Default,
     loginAction = Async.Uninitialized,
     eventSink = {}

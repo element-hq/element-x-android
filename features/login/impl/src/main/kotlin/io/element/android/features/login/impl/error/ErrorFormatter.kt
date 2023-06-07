@@ -16,12 +16,14 @@
 
 package io.element.android.features.login.impl.error
 
+import androidx.annotation.StringRes
 import io.element.android.features.login.impl.R
 import io.element.android.libraries.matrix.api.auth.AuthErrorCode
 import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import io.element.android.libraries.matrix.api.auth.errorCode
 import io.element.android.libraries.ui.strings.R.string as StringR
 
+@StringRes
 fun loginError(
     throwable: Throwable
 ): Int {

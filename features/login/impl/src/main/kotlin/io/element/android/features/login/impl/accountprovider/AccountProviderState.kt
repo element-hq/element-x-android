@@ -16,18 +16,18 @@
 
 package io.element.android.features.login.impl.accountprovider
 
+import io.element.android.features.login.impl.accountprovider.item.AccountProvider
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 
 // Do not use default value, so no member get forgotten in the presenters.
 data class AccountProviderState(
-    val homeserver: String,
-    val isMatrix: Boolean,
+    val accountProvider: AccountProvider,
     val isAccountCreation: Boolean,
     val loginFlow: Async<LoginFlow>,
     val eventSink: (AccountProviderEvents) -> Unit
 ) {
-    val submitEnabled: Boolean get() = homeserver.isNotEmpty() && (loginFlow is Async.Uninitialized || loginFlow is Async.Loading)
+    val submitEnabled: Boolean get() = accountProvider.title.isNotEmpty() && (loginFlow is Async.Uninitialized || loginFlow is Async.Loading)
 }
 
 sealed interface LoginFlow {

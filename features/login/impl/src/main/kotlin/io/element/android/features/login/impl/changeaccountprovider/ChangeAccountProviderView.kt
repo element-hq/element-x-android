@@ -40,8 +40,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
-import io.element.android.features.login.impl.changeaccountprovider.item.AccountProviderItem
-import io.element.android.features.login.impl.changeaccountprovider.item.ChangeAccountProviderItemView
+import io.element.android.features.login.impl.accountprovider.item.AccountProvider
+import io.element.android.features.login.impl.accountprovider.item.AccountProviderView
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -57,7 +57,7 @@ fun ChangeAccountProviderView(
     state: ChangeAccountProviderState,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit,
-    onAccountProviderItemClicked: (AccountProviderItem) -> Unit = {},
+    onAccountProviderClicked: (AccountProvider) -> Unit = {},
     onOtherProviderClicked: () -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
@@ -92,7 +92,7 @@ fun ChangeAccountProviderView(
                     subTitle = stringResource(id = R.string.screen_change_account_provider_subtitle),
                 )
 
-                state.accountProviderItems.forEach { item ->
+                state.accountProviders.forEach { item ->
                     val alteredItem = if (item.isMatrixOrg) {
                         // Set the subtitle from the resource
                         item.copy(
@@ -101,16 +101,16 @@ fun ChangeAccountProviderView(
                     } else {
                         item
                     }
-                    ChangeAccountProviderItemView(
+                    AccountProviderView(
                         item = alteredItem,
                         onClick = {
-                            onAccountProviderItemClicked(alteredItem)
+                            onAccountProviderClicked(alteredItem)
                         }
                     )
                 }
                 // Other
-                ChangeAccountProviderItemView(
-                    item = AccountProviderItem(
+                AccountProviderView(
+                    item = AccountProvider(
                         title = stringResource(id = R.string.screen_change_account_provider_other),
                     ),
                     onClick = onOtherProviderClicked

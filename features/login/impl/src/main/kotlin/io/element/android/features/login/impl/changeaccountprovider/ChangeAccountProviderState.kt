@@ -16,9 +16,9 @@
 
 package io.element.android.features.login.impl.changeaccountprovider
 
-import io.element.android.features.login.impl.changeaccountprovider.item.AccountProviderItem
+import io.element.android.features.login.impl.accountprovider.item.AccountProvider
 
 // Do not use default value, so no member get forgotten in the presenters.
 data class ChangeAccountProviderState constructor(
-    val accountProviderItems: List<AccountProviderItem>,
+    val accountProviders: List<AccountProvider>,
 )

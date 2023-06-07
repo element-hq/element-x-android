@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.changeserver
+package io.element.android.features.login.impl.error
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
