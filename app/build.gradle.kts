@@ -216,7 +216,8 @@ dependencies {
     implementation(libs.coil)
 
     implementation(platform(libs.network.okhttp.bom))
-    implementation("com.squareup.okhttp3:logging-interceptor")
+    implementation(libs.network.okhttp.logging)
+    implementation(libs.serialization.json)
 
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)

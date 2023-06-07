@@ -104,6 +104,8 @@ squareup_seismic = "com.squareup:seismic:1.0.3"
 
 # network
 network_okhttp_bom = "com.squareup.okhttp3:okhttp-bom:4.11.0"
+network_okhttp_logging = { module = "com.squareup.okhttp3:logging-interceptor" }
+network_okhttp = { module = "com.squareup.okhttp3:okhttp" }
 network_retrofit = "com.squareup.retrofit2:retrofit:2.9.0"
 network_retrofit_converter_serialization = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0"
 
@@ -181,7 +183,7 @@ kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-ktlint = "org.jlleitschuh.gradle.ktlint:11.3.2"
+ktlint = "org.jlleitschuh.gradle.ktlint:11.4.0"
 dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.ref = "dependencygraph" }
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyanalysis" }

@@ -17,19 +17,15 @@
 package io.element.android.features.verifysession.impl
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -38,25 +34,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep as FlowStep
@@ -82,21 +74,18 @@ fun VerifySelfSessionView(
     val buttonsVisible by remember(verificationFlowStep) {
         derivedStateOf { verificationFlowStep != FlowStep.AwaitingOtherDeviceResponse && verificationFlowStep != FlowStep.Completed }
     }
-    Surface {
-        Column(modifier = modifier.systemBarsPadding()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .padding(horizontal = 20.dp)
-            ) {
-                HeaderContent(verificationFlowStep = verificationFlowStep)
-                Content(modifier = Modifier.weight(1f), flowState = verificationFlowStep)
-            }
+    HeaderFooterPage(
+        modifier = modifier,
+        header = {
+            HeaderContent(verificationFlowStep = verificationFlowStep)
+        },
+        footer = {
             if (buttonsVisible) {
                 BottomMenu(screenState = state, goBack = ::goBackAndCancelIfNeeded)
             }
         }
+    ) {
+        Content(flowState = verificationFlowStep)
     }
 }
 
@@ -121,58 +110,22 @@ internal fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = 
         FlowStep.Ready, is FlowStep.Verifying, FlowStep.Completed -> R.string.screen_session_verification_compare_emojis_subtitle
     }
 
-    Column(modifier) {
-        Spacer(Modifier.height(80.dp))
-        Box(
-            modifier = Modifier
-                .size(width = 70.dp, height = 70.dp)
-                .align(Alignment.CenterHorizontally)
-                .background(
-                    color = LocalColors.current.quinary,
-                    shape = RoundedCornerShape(14.dp)
-                )
-        ) {
-            Spacer(modifier = Modifier.height(68.dp))
-            Icon(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(width = 48.dp, height = 48.dp),
-                tint = MaterialTheme.colorScheme.secondary,
-                resourceId = iconResourceId,
-                contentDescription = "",
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = stringResource(id = titleTextId),
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            style = ElementTextStyles.Bold.title2,
-            color = MaterialTheme.colorScheme.primary,
-        )
-        Spacer(Modifier.height(8.dp))
-        Text(
-            text = stringResource(id = subtitleTextId),
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            style = ElementTextStyles.Regular.subheadline,
-            color = MaterialTheme.colorScheme.secondary,
-        )
-    }
+    IconTitleSubtitleMolecule(
+        modifier = modifier.padding(top = 60.dp),
+        iconResourceId = iconResourceId,
+        title = stringResource(id = titleTextId),
+        subTitle = stringResource(id = subtitleTextId)
+    )
 }
 
 @Composable
 internal fun Content(flowState: FlowStep, modifier: Modifier = Modifier) {
-    Column(modifier, verticalArrangement = Arrangement.Center) {
-        Spacer(Modifier.shrinkableHeight(min = 20.dp, max = 56.dp))
+    Column(modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
         when (flowState) {
             FlowStep.Initial, FlowStep.Ready, FlowStep.Canceled, FlowStep.Completed -> Unit
             FlowStep.AwaitingOtherDeviceResponse -> ContentWaiting()
             is FlowStep.Verifying -> ContentVerifying(flowState)
         }
-        Spacer(Modifier.shrinkableHeight(min = 20.dp, max = 56.dp))
     }
 }
 
@@ -259,11 +212,8 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
         else -> goBack
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    ButtonColumnMolecule(
+        modifier = Modifier.padding(bottom = 20.dp)
     ) {
         ButtonWithProgress(
             text = positiveButtonTitle?.let { stringResource(it) },
@@ -272,7 +222,6 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
             onClick = { positiveButtonEvent?.let { eventSink(it) } }
         )
         if (negativeButtonTitle != null) {
-            Spacer(modifier = Modifier.height(16.dp))
             TextButton(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = negativeButtonCallback,
@@ -281,7 +230,6 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
                 Text(stringResource(negativeButtonTitle), fontSize = 16.sp)
             }
         }
-        Spacer(Modifier.height(40.dp))
     }
 }
 
@@ -301,16 +249,4 @@ private fun ContentToPreview(state: VerifySelfSessionState) {
         state = state,
         goBack = {},
     )
-}
-
-private fun Modifier.shrinkableHeight(
-    min: Dp,
-    max: Dp,
-    minScreenHeight: Int = 720
-): Modifier = composed {
-    if (LocalConfiguration.current.screenHeightDp >= minScreenHeight) {
-        then(Modifier.height(max))
-    } else {
-        then(Modifier.height(min))
-    }
 }

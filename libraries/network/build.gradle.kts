@@ -31,9 +31,8 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)
     implementation(platform(libs.network.okhttp.bom))
-    implementation("com.squareup.okhttp3:okhttp")
-    implementation("com.squareup.okhttp3:logging-interceptor")
-
+    implementation(libs.network.okhttp)
+    implementation(libs.network.okhttp.logging)
     implementation(libs.network.retrofit)
     implementation(libs.network.retrofit.converter.serialization)
     implementation(libs.serialization.json)

@@ -261,7 +261,7 @@ internal fun TopicSection(
             Text(
                 roomTopic.topic,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp),
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.tertiary
             )
         }
