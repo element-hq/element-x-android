@@ -24,7 +24,7 @@ class WellknownRequest @Inject constructor(
     private val retrofitFactory: RetrofitFactory,
 ) {
     /**
-     * Return true if the wellknown can be retrieved and is valid
+     * Return true if the wellknown can be retrieved and is valid.
      * @param baseUrl for instance https://matrix.org
      */
     suspend fun execute(baseUrl: String): Boolean {

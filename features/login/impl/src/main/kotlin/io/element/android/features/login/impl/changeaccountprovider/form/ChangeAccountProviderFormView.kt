@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 
 package io.element.android.features.login.impl.changeaccountprovider.form
 
@@ -71,7 +71,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 fun ChangeAccountProviderFormView(
     state: ChangeAccountProviderFormState,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit,
+    onBackPressed: () -> Unit = {},
     onAccountProviderClicked: (AccountProvider) -> Unit = {},
 ) {
     val eventSink = state.eventSink
@@ -197,6 +197,5 @@ fun ChangeAccountProviderFormViewDarkPreview(@PreviewParameter(ChangeAccountProv
 private fun ContentToPreview(state: ChangeAccountProviderFormState) {
     ChangeAccountProviderFormView(
         state = state,
-        onBackPressed = { }
     )
 }
