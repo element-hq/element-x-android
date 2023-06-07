@@ -100,6 +100,7 @@ fun LoginPasswordView(
     }
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 title = {},
@@ -108,7 +109,7 @@ fun LoginPasswordView(
         }
     ) { padding ->
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .imePadding()
                 .padding(padding)
@@ -121,14 +122,13 @@ fun LoginPasswordView(
                     .verticalScroll(state = scrollState)
                     .padding(horizontal = 16.dp),
             ) {
-                Spacer(Modifier.height(16.dp))
                 // Title
                 IconTitleSubtitleMolecule(
-                    modifier = Modifier.padding(top = 60.dp),
+                    modifier = Modifier.padding(top = 20.dp),
                     iconImageVector = Icons.Filled.AccountCircle,
                     title = stringResource(
                         id = R.string.screen_account_provider_signin_title,
-                        "state.homeserver" // TODO
+                        state.accountProvider.title
                     ),
                     subTitle = stringResource(id = R.string.screen_login_form_header)
                 )

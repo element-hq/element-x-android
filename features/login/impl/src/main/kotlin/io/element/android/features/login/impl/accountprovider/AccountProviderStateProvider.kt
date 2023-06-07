@@ -17,19 +17,19 @@
 package io.element.android.features.login.impl.accountprovider
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.login.impl.accountprovider.item.anAccountProvider
 import io.element.android.libraries.architecture.Async
 
 open class AccountProviderStateProvider : PreviewParameterProvider<AccountProviderState> {
     override val values: Sequence<AccountProviderState>
         get() = sequenceOf(
-            aAccountProviderState(),
+            anAccountProviderState(),
             // Add other state here
         )
 }
 
-fun aAccountProviderState() = AccountProviderState(
-    homeserver = "matrix.org",
-    isMatrix = true,
+fun anAccountProviderState() = AccountProviderState(
+    accountProvider = anAccountProvider(),
     isAccountCreation = false,
     loginFlow = Async.Uninitialized,
     eventSink = {}

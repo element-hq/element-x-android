@@ -28,6 +28,9 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 
+/**
+ * Not used anymore.
+ */
 @ContributesNode(AppScope::class)
 class LoginRootNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,

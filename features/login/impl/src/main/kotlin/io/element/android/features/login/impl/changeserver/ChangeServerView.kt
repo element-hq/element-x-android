@@ -60,6 +60,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
+import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.login.impl.util.LoginConstants
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.ElementTextStyles

@@ -27,7 +27,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.features.login.impl.changeserver.ChangeServerError
+import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.login.impl.datasource.AccountProviderDataSource
 import io.element.android.features.login.impl.util.LoginConstants
 import io.element.android.libraries.architecture.Async
@@ -35,7 +35,6 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.execute
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
-import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.net.URL
@@ -59,13 +58,6 @@ class AccountProviderPresenter @AssistedInject constructor(
     override fun present(): AccountProviderState {
         val accountProvider by accountProviderDataSource.flow().collectAsState()
         val currentHomeServerDetails = authenticationService.getHomeserverDetails().collectAsState().value
-        val getHomeServerDetailsAction: MutableState<Async<MatrixHomeServerDetails>> = remember {
-            if (currentHomeServerDetails != null) {
-                mutableStateOf(Async.Success(currentHomeServerDetails))
-            } else {
-                mutableStateOf(Async.Uninitialized)
-            }
-        }
         val localCoroutineScope = rememberCoroutineScope()
 
         val homeserver = rememberSaveable {
@@ -85,8 +77,7 @@ class AccountProviderPresenter @AssistedInject constructor(
         }
 
         return AccountProviderState(
-            homeserver = accountProvider.title,
-            isMatrix = accountProvider.isMatrixOrg,
+            accountProvider = accountProvider,
             isAccountCreation = params.isAccountCreation,
             loginFlow = loginFlowAction.value,
             eventSink = ::handleEvents

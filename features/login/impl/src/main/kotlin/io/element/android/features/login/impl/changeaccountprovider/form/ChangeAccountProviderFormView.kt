@@ -50,8 +50,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
-import io.element.android.features.login.impl.changeaccountprovider.item.AccountProviderItem
-import io.element.android.features.login.impl.changeaccountprovider.item.ChangeAccountProviderItemView
+import io.element.android.features.login.impl.accountprovider.item.AccountProvider
+import io.element.android.features.login.impl.accountprovider.item.AccountProviderView
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -72,7 +72,7 @@ fun ChangeAccountProviderFormView(
     state: ChangeAccountProviderFormState,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit,
-    onProviderClicked: (AccountProviderItem) -> Unit = {},
+    onAccountProviderClicked: (AccountProvider) -> Unit = {},
 ) {
     val eventSink = state.eventSink
     val scrollState = rememberScrollState()
@@ -161,16 +161,16 @@ fun ChangeAccountProviderFormView(
                     is Async.Success -> {
                         state.userInputResult.state.forEach { homeserverData ->
                             val isMatrixOrg = homeserverData.homeserverUrl == "https://matrix.org"
-                            val item = AccountProviderItem(
+                            val item = AccountProvider(
                                 title = homeserverData.homeserverUrl.removePrefix("http://").removePrefix("https://"),
                                 subtitle = if (isMatrixOrg) stringResource(id = R.string.screen_change_account_provider_matrix_org_subtitle) else null,
                                 isPublic = isMatrixOrg, // There is no need to know for other servers right now
                                 isMatrixOrg = isMatrixOrg,
                             )
-                            ChangeAccountProviderItemView(
+                            AccountProviderView(
                                 item = item,
                                 onClick = {
-                                    onProviderClicked(item)
+                                    onAccountProviderClicked(item)
                                 }
                             )
                         }

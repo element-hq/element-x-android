@@ -25,7 +25,7 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.login.impl.changeaccountprovider.item.AccountProviderItem
+import io.element.android.features.login.impl.accountprovider.item.AccountProvider
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
@@ -36,11 +36,11 @@ class ChangeAccountProviderFormNode @AssistedInject constructor(
 ) : Node(buildContext, plugins = plugins) {
 
     interface Callback : Plugin {
-        fun onAccountProviderItemClicked(data: AccountProviderItem)
+        fun onAccountProviderClicked(data: AccountProvider)
     }
 
-    private fun onAccountProviderItemClicked(data: AccountProviderItem) {
-        plugins<Callback>().forEach { it.onAccountProviderItemClicked(data) }
+    private fun onAccountProviderClicked(data: AccountProvider) {
+        plugins<Callback>().forEach { it.onAccountProviderClicked(data) }
     }
 
     @Composable
@@ -50,7 +50,7 @@ class ChangeAccountProviderFormNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onBackPressed = ::navigateUp,
-            onProviderClicked = ::onAccountProviderItemClicked
+            onAccountProviderClicked = ::onAccountProviderClicked
         )
     }
 }

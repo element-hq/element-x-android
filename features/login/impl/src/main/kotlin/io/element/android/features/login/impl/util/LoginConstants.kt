@@ -16,7 +16,7 @@
 
 package io.element.android.features.login.impl.util
 
-import io.element.android.features.login.impl.changeaccountprovider.item.AccountProviderItem
+import io.element.android.features.login.impl.accountprovider.item.AccountProvider
 
 object LoginConstants {
     const val MATRIX_ORG_URL = "matrix.org"
@@ -25,7 +25,7 @@ object LoginConstants {
     const val SLIDING_SYNC_READ_MORE_URL = "https://github.com/matrix-org/sliding-sync/blob/main/docs/Landing.md"
 }
 
-val defaultAccountProviderItem = AccountProviderItem(
+val defaultAccountProvider = AccountProvider(
     title = LoginConstants.DEFAULT_HOMESERVER_URL,
     subtitle = null,
     isPublic = LoginConstants.DEFAULT_HOMESERVER_URL == LoginConstants.MATRIX_ORG_URL,

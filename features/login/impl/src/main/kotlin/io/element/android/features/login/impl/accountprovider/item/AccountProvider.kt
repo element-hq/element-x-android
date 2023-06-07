@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.changeaccountprovider.item
+package io.element.android.features.login.impl.accountprovider.item
 
-data class AccountProviderItem constructor(
+data class AccountProvider constructor(
     val title: String,
     val subtitle: String? = null,
     val isPublic: Boolean = false,

@@ -17,7 +17,7 @@
 package io.element.android.features.login.impl.changeaccountprovider
 
 import androidx.compose.runtime.Composable
-import io.element.android.features.login.impl.changeaccountprovider.item.AccountProviderItem
+import io.element.android.features.login.impl.accountprovider.item.AccountProvider
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 
@@ -28,8 +28,8 @@ class ChangeAccountProviderPresenter @Inject constructor(
     override fun present(): ChangeAccountProviderState {
         return ChangeAccountProviderState(
             // Just matrix.org by default for now
-            accountProviderItems = listOf(
-                AccountProviderItem(
+            accountProviders = listOf(
+                AccountProvider(
                     title = "matrix.org",
                     subtitle = null,
                     isPublic = true,

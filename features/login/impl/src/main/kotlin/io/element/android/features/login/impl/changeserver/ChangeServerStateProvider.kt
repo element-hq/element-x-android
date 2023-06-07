@@ -18,6 +18,7 @@ package io.element.android.features.login.impl.changeserver
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.login.impl.R
+import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.libraries.architecture.Async
 
 open class ChangeServerStateProvider : PreviewParameterProvider<ChangeServerState> {
@@ -30,7 +31,8 @@ open class ChangeServerStateProvider : PreviewParameterProvider<ChangeServerStat
                 homeserver = "invalid.org",
                 changeServerAction = Async.Failure(ChangeServerError.InlineErrorMessage(R.string.screen_change_server_error_invalid_homeserver))
             ),
-            aChangeServerState().copy(homeserver = "invalid.org", changeServerAction = Async.Failure(ChangeServerError.SlidingSyncAlert)),
+            aChangeServerState().copy(homeserver = "invalid.org", changeServerAction = Async.Failure(
+                ChangeServerError.SlidingSyncAlert)),
             aChangeServerState().copy(homeserver = "matrix.org", changeServerAction = Async.Success(Unit)),
         )
 }

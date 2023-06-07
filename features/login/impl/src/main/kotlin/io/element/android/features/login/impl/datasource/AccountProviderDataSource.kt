@@ -16,8 +16,8 @@
 
 package io.element.android.features.login.impl.datasource
 
-import io.element.android.features.login.impl.changeaccountprovider.item.AccountProviderItem
-import io.element.android.features.login.impl.util.defaultAccountProviderItem
+import io.element.android.features.login.impl.accountprovider.item.AccountProvider
+import io.element.android.features.login.impl.util.defaultAccountProvider
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,15 +28,15 @@ import javax.inject.Inject
 @SingleIn(AppScope::class)
 class AccountProviderDataSource @Inject constructor(
 ) {
-    private val accountProvider: MutableStateFlow<AccountProviderItem> = MutableStateFlow(
-        defaultAccountProviderItem
+    private val accountProvider: MutableStateFlow<AccountProvider> = MutableStateFlow(
+        defaultAccountProvider
     )
 
-    fun flow(): StateFlow<AccountProviderItem> {
+    fun flow(): StateFlow<AccountProvider> {
         return accountProvider.asStateFlow()
     }
 
-    fun userSelection(data: AccountProviderItem) {
+    fun userSelection(data: AccountProvider) {
         accountProvider.tryEmit(data)
     }
 }

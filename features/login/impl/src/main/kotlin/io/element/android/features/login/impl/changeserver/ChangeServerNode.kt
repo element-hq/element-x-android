@@ -32,6 +32,9 @@ import io.element.android.features.login.impl.util.LoginConstants
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.di.AppScope
 
+/**
+ * Not used anymore.
+ */
 @ContributesNode(AppScope::class)
 class ChangeServerNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
