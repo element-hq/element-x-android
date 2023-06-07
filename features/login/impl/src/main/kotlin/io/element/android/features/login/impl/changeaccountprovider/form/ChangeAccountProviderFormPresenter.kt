@@ -17,16 +17,13 @@
 package io.element.android.features.login.impl.changeaccountprovider.form
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,42 +35,28 @@ class ChangeAccountProviderFormPresenter @Inject constructor(
     override fun present(): ChangeAccountProviderFormState {
         val localCoroutineScope = rememberCoroutineScope()
 
-        var currentJob: Job? = remember { null }
-
         val userInput = rememberSaveable {
             mutableStateOf("")
         }
-        val userInputResult: MutableState<Async<List<HomeserverData>>> = remember {
-            mutableStateOf(Async.Uninitialized)
-        }
+        val data by homeserverResolver.flow().collectAsState()
 
         fun handleEvents(event: ChangeAccountProviderFormEvents) {
             when (event) {
                 is ChangeAccountProviderFormEvents.UserInput -> {
-                    currentJob?.cancel()
-                    currentJob = localCoroutineScope.userInput(event.input, userInputResult)
+                    localCoroutineScope.userInput(event.input)
                 }
             }
         }
 
         return ChangeAccountProviderFormState(
             userInput = userInput.value,
-            userInputResult = userInputResult.value,
+            userInputResult = data,
             eventSink = ::handleEvents
         )
     }
 
     // Could be reworked using LaunchedEffect
-    private fun CoroutineScope.userInput(userInput: String, state: MutableState<Async<List<HomeserverData>>>) = launch {
-        state.value = Async.Uninitialized
-        // Debounce
-        delay(300)
-        state.value = Async.Loading()
-        try {
-            val result = homeserverResolver.resolve(userInput)
-            state.value = Async.Success(result)
-        } catch (error: Throwable) {
-            state.value = Async.Failure(error)
-        }
+    private fun CoroutineScope.userInput(userInput: String) = launch {
+        homeserverResolver.accept(userInput)
     }
 }
