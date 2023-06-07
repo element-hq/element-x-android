@@ -46,12 +46,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.features.messages.impl.media.local.LocalMediaView
+import io.element.android.features.messages.impl.media.local.rememberLocalMediaViewState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.isLoading
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -82,28 +85,9 @@ fun MediaViewerView(
         state.eventSink(MediaViewerEvents.ClearLoadingError)
     }
 
-    var showProgress by remember {
-        mutableStateOf(false)
-    }
-
-    // Trick to avoid showing progress indicator if the media is already on disk.
-    // When sdk will expose download progress we'll be able to remove this.
-    LaunchedEffect(state.downloadedMedia) {
-        showProgress = false
-        delay(100)
-        if (state.downloadedMedia.isLoading()) {
-            showProgress = true
-        }
-    }
-
-    var showThumbnail by remember {
-        mutableStateOf(true)
-    }
-
-    fun onMediaReady() {
-        showThumbnail = false
-    }
-
+    val localMediaViewState = rememberLocalMediaViewState()
+    val showThumbnail = !localMediaViewState.isReady
+    val showProgress = rememberShowProgress(state.downloadedMedia)
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
     Scaffold(
@@ -151,9 +135,9 @@ fun MediaViewerView(
                     )
                 }
                 LocalMediaView(
+                    localMediaViewState = localMediaViewState,
                     localMedia = state.downloadedMedia.dataOrNull(),
-                    info = state.mediaInfo,
-                    onReady = ::onMediaReady
+                    mediaInfo = state.mediaInfo,
                 )
                 ThumbnailView(
                     thumbnailSource = state.thumbnailSource,
@@ -162,6 +146,27 @@ fun MediaViewerView(
             }
         }
     }
+}
+
+@Composable
+private fun rememberShowProgress(downloadedMedia: Async<LocalMedia>): Boolean {
+    var showProgress by remember {
+        mutableStateOf(false)
+    }
+    if (LocalInspectionMode.current) {
+        showProgress = downloadedMedia.isLoading()
+    } else {
+        // Trick to avoid showing progress indicator if the media is already on disk.
+        // When sdk will expose download progress we'll be able to remove this.
+        LaunchedEffect(downloadedMedia) {
+            showProgress = false
+            delay(100)
+            if (downloadedMedia.isLoading()) {
+                showProgress = true
+            }
+        }
+    }
+    return showProgress
 }
 
 @Composable

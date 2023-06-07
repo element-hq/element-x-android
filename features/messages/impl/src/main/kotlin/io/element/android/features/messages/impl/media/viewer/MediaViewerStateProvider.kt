@@ -51,6 +51,10 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                 aPdfInfo(),
             ),
             aMediaViewerState(
+                Async.Loading(),
+                aFileInfo(),
+            ),
+            aMediaViewerState(
                 Async.Success(
                     LocalMedia(Uri.EMPTY, aFileInfo())
                 ),

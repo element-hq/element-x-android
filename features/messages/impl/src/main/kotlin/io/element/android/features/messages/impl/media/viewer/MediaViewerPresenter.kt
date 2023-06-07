@@ -116,46 +116,37 @@ class MediaViewerPresenter @AssistedInject constructor(
     }
 
     private fun CoroutineScope.saveOnDisk(localMedia: Async<LocalMedia>) = launch {
-        when (localMedia) {
-            is Async.Success -> {
-                localMediaActions.saveOnDisk(localMedia.state)
-                    .onSuccess {
-                        val snackbarMessage = SnackbarMessage(StringR.string.common_file_saved_on_disk_android)
-                        snackbarDispatcher.post(snackbarMessage)
-                    }
-                    .onFailure {
-                        val snackbarMessage = SnackbarMessage(mediaActionsError(it))
-                        snackbarDispatcher.post(snackbarMessage)
-                    }
-            }
-            else -> Unit
-        }
+        if (localMedia is Async.Success) {
+            localMediaActions.saveOnDisk(localMedia.state)
+                .onSuccess {
+                    val snackbarMessage = SnackbarMessage(StringR.string.common_file_saved_on_disk_android)
+                    snackbarDispatcher.post(snackbarMessage)
+                }
+                .onFailure {
+                    val snackbarMessage = SnackbarMessage(mediaActionsError(it))
+                    snackbarDispatcher.post(snackbarMessage)
+                }
+        } else Unit
     }
 
     private fun CoroutineScope.share(localMedia: Async<LocalMedia>) = launch {
-        when (localMedia) {
-            is Async.Success -> {
-                localMediaActions.share(localMedia.state)
-                    .onFailure {
-                        val snackbarMessage = SnackbarMessage(mediaActionsError(it))
-                        snackbarDispatcher.post(snackbarMessage)
-                    }
-            }
-            else -> Unit
-        }
+        if (localMedia is Async.Success) {
+            localMediaActions.share(localMedia.state)
+                .onFailure {
+                    val snackbarMessage = SnackbarMessage(mediaActionsError(it))
+                    snackbarDispatcher.post(snackbarMessage)
+                }
+        } else Unit
     }
 
     private fun CoroutineScope.open(localMedia: Async<LocalMedia>) = launch {
-        when (localMedia) {
-            is Async.Success -> {
-                localMediaActions.open(localMedia.state)
-                    .onFailure {
-                        val snackbarMessage = SnackbarMessage(mediaActionsError(it))
-                        snackbarDispatcher.post(snackbarMessage)
-                    }
-            }
-            else -> Unit
-        }
+        if (localMedia is Async.Success) {
+            localMediaActions.open(localMedia.state)
+                .onFailure {
+                    val snackbarMessage = SnackbarMessage(mediaActionsError(it))
+                    snackbarDispatcher.post(snackbarMessage)
+                }
+        } else Unit
     }
 
     private fun mediaActionsError(throwable: Throwable): Int {

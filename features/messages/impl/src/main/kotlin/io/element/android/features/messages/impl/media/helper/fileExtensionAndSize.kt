@@ -16,10 +16,18 @@
 
 package io.element.android.features.messages.impl.media.helper
 
+import android.webkit.MimeTypeMap
+
 fun formatFileExtensionAndSize(name: String, size: String?): String {
-    val fileExtension = name.substringAfterLast('.', "").uppercase()
+    val fileExtension = name.substringAfterLast('.', "")
+    // Makes sure the extension is known by the system, otherwise default to binary extension.
+    val safeExtension = if (MimeTypeMap.getSingleton().hasExtension(fileExtension)) {
+        fileExtension.uppercase()
+    } else {
+        "BIN"
+    }
     return buildString {
-        append(fileExtension)
+        append(safeExtension)
         if (size != null) {
             append(' ')
             append("($size)")
