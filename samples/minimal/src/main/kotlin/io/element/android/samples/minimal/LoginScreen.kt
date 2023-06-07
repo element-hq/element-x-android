@@ -17,11 +17,13 @@
 package io.element.android.samples.minimal
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import io.element.android.features.login.impl.oidc.customtab.DefaultOidcActionFlow
-import io.element.android.features.login.impl.root.LoginRootPresenter
-import io.element.android.features.login.impl.root.LoginRootView
+import io.element.android.features.login.impl.datasource.AccountProviderDataSource
+import io.element.android.features.login.impl.loginpassword.LoginPasswordPresenter
+import io.element.android.features.login.impl.loginpassword.LoginPasswordView
+import io.element.android.features.login.impl.util.defaultAccountProvider
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 
 class LoginScreen(private val authenticationService: MatrixAuthenticationService) {
@@ -29,13 +31,18 @@ class LoginScreen(private val authenticationService: MatrixAuthenticationService
     @Composable
     fun Content(modifier: Modifier = Modifier) {
         val presenter = remember {
-            LoginRootPresenter(
+            LoginPasswordPresenter(
                 authenticationService = authenticationService,
-                DefaultOidcActionFlow()
+                AccountProviderDataSource()
             )
         }
+
+        LaunchedEffect(Unit) {
+            authenticationService.setHomeserver(defaultAccountProvider.title)
+        }
+
         val state = presenter.present()
-        LoginRootView(
+        LoginPasswordView(
             state = state,
             modifier = modifier,
             onBackPressed = {},
