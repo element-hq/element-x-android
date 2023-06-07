@@ -29,19 +29,19 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
-import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.execute
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.StateEventType
+import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
-import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class RoomDetailsEditPresenter @Inject constructor(
@@ -139,13 +139,19 @@ class RoomDetailsEditPresenter @Inject constructor(
         val results = mutableListOf<Result<Unit>>()
         suspend {
             if (topic.orEmpty().trim() != room.topic.orEmpty().trim()) {
-                results.add(room.setTopic(topic.orEmpty()))
+                results.add(room.setTopic(topic.orEmpty()).onFailure {
+                    Timber.e(it, "Failed to set room topic")
+                })
             }
             if (name.isNotEmpty() && name.trim() != room.name.orEmpty().trim()) {
-                results.add(room.setName(name))
+                results.add(room.setName(name).onFailure {
+                    Timber.e(it, "Failed to set room name")
+                })
             }
             if (avatarUri?.toString()?.trim() != room.avatarUrl?.trim()) {
-                results.add(updateAvatar(avatarUri))
+                results.add(updateAvatar(avatarUri).onFailure {
+                    Timber.e(it, "Failed to update avatar")
+                })
             }
             if (results.all { it.isSuccess }) Unit else results.first { it.isFailure }.getOrThrow()
         }.execute(action)
@@ -153,14 +159,12 @@ class RoomDetailsEditPresenter @Inject constructor(
 
     private suspend fun updateAvatar(avatarUri: Uri?): Result<Unit> {
         return runCatching {
-            val result = if (avatarUri != null) {
-                val preprocessed = mediaPreProcessor.process(avatarUri, MimeTypes.Jpeg, compressIfPossible = false).getOrThrow() as? MediaUploadInfo.Image
-                val byteArray = preprocessed?.file?.readBytes()
-                byteArray?.let { room.updateAvatar(MimeTypes.Jpeg, it) } ?: error("Could not process the given uri ($avatarUri)")
+            if (avatarUri != null) {
+                val preprocessed = mediaPreProcessor.process(avatarUri, MimeTypes.Jpeg, compressIfPossible = false).getOrThrow()
+                room.updateAvatar(MimeTypes.Jpeg, preprocessed.file.readBytes()).getOrThrow()
             } else {
-                room.removeAvatar()
+                room.removeAvatar().getOrThrow()
             }
-            result.getOrThrow()
         }
     }
 }
