@@ -18,7 +18,6 @@ package io.element.android.features.roomlist.impl
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -236,32 +235,34 @@ fun RoomListContent(
 
                     if (state.invitesState != InvitesState.NoInvites) {
                         item {
-                            Row(
-                                horizontalArrangement = Arrangement.End,
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .clickable(role = Role.Button, onClick = onInvitesClicked)
-                                    .heightIn(min = 48.dp),
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
                             ) {
-                                Text(
-                                    text = stringResource(StringR.string.action_invites_list),
-                                    fontSize = 14.sp,
-                                    style = noFontPadding,
-                                )
-
-                                if (state.invitesState == InvitesState.NewInvites) {
-                                    Spacer(Modifier.width(8.dp))
-
-                                    Box(
-                                        modifier = Modifier
-                                            .size(12.dp)
-                                            .clip(CircleShape)
-                                            .background(MaterialTheme.roomListUnreadIndicator())
+                                Row(
+                                    modifier = Modifier
+                                        .clickable(role = Role.Button, onClick = onInvitesClicked)
+                                        .padding(horizontal = 16.dp)
+                                        .align(Alignment.CenterEnd)
+                                        .heightIn(min = 48.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Text(
+                                        text = stringResource(StringR.string.action_invites_list),
+                                        fontSize = 14.sp,
+                                        style = noFontPadding,
                                     )
-                                }
 
-                                Spacer(Modifier.width(16.dp))
+                                    if (state.invitesState == InvitesState.NewInvites) {
+                                        Spacer(Modifier.width(8.dp))
+
+                                        Box(
+                                            modifier = Modifier
+                                                .size(12.dp)
+                                                .clip(CircleShape)
+                                                .background(MaterialTheme.roomListUnreadIndicator())
+                                        )
+                                    }
+                                }
                             }
                         }
                     }

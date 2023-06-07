@@ -72,13 +72,13 @@ private fun ProgressDialogContent(
             modifier = Modifier.padding(top = 38.dp, bottom = 32.dp, start = 40.dp, end = 40.dp)
         ) {
             CircularProgressIndicator(
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.primary
             )
             if (!text.isNullOrBlank()) {
                 Spacer(modifier = Modifier.height(22.dp))
                 Text(
                     text = text,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = MaterialTheme.colorScheme.primary,
                 )
             }
         }
