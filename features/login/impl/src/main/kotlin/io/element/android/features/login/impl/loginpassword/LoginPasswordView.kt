@@ -139,13 +139,13 @@ fun LoginPasswordView(
                     submit = ::submit
                 )
             }
-        }
-    }
 
-    if (state.loginAction is Async.Failure) {
-        LoginErrorDialog(error = state.loginAction.error, onDismiss = {
-            state.eventSink(LoginPasswordEvents.ClearError)
-        })
+            if (state.loginAction is Async.Failure) {
+                LoginErrorDialog(error = state.loginAction.error, onDismiss = {
+                    state.eventSink(LoginPasswordEvents.ClearError)
+                })
+            }
+        }
     }
 }
 
