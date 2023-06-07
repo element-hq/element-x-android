@@ -22,7 +22,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -53,6 +52,7 @@ import io.element.android.features.messages.impl.timeline.model.bubble.BubbleSta
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.theme.LocalColors
@@ -247,7 +247,7 @@ private fun MessageEventBubbleContent(
         inReplyToDetails: InReplyTo.Ready?,
         modifier: Modifier = Modifier
     ) {
-        Column(modifier.width(IntrinsicSize.Max), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        EqualWidthColumn(modifier = modifier, spacing = 8.dp) {
             if (inReplyToDetails != null) {
                 val senderName = event.senderDisplayName ?: event.senderId.value
                 val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyToDetails)
@@ -255,17 +255,28 @@ private fun MessageEventBubbleContent(
                     senderName = senderName,
                     text = inReplyToDetails.content.body,
                     attachmentThumbnailInfo = attachmentThumbnailInfo,
-                    modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp)
-                        .fillMaxWidth()
+                    modifier = Modifier
+                        .padding(top = 8.dp, start = 8.dp, end = 8.dp)
                         .clickable(enabled = true, onClick = inReplyToClick),
                 )
             }
-            val contentModifier = if (isMediaItem) {
+            val modifierWithPadding = if (isMediaItem) {
                 Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
             } else {
                 Modifier
             }
-            ContentAndTimestampView(overlayTimestamp = isMediaItem, contentModifier = contentModifier)
+
+            val contentModifier = if (isMediaItem) {
+                Modifier.clip(RoundedCornerShape(12.dp))
+            } else {
+                Modifier
+            }
+
+            ContentAndTimestampView(
+                overlayTimestamp = isMediaItem,
+                contentModifier = contentModifier,
+                modifier = modifierWithPadding,
+            )
         }
     }
 
