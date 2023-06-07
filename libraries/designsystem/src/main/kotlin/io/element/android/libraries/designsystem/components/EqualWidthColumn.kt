@@ -23,6 +23,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
 
+/**
+ * Used to create a column where all children have the same width.
+ * It will first measure all children, get the largest width and re-measure all children with this width as the minWidth.
+ *
+ * *Note*: If all children already have the same width, it skips the 2nd measuring and acts like a normal Column.
+ */
 @Composable
 fun EqualWidthColumn(
     modifier: Modifier = Modifier,
@@ -33,7 +39,13 @@ fun EqualWidthColumn(
         val measurables = subcompose(0, content).map { it.measure(constraints) }
         val maxWidth = measurables.maxOf { it.width }
         val newConstraints = constraints.copy(minWidth = maxWidth)
-        val newMeasurables = subcompose(1, content).map { it.measure(newConstraints) }
+        val newMeasurables = if (measurables.all { it.width == maxWidth }) {
+            // Skip re-measuring if all children have the same width
+            measurables
+        } else {
+            // Re-measure with the largest width as the minWidth to have all children constrained to the same width
+            subcompose(1, content).map { it.measure(newConstraints) }
+        }
         val totalHeight = (newMeasurables.sumOf { it.height } + spacing.toPx() * (newMeasurables.size - 1)).roundToInt()
         layout(maxWidth, totalHeight) {
             var yPosition = 0
