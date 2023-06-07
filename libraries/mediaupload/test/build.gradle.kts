@@ -19,7 +19,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.libraries.matrix.test"
+    namespace = "io.element.android.libraries.mediaupload.test"
 }
 
 dependencies {
