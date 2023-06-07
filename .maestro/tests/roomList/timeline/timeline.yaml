@@ -4,10 +4,8 @@ appId: ${APP_ID}
 # TODO Create a room on a new account
 - tapOn: ${ROOM_NAME}
 - takeScreenshot: build/maestro/500-Timeline
-- tapOn: "Message…"
+- tapOn: "Message"
 - inputText: "Hello world!"
-- tapOn: "Toggle full screen mode"
-- tapOn: "Toggle full screen mode"
 - tapOn: "Send"
 - hideKeyboard
 - back

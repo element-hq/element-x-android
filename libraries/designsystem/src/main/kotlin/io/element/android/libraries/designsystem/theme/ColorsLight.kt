@@ -46,6 +46,7 @@ fun elementColorsLight() = ElementColors(
     gray400 = Compound_Gray_400_Light,
     gray1400 = Compound_Gray_1400_Light,
     textActionCritical = TextColorCriticalLight,
+    accentColor = Color(0xFF0DBD8B),
     placeholder = Compound_Gray_800_Light,
     isLight = true,
 )
