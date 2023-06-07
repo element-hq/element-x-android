@@ -35,11 +35,7 @@ import androidx.compose.material.icons.outlined.Attachment
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -76,18 +72,6 @@ import me.saket.telephoto.zoomable.ZoomableState
 import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
 import me.saket.telephoto.zoomable.rememberZoomableImageState
 import me.saket.telephoto.zoomable.rememberZoomableState
-
-@Stable
-class LocalMediaViewState {
-    var isReady: Boolean by mutableStateOf(false)
-}
-
-@Composable
-fun rememberLocalMediaViewState(): LocalMediaViewState {
-    return remember {
-        LocalMediaViewState()
-    }
-}
 
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
