@@ -10,5 +10,6 @@
   <string name="screen_room_attachment_source_camera_video">"Înregistrați un videoclip"</string>
   <string name="screen_room_attachment_source_files">"Atașament"</string>
   <string name="screen_room_attachment_source_gallery">"Bibliotecă foto și video"</string>
+  <string name="screen_room_error_failed_retrieving_user_details">"Nu am putut găsi detaliile utilizatorului"</string>
   <string name="screen_room_error_failed_processing_media">"Procesarea datelor media a eșuat, vă rugăm să încercați din nou."</string>
 </resources>

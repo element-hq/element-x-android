@@ -12,6 +12,7 @@
   <string name="screen_login_form_header">"Introduceți detaliile"</string>
   <string name="screen_login_server_header">"Locul unde trăiesc conversațiile tale"</string>
   <string name="screen_login_title">"Bine ați revenit!"</string>
+  <string name="screen_login_title_with_homeserver">"Conectați-vă la %1$s"</string>
   <string name="screen_change_server_submit">"Continuați"</string>
   <string name="screen_change_server_title">"Selectați serverul"</string>
   <string name="screen_login_password_hint">"Parola"</string>

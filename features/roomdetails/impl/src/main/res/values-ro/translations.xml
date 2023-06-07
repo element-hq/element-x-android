@@ -7,10 +7,13 @@
   <string name="screen_room_details_add_topic_title">"Adăugare subiect"</string>
   <string name="screen_room_details_already_a_member">"Deja membru"</string>
   <string name="screen_room_details_already_invited">"Deja invitat"</string>
+  <string name="screen_room_details_edit_room_title">"Editați camera"</string>
   <string name="screen_room_details_edition_error">"A apărut o eroare la actualizarea detaliilor camerei"</string>
+  <string name="screen_room_details_edition_error_title">"Nu s-a putut actualiza camera"</string>
   <string name="screen_room_details_encryption_enabled_subtitle">"Mesajele sunt securizate cu încuietori. Doar dumneavoastră și destinatarii aveți cheile unice pentru a le debloca."</string>
   <string name="screen_room_details_encryption_enabled_title">"Criptarea mesajelor este activată"</string>
   <string name="screen_room_details_invite_people_title">"Invitați persoane"</string>
+  <string name="screen_room_details_room_name_label">"Numele camerei"</string>
   <string name="screen_room_details_share_room_title">"Partajați camera"</string>
   <string name="screen_room_details_updating_room">"Se actualizează camera…"</string>
   <string name="screen_room_member_list_pending_header_title">"În așteptare"</string>

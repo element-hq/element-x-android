@@ -9,4 +9,6 @@
   <string name="screen_room_attachment_source_camera_video">"Video aufnehmen"</string>
   <string name="screen_room_attachment_source_files">"Anhang"</string>
   <string name="screen_room_attachment_source_gallery">"Foto- &amp; Video-Bibliothek"</string>
+  <string name="screen_room_error_failed_retrieving_user_details">"Benutzerdetails konnten nicht abgerufen werden"</string>
+  <string name="screen_room_error_failed_processing_media">"Fehler bei der Verarbeitung von Medien zum Hochladen, bitte versuchen Sie es erneut."</string>
 </resources>

@@ -28,13 +28,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.NotificationsOff
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.PersonAddAlt
 import androidx.compose.material.icons.outlined.Share
@@ -121,7 +125,10 @@ fun RoomDetailsView(
                         roomName = state.roomName,
                         roomAlias = state.roomAlias
                     )
-                    MainActionsSection(onShareRoom = onShareRoom)
+                    MainActionsSection(
+                        state = state,
+                        onShareRoom = onShareRoom
+                    )
                 }
 
                 is RoomDetailsType.Dm -> {
@@ -213,8 +220,18 @@ internal fun RoomDetailsTopBar(
 }
 
 @Composable
-internal fun MainActionsSection(onShareRoom: () -> Unit, modifier: Modifier = Modifier) {
+internal fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit, modifier: Modifier = Modifier) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        if (state.isMutedNotification) {
+            MainActionButton(title = "Unmute", icon = Icons.Outlined.NotificationsOff, onClick = {
+                state.eventSink(RoomDetailsEvent.MuteNotification)
+            })
+        } else {
+            MainActionButton(title = "Mute", icon = Icons.Outlined.Notifications, onClick = {
+                state.eventSink(RoomDetailsEvent.MuteNotification)
+            })
+        }
+        Spacer(modifier = Modifier.width(20.dp))
         MainActionButton(title = stringResource(R.string.screen_room_details_share_room_title), icon = Icons.Outlined.Share, onClick = onShareRoom)
     }
 }

@@ -24,25 +24,32 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RoomDetailsPresenter @Inject constructor(
+    private val client: MatrixClient,
     private val room: MatrixRoom,
     private val roomMembersDetailsPresenterFactory: RoomMemberDetailsPresenter.Factory,
     private val leaveRoomPresenter: LeaveRoomPresenter,
+    private val dispatchers: CoroutineDispatchers,
 ) : Presenter<RoomDetailsState> {
 
     @Composable
     override fun present(): RoomDetailsState {
+        val scope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
         LaunchedEffect(Unit) {
             room.updateMembers()
@@ -57,6 +64,12 @@ class RoomDetailsPresenter @Inject constructor(
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
         val roomType = getRoomType(dmMember)
 
+        val isMutedNotification = false
+
+//        scope.launch(dispatchers.io) {
+//            client.getRoomNotificationMode(room.roomId)
+//        }
+
         val topicState = remember(canEditTopic, room.topic) {
             val topic = room.topic
 
@@ -69,8 +82,11 @@ class RoomDetailsPresenter @Inject constructor(
 
         fun handleEvents(event: RoomDetailsEvent) {
             when (event) {
-                is RoomDetailsEvent.LeaveRoom ->
+                RoomDetailsEvent.LeaveRoom ->
                     leaveRoomState.eventSink(LeaveRoomEvent.ShowConfirmation(room.roomId))
+                RoomDetailsEvent.MuteNotification -> {
+
+                }
             }
         }
 
@@ -87,6 +103,8 @@ class RoomDetailsPresenter @Inject constructor(
             canInvite = canInvite,
             canEdit = canEditAvatar || canEditName || canEditTopic,
             roomType = roomType.value,
+            //TODO get push rule
+            isMutedNotification = false,
             roomMemberDetailsState = roomMemberDetailsState,
             leaveRoomState = leaveRoomState,
             eventSink = ::handleEvents,

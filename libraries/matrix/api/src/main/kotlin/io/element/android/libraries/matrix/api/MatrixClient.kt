@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -44,6 +45,9 @@ interface MatrixClient : Closeable {
     suspend fun createDM(userId: UserId): Result<RoomId>
     suspend fun getProfile(userId: UserId): Result<MatrixUser>
     suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults>
+    suspend fun getRoomNotificationMode(roomId: RoomId): Result<RoomNotificationSettings>
+    suspend fun muteRoom(roomId: RoomId): Result<Unit>
+    suspend fun unmuteRoom(roomId: RoomId): Result<Unit>
     fun startSync()
     fun stopSync()
     fun sessionVerificationService(): SessionVerificationService

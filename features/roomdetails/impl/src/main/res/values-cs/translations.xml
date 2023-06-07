@@ -13,6 +13,7 @@
   <string name="screen_room_details_edition_error_title">"Nelze aktualizovat místnost"</string>
   <string name="screen_room_details_encryption_enabled_subtitle">"Zprávy jsou zabezpečeny zámky. Pouze vy a příjemci máte jedinečné klíče k jejich odemčení."</string>
   <string name="screen_room_details_encryption_enabled_title">"Šifrování zpráv povoleno"</string>
+  <string name="screen_room_details_invite_people_title">"Pozvat lidi"</string>
   <string name="screen_room_details_room_name_label">"Název místnosti"</string>
   <string name="screen_room_details_share_room_title">"Sdílet místnost"</string>
   <string name="screen_room_details_updating_room">"Aktualizace místnosti…"</string>
