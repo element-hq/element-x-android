@@ -124,6 +124,11 @@ class FakeMatrixRoom(
         return Result.success(Unit)
     }
 
+    override suspend fun sendReaction(emoji: String, eventId: EventId): Result<Unit> {
+        delay(FAKE_DELAY_IN_MS)
+        return Result.success(Unit)
+    }
+
     var editMessageParameter: String? = null
         private set
 

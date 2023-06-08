@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Tab
@@ -101,16 +103,19 @@ fun EmojiPicker(
                 )
             }
         }
-        val currentCategory = remember(selectedTabIndex) { categories[selectedTabIndex] }
         val pagerState = rememberPagerState()
 
-        LaunchedEffect(selectedTabIndex) {
-            pagerState.animateScrollToPage(selectedTabIndex)
+        LaunchedEffect(selectedTabIndex, pagerState.isScrollInProgress) {
+            if (!pagerState.isScrollInProgress) {
+                pagerState.animateScrollToPage(selectedTabIndex)
+            }
         }
 
         LaunchedEffect(pagerState) {
             snapshotFlow { pagerState.currentPage }.collect { page ->
-                selectedTabIndex = page
+                if (!pagerState.isScrollInProgress) {
+                    selectedTabIndex = page
+                }
             }
         }
 
@@ -118,17 +123,26 @@ fun EmojiPicker(
             pageCount = categories.size,
             state = pagerState,
             modifier = Modifier.fillMaxWidth(),
-        ) {
+        ) { index ->
+            val category = categories[index]
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxWidth(),
                 columns = GridCells.Adaptive(minSize = 40.dp),
                 contentPadding = PaddingValues(vertical = 10.dp, horizontal = 16.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
-                items(currentCategory.emojis, key = { it.unicode }) { item ->
-                    Box(modifier = Modifier
-                        .size(40.dp)
-                        .clickable { onEmojiSelected(item) }, contentAlignment = Alignment.Center) {
+                items(category.emojis, key = { it.unicode }) { item ->
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clickable(
+                                enabled = true,
+                                onClick = { onEmojiSelected(item) },
+                                indication = rememberRipple(bounded = false, radius = 20.dp),
+                                interactionSource = remember { MutableInteractionSource() }
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
                         Text(text = item.unicode, fontSize = 20.sp)
                     }
                 }
@@ -139,22 +153,20 @@ fun EmojiPicker(
 
 @Preview
 @Composable
-fun EmojiPickerLightPreview() {
-    ElementPreviewLight {
-        EmojiPicker(
-            onEmojiSelected = {},
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
+internal fun EmojiPickerLightPreview() {
+    ElementPreviewLight { ContentToPreview() }
 }
 
 @Preview
 @Composable
-fun EmojiPickerDarkPreview() {
-    ElementPreviewDark {
-        EmojiPicker(
-            onEmojiSelected = {},
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
+internal fun EmojiPickerDarkPreview() {
+    ElementPreviewDark { ContentToPreview() }
+}
+
+@Composable
+private fun ContentToPreview() {
+    EmojiPicker(
+        onEmojiSelected = {},
+        modifier = Modifier.fillMaxWidth()
+    )
 }

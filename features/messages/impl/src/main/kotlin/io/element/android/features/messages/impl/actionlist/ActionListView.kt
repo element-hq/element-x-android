@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.actionlist
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,7 @@ import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddReaction
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetState
@@ -284,6 +286,8 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
     }
 }
 
+private val emojiRippleRadius = 24.dp
+
 @Composable
 internal fun EmojiReactionsRow(
     onEmojiReactionClicked: (String) -> Unit,
@@ -294,11 +298,14 @@ internal fun EmojiReactionsRow(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier.padding(horizontal = 28.dp, vertical = 16.dp)
     ) {
-        EmojiButton("\uD83D\uDC4D", onEmojiReactionClicked)
-        EmojiButton("\uD83D\uDC4E", onEmojiReactionClicked)
-        EmojiButton("\uD83D\uDD25", onEmojiReactionClicked)
-        EmojiButton("❤\uFE0F", onEmojiReactionClicked)
-        EmojiButton("\uD83D\uDC4F", onEmojiReactionClicked)
+        // TODO use most recently used emojis here when available from the Rust SDK
+        val defaultEmojis = sequenceOf(
+            "👍", "👎", "🔥", "❤️", "👏"
+        )
+        for (emoji in defaultEmojis) {
+            EmojiButton(emoji, onEmojiReactionClicked)
+        }
+
         Icon(
             imageVector = Icons.Outlined.AddReaction,
             contentDescription = "Emojis",
@@ -306,7 +313,12 @@ internal fun EmojiReactionsRow(
             modifier = Modifier
                 .size(24.dp)
                 .align(Alignment.CenterVertically)
-                .clickable(enabled = true, onClick = onCustomReactionClicked)
+                .clickable(
+                    enabled = true,
+                    onClick = onCustomReactionClicked,
+                    indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
+                    interactionSource = remember { MutableInteractionSource() }
+                )
         )
     }
 }
@@ -317,7 +329,16 @@ private fun EmojiButton(
     onClicked: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Text(emoji, fontSize = 28.dpToSp(), modifier = modifier.clickable { onClicked(emoji) })
+    Text(
+        emoji,
+        fontSize = 28.dpToSp(),
+        modifier = modifier.clickable(
+            enabled = true,
+            onClick = { onClicked(emoji) },
+            indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
+            interactionSource = remember { MutableInteractionSource() }
+        )
+    )
 }
 
 @Composable
