@@ -81,6 +81,7 @@ class TimelineItemEventFactory @Inject constructor(
             groupPosition = groupPosition,
             reactionsState = currentTimelineItem.computeReactionsState(),
             sendState = currentTimelineItem.event.localSendState ?: EventSendState.NotSentYet,
+            inReplyTo = currentTimelineItem.event.inReplyTo(),
         )
     }
 

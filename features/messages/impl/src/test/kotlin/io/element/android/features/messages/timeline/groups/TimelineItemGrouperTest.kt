@@ -42,7 +42,8 @@ class TimelineItemGrouperTest {
         senderDisplayName = "",
         content = TimelineItemStateEventContent(body = "a state event"),
         reactionsState = TimelineItemReactions(emptyList<AggregatedReaction>().toImmutableList()),
-        sendState = EventSendState.Sent(AN_EVENT_ID)
+        sendState = EventSendState.Sent(AN_EVENT_ID),
+        inReplyTo = null,
     )
     private val aNonGroupableItem = aMessageEvent()
     private val aNonGroupableItemNoEvent = TimelineItem.Virtual("virtual", aTimelineItemDaySeparatorModel("Today"))

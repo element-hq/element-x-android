@@ -59,8 +59,10 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
@@ -73,6 +75,10 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
+import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
+import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -180,21 +186,99 @@ private fun ComposerModeView(
 ) {
     when (composerMode) {
         is MessageComposerMode.Edit -> {
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp),
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 12.dp, vertical = 8.dp)) {
-                Icon(
-                    resourceId = VectorIcons.Edit,
-                    contentDescription = stringResource(R.string.editing),
-                    tint = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.size(16.dp),
-                )
+            EditingModeView(onResetComposerMode = onResetComposerMode, modifier = modifier)
+        }
+        is MessageComposerMode.Reply -> {
+            ReplyToModeView(
+                modifier = modifier.padding(8.dp),
+                senderName = composerMode.senderName,
+                text = composerMode.defaultContent.toString(),
+                attachmentThumbnailInfo = composerMode.attachmentThumbnailInfo,
+                onResetComposerMode = onResetComposerMode,
+            )
+        }
+        else -> Unit
+    }
+}
+
+@Composable
+private fun EditingModeView(
+    onResetComposerMode: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(horizontalArrangement = Arrangement.spacedBy(6.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 8.dp)) {
+        Icon(
+            resourceId = VectorIcons.Edit,
+            contentDescription = stringResource(R.string.editing),
+            tint = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier.size(16.dp),
+        )
+        Text(
+            stringResource(R.string.editing),
+            style = ElementTextStyles.Regular.caption2,
+            textAlign = TextAlign.Start,
+            color = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier.weight(1f)
+        )
+        Icon(
+            imageVector = Icons.Default.Close,
+            contentDescription = stringResource(StringR.string.action_close),
+            tint = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier
+                .size(16.dp)
+                .clickable(
+                    enabled = true,
+                    onClick = onResetComposerMode,
+                    interactionSource = MutableInteractionSource(),
+                    indication = rememberRipple(bounded = false)
+                ),
+
+            )
+    }
+}
+
+@Composable
+private fun ReplyToModeView(
+    senderName: String,
+    text: String?,
+    attachmentThumbnailInfo: AttachmentThumbnailInfo?,
+    onResetComposerMode: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val paddings = if (attachmentThumbnailInfo != null) {
+        PaddingValues(start = 4.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)
+    } else {
+        PaddingValues(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 4.dp)
+    }
+    Row(
+        modifier
+            .clip(RoundedCornerShape(13.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(paddings)
+    ) {
+        if (attachmentThumbnailInfo != null) {
+            AttachmentThumbnail(
+                info = attachmentThumbnailInfo,
+                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(RoundedCornerShape(9.dp))
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+        }
+        Column(verticalArrangement = Arrangement.SpaceEvenly) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text(
-                    stringResource(R.string.editing),
-                    style = ElementTextStyles.Regular.caption2,
+                    senderName,
+                    style = ElementTextStyles.Regular.caption2.copy(fontWeight = FontWeight.Medium),
                     textAlign = TextAlign.Start,
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.weight(1f)
                 )
                 Icon(
@@ -209,11 +293,19 @@ private fun ComposerModeView(
                             interactionSource = MutableInteractionSource(),
                             indication = rememberRipple(bounded = false)
                         ),
-
                 )
             }
+
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = text.orEmpty(),
+                style = ElementTextStyles.Regular.caption1,
+                textAlign = TextAlign.Start,
+                color = LocalColors.current.placeholder,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
-        else -> Unit
     }
 }
 
@@ -289,14 +381,30 @@ private fun BoxScope.SendButton(
 
 @Preview
 @Composable
-internal fun TextComposerLightPreview() = ElementPreviewLight { ContentToPreview() }
+internal fun TextComposerSimpleLightPreview() = ElementPreviewLight { SimpleContentToPreview() }
 
 @Preview
 @Composable
-internal fun TextComposerDarkPreview() = ElementPreviewDark { ContentToPreview() }
+internal fun TextComposerSimpleDarkPreview() = ElementPreviewDark { SimpleContentToPreview() }
+
+@Preview
+@Composable
+internal fun TextComposerEditLightPreview() = ElementPreviewLight { EditContentToPreview() }
+
+@Preview
+@Composable
+internal fun TextComposerEditDarkPreview() = ElementPreviewDark { EditContentToPreview() }
+
+@Preview
+@Composable
+internal fun TextComposerReplyLightPreview() = ElementPreviewLight { ReplyContentToPreview() }
+
+@Preview
+@Composable
+internal fun TextComposerReplyDarkPreview() = ElementPreviewDark { ReplyContentToPreview() }
 
 @Composable
-private fun ContentToPreview() {
+private fun SimpleContentToPreview() {
     Column {
         TextComposer(
             onSendMessage = {},
@@ -322,10 +430,89 @@ private fun ContentToPreview() {
             composerCanSendMessage = true,
             composerText = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
         )
+    }
+}
+
+@Composable
+private fun EditContentToPreview() {
+    TextComposer(
+        onSendMessage = {},
+        onComposerTextChange = {},
+        composerMode = MessageComposerMode.Edit(EventId("$1234"), "Some text"),
+        onResetComposerMode = {},
+        composerCanSendMessage = true,
+        composerText = "A message",
+    )
+}
+
+@Composable
+private fun ReplyContentToPreview() {
+    Column {
         TextComposer(
             onSendMessage = {},
             onComposerTextChange = {},
-            composerMode = MessageComposerMode.Edit(EventId("$1234"), "Some text"),
+            composerMode = MessageComposerMode.Reply(
+                senderName = "Alice",
+                eventId = EventId("$1234"),
+                attachmentThumbnailInfo = null,
+                defaultContent = "A message\n" +
+                    "With several lines\n" +
+                    "To preview larger textfields and long lines with overflow"
+            ),
+            onResetComposerMode = {},
+            composerCanSendMessage = true,
+            composerText = "A message",
+        )
+        TextComposer(
+            onSendMessage = {},
+            onComposerTextChange = {},
+            composerMode = MessageComposerMode.Reply(
+                senderName = "Alice",
+                eventId = EventId("$1234"),
+                attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                    mediaSource = MediaSource("https://domain.com/image.jpg"),
+                    textContent = "image.jpg",
+                    type = AttachmentThumbnailType.Image,
+                    blurHash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
+                ),
+                defaultContent = "image.jpg"
+            ),
+            onResetComposerMode = {},
+            composerCanSendMessage = true,
+            composerText = "A message",
+        )
+        TextComposer(
+            onSendMessage = {},
+            onComposerTextChange = {},
+            composerMode = MessageComposerMode.Reply(
+                senderName = "Alice",
+                eventId = EventId("$1234"),
+                attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                    mediaSource = MediaSource("https://domain.com/video.mp4"),
+                    textContent = "video.mp4",
+                    type = AttachmentThumbnailType.Video,
+                    blurHash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
+                ),
+                defaultContent = "video.mp4"
+            ),
+            onResetComposerMode = {},
+            composerCanSendMessage = true,
+            composerText = "A message",
+        )
+        TextComposer(
+            onSendMessage = {},
+            onComposerTextChange = {},
+            composerMode = MessageComposerMode.Reply(
+                senderName = "Alice",
+                eventId = EventId("$1234"),
+                attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                    mediaSource = null,
+                    textContent = "logs.txt",
+                    type = AttachmentThumbnailType.File,
+                    blurHash = null,
+                ),
+                defaultContent = "logs.txt"
+            ),
             onResetComposerMode = {},
             composerCanSendMessage = true,
             composerText = "A message",

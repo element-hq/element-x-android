@@ -32,4 +32,12 @@ data class EventTimelineItem(
     val senderProfile: ProfileTimelineDetails,
     val timestamp: Long,
     val content: EventContent
-)
+) {
+    fun inReplyTo(): InReplyTo? {
+        return (content as? MessageContent)?.inReplyTo
+    }
+    fun hasNotLoadedInReplyTo(): Boolean {
+        val details = inReplyTo()
+        return details is InReplyTo.NotLoaded || details is InReplyTo.Error
+    }
+}

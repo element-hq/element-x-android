@@ -63,6 +63,8 @@ class RustMatrixTimeline(
     )
 
     private val timelineItemFactory = MatrixTimelineItemMapper(
+        room = innerRoom,
+        coroutineScope = coroutineScope,
         virtualTimelineItemMapper = VirtualTimelineItemMapper(),
         eventTimelineItemMapper = EventTimelineItemMapper(
             contentMapper = TimelineEventContentMapper(
