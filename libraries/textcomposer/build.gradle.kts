@@ -22,9 +22,6 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.textcomposer"
-    buildFeatures {
-        viewBinding = true
-    }
 }
 
 dependencies {
@@ -35,9 +32,5 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.eventformatter.api)
-    implementation(libs.wysiwyg)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.material)
     ksp(libs.showkase.processor)
 }
