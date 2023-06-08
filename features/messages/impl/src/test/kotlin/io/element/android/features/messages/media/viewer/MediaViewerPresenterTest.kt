@@ -24,6 +24,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.media.local.MediaInfo
+import io.element.android.features.messages.impl.media.local.aFileInfo
 import io.element.android.features.messages.impl.media.viewer.MediaViewerEvents
 import io.element.android.features.messages.impl.media.viewer.MediaViewerNode
 import io.element.android.features.messages.impl.media.viewer.MediaViewerPresenter
@@ -39,11 +40,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-private val TESTED_MEDIA_INFO = MediaInfo(
-    name = "",
-    mimeType = "",
-    formattedFileSize = ""
-)
+private val TESTED_MEDIA_INFO = aFileInfo()
 
 class MediaViewerPresenterTest {
 

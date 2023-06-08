@@ -25,20 +25,21 @@ data class MediaInfo(
     val name: String,
     val mimeType: String,
     val formattedFileSize: String,
+    val fileExtension: String,
 ) : Parcelable
 
 fun anImageInfo(): MediaInfo = MediaInfo(
-    "an image file.jpg", MimeTypes.Jpeg, "4MB"
+    "an image file.jpg", MimeTypes.Jpeg, "4MB","jpg"
 )
 
 fun aVideoInfo(): MediaInfo = MediaInfo(
-    "a video file.mp4", MimeTypes.Mp4, "14MB"
+    "a video file.mp4", MimeTypes.Mp4, "14MB", "mp4"
 )
 
 fun aPdfInfo(): MediaInfo = MediaInfo(
-    "a pdf file.pdf", MimeTypes.Pdf, "23MB"
+    "a pdf file.pdf", MimeTypes.Pdf, "23MB", "pdf"
 )
 
 fun aFileInfo(): MediaInfo = MediaInfo(
-    "an apk file.apk", MimeTypes.Apk, "50MB"
+    "an apk file.apk", MimeTypes.Apk, "50MB", "apk"
 )

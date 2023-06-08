@@ -22,6 +22,7 @@ data class TimelineItemImageContent(
     val body: String,
     val mediaSource: MediaSource,
     val formattedFileSize: String,
+    val fileExtension: String,
     val mimeType: String,
     val blurhash: String?,
     val width: Int?,
