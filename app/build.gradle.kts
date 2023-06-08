@@ -219,6 +219,8 @@ dependencies {
     implementation(libs.network.okhttp.logging)
     implementation(libs.serialization.json)
 
+    implementation(libs.vanniktech.emoji)
+
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
 
