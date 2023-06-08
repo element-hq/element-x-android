@@ -39,11 +39,9 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn

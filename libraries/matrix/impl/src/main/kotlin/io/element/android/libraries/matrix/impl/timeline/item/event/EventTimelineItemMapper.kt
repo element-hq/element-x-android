@@ -81,7 +81,7 @@ private fun List<Reaction>?.map(): List<EventReaction> {
     } ?: emptyList()
 }
 
-private fun RustEventTimelineItemDebugInfo.map(): TimelineItemDebugInfo? {
+private fun RustEventTimelineItemDebugInfo.map(): TimelineItemDebugInfo {
     return TimelineItemDebugInfo(
         model = model,
         originalJson = originalJson,

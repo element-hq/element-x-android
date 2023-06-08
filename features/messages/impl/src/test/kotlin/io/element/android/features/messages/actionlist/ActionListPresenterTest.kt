@@ -20,23 +20,16 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.messages.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
-import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
-import io.element.android.libraries.matrix.test.A_USER_ID
-import io.element.android.libraries.matrix.test.A_USER_NAME
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -60,7 +53,7 @@ class ActionListPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            val messageEvent = aMessageEvent(true, TimelineItemRedactedContent)
+            val messageEvent = aMessageEvent(isMine = true, content = TimelineItemRedactedContent)
             initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent))
             // val loadingState = awaitItem()
             // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
@@ -87,7 +80,7 @@ class ActionListPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            val messageEvent = aMessageEvent(false, TimelineItemRedactedContent)
+            val messageEvent = aMessageEvent(isMine = false, content = TimelineItemRedactedContent)
             initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent))
             // val loadingState = awaitItem()
             // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
@@ -232,19 +225,3 @@ private fun aBuildMeta(
 
 private fun anActionListPresenter(isBuildDebuggable: Boolean) = ActionListPresenter(buildMeta = aBuildMeta(isDebuggable = isBuildDebuggable))
 
-private fun aMessageEvent(
-    isMine: Boolean,
-    content: TimelineItemEventContent,
-) = TimelineItem.Event(
-    id = AN_EVENT_ID.value,
-    eventId = AN_EVENT_ID,
-    senderId = A_USER_ID,
-    senderDisplayName = A_USER_NAME,
-    senderAvatar = AvatarData(A_USER_ID.value, A_USER_NAME),
-    content = content,
-    sentTime = "",
-    isMine = isMine,
-    reactionsState = TimelineItemReactions(persistentListOf()),
-    sendState = EventSendState.Sent(AN_EVENT_ID),
-    inReplyTo = null,
-)

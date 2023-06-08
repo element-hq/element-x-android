@@ -22,12 +22,14 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
+import io.element.android.libraries.matrix.test.room.aTimelineItemDebugInfo
 import kotlinx.collections.immutable.persistentListOf
 
 internal fun aMessageEvent(
@@ -35,6 +37,7 @@ internal fun aMessageEvent(
     isMine: Boolean = true,
     content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false),
     inReplyTo: InReplyTo? = null,
+    debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
 ) = TimelineItem.Event(
     id = eventId?.value.orEmpty(),
     eventId = eventId,
@@ -47,4 +50,5 @@ internal fun aMessageEvent(
     reactionsState = TimelineItemReactions(persistentListOf()),
     sendState = EventSendState.Sent(AN_EVENT_ID),
     inReplyTo = inReplyTo,
+    debugInfo = debugInfo,
 )

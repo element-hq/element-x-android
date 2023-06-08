@@ -62,7 +62,7 @@ sealed interface TimelineItem {
         val reactionsState: TimelineItemReactions,
         val sendState: EventSendState,
         val inReplyTo: InReplyTo?,
-        val debugInfo: TimelineItemDebugInfo?,
+        val debugInfo: TimelineItemDebugInfo,
     ) : TimelineItem {
 
         val showSenderInformation = groupPosition.isNew() && !isMine
