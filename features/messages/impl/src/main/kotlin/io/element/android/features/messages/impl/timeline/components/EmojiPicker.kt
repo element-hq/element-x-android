@@ -36,13 +36,8 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,6 +50,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,15 +74,14 @@ fun EmojiPicker(
     onEmojiSelected: (Emoji) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var selectedTabIndex by rememberSaveable {
-        mutableStateOf(0)
-    }
+    val coroutineScope = rememberCoroutineScope()
 
     val emojiProvider = remember { GoogleEmojiProvider() }
     val categories = remember { emojiProvider.categories }
+    val pagerState = rememberPagerState()
     Column (modifier) {
         TabRow(
-            selectedTabIndex = selectedTabIndex,
+            selectedTabIndex = pagerState.currentPage,
         ) {
             categories.forEachIndexed { index, category ->
                 Tab(
@@ -96,26 +91,11 @@ fun EmojiPicker(
                             contentDescription = category.categoryNames["en"]
                         )
                     },
-                    selected = selectedTabIndex == index,
+                    selected = pagerState.currentPage == index,
                     onClick = {
-                        selectedTabIndex = index
+                        coroutineScope.launch { pagerState.animateScrollToPage(index) }
                     }
                 )
-            }
-        }
-        val pagerState = rememberPagerState()
-
-        LaunchedEffect(selectedTabIndex, pagerState.isScrollInProgress) {
-            if (!pagerState.isScrollInProgress) {
-                pagerState.animateScrollToPage(selectedTabIndex)
-            }
-        }
-
-        LaunchedEffect(pagerState) {
-            snapshotFlow { pagerState.currentPage }.collect { page ->
-                if (!pagerState.isScrollInProgress) {
-                    selectedTabIndex = page
-                }
             }
         }
 
