@@ -31,6 +31,7 @@ android {
         // Should not be there, but this is a POC
         implementation(libs.coil.compose)
         implementation(libs.accompanist.systemui)
+        implementation(libs.vanniktech.blurhash)
         implementation(projects.libraries.elementresources)
         implementation(projects.libraries.uiStrings)
 

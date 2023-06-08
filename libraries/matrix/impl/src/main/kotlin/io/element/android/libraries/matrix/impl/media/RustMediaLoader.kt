@@ -24,12 +24,20 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
 import org.matrix.rustcomponents.sdk.use
+import java.io.File
 import org.matrix.rustcomponents.sdk.MediaSource as RustMediaSource
 
 class RustMediaLoader(
+    baseCacheDirectory: File,
     private val dispatchers: CoroutineDispatchers,
-    private val innerClient: Client
+    private val innerClient: Client,
 ) : MatrixMediaLoader {
+
+    private val cacheDirectory = File(baseCacheDirectory, "temp/media").apply {
+        if (!exists()) {
+            mkdirs()
+        }
+    }
 
     @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun loadMediaContent(source: MediaSource): Result<ByteArray> =
@@ -59,14 +67,16 @@ class RustMediaLoader(
             }
         }
 
-    override suspend fun downloadMediaFile(source: MediaSource, mimeType: String?): Result<MediaFile> =
+    override suspend fun downloadMediaFile(source: MediaSource, mimeType: String?, body: String?): Result<MediaFile> =
         withContext(dispatchers.io) {
             runCatching {
                 source.toRustMediaSource().use { mediaSource ->
                     val mediaFile = innerClient.getMediaFile(
                         mediaSource = mediaSource,
-                        body = null,
-                        mimeType = mimeType ?: "application/octet-stream"
+                        body = body,
+                        mimeType = mimeType ?: "application/octet-stream",
+                        //TODO uncomment when rust api will be merged
+                        //tempDir = cacheDirectory.path,
                     )
                     RustMediaFile(mediaFile)
                 }

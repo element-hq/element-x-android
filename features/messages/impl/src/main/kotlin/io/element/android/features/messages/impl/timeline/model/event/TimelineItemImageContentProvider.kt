@@ -36,5 +36,6 @@ fun aTimelineItemImageContent() = TimelineItemImageContent(
     blurhash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
     width = null,
     height = 300,
-    aspectRatio = 0.5f
+    aspectRatio = 0.5f,
+    formattedFileSize = "4MB"
 )

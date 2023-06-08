@@ -17,11 +17,13 @@
 package io.element.android.libraries.matrix.impl.timeline.item.event
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
@@ -31,6 +33,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageT
 import io.element.android.libraries.matrix.impl.media.map
 import org.matrix.rustcomponents.sdk.Message
 import org.matrix.rustcomponents.sdk.MessageType
+import org.matrix.rustcomponents.sdk.ProfileDetails
+import org.matrix.rustcomponents.sdk.RepliedToEventDetails
 import org.matrix.rustcomponents.sdk.use
 import org.matrix.rustcomponents.sdk.FormattedBody as RustFormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat as RustMessageFormat
@@ -66,9 +70,26 @@ class EventMessageMapper {
                 }
             }
         }
+        val inReplyToId = it.inReplyTo()?.eventId?.let(::EventId)
+        val inReplyToEvent: InReplyTo? = (it.inReplyTo()?.event)?.use { details ->
+            when (details) {
+                is RepliedToEventDetails.Ready -> {
+                    val senderProfile = details.senderProfile as? ProfileDetails.Ready
+                    InReplyTo.Ready(
+                        eventId = inReplyToId!!,
+                        content = map(details.message),
+                        senderId = UserId(details.sender),
+                        senderDisplayName = senderProfile?.displayName,
+                        senderAvatarUrl = senderProfile?.avatarUrl,
+                    )
+                }
+                is RepliedToEventDetails.Error -> InReplyTo.Error
+                is RepliedToEventDetails.Pending, is RepliedToEventDetails.Unavailable -> InReplyTo.NotLoaded(inReplyToId!!)
+            }
+        }
         MessageContent(
             body = it.body(),
-            inReplyTo = it.inReplyTo()?.eventId?.let(::EventId),
+            inReplyTo = inReplyToEvent,
             isEdited = it.isEdited(),
             type = type
         )

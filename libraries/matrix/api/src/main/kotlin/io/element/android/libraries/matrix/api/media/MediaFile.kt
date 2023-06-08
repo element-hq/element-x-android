@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.api.media
 
 import java.io.Closeable
+import java.io.File
 
 /**
  * A wrapper around a media file on the disk.
@@ -24,4 +25,8 @@ import java.io.Closeable
  */
 interface MediaFile : Closeable {
     fun path(): String
+}
+
+fun MediaFile.toFile(): File {
+    return File(path())
 }

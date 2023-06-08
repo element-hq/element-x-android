@@ -27,7 +27,8 @@ data class TimelineItemVideoContent(
     val blurHash: String?,
     val height: Int?,
     val width: Int?,
-    val mimeType: String?,
+    val mimeType: String,
+    val formattedFileSize: String,
 ) : TimelineItemEventContent {
     override val type: String = "TimelineItemImageContent"
 }

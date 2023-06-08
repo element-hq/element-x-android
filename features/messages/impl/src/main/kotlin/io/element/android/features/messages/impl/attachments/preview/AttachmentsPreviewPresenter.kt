@@ -84,7 +84,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         sendActionState: MutableState<Async<Unit>>,
     ) {
         suspend {
-            mediaSender.sendMedia(mediaAttachment.localMedia.uri, mediaAttachment.localMedia.mimeType, mediaAttachment.compressIfPossible)
+            mediaSender.sendMedia(mediaAttachment.localMedia.uri, mediaAttachment.localMedia.info.mimeType, mediaAttachment.compressIfPossible)
         }.executeResult(sendActionState)
     }
 }

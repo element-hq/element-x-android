@@ -26,6 +26,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.util.FileSizeFormatter
 import io.element.android.features.messages.impl.timeline.util.toHtmlDocument
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
@@ -51,11 +52,12 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 TimelineItemImageContent(
                     body = messageType.body,
                     mediaSource = messageType.source,
-                    mimeType = messageType.info?.mimetype,
+                    mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
                     blurhash = messageType.info?.blurhash,
                     width = messageType.info?.width?.toInt(),
                     height = messageType.info?.height?.toInt(),
-                    aspectRatio = aspectRatio
+                    aspectRatio = aspectRatio,
+                    formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0)
                 )
             }
             is VideoMessageType -> {
@@ -64,22 +66,21 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     body = messageType.body,
                     thumbnailSource = messageType.info?.thumbnailSource,
                     videoSource = messageType.source,
-                    mimeType = messageType.info?.mimetype,
+                    mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
                     width = messageType.info?.width?.toInt(),
                     height = messageType.info?.height?.toInt(),
                     duration = messageType.info?.duration ?: 0L,
                     blurHash = messageType.info?.blurhash,
-                    aspectRatio = aspectRatio
+                    aspectRatio = aspectRatio,
+                    formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0)
                 )
             }
             is FileMessageType -> TimelineItemFileContent(
                 body = messageType.body,
                 thumbnailSource = messageType.info?.thumbnailSource,
                 fileSource = messageType.source,
-                mimeType = messageType.info?.mimetype,
-                formattedFileSize = messageType.info?.size?.let {
-                    fileSizeFormatter.format(it)
-                },
+                mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
+                formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0)
             )
             is NoticeMessageType -> TimelineItemNoticeContent(
                 body = messageType.body,
