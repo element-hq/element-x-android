@@ -15,16 +15,18 @@
  */
 
 @file:Suppress("WildcardImport")
+
 package io.element.android.features.verifysession.impl
 
-import io.element.android.libraries.statemachine.createStateMachine
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
+import io.element.android.libraries.statemachine.createStateMachine
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class VerifySelfSessionStateMachine(
     coroutineScope: CoroutineScope,
@@ -37,13 +39,20 @@ class VerifySelfSessionStateMachine(
             on<Event.StartSasVerification>(State.StartingSasVerification)
         }
         addState<State.RequestingVerification> {
-            onEnter { sessionVerificationService.requestVerification() }
-
+            onEnter {
+                coroutineScope.launch {
+                    sessionVerificationService.requestVerification()
+                }
+            }
             on<Event.DidAcceptVerificationRequest>(State.VerificationRequestAccepted)
             on<Event.DidFail>(State.Initial)
         }
         addState<State.StartingSasVerification> {
-            onEnter { sessionVerificationService.startVerification() }
+            onEnter {
+                coroutineScope.launch {
+                    sessionVerificationService.startVerification()
+                }
+            }
         }
         addState<State.VerificationRequestAccepted> {
             on<Event.StartSasVerification>(State.StartingSasVerification)
@@ -60,16 +69,22 @@ class VerifySelfSessionStateMachine(
         }
         addState<State.Verifying.Replying> {
             onEnter { state ->
-                if (state.accept) {
-                    sessionVerificationService.approveVerification()
-                } else {
-                    sessionVerificationService.declineVerification()
+                coroutineScope.launch {
+                    if (state.accept) {
+                        sessionVerificationService.approveVerification()
+                    } else {
+                        sessionVerificationService.declineVerification()
+                    }
                 }
             }
             on<Event.DidAcceptChallenge>(State.Completed)
         }
         addState<State.Canceling> {
-            onEnter { sessionVerificationService.cancelVerification() }
+            onEnter {
+                coroutineScope.launch {
+                    sessionVerificationService.cancelVerification()
+                }
+            }
         }
         on<Event.DidStartSasVerification>(State.SasVerificationStarted)
         on<Event.Cancel>(State.Canceling)
@@ -134,10 +149,13 @@ class VerifySelfSessionStateMachine(
             /** Replying to a verification challenge. */
             data class Replying(override val emojis: List<VerificationEmoji>, val accept: Boolean) : Verifying(emojis)
         }
+
         /** The verification is being canceled. */
         object Canceling : State
+
         /** The verification has been canceled, remotely or locally. */
         object Canceled : State
+
         /** Verification successful. */
         object Completed : State
     }
@@ -145,26 +163,37 @@ class VerifySelfSessionStateMachine(
     sealed interface Event {
         /** Request verification. */
         object RequestVerification : Event
+
         /** The current verification request has been accepted. */
         object DidAcceptVerificationRequest : Event
+
         /** Start a SaS verification flow. */
         object StartSasVerification : Event
+
         /** Started a SaS verification flow. */
         object DidStartSasVerification : Event
+
         /** Has received emojis. */
         data class DidReceiveChallenge(val emojis: List<VerificationEmoji>) : Event
+
         /** Emojis match. */
         object AcceptChallenge : Event
+
         /** Emojis do not match. */
         object DeclineChallenge : Event
+
         /** Remote accepted challenge. */
         object DidAcceptChallenge : Event
+
         /** Request cancellation. */
         object Cancel : Event
+
         /** Verification cancelled. */
         object DidCancel : Event
+
         /** Request failed. */
         object DidFail : Event
+
         /** Restart the verification flow. */
         object Restart : Event
     }

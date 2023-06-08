@@ -18,9 +18,9 @@ package io.element.android.libraries.matrix.impl.verification
 
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
+import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -52,21 +52,21 @@ class RustSessionVerificationService @Inject constructor() : SessionVerification
     private val _sessionVerifiedStatus = MutableStateFlow<SessionVerifiedStatus>(SessionVerifiedStatus.Unknown)
     override val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus> = _sessionVerifiedStatus.asStateFlow()
 
-    override fun requestVerification() = tryOrFail {
+    override suspend fun requestVerification() = tryOrFail {
         verificationController?.requestVerification()
     }
 
-    override fun cancelVerification() = tryOrFail { verificationController?.cancelVerification() }
+    override suspend fun cancelVerification() = tryOrFail { verificationController?.cancelVerification() }
 
-    override fun approveVerification() = tryOrFail { verificationController?.approveVerification() }
+    override suspend fun approveVerification() = tryOrFail { verificationController?.approveVerification() }
 
-    override fun declineVerification() = tryOrFail { verificationController?.declineVerification() }
+    override suspend fun declineVerification() = tryOrFail { verificationController?.declineVerification() }
 
-    override fun startVerification() = tryOrFail {
+    override suspend fun startVerification() = tryOrFail {
         verificationController?.startSasVerification()
     }
 
-    private fun tryOrFail(block: () -> Unit) {
+    private suspend fun tryOrFail(block: suspend () -> Unit) {
         runCatching {
             block()
         }.onFailure { didFail() }
@@ -107,7 +107,7 @@ class RustSessionVerificationService @Inject constructor() : SessionVerification
 
     // end-region
 
-    override fun reset() {
+    override suspend fun reset() {
         if (isReady.value) {
             // Cancel any pending verification attempt
             tryOrNull { verificationController?.cancelVerification() }

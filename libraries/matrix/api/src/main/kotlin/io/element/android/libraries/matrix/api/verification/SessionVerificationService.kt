@@ -40,32 +40,32 @@ interface SessionVerificationService {
     /**
      * Request verification of the current session.
      */
-    fun requestVerification()
+    suspend fun requestVerification()
 
     /**
      * Cancels the current verification attempt.
      */
-    fun cancelVerification()
+    suspend fun cancelVerification()
 
     /**
      * Approves the current verification. This must happen on both devices to successfully verify a session.
      */
-    fun approveVerification()
+    suspend fun approveVerification()
 
     /**
      * Declines the verification attempt because the user could not verify or does not trust the other side of the verification.
      */
-    fun declineVerification()
+    suspend fun declineVerification()
 
     /**
      * Starts the verification of the unverified session from another device.
      */
-    fun startVerification()
+    suspend fun startVerification()
 
     /**
      * Returns the verification service state to the initial step.
      */
-    fun reset()
+    suspend fun reset()
 }
 
 /** Verification status of the current session. */
