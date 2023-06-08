@@ -24,9 +24,10 @@ data class TimelineItemFileContent(
     val fileSource: MediaSource,
     val thumbnailSource: MediaSource?,
     val formattedFileSize: String,
+    val fileExtension: String,
     val mimeType: String,
 ) : TimelineItemEventContent {
     override val type: String = "TimelineItemFileContent"
 
-    val fileExtensionAndSize = formatFileExtensionAndSize(body, formattedFileSize)
+    val fileExtensionAndSize = formatFileExtensionAndSize(fileExtension, formattedFileSize)
 }

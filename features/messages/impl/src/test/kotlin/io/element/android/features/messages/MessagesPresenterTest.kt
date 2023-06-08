@@ -32,7 +32,6 @@ import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
-import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatterImpl
 import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.features.messages.utils.messagesummary.FakeMessageSummaryFormatter
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
@@ -145,6 +144,8 @@ class MessagesPresenterTest {
                     width = 20,
                     height = 20,
                     aspectRatio = 1.0f,
+                    fileExtension = "jpg",
+                    formattedFileSize = "4MB"
                 )
             )
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, mediaMessage))
@@ -175,6 +176,8 @@ class MessagesPresenterTest {
                     width = 20,
                     height = 20,
                     aspectRatio = 1.0f,
+                    fileExtension = "mp4",
+                    formattedFileSize = "50MB"
                 )
             )
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, mediaMessage))
@@ -196,11 +199,12 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             val mediaMessage = aMessageEvent(
                 content = TimelineItemFileContent(
-                    body = "video.mp4",
+                    body = "video.pdf",
                     fileSource = MediaSource(AN_AVATAR_URL),
                     thumbnailSource = MediaSource(AN_AVATAR_URL),
                     formattedFileSize = "10 MB",
                     mimeType = MimeTypes.Pdf,
+                    fileExtension = "pdf",
                 )
             )
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, mediaMessage))
@@ -276,7 +280,7 @@ class MessagesPresenterTest {
             mediaPickerProvider = FakePickerProvider(),
             featureFlagService = FakeFeatureFlagService(),
             localMediaFactory = FakeLocalMediaFactory(mockMediaUrl),
-            mediaSender = MediaSender(FakeMediaPreProcessor(),matrixRoom),
+            mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom),
             snackbarDispatcher = SnackbarDispatcher(),
         )
         val timelinePresenter = TimelinePresenter(

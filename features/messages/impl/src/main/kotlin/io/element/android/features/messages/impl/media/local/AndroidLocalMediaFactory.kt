@@ -20,6 +20,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.messages.impl.timeline.util.FileExtensionExtractor
 import io.element.android.features.messages.impl.timeline.util.FileSizeFormatter
 import io.element.android.libraries.androidutils.file.getFileName
 import io.element.android.libraries.androidutils.file.getFileSize
@@ -35,6 +36,7 @@ import javax.inject.Inject
 class AndroidLocalMediaFactory @Inject constructor(
     @ApplicationContext private val context: Context,
     private val fileSizeFormatter: FileSizeFormatter,
+    private val fileExtensionExtractor: FileExtensionExtractor,
 ) : LocalMediaFactory {
 
     override fun createFromMediaFile(mediaFile: MediaFile, mediaInfo: MediaInfo): LocalMedia {
@@ -43,7 +45,7 @@ class AndroidLocalMediaFactory @Inject constructor(
             uri = uri,
             mimeType = mediaInfo.mimeType,
             name = mediaInfo.name,
-            formattedFileSize = mediaInfo.formattedFileSize
+            formattedFileSize = mediaInfo.formattedFileSize,
         )
     }
 
@@ -56,12 +58,14 @@ class AndroidLocalMediaFactory @Inject constructor(
         val resolvedMimeType = mimeType ?: context.getMimeType(uri) ?: MimeTypes.OctetStream
         val fileName = name ?: context.getFileName(uri) ?: ""
         val fileSize = formattedFileSize ?: fileSizeFormatter.format(context.getFileSize(uri))
+        val fileExtension = fileExtensionExtractor.extractFromName(fileName)
         return LocalMedia(
             uri = uri,
             info = MediaInfo(
                 mimeType = resolvedMimeType,
                 name = fileName,
-                formattedFileSize = fileSize
+                formattedFileSize = fileSize,
+                fileExtension = fileExtension
             )
         )
     }

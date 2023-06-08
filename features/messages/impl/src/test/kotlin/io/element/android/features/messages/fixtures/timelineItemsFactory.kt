@@ -31,6 +31,7 @@ import io.element.android.features.messages.impl.timeline.factories.event.Timeli
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemDaySeparatorFactory
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
 import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
+import io.element.android.features.messages.impl.timeline.util.FileExtensionExtractorWithoutValidation
 import io.element.android.features.messages.timeline.FakeFileSizeFormatter
 import io.element.android.libraries.dateformatter.test.FakeDaySeparatorFormatter
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
@@ -43,7 +44,7 @@ internal fun aTimelineItemsFactory(): TimelineItemsFactory {
         dispatchers = testCoroutineDispatchers(),
         eventItemFactory = TimelineItemEventFactory(
             TimelineItemContentFactory(
-                messageFactory = TimelineItemContentMessageFactory(FakeFileSizeFormatter()),
+                messageFactory = TimelineItemContentMessageFactory(FakeFileSizeFormatter(), FileExtensionExtractorWithoutValidation()),
                 redactedMessageFactory = TimelineItemContentRedactedFactory(),
                 stickerFactory = TimelineItemContentStickerFactory(),
                 utdFactory = TimelineItemContentUTDFactory(),
