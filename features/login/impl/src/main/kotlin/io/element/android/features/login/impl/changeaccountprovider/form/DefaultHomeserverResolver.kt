@@ -25,15 +25,14 @@ import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.core.uri.isValidUrl
 import io.element.android.libraries.di.AppScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.joinAll
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
+import java.util.Collections
 import javax.inject.Inject
 
 /**
@@ -44,35 +43,25 @@ class DefaultHomeserverResolver @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val wellknownRequest: WellknownRequest,
 ) : HomeserverResolver {
-    private val mutableFlow: MutableStateFlow<Async<List<HomeserverData>>> = MutableStateFlow(Async.Uninitialized)
 
-    override fun flow(): StateFlow<Async<List<HomeserverData>>> = mutableFlow
-
-    private var currentJob: Job? = null
-
-    override suspend fun accept(userInput: String) {
-        currentJob?.cancel()
-        val cleanedUpUserInput = userInput.trim().ensureProtocol().removeSuffix("/")
-        mutableFlow.tryEmit(Async.Uninitialized)
-        if (cleanedUpUserInput.length > 3) {
-            delay(300)
-            mutableFlow.tryEmit(Async.Loading())
-            withContext(dispatchers.io) {
-                val list = getUrlCandidate(cleanedUpUserInput)
-                currentJob = resolveList(cleanedUpUserInput, list)
-            }
-        }
-    }
-
-    private fun CoroutineScope.resolveList(userInput: String, list: List<String>): Job {
-        val currentList = mutableListOf<HomeserverData>()
-        return launch {
+    override suspend fun resolve(userInput: String): Flow<Async<List<HomeserverData>>> = flow {
+        val flowContext = currentCoroutineContext()
+        emit(Async.Uninitialized)
+        // Debounce
+        delay(300)
+        val clean = userInput.trim()
+        if (clean.length < 4) return@flow
+        emit(Async.Loading())
+        val list = getUrlCandidate(clean.ensureProtocol().removeSuffix("/"))
+        val currentList = Collections.synchronizedList(mutableListOf<HomeserverData>())
+        // Run all the requests in parallel
+        withContext(dispatchers.io) {
             list.map {
                 async {
                     val wellKnown = tryOrNull { wellknownRequest.execute(it) }
                     val isValid = wellKnown?.isValid().orFalse()
-                    val supportSlidingSync = wellKnown?.supportSlidingSync().orFalse()
                     if (isValid) {
+                        val supportSlidingSync = wellKnown?.supportSlidingSync().orFalse()
                         // Emit the list as soon as possible
                         currentList.add(
                             HomeserverData(
@@ -81,38 +70,35 @@ class DefaultHomeserverResolver @Inject constructor(
                                 supportSlidingSync = supportSlidingSync
                             )
                         )
-                        mutableFlow.tryEmit(Async.Success(currentList))
-                    }
-                }
-            }.joinAll()
-                .also {
-                    // If list is empty, and the user as entered an URL, do not block the user.
-                    if (currentList.isEmpty()) {
-                        if (userInput.isValidUrl()) {
-                            mutableFlow.tryEmit(
-                                Async.Success(
-                                    listOf(
-                                        HomeserverData(
-                                            homeserverUrl = userInput,
-                                            isWellknownValid = false,
-                                            supportSlidingSync = false,
-                                        )
-                                    )
-                                )
-                            )
-                        } else {
-                            mutableFlow.tryEmit(Async.Uninitialized)
+                        withContext(flowContext) {
+                            emit(Async.Success(currentList))
                         }
                     }
                 }
+            }.awaitAll()
+        }
+        // If list is empty, and the user as entered an URL, do not block the user.
+        if (currentList.isEmpty()) {
+            if (userInput.isValidUrl()) {
+                emit(
+                    Async.Success(
+                        listOf(
+                            HomeserverData(
+                                homeserverUrl = userInput,
+                                isWellknownValid = false,
+                                supportSlidingSync = false,
+                            )
+                        )
+                    )
+                )
+            } else {
+                emit(Async.Uninitialized)
+            }
         }
     }
 
     private fun getUrlCandidate(data: String): List<String> {
         return buildList {
-            // Always try what the user has entered
-            add(data)
-
             if (data.contains(".")) {
                 // TLD detected?
             } else {
@@ -120,6 +106,8 @@ class DefaultHomeserverResolver @Inject constructor(
                 add("${data}.com")
                 add("${data}.io")
             }
+            // Always try what the user has entered
+            add(data)
         }
     }
 }

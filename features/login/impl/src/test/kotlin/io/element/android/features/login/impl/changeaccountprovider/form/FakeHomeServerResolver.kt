@@ -19,8 +19,8 @@ package io.element.android.features.login.impl.changeaccountprovider.form
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.test.FAKE_DELAY_IN_MS
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class FakeHomeServerResolver : HomeserverResolver {
     private var pendingResult: List<List<HomeserverData>> = emptyList()
@@ -28,21 +28,17 @@ class FakeHomeServerResolver : HomeserverResolver {
         pendingResult = result
     }
 
-    private val mutableFlow: MutableStateFlow<Async<List<HomeserverData>>> = MutableStateFlow(Async.Uninitialized)
-
-    override fun flow(): StateFlow<Async<List<HomeserverData>>> = mutableFlow
-
-    override suspend fun accept(userInput: String) {
-        mutableFlow.tryEmit(Async.Uninitialized)
+    override suspend fun resolve(userInput: String): Flow<Async<List<HomeserverData>>> = flow {
+        emit(Async.Uninitialized)
         delay(FAKE_DELAY_IN_MS)
-        mutableFlow.tryEmit(Async.Loading())
+        emit(Async.Loading())
         // Sending the pending result
         if (pendingResult.isEmpty()) {
-            mutableFlow.tryEmit(Async.Uninitialized)
+            emit(Async.Uninitialized)
         } else {
             pendingResult.forEach {
                 delay(FAKE_DELAY_IN_MS)
-                mutableFlow.tryEmit(Async.Success(it))
+                emit(Async.Success(it))
             }
         }
     }

@@ -17,15 +17,15 @@
 package io.element.android.features.login.impl.changeaccountprovider.form
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import io.element.android.features.login.impl.changeaccountprovider.common.ChangeServerPresenter
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ChangeAccountProviderFormPresenter @Inject constructor(
@@ -35,33 +35,34 @@ class ChangeAccountProviderFormPresenter @Inject constructor(
 
     @Composable
     override fun present(): ChangeAccountProviderFormState {
-        val localCoroutineScope = rememberCoroutineScope()
-
-        val userInput = rememberSaveable {
+        var userInput by rememberSaveable {
             mutableStateOf("")
         }
         val changeServerState = changeServerPresenter.present()
-        val data by homeserverResolver.flow().collectAsState()
+
+        var data: Async<List<HomeserverData>> by remember {
+            mutableStateOf(Async.Uninitialized)
+        }
+
+        LaunchedEffect(userInput) {
+            homeserverResolver.resolve(userInput).collect {
+                data = it
+            }
+        }
 
         fun handleEvents(event: ChangeAccountProviderFormEvents) {
             when (event) {
                 is ChangeAccountProviderFormEvents.UserInput -> {
-                    userInput.value = event.input
-                    localCoroutineScope.userInput(event.input)
+                    userInput = event.input
                 }
             }
         }
 
         return ChangeAccountProviderFormState(
-            userInput = userInput.value,
+            userInput = userInput,
             userInputResult = data,
             changeServerState = changeServerState,
             eventSink = ::handleEvents
         )
-    }
-
-    // Could be reworked using LaunchedEffect
-    private fun CoroutineScope.userInput(userInput: String) = launch {
-        homeserverResolver.accept(userInput)
     }
 }
