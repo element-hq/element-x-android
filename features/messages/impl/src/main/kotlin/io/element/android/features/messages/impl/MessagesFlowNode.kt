@@ -120,7 +120,8 @@ class MessagesFlowNode @AssistedInject constructor(
                     mediaInfo = MediaInfo(
                         name = event.content.body,
                         mimeType = event.content.mimeType,
-                        formattedFileSize = event.content.formattedFileSize
+                        formattedFileSize = event.content.formattedFileSize,
+                        fileExtension = event.content.fileExtension
                     ),
                     mediaSource = event.content.mediaSource,
                     thumbnailSource = event.content.mediaSource,
@@ -133,7 +134,8 @@ class MessagesFlowNode @AssistedInject constructor(
                     mediaInfo = MediaInfo(
                         name = event.content.body,
                         mimeType = event.content.mimeType,
-                        formattedFileSize = event.content.formattedFileSize
+                        formattedFileSize = event.content.formattedFileSize,
+                        fileExtension = event.content.fileExtension
                     ),
                     mediaSource = mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
@@ -146,7 +148,8 @@ class MessagesFlowNode @AssistedInject constructor(
                     mediaInfo = MediaInfo(
                         name = event.content.body,
                         mimeType = event.content.mimeType,
-                        formattedFileSize = event.content.formattedFileSize
+                        formattedFileSize = event.content.formattedFileSize,
+                        fileExtension = event.content.fileExtension
                     ),
                     mediaSource = mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
