@@ -21,13 +21,21 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.login.impl.accountprovider.item.AccountProvider
+import io.element.android.features.login.impl.changeaccountprovider.common.ChangeServerPresenter
+import io.element.android.features.login.impl.datasource.AccountProviderDataSource
+import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class ChangeAccountProviderPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
+        val changeServerPresenter = ChangeServerPresenter(
+            FakeAuthenticationService(),
+            AccountProviderDataSource()
+        )
         val presenter = ChangeAccountProviderPresenter(
+            changeServerPresenter
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
