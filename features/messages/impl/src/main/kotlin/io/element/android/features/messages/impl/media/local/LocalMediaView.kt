@@ -246,7 +246,7 @@ fun MediaFileView(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = formatFileExtensionAndSize(info.name, info.formattedFileSize),
+                    text = formatFileExtensionAndSize(info.fileExtension, info.formattedFileSize),
                     fontSize = 14.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

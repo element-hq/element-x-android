@@ -33,6 +33,7 @@ fun aTimelineItemFileContent(fileName: String) = TimelineItemFileContent(
     body = fileName,
     thumbnailSource = MediaSource(url = ""),
     fileSource = MediaSource(url = ""),
-    mimeType = MimeTypes.OctetStream,
-    formattedFileSize = "100kB"
+    mimeType = MimeTypes.Pdf,
+    formattedFileSize = "100kB",
+    fileExtension = "pdf"
 )

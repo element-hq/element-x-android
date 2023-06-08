@@ -37,5 +37,6 @@ fun aTimelineItemImageContent() = TimelineItemImageContent(
     width = null,
     height = 300,
     aspectRatio = 0.5f,
-    formattedFileSize = "4MB"
+    formattedFileSize = "4MB",
+    fileExtension = "jpg"
 )
