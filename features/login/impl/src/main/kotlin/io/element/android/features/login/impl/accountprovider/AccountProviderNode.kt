@@ -16,9 +16,6 @@
 
 package io.element.android.features.login.impl.accountprovider
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,10 +26,9 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.login.impl.util.LoginConstants
+import io.element.android.features.login.impl.util.openLearnMorePage
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 
@@ -70,11 +66,6 @@ class AccountProviderNode @AssistedInject constructor(
 
     private fun onChangeAccountProvider() {
         plugins<Callback>().forEach { it.onChangeAccountProvider() }
-    }
-
-    private fun openLearnMorePage(context: Context) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(LoginConstants.SLIDING_SYNC_READ_MORE_URL))
-        tryOrNull { context.startActivity(intent) }
     }
 
     @Composable

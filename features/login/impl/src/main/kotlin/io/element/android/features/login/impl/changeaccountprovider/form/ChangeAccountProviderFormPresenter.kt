@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import io.element.android.features.login.impl.changeaccountprovider.common.ChangeServerPresenter
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -29,6 +30,7 @@ import javax.inject.Inject
 
 class ChangeAccountProviderFormPresenter @Inject constructor(
     private val homeserverResolver: HomeserverResolver,
+    private val changeServerPresenter: ChangeServerPresenter,
 ) : Presenter<ChangeAccountProviderFormState> {
 
     @Composable
@@ -38,6 +40,7 @@ class ChangeAccountProviderFormPresenter @Inject constructor(
         val userInput = rememberSaveable {
             mutableStateOf("")
         }
+        val changeServerState = changeServerPresenter.present()
         val data by homeserverResolver.flow().collectAsState()
 
         fun handleEvents(event: ChangeAccountProviderFormEvents) {
@@ -52,6 +55,7 @@ class ChangeAccountProviderFormPresenter @Inject constructor(
         return ChangeAccountProviderFormState(
             userInput = userInput.value,
             userInputResult = data,
+            changeServerState = changeServerState,
             eventSink = ::handleEvents
         )
     }

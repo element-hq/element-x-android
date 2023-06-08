@@ -18,14 +18,17 @@ package io.element.android.features.login.impl.changeaccountprovider
 
 import androidx.compose.runtime.Composable
 import io.element.android.features.login.impl.accountprovider.item.AccountProvider
+import io.element.android.features.login.impl.changeaccountprovider.common.ChangeServerPresenter
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 
 class ChangeAccountProviderPresenter @Inject constructor(
+    private val changeServerPresenter: ChangeServerPresenter,
 ) : Presenter<ChangeAccountProviderState> {
 
     @Composable
     override fun present(): ChangeAccountProviderState {
+        val changeServerState = changeServerPresenter.present()
         return ChangeAccountProviderState(
             // Just matrix.org by default for now
             accountProviders = listOf(
@@ -38,6 +41,7 @@ class ChangeAccountProviderPresenter @Inject constructor(
                     supportSlidingSync = true,
                 )
             ),
+            changeServerState = changeServerState,
         )
     }
 }

@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.changeaccountprovider
+package io.element.android.features.login.impl.util
 
-import io.element.android.features.login.impl.accountprovider.item.AccountProvider
-import io.element.android.features.login.impl.changeaccountprovider.common.ChangeServerState
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import io.element.android.libraries.core.data.tryOrNull
 
-// Do not use default value, so no member get forgotten in the presenters.
-data class ChangeAccountProviderState constructor(
-    val accountProviders: List<AccountProvider>,
-    val changeServerState: ChangeServerState,
-)
+fun openLearnMorePage(context: Context) {
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(LoginConstants.SLIDING_SYNC_READ_MORE_URL))
+    tryOrNull { context.startActivity(intent) }
+}

@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.changeaccountprovider
+package io.element.android.features.login.impl.changeaccountprovider.common
 
 import io.element.android.features.login.impl.accountprovider.item.AccountProvider
-import io.element.android.features.login.impl.changeaccountprovider.common.ChangeServerState
 
-// Do not use default value, so no member get forgotten in the presenters.
-data class ChangeAccountProviderState constructor(
-    val accountProviders: List<AccountProvider>,
-    val changeServerState: ChangeServerState,
-)
+sealed interface ChangeServerEvents {
+    data class ChangeServer(val accountProvider: AccountProvider) : ChangeServerEvents
+    object ClearError : ChangeServerEvents
+}

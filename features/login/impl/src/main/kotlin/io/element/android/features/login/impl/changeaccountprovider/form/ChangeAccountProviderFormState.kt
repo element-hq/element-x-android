@@ -16,11 +16,13 @@
 
 package io.element.android.features.login.impl.changeaccountprovider.form
 
+import io.element.android.features.login.impl.changeaccountprovider.common.ChangeServerState
 import io.element.android.libraries.architecture.Async
 
 // Do not use default value, so no member get forgotten in the presenters.
 data class ChangeAccountProviderFormState(
     val userInput: String,
     val userInputResult: Async<List<HomeserverData>>,
+    val changeServerState: ChangeServerState,
     val eventSink: (ChangeAccountProviderFormEvents) -> Unit
 )

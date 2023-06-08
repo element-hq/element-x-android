@@ -60,8 +60,6 @@ fun AccountProviderView(
         }
     }
     val eventSink = state.eventSink
-    val invalidHomeserverError = (state.loginFlow as? Async.Failure)?.error as? ChangeServerError.InlineErrorMessage
-    val slidingSyncNotSupportedError = (state.loginFlow as? Async.Failure)?.error as? ChangeServerError.SlidingSyncAlert
 
     HeaderFooterPage(
         modifier = modifier,
@@ -112,7 +110,26 @@ fun AccountProviderView(
         }
     ) {
         when (state.loginFlow) {
-            is Async.Failure -> Unit // Error dialog will be displayed
+            is Async.Failure -> {
+                when (val error = state.loginFlow.error) {
+                    is ChangeServerError.InlineErrorMessage -> {
+                        ErrorDialog(
+                            content = error.message(),
+                            onDismiss = {
+                                eventSink.invoke(AccountProviderEvents.ClearError)
+                            }
+                        )
+                    }
+                    is ChangeServerError.SlidingSyncAlert -> {
+                        SlidingSyncNotSupportedDialog(onLearnMoreClicked = {
+                            onLearnMoreClicked()
+                            eventSink(AccountProviderEvents.ClearError)
+                        }, onDismiss = {
+                            eventSink(AccountProviderEvents.ClearError)
+                        })
+                    }
+                }
+            }
             is Async.Loading -> Unit // The Continue button shows the loading state
             is Async.Success -> {
                 when (val loginFlowState = state.loginFlow.state) {
@@ -121,22 +138,6 @@ fun AccountProviderView(
                 }
             }
             Async.Uninitialized -> Unit
-        }
-        if (slidingSyncNotSupportedError != null) {
-            SlidingSyncNotSupportedDialog(onLearnMoreClicked = {
-                onLearnMoreClicked()
-                eventSink(AccountProviderEvents.ClearError)
-            }, onDismiss = {
-                eventSink(AccountProviderEvents.ClearError)
-            })
-        }
-        if (invalidHomeserverError != null) {
-            ErrorDialog(
-                content = invalidHomeserverError.message(),
-                onDismiss = {
-                    eventSink.invoke(AccountProviderEvents.ClearError)
-                }
-            )
         }
     }
 }

@@ -17,6 +17,7 @@
 package io.element.android.features.login.impl.changeaccountprovider.form
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.login.impl.changeaccountprovider.common.aChangeServerState
 import io.element.android.libraries.architecture.Async
 
 open class ChangeAccountProviderFormStateProvider : PreviewParameterProvider<ChangeAccountProviderFormState> {
@@ -34,6 +35,7 @@ fun aChangeAccountProviderFormState(
 ) = ChangeAccountProviderFormState(
     userInput = userInput,
     userInputResult = userInputResult,
+    changeServerState = aChangeServerState(),
     eventSink = {}
 )
 
