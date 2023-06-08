@@ -278,12 +278,12 @@ internal fun LoginErrorDialog(error: Throwable, onDismiss: () -> Unit) {
 
 @Preview
 @Composable
-internal fun LoginRootScreenLightPreview(@PreviewParameter(LoginPasswordStateProvider::class) state: LoginPasswordState) =
+internal fun LoginPasswordViewLightPreview(@PreviewParameter(LoginPasswordStateProvider::class) state: LoginPasswordState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @Preview
 @Composable
-internal fun LoginRootScreenDarkPreview(@PreviewParameter(LoginPasswordStateProvider::class) state: LoginPasswordState) =
+internal fun LoginPasswordViewDarkPreview(@PreviewParameter(LoginPasswordStateProvider::class) state: LoginPasswordState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @Composable

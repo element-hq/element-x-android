@@ -47,7 +47,7 @@ fun IconTitleSubtitleMolecule(
     modifier: Modifier = Modifier,
     iconResourceId: Int? = null,
     iconImageVector: ImageVector? = null,
-    iconTint: Color = Color.Unspecified,
+    iconTint: Color = MaterialTheme.colorScheme.primary,
 ) {
     Column(modifier) {
         RoundedIconAtom(

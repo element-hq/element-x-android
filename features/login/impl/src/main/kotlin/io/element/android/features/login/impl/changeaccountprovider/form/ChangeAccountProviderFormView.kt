@@ -105,7 +105,6 @@ fun ChangeAccountProviderFormView(
                 IconTitleSubtitleMolecule(
                     modifier = Modifier.padding(top = 16.dp, bottom = 40.dp, start = 16.dp, end = 16.dp),
                     iconImageVector = Icons.Filled.Home,
-                    iconTint = MaterialTheme.colorScheme.primary,
                     title = stringResource(id = R.string.screen_account_provider_form_title),
                     subTitle = stringResource(id = R.string.screen_account_provider_form_subtitle),
                 )
