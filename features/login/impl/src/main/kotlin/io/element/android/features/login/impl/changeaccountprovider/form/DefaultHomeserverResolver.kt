@@ -49,10 +49,11 @@ class DefaultHomeserverResolver @Inject constructor(
         emit(Async.Uninitialized)
         // Debounce
         delay(300)
-        val clean = userInput.trim()
-        if (clean.length < 4) return@flow
+        val trimmedUserInput = userInput.trim()
+        if (trimmedUserInput.length < 4) return@flow
         emit(Async.Loading())
-        val list = getUrlCandidate(clean.ensureProtocol().removeSuffix("/"))
+        val candidateBase = trimmedUserInput.ensureProtocol().removeSuffix("/")
+        val list = getUrlCandidates(candidateBase)
         val currentList = Collections.synchronizedList(mutableListOf<HomeserverData>())
         // Run all the requests in parallel
         withContext(dispatchers.io) {
@@ -77,14 +78,14 @@ class DefaultHomeserverResolver @Inject constructor(
                 }
             }.awaitAll()
         }
-        // If list is empty, and the user as entered an URL, do not block the user.
+        // If list is empty, and the user has entered an URL, do not block the user.
         if (currentList.isEmpty()) {
-            if (userInput.isValidUrl()) {
+            if (trimmedUserInput.isValidUrl()) {
                 emit(
                     Async.Success(
                         listOf(
                             HomeserverData(
-                                homeserverUrl = userInput,
+                                homeserverUrl = trimmedUserInput,
                                 isWellknownValid = false,
                                 supportSlidingSync = false,
                             )
@@ -97,7 +98,7 @@ class DefaultHomeserverResolver @Inject constructor(
         }
     }
 
-    private fun getUrlCandidate(data: String): List<String> {
+    private fun getUrlCandidates(data: String): List<String> {
         return buildList {
             if (data.contains(".")) {
                 // TLD detected?
