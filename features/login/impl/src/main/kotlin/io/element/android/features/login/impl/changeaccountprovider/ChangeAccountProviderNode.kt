@@ -18,6 +18,7 @@ package io.element.android.features.login.impl.changeaccountprovider
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -25,7 +26,7 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.login.impl.accountprovider.item.AccountProvider
+import io.element.android.features.login.impl.util.openLearnMorePage
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
@@ -36,12 +37,12 @@ class ChangeAccountProviderNode @AssistedInject constructor(
 ) : Node(buildContext, plugins = plugins) {
 
     interface Callback : Plugin {
-        fun onAccountProviderClicked(data: AccountProvider)
+        fun onDone()
         fun onOtherClicked()
     }
 
-    private fun onAccountProviderClicked(data: AccountProvider) {
-        plugins<Callback>().forEach { it.onAccountProviderClicked(data) }
+    private fun onDone() {
+        plugins<Callback>().forEach { it.onDone() }
     }
 
     private fun onOtherClicked() {
@@ -51,11 +52,13 @@ class ChangeAccountProviderNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
+        val context = LocalContext.current
         ChangeAccountProviderView(
             state = state,
             modifier = modifier,
             onBackPressed = ::navigateUp,
-            onAccountProviderClicked = ::onAccountProviderClicked,
+            onLearnMoreClicked = { openLearnMorePage(context) },
+            onDone = ::onDone,
             onOtherProviderClicked = ::onOtherClicked,
         )
     }

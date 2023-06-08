@@ -33,7 +33,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.login.impl.accountprovider.AccountProviderNode
-import io.element.android.features.login.impl.accountprovider.item.AccountProvider
 import io.element.android.features.login.impl.changeaccountprovider.ChangeAccountProviderNode
 import io.element.android.features.login.impl.changeaccountprovider.form.ChangeAccountProviderFormNode
 import io.element.android.features.login.impl.datasource.AccountProviderDataSource
@@ -125,8 +124,7 @@ class LoginFlowNode @AssistedInject constructor(
             }
             NavTarget.ChangeAccountProvider -> {
                 val callback = object : ChangeAccountProviderNode.Callback {
-                    override fun onAccountProviderClicked(data: AccountProvider) {
-                        accountProviderDataSource.userSelection(data)
+                    override fun onDone() {
                         // Go back to the Account Provider screen
                         backstack.singleTop(NavTarget.AccountProvider)
                     }
@@ -140,8 +138,7 @@ class LoginFlowNode @AssistedInject constructor(
             }
             NavTarget.ChangeAccountProviderForm -> {
                 val callback = object : ChangeAccountProviderFormNode.Callback {
-                    override fun onAccountProviderClicked(data: AccountProvider) {
-                        accountProviderDataSource.userSelection(data)
+                    override fun onDone() {
                         // Go back to the Account Provider screen
                         backstack.singleTop(NavTarget.AccountProvider)
                     }

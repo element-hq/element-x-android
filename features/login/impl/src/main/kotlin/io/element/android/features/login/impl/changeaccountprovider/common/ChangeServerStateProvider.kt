@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.changeaccountprovider
+package io.element.android.features.login.impl.changeaccountprovider.common
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.login.impl.accountprovider.item.anAccountProvider
-import io.element.android.features.login.impl.changeaccountprovider.common.aChangeServerState
+import io.element.android.libraries.architecture.Async
 
-open class ChangeAccountProviderStateProvider : PreviewParameterProvider<ChangeAccountProviderState> {
-    override val values: Sequence<ChangeAccountProviderState>
+open class ChangeServerStateProvider : PreviewParameterProvider<ChangeServerState> {
+    override val values: Sequence<ChangeServerState>
         get() = sequenceOf(
-            aChangeAccountProviderState(),
-            // Add other state here
+            aChangeServerState(),
         )
 }
 
-fun aChangeAccountProviderState() = ChangeAccountProviderState(
-    accountProviders = listOf(
-        anAccountProvider()
-    ),
-    changeServerState = aChangeServerState(),
+fun aChangeServerState() = ChangeServerState(
+    changeServerAction = Async.Uninitialized,
+    eventSink = {}
 )

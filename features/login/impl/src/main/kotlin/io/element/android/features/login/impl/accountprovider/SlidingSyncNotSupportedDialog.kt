@@ -17,14 +17,20 @@
 package io.element.android.features.login.impl.accountprovider
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.login.impl.R
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
-internal fun SlidingSyncNotSupportedDialog(onLearnMoreClicked: () -> Unit, onDismiss: () -> Unit) {
+internal fun SlidingSyncNotSupportedDialog(
+    onLearnMoreClicked: () -> Unit,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     ConfirmationDialog(
+        modifier = modifier,
         onDismiss = onDismiss,
         submitText = stringResource(StringR.string.action_learn_more),
         onSubmitClicked = onLearnMoreClicked,

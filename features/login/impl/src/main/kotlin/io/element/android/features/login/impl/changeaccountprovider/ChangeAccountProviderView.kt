@@ -42,6 +42,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.accountprovider.item.AccountProvider
 import io.element.android.features.login.impl.accountprovider.item.AccountProviderView
+import io.element.android.features.login.impl.changeaccountprovider.common.ChangeServerEvents
+import io.element.android.features.login.impl.changeaccountprovider.common.ChangeServerView
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -57,7 +59,8 @@ fun ChangeAccountProviderView(
     state: ChangeAccountProviderState,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
-    onAccountProviderClicked: (AccountProvider) -> Unit = {},
+    onLearnMoreClicked: () -> Unit = {},
+    onDone: () -> Unit = {},
     onOtherProviderClicked: () -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
@@ -104,7 +107,7 @@ fun ChangeAccountProviderView(
                     AccountProviderView(
                         item = alteredItem,
                         onClick = {
-                            onAccountProviderClicked(alteredItem)
+                            state.changeServerState.eventSink.invoke(ChangeServerEvents.ChangeServer(alteredItem))
                         }
                     )
                 }
@@ -117,6 +120,11 @@ fun ChangeAccountProviderView(
                 )
                 Spacer(Modifier.height(32.dp))
             }
+            ChangeServerView(
+                state = state.changeServerState,
+                onLearnMoreClicked = onLearnMoreClicked,
+                onDone = onDone,
+            )
         }
     }
 }

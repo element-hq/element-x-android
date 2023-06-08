@@ -52,6 +52,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.accountprovider.item.AccountProvider
 import io.element.android.features.login.impl.accountprovider.item.AccountProviderView
+import io.element.android.features.login.impl.changeaccountprovider.common.ChangeServerEvents
+import io.element.android.features.login.impl.changeaccountprovider.common.ChangeServerView
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -72,7 +74,8 @@ fun ChangeAccountProviderFormView(
     state: ChangeAccountProviderFormState,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
-    onAccountProviderClicked: (AccountProvider) -> Unit = {},
+    onLearnMoreClicked: () -> Unit = {},
+    onDone: () -> Unit = {},
 ) {
     val eventSink = state.eventSink
     val scrollState = rememberScrollState()
@@ -164,7 +167,7 @@ fun ChangeAccountProviderFormView(
                             AccountProviderView(
                                 item = item,
                                 onClick = {
-                                    onAccountProviderClicked(item)
+                                    state.changeServerState.eventSink.invoke(ChangeServerEvents.ChangeServer(item))
                                 }
                             )
                         }
@@ -173,6 +176,11 @@ fun ChangeAccountProviderFormView(
                 }
                 Spacer(Modifier.height(32.dp))
             }
+            ChangeServerView(
+                state = state.changeServerState,
+                onLearnMoreClicked = onLearnMoreClicked,
+                onDone = onDone,
+            )
         }
     }
 }
