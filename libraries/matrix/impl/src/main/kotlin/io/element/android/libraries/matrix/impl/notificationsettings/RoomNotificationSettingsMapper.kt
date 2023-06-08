@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.impl.room
+package io.element.android.libraries.matrix.impl.notificationsettings
 
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
-import org.matrix.rustcomponents.sdk.RoomNotificationSettings as RustRoomNotificationSettings
 import org.matrix.rustcomponents.sdk.RoomNotificationMode as RustRoomNotificationMode
+import org.matrix.rustcomponents.sdk.RoomNotificationSettings as RustRoomNotificationSettings
 
 object RoomNotificationSettingsMapper {
     fun map(roomNotificationSettings: RustRoomNotificationSettings): RoomNotificationSettings =
