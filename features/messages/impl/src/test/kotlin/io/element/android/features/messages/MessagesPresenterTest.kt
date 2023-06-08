@@ -199,7 +199,7 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             val mediaMessage = aMessageEvent(
                 content = TimelineItemFileContent(
-                    body = "video.pdf",
+                    body = "file.pdf",
                     fileSource = MediaSource(AN_AVATAR_URL),
                     thumbnailSource = MediaSource(AN_AVATAR_URL),
                     formattedFileSize = "10 MB",
