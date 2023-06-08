@@ -56,6 +56,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
@@ -224,7 +225,9 @@ private fun MessageEventBubbleContent(
     onTimestampClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val isMediaItem = event.content is TimelineItemImageContent || event.content is TimelineItemVideoContent
+    val isMediaItem = event.content is TimelineItemImageContent
+        || event.content is TimelineItemVideoContent
+        || event.content is TimelineItemLocationContent
     val replyToDetails = event.inReplyTo as? InReplyTo.Ready
 
     // Long clicks are not not automatically propagated from a `clickable`

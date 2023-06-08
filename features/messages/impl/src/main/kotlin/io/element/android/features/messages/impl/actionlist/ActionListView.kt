@@ -58,6 +58,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
@@ -232,6 +233,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
         is TimelineItemStateContent,
         is TimelineItemEncryptedContent,
         is TimelineItemRedactedContent,
+        is TimelineItemLocationContent,
         is TimelineItemUnknownContent -> content = { ContentForBody(textContent) }
         is TimelineItemImageContent -> {
             icon = {

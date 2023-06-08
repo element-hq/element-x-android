@@ -34,10 +34,12 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import io.element.android.features.location.api.internal.AttributionPlacement
 import io.element.android.features.location.api.internal.StaticMapPlaceholder
 import io.element.android.features.location.api.internal.buildStaticMapsApiUrl
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.theme.ElementTheme
 import timber.log.Timber
@@ -73,9 +75,13 @@ fun StaticMapView(
                             lat = lat,
                             lon = lon,
                             desiredZoom = zoom,
-                            desiredWidth = constraints.maxWidth,
-                            desiredHeight = constraints.maxHeight,
                             darkMode = darkMode,
+                            attributionPlacement = AttributionPlacement.BottomLeft,
+                            // Size the map based on DP rather than pixels, as otherwise the features and attribution
+                            // end up being illegibly tiny on high density displays.
+                            desiredWidth = constraints.maxWidth.toDp().value.toInt(),
+                            desiredHeight = constraints.maxHeight.toDp().value.toInt(),
+                            doubleScale = true,
                         )
                     )
                     .size(width = constraints.maxWidth, height = constraints.maxHeight)
