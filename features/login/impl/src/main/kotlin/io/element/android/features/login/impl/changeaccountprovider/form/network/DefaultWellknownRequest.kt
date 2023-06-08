@@ -15,10 +15,22 @@
  */
 package io.element.android.features.login.impl.changeaccountprovider.form.network
 
-interface WellknownRequest {
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.network.RetrofitFactory
+import javax.inject.Inject
+
+@ContributesBinding(AppScope::class)
+class DefaultWellknownRequest @Inject constructor(
+    private val retrofitFactory: RetrofitFactory,
+) : WellknownRequest {
     /**
-     * Return the WellKnown data, or throw an error if not found.
+     * Return the WellKnown data, if found.
      * @param baseUrl for instance https://matrix.org
      */
-    suspend fun execute(baseUrl: String): WellKnown
+    override suspend fun execute(baseUrl: String): WellKnown {
+        val wellknownApi = retrofitFactory.create(baseUrl)
+            .create(WellknownAPI::class.java)
+        return wellknownApi.getWellKnown()
+    }
 }
