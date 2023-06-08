@@ -38,6 +38,7 @@ import org.matrix.rustcomponents.sdk.RoomListEntry
 import org.matrix.rustcomponents.sdk.SlidingSync
 import org.matrix.rustcomponents.sdk.SlidingSyncList
 import org.matrix.rustcomponents.sdk.SlidingSyncListRoomsListDiff
+import org.matrix.rustcomponents.sdk.SlidingSyncSelectiveModeBuilder
 import org.matrix.rustcomponents.sdk.SlidingSyncState
 import org.matrix.rustcomponents.sdk.UpdateSummary
 import timber.log.Timber
@@ -98,7 +99,9 @@ internal class RustRoomSummaryDataSource(
     override fun setSlidingSyncRange(range: IntRange) {
         Timber.v("setVisibleRange=$range")
         coroutineScope.launch {
-            slidingSyncListFlow.first().setRange(range.first.toUInt(), range.last.toUInt())
+            val slidingSyncMode = SlidingSyncSelectiveModeBuilder()
+                .addRange(range.first.toUInt(), range.last.toUInt())
+            slidingSyncListFlow.first().setSyncMode(slidingSyncMode)
         }
     }
 
