@@ -37,8 +37,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddReaction
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,7 +53,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
@@ -75,8 +75,6 @@ import io.element.android.libraries.designsystem.theme.components.ModalBottomShe
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
-import kotlinx.collections.immutable.ImmutableList
-import org.w3c.dom.Text
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,15 +83,11 @@ fun ActionListView(
     isVisible: Boolean,
     onActionSelected: (action: TimelineItemAction, TimelineItem.Event) -> Unit,
     onEmojiReactionClicked: (String, TimelineItem.Event) -> Unit,
+    onCustomReactionClicked: (TimelineItem.Event) -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    sheetState: SheetState = rememberModalBottomSheetState()
 ) {
-    LaunchedEffect(isVisible) {
-        if (!isVisible) {
-            state.eventSink(ActionListEvents.Clear)
-        }
-    }
-
     val targetItem = (state.target as? ActionListState.Target.Success)?.event
 
     fun onItemActionClicked(
@@ -108,14 +102,21 @@ fun ActionListView(
         onEmojiReactionClicked(emoji, targetItem)
     }
 
+    fun onCustomReactionClicked() {
+        if (targetItem == null) return
+        onCustomReactionClicked(targetItem)
+    }
+
     if (isVisible) {
         ModalBottomSheet(
+            sheetState = sheetState,
             onDismissRequest = onDismiss
         ) {
             SheetContent(
                 state = state,
                 onActionClicked = ::onItemActionClicked,
                 onEmojiReactionClicked = ::onEmojiReactionClicked,
+                onCustomReactionClicked = ::onCustomReactionClicked,
                 modifier = modifier
                     .padding(bottom = 32.dp)
 //                    .navigationBarsPadding() - FIXME after https://issuetracker.google.com/issues/275849044
@@ -132,6 +133,7 @@ private fun SheetContent(
     modifier: Modifier = Modifier,
     onActionClicked: (TimelineItemAction) -> Unit,
     onEmojiReactionClicked: (String) -> Unit,
+    onCustomReactionClicked: () -> Unit,
 ) {
     when (val target = state.target) {
         is ActionListState.Target.Loading,
@@ -155,7 +157,11 @@ private fun SheetContent(
                     }
                 }
                 item {
-                    EmojiReactionsRow(onEmojiReactionClicked, Modifier.fillMaxWidth())
+                    EmojiReactionsRow(
+                        onEmojiReactionClicked = onEmojiReactionClicked,
+                        onCustomReactionClicked = onCustomReactionClicked,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
                     Divider()
                 }
                 items(
@@ -281,13 +287,13 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
 @Composable
 internal fun EmojiReactionsRow(
     onEmojiReactionClicked: (String) -> Unit,
+    onCustomReactionClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier.padding(horizontal = 28.dp, vertical = 16.dp)
     ) {
-        // TODO use real emojis, have real interaction
         EmojiButton("\uD83D\uDC4D", onEmojiReactionClicked)
         EmojiButton("\uD83D\uDC4E", onEmojiReactionClicked)
         EmojiButton("\uD83D\uDD25", onEmojiReactionClicked)
@@ -300,6 +306,7 @@ internal fun EmojiReactionsRow(
             modifier = Modifier
                 .size(24.dp)
                 .align(Alignment.CenterVertically)
+                .clickable(enabled = true, onClick = onCustomReactionClicked)
         )
     }
 }
@@ -334,5 +341,6 @@ private fun ContentToPreview(state: ActionListState) {
         state = state,
         onActionClicked = {},
         onEmojiReactionClicked = {},
+        onCustomReactionClicked = {},
     )
 }

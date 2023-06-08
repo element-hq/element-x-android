@@ -29,6 +29,8 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
@@ -43,12 +45,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.vanniktech.emoji.Emoji
 import com.vanniktech.emoji.google.GoogleEmojiProvider
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CustomReactionBottomSheet(
+    isVisible: Boolean,
+    sheetState: SheetState,
+    onDismiss: () -> Unit,
+    onEmojiSelected: (Emoji) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    if (isVisible) {
+        ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState, modifier = modifier) {
+            EmojiPicker(onEmojiSelected = onEmojiSelected, modifier = Modifier.fillMaxWidth())
+        }
+    }
+}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -106,8 +126,10 @@ fun EmojiPicker(
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 items(currentCategory.emojis, key = { it.unicode }) { item ->
-                    Box(modifier = Modifier.size(40.dp).clickable { onEmojiSelected(item) }, contentAlignment = Alignment.Center) {
-                        Text(text = item.unicode)
+                    Box(modifier = Modifier
+                        .size(40.dp)
+                        .clickable { onEmojiSelected(item) }, contentAlignment = Alignment.Center) {
+                        Text(text = item.unicode, fontSize = 20.sp)
                     }
                 }
             }

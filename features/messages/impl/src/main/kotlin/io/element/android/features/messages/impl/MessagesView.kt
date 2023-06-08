@@ -34,8 +34,11 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
@@ -56,12 +59,14 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
+import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
 import io.element.android.features.messages.impl.timeline.TimelineView
+import io.element.android.features.messages.impl.timeline.components.CustomReactionBottomSheet
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.androidutils.ui.hideKeyboard
@@ -85,7 +90,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import io.element.android.libraries.ui.strings.R as StringsR
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun MessagesView(
     state: MessagesState,
@@ -97,8 +102,13 @@ fun MessagesView(
     onItemDebugInfoClicked: (EventId, TimelineItemDebugInfo) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    val actionListViewBottomSheetState = rememberModalBottomSheetState()
+    val customReactionBottomSheetState = rememberModalBottomSheetState()
+
     LogCompositions(tag = "MessagesScreen", msg = "Root")
     var isMessageActionsBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
+    var isCustomReactionBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
 
     AttachmentStateView(state.composerState.attachmentsState, onPreviewAttachments)
 
@@ -121,8 +131,14 @@ fun MessagesView(
         isMessageActionsBottomSheetVisible = true
     }
 
-    fun onActionSelected(action: TimelineItemAction, event: TimelineItem.Event) {
+    suspend fun onDismissActionListBottomSheet() {
+        state.actionListState.eventSink(ActionListEvents.Clear)
+        actionListViewBottomSheetState.hide()
         isMessageActionsBottomSheetVisible = false
+    }
+
+    fun onActionSelected(action: TimelineItemAction, event: TimelineItem.Event) {
+        coroutineScope.launch { onDismissActionListBottomSheet() }
         when (action) {
             is TimelineItemAction.Developer -> if (event.eventId != null && event.debugInfo != null) {
                 onItemDebugInfoClicked(event.eventId, event.debugInfo)
@@ -133,12 +149,8 @@ fun MessagesView(
 
     fun onEmojiReactionClicked(emoji: String, event: TimelineItem.Event) {
         if (event.eventId == null) return
-        isMessageActionsBottomSheetVisible = false
+        coroutineScope.launch { onDismissActionListBottomSheet() }
         state.eventSink(MessagesEvents.SendReaction(emoji, event.eventId))
-    }
-
-    fun onDismissActionListBottomSheet() {
-        isMessageActionsBottomSheetVisible = false
     }
 
     Scaffold(
@@ -174,12 +186,44 @@ fun MessagesView(
         },
     )
 
+    var reactingToEventId: EventId? by remember { mutableStateOf(null) }
     ActionListView(
         state = state.actionListState,
+        sheetState = actionListViewBottomSheetState,
         isVisible = isMessageActionsBottomSheetVisible,
-        onDismiss = ::onDismissActionListBottomSheet,
+        onDismiss = { coroutineScope.launch { onDismissActionListBottomSheet() } },
         onActionSelected = ::onActionSelected,
+        onCustomReactionClicked = { event ->
+            reactingToEventId = event.eventId
+            coroutineScope.launch {
+                onDismissActionListBottomSheet()
+                isCustomReactionBottomSheetVisible = true
+            }
+        },
         onEmojiReactionClicked = ::onEmojiReactionClicked,
+    )
+
+    CustomReactionBottomSheet(
+        isVisible = isCustomReactionBottomSheetVisible,
+        sheetState = customReactionBottomSheetState,
+        onDismiss = {
+            reactingToEventId = null
+            coroutineScope.launch {
+                customReactionBottomSheetState.hide()
+                isCustomReactionBottomSheetVisible = false
+            }
+        },
+        onEmojiSelected = { emoji ->
+            val eventId = reactingToEventId
+            if (eventId != null) {
+                state.eventSink(MessagesEvents.SendReaction(emoji.unicode, eventId))
+                reactingToEventId = null
+                coroutineScope.launch {
+                    customReactionBottomSheetState.hide()
+                    isCustomReactionBottomSheetVisible = false
+                }
+            }
+        }
     )
 }
 
