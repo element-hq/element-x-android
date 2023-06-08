@@ -16,6 +16,7 @@
 
 package io.element.android.features.login.impl.changeaccountprovider.form.network
 
+import io.element.android.libraries.core.bool.orFalse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -28,6 +29,9 @@ import kotlinx.serialization.Serializable
  *     },
  *     "m.identity_server": {
  *         "base_url": "https://vector.im"
+ *     },
+ *     "org.matrix.msc3575.proxy": {
+ *         "url": "https://slidingsync.lab.matrix.org"
  *     }
  * }
  * </pre>
@@ -40,4 +44,15 @@ data class WellKnown(
 
     @SerialName("m.identity_server")
     val identityServer: WellKnownBaseConfig? = null,
-)
+
+    @SerialName("org.matrix.msc3575.proxy")
+    val slidingSyncProxy: WellKnownSlidingSyncConfig? = null,
+) {
+    fun isValid(): Boolean {
+        return homeServer?.baseURL?.isNotBlank().orFalse()
+    }
+
+    fun supportSlidingSync(): Boolean {
+        return slidingSyncProxy?.url?.isNotBlank().orFalse()
+    }
+}

@@ -21,4 +21,6 @@ data class AccountProvider constructor(
     val subtitle: String? = null,
     val isPublic: Boolean = false,
     val isMatrixOrg: Boolean = false,
+    val isValid: Boolean = false,
+    val supportSlidingSync: Boolean = false,
 )

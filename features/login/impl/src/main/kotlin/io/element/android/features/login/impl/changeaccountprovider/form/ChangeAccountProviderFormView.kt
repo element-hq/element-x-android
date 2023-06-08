@@ -160,13 +160,7 @@ fun ChangeAccountProviderFormView(
                     }
                     is Async.Success -> {
                         state.userInputResult.state.forEach { homeserverData ->
-                            val isMatrixOrg = homeserverData.homeserverUrl == "https://matrix.org"
-                            val item = AccountProvider(
-                                title = homeserverData.homeserverUrl.removePrefix("http://").removePrefix("https://"),
-                                subtitle = if (isMatrixOrg) stringResource(id = R.string.screen_change_account_provider_matrix_org_subtitle) else null,
-                                isPublic = isMatrixOrg, // There is no need to know for other servers right now
-                                isMatrixOrg = isMatrixOrg,
-                            )
+                            val item = homeserverData.toAccountProvider()
                             AccountProviderView(
                                 item = item,
                                 onClick = {
@@ -181,6 +175,19 @@ fun ChangeAccountProviderFormView(
             }
         }
     }
+}
+
+@Composable
+private fun HomeserverData.toAccountProvider(): AccountProvider {
+    val isMatrixOrg = homeserverUrl == "https://matrix.org"
+    return AccountProvider(
+        title = homeserverUrl.removePrefix("http://").removePrefix("https://"),
+        subtitle = if (isMatrixOrg) stringResource(id = R.string.screen_change_account_provider_matrix_org_subtitle) else null,
+        isPublic = isMatrixOrg, // There is no need to know for other servers right now
+        isMatrixOrg = isMatrixOrg,
+        isValid = isWellknownValid,
+        supportSlidingSync = supportSlidingSync,
+    )
 }
 
 @Preview
