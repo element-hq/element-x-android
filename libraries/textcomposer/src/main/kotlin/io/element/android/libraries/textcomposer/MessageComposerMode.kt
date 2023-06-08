@@ -18,6 +18,7 @@ package io.element.android.libraries.textcomposer
 
 import android.os.Parcelable
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import kotlinx.parcelize.Parcelize
 
 sealed interface MessageComposerMode : Parcelable {
@@ -38,6 +39,7 @@ sealed interface MessageComposerMode : Parcelable {
     @Parcelize
     class Reply(
         val senderName: String,
+        val attachmentThumbnailInfo: AttachmentThumbnailInfo?,
         override val eventId: EventId,
         override val defaultContent: CharSequence
     ) : Special(eventId, defaultContent)

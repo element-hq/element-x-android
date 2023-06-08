@@ -483,5 +483,5 @@ class MessageComposerPresenterTest {
 }
 
 fun anEditMode() = MessageComposerMode.Edit(AN_EVENT_ID, A_MESSAGE)
-fun aReplyMode() = MessageComposerMode.Reply(A_USER_NAME, AN_EVENT_ID, A_MESSAGE)
+fun aReplyMode() = MessageComposerMode.Reply(A_USER_NAME, null, AN_EVENT_ID, A_MESSAGE)
 fun aQuoteMode() = MessageComposerMode.Quote(AN_EVENT_ID, A_MESSAGE)

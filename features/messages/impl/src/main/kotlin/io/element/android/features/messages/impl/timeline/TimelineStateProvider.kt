@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlin.random.Random
@@ -96,6 +97,7 @@ internal fun aTimelineItemEvent(
     content: TimelineItemEventContent = aTimelineItemTextContent(),
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
     sendState: EventSendState = EventSendState.Sent(eventId),
+    inReplyTo: InReplyTo? = null,
 ): TimelineItem.Event {
     return TimelineItem.Event(
         id = eventId.value,
@@ -113,5 +115,6 @@ internal fun aTimelineItemEvent(
         senderDisplayName = "sender",
         groupPosition = groupPosition,
         sendState = sendState,
+        inReplyTo = inReplyTo,
     )
 }

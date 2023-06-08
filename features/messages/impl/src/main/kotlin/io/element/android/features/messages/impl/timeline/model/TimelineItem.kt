@@ -23,6 +23,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
@@ -59,6 +60,7 @@ sealed interface TimelineItem {
         val groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
         val reactionsState: TimelineItemReactions,
         val sendState: EventSendState,
+        val inReplyTo: InReplyTo?,
     ) : TimelineItem {
 
         val showSenderInformation = groupPosition.isNew() && !isMine
