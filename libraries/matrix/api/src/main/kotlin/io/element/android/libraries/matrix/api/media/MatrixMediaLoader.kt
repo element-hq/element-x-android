@@ -33,8 +33,9 @@ interface MatrixMediaLoader {
 
     /**
      * @param source to fetch the data for.
-     * @param mimeType: optional mime type
+     * @param mimeType: optional mime type.
+     * @param body: optional body which will be used to name the file.
      * @return a [Result] of [MediaFile]
      */
-    suspend fun downloadMediaFile(source: MediaSource, mimeType: String?): Result<MediaFile>
+    suspend fun downloadMediaFile(source: MediaSource, mimeType: String?, body: String?): Result<MediaFile>
 }

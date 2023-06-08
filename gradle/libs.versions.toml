@@ -21,7 +21,7 @@ media3 = "1.0.2"
 browser = "1.5.0"
 
 # Compose
-compose_bom = "2023.05.01"
+compose_bom = "2023.06.00"
 composecompiler = "1.4.7"
 
 # Coroutines
@@ -153,7 +153,7 @@ telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", v
 
 # Analytics
 posthog = "com.posthog.android:posthog:2.0.3"
-sentry_android = "io.sentry:sentry-android:6.21.0"
+sentry_android = "io.sentry:sentry-android:6.22.0"
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:main-SNAPSHOT"
 
 # Di

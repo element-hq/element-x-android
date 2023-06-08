@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MediaSource
 
 open class TimelineItemVideoContentProvider : PreviewParameterProvider<TimelineItemVideoContent> {
@@ -37,5 +38,6 @@ fun aTimelineItemVideoContent() = TimelineItemVideoContent(
     videoSource = MediaSource(""),
     height = 300,
     width = 150,
-    mimeType = null
+    mimeType = MimeTypes.Mp4,
+    formattedFileSize = "14MB"
 )

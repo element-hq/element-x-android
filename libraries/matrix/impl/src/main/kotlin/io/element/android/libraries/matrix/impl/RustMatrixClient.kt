@@ -79,6 +79,7 @@ class RustMatrixClient constructor(
     private val coroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
     private val baseDirectory: File,
+    private val baseCacheDirectory: File,
     private val clock: SystemClock,
 ) : MatrixClient {
 
@@ -188,7 +189,7 @@ class RustMatrixClient constructor(
     override val invitesDataSource: RoomSummaryDataSource
         get() = rustInvitesDataSource
 
-    private val rustMediaLoader = RustMediaLoader(dispatchers, client)
+    private val rustMediaLoader = RustMediaLoader(baseCacheDirectory, dispatchers, client)
     override val mediaLoader: MatrixMediaLoader
         get() = rustMediaLoader
 

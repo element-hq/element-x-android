@@ -32,6 +32,6 @@ class RetrofitFactory @Inject constructor(
     fun create(baseUrl: String): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl.ensureTrailingSlash())
         .addConverterFactory(json.get().asConverterFactory("application/json".toMediaType()))
-        .callFactory(okHttpClient.get())
+        .callFactory { request -> okHttpClient.get().newCall(request) }
         .build()
 }

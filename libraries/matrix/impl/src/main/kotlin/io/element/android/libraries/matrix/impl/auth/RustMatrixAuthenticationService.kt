@@ -16,10 +16,12 @@
 
 package io.element.android.libraries.matrix.impl.auth
 
+import android.content.Context
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -48,6 +50,7 @@ import org.matrix.rustcomponents.sdk.AuthenticationService as RustAuthentication
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
 class RustMatrixAuthenticationService @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val baseDirectory: File,
     private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
@@ -179,6 +182,7 @@ class RustMatrixAuthenticationService @Inject constructor(
             coroutineScope = coroutineScope,
             dispatchers = coroutineDispatchers,
             baseDirectory = baseDirectory,
+            baseCacheDirectory = context.cacheDir,
             clock = clock,
         )
     }

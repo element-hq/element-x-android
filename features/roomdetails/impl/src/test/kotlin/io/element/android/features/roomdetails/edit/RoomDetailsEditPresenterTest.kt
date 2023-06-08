@@ -21,7 +21,6 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditEvents
 import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditPresenter
@@ -29,9 +28,9 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
+import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
-import io.element.android.libraries.mediaupload.api.ThumbnailProcessingInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.mockk.every
 import io.mockk.mockk
@@ -600,14 +599,9 @@ class RoomDetailsEditPresenterTest {
         }
 
         fakePickerProvider.givenResult(anotherAvatarUri)
-        fakeMediaPreProcessor.givenResult(Result.success(MediaUploadInfo.Image(
+        fakeMediaPreProcessor.givenResult(Result.success(MediaUploadInfo.AnyFile(
             file = processedFile,
             info = mockk(),
-            thumbnailInfo = ThumbnailProcessingInfo(
-                file = processedFile,
-                info = mockk(),
-                blurhash = "",
-            )
         )))
     }
 
