@@ -84,7 +84,7 @@ class FakeSessionVerificationService : SessionVerificationService {
         this.emojiList = emojis
     }
 
-    override fun reset() {
+    override suspend fun reset() {
         _verificationFlowState.value = VerificationFlowState.Initial
     }
 }
