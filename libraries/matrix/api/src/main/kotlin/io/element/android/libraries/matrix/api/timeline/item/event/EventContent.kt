@@ -125,6 +125,11 @@ data class ImageMessageType(
     val info: ImageInfo?
 ) : MessageType
 
+data class LocationMessageType(
+    val body: String,
+    val geoUri: String,
+) : MessageType
+
 data class AudioMessageType(
     val body: String,
     val source: MediaSource,

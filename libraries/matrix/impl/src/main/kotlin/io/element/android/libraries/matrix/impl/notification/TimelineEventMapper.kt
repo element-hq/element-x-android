@@ -100,9 +100,9 @@ private fun MessageType.toContent(): String {
         is MessageType.Emote -> content.body
         is MessageType.File -> content.use { it.body }
         is MessageType.Image -> content.use { it.body }
+        is MessageType.Location -> content.body
         is MessageType.Notice -> content.body
         is MessageType.Text -> content.body
         is MessageType.Video -> content.use { it.body }
-        is MessageType.Location -> content.body
     }
 }

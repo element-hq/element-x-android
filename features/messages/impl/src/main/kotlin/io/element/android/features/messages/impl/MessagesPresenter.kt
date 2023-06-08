@@ -45,6 +45,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
@@ -267,6 +268,7 @@ class MessagesPresenter @AssistedInject constructor(
             is TimelineItemRedactedContent,
             is TimelineItemStateContent,
             is TimelineItemEncryptedContent,
+            is TimelineItemLocationContent,
             is TimelineItemUnknownContent -> null
         }
         val composerMode = MessageComposerMode.Reply(

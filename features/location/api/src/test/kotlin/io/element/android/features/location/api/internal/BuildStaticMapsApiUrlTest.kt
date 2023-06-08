@@ -17,7 +17,6 @@
 package io.element.android.features.location.api.internal
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.location.api.internal.buildStaticMapsApiUrl
 import org.junit.Test
 
 class BuildStaticMapsApiUrlTest {
@@ -30,10 +29,13 @@ class BuildStaticMapsApiUrlTest {
                 desiredZoom = 1.2,
                 desiredWidth = 100,
                 desiredHeight = 200,
-                darkMode = false
+                darkMode = false,
+                doubleScale = false,
+                attributionPlacement = AttributionPlacement.BottomLeft,
             )
         ).isEqualTo(
-            "https://api.maptiler.com/maps/9bc819c8-e627-474a-a348-ec144fe3d810/static/5.678,1.234,1.2/100x200.webp?key=fU3vlMsMn4Jb6dnEIFsx"
+            "https://api.maptiler.com/maps/9bc819c8-e627-474a-a348-ec144fe3d810/static/5.678,1.234,1.2/100x200.webp" +
+                "?key=fU3vlMsMn4Jb6dnEIFsx&attribution=bottomleft"
         )
     }
 
@@ -46,10 +48,51 @@ class BuildStaticMapsApiUrlTest {
                 desiredZoom = 1.2,
                 desiredWidth = 100,
                 desiredHeight = 200,
-                darkMode = true
+                darkMode = true,
+                doubleScale = false,
+                attributionPlacement = AttributionPlacement.BottomLeft,
             )
         ).isEqualTo(
-            "https://api.maptiler.com/maps/dea61faf-292b-4774-9660-58fcef89a7f3/static/5.678,1.234,1.2/100x200.webp?key=fU3vlMsMn4Jb6dnEIFsx"
+            "https://api.maptiler.com/maps/dea61faf-292b-4774-9660-58fcef89a7f3/static/5.678,1.234,1.2/100x200.webp" +
+                "?key=fU3vlMsMn4Jb6dnEIFsx&attribution=bottomleft"
+        )
+    }
+
+    @Test
+    fun `buildStaticMapsApiUrl builds double scale mode url`() {
+        assertThat(
+            buildStaticMapsApiUrl(
+                lat = 1.234,
+                lon = 5.678,
+                desiredZoom = 1.2,
+                desiredWidth = 100,
+                desiredHeight = 200,
+                darkMode = false,
+                doubleScale = true,
+                attributionPlacement = AttributionPlacement.BottomLeft,
+            )
+        ).isEqualTo(
+            "https://api.maptiler.com/maps/9bc819c8-e627-474a-a348-ec144fe3d810/static/5.678,1.234,1.2/100x200@2x.webp" +
+                "?key=fU3vlMsMn4Jb6dnEIFsx&attribution=bottomleft"
+        )
+    }
+
+    @Test
+    fun `buildStaticMapsApiUrl builds no attribution url`() {
+        assertThat(
+            buildStaticMapsApiUrl(
+                lat = 1.234,
+                lon = 5.678,
+                desiredZoom = 1.2,
+                desiredWidth = 100,
+                desiredHeight = 200,
+                darkMode = false,
+                doubleScale = false,
+                attributionPlacement = AttributionPlacement.Hidden,
+            )
+        ).isEqualTo(
+            "https://api.maptiler.com/maps/9bc819c8-e627-474a-a348-ec144fe3d810/static/5.678,1.234,1.2/100x200.webp" +
+                "?key=fU3vlMsMn4Jb6dnEIFsx&attribution=false"
         )
     }
 
@@ -62,10 +105,13 @@ class BuildStaticMapsApiUrlTest {
                 desiredZoom = 100.0,
                 desiredWidth = 8192,
                 desiredHeight = 4096,
-                darkMode = false
+                darkMode = false,
+                doubleScale = false,
+                attributionPlacement = AttributionPlacement.BottomLeft,
             )
         ).isEqualTo(
-            "https://api.maptiler.com/maps/9bc819c8-e627-474a-a348-ec144fe3d810/static/5.678,1.234,22.0/2048x1024.webp?key=fU3vlMsMn4Jb6dnEIFsx"
+            "https://api.maptiler.com/maps/9bc819c8-e627-474a-a348-ec144fe3d810/static/5.678,1.234,22.0/2048x1024.webp" +
+                "?key=fU3vlMsMn4Jb6dnEIFsx&attribution=bottomleft"
         )
     }
 }
