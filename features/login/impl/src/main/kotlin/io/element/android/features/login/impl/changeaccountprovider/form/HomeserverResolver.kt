@@ -17,12 +17,11 @@
 package io.element.android.features.login.impl.changeaccountprovider.form
 
 import io.element.android.libraries.architecture.Async
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Resolve homeserver base on search terms.
  */
 interface HomeserverResolver {
-    fun flow(): StateFlow<Async<List<HomeserverData>>>
-    suspend fun accept(userInput: String)
+    suspend fun resolve(userInput: String): Flow<Async<List<HomeserverData>>>
 }
