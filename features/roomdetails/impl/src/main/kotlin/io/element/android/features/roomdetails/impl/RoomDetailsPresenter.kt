@@ -33,10 +33,11 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RoomDetailsPresenter @Inject constructor(
@@ -64,8 +65,6 @@ class RoomDetailsPresenter @Inject constructor(
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
         val roomType = getRoomType(dmMember)
 
-        val isMutedNotification = false
-
 //        scope.launch(dispatchers.io) {
 //            client.getRoomNotificationMode(room.roomId)
 //        }
@@ -79,6 +78,9 @@ class RoomDetailsPresenter @Inject constructor(
                 else -> RoomTopicState.Hidden
             }
         }
+
+        val roomNotificationSettingsState by room.roomNotificationSettingsStateFlow.collectAsState()
+        val roomNotificationSettings by getRoomNotificationSettings(roomNotificationSettingsState)
 
         fun handleEvents(event: RoomDetailsEvent) {
             when (event) {
@@ -103,10 +105,9 @@ class RoomDetailsPresenter @Inject constructor(
             canInvite = canInvite,
             canEdit = canEditAvatar || canEditName || canEditTopic,
             roomType = roomType.value,
-            //TODO get push rule
-            isMutedNotification = false,
             roomMemberDetailsState = roomMemberDetailsState,
             leaveRoomState = leaveRoomState,
+            roomNotificationSettings = roomNotificationSettings,
             eventSink = ::handleEvents,
         )
     }
@@ -145,5 +146,19 @@ class RoomDetailsPresenter @Inject constructor(
             canSendEvent.value = room.canSendStateEvent(type).getOrElse { false }
         }
         return canSendEvent
+    }
+
+    @Composable
+    private fun getRoomNotificationSettings(roomNotificationSettingsState: MatrixRoomNotificationSettingsState): State<Async<RoomNotificationSettings>> {
+        return remember(roomNotificationSettingsState) {
+            derivedStateOf {
+                when (roomNotificationSettingsState) {
+                    MatrixRoomNotificationSettingsState.Unknown -> Async.Uninitialized
+                    is MatrixRoomNotificationSettingsState.Pending -> Async.Loading(prevState = roomNotificationSettingsState.prevRoomNotificationSettings)
+                    is MatrixRoomNotificationSettingsState.Error -> Async.Failure(roomNotificationSettingsState.failure, prevState = roomNotificationSettingsState.prevRoomNotificationSettings)
+                    is MatrixRoomNotificationSettingsState.Ready -> Async.Success(roomNotificationSettingsState.roomNotificationSettings)
+                }
+            }
+        }
     }
 }

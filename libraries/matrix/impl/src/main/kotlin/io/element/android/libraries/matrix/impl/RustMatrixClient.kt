@@ -27,10 +27,10 @@ import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.createroom.RoomVisibility
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.notification.NotificationService
+import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
@@ -38,8 +38,8 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
+import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
-import io.element.android.libraries.matrix.impl.room.RoomNotificationSettingsMapper
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.sync.SlidingSyncObserverProxy
@@ -62,7 +62,6 @@ import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.RequiredState
-import org.matrix.rustcomponents.sdk.RoomNotificationMode
 import org.matrix.rustcomponents.sdk.SlidingSyncList
 import org.matrix.rustcomponents.sdk.SlidingSyncListBuilder
 import org.matrix.rustcomponents.sdk.SlidingSyncListOnceBuilt
@@ -95,6 +94,7 @@ class RustMatrixClient constructor(
         dispatchers = dispatchers,
     )
     private val notificationService = RustNotificationService(client)
+    private val notificationSettingsService = RustNotificationSettingsService(client)
     private var slidingSyncUpdateJob: Job? = null
 
     private val clientDelegate = object : ClientDelegate {
@@ -297,29 +297,13 @@ class RustMatrixClient constructor(
             }
         }
 
-    override suspend fun getRoomNotificationMode(roomId: RoomId): Result<RoomNotificationSettings> =
-        withContext(dispatchers.io) {
-            runCatching {
-                client.getNotificationSettings().getRoomNotificationMode(roomId.value).let(RoomNotificationSettingsMapper::map)
-            }
-        }
-    override suspend fun muteRoom(roomId: RoomId): Result<Unit> = withContext(dispatchers.io) {
-        runCatching {
-            client.getNotificationSettings().setRoomNotificationMode(roomId.value, RoomNotificationMode.MUTE)
-        }
-    }
-
-    override suspend fun unmuteRoom(roomId: RoomId) = withContext(dispatchers.io) {
-        runCatching {
-            client.getNotificationSettings().unmuteRoom(roomId.value)
-        }
-    }
-
     override fun sessionVerificationService(): SessionVerificationService = verificationService
 
     override fun pushersService(): PushersService = pushersService
 
     override fun notificationService(): NotificationService = notificationService
+
+    override fun notificationSettingsService(): NotificationSettingsService = notificationSettingsService
 
     override fun startSync() {
         if (isSyncing.compareAndSet(false, true)) {

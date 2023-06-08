@@ -34,7 +34,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Notifications
@@ -81,6 +80,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -222,14 +222,17 @@ internal fun RoomDetailsTopBar(
 @Composable
 internal fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit, modifier: Modifier = Modifier) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-        if (state.isMutedNotification) {
-            MainActionButton(title = "Unmute", icon = Icons.Outlined.NotificationsOff, onClick = {
-                state.eventSink(RoomDetailsEvent.MuteNotification)
-            })
-        } else {
-            MainActionButton(title = "Mute", icon = Icons.Outlined.Notifications, onClick = {
-                state.eventSink(RoomDetailsEvent.MuteNotification)
-            })
+        val roomNotificationSettings = state.roomNotificationSettings.dataOrNull()
+        if (roomNotificationSettings != null) {
+            if (roomNotificationSettings.mode == RoomNotificationMode.MUTE) {
+                MainActionButton(title = stringResource(StringR.string.common_unmute), icon = Icons.Outlined.NotificationsOff, onClick = {
+                    state.eventSink(RoomDetailsEvent.MuteNotification)
+                })
+            } else {
+                MainActionButton(title = stringResource(StringR.string.common_mute), icon = Icons.Outlined.Notifications, onClick = {
+                    state.eventSink(RoomDetailsEvent.MuteNotification)
+                })
+            }
         }
         Spacer(modifier = Modifier.width(20.dp))
         MainActionButton(title = stringResource(R.string.screen_room_details_share_room_title), icon = Icons.Outlined.Share, onClick = onShareRoom)

@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
@@ -64,6 +65,11 @@ class RustMatrixRoom(
         get() = _membersStateFlow
 
     private var _membersStateFlow = MutableStateFlow<MatrixRoomMembersState>(MatrixRoomMembersState.Unknown)
+
+    override val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState>
+        get() = _roomNotificationSettingsStateFlow
+
+    private var _roomNotificationSettingsStateFlow = MutableStateFlow<MatrixRoomNotificationSettingsState>(MatrixRoomNotificationSettingsState.Unknown)
 
     private val timeline by lazy {
         RustMatrixTimeline(
