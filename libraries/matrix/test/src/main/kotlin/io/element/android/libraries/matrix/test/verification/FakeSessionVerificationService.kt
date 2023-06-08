@@ -37,17 +37,17 @@ class FakeSessionVerificationService : SessionVerificationService {
 
     override val isReady: StateFlow<Boolean> = _isReady
 
-    override fun requestVerification() {
+    override suspend fun requestVerification() {
         _verificationFlowState.value = VerificationFlowState.AcceptedVerificationRequest
         _verificationFlowState.value = VerificationFlowState.StartedSasVerification
         _verificationFlowState.value = VerificationFlowState.ReceivedVerificationData(emojiList)
     }
 
-    override fun cancelVerification() {
+    override suspend fun cancelVerification() {
         _verificationFlowState.value = VerificationFlowState.Canceled
     }
 
-    override fun approveVerification() {
+    override suspend fun approveVerification() {
         if (!shouldFail) {
             _verificationFlowState.value = VerificationFlowState.Finished
         } else {
@@ -55,7 +55,7 @@ class FakeSessionVerificationService : SessionVerificationService {
         }
     }
 
-    override fun declineVerification() {
+    override suspend fun declineVerification() {
         if (!shouldFail) {
             _verificationFlowState.value = VerificationFlowState.Canceled
         } else {
@@ -63,7 +63,7 @@ class FakeSessionVerificationService : SessionVerificationService {
         }
     }
 
-    override fun startVerification() {
+    override suspend fun startVerification() {
         _verificationFlowState.value = VerificationFlowState.StartedSasVerification
         _verificationFlowState.value = VerificationFlowState.ReceivedVerificationData(emojiList)
     }
