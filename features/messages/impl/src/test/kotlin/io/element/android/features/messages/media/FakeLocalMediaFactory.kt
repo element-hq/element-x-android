@@ -21,10 +21,15 @@ import io.element.android.features.messages.fixtures.aLocalMedia
 import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
 import io.element.android.features.messages.impl.media.local.MediaInfo
+import io.element.android.features.messages.impl.timeline.util.FileExtensionExtractor
+import io.element.android.features.messages.impl.timeline.util.FileExtensionExtractorWithoutValidation
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MediaFile
 
-class FakeLocalMediaFactory(private val localMediaUri: Uri) : LocalMediaFactory {
+class FakeLocalMediaFactory(
+    private val localMediaUri: Uri,
+    private val fileExtensionExtractor: FileExtensionExtractor = FileExtensionExtractorWithoutValidation()
+) : LocalMediaFactory {
 
     var fallbackMimeType: String = MimeTypes.OctetStream
     var fallbackName: String = "File name"
@@ -35,10 +40,12 @@ class FakeLocalMediaFactory(private val localMediaUri: Uri) : LocalMediaFactory 
     }
 
     override fun createFromUri(uri: Uri, mimeType: String?, name: String?, formattedFileSize: String?): LocalMedia {
+        val safeName = name ?: fallbackName
         val mediaInfo = MediaInfo(
-            name = name ?: fallbackName,
+            name = safeName,
             mimeType = mimeType ?: fallbackMimeType,
-            formattedFileSize = formattedFileSize ?: fallbackFileSize
+            formattedFileSize = formattedFileSize ?: fallbackFileSize,
+            fileExtension = fileExtensionExtractor.extractFromName(safeName)
         )
         return aLocalMedia(uri, mediaInfo)
     }

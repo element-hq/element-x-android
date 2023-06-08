@@ -42,7 +42,8 @@ import org.junit.Test
 private val TESTED_MEDIA_INFO = MediaInfo(
     name = "",
     mimeType = "",
-    formattedFileSize = ""
+    formattedFileSize = "",
+    fileExtension = ""
 )
 
 class MediaViewerPresenterTest {
