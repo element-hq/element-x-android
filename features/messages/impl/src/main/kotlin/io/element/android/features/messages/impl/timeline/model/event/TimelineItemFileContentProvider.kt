@@ -33,7 +33,7 @@ fun aTimelineItemFileContent(fileName: String) = TimelineItemFileContent(
     body = fileName,
     thumbnailSource = MediaSource(url = ""),
     fileSource = MediaSource(url = ""),
-    mimeType = MimeTypes.Apk,
+    mimeType = MimeTypes.Pdf,
     formattedFileSize = "100kB",
-    fileExtension = "apk"
+    fileExtension = "pdf"
 )
