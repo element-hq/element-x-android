@@ -20,7 +20,10 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.login.impl.changeaccountprovider.common.ChangeServerPresenter
+import io.element.android.features.login.impl.datasource.AccountProviderDataSource
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -28,8 +31,13 @@ class ChangeAccountProviderFormPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val homeServerResolver = FakeHomeServerResolver()
+        val changeServerPresenter = ChangeServerPresenter(
+            FakeAuthenticationService(),
+            AccountProviderDataSource()
+        )
         val presenter = ChangeAccountProviderFormPresenter(
-            homeServerResolver
+            homeServerResolver,
+            changeServerPresenter
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -43,8 +51,13 @@ class ChangeAccountProviderFormPresenterTest {
     @Test
     fun `present - enter text no result`() = runTest {
         val homeServerResolver = FakeHomeServerResolver()
+        val changeServerPresenter = ChangeServerPresenter(
+            FakeAuthenticationService(),
+            AccountProviderDataSource()
+        )
         val presenter = ChangeAccountProviderFormPresenter(
-            homeServerResolver
+            homeServerResolver,
+            changeServerPresenter
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -68,8 +81,13 @@ class ChangeAccountProviderFormPresenterTest {
                 listOf(aHomeserverData(), aHomeserverData()),
             )
         )
+        val changeServerPresenter = ChangeServerPresenter(
+            FakeAuthenticationService(),
+            AccountProviderDataSource()
+        )
         val presenter = ChangeAccountProviderFormPresenter(
-            homeServerResolver
+            homeServerResolver,
+            changeServerPresenter
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
