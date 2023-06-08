@@ -39,23 +39,20 @@ fun aChangeAccountProviderFormState(
 
 fun aHomeserverDataList(): List<HomeserverData> {
     return listOf(
-        HomeserverData(
-            userInput = "matrix",
-            homeserverUrl = "https://matrix.org",
-            isWellknownValid = true,
-        ),
-        HomeserverData(
-            userInput = "matrix",
-            homeserverUrl = "https://matrix.io",
-            isWellknownValid = false,
-        )
+        aHomeserverData(isWellknownValid = true, supportSlidingSync = true),
+        aHomeserverData(homeserverUrl = "https://no.sliding.sync", isWellknownValid = true, supportSlidingSync = false),
+        aHomeserverData(homeserverUrl = "https://invalid", isWellknownValid = false, supportSlidingSync = false),
     )
 }
 
-fun aHomeserverData(): HomeserverData {
+fun aHomeserverData(
+    homeserverUrl: String = "https://matrix.org",
+    isWellknownValid: Boolean = true,
+    supportSlidingSync: Boolean = true,
+): HomeserverData {
     return HomeserverData(
-        userInput = "matrix",
-        homeserverUrl = "https://matrix.org",
-        isWellknownValid = true,
+        homeserverUrl = homeserverUrl,
+        isWellknownValid = isWellknownValid,
+        supportSlidingSync = supportSlidingSync,
     )
 }

@@ -40,6 +40,8 @@ class ChangeAccountProviderPresenterTest {
                         subtitle = null,
                         isPublic = true,
                         isMatrixOrg = true,
+                        isValid = true,
+                        supportSlidingSync = true,
                     )
                 )
             )

@@ -43,7 +43,7 @@ import javax.inject.Inject
 class DefaultHomeserverResolver @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val wellknownRequest: WellknownRequest,
-): HomeserverResolver {
+) : HomeserverResolver {
     private val mutableFlow: MutableStateFlow<Async<List<HomeserverData>>> = MutableStateFlow(Async.Uninitialized)
 
     override fun flow(): StateFlow<Async<List<HomeserverData>>> = mutableFlow
@@ -52,14 +52,14 @@ class DefaultHomeserverResolver @Inject constructor(
 
     override suspend fun accept(userInput: String) {
         currentJob?.cancel()
-        val cleanedUpUserInput = userInput.trim()
+        val cleanedUpUserInput = userInput.trim().ensureProtocol().removeSuffix("/")
         mutableFlow.tryEmit(Async.Uninitialized)
         if (cleanedUpUserInput.length > 3) {
             delay(300)
             mutableFlow.tryEmit(Async.Loading())
             withContext(dispatchers.io) {
                 val list = getUrlCandidate(cleanedUpUserInput)
-                currentJob = resolveList(userInput, list)
+                currentJob = resolveList(cleanedUpUserInput, list)
             }
         }
     }
@@ -69,10 +69,18 @@ class DefaultHomeserverResolver @Inject constructor(
         return launch {
             list.map {
                 async {
-                    val isValid = tryOrNull { wellknownRequest.execute(it) }.orFalse()
+                    val wellKnown = tryOrNull { wellknownRequest.execute(it) }
+                    val isValid = wellKnown?.isValid().orFalse()
+                    val supportSlidingSync = wellKnown?.supportSlidingSync().orFalse()
                     if (isValid) {
                         // Emit the list as soon as possible
-                        currentList.add(HomeserverData(userInput, it, true))
+                        currentList.add(
+                            HomeserverData(
+                                homeserverUrl = it,
+                                isWellknownValid = true,
+                                supportSlidingSync = supportSlidingSync
+                            )
+                        )
                         mutableFlow.tryEmit(Async.Success(currentList))
                     }
                 }
@@ -85,9 +93,9 @@ class DefaultHomeserverResolver @Inject constructor(
                                 Async.Success(
                                     listOf(
                                         HomeserverData(
-                                            userInput = userInput,
                                             homeserverUrl = userInput,
-                                            isWellknownValid = false
+                                            isWellknownValid = false,
+                                            supportSlidingSync = false,
                                         )
                                     )
                                 )
@@ -102,18 +110,15 @@ class DefaultHomeserverResolver @Inject constructor(
 
     private fun getUrlCandidate(data: String): List<String> {
         return buildList {
-            val s = data.ensureProtocol()
-                .removeSuffix("/")
-
             // Always try what the user has entered
-            add(s)
+            add(data)
 
-            if (s.contains(".")) {
+            if (data.contains(".")) {
                 // TLD detected?
             } else {
-                add("${s}.org")
-                add("${s}.com")
-                add("${s}.io")
+                add("${data}.org")
+                add("${data}.com")
+                add("${data}.io")
             }
         }
     }

@@ -34,6 +34,8 @@ class ChangeAccountProviderPresenter @Inject constructor(
                     subtitle = null,
                     isPublic = true,
                     isMatrixOrg = true,
+                    isValid = true,
+                    supportSlidingSync = true,
                 )
             ),
         )

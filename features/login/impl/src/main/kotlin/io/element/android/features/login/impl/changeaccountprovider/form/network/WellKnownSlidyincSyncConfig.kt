@@ -13,21 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.element.android.features.login.impl.changeaccountprovider.form.network
 
-import io.element.android.libraries.network.RetrofitFactory
-import javax.inject.Inject
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-class WellknownRequest @Inject constructor(
-    private val retrofitFactory: RetrofitFactory,
-) {
-    /**
-     * Return the WellKnown data, if found.
-     * @param baseUrl for instance https://matrix.org
-     */
-    suspend fun execute(baseUrl: String): WellKnown {
-        val wellknownApi = retrofitFactory.create(baseUrl)
-            .create(WellknownAPI::class.java)
-        return wellknownApi.getWellKnown()
-    }
-}
+@Serializable
+data class WellKnownSlidingSyncConfig(
+        @SerialName("url")
+        val url: String? = null,
+)
