@@ -133,11 +133,22 @@ fun LoginPasswordView(
                     subTitle = stringResource(id = R.string.screen_login_form_header)
                 )
                 Spacer(Modifier.height(32.dp))
-                ServerDetailForm(
-                    state = state,
+                LoginForm(state = state,
                     isLoading = isLoading,
-                    submit = ::submit
+                    onSubmit = ::submit
                 )
+                Spacer(Modifier.height(28.dp))
+                // Submit
+                ButtonWithProgress(
+                    text = stringResource(R.string.screen_login_submit),
+                    showProgress = isLoading,
+                    onClick = ::submit,
+                    enabled = state.submitEnabled,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TestTags.loginContinue)
+                )
+                Spacer(modifier = Modifier.height(32.dp))
             }
 
             if (state.loginAction is Async.Failure) {
@@ -147,30 +158,6 @@ fun LoginPasswordView(
             }
         }
     }
-}
-
-@Composable
-fun ServerDetailForm(
-    state: LoginPasswordState,
-    isLoading: Boolean,
-    submit: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    LoginForm(state = state, isLoading = isLoading, onSubmit = submit, modifier = modifier)
-
-    Spacer(Modifier.height(28.dp))
-
-    // Submit
-    ButtonWithProgress(
-        text = stringResource(R.string.screen_login_submit),
-        showProgress = isLoading,
-        onClick = submit,
-        enabled = state.submitEnabled,
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag(TestTags.loginContinue)
-    )
-    Spacer(modifier = Modifier.height(32.dp))
 }
 
 @OptIn(ExperimentalComposeUiApi::class)

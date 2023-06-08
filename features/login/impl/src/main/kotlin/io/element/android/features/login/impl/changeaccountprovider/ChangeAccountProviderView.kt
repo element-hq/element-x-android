@@ -56,7 +56,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 fun ChangeAccountProviderView(
     state: ChangeAccountProviderState,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit,
+    onBackPressed: () -> Unit = {},
     onAccountProviderClicked: (AccountProvider) -> Unit = {},
     onOtherProviderClicked: () -> Unit = {},
 ) {
