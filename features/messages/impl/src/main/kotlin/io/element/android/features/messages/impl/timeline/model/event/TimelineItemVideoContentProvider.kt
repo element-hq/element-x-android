@@ -30,7 +30,7 @@ open class TimelineItemVideoContentProvider : PreviewParameterProvider<TimelineI
 }
 
 fun aTimelineItemVideoContent() = TimelineItemVideoContent(
-    body = "a video",
+    body = "Video.mp4",
     thumbnailSource = MediaSource(url = ""),
     blurHash = "TQF5:I_NtRE4kXt7Z#MwkCIARPjr",
     aspectRatio = 0.5f,
@@ -39,5 +39,6 @@ fun aTimelineItemVideoContent() = TimelineItemVideoContent(
     height = 300,
     width = 150,
     mimeType = MimeTypes.Mp4,
-    formattedFileSize = "14MB"
+    formattedFileSize = "14MB",
+    fileExtension = "mp4"
 )
