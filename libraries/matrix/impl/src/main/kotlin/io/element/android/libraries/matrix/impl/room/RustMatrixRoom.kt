@@ -259,6 +259,12 @@ class RustMatrixRoom(
         }
     }
 
+    override suspend fun sendReaction(emoji: String, eventId: EventId): Result<Unit> = withContext(Dispatchers.IO) {
+        runCatching {
+            innerRoom.sendReaction(key = emoji, eventId = eventId.value)
+        }
+    }
+
     @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit> =
         withContext(Dispatchers.IO) {

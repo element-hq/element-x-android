@@ -131,6 +131,12 @@ fun MessagesView(
         }
     }
 
+    fun onEmojiReactionClicked(emoji: String, event: TimelineItem.Event) {
+        if (event.eventId == null) return
+        isMessageActionsBottomSheetVisible = false
+        state.eventSink(MessagesEvents.SendReaction(emoji, event.eventId))
+    }
+
     fun onDismissActionListBottomSheet() {
         isMessageActionsBottomSheetVisible = false
     }
@@ -172,7 +178,8 @@ fun MessagesView(
         state = state.actionListState,
         isVisible = isMessageActionsBottomSheetVisible,
         onDismiss = ::onDismissActionListBottomSheet,
-        onActionSelected = ::onActionSelected
+        onActionSelected = ::onActionSelected,
+        onEmojiReactionClicked = ::onEmojiReactionClicked,
     )
 }
 

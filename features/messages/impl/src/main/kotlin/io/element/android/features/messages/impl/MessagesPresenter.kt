@@ -49,6 +49,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.handleSnackbarMessage
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
@@ -103,6 +104,7 @@ class MessagesPresenter @Inject constructor(
         fun handleEvents(event: MessagesEvents) {
             when (event) {
                 is MessagesEvents.HandleAction -> localCoroutineScope.handleTimelineAction(event.action, event.event, composerState)
+                is MessagesEvents.SendReaction -> localCoroutineScope.sendReaction(event.emoji, event.eventId)
             }
         }
         return MessagesState(
@@ -118,7 +120,7 @@ class MessagesPresenter @Inject constructor(
         )
     }
 
-    fun CoroutineScope.handleTimelineAction(
+    private fun CoroutineScope.handleTimelineAction(
         action: TimelineItemAction,
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
@@ -132,6 +134,14 @@ class MessagesPresenter @Inject constructor(
             TimelineItemAction.Developer -> Unit // Handled at UI level
             TimelineItemAction.ReportContent -> notImplementedYet()
         }
+    }
+
+    private fun CoroutineScope.sendReaction(
+        emoji: String,
+        eventId: EventId,
+    ) = launch {
+        room.sendReaction(emoji, eventId)
+            .onFailure { Timber.e(it) }
     }
 
     private fun notImplementedYet() {

@@ -52,6 +52,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
@@ -74,6 +75,8 @@ import io.element.android.libraries.designsystem.theme.components.ModalBottomShe
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import kotlinx.collections.immutable.ImmutableList
+import org.w3c.dom.Text
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -81,6 +84,7 @@ fun ActionListView(
     state: ActionListState,
     isVisible: Boolean,
     onActionSelected: (action: TimelineItemAction, TimelineItem.Event) -> Unit,
+    onEmojiReactionClicked: (String, TimelineItem.Event) -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -90,11 +94,18 @@ fun ActionListView(
         }
     }
 
+    val targetItem = (state.target as? ActionListState.Target.Success)?.event
+
     fun onItemActionClicked(
-        itemAction: TimelineItemAction,
-        targetItem: TimelineItem.Event
+        itemAction: TimelineItemAction
     ) {
+        if (targetItem == null) return
         onActionSelected(itemAction, targetItem)
+    }
+
+    fun onEmojiReactionClicked(emoji: String) {
+        if (targetItem == null) return
+        onEmojiReactionClicked(emoji, targetItem)
     }
 
     if (isVisible) {
@@ -104,6 +115,7 @@ fun ActionListView(
             SheetContent(
                 state = state,
                 onActionClicked = ::onItemActionClicked,
+                onEmojiReactionClicked = ::onEmojiReactionClicked,
                 modifier = modifier
                     .padding(bottom = 32.dp)
 //                    .navigationBarsPadding() - FIXME after https://issuetracker.google.com/issues/275849044
@@ -118,7 +130,8 @@ fun ActionListView(
 private fun SheetContent(
     state: ActionListState,
     modifier: Modifier = Modifier,
-    onActionClicked: (TimelineItemAction, TimelineItem.Event) -> Unit = { _, _ -> },
+    onActionClicked: (TimelineItemAction) -> Unit,
+    onEmojiReactionClicked: (String) -> Unit,
 ) {
     when (val target = state.target) {
         is ActionListState.Target.Loading,
@@ -142,7 +155,7 @@ private fun SheetContent(
                     }
                 }
                 item {
-                    EmojiReactionsRow(Modifier.fillMaxWidth())
+                    EmojiReactionsRow(onEmojiReactionClicked, Modifier.fillMaxWidth())
                     Divider()
                 }
                 items(
@@ -150,7 +163,7 @@ private fun SheetContent(
                 ) { action ->
                     ListItem(
                         modifier = Modifier.clickable {
-                            onActionClicked(action, target.event)
+                            onActionClicked(action)
                         },
                         text = {
                             Text(
@@ -266,17 +279,20 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
 }
 
 @Composable
-internal fun EmojiReactionsRow(modifier: Modifier = Modifier) {
+internal fun EmojiReactionsRow(
+    onEmojiReactionClicked: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier.padding(horizontal = 28.dp, vertical = 16.dp)
     ) {
         // TODO use real emojis, have real interaction
-        Text("\uD83D\uDC4D", fontSize = 28.dpToSp())
-        Text("\uD83D\uDC4E", fontSize = 28.dpToSp())
-        Text("\uD83D\uDD25", fontSize = 28.dpToSp())
-        Text("❤\uFE0F", fontSize = 28.dpToSp())
-        Text("\uD83D\uDC4F", fontSize = 28.dpToSp())
+        EmojiButton("\uD83D\uDC4D", onEmojiReactionClicked)
+        EmojiButton("\uD83D\uDC4E", onEmojiReactionClicked)
+        EmojiButton("\uD83D\uDD25", onEmojiReactionClicked)
+        EmojiButton("❤\uFE0F", onEmojiReactionClicked)
+        EmojiButton("\uD83D\uDC4F", onEmojiReactionClicked)
         Icon(
             imageVector = Icons.Outlined.AddReaction,
             contentDescription = "Emojis",
@@ -286,6 +302,15 @@ internal fun EmojiReactionsRow(modifier: Modifier = Modifier) {
                 .align(Alignment.CenterVertically)
         )
     }
+}
+
+@Composable
+private fun EmojiButton(
+    emoji: String,
+    onClicked: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Text(emoji, fontSize = 28.dpToSp(), modifier = modifier.clickable { onClicked(emoji) })
 }
 
 @Composable
@@ -305,5 +330,9 @@ fun SheetContentDarkPreview(@PreviewParameter(ActionListStateProvider::class) st
 
 @Composable
 private fun ContentToPreview(state: ActionListState) {
-    SheetContent(state = state)
+    SheetContent(
+        state = state,
+        onActionClicked = {},
+        onEmojiReactionClicked = {},
+    )
 }
