@@ -27,6 +27,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import kotlinx.collections.immutable.ImmutableList
@@ -98,6 +99,7 @@ internal fun aTimelineItemEvent(
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
     sendState: EventSendState = EventSendState.Sent(eventId),
     inReplyTo: InReplyTo? = null,
+    debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
 ): TimelineItem.Event {
     return TimelineItem.Event(
         id = eventId.value,
@@ -116,5 +118,14 @@ internal fun aTimelineItemEvent(
         groupPosition = groupPosition,
         sendState = sendState,
         inReplyTo = inReplyTo,
+        debugInfo = debugInfo,
     )
 }
+
+internal fun aTimelineItemDebugInfo(
+    model: String = "Rust(Model())",
+    originalJson: String? = null,
+    latestEditedJson: String? = null,
+) = TimelineItemDebugInfo(
+    model, originalJson, latestEditedJson
+)

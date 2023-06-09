@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.api.timeline.item.event
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 
 data class EventTimelineItem(
     val uniqueIdentifier: String,
@@ -31,7 +32,8 @@ data class EventTimelineItem(
     val sender: UserId,
     val senderProfile: ProfileTimelineDetails,
     val timestamp: Long,
-    val content: EventContent
+    val content: EventContent,
+    val debugInfo: TimelineItemDebugInfo,
 ) {
     fun inReplyTo(): InReplyTo? {
         return (content as? MessageContent)?.inReplyTo
