@@ -63,8 +63,6 @@ fun ChangeAccountProviderView(
     onOtherProviderClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val scrollState = rememberScrollState()
-
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -83,9 +81,7 @@ fun ChangeAccountProviderView(
         ) {
             Column(
                 modifier = Modifier
-                    .verticalScroll(
-                        state = scrollState,
-                    )
+                    .verticalScroll(state = rememberScrollState())
             ) {
                 IconTitleSubtitleMolecule(
                     modifier = Modifier.padding(top = 16.dp, bottom = 32.dp, start = 16.dp, end = 16.dp),
