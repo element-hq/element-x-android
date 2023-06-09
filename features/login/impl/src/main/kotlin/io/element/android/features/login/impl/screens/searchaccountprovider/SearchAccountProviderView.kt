@@ -75,10 +75,10 @@ import io.element.android.libraries.testtags.testTag
 @Composable
 fun SearchAccountProviderView(
     state: SearchAccountProviderState,
+    onBackPressed: () -> Unit,
+    onLearnMoreClicked: () -> Unit,
+    onDone: () -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
-    onLearnMoreClicked: () -> Unit = {},
-    onDone: () -> Unit = {},
 ) {
     val eventSink = state.eventSink
     val scrollState = rememberScrollState()
@@ -215,5 +215,8 @@ fun SearchAccountProviderViewDarkPreview(@PreviewParameter(SearchAccountProvider
 private fun ContentToPreview(state: SearchAccountProviderState) {
     SearchAccountProviderView(
         state = state,
+        onBackPressed = {},
+        onLearnMoreClicked = {},
+        onDone = {},
     )
 }

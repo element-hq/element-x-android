@@ -31,9 +31,9 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 @Composable
 fun ChangeServerView(
     state: ChangeServerState,
+    onLearnMoreClicked: () -> Unit,
+    onDone: () -> Unit,
     modifier: Modifier = Modifier,
-    onLearnMoreClicked: () -> Unit = {},
-    onDone: () -> Unit = {},
 ) {
     val eventSink = state.eventSink
     when (state.changeServerAction) {
@@ -80,5 +80,7 @@ fun ChangeServerViewDarkPreview(@PreviewParameter(ChangeServerStateProvider::cla
 private fun ContentToPreview(state: ChangeServerState) {
     ChangeServerView(
         state = state,
+        onLearnMoreClicked = {},
+        onDone = {},
     )
 }

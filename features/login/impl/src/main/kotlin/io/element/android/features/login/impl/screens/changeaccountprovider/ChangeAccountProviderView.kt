@@ -57,11 +57,11 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 @Composable
 fun ChangeAccountProviderView(
     state: ChangeAccountProviderState,
+    onBackPressed: () -> Unit,
+    onLearnMoreClicked: () -> Unit,
+    onDone: () -> Unit,
+    onOtherProviderClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
-    onLearnMoreClicked: () -> Unit = {},
-    onDone: () -> Unit = {},
-    onOtherProviderClicked: () -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
 
@@ -143,6 +143,9 @@ fun ChangeAccountProviderViewDarkPreview(@PreviewParameter(ChangeAccountProvider
 private fun ContentToPreview(state: ChangeAccountProviderState) {
     ChangeAccountProviderView(
         state = state,
-        onBackPressed = { }
+        onBackPressed = { },
+        onLearnMoreClicked = { },
+        onDone = { },
+        onOtherProviderClicked = { },
     )
 }

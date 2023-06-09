@@ -49,11 +49,11 @@ import io.element.android.libraries.testtags.testTag
 @Composable
 fun ConfirmAccountProviderView(
     state: ConfirmAccountProviderState,
+    onOidcDetails: (OidcDetails) -> Unit,
+    onLoginPasswordNeeded: () -> Unit,
+    onLearnMoreClicked: () -> Unit,
+    onChange: () -> Unit,
     modifier: Modifier = Modifier,
-    onOidcDetails: (OidcDetails) -> Unit = {},
-    onLoginPasswordNeeded: () -> Unit = {},
-    onLearnMoreClicked: () -> Unit = {},
-    onChange: () -> Unit = {},
 ) {
     val isLoading by remember(state.loginFlow) {
         derivedStateOf {
@@ -158,5 +158,9 @@ fun ConfirmAccountProviderViewDarkPreview(@PreviewParameter(ConfirmAccountProvid
 private fun ContentToPreview(state: ConfirmAccountProviderState) {
     ConfirmAccountProviderView(
         state = state,
+        onOidcDetails = {},
+        onLoginPasswordNeeded = {},
+        onLearnMoreClicked = {},
+        onChange = {},
     )
 }
