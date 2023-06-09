@@ -116,7 +116,7 @@ fun SearchAccountProviderView(
                         // readOnly = isLoading,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, bottom = 30.dp)
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                             .testTag(TestTags.changeServerServer),
                         onValueChange = {
                             userInputState = it
