@@ -38,6 +38,15 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Icon
 
+/**
+ * RoundedIconAtom is an atom which displays an icon inside a rounded container.
+ *
+ * @param modifier the modifier to apply to this layout
+ * @param size the size of the icon
+ * @param resourceId the resource id of the icon to display, exclusive with [imageVector]
+ * @param imageVector the image vector of the icon to display, exclusive with [resourceId]
+ * @param tint the tint to apply to the icon
+ */
 @Composable
 fun RoundedIconAtom(
     modifier: Modifier = Modifier,
