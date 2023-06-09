@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.changeserver.resolver.network
+package io.element.android.features.login.impl.resolver.network
 
 class FakeWellknownRequest : WellknownRequest {
     private var resultMap: Map<String, WellKnown> = emptyMap()

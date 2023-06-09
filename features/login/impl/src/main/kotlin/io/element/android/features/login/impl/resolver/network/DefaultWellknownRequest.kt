@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.element.android.features.login.impl.changeserver.resolver.network
+package io.element.android.features.login.impl.resolver.network
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope

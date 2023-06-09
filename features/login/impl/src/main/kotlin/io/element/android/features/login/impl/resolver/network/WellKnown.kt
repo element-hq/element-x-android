@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.changeserver.resolver.network
+package io.element.android.features.login.impl.resolver.network
 
 import io.element.android.libraries.core.bool.orFalse
 import kotlinx.serialization.SerialName

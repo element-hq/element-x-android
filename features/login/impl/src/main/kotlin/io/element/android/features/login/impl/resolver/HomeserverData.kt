@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.changeserver.resolver.network
+package io.element.android.features.login.impl.resolver
 
-import retrofit2.http.GET
-
-internal interface WellknownAPI {
-    @GET(".well-known/matrix/client")
-    suspend fun getWellKnown(): WellKnown
-}
+data class HomeserverData constructor(
+    // The computed homeserver url, for which a wellknown file has been retrieved, or just a valid Url
+    val homeserverUrl: String,
+    // True if a wellknown file has been found and is valid. If false, it means that the [homeserverUrl] is valid
+    val isWellknownValid: Boolean,
+    // True if a wellknown file has been found and is valid and is claiming a sliding sync Url
+    val supportSlidingSync: Boolean,
+)
