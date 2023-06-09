@@ -68,13 +68,13 @@ class MainNode(
     }
 
     private val roomFlowNodeCallback = object : RoomFlowNode.LifecycleCallback {
-        override fun onFlowCreated(room: MatrixRoom) {
+        override fun onFlowCreated(owner: String, room: MatrixRoom) {
             val component = bindings<RoomComponent.ParentBindings>().roomComponentBuilder().room(room).build()
-            mainDaggerComponentOwner.addComponent(room.roomId.value, component)
+            mainDaggerComponentOwner.addComponent(owner, component)
         }
 
-        override fun onFlowReleased(room: MatrixRoom) {
-            mainDaggerComponentOwner.removeComponent(room.roomId.value)
+        override fun onFlowReleased(owner: String, room: MatrixRoom) {
+            mainDaggerComponentOwner.removeComponent(owner)
         }
     }
 
