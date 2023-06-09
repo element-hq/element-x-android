@@ -19,7 +19,6 @@
 package io.element.android.features.login.impl.screens.searchaccountprovider
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -28,9 +27,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
@@ -98,70 +98,72 @@ fun SearchAccountProviderView(
                 .padding(padding)
                 .consumeWindowInsets(padding)
         ) {
-            Column(
-                modifier = Modifier
-                    .verticalScroll(state = rememberScrollState())
-            ) {
-                IconTitleSubtitleMolecule(
-                    modifier = Modifier.padding(top = 16.dp, bottom = 40.dp, start = 16.dp, end = 16.dp),
-                    iconImageVector = Icons.Filled.Search,
-                    title = stringResource(id = R.string.screen_account_provider_form_title),
-                    subTitle = stringResource(id = R.string.screen_account_provider_form_subtitle),
-                )
+            LazyColumn(modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()) {
+                item {
+                    IconTitleSubtitleMolecule(
+                        modifier = Modifier.padding(top = 16.dp, bottom = 40.dp, start = 16.dp, end = 16.dp),
+                        iconImageVector = Icons.Filled.Search,
+                        title = stringResource(id = R.string.screen_account_provider_form_title),
+                        subTitle = stringResource(id = R.string.screen_account_provider_form_subtitle),
+                    )
+                }
+                item {
+                    // TextInput
+                    var userInputState by textFieldState(stateValue = state.userInput)
 
-                // TextInput
-                var userInputState by textFieldState(stateValue = state.userInput)
-
-                OutlinedTextField(
-                    value = userInputState,
-                    // readOnly = isLoading,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, bottom = 30.dp)
-                        .testTag(TestTags.changeServerServer),
-                    onValueChange = {
-                        userInputState = it
-                        eventSink(SearchAccountProviderEvents.UserInput(it))
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Uri,
-                        imeAction = ImeAction.Done,
-                    ),
-                    singleLine = true,
-                    trailingIcon = if (userInputState.isNotEmpty()) {
-                        {
-                            IconButton(onClick = {
-                                userInputState = ""
-                                eventSink(SearchAccountProviderEvents.UserInput(""))
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Close,
-                                    contentDescription = stringResource(StringR.string.action_clear)
-                                )
+                    OutlinedTextField(
+                        value = userInputState,
+                        // readOnly = isLoading,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp, bottom = 30.dp)
+                            .testTag(TestTags.changeServerServer),
+                        onValueChange = {
+                            userInputState = it
+                            eventSink(SearchAccountProviderEvents.UserInput(it))
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Uri,
+                            imeAction = ImeAction.Done,
+                        ),
+                        singleLine = true,
+                        trailingIcon = if (userInputState.isNotEmpty()) {
+                            {
+                                IconButton(onClick = {
+                                    userInputState = ""
+                                    eventSink(SearchAccountProviderEvents.UserInput(""))
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Close,
+                                        contentDescription = stringResource(StringR.string.action_clear)
+                                    )
+                                }
                             }
+                        } else null,
+                        supportingText = {
+                            Text(text = stringResource(id = R.string.screen_account_provider_form_notice), color = MaterialTheme.colorScheme.secondary)
                         }
-                    } else null,
-                    supportingText = {
-                        Text(text = stringResource(id = R.string.screen_account_provider_form_notice), color = MaterialTheme.colorScheme.secondary)
-                    }
-                )
+                    )
+                }
 
                 when (state.userInputResult) {
                     is Async.Failure -> {
                         // Ignore errors (let the user type more chars)
                     }
                     is Async.Loading -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                        ) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.align(Alignment.Center)
-                            )
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.align(Alignment.Center)
+                                )
+                            }
                         }
                     }
                     is Async.Success -> {
-                        state.userInputResult.state.forEach { homeserverData ->
+                        items(state.userInputResult.state) { homeserverData ->
                             val item = homeserverData.toAccountProvider()
                             AccountProviderView(
                                 item = item,
@@ -173,7 +175,9 @@ fun SearchAccountProviderView(
                     }
                     Async.Uninitialized -> Unit
                 }
-                Spacer(Modifier.height(32.dp))
+                item {
+                    Spacer(Modifier.height(32.dp))
+                }
             }
             ChangeServerView(
                 state = state.changeServerState,
