@@ -70,8 +70,12 @@ class FakeMatrixRoom(
     private var setTopicResult = Result.success(Unit)
     private var updateAvatarResult = Result.success(Unit)
     private var removeAvatarResult = Result.success(Unit)
+    private var sendReactionResult = Result.success(Unit)
 
     var sendMediaCount = 0
+        private set
+
+    var sendReactionCount = 0
         private set
 
     var isInviteAccepted: Boolean = false
@@ -125,8 +129,8 @@ class FakeMatrixRoom(
     }
 
     override suspend fun sendReaction(emoji: String, eventId: EventId): Result<Unit> {
-        delay(FAKE_DELAY_IN_MS)
-        return Result.success(Unit)
+        sendReactionCount++
+        return sendReactionResult
     }
 
     var editMessageParameter: String? = null
@@ -283,5 +287,9 @@ class FakeMatrixRoom(
 
     fun givenSetTopicResult(result: Result<Unit>) {
         setTopicResult = result
+    }
+
+    fun givenSendReactionResult(result: Result<Unit>) {
+        sendReactionResult = result
     }
 }

@@ -45,6 +45,7 @@ import io.element.android.features.messages.impl.utils.messagesummary.MessageSum
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
@@ -67,6 +68,7 @@ class MessagesPresenter @Inject constructor(
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val messageSummaryFormatter: MessageSummaryFormatter,
+    private val dispatchers: CoroutineDispatchers,
 ) : Presenter<MessagesState> {
 
     @Composable
@@ -139,7 +141,7 @@ class MessagesPresenter @Inject constructor(
     private fun CoroutineScope.sendReaction(
         emoji: String,
         eventId: EventId,
-    ) = launch {
+    ) = launch(dispatchers.io) {
         room.sendReaction(emoji, eventId)
             .onFailure { Timber.e(it) }
     }
