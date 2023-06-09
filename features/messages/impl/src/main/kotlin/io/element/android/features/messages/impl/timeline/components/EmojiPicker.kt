@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -63,7 +64,7 @@ fun CustomReactionBottomSheet(
 ) {
     if (isVisible) {
         ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState, modifier = modifier) {
-            EmojiPicker(onEmojiSelected = onEmojiSelected, modifier = Modifier.fillMaxWidth())
+            EmojiPicker(onEmojiSelected = onEmojiSelected, modifier = Modifier.fillMaxSize())
         }
     }
 }
@@ -106,7 +107,7 @@ fun EmojiPicker(
         ) { index ->
             val category = categories[index]
             LazyVerticalGrid(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxSize(),
                 columns = GridCells.Adaptive(minSize = 40.dp),
                 contentPadding = PaddingValues(vertical = 10.dp, horizontal = 16.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
