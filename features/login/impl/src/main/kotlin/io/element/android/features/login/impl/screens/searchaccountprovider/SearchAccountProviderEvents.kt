@@ -18,7 +18,8 @@ package io.element.android.features.login.impl.screens.searchaccountprovider
 
 sealed interface SearchAccountProviderEvents {
     /**
-     * The user has typed something, expect to get a list of result in the state.
+     * The user has typed something, expect to get a list of matching account provider results
+     * in the state.
      */
     data class UserInput(val input: String) : SearchAccountProviderEvents
 }
