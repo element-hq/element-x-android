@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.util
+package io.element.android.features.login.impl.screens.changeaccountprovider
 
 import io.element.android.features.login.impl.accountprovider.AccountProvider
+import io.element.android.features.login.impl.changeserver.ChangeServerState
 
-object LoginConstants {
-    const val MATRIX_ORG_URL = "matrix.org"
-
-    const val DEFAULT_HOMESERVER_URL = "matrix.org" // TODO Oidc "synapse-oidc.lab.element.dev"
-    const val SLIDING_SYNC_READ_MORE_URL = "https://github.com/matrix-org/sliding-sync/blob/main/docs/Landing.md"
-}
-
-val defaultAccountProvider = AccountProvider(
-    title = LoginConstants.DEFAULT_HOMESERVER_URL,
-    subtitle = null,
-    isPublic = LoginConstants.DEFAULT_HOMESERVER_URL == LoginConstants.MATRIX_ORG_URL,
-    isMatrixOrg = LoginConstants.DEFAULT_HOMESERVER_URL == LoginConstants.MATRIX_ORG_URL,
+// Do not use default value, so no member get forgotten in the presenters.
+data class ChangeAccountProviderState constructor(
+    val accountProviders: List<AccountProvider>,
+    val changeServerState: ChangeServerState,
 )

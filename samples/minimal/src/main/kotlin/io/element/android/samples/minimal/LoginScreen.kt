@@ -20,9 +20,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import io.element.android.features.login.impl.datasource.AccountProviderDataSource
-import io.element.android.features.login.impl.loginpassword.LoginPasswordPresenter
-import io.element.android.features.login.impl.loginpassword.LoginPasswordView
+import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordPresenter
+import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordView
 import io.element.android.features.login.impl.util.defaultAccountProvider
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 

@@ -16,146 +16,117 @@
 
 package io.element.android.features.login.impl.accountprovider
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
-import io.element.android.features.login.impl.error.ChangeServerError
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
-import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
-import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
-import io.element.android.libraries.designsystem.components.button.ButtonWithProgress
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
+import io.element.android.libraries.designsystem.ElementTextStyles
+import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
+import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TextButton
-import io.element.android.libraries.matrix.api.auth.OidcDetails
-import io.element.android.libraries.testtags.TestTags
-import io.element.android.libraries.testtags.testTag
 
+/**
+ * https://www.figma.com/file/o9p34zmiuEpZRyvZXJZAYL/FTUE?type=design&node-id=604-60817
+ */
 @Composable
 fun AccountProviderView(
-    state: AccountProviderState,
+    item: AccountProvider,
     modifier: Modifier = Modifier,
-    onOidcDetails: (OidcDetails) -> Unit = {},
-    onLoginPasswordNeeded: () -> Unit = {},
-    onLearnMoreClicked: () -> Unit = {},
-    onChange: () -> Unit = {},
+    onClick: () -> Unit,
 ) {
-    val isLoading by remember(state.loginFlow) {
-        derivedStateOf {
-            state.loginFlow is Async.Loading
-        }
-    }
-    val eventSink = state.eventSink
-
-    HeaderFooterPage(
-        modifier = modifier,
-        header = {
-            IconTitleSubtitleMolecule(
-                modifier = Modifier.padding(top = 60.dp),
-                iconImageVector = Icons.Filled.AccountCircle,
-                title = stringResource(
-                    id = if (state.isAccountCreation) {
-                        R.string.screen_account_provider_signup_title
-                    } else {
-                        R.string.screen_account_provider_signin_title
-                    },
-                    state.accountProvider.title
-                ),
-                subTitle = stringResource(
-                    id = if (state.isAccountCreation) {
-                        R.string.screen_account_provider_signup_subtitle
-                    } else {
-                        // Use same value for now.
-                        R.string.screen_account_provider_signup_subtitle
-                    },
-                )
-            )
-        },
-        footer = {
-            ButtonColumnMolecule {
-                ButtonWithProgress(
-                    text = stringResource(id = R.string.screen_account_provider_continue),
-                    showProgress = isLoading,
-                    onClick = { eventSink.invoke(AccountProviderEvents.Continue) },
-                    enabled = state.submitEnabled,
+    Column(modifier = modifier
+        .fillMaxWidth()
+        .clickable { onClick() }) {
+        Divider()
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp, horizontal = 16.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 44.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (item.isMatrixOrg) {
+                    RoundedIconAtom(
+                        size = RoundedIconAtomSize.Medium,
+                        resourceId = R.drawable.ic_matrix,
+                        tint = Color.Unspecified,
+                    )
+                } else {
+                    RoundedIconAtom(
+                        size = RoundedIconAtomSize.Medium,
+                        imageVector = Icons.Filled.Search,
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
+                }
+                Text(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag(TestTags.loginContinue)
+                        .padding(start = 16.dp)
+                        .weight(1f),
+                    text = item.title,
+                    style = ElementTextStyles.Regular.headline.copy(textAlign = TextAlign.Start),
+                    color = MaterialTheme.colorScheme.primary,
                 )
-                TextButton(
-                    onClick = {
-                        onChange()
-                    },
-                    enabled = true,
+                if (item.isPublic) {
+                    Icon(
+                        modifier = Modifier
+                            .padding(start = 10.dp)
+                            .size(16.dp),
+                        resourceId = R.drawable.ic_public,
+                        contentDescription = null,
+                        tint = Color.Unspecified,
+                    )
+                }
+            }
+            if (item.subtitle != null) {
+                Text(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag(TestTags.loginChangeServer)
-                ) {
-                    Text(text = stringResource(id = R.string.screen_account_provider_change))
-                }
+                        .padding(start = 46.dp, bottom = 12.dp, end = 26.dp),
+                    text = item.subtitle,
+                    style = ElementTextStyles.Regular.subheadline.copy(textAlign = TextAlign.Start),
+                    color = MaterialTheme.colorScheme.secondary,
+                )
             }
-        }
-    ) {
-        when (state.loginFlow) {
-            is Async.Failure -> {
-                when (val error = state.loginFlow.error) {
-                    is ChangeServerError.InlineErrorMessage -> {
-                        ErrorDialog(
-                            content = error.message(),
-                            onDismiss = {
-                                eventSink.invoke(AccountProviderEvents.ClearError)
-                            }
-                        )
-                    }
-                    is ChangeServerError.SlidingSyncAlert -> {
-                        SlidingSyncNotSupportedDialog(onLearnMoreClicked = {
-                            onLearnMoreClicked()
-                            eventSink(AccountProviderEvents.ClearError)
-                        }, onDismiss = {
-                            eventSink(AccountProviderEvents.ClearError)
-                        })
-                    }
-                }
-            }
-            is Async.Loading -> Unit // The Continue button shows the loading state
-            is Async.Success -> {
-                when (val loginFlowState = state.loginFlow.state) {
-                    is LoginFlow.OidcFlow -> onOidcDetails(loginFlowState.oidcDetails)
-                    LoginFlow.PasswordLogin -> onLoginPasswordNeeded()
-                }
-            }
-            Async.Uninitialized -> Unit
         }
     }
 }
 
 @Preview
 @Composable
-fun AccountProviderViewLightPreview(@PreviewParameter(AccountProviderStateProvider::class) state: AccountProviderState) =
-    ElementPreviewLight { ContentToPreview(state) }
+fun AccountProviderViewLightPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) =
+    ElementPreviewLight { ContentToPreview(item) }
 
 @Preview
 @Composable
-fun AccountProviderViewDarkPreview(@PreviewParameter(AccountProviderStateProvider::class) state: AccountProviderState) =
-    ElementPreviewDark { ContentToPreview(state) }
+fun AccountProviderViewDarkPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) =
+    ElementPreviewDark { ContentToPreview(item) }
 
 @Composable
-private fun ContentToPreview(state: AccountProviderState) {
+private fun ContentToPreview(item: AccountProvider) {
     AccountProviderView(
-        state = state,
+        item = item,
+        onClick = { }
     )
 }
