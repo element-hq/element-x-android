@@ -50,8 +50,10 @@ import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -68,6 +70,25 @@ class MessagesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.roomId).isEqualTo(A_ROOM_ID)
+        }
+    }
+
+    @Test
+    fun `present - handle sending a reaction`() = runTest {
+        val room = FakeMatrixRoom()
+        val presenter = createMessagePresenter(matrixRoom = room)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(MessagesEvents.SendReaction("👍", AN_EVENT_ID))
+            assertThat(room.sendReactionCount).isEqualTo(1)
+
+            // No crashes when sending a reaction failed
+            room.givenSendReactionResult(Result.failure(IllegalStateException("Failed to send reaction")))
+            initialState.eventSink.invoke(MessagesEvents.SendReaction("👍", AN_EVENT_ID))
+            assertThat(room.sendReactionCount).isEqualTo(2)
         }
     }
 
@@ -309,6 +330,7 @@ class MessagesPresenterTest {
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),
             messageSummaryFormatter = FakeMessageSummaryFormatter(),
+            dispatchers = testCoroutineDispatchers(testScheduler),
         )
     }
 }
