@@ -3,4 +3,15 @@ appId: ${APP_ID}
 - tapOn:
     id: "login-change_server"
 - takeScreenshot: build/maestro/200-ChangeServer
-- tapOn: "Continue"
+- tapOn: "matrix.org"
+- tapOn:
+    id: "login-change_server"
+- tapOn: "Other"
+- tapOn:
+    id: "change_server-server"
+- inputText: "element"
+- hideKeyboard
+- tapOn: "element.io"
+- tapOn: "Cancel"
+- back
+- back

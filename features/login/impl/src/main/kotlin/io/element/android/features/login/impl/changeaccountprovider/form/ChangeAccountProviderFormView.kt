@@ -65,6 +65,8 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 
 /**
  * https://www.figma.com/file/o9p34zmiuEpZRyvZXJZAYL/FTUE?type=design&node-id=611-61435
@@ -117,7 +119,8 @@ fun ChangeAccountProviderFormView(
                     // readOnly = isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, bottom = 30.dp),
+                        .padding(start = 16.dp, end = 16.dp, bottom = 30.dp)
+                        .testTag(TestTags.changeServerServer),
                     onValueChange = {
                         userInputState = it
                         eventSink(ChangeAccountProviderFormEvents.UserInput(it))

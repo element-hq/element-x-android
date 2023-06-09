@@ -94,7 +94,7 @@ fun AccountProviderView(
                     enabled = state.submitEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .testTag(TestTags.changeServerContinue)
+                        .testTag(TestTags.loginContinue)
                 )
                 TextButton(
                     onClick = {
@@ -103,6 +103,7 @@ fun AccountProviderView(
                     enabled = true,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .testTag(TestTags.loginChangeServer)
                 ) {
                     Text(text = stringResource(id = R.string.screen_account_provider_change))
                 }
