@@ -36,8 +36,8 @@ fun LabelledTextField(
     value: String,
     modifier: Modifier = Modifier,
     placeholder: String? = null,
-    maxLines: Int = Int.MAX_VALUE,
     singleLine: Boolean = false,
+    maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     onValueChange: (String) -> Unit = {},
 ) {
     Column(

@@ -208,7 +208,6 @@ internal fun LoginForm(
                 focusManager.moveFocus(FocusDirection.Down)
             }),
             singleLine = true,
-            maxLines = 1,
             trailingIcon = if (loginFieldState.isNotEmpty()) {
                 {
                     IconButton(onClick = {
@@ -263,7 +262,6 @@ internal fun LoginForm(
                 onDone = { onSubmit() }
             ),
             singleLine = true,
-            maxLines = 1,
         )
     }
 }

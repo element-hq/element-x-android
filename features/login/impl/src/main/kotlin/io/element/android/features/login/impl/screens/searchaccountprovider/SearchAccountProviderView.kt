@@ -127,7 +127,6 @@ fun SearchAccountProviderView(
                         imeAction = ImeAction.Done,
                     ),
                     singleLine = true,
-                    maxLines = 1,
                     trailingIcon = if (userInputState.isNotEmpty()) {
                         {
                             IconButton(onClick = {
