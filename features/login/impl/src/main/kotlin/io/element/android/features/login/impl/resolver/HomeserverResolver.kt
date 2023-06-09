@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.changeserver.resolver
+package io.element.android.features.login.impl.resolver
 
-import io.element.android.features.login.impl.changeserver.resolver.network.WellknownRequest
+import io.element.android.features.login.impl.resolver.network.WellknownRequest
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers

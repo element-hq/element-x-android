@@ -24,8 +24,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.element.android.features.login.impl.changeserver.ChangeServerPresenter
-import io.element.android.features.login.impl.changeserver.resolver.HomeserverData
-import io.element.android.features.login.impl.changeserver.resolver.HomeserverResolver
+import io.element.android.features.login.impl.resolver.HomeserverData
+import io.element.android.features.login.impl.resolver.HomeserverResolver
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject

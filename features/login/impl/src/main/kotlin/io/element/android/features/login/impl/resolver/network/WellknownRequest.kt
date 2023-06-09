@@ -13,23 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.element.android.features.login.impl.resolver.network
 
-package io.element.android.features.login.impl.changeserver.resolver.network
-
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
-/**
- * https://matrix.org/docs/spec/client_server/r0.4.0.html#server-discovery
- * <pre>
- * {
- *     "base_url": "https://element.io"
- * }
- * </pre>
- * .
- */
-@Serializable
-data class WellKnownBaseConfig(
-        @SerialName("base_url")
-        val baseURL: String? = null
-)
+interface WellknownRequest {
+    /**
+     * Return the WellKnown data, or throw an error if not found.
+     * @param baseUrl for instance https://matrix.org
+     */
+    suspend fun execute(baseUrl: String): WellKnown
+}

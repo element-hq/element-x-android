@@ -18,7 +18,7 @@ package io.element.android.features.login.impl.screens.searchaccountprovider
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.login.impl.changeserver.aChangeServerState
-import io.element.android.features.login.impl.changeserver.resolver.HomeserverData
+import io.element.android.features.login.impl.resolver.HomeserverData
 import io.element.android.libraries.architecture.Async
 
 open class SearchAccountProviderStateProvider : PreviewParameterProvider<SearchAccountProviderState> {

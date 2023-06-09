@@ -17,7 +17,7 @@
 package io.element.android.features.login.impl.screens.searchaccountprovider
 
 import io.element.android.features.login.impl.changeserver.ChangeServerState
-import io.element.android.features.login.impl.changeserver.resolver.HomeserverData
+import io.element.android.features.login.impl.resolver.HomeserverData
 import io.element.android.libraries.architecture.Async
 
 // Do not use default value, so no member get forgotten in the presenters.
