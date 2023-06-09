@@ -26,6 +26,12 @@
   <string name="screen_login_server_header">"Where your conversations live"</string>
   <string name="screen_login_title">"Welcome back!"</string>
   <string name="screen_login_title_with_homeserver">"Sign in to %1$s"</string>
+  <string name="screen_server_confirmation_change_server">"Change account provider"</string>
+  <string name="screen_server_confirmation_message_login_element_dot_io">"A private server for Element employees."</string>
+  <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix is an open network for secure, decentralised communication."</string>
+  <string name="screen_server_confirmation_message_register">"This is where your conversations will live — just like you would use an email provider to keep your emails."</string>
+  <string name="screen_server_confirmation_title_login">"You’re about to sign in to %1$s"</string>
+  <string name="screen_server_confirmation_title_register">"You’re about to create an account on %1$s"</string>
   <string name="screen_change_server_submit">"Continue"</string>
   <string name="screen_change_server_title">"Select your server"</string>
   <string name="screen_login_password_hint">"Password"</string>
