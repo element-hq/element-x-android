@@ -132,10 +132,10 @@ fun ActionListView(
 @Composable
 private fun SheetContent(
     state: ActionListState,
-    modifier: Modifier = Modifier,
     onActionClicked: (TimelineItemAction) -> Unit,
     onEmojiReactionClicked: (String) -> Unit,
     onCustomReactionClicked: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     when (val target = state.target) {
         is ActionListState.Target.Loading,
