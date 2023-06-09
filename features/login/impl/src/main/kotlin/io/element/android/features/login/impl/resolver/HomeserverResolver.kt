@@ -30,6 +30,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import java.util.Collections
 import javax.inject.Inject
 
@@ -56,7 +57,11 @@ class HomeserverResolver @Inject constructor(
         withContext(dispatchers.io) {
             list.map {
                 async {
-                    val wellKnown = tryOrNull { wellknownRequest.execute(it) }
+                    val wellKnown = tryOrNull {
+                        withTimeout(5000) {
+                            wellknownRequest.execute(it)
+                        }
+                    }
                     val isValid = wellKnown?.isValid().orFalse()
                     if (isValid) {
                         val supportSlidingSync = wellKnown?.supportSlidingSync().orFalse()
