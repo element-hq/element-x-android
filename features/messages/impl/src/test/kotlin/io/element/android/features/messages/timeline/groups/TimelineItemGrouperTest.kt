@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventSendStat
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.room.aTimelineItemDebugInfo
 import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
 
@@ -44,6 +45,7 @@ class TimelineItemGrouperTest {
         reactionsState = TimelineItemReactions(emptyList<AggregatedReaction>().toImmutableList()),
         sendState = EventSendState.Sent(AN_EVENT_ID),
         inReplyTo = null,
+        debugInfo = aTimelineItemDebugInfo(),
     )
     private val aNonGroupableItem = aMessageEvent()
     private val aNonGroupableItemNoEvent = TimelineItem.Virtual("virtual", aTimelineItemDaySeparatorModel("Today"))

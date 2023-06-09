@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.impl.timeline.item.event
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
@@ -25,6 +26,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimeli
 import org.matrix.rustcomponents.sdk.Reaction
 import org.matrix.rustcomponents.sdk.EventSendState as RustEventSendState
 import org.matrix.rustcomponents.sdk.EventTimelineItem as RustEventTimelineItem
+import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfo as RustEventTimelineItemDebugInfo
 import org.matrix.rustcomponents.sdk.ProfileDetails as RustProfileDetails
 
 class EventTimelineItemMapper(private val contentMapper: TimelineEventContentMapper = TimelineEventContentMapper()) {
@@ -42,7 +44,8 @@ class EventTimelineItemMapper(private val contentMapper: TimelineEventContentMap
             sender = UserId(it.sender()),
             senderProfile = it.senderProfile().map(),
             timestamp = it.timestamp().toLong(),
-            content = contentMapper.map(it.content())
+            content = contentMapper.map(it.content()),
+            debugInfo = it.debugInfo().map(),
         )
     }
 }
@@ -76,4 +79,12 @@ private fun List<Reaction>?.map(): List<EventReaction> {
             count = it.count.toLong()
         )
     } ?: emptyList()
+}
+
+private fun RustEventTimelineItemDebugInfo.map(): TimelineItemDebugInfo {
+    return TimelineItemDebugInfo(
+        model = model,
+        originalJson = originalJson,
+        latestEditedJson = latestEditJson,
+    )
 }

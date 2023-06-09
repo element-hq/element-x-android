@@ -77,7 +77,9 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -92,6 +94,7 @@ fun MessagesView(
     onEventClicked: (event: TimelineItem.Event) -> Unit,
     onUserDataClicked: (UserId) -> Unit,
     onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
+    onItemDebugInfoClicked: (EventId, TimelineItemDebugInfo) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
@@ -120,7 +123,12 @@ fun MessagesView(
 
     fun onActionSelected(action: TimelineItemAction, event: TimelineItem.Event) {
         isMessageActionsBottomSheetVisible = false
-        state.eventSink(MessagesEvents.HandleAction(action, event))
+        when (action) {
+            is TimelineItemAction.Developer -> if (event.eventId != null && event.debugInfo != null) {
+                onItemDebugInfoClicked(event.eventId, event.debugInfo)
+            }
+            else -> state.eventSink(MessagesEvents.HandleAction(action, event))
+        }
     }
 
     fun onDismissActionListBottomSheet() {
@@ -275,5 +283,6 @@ private fun ContentToPreview(state: MessagesState) {
         onEventClicked = {},
         onPreviewAttachments = {},
         onUserDataClicked = {},
+        onItemDebugInfoClicked = { _, _ -> },
     )
 }

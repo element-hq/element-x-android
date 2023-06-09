@@ -22,15 +22,14 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomSummary
 import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
+import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
-import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID
@@ -100,6 +99,7 @@ fun anEventTimelineItem(
     senderProfile: ProfileTimelineDetails = aProfileTimelineDetails(),
     timestamp: Long = 0L,
     content: EventContent = aProfileChangeMessageContent(),
+    debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
 ) = EventTimelineItem(
     uniqueIdentifier = uniqueIdentifier,
     eventId = eventId,
@@ -113,6 +113,7 @@ fun anEventTimelineItem(
     senderProfile = senderProfile,
     timestamp = timestamp,
     content = content,
+    debugInfo = debugInfo,
 )
 
 fun aProfileTimelineDetails(
@@ -135,4 +136,12 @@ fun aProfileChangeMessageContent(
     prevDisplayName = prevDisplayName,
     avatarUrl = avatarUrl,
     prevAvatarUrl = prevAvatarUrl,
+)
+
+fun aTimelineItemDebugInfo(
+    model: String = "Rust(Model())",
+    originalJson: String? = null,
+    latestEditedJson: String? = null,
+) = TimelineItemDebugInfo(
+    model, originalJson, latestEditedJson
 )
