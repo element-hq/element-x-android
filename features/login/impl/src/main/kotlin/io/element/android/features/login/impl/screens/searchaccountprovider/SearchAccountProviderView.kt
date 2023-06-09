@@ -68,6 +68,7 @@ import io.element.android.libraries.designsystem.theme.components.OutlinedTextFi
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.ui.strings.R as StringR
 
 /**
  * https://www.figma.com/file/o9p34zmiuEpZRyvZXJZAYL/FTUE?type=design&node-id=611-61435
@@ -135,7 +136,7 @@ fun SearchAccountProviderView(
                             }) {
                                 Icon(
                                     imageVector = Icons.Filled.Close,
-                                    contentDescription = stringResource(io.element.android.libraries.ui.strings.R.string.action_clear)
+                                    contentDescription = stringResource(StringR.string.action_clear)
                                 )
                             }
                         }
