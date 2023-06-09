@@ -81,8 +81,6 @@ fun SearchAccountProviderView(
     modifier: Modifier = Modifier,
 ) {
     val eventSink = state.eventSink
-    val scrollState = rememberScrollState()
-
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -101,9 +99,7 @@ fun SearchAccountProviderView(
         ) {
             Column(
                 modifier = Modifier
-                    .verticalScroll(
-                        state = scrollState,
-                    )
+                    .verticalScroll(state = rememberScrollState())
             ) {
                 IconTitleSubtitleMolecule(
                     modifier = Modifier.padding(top = 16.dp, bottom = 40.dp, start = 16.dp, end = 16.dp),
