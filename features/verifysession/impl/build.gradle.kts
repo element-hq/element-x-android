@@ -39,7 +39,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
-    implementation(projects.libraries.statemachine)
+    api(libs.statemachine)
     api(projects.features.verifysession.api)
 
     testImplementation(libs.test.junit)

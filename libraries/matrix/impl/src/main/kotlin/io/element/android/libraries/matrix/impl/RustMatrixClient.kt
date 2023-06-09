@@ -64,6 +64,7 @@ import org.matrix.rustcomponents.sdk.SlidingSyncList
 import org.matrix.rustcomponents.sdk.SlidingSyncListBuilder
 import org.matrix.rustcomponents.sdk.SlidingSyncListOnceBuilt
 import org.matrix.rustcomponents.sdk.SlidingSyncRequestListFilters
+import org.matrix.rustcomponents.sdk.SlidingSyncSelectiveModeBuilder
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
@@ -124,8 +125,7 @@ class RustMatrixClient constructor(
             )
         )
         .filters(visibleRoomsSlidingSyncFilters)
-        .syncModeSelective()
-        .addRange(0u, 20u)
+        .syncModeSelective(SlidingSyncSelectiveModeBuilder().addRange(0u, 20u))
         .onceBuilt(object : SlidingSyncListOnceBuilt {
             override fun updateList(list: SlidingSyncList): SlidingSyncList {
                 visibleRoomsSlidingSyncList.tryEmit(list)
@@ -146,8 +146,7 @@ class RustMatrixClient constructor(
             )
         )
         .filters(invitesSlidingSyncFilters)
-        .syncModeSelective()
-        .addRange(0u, 20u)
+        .syncModeSelective(SlidingSyncSelectiveModeBuilder().addRange(0u, 20u))
         .onceBuilt(object : SlidingSyncListOnceBuilt {
             override fun updateList(list: SlidingSyncList): SlidingSyncList {
                 invitesSlidingSyncList.tryEmit(list)
@@ -156,10 +155,9 @@ class RustMatrixClient constructor(
         })
 
     private val slidingSync = client
-        .slidingSync()
+        .slidingSync("ElementX")
         // .homeserver("https://slidingsync.lab.matrix.org")
         .withCommonExtensions()
-        .storageKey("ElementX")
         .addList(visibleRoomsSlidingSyncListBuilder)
         .addList(invitesSlidingSyncListBuilder)
         .use {
