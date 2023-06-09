@@ -98,9 +98,7 @@ fun ConfirmAccountProviderView(
                         .testTag(TestTags.loginContinue)
                 )
                 TextButton(
-                    onClick = {
-                        onChange()
-                    },
+                    onClick = onChange,
                     enabled = true,
                     modifier = Modifier
                         .fillMaxWidth()

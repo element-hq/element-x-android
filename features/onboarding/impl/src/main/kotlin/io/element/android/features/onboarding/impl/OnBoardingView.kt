@@ -120,9 +120,7 @@ private fun OnBoardingButtons(
     ButtonColumnMolecule(modifier = modifier) {
         if (state.canLoginWithQrCode) {
             Button(
-                onClick = {
-                    onSignInWithQrCode()
-                },
+                onClick = onSignInWithQrCode,
                 enabled = true,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -136,9 +134,7 @@ private fun OnBoardingButtons(
             }
         }
         Button(
-            onClick = {
-                onSignIn()
-            },
+            onClick = onSignIn,
             enabled = true,
             modifier = Modifier
                 .fillMaxWidth()
@@ -148,9 +144,7 @@ private fun OnBoardingButtons(
         }
         if (state.canCreateAccount) {
             OutlinedButton(
-                onClick = {
-                    onCreateAccount()
-                },
+                onClick = onCreateAccount,
                 enabled = true,
                 modifier = Modifier
                     .fillMaxWidth()
