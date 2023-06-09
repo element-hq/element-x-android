@@ -38,7 +38,14 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
 
 /**
- * Provide either an `iconResourceId` or an `iconImageVector`.
+ * IconTitleSubtitleMolecule is a molecule which displays an icon, a title and a subtitle.
+ *
+ * @param title the title to display
+ * @param subTitle the subtitle to display
+ * @param modifier the modifier to apply to this layout
+ * @param iconResourceId the resource id of the icon to display, exclusive with [iconImageVector]
+ * @param iconImageVector the image vector of the icon to display, exclusive with [iconResourceId]
+ * @param iconTint the tint to apply to the icon
  */
 @Composable
 fun IconTitleSubtitleMolecule(
