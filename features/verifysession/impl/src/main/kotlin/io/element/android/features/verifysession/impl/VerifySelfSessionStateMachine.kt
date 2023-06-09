@@ -15,101 +15,113 @@
  */
 
 @file:Suppress("WildcardImport")
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package io.element.android.features.verifysession.impl
 
-import io.element.android.libraries.statemachine.createStateMachine
+import com.freeletics.flowredux.dsl.FlowReduxStateMachine
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
-import io.element.android.libraries.matrix.api.verification.VerificationFlowState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import javax.inject.Inject
+import com.freeletics.flowredux.dsl.State as MachineState
 
-class VerifySelfSessionStateMachine(
-    coroutineScope: CoroutineScope,
+class VerifySelfSessionStateMachine @Inject constructor(
     private val sessionVerificationService: SessionVerificationService,
+) : FlowReduxStateMachine<VerifySelfSessionStateMachine.State, VerifySelfSessionStateMachine.Event>(
+    initialState = State.Initial
 ) {
 
-    private val stateMachine = createStateMachine {
-        addInitialState(State.Initial) {
-            on<Event.RequestVerification>(State.RequestingVerification)
-            on<Event.StartSasVerification>(State.StartingSasVerification)
-        }
-        addState<State.RequestingVerification> {
-            onEnter { sessionVerificationService.requestVerification() }
-
-            on<Event.DidAcceptVerificationRequest>(State.VerificationRequestAccepted)
-            on<Event.DidFail>(State.Initial)
-        }
-        addState<State.StartingSasVerification> {
-            onEnter { sessionVerificationService.startVerification() }
-        }
-        addState<State.VerificationRequestAccepted> {
-            on<Event.StartSasVerification>(State.StartingSasVerification)
-        }
-        addState<State.Canceled> {
-            on<Event.Restart>(State.RequestingVerification)
-        }
-        addState<State.SasVerificationStarted> {
-            on<Event.DidReceiveChallenge> { event, _ -> State.Verifying.ChallengeReceived(event.emojis) }
-        }
-        addState<State.Verifying.ChallengeReceived> {
-            on<Event.AcceptChallenge> { _, prevState -> State.Verifying.Replying(prevState.emojis, true) }
-            on<Event.DeclineChallenge> { _, prevState -> State.Verifying.Replying(prevState.emojis, false) }
-        }
-        addState<State.Verifying.Replying> {
-            onEnter { state ->
-                if (state.accept) {
-                    sessionVerificationService.approveVerification()
-                } else {
-                    sessionVerificationService.declineVerification()
+    init {
+        spec {
+            inState<State.Initial> {
+                on { _: Event.RequestVerification, state: MachineState<State.Initial> ->
+                    state.override { State.RequestingVerification }
+                }
+                on { _: Event.StartSasVerification, state: MachineState<State.Initial> ->
+                    state.override { State.StartingSasVerification }
                 }
             }
-            on<Event.DidAcceptChallenge>(State.Completed)
-        }
-        addState<State.Canceling> {
-            onEnter { sessionVerificationService.cancelVerification() }
-        }
-        on<Event.DidStartSasVerification>(State.SasVerificationStarted)
-        on<Event.Cancel>(State.Canceling)
-        on<Event.DidCancel>(State.Canceled)
-        on<Event.DidFail>(State.Canceled)
-    }
-
-    init {
-        // Observe the verification service state, translate it to state machine input events
-        sessionVerificationService.verificationFlowState.onEach { verificationAttemptState ->
-            when (verificationAttemptState) {
-                VerificationFlowState.Initial -> stateMachine.restart()
-                VerificationFlowState.AcceptedVerificationRequest -> {
-                    stateMachine.process(Event.DidAcceptVerificationRequest)
+            inState<State.RequestingVerification> {
+                onEnterEffect {
+                    sessionVerificationService.requestVerification()
                 }
-                VerificationFlowState.StartedSasVerification -> {
-                    stateMachine.process(Event.DidStartSasVerification)
+                on { _: Event.DidAcceptVerificationRequest, state: MachineState<State.RequestingVerification> ->
+                    state.override { State.VerificationRequestAccepted }
                 }
-                is VerificationFlowState.ReceivedVerificationData -> {
-                    // For some reason we receive this state twice, we need to discard the 2nd one
-                    if (stateMachine.currentState == State.SasVerificationStarted) {
-                        stateMachine.process(Event.DidReceiveChallenge(verificationAttemptState.emoji))
+                on { _: Event.DidFail, state: MachineState<State.RequestingVerification> ->
+                    state.override { State.Initial }
+                }
+            }
+            inState<State.StartingSasVerification> {
+                onEnterEffect {
+                    sessionVerificationService.startVerification()
+                }
+            }
+            inState<State.VerificationRequestAccepted> {
+                on { _: Event.StartSasVerification, state: MachineState<State.VerificationRequestAccepted> ->
+                    state.override { State.StartingSasVerification }
+                }
+            }
+            inState<State.Canceled> {
+                on { _: Event.Restart, state: MachineState<State.Canceled> ->
+                    state.override { State.RequestingVerification }
+                }
+            }
+            inState<State.SasVerificationStarted> {
+                on { event: Event.DidReceiveChallenge, state: MachineState<State.SasVerificationStarted> ->
+                    state.override { State.Verifying.ChallengeReceived(event.emojis) }
+                }
+            }
+            inState<State.Verifying.ChallengeReceived> {
+                on { _: Event.AcceptChallenge, state: MachineState<State.Verifying.ChallengeReceived> ->
+                    state.override { State.Verifying.Replying(state.snapshot.emojis, accept = true) }
+                }
+                on { _: Event.DeclineChallenge, state: MachineState<State.Verifying.ChallengeReceived> ->
+                    state.override { State.Verifying.Replying(state.snapshot.emojis, accept = false) }
+                }
+            }
+            inState<State.Verifying.Replying> {
+                onEnterEffect { state ->
+                    if (state.accept) {
+                        sessionVerificationService.approveVerification()
+                    } else {
+                        sessionVerificationService.declineVerification()
                     }
                 }
-                VerificationFlowState.Finished -> {
-                    stateMachine.process(Event.DidAcceptChallenge)
-                }
-                VerificationFlowState.Canceled -> {
-                    stateMachine.process(Event.DidCancel)
-                }
-                VerificationFlowState.Failed -> {
-                    stateMachine.process(Event.DidFail)
+                on { _: Event.DidAcceptChallenge, state: MachineState<State.Verifying.Replying> ->
+                    state.override { State.Completed }
                 }
             }
-        }.launchIn(coroutineScope)
+            inState<State.Canceling> {
+                onEnterEffect {
+                    sessionVerificationService.cancelVerification()
+                }
+            }
+            inState {
+                on { _: Event.DidStartSasVerification, state: MachineState<State> ->
+                    state.override { State.SasVerificationStarted }
+                }
+                on { _: Event.Cancel, state: MachineState<State> ->
+                    if (state.snapshot in sequenceOf(
+                            State.Initial,
+                            State.Completed,
+                            State.Canceled
+                        )) {
+                        state.noChange()
+                    } else {
+                        state.override { State.Canceling }
+                    }
+                }
+                on { _: Event.DidCancel, state: MachineState<State> ->
+                    state.override { State.Canceled }
+                }
+                on { _: Event.DidFail, state: MachineState<State> ->
+                    state.override { State.Canceled }
+                }
+            }
+        }
     }
-
-    val state: StateFlow<State> = stateMachine.stateFlow
-
-    fun process(event: Event) = stateMachine.process(event)
 
     sealed interface State {
         /** The initial state, before verification started. */
@@ -134,10 +146,13 @@ class VerifySelfSessionStateMachine(
             /** Replying to a verification challenge. */
             data class Replying(override val emojis: List<VerificationEmoji>, val accept: Boolean) : Verifying(emojis)
         }
+
         /** The verification is being canceled. */
         object Canceling : State
+
         /** The verification has been canceled, remotely or locally. */
         object Canceled : State
+
         /** Verification successful. */
         object Completed : State
     }
@@ -145,26 +160,37 @@ class VerifySelfSessionStateMachine(
     sealed interface Event {
         /** Request verification. */
         object RequestVerification : Event
+
         /** The current verification request has been accepted. */
         object DidAcceptVerificationRequest : Event
+
         /** Start a SaS verification flow. */
         object StartSasVerification : Event
+
         /** Started a SaS verification flow. */
         object DidStartSasVerification : Event
+
         /** Has received emojis. */
         data class DidReceiveChallenge(val emojis: List<VerificationEmoji>) : Event
+
         /** Emojis match. */
         object AcceptChallenge : Event
+
         /** Emojis do not match. */
         object DeclineChallenge : Event
+
         /** Remote accepted challenge. */
         object DidAcceptChallenge : Event
+
         /** Request cancellation. */
         object Cancel : Event
+
         /** Verification cancelled. */
         object DidCancel : Event
+
         /** Request failed. */
         object DidFail : Event
+
         /** Restart the verification flow. */
         object Restart : Event
     }

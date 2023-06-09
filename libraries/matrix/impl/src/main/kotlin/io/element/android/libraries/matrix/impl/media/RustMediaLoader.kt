@@ -75,8 +75,7 @@ class RustMediaLoader(
                         mediaSource = mediaSource,
                         body = body,
                         mimeType = mimeType ?: "application/octet-stream",
-                        //TODO uncomment when rust api will be merged
-                        //tempDir = cacheDirectory.path,
+                        tempDir = cacheDirectory.path,
                     )
                     RustMediaFile(mediaFile)
                 }

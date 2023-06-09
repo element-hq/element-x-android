@@ -139,7 +139,7 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.15"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.16"
 sqldelight-driver-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
@@ -151,6 +151,7 @@ otaliastudios_transcoder = "com.otaliastudios:transcoder:0.10.5"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.1.0"
 vanniktech_emoji = "com.vanniktech:emoji-google:0.16.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
+statemachine = "com.freeletics.flowredux:compose:1.1.0"
 
 # Analytics
 posthog = "com.posthog.android:posthog:2.0.3"
