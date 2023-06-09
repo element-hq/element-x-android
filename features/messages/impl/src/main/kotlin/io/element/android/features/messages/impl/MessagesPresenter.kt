@@ -45,10 +45,12 @@ import io.element.android.features.messages.impl.utils.messagesummary.MessageSum
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.handleSnackbarMessage
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
@@ -66,6 +68,7 @@ class MessagesPresenter @Inject constructor(
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val messageSummaryFormatter: MessageSummaryFormatter,
+    private val dispatchers: CoroutineDispatchers,
 ) : Presenter<MessagesState> {
 
     @Composable
@@ -103,6 +106,7 @@ class MessagesPresenter @Inject constructor(
         fun handleEvents(event: MessagesEvents) {
             when (event) {
                 is MessagesEvents.HandleAction -> localCoroutineScope.handleTimelineAction(event.action, event.event, composerState)
+                is MessagesEvents.SendReaction -> localCoroutineScope.sendReaction(event.emoji, event.eventId)
             }
         }
         return MessagesState(
@@ -118,7 +122,7 @@ class MessagesPresenter @Inject constructor(
         )
     }
 
-    fun CoroutineScope.handleTimelineAction(
+    private fun CoroutineScope.handleTimelineAction(
         action: TimelineItemAction,
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
@@ -132,6 +136,14 @@ class MessagesPresenter @Inject constructor(
             TimelineItemAction.Developer -> Unit // Handled at UI level
             TimelineItemAction.ReportContent -> notImplementedYet()
         }
+    }
+
+    private fun CoroutineScope.sendReaction(
+        emoji: String,
+        eventId: EventId,
+    ) = launch(dispatchers.io) {
+        room.sendReaction(emoji, eventId)
+            .onFailure { Timber.e(it) }
     }
 
     private fun notImplementedYet() {

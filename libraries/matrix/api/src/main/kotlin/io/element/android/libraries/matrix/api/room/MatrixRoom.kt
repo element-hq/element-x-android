@@ -81,6 +81,8 @@ interface MatrixRoom : Closeable {
 
     suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit>
 
+    suspend fun sendReaction(emoji: String, eventId: EventId): Result<Unit>
+
     suspend fun leave(): Result<Unit>
 
     suspend fun acceptInvitation(): Result<Unit>

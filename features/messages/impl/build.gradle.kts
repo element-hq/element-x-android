@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.accompanist.systemui)
     implementation(libs.vanniktech.blurhash)
     implementation(libs.telephoto.zoomableimage)
+    implementation(libs.vanniktech.emoji)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

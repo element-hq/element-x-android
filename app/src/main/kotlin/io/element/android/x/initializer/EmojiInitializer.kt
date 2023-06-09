@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl
+package io.element.android.x.initializer
 
-import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.libraries.matrix.api.core.EventId
+import androidx.startup.Initializer
+import com.vanniktech.emoji.EmojiManager
+import com.vanniktech.emoji.google.GoogleEmojiProvider
 
-sealed interface MessagesEvents {
-    data class HandleAction(val action: TimelineItemAction, val event: TimelineItem.Event) : MessagesEvents
-    data class SendReaction(val emoji: String, val eventId: EventId) : MessagesEvents
+class EmojiInitializer : Initializer<Unit> {
+    override fun create(context: android.content.Context) {
+        EmojiManager.install(GoogleEmojiProvider())
+    }
+
+    override fun dependencies(): MutableList<Class<out Initializer<*>>> = mutableListOf()
 }

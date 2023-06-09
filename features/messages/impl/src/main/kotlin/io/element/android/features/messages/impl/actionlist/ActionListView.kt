@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.actionlist
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,10 +36,12 @@ import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddReaction
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -81,29 +84,41 @@ fun ActionListView(
     state: ActionListState,
     isVisible: Boolean,
     onActionSelected: (action: TimelineItemAction, TimelineItem.Event) -> Unit,
+    onEmojiReactionClicked: (String, TimelineItem.Event) -> Unit,
+    onCustomReactionClicked: (TimelineItem.Event) -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    sheetState: SheetState = rememberModalBottomSheetState()
 ) {
-    LaunchedEffect(isVisible) {
-        if (!isVisible) {
-            state.eventSink(ActionListEvents.Clear)
-        }
-    }
+    val targetItem = (state.target as? ActionListState.Target.Success)?.event
 
     fun onItemActionClicked(
-        itemAction: TimelineItemAction,
-        targetItem: TimelineItem.Event
+        itemAction: TimelineItemAction
     ) {
+        if (targetItem == null) return
         onActionSelected(itemAction, targetItem)
+    }
+
+    fun onEmojiReactionClicked(emoji: String) {
+        if (targetItem == null) return
+        onEmojiReactionClicked(emoji, targetItem)
+    }
+
+    fun onCustomReactionClicked() {
+        if (targetItem == null) return
+        onCustomReactionClicked(targetItem)
     }
 
     if (isVisible) {
         ModalBottomSheet(
+            sheetState = sheetState,
             onDismissRequest = onDismiss
         ) {
             SheetContent(
                 state = state,
                 onActionClicked = ::onItemActionClicked,
+                onEmojiReactionClicked = ::onEmojiReactionClicked,
+                onCustomReactionClicked = ::onCustomReactionClicked,
                 modifier = modifier
                     .padding(bottom = 32.dp)
 //                    .navigationBarsPadding() - FIXME after https://issuetracker.google.com/issues/275849044
@@ -117,8 +132,10 @@ fun ActionListView(
 @Composable
 private fun SheetContent(
     state: ActionListState,
+    onActionClicked: (TimelineItemAction) -> Unit,
+    onEmojiReactionClicked: (String) -> Unit,
+    onCustomReactionClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    onActionClicked: (TimelineItemAction, TimelineItem.Event) -> Unit = { _, _ -> },
 ) {
     when (val target = state.target) {
         is ActionListState.Target.Loading,
@@ -142,7 +159,11 @@ private fun SheetContent(
                     }
                 }
                 item {
-                    EmojiReactionsRow(Modifier.fillMaxWidth())
+                    EmojiReactionsRow(
+                        onEmojiReactionClicked = onEmojiReactionClicked,
+                        onCustomReactionClicked = onCustomReactionClicked,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
                     Divider()
                 }
                 items(
@@ -150,7 +171,7 @@ private fun SheetContent(
                 ) { action ->
                     ListItem(
                         modifier = Modifier.clickable {
-                            onActionClicked(action, target.event)
+                            onActionClicked(action)
                         },
                         text = {
                             Text(
@@ -265,18 +286,26 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
     }
 }
 
+private val emojiRippleRadius = 24.dp
+
 @Composable
-internal fun EmojiReactionsRow(modifier: Modifier = Modifier) {
+internal fun EmojiReactionsRow(
+    onEmojiReactionClicked: (String) -> Unit,
+    onCustomReactionClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier.padding(horizontal = 28.dp, vertical = 16.dp)
     ) {
-        // TODO use real emojis, have real interaction
-        Text("\uD83D\uDC4D", fontSize = 28.dpToSp())
-        Text("\uD83D\uDC4E", fontSize = 28.dpToSp())
-        Text("\uD83D\uDD25", fontSize = 28.dpToSp())
-        Text("❤\uFE0F", fontSize = 28.dpToSp())
-        Text("\uD83D\uDC4F", fontSize = 28.dpToSp())
+        // TODO use most recently used emojis here when available from the Rust SDK
+        val defaultEmojis = sequenceOf(
+            "👍", "👎", "🔥", "❤️", "👏"
+        )
+        for (emoji in defaultEmojis) {
+            EmojiButton(emoji, onEmojiReactionClicked)
+        }
+
         Icon(
             imageVector = Icons.Outlined.AddReaction,
             contentDescription = "Emojis",
@@ -284,8 +313,32 @@ internal fun EmojiReactionsRow(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .size(24.dp)
                 .align(Alignment.CenterVertically)
+                .clickable(
+                    enabled = true,
+                    onClick = onCustomReactionClicked,
+                    indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
+                    interactionSource = remember { MutableInteractionSource() }
+                )
         )
     }
+}
+
+@Composable
+private fun EmojiButton(
+    emoji: String,
+    onClicked: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Text(
+        emoji,
+        fontSize = 28.dpToSp(),
+        modifier = modifier.clickable(
+            enabled = true,
+            onClick = { onClicked(emoji) },
+            indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
+            interactionSource = remember { MutableInteractionSource() }
+        )
+    )
 }
 
 @Composable
@@ -305,5 +358,10 @@ fun SheetContentDarkPreview(@PreviewParameter(ActionListStateProvider::class) st
 
 @Composable
 private fun ContentToPreview(state: ActionListState) {
-    SheetContent(state = state)
+    SheetContent(
+        state = state,
+        onActionClicked = {},
+        onEmojiReactionClicked = {},
+        onCustomReactionClicked = {},
+    )
 }
