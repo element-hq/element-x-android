@@ -14,24 +14,31 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package io.element.android.features.verifysession.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import com.freeletics.flowredux.compose.rememberStateAndDispatch
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.matrix.api.verification.VerificationFlowState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 import io.element.android.features.verifysession.impl.VerifySelfSessionStateMachine.Event as StateMachineEvent
 import io.element.android.features.verifysession.impl.VerifySelfSessionStateMachine.State as StateMachineState
 
 class VerifySelfSessionPresenter @Inject constructor(
     private val sessionVerificationService: SessionVerificationService,
+    private val stateMachine: VerifySelfSessionStateMachine,
 ) : Presenter<VerifySelfSessionState> {
 
     @Composable
@@ -40,48 +47,36 @@ class VerifySelfSessionPresenter @Inject constructor(
             // Force reset, just in case the service was left in a broken state
             sessionVerificationService.reset()
         }
-
-        val coroutineScope = rememberCoroutineScope()
-        val stateMachine = remember { VerifySelfSessionStateMachine(coroutineScope, sessionVerificationService) }
-
-        // Create the new view state from the StateMachine state
-        val stateMachineCurrentState by stateMachine.state.collectAsState()
-        val verificationFlowState by remember {
-            derivedStateOf { stateMachineStateToViewState(stateMachineCurrentState) }
+        val stateAndDispatch = stateMachine.rememberStateAndDispatch()
+        val verificationFlowStep by remember {
+            derivedStateOf { stateAndDispatch.state.value.toVerificationStep() }
+        }
+        // Start this after observing state machine
+        LaunchedEffect(Unit) {
+            observeVerificationService()
         }
 
         fun handleEvents(event: VerifySelfSessionViewEvents) {
             when (event) {
-                VerifySelfSessionViewEvents.RequestVerification -> stateMachine.process(StateMachineEvent.RequestVerification)
-                VerifySelfSessionViewEvents.StartSasVerification -> stateMachine.process(StateMachineEvent.StartSasVerification)
-                VerifySelfSessionViewEvents.Restart -> stateMachine.process(StateMachineEvent.Restart)
-                VerifySelfSessionViewEvents.ConfirmVerification -> stateMachine.process(StateMachineEvent.AcceptChallenge)
-                VerifySelfSessionViewEvents.DeclineVerification -> stateMachine.process(StateMachineEvent.DeclineChallenge)
-                VerifySelfSessionViewEvents.CancelAndClose -> {
-                    if (stateMachineCurrentState !in sequenceOf(
-                            StateMachineState.Initial,
-                            StateMachineState.Completed,
-                            StateMachineState.Canceled
-                        )
-                    ) {
-                        stateMachine.process(StateMachineEvent.Cancel)
-                    }
-                }
+                VerifySelfSessionViewEvents.RequestVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.RequestVerification)
+                VerifySelfSessionViewEvents.StartSasVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.StartSasVerification)
+                VerifySelfSessionViewEvents.Restart -> stateAndDispatch.dispatchAction(StateMachineEvent.Restart)
+                VerifySelfSessionViewEvents.ConfirmVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.AcceptChallenge)
+                VerifySelfSessionViewEvents.DeclineVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.DeclineChallenge)
+                VerifySelfSessionViewEvents.CancelAndClose -> stateAndDispatch.dispatchAction(StateMachineEvent.Cancel)
             }
         }
-
         return VerifySelfSessionState(
-            verificationFlowStep = verificationFlowState,
+            verificationFlowStep = verificationFlowStep,
             eventSink = ::handleEvents,
         )
     }
 
-    private fun stateMachineStateToViewState(state: StateMachineState): VerifySelfSessionState.VerificationStep =
-        when (state) {
-            StateMachineState.Initial -> {
+    private fun StateMachineState?.toVerificationStep(): VerifySelfSessionState.VerificationStep =
+        when (val machineState = this) {
+            StateMachineState.Initial, null -> {
                 VerifySelfSessionState.VerificationStep.Initial
             }
-
             StateMachineState.RequestingVerification,
             StateMachineState.StartingSasVerification,
             StateMachineState.SasVerificationStarted,
@@ -98,15 +93,41 @@ class VerifySelfSessionPresenter @Inject constructor(
             }
 
             is StateMachineState.Verifying -> {
-                val async = when (state) {
+                val async = when (machineState) {
                     is StateMachineState.Verifying.Replying -> Async.Loading()
                     else -> Async.Uninitialized
                 }
-                VerifySelfSessionState.VerificationStep.Verifying(state.emojis, async)
+                VerifySelfSessionState.VerificationStep.Verifying(machineState.emojis, async)
             }
 
             StateMachineState.Completed -> {
                 VerifySelfSessionState.VerificationStep.Completed
             }
         }
+
+    private fun CoroutineScope.observeVerificationService() {
+        sessionVerificationService.verificationFlowState.onEach { verificationAttemptState ->
+            when (verificationAttemptState) {
+                VerificationFlowState.Initial -> stateMachine.dispatch(VerifySelfSessionStateMachine.Event.Restart)
+                VerificationFlowState.AcceptedVerificationRequest -> {
+                    stateMachine.dispatch(VerifySelfSessionStateMachine.Event.DidAcceptVerificationRequest)
+                }
+                VerificationFlowState.StartedSasVerification -> {
+                    stateMachine.dispatch(VerifySelfSessionStateMachine.Event.DidStartSasVerification)
+                }
+                is VerificationFlowState.ReceivedVerificationData -> {
+                    stateMachine.dispatch(VerifySelfSessionStateMachine.Event.DidReceiveChallenge(verificationAttemptState.emoji))
+                }
+                VerificationFlowState.Finished -> {
+                    stateMachine.dispatch(VerifySelfSessionStateMachine.Event.DidAcceptChallenge)
+                }
+                VerificationFlowState.Canceled -> {
+                    stateMachine.dispatch(VerifySelfSessionStateMachine.Event.DidCancel)
+                }
+                VerificationFlowState.Failed -> {
+                    stateMachine.dispatch(VerifySelfSessionStateMachine.Event.DidFail)
+                }
+            }
+        }.launchIn(this)
+    }
 }

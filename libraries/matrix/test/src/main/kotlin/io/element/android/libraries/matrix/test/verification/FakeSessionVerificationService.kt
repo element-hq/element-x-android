@@ -39,8 +39,6 @@ class FakeSessionVerificationService : SessionVerificationService {
 
     override suspend fun requestVerification() {
         _verificationFlowState.value = VerificationFlowState.AcceptedVerificationRequest
-        _verificationFlowState.value = VerificationFlowState.StartedSasVerification
-        _verificationFlowState.value = VerificationFlowState.ReceivedVerificationData(emojiList)
     }
 
     override suspend fun cancelVerification() {
@@ -63,9 +61,12 @@ class FakeSessionVerificationService : SessionVerificationService {
         }
     }
 
+    fun triggerReceiveVerificationData() {
+        _verificationFlowState.value = VerificationFlowState.ReceivedVerificationData(emojiList)
+    }
+
     override suspend fun startVerification() {
         _verificationFlowState.value = VerificationFlowState.StartedSasVerification
-        _verificationFlowState.value = VerificationFlowState.ReceivedVerificationData(emojiList)
     }
 
     fun givenVerifiedStatus(status: SessionVerifiedStatus) {
