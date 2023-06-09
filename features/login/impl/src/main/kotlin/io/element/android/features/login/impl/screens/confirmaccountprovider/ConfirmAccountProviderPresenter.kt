@@ -85,12 +85,11 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
         suspend {
             val domain = tryOrNull { URL(homeserverUrl) }?.host ?: homeserverUrl
             authenticationService.setHomeserver(domain).map {
-                authenticationService.getHomeserverDetails().value!!
-            }.map {
-                if (it.supportsOidcLogin) {
+                val matrixHomeServerDetails = authenticationService.getHomeserverDetails().value!!
+                if (matrixHomeServerDetails.supportsOidcLogin) {
                     // Retrieve the details right now
                     LoginFlow.OidcFlow(authenticationService.getOidcUrl().getOrThrow())
-                } else if (it.supportsPasswordLogin) {
+                } else if (matrixHomeServerDetails.supportsPasswordLogin) {
                     LoginFlow.PasswordLogin
                 } else {
                     throw IllegalStateException("Unsupported login flow")
