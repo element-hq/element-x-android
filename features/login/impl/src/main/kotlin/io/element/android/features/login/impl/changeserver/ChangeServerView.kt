@@ -39,7 +39,7 @@ fun ChangeServerView(
     when (state.changeServerAction) {
         is Async.Failure -> {
             when (val error = state.changeServerAction.error) {
-                is ChangeServerError.InlineErrorMessage -> {
+                is ChangeServerError.Error -> {
                     ErrorDialog(
                         modifier = modifier,
                         content = error.message(),
