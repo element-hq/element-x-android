@@ -17,6 +17,7 @@
 package io.element.android.features.login.impl.changeserver
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -61,7 +62,9 @@ fun ChangeServerView(
             }
         }
         is Async.Loading -> ProgressDialog()
-        is Async.Success -> onDone()
+        is Async.Success -> LaunchedEffect(state.changeServerAction) {
+            onDone()
+        }
         Async.Uninitialized -> Unit
     }
 }
