@@ -166,7 +166,7 @@ anvil_compiler_api = { module = "com.squareup.anvil:compiler-api", version.ref =
 anvil_compiler_utils = { module = "com.squareup.anvil:compiler-utils", version.ref = "anvil" }
 
 # Composer
-wysiwyg = "io.element.android:wysiwyg:2.2.1"
+wysiwyg = "io.element.android:wysiwyg:2.2.2"
 
 # Miscellaneous
 # Add unused dependency to androidx.compose.compiler:compiler to let Renovate create PR to change the
