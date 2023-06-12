@@ -45,7 +45,8 @@ import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 
-private val BUBBLE_RADIUS = 16.dp
+private val BUBBLE_RADIUS = 12.dp
+private val BUBBLE_OWN_OFFSET = 16.dp
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -88,7 +89,7 @@ fun MessageEventBubble(
         return if (state.isMine) {
             this
         } else {
-            offset(x = 20.dp)
+            offset(x = BUBBLE_OWN_OFFSET)
         }
     }
 
