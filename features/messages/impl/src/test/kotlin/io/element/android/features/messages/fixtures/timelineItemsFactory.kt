@@ -36,8 +36,9 @@ import io.element.android.libraries.dateformatter.test.FakeDaySeparatorFormatter
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.test.TestScope
 
-internal fun aTimelineItemsFactory(): TimelineItemsFactory {
+internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
     val timelineEventFormatter = aTimelineEventFormatter()
     return TimelineItemsFactory(
         dispatchers = testCoroutineDispatchers(),

@@ -63,7 +63,7 @@ class SearchAccountProviderPresenterTest {
             AccountProviderDataSource()
         )
         val presenter = SearchAccountProviderPresenter(
-            HomeserverResolver(testCoroutineDispatchers(testScheduler), fakeWellknownRequest),
+            HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRequest),
             changeServerPresenter
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -87,7 +87,7 @@ class SearchAccountProviderPresenterTest {
             AccountProviderDataSource()
         )
         val presenter = SearchAccountProviderPresenter(
-            HomeserverResolver(testCoroutineDispatchers(testScheduler), fakeWellknownRequest),
+            HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRequest),
             changeServerPresenter
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -122,7 +122,7 @@ class SearchAccountProviderPresenterTest {
             AccountProviderDataSource()
         )
         val presenter = SearchAccountProviderPresenter(
-            HomeserverResolver(testCoroutineDispatchers(testScheduler), fakeWellknownRequest),
+            HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRequest),
             changeServerPresenter
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -157,7 +157,7 @@ class SearchAccountProviderPresenterTest {
             AccountProviderDataSource()
         )
         val presenter = SearchAccountProviderPresenter(
-            HomeserverResolver(testCoroutineDispatchers(testScheduler), fakeWellknownRequest),
+            HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRequest),
             changeServerPresenter
         )
         moleculeFlow(RecompositionClock.Immediate) {
