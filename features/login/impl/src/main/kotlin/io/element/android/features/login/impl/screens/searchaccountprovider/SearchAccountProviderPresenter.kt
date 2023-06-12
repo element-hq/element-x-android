@@ -18,6 +18,7 @@ package io.element.android.features.login.impl.screens.searchaccountprovider
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +29,9 @@ import io.element.android.features.login.impl.resolver.HomeserverData
 import io.element.android.features.login.impl.resolver.HomeserverResolver
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SearchAccountProviderPresenter @Inject constructor(
@@ -42,14 +46,12 @@ class SearchAccountProviderPresenter @Inject constructor(
         }
         val changeServerState = changeServerPresenter.present()
 
-        var data: Async<List<HomeserverData>> by remember {
+        val data: MutableState<Async<List<HomeserverData>>> = remember {
             mutableStateOf(Async.Uninitialized)
         }
 
         LaunchedEffect(userInput) {
-            homeserverResolver.resolve(userInput).collect {
-                data = it
-            }
+            onUserInput(userInput, data)
         }
 
         fun handleEvents(event: SearchAccountProviderEvents) {
@@ -62,9 +64,22 @@ class SearchAccountProviderPresenter @Inject constructor(
 
         return SearchAccountProviderState(
             userInput = userInput,
-            userInputResult = data,
+            userInputResult = data.value,
             changeServerState = changeServerState,
             eventSink = ::handleEvents
         )
+    }
+
+    private fun CoroutineScope.onUserInput(userInput: String, data: MutableState<Async<List<HomeserverData>>>) = launch {
+        data.value = Async.Uninitialized
+        // Debounce
+        delay(300)
+        data.value = Async.Loading()
+        homeserverResolver.resolve(userInput).collect {
+            data.value = Async.Success(it)
+        }
+        if (data.value !is Async.Success) {
+            data.value = Async.Uninitialized
+        }
     }
 }
