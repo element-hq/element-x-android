@@ -20,6 +20,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -86,7 +87,8 @@ fun TimelineView(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = lazyListState,
-            reverseLayout = true
+            reverseLayout = true,
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         ) {
             itemsIndexed(
                 items = state.timelineItems,
