@@ -138,7 +138,8 @@ class RustMatrixTimeline(
             }
             val paginationOptions = PaginationOptions.UntilNumItems(
                 eventLimit = requestSize.toUShort(),
-                items = untilNumberOfItems.toUShort()
+                items = untilNumberOfItems.toUShort(),
+                waitForToken = true,
             )
             innerRoom.paginateBackwards(paginationOptions)
         }.onFailure {
