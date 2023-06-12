@@ -10,5 +10,6 @@
   <string name="screen_room_attachment_source_camera_video">"Natočit video"</string>
   <string name="screen_room_attachment_source_files">"Příloha"</string>
   <string name="screen_room_attachment_source_gallery">"Knihovna fotografií a videí"</string>
+  <string name="screen_room_error_failed_retrieving_user_details">"Nepodařilo se načíst údaje o uživateli"</string>
   <string name="screen_room_error_failed_processing_media">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
 </resources>
