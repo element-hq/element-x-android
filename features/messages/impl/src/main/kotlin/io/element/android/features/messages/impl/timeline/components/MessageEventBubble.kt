@@ -136,8 +136,8 @@ private fun ContentToPreview(state: BubbleState) {
     Box(
         modifier = Modifier
             .size(width = 240.dp, height = 64.dp)
-            .padding(8.dp),
-        contentAlignment = Alignment.CenterStart,
+            .padding(vertical = 8.dp),
+        contentAlignment = if (state.isMine) Alignment.CenterEnd else Alignment.CenterStart,
     ) {
         MessageEventBubble(
             state = state,
