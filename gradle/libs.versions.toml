@@ -165,9 +165,6 @@ dagger_compiler = { module = "com.google.dagger:dagger-compiler", version.ref = 
 anvil_compiler_api = { module = "com.squareup.anvil:compiler-api", version.ref = "anvil" }
 anvil_compiler_utils = { module = "com.squareup.anvil:compiler-utils", version.ref = "anvil" }
 
-# Composer
-wysiwyg = "io.element.android:wysiwyg:2.2.1"
-
 # Miscellaneous
 # Add unused dependency to androidx.compose.compiler:compiler to let Renovate create PR to change the
 # value of `composecompiler` (which is used to set composeOptions.kotlinCompilerExtensionVersion.
