@@ -57,24 +57,24 @@ class MainNode(
     DaggerComponentOwner by mainDaggerComponentOwner {
 
     private val loggedInFlowNodeCallback = object : LoggedInFlowNode.LifecycleCallback {
-        override fun onFlowCreated(client: MatrixClient) {
+        override fun onFlowCreated(identifier: String, client: MatrixClient) {
             val component = bindings<SessionComponent.ParentBindings>().sessionComponentBuilder().client(client).build()
-            mainDaggerComponentOwner.addComponent(client.sessionId.value, component)
+            mainDaggerComponentOwner.addComponent(identifier, component)
         }
 
-        override fun onFlowReleased(client: MatrixClient) {
-            mainDaggerComponentOwner.removeComponent(client.sessionId.value)
+        override fun onFlowReleased(identifier: String, client: MatrixClient) {
+            mainDaggerComponentOwner.removeComponent(identifier)
         }
     }
 
     private val roomFlowNodeCallback = object : RoomFlowNode.LifecycleCallback {
-        override fun onFlowCreated(room: MatrixRoom) {
+        override fun onFlowCreated(identifier: String, room: MatrixRoom) {
             val component = bindings<RoomComponent.ParentBindings>().roomComponentBuilder().room(room).build()
-            mainDaggerComponentOwner.addComponent(room.roomId.value, component)
+            mainDaggerComponentOwner.addComponent(identifier, component)
         }
 
-        override fun onFlowReleased(room: MatrixRoom) {
-            mainDaggerComponentOwner.removeComponent(room.roomId.value)
+        override fun onFlowReleased(identifier: String, room: MatrixRoom) {
+            mainDaggerComponentOwner.removeComponent(identifier)
         }
     }
 
