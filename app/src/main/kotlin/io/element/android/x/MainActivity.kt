@@ -23,6 +23,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
@@ -39,7 +40,7 @@ private val loggerTag = LoggerTag("MainActivity")
 
 class MainActivity : NodeComponentActivity() {
 
-    lateinit var mainNode: MainNode
+    private lateinit var mainNode: MainNode
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.tag(loggerTag.value).w("onCreate, with savedInstanceState: ${savedInstanceState != null}")
@@ -49,26 +50,32 @@ class MainActivity : NodeComponentActivity() {
         appBindings.matrixClientsHolder().restore(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            ElementTheme {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.background),
-                ) {
-                    NodeHost(integrationPoint = appyxIntegrationPoint) {
-                        MainNode(
-                            it,
-                            appBindings.mainDaggerComponentOwner(),
-                            plugins = listOf(
-                                object : NodeReadyObserver<MainNode> {
-                                    override fun init(node: MainNode) {
-                                        mainNode = node
-                                        mainNode.handleIntent(intent)
-                                    }
+            MainContent(appBindings)
+        }
+    }
+
+    @Composable
+    private fun MainContent(appBindings: AppBindings) {
+        ElementTheme {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background),
+            ) {
+                NodeHost(integrationPoint = appyxIntegrationPoint) {
+                    MainNode(
+                        it,
+                        appBindings.mainDaggerComponentOwner(),
+                        plugins = listOf(
+                            object : NodeReadyObserver<MainNode> {
+                                override fun init(node: MainNode) {
+                                    Timber.tag(loggerTag.value).w("onMainNodeInit")
+                                    mainNode = node
+                                    mainNode.handleIntent(intent)
                                 }
-                            )
+                            }
                         )
-                    }
+                    )
                 }
             }
         }
@@ -80,11 +87,17 @@ class MainActivity : NodeComponentActivity() {
      * - a notification is clicked.
      * - the app is going to background (<- this is strange)
      */
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         Timber.tag(loggerTag.value).w("onNewIntent")
-        intent ?: return
-        mainNode.handleIntent(intent)
+        // If the mainNode is not init yet, keep the intent for later.
+        // It can happen when the activity is killed by the system. The methods are called in this order :
+        // onCreate(savedInstanceState=true) -> onNewIntent -> onResume -> onMainNodeInit
+        if (::mainNode.isInitialized) {
+            mainNode.handleIntent(intent)
+        } else {
+            setIntent(intent)
+        }
     }
 
     override fun onPause() {
