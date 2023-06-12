@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_account_provider_continue">"Weiter"</string>
+  <string name="screen_account_provider_form_notice">"Geben Sie einen Suchbegriff oder eine Domainadresse ein."</string>
+  <string name="screen_account_provider_form_subtitle">"Suche nach einem Unternehmen, einer Community oder einem privaten Server."</string>
+  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org ist ein offenes Netzwerk für sichere, dezentralisierte Kommunikation."</string>
+  <string name="screen_change_account_provider_other">"Andere"</string>
+  <string name="screen_change_account_provider_subtitle">"Verwende einen anderen Kontoanbieter, z. B. deinen eigenen privaten Server oder ein Arbeitskonto."</string>
+  <string name="screen_change_account_provider_title">"Kontoanbieter ändern"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Wir konnten diesen Homeserver nicht erreichen. Bitte überprüfen Sie, ob Sie die Homeserver-URL korrekt eingegeben haben. Wenn die URL korrekt ist, wenden Sie sich an Ihren Homeserver-Administrator, um weitere Hilfe zu erhalten."</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Dieser Server unterstützt derzeit keine Sliding Sync."</string>
   <string name="screen_change_server_form_header">"Homeserver-URL"</string>
@@ -13,6 +20,12 @@
   <string name="screen_login_server_header">"Wo deine Gespräche leben"</string>
   <string name="screen_login_title">"Willkommen zurück!"</string>
   <string name="screen_login_title_with_homeserver">"Bei %1$s anmelden"</string>
+  <string name="screen_server_confirmation_change_server">"Kontoanbieter wechseln"</string>
+  <string name="screen_server_confirmation_message_login_element_dot_io">"Ein privater Server für Element-Mitarbeiter."</string>
+  <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix ist ein offenes Netzwerk für sichere, dezentrale Kommunikation"</string>
+  <string name="screen_server_confirmation_message_register">"Hier werden deine Konversationen stattfinden — genau so wie du einen E-Mail-Anbieter verwenden würdest, um deine E-Mails aufzubewahren."</string>
+  <string name="screen_server_confirmation_title_login">"Du bist dabei dich bei %1$s anzumelden"</string>
+  <string name="screen_server_confirmation_title_register">"Du bist dabei einen Account auf %1$s zu erstellen"</string>
   <string name="screen_change_server_submit">"Weiter"</string>
   <string name="screen_change_server_title">"Wählen deinen Server"</string>
   <string name="screen_login_password_hint">"Passwort"</string>

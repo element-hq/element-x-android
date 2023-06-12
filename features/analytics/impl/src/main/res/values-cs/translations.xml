@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_prompt_data_usage"><b>"Nezaznamenáváme ani neprofilujeme"</b>" žádné údaje o účtu"</string>
+  <string name="screen_analytics_prompt_help_us_improve">"Pomozte nám identifikovat problémy a vylepšit %1$s sdílením anonymních údajů o používání."</string>
+  <string name="screen_analytics_prompt_read_terms">"Můžete si přečíst všechny naše podmínky %1$s."</string>
+  <string name="screen_analytics_prompt_read_terms_content_link">"zde"</string>
+  <string name="screen_analytics_prompt_settings">"Tuto funkci můžete kdykoli vypnout v nastavení"</string>
+  <string name="screen_analytics_prompt_third_party_sharing"><b>"Nesdílíme"</b>" informace s třetími stranami"</string>
+  <string name="screen_analytics_prompt_title">"Pomozte vylepšit %1$s"</string>
+</resources>

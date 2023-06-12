@@ -7,6 +7,7 @@
   <string name="notification_inline_reply_failed">"** Senden fehlgeschlagen - bitte Raum öffnen"</string>
   <string name="notification_invitation_action_join">"Beitreten"</string>
   <string name="notification_invitation_action_reject">"Ablehnen"</string>
+  <string name="notification_invite_body">"lud dich ein"</string>
   <string name="notification_new_messages">"Neue Nachrichten"</string>
   <string name="notification_room_action_mark_as_read">"Als gelesen markieren"</string>
   <string name="notification_sender_me">"Ich"</string>

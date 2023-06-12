@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_onboarding_welcome_subtitle">"Bun venit la versiunea beta a %1$s. Supraalimentat, pentru viteză și simplitate."</string>
+  <string name="screen_onboarding_sign_in_manually">"Conectați-vă manual"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Conectați-vă cu un cod QR"</string>
+  <string name="screen_onboarding_sign_up">"Creați un cont"</string>
+  <string name="screen_onboarding_subtitle">"Comunicați și colaborați în siguranță"</string>
+  <string name="screen_onboarding_welcome_subtitle">"Bun venit în %1$s. Supraalimentat, pentru viteză și simplitate."</string>
   <string name="screen_onboarding_welcome_title">"Fii în Elementul tău"</string>
 </resources>

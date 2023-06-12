@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_onboarding_welcome_subtitle">"Benvenuto nella beta di %1$s. Potenziato in velocità e semplicità."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Benvenuto su %1$s. Potenziato in velocità e semplicità."</string>
   <string name="screen_onboarding_welcome_title">"Sii nel tuo elemento"</string>
 </resources>
