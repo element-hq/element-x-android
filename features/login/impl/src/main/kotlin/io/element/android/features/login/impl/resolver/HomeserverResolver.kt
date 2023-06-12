@@ -17,7 +17,6 @@
 package io.element.android.features.login.impl.resolver
 
 import io.element.android.features.login.impl.resolver.network.WellknownRequest
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
@@ -26,7 +25,6 @@ import io.element.android.libraries.core.uri.isValidUrl
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
@@ -42,24 +40,20 @@ class HomeserverResolver @Inject constructor(
     private val wellknownRequest: WellknownRequest,
 ) {
 
-    suspend fun resolve(userInput: String): Flow<Async<List<HomeserverData>>> = flow {
+    suspend fun resolve(userInput: String): Flow<List<HomeserverData>> = flow {
         val flowContext = currentCoroutineContext()
-        emit(Async.Uninitialized)
-        // Debounce
-        delay(300)
         val trimmedUserInput = userInput.trim()
         if (trimmedUserInput.length < 4) return@flow
-        emit(Async.Loading())
         val candidateBase = trimmedUserInput.ensureProtocol().removeSuffix("/")
         val list = getUrlCandidates(candidateBase)
         val currentList = Collections.synchronizedList(mutableListOf<HomeserverData>())
         // Run all the requests in parallel
         withContext(dispatchers.io) {
-            list.map {
+            list.map { url ->
                 async {
                     val wellKnown = tryOrNull {
                         withTimeout(5000) {
-                            wellknownRequest.execute(it)
+                            wellknownRequest.execute(url)
                         }
                     }
                     val isValid = wellKnown?.isValid().orFalse()
@@ -68,35 +62,29 @@ class HomeserverResolver @Inject constructor(
                         // Emit the list as soon as possible
                         currentList.add(
                             HomeserverData(
-                                homeserverUrl = it,
+                                homeserverUrl = url,
                                 isWellknownValid = true,
                                 supportSlidingSync = supportSlidingSync
                             )
                         )
                         withContext(flowContext) {
-                            emit(Async.Success(currentList))
+                            emit(currentList.toList())
                         }
                     }
                 }
             }.awaitAll()
         }
         // If list is empty, and the user has entered an URL, do not block the user.
-        if (currentList.isEmpty()) {
-            if (trimmedUserInput.isValidUrl()) {
-                emit(
-                    Async.Success(
-                        listOf(
-                            HomeserverData(
-                                homeserverUrl = trimmedUserInput,
-                                isWellknownValid = false,
-                                supportSlidingSync = false,
-                            )
-                        )
+        if (currentList.isEmpty() && trimmedUserInput.isValidUrl()) {
+            emit(
+                listOf(
+                    HomeserverData(
+                        homeserverUrl = trimmedUserInput,
+                        isWellknownValid = false,
+                        supportSlidingSync = false,
                     )
                 )
-            } else {
-                emit(Async.Uninitialized)
-            }
+            )
         }
     }
 
