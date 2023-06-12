@@ -34,6 +34,7 @@ import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -263,6 +264,20 @@ class RustMatrixRoom(
             innerRoom.sendReaction(key = emoji, eventId = eventId.value)
         }
     }
+
+    override suspend fun retrySendMessage(transactionId: String): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                innerRoom.retrySend(transactionId)
+            }
+        }
+
+    override suspend fun cancelSend(transactionId: String): Result<Unit>  =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                innerRoom.cancelSend(transactionId)
+            }
+        }
 
     @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit> =

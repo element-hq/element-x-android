@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugIn
 data class EventTimelineItem(
     val uniqueIdentifier: String,
     val eventId: EventId?,
+    val transactionId: String?,
     val isEditable: Boolean,
     val isLocal: Boolean,
     val isOwn: Boolean,

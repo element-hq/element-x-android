@@ -72,6 +72,7 @@ class TimelineItemEventFactory @Inject constructor(
         return TimelineItem.Event(
             id = currentTimelineItem.uniqueId,
             eventId = currentTimelineItem.eventId,
+            transactionId = currentTimelineItem.transactionId,
             senderId = currentSender,
             senderDisplayName = senderDisplayName,
             senderAvatar = senderAvatarData,

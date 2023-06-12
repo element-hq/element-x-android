@@ -52,6 +52,7 @@ sealed interface TimelineItem {
     data class Event(
         val id: String,
         val eventId: EventId? = null,
+        val transactionId: String? = null,
         val senderId: UserId,
         val senderDisplayName: String?,
         val senderAvatar: AvatarData,
