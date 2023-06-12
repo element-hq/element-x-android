@@ -22,6 +22,7 @@ import io.element.android.features.createroom.impl.userlist.aUserListState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
+import io.element.android.libraries.usersearch.api.UserSearchResult
 import kotlinx.collections.immutable.persistentListOf
 
 open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRootState> {
@@ -33,7 +34,7 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
                 userListState = aMatrixUser().let {
                     aUserListState().copy(
                         searchQuery = it.userId.value,
-                        searchResults = SearchBarResultState.Results(persistentListOf(it)),
+                        searchResults = SearchBarResultState.Results(persistentListOf(UserSearchResult(it, false))),
                         selectedUsers = persistentListOf(it),
                         isSearchActive = true,
                     )
@@ -44,7 +45,7 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
                 userListState = aMatrixUser().let {
                     aUserListState().copy(
                         searchQuery = it.userId.value,
-                        searchResults = SearchBarResultState.Results(persistentListOf(it)),
+                        searchResults = SearchBarResultState.Results(persistentListOf(UserSearchResult(it, false))),
                         selectedUsers = persistentListOf(it),
                         isSearchActive = true,
                     )
