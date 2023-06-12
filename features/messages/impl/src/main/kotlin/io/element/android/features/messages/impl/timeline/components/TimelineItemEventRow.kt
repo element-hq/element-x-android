@@ -101,9 +101,6 @@ fun TimelineItemEventRow(
         contentAlignment = parentAlignment
     ) {
         Row {
-            if (!event.isMine) {
-                Spacer(modifier = Modifier.width(4.dp))
-            }
             Column(horizontalAlignment = contentAlignment) {
                 if (event.showSenderInformation) {
                     MessageSenderInformation(
@@ -143,9 +140,6 @@ fun TimelineItemEventRow(
                         .zIndex(1f)
                         .offset(x = if (event.isMine) 0.dp else 20.dp, y = -(4.dp))
                 )
-            }
-            if (event.isMine) {
-                Spacer(modifier = Modifier.width(16.dp))
             }
         }
     }
