@@ -53,6 +53,7 @@ class OnBoardingNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onSignIn = ::onSignIn,
+            onCreateAccount = ::onSignUp,
         )
     }
 }

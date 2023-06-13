@@ -162,12 +162,6 @@
   <string name="screen_media_upload_preview_error_failed_processing">"Fehler bei der Verarbeitung von Medien zum Hochladen, bitte versuchen Sie es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Medien hochladen fehlgeschlagen. Bitte versuchen Sie es erneut."</string>
   <string name="screen_report_content_block_user_hint">"Prüfe, ob du alle aktuellen und zukünftigen Nachrichten dieses Benutzers ausblenden möchtest"</string>
-  <string name="screen_server_confirmation_change_server">"Kontoanbieter wechseln"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"Ein privater Server für Element-Mitarbeiter."</string>
-  <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix ist ein offenes Netzwerk für sichere, dezentrale Kommunikation"</string>
-  <string name="screen_server_confirmation_message_register">"Hier werden deine Konversationen stattfinden — genau so wie du einen E-Mail-Anbieter verwenden würdest, um deine E-Mails aufzubewahren."</string>
-  <string name="screen_server_confirmation_title_login">"Du bist dabei dich bei %1$s anzumelden"</string>
-  <string name="screen_server_confirmation_title_register">"Du bist dabei einen Account auf %1$s zu erstellen"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Erkennungsschwelle"</string>
   <string name="settings_title_general">"Allgemein"</string>

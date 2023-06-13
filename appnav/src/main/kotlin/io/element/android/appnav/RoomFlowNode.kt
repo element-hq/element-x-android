@@ -68,8 +68,8 @@ class RoomFlowNode @AssistedInject constructor(
 ) {
 
     interface LifecycleCallback : NodeLifecycleCallback {
-        fun onFlowCreated(room: MatrixRoom) = Unit
-        fun onFlowReleased(room: MatrixRoom) = Unit
+        fun onFlowCreated(identifier: String, room: MatrixRoom) = Unit
+        fun onFlowReleased(identifier: String, room: MatrixRoom) = Unit
     }
 
     data class Inputs(
@@ -83,14 +83,14 @@ class RoomFlowNode @AssistedInject constructor(
         lifecycle.subscribe(
             onCreate = {
                 Timber.v("OnCreate")
-                plugins<LifecycleCallback>().forEach { it.onFlowCreated(inputs.room) }
+                plugins<LifecycleCallback>().forEach { it.onFlowCreated(id, inputs.room) }
                 appNavigationStateService.onNavigateToRoom(id, inputs.room.roomId)
                 fetchRoomMembers()
             },
             onDestroy = {
                 Timber.v("OnDestroy")
                 inputs.room.close()
-                plugins<LifecycleCallback>().forEach { it.onFlowReleased(inputs.room) }
+                plugins<LifecycleCallback>().forEach { it.onFlowReleased(id, inputs.room) }
                 appNavigationStateService.onLeavingRoom(id)
             }
         )

@@ -63,7 +63,7 @@ class RustMatrixTimeline(
     )
 
     private val timelineItemFactory = MatrixTimelineItemMapper(
-        room = innerRoom,
+        fetchDetailsForEvent = this::fetchDetailsForEvent,
         coroutineScope = coroutineScope,
         virtualTimelineItemMapper = VirtualTimelineItemMapper(),
         eventTimelineItemMapper = EventTimelineItemMapper(
@@ -130,6 +130,12 @@ class RustMatrixTimeline(
         return matrixRoom.replyMessage(inReplyToEventId, message)
     }
 
+    override suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            innerRoom.fetchDetailsForEvent(eventId.value)
+        }
+    }
+
     override suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {
             Timber.v("Start back paginating for room ${matrixRoom.roomId} ")
@@ -138,7 +144,8 @@ class RustMatrixTimeline(
             }
             val paginationOptions = PaginationOptions.UntilNumItems(
                 eventLimit = requestSize.toUShort(),
-                items = untilNumberOfItems.toUShort()
+                items = untilNumberOfItems.toUShort(),
+                waitForToken = true,
             )
             innerRoom.paginateBackwards(paginationOptions)
         }.onFailure {
