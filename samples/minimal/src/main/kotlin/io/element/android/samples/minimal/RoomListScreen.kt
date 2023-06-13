@@ -35,6 +35,7 @@ import io.element.android.libraries.eventformatter.impl.DefaultRoomLastMessageFo
 import io.element.android.libraries.eventformatter.impl.ProfileChangeContentFormatter
 import io.element.android.libraries.eventformatter.impl.RoomMembershipContentFormatter
 import io.element.android.libraries.eventformatter.impl.StateContentFormatter
+import io.element.android.libraries.eventformatter.impl.isme.DefaultIsMe
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -57,13 +58,14 @@ class RoomListScreen(
     private val dateFormatters = DateFormatters(locale, clock, timeZone)
     private val sessionVerificationService = matrixClient.sessionVerificationService()
     private val stringProvider = AndroidStringProvider(context.resources)
+    private val isMe = DefaultIsMe(matrixClient)
     private val presenter = RoomListPresenter(
         client = matrixClient,
         lastMessageTimestampFormatter = DefaultLastMessageTimestampFormatter(dateTimeProvider, dateFormatters),
         roomLastMessageFormatter = DefaultRoomLastMessageFormatter(
             sp = stringProvider,
-            matrixClient = matrixClient,
-            roomMembershipContentFormatter = RoomMembershipContentFormatter(matrixClient, stringProvider),
+            isMe = isMe,
+            roomMembershipContentFormatter = RoomMembershipContentFormatter(isMe, stringProvider),
             profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
             stateContentFormatter = StateContentFormatter(stringProvider),
         ),
@@ -71,7 +73,7 @@ class RoomListScreen(
         networkMonitor = NetworkMonitorImpl(context),
         snackbarDispatcher = SnackbarDispatcher(),
         inviteStateDataSource = DefaultInviteStateDataSource(matrixClient, DefaultSeenInvitesStore(context), coroutineDispatchers),
-        leaveRoomPresenter = LeaveRoomPresenterImpl(matrixClient, RoomMembershipObserver() ,coroutineDispatchers)
+        leaveRoomPresenter = LeaveRoomPresenterImpl(matrixClient, RoomMembershipObserver(), coroutineDispatchers)
     )
 
     @Composable

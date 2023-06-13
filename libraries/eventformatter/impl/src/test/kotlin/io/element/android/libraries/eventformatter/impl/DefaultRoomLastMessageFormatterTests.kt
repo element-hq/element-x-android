@@ -46,7 +46,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnknownConten
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.test.A_USER_ID
-import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.aProfileChangeMessageContent
 import io.element.android.libraries.matrix.test.room.anEventTimelineItem
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
@@ -61,18 +60,18 @@ import org.robolectric.annotation.Config
 class DefaultRoomLastMessageFormatterTests {
 
     private lateinit var context: Context
-    private lateinit var fakeMatrixClient: FakeMatrixClient
+    private lateinit var fakeIsMe: FakeIsMe
     private lateinit var formatter: DefaultRoomLastMessageFormatter
 
     @Before
     fun setup() {
         context = RuntimeEnvironment.getApplication() as Context
-        fakeMatrixClient = FakeMatrixClient()
+        fakeIsMe = FakeIsMe()
         val stringProvider = AndroidStringProvider(context.resources)
         formatter = DefaultRoomLastMessageFormatter(
             sp = AndroidStringProvider(context.resources),
-            matrixClient = fakeMatrixClient,
-            roomMembershipContentFormatter = RoomMembershipContentFormatter(fakeMatrixClient, stringProvider),
+            isMe = fakeIsMe,
+            roomMembershipContentFormatter = RoomMembershipContentFormatter(fakeIsMe, stringProvider),
             profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
             stateContentFormatter = StateContentFormatter(stringProvider)
         )

@@ -16,7 +16,7 @@
 
 package io.element.android.libraries.eventformatter.impl
 
-import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.eventformatter.impl.isme.IsMe
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -24,7 +24,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class RoomMembershipContentFormatter @Inject constructor(
-    private val matrixClient: MatrixClient,
+    private val isMe: IsMe,
     private val sp: StringProvider,
 ) {
     fun format(
@@ -33,7 +33,7 @@ class RoomMembershipContentFormatter @Inject constructor(
         senderIsYou: Boolean,
     ): CharSequence? {
         val userId = membershipContent.userId
-        val memberIsYou = userId == matrixClient.sessionId
+        val memberIsYou = isMe(userId)
         return when (val change = membershipContent.change) {
             MembershipChange.JOINED -> if (memberIsYou) {
                 sp.getString(R.string.state_event_room_join_by_you)

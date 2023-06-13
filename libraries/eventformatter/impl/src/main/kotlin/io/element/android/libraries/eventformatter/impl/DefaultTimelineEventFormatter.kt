@@ -20,8 +20,8 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
+import io.element.android.libraries.eventformatter.impl.isme.IsMe
 import io.element.android.libraries.eventformatter.impl.mode.RenderingMode
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
@@ -41,7 +41,7 @@ import javax.inject.Inject
 @ContributesBinding(SessionScope::class)
 class DefaultTimelineEventFormatter @Inject constructor(
     private val sp: StringProvider,
-    private val matrixClient: MatrixClient,
+    private val isMe: IsMe,
     private val buildMeta: BuildMeta,
     private val roomMembershipContentFormatter: RoomMembershipContentFormatter,
     private val profileChangeContentFormatter: ProfileChangeContentFormatter,
@@ -49,7 +49,7 @@ class DefaultTimelineEventFormatter @Inject constructor(
 ) : TimelineEventFormatter {
 
     override fun format(event: EventTimelineItem): CharSequence? {
-        val isOutgoing = event.sender == matrixClient.sessionId
+        val isOutgoing = isMe(event.sender)
         val senderDisplayName = (event.senderProfile as? ProfileTimelineDetails.Ready)?.displayName ?: event.sender.value
         return when (val content = event.content) {
             is RoomMembershipContent -> {
