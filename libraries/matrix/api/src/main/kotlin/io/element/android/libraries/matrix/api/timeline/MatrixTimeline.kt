@@ -42,4 +42,6 @@ interface MatrixTimeline {
     suspend fun editMessage(originalEventId: EventId, message: String): Result<Unit>
 
     suspend fun replyMessage(inReplyToEventId: EventId, message: String): Result<Unit>
+
+    suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit>
 }
