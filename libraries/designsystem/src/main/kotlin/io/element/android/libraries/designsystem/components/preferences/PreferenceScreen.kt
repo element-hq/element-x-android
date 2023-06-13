@@ -69,14 +69,11 @@ fun PreferenceView(
             )
         },
         content = {
-            val scrollState = rememberScrollState()
             Column(
                 modifier = Modifier
                     .padding(it)
                     .consumeWindowInsets(it)
-                    .verticalScroll(
-                        state = scrollState,
-                    )
+                    .verticalScroll(state = rememberScrollState())
             ) {
                 content()
             }

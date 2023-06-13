@@ -23,7 +23,6 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationS
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.ui.strings.R
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
@@ -31,7 +30,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 class LoggedInEventProcessor @Inject constructor(
     private val snackbarDispatcher: SnackbarDispatcher,

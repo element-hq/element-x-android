@@ -63,7 +63,9 @@ class NotLoggedInFlowNode @AssistedInject constructor(
         object OnBoarding : NavTarget
 
         @Parcelize
-        object LoginFlow : NavTarget
+        data class LoginFlow(
+            val isAccountCreation: Boolean,
+        ) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -71,11 +73,11 @@ class NotLoggedInFlowNode @AssistedInject constructor(
             NavTarget.OnBoarding -> {
                 val callback = object : OnBoardingEntryPoint.Callback {
                     override fun onSignUp() {
-                        //NOOP
+                        backstack.push(NavTarget.LoginFlow(isAccountCreation = true))
                     }
 
                     override fun onSignIn() {
-                        backstack.push(NavTarget.LoginFlow)
+                        backstack.push(NavTarget.LoginFlow(isAccountCreation = false))
                     }
                 }
                 onBoardingEntryPoint
@@ -83,8 +85,10 @@ class NotLoggedInFlowNode @AssistedInject constructor(
                     .callback(callback)
                     .build()
             }
-            NavTarget.LoginFlow -> {
-                loginEntryPoint.createNode(this, buildContext)
+            is NavTarget.LoginFlow -> {
+                loginEntryPoint.nodeBuilder(this, buildContext)
+                    .params(LoginEntryPoint.Params(isAccountCreation = navTarget.isAccountCreation))
+                    .build()
             }
         }
     }

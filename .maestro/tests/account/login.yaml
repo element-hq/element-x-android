@@ -6,6 +6,8 @@ appId: ${APP_ID}
 - runFlow: changeServer.yaml
 - runFlow: ../assertions/assertLoginDisplayed.yaml
 - tapOn:
+    id: "login-continue"
+- tapOn:
     id: "login-email_username"
 - inputText: ${USERNAME}
 - pressKey: Enter

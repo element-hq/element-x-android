@@ -19,9 +19,6 @@ package io.element.android.features.login.impl.changeserver
 import io.element.android.libraries.architecture.Async
 
 data class ChangeServerState(
-    val homeserver: String,
     val changeServerAction: Async<Unit>,
-    val eventSink: (ChangeServerEvents) -> Unit,
-) {
-    val submitEnabled: Boolean get() = homeserver.isNotEmpty() && (changeServerAction is Async.Uninitialized || changeServerAction is Async.Loading)
-}
+    val eventSink: (ChangeServerEvents) -> Unit
+)

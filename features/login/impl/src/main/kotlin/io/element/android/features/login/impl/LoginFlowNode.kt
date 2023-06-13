@@ -20,7 +20,6 @@ import android.app.Activity
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.composable.Children
@@ -29,17 +28,23 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
+import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.login.impl.changeserver.ChangeServerNode
+import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.oidc.CustomTabAvailabilityChecker
 import io.element.android.features.login.impl.oidc.customtab.CustomTabHandler
 import io.element.android.features.login.impl.oidc.webview.OidcNode
-import io.element.android.features.login.impl.root.LoginRootNode
+import io.element.android.features.login.impl.screens.changeaccountprovider.ChangeAccountProviderNode
+import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderNode
+import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordNode
+import io.element.android.features.login.impl.screens.searchaccountprovider.SearchAccountProviderNode
 import io.element.android.libraries.architecture.BackstackNode
+import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.OidcDetails
@@ -51,9 +56,10 @@ class LoginFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val customTabAvailabilityChecker: CustomTabAvailabilityChecker,
     private val customTabHandler: CustomTabHandler,
+    private val accountProviderDataSource: AccountProviderDataSource,
 ) : BackstackNode<LoginFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Root,
+        initialElement = NavTarget.ConfirmAccountProvider,
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -62,12 +68,24 @@ class LoginFlowNode @AssistedInject constructor(
     private var activity: Activity? = null
     private var darkTheme: Boolean = false
 
+    data class Inputs(
+        val isAccountCreation: Boolean,
+    ) : NodeInputs
+
+    private val inputs: Inputs = inputs()
+
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        object Root : NavTarget
+        object ConfirmAccountProvider : NavTarget
 
         @Parcelize
-        object ChangeServer : NavTarget
+        object ChangeAccountProvider : NavTarget
+
+        @Parcelize
+        object SearchAccountProvider : NavTarget
+
+        @Parcelize
+        object LoginPassword : NavTarget
 
         @Parcelize
         data class OidcView(val oidcDetails: OidcDetails) : NavTarget
@@ -75,12 +93,11 @@ class LoginFlowNode @AssistedInject constructor(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Root -> {
-                val callback = object : LoginRootNode.Callback {
-                    override fun onChangeHomeServer() {
-                        backstack.push(NavTarget.ChangeServer)
-                    }
-
+            NavTarget.ConfirmAccountProvider -> {
+                val inputs = ConfirmAccountProviderNode.Inputs(
+                    isAccountCreation = inputs.isAccountCreation
+                )
+                val callback = object : ConfirmAccountProviderNode.Callback {
                     override fun onOidcDetails(oidcDetails: OidcDetails) {
                         if (customTabAvailabilityChecker.supportCustomTab()) {
                             // In this case open a Chrome Custom tab
@@ -90,11 +107,44 @@ class LoginFlowNode @AssistedInject constructor(
                             backstack.push(NavTarget.OidcView(oidcDetails))
                         }
                     }
-                }
-                createNode<LoginRootNode>(buildContext, plugins = listOf(callback))
-            }
 
-            NavTarget.ChangeServer -> createNode<ChangeServerNode>(buildContext)
+                    override fun onLoginPasswordNeeded() {
+                        backstack.push(NavTarget.LoginPassword)
+                    }
+
+                    override fun onChangeAccountProvider() {
+                        backstack.push(NavTarget.ChangeAccountProvider)
+                    }
+                }
+                createNode<ConfirmAccountProviderNode>(buildContext, plugins = listOf(inputs, callback))
+            }
+            NavTarget.ChangeAccountProvider -> {
+                val callback = object : ChangeAccountProviderNode.Callback {
+                    override fun onDone() {
+                        // Go back to the Account Provider screen
+                        backstack.singleTop(NavTarget.ConfirmAccountProvider)
+                    }
+
+                    override fun onOtherClicked() {
+                        backstack.push(NavTarget.SearchAccountProvider)
+                    }
+                }
+
+                createNode<ChangeAccountProviderNode>(buildContext, plugins = listOf(callback))
+            }
+            NavTarget.SearchAccountProvider -> {
+                val callback = object : SearchAccountProviderNode.Callback {
+                    override fun onDone() {
+                        // Go back to the Account Provider screen
+                        backstack.singleTop(NavTarget.ConfirmAccountProvider)
+                    }
+                }
+
+                createNode<SearchAccountProviderNode>(buildContext, plugins = listOf(callback))
+            }
+            NavTarget.LoginPassword -> {
+                createNode<LoginPasswordNode>(buildContext, plugins = listOf())
+            }
             is NavTarget.OidcView -> {
                 val input = OidcNode.Inputs(navTarget.oidcDetails)
                 createNode<OidcNode>(buildContext, plugins = listOf(input))
@@ -109,6 +159,7 @@ class LoginFlowNode @AssistedInject constructor(
         DisposableEffect(Unit) {
             onDispose {
                 activity = null
+                accountProviderDataSource.reset()
             }
         }
         Children(

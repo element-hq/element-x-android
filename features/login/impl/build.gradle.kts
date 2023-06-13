@@ -19,6 +19,7 @@ plugins {
     alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
     id("kotlin-parcelize")
+    kotlin("plugin.serialization") version "1.8.21"
 }
 
 android {
@@ -41,11 +42,15 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.network)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.elementresources)
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
     implementation(libs.androidx.browser)
+    implementation(libs.network.retrofit)
+    implementation(libs.serialization.json)
     api(projects.features.login.api)
     ksp(libs.showkase.processor)
 
@@ -55,6 +60,7 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.tests.testutils)
 
     androidTestImplementation(libs.test.junitext)
 }
