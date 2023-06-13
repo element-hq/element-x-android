@@ -27,7 +27,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.test.A_ROOM_ID
-import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.aFakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.flow.first
@@ -53,7 +53,7 @@ class LeaveRoomPresenterImplTest {
     @Test
     fun `present - show generic confirmation`() = runTest {
         val presenter = createPresenter(
-            client = FakeMatrixClient().apply {
+            client = aFakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
                     result = FakeMatrixRoom()
@@ -73,7 +73,7 @@ class LeaveRoomPresenterImplTest {
     @Test
     fun `present - show private room confirmation`() = runTest {
         val presenter = createPresenter(
-            client = FakeMatrixClient().apply {
+            client = aFakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
                     result = FakeMatrixRoom(isPublic = false),
@@ -93,7 +93,7 @@ class LeaveRoomPresenterImplTest {
     @Test
     fun `present - show last user in room confirmation`() = runTest {
         val presenter = createPresenter(
-            client = FakeMatrixClient().apply {
+            client = aFakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
                     result = FakeMatrixRoom(joinedMemberCount = 1),
@@ -114,7 +114,7 @@ class LeaveRoomPresenterImplTest {
     fun `present - leaving a room leaves the room`() = runTest {
         val roomMembershipObserver = RoomMembershipObserver()
         val presenter = createPresenter(
-            client = FakeMatrixClient().apply {
+            client = aFakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
                     result = FakeMatrixRoom(),
@@ -136,7 +136,7 @@ class LeaveRoomPresenterImplTest {
     @Test
     fun `present - show error if leave room fails`() = runTest {
         val presenter = createPresenter(
-            client = FakeMatrixClient().apply {
+            client = aFakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
                     result = FakeMatrixRoom().apply {
@@ -160,7 +160,7 @@ class LeaveRoomPresenterImplTest {
     @Test
     fun `present - show progress indicator while leaving a room`() = runTest {
         val presenter = createPresenter(
-            client = FakeMatrixClient().apply {
+            client = aFakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
                     result = FakeMatrixRoom(),
@@ -182,7 +182,7 @@ class LeaveRoomPresenterImplTest {
     @Test
     fun `present - hide error hides the error`() = runTest {
         val presenter = createPresenter(
-            client = FakeMatrixClient().apply {
+            client = aFakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
                     result = FakeMatrixRoom().apply {
@@ -208,7 +208,7 @@ class LeaveRoomPresenterImplTest {
 }
 
 private fun TestScope.createPresenter(
-    client: MatrixClient = FakeMatrixClient(),
+    client: MatrixClient = aFakeMatrixClient(),
     roomMembershipObserver: RoomMembershipObserver = RoomMembershipObserver(),
 ): LeaveRoomPresenter = LeaveRoomPresenterImpl(
     client = client,

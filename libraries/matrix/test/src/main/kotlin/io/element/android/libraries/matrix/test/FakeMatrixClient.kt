@@ -37,15 +37,44 @@ import io.element.android.libraries.matrix.test.pushers.FakePushersService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.TestScope
 
-class FakeMatrixClient(
+fun TestScope.aFakeMatrixClient(
+    sessionId: SessionId = A_SESSION_ID,
+    userDisplayName: Result<String> = Result.success(A_USER_NAME),
+    userAvatarURLString: Result<String> = Result.success(AN_AVATAR_URL),
+    roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
+    invitesDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
+    mediaLoader: MatrixMediaLoader = FakeMediaLoader(testCoroutineDispatchers()),
+    sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
+    pushersService: FakePushersService = FakePushersService(),
+    notificationService: FakeNotificationService = FakeNotificationService(),
+    coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
+): FakeMatrixClient {
+    return FakeMatrixClient(
+        coroutineDispatchers = coroutineDispatchers,
+        sessionId = sessionId,
+        userDisplayName = userDisplayName,
+        userAvatarURLString = userAvatarURLString,
+        roomSummaryDataSource = roomSummaryDataSource,
+        invitesDataSource = invitesDataSource,
+        mediaLoader = mediaLoader,
+        sessionVerificationService = sessionVerificationService,
+        pushersService = pushersService,
+        notificationService = notificationService,
+    )
+}
+
+class FakeMatrixClient (
+    private val coroutineDispatchers: CoroutineDispatchers,
     override val sessionId: SessionId = A_SESSION_ID,
     private val userDisplayName: Result<String> = Result.success(A_USER_NAME),
     private val userAvatarURLString: Result<String> = Result.success(AN_AVATAR_URL),
     override val roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
     override val invitesDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
-    override val mediaLoader: MatrixMediaLoader = FakeMediaLoader(),
+    override val mediaLoader: MatrixMediaLoader = FakeMediaLoader(coroutineDispatchers),
     private val sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
     private val pushersService: FakePushersService = FakePushersService(),
     private val notificationService: FakeNotificationService = FakeNotificationService(),

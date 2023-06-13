@@ -23,7 +23,7 @@ import com.google.common.truth.Truth
 import io.element.android.features.invitelist.test.FakeSeenInvitesStore
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
-import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.aFakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -35,7 +35,7 @@ internal class DefaultInviteStateDataSourceTest {
     @Test
     fun `emits NoInvites state if invites list is empty`() = runTest {
         val matrixDataSource = FakeRoomSummaryDataSource()
-        val client = FakeMatrixClient(invitesDataSource = matrixDataSource)
+        val client = aFakeMatrixClient(invitesDataSource = matrixDataSource)
         val seenStore = FakeSeenInvitesStore()
         val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers())
 
@@ -50,7 +50,7 @@ internal class DefaultInviteStateDataSourceTest {
     fun `emits NewInvites state if unseen invite exists`() = runTest {
         val matrixDataSource = FakeRoomSummaryDataSource()
         matrixDataSource.postRoomSummary(listOf(aRoomSummaryFilled(roomId = A_ROOM_ID)))
-        val client = FakeMatrixClient(invitesDataSource = matrixDataSource)
+        val client = aFakeMatrixClient(invitesDataSource = matrixDataSource)
         val seenStore = FakeSeenInvitesStore()
         val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers())
 
@@ -66,7 +66,7 @@ internal class DefaultInviteStateDataSourceTest {
     fun `emits NewInvites state if multiple invites exist and at least one is unseen`() = runTest {
         val matrixDataSource = FakeRoomSummaryDataSource()
         matrixDataSource.postRoomSummary(listOf(aRoomSummaryFilled(roomId = A_ROOM_ID), aRoomSummaryFilled(roomId = A_ROOM_ID_2)))
-        val client = FakeMatrixClient(invitesDataSource = matrixDataSource)
+        val client = aFakeMatrixClient(invitesDataSource = matrixDataSource)
         val seenStore = FakeSeenInvitesStore()
         seenStore.publishRoomIds(setOf(A_ROOM_ID))
         val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers())
@@ -83,7 +83,7 @@ internal class DefaultInviteStateDataSourceTest {
     fun `emits SeenInvites state if invite exists in seen store`() = runTest {
         val matrixDataSource = FakeRoomSummaryDataSource()
         matrixDataSource.postRoomSummary(listOf(aRoomSummaryFilled(roomId = A_ROOM_ID)))
-        val client = FakeMatrixClient(invitesDataSource = matrixDataSource)
+        val client = aFakeMatrixClient(invitesDataSource = matrixDataSource)
         val seenStore = FakeSeenInvitesStore()
         seenStore.publishRoomIds(setOf(A_ROOM_ID))
         val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers())
@@ -100,7 +100,7 @@ internal class DefaultInviteStateDataSourceTest {
     @Test
     fun `emits new state in response to upstream events`() = runTest {
         val matrixDataSource = FakeRoomSummaryDataSource()
-        val client = FakeMatrixClient(invitesDataSource = matrixDataSource)
+        val client = aFakeMatrixClient(invitesDataSource = matrixDataSource)
         val seenStore = FakeSeenInvitesStore()
         val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers())
 

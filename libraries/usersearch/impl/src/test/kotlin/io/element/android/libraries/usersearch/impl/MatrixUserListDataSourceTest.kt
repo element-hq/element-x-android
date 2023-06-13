@@ -24,7 +24,7 @@ import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_NAME
-import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.aFakeMatrixClient
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -32,7 +32,7 @@ internal class MatrixUserListDataSourceTest {
 
     @Test
     fun `search - returns users on success`() = runTest {
-        val matrixClient = FakeMatrixClient()
+        val matrixClient = aFakeMatrixClient()
         matrixClient.givenSearchUsersResult(
             searchTerm = "test",
             result = Result.success(
@@ -56,7 +56,7 @@ internal class MatrixUserListDataSourceTest {
 
     @Test
     fun `search - returns empty list on error`() = runTest {
-        val matrixClient = FakeMatrixClient()
+        val matrixClient = aFakeMatrixClient()
         matrixClient.givenSearchUsersResult(
             searchTerm = "test",
             result = Result.failure(Throwable("Ruhroh"))
@@ -69,7 +69,7 @@ internal class MatrixUserListDataSourceTest {
 
     @Test
     fun `get profile - returns user on success`() = runTest {
-        val matrixClient = FakeMatrixClient()
+        val matrixClient = aFakeMatrixClient()
         matrixClient.givenGetProfileResult(
             userId = A_USER_ID,
             result = Result.success(aMatrixUserProfile())
@@ -82,7 +82,7 @@ internal class MatrixUserListDataSourceTest {
 
     @Test
     fun `get profile - returns null on error`() = runTest {
-        val matrixClient = FakeMatrixClient()
+        val matrixClient = aFakeMatrixClient()
         matrixClient.givenGetProfileResult(
             userId = A_USER_ID,
             result = Result.failure(Throwable("Ruhroh"))

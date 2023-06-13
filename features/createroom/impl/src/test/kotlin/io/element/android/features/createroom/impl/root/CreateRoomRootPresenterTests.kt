@@ -29,31 +29,26 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_THROWABLE
-import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.aFakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.usersearch.test.FakeUserRepository
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
 import org.junit.Test
 
 class CreateRoomRootPresenterTests {
 
-    private lateinit var userRepository: FakeUserRepository
-    private lateinit var presenter: CreateRoomRootPresenter
-    private lateinit var fakeUserListPresenter: FakeUserListPresenter
-    private lateinit var fakeMatrixClient: FakeMatrixClient
-
-    @Before
-    fun setup() {
-        fakeUserListPresenter = FakeUserListPresenter()
-        fakeMatrixClient = FakeMatrixClient()
-        userRepository = FakeUserRepository()
-        presenter = CreateRoomRootPresenter(FakeUserListPresenterFactory(fakeUserListPresenter), userRepository, UserListDataStore(), fakeMatrixClient)
-    }
-
     @Test
     fun `present - initial state`() = runTest {
+        val fakeUserListPresenter = FakeUserListPresenter()
+        val fakeMatrixClient = aFakeMatrixClient()
+        val userRepository = FakeUserRepository()
+        val presenter = CreateRoomRootPresenter(
+            presenterFactory = FakeUserListPresenterFactory(fakeUserListPresenter),
+            userRepository = userRepository,
+            userListDataStore = UserListDataStore(),
+            matrixClient = fakeMatrixClient
+        )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -64,6 +59,15 @@ class CreateRoomRootPresenterTests {
 
     @Test
     fun `present - trigger create DM action`() = runTest {
+        val fakeUserListPresenter = FakeUserListPresenter()
+        val fakeMatrixClient = aFakeMatrixClient()
+        val userRepository = FakeUserRepository()
+        val presenter = CreateRoomRootPresenter(
+            presenterFactory = FakeUserListPresenterFactory(fakeUserListPresenter),
+            userRepository = userRepository,
+            userListDataStore = UserListDataStore(),
+            matrixClient = fakeMatrixClient
+        )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -84,6 +88,15 @@ class CreateRoomRootPresenterTests {
 
     @Test
     fun `present - trigger retrieve DM action`() = runTest {
+        val fakeUserListPresenter = FakeUserListPresenter()
+        val fakeMatrixClient = aFakeMatrixClient()
+        val userRepository = FakeUserRepository()
+        val presenter = CreateRoomRootPresenter(
+            presenterFactory = FakeUserListPresenterFactory(fakeUserListPresenter),
+            userRepository = userRepository,
+            userListDataStore = UserListDataStore(),
+            matrixClient = fakeMatrixClient
+        )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -102,6 +115,15 @@ class CreateRoomRootPresenterTests {
 
     @Test
     fun `present - trigger retry create DM action`() = runTest {
+        val fakeUserListPresenter = FakeUserListPresenter()
+        val fakeMatrixClient = aFakeMatrixClient()
+        val userRepository = FakeUserRepository()
+        val presenter = CreateRoomRootPresenter(
+            presenterFactory = FakeUserListPresenterFactory(fakeUserListPresenter),
+            userRepository = userRepository,
+            userListDataStore = UserListDataStore(),
+            matrixClient = fakeMatrixClient
+        )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {

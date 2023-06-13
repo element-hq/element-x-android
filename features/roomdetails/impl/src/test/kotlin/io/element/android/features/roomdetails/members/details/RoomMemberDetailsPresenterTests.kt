@@ -20,21 +20,19 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
-import io.element.android.features.roomdetails.aMatrixClient
 import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsEvents
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.test.aFakeMatrixClient
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class RoomMemberDetailsPresenterTests {
-
-    private val matrixClient = aMatrixClient()
 
     @Test
     fun `present - returns the room member's data, then updates it if needed`() = runTest {
@@ -44,7 +42,7 @@ class RoomMemberDetailsPresenterTests {
             givenUserAvatarUrlResult(Result.success("A custom avatar"))
             givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(roomMember)))
         }
-        val presenter = RoomMemberDetailsPresenter(matrixClient, room, roomMember.userId)
+        val presenter = RoomMemberDetailsPresenter(aFakeMatrixClient(), room, roomMember.userId)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -68,7 +66,7 @@ class RoomMemberDetailsPresenterTests {
             givenUserAvatarUrlResult(Result.failure(Throwable()))
             givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(roomMember)))
         }
-        val presenter = RoomMemberDetailsPresenter(matrixClient, room, roomMember.userId)
+        val presenter = RoomMemberDetailsPresenter(aFakeMatrixClient(), room, roomMember.userId)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -88,7 +86,7 @@ class RoomMemberDetailsPresenterTests {
             givenUserAvatarUrlResult(Result.success(null))
             givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(roomMember)))
         }
-        val presenter =RoomMemberDetailsPresenter(matrixClient, room, roomMember.userId)
+        val presenter = RoomMemberDetailsPresenter(aFakeMatrixClient(), room, roomMember.userId)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -104,7 +102,7 @@ class RoomMemberDetailsPresenterTests {
     fun `present - BlockUser needing confirmation displays confirmation dialog`() = runTest {
         val room = aMatrixRoom()
         val roomMember = aRoomMember()
-        val presenter =RoomMemberDetailsPresenter(matrixClient, room, roomMember.userId)
+        val presenter = RoomMemberDetailsPresenter(aFakeMatrixClient(), room, roomMember.userId)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -125,7 +123,7 @@ class RoomMemberDetailsPresenterTests {
     fun `present - BlockUser and UnblockUser without confirmation change the 'blocked' state`() = runTest {
         val room = aMatrixRoom()
         val roomMember = aRoomMember()
-        val presenter =RoomMemberDetailsPresenter(matrixClient, room, roomMember.userId)
+        val presenter = RoomMemberDetailsPresenter(aFakeMatrixClient(), room, roomMember.userId)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -142,7 +140,7 @@ class RoomMemberDetailsPresenterTests {
     fun `present - UnblockUser needing confirmation displays confirmation dialog`() = runTest {
         val room = aMatrixRoom()
         val roomMember = aRoomMember()
-        val presenter =RoomMemberDetailsPresenter(matrixClient, room, roomMember.userId)
+        val presenter = RoomMemberDetailsPresenter(aFakeMatrixClient(), room, roomMember.userId)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {

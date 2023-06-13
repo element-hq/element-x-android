@@ -28,14 +28,14 @@ import io.element.android.features.rageshake.impl.preferences.DefaultRageshakePr
 import io.element.android.features.rageshake.test.rageshake.FakeRageShake
 import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.aFakeMatrixClient
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class PreferencesRootPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
-        val logoutPresenter = DefaultLogoutPreferencePresenter(FakeMatrixClient())
+        val logoutPresenter = DefaultLogoutPreferencePresenter(aFakeMatrixClient())
         val rageshakePresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore())
         val analyticsPresenter = DefaultAnalyticsPreferencesPresenter(FakeAnalyticsService(), A_BUILD_META)
         val presenter = PreferencesRootPresenter(

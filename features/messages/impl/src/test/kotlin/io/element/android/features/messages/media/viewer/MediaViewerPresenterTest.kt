@@ -49,7 +49,7 @@ class MediaViewerPresenterTest {
     @Test
     fun `present - download media success scenario`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = false)
-        val mediaLoader = FakeMediaLoader()
+        val mediaLoader = FakeMediaLoader(coroutineDispatchers)
         val mediaActions = FakeLocalMediaActions(coroutineDispatchers)
         val presenter = aMediaViewerPresenter(mediaLoader, mediaActions)
         moleculeFlow(RecompositionClock.Immediate) {
@@ -70,7 +70,7 @@ class MediaViewerPresenterTest {
     @Test
     fun `present - check all actions `() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = false)
-        val mediaLoader = FakeMediaLoader()
+        val mediaLoader = FakeMediaLoader(coroutineDispatchers)
         val mediaActions = FakeLocalMediaActions(coroutineDispatchers)
         val presenter = aMediaViewerPresenter(mediaLoader, mediaActions)
         moleculeFlow(RecompositionClock.Immediate) {
@@ -119,7 +119,7 @@ class MediaViewerPresenterTest {
     @Test
     fun `present - download media failure then retry with success scenario`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = false)
-        val mediaLoader = FakeMediaLoader()
+        val mediaLoader = FakeMediaLoader(coroutineDispatchers)
         val mediaActions = FakeLocalMediaActions(coroutineDispatchers)
         val presenter = aMediaViewerPresenter(mediaLoader, mediaActions)
         moleculeFlow(RecompositionClock.Immediate) {

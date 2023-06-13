@@ -38,7 +38,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
-import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.aFakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -51,7 +51,7 @@ class RoomListPresenterTests {
     @Test
     fun `present - should start with no user and then load user with success`() = runTest {
         val presenter = RoomListPresenter(
-            FakeMatrixClient(A_SESSION_ID),
+            aFakeMatrixClient(A_SESSION_ID),
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
@@ -76,7 +76,7 @@ class RoomListPresenterTests {
     @Test
     fun `present - should start with no user and then load user with error`() = runTest {
         val presenter = RoomListPresenter(
-            FakeMatrixClient(
+            aFakeMatrixClient(
                 A_SESSION_ID,
                 userDisplayName = Result.failure(AN_EXCEPTION),
                 userAvatarURLString = Result.failure(AN_EXCEPTION),
@@ -102,7 +102,7 @@ class RoomListPresenterTests {
     @Test
     fun `present - should filter room with success`() = runTest {
         val presenter = RoomListPresenter(
-            FakeMatrixClient(A_SESSION_ID),
+            aFakeMatrixClient(A_SESSION_ID),
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
@@ -129,7 +129,7 @@ class RoomListPresenterTests {
     fun `present - load 1 room with success`() = runTest {
         val roomSummaryDataSource = FakeRoomSummaryDataSource()
         val presenter = RoomListPresenter(
-            FakeMatrixClient(
+            aFakeMatrixClient(
                 sessionId = A_SESSION_ID,
                 roomSummaryDataSource = roomSummaryDataSource
             ),
@@ -162,7 +162,7 @@ class RoomListPresenterTests {
     fun `present - load 1 room with success and filter rooms`() = runTest {
         val roomSummaryDataSource = FakeRoomSummaryDataSource()
         val presenter = RoomListPresenter(
-            FakeMatrixClient(
+            aFakeMatrixClient(
                 sessionId = A_SESSION_ID,
                 roomSummaryDataSource = roomSummaryDataSource
             ),
@@ -201,7 +201,7 @@ class RoomListPresenterTests {
     fun `present - update visible range`() = runTest {
         val roomSummaryDataSource = FakeRoomSummaryDataSource()
         val presenter = RoomListPresenter(
-            FakeMatrixClient(
+            aFakeMatrixClient(
                 sessionId = A_SESSION_ID,
                 roomSummaryDataSource = roomSummaryDataSource
             ),
@@ -250,7 +250,7 @@ class RoomListPresenterTests {
     fun `present - handle DismissRequestVerificationPrompt`() = runTest {
         val roomSummaryDataSource = FakeRoomSummaryDataSource()
         val presenter = RoomListPresenter(
-            FakeMatrixClient(
+            aFakeMatrixClient(
                 sessionId = A_SESSION_ID,
                 roomSummaryDataSource = roomSummaryDataSource
             ),
@@ -280,7 +280,7 @@ class RoomListPresenterTests {
     fun `present - sets invite state`() = runTest {
         val inviteStateFlow = MutableStateFlow(InvitesState.NoInvites)
         val presenter = RoomListPresenter(
-            FakeMatrixClient(
+            aFakeMatrixClient(
                 sessionId = A_SESSION_ID,
             ),
             createDateFormatter(),
@@ -312,7 +312,7 @@ class RoomListPresenterTests {
     @Test
     fun `present - show context menu`() = runTest {
         val presenter = RoomListPresenter(
-            FakeMatrixClient(A_SESSION_ID),
+            aFakeMatrixClient(A_SESSION_ID),
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
@@ -339,7 +339,7 @@ class RoomListPresenterTests {
     @Test
     fun `present - hide context menu`() = runTest {
         val presenter = RoomListPresenter(
-            FakeMatrixClient(A_SESSION_ID),
+            aFakeMatrixClient(sessionId = A_SESSION_ID),
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),
@@ -371,7 +371,7 @@ class RoomListPresenterTests {
     fun `present - leave room calls into leave room presenter`() = runTest {
         val leaveRoomPresenter = LeaveRoomPresenterFake()
         val presenter = RoomListPresenter(
-            FakeMatrixClient(A_SESSION_ID),
+            aFakeMatrixClient(A_SESSION_ID),
             createDateFormatter(),
             FakeRoomLastMessageFormatter(),
             FakeSessionVerificationService(),

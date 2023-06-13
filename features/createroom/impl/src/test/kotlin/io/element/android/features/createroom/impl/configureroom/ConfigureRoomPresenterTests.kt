@@ -31,7 +31,7 @@ import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_THROWABLE
-import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.aFakeMatrixClient
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
@@ -56,27 +56,8 @@ private const val AN_URI_FROM_GALLERY = "content://uri_from_gallery"
 @RunWith(RobolectricTestRunner::class)
 class ConfigureRoomPresenterTests {
 
-    private lateinit var presenter: ConfigureRoomPresenter
-    private lateinit var userListDataStore: UserListDataStore
-    private lateinit var createRoomDataStore: CreateRoomDataStore
-    private lateinit var fakeMatrixClient: FakeMatrixClient
-    private lateinit var fakePickerProvider: FakePickerProvider
-    private lateinit var fakeMediaPreProcessor: FakeMediaPreProcessor
-
     @Before
     fun setup() {
-        fakeMatrixClient = FakeMatrixClient()
-        userListDataStore = UserListDataStore()
-        createRoomDataStore = CreateRoomDataStore(userListDataStore)
-        fakePickerProvider = FakePickerProvider()
-        fakeMediaPreProcessor = FakeMediaPreProcessor()
-        presenter = ConfigureRoomPresenter(
-            dataStore = createRoomDataStore,
-            matrixClient = fakeMatrixClient,
-            mediaPickerProvider = fakePickerProvider,
-            mediaPreProcessor = fakeMediaPreProcessor,
-        )
-
         mockkStatic(File::readBytes)
         every { any<File>().readBytes() } returns byteArrayOf()
     }
@@ -88,6 +69,17 @@ class ConfigureRoomPresenterTests {
 
     @Test
     fun `present - initial state`() = runTest {
+        val fakeMatrixClient = aFakeMatrixClient()
+        val userListDataStore = UserListDataStore()
+        val createRoomDataStore = CreateRoomDataStore(userListDataStore)
+        val fakePickerProvider = FakePickerProvider()
+        val fakeMediaPreProcessor = FakeMediaPreProcessor()
+        val presenter = ConfigureRoomPresenter(
+            dataStore = createRoomDataStore,
+            matrixClient = fakeMatrixClient,
+            mediaPickerProvider = fakePickerProvider,
+            mediaPreProcessor = fakeMediaPreProcessor,
+        )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -103,6 +95,17 @@ class ConfigureRoomPresenterTests {
 
     @Test
     fun `present - create room button is enabled only if the required fields are completed`() = runTest {
+        val fakeMatrixClient = aFakeMatrixClient()
+        val userListDataStore = UserListDataStore()
+        val createRoomDataStore = CreateRoomDataStore(userListDataStore)
+        val fakePickerProvider = FakePickerProvider()
+        val fakeMediaPreProcessor = FakeMediaPreProcessor()
+        val presenter = ConfigureRoomPresenter(
+            dataStore = createRoomDataStore,
+            matrixClient = fakeMatrixClient,
+            mediaPickerProvider = fakePickerProvider,
+            mediaPreProcessor = fakeMediaPreProcessor,
+        )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -128,6 +131,17 @@ class ConfigureRoomPresenterTests {
 
     @Test
     fun `present - state is updated when fields are changed`() = runTest {
+        val fakeMatrixClient = aFakeMatrixClient()
+        val userListDataStore = UserListDataStore()
+        val createRoomDataStore = CreateRoomDataStore(userListDataStore)
+        val fakePickerProvider = FakePickerProvider()
+        val fakeMediaPreProcessor = FakeMediaPreProcessor()
+        val presenter = ConfigureRoomPresenter(
+            dataStore = createRoomDataStore,
+            matrixClient = fakeMatrixClient,
+            mediaPickerProvider = fakePickerProvider,
+            mediaPreProcessor = fakeMediaPreProcessor,
+        )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -198,6 +212,17 @@ class ConfigureRoomPresenterTests {
 
     @Test
     fun `present - trigger create room action`() = runTest {
+        val fakeMatrixClient = aFakeMatrixClient()
+        val userListDataStore = UserListDataStore()
+        val createRoomDataStore = CreateRoomDataStore(userListDataStore)
+        val fakePickerProvider = FakePickerProvider()
+        val fakeMediaPreProcessor = FakeMediaPreProcessor()
+        val presenter = ConfigureRoomPresenter(
+            dataStore = createRoomDataStore,
+            matrixClient = fakeMatrixClient,
+            mediaPickerProvider = fakePickerProvider,
+            mediaPreProcessor = fakeMediaPreProcessor,
+        )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -216,6 +241,17 @@ class ConfigureRoomPresenterTests {
 
     @Test
     fun `present - trigger create room with upload error and retry`() = runTest {
+        val fakeMatrixClient = aFakeMatrixClient()
+        val userListDataStore = UserListDataStore()
+        val createRoomDataStore = CreateRoomDataStore(userListDataStore)
+        val fakePickerProvider = FakePickerProvider()
+        val fakeMediaPreProcessor = FakeMediaPreProcessor()
+        val presenter = ConfigureRoomPresenter(
+            dataStore = createRoomDataStore,
+            matrixClient = fakeMatrixClient,
+            mediaPickerProvider = fakePickerProvider,
+            mediaPreProcessor = fakeMediaPreProcessor,
+        )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -240,6 +276,17 @@ class ConfigureRoomPresenterTests {
 
     @Test
     fun `present - trigger retry and cancel actions`() = runTest {
+        val fakeMatrixClient = aFakeMatrixClient()
+        val userListDataStore = UserListDataStore()
+        val createRoomDataStore = CreateRoomDataStore(userListDataStore)
+        val fakePickerProvider = FakePickerProvider()
+        val fakeMediaPreProcessor = FakeMediaPreProcessor()
+        val presenter = ConfigureRoomPresenter(
+            dataStore = createRoomDataStore,
+            matrixClient = fakeMatrixClient,
+            mediaPickerProvider = fakePickerProvider,
+            mediaPreProcessor = fakeMediaPreProcessor,
+        )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
