@@ -30,6 +30,7 @@ import io.element.android.libraries.designsystem.Gray_50
 import io.element.android.libraries.designsystem.SystemGrey5Light
 import io.element.android.libraries.designsystem.SystemGrey6Light
 import io.element.android.libraries.designsystem.TextColorCriticalLight
+import io.element.android.libraries.designsystem.theme.compound.LightDesignTokens
 import io.element.android.libraries.designsystem.theme.compound.compoundColorsLight
 import io.element.android.libraries.designsystem.theme.previews.ColorsSchemePreview
 
@@ -48,37 +49,36 @@ fun elementColorsLight() = ElementColors(
     isLight = true,
 )
 
-// TODO Lots of colors are missing
 val materialColorSchemeLight = lightColorScheme(
-    primary = compoundColorsLight.colorIconPrimary,
-    onPrimary = compoundColorsLight.colorIconOnSolidPrimary,
-    primaryContainer = compoundColorsLight.colorBgSubtlePrimary,
-    onPrimaryContainer = compoundColorsLight.colorTextActionAccent,
-    // TODO inversePrimary = ColorLightTokens.InversePrimary,
-    secondary = compoundColorsLight.colorIconSecondary,
-    onSecondary = compoundColorsLight.colorIconOnSolidPrimary,
-    // TODO secondaryContainer = ColorLightTokens.SecondaryContainer,
-    // TODO onSecondaryContainer = ColorLightTokens.OnSecondaryContainer,
-    tertiary = compoundColorsLight.colorIconTertiary,
-    onTertiary = compoundColorsLight.colorIconOnSolidPrimary,
-    // TODO tertiaryContainer = ColorLightTokens.TertiaryContainer,
-    // TODO onTertiaryContainer = ColorLightTokens.OnTertiaryContainer,
-    background = compoundColorsLight.colorBgCanvasDefault,
-    onBackground = compoundColorsLight.colorIconPrimary,
-    surface = compoundColorsLight.colorBgCanvasDefault,
-    onSurface = compoundColorsLight.colorIconPrimary,
-    surfaceVariant = compoundColorsLight.colorBgSubtlePrimary,
-    onSurfaceVariant = compoundColorsLight.colorIconTertiary,
-    surfaceTint = compoundColorsLight.colorIconPrimary,
-    // TODO inverseSurface = ColorLightTokens.InverseSurface,
-    // TODO inverseOnSurface = ColorLightTokens.InverseOnSurface,
-    error = compoundColorsLight.colorIconCriticalPrimary,
-    onError = compoundColorsLight.colorTextOnSolidPrimary,
-    errorContainer = compoundColorsLight.colorBgCriticalSubtle,
-    // TODO onErrorContainer = ColorLightTokens.OnErrorContainer,
-    outline = compoundColorsLight.colorBorderInteractivePrimary,
-    outlineVariant = compoundColorsLight.colorBorderInteractiveSecondary,
-    // TODO scrim = ColorLightTokens.Scrim,
+    primary = LightDesignTokens.colorGray1400,
+    onPrimary = LightDesignTokens.colorThemeBg,
+    primaryContainer = LightDesignTokens.colorThemeBg,
+    onPrimaryContainer = LightDesignTokens.colorGray1400,
+    inversePrimary = LightDesignTokens.colorThemeBg,
+    secondary = LightDesignTokens.colorGray900,
+    onSecondary = LightDesignTokens.colorThemeBg,
+    secondaryContainer = LightDesignTokens.colorGray400,
+    onSecondaryContainer = LightDesignTokens.colorGray1400,
+//    tertiary = compoundColorsLight.colorIconTertiary,
+//    onTertiary = compoundColorsLight.colorIconOnSolidPrimary,
+    tertiaryContainer = LightDesignTokens.colorGray1400,
+    onTertiaryContainer = LightDesignTokens.colorThemeBg,
+    background = LightDesignTokens.colorThemeBg,
+    onBackground = LightDesignTokens.colorGray1400,
+    surface = LightDesignTokens.colorThemeBg,
+    onSurface = LightDesignTokens.colorGray1400,
+    surfaceVariant = LightDesignTokens.colorGray400,
+    onSurfaceVariant = LightDesignTokens.colorGray1400,
+    surfaceTint = LightDesignTokens.colorGray1000,
+    inverseSurface = LightDesignTokens.colorGray1300,
+    inverseOnSurface = LightDesignTokens.colorThemeBg,
+    error = LightDesignTokens.colorRed900,
+    onError = LightDesignTokens.colorThemeBg,
+    errorContainer = LightDesignTokens.colorRed400,
+    onErrorContainer = LightDesignTokens.colorRed900,
+    outline = LightDesignTokens.colorGray800,
+    outlineVariant = LightDesignTokens.colorAlphaGray400,
+    scrim = LightDesignTokens.colorGray1400,
 )
 
 @Preview
