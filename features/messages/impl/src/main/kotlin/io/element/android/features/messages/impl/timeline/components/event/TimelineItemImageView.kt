@@ -43,7 +43,7 @@ fun TimelineItemImageView(
         modifier = modifier
     ) {
         BlurHashAsyncImage(
-            model = MediaRequestData(content.mediaSource, MediaRequestData.Kind.Content),
+            model = MediaRequestData(content.preferredMediaSource, MediaRequestData.Kind.Content),
             blurHash = content.blurhash,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Fit,
