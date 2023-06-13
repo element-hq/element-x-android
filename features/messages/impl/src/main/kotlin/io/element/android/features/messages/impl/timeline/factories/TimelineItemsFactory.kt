@@ -26,6 +26,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,7 +46,7 @@ class TimelineItemsFactory @Inject constructor(
     private val timelineItemGrouper: TimelineItemGrouper,
 ) {
 
-    private val timelineItems = MutableStateFlow(emptyList<TimelineItem>().toImmutableList())
+    private val timelineItems = MutableStateFlow(persistentListOf<TimelineItem>())
     private val timelineItemsCache = arrayListOf<TimelineItem?>()
 
     // Items from rust sdk, used for diffing
@@ -95,7 +96,7 @@ class TimelineItemsFactory @Inject constructor(
         Timber.v("Time to apply diff on new list of ${newTimelineItems.size} items: $timeToDiff ms")
     }
 
-    private suspend fun buildAndCacheItem(
+    private fun buildAndCacheItem(
         timelineItems: List<MatrixTimelineItem>,
         index: Int
     ): TimelineItem? {

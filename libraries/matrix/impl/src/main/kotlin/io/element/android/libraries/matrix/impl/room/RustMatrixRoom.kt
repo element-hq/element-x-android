@@ -34,7 +34,6 @@ import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -259,7 +258,7 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun sendReaction(emoji: String, eventId: EventId): Result<Unit> = withContext(Dispatchers.IO) {
+    override suspend fun sendReaction(emoji: String, eventId: EventId): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {
             innerRoom.sendReaction(key = emoji, eventId = eventId.value)
         }
@@ -267,28 +266,28 @@ class RustMatrixRoom(
 
     @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit> =
-        withContext(Dispatchers.IO) {
+        withContext(coroutineDispatchers.io) {
             runCatching {
                 innerRoom.uploadAvatar(mimeType, data.toUByteArray().toList())
             }
         }
 
     override suspend fun removeAvatar(): Result<Unit> =
-        withContext(Dispatchers.IO) {
+        withContext(coroutineDispatchers.io) {
             runCatching {
                 innerRoom.removeAvatar()
             }
         }
 
     override suspend fun setName(name: String): Result<Unit> =
-        withContext(Dispatchers.IO) {
+        withContext(coroutineDispatchers.io) {
             runCatching {
                 innerRoom.setName(name)
             }
         }
 
     override suspend fun setTopic(topic: String): Result<Unit> =
-        withContext(Dispatchers.IO) {
+        withContext(coroutineDispatchers.io) {
             runCatching {
                 innerRoom.setTopic(topic)
             }
