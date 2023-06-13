@@ -42,21 +42,19 @@ class ImageCompressor @Inject constructor(
      * @return a [Result] containing the resulting [ImageCompressionResult] with the temporary [File] and some metadata.
      */
     suspend fun compressToTmpFile(
-            inputStream: InputStream,
-            resizeMode: ResizeMode,
-            format: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG,
-            desiredQuality: Int = 80,
+        inputStream: InputStream,
+        resizeMode: ResizeMode,
+        format: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG,
+        desiredQuality: Int = 80,
     ): Result<ImageCompressionResult> = withContext(Dispatchers.IO) {
         runCatching {
             val compressedBitmap = compressToBitmap(inputStream, resizeMode).getOrThrow()
             val blurhash = BlurHash.encode(compressedBitmap, 3, 3)
-
             // Encode bitmap to the destination temporary file
             val tmpFile = context.createTmpFile(extension = "jpeg")
             tmpFile.outputStream().use {
                 compressedBitmap.compress(format, desiredQuality, it)
             }
-
             ImageCompressionResult(
                 file = tmpFile,
                 width = compressedBitmap.width,

@@ -18,10 +18,12 @@ package io.element.android.libraries.mediaupload
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
 import com.squareup.anvil.annotations.ContributesBinding
+import com.vanniktech.blurhash.BlurHash
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.androidutils.file.getFileName
 import io.element.android.libraries.androidutils.media.runAndRelease
@@ -95,23 +97,25 @@ class AndroidMediaPreProcessor @Inject constructor(
         mimeType: String,
         deleteOriginal: Boolean,
         compressIfPossible: Boolean,
-    ): Result<MediaUploadInfo> = runCatching {
-        val shouldBeCompressed = compressIfPossible &&
-            (mimeType.isMimeTypeImage() && mimeType != MimeTypes.Gif) ||
-            mimeType.isMimeTypeVideo()
+    ): Result<MediaUploadInfo> = withContext(coroutineDispatchers.computation) {
+        runCatching {
+            val shouldBeCompressed = compressIfPossible &&
+                (mimeType.isMimeTypeImage() && mimeType != MimeTypes.Gif) ||
+                mimeType.isMimeTypeVideo()
 
-        val result = when {
-            mimeType.isMimeTypeImage() -> processImage(uri, shouldBeCompressed)
-            mimeType.isMimeTypeVideo() -> processVideo(uri, mimeType, shouldBeCompressed)
-            mimeType.isMimeTypeAudio() -> processAudio(uri, mimeType)
-            else -> processFile(uri, mimeType)
-        }
-        if (deleteOriginal) {
-            tryOrNull {
-                contentResolver.delete(uri, null, null)
+            val result = when {
+                mimeType.isMimeTypeImage() -> processImage(uri, mimeType, shouldBeCompressed)
+                mimeType.isMimeTypeVideo() -> processVideo(uri, mimeType, shouldBeCompressed)
+                mimeType.isMimeTypeAudio() -> processAudio(uri, mimeType)
+                else -> processFile(uri, mimeType)
             }
+            if (deleteOriginal) {
+                tryOrNull {
+                    contentResolver.delete(uri, null, null)
+                }
+            }
+            result.postProcess(uri)
         }
-        result.postProcess(uri)
     }.mapFailure { MediaPreProcessor.Failure(it) }
 
     private suspend fun processFile(uri: Uri, mimeType: String): MediaUploadInfo {
@@ -138,25 +142,62 @@ class AndroidMediaPreProcessor @Inject constructor(
         }
     }
 
-    private suspend fun processImage(uri: Uri, shouldBeCompressed: Boolean): MediaUploadInfo {
-        val (compressQuality, resizeMode) = if (shouldBeCompressed) {
-            Pair(80, ResizeMode.Approximate(IMAGE_SCALE_REF_SIZE, IMAGE_SCALE_REF_SIZE))
+    private suspend fun processImage(uri: Uri, mimeType: String, shouldBeCompressed: Boolean): MediaUploadInfo {
+
+        suspend fun processImageWithCompression(): MediaUploadInfo {
+            val compressionResult = contentResolver.openInputStream(uri).use { input ->
+                imageCompressor.compressToTmpFile(
+                    inputStream = requireNotNull(input),
+                    resizeMode = ResizeMode.Approximate(IMAGE_SCALE_REF_SIZE, IMAGE_SCALE_REF_SIZE),
+                ).getOrThrow()
+            }
+            val thumbnailResult = compressionResult.file.inputStream().use {
+                generateImageThumbnail(it)
+            }
+            val imageInfo = compressionResult.toImageInfo(
+                mimeType = mimeType,
+                thumbnailUrl = thumbnailResult.file.path,
+                thumbnailInfo = thumbnailResult.info
+            )
+            removeSensitiveImageMetadata(compressionResult.file)
+            return MediaUploadInfo.Image(
+                file = compressionResult.file,
+                info = imageInfo,
+                thumbnailInfo = thumbnailResult
+            )
+        }
+
+        suspend fun processImageWithoutCompression(): MediaUploadInfo {
+            val file = copyToTmpFile(uri)
+            val thumbnailResult = file.inputStream().use {
+                generateImageThumbnail(it)
+            }
+            val imageInfo = contentResolver.openInputStream(uri).use { input ->
+                val bitmap = BitmapFactory.decodeStream(input, null, null)!!
+                val blurhash = BlurHash.encode(bitmap, 3, 3)
+                ImageInfo(
+                    width = bitmap.width.toLong(),
+                    height = bitmap.height.toLong(),
+                    mimetype = mimeType,
+                    size = file.length(),
+                    thumbnailInfo = thumbnailResult.info,
+                    thumbnailSource = MediaSource(thumbnailResult.file.path),
+                    blurhash = blurhash,
+                )
+            }
+            removeSensitiveImageMetadata(file)
+            return MediaUploadInfo.Image(
+                file = file,
+                info = imageInfo,
+                thumbnailInfo = thumbnailResult
+            )
+        }
+
+        return if (shouldBeCompressed) {
+            processImageWithCompression()
         } else {
-            Pair(100, ResizeMode.None)
+            processImageWithoutCompression()
         }
-        val compressedFileResult = contentResolver.openInputStream(uri).use { input ->
-            imageCompressor.compressToTmpFile(
-                inputStream = requireNotNull(input),
-                resizeMode = resizeMode,
-                desiredQuality = compressQuality
-            ).getOrThrow()
-        }
-
-        removeSensitiveImageMetadata(compressedFileResult.file)
-
-        val thumbnailResult = compressedFileResult.file.inputStream().use { generateImageThumbnail(it) }
-        val processingResult = compressedFileResult.toImageInfo(MimeTypes.Jpeg, thumbnailResult.file.path, thumbnailResult.info)
-        return MediaUploadInfo.Image(compressedFileResult.file, processingResult, thumbnailResult)
     }
 
     private suspend fun processVideo(uri: Uri, mimeType: String?, shouldBeCompressed: Boolean): MediaUploadInfo {
