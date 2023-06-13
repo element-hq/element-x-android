@@ -24,7 +24,6 @@
   <string name="action_enable">"Povolit"</string>
   <string name="action_forgot_password">"Zapomněli jste heslo?"</string>
   <string name="action_invite">"Pozvat"</string>
-  <string name="action_invite_friends">"Pozvat přátele"</string>
   <string name="action_invite_friends_to_app">"Pozvat přátele do %1$s"</string>
   <string name="action_invites_list">"Pozvánky"</string>
   <string name="action_learn_more">"Zjistit více"</string>

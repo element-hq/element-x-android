@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_room_action_create_room">"Neuer Raum"</string>
-  <string name="screen_create_room_action_invite_people">"Freunde zu Element einladen"</string>
   <string name="screen_create_room_add_people_title">"Personen einladen"</string>
   <string name="screen_create_room_error_creating_room">"Beim Erstellen des Raums ist ein Fehler aufgetreten"</string>
   <string name="screen_create_room_private_option_description">"Die Nachrichten in diesem Raum sind verschlüsselt. Die Verschlüsselung kann nicht nachträglich deaktiviert werden."</string>

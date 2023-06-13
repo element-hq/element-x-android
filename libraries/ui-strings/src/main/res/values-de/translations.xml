@@ -24,7 +24,6 @@
   <string name="action_enable">"Aktivieren"</string>
   <string name="action_forgot_password">"Passwort vergessen?"</string>
   <string name="action_invite">"Einladen"</string>
-  <string name="action_invite_friends">"Freunde einladen"</string>
   <string name="action_invite_friends_to_app">"Freunde zu %1$s einladen"</string>
   <string name="action_invites_list">"Einladungen"</string>
   <string name="action_learn_more">"Mehr erfahren"</string>
