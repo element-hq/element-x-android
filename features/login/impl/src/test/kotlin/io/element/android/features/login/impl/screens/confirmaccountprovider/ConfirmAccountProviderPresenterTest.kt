@@ -26,7 +26,7 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.test.A_HOMESERVER
 import io.element.android.libraries.matrix.test.A_HOMESERVER_OIDC
 import io.element.android.libraries.matrix.test.A_THROWABLE
-import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
+import io.element.android.libraries.matrix.test.auth.aFakeAuthenticationService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -36,7 +36,7 @@ class ConfirmAccountProviderPresenterTest {
         val presenter = ConfirmAccountProviderPresenter(
             ConfirmAccountProviderPresenter.Params(isAccountCreation = false),
             AccountProviderDataSource(),
-            FakeAuthenticationService(),
+            aFakeAuthenticationService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -51,7 +51,7 @@ class ConfirmAccountProviderPresenterTest {
 
     @Test
     fun `present - continue password login`() = runTest {
-        val authServer = FakeAuthenticationService()
+        val authServer = aFakeAuthenticationService()
         val presenter = ConfirmAccountProviderPresenter(
             ConfirmAccountProviderPresenter.Params(isAccountCreation = false),
             AccountProviderDataSource(),
@@ -75,7 +75,7 @@ class ConfirmAccountProviderPresenterTest {
 
     @Test
     fun `present - continue oidc`() = runTest {
-        val authServer = FakeAuthenticationService()
+        val authServer = aFakeAuthenticationService()
         val presenter = ConfirmAccountProviderPresenter(
             ConfirmAccountProviderPresenter.Params(isAccountCreation = false),
             AccountProviderDataSource(),
@@ -99,7 +99,7 @@ class ConfirmAccountProviderPresenterTest {
 
     @Test
     fun `present - submit fails`() = runTest {
-        val authServer = FakeAuthenticationService()
+        val authServer = aFakeAuthenticationService()
         val presenter = ConfirmAccountProviderPresenter(
             ConfirmAccountProviderPresenter.Params(isAccountCreation = false),
             AccountProviderDataSource(),
@@ -120,7 +120,7 @@ class ConfirmAccountProviderPresenterTest {
 
     @Test
     fun `present - clear error`() = runTest {
-        val authenticationService = FakeAuthenticationService()
+        val authenticationService = aFakeAuthenticationService()
         val presenter = ConfirmAccountProviderPresenter(
             ConfirmAccountProviderPresenter.Params(isAccountCreation = false),
             AccountProviderDataSource(),

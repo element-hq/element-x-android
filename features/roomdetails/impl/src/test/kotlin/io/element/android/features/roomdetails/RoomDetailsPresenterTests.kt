@@ -36,7 +36,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.aFakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aFakeMatrixRoom
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -250,7 +250,7 @@ class RoomDetailsPresenterTests {
     }
 }
 
-fun aMatrixRoom(
+fun TestScope.aMatrixRoom(
     roomId: RoomId = A_ROOM_ID,
     name: String? = A_ROOM_NAME,
     displayName: String = "A fallback display name",
@@ -259,7 +259,7 @@ fun aMatrixRoom(
     isEncrypted: Boolean = true,
     isPublic: Boolean = true,
     isDirect: Boolean = false,
-) = FakeMatrixRoom(
+) = aFakeMatrixRoom(
     roomId = roomId,
     name = name,
     displayName = displayName,

@@ -31,7 +31,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aFakeMatrixRoom
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.usersearch.api.UserSearchResult
@@ -48,7 +48,7 @@ internal class RoomInviteMembersPresenterTest {
     fun `present - initial state has no results and no search`() = runTest {
         val presenter = RoomInviteMembersPresenter(
             userRepository = FakeUserRepository(),
-            roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
+            roomMemberListDataSource = createDataSource(aFakeMatrixRoom()),
             coroutineDispatchers = testCoroutineDispatchers()
         )
 
@@ -70,7 +70,7 @@ internal class RoomInviteMembersPresenterTest {
     fun `present - updates search active state`() = runTest {
         val presenter = RoomInviteMembersPresenter(
             userRepository = FakeUserRepository(),
-            roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
+            roomMemberListDataSource = createDataSource(aFakeMatrixRoom()),
             coroutineDispatchers = testCoroutineDispatchers()
         )
 
@@ -92,7 +92,7 @@ internal class RoomInviteMembersPresenterTest {
         val repository = FakeUserRepository()
         val presenter = RoomInviteMembersPresenter(
             userRepository = repository,
-            roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
+            roomMemberListDataSource = createDataSource(aFakeMatrixRoom()),
             coroutineDispatchers = testCoroutineDispatchers()
         )
 
@@ -119,7 +119,7 @@ internal class RoomInviteMembersPresenterTest {
         val repository = FakeUserRepository()
         val presenter = RoomInviteMembersPresenter(
             userRepository = repository,
-            roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
+            roomMemberListDataSource = createDataSource(aFakeMatrixRoom()),
             coroutineDispatchers = testCoroutineDispatchers()
         )
 
@@ -159,7 +159,7 @@ internal class RoomInviteMembersPresenterTest {
         val repository = FakeUserRepository()
         val presenter = RoomInviteMembersPresenter(
             userRepository = repository,
-            roomMemberListDataSource = createDataSource(FakeMatrixRoom().apply {
+            roomMemberListDataSource = createDataSource(aFakeMatrixRoom().apply {
                 givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(
                     aRoomMember(userId = joinedUser.userId, membership = RoomMembershipState.JOIN),
                     aRoomMember(userId = invitedUser.userId, membership = RoomMembershipState.INVITE),
@@ -214,7 +214,7 @@ internal class RoomInviteMembersPresenterTest {
         val repository = FakeUserRepository()
         val presenter = RoomInviteMembersPresenter(
             userRepository = repository,
-            roomMemberListDataSource = createDataSource(FakeMatrixRoom().apply {
+            roomMemberListDataSource = createDataSource(aFakeMatrixRoom().apply {
                 givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(
                     aRoomMember(userId = joinedUser.userId, membership = RoomMembershipState.JOIN),
                     aRoomMember(userId = invitedUser.userId, membership = RoomMembershipState.INVITE),
@@ -286,7 +286,7 @@ internal class RoomInviteMembersPresenterTest {
         val repository = FakeUserRepository()
         val presenter = RoomInviteMembersPresenter(
             userRepository = repository,
-            roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
+            roomMemberListDataSource = createDataSource(aFakeMatrixRoom()),
             coroutineDispatchers = testCoroutineDispatchers()
         )
 
@@ -329,7 +329,7 @@ internal class RoomInviteMembersPresenterTest {
         val repository = FakeUserRepository()
         val presenter = RoomInviteMembersPresenter(
             userRepository = repository,
-            roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
+            roomMemberListDataSource = createDataSource(aFakeMatrixRoom()),
             coroutineDispatchers = testCoroutineDispatchers()
         )
 

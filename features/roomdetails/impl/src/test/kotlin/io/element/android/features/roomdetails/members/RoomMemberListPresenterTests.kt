@@ -20,7 +20,6 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
-import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.impl.members.RoomMemberListDataSource
 import io.element.android.features.roomdetails.impl.members.RoomMemberListEvents
 import io.element.android.features.roomdetails.impl.members.RoomMemberListPresenter
@@ -32,7 +31,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aFakeMatrixRoom
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -119,7 +118,7 @@ class RoomMemberListPresenterTests {
     @Test
     fun `present - asynchronously sets canInvite when user has correct power level`() = runTest {
         val presenter = createPresenter(
-            matrixRoom = FakeMatrixRoom().apply {
+            matrixRoom = aFakeMatrixRoom().apply {
                 givenCanInviteResult(Result.success(true))
             }
         )
@@ -135,7 +134,7 @@ class RoomMemberListPresenterTests {
     @Test
     fun `present - asynchronously sets canInvite when user does not have correct power level`() = runTest {
         val presenter = createPresenter(
-            matrixRoom = FakeMatrixRoom().apply {
+            matrixRoom = aFakeMatrixRoom().apply {
                 givenCanInviteResult(Result.success(false))
             }
         )
@@ -151,7 +150,7 @@ class RoomMemberListPresenterTests {
     @Test
     fun `present - asynchronously sets canInvite when power level check fails`() = runTest {
         val presenter = createPresenter(
-            matrixRoom = FakeMatrixRoom().apply {
+            matrixRoom = aFakeMatrixRoom().apply {
                 givenCanInviteResult(Result.failure(Throwable("Eek")))
             }
         )
@@ -167,7 +166,7 @@ class RoomMemberListPresenterTests {
 
 @ExperimentalCoroutinesApi
 private fun TestScope.createDataSource(
-    matrixRoom: MatrixRoom = aMatrixRoom().apply {
+    matrixRoom: MatrixRoom = aFakeMatrixRoom().apply {
         givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
     },
     coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers()
@@ -175,7 +174,7 @@ private fun TestScope.createDataSource(
 
 @ExperimentalCoroutinesApi
 private fun TestScope.createPresenter(
-    matrixRoom: MatrixRoom = FakeMatrixRoom(),
+    matrixRoom: MatrixRoom = aFakeMatrixRoom(),
     roomMemberListDataSource: RoomMemberListDataSource = createDataSource(),
     coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers()
 ) = RoomMemberListPresenter(matrixRoom, roomMemberListDataSource, coroutineDispatchers)

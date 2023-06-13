@@ -16,22 +16,32 @@
 
 package io.element.android.libraries.matrix.test.auth
 
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_USER_ID
-import io.element.android.libraries.matrix.test.FAKE_DELAY_IN_MS
-import kotlinx.coroutines.delay
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.withContext
 
 val A_OIDC_DATA = OidcDetails(url = "a-url")
 
-class FakeAuthenticationService : MatrixAuthenticationService {
+fun TestScope.aFakeAuthenticationService(
+    coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
+): FakeAuthenticationService {
+    return FakeAuthenticationService(coroutineDispatchers)
+}
+
+class FakeAuthenticationService constructor(
+    private val coroutineDispatchers: CoroutineDispatchers,
+) : MatrixAuthenticationService {
     private var homeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
     private var oidcError: Throwable? = null
     private var oidcCancelError: Throwable? = null
@@ -58,14 +68,12 @@ class FakeAuthenticationService : MatrixAuthenticationService {
         this.homeserver.value = homeserver
     }
 
-    override suspend fun setHomeserver(homeserver: String): Result<Unit> {
-        delay(FAKE_DELAY_IN_MS)
-        return changeServerError?.let { Result.failure(it) } ?: Result.success(Unit)
+    override suspend fun setHomeserver(homeserver: String): Result<Unit> = withContext(coroutineDispatchers.io) {
+        changeServerError?.let { Result.failure(it) } ?: Result.success(Unit)
     }
 
-    override suspend fun login(username: String, password: String): Result<SessionId> {
-        delay(FAKE_DELAY_IN_MS)
-        return loginError?.let { Result.failure(it) } ?: Result.success(A_USER_ID)
+    override suspend fun login(username: String, password: String): Result<SessionId> = withContext(coroutineDispatchers.io) {
+        loginError?.let { Result.failure(it) } ?: Result.success(A_USER_ID)
     }
 
     override suspend fun getOidcUrl(): Result<OidcDetails> {
@@ -76,9 +84,8 @@ class FakeAuthenticationService : MatrixAuthenticationService {
         return oidcCancelError?.let { Result.failure(it) } ?: Result.success(Unit)
     }
 
-    override suspend fun loginWithOidc(callbackUrl: String): Result<SessionId> {
-        delay(FAKE_DELAY_IN_MS)
-        return loginError?.let { Result.failure(it) } ?: Result.success(A_USER_ID)
+    override suspend fun loginWithOidc(callbackUrl: String): Result<SessionId> = withContext(coroutineDispatchers.io)  {
+        loginError?.let { Result.failure(it) } ?: Result.success(A_USER_ID)
     }
 
     fun givenOidcError(throwable: Throwable?) {

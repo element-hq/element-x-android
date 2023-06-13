@@ -35,8 +35,8 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.aFakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
+import io.element.android.libraries.matrix.test.room.aFakeMatrixRoom
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -198,7 +198,7 @@ class InviteListPresenterTests {
         val client = aFakeMatrixClient(
             invitesDataSource = invitesDataSource,
         )
-        val room = FakeMatrixRoom()
+        val room = aFakeMatrixRoom()
         val presenter = InviteListPresenter(client, FakeSeenInvitesStore())
         client.givenGetRoomResult(A_ROOM_ID, room)
 
@@ -224,7 +224,7 @@ class InviteListPresenterTests {
         val client = aFakeMatrixClient(
             invitesDataSource = invitesDataSource,
         )
-        val room = FakeMatrixRoom()
+        val room = aFakeMatrixRoom()
         val presenter = InviteListPresenter(client, FakeSeenInvitesStore())
         val ex = Throwable("Ruh roh!")
         room.givenRejectInviteResult(Result.failure(ex))
@@ -255,7 +255,7 @@ class InviteListPresenterTests {
         val client = aFakeMatrixClient(
             invitesDataSource = invitesDataSource,
         )
-        val room = FakeMatrixRoom()
+        val room = aFakeMatrixRoom()
         val presenter = InviteListPresenter(client, FakeSeenInvitesStore())
         val ex = Throwable("Ruh roh!")
         room.givenRejectInviteResult(Result.failure(ex))
@@ -287,7 +287,7 @@ class InviteListPresenterTests {
         val client = aFakeMatrixClient(
             invitesDataSource = invitesDataSource,
         )
-        val room = FakeMatrixRoom()
+        val room = aFakeMatrixRoom()
         val presenter = InviteListPresenter(client, FakeSeenInvitesStore())
         client.givenGetRoomResult(A_ROOM_ID, room)
 
@@ -310,7 +310,7 @@ class InviteListPresenterTests {
         val client = aFakeMatrixClient(
             invitesDataSource = invitesDataSource,
         )
-        val room = FakeMatrixRoom()
+        val room = aFakeMatrixRoom()
         val presenter = InviteListPresenter(client, FakeSeenInvitesStore())
         val ex = Throwable("Ruh roh!")
         room.givenAcceptInviteResult(Result.failure(ex))
@@ -335,7 +335,7 @@ class InviteListPresenterTests {
         val client = aFakeMatrixClient(
             invitesDataSource = invitesDataSource,
         )
-        val room = FakeMatrixRoom()
+        val room = aFakeMatrixRoom()
         val presenter = InviteListPresenter(client, FakeSeenInvitesStore())
         val ex = Throwable("Ruh roh!")
         room.givenAcceptInviteResult(Result.failure(ex))

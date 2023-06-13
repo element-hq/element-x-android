@@ -30,7 +30,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.aFakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aFakeMatrixRoom
 import io.element.android.libraries.usersearch.test.FakeUserRepository
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
@@ -102,7 +102,9 @@ class CreateRoomRootPresenterTests {
         }.test {
             val initialState = awaitItem()
             val matrixUser = MatrixUser(UserId("@name:domain"))
-            val fakeDmResult = FakeMatrixRoom(roomId = RoomId("!fakeDmResult:domain"))
+            val fakeDmResult = aFakeMatrixRoom(
+                roomId = RoomId("!fakeDmResult:domain"),
+            )
 
             fakeMatrixClient.givenFindDmResult(fakeDmResult)
 

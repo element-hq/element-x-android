@@ -45,7 +45,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aFakeMatrixRoom
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
@@ -53,7 +53,6 @@ import io.element.android.libraries.textcomposer.MessageComposerMode
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -75,7 +74,7 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle sending a reaction`() = runTest {
-        val room = FakeMatrixRoom()
+        val room = aFakeMatrixRoom()
         val presenter = createMessagePresenter(matrixRoom = room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -254,7 +253,7 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action redact`() = runTest {
-        val matrixRoom = FakeMatrixRoom()
+        val matrixRoom = aFakeMatrixRoom()
         val presenter = createMessagePresenter(matrixRoom)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -293,7 +292,7 @@ class MessagesPresenterTest {
     }
 
     private fun TestScope.createMessagePresenter(
-        matrixRoom: MatrixRoom = FakeMatrixRoom()
+        matrixRoom: MatrixRoom = aFakeMatrixRoom()
     ): MessagesPresenter {
         val messageComposerPresenter = MessageComposerPresenter(
             appCoroutineScope = this,

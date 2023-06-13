@@ -19,7 +19,6 @@
 package io.element.android.features.messages.attachments
 
 import android.net.Uri
-import androidx.media3.common.MimeTypes
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
@@ -31,13 +30,13 @@ import io.element.android.features.messages.impl.attachments.preview.Attachments
 import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.test.FAKE_DELAY_IN_MS
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aFakeMatrixRoom
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -48,7 +47,7 @@ class AttachmentsPreviewPresenterTest {
 
     @Test
     fun `present - send media success scenario`() = runTest {
-        val room = FakeMatrixRoom()
+        val room = aFakeMatrixRoom()
         val presenter = anAttachmentsPreviewPresenter(room = room)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -58,7 +57,6 @@ class AttachmentsPreviewPresenterTest {
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             val loadingState = awaitItem()
             assertThat(loadingState.sendActionState).isEqualTo(Async.Loading<Unit>())
-            testScheduler.advanceTimeBy(FAKE_DELAY_IN_MS)
             val successState = awaitItem()
             assertThat(successState.sendActionState).isEqualTo(Async.Success(Unit))
             assertThat(room.sendMediaCount).isEqualTo(1)
@@ -67,7 +65,7 @@ class AttachmentsPreviewPresenterTest {
 
     @Test
     fun `present - send media failure scenario`() = runTest {
-        val room = FakeMatrixRoom()
+        val room = aFakeMatrixRoom()
         val failure = MediaPreProcessor.Failure(null)
         room.givenSendMediaResult(Result.failure(failure))
         val presenter = anAttachmentsPreviewPresenter(room = room)
@@ -79,7 +77,6 @@ class AttachmentsPreviewPresenterTest {
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             val loadingState = awaitItem()
             assertThat(loadingState.sendActionState).isEqualTo(Async.Loading<Unit>())
-            testScheduler.advanceTimeBy(FAKE_DELAY_IN_MS)
             val failureState = awaitItem()
             assertThat(failureState.sendActionState).isEqualTo(Async.Failure<Unit>(failure))
             assertThat(room.sendMediaCount).isEqualTo(0)
@@ -89,11 +86,11 @@ class AttachmentsPreviewPresenterTest {
         }
     }
 
-    private fun anAttachmentsPreviewPresenter(
+    private fun TestScope.anAttachmentsPreviewPresenter(
         localMedia: LocalMedia = aLocalMedia(
             uri = mockMediaUrl,
         ),
-        room: MatrixRoom = FakeMatrixRoom()
+        room: MatrixRoom = aFakeMatrixRoom()
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
             attachment = Attachment.Media(localMedia, compressIfPossible = false),

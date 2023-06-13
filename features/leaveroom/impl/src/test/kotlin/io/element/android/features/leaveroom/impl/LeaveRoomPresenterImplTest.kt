@@ -28,7 +28,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.aFakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aFakeMatrixRoom
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
@@ -56,7 +56,7 @@ class LeaveRoomPresenterImplTest {
             client = aFakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
-                    result = FakeMatrixRoom()
+                    result = aFakeMatrixRoom()
                 )
             }
         )
@@ -76,7 +76,7 @@ class LeaveRoomPresenterImplTest {
             client = aFakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
-                    result = FakeMatrixRoom(isPublic = false),
+                    result = aFakeMatrixRoom(isPublic = false),
                 )
             }
         )
@@ -96,7 +96,7 @@ class LeaveRoomPresenterImplTest {
             client = aFakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
-                    result = FakeMatrixRoom(joinedMemberCount = 1),
+                    result = aFakeMatrixRoom(joinedMemberCount = 1),
                 )
             }
         )
@@ -117,7 +117,7 @@ class LeaveRoomPresenterImplTest {
             client = aFakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
-                    result = FakeMatrixRoom(),
+                    result = aFakeMatrixRoom(),
                 )
             },
             roomMembershipObserver = roomMembershipObserver
@@ -139,7 +139,7 @@ class LeaveRoomPresenterImplTest {
             client = aFakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
-                    result = FakeMatrixRoom().apply {
+                    result = aFakeMatrixRoom().apply {
                         givenLeaveRoomError(RuntimeException("Blimey!"))
                     },
                 )
@@ -163,7 +163,7 @@ class LeaveRoomPresenterImplTest {
             client = aFakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
-                    result = FakeMatrixRoom(),
+                    result = aFakeMatrixRoom(),
                 )
             }
         )
@@ -185,7 +185,7 @@ class LeaveRoomPresenterImplTest {
             client = aFakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
-                    result = FakeMatrixRoom().apply {
+                    result = aFakeMatrixRoom().apply {
                         givenLeaveRoomError(RuntimeException("Blimey!"))
                     },
                 )

@@ -25,7 +25,7 @@ import io.element.android.features.login.impl.accountprovider.AccountProviderDat
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.test.A_HOMESERVER
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
-import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
+import io.element.android.libraries.matrix.test.auth.aFakeAuthenticationService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -33,7 +33,7 @@ class ChangeServerPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = ChangeServerPresenter(
-            FakeAuthenticationService(),
+            aFakeAuthenticationService(),
             AccountProviderDataSource()
         )
         moleculeFlow(RecompositionClock.Immediate) {
@@ -46,7 +46,7 @@ class ChangeServerPresenterTest {
 
     @Test
     fun `present - change server ok`() = runTest {
-        val authenticationService = FakeAuthenticationService()
+        val authenticationService = aFakeAuthenticationService()
         val presenter = ChangeServerPresenter(
             authenticationService,
             AccountProviderDataSource()
@@ -67,7 +67,7 @@ class ChangeServerPresenterTest {
 
     @Test
     fun `present - change server error`() = runTest {
-        val authenticationService = FakeAuthenticationService()
+        val authenticationService = aFakeAuthenticationService()
         val presenter = ChangeServerPresenter(
             authenticationService,
             AccountProviderDataSource()

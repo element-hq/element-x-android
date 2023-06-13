@@ -85,7 +85,7 @@ class FakeMatrixClient (
     private var createRoomResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmFailure: Throwable? = null
-    private var findDmResult: MatrixRoom? = FakeMatrixRoom()
+    private var findDmResult: MatrixRoom? = FakeMatrixRoom(coroutineDispatchers = coroutineDispatchers)
     private var logoutFailure: Throwable? = null
     private val getRoomResults = mutableMapOf<RoomId, MatrixRoom>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()

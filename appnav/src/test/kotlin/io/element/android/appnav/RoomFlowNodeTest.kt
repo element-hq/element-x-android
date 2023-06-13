@@ -30,8 +30,9 @@ import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.libraries.architecture.childNode
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aFakeMatrixRoom
 import io.element.android.services.appnavstate.test.NoopAppNavigationStateService
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
@@ -86,9 +87,9 @@ class RoomFlowNodeTest {
     )
 
     @Test
-    fun `given a room flow node when initialized then it loads messages entry point`() {
+    fun `given a room flow node when initialized then it loads messages entry point`() = runTest {
         // GIVEN
-        val room = FakeMatrixRoom()
+        val room = aFakeMatrixRoom()
         val fakeMessagesEntryPoint = FakeMessagesEntryPoint()
         val inputs = RoomFlowNode.Inputs(room)
         val roomFlowNode = aRoomFlowNode(listOf(inputs), fakeMessagesEntryPoint)
@@ -103,9 +104,9 @@ class RoomFlowNodeTest {
     }
 
     @Test
-    fun `given a room flow node when callback on room details is triggered then it loads room details entry point`() {
+    fun `given a room flow node when callback on room details is triggered then it loads room details entry point`() = runTest {
         // GIVEN
-        val room = FakeMatrixRoom()
+        val room = aFakeMatrixRoom()
         val fakeMessagesEntryPoint = FakeMessagesEntryPoint()
         val fakeRoomDetailsEntryPoint = FakeRoomDetailsEntryPoint()
         val inputs = RoomFlowNode.Inputs(room)

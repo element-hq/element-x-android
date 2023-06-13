@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.test.room
 
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -30,15 +31,52 @@ import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.matrix.test.FAKE_DELAY_IN_MS
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
-import kotlinx.coroutines.delay
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.withContext
 import java.io.File
 
-class FakeMatrixRoom(
+fun TestScope.aFakeMatrixRoom(
+    sessionId: SessionId = A_SESSION_ID,
+    roomId: RoomId = A_ROOM_ID,
+    name: String? = null,
+    bestName: String = "",
+    displayName: String = "",
+    topic: String? = null,
+    avatarUrl: String? = null,
+    isEncrypted: Boolean = false,
+    alias: String? = null,
+    alternativeAliases: List<String> = emptyList(),
+    isPublic: Boolean = true,
+    isDirect: Boolean = false,
+    joinedMemberCount: Long = 123L,
+    matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
+    coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers()
+): FakeMatrixRoom {
+    return FakeMatrixRoom(
+        sessionId = sessionId,
+        roomId = roomId,
+        name = name,
+        bestName = bestName,
+        displayName = displayName,
+        topic = topic,
+        avatarUrl = avatarUrl,
+        isEncrypted = isEncrypted,
+        alias = alias,
+        alternativeAliases = alternativeAliases,
+        isPublic = isPublic,
+        isDirect = isDirect,
+        joinedMemberCount = joinedMemberCount,
+        matrixTimeline = matrixTimeline,
+        coroutineDispatchers = coroutineDispatchers,
+    )
+}
+
+class FakeMatrixRoom constructor(
     override val sessionId: SessionId = A_SESSION_ID,
     override val roomId: RoomId = A_ROOM_ID,
     override val name: String? = null,
@@ -53,6 +91,7 @@ class FakeMatrixRoom(
     override val isDirect: Boolean = false,
     override val joinedMemberCount: Long = 123L,
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) : MatrixRoom {
 
     private var ignoreResult: Result<Unit> = Result.success(Unit)
@@ -123,9 +162,8 @@ class FakeMatrixRoom(
         return userAvatarUrlResult
     }
 
-    override suspend fun sendMessage(message: String): Result<Unit> {
-        delay(FAKE_DELAY_IN_MS)
-        return Result.success(Unit)
+    override suspend fun sendMessage(message: String): Result<Unit> = withContext(coroutineDispatchers.io) {
+        Result.success(Unit)
     }
 
     override suspend fun sendReaction(emoji: String, eventId: EventId): Result<Unit> {
@@ -136,28 +174,25 @@ class FakeMatrixRoom(
     var editMessageParameter: String? = null
         private set
 
-    override suspend fun editMessage(originalEventId: EventId, message: String): Result<Unit> {
+    override suspend fun editMessage(originalEventId: EventId, message: String): Result<Unit> = withContext(coroutineDispatchers.io) {
         editMessageParameter = message
-        delay(FAKE_DELAY_IN_MS)
-        return Result.success(Unit)
+        Result.success(Unit)
     }
 
     var replyMessageParameter: String? = null
         private set
 
-    override suspend fun replyMessage(eventId: EventId, message: String): Result<Unit> {
+    override suspend fun replyMessage(eventId: EventId, message: String): Result<Unit> = withContext(coroutineDispatchers.io) {
         replyMessageParameter = message
-        delay(FAKE_DELAY_IN_MS)
-        return Result.success(Unit)
+        Result.success(Unit)
     }
 
     var redactEventEventIdParam: EventId? = null
         private set
 
-    override suspend fun redactEvent(eventId: EventId, reason: String?): Result<Unit> {
+    override suspend fun redactEvent(eventId: EventId, reason: String?): Result<Unit> = withContext(coroutineDispatchers.io) {
         redactEventEventIdParam = eventId
-        delay(FAKE_DELAY_IN_MS)
-        return Result.success(Unit)
+        Result.success(Unit)
     }
 
     override suspend fun leave(): Result<Unit> = leaveRoomError?.let { Result.failure(it) } ?: Result.success(Unit)
@@ -192,9 +227,8 @@ class FakeMatrixRoom(
 
     override suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit> = fakeSendMedia()
 
-    private suspend fun fakeSendMedia(): Result<Unit> {
-        delay(FAKE_DELAY_IN_MS)
-        return sendMediaResult.onSuccess {
+    private suspend fun fakeSendMedia(): Result<Unit> = withContext(coroutineDispatchers.io) {
+        sendMediaResult.onSuccess {
             sendMediaCount++
         }
     }

@@ -54,8 +54,6 @@ const val AN_AVATAR_URL = "mxc://data"
 
 const val A_FAILURE_REASON = "There has been a failure"
 
-const val FAKE_DELAY_IN_MS = 100L
-
 val A_THROWABLE = Throwable(A_FAILURE_REASON)
 val AN_EXCEPTION = Exception(A_FAILURE_REASON)
 
