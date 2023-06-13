@@ -32,7 +32,6 @@ import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
-import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.aFakeMatrixClient
@@ -48,7 +47,6 @@ class InviteListPresenterTests {
         val invitesDataSource = FakeRoomSummaryDataSource()
         val presenter = InviteListPresenter(
             aFakeMatrixClient(
-                sessionId = A_SESSION_ID,
                 invitesDataSource = invitesDataSource,
             ),
             FakeSeenInvitesStore(),
@@ -73,7 +71,6 @@ class InviteListPresenterTests {
         val invitesDataSource = FakeRoomSummaryDataSource().withDirectChatInvitation()
         val presenter = InviteListPresenter(
             aFakeMatrixClient(
-                sessionId = A_SESSION_ID,
                 invitesDataSource = invitesDataSource,
             ),
             FakeSeenInvitesStore(),
@@ -100,10 +97,8 @@ class InviteListPresenterTests {
     @Test
     fun `present - includes sender details for room invites`() = runTest {
         val invitesDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
-
         val presenter = InviteListPresenter(
             aFakeMatrixClient(
-                sessionId = A_SESSION_ID,
                 invitesDataSource = invitesDataSource,
             ),
             FakeSeenInvitesStore(),
@@ -128,10 +123,8 @@ class InviteListPresenterTests {
     @Test
     fun `present - shows confirm dialog for declining direct chat invites`() = runTest {
         val invitesDataSource = FakeRoomSummaryDataSource().withDirectChatInvitation()
-
         val presenter = InviteListPresenter(
             aFakeMatrixClient(
-                sessionId = A_SESSION_ID,
                 invitesDataSource = invitesDataSource,
             ),
             FakeSeenInvitesStore(),
@@ -154,10 +147,8 @@ class InviteListPresenterTests {
     @Test
     fun `present - shows confirm dialog for declining room invites`() = runTest {
         val invitesDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
-
         val presenter = InviteListPresenter(
             aFakeMatrixClient(
-                sessionId = A_SESSION_ID,
                 invitesDataSource = invitesDataSource,
             ),
             FakeSeenInvitesStore(),
@@ -180,10 +171,8 @@ class InviteListPresenterTests {
     @Test
     fun `present - hides confirm dialog when cancelling`() = runTest {
         val invitesDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
-
         val presenter = InviteListPresenter(
             aFakeMatrixClient(
-                sessionId = A_SESSION_ID,
                 invitesDataSource = invitesDataSource,
             ),
             FakeSeenInvitesStore(),
@@ -207,7 +196,6 @@ class InviteListPresenterTests {
     fun `present - declines invite after confirming`() = runTest {
         val invitesDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
         val client = aFakeMatrixClient(
-            sessionId = A_SESSION_ID,
             invitesDataSource = invitesDataSource,
         )
         val room = FakeMatrixRoom()
@@ -234,7 +222,6 @@ class InviteListPresenterTests {
     fun `present - declines invite after confirming and sets state on error`() = runTest {
         val invitesDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
         val client = aFakeMatrixClient(
-            sessionId = A_SESSION_ID,
             invitesDataSource = invitesDataSource,
         )
         val room = FakeMatrixRoom()
@@ -266,7 +253,6 @@ class InviteListPresenterTests {
     fun `present - dismisses declining error state`() = runTest {
         val invitesDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
         val client = aFakeMatrixClient(
-            sessionId = A_SESSION_ID,
             invitesDataSource = invitesDataSource,
         )
         val room = FakeMatrixRoom()
@@ -299,7 +285,6 @@ class InviteListPresenterTests {
     fun `present - accepts invites and sets state on success`() = runTest {
         val invitesDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
         val client = aFakeMatrixClient(
-            sessionId = A_SESSION_ID,
             invitesDataSource = invitesDataSource,
         )
         val room = FakeMatrixRoom()
@@ -323,7 +308,6 @@ class InviteListPresenterTests {
     fun `present - accepts invites and sets state on error`() = runTest {
         val invitesDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
         val client = aFakeMatrixClient(
-            sessionId = A_SESSION_ID,
             invitesDataSource = invitesDataSource,
         )
         val room = FakeMatrixRoom()
@@ -349,7 +333,6 @@ class InviteListPresenterTests {
     fun `present - dismisses accepting error state`() = runTest {
         val invitesDataSource = FakeRoomSummaryDataSource().withRoomInvitation()
         val client = aFakeMatrixClient(
-            sessionId = A_SESSION_ID,
             invitesDataSource = invitesDataSource,
         )
         val room = FakeMatrixRoom()
@@ -379,7 +362,6 @@ class InviteListPresenterTests {
         val store = FakeSeenInvitesStore()
         val presenter = InviteListPresenter(
             aFakeMatrixClient(
-                sessionId = A_SESSION_ID,
                 invitesDataSource = invitesDataSource,
             ),
             store,
@@ -416,7 +398,6 @@ class InviteListPresenterTests {
         store.publishRoomIds(setOf(A_ROOM_ID))
         val presenter = InviteListPresenter(
             aFakeMatrixClient(
-                sessionId = A_SESSION_ID,
                 invitesDataSource = invitesDataSource,
             ),
             store,
