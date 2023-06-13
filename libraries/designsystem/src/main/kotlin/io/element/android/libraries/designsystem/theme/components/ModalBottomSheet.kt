@@ -89,7 +89,6 @@ private fun ContentToPreview() {
             sheetState = SheetState(
                 skipPartiallyExpanded = true,
                 initialValue = SheetValue.Expanded,
-                skipHiddenState = true,
             ),
         ) {
             Text(

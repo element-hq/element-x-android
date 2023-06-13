@@ -55,5 +55,7 @@ private fun ContentToPreview() {
     Column {
         RadioButton(selected = false, onClick = {})
         RadioButton(selected = true, onClick = {})
+        RadioButton(selected = false, enabled = false, onClick = {})
+        RadioButton(selected = true, enabled = false, onClick = {})
     }
 }

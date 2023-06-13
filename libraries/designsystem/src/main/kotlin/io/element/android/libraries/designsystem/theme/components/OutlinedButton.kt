@@ -18,6 +18,7 @@ package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
@@ -79,7 +80,7 @@ internal fun OutlinedButtonsPreview() = ElementThemedPreview { ContentToPreview(
 
 @Composable
 private fun ContentToPreview() {
-    Column {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         OutlinedButton(onClick = {}, enabled = true) {
             Text(text = "Click me! - Enabled")
         }
