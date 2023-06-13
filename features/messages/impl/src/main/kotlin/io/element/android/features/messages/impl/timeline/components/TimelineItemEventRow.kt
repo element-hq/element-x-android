@@ -243,7 +243,7 @@ private fun MessageEventBubbleContent(
     ) {
         EqualWidthColumn(modifier = modifier, spacing = 8.dp) {
             if (inReplyToDetails != null) {
-                val senderName = event.senderDisplayName ?: event.senderId.value
+                val senderName = inReplyToDetails.senderDisplayName ?: inReplyToDetails.senderId.value
                 val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyToDetails)
                 ReplyToContent(
                     senderName = senderName,
