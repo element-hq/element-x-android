@@ -17,9 +17,16 @@
 package io.element.android.libraries.matrix.api.notificationsettings
 
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
+import kotlinx.coroutines.flow.StateFlow
 
 interface NotificationSettingsService {
+    /**
+     * State of the current room notification settings flow ([MatrixRoomNotificationSettingsState.Unknown] if not started).
+     */
+    val roomNotificationSettingsStateFlow : StateFlow<MatrixRoomNotificationSettingsState>
+
     suspend fun getRoomNotificationMode(roomId: RoomId): Result<RoomNotificationSettings>
     suspend fun muteRoom(roomId: RoomId): Result<Unit>
     suspend fun unmuteRoom(roomId: RoomId): Result<Unit>

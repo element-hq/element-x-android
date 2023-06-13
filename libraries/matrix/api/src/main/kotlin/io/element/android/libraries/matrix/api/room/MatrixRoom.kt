@@ -59,6 +59,8 @@ interface MatrixRoom : Closeable {
      */
     suspend fun updateMembers(): Result<Unit>
 
+//    suspend fun updateRoomNotificationSettings(): Result<Unit>
+
     fun syncUpdateFlow(): Flow<Long>
 
     fun timeline(): MatrixTimeline
