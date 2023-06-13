@@ -5,5 +5,5 @@
   <string name="screen_invites_decline_direct_chat_message">"Möchten Sie den Chat mit %1$s wirklich ablehnen?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Chat ablehnen"</string>
   <string name="screen_invites_empty_list">"Keine Einladungen"</string>
-  <string name="screen_invites_invited_you">"%1$s hat dich eingeladen"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) hat dich eingeladen"</string>
 </resources>

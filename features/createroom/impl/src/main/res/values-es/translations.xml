@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_room_action_create_room">"Nueva sala"</string>
-  <string name="screen_create_room_action_invite_people">"Invitar gente"</string>
   <string name="screen_create_room_add_people_title">"Añadir personas"</string>
   <string name="screen_start_chat_error_starting_chat">"Se ha producido un error al intentar iniciar un chat"</string>
   <string name="screen_create_room_title">"Crear una sala"</string>

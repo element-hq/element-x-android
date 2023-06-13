@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_account_provider_change">"Změna poskytovatele účtu"</string>
+  <string name="screen_account_provider_continue">"Pokračovat"</string>
+  <string name="screen_account_provider_form_hint">"Adresa domovského serveru"</string>
+  <string name="screen_account_provider_form_notice">"Zadejte hledaný výraz nebo adresu domény."</string>
+  <string name="screen_account_provider_form_subtitle">"Vyhledejte společnost, komunitu nebo soukromý server."</string>
+  <string name="screen_account_provider_form_title">"Najít poskytovatele účtu"</string>
+  <string name="screen_account_provider_signin_title">"Chystáte se přihlásit do %s"</string>
+  <string name="screen_account_provider_signup_subtitle">"Zde budou uloženy vaše konverzace - podobně jako u poskytovatele e-mailových služeb uchováváte své e-maily."</string>
+  <string name="screen_account_provider_signup_title">"Chystáte se vytvořit účet na %s"</string>
+  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org je otevřená síť pro bezpečnou, decentralizovanou komunikaci."</string>
+  <string name="screen_change_account_provider_other">"Jiný"</string>
+  <string name="screen_change_account_provider_subtitle">"Použijte jiného poskytovatele účtu, například vlastní soukromý server nebo pracovní účet."</string>
+  <string name="screen_change_account_provider_title">"Změnit poskytovatele účtu"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Nepodařilo se nám připojit k tomuto domovskému serveru. Zkontrolujte prosím, zda jste správně zadali adresu URL domovského serveru. Pokud je adresa URL správná, obraťte se na správce domovského serveru, který vám poskytne další pomoc."</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Tento server v současné době nepodporuje klouzavou synchronizaci."</string>
   <string name="screen_change_server_form_header">"Adresa URL domovského serveru"</string>
@@ -13,6 +26,12 @@
   <string name="screen_login_server_header">"Kde budou vaše konverzace probíhat"</string>
   <string name="screen_login_title">"Vítejte zpět!"</string>
   <string name="screen_login_title_with_homeserver">"Přihlaste se k %1$s"</string>
+  <string name="screen_server_confirmation_change_server">"Změnit poskytovatele účtu"</string>
+  <string name="screen_server_confirmation_message_login_element_dot_io">"Soukromý server pro zaměstnance Elementu."</string>
+  <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix je otevřená síť pro bezpečnou a decentralizovanou komunikaci."</string>
+  <string name="screen_server_confirmation_message_register">"Zde budou uloženy vaše konverzace - podobně jako u poskytovatele e-mailových služeb uchováváte své e-maily."</string>
+  <string name="screen_server_confirmation_title_login">"Chystáte se přihlásit do služby %1$s"</string>
+  <string name="screen_server_confirmation_title_register">"Chystáte se vytvořit účet na %1$s"</string>
   <string name="screen_change_server_submit">"Pokračovat"</string>
   <string name="screen_change_server_title">"Vyberte svůj server"</string>
   <string name="screen_login_password_hint">"Heslo"</string>
