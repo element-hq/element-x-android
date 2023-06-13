@@ -31,7 +31,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
  * If false, use [StandardTestDispatcher] for all dispatchers.
  */
 fun TestScope.testCoroutineDispatchers(
-    useUnconfinedTestDispatcher: Boolean = true,
+    useUnconfinedTestDispatcher: Boolean = false,
 ): CoroutineDispatchers = when (useUnconfinedTestDispatcher) {
     false -> CoroutineDispatchers(
         io = StandardTestDispatcher(testScheduler),
@@ -39,7 +39,6 @@ fun TestScope.testCoroutineDispatchers(
         main = StandardTestDispatcher(testScheduler),
         diffUpdateDispatcher = StandardTestDispatcher(testScheduler),
     )
-
     true -> CoroutineDispatchers(
         io = UnconfinedTestDispatcher(testScheduler),
         computation = UnconfinedTestDispatcher(testScheduler),

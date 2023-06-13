@@ -93,9 +93,8 @@ internal class RoomInviteMembersPresenterTest {
         val presenter = RoomInviteMembersPresenter(
             userRepository = repository,
             roomMemberListDataSource = createDataSource(aFakeMatrixRoom()),
-            coroutineDispatchers = testCoroutineDispatchers()
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
-
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -120,9 +119,8 @@ internal class RoomInviteMembersPresenterTest {
         val presenter = RoomInviteMembersPresenter(
             userRepository = repository,
             roomMemberListDataSource = createDataSource(aFakeMatrixRoom()),
-            coroutineDispatchers = testCoroutineDispatchers()
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
-
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -157,17 +155,24 @@ internal class RoomInviteMembersPresenterTest {
         val invitedUser = userList[1]
 
         val repository = FakeUserRepository()
+        val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         val presenter = RoomInviteMembersPresenter(
             userRepository = repository,
-            roomMemberListDataSource = createDataSource(aFakeMatrixRoom().apply {
-                givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(
-                    aRoomMember(userId = joinedUser.userId, membership = RoomMembershipState.JOIN),
-                    aRoomMember(userId = invitedUser.userId, membership = RoomMembershipState.INVITE),
-                )))
-            }),
-            coroutineDispatchers = testCoroutineDispatchers()
+            roomMemberListDataSource = createDataSource(
+                matrixRoom = aFakeMatrixRoom(coroutineDispatchers = coroutineDispatchers).apply {
+                    givenRoomMembersState(
+                        MatrixRoomMembersState.Ready(
+                            listOf(
+                                aRoomMember(userId = joinedUser.userId, membership = RoomMembershipState.JOIN),
+                                aRoomMember(userId = invitedUser.userId, membership = RoomMembershipState.INVITE),
+                            )
+                        )
+                    )
+                },
+                coroutineDispatchers = coroutineDispatchers,
+            ),
+            coroutineDispatchers = coroutineDispatchers
         )
-
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -215,12 +220,16 @@ internal class RoomInviteMembersPresenterTest {
         val presenter = RoomInviteMembersPresenter(
             userRepository = repository,
             roomMemberListDataSource = createDataSource(aFakeMatrixRoom().apply {
-                givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(
-                    aRoomMember(userId = joinedUser.userId, membership = RoomMembershipState.JOIN),
-                    aRoomMember(userId = invitedUser.userId, membership = RoomMembershipState.INVITE),
-                )))
+                givenRoomMembersState(
+                    MatrixRoomMembersState.Ready(
+                        listOf(
+                            aRoomMember(userId = joinedUser.userId, membership = RoomMembershipState.JOIN),
+                            aRoomMember(userId = invitedUser.userId, membership = RoomMembershipState.INVITE),
+                        )
+                    )
+                )
             }),
-            coroutineDispatchers = testCoroutineDispatchers()
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
 
         moleculeFlow(RecompositionClock.Immediate) {
@@ -287,9 +296,8 @@ internal class RoomInviteMembersPresenterTest {
         val presenter = RoomInviteMembersPresenter(
             userRepository = repository,
             roomMemberListDataSource = createDataSource(aFakeMatrixRoom()),
-            coroutineDispatchers = testCoroutineDispatchers()
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
-
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -323,16 +331,14 @@ internal class RoomInviteMembersPresenterTest {
         }
     }
 
-
     @Test
     fun `present - toggling a user updates existing search results`() = runTest {
         val repository = FakeUserRepository()
         val presenter = RoomInviteMembersPresenter(
             userRepository = repository,
             roomMemberListDataSource = createDataSource(aFakeMatrixRoom()),
-            coroutineDispatchers = testCoroutineDispatchers()
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
-
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {

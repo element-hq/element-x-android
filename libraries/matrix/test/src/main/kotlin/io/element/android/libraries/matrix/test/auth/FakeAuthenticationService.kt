@@ -76,15 +76,15 @@ class FakeAuthenticationService constructor(
         loginError?.let { Result.failure(it) } ?: Result.success(A_USER_ID)
     }
 
-    override suspend fun getOidcUrl(): Result<OidcDetails> {
-        return oidcError?.let { Result.failure(it) } ?: Result.success(A_OIDC_DATA)
+    override suspend fun getOidcUrl(): Result<OidcDetails> = withContext(coroutineDispatchers.io) {
+        oidcError?.let { Result.failure(it) } ?: Result.success(A_OIDC_DATA)
     }
 
     override suspend fun cancelOidcLogin(): Result<Unit> {
         return oidcCancelError?.let { Result.failure(it) } ?: Result.success(Unit)
     }
 
-    override suspend fun loginWithOidc(callbackUrl: String): Result<SessionId> = withContext(coroutineDispatchers.io)  {
+    override suspend fun loginWithOidc(callbackUrl: String): Result<SessionId> = withContext(coroutineDispatchers.io) {
         loginError?.let { Result.failure(it) } ?: Result.success(A_USER_ID)
     }
 

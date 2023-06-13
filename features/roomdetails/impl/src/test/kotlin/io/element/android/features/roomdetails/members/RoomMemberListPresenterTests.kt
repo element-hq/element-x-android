@@ -174,7 +174,7 @@ private fun TestScope.createDataSource(
 
 @ExperimentalCoroutinesApi
 private fun TestScope.createPresenter(
-    matrixRoom: MatrixRoom = aFakeMatrixRoom(),
-    roomMemberListDataSource: RoomMemberListDataSource = createDataSource(),
-    coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers()
+    coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+    matrixRoom: MatrixRoom = aFakeMatrixRoom(coroutineDispatchers = coroutineDispatchers),
+    roomMemberListDataSource: RoomMemberListDataSource = createDataSource(coroutineDispatchers = coroutineDispatchers),
 ) = RoomMemberListPresenter(matrixRoom, roomMemberListDataSource, coroutineDispatchers)

@@ -69,7 +69,7 @@ internal class DefaultInviteStateDataSourceTest {
         val client = aFakeMatrixClient(invitesDataSource = matrixDataSource)
         val seenStore = FakeSeenInvitesStore()
         seenStore.publishRoomIds(setOf(A_ROOM_ID))
-        val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers())
+        val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers(useUnconfinedTestDispatcher = true))
 
         moleculeFlow(RecompositionClock.Immediate) {
             dataSource.inviteState()
@@ -86,7 +86,7 @@ internal class DefaultInviteStateDataSourceTest {
         val client = aFakeMatrixClient(invitesDataSource = matrixDataSource)
         val seenStore = FakeSeenInvitesStore()
         seenStore.publishRoomIds(setOf(A_ROOM_ID))
-        val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers())
+        val dataSource = DefaultInviteStateDataSource(client, seenStore, testCoroutineDispatchers(useUnconfinedTestDispatcher = true))
 
         moleculeFlow(RecompositionClock.Immediate) {
             dataSource.inviteState()
