@@ -24,12 +24,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun AsyncFailure(
@@ -43,11 +45,11 @@ fun AsyncFailure(
             .padding(vertical = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(text = throwable.message ?: "An error occurred")
+        Text(text = throwable.message ?: stringResource(id = StringR.string.error_unknown))
         if (onRetry != null) {
             Spacer(modifier = Modifier.height(24.dp))
             Button(onClick = onRetry) {
-                Text(text = "Retry")
+                Text(text = stringResource(id = StringR.string.action_retry))
             }
         }
     }

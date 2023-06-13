@@ -21,19 +21,16 @@ package io.element.android.tests.testutils
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestCoroutineScheduler
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 
 /**
  * Create a [CoroutineDispatchers] instance for testing.
  *
- * @param testScheduler The [TestCoroutineScheduler] to use. If using [runTest] use the one provided by its [TestScope].
- * If null the [TestDispatcher] logic will select one or create a new one.
  * @param useUnconfinedTestDispatcher If true, use [UnconfinedTestDispatcher] for all dispatchers.
  * If false, use [StandardTestDispatcher] for all dispatchers.
  */
-fun testCoroutineDispatchers(
-    testScheduler: TestCoroutineScheduler? = null,
+fun TestScope.testCoroutineDispatchers(
     useUnconfinedTestDispatcher: Boolean = true,
 ): CoroutineDispatchers = when (useUnconfinedTestDispatcher) {
     false -> CoroutineDispatchers(

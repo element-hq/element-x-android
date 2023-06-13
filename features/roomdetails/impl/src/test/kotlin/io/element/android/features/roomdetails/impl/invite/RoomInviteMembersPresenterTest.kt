@@ -38,6 +38,7 @@ import io.element.android.libraries.usersearch.api.UserSearchResult
 import io.element.android.libraries.usersearch.test.FakeUserRepository
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -368,7 +369,7 @@ internal class RoomInviteMembersPresenterTest {
         }
     }
 
-    private fun createDataSource(
+    private fun TestScope.createDataSource(
         matrixRoom: MatrixRoom = aMatrixRoom().apply {
             givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
         },

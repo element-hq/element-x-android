@@ -252,7 +252,7 @@ class RoomDetailsPresenterTests {
 
 fun aMatrixClient(
     sessionId: SessionId = A_SESSION_ID,
-) = FakeMatrixClient()
+) = FakeMatrixClient(sessionId = sessionId)
 
 fun aMatrixRoom(
     roomId: RoomId = A_ROOM_ID,
