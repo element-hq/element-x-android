@@ -100,26 +100,11 @@ class AndroidMediaPreProcessor @Inject constructor(
             (mimeType.isMimeTypeImage() && mimeType != MimeTypes.Gif) ||
             mimeType.isMimeTypeVideo()
 
-        val result = if (shouldBeCompressed) {
-            when {
-                mimeType.isMimeTypeImage() -> processImage(uri)
-                mimeType.isMimeTypeVideo() -> processVideo(uri, mimeType)
-                mimeType.isMimeTypeAudio() -> processAudio(uri, mimeType)
-                else -> error("Cannot compress file of type: $mimeType")
-            }
-        } else {
-            val file = copyToTmpFile(uri)
-            // Remove image metadata here too
-            if (mimeType.isMimeTypeImage() && mimeType != MimeTypes.Gif) {
-                removeSensitiveImageMetadata(file)
-            }
-            val info = FileInfo(
-                mimetype = mimeType,
-                size = file.length(),
-                thumbnailInfo = null,
-                thumbnailSource = null,
-            )
-            MediaUploadInfo.AnyFile(file, info)
+        val result = when {
+            mimeType.isMimeTypeImage() -> processImage(uri, shouldBeCompressed)
+            mimeType.isMimeTypeVideo() -> processVideo(uri, mimeType, shouldBeCompressed)
+            mimeType.isMimeTypeAudio() -> processAudio(uri, mimeType)
+            else -> processFile(uri, mimeType)
         }
         if (deleteOriginal) {
             tryOrNull {
@@ -128,6 +113,17 @@ class AndroidMediaPreProcessor @Inject constructor(
         }
         result.postProcess(uri)
     }.mapFailure { MediaPreProcessor.Failure(it) }
+
+    private suspend fun processFile(uri: Uri, mimeType: String): MediaUploadInfo {
+        val file = copyToTmpFile(uri)
+        val info = FileInfo(
+            mimetype = mimeType,
+            size = file.length(),
+            thumbnailInfo = null,
+            thumbnailSource = null,
+        )
+        return MediaUploadInfo.AnyFile(file, info)
+    }
 
     private fun MediaUploadInfo.postProcess(uri: Uri): MediaUploadInfo {
         val name = context.getFileName(uri) ?: return this
@@ -142,11 +138,17 @@ class AndroidMediaPreProcessor @Inject constructor(
         }
     }
 
-    private suspend fun processImage(uri: Uri): MediaUploadInfo {
+    private suspend fun processImage(uri: Uri, shouldBeCompressed: Boolean): MediaUploadInfo {
+        val (compressQuality, resizeMode) = if (shouldBeCompressed) {
+            Pair(80, ResizeMode.Approximate(IMAGE_SCALE_REF_SIZE, IMAGE_SCALE_REF_SIZE))
+        } else {
+            Pair(100, ResizeMode.None)
+        }
         val compressedFileResult = contentResolver.openInputStream(uri).use { input ->
             imageCompressor.compressToTmpFile(
                 inputStream = requireNotNull(input),
-                resizeMode = ResizeMode.Approximate(IMAGE_SCALE_REF_SIZE, IMAGE_SCALE_REF_SIZE),
+                resizeMode = resizeMode,
+                desiredQuality = compressQuality
             ).getOrThrow()
         }
 
@@ -157,16 +159,19 @@ class AndroidMediaPreProcessor @Inject constructor(
         return MediaUploadInfo.Image(compressedFileResult.file, processingResult, thumbnailResult)
     }
 
-    private suspend fun processVideo(uri: Uri, mimeType: String?): MediaUploadInfo {
+    private suspend fun processVideo(uri: Uri, mimeType: String?, shouldBeCompressed: Boolean): MediaUploadInfo {
         val thumbnailInfo = extractVideoThumbnail(uri)
-        val resultFile = videoCompressor.compress(uri)
-            .onEach {
-                // TODO handle progress
-            }
-            .filterIsInstance<VideoTranscodingEvent.Completed>()
-            .first()
-            .file
-
+        val resultFile = if (shouldBeCompressed) {
+            videoCompressor.compress(uri)
+                .onEach {
+                    // TODO handle progress
+                }
+                .filterIsInstance<VideoTranscodingEvent.Completed>()
+                .first()
+                .file
+        } else {
+            copyToTmpFile(uri)
+        }
         val videoProcessingInfo = extractVideoMetadata(resultFile, mimeType, thumbnailInfo.file.path, thumbnailInfo)
         return MediaUploadInfo.Video(resultFile, videoProcessingInfo, thumbnailInfo)
     }
