@@ -24,14 +24,36 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.dialogs.AlertDialogContent
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(heightDp = 1200, group = PreviewGroup.DateTimePickers)
+@Preview(group = PreviewGroup.DateTimePickers)
 @Composable
-internal fun DatePickerPreview() {
-    ElementThemedPreview {
+internal fun DatePickerPreviewLight() {
+    ElementPreviewLight {
+        AlertDialogContent(
+            buttons = { /*TODO*/ },
+            icon = { /*TODO*/ },
+            title = { /*TODO*/ },
+            text = { DatePicker(state = rememberDatePickerState(), showModeToggle = true) },
+            shape = AlertDialogDefaults.shape,
+            containerColor = AlertDialogDefaults.containerColor,
+            tonalElevation = AlertDialogDefaults.TonalElevation,
+            buttonContentColor = MaterialTheme.colorScheme.primary,
+            iconContentColor = AlertDialogDefaults.iconContentColor,
+            titleContentColor = AlertDialogDefaults.titleContentColor,
+            textContentColor = AlertDialogDefaults.textContentColor,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(group = PreviewGroup.DateTimePickers)
+@Composable
+internal fun DatePickerPreviewDark() {
+    ElementPreviewDark {
         AlertDialogContent(
             buttons = { /*TODO*/ },
             icon = { /*TODO*/ },

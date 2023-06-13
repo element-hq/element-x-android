@@ -25,6 +25,8 @@ import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.dialogs.AlertDialogContent
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
@@ -50,10 +52,31 @@ internal fun TimePickerHorizontalPreview() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(heightDp = 1200, group = PreviewGroup.DateTimePickers)
+@Preview(group = PreviewGroup.DateTimePickers)
 @Composable
-internal fun TimePickerVerticalPreview() {
-    ElementThemedPreview {
+internal fun TimePickerVerticalPreviewLight() {
+    ElementPreviewLight {
+        AlertDialogContent(
+            buttons = { /*TODO*/ },
+            icon = { /*TODO*/ },
+            title = { /*TODO*/ },
+            text = { TimePicker(state = rememberTimePickerState(), layoutType = TimePickerLayoutType.Vertical) },
+            shape = AlertDialogDefaults.shape,
+            containerColor = AlertDialogDefaults.containerColor,
+            tonalElevation = AlertDialogDefaults.TonalElevation,
+            buttonContentColor = MaterialTheme.colorScheme.primary,
+            iconContentColor = AlertDialogDefaults.iconContentColor,
+            titleContentColor = AlertDialogDefaults.titleContentColor,
+            textContentColor = AlertDialogDefaults.textContentColor,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(group = PreviewGroup.DateTimePickers)
+@Composable
+internal fun TimePickerVerticalPreviewDark() {
+    ElementPreviewDark {
         AlertDialogContent(
             buttons = { /*TODO*/ },
             icon = { /*TODO*/ },
