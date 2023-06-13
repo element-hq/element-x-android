@@ -251,6 +251,7 @@ private fun MessageEventBubbleContent(
                     attachmentThumbnailInfo = attachmentThumbnailInfo,
                     modifier = Modifier
                         .padding(top = 8.dp, start = 8.dp, end = 8.dp)
+                        .clip(RoundedCornerShape(6.dp))
                         .clickable(enabled = true, onClick = inReplyToClick),
                 )
             }
@@ -295,7 +296,6 @@ private fun ReplyToContent(
     }
     Row(
         modifier
-            .clip(RoundedCornerShape(6.dp))
             .background(MaterialTheme.colorScheme.surface)
             .padding(paddings)
     ) {
