@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.roomMembers
+import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
@@ -190,6 +191,19 @@ class RustMatrixRoom(
             _membersStateFlow.value = MatrixRoomMembersState.Error(prevRoomMembers = currentMembers, failure = it)
         }
     }
+
+//    override suspend fun updateRoomNotificationSettings(): Result<Unit> = withContext(coroutineDispatchers.io) {
+//        val currentState = _roomNotificationSettingsStateFlow.value
+//        val currentRoomNotificationSettings = currentState.roomNotificationSettings()
+//        _roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Pending(prevRoomNotificationSettings = currentRoomNotificationSettings)
+//        runCatching {
+//            innerRoom.members().map(RoomMemberMapper::map)
+//        }.map {
+//            _membersStateFlow.value = MatrixRoomMembersState.Ready(it)
+//        }.onFailure {
+//            _membersStateFlow.value = MatrixRoomMembersState.Error(prevRoomMembers = currentMembers, failure = it)
+//        }
+//    }
 
     override suspend fun userDisplayName(userId: UserId): Result<String?> =
         withContext(coroutineDispatchers.io) {

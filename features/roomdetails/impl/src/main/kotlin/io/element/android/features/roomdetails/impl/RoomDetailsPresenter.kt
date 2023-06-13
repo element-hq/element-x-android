@@ -28,6 +28,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -37,7 +38,10 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettin
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 import io.element.android.libraries.matrix.api.room.StateEventType
+import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class RoomDetailsPresenter @Inject constructor(
@@ -45,15 +49,27 @@ class RoomDetailsPresenter @Inject constructor(
     private val room: MatrixRoom,
     private val roomMembersDetailsPresenterFactory: RoomMemberDetailsPresenter.Factory,
     private val leaveRoomPresenter: LeaveRoomPresenter,
-    private val dispatchers: CoroutineDispatchers,
 ) : Presenter<RoomDetailsState> {
 
     @Composable
     override fun present(): RoomDetailsState {
         val scope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
+        val roomNotificationSettingsState by room.roomNotificationSettingsStateFlow.collectAsState()
+        val roomNotificationSettings by getRoomNotificationSettings(roomNotificationSettingsState)
         LaunchedEffect(Unit) {
             room.updateMembers()
+            room.roomNotificationSettingsStateFlow.onEach { roomNotificationSettingsState ->
+                when (roomNotificationSettingsState) {
+                    MatrixRoomNotificationSettingsState.ChangedNotificationSettings -> {
+                        client.notificationSettingsService().getRoomNotificationMode(room.roomId)
+                    }
+                    is MatrixRoomNotificationSettingsState.Error -> TODO()
+                    is MatrixRoomNotificationSettingsState.Pending -> TODO()
+                    is MatrixRoomNotificationSettingsState.Ready -> TODO()
+                    MatrixRoomNotificationSettingsState.Unknown -> TODO()
+                }
+            }.launchIn(scope)
         }
 
         val membersState by room.membersStateFlow.collectAsState()
@@ -65,10 +81,6 @@ class RoomDetailsPresenter @Inject constructor(
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
         val roomType = getRoomType(dmMember)
 
-//        scope.launch(dispatchers.io) {
-//            client.getRoomNotificationMode(room.roomId)
-//        }
-
         val topicState = remember(canEditTopic, room.topic) {
             val topic = room.topic
 
@@ -78,9 +90,6 @@ class RoomDetailsPresenter @Inject constructor(
                 else -> RoomTopicState.Hidden
             }
         }
-
-        val roomNotificationSettingsState by room.roomNotificationSettingsStateFlow.collectAsState()
-        val roomNotificationSettings by getRoomNotificationSettings(roomNotificationSettingsState)
 
         fun handleEvents(event: RoomDetailsEvent) {
             when (event) {
@@ -154,6 +163,7 @@ class RoomDetailsPresenter @Inject constructor(
             derivedStateOf {
                 when (roomNotificationSettingsState) {
                     MatrixRoomNotificationSettingsState.Unknown -> Async.Uninitialized
+                    MatrixRoomNotificationSettingsState.ChangedNotificationSettings -> TODO()
                     is MatrixRoomNotificationSettingsState.Pending -> Async.Loading(prevState = roomNotificationSettingsState.prevRoomNotificationSettings)
                     is MatrixRoomNotificationSettingsState.Error -> Async.Failure(roomNotificationSettingsState.failure, prevState = roomNotificationSettingsState.prevRoomNotificationSettings)
                     is MatrixRoomNotificationSettingsState.Ready -> Async.Success(roomNotificationSettingsState.roomNotificationSettings)

@@ -18,6 +18,7 @@ package io.element.android.features.roomdetails.impl
 
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 
