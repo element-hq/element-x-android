@@ -16,8 +16,10 @@
 
 package io.element.android.features.messages.impl.timeline.components.retrysendmenu
 
+import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 
+@Immutable
 data class RetrySendMenuState(
     val selectedEvent: TimelineItem.Event?,
     val eventSink: (RetrySendMenuEvents) -> Unit,

@@ -23,20 +23,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RetrySendMenuPresenter @Inject constructor(
     private val room: MatrixRoom,
-) {
+) : Presenter<RetrySendMenuState> {
 
     @Composable
-    fun present(): RetrySendMenuState {
+    override fun present(): RetrySendMenuState {
         val coroutineScope = rememberCoroutineScope()
         var selectedEvent: TimelineItem.Event? by remember { mutableStateOf(null) }
 
-        fun handleEvents(event: RetrySendMenuEvents) {
+        fun handleEvent(event: RetrySendMenuEvents) {
             when (event) {
                 is RetrySendMenuEvents.EventSelected -> {
                     selectedEvent = event.event
@@ -65,7 +66,7 @@ class RetrySendMenuPresenter @Inject constructor(
 
         return RetrySendMenuState(
             selectedEvent = selectedEvent,
-            eventSink = ::handleEvents,
+            eventSink = ::handleEvent,
         )
     }
 }

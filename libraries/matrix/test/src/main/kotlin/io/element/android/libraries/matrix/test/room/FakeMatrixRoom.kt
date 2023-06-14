@@ -71,11 +71,19 @@ class FakeMatrixRoom(
     private var updateAvatarResult = Result.success(Unit)
     private var removeAvatarResult = Result.success(Unit)
     private var sendReactionResult = Result.success(Unit)
+    private var retrySendMessageResult = Result.success(Unit)
+    private var cancelSendResult = Result.success(Unit)
 
     var sendMediaCount = 0
         private set
 
     var sendReactionCount = 0
+        private set
+
+    var retrySendMessageCount: Int = 0
+        private set
+
+    var cancelSendCount: Int = 0
         private set
 
     var isInviteAccepted: Boolean = false
@@ -131,6 +139,16 @@ class FakeMatrixRoom(
     override suspend fun sendReaction(emoji: String, eventId: EventId): Result<Unit> {
         sendReactionCount++
         return sendReactionResult
+    }
+
+    override suspend fun retrySendMessage(transactionId: String): Result<Unit> {
+        retrySendMessageCount++
+        return retrySendMessageResult
+    }
+
+    override suspend fun cancelSend(transactionId: String): Result<Unit> {
+        cancelSendCount++
+        return cancelSendResult
     }
 
     var editMessageParameter: String? = null
@@ -291,5 +309,13 @@ class FakeMatrixRoom(
 
     fun givenSendReactionResult(result: Result<Unit>) {
         sendReactionResult = result
+    }
+
+    fun givenRetrySendMessageResult(result: Result<Unit>) {
+        retrySendMessageResult = result
+    }
+
+    fun givenCancelSendResult(result: Result<Unit>) {
+        cancelSendResult = result
     }
 }
