@@ -37,7 +37,7 @@ val A_ROOM_ID_2 = RoomId("!aRoomId2:domain")
 val A_THREAD_ID = ThreadId("\$aThreadId")
 val AN_EVENT_ID = EventId("\$anEventId")
 val AN_EVENT_ID_2 = EventId("\$anEventId2")
-val A_TRANSACTION_ID = "aTransactionId"
+const val A_TRANSACTION_ID = "aTransactionId"
 const val A_UNIQUE_ID = "aUniqueId"
 
 const val A_ROOM_NAME = "A room name"
