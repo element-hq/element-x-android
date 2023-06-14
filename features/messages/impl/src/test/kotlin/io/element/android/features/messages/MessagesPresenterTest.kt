@@ -330,7 +330,7 @@ class MessagesPresenterTest {
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),
             messageSummaryFormatter = FakeMessageSummaryFormatter(),
-            dispatchers = testCoroutineDispatchers(testScheduler),
+            dispatchers = testCoroutineDispatchers(),
         )
     }
 }

@@ -16,55 +16,55 @@
 
 package io.element.android.libraries.designsystem.atomic.molecules
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.R
+import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
+import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.LocalColors
-import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 
+/**
+ * IconTitleSubtitleMolecule is a molecule which displays an icon, a title and a subtitle.
+ *
+ * @param title the title to display
+ * @param subTitle the subtitle to display
+ * @param modifier the modifier to apply to this layout
+ * @param iconResourceId the resource id of the icon to display, exclusive with [iconImageVector]
+ * @param iconImageVector the image vector of the icon to display, exclusive with [iconResourceId]
+ * @param iconTint the tint to apply to the icon
+ */
 @Composable
 fun IconTitleSubtitleMolecule(
-    iconResourceId: Int,
     title: String,
     subTitle: String,
     modifier: Modifier = Modifier,
+    iconResourceId: Int? = null,
+    iconImageVector: ImageVector? = null,
+    iconTint: Color = MaterialTheme.colorScheme.primary,
 ) {
     Column(modifier) {
-        Box(
+        RoundedIconAtom(
             modifier = Modifier
-                .size(width = 70.dp, height = 70.dp)
-                .align(Alignment.CenterHorizontally)
-                .background(
-                    color = LocalColors.current.quinary,
-                    shape = RoundedCornerShape(14.dp)
-                )
-        ) {
-            Icon(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(width = 48.dp, height = 48.dp),
-                tint = MaterialTheme.colorScheme.secondary,
-                resourceId = iconResourceId,
-                contentDescription = "",
-            )
-        }
+                .align(Alignment.CenterHorizontally),
+            size = RoundedIconAtomSize.Large,
+            resourceId = iconResourceId,
+            imageVector = iconImageVector,
+            tint = iconTint,
+        )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = title,
