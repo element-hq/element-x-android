@@ -251,11 +251,11 @@ private fun AttachmentStateView(
 @Composable
 fun MessagesViewContent(
     state: MessagesState,
-    modifier: Modifier = Modifier,
     onMessageClicked: (TimelineItem.Event) -> Unit,
     onUserDataClicked: (UserId) -> Unit,
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier

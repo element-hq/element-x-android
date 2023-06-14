@@ -68,11 +68,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun TimelineView(
     state: TimelineState,
-    modifier: Modifier = Modifier,
     onUserDataClicked: (UserId) -> Unit,
     onMessageClicked: (TimelineItem.Event) -> Unit,
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     fun onReachedLoadMore() {
         state.eventSink(TimelineEvents.LoadMore)
