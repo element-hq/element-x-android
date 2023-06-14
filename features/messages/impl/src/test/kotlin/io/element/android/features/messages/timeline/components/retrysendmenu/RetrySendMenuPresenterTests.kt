@@ -23,6 +23,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuEvents
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
+import io.element.android.libraries.matrix.test.A_TRANSACTION_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -66,7 +67,7 @@ class RetrySendMenuPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            val selectedEvent = aTimelineItemEvent(transactionId = "AN_ID")
+            val selectedEvent = aTimelineItemEvent(transactionId = A_TRANSACTION_ID)
             initialState.eventSink(RetrySendMenuEvents.EventSelected(selectedEvent))
             skipItems(1)
 
@@ -99,7 +100,7 @@ class RetrySendMenuPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            val selectedEvent = aTimelineItemEvent(transactionId = "AN_ID")
+            val selectedEvent = aTimelineItemEvent(transactionId = A_TRANSACTION_ID)
             initialState.eventSink(RetrySendMenuEvents.EventSelected(selectedEvent))
             skipItems(1)
 
@@ -115,7 +116,7 @@ class RetrySendMenuPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            val selectedEvent = aTimelineItemEvent(transactionId = "AN_ID")
+            val selectedEvent = aTimelineItemEvent(transactionId = A_TRANSACTION_ID)
             initialState.eventSink(RetrySendMenuEvents.EventSelected(selectedEvent))
             skipItems(1)
 
@@ -148,7 +149,7 @@ class RetrySendMenuPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            val selectedEvent = aTimelineItemEvent(transactionId = "AN_ID")
+            val selectedEvent = aTimelineItemEvent(transactionId = A_TRANSACTION_ID)
             initialState.eventSink(RetrySendMenuEvents.EventSelected(selectedEvent))
             skipItems(1)
 
