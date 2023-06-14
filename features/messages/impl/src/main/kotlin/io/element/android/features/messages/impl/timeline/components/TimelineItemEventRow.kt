@@ -84,13 +84,9 @@ fun TimelineItemEventRow(
         onUserDataClick(event.senderId)
     }
 
-    fun inReplayToClicked() {
+    fun inReplyToClicked() {
         val inReplyToEventId = (event.inReplyTo as? InReplyTo.Ready)?.eventId ?: return
         inReplyToClick(inReplyToEventId)
-    }
-
-    fun onTimestampClicked() {
-        onTimestampClicked(event)
     }
 
     val (parentAlignment, contentAlignment) = if (event.isMine) {
@@ -136,8 +132,10 @@ fun TimelineItemEventRow(
                         interactionSource = interactionSource,
                         onMessageClick = onClick,
                         onMessageLongClick = onLongClick,
-                        inReplyToClick = ::inReplayToClicked,
-                        onTimestampClicked = ::onTimestampClicked,
+                        inReplyToClick = ::inReplyToClicked,
+                        onTimestampClicked = {
+                            onTimestampClicked(event)
+                        }
                     )
                 }
                 TimelineItemReactionsView(
