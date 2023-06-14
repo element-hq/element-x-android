@@ -266,14 +266,14 @@ class RustMatrixRoom(
     }
 
     override suspend fun retrySendMessage(transactionId: String): Result<Unit> =
-        withContext(Dispatchers.IO) {
+        withContext(coroutineDispatchers.io) {
             runCatching {
                 innerRoom.retrySend(transactionId)
             }
         }
 
     override suspend fun cancelSend(transactionId: String): Result<Unit>  =
-        withContext(Dispatchers.IO) {
+        withContext(coroutineDispatchers.io) {
             runCatching {
                 innerRoom.cancelSend(transactionId)
             }
