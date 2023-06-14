@@ -213,5 +213,5 @@ private fun TestScope.createPresenter(
 ): LeaveRoomPresenter = LeaveRoomPresenterImpl(
     client = client,
     roomMembershipObserver = roomMembershipObserver,
-    dispatchers = testCoroutineDispatchers(testScheduler, false),
+    dispatchers = testCoroutineDispatchers(false),
 )

@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -165,7 +166,7 @@ class RoomMemberListPresenterTests {
 }
 
 @ExperimentalCoroutinesApi
-private fun createDataSource(
+private fun TestScope.createDataSource(
     matrixRoom: MatrixRoom = aMatrixRoom().apply {
         givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
     },
@@ -173,7 +174,7 @@ private fun createDataSource(
 ) = RoomMemberListDataSource(matrixRoom, coroutineDispatchers)
 
 @ExperimentalCoroutinesApi
-private fun createPresenter(
+private fun TestScope.createPresenter(
     matrixRoom: MatrixRoom = FakeMatrixRoom(),
     roomMemberListDataSource: RoomMemberListDataSource = createDataSource(),
     coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers()
