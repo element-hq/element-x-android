@@ -41,6 +41,7 @@ dependencies {
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
+    testImplementation(kotlin("test"))
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.tests.testutils)
 }
