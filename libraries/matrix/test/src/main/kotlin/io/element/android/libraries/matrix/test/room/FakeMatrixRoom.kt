@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.test.room
 
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -32,15 +31,13 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
-import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.withContext
 import java.io.File
 
-fun TestScope.aFakeMatrixRoom(
+fun aFakeMatrixRoom(
     sessionId: SessionId = A_SESSION_ID,
     roomId: RoomId = A_ROOM_ID,
     name: String? = null,
@@ -55,7 +52,6 @@ fun TestScope.aFakeMatrixRoom(
     isDirect: Boolean = false,
     joinedMemberCount: Long = 123L,
     matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
-    coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers()
 ): FakeMatrixRoom {
     return FakeMatrixRoom(
         sessionId = sessionId,
@@ -72,7 +68,6 @@ fun TestScope.aFakeMatrixRoom(
         isDirect = isDirect,
         joinedMemberCount = joinedMemberCount,
         matrixTimeline = matrixTimeline,
-        coroutineDispatchers = coroutineDispatchers,
     )
 }
 
@@ -91,7 +86,6 @@ class FakeMatrixRoom constructor(
     override val isDirect: Boolean = false,
     override val joinedMemberCount: Long = 123L,
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
-    private val coroutineDispatchers: CoroutineDispatchers,
 ) : MatrixRoom {
 
     private var ignoreResult: Result<Unit> = Result.success(Unit)
@@ -162,8 +156,9 @@ class FakeMatrixRoom constructor(
         return userAvatarUrlResult
     }
 
-    override suspend fun sendMessage(message: String): Result<Unit> = withContext(coroutineDispatchers.io) {
-        Result.success(Unit)
+    override suspend fun sendMessage(message: String): Result<Unit> {
+        delay(1)
+        return Result.success(Unit)
     }
 
     override suspend fun sendReaction(emoji: String, eventId: EventId): Result<Unit> {
@@ -174,25 +169,28 @@ class FakeMatrixRoom constructor(
     var editMessageParameter: String? = null
         private set
 
-    override suspend fun editMessage(originalEventId: EventId, message: String): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun editMessage(originalEventId: EventId, message: String): Result<Unit> {
+        delay(1)
         editMessageParameter = message
-        Result.success(Unit)
+        return Result.success(Unit)
     }
 
     var replyMessageParameter: String? = null
         private set
 
-    override suspend fun replyMessage(eventId: EventId, message: String): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun replyMessage(eventId: EventId, message: String): Result<Unit> {
+        delay(1)
         replyMessageParameter = message
-        Result.success(Unit)
+        return Result.success(Unit)
     }
 
     var redactEventEventIdParam: EventId? = null
         private set
 
-    override suspend fun redactEvent(eventId: EventId, reason: String?): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun redactEvent(eventId: EventId, reason: String?): Result<Unit> {
+        delay(1)
         redactEventEventIdParam = eventId
-        Result.success(Unit)
+        return Result.success(Unit)
     }
 
     override suspend fun leave(): Result<Unit> = leaveRoomError?.let { Result.failure(it) } ?: Result.success(Unit)
@@ -227,8 +225,9 @@ class FakeMatrixRoom constructor(
 
     override suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit> = fakeSendMedia()
 
-    private suspend fun fakeSendMedia(): Result<Unit> = withContext(coroutineDispatchers.io) {
-        sendMediaResult.onSuccess {
+    private suspend fun fakeSendMedia(): Result<Unit> {
+        delay(1)
+        return sendMediaResult.onSuccess {
             sendMediaCount++
         }
     }

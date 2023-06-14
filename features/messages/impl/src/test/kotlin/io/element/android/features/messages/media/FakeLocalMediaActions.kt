@@ -19,10 +19,8 @@ package io.element.android.features.messages.media
 import androidx.compose.runtime.Composable
 import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.features.messages.impl.media.local.LocalMediaActions
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import kotlinx.coroutines.withContext
 
-class FakeLocalMediaActions(private val coroutineDispatchers: CoroutineDispatchers) : LocalMediaActions {
+class FakeLocalMediaActions : LocalMediaActions {
 
     var shouldFail = false
 
@@ -31,24 +29,27 @@ class FakeLocalMediaActions(private val coroutineDispatchers: CoroutineDispatche
         //NOOP
     }
 
-    override suspend fun saveOnDisk(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
-        if (shouldFail) {
+    override suspend fun saveOnDisk(localMedia: LocalMedia): Result<Unit> {
+        delay(1)
+        return if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
             Result.success(Unit)
         }
     }
 
-    override suspend fun share(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
-        if (shouldFail) {
+    override suspend fun share(localMedia: LocalMedia): Result<Unit> {
+        delay(1)
+        return if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
             Result.success(Unit)
         }
     }
 
-    override suspend fun open(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
-        if (shouldFail) {
+    override suspend fun open(localMedia: LocalMedia): Result<Unit> {
+        delay(1)
+        return if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
             Result.success(Unit)

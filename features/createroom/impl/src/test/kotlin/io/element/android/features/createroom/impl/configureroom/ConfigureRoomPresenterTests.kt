@@ -262,6 +262,8 @@ class ConfigureRoomPresenterTests {
 
             val initialState = awaitItem()
             initialState.eventSink(ConfigureRoomEvents.CreateRoom(initialState.config))
+            val loadingState = awaitItem()
+            assertThat(loadingState.createRoomAction).isInstanceOf(Async.Loading::class.java)
             val stateAfterCreateRoom = awaitItem()
             assertThat(stateAfterCreateRoom.createRoomAction).isInstanceOf(Async.Failure::class.java)
 

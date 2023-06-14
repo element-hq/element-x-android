@@ -24,4 +24,5 @@ android {
 
 dependencies {
     api(projects.libraries.mediaupload.api)
+    implementation(libs.coroutines.test)
 }

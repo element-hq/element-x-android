@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.test
 
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -37,24 +36,20 @@ import io.element.android.libraries.matrix.test.pushers.FakePushersService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
-import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.test.TestScope
 
-fun TestScope.aFakeMatrixClient(
+fun aFakeMatrixClient(
     sessionId: SessionId = A_SESSION_ID,
     userDisplayName: Result<String> = Result.success(A_USER_NAME),
     userAvatarURLString: Result<String> = Result.success(AN_AVATAR_URL),
     roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
     invitesDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
-    mediaLoader: MatrixMediaLoader = FakeMediaLoader(testCoroutineDispatchers()),
+    mediaLoader: MatrixMediaLoader = FakeMediaLoader(),
     sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
     pushersService: FakePushersService = FakePushersService(),
     notificationService: FakeNotificationService = FakeNotificationService(),
-    coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
 ): FakeMatrixClient {
     return FakeMatrixClient(
-        coroutineDispatchers = coroutineDispatchers,
         sessionId = sessionId,
         userDisplayName = userDisplayName,
         userAvatarURLString = userAvatarURLString,
@@ -67,14 +62,13 @@ fun TestScope.aFakeMatrixClient(
     )
 }
 
-class FakeMatrixClient (
-    private val coroutineDispatchers: CoroutineDispatchers,
+class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
     private val userDisplayName: Result<String> = Result.success(A_USER_NAME),
     private val userAvatarURLString: Result<String> = Result.success(AN_AVATAR_URL),
     override val roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
     override val invitesDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
-    override val mediaLoader: MatrixMediaLoader = FakeMediaLoader(coroutineDispatchers),
+    override val mediaLoader: MatrixMediaLoader = FakeMediaLoader(),
     private val sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
     private val pushersService: FakePushersService = FakePushersService(),
     private val notificationService: FakeNotificationService = FakeNotificationService(),
@@ -85,7 +79,7 @@ class FakeMatrixClient (
     private var createRoomResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmFailure: Throwable? = null
-    private var findDmResult: MatrixRoom? = FakeMatrixRoom(coroutineDispatchers = coroutineDispatchers)
+    private var findDmResult: MatrixRoom? = FakeMatrixRoom()
     private var logoutFailure: Throwable? = null
     private val getRoomResults = mutableMapOf<RoomId, MatrixRoom>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()

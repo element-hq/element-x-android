@@ -76,7 +76,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle sending a reaction`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
-        val room = aFakeMatrixRoom(coroutineDispatchers = coroutineDispatchers)
+        val room = aFakeMatrixRoom()
         val presenter = createMessagePresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -256,7 +256,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action redact`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
-        val matrixRoom = aFakeMatrixRoom(coroutineDispatchers = coroutineDispatchers)
+        val matrixRoom = aFakeMatrixRoom()
         val presenter = createMessagePresenter(matrixRoom = matrixRoom, coroutineDispatchers = coroutineDispatchers)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -296,7 +296,7 @@ class MessagesPresenterTest {
 
     private fun TestScope.createMessagePresenter(
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
-        matrixRoom: MatrixRoom = aFakeMatrixRoom(coroutineDispatchers = coroutineDispatchers)
+        matrixRoom: MatrixRoom = aFakeMatrixRoom()
     ): MessagesPresenter {
         val messageComposerPresenter = MessageComposerPresenter(
             appCoroutineScope = this,

@@ -20,6 +20,7 @@ import android.net.Uri
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
+import kotlinx.coroutines.delay
 import java.io.File
 
 class FakeMediaPreProcessor : MediaPreProcessor {
@@ -41,7 +42,10 @@ class FakeMediaPreProcessor : MediaPreProcessor {
         mimeType: String,
         deleteOriginal: Boolean,
         compressIfPossible: Boolean
-    ): Result<MediaUploadInfo> = result
+    ): Result<MediaUploadInfo> {
+        delay(1)
+        return result
+    }
 
     fun givenResult(value: Result<MediaUploadInfo>) {
         this.result = value
