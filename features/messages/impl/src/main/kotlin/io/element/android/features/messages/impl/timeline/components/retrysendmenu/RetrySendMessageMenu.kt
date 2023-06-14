@@ -17,19 +17,24 @@
 package io.element.android.features.messages.impl.timeline.components.retrysendmenu
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -54,7 +59,7 @@ internal fun RetrySendMessageMenu(
         state.eventSink(RetrySendMenuEvents.RemoveFailed)
     }
 
-    RetrySendMessageMenuContents(
+    RetrySendMessageMenuBottomSheet(
         modifier = modifier,
         isVisible = isVisible,
         onRetry = ::onRetry,
@@ -65,7 +70,7 @@ internal fun RetrySendMessageMenu(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun RetrySendMessageMenuContents(
+internal fun RetrySendMessageMenuBottomSheet(
     isVisible: Boolean,
     onRetry: () -> Unit,
     onRemoveFailed: () -> Unit,
@@ -88,47 +93,74 @@ internal fun RetrySendMessageMenuContents(
                 }
             }
         ) {
-            ListItem(headlineContent = {
-                Text("Your message failed to send", fontWeight = FontWeight.Medium)
-            })
-            ListItem(
-                headlineContent = {
-                    Text("Send again")
-                },
-                modifier = Modifier.clickable {
-                    coroutineScope.launch {
-                        sheetState.hide()
-                        onRetry()
-                    }
-                }
-            )
-            ListItem(
-                headlineContent = {
-                    Text("Remove")
-                },
-                colors = ListItemDefaults.colors(headlineColor = LocalColors.current.textActionCritical),
-                modifier = Modifier.clickable {
-                    coroutineScope.launch {
-                        sheetState.hide()
-                        onRemoveFailed()
-                    }
-                }
-            )
+            RetrySendMenuContents(onRetry = onRetry, onRemoveFailed = onRemoveFailed)
             // FIXME remove after https://issuetracker.google.com/issues/275849044
             Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ColumnScope.RetrySendMenuContents(
+    onRetry: () -> Unit,
+    onRemoveFailed: () -> Unit,
+    sheetState: SheetState = rememberModalBottomSheetState(),
+) {
+    val coroutineScope = rememberCoroutineScope()
+
+    ListItem(headlineContent = {
+        Text("Your message failed to send", fontWeight = FontWeight.Medium)
+    })
+    ListItem(
+        headlineContent = {
+            Text("Send again")
+        },
+        modifier = Modifier.clickable {
+            coroutineScope.launch {
+                sheetState.hide()
+                onRetry()
+            }
+        }
+    )
+    ListItem(
+        headlineContent = {
+            Text("Remove")
+        },
+        colors = ListItemDefaults.colors(headlineColor = LocalColors.current.textActionCritical),
+        modifier = Modifier.clickable {
+            coroutineScope.launch {
+                sheetState.hide()
+                onRemoveFailed()
+            }
+        }
+    )
+}
+
 @Preview
 @Composable
-internal fun RetrySendMessageMenuPreview() {
+internal fun RetrySendMessageMenuPreviewLight(@PreviewParameter(RetrySendMenuStateProvider::class) state: RetrySendMenuState) {
     ElementPreviewLight {
-        RetrySendMessageMenuContents(
-            isVisible = true,
+        ContentToPreview(state)
+    }
+}
+
+@Preview
+@Composable
+internal fun RetrySendMessageMenuPreviewDark(@PreviewParameter(RetrySendMenuStateProvider::class) state: RetrySendMenuState) {
+    ElementPreviewDark {
+        ContentToPreview(state)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ContentToPreview(state: RetrySendMenuState) {
+    // TODO restore RetrySendMessageMenuBottomSheet once the issue with bottom sheet not being previewable is fixed
+    Column {
+        RetrySendMenuContents(
             onRetry = {},
             onRemoveFailed = {},
-            onDismiss = {},
         )
     }
 }
