@@ -30,6 +30,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -38,6 +39,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.features.messages.impl.R
 import kotlinx.coroutines.launch
 
 @Composable
@@ -110,11 +112,11 @@ private fun ColumnScope.RetrySendMenuContents(
     val coroutineScope = rememberCoroutineScope()
 
     ListItem(headlineContent = {
-        Text("Your message failed to send", fontWeight = FontWeight.Medium)
+        Text(stringResource(R.string.screen_room_retry_send_menu_title), fontWeight = FontWeight.Medium)
     })
     ListItem(
         headlineContent = {
-            Text("Send again")
+            Text(stringResource(R.string.screen_room_retry_send_menu_send_again_action))
         },
         modifier = Modifier.clickable {
             coroutineScope.launch {
@@ -125,7 +127,7 @@ private fun ColumnScope.RetrySendMenuContents(
     )
     ListItem(
         headlineContent = {
-            Text("Remove")
+            Text(stringResource(R.string.screen_room_retry_send_menu_remove_action))
         },
         colors = ListItemDefaults.colors(headlineColor = LocalColors.current.textActionCritical),
         modifier = Modifier.clickable {
