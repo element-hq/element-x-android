@@ -315,7 +315,7 @@ internal fun OtherActionsSection(onLeaveRoom: () -> Unit, modifier: Modifier = M
         PreferenceText(
             title = stringResource(R.string.screen_room_details_leave_room_title),
             icon = ImageVector.vectorResource(R.drawable.ic_door_open),
-            tintColor = LocalColors.current.textActionCritical,
+            tintColor = MaterialTheme.colorScheme.error,
             onClick = onLeaveRoom,
         )
     }

@@ -83,7 +83,7 @@ private fun Indicator(modifier: Modifier = Modifier) {
     Row(
         modifier
             .fillMaxWidth()
-            .background(LocalColors.current.gray400)
+            .background(MaterialTheme.colorScheme.secondaryContainer)
             .statusBarsPadding()
             .padding(vertical = 6.dp),
         horizontalArrangement = Arrangement.Center,

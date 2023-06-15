@@ -30,9 +30,6 @@ class ElementColors(
     quaternary: Color,
     quinary: Color,
     gray300: Color,
-    gray400: Color,
-    gray1400: Color,
-    textActionCritical: Color,
     accentColor: Color,
     placeholder: Color,
     isLight: Boolean
@@ -50,16 +47,7 @@ class ElementColors(
     var quinary by mutableStateOf(quinary)
         private set
 
-    var gray300 by mutableStateOf(gray400)
-        private set
-
-    var gray400 by mutableStateOf(gray400)
-        private set
-
-    var gray1400 by mutableStateOf(gray1400)
-        private set
-
-    var textActionCritical by mutableStateOf(textActionCritical)
+    var gray300 by mutableStateOf(gray300)
         private set
 
     var accentColor by mutableStateOf(accentColor)
@@ -78,9 +66,6 @@ class ElementColors(
         quaternary: Color = this.quaternary,
         quinary: Color = this.quinary,
         gray300: Color = this.gray300,
-        gray400: Color = this.gray400,
-        gray1400: Color = this.gray1400,
-        textActionCritical: Color = this.textActionCritical,
         accentColor: Color = this.accentColor,
         placeholder: Color = this.placeholder,
         isLight: Boolean = this.isLight,
@@ -91,9 +76,6 @@ class ElementColors(
         quaternary = quaternary,
         quinary = quinary,
         gray300 = gray300,
-        gray400 = gray400,
-        gray1400 = gray1400,
-        textActionCritical = textActionCritical,
         accentColor = accentColor,
         placeholder = placeholder,
         isLight = isLight,
@@ -106,9 +88,6 @@ class ElementColors(
         quaternary = other.quaternary
         quinary = other.quinary
         gray300 = other.gray300
-        gray400 = other.gray400
-        gray1400 = other.gray1400
-        textActionCritical = other.textActionCritical
         accentColor = other.accentColor
         placeholder = other.placeholder
         isLight = other.isLight

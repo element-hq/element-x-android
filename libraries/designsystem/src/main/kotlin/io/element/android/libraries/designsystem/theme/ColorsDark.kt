@@ -21,17 +21,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.Azure
-import io.element.android.libraries.designsystem.Compound_Gray_1400_Dark
-import io.element.android.libraries.designsystem.Compound_Gray_300_Dark
-import io.element.android.libraries.designsystem.Compound_Gray_400_Dark
-import io.element.android.libraries.designsystem.Compound_Gray_800_Dark
+import io.element.android.libraries.designsystem.ElementGreen
 import io.element.android.libraries.designsystem.Gray_400
 import io.element.android.libraries.designsystem.Gray_450
 import io.element.android.libraries.designsystem.SystemGrey5Dark
 import io.element.android.libraries.designsystem.SystemGrey6Dark
-import io.element.android.libraries.designsystem.TextColorCriticalDark
 import io.element.android.libraries.designsystem.theme.compound.DarkDesignTokens
-import io.element.android.libraries.designsystem.theme.compound.compoundColorsDark
 import io.element.android.libraries.designsystem.theme.previews.ColorsSchemePreview
 
 fun elementColorsDark() = ElementColors(
@@ -40,12 +35,9 @@ fun elementColorsDark() = ElementColors(
     messageHighlightedBackground = Azure,
     quaternary = Gray_400,
     quinary = Gray_450,
-    gray300 = Compound_Gray_300_Dark,
-    gray400 = Compound_Gray_400_Dark,
-    gray1400 = Compound_Gray_1400_Dark,
-    textActionCritical = TextColorCriticalDark,
-    accentColor = Color(0xFF0DBD8B),
-    placeholder = Compound_Gray_800_Dark,
+    gray300 = DarkDesignTokens.colorGray300,
+    accentColor = ElementGreen,
+    placeholder = DarkDesignTokens.colorGray800,
     isLight = false,
 )
 
@@ -59,8 +51,8 @@ val materialColorSchemeDark = darkColorScheme(
     onSecondary = DarkDesignTokens.colorThemeBg,
     secondaryContainer = DarkDesignTokens.colorGray400,
     onSecondaryContainer = DarkDesignTokens.colorGray1400,
-//    tertiary = compoundColorsLight.colorIconTertiary,
-//    onTertiary = compoundColorsLight.colorIconOnSolidPrimary,
+    tertiary = DarkDesignTokens.colorGray900,
+    onTertiary = DarkDesignTokens.colorThemeBg,
     tertiaryContainer = DarkDesignTokens.colorGray1400,
     onTertiaryContainer = DarkDesignTokens.colorThemeBg,
     background = DarkDesignTokens.colorThemeBg,

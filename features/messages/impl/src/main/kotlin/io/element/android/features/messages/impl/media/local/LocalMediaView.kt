@@ -242,7 +242,7 @@ fun MediaFileView(
                     fontSize = 16.sp,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center,
-                    color = ElementTheme.colors.gray1400
+                    color = MaterialTheme.colorScheme.primary
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
@@ -250,7 +250,7 @@ fun MediaFileView(
                     fontSize = 14.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    color = ElementTheme.colors.gray1400
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
         }

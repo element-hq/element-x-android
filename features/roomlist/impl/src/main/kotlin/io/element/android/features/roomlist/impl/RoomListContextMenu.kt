@@ -102,7 +102,7 @@ private fun RoomListModalBottomSheetContent(
             headlineContent = {
                 Text(
                     text = stringResource(id = StringR.string.action_leave_room),
-                    color = ElementTheme.colors.textActionCritical,
+                    color = MaterialTheme.colorScheme.error,
                 )
             },
             modifier = Modifier.clickable { onLeaveRoomClicked(contextMenu.roomId) },
@@ -111,7 +111,7 @@ private fun RoomListModalBottomSheetContent(
                     resourceId = VectorIcons.DoorOpen,
                     contentDescription = stringResource(id = StringR.string.action_leave_room),
                     modifier = Modifier.size(20.dp),
-                    tint = ElementTheme.colors.textActionCritical,
+                    tint = MaterialTheme.colorScheme.error,
                 )
             }
         )

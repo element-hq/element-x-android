@@ -21,17 +21,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.Azure
-import io.element.android.libraries.designsystem.Compound_Gray_1400_Light
-import io.element.android.libraries.designsystem.Compound_Gray_300_Light
-import io.element.android.libraries.designsystem.Compound_Gray_400_Light
-import io.element.android.libraries.designsystem.Compound_Gray_800_Light
+import io.element.android.libraries.designsystem.ElementGreen
 import io.element.android.libraries.designsystem.Gray_100
 import io.element.android.libraries.designsystem.Gray_50
 import io.element.android.libraries.designsystem.SystemGrey5Light
 import io.element.android.libraries.designsystem.SystemGrey6Light
-import io.element.android.libraries.designsystem.TextColorCriticalLight
 import io.element.android.libraries.designsystem.theme.compound.LightDesignTokens
-import io.element.android.libraries.designsystem.theme.compound.compoundColorsLight
 import io.element.android.libraries.designsystem.theme.previews.ColorsSchemePreview
 
 fun elementColorsLight() = ElementColors(
@@ -40,12 +35,9 @@ fun elementColorsLight() = ElementColors(
     messageHighlightedBackground = Azure,
     quaternary = Gray_100,
     quinary = Gray_50,
-    gray300 = Compound_Gray_300_Light,
-    gray400 = Compound_Gray_400_Light,
-    gray1400 = Compound_Gray_1400_Light,
-    textActionCritical = TextColorCriticalLight,
-    accentColor = Color(0xFF0DBD8B),
-    placeholder = Compound_Gray_800_Light,
+    gray300 = LightDesignTokens.colorGray300,
+    accentColor = ElementGreen,
+    placeholder = LightDesignTokens.colorGray800,
     isLight = true,
 )
 
@@ -59,8 +51,8 @@ val materialColorSchemeLight = lightColorScheme(
     onSecondary = LightDesignTokens.colorThemeBg,
     secondaryContainer = LightDesignTokens.colorGray400,
     onSecondaryContainer = LightDesignTokens.colorGray1400,
-//    tertiary = compoundColorsLight.colorIconTertiary,
-//    onTertiary = compoundColorsLight.colorIconOnSolidPrimary,
+    tertiary = LightDesignTokens.colorGray900,
+    onTertiary = LightDesignTokens.colorThemeBg,
     tertiaryContainer = LightDesignTokens.colorGray1400,
     onTertiaryContainer = LightDesignTokens.colorThemeBg,
     background = LightDesignTokens.colorThemeBg,

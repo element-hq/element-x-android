@@ -237,7 +237,7 @@ private fun EditableAvatarView(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .clip(CircleShape)
-                        .background(LocalColors.current.gray1400)
+                        .background(MaterialTheme.colorScheme.primary)
                         .size(24.dp),
                     contentAlignment = Alignment.Center,
                 ) {

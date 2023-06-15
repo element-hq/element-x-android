@@ -52,7 +52,7 @@ fun TimelineEventTimestampView(
     val formattedTime = event.sentTime
     val hasMessageSendingFailed = event.sendState is EventSendState.SendingFailed
     val isMessageEdited = (event.content as? TimelineItemTextBasedContent)?.isEdited.orFalse()
-    val tint = if (hasMessageSendingFailed) ElementTheme.colors.textActionCritical else null
+    val tint = if (hasMessageSendingFailed) MaterialTheme.colorScheme.error else null
     Row(
         modifier = modifier.clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
