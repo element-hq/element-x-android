@@ -21,6 +21,7 @@ import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineState
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.core.data.StableCharSequence
@@ -54,6 +55,10 @@ fun aMessagesState() = MessagesState(
         eventSink = {},
     ),
     actionListState = anActionListState(),
+    customReactionState = CustomReactionState(
+        selectedEventId = null,
+        eventSink = {},
+    ),
     hasNetworkConnection = true,
     snackbarMessage = null,
     eventSink = {}
