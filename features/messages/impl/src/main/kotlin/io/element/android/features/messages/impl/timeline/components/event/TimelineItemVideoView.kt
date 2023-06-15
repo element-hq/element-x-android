@@ -49,7 +49,7 @@ fun TimelineItemVideoView(
         contentAlignment = Alignment.Center,
     ) {
         BlurHashAsyncImage(
-            model = MediaRequestData(content.thumbnailSource, MediaRequestData.Kind.Content),
+            model = MediaRequestData(content.thumbnailSource, MediaRequestData.Kind.File(content.body, content.mimeType)),
             blurHash = content.blurHash,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Fit,
