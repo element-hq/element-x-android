@@ -16,8 +16,10 @@
 
 package io.element.android.libraries.matrix.api.media
 
+import java.time.Duration
+
 data class AudioInfo(
-    val duration: Long?,
+    val duration: Duration?,
     val size: Long?,
     val mimeType: String?,
 )
