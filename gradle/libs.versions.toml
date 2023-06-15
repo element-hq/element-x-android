@@ -50,6 +50,9 @@ telephoto = "0.4.0"
 dagger = "2.46.1"
 anvil = "2.4.6"
 
+# Auto service
+autoservice = "1.1.1"
+
 # quality
 detekt = "1.23.0"
 dependencygraph = "0.12"
@@ -165,11 +168,16 @@ dagger_compiler = { module = "com.google.dagger:dagger-compiler", version.ref = 
 anvil_compiler_api = { module = "com.squareup.anvil:compiler-api", version.ref = "anvil" }
 anvil_compiler_utils = { module = "com.squareup.anvil:compiler-utils", version.ref = "anvil" }
 
+# Auto services
+google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }
+google_autoservice_annotations = { module = "com.google.auto.service:auto-service-annotations", version.ref = "autoservice" }
+
+
 # Miscellaneous
 # Add unused dependency to androidx.compose.compiler:compiler to let Renovate create PR to change the
 # value of `composecompiler` (which is used to set composeOptions.kotlinCompilerExtensionVersion.
 # See https://github.com/renovatebot/renovate/issues/18354
-android_composeCompiler = {module="androidx.compose.compiler:compiler", version.ref ="composecompiler"}
+android_composeCompiler = { module = "androidx.compose.compiler:compiler", version.ref = "composecompiler" }
 
 [bundles]
 
