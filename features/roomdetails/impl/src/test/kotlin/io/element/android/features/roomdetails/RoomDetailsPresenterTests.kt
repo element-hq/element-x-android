@@ -27,7 +27,6 @@ import io.element.android.features.roomdetails.impl.RoomTopicState
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -48,7 +47,7 @@ class RoomDetailsPresenterTests {
     private fun aRoomDetailsPresenter(room: MatrixRoom): RoomDetailsPresenter {
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
             override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
-                return RoomMemberDetailsPresenter(aMatrixClient(), room, roomMemberId)
+                return RoomMemberDetailsPresenter(FakeMatrixClient(), room, roomMemberId)
             }
         }
         return RoomDetailsPresenter(room, roomMemberDetailsPresenterFactory, LeaveRoomPresenterFake())
@@ -249,10 +248,6 @@ class RoomDetailsPresenterTests {
         }
     }
 }
-
-fun aMatrixClient(
-    sessionId: SessionId = A_SESSION_ID,
-) = FakeMatrixClient(sessionId = sessionId)
 
 fun aMatrixRoom(
     roomId: RoomId = A_ROOM_ID,

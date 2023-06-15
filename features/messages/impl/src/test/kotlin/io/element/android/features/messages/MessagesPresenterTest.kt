@@ -38,6 +38,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.features.messages.utils.messagesummary.FakeMessageSummaryFormatter
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.core.mimetype.MimeTypes
@@ -56,7 +57,6 @@ import io.element.android.libraries.textcomposer.MessageComposerMode
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -78,8 +78,9 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle sending a reaction`() = runTest {
+        val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         val room = FakeMatrixRoom()
-        val presenter = createMessagePresenter(matrixRoom = room)
+        val presenter = createMessagePresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -264,8 +265,9 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action redact`() = runTest {
+        val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         val matrixRoom = FakeMatrixRoom()
-        val presenter = createMessagePresenter(matrixRoom)
+        val presenter = createMessagePresenter(matrixRoom = matrixRoom, coroutineDispatchers = coroutineDispatchers)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -317,6 +319,7 @@ class MessagesPresenterTest {
     }
 
     private fun TestScope.createMessagePresenter(
+        coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         matrixRoom: MatrixRoom = FakeMatrixRoom()
     ): MessagesPresenter {
         val messageComposerPresenter = MessageComposerPresenter(
@@ -358,7 +361,7 @@ class MessagesPresenterTest {
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),
             messageSummaryFormatter = FakeMessageSummaryFormatter(),
-            dispatchers = testCoroutineDispatchers(),
+            dispatchers = coroutineDispatchers,
         )
     }
 }

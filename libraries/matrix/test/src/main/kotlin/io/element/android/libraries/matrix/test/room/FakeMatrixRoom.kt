@@ -30,9 +30,8 @@ import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.matrix.test.FAKE_DELAY_IN_MS
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
-import kotlinx.coroutines.delay
+import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
@@ -111,8 +110,8 @@ class FakeMatrixRoom(
 
     override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)
 
-    override suspend fun updateMembers(): Result<Unit> {
-        return updateMembersResult
+    override suspend fun updateMembers(): Result<Unit> = simulateLongTask {
+        updateMembersResult
     }
 
     override fun syncUpdateFlow(): Flow<Long> {
@@ -123,17 +122,16 @@ class FakeMatrixRoom(
         return matrixTimeline
     }
 
-    override suspend fun userDisplayName(userId: UserId): Result<String?> {
-        return userDisplayNameResult
+    override suspend fun userDisplayName(userId: UserId): Result<String?> = simulateLongTask {
+        userDisplayNameResult
     }
 
-    override suspend fun userAvatarUrl(userId: UserId): Result<String?> {
-        return userAvatarUrlResult
+    override suspend fun userAvatarUrl(userId: UserId): Result<String?> = simulateLongTask {
+        userAvatarUrlResult
     }
 
-    override suspend fun sendMessage(message: String): Result<Unit> {
-        delay(FAKE_DELAY_IN_MS)
-        return Result.success(Unit)
+    override suspend fun sendMessage(message: String): Result<Unit> = simulateLongTask {
+        Result.success(Unit)
     }
 
     override suspend fun sendReaction(emoji: String, eventId: EventId): Result<Unit> {
@@ -156,7 +154,6 @@ class FakeMatrixRoom(
 
     override suspend fun editMessage(originalEventId: EventId, message: String): Result<Unit> {
         editMessageParameter = message
-        delay(FAKE_DELAY_IN_MS)
         return Result.success(Unit)
     }
 
@@ -165,7 +162,6 @@ class FakeMatrixRoom(
 
     override suspend fun replyMessage(eventId: EventId, message: String): Result<Unit> {
         replyMessageParameter = message
-        delay(FAKE_DELAY_IN_MS)
         return Result.success(Unit)
     }
 
@@ -174,11 +170,11 @@ class FakeMatrixRoom(
 
     override suspend fun redactEvent(eventId: EventId, reason: String?): Result<Unit> {
         redactEventEventIdParam = eventId
-        delay(FAKE_DELAY_IN_MS)
         return Result.success(Unit)
     }
 
     override suspend fun leave(): Result<Unit> = leaveRoomError?.let { Result.failure(it) } ?: Result.success(Unit)
+
     override suspend fun acceptInvitation(): Result<Unit> {
         isInviteAccepted = true
         return acceptInviteResult
@@ -189,9 +185,9 @@ class FakeMatrixRoom(
         return rejectInviteResult
     }
 
-    override suspend fun inviteUserById(id: UserId): Result<Unit> {
+    override suspend fun inviteUserById(id: UserId): Result<Unit> = simulateLongTask {
         invitedUserId = id
-        return inviteUserResult
+        inviteUserResult
     }
 
     override suspend fun canInvite(): Result<Boolean> {
@@ -210,31 +206,30 @@ class FakeMatrixRoom(
 
     override suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit> = fakeSendMedia()
 
-    private suspend fun fakeSendMedia(): Result<Unit> {
-        delay(FAKE_DELAY_IN_MS)
-        return sendMediaResult.onSuccess {
+    private suspend fun fakeSendMedia(): Result<Unit> = simulateLongTask {
+        sendMediaResult.onSuccess {
             sendMediaCount++
         }
     }
 
-    override suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit> {
+    override suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit> = simulateLongTask {
         newAvatarData = data
-        return updateAvatarResult
+        updateAvatarResult
     }
 
-    override suspend fun removeAvatar(): Result<Unit> {
+    override suspend fun removeAvatar(): Result<Unit> = simulateLongTask {
         removedAvatar = true
-        return removeAvatarResult
+        removeAvatarResult
     }
 
-    override suspend fun setName(name: String): Result<Unit> {
+    override suspend fun setName(name: String): Result<Unit> = simulateLongTask {
         newName = name
-        return setNameResult
+        setNameResult
     }
 
-    override suspend fun setTopic(topic: String): Result<Unit> {
+    override suspend fun setTopic(topic: String): Result<Unit> = simulateLongTask {
         newTopic = topic
-        return setTopicResult
+        setTopicResult
     }
 
     override fun close() = Unit
