@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl
+package io.element.android.features.messages.impl.timeline.components.customreaction
 
-import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.matrix.api.core.EventId
 
-sealed interface MessagesEvents {
-    data class HandleAction(val action: TimelineItemAction, val event: TimelineItem.Event) : MessagesEvents
-    data class SendReaction(val emoji: String, val eventId: EventId) : MessagesEvents
-    object Dismiss : MessagesEvents
-}
+data class CustomReactionState(
+    val selectedEventId: EventId?,
+    val eventSink: (CustomReactionEvents) -> Unit,
+)

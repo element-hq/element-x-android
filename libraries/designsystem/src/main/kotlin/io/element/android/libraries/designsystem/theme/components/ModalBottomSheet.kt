@@ -37,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,6 +66,14 @@ fun ModalBottomSheet(
         dragHandle = dragHandle,
         content = content,
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+fun SheetState.hide(coroutineScope: CoroutineScope, then: () -> Unit) {
+    coroutineScope.launch {
+        hide()
+        then()
+    }
 }
 
 // This preview and its screenshots are blank, see: https://issuetracker.google.com/issues/283843380
