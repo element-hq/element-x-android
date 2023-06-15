@@ -32,6 +32,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
+import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
@@ -65,6 +66,7 @@ class MessagesPresenter @Inject constructor(
     private val composerPresenter: MessageComposerPresenter,
     private val timelinePresenter: TimelinePresenter,
     private val actionListPresenter: ActionListPresenter,
+    private val retrySendMenuPresenter: RetrySendMenuPresenter,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val messageSummaryFormatter: MessageSummaryFormatter,
@@ -77,6 +79,7 @@ class MessagesPresenter @Inject constructor(
         val composerState = composerPresenter.present()
         val timelineState = timelinePresenter.present()
         val actionListState = actionListPresenter.present()
+        val retryState = retrySendMenuPresenter.present()
 
         val syncUpdateFlow = room.syncUpdateFlow().collectAsState(0L)
         val roomName: MutableState<String?> = rememberSaveable {
@@ -116,6 +119,7 @@ class MessagesPresenter @Inject constructor(
             composerState = composerState,
             timelineState = timelineState,
             actionListState = actionListState,
+            retrySendMenuState = retryState,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             snackbarMessage = snackbarMessage,
             eventSink = ::handleEvents

@@ -24,6 +24,7 @@ sealed interface MatrixTimelineItem {
     data class Event(val event: EventTimelineItem) : MatrixTimelineItem {
         val uniqueId: String = event.uniqueIdentifier
         val eventId: EventId? = event.eventId
+        val transactionId: String? = event.transactionId
     }
 
     data class Virtual(val virtual: VirtualTimelineItem) : MatrixTimelineItem
