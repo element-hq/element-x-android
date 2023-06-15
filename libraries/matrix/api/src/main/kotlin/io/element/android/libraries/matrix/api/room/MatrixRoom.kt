@@ -83,6 +83,10 @@ interface MatrixRoom : Closeable {
 
     suspend fun sendReaction(emoji: String, eventId: EventId): Result<Unit>
 
+    suspend fun retrySendMessage(transactionId: String): Result<Unit>
+
+    suspend fun cancelSend(transactionId: String): Result<Unit>
+
     suspend fun leave(): Result<Unit>
 
     suspend fun acceptInvitation(): Result<Unit>

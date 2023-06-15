@@ -17,12 +17,15 @@
 package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -54,7 +57,15 @@ fun TimelineEventTimestampView(
     val isMessageEdited = (event.content as? TimelineItemTextBasedContent)?.isEdited.orFalse()
     val tint = if (hasMessageSendingFailed) ElementTheme.colors.textActionCritical else null
     Row(
-        modifier = modifier.clickable(onClick = onClick),
+        modifier = Modifier
+            .clickable(
+                onClick = onClick,
+                enabled = true,
+                indication = rememberRipple(bounded = false),
+                interactionSource = MutableInteractionSource()
+            )
+            .padding(start = 16.dp) // Add extra padding for touch target size
+            .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (isMessageEdited) {

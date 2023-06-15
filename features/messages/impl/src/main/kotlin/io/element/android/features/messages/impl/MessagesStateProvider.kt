@@ -21,6 +21,7 @@ import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineState
+import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -47,6 +48,10 @@ fun aMessagesState() = MessagesState(
     ),
     timelineState = aTimelineState().copy(
         timelineItems = aTimelineItemList(aTimelineItemTextContent()),
+    ),
+    retrySendMenuState = RetrySendMenuState(
+        selectedEvent = null,
+        eventSink = {},
     ),
     actionListState = anActionListState(),
     hasNetworkConnection = true,

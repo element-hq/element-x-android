@@ -34,14 +34,10 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SheetState
-import androidx.compose.material3.SheetValue
 import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -59,7 +55,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
-import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
@@ -67,6 +62,8 @@ import io.element.android.features.messages.impl.messagecomposer.AttachmentsStat
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.components.CustomReactionBottomSheet
+import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuEvents
+import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMessageMenu
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.androidutils.ui.hideKeyboard
@@ -85,6 +82,7 @@ import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -176,6 +174,11 @@ fun MessagesView(
                 onMessageClicked = ::onMessageClicked,
                 onMessageLongClicked = ::onMessageLongClicked,
                 onUserDataClicked = onUserDataClicked,
+                onTimestampClicked = { event ->
+                    if (event.sendState is EventSendState.SendingFailed) {
+                        state.retrySendMenuState.eventSink(RetrySendMenuEvents.EventSelected(event))
+                    }
+                }
             )
         },
         snackbarHost = {
@@ -225,6 +228,10 @@ fun MessagesView(
             }
         }
     )
+
+    RetrySendMessageMenu(
+        state = state.retrySendMenuState
+    )
 }
 
 @Composable
@@ -244,10 +251,11 @@ private fun AttachmentStateView(
 @Composable
 fun MessagesViewContent(
     state: MessagesState,
+    onMessageClicked: (TimelineItem.Event) -> Unit,
+    onUserDataClicked: (UserId) -> Unit,
+    onMessageLongClicked: (TimelineItem.Event) -> Unit,
+    onTimestampClicked: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
-    onMessageClicked: (TimelineItem.Event) -> Unit = {},
-    onUserDataClicked: (UserId) -> Unit = {},
-    onMessageLongClicked: (TimelineItem.Event) -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -263,6 +271,7 @@ fun MessagesViewContent(
                 onMessageClicked = onMessageClicked,
                 onMessageLongClicked = onMessageLongClicked,
                 onUserDataClicked = onUserDataClicked,
+                onTimestampClicked = onTimestampClicked,
             )
         }
         MessageComposerView(
