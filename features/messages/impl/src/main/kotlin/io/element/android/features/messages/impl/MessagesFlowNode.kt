@@ -138,7 +138,7 @@ class MessagesFlowNode @AssistedInject constructor(
                         fileExtension = event.content.fileExtension
                     ),
                     mediaSource = event.content.mediaSource,
-                    thumbnailSource = event.content.mediaSource,
+                    thumbnailSource = event.content.thumbnailSource,
                 )
                 backstack.push(navTarget)
             }
