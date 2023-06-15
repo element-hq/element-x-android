@@ -51,6 +51,7 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
+import java.time.Duration
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
@@ -175,9 +176,8 @@ class AndroidMediaPreProcessor @Inject constructor(
         val file = copyToTmpFile(uri)
         return MediaMetadataRetriever().runAndRelease {
             setDataSource(context, Uri.fromFile(file))
-
             val info = AudioInfo(
-                duration = extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L,
+                duration = extractDuration(),
                 size = file.length(),
                 mimeType = mimeType,
             )
@@ -219,7 +219,7 @@ class AndroidMediaPreProcessor @Inject constructor(
         MediaMetadataRetriever().runAndRelease {
             setDataSource(context, Uri.fromFile(file))
             VideoInfo(
-                duration = extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L,
+                duration = extractDuration(),
                 width = extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toLong() ?: 0L,
                 height = extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toLong() ?: 0L,
                 mimetype = mimeType,
@@ -250,6 +250,11 @@ class AndroidMediaPreProcessor @Inject constructor(
         return contentResolver.openInputStream(uri)?.use { createTmpFileWithInput(it) }
             ?: error("Could not copy the contents of $uri to a temporary file")
     }
+}
+
+private fun MediaMetadataRetriever.extractDuration(): Duration {
+    val durationInMs = extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L
+    return Duration.ofMillis(durationInMs)
 }
 
 fun ImageCompressionResult.toImageInfo(mimeType: String, thumbnailUrl: String?, thumbnailInfo: ThumbnailInfo?) = ImageInfo(

@@ -103,7 +103,7 @@ private fun RustFormattedBody.map(): FormattedBody = FormattedBody(
 
 private fun RustMessageFormat.map(): MessageFormat {
     return when (this) {
-        RustMessageFormat.HTML -> MessageFormat.HTML
-        RustMessageFormat.UNKNOWN -> MessageFormat.UNKNOWN
+        RustMessageFormat.Html -> MessageFormat.HTML
+        is RustMessageFormat.Unknown -> MessageFormat.UNKNOWN
     }
 }
