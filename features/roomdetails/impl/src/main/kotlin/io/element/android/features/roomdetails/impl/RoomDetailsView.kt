@@ -150,6 +150,8 @@ fun RoomDetailsView(
                 )
             }
 
+            NotificationSection()
+
             if (state.roomType is RoomDetailsType.Room) {
                 MembersSection(
                     memberCount = state.memberCount,
@@ -285,6 +287,17 @@ internal fun TopicSection(
                 color = MaterialTheme.colorScheme.tertiary
             )
         }
+    }
+}
+
+@Composable
+internal fun NotificationSection(modifier: Modifier = Modifier) {
+    PreferenceCategory(modifier = modifier) {
+        PreferenceText(
+            title = stringResource(R.string.screen_room_details_notification_title),
+            subtitle = "Default",
+            icon = Icons.Outlined.Notifications,
+        )
     }
 }
 

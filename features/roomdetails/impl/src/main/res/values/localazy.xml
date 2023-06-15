@@ -13,6 +13,7 @@
   <string name="screen_room_details_encryption_enabled_subtitle">"Messages are secured with locks. Only you and the recipients have the unique keys to unlock them."</string>
   <string name="screen_room_details_encryption_enabled_title">"Message encryption enabled"</string>
   <string name="screen_room_details_invite_people_title">"Invite people"</string>
+  <string name="screen_room_details_notification_title">"Notification"</string>
   <string name="screen_room_details_room_name_label">"Room name"</string>
   <string name="screen_room_details_share_room_title">"Share room"</string>
   <string name="screen_room_details_updating_room">"Updating room…"</string>

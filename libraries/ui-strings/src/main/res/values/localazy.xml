@@ -168,7 +168,7 @@
   <string name="test_untranslated_default_language_identifier">"en"</string>
   <string name="dialog_title_error">"Error"</string>
   <string name="dialog_title_success">"Success"</string>
-  <string name="screen_analytics_settings_help_us_improve">"Help us identify issues and improve %1$s by sharing anonymous usage data."</string>
+  <string name="screen_analytics_settings_help_us_improve">"Share anonymous usage data to help us identify issues."</string>
   <string name="screen_analytics_settings_read_terms">"You can read all our terms %1$s."</string>
   <string name="screen_analytics_settings_read_terms_content_link">"here"</string>
   <string name="screen_report_content_block_user">"Block user"</string>

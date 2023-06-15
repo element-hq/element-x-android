@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_room_action_create_room">"New room"</string>
+  <string name="screen_create_room_action_invite_people">"Invite friends to Element"</string>
   <string name="screen_create_room_add_people_title">"Invite people"</string>
   <string name="screen_create_room_error_creating_room">"An error occurred when creating the room"</string>
   <string name="screen_create_room_private_option_description">"Messages in this room are encrypted. Encryption can’t be disabled afterwards."</string>
