@@ -36,24 +36,46 @@ sealed interface Async<out T> {
     }
 }
 
+suspend inline fun <T> MutableState<Async<T>>.execute(
+    errorMapping: (Throwable) -> Throwable = { it },
+    block: () -> T,
+): Unit = execute(state = this, errorMapping = errorMapping, block = block)
+
 suspend inline fun <T> (suspend () -> T).execute(
     state: MutableState<Async<T>>,
-    errorMapping: ((Throwable) -> Throwable) = { it },
-) {
-    try {
-        state.value = Async.Loading()
-        val result = this()
-        state.value = Async.Success(result)
-    } catch (error: Throwable) {
-        state.value = Async.Failure(errorMapping.invoke(error))
-    }
+    errorMapping: (Throwable) -> Throwable = { it },
+): Unit = execute(state = state, errorMapping = errorMapping, block = this)
+
+@Suppress("REDUNDANT_INLINE_SUSPEND_FUNCTION_TYPE")
+suspend inline fun <T> execute(
+    state: MutableState<Async<T>>,
+    errorMapping: (Throwable) -> Throwable = { it },
+    block: suspend () -> T,
+): Unit = try {
+    state.value = Async.Loading()
+    val result = block()
+    state.value = Async.Success(result)
+} catch (error: Throwable) {
+    state.value = Async.Failure(errorMapping.invoke(error))
 }
 
-suspend inline fun <T> (suspend () -> Result<T>).executeResult(state: MutableState<Async<T>>) {
+suspend inline fun <T> MutableState<Async<T>>.executeResult(
+    block: () -> Result<T>,
+): Unit = executeResult(state = this, block = block)
+
+suspend inline fun <T> (suspend () -> Result<T>).executeResult(
+    state: MutableState<Async<T>>,
+): Unit = executeResult(state = state, block = this)
+
+@Suppress("REDUNDANT_INLINE_SUSPEND_FUNCTION_TYPE")
+suspend inline fun <T> executeResult(
+    state: MutableState<Async<T>>,
+    block: suspend () -> Result<T>,
+) {
     if (state.value !is Async.Success) {
         state.value = Async.Loading()
     }
-    this().fold(
+    block().fold(
         onSuccess = {
             state.value = Async.Success(it)
         },
