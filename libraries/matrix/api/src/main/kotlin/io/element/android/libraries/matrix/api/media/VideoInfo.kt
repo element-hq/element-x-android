@@ -16,8 +16,10 @@
 
 package io.element.android.libraries.matrix.api.media
 
+import java.time.Duration
+
 data class VideoInfo(
-    val duration: Long?,
+    val duration: Duration?,
     val height: Long?,
     val width: Long?,
     val mimetype: String?,
