@@ -26,6 +26,7 @@ import io.element.android.features.messages.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.MessagesEvents
 import io.element.android.features.messages.impl.MessagesPresenter
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
+import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
@@ -91,6 +92,7 @@ class MessagesPresenterTest {
             room.givenSendReactionResult(Result.failure(IllegalStateException("Failed to send reaction")))
             initialState.eventSink.invoke(MessagesEvents.SendReaction("👍", AN_EVENT_ID))
             assertThat(room.sendReactionCount).isEqualTo(2)
+            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -103,7 +105,7 @@ class MessagesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Forward, aMessageEvent()))
-            // Still a TODO in the code
+            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -116,7 +118,7 @@ class MessagesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Copy, aMessageEvent()))
-            // Still a TODO in the code
+            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -132,6 +134,7 @@ class MessagesPresenterTest {
             skipItems(1)
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
+            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -144,7 +147,7 @@ class MessagesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, aMessageEvent(eventId = null)))
-            skipItems(1)
+            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
             // Otherwise we would have some extra items here
             ensureAllEventsConsumed()
         }
@@ -177,6 +180,7 @@ class MessagesPresenterTest {
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
             assertThat(replyMode.attachmentThumbnailInfo).isNotNull()
+            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -209,6 +213,7 @@ class MessagesPresenterTest {
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
             assertThat(replyMode.attachmentThumbnailInfo).isNotNull()
+            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -236,6 +241,7 @@ class MessagesPresenterTest {
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
             assertThat(replyMode.attachmentThumbnailInfo).isNotNull()
+            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -251,6 +257,7 @@ class MessagesPresenterTest {
             skipItems(1)
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Edit::class.java)
+            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -265,6 +272,7 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Redact, aMessageEvent()))
             assertThat(matrixRoom.redactEventEventIdParam).isEqualTo(AN_EVENT_ID)
+            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -277,7 +285,20 @@ class MessagesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.ReportContent, aMessageEvent()))
-            // Still a TODO in the code
+            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+        }
+    }
+
+    @Test
+    fun `present - handle dismiss action`() = runTest {
+        val presenter = createMessagePresenter()
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(MessagesEvents.Dismiss)
+            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -290,7 +311,7 @@ class MessagesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Developer, aMessageEvent()))
-            // Still a TODO in the code
+            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
