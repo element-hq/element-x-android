@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.tests.testutils
 
-android {
-    namespace = "io.element.android.libraries.mediaupload.test"
-}
+import kotlinx.coroutines.delay
 
-dependencies {
-    api(projects.libraries.mediaupload.api)
-    implementation(projects.tests.testutils)
+/**
+ * Workaround for https://github.com/cashapp/molecule/issues/249.
+ * This functions should be removed/deprecated right after we find a proper fix.
+ */
+suspend inline fun <T> simulateLongTask(lambda: () -> T): T {
+    delay(1)
+    return lambda()
 }

@@ -19,7 +19,6 @@
 package io.element.android.features.messages.attachments
 
 import android.net.Uri
-import androidx.media3.common.MimeTypes
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
@@ -31,7 +30,6 @@ import io.element.android.features.messages.impl.attachments.preview.Attachments
 import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.test.FAKE_DELAY_IN_MS
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -58,7 +56,6 @@ class AttachmentsPreviewPresenterTest {
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             val loadingState = awaitItem()
             assertThat(loadingState.sendActionState).isEqualTo(Async.Loading<Unit>())
-            testScheduler.advanceTimeBy(FAKE_DELAY_IN_MS)
             val successState = awaitItem()
             assertThat(successState.sendActionState).isEqualTo(Async.Success(Unit))
             assertThat(room.sendMediaCount).isEqualTo(1)
@@ -79,7 +76,6 @@ class AttachmentsPreviewPresenterTest {
             initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
             val loadingState = awaitItem()
             assertThat(loadingState.sendActionState).isEqualTo(Async.Loading<Unit>())
-            testScheduler.advanceTimeBy(FAKE_DELAY_IN_MS)
             val failureState = awaitItem()
             assertThat(failureState.sendActionState).isEqualTo(Async.Failure<Unit>(failure))
             assertThat(room.sendMediaCount).isEqualTo(0)
