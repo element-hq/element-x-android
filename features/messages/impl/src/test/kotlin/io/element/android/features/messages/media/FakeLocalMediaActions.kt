@@ -19,10 +19,9 @@ package io.element.android.features.messages.media
 import androidx.compose.runtime.Composable
 import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.features.messages.impl.media.local.LocalMediaActions
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import kotlinx.coroutines.withContext
+import io.element.android.tests.testutils.simulateLongTask
 
-class FakeLocalMediaActions(private val coroutineDispatchers: CoroutineDispatchers) : LocalMediaActions {
+class FakeLocalMediaActions : LocalMediaActions {
 
     var shouldFail = false
 
@@ -31,7 +30,7 @@ class FakeLocalMediaActions(private val coroutineDispatchers: CoroutineDispatche
         //NOOP
     }
 
-    override suspend fun saveOnDisk(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun saveOnDisk(localMedia: LocalMedia): Result<Unit> = simulateLongTask {
         if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
@@ -39,7 +38,7 @@ class FakeLocalMediaActions(private val coroutineDispatchers: CoroutineDispatche
         }
     }
 
-    override suspend fun share(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun share(localMedia: LocalMedia): Result<Unit> = simulateLongTask {
         if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
@@ -47,7 +46,7 @@ class FakeLocalMediaActions(private val coroutineDispatchers: CoroutineDispatche
         }
     }
 
-    override suspend fun open(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun open(localMedia: LocalMedia): Result<Unit> = simulateLongTask {
         if (shouldFail) {
             Result.failure(RuntimeException())
         } else {

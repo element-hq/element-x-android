@@ -49,7 +49,12 @@ class CreateRoomRootPresenterTests {
         fakeUserListPresenter = FakeUserListPresenter()
         fakeMatrixClient = FakeMatrixClient()
         userRepository = FakeUserRepository()
-        presenter = CreateRoomRootPresenter(FakeUserListPresenterFactory(fakeUserListPresenter), userRepository, UserListDataStore(), fakeMatrixClient)
+        presenter = CreateRoomRootPresenter(
+            presenterFactory = FakeUserListPresenterFactory(fakeUserListPresenter),
+            userRepository = userRepository,
+            userListDataStore = UserListDataStore(),
+            matrixClient = fakeMatrixClient
+        )
     }
 
     @Test
