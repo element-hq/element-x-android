@@ -64,7 +64,7 @@ android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref
 android_desugar = "com.android.tools:desugar_jdk_libs:2.0.3"
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:32.1.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:32.1.1"
 
 # AndroidX
 androidx_material = { module = "com.google.android.material:material", version.ref = "material" }
