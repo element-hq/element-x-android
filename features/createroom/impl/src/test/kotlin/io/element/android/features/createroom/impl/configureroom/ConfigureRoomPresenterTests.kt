@@ -21,7 +21,6 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.features.createroom.impl.userlist.UserListDataStore
@@ -33,6 +32,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
+import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
@@ -226,6 +226,7 @@ class ConfigureRoomPresenterTests {
 
             val initialState = awaitItem()
             initialState.eventSink(ConfigureRoomEvents.CreateRoom(initialState.config))
+            assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Loading::class.java)
             val stateAfterCreateRoom = awaitItem()
             assertThat(stateAfterCreateRoom.createRoomAction).isInstanceOf(Async.Failure::class.java)
 
@@ -234,7 +235,6 @@ class ConfigureRoomPresenterTests {
             assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Uninitialized::class.java)
             assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Loading::class.java)
             assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Success::class.java)
-
         }
     }
 
