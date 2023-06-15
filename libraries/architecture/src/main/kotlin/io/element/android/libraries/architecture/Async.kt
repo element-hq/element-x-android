@@ -36,17 +36,20 @@ sealed interface Async<out T> {
     }
 }
 
-suspend fun <T> (suspend () -> T).execute(state: MutableState<Async<T>>, errorMapping: ((Throwable) -> Throwable)? = null) {
+suspend inline fun <T> (suspend () -> T).execute(
+    state: MutableState<Async<T>>,
+    errorMapping: ((Throwable) -> Throwable) = { it },
+) {
     try {
         state.value = Async.Loading()
         val result = this()
         state.value = Async.Success(result)
     } catch (error: Throwable) {
-        state.value = Async.Failure(errorMapping?.invoke(error) ?: error)
+        state.value = Async.Failure(errorMapping.invoke(error))
     }
 }
 
-suspend fun <T> (suspend () -> Result<T>).executeResult(state: MutableState<Async<T>>) {
+suspend inline fun <T> (suspend () -> Result<T>).executeResult(state: MutableState<Async<T>>) {
     if (state.value !is Async.Success) {
         state.value = Async.Loading()
     }
