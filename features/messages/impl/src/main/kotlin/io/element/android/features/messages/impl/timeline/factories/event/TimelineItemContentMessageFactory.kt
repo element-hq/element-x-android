@@ -54,6 +54,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 TimelineItemImageContent(
                     body = messageType.body,
                     mediaSource = messageType.source,
+                    thumbnailSource  = messageType.info?.thumbnailSource,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
                     blurhash = messageType.info?.blurhash,
                     width = messageType.info?.width?.toInt(),

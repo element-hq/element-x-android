@@ -160,6 +160,7 @@ class MessagesPresenterTest {
                 content = TimelineItemImageContent(
                     body = "image.jpg",
                     mediaSource = MediaSource(AN_AVATAR_URL),
+                    thumbnailSource  = null,
                     mimeType = MimeTypes.Jpeg,
                     blurhash = null,
                     width = 20,
