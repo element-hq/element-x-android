@@ -27,7 +27,7 @@ import dagger.assisted.AssistedInject
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.executeResult
+import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.mediaupload.api.MediaSender
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -83,8 +83,8 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
         mediaAttachment: Attachment.Media,
         sendActionState: MutableState<Async<Unit>>,
     ) {
-        suspend {
+        sendActionState.runUpdatingState {
             mediaSender.sendMedia(mediaAttachment.localMedia.uri, mediaAttachment.localMedia.info.mimeType, mediaAttachment.compressIfPossible)
-        }.executeResult(sendActionState)
+        }
     }
 }

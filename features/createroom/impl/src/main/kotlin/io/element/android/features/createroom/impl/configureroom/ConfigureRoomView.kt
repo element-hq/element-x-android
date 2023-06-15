@@ -84,7 +84,7 @@ fun ConfigureRoomView(
 
     if (state.createRoomAction is Async.Success) {
         LaunchedEffect(state.createRoomAction) {
-            onRoomCreated(state.createRoomAction.state)
+            onRoomCreated(state.createRoomAction.data)
         }
     }
 

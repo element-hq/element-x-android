@@ -30,7 +30,7 @@ import io.element.android.features.login.impl.accountprovider.AccountProviderDat
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.execute
+import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import kotlinx.coroutines.CoroutineScope
@@ -95,6 +95,6 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
                     throw IllegalStateException("Unsupported login flow")
                 }
             }.getOrThrow()
-        }.execute(loginFlowAction, errorMapping = ChangeServerError::from)
+        }.runCatchingUpdatingState(loginFlowAction, exceptionTransform = ChangeServerError::from)
     }
 }

@@ -18,51 +18,119 @@ package io.element.android.libraries.architecture
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
+/**
+ * Sealed type that allows to model an asynchronous operation.
+ */
 @Stable
 sealed interface Async<out T> {
+    data class Failure<out T>(
+        val exception: Throwable,
+        val prevData: T? = null,
+    ) : Async<T>
+
+    data class Loading<out T>(
+        val prevData: T? = null,
+    ) : Async<T>
+
+    data class Success<out T>(
+        val data: T,
+    ) : Async<T>
+
     object Uninitialized : Async<Nothing>
-    data class Loading<out T>(val prevState: T? = null) : Async<T>
-    data class Failure<out T>(val error: Throwable, val prevState: T? = null) : Async<T>
-    data class Success<out T>(val state: T) : Async<T>
 
-    fun dataOrNull(): T? {
-        return when (this) {
-            is Failure -> prevState
-            is Loading -> prevState
-            is Success -> state
-            Uninitialized -> null
-        }
+    fun dataOrNull(): T? = when (this) {
+        is Failure -> prevData
+        is Loading -> prevData
+        is Success -> data
+        Uninitialized -> null
     }
+
+    fun exceptionOrNull(): Throwable? = when (this) {
+        is Failure -> exception
+        else -> null
+    }
+
+    fun isFailure(): Boolean = this is Failure<T>
+
+    fun isLoading(): Boolean = this is Loading<T>
+
+    fun isSuccess(): Boolean = this is Success<T>
+
+    fun isUninitialized(): Boolean = this == Uninitialized
 }
 
-suspend inline fun <T> (suspend () -> T).execute(
+suspend inline fun <T> MutableState<Async<T>>.runCatchingUpdatingState(
+    exceptionTransform: (Throwable) -> Throwable = { it },
+    block: () -> T,
+): Result<T> = runUpdatingState(
+    state = this,
+    exceptionTransform = exceptionTransform,
+    resultBlock = {
+        runCatching {
+            block()
+        }
+    },
+)
+
+suspend inline fun <T> (suspend () -> T).runCatchingUpdatingState(
     state: MutableState<Async<T>>,
-    errorMapping: ((Throwable) -> Throwable) = { it },
-) {
-    try {
-        state.value = Async.Loading()
-        val result = this()
-        state.value = Async.Success(result)
-    } catch (error: Throwable) {
-        state.value = Async.Failure(errorMapping.invoke(error))
-    }
-}
-
-suspend inline fun <T> (suspend () -> Result<T>).executeResult(state: MutableState<Async<T>>) {
-    if (state.value !is Async.Success) {
-        state.value = Async.Loading()
-    }
-    this().fold(
-        onSuccess = {
-            state.value = Async.Success(it)
-        },
-        onFailure = {
-            state.value = Async.Failure(it)
+    exceptionTransform: (Throwable) -> Throwable = { it },
+): Result<T> = runUpdatingState(
+    state = state,
+    exceptionTransform = exceptionTransform,
+    resultBlock = {
+        runCatching {
+            this()
         }
-    )
-}
+    },
+)
 
-fun <T> Async<T>.isLoading(): Boolean {
-    return this is Async.Loading<T>
+suspend inline fun <T> MutableState<Async<T>>.runUpdatingState(
+    exceptionTransform: (Throwable) -> Throwable = { it },
+    resultBlock: () -> Result<T>,
+): Result<T> = runUpdatingState(
+    state = this,
+    exceptionTransform = exceptionTransform,
+    resultBlock = resultBlock,
+)
+
+/**
+ * Calls the specified [Result]-returning function [resultBlock]
+ * encapsulating its progress and return value into an [Async] while
+ * posting its updates to the MutableState [state].
+ *
+ * @state the [MutableState] to post updates to.
+ * @exceptionTransform a function to transform the exception before posting it.
+ * @resultBlock a suspending function that returns a [Result].
+ * @return the [Result] returned by [resultBlock].
+ */
+@OptIn(ExperimentalContracts::class)
+@Suppress("REDUNDANT_INLINE_SUSPEND_FUNCTION_TYPE")
+suspend inline fun <T> runUpdatingState(
+    state: MutableState<Async<T>>,
+    exceptionTransform: (Throwable) -> Throwable = { it },
+    resultBlock: suspend () -> Result<T>,
+): Result<T> {
+    contract {
+        callsInPlace(resultBlock, InvocationKind.EXACTLY_ONCE)
+    }
+    val prevData = state.value.dataOrNull()
+    state.value = Async.Loading(prevData = prevData)
+    val result = resultBlock()
+    return if (result.isSuccess) {
+        val data = result.getOrNull()!!
+        state.value = Async.Success(data)
+        Result.success(data)
+    } else {
+        val exception = exceptionTransform(result.exceptionOrNull()!!)
+        state.value = Async.Failure(
+            exception = exception,
+            prevData = prevData,
+        )
+        Result.failure(exception)
+    }
 }

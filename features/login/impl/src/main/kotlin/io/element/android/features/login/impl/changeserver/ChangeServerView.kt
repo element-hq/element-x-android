@@ -39,7 +39,7 @@ fun ChangeServerView(
     val eventSink = state.eventSink
     when (state.changeServerAction) {
         is Async.Failure -> {
-            when (val error = state.changeServerAction.error) {
+            when (val error = state.changeServerAction.exception) {
                 is ChangeServerError.Error -> {
                     ErrorDialog(
                         modifier = modifier,

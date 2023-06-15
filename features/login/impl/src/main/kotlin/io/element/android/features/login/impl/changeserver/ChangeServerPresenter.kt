@@ -26,7 +26,7 @@ import io.element.android.features.login.impl.accountprovider.AccountProviderDat
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.execute
+import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import kotlinx.coroutines.CoroutineScope
@@ -71,6 +71,6 @@ class ChangeServerPresenter @Inject constructor(
                 // Valid, remember user choice
                 accountProviderDataSource.userSelection(data)
             }.getOrThrow()
-        }.execute(changeServerAction, errorMapping = ChangeServerError::from)
+        }.runCatchingUpdatingState(changeServerAction, exceptionTransform = ChangeServerError::from)
     }
 }

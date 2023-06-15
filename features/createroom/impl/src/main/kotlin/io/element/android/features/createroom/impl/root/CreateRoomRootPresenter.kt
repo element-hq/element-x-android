@@ -28,7 +28,7 @@ import io.element.android.features.createroom.impl.userlist.UserListPresenter
 import io.element.android.features.createroom.impl.userlist.UserListPresenterArgs
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.execute
+import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -95,6 +95,6 @@ class CreateRoomRootPresenter @Inject constructor(
         suspend {
             matrixClient.createDM(user.userId).getOrThrow()
                 .also { analyticsService.capture(CreatedRoom(isDM = true)) }
-        }.execute(startDmAction)
+        }.runCatchingUpdatingState(startDmAction)
     }
 }

@@ -69,7 +69,7 @@ fun CreateRoomRootView(
 ) {
     if (state.startDmAction is Async.Success) {
         LaunchedEffect(state.startDmAction) {
-            onOpenDM(state.startDmAction.state)
+            onOpenDM(state.startDmAction.data)
         }
     }
 

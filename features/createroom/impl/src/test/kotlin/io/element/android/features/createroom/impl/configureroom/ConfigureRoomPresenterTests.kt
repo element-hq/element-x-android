@@ -278,7 +278,7 @@ class ConfigureRoomPresenterTests {
             assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Loading::class.java)
             val stateAfterCreateRoom = awaitItem()
             assertThat(stateAfterCreateRoom.createRoomAction).isInstanceOf(Async.Failure::class.java)
-            assertThat((stateAfterCreateRoom.createRoomAction as? Async.Failure)?.error).isEqualTo(createRoomResult.exceptionOrNull())
+            assertThat((stateAfterCreateRoom.createRoomAction as? Async.Failure)?.exception).isEqualTo(createRoomResult.exceptionOrNull())
 
             // Retry
             stateAfterCreateRoom.eventSink(ConfigureRoomEvents.CreateRoom(initialState.config))
@@ -286,7 +286,7 @@ class ConfigureRoomPresenterTests {
             assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Loading::class.java)
             val stateAfterRetry = awaitItem()
             assertThat(stateAfterRetry.createRoomAction).isInstanceOf(Async.Failure::class.java)
-            assertThat((stateAfterRetry.createRoomAction as? Async.Failure)?.error).isEqualTo(createRoomResult.exceptionOrNull())
+            assertThat((stateAfterRetry.createRoomAction as? Async.Failure)?.exception).isEqualTo(createRoomResult.exceptionOrNull())
 
             // Cancel
             stateAfterRetry.eventSink(ConfigureRoomEvents.CancelCreateRoom)

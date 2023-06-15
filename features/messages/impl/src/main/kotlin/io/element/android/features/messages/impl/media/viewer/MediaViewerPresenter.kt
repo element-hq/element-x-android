@@ -117,7 +117,7 @@ class MediaViewerPresenter @AssistedInject constructor(
 
     private fun CoroutineScope.saveOnDisk(localMedia: Async<LocalMedia>) = launch {
         if (localMedia is Async.Success) {
-            localMediaActions.saveOnDisk(localMedia.state)
+            localMediaActions.saveOnDisk(localMedia.data)
                 .onSuccess {
                     val snackbarMessage = SnackbarMessage(StringR.string.common_file_saved_on_disk_android)
                     snackbarDispatcher.post(snackbarMessage)
@@ -131,7 +131,7 @@ class MediaViewerPresenter @AssistedInject constructor(
 
     private fun CoroutineScope.share(localMedia: Async<LocalMedia>) = launch {
         if (localMedia is Async.Success) {
-            localMediaActions.share(localMedia.state)
+            localMediaActions.share(localMedia.data)
                 .onFailure {
                     val snackbarMessage = SnackbarMessage(mediaActionsError(it))
                     snackbarDispatcher.post(snackbarMessage)
@@ -141,7 +141,7 @@ class MediaViewerPresenter @AssistedInject constructor(
 
     private fun CoroutineScope.open(localMedia: Async<LocalMedia>) = launch {
         if (localMedia is Async.Success) {
-            localMediaActions.open(localMedia.state)
+            localMediaActions.open(localMedia.data)
                 .onFailure {
                     val snackbarMessage = SnackbarMessage(mediaActionsError(it))
                     snackbarDispatcher.post(snackbarMessage)
