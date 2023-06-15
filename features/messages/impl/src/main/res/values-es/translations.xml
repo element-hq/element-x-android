@@ -4,4 +4,5 @@
     <item quantity="one">"%1$d cambio en la sala"</item>
     <item quantity="other">"%1$d cambios en la sala"</item>
   </plurals>
+  <string name="screen_room_retry_send_menu_remove_action">"Eliminar"</string>
 </resources>

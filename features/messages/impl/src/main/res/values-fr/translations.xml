@@ -5,4 +5,5 @@
     <item quantity="other">"%1$d changements dans la conversation"</item>
   </plurals>
   <string name="screen_room_attachment_source_camera_photo">"Prendre une photo"</string>
+  <string name="screen_room_retry_send_menu_remove_action">"Supprimer"</string>
 </resources>

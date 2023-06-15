@@ -81,7 +81,7 @@ class CreateRoomRootNode @AssistedInject constructor(
             startSharePlainTextIntent(
                 context = context,
                 activityResultLauncher = null,
-                chooserTitle = context.getString(R.string.action_invite_friends),
+                chooserTitle = context.getString(R.string.action_invite_friends_to_app),
                 text = context.getString(R.string.invite_friends_text, appName, permalink),
                 extraTitle = context.getString(R.string.invite_friends_rich_title, appName),
                 noActivityFoundMessage = context.getString(io.element.android.libraries.androidutils.R.string.error_no_compatible_app_found)

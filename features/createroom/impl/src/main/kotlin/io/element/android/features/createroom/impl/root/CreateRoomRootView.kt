@@ -167,7 +167,7 @@ fun CreateRoomActionButtonsList(
         )
         CreateRoomActionButton(
             iconRes = DrawableR.drawable.ic_share,
-            text = stringResource(id = R.string.screen_create_room_action_invite_people),
+            text = stringResource(id = R.string.screen_create_room_action_create_room),
             onClick = onInvitePeopleClicked,
         )
     }

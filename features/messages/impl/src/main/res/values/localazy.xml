@@ -10,6 +10,8 @@
   <string name="screen_room_attachment_source_files">"Attachment"</string>
   <string name="screen_room_attachment_source_gallery">"Photo &amp; Video Library"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Could not retrieve user details"</string>
+  <string name="screen_room_invite_again_alert_message">"Would you like to invite them back?"</string>
+  <string name="screen_room_invite_again_alert_title">"You are alone in this chat"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Send again"</string>
   <string name="screen_room_retry_send_menu_title">"Your message failed to send"</string>
   <string name="screen_room_error_failed_processing_media">"Failed processing media to upload, please try again."</string>

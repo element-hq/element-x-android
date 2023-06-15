@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_account_provider_change">"Kontoanbieter wechseln"</string>
   <string name="screen_account_provider_continue">"Weiter"</string>
+  <string name="screen_account_provider_form_hint">"Adresse des Homeservers"</string>
   <string name="screen_account_provider_form_notice">"Geben Sie einen Suchbegriff oder eine Domainadresse ein."</string>
   <string name="screen_account_provider_form_subtitle">"Suche nach einem Unternehmen, einer Community oder einem privaten Server."</string>
+  <string name="screen_account_provider_form_title">"Finde einen Accountanbieter"</string>
+  <string name="screen_account_provider_signin_title">"Du bist dabei dich bei %s anzumelden"</string>
+  <string name="screen_account_provider_signup_subtitle">"Hier werden deine Konversationen stattfinden — genauso wie du einen E-Mail-Anbieter verwenden würdest, um deine E-Mails aufzubewahren."</string>
+  <string name="screen_account_provider_signup_title">"Du bist dabei einen Account auf %s zu erstellen"</string>
   <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org ist ein offenes Netzwerk für sichere, dezentralisierte Kommunikation."</string>
   <string name="screen_change_account_provider_other">"Andere"</string>
   <string name="screen_change_account_provider_subtitle">"Verwende einen anderen Kontoanbieter, z. B. deinen eigenen privaten Server oder ein Arbeitskonto."</string>

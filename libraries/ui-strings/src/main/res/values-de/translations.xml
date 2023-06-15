@@ -23,7 +23,9 @@
   <string name="action_edit">"Bearbeiten"</string>
   <string name="action_enable">"Aktivieren"</string>
   <string name="action_forgot_password">"Passwort vergessen?"</string>
+  <string name="action_forward">"Weiterleiten"</string>
   <string name="action_invite">"Einladen"</string>
+  <string name="action_invite_friends">"Freunde einladen"</string>
   <string name="action_invite_friends_to_app">"Freunde zu %1$s einladen"</string>
   <string name="action_invites_list">"Einladungen"</string>
   <string name="action_learn_more">"Mehr erfahren"</string>
@@ -52,13 +54,16 @@
   <string name="action_start">"Starten"</string>
   <string name="action_start_chat">"Chat starten"</string>
   <string name="action_start_verification">"Verifizierung starten"</string>
+  <string name="action_static_map_load">"Tippe, um die Karte zu laden"</string>
   <string name="action_take_photo">"Foto aufnehmen"</string>
   <string name="action_view_source">"Quelltext anzeigen"</string>
   <string name="action_yes">"Ja"</string>
   <string name="common_about">"Über"</string>
+  <string name="common_acceptable_use_policy">"Allgemeine Geschäftsbedingungen"</string>
   <string name="common_analytics">"Analyse"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_bubbles">"Blasen"</string>
+  <string name="common_copyright">"Urheberrecht"</string>
   <string name="common_creating_room">"Erstelle Raum…"</string>
   <string name="common_current_user_left_room">"Raum verlassen"</string>
   <string name="common_decryption_error">"Entschlüsselungsfehler"</string>
@@ -70,6 +75,7 @@
   <string name="common_error">"Fehler"</string>
   <string name="common_file">"Datei"</string>
   <string name="common_file_saved_on_disk_android">"Datei gespeichert unter Downloads"</string>
+  <string name="common_forward_message">"Nachricht weiterleiten"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Bild"</string>
   <string name="common_invite_unknown_profile">"Wir können die Matrix-ID dieses Benutzers nicht validieren. Die Einladung wurde möglicherweise nicht empfangen."</string>

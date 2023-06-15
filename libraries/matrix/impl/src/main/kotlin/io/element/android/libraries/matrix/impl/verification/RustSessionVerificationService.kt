@@ -110,7 +110,7 @@ class RustSessionVerificationService @Inject constructor() : SessionVerification
     override suspend fun reset() {
         if (isReady.value) {
             // Cancel any pending verification attempt
-//            tryOrNull { verificationController?.cancelVerification() }
+            tryOrNull { verificationController?.cancelVerification() }
         }
         _verificationFlowState.value = VerificationFlowState.Initial
     }

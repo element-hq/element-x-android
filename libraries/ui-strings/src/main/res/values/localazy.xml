@@ -25,6 +25,7 @@
   <string name="action_forgot_password">"Forgot password?"</string>
   <string name="action_forward">"Forward"</string>
   <string name="action_invite">"Invite"</string>
+  <string name="action_invite_friends">"Invite friends"</string>
   <string name="action_invite_friends_to_app">"Invite friends to %1$s"</string>
   <string name="action_invites_list">"Invites"</string>
   <string name="action_learn_more">"Learn more"</string>
@@ -53,6 +54,7 @@
   <string name="action_start">"Start"</string>
   <string name="action_start_chat">"Start chat"</string>
   <string name="action_start_verification">"Start verification"</string>
+  <string name="action_static_map_load">"Tap to load map"</string>
   <string name="action_take_photo">"Take photo"</string>
   <string name="action_view_source">"View Source"</string>
   <string name="action_yes">"Yes"</string>
@@ -73,6 +75,7 @@
   <string name="common_error">"Error"</string>
   <string name="common_file">"File"</string>
   <string name="common_file_saved_on_disk_android">"File saved to Downloads"</string>
+  <string name="common_forward_message">"Forward message"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Image"</string>
   <string name="common_invite_unknown_profile">"We can’t validate this user’s Matrix ID. The invite might not be received."</string>

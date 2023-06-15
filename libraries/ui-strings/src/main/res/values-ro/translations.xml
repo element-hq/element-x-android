@@ -25,6 +25,7 @@
   <string name="action_forgot_password">"Ați uitat parola?"</string>
   <string name="action_forward">"Redirecționați"</string>
   <string name="action_invite">"Invitați"</string>
+  <string name="action_invite_friends">"Invitați prieteni"</string>
   <string name="action_invite_friends_to_app">"Invitați prieteni în %1$s"</string>
   <string name="action_invites_list">"Invitații"</string>
   <string name="action_learn_more">"Aflați mai multe"</string>

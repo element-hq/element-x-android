@@ -23,7 +23,9 @@
   <string name="action_edit">"Upravit"</string>
   <string name="action_enable">"Povolit"</string>
   <string name="action_forgot_password">"Zapomněli jste heslo?"</string>
+  <string name="action_forward">"Vpřed"</string>
   <string name="action_invite">"Pozvat"</string>
+  <string name="action_invite_friends">"Pozvat přátele"</string>
   <string name="action_invite_friends_to_app">"Pozvat přátele do %1$s"</string>
   <string name="action_invites_list">"Pozvánky"</string>
   <string name="action_learn_more">"Zjistit více"</string>
@@ -72,6 +74,7 @@
   <string name="common_error">"Chyba"</string>
   <string name="common_file">"Soubor"</string>
   <string name="common_file_saved_on_disk_android">"Soubor byl uložen do složky Stažené soubory"</string>
+  <string name="common_forward_message">"Přeposlat zprávu"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Obrázek"</string>
   <string name="common_invite_unknown_profile">"Nemůžeme ověřit Matrix ID tohoto uživatele. Pozvánka nemusí být přijata."</string>
