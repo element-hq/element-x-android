@@ -18,17 +18,28 @@ package io.element.android.libraries.matrix.ui.media
 
 import io.element.android.libraries.matrix.api.media.MediaSource
 
+/**
+ * Can be use with [coil.compose.AsyncImage] to load a [MediaSource].
+ * This will go internally through our [CoilMediaFetcher].
+ *
+ * Example of usage:
+ *  AsyncImage(
+ *      model = MediaRequestData(mediaSource, MediaRequestData.Kind.Content),
+ *      contentScale = ContentScale.Fit,
+ *  )
+ *
+ */
 data class MediaRequestData(
     val source: MediaSource?,
     val kind: Kind
 ) {
 
     sealed interface Kind {
+        object Content : Kind
+        data class File(val body: String?, val mimeType: String) : Kind
         data class Thumbnail(val width: Long, val height: Long) : Kind {
             constructor(size: Long) : this(size, size)
         }
-
-        object Content : Kind
     }
 }
 
