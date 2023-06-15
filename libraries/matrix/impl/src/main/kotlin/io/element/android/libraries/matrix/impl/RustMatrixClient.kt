@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.api.createroom.RoomVisibility
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.pusher.PushersService
+import io.element.android.libraries.matrix.api.room.ForwardEventException
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
@@ -38,6 +39,7 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationS
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
+import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.sync.SlidingSyncObserverProxy
@@ -50,6 +52,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
@@ -60,6 +63,7 @@ import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.RequiredState
+import org.matrix.rustcomponents.sdk.RoomMessageEventContent
 import org.matrix.rustcomponents.sdk.SlidingSyncList
 import org.matrix.rustcomponents.sdk.SlidingSyncListBuilder
 import org.matrix.rustcomponents.sdk.SlidingSyncListOnceBuilt
@@ -197,6 +201,8 @@ class RustMatrixClient constructor(
 
     private val roomMembershipObserver = RoomMembershipObserver()
 
+    private val roomContentForwarder = RoomContentForwarder(slidingSync, coroutineScope)
+
     init {
         client.setDelegate(clientDelegate)
         rustRoomSummaryDataSource.init()
@@ -218,6 +224,7 @@ class RustMatrixClient constructor(
             coroutineScope = coroutineScope,
             coroutineDispatchers = dispatchers,
             clock = clock,
+            roomContentForwarder = roomContentForwarder,
         )
     }
 

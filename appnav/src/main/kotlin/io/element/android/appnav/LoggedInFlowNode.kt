@@ -66,6 +66,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
@@ -238,8 +239,13 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
                 } else {
                     val nodeLifecycleCallbacks = plugins<NodeLifecycleCallback>()
+                    val callback = object : RoomFlowNode.Callback {
+                        override fun onForwardedToSingleRoom(roomId: RoomId) {
+                            coroutineScope.launch { attachRoom(roomId) }
+                        }
+                    }
                     val inputs = RoomFlowNode.Inputs(room, initialElement = navTarget.initialElement)
-                    createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs) + nodeLifecycleCallbacks)
+                    createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs, callback) + nodeLifecycleCallbacks)
                 }
             }
             NavTarget.Settings -> {

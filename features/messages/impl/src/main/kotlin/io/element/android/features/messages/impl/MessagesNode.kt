@@ -48,6 +48,7 @@ class MessagesNode @AssistedInject constructor(
         fun onPreviewAttachments(attachments: ImmutableList<Attachment>)
         fun onUserDataClicked(userId: UserId)
         fun onShowEventDebugInfoClicked(eventId: EventId, debugInfo: TimelineItemDebugInfo)
+        fun onForwardEventClicked(eventId: EventId)
     }
 
     private fun onRoomDetailsClicked() {
@@ -70,6 +71,10 @@ class MessagesNode @AssistedInject constructor(
         callback?.onShowEventDebugInfoClicked(eventId, debugInfo)
     }
 
+    private fun onForwardEventClicked(eventId: EventId) {
+        callback?.onForwardEventClicked(eventId)
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -81,6 +86,7 @@ class MessagesNode @AssistedInject constructor(
             onPreviewAttachments = this::onPreviewAttachments,
             onUserDataClicked = this::onUserDataClicked,
             onItemDebugInfoClicked = this::onShowEventDebugInfoClicked,
+            onForwardEventClicked = this::onForwardEventClicked,
             modifier = modifier,
         )
     }

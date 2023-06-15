@@ -39,6 +39,7 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -67,6 +68,10 @@ class RoomFlowNode @AssistedInject constructor(
     plugins = plugins,
 ) {
 
+    interface Callback : Plugin {
+        fun onForwardedToSingleRoom(roomId: RoomId)
+    }
+
     interface LifecycleCallback : NodeLifecycleCallback {
         fun onFlowCreated(identifier: String, room: MatrixRoom) = Unit
         fun onFlowReleased(identifier: String, room: MatrixRoom) = Unit
@@ -78,6 +83,7 @@ class RoomFlowNode @AssistedInject constructor(
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
+    private val callbacks = plugins.filterIsInstance<Callback>()
 
     init {
         lifecycle.subscribe(
@@ -123,6 +129,10 @@ class RoomFlowNode @AssistedInject constructor(
 
                     override fun onUserDataClicked(userId: UserId) {
                         backstack.push(NavTarget.RoomMemberDetails(userId))
+                    }
+
+                    override fun onForwardedToSingleRoom(roomId: RoomId) {
+                        callbacks.forEach { it.onForwardedToSingleRoom(roomId) }
                     }
                 }
                 messagesEntryPoint.createNode(this, buildContext, callback)

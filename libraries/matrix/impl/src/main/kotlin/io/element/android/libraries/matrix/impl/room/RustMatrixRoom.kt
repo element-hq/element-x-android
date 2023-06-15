@@ -48,6 +48,7 @@ import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 import org.matrix.rustcomponents.sdk.UpdateSummary
 import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
+import timber.log.Timber
 import java.io.File
 
 class RustMatrixRoom(
@@ -58,6 +59,7 @@ class RustMatrixRoom(
     private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val clock: SystemClock,
+    private val roomContentForwarder: RoomContentForwarder,
 ) : MatrixRoom {
 
     override val membersStateFlow: StateFlow<MatrixRoomMembersState>
@@ -268,6 +270,14 @@ class RustMatrixRoom(
     override suspend fun sendReaction(emoji: String, eventId: EventId): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {
             innerRoom.sendReaction(key = emoji, eventId = eventId.value)
+        }
+    }
+
+    override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            roomContentForwarder.forward(fromRoom = innerRoom, eventId = eventId, toRoomIds = roomIds)
+        }.onFailure {
+            Timber.e(it)
         }
     }
 

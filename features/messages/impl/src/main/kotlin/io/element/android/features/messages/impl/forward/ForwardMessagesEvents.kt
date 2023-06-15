@@ -14,25 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.api
+package io.element.android.features.messages.impl.forward
 
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.plugin.Plugin
-import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
 
-interface MessagesEntryPoint : FeatureEntryPoint {
-    fun createNode(
-        parentNode: Node,
-        buildContext: BuildContext,
-        callback: Callback,
-    ): Node
-
-    interface Callback : Plugin {
-        fun onRoomDetailsClicked()
-        fun onUserDataClicked(userId: UserId)
-        fun onForwardedToSingleRoom(roomId: RoomId)
-    }
+sealed interface ForwardMessagesEvents {
+    data class ToggleSelectedRoom(val room: RoomSummaryDetails) : ForwardMessagesEvents
+    object ToggleSearchActive : ForwardMessagesEvents
+    data class UpdateQuery(val query: String) : ForwardMessagesEvents
+    object ForwardEvent : ForwardMessagesEvents
+    object ClearError : ForwardMessagesEvents
 }
