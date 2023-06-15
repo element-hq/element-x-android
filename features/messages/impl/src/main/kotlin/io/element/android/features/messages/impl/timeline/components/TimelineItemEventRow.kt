@@ -248,7 +248,7 @@ private fun MessageEventBubbleContent(
     ) {
         EqualWidthColumn(modifier = modifier, spacing = 8.dp) {
             if (inReplyToDetails != null) {
-                val senderName = event.senderDisplayName ?: event.senderId.value
+                val senderName = inReplyToDetails.senderDisplayName ?: inReplyToDetails.senderId.value
                 val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyToDetails)
                 ReplyToContent(
                     senderName = senderName,
@@ -256,6 +256,7 @@ private fun MessageEventBubbleContent(
                     attachmentThumbnailInfo = attachmentThumbnailInfo,
                     modifier = Modifier
                         .padding(top = 8.dp, start = 8.dp, end = 8.dp)
+                        .clip(RoundedCornerShape(6.dp))
                         .clickable(enabled = true, onClick = inReplyToClick),
                 )
             }
@@ -300,7 +301,6 @@ private fun ReplyToContent(
     }
     Row(
         modifier
-            .clip(RoundedCornerShape(6.dp))
             .background(MaterialTheme.colorScheme.surface)
             .padding(paddings)
     ) {
