@@ -18,6 +18,7 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.content.Context
 import io.element.android.libraries.androidutils.file.EncryptedFileFactory
+import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.ApplicationContext
@@ -70,7 +71,7 @@ class NotificationEventPersistence @Inject constructor(
     fun persistEvents(queuedEvents: NotificationEventQueue) {
         Timber.tag(loggerTag.value).d("Serializing ${queuedEvents.rawEvents().size} NotifiableEvent(s)")
         // Always delete file before writing, or encryptedFile.openFileOutput() will throw
-        file.delete()
+        file.safeDelete()
         if (queuedEvents.isEmpty()) return
         try {
             encryptedFile.openFileOutput().use { fos ->

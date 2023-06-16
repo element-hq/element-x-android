@@ -35,6 +35,19 @@ fun File.safeDelete() {
     )
 }
 
+fun File.safeRenameTo(dest: File) {
+    tryOrNull(
+        onError = {
+            Timber.e(it, "Error, unable to rename file $path to ${dest.path}")
+        },
+        operation = {
+            if (renameTo(dest).not()) {
+                Timber.w("Warning, unable to rename file $path to ${dest.path}")
+            }
+        }
+    )
+}
+
 fun Context.createTmpFile(baseDir: File = cacheDir, extension: String? = null): File {
     val suffix = extension?.let { ".$extension" }
     return File.createTempFile(UUID.randomUUID().toString(), suffix, baseDir).apply { mkdirs() }
