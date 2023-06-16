@@ -20,5 +20,9 @@ import android.media.MediaMetadataRetriever
 
 /** [MediaMetadataRetriever] only implements `AutoClosable` since API 29, so we need to execute this to have the same in older APIs. */
 inline fun <T> MediaMetadataRetriever.runAndRelease(block: MediaMetadataRetriever.() -> T): T {
-    return block().also { release() }
+    return try {
+        block()
+    } finally {
+        release()
+    }
 }
