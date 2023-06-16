@@ -64,7 +64,7 @@ android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref
 android_desugar = "com.android.tools:desugar_jdk_libs:2.0.3"
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:32.1.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:32.1.1"
 
 # AndroidX
 androidx_material = { module = "com.google.android.material:material", version.ref = "material" }
@@ -142,7 +142,7 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.19"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.21"
 sqldelight-driver-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }

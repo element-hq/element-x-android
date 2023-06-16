@@ -20,7 +20,7 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import org.matrix.rustcomponents.sdk.VideoInfo as RustVideoInfo
 
 fun RustVideoInfo.map(): VideoInfo = VideoInfo(
-    duration = duration?.toLong(),
+    duration = duration,
     height = height?.toLong(),
     width = width?.toLong(),
     mimetype = mimetype,
@@ -31,7 +31,7 @@ fun RustVideoInfo.map(): VideoInfo = VideoInfo(
 )
 
 fun VideoInfo.map(): RustVideoInfo = RustVideoInfo(
-    duration = duration?.toULong(),
+    duration = duration,
     height = height?.toULong(),
     width = width?.toULong(),
     mimetype = mimetype,
