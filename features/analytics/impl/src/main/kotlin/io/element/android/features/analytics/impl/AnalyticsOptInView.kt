@@ -82,11 +82,15 @@ fun AnalyticsOptInView(
 }
 
 @Composable
-fun AnalyticsOptInHeader(
+private fun AnalyticsOptInHeader(
     state: AnalyticsOptInState,
     onClickTerms: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         IconTitleSubtitleMolecule(
             modifier = Modifier.padding(top = 60.dp, bottom = 12.dp),
             title = stringResource(id = R.string.screen_analytics_prompt_title, state.applicationName),
@@ -113,9 +117,11 @@ fun AnalyticsOptInHeader(
 }
 
 @Composable
-fun AnalyticsOptInContent() {
+private fun AnalyticsOptInContent(
+    modifier: Modifier = Modifier,
+) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentAlignment = BiasAlignment(
             horizontalBias = 0f,
             verticalBias = -0.4f
@@ -141,9 +147,10 @@ fun AnalyticsOptInContent() {
 }
 
 @Composable
-fun AnalyticsOptInContentRow(
+private fun AnalyticsOptInContentRow(
     text: String,
     idx: Int,
+    modifier: Modifier = Modifier,
 ) {
     val radius = 14.dp
     val bgShape = when (idx) {
@@ -152,7 +159,7 @@ fun AnalyticsOptInContentRow(
         else -> RoundedCornerShape(0.dp)
     }
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(
                 color = LocalColors.current.quinary,
@@ -181,8 +188,13 @@ fun AnalyticsOptInContentRow(
 }
 
 @Composable
-fun AnalyticsOptInFooter(eventSink: (AnalyticsOptInEvents) -> Unit) {
-    ButtonColumnMolecule {
+private fun AnalyticsOptInFooter(
+    eventSink: (AnalyticsOptInEvents) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    ButtonColumnMolecule(
+        modifier = modifier,
+    ) {
         Button(
             onClick = { eventSink(AnalyticsOptInEvents.EnableAnalytics(true)) },
             modifier = Modifier.fillMaxWidth(),
