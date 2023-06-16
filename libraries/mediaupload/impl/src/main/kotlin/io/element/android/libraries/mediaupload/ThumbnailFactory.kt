@@ -86,12 +86,12 @@ class ThumbnailFactory @Inject constructor(
         }
     }
 
-    private suspend fun createThumbnail(bitmapThumbnailFactory: (CancellationSignal) -> Bitmap?): ThumbnailResult = suspendCancellableCoroutine { continuation ->
+    private suspend fun createThumbnail(bitmapFactory: (CancellationSignal) -> Bitmap?): ThumbnailResult = suspendCancellableCoroutine { continuation ->
         val cancellationSignal = CancellationSignal()
         continuation.invokeOnCancellation {
             cancellationSignal.cancel()
         }
-        val bitmapThumbnail: Bitmap? = bitmapThumbnailFactory(cancellationSignal)
+        val bitmapThumbnail: Bitmap? = bitmapFactory(cancellationSignal)
         val thumbnailFile = context.createTmpFile(extension = "jpeg")
         thumbnailFile.outputStream().use { outputStream ->
             bitmapThumbnail?.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
