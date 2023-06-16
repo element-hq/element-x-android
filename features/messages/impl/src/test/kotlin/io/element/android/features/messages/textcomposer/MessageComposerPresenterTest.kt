@@ -50,7 +50,7 @@ import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
-import io.element.android.libraries.mediaupload.api.ThumbnailProcessingInfo
+import io.element.android.libraries.mediaupload.api.ThumbnailResult
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import io.mockk.mockk
@@ -301,7 +301,7 @@ class MessageComposerPresenterTest {
                         thumbnailSource = null,
                         blurhash = null,
                     ),
-                    thumbnailInfo = ThumbnailProcessingInfo(
+                    thumbnailInfo = ThumbnailResult(
                         file = File("/some/path"),
                         info = ThumbnailInfo(
                             width = null,
@@ -309,7 +309,6 @@ class MessageComposerPresenterTest {
                             mimetype = null,
                             size = null,
                         ),
-                        blurhash = "",
                     )
                 )
             )
@@ -344,7 +343,7 @@ class MessageComposerPresenterTest {
                         thumbnailSource = null,
                         blurhash = null,
                     ),
-                    thumbnailInfo = ThumbnailProcessingInfo(
+                    thumbnailInfo = ThumbnailResult(
                         file = File("/some/path"),
                         info = ThumbnailInfo(
                             width = null,
@@ -352,7 +351,6 @@ class MessageComposerPresenterTest {
                             mimetype = null,
                             size = null,
                         ),
-                        blurhash = "",
                     )
                 )
             )
