@@ -22,25 +22,27 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.filled.Poll
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -54,9 +56,14 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
+import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.LinkColor
+import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -71,114 +78,122 @@ fun AnalyticsOptInView(
 ) {
     LogCompositions(tag = "Analytics", msg = "Root")
     val eventSink = state.eventSink
-    Box(
+    HeaderFooterPage(
         modifier = modifier
             .fillMaxSize()
             .systemBarsPadding()
-            .imePadding()
+            .imePadding(),
+        header = { AnalyticsOptInHeader(state) },
+        content = { AnalyticsOptInContent() },
+        footer = { AnalyticsOptInFooter(eventSink) })
+}
+
+@Composable
+fun AnalyticsOptInHeader(state: AnalyticsOptInState) {
+    Column {
+        IconTitleSubtitleMolecule(
+            modifier = Modifier.padding(top = 60.dp),
+            title = stringResource(id = R.string.screen_analytics_prompt_title, state.applicationName),
+            subTitle = stringResource(id = R.string.screen_analytics_prompt_help_us_improve),
+            iconImageVector = Icons.Filled.Poll
+        )
+        Text(
+            text = buildAnnotatedStringWithColoredPart(
+                R.string.screen_analytics_prompt_read_terms,
+                R.string.screen_analytics_prompt_read_terms_content_link
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp),
+            style = ElementTextStyles.Regular.subheadline,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.secondary,
+        )
+    }
+}
+
+@Composable
+fun AnalyticsOptInContent() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = BiasAlignment(
+            horizontalBias = 0f,
+            verticalBias = -0.4f
+        )
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Image(
-                    painterResource(id = R.drawable.element_logo_stars),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(16.dp)
-                )
-                Text(
-                    text = stringResource(id = R.string.screen_analytics_prompt_title, state.applicationName),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 16.dp),
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-                Text(
-                    text = stringResource(id = R.string.screen_analytics_prompt_help_us_improve, state.applicationName),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 16.dp),
-                    textAlign = TextAlign.Center,
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.secondary,
-                )
+            AnalyticsOptInContentRow(
+                text = stringResource(id = R.string.screen_analytics_prompt_data_usage),
+                idx = 0
+            )
+            AnalyticsOptInContentRow(
+                text = stringResource(id = R.string.screen_analytics_prompt_third_party_sharing),
+                idx = 1
+            )
+            AnalyticsOptInContentRow(
+                text = stringResource(id = R.string.screen_analytics_prompt_settings),
+                idx = 2
+            )
+        }
+    }
+}
 
-                Text(
-                    text = buildAnnotatedStringWithColoredPart(
-                        R.string.screen_analytics_prompt_read_terms,
-                        R.string.screen_analytics_prompt_read_terms_content_link
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 16.dp),
-                    textAlign = TextAlign.Center,
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.secondary,
-                )
+@Composable
+fun AnalyticsOptInContentRow(
+    text: String,
+    idx: Int,
+) {
+    val radius = 14.dp
+    val bgShape = when (idx) {
+        0 -> RoundedCornerShape(topStart = radius, topEnd = radius)
+        2 -> RoundedCornerShape(bottomStart = radius, bottomEnd = radius)
+        else -> RoundedCornerShape(0.dp)
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = LocalColors.current.quinary,
+                shape = bgShape,
+            )
+            .padding(vertical = 12.dp, horizontal = 20.dp),
+    ) {
+        Icon(
+            modifier = Modifier
+                .size(20.dp)
+                .background(color = MaterialTheme.colorScheme.background, shape = CircleShape)
+                .padding(2.dp),
+            imageVector = Icons.Rounded.Check,
+            contentDescription = null,
+            // TODO Compound, this color is not yet in the theme
+            tint = Color(0xFF007A61)
+        )
+        Text(
+            modifier = Modifier.padding(start = 16.dp),
+            text = text,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.primary,
+        )
+    }
+}
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(imageVector = Icons.Outlined.CheckCircle,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.secondary)
-                    Text(
-                        text = stringResource(id = R.string.screen_analytics_prompt_data_usage).toAnnotatedString(),
-                        color = MaterialTheme.colorScheme.secondary,
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(imageVector = Icons.Outlined.CheckCircle,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.secondary)
-                    Text(
-                        text = stringResource(id = R.string.screen_analytics_prompt_third_party_sharing).toAnnotatedString(),
-                        color = MaterialTheme.colorScheme.secondary,
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(imageVector = Icons.Outlined.CheckCircle,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.secondary)
-                    Text(
-                        text = stringResource(id = R.string.screen_analytics_prompt_settings),
-                        color = MaterialTheme.colorScheme.secondary,
-                    )
-                }
-            }
-
-            Button(
-                onClick = { eventSink(AnalyticsOptInEvents.EnableAnalytics(true)) },
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(text = stringResource(id = StringR.string.action_enable))
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            TextButton(
-                onClick = { eventSink(AnalyticsOptInEvents.EnableAnalytics(false)) },
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(text = stringResource(id = StringR.string.action_not_now))
-            }
-            Spacer(Modifier.height(40.dp))
+@Composable
+fun AnalyticsOptInFooter(eventSink: (AnalyticsOptInEvents) -> Unit) {
+    ButtonColumnMolecule {
+        Button(
+            onClick = { eventSink(AnalyticsOptInEvents.EnableAnalytics(true)) },
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(text = stringResource(id = StringR.string.action_ok))
+        }
+        TextButton(
+            onClick = { eventSink(AnalyticsOptInEvents.EnableAnalytics(false)) },
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(text = stringResource(id = StringR.string.action_not_now))
         }
     }
 }
