@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.oidc.customtab
+package io.element.android.libraries.androidutils.browser
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
