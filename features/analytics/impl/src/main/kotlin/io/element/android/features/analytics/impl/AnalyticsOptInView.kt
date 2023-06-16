@@ -16,12 +16,6 @@
 
 package io.element.android.features.analytics.impl
 
-import android.graphics.Typeface
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
-import android.text.style.UnderlineSpan
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,25 +38,20 @@ import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.libraries.designsystem.ElementTextStyles
-import io.element.android.libraries.designsystem.LinkColor
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
 import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -98,9 +87,12 @@ fun AnalyticsOptInHeader(state: AnalyticsOptInState) {
             iconImageVector = Icons.Filled.Poll
         )
         Text(
-            text = buildAnnotatedStringWithColoredPart(
+            text = buildAnnotatedStringWithStyledPart(
                 R.string.screen_analytics_prompt_read_terms,
-                R.string.screen_analytics_prompt_read_terms_content_link
+                R.string.screen_analytics_prompt_read_terms_content_link,
+                color = Color.Unspecified,
+                underline = false,
+                bold = true,
             ),
             modifier = Modifier
                 .fillMaxWidth()
@@ -196,43 +188,6 @@ fun AnalyticsOptInFooter(eventSink: (AnalyticsOptInEvents) -> Unit) {
             Text(text = stringResource(id = StringR.string.action_not_now))
         }
     }
-}
-
-fun String.toAnnotatedString(): AnnotatedString = buildAnnotatedString {
-    append(this@toAnnotatedString)
-    val spannable = SpannableString(this@toAnnotatedString)
-    spannable.getSpans(0, spannable.length, Any::class.java).forEach { span ->
-        val start = spannable.getSpanStart(span)
-        val end = spannable.getSpanEnd(span)
-        when (span) {
-            is StyleSpan -> when (span.style) {
-                Typeface.BOLD -> addStyle(SpanStyle(fontWeight = FontWeight.Bold), start, end)
-                Typeface.ITALIC -> addStyle(SpanStyle(fontStyle = FontStyle.Italic), start, end)
-                Typeface.BOLD_ITALIC -> addStyle(SpanStyle(fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic), start, end)
-            }
-            is UnderlineSpan -> addStyle(SpanStyle(textDecoration = TextDecoration.Underline), start, end)
-            is ForegroundColorSpan -> addStyle(SpanStyle(color = Color(span.foregroundColor)), start, end)
-        }
-    }
-}
-
-@Composable
-fun buildAnnotatedStringWithColoredPart(
-    @StringRes fullTextRes: Int,
-    @StringRes coloredTextRes: Int,
-    color: Color = LinkColor,
-    underline: Boolean = true,
-) = buildAnnotatedString {
-    val coloredPart = stringResource(coloredTextRes)
-    val fullText = stringResource(fullTextRes, coloredPart)
-    val startIndex = fullText.indexOf(coloredPart)
-    append(fullText)
-    addStyle(
-        style = SpanStyle(
-            color = color,
-            textDecoration = if (underline) TextDecoration.Underline else null
-        ), start = startIndex, end = startIndex + coloredPart.length
-    )
 }
 
 @Preview
