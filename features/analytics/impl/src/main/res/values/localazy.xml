@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_analytics_prompt_data_usage">"We "<b>"don\'t"</b>" record or profile any account data"</string>
-  <string name="screen_analytics_prompt_help_us_improve">"Help us identify issues and improve %1$s by sharing anonymous usage data."</string>
+  <string name="screen_analytics_prompt_data_usage">"We won\'t record or profile any personal data"</string>
+  <string name="screen_analytics_prompt_help_us_improve">"Share anonymous usage data to help us identify issues."</string>
   <string name="screen_analytics_prompt_read_terms">"You can read all our terms %1$s."</string>
   <string name="screen_analytics_prompt_read_terms_content_link">"here"</string>
-  <string name="screen_analytics_prompt_settings">"You can turn this off anytime in settings"</string>
-  <string name="screen_analytics_prompt_third_party_sharing">"We "<b>"don\'t"</b>" share information with third parties"</string>
+  <string name="screen_analytics_prompt_settings">"You can turn this off anytime"</string>
+  <string name="screen_analytics_prompt_third_party_sharing">"We won\'t share your data with third parties"</string>
   <string name="screen_analytics_prompt_title">"Help improve %1$s"</string>
 </resources>
