@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2023 New Vector Ltd
  *
@@ -14,20 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
+
+package io.element.android.features.analytics.api
+
+object Config {
+    const val POLICY_LINK = "https://element.io/cookie-policy"
 }
 
-android {
-    namespace = "io.element.android.libraries.androidutils"
-}
-
-dependencies {
-    implementation(libs.timber)
-    implementation(libs.androidx.corektx)
-    implementation(libs.androidx.activity.activity)
-    implementation(libs.androidx.exifinterface)
-    implementation(libs.androidx.security.crypto)
-    implementation(libs.androidx.browser)
-    implementation(projects.libraries.core)
-}
