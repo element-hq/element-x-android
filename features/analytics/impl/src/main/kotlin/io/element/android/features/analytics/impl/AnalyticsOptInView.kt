@@ -17,6 +17,7 @@
 package io.element.android.features.analytics.impl
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,8 +35,10 @@ import androidx.compose.material.icons.filled.Poll
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -63,6 +66,7 @@ import io.element.android.libraries.ui.strings.R as StringR
 @Composable
 fun AnalyticsOptInView(
     state: AnalyticsOptInState,
+    onClickTerms: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LogCompositions(tag = "Analytics", msg = "Root")
@@ -72,16 +76,19 @@ fun AnalyticsOptInView(
             .fillMaxSize()
             .systemBarsPadding()
             .imePadding(),
-        header = { AnalyticsOptInHeader(state) },
+        header = { AnalyticsOptInHeader(state, onClickTerms) },
         content = { AnalyticsOptInContent() },
         footer = { AnalyticsOptInFooter(eventSink) })
 }
 
 @Composable
-fun AnalyticsOptInHeader(state: AnalyticsOptInState) {
-    Column {
+fun AnalyticsOptInHeader(
+    state: AnalyticsOptInState,
+    onClickTerms: () -> Unit,
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         IconTitleSubtitleMolecule(
-            modifier = Modifier.padding(top = 60.dp),
+            modifier = Modifier.padding(top = 60.dp, bottom = 12.dp),
             title = stringResource(id = R.string.screen_analytics_prompt_title, state.applicationName),
             subTitle = stringResource(id = R.string.screen_analytics_prompt_help_us_improve),
             iconImageVector = Icons.Filled.Poll
@@ -95,8 +102,9 @@ fun AnalyticsOptInHeader(state: AnalyticsOptInState) {
                 bold = true,
             ),
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp),
+                .clip(shape = RoundedCornerShape(8.dp))
+                .clickable { onClickTerms() }
+                .padding(8.dp),
             style = ElementTextStyles.Regular.subheadline,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.secondary,
@@ -204,5 +212,8 @@ fun AnalyticsOptInViewDarkPreview(@PreviewParameter(AnalyticsOptInStateProvider:
 
 @Composable
 private fun ContentToPreview(state: AnalyticsOptInState) {
-    AnalyticsOptInView(state = state)
+    AnalyticsOptInView(
+        state = state,
+        onClickTerms = {},
+    )
 }
