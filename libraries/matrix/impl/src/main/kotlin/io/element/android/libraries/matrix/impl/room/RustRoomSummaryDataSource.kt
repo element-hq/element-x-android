@@ -39,7 +39,7 @@ import org.matrix.rustcomponents.sdk.SlidingSync
 import org.matrix.rustcomponents.sdk.SlidingSyncList
 import org.matrix.rustcomponents.sdk.SlidingSyncListRoomsListDiff
 import org.matrix.rustcomponents.sdk.SlidingSyncSelectiveModeBuilder
-import org.matrix.rustcomponents.sdk.SlidingSyncState
+import org.matrix.rustcomponents.sdk.SlidingSyncListLoadingState
 import org.matrix.rustcomponents.sdk.UpdateSummary
 import timber.log.Timber
 import java.io.Closeable
@@ -56,7 +56,7 @@ internal class RustRoomSummaryDataSource(
     private val coroutineScope = CoroutineScope(SupervisorJob() + coroutineDispatchers.io)
 
     private val roomSummaries = MutableStateFlow<List<RoomSummary>>(emptyList())
-    private val state = MutableStateFlow(SlidingSyncState.NOT_LOADED)
+    private val state = MutableStateFlow(SlidingSyncListLoadingState.NOT_LOADED)
 
     fun init() {
         coroutineScope.launch {
@@ -107,7 +107,7 @@ internal class RustRoomSummaryDataSource(
 
     private suspend fun didReceiveSyncUpdate(summary: UpdateSummary) {
         Timber.v("UpdateRooms with identifiers: ${summary.rooms}")
-        if (state.value != SlidingSyncState.FULLY_LOADED) {
+        if (state.value != SlidingSyncListLoadingState.FULLY_LOADED) {
             return
         }
         updateRoomSummaries {
