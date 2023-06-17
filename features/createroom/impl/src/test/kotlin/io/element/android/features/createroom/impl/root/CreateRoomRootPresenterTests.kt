@@ -20,6 +20,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.features.createroom.impl.userlist.FakeUserListPresenter
 import io.element.android.features.createroom.impl.userlist.FakeUserListPresenterFactory
 import io.element.android.features.createroom.impl.userlist.UserListDataStore
@@ -43,17 +44,20 @@ class CreateRoomRootPresenterTests {
     private lateinit var presenter: CreateRoomRootPresenter
     private lateinit var fakeUserListPresenter: FakeUserListPresenter
     private lateinit var fakeMatrixClient: FakeMatrixClient
+    private lateinit var fakeAnalyticsService: FakeAnalyticsService
 
     @Before
     fun setup() {
         fakeUserListPresenter = FakeUserListPresenter()
         fakeMatrixClient = FakeMatrixClient()
+        fakeAnalyticsService = FakeAnalyticsService()
         userRepository = FakeUserRepository()
         presenter = CreateRoomRootPresenter(
             presenterFactory = FakeUserListPresenterFactory(fakeUserListPresenter),
             userRepository = userRepository,
             userListDataStore = UserListDataStore(),
-            matrixClient = fakeMatrixClient
+            matrixClient = fakeMatrixClient,
+            analyticsService = fakeAnalyticsService,
         )
     }
 
