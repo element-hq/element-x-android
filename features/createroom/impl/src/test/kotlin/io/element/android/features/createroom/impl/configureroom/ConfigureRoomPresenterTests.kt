@@ -21,6 +21,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.features.createroom.impl.userlist.UserListDataStore
@@ -62,6 +63,7 @@ class ConfigureRoomPresenterTests {
     private lateinit var fakeMatrixClient: FakeMatrixClient
     private lateinit var fakePickerProvider: FakePickerProvider
     private lateinit var fakeMediaPreProcessor: FakeMediaPreProcessor
+    private lateinit var fakeAnalyticsService: FakeAnalyticsService
 
     @Before
     fun setup() {
@@ -70,11 +72,13 @@ class ConfigureRoomPresenterTests {
         createRoomDataStore = CreateRoomDataStore(userListDataStore)
         fakePickerProvider = FakePickerProvider()
         fakeMediaPreProcessor = FakeMediaPreProcessor()
+        fakeAnalyticsService = FakeAnalyticsService()
         presenter = ConfigureRoomPresenter(
             dataStore = createRoomDataStore,
             matrixClient = fakeMatrixClient,
             mediaPickerProvider = fakePickerProvider,
             mediaPreProcessor = fakeMediaPreProcessor,
+            analyticsService = fakeAnalyticsService,
         )
 
         mockkStatic(File::readBytes)

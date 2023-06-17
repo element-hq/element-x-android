@@ -21,6 +21,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import im.vector.app.features.analytics.plan.CreatedRoom
 import io.element.android.features.createroom.impl.userlist.SelectionMode
 import io.element.android.features.createroom.impl.userlist.UserListDataStore
 import io.element.android.features.createroom.impl.userlist.UserListPresenter
@@ -32,6 +33,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.usersearch.api.UserRepository
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -41,6 +43,7 @@ class CreateRoomRootPresenter @Inject constructor(
     private val userRepository: UserRepository,
     private val userListDataStore: UserListDataStore,
     private val matrixClient: MatrixClient,
+    private val analyticsService: AnalyticsService,
 ) : Presenter<CreateRoomRootState> {
 
     private val presenter by lazy {
@@ -88,6 +91,7 @@ class CreateRoomRootPresenter @Inject constructor(
     private fun CoroutineScope.createDM(user: MatrixUser, startDmAction: MutableState<Async<RoomId>>) = launch {
         suspend {
             matrixClient.createDM(user.userId).getOrThrow()
+                .also { analyticsService.capture(CreatedRoom(isDM = true)) }
         }.execute(startDmAction)
     }
 }
