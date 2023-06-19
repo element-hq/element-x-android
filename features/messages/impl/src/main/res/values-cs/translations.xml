@@ -10,5 +10,11 @@
   <string name="screen_room_attachment_source_camera_video">"Natočit video"</string>
   <string name="screen_room_attachment_source_files">"Příloha"</string>
   <string name="screen_room_attachment_source_gallery">"Knihovna fotografií a videí"</string>
+  <string name="screen_room_error_failed_retrieving_user_details">"Nepodařilo se načíst údaje o uživateli"</string>
+  <string name="screen_room_invite_again_alert_message">"Chtěli byste je pozvat zpět?"</string>
+  <string name="screen_room_invite_again_alert_title">"V tomto chatu jste sami"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Odeslat znovu"</string>
+  <string name="screen_room_retry_send_menu_title">"Vaši zprávu se nepodařilo odeslat"</string>
   <string name="screen_room_error_failed_processing_media">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
+  <string name="screen_room_retry_send_menu_remove_action">"Odstranit"</string>
 </resources>

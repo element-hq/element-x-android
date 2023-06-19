@@ -6,6 +6,7 @@
   </plurals>
   <string name="screen_room_details_encryption_enabled_subtitle">"Les messages sont sécurisés par des verrous. Seuls vous et les destinataires possédez les clés uniques pour les déverrouiller."</string>
   <string name="screen_room_details_encryption_enabled_title">"Chiffrement des messages activé"</string>
+  <string name="screen_room_details_invite_people_title">"Inviter des personnes"</string>
   <string name="screen_room_details_share_room_title">"Partager la salle"</string>
   <string name="screen_dm_details_block_alert_action">"Bloquer"</string>
   <string name="screen_dm_details_block_alert_description">"Les utilisateurs bloqués ne pourront pas vous envoyer de messages et tous leurs messages seront masqués. Vous pouvez annuler cette action à tout moment."</string>
