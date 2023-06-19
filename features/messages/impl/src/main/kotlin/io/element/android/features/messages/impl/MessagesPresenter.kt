@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,6 +56,7 @@ import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.handleSnackbarMessage
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.textcomposer.MessageComposerMode
@@ -86,6 +88,7 @@ class MessagesPresenter @Inject constructor(
         val retryState = retrySendMenuPresenter.present()
 
         val syncUpdateFlow = room.syncUpdateFlow().collectAsState(0L)
+        val userHasPermissionToSendMessage by getCanSendEvent(MessageEventType.ROOM_MESSAGE)
         val roomName: MutableState<String?> = rememberSaveable {
             mutableStateOf(null)
         }
@@ -125,6 +128,7 @@ class MessagesPresenter @Inject constructor(
             roomId = room.roomId,
             roomName = roomName.value,
             roomAvatar = roomAvatar.value,
+            userHasPermissionToSendMessage = userHasPermissionToSendMessage,
             composerState = composerState,
             timelineState = timelineState,
             actionListState = actionListState,
@@ -217,5 +221,14 @@ class MessagesPresenter @Inject constructor(
         composerState.eventSink(
             MessageComposerEvents.SetMode(composerMode)
         )
+    }
+
+    @Composable
+    private fun getCanSendEvent(type: MessageEventType): State<Boolean> {
+        val canSendEvent = remember(type) { mutableStateOf(false) }
+        LaunchedEffect(type) {
+            canSendEvent.value = room.canSendEvent(type).getOrElse { false }
+        }
+        return canSendEvent
     }
 }
