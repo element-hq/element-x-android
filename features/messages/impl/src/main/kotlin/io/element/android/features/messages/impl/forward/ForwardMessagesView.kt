@@ -78,9 +78,11 @@ fun ForwardMessagesView(
 ) {
     if (state.forwardingSucceeded != null) {
         onForwardingSucceeded(state.forwardingSucceeded)
+        return
     }
 
     fun onRoomRemoved(roomSummaryDetails: RoomSummaryDetails) {
+        // TODO toggle selection when multi-selection is enabled
         state.eventSink(ForwardMessagesEvents.RemoveSelectedRoom)
     }
 

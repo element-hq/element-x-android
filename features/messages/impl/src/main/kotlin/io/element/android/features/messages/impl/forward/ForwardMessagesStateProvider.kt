@@ -29,30 +29,58 @@ open class ForwardMessagesStateProvider : PreviewParameterProvider<ForwardMessag
     override val values: Sequence<ForwardMessagesState>
         get() = sequenceOf(
             aForwardMessagesState(),
+            aForwardMessagesState(query = "Test"),
+            aForwardMessagesState(resultState = SearchBarResultState.Results(aForwardMessagesRoomList())),
+            aForwardMessagesState(resultState = SearchBarResultState.Results(aForwardMessagesRoomList()), query = "Test"),
             aForwardMessagesState(
-                resultState = SearchBarResultState.Results(
-                    persistentListOf(
-                        aRoomDetailsState(),
-                        aRoomDetailsState(roomId = RoomId("!room2:domain"), canonicalAlias = "#element-x-room:matrix.org"),
-                    )
-                ),
+                resultState = SearchBarResultState.Results(aForwardMessagesRoomList()),
+                query = "Test",
+                selectedRooms = persistentListOf(aRoomDetailsState(roomId = RoomId("!room2:domain")))
+            ),
+            aForwardMessagesState(
+                resultState = SearchBarResultState.Results(aForwardMessagesRoomList()),
+                query = "Test",
+                selectedRooms = persistentListOf(aRoomDetailsState(roomId = RoomId("!room2:domain"))),
+                isForwarding = true,
+            ),
+            aForwardMessagesState(
+                resultState = SearchBarResultState.Results(aForwardMessagesRoomList()),
+                query = "Test",
+                selectedRooms = persistentListOf(aRoomDetailsState(roomId = RoomId("!room2:domain"))),
+                forwardingSucceeded = persistentListOf(RoomId("!room2:domain")),
+            ),
+            aForwardMessagesState(
+                resultState = SearchBarResultState.Results(aForwardMessagesRoomList()),
+                query = "Test",
+                selectedRooms = persistentListOf(aRoomDetailsState(roomId = RoomId("!room2:domain"))),
+                error = Throwable("error"),
             ),
             // Add other states here
         )
 }
 
-// TODO: Add more states here
 fun aForwardMessagesState(
     resultState: SearchBarResultState<ImmutableList<RoomSummaryDetails>> = SearchBarResultState.NotSearching(),
+    query: String = "",
+    isSearchActive: Boolean = false,
+    selectedRooms: ImmutableList<RoomSummaryDetails> = persistentListOf(),
+    isForwarding: Boolean = false,
+    error: Throwable? = null,
+    forwardingSucceeded: ImmutableList<RoomId>? = null,
 ) = ForwardMessagesState(
     resultState = resultState,
-    query = "",
-    isSearchActive = false,
-    selectedRooms = persistentListOf(),
-    isForwarding = false,
-    error = null,
-    forwardingSucceeded = null,
+    query = query,
+    isSearchActive = isSearchActive,
+    selectedRooms = selectedRooms,
+    isForwarding = isForwarding,
+    error = error,
+    forwardingSucceeded = forwardingSucceeded,
     eventSink = {}
+)
+
+internal fun aForwardMessagesRoomList() = listOf(
+    aRoomDetailsState(),
+    aRoomDetailsState(roomId = RoomId("!room2:domain"), canonicalAlias = "#element-x-room:matrix.org"),
 )
 
 fun aRoomDetailsState(
