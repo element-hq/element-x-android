@@ -16,6 +16,7 @@
 
 import extension.allFeaturesImpl
 import extension.allLibrariesImpl
+import extension.allServicesImpl
 
 plugins {
     id("io.element.android-compose-library")
@@ -37,5 +38,6 @@ dependencies {
     implementation(libs.showkase)
 
     allLibrariesImpl()
+    allServicesImpl()
     allFeaturesImpl(rootDir, logger)
 }
