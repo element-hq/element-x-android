@@ -24,6 +24,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -80,6 +81,10 @@ class ForwardMessagesPresenter @AssistedInject constructor(
             }
         }
 
+        val forwardingSucceeded by remember {
+            derivedStateOf { forwardingActionState.value.dataOrNull() }
+        }
+
         fun handleEvents(event: ForwardMessagesEvents) {
             when (event) {
                 is ForwardMessagesEvents.SetSelectedRoom -> {
@@ -92,20 +97,16 @@ class ForwardMessagesPresenter @AssistedInject constructor(
 //                        selectedRooms.add(event.room)
 //                    }
                 }
-                is ForwardMessagesEvents.RemoveSelectedRoom -> selectedRooms = persistentListOf()
+                ForwardMessagesEvents.RemoveSelectedRoom -> selectedRooms = persistentListOf()
                 is ForwardMessagesEvents.UpdateQuery -> query = event.query
                 ForwardMessagesEvents.ToggleSearchActive -> isSearchActive = !isSearchActive
-                is ForwardMessagesEvents.ForwardEvent -> {
+                ForwardMessagesEvents.ForwardEvent -> {
                     isSearchActive = false
                     val roomIds = selectedRooms.map { it.roomId }.toPersistentList()
                     matrixCoroutineScope.forwardEvent(eventId, roomIds, forwardingActionState)
                 }
-                is ForwardMessagesEvents.ClearError -> forwardingActionState.value = Async.Uninitialized
+                ForwardMessagesEvents.ClearError -> forwardingActionState.value = Async.Uninitialized
             }
-        }
-
-        val forwardingSucceeded by remember {
-            derivedStateOf { forwardingActionState.value.dataOrNull() }
         }
 
         return ForwardMessagesState(
@@ -116,7 +117,7 @@ class ForwardMessagesPresenter @AssistedInject constructor(
             isForwarding = forwardingActionState.value.isLoading(),
             error = (forwardingActionState.value as? Async.Failure)?.error,
             forwardingSucceeded = forwardingSucceeded,
-            eventSink = ::handleEvents
+            eventSink = { handleEvents(it) }
         )
     }
 
