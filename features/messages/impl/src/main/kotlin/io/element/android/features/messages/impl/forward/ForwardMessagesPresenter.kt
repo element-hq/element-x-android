@@ -82,14 +82,17 @@ class ForwardMessagesPresenter @AssistedInject constructor(
 
         fun handleEvents(event: ForwardMessagesEvents) {
             when (event) {
-                is ForwardMessagesEvents.ToggleSelectedRoom -> {
-                    val index = selectedRooms.indexOfFirst { it.roomId == event.room.roomId }
-                    selectedRooms = if (index >= 0) {
-                        selectedRooms.removeAt(index)
-                    } else {
-                        selectedRooms.add(event.room)
-                    }
+                is ForwardMessagesEvents.SetSelectedRoom -> {
+                    selectedRooms = persistentListOf(event.room)
+                    // Restore for multi-selection
+//                    val index = selectedRooms.indexOfFirst { it.roomId == event.room.roomId }
+//                    selectedRooms = if (index >= 0) {
+//                        selectedRooms.removeAt(index)
+//                    } else {
+//                        selectedRooms.add(event.room)
+//                    }
                 }
+                is ForwardMessagesEvents.RemoveSelectedRoom -> selectedRooms = persistentListOf()
                 is ForwardMessagesEvents.UpdateQuery -> query = event.query
                 ForwardMessagesEvents.ToggleSearchActive -> isSearchActive = !isSearchActive
                 is ForwardMessagesEvents.ForwardEvent -> {

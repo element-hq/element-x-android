@@ -16,11 +16,12 @@
 
 package io.element.android.features.messages.impl.forward
 
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
 
 sealed interface ForwardMessagesEvents {
-    data class ToggleSelectedRoom(val room: RoomSummaryDetails) : ForwardMessagesEvents
+    data class SetSelectedRoom(val room: RoomSummaryDetails) : ForwardMessagesEvents
+    // TODO remove to restore multi-selection
+    object RemoveSelectedRoom : ForwardMessagesEvents
     object ToggleSearchActive : ForwardMessagesEvents
     data class UpdateQuery(val query: String) : ForwardMessagesEvents
     object ForwardEvent : ForwardMessagesEvents

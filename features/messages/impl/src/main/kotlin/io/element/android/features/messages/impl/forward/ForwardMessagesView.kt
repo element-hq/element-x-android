@@ -52,8 +52,8 @@ import io.element.android.libraries.designsystem.components.dialogs.ErrorDialogD
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CenterAlignedTopAppBar
-import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.Divider
+import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -80,7 +80,7 @@ fun ForwardMessagesView(
     }
 
     fun onRoomRemoved(roomSummaryDetails: RoomSummaryDetails) {
-        state.eventSink(ForwardMessagesEvents.ToggleSelectedRoom(roomSummaryDetails))
+        state.eventSink(ForwardMessagesEvents.RemoveSelectedRoom)
     }
 
     @Composable
@@ -149,7 +149,7 @@ fun ForwardMessagesView(
                                 roomSummary,
                                 isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
                                 onSelection = { roomSummary ->
-                                    state.eventSink(ForwardMessagesEvents.ToggleSelectedRoom(roomSummary))
+                                    state.eventSink(ForwardMessagesEvents.SetSelectedRoom(roomSummary))
                                 }
                             )
                             Divider(modifier = Modifier.fillMaxWidth())
@@ -172,7 +172,7 @@ fun ForwardMessagesView(
                                     roomSummary,
                                     isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
                                     onSelection = { roomSummary ->
-                                        state.eventSink(ForwardMessagesEvents.ToggleSelectedRoom(roomSummary))
+                                        state.eventSink(ForwardMessagesEvents.SetSelectedRoom(roomSummary))
                                     }
                                 )
                                 Divider(modifier = Modifier.fillMaxWidth())
@@ -253,7 +253,7 @@ internal fun RoomSummaryView(
                 overflow = TextOverflow.Ellipsis
             )
         }
-        Checkbox(checked = isSelected, onCheckedChange = { onSelection(summary) })
+        RadioButton(selected = isSelected, onClick = { onSelection(summary) })
     }
 }
 
