@@ -125,7 +125,7 @@ test_barista = "com.adevinta.android:barista:4.3.0"
 test_hamcrest = "org.hamcrest:hamcrest:2.2"
 test_orchestrator = "androidx.test:orchestrator:1.4.2"
 test_turbine = "app.cash.turbine:turbine:0.13.0"
-test_truth = "com.google.truth:truth:1.1.4"
+test_truth = "com.google.truth:truth:1.1.5"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.12"
 test_robolectric = "org.robolectric:robolectric:4.10.3"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
