@@ -26,11 +26,10 @@ jobs:
       - name: Create Pull Request for Strings
         uses: peter-evans/create-pull-request@v5
         with:
+          token: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
           commit-message: Sync Strings from Localazy
           title: Sync Strings
           body: |
             - Update Strings from Localazy
           branch: sync-localazy
           base: develop
-        env:
-          GITHUB_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
