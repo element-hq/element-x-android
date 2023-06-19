@@ -89,9 +89,10 @@ fun RoomMemberDetailsView(
 
             Spacer(modifier = Modifier.height(26.dp))
 
-            SendMessageSection(onSendMessage = {
-                // TODO implement send DM
-            })
+            // TODO implement send DM
+            // SendMessageSection(onSendMessage = {
+            //     ...
+            // })
 
             if (!state.isCurrentUser) {
                 BlockUserSection(state)
