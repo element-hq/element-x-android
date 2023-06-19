@@ -1,5 +1,6 @@
 name: Sync Localazy
 on:
+  workflow_dispatch:
   schedule:
     # At 00:00 on every Monday UTC
     - cron: '0 0 * * 1'
