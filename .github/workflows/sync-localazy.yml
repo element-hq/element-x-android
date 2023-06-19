@@ -31,3 +31,5 @@ jobs:
             - Update Strings from Localazy
           branch: sync-localazy
           base: develop
+        env:
+          GITHUB_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
