@@ -34,14 +34,13 @@ fun TimelineItemImageView(
     modifier: Modifier = Modifier,
 ) {
     TimelineItemAspectRatioBox(
-        height = content.height,
         aspectRatio = content.aspectRatio,
         modifier = modifier
     ) {
         BlurHashAsyncImage(
             model = MediaRequestData(content.preferredMediaSource, MediaRequestData.Kind.File(content.body, content.mimeType)),
             blurHash = content.blurhash,
-            contentScale = ContentScale.Fit,
+            contentScale = ContentScale.Crop,
         )
     }
 }

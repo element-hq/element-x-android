@@ -25,22 +25,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+private const val MAX_HEIGHT_IN_DP = 360f
+private const val MIN_ASPECT_RATIO = 0.6f
+private const val MAX_ASPECT_RATIO = 4f
+private const val DEFAULT_ASPECT_RATIO = 1.33f
+
 @Composable
 fun TimelineItemAspectRatioBox(
-    height: Int?,
     aspectRatio: Float?,
     modifier: Modifier = Modifier,
     contentAlignment: Alignment = Alignment.TopStart,
-    content: @Composable BoxScope.() -> Unit,
+    content: @Composable (BoxScope.() -> Unit),
 ) {
-    val maxHeight = minOf(300, maxOf(100, height ?: Int.MAX_VALUE))
-    val aspectRatioModifier = aspectRatio?.let {
-        Modifier.aspectRatio(it)
-    } ?: Modifier
+    val safeAspectRatio = (aspectRatio ?: DEFAULT_ASPECT_RATIO).coerceIn(MIN_ASPECT_RATIO, MAX_ASPECT_RATIO)
     Box(
         modifier = modifier
-            .heightIn(max = maxHeight.dp)
-            .then(aspectRatioModifier),
+            .heightIn(max = MAX_HEIGHT_IN_DP.dp)
+            .aspectRatio(safeAspectRatio, true),
         contentAlignment = contentAlignment,
         content = content
     )
