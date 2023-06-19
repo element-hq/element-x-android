@@ -43,6 +43,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -107,7 +108,7 @@ fun ForwardMessagesView(
         modifier = modifier,
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Forward message") },
+                title = { Text(stringResource(StringR.string.common_forward_message), style = ElementTextStyles.Bold.callout) },
                 navigationIcon = {
                     BackButton(onClick = { onBackButton(state) })
                 },
@@ -128,7 +129,7 @@ fun ForwardMessagesView(
                 .consumeWindowInsets(paddingValues)
         ) {
             SearchBar<ImmutableList<RoomSummaryDetails>>(
-                placeHolderTitle = "Search for someone",
+                placeHolderTitle = stringResource(StringR.string.action_search),
                 query = state.query,
                 onQueryChange = { state.eventSink(ForwardMessagesEvents.UpdateQuery(it)) },
                 active = state.isSearchActive,
