@@ -21,6 +21,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.preferences.impl.tasks.FakeClearCacheUseCase
+import io.element.android.features.preferences.impl.tasks.FakeComputeCacheSizeUseCase
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -32,7 +33,8 @@ class DeveloperSettingsPresenterTest {
     fun `present - ensures initial state is correct`() = runTest {
         val presenter = DeveloperSettingsPresenter(
             FakeFeatureFlagService(),
-            FakeClearCacheUseCase()
+            FakeComputeCacheSizeUseCase(),
+            FakeClearCacheUseCase(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -40,6 +42,7 @@ class DeveloperSettingsPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.features).isEmpty()
             assertThat(initialState.clearCacheAction).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.cacheSizeInBytes).isEqualTo(Async.Uninitialized)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -48,7 +51,8 @@ class DeveloperSettingsPresenterTest {
     fun `present - ensures feature list is loaded`() = runTest {
         val presenter = DeveloperSettingsPresenter(
             FakeFeatureFlagService(),
-            FakeClearCacheUseCase()
+            FakeComputeCacheSizeUseCase(),
+            FakeClearCacheUseCase(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -64,7 +68,8 @@ class DeveloperSettingsPresenterTest {
     fun `present - ensures state is updated when enabled feature event is triggered`() = runTest {
         val presenter = DeveloperSettingsPresenter(
             FakeFeatureFlagService(),
-            FakeClearCacheUseCase()
+            FakeComputeCacheSizeUseCase(),
+            FakeClearCacheUseCase(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -86,7 +91,8 @@ class DeveloperSettingsPresenterTest {
         val clearCacheUseCase = FakeClearCacheUseCase()
         val presenter = DeveloperSettingsPresenter(
             FakeFeatureFlagService(),
-            clearCacheUseCase
+            FakeComputeCacheSizeUseCase(),
+            clearCacheUseCase,
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -97,8 +103,10 @@ class DeveloperSettingsPresenterTest {
             initialState.eventSink(DeveloperSettingsEvents.ClearCache)
             val stateAfterEvent = awaitItem()
             assertThat(stateAfterEvent.clearCacheAction).isInstanceOf(Async.Loading::class.java)
+            skipItems(1)
             assertThat(awaitItem().clearCacheAction).isInstanceOf(Async.Success::class.java)
             assertThat(clearCacheUseCase.executeHasBeenCalled).isTrue()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 }

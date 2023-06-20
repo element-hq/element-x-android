@@ -18,6 +18,7 @@
 
 package io.element.android.libraries.matrix.impl
 
+import io.element.android.libraries.androidutils.file.getSizeOfFiles
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -337,8 +338,12 @@ class RustMatrixClient constructor(
         client.destroy()
     }
 
+    override suspend fun getCacheSize(): Long {
+        return baseDirectory.getCacheSize(userID = client.userId())
+    }
+
     override suspend fun clearCache() {
-        baseDirectory.deleteSessionDirectory(userID = client.userId(), deleteCryptoDb = false)
+        baseDirectory.deleteSessionDirectory(userID = client.userId())
     }
 
     override suspend fun logout() = withContext(dispatchers.io) {
@@ -347,7 +352,7 @@ class RustMatrixClient constructor(
         } catch (failure: Throwable) {
             Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
         }
-        baseDirectory.deleteSessionDirectory(userID = client.userId())
+        baseDirectory.deleteSessionDirectory(userID = client.userId(), deleteCryptoDb = true)
         sessionStore.removeSession(client.userId())
         close()
     }
@@ -383,14 +388,36 @@ class RustMatrixClient constructor(
 
     override fun roomMembershipObserver(): RoomMembershipObserver = roomMembershipObserver
 
-    private fun File.deleteSessionDirectory(
+    private suspend fun File.getCacheSize(
         userID: String,
-        deleteCryptoDb: Boolean = false,
-    ): Boolean {
+        includeCryptoDb: Boolean = false,
+    ): Long = withContext(dispatchers.io) {
         // Rust sanitises the user ID replacing invalid characters with an _
         val sanitisedUserID = userID.replace(":", "_")
-        val sessionDirectory = File(this, sanitisedUserID)
-        return if (deleteCryptoDb) {
+        val sessionDirectory = File(this@getCacheSize, sanitisedUserID)
+        if (includeCryptoDb) {
+            sessionDirectory.getSizeOfFiles()
+        } else {
+            listOf(
+                "matrix-sdk-state.sqlite3",
+                "matrix-sdk-state.sqlite3-shm",
+                "matrix-sdk-state.sqlite3-wal",
+            ).map { fileName ->
+                File(sessionDirectory, fileName)
+            }.sumOf { file ->
+                file.length()
+            }
+        }
+    }
+
+    private suspend fun File.deleteSessionDirectory(
+        userID: String,
+        deleteCryptoDb: Boolean = false,
+    ): Boolean = withContext(dispatchers.io) {
+        // Rust sanitises the user ID replacing invalid characters with an _
+        val sanitisedUserID = userID.replace(":", "_")
+        val sessionDirectory = File(this@deleteSessionDirectory, sanitisedUserID)
+        if (deleteCryptoDb) {
             // Delete the folder and all its content
             sessionDirectory.deleteRecursively()
         } else {
