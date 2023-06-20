@@ -37,10 +37,10 @@ internal class MatrixTimelineDiffProcessor(
     private val timelineItemFactory: MatrixTimelineItemMapper,
 ) : TimelineListener {
 
-    override fun onUpdate(update: TimelineDiff) {
+    override fun onUpdate(diff: TimelineDiff) {
         coroutineScope.launch {
             updateTimelineItems {
-                applyDiff(update)
+                applyDiff(diff)
             }
             when (val firstItem = timelineItems.value.firstOrNull()) {
                 is MatrixTimelineItem.Virtual -> updateBackPaginationState(firstItem.virtual)

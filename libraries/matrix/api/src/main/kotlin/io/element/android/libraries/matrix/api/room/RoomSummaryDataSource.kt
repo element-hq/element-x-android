@@ -19,6 +19,15 @@ package io.element.android.libraries.matrix.api.room
 import kotlinx.coroutines.flow.StateFlow
 
 interface RoomSummaryDataSource {
+
+    enum class LoadingState {
+        NotLoaded,
+        PreLoaded,
+        PartiallyLoaded,
+        FullyLoaded,
+    }
+
+    fun loadingState(): StateFlow<LoadingState>
     fun roomSummaries(): StateFlow<List<RoomSummary>>
     fun setSlidingSyncRange(range: IntRange)
 }

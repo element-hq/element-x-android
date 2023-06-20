@@ -38,6 +38,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.PaginationOptions
 import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomSubscription
 import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 import org.matrix.rustcomponents.sdk.TimelineItem
@@ -48,7 +49,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 class RustMatrixTimeline(
     private val matrixRoom: MatrixRoom,
     private val innerRoom: Room,
-    private val slidingSyncRoom: SlidingSyncRoom,
+    private val roomListItem: RoomListItem,
     private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : MatrixTimeline {
@@ -166,12 +167,12 @@ class RustMatrixTimeline(
                 ),
                 timelineLimit = null
             )
-            slidingSyncRoom.subscribeToRoom(settings)
-            val result = slidingSyncRoom.addTimelineListener(timelineListener)
+            roomListItem.subscribe(settings)
+            val result = innerRoom.addTimelineListener(timelineListener)
             launch {
                 fetchMembers()
             }
-            listenerTokens += result.taskHandle
+            listenerTokens += result.itemsStream
             result.items
         }
     }
