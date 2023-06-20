@@ -16,13 +16,43 @@
 # limitations under the License.
 #
 
-if [[ -z ${GITHUB_TOKEN} ]]; then
-  echo "Missing GITHUB_TOKEN variable"
+TOKEN=$GITHUB_TOKEN
+REPO=$GITHUB_REPOSITORY
+
+SHORT=t:,r:
+LONG=token:,repo:
+OPTS=$(getopt -a -n recordScreenshots --options $SHORT --longoptions $LONG -- "$@")
+
+eval set -- "$OPTS"
+while :
+do
+  case "$1" in
+    -t | --token )
+      TOKEN="$2"
+      shift 2
+      ;;
+    -r | --repo )
+      REPO="$2"
+      shift 2
+      ;;
+    --)
+      shift;
+      break
+      ;;
+    *)
+      echo "Unexpected option: $1"
+      help
+      ;;
+  esac
+done
+
+if [[ -z ${TOKEN} ]]; then
+  echo "No token specified, either set the env var GITHUB_TOKEN or use the --token option"
   exit 1
 fi
 
-if [[ -z ${GITHUB_REPOSITORY} ]]; then
-  echo "Missing GITHUB_REPOSITORY variable"
+if [[ -z ${REPO} ]]; then
+  echo "No repo specified, either set the env var GITHUB_REPOSITORY or use the --repo option"
   exit 1
 fi
 
@@ -35,6 +65,8 @@ git config user.email "benoitm+elementbot@element.io"
 git add -A
 git commit -m "Update screenshots"
 
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
 echo "Pushing changes"
-git push "https://$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
+git push "https://$TOKEN@github.com/$REPO.git" $BRANCH:refs/heads/$BRANCH
 echo "Done!"
