@@ -24,22 +24,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlin.math.min
+
+private const val MAX_HEIGHT_IN_DP = 360f
+private const val MIN_ASPECT_RATIO = 0.6f
+private const val MAX_ASPECT_RATIO = 4f
+private const val DEFAULT_ASPECT_RATIO = 1.33f
 
 @Composable
 fun TimelineItemAspectRatioBox(
-    height: Int?,
-    aspectRatio: Float,
+    aspectRatio: Float?,
     modifier: Modifier = Modifier,
     contentAlignment: Alignment = Alignment.TopStart,
-    content: @Composable BoxScope.() -> Unit,
+    content: @Composable (BoxScope.() -> Unit),
 ) {
-    // TODO should probably be moved to an ElementTheme.dimensions
-    val maxHeight = min(300, height ?: 0)
+    val safeAspectRatio = (aspectRatio ?: DEFAULT_ASPECT_RATIO).coerceIn(MIN_ASPECT_RATIO, MAX_ASPECT_RATIO)
     Box(
         modifier = modifier
-            .heightIn(max = maxHeight.dp)
-            .aspectRatio(aspectRatio, matchHeightConstraintsFirst = true),
+            .heightIn(max = MAX_HEIGHT_IN_DP.dp)
+            .aspectRatio(safeAspectRatio, true),
         contentAlignment = contentAlignment,
         content = content
     )

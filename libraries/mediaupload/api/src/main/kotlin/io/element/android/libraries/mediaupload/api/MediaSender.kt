@@ -44,15 +44,26 @@ class MediaSender @Inject constructor(
     ): Result<Unit> {
         return when (info) {
             is MediaUploadInfo.Image -> {
-                sendImage(info.file, info.thumbnailInfo.file, info.info)
+                sendImage(
+                    file = info.file,
+                    thumbnailFile = info.thumbnailFile,
+                    imageInfo = info.info
+                )
             }
 
             is MediaUploadInfo.Video -> {
-                sendVideo(info.file, info.thumbnailInfo.file, info.info)
+                sendVideo(
+                    file = info.file,
+                    thumbnailFile = info.thumbnailFile,
+                    videoInfo = info.info
+                )
             }
 
             is MediaUploadInfo.AnyFile -> {
-                sendFile(info.file, info.info)
+                sendFile(
+                    file = info.file,
+                    fileInfo = info.info
+                )
             }
             else -> Result.failure(IllegalStateException("Unexpected MediaUploadInfo format: $info"))
         }
