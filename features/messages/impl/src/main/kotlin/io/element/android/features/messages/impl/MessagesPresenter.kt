@@ -147,11 +147,11 @@ class MessagesPresenter @Inject constructor(
     ) = launch {
         when (action) {
             TimelineItemAction.Copy -> notImplementedYet()
-            TimelineItemAction.Forward -> notImplementedYet()
             TimelineItemAction.Redact -> handleActionRedact(targetEvent)
             TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState)
             TimelineItemAction.Reply -> handleActionReply(targetEvent, composerState)
-            TimelineItemAction.Developer -> Unit // Handled at UI level
+            TimelineItemAction.Developer,
+            TimelineItemAction.Forward -> Unit // Handled at UI level
             TimelineItemAction.ReportContent -> notImplementedYet()
         }
     }
