@@ -19,7 +19,7 @@ package io.element.android.libraries.androidtools.test
 import io.element.android.libraries.androidtools.api.FileSizeFormatter
 
 class FakeFileSizeFormatter : FileSizeFormatter {
-    override fun format(fileSize: Long): String {
+    override fun format(fileSize: Long, useShortFormat: Boolean): String {
         return "$fileSize Bytes"
     }
 }

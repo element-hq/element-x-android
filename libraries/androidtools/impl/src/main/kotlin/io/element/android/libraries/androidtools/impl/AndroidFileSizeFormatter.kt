@@ -17,6 +17,7 @@
 package io.element.android.libraries.androidtools.impl
 
 import android.content.Context
+import android.os.Build
 import android.text.format.Formatter
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.androidtools.api.FileSizeFormatter
@@ -26,7 +27,25 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class AndroidFileSizeFormatter @Inject constructor(@ApplicationContext private val context: Context) : FileSizeFormatter {
-    override fun format(fileSize: Long): String {
-        return Formatter.formatShortFileSize(context, fileSize)
+    override fun format(fileSize: Long, useShortFormat: Boolean): String {
+        // Since Android O, the system considers that 1ko = 1000 bytes instead of 1024 bytes.
+        // We want to avoid that.
+        val normalizedSize = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
+            fileSize
+        } else {
+            // First convert the size
+            when {
+                fileSize < 1024 -> fileSize
+                fileSize < 1024 * 1024 -> fileSize * 1000 / 1024
+                fileSize < 1024 * 1024 * 1024 -> fileSize * 1000 / 1024 * 1000 / 1024
+                else -> fileSize * 1000 / 1024 * 1000 / 1024 * 1000 / 1024
+            }
+        }
+
+        return if (useShortFormat) {
+            Formatter.formatShortFileSize(context, normalizedSize)
+        } else {
+            Formatter.formatFileSize(context, normalizedSize)
+        }
     }
 }
