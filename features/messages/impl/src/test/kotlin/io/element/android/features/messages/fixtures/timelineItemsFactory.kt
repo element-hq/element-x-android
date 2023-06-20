@@ -32,7 +32,7 @@ import io.element.android.features.messages.impl.timeline.factories.virtual.Time
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
 import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
 import io.element.android.features.messages.impl.timeline.util.FileExtensionExtractorWithoutValidation
-import io.element.android.features.messages.timeline.FakeFileSizeFormatter
+import io.element.android.libraries.androidtools.test.FakeFileSizeFormatter
 import io.element.android.libraries.dateformatter.test.FakeDaySeparatorFormatter
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem

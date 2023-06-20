@@ -25,8 +25,8 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.util.FileExtensionExtractor
-import io.element.android.features.messages.impl.timeline.util.FileSizeFormatter
 import io.element.android.features.messages.impl.timeline.util.toHtmlDocument
+import io.element.android.libraries.androidtools.api.FileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
