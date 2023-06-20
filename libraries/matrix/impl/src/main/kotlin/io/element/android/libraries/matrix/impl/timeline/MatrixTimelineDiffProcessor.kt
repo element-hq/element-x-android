@@ -27,7 +27,6 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.TimelineChange
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
-import org.matrix.rustcomponents.sdk.TimelineListener
 
 internal class MatrixTimelineDiffProcessor(
     private val paginationState: MutableStateFlow<MatrixTimeline.PaginationState>,
@@ -35,9 +34,9 @@ internal class MatrixTimelineDiffProcessor(
     private val coroutineScope: CoroutineScope,
     private val diffDispatcher: CoroutineDispatcher,
     private val timelineItemFactory: MatrixTimelineItemMapper,
-) : TimelineListener {
+) {
 
-    override fun onUpdate(diff: TimelineDiff) {
+    fun onUpdate(diff: TimelineDiff) {
         coroutineScope.launch {
             updateTimelineItems {
                 applyDiff(diff)
@@ -123,5 +122,4 @@ internal class MatrixTimelineDiffProcessor(
     private fun TimelineItem.asMatrixTimelineItem(): MatrixTimelineItem {
         return timelineItemFactory.map(this)
     }
-
 }
