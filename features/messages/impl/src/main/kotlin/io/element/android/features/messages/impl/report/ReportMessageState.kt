@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl
+package io.element.android.features.messages.impl.report
 
-import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.architecture.Async
 
-interface MessagesNavigator {
-    fun onShowEventDebugInfoClicked(eventId: EventId, debugInfo: TimelineItemDebugInfo)
-    fun onForwardEventClicked(eventId: EventId)
-    fun onReportContentClicked(eventId: EventId, senderId: UserId)
-}
+data class ReportMessageState(
+    val reason: String,
+    val blockUser: Boolean,
+    val result: Async<Unit>,
+    val eventSink: (ReportMessageEvents) -> Unit
+)

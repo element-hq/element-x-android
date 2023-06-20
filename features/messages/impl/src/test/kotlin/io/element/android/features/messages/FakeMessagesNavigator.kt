@@ -18,6 +18,7 @@ package io.element.android.features.messages
 
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 
 class FakeMessagesNavigator : MessagesNavigator {
@@ -27,11 +28,18 @@ class FakeMessagesNavigator : MessagesNavigator {
     var onForwardEventClickedCount = 0
         private set
 
+    var onReportContentClickedCount = 0
+        private set
+
     override fun onShowEventDebugInfoClicked(eventId: EventId, debugInfo: TimelineItemDebugInfo) {
         onShowEventDebugInfoClickedCount++
     }
 
     override fun onForwardEventClicked(eventId: EventId) {
         onForwardEventClickedCount++
+    }
+
+    override fun onReportContentClicked(eventId: EventId, senderId: UserId) {
+        onReportContentClickedCount++
     }
 }
