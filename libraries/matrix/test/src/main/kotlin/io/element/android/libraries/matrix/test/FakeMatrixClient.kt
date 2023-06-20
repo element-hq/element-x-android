@@ -102,6 +102,10 @@ class FakeMatrixClient(
 
     override fun stopSync() = Unit
 
+    override suspend fun getCacheSize(): Long {
+        return 0
+    }
+
     override suspend fun clearCache() {
     }
 

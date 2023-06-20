@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.isLoading
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
@@ -55,11 +56,15 @@ fun DeveloperSettingsView(
                 onClick = onOpenShowkase
             )
         }
+        val cache = state.cacheSizeInBytes
         PreferenceCategory(title = "Cache") {
             PreferenceText(
                 title = "Clear cache",
                 icon = Icons.Default.Delete,
-                loadingCurrentValue = state.clearCacheAction.isLoading(),
+                currentValue = if (cache is Async.Success) {
+                    "${cache.state} bytes"
+                } else null,
+                loadingCurrentValue = state.cacheSizeInBytes.isLoading() || state.clearCacheAction.isLoading(),
                 onClick = {
                     if (state.clearCacheAction.isLoading().not()) {
                         state.eventSink(DeveloperSettingsEvents.ClearCache)

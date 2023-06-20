@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
+import io.element.android.features.preferences.impl.tasks.ComputeCacheSizeUseCase
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.execute
@@ -41,6 +42,7 @@ import javax.inject.Inject
 
 class DeveloperSettingsPresenter @Inject constructor(
     private val featureFlagService: FeatureFlagService,
+    private val computeCacheSizeUseCase: ComputeCacheSizeUseCase,
     private val clearCacheUseCase: ClearCacheUseCase,
 ) : Presenter<DeveloperSettingsState> {
 
@@ -53,6 +55,9 @@ class DeveloperSettingsPresenter @Inject constructor(
         val enabledFeatures = remember {
             mutableStateMapOf<String, Boolean>()
         }
+        val cacheSize = remember {
+            mutableStateOf<Async<Long>>(Async.Uninitialized)
+        }
         val clearCacheAction = remember {
             mutableStateOf<Async<Unit>>(Async.Uninitialized)
         }
@@ -64,6 +69,10 @@ class DeveloperSettingsPresenter @Inject constructor(
         }
         val featureUiModels = createUiModels(features, enabledFeatures)
         val coroutineScope = rememberCoroutineScope()
+        // Compute cache size each time the clear cache action value is changed
+        LaunchedEffect(clearCacheAction.value) {
+            computeCacheSize(cacheSize)
+        }
 
         fun handleEvents(event: DeveloperSettingsEvents) {
             when (event) {
@@ -79,6 +88,7 @@ class DeveloperSettingsPresenter @Inject constructor(
 
         return DeveloperSettingsState(
             features = featureUiModels.toImmutableList(),
+            cacheSizeInBytes = cacheSize.value,
             clearCacheAction = clearCacheAction.value,
             eventSink = ::handleEvents
         )
@@ -113,6 +123,12 @@ class DeveloperSettingsPresenter @Inject constructor(
         if (featureFlagService.setFeatureEnabled(feature, enabled)) {
             enabledFeatures[featureUiModel.key] = enabled
         }
+    }
+
+    private fun CoroutineScope.computeCacheSize(cacheSize: MutableState<Async<Long>>) = launch {
+        suspend {
+            computeCacheSizeUseCase.execute()
+        }.execute(cacheSize)
     }
 
     private fun CoroutineScope.clearCache(clearCacheAction: MutableState<Async<Unit>>) = launch {

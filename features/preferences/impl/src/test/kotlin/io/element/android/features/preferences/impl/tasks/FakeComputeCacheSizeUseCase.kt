@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.developer
+package io.element.android.features.preferences.impl.tasks
 
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
-import kotlinx.collections.immutable.ImmutableList
+import io.element.android.tests.testutils.simulateLongTask
 
-data class DeveloperSettingsState constructor(
-    val features: ImmutableList<FeatureUiModel>,
-    val cacheSizeInBytes: Async<Long>,
-    val clearCacheAction: Async<Unit>,
-    val eventSink: (DeveloperSettingsEvents) -> Unit
-)
+class FakeComputeCacheSizeUseCase : ComputeCacheSizeUseCase {
+    override suspend fun execute() = simulateLongTask {
+        0L
+    }
+}

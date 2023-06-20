@@ -50,6 +50,7 @@ interface MatrixClient : Closeable {
     fun sessionVerificationService(): SessionVerificationService
     fun pushersService(): PushersService
     fun notificationService(): NotificationService
+    suspend fun getCacheSize(): Long
     suspend fun clearCache()
     suspend fun logout()
     suspend fun loadUserDisplayName(): Result<String>
