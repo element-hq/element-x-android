@@ -36,7 +36,6 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.media.ImageInfo
-import io.element.android.libraries.matrix.api.media.ThumbnailInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.ANOTHER_MESSAGE
@@ -50,7 +49,6 @@ import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
-import io.element.android.libraries.mediaupload.api.ThumbnailProcessingInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import io.mockk.mockk
@@ -301,16 +299,7 @@ class MessageComposerPresenterTest {
                         thumbnailSource = null,
                         blurhash = null,
                     ),
-                    thumbnailInfo = ThumbnailProcessingInfo(
-                        file = File("/some/path"),
-                        info = ThumbnailInfo(
-                            width = null,
-                            height = null,
-                            mimetype = null,
-                            size = null,
-                        ),
-                        blurhash = "",
-                    )
+                    thumbnailFile = File("/some/path")
                 )
             )
         )
@@ -344,16 +333,7 @@ class MessageComposerPresenterTest {
                         thumbnailSource = null,
                         blurhash = null,
                     ),
-                    thumbnailInfo = ThumbnailProcessingInfo(
-                        file = File("/some/path"),
-                        info = ThumbnailInfo(
-                            width = null,
-                            height = null,
-                            mimetype = null,
-                            size = null,
-                        ),
-                        blurhash = "",
-                    )
+                    thumbnailFile = File("/some/path")
                 )
             )
         )
