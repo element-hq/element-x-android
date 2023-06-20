@@ -43,6 +43,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
+import timber.log.Timber
 import java.util.Locale
 
 class RoomListScreen(
@@ -106,8 +107,10 @@ class RoomListScreen(
         )
 
         DisposableEffect(Unit) {
+            Timber.w("Start sync!")
             matrixClient.startSync()
             onDispose {
+                Timber.w("Stop sync!")
                 matrixClient.stopSync()
             }
         }
