@@ -31,7 +31,6 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
-import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -40,7 +39,6 @@ import io.element.android.libraries.matrix.impl.notification.RustNotificationSer
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
-import io.element.android.libraries.matrix.impl.sync.SlidingSyncObserverProxy
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
@@ -50,21 +48,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
-import org.matrix.rustcomponents.sdk.RequiredState
-import org.matrix.rustcomponents.sdk.SlidingSyncList
-import org.matrix.rustcomponents.sdk.SlidingSyncListBuilder
-import org.matrix.rustcomponents.sdk.SlidingSyncListOnceBuilt
-import org.matrix.rustcomponents.sdk.SlidingSyncRequestListFilters
-import org.matrix.rustcomponents.sdk.SlidingSyncSelectiveModeBuilder
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
@@ -101,75 +90,11 @@ class RustMatrixClient constructor(
         }
     }
 
-    private val visibleRoomsSlidingSyncFilters = SlidingSyncRequestListFilters(
-        isDm = null,
-        spaces = emptyList(),
-        isEncrypted = null,
-        isInvite = false,
-        isTombstoned = false,
-        roomTypes = emptyList(),
-        notRoomTypes = listOf("m.space"),
-        roomNameLike = null,
-        tags = emptyList(),
-        notTags = emptyList()
-    )
+    private val roomList = client.roomList()
 
-    private val visibleRoomsSlidingSyncList = MutableSharedFlow<SlidingSyncList>(replay = 1)
-    private val visibleRoomsSlidingSyncListBuilder = SlidingSyncListBuilder("CurrentlyVisibleRooms")
-        .timelineLimit(limit = 1u)
-        .requiredState(
-            requiredState = listOf(
-                RequiredState(key = EventType.STATE_ROOM_AVATAR, value = ""),
-                RequiredState(key = EventType.STATE_ROOM_ENCRYPTION, value = ""),
-                RequiredState(key = EventType.STATE_ROOM_JOIN_RULES, value = ""),
-            )
-        )
-        .filters(visibleRoomsSlidingSyncFilters)
-        .syncModeSelective(SlidingSyncSelectiveModeBuilder().addRange(0u, 20u))
-        .onceBuilt(object : SlidingSyncListOnceBuilt {
-            override fun updateList(list: SlidingSyncList): SlidingSyncList {
-                visibleRoomsSlidingSyncList.tryEmit(list)
-                return list
-            }
-        })
-
-    private val invitesSlidingSyncFilters = visibleRoomsSlidingSyncFilters.copy(isInvite = true)
-
-    private val invitesSlidingSyncList = MutableSharedFlow<SlidingSyncList>(replay = 1)
-    private val invitesSlidingSyncListBuilder = SlidingSyncListBuilder("CurrentInvites")
-        .timelineLimit(limit = 1u)
-        .requiredState(
-            requiredState = listOf(
-                RequiredState(key = EventType.STATE_ROOM_AVATAR, value = ""),
-                RequiredState(key = EventType.STATE_ROOM_ENCRYPTION, value = ""),
-                RequiredState(key = EventType.STATE_ROOM_CANONICAL_ALIAS, value = ""),
-            )
-        )
-        .filters(invitesSlidingSyncFilters)
-        .syncModeSelective(SlidingSyncSelectiveModeBuilder().addRange(0u, 20u))
-        .onceBuilt(object : SlidingSyncListOnceBuilt {
-            override fun updateList(list: SlidingSyncList): SlidingSyncList {
-                invitesSlidingSyncList.tryEmit(list)
-                return list
-            }
-        })
-
-    private val slidingSync = client
-        .slidingSync("ElementX")
-        // .homeserver("https://slidingsync.lab.matrix.org")
-        .withCommonExtensions()
-        .addList(visibleRoomsSlidingSyncListBuilder)
-        .addList(invitesSlidingSyncListBuilder)
-        .use {
-            it.build()
-        }
-
-    private val slidingSyncObserverProxy = SlidingSyncObserverProxy(coroutineScope)
     private val rustRoomSummaryDataSource: RustRoomSummaryDataSource =
         RustRoomSummaryDataSource(
-            slidingSyncObserverProxy.updateSummaryFlow,
-            slidingSync,
-            visibleRoomsSlidingSyncList,
+            roomList,
             dispatchers,
         )
 
@@ -178,9 +103,7 @@ class RustMatrixClient constructor(
 
     private val rustInvitesDataSource: RustRoomSummaryDataSource =
         RustRoomSummaryDataSource(
-            slidingSyncObserverProxy.updateSummaryFlow,
-            slidingSync,
-            invitesSlidingSyncList,
+            roomList,
             dispatchers,
         )
 
@@ -199,25 +122,19 @@ class RustMatrixClient constructor(
 
     init {
         client.setDelegate(clientDelegate)
-        rustRoomSummaryDataSource.init()
-        rustInvitesDataSource.init()
-        slidingSync.setObserver(slidingSyncObserverProxy)
-        slidingSyncUpdateJob = slidingSyncObserverProxy.updateSummaryFlow
-            .onEach { onSlidingSyncUpdate() }
-            .launchIn(coroutineScope)
+        rustRoomSummaryDataSource.subscribeIfNeeded()
+        //rustInvitesDataSource.init()
     }
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
-        val slidingSyncRoom = slidingSync.getRoom(roomId.value) ?: return null
-        val fullRoom = slidingSyncRoom.fullRoom() ?: return null
+        val roomListItem = roomList.room(roomId.value)
+        val fullRoom = roomListItem.fullRoom()
         return RustMatrixRoom(
             sessionId = sessionId,
-            slidingSyncUpdateFlow = slidingSyncObserverProxy.updateSummaryFlow,
-            slidingSyncRoom = slidingSyncRoom,
+            roomListItem = roomListItem,
             innerRoom = fullRoom,
             coroutineScope = coroutineScope,
             coroutineDispatchers = dispatchers,
-            clock = clock,
         )
     }
 
@@ -261,9 +178,11 @@ class RustMatrixClient constructor(
 
             // Wait to receive the room back from the sync
             withTimeout(30_000L) {
-                slidingSyncObserverProxy.updateSummaryFlow.filter { roomId.value in it.rooms }.first()
+                roomSummaryDataSource.roomSummaries()
+                    .filter { roomSummaries ->
+                        roomSummaries.map { it.identifier() }.contains(roomId.value)
+                    }.first()
             }
-
             roomId
         }
     }
@@ -301,7 +220,7 @@ class RustMatrixClient constructor(
 
     override fun startSync() {
         if (isSyncing.compareAndSet(false, true)) {
-            slidingSyncObserverToken = slidingSync.sync()
+            slidingSyncObserverToken = roomList.sync()
         }
     }
 
@@ -314,16 +233,11 @@ class RustMatrixClient constructor(
     override fun close() {
         slidingSyncUpdateJob?.cancel()
         stopSync()
-        slidingSync.setObserver(null)
         rustRoomSummaryDataSource.close()
         rustInvitesDataSource.close()
         client.setDelegate(null)
-        visibleRoomsSlidingSyncListBuilder.destroy()
-        invitesSlidingSyncListBuilder.destroy()
-        visibleRoomsSlidingSyncList.resetReplayCache()
-        invitesSlidingSyncList.resetReplayCache()
-        slidingSync.destroy()
         verificationService.destroy()
+        roomList.destroy()
         client.destroy()
     }
 

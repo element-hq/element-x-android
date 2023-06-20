@@ -34,30 +34,28 @@ import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
+import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMember
-import org.matrix.rustcomponents.sdk.SlidingSyncRoom
-import org.matrix.rustcomponents.sdk.UpdateSummary
 import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 import java.io.File
 
 class RustMatrixRoom(
     override val sessionId: SessionId,
-    private val slidingSyncUpdateFlow: Flow<UpdateSummary>,
-    private val slidingSyncRoom: SlidingSyncRoom,
+    private val roomListItem: RoomListItem,
     private val innerRoom: Room,
     private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val clock: SystemClock,
 ) : MatrixRoom {
 
     override val membersStateFlow: StateFlow<MatrixRoomMembersState>
@@ -69,21 +67,15 @@ class RustMatrixRoom(
         RustMatrixTimeline(
             matrixRoom = this,
             innerRoom = innerRoom,
-            slidingSyncRoom = slidingSyncRoom,
+            roomListItem = roomListItem,
             coroutineScope = coroutineScope,
             coroutineDispatchers = coroutineDispatchers
         )
     }
 
     override fun syncUpdateFlow(): Flow<Long> {
-        return slidingSyncUpdateFlow
-            .filter {
-                it.rooms.contains(roomId.value)
-            }
-            .map {
-                clock.epochMillis()
-            }
-            .onStart { emit(clock.epochMillis()) }
+        //TODO branch this somehow...
+        return emptyFlow()
     }
 
     override fun timeline(): MatrixTimeline {
@@ -92,14 +84,14 @@ class RustMatrixRoom(
 
     override fun close() {
         innerRoom.destroy()
-        slidingSyncRoom.destroy()
+        roomListItem.destroy()
     }
 
     override val roomId = RoomId(innerRoom.id())
 
     override val name: String?
         get() {
-            return slidingSyncRoom.name()
+            return roomListItem.name()
         }
 
     override val bestName: String
