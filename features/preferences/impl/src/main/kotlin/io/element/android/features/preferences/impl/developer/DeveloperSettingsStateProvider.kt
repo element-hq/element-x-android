@@ -30,7 +30,7 @@ open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSe
 
 fun aDeveloperSettingsState() = DeveloperSettingsState(
     features = aFeatureUiModelList(),
-    cacheSizeInBytes = Async.Success(0L),
+    cacheSize = Async.Success("1.2 MB"),
     clearCacheAction = Async.Uninitialized,
     eventSink = {}
 )

@@ -42,7 +42,7 @@ class DeveloperSettingsPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.features).isEmpty()
             assertThat(initialState.clearCacheAction).isEqualTo(Async.Uninitialized)
-            assertThat(initialState.cacheSizeInBytes).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.cacheSize).isEqualTo(Async.Uninitialized)
             cancelAndIgnoreRemainingEvents()
         }
     }

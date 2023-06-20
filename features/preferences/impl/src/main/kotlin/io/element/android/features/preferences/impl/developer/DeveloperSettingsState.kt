@@ -22,7 +22,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class DeveloperSettingsState constructor(
     val features: ImmutableList<FeatureUiModel>,
-    val cacheSizeInBytes: Async<Long>,
+    val cacheSize: Async<String>,
     val clearCacheAction: Async<Unit>,
     val eventSink: (DeveloperSettingsEvents) -> Unit
 )

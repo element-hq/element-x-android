@@ -18,6 +18,7 @@ package io.element.android.features.preferences.impl.tasks
 
 import android.content.Context
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.androidtools.api.FileSizeFormatter
 import io.element.android.libraries.androidutils.file.getSizeOfFiles
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.ApplicationContext
@@ -27,7 +28,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 interface ComputeCacheSizeUseCase {
-    suspend fun execute(): Long
+    suspend fun execute(): String
 }
 
 @ContributesBinding(SessionScope::class)
@@ -35,11 +36,13 @@ class DefaultComputeCacheSizeUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
     private val matrixClient: MatrixClient,
     private val coroutineDispatchers: CoroutineDispatchers,
+    private val fileSizeFormatter: FileSizeFormatter,
 ) : ComputeCacheSizeUseCase {
-    override suspend fun execute(): Long = withContext(coroutineDispatchers.io) {
+    override suspend fun execute(): String = withContext(coroutineDispatchers.io) {
         var cumulativeSize = 0L
         cumulativeSize += matrixClient.getCacheSize()
-        cumulativeSize += context.cacheDir.getSizeOfFiles()
-        cumulativeSize
+        // - 4096 to not include the size fo the folder
+        cumulativeSize += (context.cacheDir.getSizeOfFiles() - 4096).coerceAtLeast(0)
+        fileSizeFormatter.format(cumulativeSize)
     }
 }

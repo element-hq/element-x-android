@@ -26,7 +26,9 @@ import io.element.android.libraries.di.ApplicationContext
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class AndroidFileSizeFormatter @Inject constructor(@ApplicationContext private val context: Context) : FileSizeFormatter {
+class AndroidFileSizeFormatter @Inject constructor(
+    @ApplicationContext private val context: Context,
+    ) : FileSizeFormatter {
     override fun format(fileSize: Long, useShortFormat: Boolean): String {
         // Since Android O, the system considers that 1ko = 1000 bytes instead of 1024 bytes.
         // We want to avoid that.
