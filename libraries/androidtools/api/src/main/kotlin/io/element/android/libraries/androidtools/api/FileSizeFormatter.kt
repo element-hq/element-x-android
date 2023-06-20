@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline
+package io.element.android.libraries.androidtools.api
 
-import io.element.android.features.messages.impl.timeline.util.FileSizeFormatter
-
-class FakeFileSizeFormatter : FileSizeFormatter {
-    override fun format(fileSize: Long): String {
-        return "$fileSize Bytes"
-    }
+interface FileSizeFormatter {
+    /**
+     * Formats a content size to be in the form of bytes, kilobytes, megabytes, etc.
+     */
+    fun format(fileSize: Long): String
 }

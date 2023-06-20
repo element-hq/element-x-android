@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.util
+package io.element.android.libraries.androidtools.impl
 
 import android.content.Context
 import android.text.format.Formatter
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.androidtools.api.FileSizeFormatter
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import javax.inject.Inject
-
-interface FileSizeFormatter {
-    /**
-     * Formats a content size to be in the form of bytes, kilobytes, megabytes, etc.
-     */
-    fun format(fileSize: Long): String
-}
 
 @ContributesBinding(AppScope::class)
 class AndroidFileSizeFormatter @Inject constructor(@ApplicationContext private val context: Context) : FileSizeFormatter {
