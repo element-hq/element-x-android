@@ -20,5 +20,5 @@ interface FileSizeFormatter {
     /**
      * Formats a content size to be in the form of bytes, kilobytes, megabytes, etc.
      */
-    fun format(fileSize: Long): String
+    fun format(fileSize: Long, useShortFormat: Boolean = true): String
 }
