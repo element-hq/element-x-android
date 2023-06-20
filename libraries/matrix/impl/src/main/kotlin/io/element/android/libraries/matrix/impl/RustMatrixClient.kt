@@ -18,6 +18,7 @@
 
 package io.element.android.libraries.matrix.impl
 
+import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.ProgressCallback
@@ -336,6 +337,10 @@ class RustMatrixClient constructor(
         client.destroy()
     }
 
+    override suspend fun clearCache() {
+        baseDirectory.deleteSessionDirectory(userID = client.userId(), deleteCryptoDb = false)
+    }
+
     override suspend fun logout() = withContext(dispatchers.io) {
         try {
             client.logout()
@@ -378,11 +383,29 @@ class RustMatrixClient constructor(
 
     override fun roomMembershipObserver(): RoomMembershipObserver = roomMembershipObserver
 
-    private fun File.deleteSessionDirectory(userID: String): Boolean {
+    private fun File.deleteSessionDirectory(
+        userID: String,
+        deleteCryptoDb: Boolean = false,
+    ): Boolean {
         // Rust sanitises the user ID replacing invalid characters with an _
         val sanitisedUserID = userID.replace(":", "_")
         val sessionDirectory = File(this, sanitisedUserID)
-        return sessionDirectory.deleteRecursively()
+        return if (deleteCryptoDb) {
+            // Delete the folder and all its content
+            sessionDirectory.deleteRecursively()
+        } else {
+            // Delete only the state.db file
+            listOf(
+                "matrix-sdk-state.sqlite3",
+                "matrix-sdk-state.sqlite3-shm",
+                "matrix-sdk-state.sqlite3-wal",
+            ).map { fileName ->
+                File(sessionDirectory, fileName)
+            }.forEach { file ->
+                file.safeDelete()
+            }
+            true
+        }
     }
 }
 
