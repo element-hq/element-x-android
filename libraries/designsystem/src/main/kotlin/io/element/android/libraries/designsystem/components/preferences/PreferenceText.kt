@@ -17,6 +17,7 @@
 package io.element.android.libraries.designsystem.components.preferences
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,7 +27,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BugReport
@@ -55,7 +55,7 @@ fun PreferenceText(
     tintColor: Color? = null,
     onClick: () -> Unit = {},
 ) {
-    val minHeight = if (subtitle == null) preferenceMinHeightOnlyTitle else  preferenceMinHeight
+    val minHeight = if (subtitle == null) preferenceMinHeightOnlyTitle else preferenceMinHeight
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -69,9 +69,10 @@ fun PreferenceText(
                 .padding(vertical = preferencePaddingVertical)
         ) {
             PreferenceIcon(icon = icon, tintColor = tintColor)
-            Column(modifier = Modifier
-                .weight(1f)
-                .align(Alignment.CenterVertically)
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .align(Alignment.CenterVertically)
             ) {
                 if (title != null) {
                     Text(
@@ -92,15 +93,24 @@ fun PreferenceText(
                 }
             }
             if (currentValue != null) {
-                Text(currentValue, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
-                Spacer(Modifier.width(16.dp))
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(horizontal = 16.dp),
+                    text = currentValue,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.secondary,
+                )
             } else if (loadingCurrentValue) {
-                CircularProgressIndicator(modifier = Modifier
-                    .progressSemantics()
-                    .size(20.dp), strokeWidth = 2.dp)
-                Spacer(Modifier.width(16.dp))
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .progressSemantics()
+                        .padding(horizontal = 16.dp)
+                        .size(20.dp)
+                        .align(Alignment.CenterVertically),
+                    strokeWidth = 2.dp
+                )
             }
-
         }
     }
 }
@@ -111,9 +121,39 @@ internal fun PreferenceTextPreview() = ElementThemedPreview { ContentToPreview()
 
 @Composable
 private fun ContentToPreview() {
-    PreferenceText(
-        title = "Title",
-        subtitle = "Some content",
-        icon = Icons.Default.BugReport,
-    )
+    Column(
+        verticalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+        PreferenceText(
+            title = "Title",
+            icon = Icons.Default.BugReport,
+        )
+        PreferenceText(
+            title = "Title",
+            subtitle = "Some content",
+            icon = Icons.Default.BugReport,
+        )
+        PreferenceText(
+            title = "Title",
+            subtitle = "Some content",
+            icon = Icons.Default.BugReport,
+            currentValue = "123",
+        )
+        PreferenceText(
+            title = "Title",
+            subtitle = "Some content",
+            icon = Icons.Default.BugReport,
+            loadingCurrentValue = true,
+        )
+        PreferenceText(
+            title = "Title",
+            icon = Icons.Default.BugReport,
+            currentValue = "123",
+        )
+        PreferenceText(
+            title = "Title",
+            icon = Icons.Default.BugReport,
+            loadingCurrentValue = true,
+        )
+    }
 }
