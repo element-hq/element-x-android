@@ -56,7 +56,7 @@ class DeveloperSettingsPresenter @Inject constructor(
             mutableStateMapOf<String, Boolean>()
         }
         val cacheSize = remember {
-            mutableStateOf<Async<Long>>(Async.Uninitialized)
+            mutableStateOf<Async<String>>(Async.Uninitialized)
         }
         val clearCacheAction = remember {
             mutableStateOf<Async<Unit>>(Async.Uninitialized)
@@ -88,7 +88,7 @@ class DeveloperSettingsPresenter @Inject constructor(
 
         return DeveloperSettingsState(
             features = featureUiModels.toImmutableList(),
-            cacheSizeInBytes = cacheSize.value,
+            cacheSize = cacheSize.value,
             clearCacheAction = clearCacheAction.value,
             eventSink = ::handleEvents
         )
@@ -125,7 +125,7 @@ class DeveloperSettingsPresenter @Inject constructor(
         }
     }
 
-    private fun CoroutineScope.computeCacheSize(cacheSize: MutableState<Async<Long>>) = launch {
+    private fun CoroutineScope.computeCacheSize(cacheSize: MutableState<Async<String>>) = launch {
         suspend {
             computeCacheSizeUseCase.execute()
         }.execute(cacheSize)

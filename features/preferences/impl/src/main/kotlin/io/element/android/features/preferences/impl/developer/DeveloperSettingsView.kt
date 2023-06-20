@@ -56,15 +56,13 @@ fun DeveloperSettingsView(
                 onClick = onOpenShowkase
             )
         }
-        val cache = state.cacheSizeInBytes
+        val cache = state.cacheSize
         PreferenceCategory(title = "Cache") {
             PreferenceText(
                 title = "Clear cache",
                 icon = Icons.Default.Delete,
-                currentValue = if (cache is Async.Success) {
-                    "${cache.state} bytes"
-                } else null,
-                loadingCurrentValue = state.cacheSizeInBytes.isLoading() || state.clearCacheAction.isLoading(),
+                currentValue = cache.dataOrNull(),
+                loadingCurrentValue = state.cacheSize.isLoading() || state.clearCacheAction.isLoading(),
                 onClick = {
                     if (state.clearCacheAction.isLoading().not()) {
                         state.eventSink(DeveloperSettingsEvents.ClearCache)
