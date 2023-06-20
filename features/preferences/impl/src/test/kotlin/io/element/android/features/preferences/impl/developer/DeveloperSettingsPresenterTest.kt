@@ -20,6 +20,8 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.preferences.impl.tasks.FakeClearCacheUseCase
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import kotlinx.coroutines.test.runTest
@@ -29,13 +31,15 @@ class DeveloperSettingsPresenterTest {
     @Test
     fun `present - ensures initial state is correct`() = runTest {
         val presenter = DeveloperSettingsPresenter(
-            FakeFeatureFlagService()
+            FakeFeatureFlagService(),
+            FakeClearCacheUseCase()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.features).isEmpty()
+            assertThat(initialState.clearCacheAction).isEqualTo(Async.Uninitialized)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -43,7 +47,8 @@ class DeveloperSettingsPresenterTest {
     @Test
     fun `present - ensures feature list is loaded`() = runTest {
         val presenter = DeveloperSettingsPresenter(
-            FakeFeatureFlagService()
+            FakeFeatureFlagService(),
+            FakeClearCacheUseCase()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -58,7 +63,8 @@ class DeveloperSettingsPresenterTest {
     @Test
     fun `present - ensures state is updated when enabled feature event is triggered`() = runTest {
         val presenter = DeveloperSettingsPresenter(
-            FakeFeatureFlagService()
+            FakeFeatureFlagService(),
+            FakeClearCacheUseCase()
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -72,6 +78,27 @@ class DeveloperSettingsPresenterTest {
             assertThat(featureBeforeEvent.key).isEqualTo(featureAfterEvent.key)
             assertThat(featureBeforeEvent.isEnabled).isNotEqualTo(featureAfterEvent.isEnabled)
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - clear cache`() = runTest {
+        val clearCacheUseCase = FakeClearCacheUseCase()
+        val presenter = DeveloperSettingsPresenter(
+            FakeFeatureFlagService(),
+            clearCacheUseCase
+        )
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(clearCacheUseCase.executeHasBeenCalled).isFalse()
+            initialState.eventSink(DeveloperSettingsEvents.ClearCache)
+            val stateAfterEvent = awaitItem()
+            assertThat(stateAfterEvent.clearCacheAction).isInstanceOf(Async.Loading::class.java)
+            assertThat(awaitItem().clearCacheAction).isInstanceOf(Async.Success::class.java)
+            assertThat(clearCacheUseCase.executeHasBeenCalled).isTrue()
         }
     }
 }
