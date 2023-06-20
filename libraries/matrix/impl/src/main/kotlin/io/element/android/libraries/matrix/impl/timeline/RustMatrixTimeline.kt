@@ -32,6 +32,8 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -40,9 +42,6 @@ import org.matrix.rustcomponents.sdk.RequiredState
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomSubscription
-import org.matrix.rustcomponents.sdk.SlidingSyncRoom
-import org.matrix.rustcomponents.sdk.TimelineItem
-import org.matrix.rustcomponents.sdk.TimelineListener
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -74,7 +73,7 @@ class RustMatrixTimeline(
         )
     )
 
-    private val innerTimelineListener = MatrixTimelineDiffProcessor(
+    private val timelineDiffProcessor = MatrixTimelineDiffProcessor(
         paginationState = paginationState,
         timelineItems = timelineItems,
         coroutineScope = coroutineScope,
@@ -95,13 +94,8 @@ class RustMatrixTimeline(
     override fun initialize() {
         Timber.v("Init timeline for room ${matrixRoom.roomId}")
         coroutineScope.launch {
-            val result = addListener(innerTimelineListener)
-            result
-                .onSuccess { timelineItems ->
-                    val matrixTimelineItems = timelineItems.map(timelineItemFactory::map)
-                    withContext(coroutineDispatchers.diffUpdateDispatcher) {
-                        this@RustMatrixTimeline.timelineItems.value = matrixTimelineItems
-                    }
+            subscribeAndAddListener(this)
+                .onSuccess {
                     isInit.set(true)
                 }
                 .onFailure {
@@ -156,8 +150,8 @@ class RustMatrixTimeline(
         }
     }
 
-    private suspend fun addListener(timelineListener: TimelineListener): Result<List<TimelineItem>> = withContext(coroutineDispatchers.io) {
-        runCatching {
+    private fun subscribeAndAddListener(coroutineScope: CoroutineScope): Result<Unit> {
+        return runCatching {
             val settings = RoomSubscription(
                 requiredState = listOf(
                     RequiredState(key = EventType.STATE_ROOM_CANONICAL_ALIAS, value = ""),
@@ -168,12 +162,11 @@ class RustMatrixTimeline(
                 timelineLimit = null
             )
             roomListItem.subscribe(settings)
-            val result = innerRoom.addTimelineListener(timelineListener)
-            launch {
-                fetchMembers()
-            }
-            listenerTokens += result.itemsStream
-            result.items
+            innerRoom.timelineDiffFlow { initialList ->
+                timelineItems.value = initialList.map(timelineItemFactory::map)
+            }.onEach {
+                timelineDiffProcessor.onUpdate(it)
+            }.launchIn(coroutineScope)
         }
     }
 
