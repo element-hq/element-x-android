@@ -16,7 +16,9 @@
 
 package io.element.android.features.messages.impl
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
@@ -34,6 +36,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,7 +44,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -231,12 +236,16 @@ fun MessagesViewContent(
                 onTimestampClicked = onTimestampClicked,
             )
         }
-        MessageComposerView(
-            state = state.composerState,
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(Alignment.Bottom)
-        )
+        if (state.userHasPermissionToSendMessage) {
+            MessageComposerView(
+                state = state.composerState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(Alignment.Bottom)
+            )
+        } else {
+            CantSendMessageBanner()
+        }
     }
 }
 
@@ -279,6 +288,28 @@ fun MessagesViewTopBar(
         },
         windowInsets = WindowInsets(0.dp)
     )
+}
+
+@Composable
+fun CantSendMessageBanner(
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.secondary)
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = stringResource(id = R.string.screen_room_no_permission_to_post),
+            color = MaterialTheme.colorScheme.onSecondary,
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+            fontStyle = FontStyle.Italic,
+        )
+    }
 }
 
 @Preview
