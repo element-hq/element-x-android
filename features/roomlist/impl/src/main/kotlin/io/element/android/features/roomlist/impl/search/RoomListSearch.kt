@@ -48,15 +48,19 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomlist.impl.RoomListEvents
 import io.element.android.features.roomlist.impl.RoomListState
+import io.element.android.features.roomlist.impl.aRoomListState
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
 import io.element.android.features.roomlist.impl.contentType
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.modifiers.applyIf
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -109,6 +113,7 @@ internal fun RoomListSearchResultContent(
     fun onBackButtonPressed() {
         state.eventSink(RoomListEvents.ToggleSearchResults)
     }
+
     fun onRoomClicked(room: RoomListRoomSummary) {
         onRoomClicked(room.roomId)
     }
@@ -211,4 +216,24 @@ internal fun RoomListSearchResultContent(
             }
         }
     }
+}
+
+@Preview
+@Composable
+internal fun RoomListSearchResultContentLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+internal fun RoomListSearchResultContentDarkPreview() =
+    ElementPreviewDark { ContentToPreview() }
+
+@Preview
+@Composable
+internal fun ContentToPreview() {
+    RoomListSearchResultContent(
+        state = aRoomListState(),
+        onRoomClicked = {},
+        onRoomLongClicked = {}
+    )
 }
