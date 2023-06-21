@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.flowOf
 val A_OIDC_DATA = OidcDetails(url = "a-url")
 
 class FakeAuthenticationService : MatrixAuthenticationService {
-    private var homeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
+    private val homeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
     private var oidcError: Throwable? = null
     private var oidcCancelError: Throwable? = null
     private var loginError: Throwable? = null
