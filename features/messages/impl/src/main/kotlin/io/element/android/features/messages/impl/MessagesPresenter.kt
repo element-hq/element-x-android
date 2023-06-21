@@ -88,7 +88,7 @@ class MessagesPresenter @Inject constructor(
         val retryState = retrySendMenuPresenter.present()
 
         val syncUpdateFlow = room.syncUpdateFlow().collectAsState(0L)
-        val userHasPermissionToSendMessage by room.canSendEventAsState(type = MessageEventType.ROOM_MESSAGE)
+        val userHasPermissionToSendMessage by room.canSendEventAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
         val roomName: MutableState<String?> = rememberSaveable {
             mutableStateOf(null)
         }
