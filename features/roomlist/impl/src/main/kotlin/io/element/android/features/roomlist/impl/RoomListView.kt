@@ -63,6 +63,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
+import io.element.android.features.roomlist.impl.components.RoomListMenuAction
 import io.element.android.features.roomlist.impl.components.RoomListTopBar
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
@@ -95,6 +96,7 @@ fun RoomListView(
     onCreateRoomClicked: () -> Unit,
     onInvitesClicked: () -> Unit,
     onRoomSettingsClicked: (roomId: RoomId) -> Unit,
+    onMenuActionClicked: (RoomListMenuAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -118,12 +120,13 @@ fun RoomListView(
 
             RoomListContent(
                 state = state,
+                onVerifyClicked = onVerifyClicked,
                 onRoomClicked = onRoomClicked,
                 onRoomLongClicked = { onRoomLongClicked(it) },
                 onOpenSettings = onSettingsClicked,
-                onVerifyClicked = onVerifyClicked,
                 onCreateRoomClicked = onCreateRoomClicked,
                 onInvitesClicked = onInvitesClicked,
+                onMenuActionClicked = onMenuActionClicked,
             )
             // This overlaid view will only be visible when state.displaySearchResults is true
             RoomListSearchResultView(
@@ -143,12 +146,13 @@ fun RoomListView(
 fun RoomListContent(
     state: RoomListState,
     modifier: Modifier = Modifier,
-    onVerifyClicked: () -> Unit = {},
-    onRoomClicked: (RoomId) -> Unit = {},
-    onRoomLongClicked: (RoomListRoomSummary) -> Unit = {},
-    onOpenSettings: () -> Unit = {},
-    onCreateRoomClicked: () -> Unit = {},
-    onInvitesClicked: () -> Unit = {},
+    onVerifyClicked: () -> Unit,
+    onRoomClicked: (RoomId) -> Unit,
+    onRoomLongClicked: (RoomListRoomSummary) -> Unit,
+    onOpenSettings: () -> Unit,
+    onCreateRoomClicked: () -> Unit,
+    onInvitesClicked: () -> Unit,
+    onMenuActionClicked: (RoomListMenuAction) -> Unit,
 ) {
     fun onRoomClicked(room: RoomListRoomSummary) {
         onRoomClicked(room.roomId)
@@ -190,6 +194,7 @@ fun RoomListContent(
                 areSearchResultsDisplayed = state.displaySearchResults,
                 onFilterChanged = { state.eventSink(RoomListEvents.UpdateFilter(it)) },
                 onToggleSearch = { state.eventSink(RoomListEvents.ToggleSearchResults) },
+                onMenuActionClicked = onMenuActionClicked,
                 onOpenSettings = onOpenSettings,
                 scrollBehavior = scrollBehavior,
             )
@@ -369,7 +374,8 @@ private fun ContentToPreview(state: RoomListState) {
         onVerifyClicked = {},
         onCreateRoomClicked = {},
         onInvitesClicked = {},
-        onRoomSettingsClicked = {}
+        onRoomSettingsClicked = {},
+        onMenuActionClicked = {},
     )
 }
 
