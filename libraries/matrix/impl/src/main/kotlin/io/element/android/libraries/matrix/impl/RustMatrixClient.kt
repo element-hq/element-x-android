@@ -339,11 +339,13 @@ class RustMatrixClient constructor(
     }
 
     override suspend fun getCacheSize(): Long {
-        return baseDirectory.getCacheSize(userID = client.userId())
+        // Do not use client.userId since it can throw if client has been closed (during clear cache)
+        return baseDirectory.getCacheSize(userID = sessionId.value)
     }
 
     override suspend fun clearCache() {
-        baseDirectory.deleteSessionDirectory(userID = client.userId())
+        close()
+        baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = false)
     }
 
     override suspend fun logout() = withContext(dispatchers.io) {
