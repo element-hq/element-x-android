@@ -29,7 +29,15 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
             aRoomListRoomSummary().copy(hasUnread = true),
             aRoomListRoomSummary().copy(timestamp = "88:88"),
             aRoomListRoomSummary().copy(timestamp = "88:88", hasUnread = true),
-            aRoomListRoomSummary().copy(isPlaceholder = true),
+            aRoomListRoomSummary().copy(isPlaceholder = true, timestamp = "88:88"),
+            aRoomListRoomSummary().copy(
+                name = "A very long room name that should be truncated",
+                lastMessage = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt" +
+                    " ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea com" +
+                    "modo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+                timestamp = "yesterday",
+                hasUnread = true,
+            ),
         )
 }
 
