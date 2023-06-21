@@ -192,72 +192,67 @@ fun RoomListContent(
             )
         },
         content = { padding ->
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .padding(padding)
                     .consumeWindowInsets(padding)
+                    .nestedScroll(nestedScrollConnection),
+                state = lazyListState,
             ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .weight(1f)
-                        .nestedScroll(nestedScrollConnection),
-                    state = lazyListState,
-                ) {
-                    if (state.displayVerificationPrompt) {
-                        item {
-                            RequestVerificationHeader(
-                                onVerifyClicked = onVerifyClicked,
-                                onDismissClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
-                            )
-                        }
+                if (state.displayVerificationPrompt) {
+                    item {
+                        RequestVerificationHeader(
+                            onVerifyClicked = onVerifyClicked,
+                            onDismissClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
+                        )
                     }
+                }
 
-                    if (state.invitesState != InvitesState.NoInvites) {
-                        item {
-                            Box(
-                                modifier = Modifier.fillMaxWidth(),
+                if (state.invitesState != InvitesState.NoInvites) {
+                    item {
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .clickable(role = Role.Button, onClick = onInvitesClicked)
+                                    .padding(horizontal = 16.dp)
+                                    .align(Alignment.CenterEnd)
+                                    .heightIn(min = 48.dp),
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
-                                Row(
-                                    modifier = Modifier
-                                        .clickable(role = Role.Button, onClick = onInvitesClicked)
-                                        .padding(horizontal = 16.dp)
-                                        .align(Alignment.CenterEnd)
-                                        .heightIn(min = 48.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    Text(
-                                        text = stringResource(CommonStrings.action_invites_list),
-                                        fontSize = 14.sp,
-                                        style = noFontPadding,
+                                Text(
+                                    text = stringResource(CommonStrings.action_invites_list),
+                                    fontSize = 14.sp,
+                                    style = noFontPadding,
+                                )
+
+                                if (state.invitesState == InvitesState.NewInvites) {
+                                    Spacer(Modifier.width(8.dp))
+
+                                    Box(
+                                        modifier = Modifier
+                                            .size(12.dp)
+                                            .clip(CircleShape)
+                                            .background(MaterialTheme.roomListUnreadIndicator())
                                     )
-
-                                    if (state.invitesState == InvitesState.NewInvites) {
-                                        Spacer(Modifier.width(8.dp))
-
-                                        Box(
-                                            modifier = Modifier
-                                                .size(12.dp)
-                                                .clip(CircleShape)
-                                                .background(MaterialTheme.roomListUnreadIndicator())
-                                        )
-                                    }
                                 }
                             }
                         }
                     }
+                }
 
-                    itemsIndexed(
-                        items = state.roomList,
-                        contentType = { _, room -> room.contentType() },
-                    ) { index, room ->
-                        RoomSummaryRow(
-                            room = room,
-                            onClick = ::onRoomClicked,
-                            onLongClick = onRoomLongClicked,
-                        )
-                        if (index != state.roomList.lastIndex) {
-                            Divider()
-                        }
+                itemsIndexed(
+                    items = state.roomList,
+                    contentType = { _, room -> room.contentType() },
+                ) { index, room ->
+                    RoomSummaryRow(
+                        room = room,
+                        onClick = ::onRoomClicked,
+                        onLongClick = onRoomLongClicked,
+                    )
+                    if (index != state.roomList.lastIndex) {
+                        Divider()
                     }
                 }
             }
