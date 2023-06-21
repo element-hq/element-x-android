@@ -23,9 +23,9 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
 
 @Composable
-fun MatrixRoom.canSendEventAsState(type: MessageEventType): State<Boolean> {
-    return produceState(initialValue = false, key1 = type) {
-        value = canSendEvent(type).getOrElse { false }
+fun MatrixRoom.canSendEventAsState(type: MessageEventType, updateKey: Long): State<Boolean> {
+    return produceState(initialValue = true, key1 = updateKey) {
+        value = canSendEvent(type).getOrElse { true }
     }
 }
 
