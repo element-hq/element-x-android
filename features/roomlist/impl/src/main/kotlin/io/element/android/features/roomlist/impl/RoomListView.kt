@@ -71,7 +71,6 @@ import io.element.android.libraries.designsystem.theme.components.FloatingAction
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.noFontPadding
 import io.element.android.libraries.designsystem.theme.roomListUnreadIndicator
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
@@ -210,35 +209,7 @@ fun RoomListContent(
 
                 if (state.invitesState != InvitesState.NoInvites) {
                     item {
-                        Box(
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .clickable(role = Role.Button, onClick = onInvitesClicked)
-                                    .padding(horizontal = 16.dp)
-                                    .align(Alignment.CenterEnd)
-                                    .heightIn(min = 48.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(
-                                    text = stringResource(CommonStrings.action_invites_list),
-                                    fontSize = 14.sp,
-                                    style = noFontPadding,
-                                )
-
-                                if (state.invitesState == InvitesState.NewInvites) {
-                                    Spacer(Modifier.width(8.dp))
-
-                                    Box(
-                                        modifier = Modifier
-                                            .size(12.dp)
-                                            .clip(CircleShape)
-                                            .background(MaterialTheme.roomListUnreadIndicator())
-                                    )
-                                }
-                            }
-                        }
+                        InvitesEntryPointView(onInvitesClicked, state)
                     }
                 }
 
@@ -276,6 +247,43 @@ fun RoomListContent(
             }
         },
     )
+}
+
+@Composable
+private fun InvitesEntryPointView(
+    onInvitesClicked: () -> Unit,
+    state: RoomListState,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        Row(
+            modifier = Modifier
+                .clickable(role = Role.Button, onClick = onInvitesClicked)
+                .padding(horizontal = 16.dp)
+                .align(Alignment.CenterEnd)
+                .heightIn(min = 48.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = stringResource(CommonStrings.action_invites_list),
+                fontSize = 14.sp,
+                style = MaterialTheme.typography.bodyMedium,
+            )
+
+            if (state.invitesState == InvitesState.NewInvites) {
+                Spacer(Modifier.width(8.dp))
+
+                Box(
+                    modifier = Modifier
+                        .size(12.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.roomListUnreadIndicator())
+                )
+            }
+        }
+    }
 }
 
 internal fun RoomListRoomSummary.contentType() = isPlaceholder
