@@ -20,6 +20,7 @@ import android.net.Uri
 import io.element.android.features.createroom.impl.configureroom.RoomPrivacy
 import io.element.android.features.createroom.impl.di.CreateRoomScope
 import io.element.android.features.createroom.impl.userlist.UserListDataStore
+import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.di.SingleIn
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
@@ -36,7 +37,7 @@ class CreateRoomDataStore @Inject constructor(
     private val createRoomConfigFlow: MutableStateFlow<CreateRoomConfig> = MutableStateFlow(CreateRoomConfig())
     private var cachedAvatarUri: Uri? = null
         set(value) {
-            field?.path?.let { File(it) }?.delete()
+            field?.path?.let { File(it) }?.safeDelete()
             field = value
         }
 
