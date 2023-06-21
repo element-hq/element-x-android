@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalCoilApi::class)
+
 package io.element.android.features.preferences.impl.tasks
 
 import android.content.Context
+import coil.Coil
+import coil.annotation.ExperimentalCoilApi
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.ApplicationContext
@@ -24,7 +28,9 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
 import javax.inject.Inject
+import javax.inject.Provider
 
 interface ClearCacheUseCase {
     suspend fun execute()
@@ -36,10 +42,21 @@ class DefaultClearCacheUseCase @Inject constructor(
     private val matrixClient: MatrixClient,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val authenticationService: MatrixAuthenticationService,
+    private val okHttpClient: Provider<OkHttpClient>,
 ) : ClearCacheUseCase {
     override suspend fun execute() = withContext(coroutineDispatchers.io) {
+        // Clear Matrix cache
         matrixClient.clearCache()
+        // Clear Coil cache
+        Coil.imageLoader(context).let {
+            it.diskCache?.clear()
+            it.memoryCache?.clear()
+        }
+        // Clear OkHttp cache
+        okHttpClient.get().cache?.delete()
+        // Clear app cache
         context.cacheDir.deleteRecursively()
+        // Ensure the app is restarted
         authenticationService.incrementCacheIdx()
     }
 }
