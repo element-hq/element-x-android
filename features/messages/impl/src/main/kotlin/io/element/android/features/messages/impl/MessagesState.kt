@@ -31,6 +31,7 @@ data class MessagesState(
     val roomId: RoomId,
     val roomName: String?,
     val roomAvatar: AvatarData?,
+    val userHasPermissionToSendMessage: Boolean,
     val composerState: MessageComposerState,
     val timelineState: TimelineState,
     val actionListState: ActionListState,

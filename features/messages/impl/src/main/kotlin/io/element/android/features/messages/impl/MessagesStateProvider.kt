@@ -35,6 +35,7 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             aMessagesState(),
             aMessagesState().copy(hasNetworkConnection = false),
             aMessagesState().copy(composerState = aMessageComposerState().copy(showAttachmentSourcePicker = true)),
+            aMessagesState().copy(userHasPermissionToSendMessage = false),
         )
 }
 
@@ -42,6 +43,7 @@ fun aMessagesState() = MessagesState(
     roomId = RoomId("!id:domain"),
     roomName = "Room name",
     roomAvatar = AvatarData("!id:domain", "Room name"),
+    userHasPermissionToSendMessage = true,
     composerState = aMessageComposerState().copy(
         text = StableCharSequence("Hello"),
         isFullScreen = false,
