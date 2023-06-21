@@ -81,8 +81,12 @@ jobs:
             **/out/failures/
             **/build/reports/tests/*UnitTest/
 
-      - name: 🔊 Publish results to Sonar (disabled)
-        run: echo "This is now done only once a day, see nightlyReports.yml"
+      - name: 🔊 Publish results to Sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
+        if: ${{ always() && env.SONAR_TOKEN != '' && env.ORG_GRADLE_PROJECT_SONAR_LOGIN != '' }}
+        run: ./gradlew sonar $CI_GRADLE_ARG_PROPERTIES
 
       # https://github.com/codecov/codecov-action
       - name: ☂️ Upload coverage reports to codecov
