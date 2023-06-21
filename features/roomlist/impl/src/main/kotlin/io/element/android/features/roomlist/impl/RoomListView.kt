@@ -63,7 +63,6 @@ import io.element.android.features.roomlist.impl.components.RoomListMenuAction
 import io.element.android.features.roomlist.impl.components.RoomListTopBar
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
-import io.element.android.features.roomlist.impl.search.RoomListSearchResultContent
 import io.element.android.features.roomlist.impl.search.RoomListSearchResultView
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -308,16 +307,4 @@ private fun ContentToPreview(state: RoomListState) {
         onRoomSettingsClicked = {},
         onMenuActionClicked = {},
     )
-}
-
-@Preview
-@Composable
-internal fun RoomListSearchResultContentPreview() {
-    ElementPreviewLight {
-        RoomListSearchResultContent(
-            state = aRoomListState(),
-            onRoomClicked = {},
-            onRoomLongClicked = {}
-        )
-    }
 }
