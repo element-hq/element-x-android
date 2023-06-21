@@ -55,13 +55,14 @@ fun SelectedUser(
     modifier: Modifier = Modifier,
     onUserRemoved: (MatrixUser) -> Unit = {},
 ) {
-    Box(modifier = modifier
-        .width(56.dp)
+    Box(
+        modifier = modifier
+            .width(AvatarSize.SelectedUser.dp)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Avatar(matrixUser.getAvatarData(size = AvatarSize.Custom(56.dp)))
+            Avatar(matrixUser.getAvatarData(size = AvatarSize.SelectedUser))
             Text(
                 text = matrixUser.getBestName(),
                 overflow = TextOverflow.Ellipsis,

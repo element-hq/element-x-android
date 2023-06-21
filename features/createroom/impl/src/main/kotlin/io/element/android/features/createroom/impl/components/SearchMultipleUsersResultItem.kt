@@ -40,7 +40,7 @@ fun SearchMultipleUsersResultItem(
         CheckableUnresolvedUserRow(
             checked = isUserSelected,
             modifier = modifier,
-            avatarData = searchResult.matrixUser.getAvatarData(AvatarSize.Custom(36.dp)),
+            avatarData = searchResult.matrixUser.getAvatarData(AvatarSize.UserListItem),
             id = searchResult.matrixUser.userId.value,
             onCheckedChange = onCheckedChange,
         )
@@ -49,7 +49,7 @@ fun SearchMultipleUsersResultItem(
             checked = isUserSelected,
             modifier = modifier,
             matrixUser = searchResult.matrixUser,
-            avatarSize = AvatarSize.Custom(36.dp),
+            avatarSize = AvatarSize.UserListItem,
             onCheckedChange = onCheckedChange,
         )
     }

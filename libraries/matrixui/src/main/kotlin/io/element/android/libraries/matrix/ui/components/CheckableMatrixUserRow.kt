@@ -42,7 +42,7 @@ fun CheckableMatrixUserRow(
     checked: Boolean,
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
-    avatarSize: AvatarSize = AvatarSize.MEDIUM,
+    avatarSize: AvatarSize = AvatarSize.UserListItem,
     onCheckedChange: (Boolean) -> Unit = {},
     enabled: Boolean = true,
 ) = CheckableUserRow(

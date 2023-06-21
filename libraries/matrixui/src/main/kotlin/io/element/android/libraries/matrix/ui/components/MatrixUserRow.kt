@@ -49,7 +49,7 @@ import io.element.android.libraries.matrix.ui.model.getBestName
 fun MatrixUserRow(
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
-    avatarSize: AvatarSize = AvatarSize.Custom(36.dp),
+    avatarSize: AvatarSize = AvatarSize.UserListItem,
 ) = UserRow(
     avatarData = matrixUser.getAvatarData(avatarSize),
     name = matrixUser.getBestName(),

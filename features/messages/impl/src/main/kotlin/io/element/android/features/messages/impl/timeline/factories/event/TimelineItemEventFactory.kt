@@ -67,7 +67,7 @@ class TimelineItemEventFactory @Inject constructor(
             id = currentSender.value,
             name = senderDisplayName ?: currentSender.value,
             url = senderAvatarUrl,
-            size = AvatarSize.SMALL
+            size = AvatarSize.TimelineSender
         )
         return TimelineItem.Event(
             id = currentTimelineItem.uniqueId,

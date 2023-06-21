@@ -17,6 +17,7 @@
 package io.element.android.features.roomlist.impl.model
 
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
 
 object RoomListRoomSummaryPlaceholders {
@@ -29,7 +30,7 @@ object RoomListRoomSummaryPlaceholders {
             name = "Short name",
             timestamp = "hh:mm",
             lastMessage = "Last message for placeholder",
-            avatarData = AvatarData(id, "S")
+            avatarData = AvatarData(id, "S", size = AvatarSize.RoomListItem)
         )
     }
 

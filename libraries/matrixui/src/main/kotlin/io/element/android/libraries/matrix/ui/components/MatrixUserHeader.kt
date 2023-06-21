@@ -57,7 +57,7 @@ fun MatrixUserHeader(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Avatar(
-            matrixUser.getAvatarData(size = AvatarSize.HUGE),
+            matrixUser.getAvatarData(size = AvatarSize.UserHeader),
         )
         Spacer(modifier = Modifier.height(16.dp))
         // Name

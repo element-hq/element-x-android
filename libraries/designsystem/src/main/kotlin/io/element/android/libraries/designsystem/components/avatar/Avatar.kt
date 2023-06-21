@@ -17,7 +17,9 @@
 package io.element.android.libraries.designsystem.components.avatar
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -30,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
@@ -109,4 +112,12 @@ private fun InitialsAvatar(
 @Preview(group = PreviewGroup.Avatars)
 @Composable
 fun AvatarPreview(@PreviewParameter(AvatarDataProvider::class) avatarData: AvatarData) =
-    ElementThemedPreview { Avatar(avatarData) }
+    ElementThemedPreview {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Avatar(avatarData)
+            Text(text = avatarData.size.name + " " + avatarData.size.dp)
+        }
+    }

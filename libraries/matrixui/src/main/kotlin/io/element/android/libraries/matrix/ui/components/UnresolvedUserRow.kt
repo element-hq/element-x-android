@@ -82,7 +82,9 @@ fun UnresolvedUserRow(
             )
 
             // Warning
-            Row(modifier = Modifier.fillMaxWidth().padding(top = 3.dp)) {
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 3.dp)) {
                 Icon(
                     imageVector = Icons.Filled.Error,
                     contentDescription = "",
@@ -141,7 +143,7 @@ fun CheckableUnresolvedUserRow(
 internal fun UnresolvedUserRowPreview() =
     ElementThemedPreview {
         val matrixUser = aMatrixUser()
-        UnresolvedUserRow(matrixUser.getAvatarData(), matrixUser.userId.value)
+        UnresolvedUserRow(matrixUser.getAvatarData(size = AvatarSize.UserListItem), matrixUser.userId.value)
     }
 
 @Preview
@@ -150,9 +152,9 @@ internal fun CheckableUnresolvedUserRowPreview() =
     ElementThemedPreview {
         val matrixUser = aMatrixUser()
         Column {
-            CheckableUnresolvedUserRow(false, matrixUser.getAvatarData(AvatarSize.Custom(36.dp)), matrixUser.userId.value)
-            CheckableUnresolvedUserRow(true, matrixUser.getAvatarData(AvatarSize.Custom(36.dp)), matrixUser.userId.value)
-            CheckableUnresolvedUserRow(false, matrixUser.getAvatarData(AvatarSize.Custom(36.dp)), matrixUser.userId.value, enabled = false)
-            CheckableUnresolvedUserRow(true, matrixUser.getAvatarData(AvatarSize.Custom(36.dp)), matrixUser.userId.value, enabled = false)
+            CheckableUnresolvedUserRow(false, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value)
+            CheckableUnresolvedUserRow(true, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value)
+            CheckableUnresolvedUserRow(false, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value, enabled = false)
+            CheckableUnresolvedUserRow(true, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value, enabled = false)
         }
     }

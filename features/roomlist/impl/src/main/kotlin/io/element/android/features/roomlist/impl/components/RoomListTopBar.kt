@@ -126,7 +126,7 @@ private fun DefaultRoomListTopBar(
                 ) {
                     val avatarData by remember {
                         derivedStateOf {
-                            matrixUser.getAvatarData(size = AvatarSize.Custom(28.dp))
+                            matrixUser.getAvatarData(size = AvatarSize.CurrentUserTopBar)
                         }
                     }
                     Avatar(avatarData, contentDescription = stringResource(CommonStrings.common_settings))

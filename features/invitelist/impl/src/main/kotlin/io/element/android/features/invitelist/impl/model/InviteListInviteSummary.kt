@@ -18,6 +18,7 @@ package io.element.android.features.invitelist.impl.model
 
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 
@@ -26,14 +27,14 @@ data class InviteListInviteSummary(
     val roomId: RoomId,
     val roomName: String = "",
     val roomAlias: String? = null,
-    val roomAvatarData: AvatarData = AvatarData(roomId.value, roomName),
+    val roomAvatarData: AvatarData = AvatarData(roomId.value, roomName, size = AvatarSize.RoomListItem),
     val sender: InviteSender? = null,
     val isDirect: Boolean = false,
     val isNew: Boolean = false,
 )
 
-data class InviteSender(
+data class InviteSender constructor(
     val userId: UserId,
     val displayName: String,
-    val avatarData: AvatarData = AvatarData(userId.value, displayName),
+    val avatarData: AvatarData = AvatarData(userId.value, displayName, size = AvatarSize.InviteSender),
 )
