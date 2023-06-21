@@ -41,6 +41,7 @@ dependencies {
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.featureflag.ui)
     implementation(projects.libraries.elementresources)
+    implementation(projects.libraries.network)
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
     implementation(projects.features.rageshake.api)
@@ -49,6 +50,7 @@ dependencies {
     implementation(projects.features.logout.api)
     implementation(libs.datetime)
     implementation(libs.accompanist.placeholder)
+    implementation(libs.coil.compose)
     api(projects.features.preferences.api)
     ksp(libs.showkase.processor)
 
