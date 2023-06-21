@@ -424,15 +424,12 @@ class RustMatrixClient constructor(
             sessionDirectory.deleteRecursively()
         } else {
             // Delete only the state.db file
-            listOf(
-                "matrix-sdk-state.sqlite3",
-                "matrix-sdk-state.sqlite3-shm",
-                "matrix-sdk-state.sqlite3-wal",
-            ).map { fileName ->
-                File(sessionDirectory, fileName)
-            }.forEach { file ->
-                file.safeDelete()
-            }
+            sessionDirectory.listFiles().orEmpty()
+                .filter { it.name.contains("matrix-sdk-state") }
+                .forEach { file ->
+                    Timber.w("Deleting file ${file.name}...")
+                    file.safeDelete()
+                }
             true
         }
     }
