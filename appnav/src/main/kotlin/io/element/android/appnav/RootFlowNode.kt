@@ -54,7 +54,9 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
@@ -88,11 +90,17 @@ class RootFlowNode @AssistedInject constructor(
     private fun observeLoggedInState() {
         authenticationService.isLoggedIn()
             .distinctUntilChanged()
+            .combine(
+                authenticationService.cacheIdx().onEach {
+                    Timber.v("cacheIdx=$it")
+                    matrixClientsHolder.removeAll()
+                }
+            ) { isLoggedIn, cacheIdx -> isLoggedIn to cacheIdx }
             .onEach { isLoggedIn ->
                 Timber.v("isLoggedIn=$isLoggedIn")
-                if (isLoggedIn) {
+                if (isLoggedIn.first) {
                     tryToRestoreLatestSession(
-                        onSuccess = { switchToLoggedInFlow(it) },
+                        onSuccess = { switchToLoggedInFlow(it, isLoggedIn.second) },
                         onFailure = { switchToNotLoggedInFlow() }
                     )
                 } else {
@@ -102,8 +110,8 @@ class RootFlowNode @AssistedInject constructor(
             .launchIn(lifecycleScope)
     }
 
-    private fun switchToLoggedInFlow(sessionId: SessionId) {
-        backstack.safeRoot(NavTarget.LoggedInFlow(sessionId))
+    private fun switchToLoggedInFlow(sessionId: SessionId, cacheIndex: Int) {
+        backstack.safeRoot(NavTarget.LoggedInFlow(sessionId, cacheIndex))
     }
 
     private fun switchToNotLoggedInFlow() {
@@ -163,7 +171,7 @@ class RootFlowNode @AssistedInject constructor(
         object NotLoggedInFlow : NavTarget
 
         @Parcelize
-        data class LoggedInFlow(val sessionId: SessionId) : NavTarget
+        data class LoggedInFlow(val sessionId: SessionId, val cacheIndex: Int) : NavTarget
 
         @Parcelize
         object BugReport : NavTarget
@@ -235,8 +243,9 @@ class RootFlowNode @AssistedInject constructor(
     }
 
     private suspend fun attachSession(sessionId: SessionId): LoggedInFlowNode {
+        val cacheIdx = authenticationService.cacheIdx().first()
         return attachChild {
-            backstack.newRoot(NavTarget.LoggedInFlow(sessionId))
+            backstack.newRoot(NavTarget.LoggedInFlow(sessionId, cacheIdx))
         }
     }
 }

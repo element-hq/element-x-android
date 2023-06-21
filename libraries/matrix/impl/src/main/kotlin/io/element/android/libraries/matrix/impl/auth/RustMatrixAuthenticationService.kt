@@ -58,6 +58,8 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val clock: SystemClock,
 ) : MatrixAuthenticationService {
 
+    private val cacheIdxState = MutableStateFlow(0)
+
     private val authService: RustAuthenticationService = RustAuthenticationService(
         basePath = baseDirectory.absolutePath,
         passphrase = null,
@@ -69,6 +71,14 @@ class RustMatrixAuthenticationService @Inject constructor(
 
     override fun isLoggedIn(): Flow<Boolean> {
         return sessionStore.isLoggedIn()
+    }
+
+    override fun incrementCacheIdx() {
+        cacheIdxState.value++
+    }
+
+    override fun cacheIdx(): Flow<Int> {
+        return cacheIdxState
     }
 
     override suspend fun getLatestSessionId(): SessionId? = withContext(coroutineDispatchers.io) {

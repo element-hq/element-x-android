@@ -22,6 +22,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -34,11 +35,11 @@ class DefaultClearCacheUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
     private val matrixClient: MatrixClient,
     private val coroutineDispatchers: CoroutineDispatchers,
+    private val authenticationService: MatrixAuthenticationService,
 ) : ClearCacheUseCase {
     override suspend fun execute() = withContext(coroutineDispatchers.io) {
-        matrixClient.stopSync()
         matrixClient.clearCache()
         context.cacheDir.deleteRecursively()
-        matrixClient.startSync()
+        authenticationService.incrementCacheIdx()
     }
 }
