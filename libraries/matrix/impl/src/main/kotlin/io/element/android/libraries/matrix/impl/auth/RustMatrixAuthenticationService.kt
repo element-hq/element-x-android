@@ -52,7 +52,7 @@ import org.matrix.rustcomponents.sdk.AuthenticationService as RustAuthentication
 class RustMatrixAuthenticationService @Inject constructor(
     @ApplicationContext private val context: Context,
     private val baseDirectory: File,
-    private val coroutineScope: CoroutineScope,
+    private val appCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val sessionStore: SessionStore,
     private val clock: SystemClock,
@@ -179,7 +179,7 @@ class RustMatrixAuthenticationService @Inject constructor(
         return RustMatrixClient(
             client = client,
             sessionStore = sessionStore,
-            coroutineScope = coroutineScope,
+            appCoroutineScope = appCoroutineScope,
             dispatchers = coroutineDispatchers,
             baseDirectory = baseDirectory,
             baseCacheDirectory = context.cacheDir,

@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
         RustMatrixAuthenticationService(
             context = applicationContext,
             baseDirectory = baseDirectory,
-            coroutineScope = Singleton.appScope,
+            appCoroutineScope = Singleton.appScope,
             coroutineDispatchers = Singleton.coroutineDispatchers,
             sessionStore = InMemorySessionStore(),
             clock = DefaultSystemClock()

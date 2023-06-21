@@ -28,20 +28,8 @@ interface MatrixTimeline {
     )
 
     fun paginationState(): StateFlow<PaginationState>
-
     fun timelineItems(): Flow<List<MatrixTimelineItem>>
+
     suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit>
-    fun initialize()
-    fun dispose()
-
-    /**
-     * @param message markdown message
-     */
-    suspend fun sendMessage(message: String): Result<Unit>
-
-    suspend fun editMessage(originalEventId: EventId, message: String): Result<Unit>
-
-    suspend fun replyMessage(inReplyToEventId: EventId, message: String): Result<Unit>
-
     suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit>
 }

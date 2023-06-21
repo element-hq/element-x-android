@@ -61,6 +61,8 @@ interface MatrixRoom : Closeable {
 
     fun timeline(): MatrixTimeline
 
+    fun open(): Result<Unit>
+
     suspend fun userDisplayName(userId: UserId): Result<String?>
 
     suspend fun userAvatarUrl(userId: UserId): Result<String?>

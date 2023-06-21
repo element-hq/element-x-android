@@ -7,10 +7,12 @@ import org.matrix.rustcomponents.sdk.RoomList
 import org.matrix.rustcomponents.sdk.RoomListEntriesListener
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 import org.matrix.rustcomponents.sdk.RoomListEntry
+import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomListState
 import org.matrix.rustcomponents.sdk.RoomListStateListener
 import org.matrix.rustcomponents.sdk.SlidingSyncListLoadingState
 import org.matrix.rustcomponents.sdk.SlidingSyncListStateObserver
+import timber.log.Timber
 
 fun RoomList.stateFlow(): Flow<RoomListState> =
     mxCallbackFlow {
@@ -46,3 +48,11 @@ fun RoomList.roomListEntriesUpdateFlow(onInitialList: suspend (List<RoomListEntr
         result.entriesStream
     }
 
+fun RoomList.roomOrNull(roomId: String): RoomListItem? {
+    return try {
+        room(roomId)
+    } catch (failure: Throwable) {
+        Timber.e(failure, "Failed finding room with id=$roomId")
+        return null
+    }
+}

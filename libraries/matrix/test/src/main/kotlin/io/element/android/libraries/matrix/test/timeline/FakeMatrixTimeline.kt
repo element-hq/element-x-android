@@ -71,18 +71,6 @@ class FakeMatrixTimeline(
         isInitialized = false
     }
 
-    override suspend fun sendMessage(message: String): Result<Unit> {
-        return Result.success(Unit)
-    }
-
-    override suspend fun editMessage(originalEventId: EventId, message: String): Result<Unit> {
-        return Result.success(Unit)
-    }
-
-    override suspend fun replyMessage(inReplyToEventId: EventId, message: String): Result<Unit> {
-        return Result.success(Unit)
-    }
-
     override suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> {
         return Result.success(Unit)
     }
