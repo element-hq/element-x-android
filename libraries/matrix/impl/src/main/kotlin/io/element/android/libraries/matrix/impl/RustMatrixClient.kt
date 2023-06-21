@@ -19,6 +19,7 @@
 package io.element.android.libraries.matrix.impl
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.coroutine.childScopeOf
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -39,6 +40,7 @@ import io.element.android.libraries.matrix.impl.notification.RustNotificationSer
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
+import io.element.android.libraries.matrix.impl.room.roomOrNull
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
@@ -47,7 +49,7 @@ import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -66,7 +68,7 @@ import org.matrix.rustcomponents.sdk.RoomVisibility as RustRoomVisibility
 class RustMatrixClient constructor(
     private val client: Client,
     private val sessionStore: SessionStore,
-    private val coroutineScope: CoroutineScope,
+    private val appCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
     private val baseDirectory: File,
     private val baseCacheDirectory: File,
@@ -75,13 +77,13 @@ class RustMatrixClient constructor(
 
     override val sessionId: UserId = UserId(client.userId())
 
+    private val sessionCoroutineScope = childScopeOf(appCoroutineScope, dispatchers.main, "Session-${sessionId}")
     private val verificationService = RustSessionVerificationService()
     private val pushersService = RustPushersService(
         client = client,
         dispatchers = dispatchers,
     )
     private val notificationService = RustNotificationService(client)
-    private var slidingSyncUpdateJob: Job? = null
 
     private val clientDelegate = object : ClientDelegate {
         override fun didReceiveAuthError(isSoftLogout: Boolean) {
@@ -95,6 +97,7 @@ class RustMatrixClient constructor(
     private val rustRoomSummaryDataSource: RustRoomSummaryDataSource =
         RustRoomSummaryDataSource(
             roomList,
+            sessionCoroutineScope,
             dispatchers,
         )
 
@@ -104,6 +107,7 @@ class RustMatrixClient constructor(
     private val rustInvitesDataSource: RustRoomSummaryDataSource =
         RustRoomSummaryDataSource(
             roomList,
+            sessionCoroutineScope,
             dispatchers,
         )
 
@@ -127,14 +131,15 @@ class RustMatrixClient constructor(
     }
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
-        val roomListItem = roomList.room(roomId.value)
+        val roomListItem = roomList.roomOrNull(roomId.value) ?: return null
         val fullRoom = roomListItem.fullRoom()
         return RustMatrixRoom(
             sessionId = sessionId,
             roomListItem = roomListItem,
             innerRoom = fullRoom,
-            coroutineScope = coroutineScope,
+            sessionCoroutineScope = sessionCoroutineScope,
             coroutineDispatchers = dispatchers,
+            systemClock = clock
         )
     }
 
@@ -231,10 +236,8 @@ class RustMatrixClient constructor(
     }
 
     override fun close() {
-        slidingSyncUpdateJob?.cancel()
         stopSync()
-        rustRoomSummaryDataSource.close()
-        rustInvitesDataSource.close()
+        sessionCoroutineScope.cancel()
         client.setDelegate(null)
         verificationService.destroy()
         roomList.destroy()

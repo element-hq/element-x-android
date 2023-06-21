@@ -36,7 +36,7 @@ internal class MatrixTimelineDiffProcessor(
     private val timelineItemFactory: MatrixTimelineItemMapper,
 ) {
 
-    fun onUpdate(diff: TimelineDiff) {
+    fun postDiff(diff: TimelineDiff) {
         coroutineScope.launch {
             updateTimelineItems {
                 applyDiff(diff)
@@ -122,4 +122,5 @@ internal class MatrixTimelineDiffProcessor(
     private fun TimelineItem.asMatrixTimelineItem(): MatrixTimelineItem {
         return timelineItemFactory.map(this)
     }
+
 }

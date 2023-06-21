@@ -20,8 +20,6 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.RoomSummary
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -33,24 +31,21 @@ import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 import org.matrix.rustcomponents.sdk.RoomListEntry
 import org.matrix.rustcomponents.sdk.RoomListInput
 import org.matrix.rustcomponents.sdk.RoomListRange
-import org.matrix.rustcomponents.sdk.SlidingSyncListLoadingState
 import timber.log.Timber
-import java.io.Closeable
 import java.util.UUID
 
 internal class RustRoomSummaryDataSource(
     private val roomList: RoomList,
+    private val sessionCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
-) : RoomSummaryDataSource, Closeable {
-
-    private val coroutineScope = CoroutineScope(SupervisorJob() + coroutineDispatchers.io)
+) : RoomSummaryDataSource {
 
     private val roomSummaries = MutableStateFlow<List<RoomSummary>>(emptyList())
     private val loadingState = MutableStateFlow(RoomSummaryDataSource.LoadingState.NotLoaded)
 
     fun subscribeIfNeeded() {
-        coroutineScope.launch {
+        sessionCoroutineScope.launch {
             roomList.roomListEntriesUpdateFlow { roomListEntries ->
                 val summaries = roomListEntries.map(::buildSummaryForRoomListEntry)
                 updateRoomSummaries {
@@ -64,10 +59,6 @@ internal class RustRoomSummaryDataSource(
         }
     }
 
-    override fun close() {
-        coroutineScope.cancel()
-    }
-
     override fun roomSummaries(): StateFlow<List<RoomSummary>> {
         return roomSummaries
     }
@@ -78,7 +69,7 @@ internal class RustRoomSummaryDataSource(
 
     override fun setSlidingSyncRange(range: IntRange) {
         Timber.v("setVisibleRange=$range")
-        coroutineScope.launch {
+        sessionCoroutineScope.launch {
             val ranges = listOf(RoomListRange(range.first.toUInt(), range.last.toUInt()))
             roomList.applyInput(
                 RoomListInput.Viewport(ranges)
@@ -148,7 +139,8 @@ internal class RustRoomSummaryDataSource(
     }
 
     private fun buildRoomSummaryForIdentifier(identifier: String): RoomSummary {
-        return roomList.room(identifier).use { roomListItem ->
+        val roomListItem = roomList.roomOrNull(identifier) ?: return RoomSummary.Empty(identifier)
+        return roomListItem.use {
             roomListItem.fullRoom().use { fullRoom ->
                 RoomSummary.Filled(
                     details = roomSummaryDetailsFactory.create(roomListItem, fullRoom)
