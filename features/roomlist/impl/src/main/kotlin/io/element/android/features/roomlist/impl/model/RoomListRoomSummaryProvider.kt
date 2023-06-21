@@ -18,6 +18,7 @@ package io.element.android.features.roomlist.impl.model
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
 
 open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSummary> {
@@ -39,6 +40,6 @@ fun aRoomListRoomSummary() = RoomListRoomSummary(
     hasUnread = false,
     timestamp = null,
     lastMessage = "Last message",
-    avatarData = AvatarData("!roomId", "Room name"),
+    avatarData = AvatarData("!roomId", "Room name", size = AvatarSize.RoomListItem),
     isPlaceholder = false,
 )

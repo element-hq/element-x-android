@@ -21,6 +21,7 @@ import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryPlaceholders
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -68,7 +69,7 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
             hasUnread = true,
             timestamp = "14:18",
             lastMessage = "A very very very very long message which suites on two lines",
-            avatarData = AvatarData("!id", "R"),
+            avatarData = AvatarData("!id", "R", size = AvatarSize.RoomListItem),
             id = "!roomId:domain",
             roomId = RoomId("!roomId:domain")
         ),
@@ -77,7 +78,7 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
             hasUnread = false,
             timestamp = "14:16",
             lastMessage = "A short message",
-            avatarData = AvatarData("!id", "Z"),
+            avatarData = AvatarData("!id", "Z", size = AvatarSize.RoomListItem),
             id = "!roomId2:domain",
             roomId = RoomId("!roomId2:domain")
         ),

@@ -99,7 +99,7 @@ internal fun DefaultInviteSummaryRow(
         verticalAlignment = Alignment.Top
     ) {
         Avatar(
-            invite.roomAvatarData.copy(size = AvatarSize.Custom(52.dp)),
+            invite.roomAvatarData.copy(size = AvatarSize.RoomListItem),
         )
 
         Column(
@@ -178,7 +178,7 @@ private fun SenderRow(sender: InviteSender) {
         modifier = Modifier.padding(top = 6.dp),
     ) {
         Avatar(
-            avatarData = sender.avatarData.copy(size = AvatarSize.Custom(16.dp)),
+            avatarData = sender.avatarData.copy(size = AvatarSize.InviteSender),
         )
         Text(
             text = stringResource(R.string.screen_invites_invited_you, sender.displayName, sender.userId.value).let { text ->

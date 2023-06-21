@@ -112,7 +112,7 @@ internal fun RoomMemberHeaderSection(
     Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Box(modifier = Modifier.size(70.dp)) {
             Avatar(
-                avatarData = AvatarData(userId, userName, avatarUrl, AvatarSize.HUGE),
+                avatarData = AvatarData(userId, userName, avatarUrl, AvatarSize.UserHeader),
                 modifier = Modifier.fillMaxSize()
             )
         }

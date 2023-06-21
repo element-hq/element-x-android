@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -107,6 +108,7 @@ internal fun DefaultRoomSummaryRow(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
+            .defaultMinSize(minHeight = 84.dp)
             .height(IntrinsicSize.Min),
         verticalAlignment = CenterVertically
     ) {
