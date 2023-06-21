@@ -103,6 +103,7 @@ class RoomListScreen(
             onCreateRoomClicked = {},
             onInvitesClicked = {},
             onRoomSettingsClicked = {},
+            onMenuActionClicked = {},
             modifier = modifier,
         )
 

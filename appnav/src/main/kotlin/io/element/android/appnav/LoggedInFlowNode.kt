@@ -222,6 +222,10 @@ class LoggedInFlowNode @AssistedInject constructor(
                     override fun onRoomSettingsClicked(roomId: RoomId) {
                         backstack.push(NavTarget.Room(roomId, initialElement = RoomFlowNode.NavTarget.RoomDetails))
                     }
+
+                    override fun onReportBugClicked() {
+                        plugins<Callback>().forEach { it.onOpenBugReport() }
+                    }
                 }
                 roomListEntryPoint
                     .nodeBuilder(this, buildContext)

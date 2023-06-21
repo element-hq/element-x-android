@@ -16,8 +16,10 @@
 
 package io.element.android.features.roomlist.impl
 
+import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -26,6 +28,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.roomlist.api.RoomListEntryPoint
+import io.element.android.features.roomlist.impl.components.RoomListMenuAction
+import io.element.android.libraries.deeplink.usecase.InviteFriendsUseCase
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 
@@ -33,7 +37,8 @@ import io.element.android.libraries.matrix.api.core.RoomId
 class RoomListNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter:  RoomListPresenter,
+    private val presenter: RoomListPresenter,
+    private val inviteFriendsUseCase: InviteFriendsUseCase,
 ) : Node(buildContext, plugins = plugins) {
 
     private fun onRoomClicked(roomId: RoomId) {
@@ -60,9 +65,21 @@ class RoomListNode @AssistedInject constructor(
         plugins<RoomListEntryPoint.Callback>().forEach { it.onRoomSettingsClicked(roomId) }
     }
 
+    private fun onMenuActionClicked(activity: Activity, roomListMenuAction: RoomListMenuAction) {
+        when (roomListMenuAction) {
+            RoomListMenuAction.InviteFriends -> {
+                inviteFriendsUseCase.execute(activity)
+            }
+            RoomListMenuAction.ReportBug -> {
+                plugins<RoomListEntryPoint.Callback>().forEach { it.onReportBugClicked() }
+            }
+        }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
+        val activity = LocalContext.current as Activity
         RoomListView(
             state = state,
             onRoomClicked = this::onRoomClicked,
@@ -71,6 +88,7 @@ class RoomListNode @AssistedInject constructor(
             onVerifyClicked = this::onSessionVerificationClicked,
             onInvitesClicked = this::onInvitesClicked,
             onRoomSettingsClicked = this::onRoomSettingsClicked,
+            onMenuActionClicked = { onMenuActionClicked(activity, it) },
             modifier = modifier,
         )
     }
