@@ -354,9 +354,9 @@ class RustMatrixClient constructor(
         } catch (failure: Throwable) {
             Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
         }
-        baseDirectory.deleteSessionDirectory(userID = client.userId(), deleteCryptoDb = true)
-        sessionStore.removeSession(client.userId())
         close()
+        baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = true)
+        sessionStore.removeSession(sessionId.value)
     }
 
     override suspend fun loadUserDisplayName(): Result<String> = withContext(dispatchers.io) {
