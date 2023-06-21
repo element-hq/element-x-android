@@ -20,6 +20,6 @@ import io.element.android.tests.testutils.simulateLongTask
 
 class FakeComputeCacheSizeUseCase : ComputeCacheSizeUseCase {
     override suspend fun execute() = simulateLongTask {
-        0L
+        "O kB"
     }
 }
