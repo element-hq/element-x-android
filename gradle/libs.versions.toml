@@ -158,7 +158,7 @@ statemachine = "com.freeletics.flowredux:compose:1.1.0"
 
 # Analytics
 posthog = "com.posthog.android:posthog:2.0.3"
-sentry_android = "io.sentry:sentry-android:6.23.0"
+sentry_android = "io.sentry:sentry-android:6.24.0"
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:main-SNAPSHOT"
 
 # Di
