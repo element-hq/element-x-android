@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.impl.room
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScopeOf
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -28,10 +29,12 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
+import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.timelineDiffFlow
@@ -264,27 +267,37 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun canSendEvent(type: MessageEventType): Result<Boolean> = withContext(coroutineDispatchers.io) {
         runCatching {
-            innerRoom.sendImage(file.path, thumbnailFile.path, imageInfo.map())
+            innerRoom.member(sessionId.value).use { it.canSendMessage(type.map()) }
         }
     }
 
-    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo, progressCallback: ProgressCallback?): Result<Unit> = withContext(
+        coroutineDispatchers.io
+    ) {
         runCatching {
-            innerRoom.sendVideo(file.path, thumbnailFile.path, videoInfo.map())
+            innerRoom.sendImage(file.path, thumbnailFile.path, imageInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 
-    override suspend fun sendAudio(file: File, audioInfo: AudioInfo): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<Unit> = withContext(
+        coroutineDispatchers.io
+    ) {
         runCatching {
-            innerRoom.sendAudio(file.path, audioInfo.map())
+            innerRoom.sendVideo(file.path, thumbnailFile.path, videoInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 
-    override suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {
-            innerRoom.sendFile(file.path, fileInfo.map())
+            innerRoom.sendAudio(file.path, audioInfo.map(), progressCallback?.toProgressWatcher())
+        }
+    }
+
+    override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            innerRoom.sendFile(file.path, fileInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 

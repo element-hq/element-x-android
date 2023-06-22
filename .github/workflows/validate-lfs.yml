@@ -7,9 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Validate
     steps:
-      - uses: actions/checkout@v3
-        with:
-          lfs: 'true'
+      - uses: nschloe/action-cached-lfs-checkout@v1.2.1
 
       - run: |
           ./tools/git/validate_lfs.sh

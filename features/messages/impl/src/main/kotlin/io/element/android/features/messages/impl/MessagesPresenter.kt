@@ -55,8 +55,10 @@ import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.handleSnackbarMessage
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.libraries.matrix.ui.room.canSendEventAsState
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -86,6 +88,7 @@ class MessagesPresenter @Inject constructor(
         val retryState = retrySendMenuPresenter.present()
 
         val syncUpdateFlow = room.syncUpdateFlow().collectAsState(0L)
+        val userHasPermissionToSendMessage by room.canSendEventAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
         val roomName: MutableState<String?> = rememberSaveable {
             mutableStateOf(null)
         }
@@ -125,6 +128,7 @@ class MessagesPresenter @Inject constructor(
             roomId = room.roomId,
             roomName = roomName.value,
             roomAvatar = roomAvatar.value,
+            userHasPermissionToSendMessage = userHasPermissionToSendMessage,
             composerState = composerState,
             timelineState = timelineState,
             actionListState = actionListState,

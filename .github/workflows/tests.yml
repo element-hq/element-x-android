@@ -22,12 +22,11 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: ⏬ Checkout with LFS
-        uses: actions/checkout@v3
+        uses: nschloe/action-cached-lfs-checkout@v1.2.1
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
-          lfs: 'true'
       - name: ☕️ Use JDK 17
         uses: actions/setup-java@v3
         with:
@@ -81,8 +80,12 @@ jobs:
             **/out/failures/
             **/build/reports/tests/*UnitTest/
 
-      - name: 🔊 Publish results to Sonar (disabled)
-        run: echo "This is now done only once a day, see nightlyReports.yml"
+      - name: 🔊 Publish results to Sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
+        if: ${{ always() && env.SONAR_TOKEN != '' && env.ORG_GRADLE_PROJECT_SONAR_LOGIN != '' }}
+        run: ./gradlew sonar $CI_GRADLE_ARG_PROPERTIES
 
       # https://github.com/codecov/codecov-action
       - name: ☂️ Upload coverage reports to codecov

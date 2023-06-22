@@ -46,6 +46,7 @@ import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -166,7 +167,7 @@ class MessagesPresenterTest {
                 content = TimelineItemImageContent(
                     body = "image.jpg",
                     mediaSource = MediaSource(AN_AVATAR_URL),
-                    thumbnailSource  = null,
+                    thumbnailSource = null,
                     mimeType = MimeTypes.Jpeg,
                     blurhash = null,
                     width = 20,
@@ -315,6 +316,32 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Developer, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+        }
+    }
+
+    @Test
+    fun `present - permission to post`() = runTest {
+        val matrixRoom = FakeMatrixRoom()
+        matrixRoom.givenCanSendEventResult(MessageEventType.ROOM_MESSAGE, Result.success(true))
+        val presenter = createMessagePresenter(matrixRoom = matrixRoom)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            assertThat(awaitItem().userHasPermissionToSendMessage).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - no permission to post`() = runTest {
+        val matrixRoom = FakeMatrixRoom()
+        matrixRoom.givenCanSendEventResult(MessageEventType.ROOM_MESSAGE, Result.success(false))
+        val presenter = createMessagePresenter(matrixRoom = matrixRoom)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            assertThat(awaitItem().userHasPermissionToSendMessage).isFalse()
         }
     }
 

@@ -16,8 +16,6 @@
 
 package io.element.android.libraries.matrix.impl.notification
 
-import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationEvent
 import org.matrix.rustcomponents.sdk.MessageLikeEventContent
 import org.matrix.rustcomponents.sdk.MessageType
@@ -105,5 +103,6 @@ private fun MessageType.toContent(): String {
         is MessageType.Notice -> content.body
         is MessageType.Text -> content.body
         is MessageType.Video -> content.use { it.body }
+        is MessageType.Location -> content.body
     }
 }
