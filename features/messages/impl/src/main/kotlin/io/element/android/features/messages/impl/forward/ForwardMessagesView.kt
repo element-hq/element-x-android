@@ -162,10 +162,11 @@ fun ForwardMessagesView(
             }
 
             if (!state.isSearchActive) {
-                SelectedRoomsHelper(
-                    isForwarding = state.isForwarding,
-                    selectedRooms = state.selectedRooms
-                )
+                // TODO restore for multi-selection
+//                SelectedRoomsHelper(
+//                    isForwarding = state.isForwarding,
+//                    selectedRooms = state.selectedRooms
+//                )
 
                 if (state.resultState is SearchBarResultState.Results) {
                     LazyColumn {
