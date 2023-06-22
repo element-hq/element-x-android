@@ -141,11 +141,16 @@ class LoggedInFlowNode @AssistedInject constructor(
                 plugins<LifecycleCallback>().forEach { it.onFlowCreated(id, inputs.matrixClient) }
                 val imageLoaderFactory = bindings<MatrixUIBindings>().loggedInImageLoaderFactory()
                 Coil.setImageLoader(imageLoaderFactory)
-                inputs.matrixClient.startSync()
                 appNavigationStateService.onNavigateToSession(id, inputs.matrixClient.sessionId)
                 // TODO We do not support Space yet, so directly navigate to main space
                 appNavigationStateService.onNavigateToSpace(id, MAIN_SPACE)
                 loggedInFlowProcessor.observeEvents(coroutineScope)
+            },
+            onResume = {
+                inputs.matrixClient.startSync()
+            },
+            onPause = {
+                inputs.matrixClient.stopSync()
             },
             onDestroy = {
                 val imageLoaderFactory = bindings<MatrixUIBindings>().notLoggedInImageLoaderFactory()
