@@ -44,18 +44,24 @@ import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.theme.LocalColors
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -358,3 +364,50 @@ private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready) =
         )
         else -> null
     }
+
+@Preview
+@Composable
+internal fun TimelineItemEventRowLightPreview() =
+    ElementPreviewLight { ContentToPreview() }
+
+@Preview
+@Composable
+internal fun TimelineItemEventRowDarkPreview() =
+    ElementPreviewDark { ContentToPreview() }
+
+@Composable
+private fun ContentToPreview() {
+    Column {
+        sequenceOf(false, true).forEach {
+            TimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = it,
+                    content = aTimelineItemTextContent().copy(
+                        body = "A long text which will be displayed on several lines and" +
+                            " hopefully can be manually adjusted to test different behaviors."
+                    )
+                ),
+                isHighlighted = false,
+                onClick = {},
+                onLongClick = {},
+                onUserDataClick = {},
+                inReplyToClick = {},
+                onTimestampClicked = {},
+            )
+            TimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = it,
+                    content = aTimelineItemImageContent().copy(
+                        aspectRatio = 5f
+                    )
+                ),
+                isHighlighted = false,
+                onClick = {},
+                onLongClick = {},
+                onUserDataClick = {},
+                inReplyToClick = {},
+                onTimestampClicked = {},
+            )
+        }
+    }
+}
