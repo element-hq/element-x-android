@@ -39,7 +39,7 @@ import org.matrix.rustcomponents.sdk.TimelineItem
 import timber.log.Timber
 
 class RustMatrixTimeline(
-    coroutineScope: CoroutineScope,
+    roomCoroutineScope: CoroutineScope,
     private val matrixRoom: MatrixRoom,
     private val innerRoom: Room,
     private val coroutineDispatchers: CoroutineDispatchers,
@@ -54,7 +54,7 @@ class RustMatrixTimeline(
 
     private val timelineItemFactory = MatrixTimelineItemMapper(
         fetchDetailsForEvent = this::fetchDetailsForEvent,
-        coroutineScope = coroutineScope,
+        roomCoroutineScope = roomCoroutineScope,
         virtualTimelineItemMapper = VirtualTimelineItemMapper(),
         eventTimelineItemMapper = EventTimelineItemMapper(
             contentMapper = TimelineEventContentMapper(
@@ -66,7 +66,7 @@ class RustMatrixTimeline(
     private val timelineDiffProcessor = MatrixTimelineDiffProcessor(
         paginationState = paginationState,
         timelineItems = timelineItems,
-        coroutineScope = coroutineScope,
+        coroutineScope = roomCoroutineScope,
         diffDispatcher = coroutineDispatchers.diffUpdateDispatcher,
         timelineItemFactory = timelineItemFactory,
     )
