@@ -131,6 +131,6 @@ class ConfigureRoomPresenter @Inject constructor(
     private suspend fun uploadAvatar(avatarUri: Uri): String {
         val preprocessed = mediaPreProcessor.process(avatarUri, MimeTypes.Jpeg, compressIfPossible = false).getOrThrow()
         val byteArray = preprocessed.file.readBytes()
-        return matrixClient.uploadMedia(MimeTypes.Jpeg, byteArray).getOrThrow()
+        return matrixClient.uploadMedia(MimeTypes.Jpeg, byteArray, null).getOrThrow()
     }
 }

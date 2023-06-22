@@ -24,6 +24,7 @@ import androidx.exifinterface.media.ExifInterface
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.androidutils.file.getFileName
+import io.element.android.libraries.androidutils.file.safeRenameTo
 import io.element.android.libraries.androidutils.media.runAndRelease
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
@@ -105,7 +106,7 @@ class AndroidMediaPreProcessor @Inject constructor(
     private fun MediaUploadInfo.postProcess(uri: Uri): MediaUploadInfo {
         val name = context.getFileName(uri) ?: return this
         val renamedFile = File(context.cacheDir, name).also {
-            file.renameTo(it)
+            file.safeRenameTo(it)
         }
         return when (this) {
             is MediaUploadInfo.AnyFile -> copy(file = renamedFile)

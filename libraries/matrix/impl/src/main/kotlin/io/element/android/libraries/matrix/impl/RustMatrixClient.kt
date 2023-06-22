@@ -21,6 +21,7 @@ package io.element.android.libraries.matrix.impl
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScopeOf
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
@@ -35,6 +36,7 @@ import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
@@ -56,7 +58,6 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
-import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
@@ -117,8 +118,6 @@ class RustMatrixClient constructor(
     private val rustMediaLoader = RustMediaLoader(baseCacheDirectory, dispatchers, client)
     override val mediaLoader: MatrixMediaLoader
         get() = rustMediaLoader
-
-    private var slidingSyncObserverToken: TaskHandle? = null
 
     private val isSyncing = AtomicBoolean(false)
 
@@ -225,13 +224,13 @@ class RustMatrixClient constructor(
 
     override fun startSync() {
         if (isSyncing.compareAndSet(false, true)) {
-            slidingSyncObserverToken = roomList.sync()
+            roomList.sync()
         }
     }
 
     override fun stopSync() {
         if (isSyncing.compareAndSet(true, false)) {
-            slidingSyncObserverToken?.use { it.cancel() }
+            roomList.stopSync()
         }
     }
 
@@ -268,9 +267,9 @@ class RustMatrixClient constructor(
     }
 
     @OptIn(ExperimentalUnsignedTypes::class)
-    override suspend fun uploadMedia(mimeType: String, data: ByteArray): Result<String> = withContext(dispatchers.io) {
+    override suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String> = withContext(dispatchers.io) {
         runCatching {
-            client.uploadMedia(mimeType, data.toUByteArray().toList())
+            client.uploadMedia(mimeType, data.toUByteArray().toList(), progressCallback?.toProgressWatcher())
         }
     }
 
