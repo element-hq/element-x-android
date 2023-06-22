@@ -231,7 +231,12 @@ fun RoomListContent(
                 containerColor = MaterialTheme.colorScheme.primary,
                 onClick = onCreateRoomClicked
             ) {
-                Icon(resourceId = DrawableR.drawable.ic_edit_square, contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message))
+                Icon(
+                    // Correct icon alignment for better rendering.
+                    modifier = Modifier.padding(start = 1.dp, bottom = 1.dp),
+                    resourceId = DrawableR.drawable.ic_edit_square,
+                    contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message)
+                )
             }
         },
         snackbarHost = {
