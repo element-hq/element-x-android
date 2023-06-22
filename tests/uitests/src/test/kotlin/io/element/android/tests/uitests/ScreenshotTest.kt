@@ -39,6 +39,8 @@ import com.android.ide.common.rendering.api.SessionParams
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.utils.LocalSnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -96,6 +98,8 @@ class ScreenshotTest {
                 LocalConfiguration provides Configuration().apply {
                     setLocales(LocaleList(localeStr.toLocale()))
                 },
+                // Needed to display Snackbars and avoid crashes during screenshot tests
+                LocalSnackbarDispatcher provides SnackbarDispatcher(),
                 // Needed so that UI that uses it don't crash during screenshot tests
                 LocalOnBackPressedDispatcherOwner provides object : OnBackPressedDispatcherOwner {
                     override val lifecycle: Lifecycle get() = lifecycleOwner.lifecycle
