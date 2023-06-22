@@ -112,7 +112,7 @@ internal fun aTimelineItemEvent(
         content = content,
         reactionsState = TimelineItemReactions(
             persistentListOf(
-                AggregatedReaction("👍", "1")
+                AggregatedReaction("👍", "1", isOnMyMessage = isMine)
             )
         ),
         sentTime = "12:34",

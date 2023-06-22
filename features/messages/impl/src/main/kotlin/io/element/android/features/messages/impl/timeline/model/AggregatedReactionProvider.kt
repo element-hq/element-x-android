@@ -20,16 +20,24 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
 open class AggregatedReactionProvider : PreviewParameterProvider<AggregatedReaction> {
     override val values: Sequence<AggregatedReaction>
-        get() = sequenceOf(
-            anAggregatedReaction(),
-            anAggregatedReaction().copy(count = "88"),
-            anAggregatedReaction().copy(isHighlighted = true),
-            anAggregatedReaction().copy(count = "88", isHighlighted = true),
-        )
+        get() = sequenceOf(false, true).flatMap {
+            sequenceOf(
+                anAggregatedReaction(isOnMyMessage = it),
+                anAggregatedReaction(isOnMyMessage = it, count = "88"),
+                anAggregatedReaction(isOnMyMessage = it, isHighlighted = true),
+                anAggregatedReaction(isOnMyMessage = it, count = "88", isHighlighted = true),
+            )
+        }
 }
 
-fun anAggregatedReaction() = AggregatedReaction(
-    key = "👍",
-    count = "1", // TODO Why is it a String?
-    isHighlighted = false,
+fun anAggregatedReaction(
+    key: String = "👍",
+    count: String = "1", // TODO Why is it a String?
+    isOnMyMessage: Boolean = false,
+    isHighlighted: Boolean = false,
+) = AggregatedReaction(
+    key = key,
+    count = count,
+    isOnMyMessage = isOnMyMessage,
+    isHighlighted = isHighlighted,
 )

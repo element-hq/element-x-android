@@ -35,23 +35,29 @@ import io.element.android.features.messages.impl.timeline.model.AggregatedReacti
 import io.element.android.features.messages.impl.timeline.model.AggregatedReactionProvider
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
 fun MessagesReactionButton(reaction: AggregatedReaction, modifier: Modifier = Modifier) {
+    val backgroundColor = if (reaction.isOnMyMessage) {
+        ElementTheme.colors.messageFromMeBackground
+    } else {
+        ElementTheme.colors.messageFromOtherBackground
+    }
     Surface(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.surfaceVariant,
+        color = backgroundColor,
         border = BorderStroke(2.dp, MaterialTheme.colorScheme.background),
-        shape = RoundedCornerShape(corner = CornerSize(12.dp)),
+        shape = RoundedCornerShape(corner = CornerSize(14.dp)),
     ) {
         Row(
-            modifier = Modifier.padding(vertical = 5.dp, horizontal = 8.dp),
+            modifier = Modifier.padding(vertical = 6.dp, horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // TODO `reaction.isHighlighted` is not used.
-            Text(text = reaction.key, fontSize = 12.sp)
+            Text(text = reaction.key, fontSize = 14.sp)
             Spacer(modifier = Modifier.width(4.dp))
             Text(text = reaction.count, color = MaterialTheme.colorScheme.secondary, fontSize = 12.sp)
         }
