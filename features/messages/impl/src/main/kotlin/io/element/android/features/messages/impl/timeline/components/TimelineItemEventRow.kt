@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -40,12 +41,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.LastBaseline
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
@@ -115,7 +118,7 @@ fun TimelineItemEventRow(
                         event.senderAvatar,
                         Modifier
                             .zIndex(1f)
-                            .offset(y = 12.dp)
+                            .offset(y = 8.dp)
                             .clickable(onClick = ::onUserDataClicked)
                     )
                 }
@@ -163,20 +166,38 @@ fun TimelineItemEventRow(
 @Composable
 private fun MessageSenderInformation(
     sender: String,
-    senderAvatar: AvatarData?,
+    senderAvatar: AvatarData,
     modifier: Modifier = Modifier
 ) {
-    Row(modifier = modifier) {
-        if (senderAvatar != null) {
+    val avatarStrokeSize = 3.dp
+    val avatarStrokeColor = MaterialTheme.colorScheme.background
+    val avatarSize = senderAvatar.size.dp
+    Box(
+        modifier = modifier.offset(y = avatarStrokeSize)
+    ) {
+        // Background of Avatar, to erase the corner of the message content
+        Canvas(
+            modifier = Modifier
+                .size(size = avatarSize + avatarStrokeSize)
+                .clipToBounds()
+        ) {
+            drawCircle(
+                color = avatarStrokeColor,
+                center = Offset(x = (avatarSize / 2).toPx(), y = (avatarSize / 2).toPx()),
+                radius = (avatarSize / 2 + avatarStrokeSize).toPx()
+            )
+        }
+        // Content
+        Row {
             Avatar(senderAvatar)
             Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = sender,
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.titleMedium,
+            )
         }
-        Text(
-            text = sender,
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier
-                .alignBy(LastBaseline)
-        )
     }
 }
 

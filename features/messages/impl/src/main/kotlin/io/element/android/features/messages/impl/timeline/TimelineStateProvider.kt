@@ -117,7 +117,7 @@ internal fun aTimelineItemEvent(
         ),
         sentTime = "12:34",
         isMine = isMine,
-        senderDisplayName = "sender",
+        senderDisplayName = "Sender",
         groupPosition = groupPosition,
         sendState = sendState,
         inReplyTo = inReplyTo,
