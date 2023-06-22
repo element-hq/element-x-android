@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.api
 
+import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -52,7 +53,7 @@ interface MatrixClient : Closeable {
     suspend fun logout()
     suspend fun loadUserDisplayName(): Result<String>
     suspend fun loadUserAvatarURLString(): Result<String?>
-    suspend fun uploadMedia(mimeType: String, data: ByteArray): Result<String>
+    suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String>
     fun onSlidingSyncUpdate()
     fun roomMembershipObserver(): RoomMembershipObserver
 }

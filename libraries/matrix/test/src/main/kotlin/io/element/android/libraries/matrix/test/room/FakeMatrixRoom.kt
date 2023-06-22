@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.test.room
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -204,13 +205,18 @@ class FakeMatrixRoom(
         return canSendEventResults[type] ?: Result.failure(IllegalStateException("No fake answer"))
     }
 
-    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo): Result<Unit> = fakeSendMedia()
+    override suspend fun sendImage(
+        file: File,
+        thumbnailFile: File,
+        imageInfo: ImageInfo,
+        progressCallback: ProgressCallback?
+    ): Result<Unit> = fakeSendMedia()
 
-    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo): Result<Unit> = fakeSendMedia()
+    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<Unit> = fakeSendMedia()
 
-    override suspend fun sendAudio(file: File, audioInfo: AudioInfo): Result<Unit> = fakeSendMedia()
+    override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<Unit> = fakeSendMedia()
 
-    override suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit> = fakeSendMedia()
+    override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<Unit> = fakeSendMedia()
 
     private suspend fun fakeSendMedia(): Result<Unit> = simulateLongTask {
         sendMediaResult.onSuccess {

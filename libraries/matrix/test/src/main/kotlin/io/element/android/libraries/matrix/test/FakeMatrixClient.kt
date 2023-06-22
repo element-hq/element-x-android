@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.test
 
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -116,7 +117,11 @@ class FakeMatrixClient(
         return userAvatarURLString
     }
 
-    override suspend fun uploadMedia(mimeType: String, data: ByteArray): Result<String> {
+    override suspend fun uploadMedia(
+        mimeType: String,
+        data: ByteArray,
+        progressCallback: ProgressCallback?
+    ): Result<String> {
         return uploadMediaResult
     }
 
