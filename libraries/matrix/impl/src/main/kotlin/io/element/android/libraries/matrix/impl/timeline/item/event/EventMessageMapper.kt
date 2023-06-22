@@ -65,9 +65,11 @@ class EventMessageMapper {
                 is MessageType.Video -> {
                     VideoMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
                 }
+                is MessageType.Location,
                 null -> {
                     UnknownMessageType
                 }
+
             }
         }
         val inReplyToId = it.inReplyTo()?.eventId?.let(::EventId)
@@ -103,7 +105,7 @@ private fun RustFormattedBody.map(): FormattedBody = FormattedBody(
 
 private fun RustMessageFormat.map(): MessageFormat {
     return when (this) {
-        RustMessageFormat.HTML -> MessageFormat.HTML
-        RustMessageFormat.UNKNOWN -> MessageFormat.UNKNOWN
+        RustMessageFormat.Html -> MessageFormat.HTML
+        is RustMessageFormat.Unknown -> MessageFormat.UNKNOWN
     }
 }

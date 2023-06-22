@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_room_action_create_room">"Cameră nouă"</string>
-  <string name="screen_create_room_action_invite_people">"Invitați persoane"</string>
-  <string name="screen_create_room_add_people_title">"Adaugați persoane"</string>
+  <string name="screen_create_room_action_invite_people">"Invitați prieteni în Element"</string>
+  <string name="screen_create_room_add_people_title">"Invitați persoane"</string>
   <string name="screen_create_room_error_creating_room">"A apărut o eroare la crearea camerei"</string>
   <string name="screen_create_room_private_option_description">"Mesajele din această cameră sunt criptate. Criptarea nu poate fi dezactivată ulterior."</string>
   <string name="screen_create_room_private_option_title">"Cameră privată (doar pe bază de invitație)"</string>

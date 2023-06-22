@@ -21,7 +21,7 @@ media3 = "1.0.2"
 browser = "1.5.0"
 
 # Compose
-compose_bom = "2023.06.00"
+compose_bom = "2023.06.01"
 composecompiler = "1.4.7"
 
 # Coroutines
@@ -50,6 +50,9 @@ telephoto = "0.4.0"
 dagger = "2.46.1"
 anvil = "2.4.6"
 
+# Auto service
+autoservice = "1.1.1"
+
 # quality
 detekt = "1.23.0"
 dependencygraph = "0.12"
@@ -61,7 +64,7 @@ android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref
 android_desugar = "com.android.tools:desugar_jdk_libs:2.0.3"
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:32.1.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:32.1.1"
 
 # AndroidX
 androidx_material = { module = "com.google.android.material:material", version.ref = "material" }
@@ -121,8 +124,8 @@ test_mockk = "io.mockk:mockk:1.13.5"
 test_barista = "com.adevinta.android:barista:4.3.0"
 test_hamcrest = "org.hamcrest:hamcrest:2.2"
 test_orchestrator = "androidx.test:orchestrator:1.4.2"
-test_turbine = "app.cash.turbine:turbine:0.13.0"
-test_truth = "com.google.truth:truth:1.1.4"
+test_turbine = "app.cash.turbine:turbine:1.0.0"
+test_truth = "com.google.truth:truth:1.1.5"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.12"
 test_robolectric = "org.robolectric:robolectric:4.10.3"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
@@ -139,7 +142,7 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.18"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.22"
 sqldelight-driver-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
@@ -155,7 +158,7 @@ statemachine = "com.freeletics.flowredux:compose:1.1.0"
 
 # Analytics
 posthog = "com.posthog.android:posthog:2.0.3"
-sentry_android = "io.sentry:sentry-android:6.22.0"
+sentry_android = "io.sentry:sentry-android:6.23.0"
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:main-SNAPSHOT"
 
 # Di
@@ -165,11 +168,16 @@ dagger_compiler = { module = "com.google.dagger:dagger-compiler", version.ref = 
 anvil_compiler_api = { module = "com.squareup.anvil:compiler-api", version.ref = "anvil" }
 anvil_compiler_utils = { module = "com.squareup.anvil:compiler-utils", version.ref = "anvil" }
 
+# Auto services
+google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }
+google_autoservice_annotations = { module = "com.google.auto.service:auto-service-annotations", version.ref = "autoservice" }
+
+
 # Miscellaneous
 # Add unused dependency to androidx.compose.compiler:compiler to let Renovate create PR to change the
 # value of `composecompiler` (which is used to set composeOptions.kotlinCompilerExtensionVersion.
 # See https://github.com/renovatebot/renovate/issues/18354
-android_composeCompiler = {module="androidx.compose.compiler:compiler", version.ref ="composecompiler"}
+android_composeCompiler = { module = "androidx.compose.compiler:compiler", version.ref = "composecompiler" }
 
 [bundles]
 
@@ -182,7 +190,7 @@ kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-ktlint = "org.jlleitschuh.gradle.ktlint:11.4.0"
+ktlint = "org.jlleitschuh.gradle.ktlint:11.4.1"
 dependencygraph = { id = "com.savvasdalkitsis.module-dependency-graph", version.ref = "dependencygraph" }
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyanalysis" }

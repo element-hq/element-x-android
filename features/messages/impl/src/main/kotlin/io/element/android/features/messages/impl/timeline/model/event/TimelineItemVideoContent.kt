@@ -23,7 +23,7 @@ data class TimelineItemVideoContent(
     val duration: Long,
     val videoSource: MediaSource,
     val thumbnailSource: MediaSource?,
-    val aspectRatio: Float,
+    val aspectRatio: Float?,
     val blurHash: String?,
     val height: Int?,
     val width: Int?,

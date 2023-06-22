@@ -42,7 +42,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -74,6 +77,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
+import io.element.android.libraries.designsystem.theme.components.hide
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
@@ -82,37 +86,51 @@ import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 @Composable
 fun ActionListView(
     state: ActionListState,
-    isVisible: Boolean,
     onActionSelected: (action: TimelineItemAction, TimelineItem.Event) -> Unit,
     onEmojiReactionClicked: (String, TimelineItem.Event) -> Unit,
     onCustomReactionClicked: (TimelineItem.Event) -> Unit,
-    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     sheetState: SheetState = rememberModalBottomSheetState()
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val targetItem = (state.target as? ActionListState.Target.Success)?.event
 
     fun onItemActionClicked(
         itemAction: TimelineItemAction
     ) {
         if (targetItem == null) return
-        onActionSelected(itemAction, targetItem)
+        sheetState.hide(coroutineScope) {
+            state.eventSink(ActionListEvents.Clear)
+            onActionSelected(itemAction, targetItem)
+        }
     }
 
     fun onEmojiReactionClicked(emoji: String) {
         if (targetItem == null) return
-        onEmojiReactionClicked(emoji, targetItem)
+        sheetState.hide(coroutineScope) {
+            state.eventSink(ActionListEvents.Clear)
+            onEmojiReactionClicked(emoji, targetItem)
+        }
     }
 
     fun onCustomReactionClicked() {
         if (targetItem == null) return
-        onCustomReactionClicked(targetItem)
+        sheetState.hide(coroutineScope) {
+            state.eventSink(ActionListEvents.Clear)
+            onCustomReactionClicked(targetItem)
+        }
     }
 
-    if (isVisible) {
+    fun onDismiss() {
+        sheetState.hide(coroutineScope) {
+            state.eventSink(ActionListEvents.Clear)
+        }
+    }
+
+    if (targetItem != null) {
         ModalBottomSheet(
             sheetState = sheetState,
-            onDismissRequest = onDismiss
+            onDismissRequest = ::onDismiss,
         ) {
             SheetContent(
                 state = state,

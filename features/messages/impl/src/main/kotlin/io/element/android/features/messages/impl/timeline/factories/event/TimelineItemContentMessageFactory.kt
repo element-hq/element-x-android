@@ -54,6 +54,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 TimelineItemImageContent(
                     body = messageType.body,
                     mediaSource = messageType.source,
+                    thumbnailSource = messageType.info?.thumbnailSource,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
                     blurhash = messageType.info?.blurhash,
                     width = messageType.info?.width?.toInt(),
@@ -72,7 +73,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
                     width = messageType.info?.width?.toInt(),
                     height = messageType.info?.height?.toInt(),
-                    duration = messageType.info?.duration ?: 0L,
+                    duration = messageType.info?.duration?.toMillis() ?: 0L,
                     blurHash = messageType.info?.blurhash,
                     aspectRatio = aspectRatio,
                     formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
@@ -101,11 +102,11 @@ class TimelineItemContentMessageFactory @Inject constructor(
         }
     }
 
-    private fun aspectRatioOf(width: Long?, height: Long?): Float {
+    private fun aspectRatioOf(width: Long?, height: Long?): Float? {
         return if (height != null && width != null) {
             width.toFloat() / height.toFloat()
         } else {
-            0.7f
+            null
         }
     }
 }

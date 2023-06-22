@@ -14,9 +14,9 @@ jobs:
 
     steps:
       - name: ⏬ Checkout with LFS
-        uses: actions/checkout@v3
+        uses: nschloe/action-cached-lfs-checkout@v1.2.1
         with:
-          lfs: 'true'
+          persist-credentials: false
       - name: ☕️ Use JDK 17
         uses: actions/setup-java@v3
         with:
@@ -30,5 +30,6 @@ jobs:
       - name: Record screenshots
         run: "./.github/workflows/scripts/recordScreenshots.sh"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
           GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
+

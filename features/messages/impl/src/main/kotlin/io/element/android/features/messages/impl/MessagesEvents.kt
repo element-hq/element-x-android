@@ -23,4 +23,5 @@ import io.element.android.libraries.matrix.api.core.EventId
 sealed interface MessagesEvents {
     data class HandleAction(val action: TimelineItemAction, val event: TimelineItem.Event) : MessagesEvents
     data class SendReaction(val emoji: String, val eventId: EventId) : MessagesEvents
+    object Dismiss : MessagesEvents
 }

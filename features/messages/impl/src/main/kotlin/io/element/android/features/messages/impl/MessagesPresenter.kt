@@ -25,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
@@ -32,6 +33,8 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
+import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
@@ -52,8 +55,10 @@ import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.handleSnackbarMessage
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.libraries.matrix.ui.room.canSendEventAsState
 import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -65,6 +70,8 @@ class MessagesPresenter @Inject constructor(
     private val composerPresenter: MessageComposerPresenter,
     private val timelinePresenter: TimelinePresenter,
     private val actionListPresenter: ActionListPresenter,
+    private val customReactionPresenter: CustomReactionPresenter,
+    private val retrySendMenuPresenter: RetrySendMenuPresenter,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val messageSummaryFormatter: MessageSummaryFormatter,
@@ -77,8 +84,11 @@ class MessagesPresenter @Inject constructor(
         val composerState = composerPresenter.present()
         val timelineState = timelinePresenter.present()
         val actionListState = actionListPresenter.present()
+        val customReactionState = customReactionPresenter.present()
+        val retryState = retrySendMenuPresenter.present()
 
         val syncUpdateFlow = room.syncUpdateFlow().collectAsState(0L)
+        val userHasPermissionToSendMessage by room.canSendEventAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
         val roomName: MutableState<String?> = rememberSaveable {
             mutableStateOf(null)
         }
@@ -105,17 +115,25 @@ class MessagesPresenter @Inject constructor(
         }
         fun handleEvents(event: MessagesEvents) {
             when (event) {
-                is MessagesEvents.HandleAction -> localCoroutineScope.handleTimelineAction(event.action, event.event, composerState)
-                is MessagesEvents.SendReaction -> localCoroutineScope.sendReaction(event.emoji, event.eventId)
+                is MessagesEvents.HandleAction -> {
+                    localCoroutineScope.handleTimelineAction(event.action, event.event, composerState)
+                }
+                is MessagesEvents.SendReaction -> {
+                    localCoroutineScope.sendReaction(event.emoji, event.eventId)
+                }
+                is MessagesEvents.Dismiss -> actionListState.eventSink(ActionListEvents.Clear)
             }
         }
         return MessagesState(
             roomId = room.roomId,
             roomName = roomName.value,
             roomAvatar = roomAvatar.value,
+            userHasPermissionToSendMessage = userHasPermissionToSendMessage,
             composerState = composerState,
             timelineState = timelineState,
             actionListState = actionListState,
+            customReactionState = customReactionState,
+            retrySendMenuState = retryState,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             snackbarMessage = snackbarMessage,
             eventSink = ::handleEvents

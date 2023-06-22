@@ -7,9 +7,10 @@
   <string name="notification_inline_reply_failed">"** Failed to send - please open room"</string>
   <string name="notification_invitation_action_join">"Join"</string>
   <string name="notification_invitation_action_reject">"Reject"</string>
-  <string name="notification_invite_body">"invited you"</string>
+  <string name="notification_invite_body">"Invited you to chat"</string>
   <string name="notification_new_messages">"New Messages"</string>
   <string name="notification_room_action_mark_as_read">"Mark as read"</string>
+  <string name="notification_room_invite_body">"Invited you to join the room"</string>
   <string name="notification_sender_me">"Me"</string>
   <string name="notification_test_push_notification_content">"You are viewing the notification! Click me!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>

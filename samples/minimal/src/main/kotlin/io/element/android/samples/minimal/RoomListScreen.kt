@@ -71,7 +71,7 @@ class RoomListScreen(
         networkMonitor = NetworkMonitorImpl(context),
         snackbarDispatcher = SnackbarDispatcher(),
         inviteStateDataSource = DefaultInviteStateDataSource(matrixClient, DefaultSeenInvitesStore(context), coroutineDispatchers),
-        leaveRoomPresenter = LeaveRoomPresenterImpl(matrixClient, RoomMembershipObserver() ,coroutineDispatchers)
+        leaveRoomPresenter = LeaveRoomPresenterImpl(matrixClient, RoomMembershipObserver(), coroutineDispatchers)
     )
 
     @Composable

@@ -16,7 +16,6 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -28,25 +27,20 @@ import io.element.android.libraries.designsystem.components.BlurHashAsyncImage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
-import kotlin.math.max
 
 @Composable
 fun TimelineItemImageView(
     content: TimelineItemImageContent,
     modifier: Modifier = Modifier,
 ) {
-    // TODO place this value somewhere else?
-    val minHeight = max(100, content.height ?: 0)
     TimelineItemAspectRatioBox(
-        height = minHeight,
         aspectRatio = content.aspectRatio,
         modifier = modifier
     ) {
         BlurHashAsyncImage(
-            model = MediaRequestData(content.mediaSource, MediaRequestData.Kind.Content),
+            model = MediaRequestData(content.preferredMediaSource, MediaRequestData.Kind.File(content.body, content.mimeType)),
             blurHash = content.blurhash,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Fit,
+            contentScale = ContentScale.Crop,
         )
     }
 }

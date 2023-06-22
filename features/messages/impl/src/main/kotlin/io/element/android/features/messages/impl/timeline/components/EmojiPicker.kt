@@ -32,8 +32,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
@@ -49,25 +47,8 @@ import com.vanniktech.emoji.google.GoogleEmojiProvider
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.coroutines.launch
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CustomReactionBottomSheet(
-    isVisible: Boolean,
-    sheetState: SheetState,
-    onDismiss: () -> Unit,
-    onEmojiSelected: (Emoji) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    if (isVisible) {
-        ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState, modifier = modifier) {
-            EmojiPicker(onEmojiSelected = onEmojiSelected, modifier = Modifier.fillMaxSize())
-        }
-    }
-}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

@@ -75,6 +75,7 @@ fun TimelineItemEventRow(
     onLongClick: () -> Unit,
     onUserDataClick: (UserId) -> Unit,
     inReplyToClick: (EventId) -> Unit,
+    onTimestampClicked: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -83,7 +84,7 @@ fun TimelineItemEventRow(
         onUserDataClick(event.senderId)
     }
 
-    fun inReplayToClicked() {
+    fun inReplyToClicked() {
         val inReplyToEventId = (event.inReplyTo as? InReplyTo.Ready)?.eventId ?: return
         inReplyToClick(inReplyToEventId)
     }
@@ -131,7 +132,10 @@ fun TimelineItemEventRow(
                         interactionSource = interactionSource,
                         onMessageClick = onClick,
                         onMessageLongClick = onLongClick,
-                        inReplyToClick = ::inReplayToClicked,
+                        inReplyToClick = ::inReplyToClicked,
+                        onTimestampClicked = {
+                            onTimestampClicked(event)
+                        }
                     )
                 }
                 TimelineItemReactionsView(
@@ -177,6 +181,7 @@ private fun MessageEventBubbleContent(
     onMessageClick: () -> Unit,
     onMessageLongClick: () -> Unit,
     inReplyToClick: () -> Unit,
+    onTimestampClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val isMediaItem = event.content is TimelineItemImageContent || event.content is TimelineItemVideoContent
@@ -207,7 +212,7 @@ private fun MessageEventBubbleContent(
                 ContentView(modifier = contentModifier)
                 TimelineEventTimestampView(
                     event = event,
-                    onClick = onMessageClick,
+                    onClick = onTimestampClicked,
                     modifier = timestampModifier
                         .padding(horizontal = 4.dp, vertical = 4.dp) // Outer padding
                         .background(LocalColors.current.gray300, RoundedCornerShape(10.0.dp))
@@ -220,7 +225,7 @@ private fun MessageEventBubbleContent(
                 ContentView(modifier = contentModifier.padding(start = 12.dp, end = 12.dp, top = 8.dp))
                 TimelineEventTimestampView(
                     event = event,
-                    onClick = onMessageClick,
+                    onClick = onTimestampClicked,
                     modifier = timestampModifier
                         .align(Alignment.End)
                         .padding(horizontal = 8.dp, vertical = 2.dp)
@@ -243,7 +248,7 @@ private fun MessageEventBubbleContent(
     ) {
         EqualWidthColumn(modifier = modifier, spacing = 8.dp) {
             if (inReplyToDetails != null) {
-                val senderName = event.senderDisplayName ?: event.senderId.value
+                val senderName = inReplyToDetails.senderDisplayName ?: inReplyToDetails.senderId.value
                 val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyToDetails)
                 ReplyToContent(
                     senderName = senderName,
@@ -251,6 +256,7 @@ private fun MessageEventBubbleContent(
                     attachmentThumbnailInfo = attachmentThumbnailInfo,
                     modifier = Modifier
                         .padding(top = 8.dp, start = 8.dp, end = 8.dp)
+                        .clip(RoundedCornerShape(6.dp))
                         .clickable(enabled = true, onClick = inReplyToClick),
                 )
             }
@@ -295,7 +301,6 @@ private fun ReplyToContent(
     }
     Row(
         modifier
-            .clip(RoundedCornerShape(6.dp))
             .background(MaterialTheme.colorScheme.surface)
             .padding(paddings)
     ) {

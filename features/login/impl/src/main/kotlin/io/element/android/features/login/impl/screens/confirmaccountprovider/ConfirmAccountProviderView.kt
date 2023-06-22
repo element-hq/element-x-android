@@ -80,8 +80,7 @@ fun ConfirmAccountProviderView(
                     id = if (state.isAccountCreation) {
                         R.string.screen_account_provider_signup_subtitle
                     } else {
-                        // Use same value for now.
-                        R.string.screen_account_provider_signup_subtitle
+                        R.string.screen_account_provider_signin_subtitle
                     },
                 )
             )
