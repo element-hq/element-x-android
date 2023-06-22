@@ -95,7 +95,6 @@ fun MessagesView(
     onEventClicked: (event: TimelineItem.Event) -> Unit,
     onUserDataClicked: (UserId) -> Unit,
     onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
-    onItemDebugInfoClicked: (EventId, TimelineItemDebugInfo) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
@@ -121,12 +120,7 @@ fun MessagesView(
     }
 
     fun onActionSelected(action: TimelineItemAction, event: TimelineItem.Event) {
-        when (action) {
-            is TimelineItemAction.Developer -> if (event.eventId != null) {
-                onItemDebugInfoClicked(event.eventId, event.debugInfo)
-            }
-            else -> state.eventSink(MessagesEvents.HandleAction(action, event))
-        }
+        state.eventSink(MessagesEvents.HandleAction(action, event))
     }
 
     fun onEmojiReactionClicked(emoji: String, event: TimelineItem.Event) {
@@ -331,6 +325,5 @@ private fun ContentToPreview(state: MessagesState) {
         onEventClicked = {},
         onPreviewAttachments = {},
         onUserDataClicked = {},
-        onItemDebugInfoClicked = { _, _ -> },
     )
 }
