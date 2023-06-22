@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalCoroutinesApi::class)
-
 package io.element.android.libraries.matrix.impl
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -43,6 +41,7 @@ import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.room.roomOrNull
+import io.element.android.libraries.matrix.impl.room.stateFlow
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
@@ -54,6 +53,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.Client
@@ -61,7 +62,6 @@ import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
-import java.util.concurrent.atomic.AtomicBoolean
 import org.matrix.rustcomponents.sdk.CreateRoomParameters as RustCreateRoomParameters
 import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
 import org.matrix.rustcomponents.sdk.RoomVisibility as RustRoomVisibility
@@ -119,13 +119,16 @@ class RustMatrixClient constructor(
     override val mediaLoader: MatrixMediaLoader
         get() = rustMediaLoader
 
-    private val isSyncing = AtomicBoolean(false)
-
     private val roomMembershipObserver = RoomMembershipObserver()
 
     init {
         client.setDelegate(clientDelegate)
         rustRoomSummaryDataSource.subscribeIfNeeded()
+        roomList.stateFlow()
+            .onEach {
+                Timber.v("onRoomList state change: $it")
+            }
+            .launchIn(sessionCoroutineScope)
         //rustInvitesDataSource.init()
     }
 
@@ -223,13 +226,13 @@ class RustMatrixClient constructor(
     override fun notificationService(): NotificationService = notificationService
 
     override fun startSync() {
-        if (isSyncing.compareAndSet(false, true)) {
+        if (!roomList.isSyncing()) {
             roomList.sync()
         }
     }
 
     override fun stopSync() {
-        if (isSyncing.compareAndSet(true, false)) {
+        if (roomList.isSyncing()) {
             roomList.stopSync()
         }
     }
