@@ -16,9 +16,8 @@
 
 package io.element.android.features.networkmonitor.api
 
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 interface NetworkMonitor {
-    val connectivity: Flow<NetworkStatus>
-    val currentConnectivityStatus: NetworkStatus
+    val connectivity: StateFlow<NetworkStatus>
 }
