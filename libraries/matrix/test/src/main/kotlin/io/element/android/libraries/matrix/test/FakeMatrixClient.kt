@@ -36,6 +36,7 @@ import io.element.android.libraries.matrix.test.notification.FakeNotificationSer
 import io.element.android.libraries.matrix.test.pushers.FakePushersService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
+import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import kotlinx.coroutines.delay
 
@@ -44,11 +45,11 @@ class FakeMatrixClient(
     private val userDisplayName: Result<String> = Result.success(A_USER_NAME),
     private val userAvatarURLString: Result<String> = Result.success(AN_AVATAR_URL),
     override val roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
-    override val invitesDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
     override val mediaLoader: MatrixMediaLoader = FakeMediaLoader(),
     private val sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
     private val pushersService: FakePushersService = FakePushersService(),
     private val notificationService: FakeNotificationService = FakeNotificationService(),
+    private val syncService: FakeSyncService = FakeSyncService(),
 ) : MatrixClient {
 
     private var ignoreUserResult: Result<Unit> = Result.success(Unit)
@@ -98,9 +99,7 @@ class FakeMatrixClient(
         return searchUserResults[searchTerm] ?: Result.failure(IllegalStateException("No response defined for $searchTerm"))
     }
 
-    override fun startSync() = Unit
-
-    override fun stopSync() = Unit
+    override fun syncService() = syncService
 
     override suspend fun logout() {
         delay(100)
@@ -130,8 +129,6 @@ class FakeMatrixClient(
     override fun pushersService(): PushersService = pushersService
 
     override fun notificationService(): NotificationService = notificationService
-
-    override fun onSlidingSyncUpdate() {}
 
     override fun roomMembershipObserver(): RoomMembershipObserver {
         return RoomMembershipObserver()

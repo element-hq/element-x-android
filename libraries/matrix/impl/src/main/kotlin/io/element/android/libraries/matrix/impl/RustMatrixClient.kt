@@ -31,6 +31,8 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
+import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -41,7 +43,7 @@ import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.room.roomOrNull
-import io.element.android.libraries.matrix.impl.room.stateFlow
+import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
@@ -49,7 +51,6 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
@@ -78,8 +79,10 @@ class RustMatrixClient constructor(
 
     override val sessionId: UserId = UserId(client.userId())
 
+    private val roomListService = client.roomList()
     private val sessionCoroutineScope = childScopeOf(appCoroutineScope, dispatchers.main, "Session-${sessionId}")
     private val verificationService = RustSessionVerificationService()
+    private val syncService = RustSyncService(roomListService, sessionCoroutineScope)
     private val pushersService = RustPushersService(
         client = client,
         dispatchers = dispatchers,
@@ -92,8 +95,6 @@ class RustMatrixClient constructor(
             Timber.v("didReceiveAuthError(isSoftLogout=$isSoftLogout)")
         }
     }
-
-    private val roomListService = client.roomList()
 
     private val rustRoomSummaryDataSource: RustRoomSummaryDataSource =
         RustRoomSummaryDataSource(
@@ -113,12 +114,13 @@ class RustMatrixClient constructor(
 
     init {
         client.setDelegate(clientDelegate)
+        syncService.syncState()
+            .onEach { syncState ->
+                if (syncState == SyncState.Syncing) {
+                    onSlidingSyncUpdate()
+                }
+            }.launchIn(sessionCoroutineScope)
         rustRoomSummaryDataSource.init()
-        roomListService.stateFlow()
-            .onEach {
-                Timber.v("onRoomList state change: $it")
-            }
-            .launchIn(sessionCoroutineScope)
     }
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
@@ -208,26 +210,15 @@ class RustMatrixClient constructor(
             }
         }
 
+    override fun syncService(): SyncService = syncService
+
     override fun sessionVerificationService(): SessionVerificationService = verificationService
 
     override fun pushersService(): PushersService = pushersService
 
     override fun notificationService(): NotificationService = notificationService
 
-    override fun startSync() {
-        if (!roomListService.isSyncing()) {
-            roomListService.sync()
-        }
-    }
-
-    override fun stopSync() {
-        if (roomListService.isSyncing()) {
-            roomListService.stopSync()
-        }
-    }
-
     override fun close() {
-        stopSync()
         sessionCoroutineScope.cancel()
         client.setDelegate(null)
         verificationService.destroy()
@@ -265,7 +256,7 @@ class RustMatrixClient constructor(
         }
     }
 
-    override fun onSlidingSyncUpdate() {
+    private fun onSlidingSyncUpdate() {
         if (!verificationService.isReady.value) {
             try {
                 verificationService.verificationController = client.getSessionVerificationController()
