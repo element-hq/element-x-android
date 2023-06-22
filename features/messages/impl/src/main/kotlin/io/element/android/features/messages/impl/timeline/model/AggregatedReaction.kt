@@ -16,8 +16,9 @@
 
 package io.element.android.features.messages.impl.timeline.model
 
-data class AggregatedReaction(
+data class AggregatedReaction constructor(
     val key: String,
     val count: String,
+    val isOnMyMessage: Boolean,
     val isHighlighted: Boolean = false
 )

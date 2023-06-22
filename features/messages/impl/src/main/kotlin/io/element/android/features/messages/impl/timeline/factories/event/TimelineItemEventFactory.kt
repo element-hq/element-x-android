@@ -89,7 +89,12 @@ class TimelineItemEventFactory @Inject constructor(
 
     private fun MatrixTimelineItem.Event.computeReactionsState(): TimelineItemReactions {
         val aggregatedReactions = event.reactions.map {
-            AggregatedReaction(key = it.key, count = it.count.toString(), isHighlighted = false)
+            AggregatedReaction(
+                key = it.key,
+                count = it.count.toString(),
+                isHighlighted = false,
+                isOnMyMessage = event.isOwn,
+            )
         }
         return TimelineItemReactions(aggregatedReactions.toImmutableList())
     }
