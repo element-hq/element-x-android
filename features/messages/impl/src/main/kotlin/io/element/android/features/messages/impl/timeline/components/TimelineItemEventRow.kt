@@ -260,7 +260,7 @@ private fun MessageEventBubbleContent(
                     onClick = onTimestampClicked,
                     modifier = timestampModifier
                         .align(Alignment.End)
-                        .padding(horizontal = 8.dp, vertical = 2.dp)
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
                 )
             }
         }
