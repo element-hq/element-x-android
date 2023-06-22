@@ -22,7 +22,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
@@ -52,19 +52,16 @@ class SnackbarDispatcher {
     }
 }
 
+/** Used to provide a [SnackbarDispatcher] to composable functions, it's needed for [rememberSnackbarHostState]. */
+val LocalSnackbarDispatcher = compositionLocalOf<SnackbarDispatcher> {
+    error("No SnackbarDispatcher provided")
+}
+
 @Composable
 fun handleSnackbarMessage(
     snackbarDispatcher: SnackbarDispatcher
 ): SnackbarMessage? {
-    val snackbarMessage by snackbarDispatcher.snackbarMessage.collectAsState(initial = null)
-    LaunchedEffect(snackbarMessage) {
-        if (snackbarMessage != null) {
-            launch {
-                snackbarDispatcher.clear()
-            }
-        }
-    }
-    return snackbarMessage
+    return snackbarDispatcher.snackbarMessage.collectAsState(initial = null).value
 }
 
 @Composable
@@ -74,6 +71,7 @@ fun rememberSnackbarHostState(snackbarMessage: SnackbarMessage?): SnackbarHostSt
     val snackbarMessageText = snackbarMessage?.let {
         stringResource(id = snackbarMessage.messageResId)
     }
+    val dispatcher = LocalSnackbarDispatcher.current
     LaunchedEffect(snackbarMessage) {
         if (snackbarMessageText == null) return@LaunchedEffect
         coroutineScope.launch {
@@ -81,6 +79,7 @@ fun rememberSnackbarHostState(snackbarMessage: SnackbarMessage?): SnackbarHostSt
                 message = snackbarMessageText,
                 duration = snackbarMessage.duration,
             )
+            dispatcher.clear()
         }
     }
     return snackbarHostState

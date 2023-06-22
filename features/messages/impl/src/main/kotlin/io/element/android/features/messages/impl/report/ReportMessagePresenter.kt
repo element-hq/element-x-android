@@ -27,22 +27,23 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.execute
 import io.element.android.libraries.architecture.executeResult
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import io.element.android.libraries.ui.strings.R as StringR
 
 class ReportMessagePresenter @AssistedInject constructor(
     private val room: MatrixRoom,
     @Assisted private val inputs: Inputs,
+    private val snackbarDispatcher: SnackbarDispatcher,
     private val dispatchers: CoroutineDispatchers,
 ) : Presenter<ReportMessageState> {
 
@@ -90,6 +91,9 @@ class ReportMessagePresenter @AssistedInject constructor(
         suspend {
             val userIdToBlock = userId.takeIf { blockUser }
             room.reportContent(eventId, reason, userIdToBlock)
+                .onSuccess {
+                    snackbarDispatcher.post(SnackbarMessage(StringR.string.common_report_submitted))
+                }
         }.executeResult(result)
     }
 }
