@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -167,6 +168,7 @@ fun ForwardMessagesView(
 //                    isForwarding = state.isForwarding,
 //                    selectedRooms = state.selectedRooms
 //                )
+                Spacer(modifier = Modifier.height(20.dp))
 
                 if (state.resultState is SearchBarResultState.Results) {
                     LazyColumn {
