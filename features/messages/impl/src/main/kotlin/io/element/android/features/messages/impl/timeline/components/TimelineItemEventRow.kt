@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -49,7 +48,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -98,64 +96,71 @@ fun TimelineItemEventRow(
         inReplyToClick(inReplyToEventId)
     }
 
-    val (parentAlignment, contentAlignment) = if (event.isMine) {
-        Pair(Alignment.CenterEnd, Alignment.End)
-    } else {
-        Pair(Alignment.CenterStart, Alignment.Start)
-    }
-
+    // To avoid using negative offset, we display in this Box a column with:
+    // - Spacer to give room to the Sender information if they must be displayed;
+    // - The message bubble;
+    // - Spacer for the reactions if there are some.
+    // Then the Sender information and the reactions are displayed on top of it.
+    // This fixes some clickable issue and some unexpected margin on top and bottom of each message row
     Box(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight(),
-        contentAlignment = parentAlignment
+        contentAlignment = if (event.isMine) Alignment.CenterEnd else Alignment.CenterStart
     ) {
-        Row {
-            Column(horizontalAlignment = contentAlignment) {
-                if (event.showSenderInformation) {
-                    MessageSenderInformation(
-                        event.safeSenderName,
-                        event.senderAvatar,
-                        Modifier
-                            .zIndex(1f)
-                            .offset(y = 8.dp)
-                            .clickable(onClick = ::onUserDataClicked)
-                    )
-                }
-                val bubbleState = BubbleState(
-                    groupPosition = event.groupPosition,
-                    isMine = event.isMine,
-                    isHighlighted = isHighlighted,
-                )
-                MessageEventBubble(
-                    state = bubbleState,
+        Column {
+            if (event.showSenderInformation) {
+                Spacer(modifier = Modifier.height(event.senderAvatar.size.dp - 8.dp))
+            }
+            val bubbleState = BubbleState(
+                groupPosition = event.groupPosition,
+                isMine = event.isMine,
+                isHighlighted = isHighlighted,
+            )
+            MessageEventBubble(
+                state = bubbleState,
+                interactionSource = interactionSource,
+                onClick = onClick,
+                onLongClick = onLongClick,
+                modifier = Modifier
+                    .widthIn(max = 320.dp)
+            ) {
+                MessageEventBubbleContent(
+                    event = event,
                     interactionSource = interactionSource,
-                    onClick = onClick,
-                    onLongClick = onLongClick,
-                    modifier = Modifier
-                        .zIndex(-1f)
-                        .widthIn(max = 320.dp)
-                ) {
-                    MessageEventBubbleContent(
-                        event = event,
-                        interactionSource = interactionSource,
-                        onMessageClick = onClick,
-                        onMessageLongClick = onLongClick,
-                        inReplyToClick = ::inReplyToClicked,
-                        onTimestampClicked = {
-                            onTimestampClicked(event)
-                        }
-                    )
-                }
-                TimelineItemReactionsView(
-                    reactionsState = event.reactionsState,
-                    modifier = Modifier
-                        .zIndex(1f)
-                        .offset(x = if (event.isMine) 0.dp else 20.dp, y = -(4.dp))
+                    onMessageClick = onClick,
+                    onMessageLongClick = onLongClick,
+                    inReplyToClick = ::inReplyToClicked,
+                    onTimestampClicked = {
+                        onTimestampClicked(event)
+                    }
                 )
             }
+            if (event.reactionsState.reactions.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(28.dp))
+            }
+        }
+        // Align to the top of the box
+        if (event.showSenderInformation) {
+            MessageSenderInformation(
+                event.safeSenderName,
+                event.senderAvatar,
+                Modifier
+                    .align(Alignment.TopStart)
+                    .clickable(onClick = ::onUserDataClicked)
+            )
+        }
+        // Align to the bottom of the box
+        if (event.reactionsState.reactions.isNotEmpty()) {
+            TimelineItemReactionsView(
+                reactionsState = event.reactionsState,
+                modifier = Modifier
+                    .align(if (event.isMine) Alignment.BottomEnd else Alignment.BottomStart)
+                    .padding(start = if (event.isMine) 0.dp else 20.dp)
+            )
         }
     }
+    // This is assuming that we are in a ColumnScope, but this is OK, for both Preview and real usage.
     if (event.groupPosition.isNew()) {
         Spacer(modifier = modifier.height(8.dp))
     } else {
@@ -173,7 +178,7 @@ private fun MessageSenderInformation(
     val avatarStrokeColor = MaterialTheme.colorScheme.background
     val avatarSize = senderAvatar.size.dp
     Box(
-        modifier = modifier.offset(y = avatarStrokeSize)
+        modifier = modifier
     ) {
         // Background of Avatar, to erase the corner of the message content
         Canvas(

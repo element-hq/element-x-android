@@ -31,7 +31,6 @@ fun TimelineItemReactionsView(
     reactionsState: TimelineItemReactions,
     modifier: Modifier = Modifier,
 ) {
-    if (reactionsState.reactions.isEmpty()) return
     FlowRow(
         modifier = modifier,
         mainAxisSpacing = 2.dp,
