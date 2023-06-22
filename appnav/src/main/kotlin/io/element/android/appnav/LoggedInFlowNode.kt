@@ -127,6 +127,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
+    private val syncService = inputs.matrixClient.syncService()
     private val loggedInFlowProcessor = LoggedInEventProcessor(
         snackbarDispatcher,
         inputs.matrixClient.roomMembershipObserver(),
@@ -147,10 +148,10 @@ class LoggedInFlowNode @AssistedInject constructor(
                 loggedInFlowProcessor.observeEvents(coroutineScope)
             },
             onResume = {
-                inputs.matrixClient.startSync()
+                syncService.startSync()
             },
             onPause = {
-                inputs.matrixClient.stopSync()
+                syncService.stopSync()
             },
             onDestroy = {
                 val imageLoaderFactory = bindings<MatrixUIBindings>().notLoggedInImageLoaderFactory()
