@@ -96,7 +96,7 @@ class MessagesPresenter @Inject constructor(
             mutableStateOf(null)
         }
 
-        val networkConnectionStatus by networkMonitor.connectivity.collectAsState(initial = networkMonitor.currentConnectivityStatus)
+        val networkConnectionStatus by networkMonitor.connectivity.collectAsState()
 
         val snackbarMessage = handleSnackbarMessage(snackbarDispatcher)
 

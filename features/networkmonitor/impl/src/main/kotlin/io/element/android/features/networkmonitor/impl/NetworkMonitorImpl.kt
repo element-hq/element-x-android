@@ -29,6 +29,7 @@ import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -61,9 +62,7 @@ class NetworkMonitorImpl @Inject constructor(
     }
 
     private val _connectivity = MutableStateFlow(NetworkStatus.Online)
-    override val connectivity: Flow<NetworkStatus> = _connectivity
-
-    override val currentConnectivityStatus: NetworkStatus get() = _connectivity.value
+    override val connectivity: StateFlow<NetworkStatus> = _connectivity
 
     init {
         listenToConnectionChanges()
