@@ -25,6 +25,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -65,7 +68,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-class MessagesPresenter @Inject constructor(
+class MessagesPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
     private val composerPresenter: MessageComposerPresenter,
     private val timelinePresenter: TimelinePresenter,
@@ -76,7 +79,13 @@ class MessagesPresenter @Inject constructor(
     private val snackbarDispatcher: SnackbarDispatcher,
     private val messageSummaryFormatter: MessageSummaryFormatter,
     private val dispatchers: CoroutineDispatchers,
+    @Assisted private val navigator: MessagesNavigator,
 ) : Presenter<MessagesState> {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(navigator: MessagesNavigator): MessagesPresenter
+    }
 
     @Composable
     override fun present(): MessagesState {
@@ -147,11 +156,11 @@ class MessagesPresenter @Inject constructor(
     ) = launch {
         when (action) {
             TimelineItemAction.Copy -> notImplementedYet()
-            TimelineItemAction.Forward -> notImplementedYet()
             TimelineItemAction.Redact -> handleActionRedact(targetEvent)
             TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState)
             TimelineItemAction.Reply -> handleActionReply(targetEvent, composerState)
-            TimelineItemAction.Developer -> Unit // Handled at UI level
+            TimelineItemAction.Developer -> handleShowDebugInfoAction(targetEvent)
+            TimelineItemAction.Forward -> handleForwardAction(targetEvent)
             TimelineItemAction.ReportContent -> notImplementedYet()
         }
     }
@@ -221,5 +230,15 @@ class MessagesPresenter @Inject constructor(
         composerState.eventSink(
             MessageComposerEvents.SetMode(composerMode)
         )
+    }
+
+    private fun handleShowDebugInfoAction(event: TimelineItem.Event) {
+        if (event.eventId == null) return
+        navigator.onShowEventDebugInfoClicked(event.eventId, event.debugInfo)
+    }
+
+    private fun handleForwardAction(event: TimelineItem.Event) {
+        if (event.eventId == null) return
+        navigator.onForwardEventClicked(event.eventId)
     }
 }

@@ -14,25 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.api
+package io.element.android.libraries.matrix.api.room
 
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.plugin.Plugin
-import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.UserId
 
-interface MessagesEntryPoint : FeatureEntryPoint {
-    fun createNode(
-        parentNode: Node,
-        buildContext: BuildContext,
-        callback: Callback,
-    ): Node
+class ForwardEventException(
+    val roomIds: List<RoomId>
+) : Exception() {
 
-    interface Callback : Plugin {
-        fun onRoomDetailsClicked()
-        fun onUserDataClicked(userId: UserId)
-        fun onForwardedToSingleRoom(roomId: RoomId)
-    }
+    override val message: String? = "Failed to deliver event to $roomIds rooms"
 }

@@ -33,7 +33,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 class RoomListNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: RoomListPresenter,
+    private val presenter:  RoomListPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
     private fun onRoomClicked(roomId: RoomId) {

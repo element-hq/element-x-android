@@ -75,6 +75,7 @@ class FakeMatrixRoom(
     private var sendReactionResult = Result.success(Unit)
     private var retrySendMessageResult = Result.success(Unit)
     private var cancelSendResult = Result.success(Unit)
+    private var forwardEventResult = Result.success(Unit)
 
     var sendMediaCount = 0
         private set
@@ -218,6 +219,10 @@ class FakeMatrixRoom(
 
     override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<Unit> = fakeSendMedia()
 
+    override suspend fun forwardEvent(eventId: EventId, rooms: List<RoomId>): Result<Unit> = simulateLongTask {
+        forwardEventResult
+    }
+
     private suspend fun fakeSendMedia(): Result<Unit> = simulateLongTask {
         sendMediaResult.onSuccess {
             sendMediaCount++
@@ -328,5 +333,9 @@ class FakeMatrixRoom(
 
     fun givenCancelSendResult(result: Result<Unit>) {
         cancelSendResult = result
+    }
+
+    fun givenForwardEventResult(result: Result<Unit>) {
+        forwardEventResult = result
     }
 }
