@@ -35,7 +35,6 @@ import java.io.Closeable
 interface MatrixClient : Closeable {
     val sessionId: SessionId
     val roomSummaryDataSource: RoomSummaryDataSource
-    val invitesDataSource: RoomSummaryDataSource
     val mediaLoader: MatrixMediaLoader
     fun getRoom(roomId: RoomId): MatrixRoom?
     fun findDM(userId: UserId): MatrixRoom?

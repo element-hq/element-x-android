@@ -7,6 +7,7 @@ import org.matrix.rustcomponents.sdk.RoomList
 import org.matrix.rustcomponents.sdk.RoomListEntriesListener
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 import org.matrix.rustcomponents.sdk.RoomListEntry
+import org.matrix.rustcomponents.sdk.RoomListInterface
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomListState
 import org.matrix.rustcomponents.sdk.RoomListStateListener
@@ -14,7 +15,7 @@ import org.matrix.rustcomponents.sdk.SlidingSyncListLoadingState
 import org.matrix.rustcomponents.sdk.SlidingSyncListStateObserver
 import timber.log.Timber
 
-fun RoomList.stateFlow(): Flow<RoomListState> =
+fun RoomListInterface.stateFlow(): Flow<RoomListState> =
     mxCallbackFlow {
         val listener = object : RoomListStateListener {
             override fun onUpdate(state: RoomListState) {
@@ -24,7 +25,7 @@ fun RoomList.stateFlow(): Flow<RoomListState> =
         state(listener)
     }
 
-fun RoomList.loadingStateFlow(): Flow<SlidingSyncListLoadingState> =
+fun RoomListInterface.loadingStateFlow(): Flow<SlidingSyncListLoadingState> =
     mxCallbackFlow {
         val listener = object : SlidingSyncListStateObserver {
             override fun didReceiveUpdate(newState: SlidingSyncListLoadingState) {
@@ -36,7 +37,7 @@ fun RoomList.loadingStateFlow(): Flow<SlidingSyncListLoadingState> =
         result.entriesLoadingStateStream
     }
 
-fun RoomList.roomListEntriesUpdateFlow(onInitialList: suspend (List<RoomListEntry>) -> Unit): Flow<RoomListEntriesUpdate> =
+fun RoomListInterface.roomListEntriesUpdateFlow(onInitialList: suspend (List<RoomListEntry>) -> Unit): Flow<RoomListEntriesUpdate> =
     mxCallbackFlow {
         val listener = object : RoomListEntriesListener {
             override fun onUpdate(roomEntriesUpdate: RoomListEntriesUpdate) {
@@ -48,7 +49,7 @@ fun RoomList.roomListEntriesUpdateFlow(onInitialList: suspend (List<RoomListEntr
         result.entriesStream
     }
 
-fun RoomList.roomOrNull(roomId: String): RoomListItem? {
+fun RoomListInterface.roomOrNull(roomId: String): RoomListItem? {
     return try {
         room(roomId)
     } catch (failure: Throwable) {

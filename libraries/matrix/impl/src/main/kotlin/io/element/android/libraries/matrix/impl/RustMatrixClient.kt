@@ -93,27 +93,17 @@ class RustMatrixClient constructor(
         }
     }
 
-    private val roomList = client.roomList()
+    private val roomListService = client.roomList()
 
     private val rustRoomSummaryDataSource: RustRoomSummaryDataSource =
         RustRoomSummaryDataSource(
-            roomList,
-            sessionCoroutineScope,
-            dispatchers,
+            roomListService = roomListService,
+            sessionCoroutineScope = sessionCoroutineScope,
+            coroutineDispatchers = dispatchers,
         )
 
     override val roomSummaryDataSource: RoomSummaryDataSource
         get() = rustRoomSummaryDataSource
-
-    private val rustInvitesDataSource: RustRoomSummaryDataSource =
-        RustRoomSummaryDataSource(
-            roomList,
-            sessionCoroutineScope,
-            dispatchers,
-        )
-
-    override val invitesDataSource: RoomSummaryDataSource
-        get() = rustInvitesDataSource
 
     private val rustMediaLoader = RustMediaLoader(baseCacheDirectory, dispatchers, client)
     override val mediaLoader: MatrixMediaLoader
@@ -123,17 +113,16 @@ class RustMatrixClient constructor(
 
     init {
         client.setDelegate(clientDelegate)
-        rustRoomSummaryDataSource.subscribeIfNeeded()
-        roomList.stateFlow()
+        rustRoomSummaryDataSource.init()
+        roomListService.stateFlow()
             .onEach {
                 Timber.v("onRoomList state change: $it")
             }
             .launchIn(sessionCoroutineScope)
-        //rustInvitesDataSource.init()
     }
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
-        val roomListItem = roomList.roomOrNull(roomId.value) ?: return null
+        val roomListItem = roomListService.roomOrNull(roomId.value) ?: return null
         val fullRoom = roomListItem.fullRoom()
         return RustMatrixRoom(
             sessionId = sessionId,
@@ -185,7 +174,7 @@ class RustMatrixClient constructor(
 
             // Wait to receive the room back from the sync
             withTimeout(30_000L) {
-                roomSummaryDataSource.roomSummaries()
+                roomSummaryDataSource.roomList()
                     .filter { roomSummaries ->
                         roomSummaries.map { it.identifier() }.contains(roomId.value)
                     }.first()
@@ -226,14 +215,14 @@ class RustMatrixClient constructor(
     override fun notificationService(): NotificationService = notificationService
 
     override fun startSync() {
-        if (!roomList.isSyncing()) {
-            roomList.sync()
+        if (!roomListService.isSyncing()) {
+            roomListService.sync()
         }
     }
 
     override fun stopSync() {
-        if (roomList.isSyncing()) {
-            roomList.stopSync()
+        if (roomListService.isSyncing()) {
+            roomListService.stopSync()
         }
     }
 
@@ -242,7 +231,7 @@ class RustMatrixClient constructor(
         sessionCoroutineScope.cancel()
         client.setDelegate(null)
         verificationService.destroy()
-        roomList.destroy()
+        roomListService.destroy()
         client.destroy()
     }
 

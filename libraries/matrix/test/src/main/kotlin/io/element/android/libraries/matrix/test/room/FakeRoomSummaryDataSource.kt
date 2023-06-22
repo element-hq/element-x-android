@@ -29,14 +29,14 @@ class FakeRoomSummaryDataSource : RoomSummaryDataSource {
         roomSummariesFlow.emit(roomSummaries)
     }
 
-    override fun roomSummaries(): StateFlow<List<RoomSummary>> {
+    override fun roomList(): StateFlow<List<RoomSummary>> {
         return roomSummariesFlow
     }
 
     var latestSlidingSyncRange: IntRange? = null
         private set
 
-    override fun setSlidingSyncRange(range: IntRange) {
+    override fun updateRoomListVisibleRange(range: IntRange) {
         latestSlidingSyncRange = range
     }
 }

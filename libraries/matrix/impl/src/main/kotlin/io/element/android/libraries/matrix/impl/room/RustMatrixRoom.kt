@@ -81,7 +81,7 @@ class RustMatrixRoom(
         RustMatrixTimeline(
             matrixRoom = this,
             innerRoom = innerRoom,
-            coroutineScope = roomCoroutineScope,
+            roomCoroutineScope = roomCoroutineScope,
             coroutineDispatchers = coroutineDispatchers
         )
     }

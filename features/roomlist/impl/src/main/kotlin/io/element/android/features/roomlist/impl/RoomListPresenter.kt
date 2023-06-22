@@ -77,7 +77,7 @@ class RoomListPresenter @Inject constructor(
         var filter by rememberSaveable { mutableStateOf("") }
         val roomSummaries by client
             .roomSummaryDataSource
-            .roomSummaries()
+            .roomList()
             .collectAsState()
 
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState(initial = networkMonitor.currentConnectivityStatus)
@@ -177,7 +177,7 @@ class RoomListPresenter @Inject constructor(
         // Safe to give bigger size than room list
         val extendedRangeEnd = range.last + midExtendedRangeSize
         val extendedRange = IntRange(extendedRangeStart, extendedRangeEnd)
-        client.roomSummaryDataSource.setSlidingSyncRange(extendedRange)
+        client.roomSummaryDataSource.updateRoomListVisibleRange(extendedRange)
     }
 
     private suspend fun mapRoomSummaries(

@@ -43,8 +43,8 @@ class DefaultInviteStateDataSource @Inject constructor(
     @Composable
     override fun inviteState(): InvitesState {
         val invites by client
-            .invitesDataSource
-            .roomSummaries()
+            .roomSummaryDataSource
+            .inviteList()
             .collectAsState()
 
         val seenInvites by seenInvitesStore
