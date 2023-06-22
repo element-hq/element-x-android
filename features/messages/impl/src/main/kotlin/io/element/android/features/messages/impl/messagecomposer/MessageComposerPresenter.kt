@@ -152,6 +152,10 @@ class MessageComposerPresenter @Inject constructor(
                     showAttachmentSourcePicker = false
                     cameraVideoPicker.launch()
                 }
+                MessageComposerEvents.PickAttachmentSource.Location -> {
+                    showAttachmentSourcePicker = false
+                    // Navigation to the location picker screen is done at the view layer
+                }
             }
         }
 

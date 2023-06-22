@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-compose-library")
-    alias(libs.plugins.ksp)
-}
+package io.element.android.features.location.impl
 
-android {
-    namespace = "io.element.android.features.location.api"
-}
-
-dependencies {
-    implementation(projects.libraries.architecture)
-    implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.core)
-    implementation(projects.libraries.uiStrings)
-    implementation(libs.coil.compose)
-    ksp(libs.showkase.processor)
-
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
+data class SendLocationState(
+    val mode: Mode = Mode.ALocation,
+    val eventSink: (SendLocationEvents) -> Unit = {},
+) {
+    sealed interface Mode {
+        object MyLocation : Mode
+        object ALocation : Mode
+    }
 }

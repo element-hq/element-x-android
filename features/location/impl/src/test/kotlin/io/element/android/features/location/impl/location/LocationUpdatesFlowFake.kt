@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-compose-library")
-    alias(libs.plugins.ksp)
+package io.element.android.features.location.impl.location
+
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+
+fun fakeLocationUpdatesFlow(): Flow<io.element.android.features.location.impl.location.Location> = flow {
+    while (true) {
+        delay(1_000)
+        emit(aLocation())
+    }
 }
 
-android {
-    namespace = "io.element.android.features.location.api"
-}
-
-dependencies {
-    implementation(projects.libraries.architecture)
-    implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.core)
-    implementation(projects.libraries.uiStrings)
-    implementation(libs.coil.compose)
-    ksp(libs.showkase.processor)
-
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
-}
+private fun aLocation() = io.element.android.features.location.impl.location.Location(
+    lat = 51.49404,
+    lon = -0.25484,
+    accuracy = 5f
+)

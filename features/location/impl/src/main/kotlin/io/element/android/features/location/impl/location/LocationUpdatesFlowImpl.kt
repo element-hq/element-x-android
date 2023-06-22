@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.location.impl
+package io.element.android.features.location.impl.location
 
 import android.Manifest
 import android.content.Context
@@ -25,7 +25,6 @@ import androidx.core.location.LocationListenerCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.core.location.LocationRequestCompat
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.features.location.api.Location
 import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking

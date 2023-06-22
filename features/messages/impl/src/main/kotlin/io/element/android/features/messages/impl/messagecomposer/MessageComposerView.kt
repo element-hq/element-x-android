@@ -28,6 +28,7 @@ import io.element.android.libraries.textcomposer.TextComposer
 @Composable
 fun MessageComposerView(
     state: MessageComposerState,
+    onSendLocationClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onFullscreenToggle() {
@@ -47,7 +48,10 @@ fun MessageComposerView(
     }
 
     Box {
-        AttachmentsBottomSheet(state = state)
+        AttachmentsBottomSheet(
+            state = state,
+            onSendLocationClicked = onSendLocationClicked,
+        )
 
         TextComposer(
             onSendMessage = ::sendMessage,
@@ -76,5 +80,8 @@ internal fun MessageComposerViewDarkPreview(@PreviewParameter(MessageComposerSta
 
 @Composable
 private fun ContentToPreview(state: MessageComposerState) {
-    MessageComposerView(state)
+    MessageComposerView(
+        state = state,
+        onSendLocationClicked = {}
+    )
 }

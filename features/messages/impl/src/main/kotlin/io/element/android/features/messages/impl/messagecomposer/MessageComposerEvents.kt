@@ -33,5 +33,6 @@ sealed interface MessageComposerEvents {
         object FromFiles : PickAttachmentSource
         object PhotoFromCamera : PickAttachmentSource
         object VideoFromCamera : PickAttachmentSource
+        object Location : PickAttachmentSource
     }
 }
