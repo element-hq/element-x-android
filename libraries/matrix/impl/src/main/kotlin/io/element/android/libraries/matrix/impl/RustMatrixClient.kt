@@ -201,7 +201,7 @@ class RustMatrixClient constructor(
 
     private val roomMembershipObserver = RoomMembershipObserver()
 
-    private val roomContentForwarder = RoomContentForwarder(slidingSync, coroutineScope)
+    private val roomContentForwarder = RoomContentForwarder(slidingSync)
 
     init {
         client.setDelegate(clientDelegate)

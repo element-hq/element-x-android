@@ -100,7 +100,8 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action forward`() = runTest {
-        val presenter = createMessagePresenter()
+        val navigator = FakeMessagesNavigator()
+        val presenter = createMessagePresenter(navigator = navigator)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -108,6 +109,7 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Forward, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(navigator.onForwardEventClickedCount).isEqualTo(1)
         }
     }
 
@@ -308,7 +310,8 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action show developer info`() = runTest {
-        val presenter = createMessagePresenter()
+        val navigator = FakeMessagesNavigator()
+        val presenter = createMessagePresenter(navigator = navigator)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -316,6 +319,7 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Developer, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(navigator.onShowEventDebugInfoClickedCount).isEqualTo(1)
         }
     }
 
@@ -347,7 +351,8 @@ class MessagesPresenterTest {
 
     private fun TestScope.createMessagePresenter(
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
-        matrixRoom: MatrixRoom = FakeMatrixRoom()
+        matrixRoom: MatrixRoom = FakeMatrixRoom(),
+        navigator: FakeMessagesNavigator = FakeMessagesNavigator(),
     ): MessagesPresenter {
         val messageComposerPresenter = MessageComposerPresenter(
             appCoroutineScope = this,
@@ -388,6 +393,7 @@ class MessagesPresenterTest {
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),
             messageSummaryFormatter = FakeMessageSummaryFormatter(),
+            navigator = navigator,
             dispatchers = coroutineDispatchers,
         )
     }
