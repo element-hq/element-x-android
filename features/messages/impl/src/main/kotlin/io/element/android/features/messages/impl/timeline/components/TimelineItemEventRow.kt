@@ -162,7 +162,7 @@ fun TimelineItemEventRow(
     }
     // This is assuming that we are in a ColumnScope, but this is OK, for both Preview and real usage.
     if (event.groupPosition.isNew()) {
-        Spacer(modifier = modifier.height(8.dp))
+        Spacer(modifier = modifier.height(16.dp))
     } else {
         Spacer(modifier = modifier.height(2.dp))
     }
