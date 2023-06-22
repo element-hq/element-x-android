@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -79,7 +80,9 @@ fun rememberSnackbarHostState(snackbarMessage: SnackbarMessage?): SnackbarHostSt
                 message = snackbarMessageText,
                 duration = snackbarMessage.duration,
             )
-            dispatcher.clear()
+            if (isActive) {
+                dispatcher.clear()
+            }
         }
     }
     return snackbarHostState

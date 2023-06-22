@@ -23,6 +23,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.report.ReportMessageEvents
 import io.element.android.features.messages.impl.report.ReportMessagePresenter
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -134,9 +135,11 @@ class ReportMessagePresenterTests {
     private fun TestScope.aPresenter(
         inputs: ReportMessagePresenter.Inputs = ReportMessagePresenter.Inputs(AN_EVENT_ID, A_USER_ID),
         matrixRoom: MatrixRoom = FakeMatrixRoom(),
+        snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
     ) = ReportMessagePresenter(
         inputs = inputs,
         room = matrixRoom,
         dispatchers = testCoroutineDispatchers(),
+        snackbarDispatcher = snackbarDispatcher,
     )
 }
