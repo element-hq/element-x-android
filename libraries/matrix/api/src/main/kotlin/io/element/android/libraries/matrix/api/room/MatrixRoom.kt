@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.api.room
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -73,13 +74,13 @@ interface MatrixRoom : Closeable {
 
     suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>
 
-    suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo): Result<Unit>
+    suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo, progressCallback: ProgressCallback?): Result<Unit>
 
-    suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo): Result<Unit>
+    suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<Unit>
 
-    suspend fun sendAudio(file: File, audioInfo: AudioInfo): Result<Unit>
+    suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<Unit>
 
-    suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit>
+    suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<Unit>
 
     suspend fun sendReaction(emoji: String, eventId: EventId): Result<Unit>
 
