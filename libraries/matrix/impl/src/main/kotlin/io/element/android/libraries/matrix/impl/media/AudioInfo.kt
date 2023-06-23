@@ -20,13 +20,13 @@ import io.element.android.libraries.matrix.api.media.AudioInfo
 import org.matrix.rustcomponents.sdk.AudioInfo as RustAudioInfo
 
 fun RustAudioInfo.map(): AudioInfo = AudioInfo(
-    duration = duration?.toLong(),
+    duration = duration,
     size = size?.toLong(),
     mimeType = mimetype
 )
 
 fun AudioInfo.map(): RustAudioInfo = RustAudioInfo(
-    duration = duration?.toULong(),
+    duration = duration,
     size = size?.toULong(),
     mimetype = mimeType,
 )

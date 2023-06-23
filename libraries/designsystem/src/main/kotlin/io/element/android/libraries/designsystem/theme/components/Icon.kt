@@ -30,6 +30,54 @@ import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
+/**
+ * Icon is a wrapper around [androidx.compose.material3.Icon] which allows to use
+ * [ImageVector], [ImageBitmap] or [DrawableRes] as icon source.
+ *
+ * @param contentDescription the content description to be used for accessibility
+ * @param modifier the modifier to apply to this layout
+ * @param tint the tint to apply to the icon
+ * @param imageVector the image vector of the icon to display, exclusive with [bitmap] and [resourceId]
+ * @param bitmap the bitmap of the icon to display, exclusive with [imageVector] and [resourceId]
+ * @param resourceId the resource id of the icon to display, exclusive with [imageVector] and [bitmap]
+ */
+@Composable
+fun Icon(
+    contentDescription: String?,
+    modifier: Modifier = Modifier,
+    tint: Color = LocalContentColor.current,
+    imageVector: ImageVector? = null,
+    bitmap: ImageBitmap? = null,
+    @DrawableRes resourceId: Int? = null,
+) {
+    when {
+        imageVector != null -> {
+            Icon(
+                imageVector = imageVector,
+                contentDescription = contentDescription,
+                modifier = modifier,
+                tint = tint
+            )
+        }
+        bitmap != null -> {
+            Icon(
+                bitmap = bitmap,
+                contentDescription = contentDescription,
+                modifier = modifier,
+                tint = tint
+            )
+        }
+        resourceId != null -> {
+            Icon(
+                resourceId = resourceId,
+                contentDescription = contentDescription,
+                modifier = modifier,
+                tint = tint
+            )
+        }
+    }
+}
+
 @Composable
 fun Icon(
     imageVector: ImageVector,

@@ -43,16 +43,14 @@ fun TimelineItemVideoView(
     modifier: Modifier = Modifier,
 ) {
     TimelineItemAspectRatioBox(
-        height = content.height,
         aspectRatio = content.aspectRatio,
         modifier = modifier,
         contentAlignment = Alignment.Center,
     ) {
         BlurHashAsyncImage(
-            model = MediaRequestData(content.thumbnailSource, MediaRequestData.Kind.Content),
+            model = MediaRequestData(content.thumbnailSource, MediaRequestData.Kind.File(content.body, content.mimeType)),
             blurHash = content.blurHash,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Fit,
+            contentScale = ContentScale.Crop,
         )
         Box(
             modifier = Modifier.roundedBackground(),

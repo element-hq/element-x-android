@@ -16,14 +16,19 @@
 
 package io.element.android.features.analytics.impl
 
+import android.app.Activity
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.analytics.api.Config
+import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
@@ -33,12 +38,19 @@ class AnalyticsOptInNode @AssistedInject constructor(
     private val presenter: AnalyticsOptInPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
+    private fun onClickTerms(activity: Activity, darkTheme: Boolean) {
+        activity.openUrlInChromeCustomTab(null, darkTheme, Config.POLICY_LINK)
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
+        val activity = LocalContext.current as Activity
+        val isDark = MaterialTheme.colors.isLight.not()
         val state = presenter.present()
         AnalyticsOptInView(
             state = state,
             modifier = modifier,
+            onClickTerms = { onClickTerms(activity, isDark) },
         )
     }
 }

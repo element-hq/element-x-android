@@ -17,13 +17,14 @@
 package io.element.android.libraries.mediaupload
 
 import android.content.Context
-import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.androidutils.file.getFileName
+import io.element.android.libraries.androidutils.file.safeRenameTo
 import io.element.android.libraries.androidutils.media.runAndRelease
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
@@ -37,26 +38,22 @@ import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
-import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.matrix.api.media.ThumbnailInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
-import io.element.android.libraries.mediaupload.api.ThumbnailProcessingInfo
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
+import java.time.Duration
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 
 @ContributesBinding(AppScope::class)
 class AndroidMediaPreProcessor @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val thumbnailFactory: ThumbnailFactory,
     private val imageCompressor: ImageCompressor,
     private val videoCompressor: VideoCompressor,
     private val coroutineDispatchers: CoroutineDispatchers,
@@ -69,23 +66,6 @@ class AndroidMediaPreProcessor @Inject constructor(
          * values may surpass this limit. (i.e.: an image of `480x3000px` would have `inSampleSize=1` and be sent as is).
          */
         private const val IMAGE_SCALE_REF_SIZE = 640
-
-        /**
-         * Max width of thumbnail images.
-         * See [the Matrix spec](https://spec.matrix.org/latest/client-server-api/?ref=blog.gitter.im#thumbnails).
-         */
-        private const val THUMB_MAX_WIDTH = 800
-
-        /**
-         * Max height of thumbnail images.
-         * See [the Matrix spec](https://spec.matrix.org/latest/client-server-api/?ref=blog.gitter.im#thumbnails).
-         */
-        private const val THUMB_MAX_HEIGHT = 600
-
-        /**
-         * Frame of the video to be used for generating a thumbnail.
-         */
-        private val VIDEO_THUMB_FRAME = 5.seconds.inWholeMicroseconds
     }
 
     private val contentResolver = context.contentResolver
@@ -95,44 +75,38 @@ class AndroidMediaPreProcessor @Inject constructor(
         mimeType: String,
         deleteOriginal: Boolean,
         compressIfPossible: Boolean,
-    ): Result<MediaUploadInfo> = runCatching {
-        val shouldBeCompressed = compressIfPossible &&
-            (mimeType.isMimeTypeImage() && mimeType != MimeTypes.Gif) ||
-            mimeType.isMimeTypeVideo()
-
-        val result = if (shouldBeCompressed) {
-            when {
-                mimeType.isMimeTypeImage() -> processImage(uri)
-                mimeType.isMimeTypeVideo() -> processVideo(uri, mimeType)
+    ): Result<MediaUploadInfo> = withContext(coroutineDispatchers.computation) {
+        runCatching {
+            val result = when {
+                mimeType.isMimeTypeImage() -> processImage(uri, mimeType, compressIfPossible && mimeType != MimeTypes.Gif)
+                mimeType.isMimeTypeVideo() -> processVideo(uri, mimeType, compressIfPossible)
                 mimeType.isMimeTypeAudio() -> processAudio(uri, mimeType)
-                else -> error("Cannot compress file of type: $mimeType")
+                else -> processFile(uri, mimeType)
             }
-        } else {
-            val file = copyToTmpFile(uri)
-            // Remove image metadata here too
-            if (mimeType.isMimeTypeImage() && mimeType != MimeTypes.Gif) {
-                removeSensitiveImageMetadata(file)
+            if (deleteOriginal) {
+                tryOrNull {
+                    contentResolver.delete(uri, null, null)
+                }
             }
-            val info = FileInfo(
-                mimetype = mimeType,
-                size = file.length(),
-                thumbnailInfo = null,
-                thumbnailSource = null,
-            )
-            MediaUploadInfo.AnyFile(file, info)
+            result.postProcess(uri)
         }
-        if (deleteOriginal) {
-            tryOrNull {
-                contentResolver.delete(uri, null, null)
-            }
-        }
-        result.postProcess(uri)
     }.mapFailure { MediaPreProcessor.Failure(it) }
+
+    private suspend fun processFile(uri: Uri, mimeType: String): MediaUploadInfo {
+        val file = copyToTmpFile(uri)
+        val info = FileInfo(
+            mimetype = mimeType,
+            size = file.length(),
+            thumbnailInfo = null,
+            thumbnailSource = null,
+        )
+        return MediaUploadInfo.AnyFile(file, info)
+    }
 
     private fun MediaUploadInfo.postProcess(uri: Uri): MediaUploadInfo {
         val name = context.getFileName(uri) ?: return this
         val renamedFile = File(context.cacheDir, name).also {
-            file.renameTo(it)
+            file.safeRenameTo(it)
         }
         return when (this) {
             is MediaUploadInfo.AnyFile -> copy(file = renamedFile)
@@ -142,57 +116,91 @@ class AndroidMediaPreProcessor @Inject constructor(
         }
     }
 
-    private suspend fun processImage(uri: Uri): MediaUploadInfo {
-        val compressedFileResult = contentResolver.openInputStream(uri).use { input ->
-            imageCompressor.compressToTmpFile(
-                inputStream = requireNotNull(input),
-                resizeMode = ResizeMode.Approximate(IMAGE_SCALE_REF_SIZE, IMAGE_SCALE_REF_SIZE),
-            ).getOrThrow()
+    private suspend fun processImage(uri: Uri, mimeType: String, shouldBeCompressed: Boolean): MediaUploadInfo {
+
+        suspend fun processImageWithCompression(): MediaUploadInfo {
+            val compressionResult = contentResolver.openInputStream(uri).use { input ->
+                imageCompressor.compressToTmpFile(
+                    inputStream = requireNotNull(input),
+                    resizeMode = ResizeMode.Approximate(IMAGE_SCALE_REF_SIZE, IMAGE_SCALE_REF_SIZE),
+                ).getOrThrow()
+            }
+            val thumbnailResult: ThumbnailResult = thumbnailFactory.createImageThumbnail(compressionResult.file)
+            val imageInfo = compressionResult.toImageInfo(
+                mimeType = mimeType,
+                thumbnailResult = thumbnailResult
+            )
+            removeSensitiveImageMetadata(compressionResult.file)
+            return MediaUploadInfo.Image(
+                file = compressionResult.file,
+                info = imageInfo,
+                thumbnailFile = thumbnailResult.file
+            )
         }
 
-        removeSensitiveImageMetadata(compressedFileResult.file)
+        suspend fun processImageWithoutCompression(): MediaUploadInfo {
+            val file = copyToTmpFile(uri)
+            val thumbnailResult: ThumbnailResult = thumbnailFactory.createImageThumbnail(file)
+            val imageInfo = contentResolver.openInputStream(uri).use { input ->
+                val bitmap = BitmapFactory.decodeStream(input, null, null)!!
+                ImageInfo(
+                    width = bitmap.width.toLong(),
+                    height = bitmap.height.toLong(),
+                    mimetype = mimeType,
+                    size = file.length(),
+                    thumbnailInfo = thumbnailResult.info,
+                    thumbnailSource = null,
+                    blurhash = thumbnailResult.blurhash,
+                )
+            }
+            removeSensitiveImageMetadata(file)
+            return MediaUploadInfo.Image(
+                file = file,
+                info = imageInfo,
+                thumbnailFile = thumbnailResult.file
+            )
+        }
 
-        val thumbnailResult = compressedFileResult.file.inputStream().use { generateImageThumbnail(it) }
-        val processingResult = compressedFileResult.toImageInfo(MimeTypes.Jpeg, thumbnailResult.file.path, thumbnailResult.info)
-        return MediaUploadInfo.Image(compressedFileResult.file, processingResult, thumbnailResult)
+        return if (shouldBeCompressed) {
+            processImageWithCompression()
+        } else {
+            processImageWithoutCompression()
+        }
     }
 
-    private suspend fun processVideo(uri: Uri, mimeType: String?): MediaUploadInfo {
-        val thumbnailInfo = extractVideoThumbnail(uri)
-        val resultFile = videoCompressor.compress(uri)
-            .onEach {
-                // TODO handle progress
-            }
-            .filterIsInstance<VideoTranscodingEvent.Completed>()
-            .first()
-            .file
-
-        val videoProcessingInfo = extractVideoMetadata(resultFile, mimeType, thumbnailInfo.file.path, thumbnailInfo)
-        return MediaUploadInfo.Video(resultFile, videoProcessingInfo, thumbnailInfo)
+    private suspend fun processVideo(uri: Uri, mimeType: String?, shouldBeCompressed: Boolean): MediaUploadInfo {
+        val resultFile = if (shouldBeCompressed) {
+            videoCompressor.compress(uri)
+                .onEach {
+                    // TODO handle progress
+                }
+                .filterIsInstance<VideoTranscodingEvent.Completed>()
+                .first()
+                .file
+        } else {
+            copyToTmpFile(uri)
+        }
+        val thumbnailInfo = thumbnailFactory.createVideoThumbnail(resultFile)
+        val videoInfo = extractVideoMetadata(resultFile, mimeType, thumbnailInfo)
+        return MediaUploadInfo.Video(
+            file = resultFile,
+            info = videoInfo,
+            thumbnailFile = thumbnailInfo.file
+        )
     }
 
     private suspend fun processAudio(uri: Uri, mimeType: String?): MediaUploadInfo {
         val file = copyToTmpFile(uri)
         return MediaMetadataRetriever().runAndRelease {
             setDataSource(context, Uri.fromFile(file))
-
             val info = AudioInfo(
-                duration = extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L,
+                duration = extractDuration(),
                 size = file.length(),
                 mimeType = mimeType,
             )
 
             MediaUploadInfo.Audio(file, info)
         }
-    }
-
-    private suspend fun generateImageThumbnail(inputStream: InputStream): ThumbnailProcessingInfo {
-        val thumbnailResult = imageCompressor
-            .compressToTmpFile(
-                inputStream = inputStream,
-                resizeMode = ResizeMode.Strict(THUMB_MAX_WIDTH, THUMB_MAX_HEIGHT),
-            ).getOrThrow()
-        return thumbnailResult.toThumbnailProcessingInfo(MimeTypes.Jpeg)
     }
 
     private fun removeSensitiveImageMetadata(file: File) {
@@ -215,35 +223,20 @@ class AndroidMediaPreProcessor @Inject constructor(
         }
     }
 
-    private fun extractVideoMetadata(file: File, mimeType: String?, thumbnailUrl: String?, thumbnailInfo: ThumbnailProcessingInfo?): VideoInfo =
+    private fun extractVideoMetadata(file: File, mimeType: String?, thumbnailResult: ThumbnailResult): VideoInfo =
         MediaMetadataRetriever().runAndRelease {
             setDataSource(context, Uri.fromFile(file))
             VideoInfo(
-                duration = extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L,
+                duration = extractDuration(),
                 width = extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toLong() ?: 0L,
                 height = extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toLong() ?: 0L,
                 mimetype = mimeType,
                 size = file.length(),
-                thumbnailInfo = thumbnailInfo?.info,
-                thumbnailSource = thumbnailUrl?.let { MediaSource(it) },
-                blurhash = thumbnailInfo?.blurhash,
+                thumbnailInfo = thumbnailResult.info,
+                // Will be computed by the rust sdk
+                thumbnailSource = null,
+                blurhash = thumbnailResult.blurhash,
             )
-        }
-
-    private suspend fun extractVideoThumbnail(uri: Uri): ThumbnailProcessingInfo =
-        MediaMetadataRetriever().runAndRelease {
-            setDataSource(context, uri)
-            val bitmap = requireNotNull(getFrameAtTime(VIDEO_THUMB_FRAME))
-            val inputStream = ByteArrayOutputStream().use {
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, it)
-                ByteArrayInputStream(it.toByteArray())
-            }
-
-            val result = imageCompressor.compressToTmpFile(
-                inputStream = inputStream,
-                resizeMode = ResizeMode.Strict(THUMB_MAX_WIDTH, THUMB_MAX_HEIGHT),
-            )
-            result.getOrThrow().toThumbnailProcessingInfo(MimeTypes.Jpeg)
         }
 
     private suspend fun copyToTmpFile(uri: Uri): File {
@@ -252,23 +245,19 @@ class AndroidMediaPreProcessor @Inject constructor(
     }
 }
 
-fun ImageCompressionResult.toImageInfo(mimeType: String, thumbnailUrl: String?, thumbnailInfo: ThumbnailInfo?) = ImageInfo(
+fun ImageCompressionResult.toImageInfo(mimeType: String, thumbnailResult: ThumbnailResult) = ImageInfo(
     width = width.toLong(),
     height = height.toLong(),
     mimetype = mimeType,
     size = size,
-    thumbnailInfo = thumbnailInfo,
-    thumbnailSource = thumbnailUrl?.let { MediaSource(it) },
-    blurhash = blurhash,
+    thumbnailInfo = thumbnailResult.info,
+    // Will be computed by the rust sdk
+    thumbnailSource = null,
+    blurhash = thumbnailResult.blurhash,
 )
 
-fun ImageCompressionResult.toThumbnailProcessingInfo(mimeType: String) = ThumbnailProcessingInfo(
-    file = file,
-    info = ThumbnailInfo(
-        width = width.toLong(),
-        height = height.toLong(),
-        mimetype = mimeType,
-        size = size,
-    ),
-    blurhash = blurhash,
-)
+private fun MediaMetadataRetriever.extractDuration(): Duration {
+    val durationInMs = extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L
+    return Duration.ofMillis(durationInMs)
+}
+

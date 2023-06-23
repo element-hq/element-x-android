@@ -105,7 +105,8 @@ class RoomDetailsEditPresenterTest {
         val room = aMatrixRoom(avatarUrl = AN_AVATAR_URL).apply {
             givenCanSendStateResult(StateEventType.ROOM_NAME, Result.success(true))
             givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.success(false))
-            givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.failure(Throwable("Oops")))        }
+            givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.failure(Throwable("Oops")))
+        }
         val presenter = aRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionClock.Immediate) {
@@ -381,7 +382,7 @@ class RoomDetailsEditPresenterTest {
             initialState.eventSink(RoomDetailsEditEvents.UpdateRoomTopic("New topic"))
             initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.Remove))
             initialState.eventSink(RoomDetailsEditEvents.Save)
-
+            skipItems(5)
             assertThat(room.newName).isEqualTo("New name")
             assertThat(room.newTopic).isEqualTo("New topic")
             assertThat(room.newAvatarData).isNull()
@@ -476,7 +477,7 @@ class RoomDetailsEditPresenterTest {
 
             initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
             initialState.eventSink(RoomDetailsEditEvents.Save)
-            skipItems(2)
+            skipItems(3)
 
             assertThat(room.newName).isNull()
             assertThat(room.newTopic).isNull()
@@ -501,7 +502,7 @@ class RoomDetailsEditPresenterTest {
 
             initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
             initialState.eventSink(RoomDetailsEditEvents.Save)
-            skipItems(1)
+            skipItems(2)
 
             assertThat(room.newName).isNull()
             assertThat(room.newTopic).isNull()
@@ -567,7 +568,7 @@ class RoomDetailsEditPresenterTest {
 
             initialState.eventSink(RoomDetailsEditEvents.UpdateRoomTopic("foo"))
             initialState.eventSink(RoomDetailsEditEvents.Save)
-            skipItems(1)
+            skipItems(2)
 
             assertThat(awaitItem().saveAction).isInstanceOf(Async.Failure::class.java)
 
@@ -588,6 +589,7 @@ class RoomDetailsEditPresenterTest {
             initialState.eventSink(RoomDetailsEditEvents.Save)
             skipItems(1)
 
+            assertThat(awaitItem().saveAction).isInstanceOf(Async.Loading::class.java)
             assertThat(awaitItem().saveAction).isInstanceOf(Async.Failure::class.java)
         }
     }
@@ -599,14 +601,17 @@ class RoomDetailsEditPresenterTest {
         }
 
         fakePickerProvider.givenResult(anotherAvatarUri)
-        fakeMediaPreProcessor.givenResult(Result.success(MediaUploadInfo.AnyFile(
-            file = processedFile,
-            info = mockk(),
-        )))
+        fakeMediaPreProcessor.givenResult(
+            Result.success(
+                MediaUploadInfo.AnyFile(
+                    file = processedFile,
+                    info = mockk(),
+                )
+            )
+        )
     }
 
     companion object {
         private const val ANOTHER_AVATAR_URL = "example://camera/foo.jpg"
     }
-
 }

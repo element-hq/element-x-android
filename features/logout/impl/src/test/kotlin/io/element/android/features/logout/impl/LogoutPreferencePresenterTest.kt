@@ -23,7 +23,6 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.logout.api.LogoutPreferenceEvents
 import io.element.android.features.logout.api.LogoutPreferenceState
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import kotlinx.coroutines.test.runTest
@@ -33,7 +32,7 @@ class LogoutPreferencePresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = DefaultLogoutPreferencePresenter(
-            FakeMatrixClient(A_SESSION_ID),
+            FakeMatrixClient(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -46,7 +45,7 @@ class LogoutPreferencePresenterTest {
     @Test
     fun `present - logout`() = runTest {
         val presenter = DefaultLogoutPreferencePresenter(
-            FakeMatrixClient(A_SESSION_ID),
+            FakeMatrixClient(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -62,7 +61,7 @@ class LogoutPreferencePresenterTest {
 
     @Test
     fun `present - logout with error`() = runTest {
-        val matrixClient = FakeMatrixClient(A_SESSION_ID)
+        val matrixClient = FakeMatrixClient()
         val presenter = DefaultLogoutPreferencePresenter(
             matrixClient,
         )

@@ -20,7 +20,6 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
-import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.impl.members.RoomMemberListDataSource
 import io.element.android.features.roomdetails.impl.members.RoomMemberListEvents
 import io.element.android.features.roomdetails.impl.members.RoomMemberListPresenter
@@ -35,6 +34,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -165,16 +165,16 @@ class RoomMemberListPresenterTests {
 }
 
 @ExperimentalCoroutinesApi
-private fun createDataSource(
-    matrixRoom: MatrixRoom = aMatrixRoom().apply {
+private fun TestScope.createDataSource(
+    matrixRoom: MatrixRoom = FakeMatrixRoom().apply {
         givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
     },
     coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers()
 ) = RoomMemberListDataSource(matrixRoom, coroutineDispatchers)
 
 @ExperimentalCoroutinesApi
-private fun createPresenter(
+private fun TestScope.createPresenter(
+    coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
     matrixRoom: MatrixRoom = FakeMatrixRoom(),
-    roomMemberListDataSource: RoomMemberListDataSource = createDataSource(),
-    coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers()
+    roomMemberListDataSource: RoomMemberListDataSource = createDataSource(coroutineDispatchers = coroutineDispatchers),
 ) = RoomMemberListPresenter(matrixRoom, roomMemberListDataSource, coroutineDispatchers)

@@ -21,11 +21,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.matrix.rustcomponents.sdk.SlidingSyncList
+import org.matrix.rustcomponents.sdk.SlidingSyncListLoadingState
 import org.matrix.rustcomponents.sdk.SlidingSyncListRoomListObserver
 import org.matrix.rustcomponents.sdk.SlidingSyncListRoomsCountObserver
 import org.matrix.rustcomponents.sdk.SlidingSyncListRoomsListDiff
 import org.matrix.rustcomponents.sdk.SlidingSyncListStateObserver
-import org.matrix.rustcomponents.sdk.SlidingSyncState
 
 fun SlidingSyncList.roomListDiff(scope: CoroutineScope): Flow<SlidingSyncListRoomsListDiff> =
     mxCallbackFlow {
@@ -39,9 +39,9 @@ fun SlidingSyncList.roomListDiff(scope: CoroutineScope): Flow<SlidingSyncListRoo
         observeRoomList(observer)
     }
 
-fun SlidingSyncList.state(scope: CoroutineScope): Flow<SlidingSyncState> = mxCallbackFlow {
+fun SlidingSyncList.state(scope: CoroutineScope): Flow<SlidingSyncListLoadingState> = mxCallbackFlow {
     val observer = object : SlidingSyncListStateObserver {
-        override fun didReceiveUpdate(newState: SlidingSyncState) {
+        override fun didReceiveUpdate(newState: SlidingSyncListLoadingState) {
             scope.launch {
                 send(newState)
             }

@@ -16,7 +16,9 @@
 
 package io.element.android.features.messages.impl
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
@@ -34,39 +36,33 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SheetState
-import androidx.compose.material3.SheetValue
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
-import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
 import io.element.android.features.messages.impl.timeline.TimelineView
-import io.element.android.features.messages.impl.timeline.components.CustomReactionBottomSheet
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvents
+import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuEvents
+import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMessageMenu
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.androidutils.ui.hideKeyboard
@@ -85,8 +81,8 @@ import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import io.element.android.libraries.ui.strings.R as StringsR
 
@@ -99,16 +95,9 @@ fun MessagesView(
     onEventClicked: (event: TimelineItem.Event) -> Unit,
     onUserDataClicked: (UserId) -> Unit,
     onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
-    onItemDebugInfoClicked: (EventId, TimelineItemDebugInfo) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-    val actionListViewBottomSheetState = rememberModalBottomSheetState()
-    val customReactionBottomSheetState = rememberModalBottomSheetState()
-
     LogCompositions(tag = "MessagesScreen", msg = "Root")
-    var isMessageActionsBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
-    var isCustomReactionBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
 
     AttachmentStateView(state.composerState.attachmentsState, onPreviewAttachments)
 
@@ -128,28 +117,14 @@ fun MessagesView(
         Timber.v("OnMessageLongClicked= ${event.id}")
         localView.hideKeyboard()
         state.actionListState.eventSink(ActionListEvents.ComputeForMessage(event))
-        isMessageActionsBottomSheetVisible = true
-    }
-
-    suspend fun onDismissActionListBottomSheet() {
-        state.actionListState.eventSink(ActionListEvents.Clear)
-        actionListViewBottomSheetState.hide()
-        isMessageActionsBottomSheetVisible = false
     }
 
     fun onActionSelected(action: TimelineItemAction, event: TimelineItem.Event) {
-        coroutineScope.launch { onDismissActionListBottomSheet() }
-        when (action) {
-            is TimelineItemAction.Developer -> if (event.eventId != null && event.debugInfo != null) {
-                onItemDebugInfoClicked(event.eventId, event.debugInfo)
-            }
-            else -> state.eventSink(MessagesEvents.HandleAction(action, event))
-        }
+        state.eventSink(MessagesEvents.HandleAction(action, event))
     }
 
     fun onEmojiReactionClicked(emoji: String, event: TimelineItem.Event) {
         if (event.eventId == null) return
-        coroutineScope.launch { onDismissActionListBottomSheet() }
         state.eventSink(MessagesEvents.SendReaction(emoji, event.eventId))
     }
 
@@ -176,6 +151,11 @@ fun MessagesView(
                 onMessageClicked = ::onMessageClicked,
                 onMessageLongClicked = ::onMessageLongClicked,
                 onUserDataClicked = onUserDataClicked,
+                onTimestampClicked = { event ->
+                    if (event.sendState is EventSendState.SendingFailed) {
+                        state.retrySendMenuState.eventSink(RetrySendMenuEvents.EventSelected(event))
+                    }
+                }
             )
         },
         snackbarHost = {
@@ -186,44 +166,27 @@ fun MessagesView(
         },
     )
 
-    var reactingToEventId: EventId? by remember { mutableStateOf(null) }
     ActionListView(
         state = state.actionListState,
-        sheetState = actionListViewBottomSheetState,
-        isVisible = isMessageActionsBottomSheetVisible,
-        onDismiss = { coroutineScope.launch { onDismissActionListBottomSheet() } },
         onActionSelected = ::onActionSelected,
         onCustomReactionClicked = { event ->
-            reactingToEventId = event.eventId
-            coroutineScope.launch {
-                onDismissActionListBottomSheet()
-                isCustomReactionBottomSheetVisible = true
-            }
+            state.customReactionState.eventSink(CustomReactionEvents.UpdateSelectedEvent(event.eventId))
         },
         onEmojiReactionClicked = ::onEmojiReactionClicked,
     )
 
     CustomReactionBottomSheet(
-        isVisible = isCustomReactionBottomSheetVisible,
-        sheetState = customReactionBottomSheetState,
-        onDismiss = {
-            reactingToEventId = null
-            coroutineScope.launch {
-                customReactionBottomSheetState.hide()
-                isCustomReactionBottomSheetVisible = false
-            }
-        },
+        state = state.customReactionState,
         onEmojiSelected = { emoji ->
-            val eventId = reactingToEventId
-            if (eventId != null) {
+            state.customReactionState.selectedEventId?.let { eventId ->
                 state.eventSink(MessagesEvents.SendReaction(emoji.unicode, eventId))
-                reactingToEventId = null
-                coroutineScope.launch {
-                    customReactionBottomSheetState.hide()
-                    isCustomReactionBottomSheetVisible = false
-                }
+                state.customReactionState.eventSink(CustomReactionEvents.UpdateSelectedEvent(null))
             }
         }
+    )
+
+    RetrySendMessageMenu(
+        state = state.retrySendMenuState
     )
 }
 
@@ -244,10 +207,11 @@ private fun AttachmentStateView(
 @Composable
 fun MessagesViewContent(
     state: MessagesState,
+    onMessageClicked: (TimelineItem.Event) -> Unit,
+    onUserDataClicked: (UserId) -> Unit,
+    onMessageLongClicked: (TimelineItem.Event) -> Unit,
+    onTimestampClicked: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
-    onMessageClicked: (TimelineItem.Event) -> Unit = {},
-    onUserDataClicked: (UserId) -> Unit = {},
-    onMessageLongClicked: (TimelineItem.Event) -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -263,14 +227,19 @@ fun MessagesViewContent(
                 onMessageClicked = onMessageClicked,
                 onMessageLongClicked = onMessageLongClicked,
                 onUserDataClicked = onUserDataClicked,
+                onTimestampClicked = onTimestampClicked,
             )
         }
-        MessageComposerView(
-            state = state.composerState,
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(Alignment.Bottom)
-        )
+        if (state.userHasPermissionToSendMessage) {
+            MessageComposerView(
+                state = state.composerState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(Alignment.Bottom)
+            )
+        } else {
+            CantSendMessageBanner()
+        }
     }
 }
 
@@ -315,6 +284,28 @@ fun MessagesViewTopBar(
     )
 }
 
+@Composable
+fun CantSendMessageBanner(
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.secondary)
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = stringResource(id = R.string.screen_room_no_permission_to_post),
+            color = MaterialTheme.colorScheme.onSecondary,
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+            fontStyle = FontStyle.Italic,
+        )
+    }
+}
+
 @Preview
 @Composable
 internal fun MessagesViewLightPreview(@PreviewParameter(MessagesStateProvider::class) state: MessagesState) =
@@ -334,6 +325,5 @@ private fun ContentToPreview(state: MessagesState) {
         onEventClicked = {},
         onPreviewAttachments = {},
         onUserDataClicked = {},
-        onItemDebugInfoClicked = { _, _ -> },
     )
 }

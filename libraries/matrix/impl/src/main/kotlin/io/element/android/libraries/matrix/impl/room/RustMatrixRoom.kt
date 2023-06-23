@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -27,14 +28,15 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -48,6 +50,7 @@ import org.matrix.rustcomponents.sdk.SlidingSyncRoom
 import org.matrix.rustcomponents.sdk.UpdateSummary
 import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
+import timber.log.Timber
 import java.io.File
 
 class RustMatrixRoom(
@@ -58,6 +61,7 @@ class RustMatrixRoom(
     private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val clock: SystemClock,
+    private val roomContentForwarder: RoomContentForwarder,
 ) : MatrixRoom {
 
     override val membersStateFlow: StateFlow<MatrixRoomMembersState>
@@ -235,62 +239,103 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun canSendEvent(type: MessageEventType): Result<Boolean> = withContext(coroutineDispatchers.io) {
         runCatching {
-            innerRoom.sendImage(file.path, thumbnailFile.path, imageInfo.map())
+            innerRoom.member(sessionId.value).use { it.canSendMessage(type.map()) }
         }
     }
 
-    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo, progressCallback: ProgressCallback?): Result<Unit> = withContext(
+        coroutineDispatchers.io
+    ) {
         runCatching {
-            innerRoom.sendVideo(file.path, thumbnailFile.path, videoInfo.map())
+            innerRoom.sendImage(file.path, thumbnailFile.path, imageInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 
-    override suspend fun sendAudio(file: File, audioInfo: AudioInfo): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<Unit> = withContext(
+        coroutineDispatchers.io
+    ) {
         runCatching {
-            innerRoom.sendAudio(file.path, audioInfo.map())
+            innerRoom.sendVideo(file.path, thumbnailFile.path, videoInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 
-    override suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit> = withContext(coroutineDispatchers.io) {
+    override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {
-            innerRoom.sendFile(file.path, fileInfo.map())
+            innerRoom.sendAudio(file.path, audioInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 
-    override suspend fun sendReaction(emoji: String, eventId: EventId): Result<Unit> = withContext(Dispatchers.IO) {
+    override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            innerRoom.sendFile(file.path, fileInfo.map(), progressCallback?.toProgressWatcher())
+        }
+    }
+
+    override suspend fun sendReaction(emoji: String, eventId: EventId): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {
             innerRoom.sendReaction(key = emoji, eventId = eventId.value)
         }
     }
 
+    override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            roomContentForwarder.forward(fromRoom = innerRoom, eventId = eventId, toRoomIds = roomIds)
+        }.onFailure {
+            Timber.e(it)
+        }
+    }
+
+    override suspend fun retrySendMessage(transactionId: String): Result<Unit> =
+        withContext(coroutineDispatchers.io) {
+            runCatching {
+                innerRoom.retrySend(transactionId)
+            }
+        }
+
+    override suspend fun cancelSend(transactionId: String): Result<Unit> =
+        withContext(coroutineDispatchers.io) {
+            runCatching {
+                innerRoom.cancelSend(transactionId)
+            }
+        }
+
     @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit> =
-        withContext(Dispatchers.IO) {
+        withContext(coroutineDispatchers.io) {
             runCatching {
                 innerRoom.uploadAvatar(mimeType, data.toUByteArray().toList())
             }
         }
 
     override suspend fun removeAvatar(): Result<Unit> =
-        withContext(Dispatchers.IO) {
+        withContext(coroutineDispatchers.io) {
             runCatching {
                 innerRoom.removeAvatar()
             }
         }
 
     override suspend fun setName(name: String): Result<Unit> =
-        withContext(Dispatchers.IO) {
+        withContext(coroutineDispatchers.io) {
             runCatching {
                 innerRoom.setName(name)
             }
         }
 
     override suspend fun setTopic(topic: String): Result<Unit> =
-        withContext(Dispatchers.IO) {
+        withContext(coroutineDispatchers.io) {
             runCatching {
                 innerRoom.setTopic(topic)
             }
         }
+
+    override suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            innerRoom.reportContent(eventId = eventId.value, score = null, reason = reason)
+            if (blockUserId != null) {
+                innerRoom.ignoreUser(blockUserId.value)
+            }
+        }
+    }
 }

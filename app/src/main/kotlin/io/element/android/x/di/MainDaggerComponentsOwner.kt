@@ -38,6 +38,10 @@ class MainDaggerComponentsOwner @Inject constructor(@ApplicationContext context:
         daggerComponents.remove(identifier)
     }
 
+    /**
+     * We expose the dagger components in the opposite order they arrived.
+     * So we pick the most recent component when searching with the [io.element.android.libraries.architecture.bindings] methods.
+     */
     override val daggerComponent: Any
         get() = daggerComponents.values.reversed()
 }

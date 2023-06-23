@@ -37,6 +37,7 @@ val A_ROOM_ID_2 = RoomId("!aRoomId2:domain")
 val A_THREAD_ID = ThreadId("\$aThreadId")
 val AN_EVENT_ID = EventId("\$anEventId")
 val AN_EVENT_ID_2 = EventId("\$anEventId2")
+const val A_TRANSACTION_ID = "aTransactionId"
 const val A_UNIQUE_ID = "aUniqueId"
 
 const val A_ROOM_NAME = "A room name"
@@ -53,8 +54,6 @@ val A_HOMESERVER_OIDC = MatrixHomeServerDetails(A_HOMESERVER_URL, supportsPasswo
 const val AN_AVATAR_URL = "mxc://data"
 
 const val A_FAILURE_REASON = "There has been a failure"
-
-const val FAKE_DELAY_IN_MS = 100L
 
 val A_THROWABLE = Throwable(A_FAILURE_REASON)
 val AN_EXCEPTION = Exception(A_FAILURE_REASON)

@@ -21,6 +21,8 @@ import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineState
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
+import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.core.data.StableCharSequence
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -33,6 +35,7 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             aMessagesState(),
             aMessagesState().copy(hasNetworkConnection = false),
             aMessagesState().copy(composerState = aMessageComposerState().copy(showAttachmentSourcePicker = true)),
+            aMessagesState().copy(userHasPermissionToSendMessage = false),
         )
 }
 
@@ -40,6 +43,7 @@ fun aMessagesState() = MessagesState(
     roomId = RoomId("!id:domain"),
     roomName = "Room name",
     roomAvatar = AvatarData("!id:domain", "Room name"),
+    userHasPermissionToSendMessage = true,
     composerState = aMessageComposerState().copy(
         text = StableCharSequence("Hello"),
         isFullScreen = false,
@@ -48,7 +52,15 @@ fun aMessagesState() = MessagesState(
     timelineState = aTimelineState().copy(
         timelineItems = aTimelineItemList(aTimelineItemTextContent()),
     ),
+    retrySendMenuState = RetrySendMenuState(
+        selectedEvent = null,
+        eventSink = {},
+    ),
     actionListState = anActionListState(),
+    customReactionState = CustomReactionState(
+        selectedEventId = null,
+        eventSink = {},
+    ),
     hasNetworkConnection = true,
     snackbarMessage = null,
     eventSink = {}

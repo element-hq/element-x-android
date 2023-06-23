@@ -9,9 +9,14 @@
   <string name="screen_room_details_already_invited">"Bereits eingeladen"</string>
   <string name="screen_room_details_edit_room_title">"Raum bearbeiten"</string>
   <string name="screen_room_details_edition_error">"Wir konnten nicht alle Informationen für diesen Raum aktualisieren."</string>
+  <string name="screen_room_details_edition_error_title">"Raum konnte nicht aktualisiert werden"</string>
   <string name="screen_room_details_encryption_enabled_subtitle">"Nachrichten sind mit Schlössern gesichert. Nur du und der Empfänger haben die eindeutigen Schlüssel, um sie zu entsperren."</string>
   <string name="screen_room_details_encryption_enabled_title">"Nachrichtenverschlüsselung aktiviert"</string>
+  <string name="screen_room_details_invite_people_title">"Personen einladen"</string>
+  <string name="screen_room_details_room_name_label">"Raumname"</string>
   <string name="screen_room_details_share_room_title">"Raum teilen"</string>
+  <string name="screen_room_details_updating_room">"Aktualisiere Raum…"</string>
+  <string name="screen_room_member_list_pending_header_title">"Ausstehend"</string>
   <string name="screen_room_member_list_room_members_header_title">"Raummitglieder"</string>
   <string name="screen_dm_details_block_alert_action">"Blockieren"</string>
   <string name="screen_dm_details_block_alert_description">"Blockierte Benutzer können dir keine Nachrichten senden und alle Nachrichten von ihnen werden ausgeblendet. Du kannst diese Aktion jederzeit rückgängig machen."</string>
