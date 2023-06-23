@@ -47,6 +47,7 @@ dependencies {
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.mediaupload.api)
     implementation(projects.features.networkmonitor.api)
+    implementation(projects.services.analytics.api)
     implementation(libs.coil.compose)
     implementation(libs.datetime)
     implementation(libs.accompanist.flowlayout)
