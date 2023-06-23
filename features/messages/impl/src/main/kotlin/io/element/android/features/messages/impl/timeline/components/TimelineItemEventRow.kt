@@ -31,7 +31,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -127,8 +126,6 @@ fun TimelineItemEventRow(
                 interactionSource = interactionSource,
                 onClick = onClick,
                 onLongClick = onLongClick,
-                modifier = Modifier
-                    .widthIn(max = 320.dp)
             ) {
                 MessageEventBubbleContent(
                     event = event,
@@ -460,7 +457,7 @@ private fun ContentTimestampToPreview(event: TimelineItem.Event) {
         val oldContent = event.content as TimelineItemTextContent
         listOf(
             "Text",
-            "Text longer but displayed on 1 line",
+            "Text longer, displayed on 1 line",
             "Text which should be rendered on several lines",
         ).forEach { str ->
             listOf(false, true).forEach { useDocument ->
