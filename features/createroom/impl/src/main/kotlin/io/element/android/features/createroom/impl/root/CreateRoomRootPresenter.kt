@@ -29,6 +29,7 @@ import io.element.android.features.createroom.impl.userlist.UserListPresenterArg
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.execute
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -44,6 +45,7 @@ class CreateRoomRootPresenter @Inject constructor(
     private val userListDataStore: UserListDataStore,
     private val matrixClient: MatrixClient,
     private val analyticsService: AnalyticsService,
+    private val buildMeta: BuildMeta,
 ) : Presenter<CreateRoomRootState> {
 
     private val presenter by lazy {
@@ -82,6 +84,7 @@ class CreateRoomRootPresenter @Inject constructor(
         }
 
         return CreateRoomRootState(
+            applicationName = buildMeta.applicationName,
             userListState = userListState,
             startDmAction = startDmAction.value,
             eventSink = ::handleEvents,
