@@ -30,13 +30,6 @@ interface MatrixAuthenticationService {
     suspend fun login(username: String, password: String): Result<SessionId>
 
     /*
-     * Cache index
-     */
-
-    fun cacheIndex(): Flow<Int>
-    fun incrementCacheIndex()
-
-    /*
      * OIDC part.
      */
 

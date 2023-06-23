@@ -44,6 +44,7 @@ import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.root.RootView
 import io.element.android.features.login.api.oidc.OidcAction
 import io.element.android.features.login.api.oidc.OidcActionFlow
+import io.element.android.features.preferences.api.CacheService
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -67,6 +68,7 @@ class RootFlowNode @AssistedInject constructor(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val authenticationService: MatrixAuthenticationService,
+    private val cacheService: CacheService,
     private val matrixClientsHolder: MatrixClientsHolder,
     private val presenter: RootPresenter,
     private val bugReportEntryPoint: BugReportEntryPoint,
@@ -91,7 +93,7 @@ class RootFlowNode @AssistedInject constructor(
         authenticationService.isLoggedIn()
             .distinctUntilChanged()
             .combine(
-                authenticationService.cacheIndex().onEach {
+                cacheService.cacheIndex().onEach {
                     Timber.v("cacheIndex=$it")
                     matrixClientsHolder.removeAll()
                 }
@@ -245,7 +247,7 @@ class RootFlowNode @AssistedInject constructor(
     }
 
     private suspend fun attachSession(sessionId: SessionId): LoggedInFlowNode {
-        val cacheIndex = authenticationService.cacheIndex().first()
+        val cacheIndex = cacheService.cacheIndex().first()
         return attachChild {
             backstack.newRoot(NavTarget.LoggedInFlow(sessionId, cacheIndex))
         }
