@@ -31,8 +31,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
@@ -105,7 +107,7 @@ fun MessageEventBubble(
     val bubbleShape = bubbleShape()
     Surface(
         modifier = modifier
-            .widthIn(min = 80.dp)
+            .widthIn(min = 80.dp, max = bubbleMaxSize())
             .offsetForItem()
             .clip(bubbleShape)
             .combinedClickable(
@@ -118,6 +120,13 @@ fun MessageEventBubble(
         shape = bubbleShape,
         content = content
     )
+}
+
+@Composable
+fun bubbleMaxSize(): Dp {
+    // Design says: The maximum width of a bubble is still 3/4 of the screen width even with the new
+    // timestamps
+    return LocalConfiguration.current.screenWidthDp.dp * 0.75f
 }
 
 @Preview
