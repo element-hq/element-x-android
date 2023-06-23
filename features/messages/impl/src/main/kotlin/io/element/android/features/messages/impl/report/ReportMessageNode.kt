@@ -34,7 +34,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 class ReportMessageNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenterFactory: ReportMessagePresenter.Factory,
+    presenterFactory: ReportMessagePresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
 
     data class Inputs(

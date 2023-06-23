@@ -253,7 +253,11 @@ class FakeMatrixRoom(
         setTopicResult
     }
 
-    override suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit> {
+    override suspend fun reportContent(
+        eventId: EventId,
+        reason: String,
+        blockUserId: UserId?
+    ): Result<Unit> = simulateLongTask {
         reportedContentCount++
         return reportContentResult
     }

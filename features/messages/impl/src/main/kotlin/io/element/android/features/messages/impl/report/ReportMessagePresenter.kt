@@ -44,7 +44,6 @@ class ReportMessagePresenter @AssistedInject constructor(
     private val room: MatrixRoom,
     @Assisted private val inputs: Inputs,
     private val snackbarDispatcher: SnackbarDispatcher,
-    private val dispatchers: CoroutineDispatchers,
 ) : Presenter<ReportMessageState> {
 
     data class Inputs(
@@ -87,7 +86,7 @@ class ReportMessagePresenter @AssistedInject constructor(
         reason: String,
         blockUser: Boolean,
         result: MutableState<Async<Unit>>,
-    ) = launch(dispatchers.main) {
+    ) = launch {
         suspend {
             val userIdToBlock = userId.takeIf { blockUser }
             room.reportContent(eventId, reason, userIdToBlock)

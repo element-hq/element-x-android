@@ -28,8 +28,6 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
-import io.element.android.tests.testutils.testCoroutineDispatchers
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -132,14 +130,13 @@ class ReportMessagePresenterTests {
         }
     }
 
-    private fun TestScope.aPresenter(
+    private fun aPresenter(
         inputs: ReportMessagePresenter.Inputs = ReportMessagePresenter.Inputs(AN_EVENT_ID, A_USER_ID),
         matrixRoom: MatrixRoom = FakeMatrixRoom(),
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
     ) = ReportMessagePresenter(
         inputs = inputs,
         room = matrixRoom,
-        dispatchers = testCoroutineDispatchers(),
         snackbarDispatcher = snackbarDispatcher,
     )
 }
