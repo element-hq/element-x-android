@@ -31,12 +31,14 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun TimelineItemEncryptedView(
     content: TimelineItemEncryptedContent,
+    extraPadding: ExtraPadding,
     modifier: Modifier = Modifier
 ) {
     TimelineItemInformativeView(
         text = stringResource(id = CommonStrings.common_decryption_error),
         iconDescription = stringResource(id = CommonStrings.dialog_title_warning),
         icon = Icons.Default.Warning,
+        extraPadding = extraPadding,
         modifier = modifier
     )
 }
@@ -56,6 +58,7 @@ private fun ContentToPreview() {
     TimelineItemEncryptedView(
         content = TimelineItemEncryptedContent(
             data = UnableToDecryptContent.Data.Unknown
-        )
+        ),
+        extraPadding = noExtraPadding
     )
 }

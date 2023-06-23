@@ -17,10 +17,8 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
@@ -35,6 +33,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 fun TimelineItemEventContentView(
     content: TimelineItemEventContent,
     interactionSource: MutableInteractionSource,
+    extraPadding: ExtraPadding,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -42,14 +41,17 @@ fun TimelineItemEventContentView(
     when (content) {
         is TimelineItemEncryptedContent -> TimelineItemEncryptedView(
             content = content,
+            extraPadding = extraPadding,
             modifier = modifier
         )
         is TimelineItemRedactedContent -> TimelineItemRedactedView(
             content = content,
+            extraPadding = extraPadding,
             modifier = modifier
         )
         is TimelineItemTextBasedContent -> TimelineItemTextView(
             content = content,
+            extraPadding = extraPadding,
             interactionSource = interactionSource,
             modifier = modifier,
             onTextClicked = onClick,
@@ -57,6 +59,7 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemUnknownContent -> TimelineItemUnknownView(
             content = content,
+            extraPadding = extraPadding,
             modifier = modifier
         )
         is TimelineItemImageContent -> TimelineItemImageView(

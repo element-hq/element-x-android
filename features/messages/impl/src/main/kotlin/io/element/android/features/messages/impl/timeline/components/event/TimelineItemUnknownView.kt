@@ -30,12 +30,14 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun TimelineItemUnknownView(
     content: TimelineItemUnknownContent,
+    extraPadding: ExtraPadding,
     modifier: Modifier = Modifier
 ) {
     TimelineItemInformativeView(
-        text = stringResource(id = CommonStrings.common_unsupported_event) + extraPaddingTrick,
+        text = stringResource(id = CommonStrings.common_unsupported_event),
         iconDescription = stringResource(id = CommonStrings.dialog_title_warning),
         icon = Icons.Default.Info,
+        extraPadding = extraPadding,
         modifier = modifier
     )
 }
@@ -52,5 +54,8 @@ internal fun TimelineItemUnknownViewDarkPreview() =
 
 @Composable
 private fun ContentToPreview() {
-    TimelineItemUnknownView(TimelineItemUnknownContent)
+    TimelineItemUnknownView(
+        content = TimelineItemUnknownContent,
+        extraPadding = noExtraPadding
+    )
 }

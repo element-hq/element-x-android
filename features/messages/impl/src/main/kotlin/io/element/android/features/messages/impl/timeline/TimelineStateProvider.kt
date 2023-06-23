@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventSendStat
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlin.random.Random
 
 fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf()) = TimelineState(
@@ -102,6 +103,7 @@ internal fun aTimelineItemEvent(
     sendState: EventSendState = EventSendState.Sent(eventId),
     inReplyTo: InReplyTo? = null,
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
+    timelineItemReactions: TimelineItemReactions = aTimelineItemReactions(isMine = isMine),
 ): TimelineItem.Event {
     return TimelineItem.Event(
         id = eventId.value,
@@ -110,11 +112,7 @@ internal fun aTimelineItemEvent(
         senderId = UserId("@senderId:domain"),
         senderAvatar = AvatarData("@senderId:domain", "sender", size = AvatarSize.TimelineSender),
         content = content,
-        reactionsState = TimelineItemReactions(
-            persistentListOf(
-                AggregatedReaction("👍", "1", isOnMyMessage = isMine)
-            )
-        ),
+        reactionsState = timelineItemReactions,
         sentTime = "12:34",
         isMine = isMine,
         senderDisplayName = "Sender",
@@ -122,6 +120,19 @@ internal fun aTimelineItemEvent(
         sendState = sendState,
         inReplyTo = inReplyTo,
         debugInfo = debugInfo,
+    )
+}
+
+fun aTimelineItemReactions(
+    count: Int = 1,
+    isMine: Boolean = true,
+): TimelineItemReactions {
+    return TimelineItemReactions(
+        reactions = buildList {
+            repeat(count) {
+                add(AggregatedReaction(key = "👍", count = (it + 1).toString(), isOnMyMessage = isMine))
+            }
+        }.toPersistentList()
     )
 }
 

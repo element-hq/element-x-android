@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
+import io.element.android.features.messages.impl.timeline.components.event.noExtraPadding
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
@@ -66,6 +67,7 @@ fun TimelineItemStateEventRow(
                 interactionSource = interactionSource,
                 onClick = onClick,
                 onLongClick = onLongClick,
+                extraPadding = noExtraPadding,
                 modifier = Modifier.defaultTimelineContentPadding()
             )
         }

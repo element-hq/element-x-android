@@ -41,6 +41,7 @@ fun TimelineItemInformativeView(
     text: String,
     iconDescription: String,
     icon: ImageVector,
+    extraPadding: ExtraPadding,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -58,7 +59,7 @@ fun TimelineItemInformativeView(
             fontStyle = FontStyle.Italic,
             color = MaterialTheme.colorScheme.secondary,
             fontSize = 14.sp,
-            text = text + extraPaddingTrick
+            text = text + extraPadding.str
         )
     }
 }
@@ -76,6 +77,7 @@ private fun ContentToPreview() {
     TimelineItemInformativeView(
         text = "Info",
         iconDescription = "",
-        icon = Icons.Default.Delete
+        icon = Icons.Default.Delete,
+        extraPadding = noExtraPadding,
     )
 }
