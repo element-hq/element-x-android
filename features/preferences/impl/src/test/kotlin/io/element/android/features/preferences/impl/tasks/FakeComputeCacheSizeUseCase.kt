@@ -19,7 +19,7 @@ package io.element.android.features.preferences.impl.tasks
 import io.element.android.tests.testutils.simulateLongTask
 
 class FakeComputeCacheSizeUseCase : ComputeCacheSizeUseCase {
-    override suspend fun execute() = simulateLongTask {
+    override suspend fun invoke() = simulateLongTask {
         "O kB"
     }
 }

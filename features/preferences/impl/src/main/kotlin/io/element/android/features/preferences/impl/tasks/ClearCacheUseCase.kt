@@ -33,7 +33,7 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 interface ClearCacheUseCase {
-    suspend fun execute()
+    suspend operator fun invoke()
 }
 
 @ContributesBinding(SessionScope::class)
@@ -44,7 +44,7 @@ class DefaultClearCacheUseCase @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
     private val okHttpClient: Provider<OkHttpClient>,
 ) : ClearCacheUseCase {
-    override suspend fun execute() = withContext(coroutineDispatchers.io) {
+    override suspend fun invoke() = withContext(coroutineDispatchers.io) {
         // Clear Matrix cache
         matrixClient.clearCache()
         // Clear Coil cache
