@@ -101,10 +101,10 @@ fun RoomListTopBar(
 private fun DefaultRoomListTopBar(
     matrixUser: MatrixUser?,
     scrollBehavior: TopAppBarScrollBehavior,
-    modifier: Modifier = Modifier,
     onOpenSettings: () -> Unit,
     onSearchClicked: () -> Unit,
     onMenuActionClicked: (RoomListMenuAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var showMenu by remember { mutableStateOf(false) }
     MediumTopAppBar(

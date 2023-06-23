@@ -133,7 +133,6 @@ fun RoomListView(
 @Composable
 fun RoomListContent(
     state: RoomListState,
-    modifier: Modifier = Modifier,
     onVerifyClicked: () -> Unit,
     onRoomClicked: (RoomId) -> Unit,
     onRoomLongClicked: (RoomListRoomSummary) -> Unit,
@@ -141,6 +140,7 @@ fun RoomListContent(
     onCreateRoomClicked: () -> Unit,
     onInvitesClicked: () -> Unit,
     onMenuActionClicked: (RoomListMenuAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     fun onRoomClicked(room: RoomListRoomSummary) {
         onRoomClicked(room.roomId)
