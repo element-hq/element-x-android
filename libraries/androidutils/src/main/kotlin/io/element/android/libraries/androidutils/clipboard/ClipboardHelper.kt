@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.model.event
-
-import androidx.compose.runtime.Immutable
-
-@Immutable
-sealed interface TimelineItemEventContent {
-    val type: String
-}
+package io.element.android.libraries.androidutils.clipboard
 
 /**
- * Only text based content and states can be copied.
+ * Wrapper class for handling clipboard operations so it can be used in JVM environments.
  */
-fun TimelineItemEventContent.canBeCopied(): Boolean =
-    when (this) {
-        is TimelineItemTextBasedContent,
-        is TimelineItemStateContent,
-        is TimelineItemRedactedContent -> true
-        else -> false
-    }
+interface ClipboardHelper {
+    fun copyPlainText(text: String)
+
+}
