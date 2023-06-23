@@ -20,9 +20,16 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import androidx.core.content.getSystemService
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.SingleIn
+import javax.inject.Inject
 
-class AndroidClipboardHelper(
-    private val context: Context,
+@ContributesBinding(AppScope::class)
+@SingleIn(AppScope::class)
+class AndroidClipboardHelper @Inject constructor(
+    @ApplicationContext private val context: Context,
 ) : ClipboardHelper {
 
     private val clipboardManager = requireNotNull(context.getSystemService<ClipboardManager>())
