@@ -24,7 +24,7 @@ sealed interface TimelineItemEventContent {
 }
 
 /**
- * Only text based content and states can be copied
+ * Only text based content and states can be copied.
  */
 fun TimelineItemEventContent.canBeCopied(): Boolean =
     when (this) {
