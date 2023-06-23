@@ -30,7 +30,7 @@ class AndroidFileSizeFormatter @Inject constructor(
     @ApplicationContext private val context: Context,
     ) : FileSizeFormatter {
     override fun format(fileSize: Long, useShortFormat: Boolean): String {
-        // Since Android O, the system considers that 1ko = 1000 bytes instead of 1024 bytes.
+        // Since Android O, the system considers that 1kB = 1000 bytes instead of 1024 bytes.
         // We want to avoid that.
         val normalizedSize = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
             fileSize
