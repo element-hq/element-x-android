@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.impl.room.roomListStateFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -46,13 +47,10 @@ class RustSyncService(
         }
     }
 
-    override fun syncState(): StateFlow<SyncState> {
-        return roomListService
+    override val syncState: StateFlow<SyncState> =
+        roomListService
             .roomListStateFlow()
             .map(RoomListState::toSyncState)
-            .onEach { syncState ->
-                Timber.d("OnSyncState updated = $syncState")
-            }
-            .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, SyncState.Idle)
-    }
+            .distinctUntilChanged()
+            .stateIn(sessionCoroutineScope, SharingStarted.WhileSubscribed(), SyncState.Idle)
 }
