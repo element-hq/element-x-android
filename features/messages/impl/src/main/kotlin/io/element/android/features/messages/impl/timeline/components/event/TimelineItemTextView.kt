@@ -66,13 +66,6 @@ fun TimelineItemTextView(
             )
             Spacer(Modifier.height(16.dp))
         }
-        HtmlDocument(
-            document = htmlDocument,
-            modifier = modifier,
-            onTextClicked = onTextClicked,
-            onTextLongClicked = onTextLongClicked,
-            interactionSource = interactionSource
-        )
     } else {
         Box(modifier) {
             val linkStyle = SpanStyle(
