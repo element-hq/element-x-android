@@ -30,7 +30,7 @@ interface SyncService {
     fun stopSync()
 
     /**
-     *
+     * Flow of [SyncState]. Will be updated as soon as the current [SyncState] changes.
      */
-    fun syncState(): StateFlow<SyncState>
+    val syncState: StateFlow<SyncState>
 }

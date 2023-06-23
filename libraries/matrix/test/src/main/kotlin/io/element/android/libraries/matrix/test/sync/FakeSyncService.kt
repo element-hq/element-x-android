@@ -23,21 +23,19 @@ import kotlinx.coroutines.flow.StateFlow
 
 class FakeSyncService : SyncService {
 
-    private val syncState = MutableStateFlow(SyncState.Idle)
+    private val syncStateFlow = MutableStateFlow(SyncState.Idle)
 
     fun simulateError() {
-        syncState.value = SyncState.InError
+        syncStateFlow.value = SyncState.InError
     }
 
     override fun startSync() {
-        syncState.value = SyncState.Syncing
+        syncStateFlow.value = SyncState.Syncing
     }
 
     override fun stopSync() {
-        syncState.value = SyncState.Terminated
+        syncStateFlow.value = SyncState.Terminated
     }
 
-    override fun syncState(): StateFlow<SyncState> {
-        return syncState
-    }
+    override val syncState: StateFlow<SyncState> = syncStateFlow
 }

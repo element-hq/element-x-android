@@ -22,7 +22,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import coil.Coil
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.lifecycle.subscribe
@@ -43,6 +45,8 @@ import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.features.analytics.api.AnalyticsEntryPoint
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.invitelist.api.InviteListEntryPoint
+import io.element.android.features.networkmonitor.api.NetworkMonitor
+import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
@@ -59,13 +63,17 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
@@ -81,6 +89,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val inviteListEntryPoint: InviteListEntryPoint,
     private val analyticsService: AnalyticsService,
     private val coroutineScope: CoroutineScope,
+    private val networkMonitor: NetworkMonitor,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BackstackNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
@@ -162,6 +171,27 @@ class LoggedInFlowNode @AssistedInject constructor(
                 loggedInFlowProcessor.stopObserving()
             }
         )
+
+        observeSyncStateAndNetworkStatus()
+    }
+
+    private fun observeSyncStateAndNetworkStatus() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                combine(
+                    syncService.syncState.debounce(100),
+                    networkMonitor.connectivity
+                ) { syncState, networkStatus ->
+                    syncState == SyncState.InError && networkStatus == NetworkStatus.Online
+                }
+                    .distinctUntilChanged()
+                    .collect { restartSync ->
+                        if (restartSync) {
+                            syncService.startSync()
+                        }
+                    }
+            }
+        }
     }
 
     sealed interface NavTarget : Parcelable {
