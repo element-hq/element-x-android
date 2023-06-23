@@ -48,6 +48,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.RoomPrivacyOption
 import io.element.android.libraries.architecture.Async
@@ -65,6 +66,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
 import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.launch
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -75,7 +77,14 @@ fun ConfigureRoomView(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
     onRoomCreated: (RoomId) -> Unit = {},
+    analyticsService: AnalyticsService? = null,
 ) {
+    analyticsService?.let {
+        LaunchedEffect(Unit) {
+            it.screen(MobileScreen(screenName = MobileScreen.ScreenName.CreateRoom))
+        }
+    }
+
     val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
     val itemActionsBottomSheetState = rememberModalBottomSheetState(
