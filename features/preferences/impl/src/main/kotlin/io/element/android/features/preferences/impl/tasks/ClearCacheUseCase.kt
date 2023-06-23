@@ -57,6 +57,6 @@ class DefaultClearCacheUseCase @Inject constructor(
         // Clear app cache
         context.cacheDir.deleteRecursively()
         // Ensure the app is restarted
-        authenticationService.incrementCacheIdx()
+        authenticationService.incrementCacheIndex()
     }
 }

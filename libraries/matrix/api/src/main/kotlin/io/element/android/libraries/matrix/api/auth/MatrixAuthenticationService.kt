@@ -33,8 +33,8 @@ interface MatrixAuthenticationService {
      * Cache index
      */
 
-    fun cacheIdx(): Flow<Int>
-    fun incrementCacheIdx()
+    fun cacheIndex(): Flow<Int>
+    fun incrementCacheIndex()
 
     /*
      * OIDC part.

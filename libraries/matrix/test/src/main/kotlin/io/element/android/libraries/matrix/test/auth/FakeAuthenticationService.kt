@@ -65,14 +65,14 @@ class FakeAuthenticationService : MatrixAuthenticationService {
         loginError?.let { Result.failure(it) } ?: Result.success(A_USER_ID)
     }
 
-    private val cacheIdxFlow = MutableStateFlow(0)
+    private val cacheIndexFlow = MutableStateFlow(0)
 
-    override fun cacheIdx(): Flow<Int> {
-        return cacheIdxFlow
+    override fun cacheIndex(): Flow<Int> {
+        return cacheIndexFlow
     }
 
-    override fun incrementCacheIdx() {
-        cacheIdxFlow.value++
+    override fun incrementCacheIndex() {
+        cacheIndexFlow.value++
     }
 
     override suspend fun getOidcUrl(): Result<OidcDetails> = simulateLongTask {
