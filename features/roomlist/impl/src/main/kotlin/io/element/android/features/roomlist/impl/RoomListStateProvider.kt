@@ -82,6 +82,7 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
             id = "!roomId2:domain",
             roomId = RoomId("!roomId2:domain")
         ),
-        RoomListRoomSummaryPlaceholders.create("!roomId2:domain")
+        RoomListRoomSummaryPlaceholders.create("!roomId2:domain"),
+        RoomListRoomSummaryPlaceholders.create("!roomId3:domain"),
     )
 }
