@@ -37,12 +37,12 @@ internal fun SwitchPreview() {
     ElementThemedPreview {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             var checked by remember { mutableStateOf(false) }
-            Switch(checked = checked, onCheckedChange = { checked != checked })
-            Switch(checked = checked, onCheckedChange = { checked != checked }, thumbContent = {
+            Switch(checked = checked, onCheckedChange = { checked = !checked })
+            Switch(checked = checked, onCheckedChange = { checked = !checked }, thumbContent = {
                 Icon(imageVector = Icons.Outlined.Check, contentDescription = null)
             })
-            Switch(checked = checked, enabled = false, onCheckedChange = { checked != checked })
-            Switch(checked = checked, enabled = false, onCheckedChange = { checked != checked }, thumbContent = {
+            Switch(checked = checked, enabled = false, onCheckedChange = { checked = !checked })
+            Switch(checked = checked, enabled = false, onCheckedChange = { checked = !checked }, thumbContent = {
                 Icon(imageVector = Icons.Outlined.Check, contentDescription = null)
             })
         }
