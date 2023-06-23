@@ -97,6 +97,7 @@ fun CreateRoomRootView(
 
             if (!state.userListState.isSearchActive) {
                 CreateRoomActionButtonsList(
+                    state = state,
                     onNewRoomClicked = onNewRoomClicked,
                     onInvitePeopleClicked = onInviteFriendsClicked,
                 )
@@ -155,6 +156,7 @@ fun CreateRoomRootViewTopBar(
 
 @Composable
 fun CreateRoomActionButtonsList(
+    state: CreateRoomRootState,
     modifier: Modifier = Modifier,
     onNewRoomClicked: () -> Unit = {},
     onInvitePeopleClicked: () -> Unit = {},
@@ -167,7 +169,7 @@ fun CreateRoomActionButtonsList(
         )
         CreateRoomActionButton(
             iconRes = DrawableR.drawable.ic_share,
-            text = stringResource(id = R.string.screen_create_room_action_invite_people),
+            text = stringResource(id = StringR.string.action_invite_friends_to_app, state.applicationName),
             onClick = onInvitePeopleClicked,
         )
     }

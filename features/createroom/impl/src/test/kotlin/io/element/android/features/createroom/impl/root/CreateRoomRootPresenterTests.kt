@@ -27,6 +27,8 @@ import io.element.android.features.createroom.impl.userlist.FakeUserListPresente
 import io.element.android.features.createroom.impl.userlist.UserListDataStore
 import io.element.android.features.createroom.impl.userlist.aUserListState
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -59,6 +61,7 @@ class CreateRoomRootPresenterTests {
             userListDataStore = UserListDataStore(),
             matrixClient = fakeMatrixClient,
             analyticsService = fakeAnalyticsService,
+            buildMeta = aBuildMeta(),
         )
     }
 
@@ -68,7 +71,11 @@ class CreateRoomRootPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState)
+            assertThat(initialState.startDmAction).isInstanceOf(Async.Uninitialized::class.java)
+            assertThat(initialState.applicationName).isEqualTo(aBuildMeta().applicationName)
+            assertThat(initialState.userListState.selectedUsers).isEmpty()
+            assertThat(initialState.userListState.isSearchActive).isFalse()
+            assertThat(initialState.userListState.isMultiSelectionEnabled).isFalse()
         }
     }
 
@@ -176,3 +183,18 @@ class CreateRoomRootPresenterTests {
         }
     }
 }
+
+private fun aBuildMeta() =
+    BuildMeta(
+        buildType = BuildType.DEBUG,
+        isDebuggable = true,
+        applicationId = "",
+        applicationName = "An Application",
+        lowPrivacyLoggingEnabled = true,
+        versionName = "",
+        gitRevision = "",
+        gitBranchName = "",
+        gitRevisionDate = "",
+        flavorDescription = "",
+        flavorShortDescription = "",
+    )
