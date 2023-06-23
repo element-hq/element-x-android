@@ -91,8 +91,8 @@ class RootFlowNode @AssistedInject constructor(
         authenticationService.isLoggedIn()
             .distinctUntilChanged()
             .combine(
-                authenticationService.cacheIdx().onEach {
-                    Timber.v("cacheIdx=$it")
+                authenticationService.cacheIndex().onEach {
+                    Timber.v("cacheIndex=$it")
                     matrixClientsHolder.removeAll()
                 }
             ) { isLoggedIn, cacheIdx -> isLoggedIn to cacheIdx }
@@ -243,9 +243,9 @@ class RootFlowNode @AssistedInject constructor(
     }
 
     private suspend fun attachSession(sessionId: SessionId): LoggedInFlowNode {
-        val cacheIdx = authenticationService.cacheIdx().first()
+        val cacheIndex = authenticationService.cacheIndex().first()
         return attachChild {
-            backstack.newRoot(NavTarget.LoggedInFlow(sessionId, cacheIdx))
+            backstack.newRoot(NavTarget.LoggedInFlow(sessionId, cacheIndex))
         }
     }
 }
