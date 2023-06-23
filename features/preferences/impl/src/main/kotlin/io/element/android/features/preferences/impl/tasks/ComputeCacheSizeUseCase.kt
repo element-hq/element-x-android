@@ -28,7 +28,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 interface ComputeCacheSizeUseCase {
-    suspend fun execute(): String
+    suspend operator fun invoke(): String
 }
 
 @ContributesBinding(SessionScope::class)
@@ -38,7 +38,7 @@ class DefaultComputeCacheSizeUseCase @Inject constructor(
     private val coroutineDispatchers: CoroutineDispatchers,
     private val fileSizeFormatter: FileSizeFormatter,
 ) : ComputeCacheSizeUseCase {
-    override suspend fun execute(): String = withContext(coroutineDispatchers.io) {
+    override suspend fun invoke(): String = withContext(coroutineDispatchers.io) {
         var cumulativeSize = 0L
         cumulativeSize += matrixClient.getCacheSize()
         // - 4096 to not include the size fo the folder

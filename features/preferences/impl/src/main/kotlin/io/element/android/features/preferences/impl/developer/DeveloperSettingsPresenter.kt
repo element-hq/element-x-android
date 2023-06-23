@@ -127,13 +127,13 @@ class DeveloperSettingsPresenter @Inject constructor(
 
     private fun CoroutineScope.computeCacheSize(cacheSize: MutableState<Async<String>>) = launch {
         suspend {
-            computeCacheSizeUseCase.execute()
+            computeCacheSizeUseCase()
         }.execute(cacheSize)
     }
 
     private fun CoroutineScope.clearCache(clearCacheAction: MutableState<Async<Unit>>) = launch {
         suspend {
-            clearCacheUseCase.execute()
+            clearCacheUseCase()
         }.execute(clearCacheAction)
     }
 }

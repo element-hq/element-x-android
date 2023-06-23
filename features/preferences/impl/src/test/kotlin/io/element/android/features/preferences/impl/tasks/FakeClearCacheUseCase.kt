@@ -22,7 +22,7 @@ class FakeClearCacheUseCase : ClearCacheUseCase {
     var executeHasBeenCalled = false
         private set
 
-    override suspend fun execute() = simulateLongTask {
+    override suspend fun invoke() = simulateLongTask {
         executeHasBeenCalled = true
     }
 }
