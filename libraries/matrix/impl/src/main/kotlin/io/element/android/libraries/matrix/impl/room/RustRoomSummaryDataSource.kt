@@ -75,9 +75,9 @@ internal class RustRoomSummaryDataSource(
                 .launchIn(this)
 
             slidingSyncList.state(this)
-                .onEach { slidingSyncState ->
-                    Timber.v("New sliding sync state: $slidingSyncState")
-                    state.value = slidingSyncState
+                .onEach { SlidingSyncListLoadingState ->
+                    Timber.v("New sliding sync state: $SlidingSyncListLoadingState")
+                    state.value = SlidingSyncListLoadingState
                 }.launchIn(this)
         }
 

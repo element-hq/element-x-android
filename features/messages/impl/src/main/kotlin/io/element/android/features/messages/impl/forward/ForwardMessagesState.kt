@@ -14,25 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.api
+package io.element.android.features.messages.impl.forward
 
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.plugin.Plugin
-import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
+import kotlinx.collections.immutable.ImmutableList
 
-interface MessagesEntryPoint : FeatureEntryPoint {
-    fun createNode(
-        parentNode: Node,
-        buildContext: BuildContext,
-        callback: Callback,
-    ): Node
-
-    interface Callback : Plugin {
-        fun onRoomDetailsClicked()
-        fun onUserDataClicked(userId: UserId)
-        fun onForwardedToSingleRoom(roomId: RoomId)
-    }
-}
+data class ForwardMessagesState(
+    val resultState: SearchBarResultState<ImmutableList<RoomSummaryDetails>>,
+    val query: String,
+    val isSearchActive: Boolean,
+    val selectedRooms: ImmutableList<RoomSummaryDetails>,
+    val isForwarding: Boolean,
+    val error: Throwable?,
+    val forwardingSucceeded: ImmutableList<RoomId>?,
+    val eventSink: (ForwardMessagesEvents) -> Unit
+)
