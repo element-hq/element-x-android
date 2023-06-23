@@ -18,10 +18,9 @@ package io.element.android.features.messages.timeline.groups
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.fixtures.aMessageEvent
+import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
-import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.virtual.aTimelineItemDaySeparatorModel
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
@@ -42,7 +41,7 @@ class TimelineItemGrouperTest {
         senderAvatar = anAvatarData(),
         senderDisplayName = "",
         content = TimelineItemStateEventContent(body = "a state event"),
-        reactionsState = TimelineItemReactions(emptyList<AggregatedReaction>().toImmutableList()),
+        reactionsState = aTimelineItemReactions(count = 0),
         sendState = EventSendState.Sent(AN_EVENT_ID),
         inReplyTo = null,
         debugInfo = aTimelineItemDebugInfo(),
