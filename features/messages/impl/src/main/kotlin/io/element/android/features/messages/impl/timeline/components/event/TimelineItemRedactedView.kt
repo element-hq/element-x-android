@@ -30,12 +30,14 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun TimelineItemRedactedView(
     content: TimelineItemRedactedContent,
+    extraPadding: ExtraPadding,
     modifier: Modifier = Modifier
 ) {
     TimelineItemInformativeView(
-        text = stringResource(id = CommonStrings.common_message_removed) + extraPaddingTrick,
+        text = stringResource(id = CommonStrings.common_message_removed),
         iconDescription = stringResource(id = CommonStrings.common_message_removed),
         icon = Icons.Default.Delete,
+        extraPadding = extraPadding,
         modifier = modifier
     )
 }
@@ -52,5 +54,8 @@ internal fun TimelineItemRedactedViewDarkPreview() =
 
 @Composable
 private fun ContentToPreview() {
-    TimelineItemRedactedView(TimelineItemRedactedContent)
+    TimelineItemRedactedView(
+        TimelineItemRedactedContent,
+        extraPadding = noExtraPadding
+    )
 }

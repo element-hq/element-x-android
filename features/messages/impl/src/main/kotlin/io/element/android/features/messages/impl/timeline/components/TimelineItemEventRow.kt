@@ -46,13 +46,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
+import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
+import io.element.android.features.messages.impl.timeline.components.event.toExtraPadding
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
@@ -73,6 +77,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageT
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import org.jsoup.Jsoup
 
 @Composable
 fun TimelineItemEventRow(
@@ -228,6 +233,7 @@ private fun MessageEventBubbleContent(
             interactionSource = interactionSource,
             onClick = onMessageClick,
             onLongClick = onMessageLongClick,
+            extraPadding = event.toExtraPadding(),
             modifier = modifier,
         )
     }
@@ -434,6 +440,47 @@ private fun ContentToPreview() {
                 inReplyToClick = {},
                 onTimestampClicked = {},
             )
+        }
+    }
+}
+
+@Preview
+@Composable
+internal fun TimelineItemEventRowTimestampLightPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) =
+    ElementPreviewLight { ContentTimestampToPreview(event) }
+
+@Preview
+@Composable
+internal fun TimelineItemEventRowTimestampDarkPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) =
+    ElementPreviewDark { ContentTimestampToPreview(event) }
+
+@Composable
+private fun ContentTimestampToPreview(event: TimelineItem.Event) {
+    Column {
+        val oldContent = event.content as TimelineItemTextContent
+        listOf(
+            "Text",
+            "Text longer but displayed on 1 line",
+            "Text which should be rendered on several lines",
+        ).forEach { str ->
+            listOf(false, true).forEach { useDocument ->
+                TimelineItemEventRow(
+                    event = event.copy(
+                        content = oldContent.copy(
+                            body = str,
+                            htmlDocument = if (useDocument) Jsoup.parse(str) else null,
+                        ),
+                        reactionsState = aTimelineItemReactions(count = 0),
+                        senderDisplayName = if (useDocument) "Document case" else "Text case",
+                    ),
+                    isHighlighted = false,
+                    onClick = {},
+                    onLongClick = {},
+                    onUserDataClick = {},
+                    inReplyToClick = {},
+                    onTimestampClicked = {},
+                )
+            }
         }
     }
 }

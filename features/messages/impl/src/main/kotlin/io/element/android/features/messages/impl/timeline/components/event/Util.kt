@@ -16,6 +16,38 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
+import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
+import io.element.android.libraries.ui.strings.R
+
 // Allow to not overlap the timestamp with the text, in the message bubble.
 // Compute the size of the worst case.
-val extraPaddingTrick: String = " ".repeat(" (edited) 88:88 X ".length)
+data class ExtraPadding(val str: String)
+
+val noExtraPadding = ExtraPadding("")
+
+/**
+ * See [io.element.android.features.messages.impl.timeline.components.TimelineEventTimestampView] for the related View.
+ * And https://www.figma.com/file/0MMNu7cTOzLOlWb7ctTkv3/Element-X?node-id=1819%253A99506 for the design.
+ */
+@Composable
+fun TimelineItem.Event.toExtraPadding(): ExtraPadding {
+    val formattedTime = sentTime
+    val hasMessageSendingFailed = sendState is EventSendState.SendingFailed
+    val isMessageEdited = (content as? TimelineItemTextBasedContent)?.isEdited.orFalse()
+
+    var strLen = 2
+    if (isMessageEdited) {
+        strLen += stringResource(id = R.string.common_edited_suffix).length + 2
+    }
+    strLen += formattedTime.length
+    if (hasMessageSendingFailed) {
+        strLen += 3
+    }
+    // A space and a few unbreakable spaces
+    return ExtraPadding(" " + "\u00A0".repeat(strLen))
+}
