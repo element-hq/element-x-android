@@ -22,11 +22,11 @@ import android.content.Context
 import coil.Coil
 import coil.annotation.ExperimentalCoilApi
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.preferences.impl.DefaultCacheService
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import javax.inject.Inject
@@ -41,7 +41,7 @@ class DefaultClearCacheUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
     private val matrixClient: MatrixClient,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val authenticationService: MatrixAuthenticationService,
+    private val defaultCacheIndexProvider: DefaultCacheService,
     private val okHttpClient: Provider<OkHttpClient>,
 ) : ClearCacheUseCase {
     override suspend fun invoke() = withContext(coroutineDispatchers.io) {
@@ -57,6 +57,6 @@ class DefaultClearCacheUseCase @Inject constructor(
         // Clear app cache
         context.cacheDir.deleteRecursively()
         // Ensure the app is restarted
-        authenticationService.incrementCacheIndex()
+        defaultCacheIndexProvider.incrementCacheIndex()
     }
 }
