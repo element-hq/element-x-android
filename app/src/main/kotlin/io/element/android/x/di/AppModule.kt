@@ -23,6 +23,8 @@ import androidx.preference.PreferenceManager
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import io.element.android.libraries.androidutils.clipboard.AndroidClipboardHelper
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
@@ -106,5 +108,11 @@ object AppModule {
     @SingleIn(AppScope::class)
     fun provideSnackbarDispatcher(): SnackbarDispatcher {
         return SnackbarDispatcher()
+    }
+
+    @Provides
+    @SingleIn(AppScope::class)
+    fun provideClipboardHelper(@ApplicationContext context: Context): ClipboardHelper {
+        return AndroidClipboardHelper(context)
     }
 }
