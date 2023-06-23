@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl
 
+import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -25,6 +26,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -47,11 +51,13 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.handleSnackbarMessage
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -63,9 +69,8 @@ import io.element.android.libraries.textcomposer.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
-class MessagesPresenter @Inject constructor(
+class MessagesPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
     private val composerPresenter: MessageComposerPresenter,
     private val timelinePresenter: TimelinePresenter,
@@ -76,7 +81,14 @@ class MessagesPresenter @Inject constructor(
     private val snackbarDispatcher: SnackbarDispatcher,
     private val messageSummaryFormatter: MessageSummaryFormatter,
     private val dispatchers: CoroutineDispatchers,
+    private val clipboardHelper: ClipboardHelper,
+    @Assisted private val navigator: MessagesNavigator,
 ) : Presenter<MessagesState> {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(navigator: MessagesNavigator): MessagesPresenter
+    }
 
     @Composable
     override fun present(): MessagesState {
@@ -146,13 +158,13 @@ class MessagesPresenter @Inject constructor(
         composerState: MessageComposerState,
     ) = launch {
         when (action) {
-            TimelineItemAction.Copy -> notImplementedYet()
-            TimelineItemAction.Forward -> notImplementedYet()
+            TimelineItemAction.Copy -> handleCopyContents(targetEvent)
             TimelineItemAction.Redact -> handleActionRedact(targetEvent)
             TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState)
             TimelineItemAction.Reply -> handleActionReply(targetEvent, composerState)
-            TimelineItemAction.Developer -> Unit // Handled at UI level
-            TimelineItemAction.ReportContent -> notImplementedYet()
+            TimelineItemAction.Developer -> handleShowDebugInfoAction(targetEvent)
+            TimelineItemAction.Forward -> handleForwardAction(targetEvent)
+            TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
         }
     }
 
@@ -221,5 +233,34 @@ class MessagesPresenter @Inject constructor(
         composerState.eventSink(
             MessageComposerEvents.SetMode(composerMode)
         )
+    }
+
+    private fun handleShowDebugInfoAction(event: TimelineItem.Event) {
+        if (event.eventId == null) return
+        navigator.onShowEventDebugInfoClicked(event.eventId, event.debugInfo)
+    }
+
+    private fun handleForwardAction(event: TimelineItem.Event) {
+        if (event.eventId == null) return
+        navigator.onForwardEventClicked(event.eventId)
+    }
+
+    private fun handleReportAction(event: TimelineItem.Event) {
+        if (event.eventId == null) return
+        navigator.onReportContentClicked(event.eventId, event.senderId)
+    }
+
+    private suspend fun handleCopyContents(event: TimelineItem.Event) {
+        val content = when (event.content) {
+            is TimelineItemTextBasedContent -> event.content.body
+            is TimelineItemStateContent -> event.content.body
+            else -> return
+        }
+
+        clipboardHelper.copyPlainText(content)
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            snackbarDispatcher.post(SnackbarMessage(R.string.screen_room_message_copied))
+        }
     }
 }

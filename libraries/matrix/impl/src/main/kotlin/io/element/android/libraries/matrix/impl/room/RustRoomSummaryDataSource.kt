@@ -30,13 +30,13 @@ import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 import org.matrix.rustcomponents.sdk.RoomListEntry
 import org.matrix.rustcomponents.sdk.RoomListException
 import org.matrix.rustcomponents.sdk.RoomListInput
-import org.matrix.rustcomponents.sdk.RoomListInterface
 import org.matrix.rustcomponents.sdk.RoomListRange
+import org.matrix.rustcomponents.sdk.RoomListService
 import timber.log.Timber
 import java.util.UUID
 
 internal class RustRoomSummaryDataSource(
-    private val roomListService: RoomListInterface,
+    private val roomListService: RoomListService,
     private val sessionCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
@@ -48,7 +48,7 @@ internal class RustRoomSummaryDataSource(
 
     fun init() {
         sessionCoroutineScope.launch(coroutineDispatchers.computation) {
-            roomListService.roomListEntriesUpdateFlow { roomListEntries ->
+            roomListService.allRooms().entriesFlow { roomListEntries ->
                 roomList.value = roomListEntries.map(::buildSummaryForRoomListEntry)
             }.onEach { update ->
                 roomList.getAndUpdate {

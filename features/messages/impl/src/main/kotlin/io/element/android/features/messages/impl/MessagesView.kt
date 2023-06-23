@@ -33,8 +33,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
@@ -69,18 +67,15 @@ import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import kotlinx.collections.immutable.ImmutableList
 import timber.log.Timber
@@ -95,7 +90,6 @@ fun MessagesView(
     onEventClicked: (event: TimelineItem.Event) -> Unit,
     onUserDataClicked: (UserId) -> Unit,
     onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
-    onItemDebugInfoClicked: (EventId, TimelineItemDebugInfo) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LogCompositions(tag = "MessagesScreen", msg = "Root")
@@ -121,12 +115,7 @@ fun MessagesView(
     }
 
     fun onActionSelected(action: TimelineItemAction, event: TimelineItem.Event) {
-        when (action) {
-            is TimelineItemAction.Developer -> if (event.eventId != null) {
-                onItemDebugInfoClicked(event.eventId, event.debugInfo)
-            }
-            else -> state.eventSink(MessagesEvents.HandleAction(action, event))
-        }
+        state.eventSink(MessagesEvents.HandleAction(action, event))
     }
 
     fun onEmojiReactionClicked(emoji: String, event: TimelineItem.Event) {
@@ -261,12 +250,7 @@ fun MessagesViewTopBar(
     TopAppBar(
         modifier = modifier,
         navigationIcon = {
-            IconButton(onClick = onBackPressed) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Back"
-                )
-            }
+            BackButton(onClick = onBackPressed)
         },
         title = {
             Row(
@@ -331,6 +315,5 @@ private fun ContentToPreview(state: MessagesState) {
         onEventClicked = {},
         onPreviewAttachments = {},
         onUserDataClicked = {},
-        onItemDebugInfoClicked = { _, _ -> },
     )
 }

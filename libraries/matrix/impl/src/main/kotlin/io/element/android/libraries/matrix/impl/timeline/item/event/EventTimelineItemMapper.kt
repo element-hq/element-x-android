@@ -70,6 +70,7 @@ fun RustEventSendState?.map(): EventSendState? {
         RustEventSendState.NotSentYet -> EventSendState.NotSentYet
         is RustEventSendState.SendingFailed -> EventSendState.SendingFailed(error)
         is RustEventSendState.Sent -> EventSendState.Sent(EventId(eventId))
+        RustEventSendState.Cancelled -> EventSendState.Canceled
     }
 }
 

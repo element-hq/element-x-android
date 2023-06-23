@@ -18,20 +18,18 @@ package io.element.android.libraries.matrix.impl.sync
 
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
-import io.element.android.libraries.matrix.impl.room.roomListStateFlow
+import io.element.android.libraries.matrix.impl.room.stateFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
-import org.matrix.rustcomponents.sdk.RoomList
-import org.matrix.rustcomponents.sdk.RoomListState
-import timber.log.Timber
+import org.matrix.rustcomponents.sdk.RoomListService
+import org.matrix.rustcomponents.sdk.RoomListServiceState
 
 class RustSyncService(
-    private val roomListService: RoomList,
+    private val roomListService: RoomListService,
     private val sessionCoroutineScope: CoroutineScope
 ) : SyncService {
 
@@ -49,8 +47,8 @@ class RustSyncService(
 
     override val syncState: StateFlow<SyncState> =
         roomListService
-            .roomListStateFlow()
-            .map(RoomListState::toSyncState)
+            .stateFlow()
+            .map(RoomListServiceState::toSyncState)
             .distinctUntilChanged()
             .stateIn(sessionCoroutineScope, SharingStarted.WhileSubscribed(), SyncState.Idle)
 }

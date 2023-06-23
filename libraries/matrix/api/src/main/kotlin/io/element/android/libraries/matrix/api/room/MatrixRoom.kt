@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.io.Closeable
@@ -86,6 +87,8 @@ interface MatrixRoom : Closeable {
 
     suspend fun sendReaction(emoji: String, eventId: EventId): Result<Unit>
 
+    suspend fun forwardEvent(eventId: EventId, rooms: List<RoomId>): Result<Unit>
+
     suspend fun retrySendMessage(transactionId: String): Result<Unit>
 
     suspend fun cancelSend(transactionId: String): Result<Unit>
@@ -111,4 +114,6 @@ interface MatrixRoom : Closeable {
     suspend fun setName(name: String): Result<Unit>
 
     suspend fun setTopic(topic: String): Result<Unit>
+
+    suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit>
 }

@@ -19,6 +19,7 @@ package io.element.android.libraries.designsystem.theme.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomSheetDefaults
@@ -52,6 +53,7 @@ fun ModalBottomSheet(
     tonalElevation: Dp = BottomSheetDefaults.Elevation,
     scrimColor: Color = BottomSheetDefaults.ScrimColor,
     dragHandle: @Composable (() -> Unit)? = { BottomSheetDefaults.DragHandle() },
+    windowInsets: WindowInsets = BottomSheetDefaults.windowInsets,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     androidx.compose.material3.ModalBottomSheet(
@@ -64,6 +66,7 @@ fun ModalBottomSheet(
         tonalElevation = tonalElevation,
         scrimColor = scrimColor,
         dragHandle = dragHandle,
+        windowInsets = windowInsets,
         content = content,
     )
 }

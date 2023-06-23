@@ -69,7 +69,8 @@ class MediaViewerPresenterTest {
     fun `present - check all actions `() = runTest {
         val mediaLoader = FakeMediaLoader()
         val mediaActions = FakeLocalMediaActions()
-        val presenter = aMediaViewerPresenter(mediaLoader, mediaActions)
+        val snackbarDispatcher = SnackbarDispatcher()
+        val presenter = aMediaViewerPresenter(mediaLoader, mediaActions, snackbarDispatcher)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -90,26 +91,24 @@ class MediaViewerPresenterTest {
             state.eventSink(MediaViewerEvents.SaveOnDisk)
             state = awaitItem()
             assertThat(state.snackbarMessage).isNotNull()
-            state = awaitItem()
-            assertThat(state.snackbarMessage).isNull()
+            snackbarDispatcher.clear()
+            assertThat(awaitItem().snackbarMessage).isNull()
 
             // Check failures
             mediaActions.shouldFail = true
             state.eventSink(MediaViewerEvents.OpenWith)
             state = awaitItem()
             assertThat(state.snackbarMessage).isNotNull()
-            state = awaitItem()
-            assertThat(state.snackbarMessage).isNull()
+            snackbarDispatcher.clear()
+            assertThat(awaitItem().snackbarMessage).isNull()
             state.eventSink(MediaViewerEvents.Share)
             state = awaitItem()
             assertThat(state.snackbarMessage).isNotNull()
-            state = awaitItem()
-            assertThat(state.snackbarMessage).isNull()
+            snackbarDispatcher.clear()
+            assertThat(awaitItem().snackbarMessage).isNull()
             state.eventSink(MediaViewerEvents.SaveOnDisk)
             state = awaitItem()
             assertThat(state.snackbarMessage).isNotNull()
-            state = awaitItem()
-            assertThat(state.snackbarMessage).isNull()
         }
     }
 
@@ -145,6 +144,7 @@ class MediaViewerPresenterTest {
     private fun aMediaViewerPresenter(
         mediaLoader: FakeMediaLoader,
         localMediaActions: FakeLocalMediaActions,
+        snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
     ): MediaViewerPresenter {
         return MediaViewerPresenter(
             inputs = MediaViewerNode.Inputs(
@@ -155,7 +155,7 @@ class MediaViewerPresenterTest {
             localMediaFactory = localMediaFactory,
             mediaLoader = mediaLoader,
             localMediaActions = localMediaActions,
-            snackbarDispatcher = SnackbarDispatcher()
+            snackbarDispatcher = snackbarDispatcher,
         )
     }
 }

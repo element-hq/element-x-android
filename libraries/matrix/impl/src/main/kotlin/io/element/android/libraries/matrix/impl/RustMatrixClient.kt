@@ -40,6 +40,7 @@ import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
+import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.RustRoomSummaryDataSource
 import io.element.android.libraries.matrix.impl.room.roomOrNull
@@ -79,7 +80,7 @@ class RustMatrixClient constructor(
 
     override val sessionId: UserId = UserId(client.userId())
 
-    private val roomListService = client.roomList()
+    private val roomListService = client.roomListService()
     private val sessionCoroutineScope = childScopeOf(appCoroutineScope, dispatchers.main, "Session-${sessionId}")
     private val verificationService = RustSessionVerificationService()
     private val syncService = RustSyncService(roomListService, sessionCoroutineScope)
@@ -112,6 +113,8 @@ class RustMatrixClient constructor(
 
     private val roomMembershipObserver = RoomMembershipObserver()
 
+    private val roomContentForwarder = RoomContentForwarder(roomListService)
+
     init {
         client.setDelegate(clientDelegate)
         syncService.syncState
@@ -132,7 +135,8 @@ class RustMatrixClient constructor(
             innerRoom = fullRoom,
             sessionCoroutineScope = sessionCoroutineScope,
             coroutineDispatchers = dispatchers,
-            systemClock = clock
+            systemClock = clock,
+            roomContentForwarder = roomContentForwarder,
         )
     }
 

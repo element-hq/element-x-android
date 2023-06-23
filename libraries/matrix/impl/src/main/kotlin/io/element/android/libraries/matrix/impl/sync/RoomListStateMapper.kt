@@ -17,14 +17,14 @@
 package io.element.android.libraries.matrix.impl.sync
 
 import io.element.android.libraries.matrix.api.sync.SyncState
-import org.matrix.rustcomponents.sdk.RoomListState
+import org.matrix.rustcomponents.sdk.RoomListServiceState
 
-internal fun RoomListState.toSyncState(): SyncState {
+internal fun RoomListServiceState.toSyncState(): SyncState {
     return when (this) {
-        RoomListState.INIT,
-        RoomListState.SETTING_UP -> SyncState.Idle
-        RoomListState.RUNNING -> SyncState.Syncing
-        RoomListState.ERROR -> SyncState.InError
-        RoomListState.TERMINATED -> SyncState.Terminated
+        RoomListServiceState.INIT,
+        RoomListServiceState.SETTING_UP -> SyncState.Idle
+        RoomListServiceState.RUNNING -> SyncState.Syncing
+        RoomListServiceState.ERROR -> SyncState.InError
+        RoomListServiceState.TERMINATED -> SyncState.Terminated
     }
 }
