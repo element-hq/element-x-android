@@ -253,13 +253,13 @@ private fun MessageEventBubbleContent(
                 )
             }
         } else {
-            Column(modifier) {
-                ContentView(modifier = contentModifier.padding(start = 12.dp, end = 12.dp, top = 8.dp))
+            Box(modifier) {
+                ContentView(modifier = contentModifier.padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp))
                 TimelineEventTimestampView(
                     event = event,
                     onClick = onTimestampClicked,
                     modifier = timestampModifier
-                        .align(Alignment.End)
+                        .align(Alignment.BottomEnd)
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 )
             }

@@ -33,7 +33,7 @@ fun TimelineItemRedactedView(
     modifier: Modifier = Modifier
 ) {
     TimelineItemInformativeView(
-        text = stringResource(id = CommonStrings.common_message_removed),
+        text = stringResource(id = CommonStrings.common_message_removed) + extraPaddingTrick,
         iconDescription = stringResource(id = CommonStrings.common_message_removed),
         icon = Icons.Default.Delete,
         modifier = modifier

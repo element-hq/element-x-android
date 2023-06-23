@@ -37,6 +37,7 @@ import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.theme.LinkColor
+import io.element.android.libraries.designsystem.text.toAnnotatedString
 
 @Composable
 fun TimelineItemTextView(
@@ -60,7 +61,7 @@ fun TimelineItemTextView(
             val linkStyle = SpanStyle(
                 color = LinkColor,
             )
-            val styledText = remember(content.body) { content.body.linkify(linkStyle) }
+            val styledText = remember(content.body) { content.body.linkify(linkStyle) + extraPaddingTrick.toAnnotatedString() }
             ClickableLinkText(
                 text = styledText,
                 linkAnnotationTag = "URL",

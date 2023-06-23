@@ -58,7 +58,7 @@ fun TimelineItemInformativeView(
             fontStyle = FontStyle.Italic,
             color = MaterialTheme.colorScheme.secondary,
             fontSize = 14.sp,
-            text = text
+            text = text + extraPaddingTrick
         )
     }
 }
