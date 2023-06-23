@@ -20,12 +20,14 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
 import io.element.android.libraries.core.meta.BuildMeta
@@ -34,6 +36,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.ui.strings.R
+import io.element.android.services.analytics.api.AnalyticsService
 import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
@@ -43,6 +46,7 @@ class CreateRoomRootNode @AssistedInject constructor(
     private val presenter: CreateRoomRootPresenter,
     private val matrixClient: MatrixClient,
     private val buildMeta: BuildMeta,
+    private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
 
     interface Callback : Plugin {
@@ -60,6 +64,12 @@ class CreateRoomRootNode @AssistedInject constructor(
         }
     }
 
+    init {
+        lifecycle.subscribe(
+            onResume = { analyticsService.screen(MobileScreen(screenName = MobileScreen.ScreenName.StartChat)) }
+        )
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -70,7 +80,7 @@ class CreateRoomRootNode @AssistedInject constructor(
             onClosePressed = this::navigateUp,
             onNewRoomClicked = callback::onCreateNewRoom,
             onOpenDM = callback::onStartChatSuccess,
-            onInviteFriendsClicked = { invitePeople(context) }
+            onInviteFriendsClicked = { invitePeople(context) },
         )
     }
 
