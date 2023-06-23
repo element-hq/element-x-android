@@ -63,7 +63,6 @@ import io.element.android.libraries.designsystem.theme.roomListUnreadIndicator
 
 internal val minHeight = 84.dp
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun RoomSummaryRow(
     room: RoomListRoomSummary,
@@ -72,9 +71,27 @@ internal fun RoomSummaryRow(
     modifier: Modifier = Modifier,
 ) {
     if (room.isPlaceholder) {
-        RoomSummaryPlaceholderRow(modifier)
-        return
+        RoomSummaryPlaceholderRow(
+            modifier = modifier,
+        )
+    } else {
+        RoomSummaryRealRow(
+            room = room,
+            onClick = onClick,
+            onLongClick = onLongClick,
+            modifier = modifier
+        )
     }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+internal fun RoomSummaryRealRow(
+    room: RoomListRoomSummary,
+    onClick: (RoomListRoomSummary) -> Unit,
+    onLongClick: (RoomListRoomSummary) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val clickModifier = Modifier.combinedClickable(
         onClick = { onClick(room) },
         onLongClick = { onLongClick(room) },
