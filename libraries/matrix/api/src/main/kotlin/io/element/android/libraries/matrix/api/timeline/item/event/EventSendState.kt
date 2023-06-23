@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 
 sealed interface EventSendState {
     object NotSentYet : EventSendState
+    object Canceled : EventSendState
 
     data class SendingFailed(
         val error: String
