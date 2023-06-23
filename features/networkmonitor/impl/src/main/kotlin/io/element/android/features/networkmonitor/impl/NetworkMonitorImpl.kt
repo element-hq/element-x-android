@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(FlowPreview::class)
+
 package io.element.android.features.networkmonitor.impl
 
 import android.content.Context
@@ -27,62 +29,69 @@ import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.channels.trySendBlocking
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
 import javax.inject.Inject
 
 @ContributesBinding(scope = AppScope::class)
 @SingleIn(AppScope::class)
 class NetworkMonitorImpl @Inject constructor(
-    @ApplicationContext context: Context
+    @ApplicationContext context: Context,
+    appCoroutineScope: CoroutineScope,
 ) : NetworkMonitor {
 
     private val connectivityManager: ConnectivityManager = context.getSystemService(ConnectivityManager::class.java)
 
-    private val callback = object : ConnectivityManager.NetworkCallback() {
-        override fun onAvailable(network: Network) {
-            _connectivity.value = connectivityManager.currentConnectionStatus()
-            Timber.v("Connectivity status (available): ${connectivityManager.currentConnectionStatus()}")
+    override val connectivity: StateFlow<NetworkStatus> = callbackFlow {
+
+        /**
+         *  Assume there is no network available as soon as onLost is called.
+         *  Reading activeNetwork synchronously from the callback is not safe.
+         *  If there is an other active network we'll get some callback in onCapabilitiesChanged.
+         *  Debounce the result to avoid quick offline<->online changes.
+         */
+        val callback = object : ConnectivityManager.NetworkCallback() {
+            override fun onLost(network: Network) {
+                trySendBlocking(NetworkStatus.Offline)
+            }
+
+            override fun onCapabilitiesChanged(
+                network: Network,
+                networkCapabilities: NetworkCapabilities
+            ) {
+                trySendBlocking(networkCapabilities.getNetworkStatus())
+            }
         }
-
-        override fun onLost(network: Network) {
-            _connectivity.value = connectivityManager.currentConnectionStatus()
-            Timber.v("Connectivity status (lost): ${connectivityManager.currentConnectionStatus()}")
-        }
-
-        override fun onCapabilitiesChanged(
-            network: Network,
-            networkCapabilities: NetworkCapabilities
-        ) {
-            _connectivity.value = connectivityManager.currentConnectionStatus()
-            Timber.v("Connectivity status (changed): ${connectivityManager.currentConnectionStatus()}")
-        }
-    }
-
-    private val _connectivity = MutableStateFlow(NetworkStatus.Online)
-    override val connectivity: StateFlow<NetworkStatus> = _connectivity
-
-    init {
-        listenToConnectionChanges()
-    }
-
-    private fun listenToConnectionChanges() {
+        trySendBlocking(connectivityManager.activeNetworkStatus())
         val request = NetworkRequest.Builder()
-//            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-//            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
             .build()
         connectivityManager.registerNetworkCallback(request, callback)
+        Timber.d("Subscribe")
+        awaitClose {
+            Timber.d("Unsubscribe")
+            connectivityManager.unregisterNetworkCallback(callback)
+        }
+    }
+        .debounce(300)
+        .stateIn(appCoroutineScope, SharingStarted.WhileSubscribed(), connectivityManager.activeNetworkStatus())
 
-        _connectivity.tryEmit(connectivityManager.currentConnectionStatus())
+    private fun ConnectivityManager.activeNetworkStatus(): NetworkStatus {
+        return activeNetwork?.let {
+            getNetworkCapabilities(it)?.getNetworkStatus()
+        } ?: NetworkStatus.Offline
     }
 
-    private fun ConnectivityManager.currentConnectionStatus(): NetworkStatus {
-        val hasInternet = activeNetwork?.let(::getNetworkCapabilities)
-            ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            ?: false
+    private fun NetworkCapabilities.getNetworkStatus(): NetworkStatus {
+        val hasInternet = hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
         return if (hasInternet) {
             NetworkStatus.Online
         } else {
