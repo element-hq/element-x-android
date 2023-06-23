@@ -21,6 +21,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemReac
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
@@ -43,7 +44,7 @@ internal fun aMessageEvent(
     eventId = eventId,
     senderId = A_USER_ID,
     senderDisplayName = A_USER_NAME,
-    senderAvatar = AvatarData(A_USER_ID.value, A_USER_NAME),
+    senderAvatar = AvatarData(A_USER_ID.value, A_USER_NAME, size = AvatarSize.TimelineSender),
     content = content,
     sentTime = "",
     isMine = isMine,
