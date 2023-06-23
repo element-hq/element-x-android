@@ -55,6 +55,7 @@ import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomSubscription
 import org.matrix.rustcomponents.sdk.genTransactionId
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
+import timber.log.Timber
 import java.io.File
 
 class RustMatrixRoom(
@@ -64,6 +65,7 @@ class RustMatrixRoom(
     sessionCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val systemClock: SystemClock,
+    private val roomContentForwarder: RoomContentForwarder,
 ) : MatrixRoom {
 
     override val roomId = RoomId(innerRoom.id())
@@ -307,6 +309,14 @@ class RustMatrixRoom(
         }
     }
 
+    override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            roomContentForwarder.forward(fromRoom = innerRoom, eventId = eventId, toRoomIds = roomIds)
+        }.onFailure {
+            Timber.e(it)
+        }
+    }
+
     override suspend fun retrySendMessage(transactionId: String): Result<Unit> =
         withContext(coroutineDispatchers.io) {
             runCatching {
@@ -350,9 +360,19 @@ class RustMatrixRoom(
             }
         }
 
+
     private suspend fun fetchMembers() = withContext(coroutineDispatchers.io) {
         runCatching {
             innerRoom.fetchMembers()
+        }
+    }
+
+    override suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            innerRoom.reportContent(eventId = eventId.value, score = null, reason = reason)
+            if (blockUserId != null) {
+                innerRoom.ignoreUser(blockUserId.value)
+            }
         }
     }
 }

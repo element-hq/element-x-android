@@ -30,7 +30,7 @@ interface AnalyticsProvider: AnalyticsTracker, ErrorTracker {
      */
     val name: String
 
-    suspend fun init()
+    fun init()
 
     fun stop()
 }

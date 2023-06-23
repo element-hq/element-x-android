@@ -32,17 +32,21 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
+import io.element.android.features.messages.impl.forward.ForwardMessagesNode
 import io.element.android.features.messages.impl.media.local.MediaInfo
 import io.element.android.features.messages.impl.media.viewer.MediaViewerNode
+import io.element.android.features.messages.impl.report.ReportMessageNode
 import io.element.android.features.messages.impl.timeline.debug.EventDebugInfoNode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.libraries.architecture.BackstackNode
+import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
@@ -78,6 +82,12 @@ class MessagesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class EventDebugInfo(val eventId: EventId, val debugInfo: TimelineItemDebugInfo) : NavTarget
+
+        @Parcelize
+        data class ForwardEvent(val eventId: EventId) : NavTarget
+
+        @Parcelize
+        data class ReportMessage(val eventId: EventId, val senderId: UserId) : NavTarget
     }
 
     private val callback = plugins<MessagesEntryPoint.Callback>().firstOrNull()
@@ -105,6 +115,14 @@ class MessagesFlowNode @AssistedInject constructor(
                     override fun onShowEventDebugInfoClicked(eventId: EventId, debugInfo: TimelineItemDebugInfo) {
                         backstack.push(NavTarget.EventDebugInfo(eventId, debugInfo))
                     }
+
+                    override fun onForwardEventClicked(eventId: EventId) {
+                        backstack.push(NavTarget.ForwardEvent(eventId))
+                    }
+
+                    override fun onReportMessage(eventId: EventId, senderId: UserId) {
+                        backstack.push(NavTarget.ReportMessage(eventId, senderId))
+                    }
                 }
                 createNode<MessagesNode>(buildContext, listOf(callback))
             }
@@ -123,6 +141,19 @@ class MessagesFlowNode @AssistedInject constructor(
             is NavTarget.EventDebugInfo -> {
                 val inputs = EventDebugInfoNode.Inputs(navTarget.eventId, navTarget.debugInfo)
                 createNode<EventDebugInfoNode>(buildContext, listOf(inputs))
+            }
+            is NavTarget.ForwardEvent -> {
+                val inputs = ForwardMessagesNode.Inputs(navTarget.eventId)
+                val callback = object : ForwardMessagesNode.Callback {
+                    override fun onForwardedToSingleRoom(roomId: RoomId) {
+                        this@MessagesFlowNode.callback?.onForwardedToSingleRoom(roomId)
+                    }
+                }
+                createNode<ForwardMessagesNode>(buildContext, listOf(inputs, callback))
+            }
+            is NavTarget.ReportMessage -> {
+                val inputs = ReportMessageNode.Inputs(navTarget.eventId, navTarget.senderId)
+                createNode<ReportMessageNode>(buildContext, listOf(inputs))
             }
         }
     }
@@ -179,6 +210,7 @@ class MessagesFlowNode @AssistedInject constructor(
         Children(
             navModel = backstack,
             modifier = modifier,
+            transitionHandler = rememberDefaultTransitionHandler(),
         )
     }
 }

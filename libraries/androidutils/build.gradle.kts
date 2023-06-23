@@ -16,18 +16,28 @@
  */
 plugins {
     id("io.element.android-library")
+    alias(libs.plugins.anvil)
 }
 
 android {
     namespace = "io.element.android.libraries.androidutils"
 }
 
+anvil {
+    generateDaggerFactories.set(true)
+}
+
 dependencies {
+    anvil(projects.anvilcodegen)
+    implementation(projects.anvilannotations)
+    implementation(projects.libraries.di)
+
+    implementation(projects.libraries.core)
+    implementation(libs.dagger)
     implementation(libs.timber)
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.activity.activity)
     implementation(libs.androidx.exifinterface)
     implementation(libs.androidx.security.crypto)
     implementation(libs.androidx.browser)
-    implementation(projects.libraries.core)
 }

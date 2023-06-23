@@ -34,10 +34,12 @@ import io.element.android.features.messages.impl.timeline.components.customreact
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.features.messages.utils.messagesummary.FakeMessageSummaryFormatter
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
+import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
@@ -100,7 +102,8 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action forward`() = runTest {
-        val presenter = createMessagePresenter()
+        val navigator = FakeMessagesNavigator()
+        val presenter = createMessagePresenter(navigator = navigator)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -108,19 +111,23 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Forward, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(navigator.onForwardEventClickedCount).isEqualTo(1)
         }
     }
 
     @Test
     fun `present - handle action copy`() = runTest {
-        val presenter = createMessagePresenter()
+        val clipboardHelper = FakeClipboardHelper()
+        val event = aMessageEvent()
+        val presenter = createMessagePresenter(clipboardHelper = clipboardHelper)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Copy, aMessageEvent()))
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Copy, event))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(clipboardHelper.clipboardContents).isEqualTo((event.content as TimelineItemTextContent).body)
         }
     }
 
@@ -282,7 +289,8 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action report content`() = runTest {
-        val presenter = createMessagePresenter()
+        val navigator = FakeMessagesNavigator()
+        val presenter = createMessagePresenter(navigator = navigator)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -290,6 +298,7 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.ReportContent, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(navigator.onReportContentClickedCount).isEqualTo(1)
         }
     }
 
@@ -308,7 +317,8 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action show developer info`() = runTest {
-        val presenter = createMessagePresenter()
+        val navigator = FakeMessagesNavigator()
+        val presenter = createMessagePresenter(navigator = navigator)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -316,6 +326,7 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Developer, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(navigator.onShowEventDebugInfoClickedCount).isEqualTo(1)
         }
     }
 
@@ -347,7 +358,9 @@ class MessagesPresenterTest {
 
     private fun TestScope.createMessagePresenter(
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
-        matrixRoom: MatrixRoom = FakeMatrixRoom()
+        matrixRoom: MatrixRoom = FakeMatrixRoom(),
+        navigator: FakeMessagesNavigator = FakeMessagesNavigator(),
+        clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
     ): MessagesPresenter {
         val messageComposerPresenter = MessageComposerPresenter(
             appCoroutineScope = this,
@@ -388,6 +401,8 @@ class MessagesPresenterTest {
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),
             messageSummaryFormatter = FakeMessageSummaryFormatter(),
+            navigator = navigator,
+            clipboardHelper = clipboardHelper,
             dispatchers = coroutineDispatchers,
         )
     }

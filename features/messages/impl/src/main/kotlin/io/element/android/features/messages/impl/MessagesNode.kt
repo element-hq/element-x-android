@@ -37,9 +37,10 @@ import kotlinx.collections.immutable.ImmutableList
 class MessagesNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: MessagesPresenter,
-) : Node(buildContext, plugins = plugins) {
+    private val presenterFactory: MessagesPresenter.Factory,
+) : Node(buildContext, plugins = plugins), MessagesNavigator {
 
+    private val presenter = presenterFactory.create(this)
     private val callback = plugins<Callback>().firstOrNull()
 
     interface Callback : Plugin {
@@ -48,6 +49,8 @@ class MessagesNode @AssistedInject constructor(
         fun onPreviewAttachments(attachments: ImmutableList<Attachment>)
         fun onUserDataClicked(userId: UserId)
         fun onShowEventDebugInfoClicked(eventId: EventId, debugInfo: TimelineItemDebugInfo)
+        fun onForwardEventClicked(eventId: EventId)
+        fun onReportMessage(eventId: EventId, senderId: UserId)
     }
 
     private fun onRoomDetailsClicked() {
@@ -65,9 +68,16 @@ class MessagesNode @AssistedInject constructor(
     private fun onUserDataClicked(userId: UserId) {
         callback?.onUserDataClicked(userId)
     }
-
-    private fun onShowEventDebugInfoClicked(eventId: EventId, debugInfo: TimelineItemDebugInfo) {
+    override fun onShowEventDebugInfoClicked(eventId: EventId, debugInfo: TimelineItemDebugInfo) {
         callback?.onShowEventDebugInfoClicked(eventId, debugInfo)
+    }
+
+    override fun onForwardEventClicked(eventId: EventId) {
+        callback?.onForwardEventClicked(eventId)
+    }
+
+    override fun onReportContentClicked(eventId: EventId, senderId: UserId) {
+        callback?.onReportMessage(eventId, senderId)
     }
 
     @Composable
@@ -80,7 +90,6 @@ class MessagesNode @AssistedInject constructor(
             onEventClicked = this::onEventClicked,
             onPreviewAttachments = this::onPreviewAttachments,
             onUserDataClicked = this::onUserDataClicked,
-            onItemDebugInfoClicked = this::onShowEventDebugInfoClicked,
             modifier = modifier,
         )
     }

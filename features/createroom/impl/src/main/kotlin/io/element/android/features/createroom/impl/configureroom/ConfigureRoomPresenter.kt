@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import im.vector.app.features.analytics.plan.CreatedRoom
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.libraries.architecture.Async
@@ -39,6 +40,7 @@ import io.element.android.libraries.matrix.api.createroom.RoomVisibility
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -49,6 +51,7 @@ class ConfigureRoomPresenter @Inject constructor(
     private val matrixClient: MatrixClient,
     private val mediaPickerProvider: PickerProvider,
     private val mediaPreProcessor: MediaPreProcessor,
+    private val analyticsService: AnalyticsService,
 ) : Presenter<ConfigureRoomState> {
 
     @Composable
@@ -124,7 +127,10 @@ class ConfigureRoomPresenter @Inject constructor(
                 avatar = avatarUrl,
             )
             matrixClient.createRoom(params).getOrThrow()
-                .also { dataStore.clearCachedData() }
+                .also {
+                    dataStore.clearCachedData()
+                    analyticsService.capture(CreatedRoom(isDM = false))
+                }
         }.execute(createRoomAction)
     }
 
