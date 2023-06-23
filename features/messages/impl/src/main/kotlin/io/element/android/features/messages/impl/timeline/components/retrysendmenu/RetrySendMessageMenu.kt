@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -129,7 +130,7 @@ private fun ColumnScope.RetrySendMenuContents(
         headlineContent = {
             Text(stringResource(R.string.screen_room_retry_send_menu_remove_action))
         },
-        colors = ListItemDefaults.colors(headlineColor = LocalColors.current.textActionCritical),
+        colors = ListItemDefaults.colors(headlineColor = MaterialTheme.colorScheme.error),
         modifier = Modifier.clickable {
             coroutineScope.launch {
                 sheetState.hide()
