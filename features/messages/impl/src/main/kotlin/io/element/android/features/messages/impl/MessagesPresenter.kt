@@ -161,7 +161,7 @@ class MessagesPresenter @AssistedInject constructor(
             TimelineItemAction.Reply -> handleActionReply(targetEvent, composerState)
             TimelineItemAction.Developer -> handleShowDebugInfoAction(targetEvent)
             TimelineItemAction.Forward -> handleForwardAction(targetEvent)
-            TimelineItemAction.ReportContent -> notImplementedYet()
+            TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
         }
     }
 
@@ -240,5 +240,10 @@ class MessagesPresenter @AssistedInject constructor(
     private fun handleForwardAction(event: TimelineItem.Event) {
         if (event.eventId == null) return
         navigator.onForwardEventClicked(event.eventId)
+    }
+
+    private fun handleReportAction(event: TimelineItem.Event) {
+        if (event.eventId == null) return
+        navigator.onReportContentClicked(event.eventId, event.senderId)
     }
 }

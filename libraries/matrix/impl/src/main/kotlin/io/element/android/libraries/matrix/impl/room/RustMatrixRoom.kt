@@ -329,4 +329,13 @@ class RustMatrixRoom(
                 innerRoom.setTopic(topic)
             }
         }
+
+    override suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            innerRoom.reportContent(eventId = eventId.value, score = null, reason = reason)
+            if (blockUserId != null) {
+                innerRoom.ignoreUser(blockUserId.value)
+            }
+        }
+    }
 }

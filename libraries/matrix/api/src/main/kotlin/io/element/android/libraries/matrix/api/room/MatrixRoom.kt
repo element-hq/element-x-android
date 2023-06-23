@@ -112,4 +112,6 @@ interface MatrixRoom : Closeable {
     suspend fun setName(name: String): Result<Unit>
 
     suspend fun setTopic(topic: String): Result<Unit>
+
+    suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit>
 }

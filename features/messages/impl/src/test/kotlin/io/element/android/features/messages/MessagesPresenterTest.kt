@@ -284,7 +284,8 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action report content`() = runTest {
-        val presenter = createMessagePresenter()
+        val navigator = FakeMessagesNavigator()
+        val presenter = createMessagePresenter(navigator = navigator)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -292,6 +293,7 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.ReportContent, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(navigator.onReportContentClickedCount).isEqualTo(1)
         }
     }
 
