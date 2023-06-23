@@ -115,15 +115,16 @@ class DefaultAnalyticsService @Inject constructor(
     }
 
     private fun initOrStop() {
-        userConsent?.let { _userConsent ->
-            when (_userConsent) {
+        userConsent?.let { userConsent ->
+            when (userConsent) {
                 true -> {
+                    analyticsProviders.onEach { it.init() }
                     pendingUserProperties?.let {
                         analyticsProviders.onEach { provider -> provider.updateUserProperties(it) }
                         pendingUserProperties = null
                     }
                 }
-                false -> {}
+                false -> analyticsProviders.onEach { it.stop() }
             }
         }
     }
