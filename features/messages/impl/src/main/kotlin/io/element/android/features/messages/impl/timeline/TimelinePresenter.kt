@@ -64,6 +64,7 @@ class TimelinePresenter @Inject constructor(
             when (event) {
                 TimelineEvents.LoadMore -> localCoroutineScope.loadMore(paginationState.value)
                 is TimelineEvents.SetHighlightedEvent -> highlightedEventId.value = event.eventId
+                is TimelineEvents.SendReadReceipt -> localCoroutineScope.sendReadReceipt(event.eventId)
             }
         }
 
@@ -93,5 +94,9 @@ class TimelinePresenter @Inject constructor(
         } else {
             Timber.v("Can't back paginate as paginationState = $paginationState")
         }
+    }
+
+    private fun CoroutineScope.sendReadReceipt(eventId: EventId) = launch {
+        timeline.sendReadReceipt(eventId)
     }
 }
