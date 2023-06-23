@@ -64,9 +64,9 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
@@ -118,9 +118,9 @@ class LoggedInFlowNode @AssistedInject constructor(
     }
 
     interface LifecycleCallback : NodeLifecycleCallback {
-        fun onFlowCreated(client: MatrixClient) = Unit
+        fun onFlowCreated(identifier: String, client: MatrixClient) = Unit
 
-        fun onFlowReleased(client: MatrixClient) = Unit
+        fun onFlowReleased(identifier: String, client: MatrixClient) = Unit
     }
 
     data class Inputs(
@@ -139,7 +139,7 @@ class LoggedInFlowNode @AssistedInject constructor(
         observeAnalyticsState()
         lifecycle.subscribe(
             onCreate = {
-                plugins<LifecycleCallback>().forEach { it.onFlowCreated(inputs.matrixClient) }
+                plugins<LifecycleCallback>().forEach { it.onFlowCreated(id, inputs.matrixClient) }
                 val imageLoaderFactory = bindings<MatrixUIBindings>().loggedInImageLoaderFactory()
                 Coil.setImageLoader(imageLoaderFactory)
                 inputs.matrixClient.startSync()
@@ -151,7 +151,7 @@ class LoggedInFlowNode @AssistedInject constructor(
             onDestroy = {
                 val imageLoaderFactory = bindings<MatrixUIBindings>().notLoggedInImageLoaderFactory()
                 Coil.setImageLoader(imageLoaderFactory)
-                plugins<LifecycleCallback>().forEach { it.onFlowReleased(inputs.matrixClient) }
+                plugins<LifecycleCallback>().forEach { it.onFlowReleased(id, inputs.matrixClient) }
                 appNavigationStateService.onLeavingSpace(id)
                 appNavigationStateService.onLeavingSession(id)
                 loggedInFlowProcessor.stopObserving()
@@ -239,8 +239,13 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
                 } else {
                     val nodeLifecycleCallbacks = plugins<NodeLifecycleCallback>()
+                    val callback = object : RoomFlowNode.Callback {
+                        override fun onForwardedToSingleRoom(roomId: RoomId) {
+                            coroutineScope.launch { attachRoom(roomId) }
+                        }
+                    }
                     val inputs = RoomFlowNode.Inputs(room, initialElement = navTarget.initialElement)
-                    createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs) + nodeLifecycleCallbacks)
+                    createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs, callback) + nodeLifecycleCallbacks)
                 }
             }
             NavTarget.Settings -> {

@@ -94,6 +94,7 @@ internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList
 
 internal fun aTimelineItemEvent(
     eventId: EventId = EventId("\$" + Random.nextInt().toString()),
+    transactionId: String? = null,
     isMine: Boolean = false,
     content: TimelineItemEventContent = aTimelineItemTextContent(),
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
@@ -104,6 +105,7 @@ internal fun aTimelineItemEvent(
     return TimelineItem.Event(
         id = eventId.value,
         eventId = eventId,
+        transactionId = transactionId,
         senderId = UserId("@senderId:domain"),
         senderAvatar = AvatarData("@senderId:domain", "sender"),
         content = content,

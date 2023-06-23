@@ -16,20 +16,16 @@
 
 package io.element.android.libraries.matrix.test.media
 
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.matrix.test.FAKE_DELAY_IN_MS
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
-import kotlin.coroutines.coroutineContext
+import io.element.android.tests.testutils.simulateLongTask
 
-class FakeMediaLoader(private val coroutineDispatchers: CoroutineDispatchers) : MatrixMediaLoader {
+class FakeMediaLoader : MatrixMediaLoader {
 
     var shouldFail = false
 
-    override suspend fun loadMediaContent(source: MediaSource): Result<ByteArray> = withContext(coroutineDispatchers.io){
+    override suspend fun loadMediaContent(source: MediaSource): Result<ByteArray> = simulateLongTask {
         if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
@@ -37,7 +33,7 @@ class FakeMediaLoader(private val coroutineDispatchers: CoroutineDispatchers) : 
         }
     }
 
-    override suspend fun loadMediaThumbnail(source: MediaSource, width: Long, height: Long): Result<ByteArray>  = withContext(coroutineDispatchers.io){
+    override suspend fun loadMediaThumbnail(source: MediaSource, width: Long, height: Long): Result<ByteArray> = simulateLongTask {
         if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
@@ -45,7 +41,7 @@ class FakeMediaLoader(private val coroutineDispatchers: CoroutineDispatchers) : 
         }
     }
 
-    override suspend fun downloadMediaFile(source: MediaSource, mimeType: String?, body: String?): Result<MediaFile> = withContext(coroutineDispatchers.io){
+    override suspend fun downloadMediaFile(source: MediaSource, mimeType: String?, body: String?): Result<MediaFile> = simulateLongTask {
         if (shouldFail) {
             Result.failure(RuntimeException())
         } else {

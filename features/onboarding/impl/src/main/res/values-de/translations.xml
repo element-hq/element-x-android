@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_onboarding_sign_in_manually">"Manuell anmelden"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Mit QR-Code anmelden"</string>
   <string name="screen_onboarding_sign_up">"Konto erstellen"</string>
-  <string name="screen_onboarding_welcome_subtitle">"Willkommen zur %1$s Beta. Verbessert, für Geschwindigkeit und Einfachheit."</string>
+  <string name="screen_onboarding_subtitle">"Sicher kommunizieren und zusammenarbeiten"</string>
+  <string name="screen_onboarding_welcome_subtitle">"Willkommen zur %1$s. Verbessert, für Geschwindigkeit und Einfachheit."</string>
   <string name="screen_onboarding_welcome_title">"Sei in deinem Element"</string>
 </resources>

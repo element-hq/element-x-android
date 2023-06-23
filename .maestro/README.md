@@ -25,7 +25,7 @@ maestro test \
     -e APP_ID=io.element.android.x.debug \
     -e USERNAME=user \
     -e PASSWORD=123 \
-    -e ROOM_NAME="my room" \
+    -e ROOM_NAME="MyRoom" \
     .maestro/allTests.yaml
 ```
 

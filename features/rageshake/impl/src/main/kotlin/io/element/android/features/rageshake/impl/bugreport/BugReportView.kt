@@ -81,12 +81,9 @@ fun BugReportView(
             .systemBarsPadding()
             .imePadding()
     ) {
-        val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
-                .verticalScroll(
-                    state = scrollState,
-                )
+                .verticalScroll(state = rememberScrollState())
                 .padding(horizontal = 16.dp),
         ) {
             val isError = state.sending is Async.Failure

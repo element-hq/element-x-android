@@ -21,8 +21,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import io.element.android.features.login.impl.util.LoginConstants
+import io.element.android.features.login.impl.accountprovider.AccountProvider
+import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.execute
@@ -33,44 +34,43 @@ import kotlinx.coroutines.launch
 import java.net.URL
 import javax.inject.Inject
 
-class ChangeServerPresenter @Inject constructor(private val authenticationService: MatrixAuthenticationService) : Presenter<ChangeServerState> {
+class ChangeServerPresenter @Inject constructor(
+    private val authenticationService: MatrixAuthenticationService,
+    private val accountProviderDataSource: AccountProviderDataSource,
+) : Presenter<ChangeServerState> {
 
     @Composable
     override fun present(): ChangeServerState {
         val localCoroutineScope = rememberCoroutineScope()
 
-        val homeserver = rememberSaveable {
-            mutableStateOf(authenticationService.getHomeserverDetails().value?.url ?: LoginConstants.DEFAULT_HOMESERVER_URL)
-        }
         val changeServerAction: MutableState<Async<Unit>> = remember {
             mutableStateOf(Async.Uninitialized)
         }
 
         fun handleEvents(event: ChangeServerEvents) {
             when (event) {
-                is ChangeServerEvents.SetServer -> {
-                    homeserver.value = event.server
-                    handleEvents(ChangeServerEvents.ClearError)
-                }
-                ChangeServerEvents.Submit -> {
-                    localCoroutineScope.submit(homeserver, changeServerAction)
-                }
+                is ChangeServerEvents.ChangeServer -> localCoroutineScope.changeServer(event.accountProvider, changeServerAction)
                 ChangeServerEvents.ClearError -> changeServerAction.value = Async.Uninitialized
             }
         }
 
         return ChangeServerState(
-            homeserver = homeserver.value,
             changeServerAction = changeServerAction.value,
             eventSink = ::handleEvents
         )
     }
 
-    private fun CoroutineScope.submit(homeserverUrl: MutableState<String>, changeServerAction: MutableState<Async<Unit>>) = launch {
+    private fun CoroutineScope.changeServer(
+        data: AccountProvider,
+        changeServerAction: MutableState<Async<Unit>>,
+    ) = launch {
         suspend {
-            val domain = tryOrNull { URL(homeserverUrl.value) }?.host ?: homeserverUrl.value
-            authenticationService.setHomeserver(domain).getOrThrow()
-            homeserverUrl.value = domain
+            val domain = tryOrNull { URL(data.title) }?.host ?: data.title
+            authenticationService.setHomeserver(domain).map {
+                authenticationService.getHomeserverDetails().value!!
+                // Valid, remember user choice
+                accountProviderDataSource.userSelection(data)
+            }.getOrThrow()
         }.execute(changeServerAction, errorMapping = ChangeServerError::from)
     }
 }

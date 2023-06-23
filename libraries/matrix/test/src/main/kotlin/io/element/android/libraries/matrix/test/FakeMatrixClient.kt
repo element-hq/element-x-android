@@ -16,8 +16,8 @@
 
 package io.element.android.libraries.matrix.test
 
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -37,18 +37,15 @@ import io.element.android.libraries.matrix.test.pushers.FakePushersService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeRoomSummaryDataSource
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
-import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.test.StandardTestDispatcher
 
 class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
-    private val coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
     private val userDisplayName: Result<String> = Result.success(A_USER_NAME),
     private val userAvatarURLString: Result<String> = Result.success(AN_AVATAR_URL),
     override val roomSummaryDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
     override val invitesDataSource: RoomSummaryDataSource = FakeRoomSummaryDataSource(),
-    override val mediaLoader: MatrixMediaLoader = FakeMediaLoader(coroutineDispatchers),
+    override val mediaLoader: MatrixMediaLoader = FakeMediaLoader(),
     private val sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
     private val pushersService: FakePushersService = FakePushersService(),
     private val notificationService: FakeNotificationService = FakeNotificationService(),
@@ -120,7 +117,11 @@ class FakeMatrixClient(
         return userAvatarURLString
     }
 
-    override suspend fun uploadMedia(mimeType: String, data: ByteArray): Result<String> {
+    override suspend fun uploadMedia(
+        mimeType: String,
+        data: ByteArray,
+        progressCallback: ProgressCallback?
+    ): Result<String> {
         return uploadMediaResult
     }
 

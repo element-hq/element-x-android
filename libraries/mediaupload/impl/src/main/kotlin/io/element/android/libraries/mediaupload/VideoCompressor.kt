@@ -21,6 +21,7 @@ import android.net.Uri
 import com.otaliastudios.transcoder.Transcoder
 import com.otaliastudios.transcoder.TranscoderListener
 import io.element.android.libraries.androidutils.file.createTmpFile
+import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -46,12 +47,12 @@ class VideoCompressor @Inject constructor(
                 }
 
                 override fun onTranscodeCanceled() {
-                    tmpFile.delete()
+                    tmpFile.safeDelete()
                     close()
                 }
 
                 override fun onTranscodeFailed(exception: Throwable) {
-                    tmpFile.delete()
+                    tmpFile.safeDelete()
                     close(exception)
                 }
             })

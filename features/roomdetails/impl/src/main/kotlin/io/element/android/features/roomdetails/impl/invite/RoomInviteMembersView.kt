@@ -147,7 +147,7 @@ private fun RoomInviteMembersSearchBar(
     selectedUsers: ImmutableList<MatrixUser>,
     active: Boolean,
     modifier: Modifier = Modifier,
-    placeHolderTitle: String = stringResource(io.element.android.libraries.ui.strings.R.string.common_search_for_someone),
+    placeHolderTitle: String = stringResource(StringR.string.common_search_for_someone),
     onActiveChanged: (Boolean) -> Unit = {},
     onTextChanged: (String) -> Unit = {},
     onUserToggled: (MatrixUser) -> Unit = {},

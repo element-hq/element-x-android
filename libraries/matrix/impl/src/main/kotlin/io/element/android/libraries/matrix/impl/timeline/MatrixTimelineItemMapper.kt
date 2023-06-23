@@ -22,15 +22,13 @@ import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelin
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.TimelineItem
-import timber.log.Timber
 
 class MatrixTimelineItemMapper(
-    private val room: Room,
+    private val fetchDetailsForEvent: suspend (EventId) -> Result<Unit>,
     private val coroutineScope: CoroutineScope,
     private val virtualTimelineItemMapper: VirtualTimelineItemMapper = VirtualTimelineItemMapper(),
-    private val eventTimelineItemMapper: EventTimelineItemMapper= EventTimelineItemMapper(),
+    private val eventTimelineItemMapper: EventTimelineItemMapper = EventTimelineItemMapper(),
 ) {
 
     fun map(timelineItem: TimelineItem): MatrixTimelineItem = timelineItem.use {
@@ -40,7 +38,7 @@ class MatrixTimelineItemMapper(
 
 
             if (eventTimelineItem.hasNotLoadedInReplyTo() && eventTimelineItem.eventId != null) {
-                fetchDetailsForEvent(eventTimelineItem.eventId!!)
+                fetchEventDetails(eventTimelineItem.eventId!!)
             }
 
             return MatrixTimelineItem.Event(eventTimelineItem)
@@ -53,12 +51,7 @@ class MatrixTimelineItemMapper(
         return MatrixTimelineItem.Other
     }
 
-    private fun fetchDetailsForEvent(eventId: EventId) = coroutineScope.launch {
-        runCatching {
-            room.fetchDetailsForEvent(eventId.value)
-        }.onFailure {
-            Timber.e(it)
-        }
+    private fun fetchEventDetails(eventId: EventId) = coroutineScope.launch {
+        fetchDetailsForEvent(eventId)
     }
-
 }

@@ -68,10 +68,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun TimelineView(
     state: TimelineState,
+    onUserDataClicked: (UserId) -> Unit,
+    onMessageClicked: (TimelineItem.Event) -> Unit,
+    onMessageLongClicked: (TimelineItem.Event) -> Unit,
+    onTimestampClicked: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
-    onUserDataClicked: (UserId) -> Unit = {},
-    onMessageClicked: (TimelineItem.Event) -> Unit = {},
-    onMessageLongClicked: (TimelineItem.Event) -> Unit = {},
 ) {
     fun onReachedLoadMore() {
         state.eventSink(TimelineEvents.LoadMore)
@@ -102,6 +103,7 @@ fun TimelineView(
                     onLongClick = onMessageLongClicked,
                     onUserDataClick = onUserDataClicked,
                     inReplyToClick = ::inReplyToClicked,
+                    onTimestampClicked = onTimestampClicked,
                 )
                 if (index == state.timelineItems.lastIndex) {
                     onReachedLoadMore()
@@ -125,6 +127,7 @@ fun TimelineItemRow(
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
+    onTimestampClicked: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (timelineItem) {
@@ -159,6 +162,7 @@ fun TimelineItemRow(
                     onLongClick = ::onLongClick,
                     onUserDataClick = onUserDataClick,
                     inReplyToClick = inReplyToClick,
+                    onTimestampClicked = onTimestampClicked,
                     modifier = modifier,
                 )
             }
@@ -191,6 +195,7 @@ fun TimelineItemRow(
                                 onLongClick = onLongClick,
                                 inReplyToClick = inReplyToClick,
                                 onUserDataClick = onUserDataClick,
+                                onTimestampClicked = onTimestampClicked,
                             )
                         }
                     }
@@ -276,6 +281,10 @@ fun TimelineViewDarkPreview(
 private fun ContentToPreview(content: TimelineItemEventContent) {
     val timelineItems = aTimelineItemList(content)
     TimelineView(
-        state = aTimelineState(timelineItems)
+        state = aTimelineState(timelineItems),
+        onMessageClicked = {},
+        onTimestampClicked = {},
+        onUserDataClicked = {},
+        onMessageLongClicked = {},
     )
 }

@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.api.room
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -25,6 +26,7 @@ import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.io.Closeable
@@ -73,15 +75,21 @@ interface MatrixRoom : Closeable {
 
     suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>
 
-    suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo): Result<Unit>
+    suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo, progressCallback: ProgressCallback?): Result<Unit>
 
-    suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo): Result<Unit>
+    suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<Unit>
 
-    suspend fun sendAudio(file: File, audioInfo: AudioInfo): Result<Unit>
+    suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<Unit>
 
-    suspend fun sendFile(file: File, fileInfo: FileInfo): Result<Unit>
+    suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<Unit>
 
     suspend fun sendReaction(emoji: String, eventId: EventId): Result<Unit>
+
+    suspend fun forwardEvent(eventId: EventId, rooms: List<RoomId>): Result<Unit>
+
+    suspend fun retrySendMessage(transactionId: String): Result<Unit>
+
+    suspend fun cancelSend(transactionId: String): Result<Unit>
 
     suspend fun leave(): Result<Unit>
 
@@ -95,6 +103,8 @@ interface MatrixRoom : Closeable {
 
     suspend fun canSendStateEvent(type: StateEventType): Result<Boolean>
 
+    suspend fun canSendEvent(type: MessageEventType): Result<Boolean>
+
     suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit>
 
     suspend fun removeAvatar(): Result<Unit>
@@ -102,4 +112,6 @@ interface MatrixRoom : Closeable {
     suspend fun setName(name: String): Result<Unit>
 
     suspend fun setTopic(topic: String): Result<Unit>
+
+    suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit>
 }

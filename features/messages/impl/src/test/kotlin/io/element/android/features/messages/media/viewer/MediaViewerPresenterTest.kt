@@ -23,7 +23,6 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.messages.impl.media.local.MediaInfo
 import io.element.android.features.messages.impl.media.local.aFileInfo
 import io.element.android.features.messages.impl.media.viewer.MediaViewerEvents
 import io.element.android.features.messages.impl.media.viewer.MediaViewerNode
@@ -34,7 +33,6 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.matrix.test.media.FakeMediaLoader
 import io.element.android.libraries.matrix.test.media.aMediaSource
-import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -49,9 +47,8 @@ class MediaViewerPresenterTest {
 
     @Test
     fun `present - download media success scenario`() = runTest {
-        val coroutineDispatchers = testCoroutineDispatchers(testScheduler, useUnconfinedTestDispatcher = false)
-        val mediaLoader = FakeMediaLoader(coroutineDispatchers)
-        val mediaActions = FakeLocalMediaActions(coroutineDispatchers)
+        val mediaLoader = FakeMediaLoader()
+        val mediaActions = FakeLocalMediaActions()
         val presenter = aMediaViewerPresenter(mediaLoader, mediaActions)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -70,10 +67,10 @@ class MediaViewerPresenterTest {
 
     @Test
     fun `present - check all actions `() = runTest {
-        val coroutineDispatchers = testCoroutineDispatchers(testScheduler, useUnconfinedTestDispatcher = false)
-        val mediaLoader = FakeMediaLoader(coroutineDispatchers)
-        val mediaActions = FakeLocalMediaActions(coroutineDispatchers)
-        val presenter = aMediaViewerPresenter(mediaLoader, mediaActions)
+        val mediaLoader = FakeMediaLoader()
+        val mediaActions = FakeLocalMediaActions()
+        val snackbarDispatcher = SnackbarDispatcher()
+        val presenter = aMediaViewerPresenter(mediaLoader, mediaActions, snackbarDispatcher)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
         }.test {
@@ -94,34 +91,31 @@ class MediaViewerPresenterTest {
             state.eventSink(MediaViewerEvents.SaveOnDisk)
             state = awaitItem()
             assertThat(state.snackbarMessage).isNotNull()
-            state = awaitItem()
-            assertThat(state.snackbarMessage).isNull()
+            snackbarDispatcher.clear()
+            assertThat(awaitItem().snackbarMessage).isNull()
 
             // Check failures
             mediaActions.shouldFail = true
             state.eventSink(MediaViewerEvents.OpenWith)
             state = awaitItem()
             assertThat(state.snackbarMessage).isNotNull()
-            state = awaitItem()
-            assertThat(state.snackbarMessage).isNull()
+            snackbarDispatcher.clear()
+            assertThat(awaitItem().snackbarMessage).isNull()
             state.eventSink(MediaViewerEvents.Share)
             state = awaitItem()
             assertThat(state.snackbarMessage).isNotNull()
-            state = awaitItem()
-            assertThat(state.snackbarMessage).isNull()
+            snackbarDispatcher.clear()
+            assertThat(awaitItem().snackbarMessage).isNull()
             state.eventSink(MediaViewerEvents.SaveOnDisk)
             state = awaitItem()
             assertThat(state.snackbarMessage).isNotNull()
-            state = awaitItem()
-            assertThat(state.snackbarMessage).isNull()
         }
     }
 
     @Test
     fun `present - download media failure then retry with success scenario`() = runTest {
-        val coroutineDispatchers = testCoroutineDispatchers(testScheduler, useUnconfinedTestDispatcher = false)
-        val mediaLoader = FakeMediaLoader(coroutineDispatchers)
-        val mediaActions = FakeLocalMediaActions(coroutineDispatchers)
+        val mediaLoader = FakeMediaLoader()
+        val mediaActions = FakeLocalMediaActions()
         val presenter = aMediaViewerPresenter(mediaLoader, mediaActions)
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -150,6 +144,7 @@ class MediaViewerPresenterTest {
     private fun aMediaViewerPresenter(
         mediaLoader: FakeMediaLoader,
         localMediaActions: FakeLocalMediaActions,
+        snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
     ): MediaViewerPresenter {
         return MediaViewerPresenter(
             inputs = MediaViewerNode.Inputs(
@@ -160,7 +155,7 @@ class MediaViewerPresenterTest {
             localMediaFactory = localMediaFactory,
             mediaLoader = mediaLoader,
             localMediaActions = localMediaActions,
-            snackbarDispatcher = SnackbarDispatcher()
+            snackbarDispatcher = snackbarDispatcher,
         )
     }
 }

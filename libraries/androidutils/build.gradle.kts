@@ -28,5 +28,6 @@ dependencies {
     implementation(libs.androidx.activity.activity)
     implementation(libs.androidx.exifinterface)
     implementation(libs.androidx.security.crypto)
+    implementation(libs.androidx.browser)
     implementation(projects.libraries.core)
 }

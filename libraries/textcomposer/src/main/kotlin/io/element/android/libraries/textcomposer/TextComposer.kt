@@ -302,7 +302,7 @@ private fun ReplyToModeView(
                 style = ElementTextStyles.Regular.caption1,
                 textAlign = TextAlign.Start,
                 color = LocalColors.current.placeholder,
-                maxLines = 1,
+                maxLines = if (attachmentThumbnailInfo != null) 1 else 2,
                 overflow = TextOverflow.Ellipsis,
             )
         }
