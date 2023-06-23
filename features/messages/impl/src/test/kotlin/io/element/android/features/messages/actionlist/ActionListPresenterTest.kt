@@ -25,8 +25,10 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.matrix.test.A_MESSAGE
@@ -154,6 +156,38 @@ class ActionListPresenterTest {
                         TimelineItemAction.Forward,
                         TimelineItemAction.Edit,
                         TimelineItemAction.Copy,
+                        TimelineItemAction.Developer,
+                        TimelineItemAction.Redact,
+                    )
+                )
+            )
+            initialState.eventSink.invoke(ActionListEvents.Clear)
+            assertThat(awaitItem().target).isEqualTo(ActionListState.Target.None)
+        }
+    }
+
+    @Test
+    fun `present - compute for a media item`() = runTest {
+        val presenter = anActionListPresenter(isBuildDebuggable = true)
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = true,
+                content = aTimelineItemImageContent(),
+            )
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent))
+            // val loadingState = awaitItem()
+            // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    messageEvent,
+                    persistentListOf(
+                        TimelineItemAction.Reply,
+                        TimelineItemAction.Forward,
+                        TimelineItemAction.Edit,
                         TimelineItemAction.Developer,
                         TimelineItemAction.Redact,
                     )
