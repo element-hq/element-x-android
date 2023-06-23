@@ -35,7 +35,7 @@ class RustNotificationService(
         eventId: EventId
     ): Result<NotificationData?> {
         return runCatching {
-            client.getNotificationItem(roomId.value, eventId.value).use(notificationMapper::map)
+            client.getNotificationItem(roomId.value, eventId.value)?.use(notificationMapper::map)
         }
     }
 }
