@@ -34,6 +34,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.ui.strings.R
+import io.element.android.services.analytics.api.AnalyticsService
 import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
@@ -43,6 +44,7 @@ class CreateRoomRootNode @AssistedInject constructor(
     private val presenter: CreateRoomRootPresenter,
     private val matrixClient: MatrixClient,
     private val buildMeta: BuildMeta,
+    private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
 
     interface Callback : Plugin {
@@ -70,7 +72,8 @@ class CreateRoomRootNode @AssistedInject constructor(
             onClosePressed = this::navigateUp,
             onNewRoomClicked = callback::onCreateNewRoom,
             onOpenDM = callback::onStartChatSuccess,
-            onInviteFriendsClicked = { invitePeople(context) }
+            onInviteFriendsClicked = { invitePeople(context) },
+            analyticsService = analyticsService,
         )
     }
 

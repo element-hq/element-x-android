@@ -27,12 +27,14 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.createroom.impl.di.CreateRoomScope
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(CreateRoomScope::class)
 class ConfigureRoomNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: ConfigureRoomPresenter,
+    private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
 
     interface Callback : Plugin {
@@ -50,7 +52,8 @@ class ConfigureRoomNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onBackPressed = this::navigateUp,
-            onRoomCreated = this::onRoomCreated
+            onRoomCreated = this::onRoomCreated,
+            analyticsService = analyticsService,
         )
     }
 }
