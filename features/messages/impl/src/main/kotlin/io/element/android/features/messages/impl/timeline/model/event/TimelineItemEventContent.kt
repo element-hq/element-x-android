@@ -22,3 +22,14 @@ import androidx.compose.runtime.Immutable
 sealed interface TimelineItemEventContent {
     val type: String
 }
+
+/**
+ * Only text based content and states can be copied
+ */
+fun TimelineItemEventContent.canBeCopied(): Boolean =
+    when (this) {
+        is TimelineItemTextBasedContent,
+        is TimelineItemStateContent,
+        is TimelineItemRedactedContent -> true
+        else -> false
+    }
