@@ -20,6 +20,8 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.CreatedRoom
+import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.features.createroom.impl.userlist.FakeUserListPresenter
 import io.element.android.features.createroom.impl.userlist.FakeUserListPresenterFactory
 import io.element.android.features.createroom.impl.userlist.UserListDataStore
@@ -45,19 +47,21 @@ class CreateRoomRootPresenterTests {
     private lateinit var presenter: CreateRoomRootPresenter
     private lateinit var fakeUserListPresenter: FakeUserListPresenter
     private lateinit var fakeMatrixClient: FakeMatrixClient
+    private lateinit var fakeAnalyticsService: FakeAnalyticsService
 
     @Before
     fun setup() {
         fakeUserListPresenter = FakeUserListPresenter()
         fakeMatrixClient = FakeMatrixClient()
+        fakeAnalyticsService = FakeAnalyticsService()
         userRepository = FakeUserRepository()
         presenter = CreateRoomRootPresenter(
-            presenterFactory =FakeUserListPresenterFactory(fakeUserListPresenter),
-            userRepository= userRepository,
-            userListDataStore =
-            UserListDataStore(),
+            presenterFactory = FakeUserListPresenterFactory(fakeUserListPresenter),
+            userRepository = userRepository,
+            userListDataStore = UserListDataStore(),
             matrixClient = fakeMatrixClient,
-            aBuildMeta(),
+            analyticsService = fakeAnalyticsService,
+            buildMeta = aBuildMeta(),
         )
     }
 
@@ -96,6 +100,27 @@ class CreateRoomRootPresenterTests {
     }
 
     @Test
+    fun `present - creating a DM records analytics event`() = runTest {
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val matrixUser = MatrixUser(UserId("@name:domain"))
+            val createDmResult = Result.success(RoomId("!createDmResult:domain"))
+
+            fakeMatrixClient.givenFindDmResult(null)
+            fakeMatrixClient.givenCreateDmResult(createDmResult)
+
+            initialState.eventSink(CreateRoomRootEvents.StartDM(matrixUser))
+            skipItems(2)
+
+            val analyticsEvent = fakeAnalyticsService.capturedEvents.filterIsInstance<CreatedRoom>().firstOrNull()
+            assertThat(analyticsEvent).isNotNull()
+            assertThat(analyticsEvent?.isDM).isTrue()
+        }
+    }
+
+    @Test
     fun `present - trigger retrieve DM action`() = runTest {
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -110,6 +135,7 @@ class CreateRoomRootPresenterTests {
             val stateAfterStartDM = awaitItem()
             assertThat(stateAfterStartDM.startDmAction).isInstanceOf(Async.Success::class.java)
             assertThat(stateAfterStartDM.startDmAction.dataOrNull()).isEqualTo(fakeDmResult.roomId)
+            assertThat(fakeAnalyticsService.capturedEvents.filterIsInstance<CreatedRoom>()).isEmpty()
         }
     }
 
@@ -132,6 +158,7 @@ class CreateRoomRootPresenterTests {
             assertThat(awaitItem().startDmAction).isInstanceOf(Async.Loading::class.java)
             val stateAfterStartDM = awaitItem()
             assertThat(stateAfterStartDM.startDmAction).isInstanceOf(Async.Failure::class.java)
+            assertThat(fakeAnalyticsService.capturedEvents.filterIsInstance<CreatedRoom>()).isEmpty()
 
             // Cancel
             stateAfterStartDM.eventSink(CreateRoomRootEvents.CancelStartDM)
@@ -143,6 +170,7 @@ class CreateRoomRootPresenterTests {
             assertThat(awaitItem().startDmAction).isInstanceOf(Async.Loading::class.java)
             val stateAfterSecondAttempt = awaitItem()
             assertThat(stateAfterSecondAttempt.startDmAction).isInstanceOf(Async.Failure::class.java)
+            assertThat(fakeAnalyticsService.capturedEvents.filterIsInstance<CreatedRoom>()).isEmpty()
 
             // Retry with success
             fakeMatrixClient.givenCreateDmError(null)
