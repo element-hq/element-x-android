@@ -41,7 +41,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.UserListView
 import io.element.android.libraries.architecture.Async
@@ -55,7 +54,6 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.libraries.designsystem.R as DrawableR
 import io.element.android.libraries.ui.strings.R as StringR
 
@@ -68,14 +66,7 @@ fun CreateRoomRootView(
     onNewRoomClicked: () -> Unit = {},
     onOpenDM: (RoomId) -> Unit = {},
     onInviteFriendsClicked: () -> Unit = {},
-    analyticsService: AnalyticsService? = null,
 ) {
-    analyticsService?.let {
-        LaunchedEffect(Unit) {
-            it.screen(MobileScreen(screenName = MobileScreen.ScreenName.StartChat))
-        }
-    }
-
     if (state.startDmAction is Async.Success) {
         LaunchedEffect(state.startDmAction) {
             onOpenDM(state.startDmAction.state)

@@ -20,12 +20,14 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
 import io.element.android.libraries.core.meta.BuildMeta
@@ -62,6 +64,12 @@ class CreateRoomRootNode @AssistedInject constructor(
         }
     }
 
+    init {
+        lifecycle.subscribe(
+            onResume = { analyticsService.screen(MobileScreen(screenName = MobileScreen.ScreenName.StartChat)) }
+        )
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -73,7 +81,6 @@ class CreateRoomRootNode @AssistedInject constructor(
             onNewRoomClicked = callback::onCreateNewRoom,
             onOpenDM = callback::onStartChatSuccess,
             onInviteFriendsClicked = { invitePeople(context) },
-            analyticsService = analyticsService,
         )
     }
 
