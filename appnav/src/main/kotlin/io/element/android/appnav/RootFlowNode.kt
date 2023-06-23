@@ -96,11 +96,13 @@ class RootFlowNode @AssistedInject constructor(
                     matrixClientsHolder.removeAll()
                 }
             ) { isLoggedIn, cacheIdx -> isLoggedIn to cacheIdx }
-            .onEach { isLoggedIn ->
-                Timber.v("isLoggedIn=$isLoggedIn")
-                if (isLoggedIn.first) {
+            .onEach { pair ->
+                val isLoggedIn = pair.first
+                val cacheIndex = pair.second
+                Timber.v("isLoggedIn=$isLoggedIn, cacheIndex=$cacheIndex")
+                if (isLoggedIn) {
                     tryToRestoreLatestSession(
-                        onSuccess = { switchToLoggedInFlow(it, isLoggedIn.second) },
+                        onSuccess = { switchToLoggedInFlow(it, cacheIndex) },
                         onFailure = { switchToNotLoggedInFlow() }
                     )
                 } else {
