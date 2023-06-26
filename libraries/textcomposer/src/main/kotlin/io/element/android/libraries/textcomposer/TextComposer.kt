@@ -70,7 +70,6 @@ import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.modifiers.applyIf
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -79,6 +78,7 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.libraries.theme.LocalColors
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -252,16 +252,11 @@ private fun ReplyToModeView(
     onResetComposerMode: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val paddings = if (attachmentThumbnailInfo != null) {
-        PaddingValues(start = 4.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)
-    } else {
-        PaddingValues(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 4.dp)
-    }
     Row(
         modifier
             .clip(RoundedCornerShape(13.dp))
             .background(MaterialTheme.colorScheme.surface)
-            .padding(paddings)
+            .padding(4.dp)
     ) {
         if (attachmentThumbnailInfo != null) {
             AttachmentThumbnail(
@@ -271,34 +266,20 @@ private fun ReplyToModeView(
                     .size(36.dp)
                     .clip(RoundedCornerShape(9.dp))
             )
-            Spacer(modifier = Modifier.width(8.dp))
         }
-        Column(verticalArrangement = Arrangement.SpaceEvenly) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    senderName,
-                    style = ElementTextStyles.Regular.caption2.copy(fontWeight = FontWeight.Medium),
-                    textAlign = TextAlign.Start,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.weight(1f)
-                )
-                Icon(
-                    imageVector = Icons.Default.Close,
-                    contentDescription = stringResource(CommonStrings.action_close),
-                    tint = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier
-                        .size(16.dp)
-                        .clickable(
-                            enabled = true,
-                            onClick = onResetComposerMode,
-                            interactionSource = MutableInteractionSource(),
-                            indication = rememberRipple(bounded = false)
-                        ),
-                )
-            }
+        Spacer(modifier = Modifier.width(8.dp))
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .align(Alignment.CenterVertically)
+        ) {
+            Text(
+                text = senderName,
+                modifier = Modifier.fillMaxWidth(),
+                style = ElementTextStyles.Regular.caption2.copy(fontWeight = FontWeight.Medium),
+                textAlign = TextAlign.Start,
+                color = MaterialTheme.colorScheme.primary,
+            )
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -310,6 +291,20 @@ private fun ReplyToModeView(
                 overflow = TextOverflow.Ellipsis,
             )
         }
+        Icon(
+            imageVector = Icons.Default.Close,
+            contentDescription = stringResource(CommonStrings.action_close),
+            tint = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier
+                .padding(end = 4.dp, top = 4.dp, start = 16.dp, bottom = 16.dp)
+                .size(16.dp)
+                .clickable(
+                    enabled = true,
+                    onClick = onResetComposerMode,
+                    interactionSource = MutableInteractionSource(),
+                    indication = rememberRipple(bounded = false)
+                ),
+        )
     }
 }
 
