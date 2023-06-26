@@ -74,9 +74,7 @@ fun UserRow(
         Avatar(avatarData)
         Column(
             modifier = Modifier
-                .padding(start = 12.dp)
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.SpaceBetween,
+                .padding(start = 12.dp),
         ) {
             // Name
             Text(
