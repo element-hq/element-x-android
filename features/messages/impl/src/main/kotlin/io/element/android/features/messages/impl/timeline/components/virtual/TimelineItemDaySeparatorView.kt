@@ -24,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -39,7 +40,7 @@ internal fun TimelineItemDaySeparatorView(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier
+        modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(8.dp),
@@ -47,22 +48,23 @@ internal fun TimelineItemDaySeparatorView(
     ) {
         Text(
             text = model.formattedDate,
-            color = MaterialTheme.colorScheme.secondary,
+            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
+            color = MaterialTheme.colorScheme.primary,
         )
     }
 }
 
 @Preview
 @Composable
-internal fun TimelineItemDaySeparatorViewLightPreview(@PreviewParameter(
-    TimelineItemDaySeparatorModelProvider::class) model: TimelineItemDaySeparatorModel
+internal fun TimelineItemDaySeparatorViewLightPreview(
+    @PreviewParameter(TimelineItemDaySeparatorModelProvider::class) model: TimelineItemDaySeparatorModel
 ) =
     ElementPreviewLight { ContentToPreview(model) }
 
 @Preview
 @Composable
-internal fun TimelineItemDaySeparatorViewDarkPreview(@PreviewParameter(
-    TimelineItemDaySeparatorModelProvider::class) model: TimelineItemDaySeparatorModel
+internal fun TimelineItemDaySeparatorViewDarkPreview(
+    @PreviewParameter(TimelineItemDaySeparatorModelProvider::class) model: TimelineItemDaySeparatorModel
 ) =
     ElementPreviewDark { ContentToPreview(model) }
 
