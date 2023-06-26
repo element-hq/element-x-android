@@ -19,11 +19,9 @@ package io.element.android.libraries.matrix.impl.timeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.matrix.rustcomponents.sdk.TimelineChange
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
@@ -31,20 +29,23 @@ import org.matrix.rustcomponents.sdk.TimelineItem
 internal class MatrixTimelineDiffProcessor(
     private val paginationState: MutableStateFlow<MatrixTimeline.PaginationState>,
     private val timelineItems: MutableStateFlow<List<MatrixTimelineItem>>,
-    private val coroutineScope: CoroutineScope,
-    private val diffDispatcher: CoroutineDispatcher,
     private val timelineItemFactory: MatrixTimelineItemMapper,
 ) {
 
-    fun postDiff(diff: TimelineDiff) {
-        coroutineScope.launch {
-            updateTimelineItems {
-                applyDiff(diff)
-            }
-            when (val firstItem = timelineItems.value.firstOrNull()) {
-                is MatrixTimelineItem.Virtual -> updateBackPaginationState(firstItem.virtual)
-                else -> updateBackPaginationState(null)
-            }
+    private val mutex = Mutex()
+
+    suspend fun postItems(items: List<TimelineItem>) {
+        updateTimelineItems {
+            val mappedItems = items.map { it.asMatrixTimelineItem() }
+            addAll(mappedItems)
+            updateBackPaginationState()
+        }
+    }
+
+    suspend fun postDiff(diff: TimelineDiff) {
+        updateTimelineItems {
+            applyDiff(diff)
+            updateBackPaginationState()
         }
     }
 
@@ -68,7 +69,7 @@ internal class MatrixTimelineDiffProcessor(
     }
 
     private suspend fun updateTimelineItems(block: MutableList<MatrixTimelineItem>.() -> Unit) =
-        withContext(diffDispatcher) {
+        mutex.withLock {
             val mutableTimelineItems = timelineItems.value.toMutableList()
             block(mutableTimelineItems)
             timelineItems.value = mutableTimelineItems
@@ -119,8 +120,14 @@ internal class MatrixTimelineDiffProcessor(
         }
     }
 
+    private fun List<MatrixTimelineItem>.updateBackPaginationState() {
+        when (val firstItem = firstOrNull()) {
+            is MatrixTimelineItem.Virtual -> updateBackPaginationState(firstItem.virtual)
+            else -> updateBackPaginationState(null)
+        }
+    }
+
     private fun TimelineItem.asMatrixTimelineItem(): MatrixTimelineItem {
         return timelineItemFactory.map(this)
     }
-
 }

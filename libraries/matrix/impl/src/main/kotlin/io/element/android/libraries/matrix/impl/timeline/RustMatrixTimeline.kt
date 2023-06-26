@@ -66,8 +66,6 @@ class RustMatrixTimeline(
     private val timelineDiffProcessor = MatrixTimelineDiffProcessor(
         paginationState = paginationState,
         timelineItems = timelineItems,
-        coroutineScope = roomCoroutineScope,
-        diffDispatcher = coroutineDispatchers.diffUpdateDispatcher,
         timelineItemFactory = timelineItemFactory,
     )
 
@@ -80,11 +78,11 @@ class RustMatrixTimeline(
         return timelineItems.sample(50)
     }
 
-    internal fun postItems(items: List<TimelineItem>)  {
-        timelineItems.value = items.map(timelineItemFactory::map)
+    internal suspend fun postItems(items: List<TimelineItem>) {
+        timelineDiffProcessor.postItems(items)
     }
 
-    internal fun postDiff(timelineDiff: TimelineDiff) {
+    internal suspend fun postDiff(timelineDiff: TimelineDiff) {
         timelineDiffProcessor.postDiff(timelineDiff)
     }
 
