@@ -46,7 +46,7 @@ fun TimelineItem.Event.toExtraPadding(): ExtraPadding {
     }
     strLen += formattedTime.length
     if (hasMessageSendingFailed) {
-        strLen += 3
+        strLen += 5
     }
     // A space and a few unbreakable spaces
     return ExtraPadding(" " + "\u00A0".repeat(strLen))
