@@ -123,7 +123,7 @@ fun ContentToPreview(content: TimelineItemTextBasedContent) {
     TimelineItemTextView(
         content = content,
         interactionSource = MutableInteractionSource(),
-        extraPadding = ExtraPadding("xxxxxxx"),
+        extraPadding = ExtraPadding(" (padding)"),
     )
 }
 
