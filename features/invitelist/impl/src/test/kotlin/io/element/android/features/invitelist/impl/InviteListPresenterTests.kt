@@ -92,7 +92,7 @@ class InviteListPresenterTests {
                     id = A_USER_ID.value,
                     name = A_USER_NAME,
                     url = AN_AVATAR_URL,
-                    size = AvatarSize.RoomListItem,
+                    size = AvatarSize.RoomInviteItem,
                 )
             )
             Truth.assertThat(withInviteState.inviteList[0].sender).isNull()
