@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.impl.RustMatrixClient
+import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -56,6 +57,7 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val coroutineDispatchers: CoroutineDispatchers,
     private val sessionStore: SessionStore,
     private val clock: SystemClock,
+    private val userAgentProvider: UserAgentProvider,
 ) : MatrixAuthenticationService {
 
     private val authService: RustAuthenticationService = RustAuthenticationService(
@@ -84,6 +86,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                     .basePath(baseDirectory.absolutePath)
                     .homeserverUrl(sessionData.homeserverUrl)
                     .username(sessionData.userId)
+                    .userAgent(userAgentProvider.provide())
                     .use { it.build() }
                 client.restoreSession(sessionData.toSession())
                 createMatrixClient(client)

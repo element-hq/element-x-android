@@ -54,6 +54,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
+    implementation(projects.libraries.network)
     implementation(projects.libraries.dateformatter.impl)
     implementation(projects.libraries.eventformatter.impl)
     implementation(projects.features.invitelist.impl)

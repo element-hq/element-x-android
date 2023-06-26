@@ -29,6 +29,7 @@ import androidx.core.view.WindowCompat
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.impl.auth.RustMatrixAuthenticationService
+import io.element.android.libraries.network.useragent.SimpleUserAgentProvider
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
 import io.element.android.services.toolbox.impl.systemclock.DefaultSystemClock
 import kotlinx.coroutines.runBlocking
@@ -45,7 +46,8 @@ class MainActivity : ComponentActivity() {
             appCoroutineScope = Singleton.appScope,
             coroutineDispatchers = Singleton.coroutineDispatchers,
             sessionStore = InMemorySessionStore(),
-            clock = DefaultSystemClock()
+            clock = DefaultSystemClock(),
+            userAgentProvider = SimpleUserAgentProvider("MinimalSample")
         )
     }
 
