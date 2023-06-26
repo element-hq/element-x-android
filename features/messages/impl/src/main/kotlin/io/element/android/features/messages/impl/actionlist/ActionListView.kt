@@ -213,7 +213,7 @@ private fun SheetContent(
 @Composable
 private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modifier) {
     val content: @Composable () -> Unit
-    var icon: @Composable () -> Unit = { Avatar(avatarData = event.senderAvatar.copy(size = AvatarSize.TimelineSender)) }
+    var icon: @Composable () -> Unit = { Avatar(avatarData = event.senderAvatar.copy(size = AvatarSize.MessageActionSender)) }
     val contentStyle = ElementTextStyles.Regular.bodyMD.copy(color = MaterialTheme.colorScheme.secondary)
     val imageModifier = Modifier
         .size(36.dp)
