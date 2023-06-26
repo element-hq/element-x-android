@@ -9,6 +9,7 @@
   <string name="screen_room_attachment_source_camera_video">"Record a video"</string>
   <string name="screen_room_attachment_source_files">"Attachment"</string>
   <string name="screen_room_attachment_source_gallery">"Photo &amp; Video Library"</string>
+  <string name="screen_room_attachment_source_location">"Location"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Could not retrieve user details"</string>
   <string name="screen_room_invite_again_alert_message">"Would you like to invite them back?"</string>
   <string name="screen_room_invite_again_alert_title">"You are alone in this chat"</string>
