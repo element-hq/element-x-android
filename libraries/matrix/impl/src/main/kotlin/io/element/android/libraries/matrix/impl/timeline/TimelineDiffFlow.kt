@@ -17,8 +17,10 @@
 package io.element.android.libraries.matrix.impl.timeline
 
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.buffer
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
@@ -34,4 +36,4 @@ internal fun Room.timelineDiffFlow(onInitialList: suspend (List<TimelineItem>) -
         val result = addTimelineListener(listener)
         onInitialList(result.items)
         result.itemsStream
-    }
+    }.buffer(Channel.UNLIMITED)
