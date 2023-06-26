@@ -120,17 +120,18 @@ suspend inline fun <T> runUpdatingState(
     }
     val prevData = state.value.dataOrNull()
     state.value = Async.Loading(prevData = prevData)
-    val result = resultBlock()
-    return if (result.isSuccess) {
-        val data = result.getOrNull()!!
-        state.value = Async.Success(data)
-        Result.success(data)
-    } else {
-        val exception = exceptionTransform(result.exceptionOrNull()!!)
-        state.value = Async.Failure(
-            exception = exception,
-            prevData = prevData,
-        )
-        Result.failure(exception)
-    }
+    return resultBlock().fold(
+        onSuccess = {
+            state.value = Async.Success(it)
+            Result.success(it)
+        },
+        onFailure = {
+            val exception = exceptionTransform(it)
+            state.value = Async.Failure(
+                exception = exception,
+                prevData = prevData,
+            )
+            Result.failure(exception)
+        }
+    )
 }
