@@ -72,6 +72,7 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemFileContent -> TimelineItemFileView(
             content = content,
+            extraPadding = extraPadding,
             modifier = modifier
         )
         is TimelineItemStateContent -> TimelineItemStateView(
