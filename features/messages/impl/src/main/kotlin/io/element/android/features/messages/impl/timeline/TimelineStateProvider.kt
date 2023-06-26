@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventSendStat
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlin.random.Random
 
@@ -85,12 +86,8 @@ internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList
             content = content,
             groupPosition = TimelineItemGroupPosition.First
         ),
-        // A state event on top of it
-        aTimelineItemEvent(
-            isMine = true,
-            content = aTimelineItemStateEventContent(),
-            groupPosition = TimelineItemGroupPosition.None
-        ),
+        // A grouped event on top of it
+        aGroupedEvents(),
     )
 }
 
@@ -143,3 +140,17 @@ internal fun aTimelineItemDebugInfo(
 ) = TimelineItemDebugInfo(
     model, originalJson, latestEditedJson
 )
+
+fun aGroupedEvents(): TimelineItem.GroupedEvents {
+    val event = aTimelineItemEvent(
+        isMine = true,
+        content = aTimelineItemStateEventContent(),
+        groupPosition = TimelineItemGroupPosition.None
+    )
+    return TimelineItem.GroupedEvents(
+        events = listOf(
+            event,
+            event,
+        ).toImmutableList()
+    )
+}
