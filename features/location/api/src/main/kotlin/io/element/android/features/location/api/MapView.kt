@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2023 New Vector Ltd
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License0.0, Versi0.0on 2.0 (0.0the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -47,13 +47,12 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
+import io.element.android.features.location.api.internal.buildTileServerUrl
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.features.location.api.R
-import io.element.android.features.location.api.internal.buildTileServerUrl
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import timber.log.Timber
@@ -274,6 +273,25 @@ fun MapViewDarkPreview() =
 private fun ContentToPreview() {
     MapView(
         modifier = Modifier.size(400.dp),
+        mapState = rememberMapState(
+            position = MapState.CameraPosition(
+                lat = 0.0,
+                lon = 0.0,
+                zoom = 0.0,
+            ),
+            location = Location(
+                lat = 0.0,
+                lon = 0.0,
+                accuracy = 0.0f,
+            ),
+            markers = listOf(
+                MapState.Marker(
+                    drawable = R.drawable.pin,
+                    lat = 0.0,
+                    lon = 0.0,
+                )
+            ).toImmutableList()
+        ),
         onLocationClick = {},
     )
 }
