@@ -18,8 +18,8 @@ package io.element.android.features.location.api.internal
 
 import kotlin.math.roundToInt
 
-internal const val API_KEY = "fU3vlMsMn4Jb6dnEIFsx"
-const val BASE_URL = "https://api.maptiler.com"
+private const val API_KEY = "fU3vlMsMn4Jb6dnEIFsx"
+private const val BASE_URL = "https://api.maptiler.com"
 private const val LIGHT_MAP_ID = "9bc819c8-e627-474a-a348-ec144fe3d810"
 private const val DARK_MAP_ID = "dea61faf-292b-4774-9660-58fcef89a7f3"
 private const val STATIC_MAP_FORMAT = "webp"
