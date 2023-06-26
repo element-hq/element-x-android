@@ -215,7 +215,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
     var icon: @Composable () -> Unit = { Avatar(avatarData = event.senderAvatar.copy(size = AvatarSize.MessageActionSender)) }
     val contentStyle = ElementTextStyles.Regular.bodyMD.copy(color = MaterialTheme.colorScheme.secondary)
     val imageModifier = Modifier
-        .size(36.dp)
+        .size(AvatarSize.MessageActionSender.dp)
         .clip(RoundedCornerShape(9.dp))
 
     @Composable
