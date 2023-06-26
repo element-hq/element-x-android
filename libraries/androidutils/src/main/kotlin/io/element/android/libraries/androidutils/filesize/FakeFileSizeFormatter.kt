@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.androidtools.test
-
-import io.element.android.libraries.androidtools.api.FileSizeFormatter
+package io.element.android.libraries.androidutils.filesize
 
 class FakeFileSizeFormatter : FileSizeFormatter {
     override fun format(fileSize: Long, useShortFormat: Boolean): String {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.androidtools.api
+package io.element.android.libraries.androidutils.filesize
 
 interface FileSizeFormatter {
     /**
