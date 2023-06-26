@@ -92,13 +92,15 @@ fun TextComposer(
     onSendMessage: (String) -> Unit = {},
     onResetComposerMode: () -> Unit = {},
     onComposerTextChange: (CharSequence) -> Unit = {},
-    onAddAttachment:() -> Unit = {},
+    onAddAttachment: () -> Unit = {},
 ) {
     val text = composerText.orEmpty()
-    Row(modifier.padding(
-        horizontal = 12.dp,
-        vertical = 8.dp
-    ), verticalAlignment = Alignment.Bottom) {
+    Row(
+        modifier.padding(
+            horizontal = 12.dp,
+            vertical = 8.dp
+        ), verticalAlignment = Alignment.Bottom
+    ) {
         AttachmentButton(onClick = onAddAttachment, modifier = Modifier.padding(vertical = 6.dp))
         Spacer(modifier = Modifier.width(12.dp))
         var lineCount by remember { mutableStateOf(0) }
@@ -206,10 +208,12 @@ private fun EditingModeView(
     onResetComposerMode: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(horizontalArrangement = Arrangement.spacedBy(6.dp),
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 8.dp)) {
+            .padding(horizontal = 12.dp, vertical = 8.dp)
+    ) {
         Icon(
             resourceId = VectorIcons.Edit,
             contentDescription = stringResource(CommonStrings.common_editing),
@@ -301,7 +305,7 @@ private fun ReplyToModeView(
                 text = text.orEmpty(),
                 style = ElementTextStyles.Regular.caption1,
                 textAlign = TextAlign.Start,
-                color = LocalColors.current.placeholder,
+                color = MaterialTheme.colorScheme.secondary,
                 maxLines = if (attachmentThumbnailInfo != null) 1 else 2,
                 overflow = TextOverflow.Ellipsis,
             )
