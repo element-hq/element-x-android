@@ -20,14 +20,12 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface RoomSummaryDataSource {
 
-    enum class LoadingState {
-        NotLoaded,
-        PreLoaded,
-        PartiallyLoaded,
-        FullyLoaded,
+    sealed class LoadingState {
+        object NotLoaded : LoadingState()
+        data class Loaded(val numberOfRooms: Int): LoadingState()
     }
 
-    fun loadingState(): StateFlow<LoadingState>
+    fun allRoomsLoadingState(): StateFlow<LoadingState>
     fun allRooms(): StateFlow<List<RoomSummary>>
     fun inviteRooms(): StateFlow<List<RoomSummary>>
     fun updateRoomListVisibleRange(range: IntRange)
