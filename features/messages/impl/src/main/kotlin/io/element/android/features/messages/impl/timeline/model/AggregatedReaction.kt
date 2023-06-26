@@ -17,6 +17,8 @@
 package io.element.android.features.messages.impl.timeline.model
 
 /**
+ * @property key the reaction key (e.g. "👍")
+ * @property count the number of users who reacted with this key
  * @property isHighlighted true if the reaction has (also) been sent by the current user.
  */
 data class AggregatedReaction(
