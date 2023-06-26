@@ -47,7 +47,6 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
-import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -56,13 +55,14 @@ fun SelectedRoom(
     modifier: Modifier = Modifier,
     onRoomRemoved: (RoomSummaryDetails) -> Unit = {},
 ) {
-    Box(modifier = modifier
-        .width(56.dp)
+    Box(
+        modifier = modifier
+            .width(56.dp)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Avatar(AvatarData(roomSummary.roomId.value, roomSummary.name, roomSummary.avatarURLString, AvatarSize.Custom(56.dp)))
+            Avatar(AvatarData(roomSummary.roomId.value, roomSummary.name, roomSummary.avatarURLString, AvatarSize.SelectedRoom))
             Text(
                 text = roomSummary.name,
                 overflow = TextOverflow.Ellipsis,
@@ -102,8 +102,8 @@ internal fun SelectedRoomDarkPreview() = ElementPreviewDark { ContentToPreview()
 
 @Composable
 private fun ContentToPreview() {
-    SelectedRoom(roomSummary =
-        RoomSummaryDetails(
+    SelectedRoom(
+        roomSummary = RoomSummaryDetails(
             roomId = RoomId("!room:domain"),
             name = "roomName",
             canonicalAlias = null,

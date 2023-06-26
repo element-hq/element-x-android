@@ -29,6 +29,7 @@ enum class AvatarSize(val dp: Dp) {
     UserListItem(36.dp),
 
     SelectedUser(56.dp),
+    SelectedRoom(56.dp),
 
     TimelineRoom(32.dp),
     TimelineSender(32.dp),
