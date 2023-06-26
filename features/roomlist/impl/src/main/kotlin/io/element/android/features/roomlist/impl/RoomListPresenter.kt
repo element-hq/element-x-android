@@ -77,7 +77,7 @@ class RoomListPresenter @Inject constructor(
         var filter by rememberSaveable { mutableStateOf("") }
         val roomSummaries by client
             .roomSummaryDataSource
-            .roomList()
+            .allRooms()
             .collectAsState()
 
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState()

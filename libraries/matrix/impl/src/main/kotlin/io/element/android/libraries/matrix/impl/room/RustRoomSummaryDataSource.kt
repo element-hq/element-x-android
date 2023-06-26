@@ -22,48 +22,44 @@ import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
-import org.matrix.rustcomponents.sdk.RoomListEntry
 import org.matrix.rustcomponents.sdk.RoomListException
 import org.matrix.rustcomponents.sdk.RoomListInput
 import org.matrix.rustcomponents.sdk.RoomListRange
 import org.matrix.rustcomponents.sdk.RoomListService
 import timber.log.Timber
-import java.util.UUID
 
 internal class RustRoomSummaryDataSource(
     private val roomListService: RoomListService,
     private val sessionCoroutineScope: CoroutineScope,
-    private val coroutineDispatchers: CoroutineDispatchers,
-    private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
+    coroutineDispatchers: CoroutineDispatchers,
+    roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
 ) : RoomSummaryDataSource {
 
-    private val roomList = MutableStateFlow<List<RoomSummary>>(emptyList())
-    private val inviteList = MutableStateFlow<List<RoomSummary>>(emptyList())
-    private val loadingState = MutableStateFlow(RoomSummaryDataSource.LoadingState.NotLoaded)
+    private val allRooms = MutableStateFlow<List<RoomSummary>>(emptyList())
+    private val inviteRooms = MutableStateFlow<List<RoomSummary>>(emptyList())
 
-    fun init() {
+    private val loadingState = MutableStateFlow(RoomSummaryDataSource.LoadingState.NotLoaded)
+    private val allRoomsListProcessor = RoomSummaryListProcessor(allRooms, roomListService, roomSummaryDetailsFactory)
+
+    init {
         sessionCoroutineScope.launch(coroutineDispatchers.computation) {
             roomListService.allRooms().entriesFlow { roomListEntries ->
-                roomList.value = roomListEntries.map(::buildSummaryForRoomListEntry)
+                allRoomsListProcessor.postEntries(roomListEntries)
             }.onEach { update ->
-                roomList.getAndUpdate {
-                    it.applyUpdate(update)
-                }
+                allRoomsListProcessor.postUpdate(update)
             }.launchIn(this)
         }
     }
 
-    override fun roomList(): StateFlow<List<RoomSummary>> {
-        return roomList
+    override fun allRooms(): StateFlow<List<RoomSummary>> {
+        return allRooms
     }
 
-    override fun inviteList(): StateFlow<List<RoomSummary>> {
-        return inviteList
+    override fun inviteRooms(): StateFlow<List<RoomSummary>> {
+        return inviteRooms
     }
 
     override fun loadingState(): StateFlow<RoomSummaryDataSource.LoadingState> {
@@ -80,74 +76,6 @@ internal class RustRoomSummaryDataSource(
                 )
             } catch (exception: RoomListException) {
                 Timber.e(exception, "Failed updating visible range")
-            }
-        }
-    }
-
-    private fun List<RoomSummary>.applyUpdate(update: RoomListEntriesUpdate): List<RoomSummary> {
-        val newList = toMutableList()
-        when (update) {
-            is RoomListEntriesUpdate.Append -> {
-                val roomSummaries = update.values.map {
-                    buildSummaryForRoomListEntry(it)
-                }
-                newList.addAll(roomSummaries)
-            }
-            is RoomListEntriesUpdate.PushBack -> {
-                val roomSummary = buildSummaryForRoomListEntry(update.value)
-                newList.add(roomSummary)
-            }
-            is RoomListEntriesUpdate.PushFront -> {
-                val roomSummary = buildSummaryForRoomListEntry(update.value)
-                newList.add(0, roomSummary)
-            }
-            is RoomListEntriesUpdate.Set -> {
-                val roomSummary = buildSummaryForRoomListEntry(update.value)
-                newList[update.index.toInt()] = roomSummary
-            }
-            is RoomListEntriesUpdate.Insert -> {
-                val roomSummary = buildSummaryForRoomListEntry(update.value)
-                newList.add(update.index.toInt(), roomSummary)
-            }
-            is RoomListEntriesUpdate.Remove -> {
-                newList.removeAt(update.index.toInt())
-            }
-            is RoomListEntriesUpdate.Reset -> {
-                newList.clear()
-                newList.addAll(update.values.map { buildSummaryForRoomListEntry(it) })
-            }
-            RoomListEntriesUpdate.PopBack -> {
-                newList.removeFirstOrNull()
-            }
-            RoomListEntriesUpdate.PopFront -> {
-                newList.removeLastOrNull()
-            }
-            RoomListEntriesUpdate.Clear -> {
-                newList.clear()
-            }
-        }
-        return newList
-    }
-
-    private fun buildSummaryForRoomListEntry(entry: RoomListEntry): RoomSummary {
-        return when (entry) {
-            RoomListEntry.Empty -> buildEmptyRoomSummary()
-            is RoomListEntry.Invalidated -> buildRoomSummaryForIdentifier(entry.roomId)
-            is RoomListEntry.Filled -> buildRoomSummaryForIdentifier(entry.roomId)
-        }
-    }
-
-    private fun buildEmptyRoomSummary(): RoomSummary {
-        return RoomSummary.Empty(UUID.randomUUID().toString())
-    }
-
-    private fun buildRoomSummaryForIdentifier(identifier: String): RoomSummary {
-        val roomListItem = roomListService.roomOrNull(identifier) ?: return RoomSummary.Empty(identifier)
-        return roomListItem.use {
-            roomListItem.fullRoom().use { fullRoom ->
-                RoomSummary.Filled(
-                    details = roomSummaryDetailsFactory.create(roomListItem, fullRoom)
-                )
             }
         }
     }

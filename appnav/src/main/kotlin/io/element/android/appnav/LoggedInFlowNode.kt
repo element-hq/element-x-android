@@ -179,7 +179,7 @@ class LoggedInFlowNode @AssistedInject constructor(
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 combine(
-                    syncService.syncState.debounce(100),
+                    syncService.syncState,
                     networkMonitor.connectivity
                 ) { syncState, networkStatus ->
                     syncState == SyncState.InError && networkStatus == NetworkStatus.Online
