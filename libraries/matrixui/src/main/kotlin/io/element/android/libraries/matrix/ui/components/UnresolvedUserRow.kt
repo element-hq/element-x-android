@@ -19,11 +19,9 @@ package io.element.android.libraries.matrix.ui.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -44,6 +42,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.theme.components.Checkbox
+import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.noFontPadding
@@ -59,15 +58,14 @@ fun UnresolvedUserRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
-            .height(IntrinsicSize.Min),
+            .heightIn(min = 56.dp)
+            .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Avatar(avatarData)
         Column(
             modifier = Modifier
-                .padding(start = 12.dp)
-                .fillMaxHeight(),
+                .padding(start = 12.dp),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             // ID
@@ -82,9 +80,11 @@ fun UnresolvedUserRow(
             )
 
             // Warning
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 3.dp)) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 3.dp)
+            ) {
                 Icon(
                     imageVector = Icons.Filled.Error,
                     contentDescription = "",
@@ -153,8 +153,11 @@ internal fun CheckableUnresolvedUserRowPreview() =
         val matrixUser = aMatrixUser()
         Column {
             CheckableUnresolvedUserRow(false, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value)
+            Divider()
             CheckableUnresolvedUserRow(true, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value)
+            Divider()
             CheckableUnresolvedUserRow(false, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value, enabled = false)
+            Divider()
             CheckableUnresolvedUserRow(true, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value, enabled = false)
         }
     }

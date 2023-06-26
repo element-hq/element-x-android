@@ -16,13 +16,10 @@
 
 package io.element.android.libraries.matrix.ui.components
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -67,8 +64,8 @@ fun UserRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
-            .height(IntrinsicSize.Min),
+            .heightIn(min = 56.dp)
+            .padding(start = 16.dp, top = 4.dp, end = 16.dp, bottom = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Avatar(avatarData)
