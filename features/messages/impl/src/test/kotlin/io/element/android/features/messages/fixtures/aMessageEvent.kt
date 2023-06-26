@@ -47,7 +47,7 @@ internal fun aMessageEvent(
     content = content,
     sentTime = "",
     isMine = isMine,
-    reactionsState = aTimelineItemReactions(count = 0, isMine = isMine),
+    reactionsState = aTimelineItemReactions(count = 0),
     sendState = EventSendState.Sent(AN_EVENT_ID),
     inReplyTo = inReplyTo,
     debugInfo = debugInfo,

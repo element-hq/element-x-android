@@ -16,9 +16,11 @@
 
 package io.element.android.features.messages.impl.timeline.model
 
-data class AggregatedReaction constructor(
+/**
+ * @property isHighlighted true if the reaction has (also) been sent by the current user.
+ */
+data class AggregatedReaction(
     val key: String,
-    val count: String,
-    val isOnMyMessage: Boolean,
+    val count: Int,
     val isHighlighted: Boolean = false
 )

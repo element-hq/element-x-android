@@ -100,7 +100,7 @@ internal fun aTimelineItemEvent(
     sendState: EventSendState = EventSendState.Sent(eventId),
     inReplyTo: InReplyTo? = null,
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
-    timelineItemReactions: TimelineItemReactions = aTimelineItemReactions(isMine = isMine),
+    timelineItemReactions: TimelineItemReactions = aTimelineItemReactions(),
 ): TimelineItem.Event {
     return TimelineItem.Event(
         id = eventId.value,
@@ -122,12 +122,12 @@ internal fun aTimelineItemEvent(
 
 fun aTimelineItemReactions(
     count: Int = 1,
-    isMine: Boolean = true,
+    isHighlighted: Boolean = false,
 ): TimelineItemReactions {
     return TimelineItemReactions(
         reactions = buildList {
             repeat(count) {
-                add(AggregatedReaction(key = "👍", count = (it + 1).toString(), isOnMyMessage = isMine))
+                add(AggregatedReaction(key = "👍", count = 1 + it, isHighlighted = isHighlighted))
             }
         }.toPersistentList()
     )

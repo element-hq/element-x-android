@@ -24,6 +24,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemReac
 import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
@@ -34,6 +35,7 @@ import javax.inject.Inject
 
 class TimelineItemEventFactory @Inject constructor(
     private val contentFactory: TimelineItemContentFactory,
+    private val matrixClient: MatrixClient,
 ) {
 
     fun create(
@@ -91,11 +93,11 @@ class TimelineItemEventFactory @Inject constructor(
         val aggregatedReactions = event.reactions.map {
             AggregatedReaction(
                 key = it.key,
-                count = it.count.toString(),
-                isHighlighted = false,
-                isOnMyMessage = event.isOwn,
+                count = it.count.toInt(),
+                isHighlighted = it.senderIds.contains(matrixClient.sessionId),
             )
         }
+        aggregatedReactions.sortedByDescending { it.count }
         return TimelineItemReactions(aggregatedReactions.toImmutableList())
     }
 
