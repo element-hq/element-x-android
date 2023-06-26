@@ -23,6 +23,7 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.network.interceptors.FormattedJsonHttpLogger
+import io.element.android.libraries.network.interceptors.UserAgentInterceptor
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -35,10 +36,12 @@ object NetworkModule {
     @SingleIn(AppScope::class)
     fun providesOkHttpClient(
         buildMeta: BuildMeta,
+        userAgentInterceptor: UserAgentInterceptor,
     ): OkHttpClient = OkHttpClient.Builder().apply {
         connectTimeout(30, TimeUnit.SECONDS)
         readTimeout(60, TimeUnit.SECONDS)
         writeTimeout(60, TimeUnit.SECONDS)
+        addInterceptor(userAgentInterceptor)
         if (buildMeta.isDebuggable) addInterceptor(providesHttpLoggingInterceptor())
     }.build()
 
