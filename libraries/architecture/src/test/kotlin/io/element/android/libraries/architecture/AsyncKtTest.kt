@@ -35,9 +35,9 @@ class AsyncKtTest {
         assertThat(result.isSuccess).isTrue()
         assertThat(result.getOrNull()).isEqualTo(1)
 
-        assertThat(state.pop()).isEqualTo(Async.Uninitialized)
-        assertThat(state.pop()).isEqualTo(Async.Loading(null))
-        assertThat(state.pop()).isEqualTo(Async.Success(1))
+        assertThat(state.popFirst()).isEqualTo(Async.Uninitialized)
+        assertThat(state.popFirst()).isEqualTo(Async.Loading(null))
+        assertThat(state.popFirst()).isEqualTo(Async.Success(1))
         state.assertNoMoreValues()
     }
 
@@ -53,9 +53,9 @@ class AsyncKtTest {
         assertThat(result.isFailure).isTrue()
         assertThat(result.exceptionOrNull()).isEqualTo(MyThrowable("hello"))
 
-        assertThat(state.pop()).isEqualTo(Async.Uninitialized)
-        assertThat(state.pop()).isEqualTo(Async.Loading(null))
-        assertThat(state.pop()).isEqualTo(Async.Failure<Int>(MyThrowable("hello")))
+        assertThat(state.popFirst()).isEqualTo(Async.Uninitialized)
+        assertThat(state.popFirst()).isEqualTo(Async.Loading(null))
+        assertThat(state.popFirst()).isEqualTo(Async.Failure<Int>(MyThrowable("hello")))
         state.assertNoMoreValues()
     }
 
@@ -71,9 +71,9 @@ class AsyncKtTest {
         assertThat(result.isFailure).isTrue()
         assertThat(result.exceptionOrNull()).isEqualTo(MyThrowable("hello world"))
 
-        assertThat(state.pop()).isEqualTo(Async.Uninitialized)
-        assertThat(state.pop()).isEqualTo(Async.Loading(null))
-        assertThat(state.pop()).isEqualTo(Async.Failure<Int>(MyThrowable("hello world")))
+        assertThat(state.popFirst()).isEqualTo(Async.Uninitialized)
+        assertThat(state.popFirst()).isEqualTo(Async.Loading(null))
+        assertThat(state.popFirst()).isEqualTo(Async.Failure<Int>(MyThrowable("hello world")))
         state.assertNoMoreValues()
     }
 }
@@ -96,7 +96,7 @@ private class TestableMutableState<T>(
     /**
      * Returns the states that were set in the order they were set.
      */
-    fun pop(): T = _deque.removeFirst()
+    fun popFirst(): T = _deque.removeFirst()
 
     fun assertNoMoreValues() {
         assertThat(_deque).isEmpty()
