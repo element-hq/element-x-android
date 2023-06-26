@@ -62,7 +62,6 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemProfileChangeContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
@@ -232,7 +231,6 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
     when (event.content) {
         is TimelineItemTextBasedContent,
         is TimelineItemStateContent,
-        is TimelineItemProfileChangeContent,
         is TimelineItemEncryptedContent,
         is TimelineItemRedactedContent,
         is TimelineItemUnknownContent -> content = { ContentForBody(textContent) }
