@@ -27,21 +27,46 @@ import kotlin.contracts.contract
  */
 @Stable
 sealed interface Async<out T> {
+
+    /**
+     * Represents a failed operation.
+     *
+     * @param exception the exception that caused the operation to fail.
+     * @param prevData the data returned by a previous successful run of the operation if any.
+     */
     data class Failure<out T>(
         val exception: Throwable,
         val prevData: T? = null,
     ) : Async<T>
 
+    /**
+     * Represents an operation that is currently ongoing.
+     *
+     * @param prevData the data returned by a previous successful run of the operation if any.
+     */
     data class Loading<out T>(
         val prevData: T? = null,
     ) : Async<T>
 
+    /**
+     * Represents a successful operation.
+     *
+     * @param data the data returned by the operation.
+     */
     data class Success<out T>(
         val data: T,
     ) : Async<T>
 
+    /**
+     * Represents an uninitialized operation (i.e. yet to be run).
+     */
     object Uninitialized : Async<Nothing>
 
+    /**
+     * Returns the data returned by the operation, or null otherwise.
+     *
+     * Please note this method may return stale data if the operation is not [Success].
+     */
     fun dataOrNull(): T? = when (this) {
         is Failure -> prevData
         is Loading -> prevData
@@ -49,6 +74,9 @@ sealed interface Async<out T> {
         Uninitialized -> null
     }
 
+    /**
+     * Returns the exception that caused the operation to fail, or null otherwise.
+     */
     fun exceptionOrNull(): Throwable? = when (this) {
         is Failure -> exception
         else -> null
