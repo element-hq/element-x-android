@@ -108,13 +108,13 @@ class RustMatrixRoom(
             timelineLimit = null
         )
         roomListItem.subscribe(settings)
-        innerRoom.timelineDiffFlow { initialList ->
-            timeline.postItems(initialList)
-        }.onEach {
-            syncUpdateFlow.value = systemClock.epochMillis()
-            timeline.postDiff(it)
-        }.launchIn(roomCoroutineScope)
-        roomCoroutineScope.launch {
+        roomCoroutineScope.launch(coroutineDispatchers.computation) {
+            innerRoom.timelineDiffFlow { initialList ->
+                timeline.postItems(initialList)
+            }.onEach {
+                syncUpdateFlow.value = systemClock.epochMillis()
+                timeline.postDiff(it)
+            }.launchIn(this)
             fetchMembers()
         }
         isInit.value = true
@@ -122,7 +122,7 @@ class RustMatrixRoom(
     }
 
     override fun close() {
-        if(isInit.value) {
+        if (isInit.value) {
             isInit.value = false
             roomCoroutineScope.cancel()
             roomListItem.unsubscribe()
@@ -359,7 +359,6 @@ class RustMatrixRoom(
                 innerRoom.setTopic(topic)
             }
         }
-
 
     private suspend fun fetchMembers() = withContext(coroutineDispatchers.io) {
         runCatching {
