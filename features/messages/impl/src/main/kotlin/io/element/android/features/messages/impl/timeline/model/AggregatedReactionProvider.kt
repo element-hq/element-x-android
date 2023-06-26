@@ -22,22 +22,18 @@ open class AggregatedReactionProvider : PreviewParameterProvider<AggregatedReact
     override val values: Sequence<AggregatedReaction>
         get() = sequenceOf(false, true).flatMap {
             sequenceOf(
-                anAggregatedReaction(isOnMyMessage = it),
-                anAggregatedReaction(isOnMyMessage = it, count = "88"),
-                anAggregatedReaction(isOnMyMessage = it, isHighlighted = true),
-                anAggregatedReaction(isOnMyMessage = it, count = "88", isHighlighted = true),
+                anAggregatedReaction(isHighlighted = it),
+                anAggregatedReaction(isHighlighted = it, count = 88),
             )
         }
 }
 
 fun anAggregatedReaction(
     key: String = "👍",
-    count: String = "1", // TODO Why is it a String?
-    isOnMyMessage: Boolean = false,
+    count: Int = 1,
     isHighlighted: Boolean = false,
 ) = AggregatedReaction(
     key = key,
     count = count,
-    isOnMyMessage = isOnMyMessage,
     isHighlighted = isHighlighted,
 )
