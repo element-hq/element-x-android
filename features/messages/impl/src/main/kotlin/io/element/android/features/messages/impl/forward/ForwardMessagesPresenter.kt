@@ -24,7 +24,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -67,7 +66,7 @@ class ForwardMessagesPresenter @AssistedInject constructor(
         var results: SearchBarResultState<ImmutableList<RoomSummaryDetails>> by remember { mutableStateOf(SearchBarResultState.NotSearching()) }
         val forwardingActionState: MutableState<Async<ImmutableList<RoomId>>> = remember { mutableStateOf(Async.Uninitialized) }
 
-        val summaries by client.roomSummaryDataSource.roomList().collectAsState()
+        val summaries by client.roomSummaryDataSource.allRooms().collectAsState()
 
         LaunchedEffect(query, summaries) {
             val filteredSummaries = summaries.filterIsInstance<RoomSummary.Filled>()

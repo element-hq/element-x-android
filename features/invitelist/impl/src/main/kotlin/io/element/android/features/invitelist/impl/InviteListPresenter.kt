@@ -50,7 +50,7 @@ class InviteListPresenter @Inject constructor(
     override fun present(): InviteListState {
         val invites by client
             .roomSummaryDataSource
-            .inviteList()
+            .inviteRooms()
             .collectAsState()
 
         var seenInvites by remember { mutableStateOf<Set<RoomId>>(emptySet()) }

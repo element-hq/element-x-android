@@ -29,7 +29,7 @@ class FakeRoomSummaryDataSource : RoomSummaryDataSource {
         roomSummariesFlow.emit(roomSummaries)
     }
 
-    override fun roomList(): StateFlow<List<RoomSummary>> {
+    override fun allRooms(): StateFlow<List<RoomSummary>> {
         return roomSummariesFlow
     }
 

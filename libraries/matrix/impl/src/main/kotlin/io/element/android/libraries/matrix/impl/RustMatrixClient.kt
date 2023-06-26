@@ -123,7 +123,6 @@ class RustMatrixClient constructor(
                     onSlidingSyncUpdate()
                 }
             }.launchIn(sessionCoroutineScope)
-        rustRoomSummaryDataSource.init()
     }
 
     override fun getRoom(roomId: RoomId): MatrixRoom? {
@@ -180,7 +179,7 @@ class RustMatrixClient constructor(
 
             // Wait to receive the room back from the sync
             withTimeout(30_000L) {
-                roomSummaryDataSource.roomList()
+                roomSummaryDataSource.allRooms()
                     .filter { roomSummaries ->
                         roomSummaries.map { it.identifier() }.contains(roomId.value)
                     }.first()

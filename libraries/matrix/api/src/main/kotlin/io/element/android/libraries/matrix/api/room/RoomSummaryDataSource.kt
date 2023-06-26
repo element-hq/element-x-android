@@ -28,7 +28,7 @@ interface RoomSummaryDataSource {
     }
 
     fun loadingState(): StateFlow<LoadingState>
-    fun roomList(): StateFlow<List<RoomSummary>>
-    fun inviteList(): StateFlow<List<RoomSummary>>
+    fun allRooms(): StateFlow<List<RoomSummary>>
+    fun inviteRooms(): StateFlow<List<RoomSummary>>
     fun updateRoomListVisibleRange(range: IntRange)
 }

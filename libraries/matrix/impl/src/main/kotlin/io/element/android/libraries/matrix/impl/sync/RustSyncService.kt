@@ -30,7 +30,7 @@ import org.matrix.rustcomponents.sdk.RoomListServiceState
 
 class RustSyncService(
     private val roomListService: RoomListService,
-    private val sessionCoroutineScope: CoroutineScope
+    sessionCoroutineScope: CoroutineScope
 ) : SyncService {
 
     override fun startSync() {
