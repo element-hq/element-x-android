@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.developer
+package io.element.android.libraries.androidutils.filesize
 
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
-import kotlinx.collections.immutable.ImmutableList
-
-data class DeveloperSettingsState constructor(
-    val features: ImmutableList<FeatureUiModel>,
-    val cacheSize: Async<String>,
-    val clearCacheAction: Async<Unit>,
-    val eventSink: (DeveloperSettingsEvents) -> Unit
-)
+interface FileSizeFormatter {
+    /**
+     * Formats a content size to be in the form of bytes, kilobytes, megabytes, etc.
+     */
+    fun format(fileSize: Long, useShortFormat: Boolean = true): String
+}

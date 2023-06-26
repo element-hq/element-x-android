@@ -17,16 +17,20 @@
 package io.element.android.features.preferences.impl.developer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.featureflag.ui.model.aFeatureUiModelList
 
 open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSettingsState> {
     override val values: Sequence<DeveloperSettingsState>
         get() = sequenceOf(
             aDeveloperSettingsState(),
+            aDeveloperSettingsState().copy(clearCacheAction = Async.Loading()),
         )
 }
 
 fun aDeveloperSettingsState() = DeveloperSettingsState(
     features = aFeatureUiModelList(),
+    cacheSize = Async.Success("1.2 MB"),
+    clearCacheAction = Async.Uninitialized,
     eventSink = {}
 )
