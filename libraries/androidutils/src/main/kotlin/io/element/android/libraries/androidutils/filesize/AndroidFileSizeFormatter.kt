@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.androidtools.impl
+package io.element.android.libraries.androidutils.filesize
 
 import android.content.Context
 import android.os.Build
 import android.text.format.Formatter
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.androidtools.api.FileSizeFormatter
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import javax.inject.Inject
