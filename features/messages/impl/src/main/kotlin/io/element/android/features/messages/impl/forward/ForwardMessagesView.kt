@@ -48,6 +48,7 @@ import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialogDefaults
@@ -233,7 +234,12 @@ internal fun RoomSummaryView(
     ) {
         val roomAlias = summary.canonicalAlias ?: summary.roomId.value
         Avatar(
-            avatarData = AvatarData(id = roomAlias, name = summary.name, url = summary.avatarURLString),
+            avatarData = AvatarData(
+                id = roomAlias,
+                name = summary.name,
+                url = summary.avatarURLString,
+                size = AvatarSize.RoomListItem,
+            ),
         )
         Column(
             modifier = Modifier
