@@ -77,15 +77,14 @@ class RoomSummaryListProcessor(
                 removeAt(update.index.toInt())
             }
             is RoomListEntriesUpdate.Reset -> {
-                Timber.v("Reset size: ${update.values.size}")
                 clear()
                 addAll(update.values.map { buildSummaryForRoomListEntry(it) })
             }
             RoomListEntriesUpdate.PopBack -> {
-                removeFirstOrNull()
+                removeLastOrNull()
             }
             RoomListEntriesUpdate.PopFront -> {
-                removeLastOrNull()
+                removeFirstOrNull()
             }
             RoomListEntriesUpdate.Clear -> {
                 clear()
