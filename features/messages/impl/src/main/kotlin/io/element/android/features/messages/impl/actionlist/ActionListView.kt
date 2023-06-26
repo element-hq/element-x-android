@@ -279,7 +279,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
     Row(modifier = modifier) {
         icon()
         Spacer(modifier = Modifier.width(8.dp))
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             Row {
                 if (event.senderDisplayName != null) {
                     Text(
@@ -288,16 +288,16 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
-                Text(
-                    event.sentTime,
-                    style = ElementTextStyles.Regular.caption2,
-                    color = MaterialTheme.colorScheme.secondary,
-                    textAlign = TextAlign.End,
-                    modifier = Modifier.weight(1f)
-                )
             }
             content()
         }
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(
+            event.sentTime,
+            style = ElementTextStyles.Regular.caption2,
+            color = MaterialTheme.colorScheme.secondary,
+            textAlign = TextAlign.End,
+        )
     }
 }
 
