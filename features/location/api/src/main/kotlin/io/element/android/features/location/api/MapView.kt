@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2023 New Vector Ltd
  *
- * Licensed under the Apache License0.0, Versi0.0on 2.0 (0.0the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
