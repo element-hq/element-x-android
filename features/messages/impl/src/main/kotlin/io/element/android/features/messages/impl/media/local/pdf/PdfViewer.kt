@@ -35,9 +35,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.text.roundToPx
+import io.element.android.libraries.designsystem.text.toDp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import me.saket.telephoto.zoomable.zoomable
@@ -51,7 +51,7 @@ fun PdfViewer(
         modifier = modifier.zoomable(pdfViewerState.zoomableState),
         contentAlignment = Alignment.Center
     ) {
-        val maxWidthInPx = maxWidth.dpToPx()
+        val maxWidthInPx = maxWidth.roundToPx()
         DisposableEffect(pdfViewerState) {
             pdfViewerState.openForWidth(maxWidthInPx)
             onDispose {
@@ -107,15 +107,9 @@ private fun PdfPageView(
             Box(
                 modifier = modifier
                     .fillMaxWidth()
-                    .height(state.height.pxToDp())
+                    .height(state.height.toDp())
                     .background(color = Color.White)
             )
         }
     }
 }
-
-@Composable
-private fun Int.pxToDp() = with(LocalDensity.current) { this@pxToDp.toDp() }
-
-@Composable
-private fun Dp.dpToPx() = with(LocalDensity.current) { this@dpToPx.roundToPx() }

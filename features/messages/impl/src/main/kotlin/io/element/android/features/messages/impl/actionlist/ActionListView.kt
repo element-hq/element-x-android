@@ -42,20 +42,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -73,6 +69,7 @@ import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.components.Divider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
@@ -168,9 +165,11 @@ private fun SheetContent(
             ) {
                 item {
                     Column {
-                        MessageSummary(event = target.event, modifier = Modifier
+                        MessageSummary(
+                            event = target.event, modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 16.dp))
+                            .padding(horizontal = 16.dp)
+                        )
                         Spacer(modifier = Modifier.height(14.dp))
                         Divider()
                     }
@@ -347,7 +346,7 @@ private fun EmojiButton(
 ) {
     Text(
         emoji,
-        fontSize = 28.dpToSp(),
+        fontSize = 28.dp.toSp(),
         modifier = modifier.clickable(
             enabled = true,
             onClick = { onClicked(emoji) },
@@ -355,11 +354,6 @@ private fun EmojiButton(
             interactionSource = remember { MutableInteractionSource() }
         )
     )
-}
-
-@Composable
-private fun Int.dpToSp(): TextUnit = with(LocalDensity.current) {
-    return dp.toSp()
 }
 
 @Preview

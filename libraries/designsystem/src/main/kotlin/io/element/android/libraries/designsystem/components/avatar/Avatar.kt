@@ -37,7 +37,7 @@ import coil.compose.AsyncImage
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.preview.debugPlaceholderAvatar
-import io.element.android.libraries.designsystem.text.textDp
+import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.AvatarGradientEnd
 import io.element.android.libraries.theme.AvatarGradientStart
@@ -103,7 +103,7 @@ private fun InitialsAvatar(
         Text(
             modifier = Modifier.align(Alignment.Center),
             text = avatarData.initial,
-            fontSize = ((avatarData.size.dp / 2).value).toInt().textDp,
+            fontSize = avatarData.size.dp.toSp() / 2,
             color = Color.White,
         )
     }
