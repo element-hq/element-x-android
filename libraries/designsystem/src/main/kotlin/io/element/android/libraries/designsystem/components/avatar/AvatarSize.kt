@@ -36,5 +36,6 @@ enum class AvatarSize(val dp: Dp) {
 
     MessageActionSender(32.dp),
 
+    RoomInviteItem(52.dp),
     InviteSender(16.dp),
 }

@@ -159,14 +159,14 @@ class InviteListPresenter @Inject constructor(
                 id = i.userId.value,
                 name = i.displayName,
                 url = i.avatarUrl,
-                size = AvatarSize.RoomListItem,
+                size = AvatarSize.RoomInviteItem,
             )
         else
             AvatarData(
                 id = roomId.value,
                 name = name,
                 url = avatarURLString,
-                size = AvatarSize.RoomListItem,
+                size = AvatarSize.RoomInviteItem,
             )
 
         val alias = if (isDirect)
