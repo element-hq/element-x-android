@@ -33,13 +33,13 @@ class RustSyncService(
     sessionCoroutineScope: CoroutineScope
 ) : SyncService {
 
-    override fun startSync() {
+    override fun startSync() = runCatching {
         if (!roomListService.isSyncing()) {
             roomListService.sync()
         }
     }
 
-    override fun stopSync() {
+    override fun stopSync() = runCatching {
         if (roomListService.isSyncing()) {
             roomListService.stopSync()
         }

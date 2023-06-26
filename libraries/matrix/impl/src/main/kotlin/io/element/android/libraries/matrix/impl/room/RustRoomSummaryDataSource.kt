@@ -20,13 +20,18 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.RoomSummary
 import io.element.android.libraries.matrix.api.room.RoomSummaryDataSource
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.matrix.rustcomponents.sdk.RoomList
+import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 import org.matrix.rustcomponents.sdk.RoomListException
 import org.matrix.rustcomponents.sdk.RoomListInput
+import org.matrix.rustcomponents.sdk.RoomListLoadingState
 import org.matrix.rustcomponents.sdk.RoomListRange
 import org.matrix.rustcomponents.sdk.RoomListService
 import timber.log.Timber
@@ -41,16 +46,20 @@ internal class RustRoomSummaryDataSource(
     private val allRooms = MutableStateFlow<List<RoomSummary>>(emptyList())
     private val inviteRooms = MutableStateFlow<List<RoomSummary>>(emptyList())
 
-    private val loadingState = MutableStateFlow(RoomSummaryDataSource.LoadingState.NotLoaded)
+    private val allRoomsLoadingState: MutableStateFlow<RoomSummaryDataSource.LoadingState> = MutableStateFlow(RoomSummaryDataSource.LoadingState.NotLoaded)
     private val allRoomsListProcessor = RoomSummaryListProcessor(allRooms, roomListService, roomSummaryDetailsFactory)
 
     init {
         sessionCoroutineScope.launch(coroutineDispatchers.computation) {
-            roomListService.allRooms().entriesFlow { roomListEntries ->
-                allRoomsListProcessor.postEntries(roomListEntries)
-            }.onEach { update ->
-                allRoomsListProcessor.postUpdate(update)
-            }.launchIn(this)
+            val allRooms = roomListService.allRooms()
+            allRooms.observeEntriesWithProcessor(allRoomsListProcessor)
+                .launchIn(this)
+
+            allRooms.loadingStateFlow()
+                .map { it.toRoomSummaryDataSourceLoadingState() }
+                .onEach {
+                    allRoomsLoadingState.value = it
+                }.launchIn(this)
         }
     }
 
@@ -62,8 +71,8 @@ internal class RustRoomSummaryDataSource(
         return inviteRooms
     }
 
-    override fun loadingState(): StateFlow<RoomSummaryDataSource.LoadingState> {
-        return loadingState
+    override fun allRoomsLoadingState(): StateFlow<RoomSummaryDataSource.LoadingState> {
+        return allRoomsLoadingState
     }
 
     override fun updateRoomListVisibleRange(range: IntRange) {
@@ -80,3 +89,19 @@ internal class RustRoomSummaryDataSource(
         }
     }
 }
+
+private fun RoomListLoadingState.toRoomSummaryDataSourceLoadingState(): RoomSummaryDataSource.LoadingState {
+    return when (this) {
+        is RoomListLoadingState.Loaded -> RoomSummaryDataSource.LoadingState.Loaded(maximumNumberOfRooms?.toInt() ?: 0)
+        is RoomListLoadingState.NotLoaded -> RoomSummaryDataSource.LoadingState.NotLoaded
+    }
+}
+
+fun RoomList.observeEntriesWithProcessor(processor: RoomSummaryListProcessor): Flow<RoomListEntriesUpdate> {
+    return entriesFlow { roomListEntries ->
+        processor.postEntries(roomListEntries)
+    }.onEach { update ->
+        processor.postUpdate(update)
+    }
+}
+
