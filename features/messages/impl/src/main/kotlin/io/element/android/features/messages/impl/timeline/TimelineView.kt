@@ -89,7 +89,7 @@ fun TimelineView(
             modifier = Modifier.fillMaxSize(),
             state = lazyListState,
             reverseLayout = true,
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            contentPadding = PaddingValues(vertical = 8.dp),
         ) {
             itemsIndexed(
                 items = state.timelineItems,

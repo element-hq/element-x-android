@@ -20,6 +20,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,10 +32,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
@@ -49,6 +48,9 @@ import io.element.android.libraries.designsystem.theme.components.Text
 
 private val BUBBLE_RADIUS = 12.dp
 private val BUBBLE_INCOMING_OFFSET = 16.dp
+
+// Design says: The maximum width of a bubble is still 3/4 of the screen width
+private const val BUBBLE_WIDTH_RATIO = 0.75f
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -105,28 +107,29 @@ fun MessageEventBubble(
         }
     }
     val bubbleShape = bubbleShape()
-    Surface(
+    Box(
         modifier = modifier
-            .widthIn(min = 80.dp, max = bubbleMaxSize())
-            .offsetForItem()
-            .clip(bubbleShape)
-            .combinedClickable(
-                onClick = onClick,
-                onLongClick = onLongClick,
-                indication = rememberRipple(),
-                interactionSource = interactionSource
-            ),
-        color = backgroundBubbleColor,
-        shape = bubbleShape,
-        content = content
-    )
-}
-
-@Composable
-fun bubbleMaxSize(): Dp {
-    // Design says: The maximum width of a bubble is still 3/4 of the screen width even with the new
-    // timestamps
-    return LocalConfiguration.current.screenWidthDp.dp * 0.75f
+            .fillMaxWidth(BUBBLE_WIDTH_RATIO)
+            .padding(horizontal = 16.dp)
+            .offsetForItem(),
+        // Need to repeat this if content width is low.
+        contentAlignment = if (state.isMine) Alignment.CenterEnd else Alignment.CenterStart
+    ) {
+        Surface(
+            modifier = Modifier
+                .widthIn(min = 80.dp)
+                .clip(bubbleShape)
+                .combinedClickable(
+                    onClick = onClick,
+                    onLongClick = onLongClick,
+                    indication = rememberRipple(),
+                    interactionSource = interactionSource
+                ),
+            color = backgroundBubbleColor,
+            shape = bubbleShape,
+            content = content
+        )
+    }
 }
 
 @Preview

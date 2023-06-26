@@ -148,6 +148,7 @@ fun TimelineItemEventRow(
                 event.safeSenderName,
                 event.senderAvatar,
                 Modifier
+                    .padding(horizontal = 16.dp)
                     .align(Alignment.TopStart)
                     .clickable(onClick = ::onUserDataClicked)
             )
@@ -158,7 +159,7 @@ fun TimelineItemEventRow(
                 reactionsState = event.reactionsState,
                 modifier = Modifier
                     .align(if (event.isMine) Alignment.BottomEnd else Alignment.BottomStart)
-                    .padding(start = if (event.isMine) 0.dp else 20.dp)
+                    .padding(start = if (event.isMine) 16.dp else 36.dp, end = 16.dp)
             )
         }
     }
