@@ -1,8 +1,10 @@
 package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.buffer
 import org.matrix.rustcomponents.sdk.RoomList
 import org.matrix.rustcomponents.sdk.RoomListEntriesListener
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
@@ -25,7 +27,7 @@ fun RoomList.loadingStateFlow(): Flow<RoomListLoadingState> =
         val result = loadingState(listener)
         send(result.state)
         result.stateStream
-    }
+    }.buffer(Channel.UNLIMITED)
 
 fun RoomList.entriesFlow(onInitialList: suspend (List<RoomListEntry>) -> Unit): Flow<RoomListEntriesUpdate> =
     mxCallbackFlow {
@@ -37,7 +39,7 @@ fun RoomList.entriesFlow(onInitialList: suspend (List<RoomListEntry>) -> Unit): 
         val result = entries(listener)
         onInitialList(result.entries)
         result.entriesStream
-    }
+    }.buffer(Channel.UNLIMITED)
 
 fun RoomListService.roomOrNull(roomId: String): RoomListItem? {
     return try {
@@ -56,4 +58,4 @@ fun RoomListService.stateFlow(): Flow<RoomListServiceState> =
             }
         }
         state(listener)
-    }
+    }.buffer(Channel.UNLIMITED)
