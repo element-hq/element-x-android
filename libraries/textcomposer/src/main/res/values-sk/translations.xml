@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_composer_placeholder">"Správa…"</string>
+  <string name="rich_text_editor_format_bold">"Použiť tučný formát"</string>
+  <string name="rich_text_editor_format_italic">"Použiť formát kurzívy"</string>
+  <string name="rich_text_editor_format_strikethrough">"Použiť formát prečiarknutia"</string>
+  <string name="rich_text_editor_format_underline">"Použiť formát podčiarknutia"</string>
+  <string name="rich_text_editor_link">"Nastaviť odkaz"</string>
+</resources>
