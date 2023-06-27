@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.impl.timeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -32,6 +33,7 @@ internal class MatrixTimelineDiffProcessor(
     private val timelineItemFactory: MatrixTimelineItemMapper,
 ) {
 
+    private val initLatch = CompletableDeferred<Unit>()
     private val mutex = Mutex()
 
     suspend fun postItems(items: List<TimelineItem>) {
@@ -40,9 +42,12 @@ internal class MatrixTimelineDiffProcessor(
             addAll(mappedItems)
             updateBackPaginationState()
         }
+        initLatch.complete(Unit)
     }
 
     suspend fun postDiff(diff: TimelineDiff) {
+        // Makes sure to process first items before diff.
+        initLatch.await()
         updateTimelineItems {
             applyDiff(diff)
             updateBackPaginationState()
