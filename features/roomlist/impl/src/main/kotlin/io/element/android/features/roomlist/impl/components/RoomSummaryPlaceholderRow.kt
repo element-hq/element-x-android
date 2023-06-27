@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,7 +38,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.roomListPlaceHolder
-import io.element.android.libraries.theme.ElementTheme
 
 /**
  * https://www.figma.com/file/0MMNu7cTOzLOlWb7ctTkv3/Element-X?node-id=6547%3A147623
@@ -56,7 +56,7 @@ internal fun RoomSummaryPlaceholderRow(
             modifier = Modifier
                 .size(AvatarSize.RoomListItem.dp)
                 .align(Alignment.CenterVertically)
-                .background(color = ElementTheme.colors.roomListPlaceHolder(), shape = CircleShape)
+                .background(color = MaterialTheme.roomListPlaceHolder(), shape = CircleShape)
         )
         Column(
             modifier = Modifier
