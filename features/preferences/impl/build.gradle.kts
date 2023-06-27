@@ -39,7 +39,6 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.featureflag.ui)
-    implementation(projects.libraries.elementresources)
     implementation(projects.libraries.network)
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)

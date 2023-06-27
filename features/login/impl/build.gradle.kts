@@ -46,7 +46,6 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.network)
     implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.elementresources)
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
     implementation(libs.androidx.browser)
