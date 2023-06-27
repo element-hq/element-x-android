@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_account_provider_continue">"Pokračovať"</string>
+  <string name="screen_account_provider_form_hint">"Adresa domovského servera"</string>
+  <string name="screen_change_server_form_header">"Adresa URL domovského servera"</string>
+  <string name="screen_change_server_subtitle">"Aká je adresa vášho servera?"</string>
+  <string name="screen_login_error_deactivated_account">"Tento účet bol deaktivovaný."</string>
+  <string name="screen_login_error_invalid_credentials">"Nesprávne používateľské meno a/alebo heslo"</string>
+  <string name="screen_login_form_header">"Zadajte svoje údaje"</string>
+  <string name="screen_login_server_header">"Kde žijú vaše rozhovory"</string>
+  <string name="screen_login_title">"Vitajte späť!"</string>
+  <string name="screen_login_title_with_homeserver">"Prihlásiť sa do %1$s"</string>
+  <string name="screen_server_confirmation_change_server">"Zmeniť poskytovateľa účtu"</string>
+  <string name="screen_server_confirmation_message_login_element_dot_io">"Súkromný server pre zamestnancov spoločnosti Element."</string>
+  <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix je otvorená sieť pre bezpečnú a decentralizovanú komunikáciu."</string>
+  <string name="screen_server_confirmation_title_login">"Chystáte sa prihlásiť do %1$s"</string>
+  <string name="screen_server_confirmation_title_register">"Chystáte sa vytvoriť účet na %1$s"</string>
+  <string name="screen_change_server_submit">"Pokračovať"</string>
+  <string name="screen_change_server_title">"Vyberte svoj server"</string>
+  <string name="screen_login_password_hint">"Heslo"</string>
+  <string name="screen_login_submit">"Pokračovať"</string>
+  <string name="screen_login_username_hint">"Používateľské meno"</string>
+</resources>

@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline
+package io.element.android.features.preferences.api
 
-import io.element.android.features.messages.impl.timeline.util.FileSizeFormatter
+import kotlinx.coroutines.flow.Flow
 
-class FakeFileSizeFormatter : FileSizeFormatter {
-    override fun format(fileSize: Long): String {
-        return "$fileSize Bytes"
-    }
+interface CacheService {
+    /**
+     * Returns a flow of the current cache index, can let the app to know when the
+     * cache has been cleared, for instance to restart the app.
+     * Will be a flow of Int, starting from 0, and incrementing each time the cache is cleared.
+     */
+    fun cacheIndex(): Flow<Int>
 }

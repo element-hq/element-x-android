@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="room_timeline_state_changes">
+    <item quantity="one">"%1$d zmena miestnosti"</item>
+    <item quantity="few">"%1$d zmeny miestnosti"</item>
+    <item quantity="other">"%1$d zmien miestnosti"</item>
+  </plurals>
+  <string name="screen_room_attachment_source_camera">"Kamera"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Odfotiť"</string>
+  <string name="screen_room_attachment_source_camera_video">"Nahrať video"</string>
+  <string name="screen_room_attachment_source_files">"Príloha"</string>
+  <string name="screen_room_attachment_source_gallery">"Knižnica fotografií a videí"</string>
+  <string name="screen_room_attachment_source_location">"Poloha"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Odoslať znova"</string>
+  <string name="screen_room_retry_send_menu_remove_action">"Odstrániť"</string>
+</resources>

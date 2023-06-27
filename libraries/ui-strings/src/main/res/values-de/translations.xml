@@ -158,7 +158,7 @@
   <string name="screen_analytics_settings_share_data">"Teile Analyse-Daten"</string>
   <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Fehler bei der Verarbeitung von Medien zum Hochladen, bitte versuchen Sie es erneut."</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"Medien hochladen fehlgeschlagen. Bitte versuchen Sie es erneut."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Hochladen von Medien fehlgeschlagen, bitte versuchen Sie es erneut."</string>
   <string name="screen_report_content_block_user_hint">"Prüfe, ob du alle aktuellen und zukünftigen Nachrichten dieses Benutzers ausblenden möchtest"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Erkennungsschwelle"</string>

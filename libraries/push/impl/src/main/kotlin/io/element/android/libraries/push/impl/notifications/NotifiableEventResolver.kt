@@ -59,6 +59,7 @@ class NotifiableEventResolver @Inject constructor(
                 userId = sessionId,
                 roomId = roomId,
                 eventId = eventId,
+                filterByPushRules = true,
             )
         }.fold(
             {

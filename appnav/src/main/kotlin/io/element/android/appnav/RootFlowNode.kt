@@ -44,6 +44,7 @@ import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.root.RootView
 import io.element.android.features.login.api.oidc.OidcAction
 import io.element.android.features.login.api.oidc.OidcActionFlow
+import io.element.android.features.preferences.api.CacheService
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
@@ -54,7 +55,9 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
@@ -65,6 +68,7 @@ class RootFlowNode @AssistedInject constructor(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val authenticationService: MatrixAuthenticationService,
+    private val cacheService: CacheService,
     private val matrixClientsHolder: MatrixClientsHolder,
     private val presenter: RootPresenter,
     private val bugReportEntryPoint: BugReportEntryPoint,
@@ -88,11 +92,19 @@ class RootFlowNode @AssistedInject constructor(
     private fun observeLoggedInState() {
         authenticationService.isLoggedIn()
             .distinctUntilChanged()
-            .onEach { isLoggedIn ->
-                Timber.v("isLoggedIn=$isLoggedIn")
+            .combine(
+                cacheService.cacheIndex().onEach {
+                    Timber.v("cacheIndex=$it")
+                    matrixClientsHolder.removeAll()
+                }
+            ) { isLoggedIn, cacheIdx -> isLoggedIn to cacheIdx }
+            .onEach { pair ->
+                val isLoggedIn = pair.first
+                val cacheIndex = pair.second
+                Timber.v("isLoggedIn=$isLoggedIn, cacheIndex=$cacheIndex")
                 if (isLoggedIn) {
                     tryToRestoreLatestSession(
-                        onSuccess = { switchToLoggedInFlow(it) },
+                        onSuccess = { switchToLoggedInFlow(it, cacheIndex) },
                         onFailure = { switchToNotLoggedInFlow() }
                     )
                 } else {
@@ -102,8 +114,8 @@ class RootFlowNode @AssistedInject constructor(
             .launchIn(lifecycleScope)
     }
 
-    private fun switchToLoggedInFlow(sessionId: SessionId) {
-        backstack.safeRoot(NavTarget.LoggedInFlow(sessionId))
+    private fun switchToLoggedInFlow(sessionId: SessionId, cacheIndex: Int) {
+        backstack.safeRoot(NavTarget.LoggedInFlow(sessionId, cacheIndex))
     }
 
     private fun switchToNotLoggedInFlow() {
@@ -163,7 +175,7 @@ class RootFlowNode @AssistedInject constructor(
         object NotLoggedInFlow : NavTarget
 
         @Parcelize
-        data class LoggedInFlow(val sessionId: SessionId) : NavTarget
+        data class LoggedInFlow(val sessionId: SessionId, val cacheIndex: Int) : NavTarget
 
         @Parcelize
         object BugReport : NavTarget
@@ -235,8 +247,9 @@ class RootFlowNode @AssistedInject constructor(
     }
 
     private suspend fun attachSession(sessionId: SessionId): LoggedInFlowNode {
+        val cacheIndex = cacheService.cacheIndex().first()
         return attachChild {
-            backstack.newRoot(NavTarget.LoggedInFlow(sessionId))
+            backstack.newRoot(NavTarget.LoggedInFlow(sessionId, cacheIndex))
         }
     }
 }

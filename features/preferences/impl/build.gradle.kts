@@ -32,6 +32,7 @@ anvil {
 dependencies {
     implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
+    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
@@ -39,6 +40,7 @@ dependencies {
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.featureflag.ui)
     implementation(projects.libraries.elementresources)
+    implementation(projects.libraries.network)
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
     implementation(projects.features.rageshake.api)
@@ -47,6 +49,7 @@ dependencies {
     implementation(projects.features.logout.api)
     implementation(libs.datetime)
     implementation(libs.accompanist.placeholder)
+    implementation(libs.coil.compose)
     api(projects.features.preferences.api)
     ksp(libs.showkase.processor)
 
@@ -62,6 +65,7 @@ dependencies {
     testImplementation(projects.features.logout.impl)
     testImplementation(projects.features.analytics.test)
     testImplementation(projects.features.analytics.impl)
+    testImplementation(projects.tests.testutils)
 
     androidTestImplementation(libs.test.junitext)
 }

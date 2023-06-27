@@ -16,11 +16,15 @@
 
 package io.element.android.features.preferences.impl.developer
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.isLoading
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.components.preferences.PreferenceView
@@ -50,6 +54,20 @@ fun DeveloperSettingsView(
             PreferenceText(
                 title = "Open Showkase browser",
                 onClick = onOpenShowkase
+            )
+        }
+        val cache = state.cacheSize
+        PreferenceCategory(title = "Cache") {
+            PreferenceText(
+                title = "Clear cache",
+                icon = Icons.Default.Delete,
+                currentValue = cache.dataOrNull(),
+                loadingCurrentValue = state.cacheSize.isLoading() || state.clearCacheAction.isLoading(),
+                onClick = {
+                    if (state.clearCacheAction.isLoading().not()) {
+                        state.eventSink(DeveloperSettingsEvents.ClearCache)
+                    }
+                }
             )
         }
     }

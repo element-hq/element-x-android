@@ -101,6 +101,13 @@ class FakeMatrixClient(
 
     override fun syncService() = syncService
 
+    override suspend fun getCacheSize(): Long {
+        return 0
+    }
+
+    override suspend fun clearCache() {
+    }
+
     override suspend fun logout() {
         delay(100)
         logoutFailure?.let { throw it }

@@ -26,16 +26,17 @@ import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClient
 import okhttp3.OkHttpClient
 import javax.inject.Inject
+import javax.inject.Provider
 
 class LoggedInImageLoaderFactory @Inject constructor(
     @ApplicationContext private val context: Context,
     private val matrixClient: MatrixClient,
-    private val okHttpClient: OkHttpClient,
+    private val okHttpClient: Provider<OkHttpClient>,
 ) : ImageLoaderFactory {
     override fun newImageLoader(): ImageLoader {
         return ImageLoader
             .Builder(context)
-            .okHttpClient(okHttpClient)
+            .okHttpClient { okHttpClient.get() }
             .components {
                 // Add gif support
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -54,12 +55,12 @@ class LoggedInImageLoaderFactory @Inject constructor(
 
 class NotLoggedInImageLoaderFactory @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val okHttpClient: OkHttpClient,
+    private val okHttpClient: Provider<OkHttpClient>,
 ) : ImageLoaderFactory {
     override fun newImageLoader(): ImageLoader {
         return ImageLoader
             .Builder(context)
-            .okHttpClient(okHttpClient)
+            .okHttpClient { okHttpClient.get() }
             .build()
     }
 }

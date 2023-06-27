@@ -38,7 +38,7 @@ import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
-import io.element.android.libraries.designsystem.utils.handleSnackbarMessage
+import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -135,7 +135,7 @@ class RoomListPresenter @Inject constructor(
             filteredRoomSummaries.value = updateFilteredRoomSummaries(mappedRoomSummaries.value, filter)
         }
 
-        val snackbarMessage = handleSnackbarMessage(snackbarDispatcher)
+        val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 
         return RoomListState(
             matrixUser = matrixUser.value,
