@@ -61,7 +61,6 @@ class RoomFlowNode @AssistedInject constructor(
     private val messagesEntryPoint: MessagesEntryPoint,
     private val roomDetailsEntryPoint: RoomDetailsEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
-    private val analyticsService: AnalyticsService,
     roomMembershipObserver: RoomMembershipObserver,
 ) : BackstackNode<RoomFlowNode.NavTarget>(
     backstack = BackStack(
@@ -93,7 +92,6 @@ class RoomFlowNode @AssistedInject constructor(
         lifecycle.subscribe(
             onCreate = {
                 Timber.v("OnCreate")
-                analyticsService.capture(inputs.room.toAnalyticsViewRoom())
                 plugins<LifecycleCallback>().forEach { it.onFlowCreated(id, inputs.room) }
                 appNavigationStateService.onNavigateToRoom(id, inputs.room.roomId)
                 fetchRoomMembers()

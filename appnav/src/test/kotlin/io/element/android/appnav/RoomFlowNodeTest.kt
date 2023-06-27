@@ -84,7 +84,6 @@ class RoomFlowNodeTest {
         roomDetailsEntryPoint = roomDetailsEntryPoint,
         appNavigationStateService = NoopAppNavigationStateService(),
         roomMembershipObserver = RoomMembershipObserver(),
-        analyticsService = FakeAnalyticsService()
     )
 
     @Test
