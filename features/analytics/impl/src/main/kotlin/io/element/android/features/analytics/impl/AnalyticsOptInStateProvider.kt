@@ -17,8 +17,6 @@
 package io.element.android.features.analytics.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.core.meta.BuildMeta
 import javax.inject.Inject
 
 open class AnalyticsOptInStateProvider @Inject constructor(
@@ -30,6 +28,6 @@ open class AnalyticsOptInStateProvider @Inject constructor(
 }
 
 fun aAnalyticsOptInState() = AnalyticsOptInState(
-    applicationName = "ElementX",
+    applicationName = "Element X",
     eventSink = {}
 )
