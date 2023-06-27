@@ -155,6 +155,8 @@ vanniktech_blurhash = "com.vanniktech:blurhash:0.1.0"
 vanniktech_emoji = "com.vanniktech:emoji-google:0.16.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.1.0"
+maplibre = "org.maplibre.gl:android-sdk:10.2.0"
+maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:1.0.0"
 
 # Analytics
 posthog = "com.posthog.android:posthog:2.0.3"
@@ -186,6 +188,7 @@ android_application = { id = "com.android.application", version.ref = "android_g
 android_library = { id = "com.android.library", version.ref = "android_gradle_plugin" }
 kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin_jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
