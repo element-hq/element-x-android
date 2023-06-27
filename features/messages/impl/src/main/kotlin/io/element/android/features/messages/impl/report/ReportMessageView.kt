@@ -54,7 +54,7 @@ import io.element.android.libraries.designsystem.theme.components.CenterAlignedT
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -74,7 +74,7 @@ fun ReportMessageView(
         }
         is Async.Failure -> {
             ErrorDialog(
-                content = stringResource(StringR.string.error_unknown),
+                content = stringResource(CommonStrings.error_unknown),
                 onDismiss = { state.eventSink(ReportMessageEvents.ClearError) }
             )
         }
@@ -86,7 +86,7 @@ fun ReportMessageView(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        stringResource(StringR.string.action_report_content),
+                        stringResource(CommonStrings.action_report_content),
                         style = ElementTextStyles.Regular.callout,
                         fontWeight = FontWeight.Medium,
                     )
@@ -112,14 +112,14 @@ fun ReportMessageView(
             OutlinedTextField(
                 value = state.reason,
                 onValueChange = { state.eventSink(ReportMessageEvents.UpdateReason(it)) },
-                placeholder = { Text(stringResource(StringR.string.report_content_hint)) },
+                placeholder = { Text(stringResource(CommonStrings.report_content_hint)) },
                 enabled = !isSending,
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(min = 90.dp)
             )
             Text(
-                text = stringResource(StringR.string.report_content_explanation),
+                text = stringResource(CommonStrings.report_content_explanation),
                 style = ElementTextStyles.Regular.caption1,
                 color = MaterialTheme.colorScheme.secondary,
                 textAlign = TextAlign.Start,
@@ -133,11 +133,11 @@ fun ReportMessageView(
             ) {
                 Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(
-                        text = stringResource(StringR.string.screen_report_content_block_user),
+                        text = stringResource(CommonStrings.screen_report_content_block_user),
                         style = ElementTextStyles.Regular.callout,
                     )
                     Text(
-                        text = stringResource(StringR.string.screen_report_content_block_user_hint),
+                        text = stringResource(CommonStrings.screen_report_content_block_user_hint),
                         style = ElementTextStyles.Regular.bodyMD,
                         color = MaterialTheme.colorScheme.secondary,
                     )
@@ -152,7 +152,7 @@ fun ReportMessageView(
             Spacer(modifier = Modifier.height(24.dp))
 
             ButtonWithProgress(
-                text = stringResource(StringR.string.action_send),
+                text = stringResource(CommonStrings.action_send),
                 enabled = state.reason.isNotBlank() && !isSending,
                 showProgress = isSending,
                 onClick = {

@@ -54,8 +54,8 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.designsystem.R as DrawableR
-import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -107,7 +107,7 @@ fun CreateRoomRootView(
 
     when (state.startDmAction) {
         is Async.Loading -> {
-            ProgressDialog(text = stringResource(id = StringR.string.common_starting_chat))
+            ProgressDialog(text = stringResource(id = CommonStrings.common_starting_chat))
         }
 
         is Async.Failure -> {
@@ -137,7 +137,7 @@ fun CreateRoomRootViewTopBar(
         modifier = modifier,
         title = {
             Text(
-                text = stringResource(id = StringR.string.action_start_chat),
+                text = stringResource(id = CommonStrings.action_start_chat),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
             )
@@ -146,7 +146,7 @@ fun CreateRoomRootViewTopBar(
             IconButton(onClick = onClosePressed) {
                 Icon(
                     imageVector = Icons.Default.Close,
-                    contentDescription = stringResource(id = StringR.string.action_close),
+                    contentDescription = stringResource(id = CommonStrings.action_close),
                     tint = MaterialTheme.colorScheme.primary,
                 )
             }
@@ -169,7 +169,7 @@ fun CreateRoomActionButtonsList(
         )
         CreateRoomActionButton(
             iconRes = DrawableR.drawable.ic_share,
-            text = stringResource(id = StringR.string.action_invite_friends_to_app, state.applicationName),
+            text = stringResource(id = CommonStrings.action_invite_friends_to_app, state.applicationName),
             onClick = onInvitePeopleClicked,
         )
     }

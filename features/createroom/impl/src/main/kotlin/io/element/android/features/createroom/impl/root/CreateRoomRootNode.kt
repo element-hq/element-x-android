@@ -35,7 +35,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
-import io.element.android.libraries.ui.strings.R
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import timber.log.Timber
 
@@ -91,9 +91,9 @@ class CreateRoomRootNode @AssistedInject constructor(
             startSharePlainTextIntent(
                 context = context,
                 activityResultLauncher = null,
-                chooserTitle = context.getString(R.string.action_invite_friends),
-                text = context.getString(R.string.invite_friends_text, appName, permalink),
-                extraTitle = context.getString(R.string.invite_friends_rich_title, appName),
+                chooserTitle = context.getString(CommonStrings.action_invite_friends),
+                text = context.getString(CommonStrings.invite_friends_text, appName, permalink),
+                extraTitle = context.getString(CommonStrings.invite_friends_rich_title, appName),
                 noActivityFoundMessage = context.getString(io.element.android.libraries.androidutils.R.string.error_no_compatible_app_found)
             )
         }.onFailure {

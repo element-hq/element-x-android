@@ -52,8 +52,8 @@ import io.element.android.libraries.matrix.ui.components.CheckableUserRow
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
-import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -131,7 +131,7 @@ fun RoomInviteMembersTopBar(
             TextButton(
                 onClick = onSendPressed,
                 content = {
-                    Text(stringResource(StringR.string.action_send))
+                    Text(stringResource(CommonStrings.action_send))
                 },
                 enabled = canSend,
             )
@@ -147,7 +147,7 @@ private fun RoomInviteMembersSearchBar(
     selectedUsers: ImmutableList<MatrixUser>,
     active: Boolean,
     modifier: Modifier = Modifier,
-    placeHolderTitle: String = stringResource(StringR.string.common_search_for_someone),
+    placeHolderTitle: String = stringResource(CommonStrings.common_search_for_someone),
     onActiveChanged: (Boolean) -> Unit = {},
     onTextChanged: (String) -> Unit = {},
     onUserToggled: (MatrixUser) -> Unit = {},

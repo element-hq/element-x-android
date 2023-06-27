@@ -23,7 +23,7 @@ import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material.icons.outlined.PhotoLibrary
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
-import io.element.android.libraries.ui.strings.R
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Immutable
 sealed class AvatarAction(
@@ -31,7 +31,7 @@ sealed class AvatarAction(
     val icon: ImageVector,
     val destructive: Boolean = false,
 ) {
-    object TakePhoto : AvatarAction(titleResId = R.string.action_take_photo, icon = Icons.Outlined.PhotoCamera)
-    object ChoosePhoto : AvatarAction(titleResId = R.string.action_choose_photo, icon = Icons.Outlined.PhotoLibrary)
-    object Remove : AvatarAction(titleResId = R.string.action_remove, icon = Icons.Outlined.Delete, destructive = true)
+    object TakePhoto : AvatarAction(titleResId = CommonStrings.action_take_photo, icon = Icons.Outlined.PhotoCamera)
+    object ChoosePhoto : AvatarAction(titleResId = CommonStrings.action_choose_photo, icon = Icons.Outlined.PhotoLibrary)
+    object Remove : AvatarAction(titleResId = CommonStrings.action_remove, icon = Icons.Outlined.Delete, destructive = true)
 }
