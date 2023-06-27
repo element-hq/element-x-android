@@ -32,11 +32,11 @@ fun Long?.toAnalyticsRoomSize(): JoinedRoom.RoomSize {
     }
 }
 
-fun MatrixRoom?.toAnalyticsJoinedRoom(trigger: JoinedRoom.Trigger?): JoinedRoom {
+fun MatrixRoom.toAnalyticsJoinedRoom(trigger: JoinedRoom.Trigger?): JoinedRoom {
     return JoinedRoom(
-            isDM = this?.isDirect.orFalse(),
-            isSpace = MatrixPatterns.isSpaceId(this?.roomId?.value),
-            roomSize = this?.joinedMemberCount?.toAnalyticsRoomSize() ?: JoinedRoom.RoomSize.Two,
+            isDM = this.isDirect.orFalse(),
+            isSpace = MatrixPatterns.isSpaceId(this.roomId.value),
+            roomSize = this.joinedMemberCount.toAnalyticsRoomSize(),
             trigger = trigger
     )
 }
