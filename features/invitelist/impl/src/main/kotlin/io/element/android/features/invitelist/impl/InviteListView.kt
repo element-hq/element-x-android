@@ -58,7 +58,7 @@ fun InviteListView(
 ) {
     if (state.acceptedAction is Async.Success) {
         LaunchedEffect(state.acceptedAction) {
-            onInviteAccepted(state.acceptedAction.state)
+            onInviteAccepted(state.acceptedAction.data)
         }
     }
 

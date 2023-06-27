@@ -29,8 +29,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.executeResult
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.EventId
@@ -87,12 +86,12 @@ class ReportMessagePresenter @AssistedInject constructor(
         blockUser: Boolean,
         result: MutableState<Async<Unit>>,
     ) = launch {
-        suspend {
+        result.runUpdatingState {
             val userIdToBlock = userId.takeIf { blockUser }
             room.reportContent(eventId, reason, userIdToBlock)
                 .onSuccess {
                     snackbarDispatcher.post(SnackbarMessage(StringR.string.common_report_submitted))
                 }
-        }.executeResult(result)
+        }
     }
 }

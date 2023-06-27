@@ -57,7 +57,6 @@ import io.element.android.features.messages.impl.media.local.LocalMediaView
 import io.element.android.features.messages.impl.media.local.MediaInfo
 import io.element.android.features.messages.impl.media.local.rememberLocalMediaViewState
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.architecture.isLoading
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
