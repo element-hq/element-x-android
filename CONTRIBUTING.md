@@ -32,6 +32,10 @@ Element X Android support can be found in this room: [![Element Android Matrix r
 
 The rest of the document contains specific rules for Matrix Android projects
 
+## Developer onboarding
+
+For a detailed overview of the project, see [Developer Onboarding](./docs/_developer_onboarding.md).
+
 ## Android Studio settings
 
 Please set the "hard wrap" setting of Android Studio to 160 chars, this is the setting we use internally to format the source code (Menu `Settings/Editor/Code Style` then `Hard wrap at`).
