@@ -38,9 +38,9 @@ import io.element.android.features.messages.impl.timeline.model.AggregatedReacti
 import io.element.android.features.messages.impl.timeline.model.AggregatedReactionProvider
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun MessagesReactionButton(reaction: AggregatedReaction, modifier: Modifier = Modifier) {
