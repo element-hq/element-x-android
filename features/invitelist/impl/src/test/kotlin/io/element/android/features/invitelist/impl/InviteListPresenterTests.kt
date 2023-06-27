@@ -20,6 +20,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
+import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.features.invitelist.test.FakeSeenInvitesStore
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -50,6 +51,7 @@ class InviteListPresenterTests {
                 invitesDataSource = invitesDataSource,
             ),
             FakeSeenInvitesStore(),
+            FakeAnalyticsService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -74,6 +76,7 @@ class InviteListPresenterTests {
                 invitesDataSource = invitesDataSource,
             ),
             FakeSeenInvitesStore(),
+            FakeAnalyticsService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -102,6 +105,7 @@ class InviteListPresenterTests {
                 invitesDataSource = invitesDataSource,
             ),
             FakeSeenInvitesStore(),
+            FakeAnalyticsService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -128,6 +132,7 @@ class InviteListPresenterTests {
                 invitesDataSource = invitesDataSource,
             ),
             FakeSeenInvitesStore(),
+            FakeAnalyticsService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -152,6 +157,7 @@ class InviteListPresenterTests {
                 invitesDataSource = invitesDataSource,
             ),
             FakeSeenInvitesStore(),
+            FakeAnalyticsService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -176,6 +182,7 @@ class InviteListPresenterTests {
                 invitesDataSource = invitesDataSource,
             ),
             FakeSeenInvitesStore(),
+            FakeAnalyticsService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -199,7 +206,7 @@ class InviteListPresenterTests {
             invitesDataSource = invitesDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = InviteListPresenter(client, FakeSeenInvitesStore())
+        val presenter = InviteListPresenter(client, FakeSeenInvitesStore(), FakeAnalyticsService())
         client.givenGetRoomResult(A_ROOM_ID, room)
 
         moleculeFlow(RecompositionClock.Immediate) {
@@ -225,7 +232,7 @@ class InviteListPresenterTests {
             invitesDataSource = invitesDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = InviteListPresenter(client, FakeSeenInvitesStore())
+        val presenter = InviteListPresenter(client, FakeSeenInvitesStore(), FakeAnalyticsService())
         val ex = Throwable("Ruh roh!")
         room.givenRejectInviteResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
@@ -256,7 +263,7 @@ class InviteListPresenterTests {
             invitesDataSource = invitesDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = InviteListPresenter(client, FakeSeenInvitesStore())
+        val presenter = InviteListPresenter(client, FakeSeenInvitesStore(), FakeAnalyticsService())
         val ex = Throwable("Ruh roh!")
         room.givenRejectInviteResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
@@ -288,7 +295,7 @@ class InviteListPresenterTests {
             invitesDataSource = invitesDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = InviteListPresenter(client, FakeSeenInvitesStore())
+        val presenter = InviteListPresenter(client, FakeSeenInvitesStore(), FakeAnalyticsService())
         client.givenGetRoomResult(A_ROOM_ID, room)
 
         moleculeFlow(RecompositionClock.Immediate) {
@@ -311,7 +318,7 @@ class InviteListPresenterTests {
             invitesDataSource = invitesDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = InviteListPresenter(client, FakeSeenInvitesStore())
+        val presenter = InviteListPresenter(client, FakeSeenInvitesStore(), FakeAnalyticsService())
         val ex = Throwable("Ruh roh!")
         room.givenAcceptInviteResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
@@ -336,7 +343,7 @@ class InviteListPresenterTests {
             invitesDataSource = invitesDataSource,
         )
         val room = FakeMatrixRoom()
-        val presenter = InviteListPresenter(client, FakeSeenInvitesStore())
+        val presenter = InviteListPresenter(client, FakeSeenInvitesStore(), FakeAnalyticsService())
         val ex = Throwable("Ruh roh!")
         room.givenAcceptInviteResult(Result.failure(ex))
         client.givenGetRoomResult(A_ROOM_ID, room)
@@ -365,6 +372,7 @@ class InviteListPresenterTests {
                 invitesDataSource = invitesDataSource,
             ),
             store,
+            FakeAnalyticsService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -401,6 +409,7 @@ class InviteListPresenterTests {
                 invitesDataSource = invitesDataSource,
             ),
             store,
+            FakeAnalyticsService(),
         )
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
