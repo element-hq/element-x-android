@@ -68,6 +68,7 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.dateformatter.test)
     testImplementation(projects.features.networkmonitor.test)
+    testImplementation(projects.features.analytics.test)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.mediaupload.test)
