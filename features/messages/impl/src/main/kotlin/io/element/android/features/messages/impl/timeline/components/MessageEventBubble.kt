@@ -112,7 +112,8 @@ fun MessageEventBubble(
             .fillMaxWidth(BUBBLE_WIDTH_RATIO)
             .padding(horizontal = 16.dp)
             .offsetForItem(),
-        // Need to repeat this if content width is low.
+        // Need to set the contentAlignment again (it's already set in TimelineItemEventRow), for the case
+        // when content width is low.
         contentAlignment = if (state.isMine) Alignment.CenterEnd else Alignment.CenterStart
     ) {
         Surface(
