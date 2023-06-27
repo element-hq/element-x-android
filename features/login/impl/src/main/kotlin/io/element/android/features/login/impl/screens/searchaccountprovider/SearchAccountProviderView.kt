@@ -171,7 +171,7 @@ fun SearchAccountProviderView(
                         }
                     }
                     is Async.Success -> {
-                        items(state.userInputResult.state) { homeserverData ->
+                        items(state.userInputResult.data) { homeserverData ->
                             val item = homeserverData.toAccountProvider()
                             AccountProviderView(
                                 item = item,

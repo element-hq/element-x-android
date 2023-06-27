@@ -26,7 +26,7 @@ import io.element.android.features.logout.api.LogoutPreferenceEvents
 import io.element.android.features.logout.api.LogoutPreferencePresenter
 import io.element.android.features.logout.api.LogoutPreferenceState
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.architecture.execute
+import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import kotlinx.coroutines.CoroutineScope
@@ -59,6 +59,6 @@ class DefaultLogoutPreferencePresenter @Inject constructor(private val matrixCli
     private fun CoroutineScope.logout(logoutAction: MutableState<Async<Unit>>) = launch {
         suspend {
             matrixClient.logout()
-        }.execute(logoutAction)
+        }.runCatchingUpdatingState(logoutAction)
     }
 }

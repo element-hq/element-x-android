@@ -29,7 +29,7 @@ import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.ComputeCacheSizeUseCase
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.execute
+import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.featureflag.api.Feature
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -128,13 +128,13 @@ class DeveloperSettingsPresenter @Inject constructor(
     private fun CoroutineScope.computeCacheSize(cacheSize: MutableState<Async<String>>) = launch {
         suspend {
             computeCacheSizeUseCase()
-        }.execute(cacheSize)
+        }.runCatchingUpdatingState(cacheSize)
     }
 
     private fun CoroutineScope.clearCache(clearCacheAction: MutableState<Async<Unit>>) = launch {
         suspend {
             clearCacheUseCase()
-        }.execute(clearCacheAction)
+        }.runCatchingUpdatingState(clearCacheAction)
     }
 }
 
