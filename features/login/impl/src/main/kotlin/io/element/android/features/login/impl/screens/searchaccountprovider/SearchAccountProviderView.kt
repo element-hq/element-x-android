@@ -72,7 +72,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 /**
  * https://www.figma.com/file/o9p34zmiuEpZRyvZXJZAYL/FTUE?type=design&node-id=611-61435
@@ -143,7 +143,7 @@ fun SearchAccountProviderView(
                                 }) {
                                     Icon(
                                         imageVector = Icons.Filled.Close,
-                                        contentDescription = stringResource(StringR.string.action_clear)
+                                        contentDescription = stringResource(CommonStrings.action_clear)
                                     )
                                 }
                             }
@@ -171,7 +171,7 @@ fun SearchAccountProviderView(
                         }
                     }
                     is Async.Success -> {
-                        items(state.userInputResult.state) { homeserverData ->
+                        items(state.userInputResult.data) { homeserverData ->
                             val item = homeserverData.toAccountProvider()
                             AccountProviderView(
                                 item = item,

@@ -77,9 +77,9 @@ import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import timber.log.Timber
-import io.element.android.libraries.ui.strings.R as StringsR
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -195,7 +195,7 @@ private fun AttachmentStateView(
         is AttachmentsState.Previewing -> LaunchedEffect(state) {
             onPreviewAttachments(state.attachments)
         }
-        is AttachmentsState.Sending -> ProgressDialog(text = stringResource(id = StringsR.string.common_loading))
+        is AttachmentsState.Sending -> ProgressDialog(text = stringResource(id = CommonStrings.common_loading))
     }
 }
 

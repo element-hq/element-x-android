@@ -28,11 +28,11 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.apperror.api.AppErrorStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import io.element.android.libraries.ui.strings.R as StringR
 
 @ContributesNode(RoomScope::class)
 class RoomInviteMembersNode @AssistedInject constructor(
@@ -65,8 +65,8 @@ class RoomInviteMembersNode @AssistedInject constructor(
 
                     if (anyInviteFailed) {
                         appErrorStateService.showError(
-                            title = context.getString(StringR.string.common_unable_to_invite_title),
-                            body = context.getString(StringR.string.common_unable_to_invite_message),
+                            title = context.getString(CommonStrings.common_unable_to_invite_title),
+                            body = context.getString(CommonStrings.common_unable_to_invite_message),
                         )
                     }
 

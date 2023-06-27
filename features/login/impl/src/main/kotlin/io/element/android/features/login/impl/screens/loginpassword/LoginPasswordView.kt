@@ -76,7 +76,7 @@ import io.element.android.libraries.designsystem.theme.components.autofill
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -213,7 +213,7 @@ internal fun LoginForm(
                     IconButton(onClick = {
                         loginFieldState = ""
                     }) {
-                        Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(StringR.string.action_clear))
+                        Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(CommonStrings.action_clear))
                     }
                 }
             } else null,
@@ -248,7 +248,7 @@ internal fun LoginForm(
                 val image =
                     if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                 val description =
-                    if (passwordVisible) stringResource(StringR.string.a11y_hide_password) else stringResource(StringR.string.a11y_show_password)
+                    if (passwordVisible) stringResource(CommonStrings.a11y_hide_password) else stringResource(CommonStrings.a11y_show_password)
 
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
                     Icon(imageVector = image, description)

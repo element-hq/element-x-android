@@ -31,7 +31,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun AsyncFailure(
@@ -45,11 +45,11 @@ fun AsyncFailure(
             .padding(vertical = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(text = throwable.message ?: stringResource(id = StringR.string.error_unknown))
+        Text(text = throwable.message ?: stringResource(id = CommonStrings.error_unknown))
         if (onRetry != null) {
             Spacer(modifier = Modifier.height(24.dp))
             Button(onClick = onRetry) {
-                Text(text = stringResource(id = StringR.string.action_retry))
+                Text(text = stringResource(id = CommonStrings.action_retry))
             }
         }
     }

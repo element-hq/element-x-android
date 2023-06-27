@@ -58,7 +58,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.LogCompositions
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun BugReportView(
@@ -90,7 +90,7 @@ fun BugReportView(
             val isFormEnabled = state.sending !is Async.Loading
             // Title
             Text(
-                text = stringResource(id = StringR.string.action_report_bug),
+                text = stringResource(id = CommonStrings.action_report_bug),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 16.dp),
@@ -190,7 +190,7 @@ fun BugReportView(
                     .fillMaxWidth()
                     .padding(vertical = 32.dp)
             ) {
-                Text(text = stringResource(id = StringR.string.action_send))
+                Text(text = stringResource(id = CommonStrings.action_send))
             }
         }
         when (state.sending) {

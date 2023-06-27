@@ -47,7 +47,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun InviteListView(
@@ -58,7 +58,7 @@ fun InviteListView(
 ) {
     if (state.acceptedAction is Async.Success) {
         LaunchedEffect(state.acceptedAction) {
-            onInviteAccepted(state.acceptedAction.state)
+            onInviteAccepted(state.acceptedAction.data)
         }
     }
 
@@ -82,8 +82,8 @@ fun InviteListView(
         ConfirmationDialog(
             content = stringResource(contentResource, state.declineConfirmationDialog.name),
             title = stringResource(titleResource),
-            submitText = stringResource(StringR.string.action_decline),
-            cancelText = stringResource(StringR.string.action_cancel),
+            submitText = stringResource(CommonStrings.action_decline),
+            cancelText = stringResource(CommonStrings.action_cancel),
             emphasizeSubmitButton = true,
             onSubmitClicked = { state.eventSink(InviteListEvents.ConfirmDeclineInvite) },
             onDismiss = { state.eventSink(InviteListEvents.CancelDeclineInvite) }
@@ -92,18 +92,18 @@ fun InviteListView(
 
     if (state.acceptedAction is Async.Failure) {
         ErrorDialog(
-            content = stringResource(StringR.string.error_unknown),
-            title = stringResource(StringR.string.common_error),
-            submitText = stringResource(StringR.string.action_ok),
+            content = stringResource(CommonStrings.error_unknown),
+            title = stringResource(CommonStrings.common_error),
+            submitText = stringResource(CommonStrings.action_ok),
             onDismiss = { state.eventSink(InviteListEvents.DismissAcceptError) }
         )
     }
 
     if (state.declinedAction is Async.Failure) {
         ErrorDialog(
-            content = stringResource(StringR.string.error_unknown),
-            title = stringResource(StringR.string.common_error),
-            submitText = stringResource(StringR.string.action_ok),
+            content = stringResource(CommonStrings.error_unknown),
+            title = stringResource(CommonStrings.common_error),
+            submitText = stringResource(CommonStrings.action_ok),
             onDismiss = { state.eventSink(InviteListEvents.DismissDeclineError) }
         )
     }
@@ -124,7 +124,7 @@ fun InviteListContent(
                     BackButton(onClick = onBackClicked)
                 },
                 title = {
-                    Text(text = stringResource(StringR.string.action_invites_list))
+                    Text(text = stringResource(CommonStrings.action_invites_list))
                 }
             )
         },

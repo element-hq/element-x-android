@@ -48,7 +48,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -109,7 +109,7 @@ private fun DefaultRoomListTopBar(
                     onClick = onOpenSettings
                 ) {
                     val avatarData by remember { derivedStateOf { matrixUser.getAvatarData() } }
-                    Avatar(avatarData, contentDescription = stringResource(StringR.string.common_settings))
+                    Avatar(avatarData, contentDescription = stringResource(CommonStrings.common_settings))
                 }
             }
         },
@@ -117,7 +117,7 @@ private fun DefaultRoomListTopBar(
             IconButton(
                 onClick = onSearchClicked,
             ) {
-                Icon(Icons.Default.Search, contentDescription = stringResource(StringR.string.action_search))
+                Icon(Icons.Default.Search, contentDescription = stringResource(CommonStrings.action_search))
             }
         },
         scrollBehavior = scrollBehavior,
