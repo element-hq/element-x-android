@@ -39,7 +39,7 @@ import coil.request.ImageRequest
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
-import io.element.android.libraries.designsystem.theme.LocalColors
+import io.element.android.libraries.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Icon
 
 /**

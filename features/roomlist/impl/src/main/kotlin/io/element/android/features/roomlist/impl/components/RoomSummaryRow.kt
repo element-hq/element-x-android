@@ -61,7 +61,7 @@ import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.roomListPlaceHolder
 import io.element.android.libraries.designsystem.theme.roomListRoomMessage

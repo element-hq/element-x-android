@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.theme.previews
+package io.element.android.libraries.theme.previews
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable

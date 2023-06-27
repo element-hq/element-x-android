@@ -48,7 +48,6 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -83,7 +82,7 @@ private fun Indicator(modifier: Modifier = Modifier) {
     Row(
         modifier
             .fillMaxWidth()
-            .background(LocalColors.current.gray400)
+            .background(MaterialTheme.colorScheme.secondaryContainer)
             .statusBarsPadding()
             .padding(vertical = 6.dp),
         horizontalArrangement = Arrangement.Center,

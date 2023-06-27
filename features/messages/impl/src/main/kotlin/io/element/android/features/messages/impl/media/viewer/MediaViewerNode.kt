@@ -27,7 +27,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.impl.media.local.MediaInfo
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.designsystem.theme.ForcedDarkElementTheme
+import io.element.android.libraries.theme.ForcedDarkElementTheme
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.media.MediaSource
 

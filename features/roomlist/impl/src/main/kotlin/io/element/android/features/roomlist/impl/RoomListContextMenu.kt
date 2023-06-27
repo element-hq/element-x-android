@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.VectorIcons
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -102,7 +101,7 @@ private fun RoomListModalBottomSheetContent(
             headlineContent = {
                 Text(
                     text = stringResource(id = CommonStrings.action_leave_room),
-                    color = ElementTheme.colors.textActionCritical,
+                    color = MaterialTheme.colorScheme.error,
                 )
             },
             modifier = Modifier.clickable { onLeaveRoomClicked(contextMenu.roomId) },
@@ -111,7 +110,7 @@ private fun RoomListModalBottomSheetContent(
                     resourceId = VectorIcons.DoorOpen,
                     contentDescription = stringResource(id = CommonStrings.action_leave_room),
                     modifier = Modifier.size(20.dp),
-                    tint = ElementTheme.colors.textActionCritical,
+                    tint = MaterialTheme.colorScheme.error,
                 )
             }
         )

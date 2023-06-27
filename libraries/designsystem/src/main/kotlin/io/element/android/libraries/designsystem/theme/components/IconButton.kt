@@ -17,6 +17,7 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.IconButtonDefaults
@@ -52,7 +53,12 @@ internal fun IconButtonPreview() =
 
 @Composable
 private fun ContentToPreview() {
-    IconButton(onClick = {}) {
-        Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+    Row {
+        IconButton(onClick = {}) {
+            Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+        }
+        IconButton(enabled = false, onClick = {}) {
+            Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+        }
     }
 }

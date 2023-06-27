@@ -40,7 +40,6 @@ import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.ElementTextStyles
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.timeline.item.event.EventSendState
@@ -55,7 +54,7 @@ fun TimelineEventTimestampView(
     val formattedTime = event.sentTime
     val hasMessageSendingFailed = event.sendState is EventSendState.SendingFailed
     val isMessageEdited = (event.content as? TimelineItemTextBasedContent)?.isEdited.orFalse()
-    val tint = if (hasMessageSendingFailed) ElementTheme.colors.textActionCritical else null
+    val tint = if (hasMessageSendingFailed) MaterialTheme.colorScheme.error else null
     Row(
         modifier = Modifier
             .clickable(

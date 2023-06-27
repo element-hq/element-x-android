@@ -38,7 +38,7 @@ import com.airbnb.android.showkase.models.Showkase
 import com.android.ide.common.rendering.api.SessionParams
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
-import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.designsystem.utils.LocalSnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import org.junit.Rule
