@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.Dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.utils.BooleanProvider
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,8 +41,8 @@ fun ConfirmationDialog(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     title: String? = null,
-    submitText: String = stringResource(id = StringR.string.action_ok),
-    cancelText: String = stringResource(id = StringR.string.action_cancel),
+    submitText: String = stringResource(id = CommonStrings.action_ok),
+    cancelText: String = stringResource(id = CommonStrings.action_cancel),
     thirdButtonText: String? = null,
     emphasizeSubmitButton: Boolean = false,
     onCancelClicked: () -> Unit = onDismiss,

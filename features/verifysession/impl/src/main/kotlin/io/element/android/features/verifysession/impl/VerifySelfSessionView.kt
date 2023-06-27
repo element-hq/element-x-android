@@ -51,8 +51,8 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep as FlowStep
-import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun VerifySelfSessionView(
@@ -190,8 +190,8 @@ internal fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit)
         else -> null
     }
     val negativeButtonTitle = when (verificationViewState) {
-        FlowStep.Initial -> StringR.string.action_cancel
-        FlowStep.Canceled -> StringR.string.action_cancel
+        FlowStep.Initial -> CommonStrings.action_cancel
+        FlowStep.Canceled -> CommonStrings.action_cancel
         is FlowStep.Verifying -> R.string.screen_session_verification_they_dont_match
         else -> null
     }

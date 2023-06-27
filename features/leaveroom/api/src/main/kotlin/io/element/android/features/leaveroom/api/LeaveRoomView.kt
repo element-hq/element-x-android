@@ -32,7 +32,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.R
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun LeaveRoomView(
@@ -50,19 +50,19 @@ private fun LeaveRoomConfirmationDialog(
     when (state.confirmation) {
         is LeaveRoomState.Confirmation.Hidden -> {}
         is LeaveRoomState.Confirmation.PrivateRoom -> LeaveRoomConfirmationDialog(
-            text = StringR.string.leave_room_alert_private_subtitle,
+            text = CommonStrings.leave_room_alert_private_subtitle,
             roomId = state.confirmation.roomId,
             eventSink = state.eventSink,
         )
 
         is LeaveRoomState.Confirmation.LastUserInRoom -> LeaveRoomConfirmationDialog(
-            text = StringR.string.leave_room_alert_empty_subtitle,
+            text = CommonStrings.leave_room_alert_empty_subtitle,
             roomId = state.confirmation.roomId,
             eventSink = state.eventSink,
         )
 
         is LeaveRoomState.Confirmation.Generic -> LeaveRoomConfirmationDialog(
-            text = StringR.string.leave_room_alert_subtitle,
+            text = CommonStrings.leave_room_alert_subtitle,
             roomId = state.confirmation.roomId,
             eventSink = state.eventSink,
         )
@@ -90,7 +90,7 @@ private fun LeaveRoomProgressDialog(
     when (state.progress) {
         is LeaveRoomState.Progress.Hidden -> {}
         is LeaveRoomState.Progress.Shown -> ProgressDialog(
-            text = stringResource(StringR.string.common_leaving_room),
+            text = stringResource(CommonStrings.common_leaving_room),
         )
     }
 }
@@ -102,7 +102,7 @@ private fun LeaveRoomErrorDialog(
     when (state.error) {
         is LeaveRoomState.Error.Hidden -> {}
         is LeaveRoomState.Error.Shown -> ErrorDialog(
-            content = stringResource(StringR.string.error_unknown),
+            content = stringResource(CommonStrings.error_unknown),
             onDismiss = { state.eventSink(LeaveRoomEvent.HideError) }
         )
     }

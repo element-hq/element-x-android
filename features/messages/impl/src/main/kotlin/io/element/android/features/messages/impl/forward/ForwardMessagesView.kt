@@ -66,8 +66,8 @@ import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomSummaryDetails
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
-import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -111,7 +111,7 @@ fun ForwardMessagesView(
         modifier = modifier,
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(stringResource(StringR.string.common_forward_message), style = ElementTextStyles.Bold.callout) },
+                title = { Text(stringResource(CommonStrings.common_forward_message), style = ElementTextStyles.Bold.callout) },
                 navigationIcon = {
                     BackButton(onClick = { onBackButton(state) })
                 },
@@ -120,7 +120,7 @@ fun ForwardMessagesView(
                         enabled = state.selectedRooms.isNotEmpty(),
                         onClick = { state.eventSink(ForwardMessagesEvents.ForwardEvent) }
                     ) {
-                        Text(text = stringResource(StringR.string.action_send))
+                        Text(text = stringResource(CommonStrings.action_send))
                     }
                 }
             )
@@ -132,7 +132,7 @@ fun ForwardMessagesView(
                 .consumeWindowInsets(paddingValues)
         ) {
             SearchBar<ImmutableList<RoomSummaryDetails>>(
-                placeHolderTitle = stringResource(StringR.string.action_search),
+                placeHolderTitle = stringResource(CommonStrings.action_search),
                 query = state.query,
                 onQueryChange = { state.eventSink(ForwardMessagesEvents.UpdateQuery(it)) },
                 active = state.isSearchActive,

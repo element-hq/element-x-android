@@ -77,7 +77,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -198,7 +198,7 @@ internal fun RoomDetailsTopBar(
                     onDismissRequest = { showMenu = false },
                 ) {
                     DropdownMenuItem(
-                        text = { Text(stringResource(id = StringR.string.action_edit)) },
+                        text = { Text(stringResource(id = CommonStrings.action_edit)) },
                         onClick = {
                             // Explicitly close the menu before handling the action, as otherwise it stays open during the
                             // transition and renders really badly.
@@ -250,7 +250,7 @@ internal fun TopicSection(
     onActionClicked: (RoomDetailsAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    PreferenceCategory(title = stringResource(StringR.string.common_topic), modifier = modifier) {
+    PreferenceCategory(title = stringResource(CommonStrings.common_topic), modifier = modifier) {
         if (roomTopic is RoomTopicState.CanAddTopic) {
             PreferenceText(
                 title = stringResource(R.string.screen_room_details_add_topic_title),

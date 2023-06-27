@@ -79,7 +79,7 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -146,7 +146,7 @@ fun TextComposer(
                             contentPadding = PaddingValues(top = 10.dp, bottom = 10.dp, start = 12.dp, end = 42.dp),
                             interactionSource = remember { MutableInteractionSource() },
                             placeholder = {
-                                Text(stringResource(StringR.string.common_message), style = defaultTypography)
+                                Text(stringResource(CommonStrings.common_message), style = defaultTypography)
                             },
                             colors = TextFieldDefaults.colors(
                                 unfocusedTextColor = MaterialTheme.colorScheme.secondary,
@@ -225,7 +225,7 @@ private fun EditingModeView(
         )
         Icon(
             imageVector = Icons.Default.Close,
-            contentDescription = stringResource(StringR.string.action_close),
+            contentDescription = stringResource(CommonStrings.action_close),
             tint = MaterialTheme.colorScheme.secondary,
             modifier = Modifier
                 .size(16.dp)
@@ -283,7 +283,7 @@ private fun ReplyToModeView(
                 )
                 Icon(
                     imageVector = Icons.Default.Close,
-                    contentDescription = stringResource(StringR.string.action_close),
+                    contentDescription = stringResource(CommonStrings.action_close),
                     tint = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier
                         .size(16.dp)
@@ -367,8 +367,8 @@ private fun BoxScope.SendButton(
             else -> R.drawable.ic_send
         }
         val contentDescription = when (composerMode) {
-            is MessageComposerMode.Edit -> stringResource(StringR.string.action_edit)
-            else -> stringResource(StringR.string.action_send)
+            is MessageComposerMode.Edit -> stringResource(CommonStrings.action_edit)
+            else -> stringResource(CommonStrings.action_send)
         }
         Icon(
             modifier = Modifier.size(16.dp),

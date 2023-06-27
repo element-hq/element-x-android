@@ -38,10 +38,10 @@ import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import io.element.android.libraries.androidutils.R as UtilsR
-import io.element.android.libraries.ui.strings.R as StringR
 
 class MediaViewerPresenter @AssistedInject constructor(
     @Assisted private val inputs: MediaViewerNode.Inputs,
@@ -119,7 +119,7 @@ class MediaViewerPresenter @AssistedInject constructor(
         if (localMedia is Async.Success) {
             localMediaActions.saveOnDisk(localMedia.state)
                 .onSuccess {
-                    val snackbarMessage = SnackbarMessage(StringR.string.common_file_saved_on_disk_android)
+                    val snackbarMessage = SnackbarMessage(CommonStrings.common_file_saved_on_disk_android)
                     snackbarDispatcher.post(snackbarMessage)
                 }
                 .onFailure {
@@ -153,7 +153,7 @@ class MediaViewerPresenter @AssistedInject constructor(
         return if (throwable is ActivityNotFoundException) {
             UtilsR.string.error_no_compatible_app_found
         } else {
-            StringR.string.error_unknown
+            CommonStrings.error_unknown
         }
     }
 }

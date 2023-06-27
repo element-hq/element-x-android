@@ -47,9 +47,9 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecry
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
-import io.element.android.libraries.ui.strings.R as StringR
 
 @ContributesBinding(SessionScope::class)
 class DefaultRoomLastMessageFormatter @Inject constructor(
@@ -66,7 +66,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
         return when (val content = event.content) {
             is MessageContent -> processMessageContents(content, senderDisplayName, isDmRoom)
             RedactedContent -> {
-                val message = sp.getString(StringR.string.common_message_removed)
+                val message = sp.getString(CommonStrings.common_message_removed)
                 if (!isDmRoom) {
                     prefix(message, senderDisplayName)
                 } else {
@@ -77,7 +77,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 content.body
             }
             is UnableToDecryptContent -> {
-                val message = sp.getString(StringR.string.common_decryption_error)
+                val message = sp.getString(CommonStrings.common_decryption_error)
                 if (!isDmRoom) {
                     prefix(message, senderDisplayName)
                 } else {
@@ -94,7 +94,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 stateContentFormatter.format(content, senderDisplayName, isOutgoing, RenderingMode.RoomList)
             }
             is FailedToParseMessageLikeContent, is FailedToParseStateContent, is UnknownContent -> {
-                prefixIfNeeded(sp.getString(StringR.string.common_unsupported_event), senderDisplayName, isDmRoom)
+                prefixIfNeeded(sp.getString(CommonStrings.common_unsupported_event), senderDisplayName, isDmRoom)
             }
         }
     }
@@ -111,19 +111,19 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 messageType.body
             }
             is VideoMessageType -> {
-                sp.getString(StringR.string.common_video)
+                sp.getString(CommonStrings.common_video)
             }
             is ImageMessageType -> {
-                sp.getString(StringR.string.common_image)
+                sp.getString(CommonStrings.common_image)
             }
             is FileMessageType -> {
-                sp.getString(StringR.string.common_file)
+                sp.getString(CommonStrings.common_file)
             }
             is AudioMessageType -> {
-                sp.getString(StringR.string.common_audio)
+                sp.getString(CommonStrings.common_audio)
             }
             UnknownMessageType -> {
-                sp.getString(StringR.string.common_unsupported_event)
+                sp.getString(CommonStrings.common_unsupported_event)
             }
             is NoticeMessageType -> {
                 messageType.body
