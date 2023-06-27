@@ -17,25 +17,12 @@
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.ksp)
-    id("kotlin-parcelize")
 }
 
 android {
-    namespace = "io.element.android.libraries.designsystem"
-
-    buildFeatures {
-        buildConfig = true
-    }
+    namespace = "io.element.android.libraries.theme"
 
     dependencies {
-        api(projects.libraries.theme)
-        // Should not be there, but this is a POC
-        implementation(libs.coil.compose)
-        implementation(libs.accompanist.systemui)
-        implementation(libs.vanniktech.blurhash)
-        implementation(projects.libraries.elementresources)
-        implementation(projects.libraries.uiStrings)
-
         ksp(libs.showkase.processor)
         kspTest(libs.showkase.processor)
     }

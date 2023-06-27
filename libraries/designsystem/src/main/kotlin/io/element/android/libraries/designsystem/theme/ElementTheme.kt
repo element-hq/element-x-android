@@ -34,19 +34,52 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import io.element.android.libraries.designsystem.theme.compound.CompoundColors
-import io.element.android.libraries.designsystem.theme.compound.compoundColorsDark
-import io.element.android.libraries.designsystem.theme.compound.compoundColorsLight
-import io.element.android.libraries.designsystem.theme.compound.compoundTypography
+import io.element.android.libraries.theme.ElementColors
+import io.element.android.libraries.theme.compound.compoundColorsDark
+import io.element.android.libraries.theme.compound.compoundColorsLight
+import io.element.android.libraries.theme.compound.compoundTypography
+import io.element.android.libraries.theme.compound.gen.SemanticColors
+import io.element.android.libraries.theme.elementColorsDark
+import io.element.android.libraries.theme.elementColorsLight
+import io.element.android.libraries.theme.materialColorSchemeDark
+import io.element.android.libraries.theme.materialColorSchemeLight
 
 /**
  * Inspired from https://medium.com/@lucasyujideveloper/54cbcbde1ace
  */
 object ElementTheme {
+    /**
+     * The current [ElementColors] provided by [ElementTheme]. Usage of these colors is discouraged.
+     */
     val colors: ElementColors
         @Composable
         @ReadOnlyComposable
         get() = LocalColors.current
+
+    /**
+     * The current [SemanticColors] provided by [ElementTheme].
+     * These come from Compound and are the recommended colors to use for custom components.
+     */
+    val compoundColors: SemanticColors
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalCompoundColors.current
+
+    /**
+     * The current Material 3 [ColorScheme] provided by [ElementTheme], coming from [MaterialTheme].
+     */
+    val materialColors: ColorScheme
+        @Composable
+        @ReadOnlyComposable
+        get() = MaterialTheme.colorScheme
+
+    /**
+     * Material 3 [Typography] tokens.
+     */
+    val typography: Typography
+        @Composable
+        @ReadOnlyComposable
+        get() = MaterialTheme.typography
 }
 
 /* Global variables (application level) */
@@ -58,7 +91,7 @@ fun ElementTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false, /* true to enable MaterialYou */
     colors: ElementColors = if (darkTheme) elementColorsDark() else elementColorsLight(),
-    compoundColors: CompoundColors = if (darkTheme) compoundColorsDark else compoundColorsLight,
+    compoundColors: SemanticColors = if (darkTheme) compoundColorsDark else compoundColorsLight,
     materialLightColors: ColorScheme = materialColorSchemeLight,
     materialDarkColors: ColorScheme = materialColorSchemeDark,
     typography: Typography = compoundTypography,
@@ -84,7 +117,7 @@ fun ElementTheme(
     }
     CompositionLocalProvider(
         LocalColors provides currentColor,
-        LocalCompoundColors provides compoundColors,
+        LocalCompoundColors provides currentCompoundColor,
     ) {
         MaterialTheme(
             colorScheme = colorScheme,

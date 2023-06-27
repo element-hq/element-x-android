@@ -14,31 +14,43 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.theme
+package io.element.android.libraries.theme
 
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.Azure
-import io.element.android.libraries.designsystem.ElementGreen
-import io.element.android.libraries.designsystem.Gray_400
-import io.element.android.libraries.designsystem.Gray_450
-import io.element.android.libraries.designsystem.SystemGrey5Dark
-import io.element.android.libraries.designsystem.SystemGrey6Dark
-import io.element.android.libraries.designsystem.theme.compound.DarkDesignTokens
-import io.element.android.libraries.designsystem.theme.previews.ColorsSchemePreview
+import androidx.compose.material3.lightColorScheme
+import io.element.android.libraries.theme.compound.gen.internal.DarkDesignTokens
+import io.element.android.libraries.theme.compound.gen.internal.LightDesignTokens
 
-fun elementColorsDark() = ElementColors(
-    messageFromMeBackground = SystemGrey5Dark,
-    messageFromOtherBackground = SystemGrey6Dark,
-    messageHighlightedBackground = Azure,
-    quaternary = Gray_400,
-    quinary = Gray_450,
-    gray300 = DarkDesignTokens.colorGray300,
-    accentColor = ElementGreen,
-    placeholder = DarkDesignTokens.colorGray800,
-    isLight = false,
+val materialColorSchemeLight = lightColorScheme(
+    primary = LightDesignTokens.colorGray1400,
+    onPrimary = LightDesignTokens.colorThemeBg,
+    primaryContainer = LightDesignTokens.colorThemeBg,
+    onPrimaryContainer = LightDesignTokens.colorGray1400,
+    inversePrimary = LightDesignTokens.colorThemeBg,
+    secondary = LightDesignTokens.colorGray900,
+    onSecondary = LightDesignTokens.colorThemeBg,
+    secondaryContainer = LightDesignTokens.colorGray400,
+    onSecondaryContainer = LightDesignTokens.colorGray1400,
+    tertiary = LightDesignTokens.colorGray900,
+    onTertiary = LightDesignTokens.colorThemeBg,
+    tertiaryContainer = LightDesignTokens.colorGray1400,
+    onTertiaryContainer = LightDesignTokens.colorThemeBg,
+    background = LightDesignTokens.colorThemeBg,
+    onBackground = LightDesignTokens.colorGray1400,
+    surface = LightDesignTokens.colorThemeBg,
+    onSurface = LightDesignTokens.colorGray1400,
+    surfaceVariant = LightDesignTokens.colorGray400,
+    onSurfaceVariant = LightDesignTokens.colorGray1400,
+    surfaceTint = LightDesignTokens.colorGray1000,
+    inverseSurface = LightDesignTokens.colorGray1300,
+    inverseOnSurface = LightDesignTokens.colorThemeBg,
+    error = LightDesignTokens.colorRed900,
+    onError = LightDesignTokens.colorThemeBg,
+    errorContainer = LightDesignTokens.colorRed400,
+    onErrorContainer = LightDesignTokens.colorRed900,
+    outline = LightDesignTokens.colorGray800,
+    outlineVariant = LightDesignTokens.colorAlphaGray400,
+    scrim = LightDesignTokens.colorGray1400,
 )
 
 val materialColorSchemeDark = darkColorScheme(
@@ -71,12 +83,4 @@ val materialColorSchemeDark = darkColorScheme(
     outline = DarkDesignTokens.colorGray800,
     outlineVariant = DarkDesignTokens.colorAlphaGray400,
     scrim = DarkDesignTokens.colorGray300,
-)
-
-@Preview
-@Composable
-fun ColorsSchemePreviewDark() = ColorsSchemePreview(
-    Color.White,
-    Color.Black,
-    materialColorSchemeDark,
 )

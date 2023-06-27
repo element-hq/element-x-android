@@ -14,14 +14,27 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.theme
+package io.element.android.libraries.theme
 
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import io.element.android.libraries.theme.compound.gen.internal.DarkDesignTokens
+import io.element.android.libraries.theme.compound.gen.internal.LightDesignTokens
+import io.element.android.libraries.theme.compound.gen.SemanticColors
 
+/**
+ * Element color palette.
+ *
+ * ## IMPORTANT!
+ * **We should not add any new colors here, all new colors should come from [SemanticColors] instead.**
+ *
+ * If a design needs you to add a different color here, talk to some designer first, as they'll probably be using
+ * the legacy color palette.
+ */
+@Deprecated("Use SemanticColors instead")
 @Stable
 class ElementColors(
     messageFromMeBackground: Color,
@@ -93,3 +106,27 @@ class ElementColors(
         isLight = other.isLight
     }
 }
+
+fun elementColorsLight() = ElementColors(
+    messageFromMeBackground = SystemGrey5Light,
+    messageFromOtherBackground = SystemGrey6Light,
+    messageHighlightedBackground = Azure,
+    quaternary = Gray_100,
+    quinary = Gray_50,
+    gray300 = LightDesignTokens.colorGray300,
+    accentColor = ElementGreen,
+    placeholder = LightDesignTokens.colorGray800,
+    isLight = true,
+)
+
+fun elementColorsDark() = ElementColors(
+    messageFromMeBackground = SystemGrey5Dark,
+    messageFromOtherBackground = SystemGrey6Dark,
+    messageHighlightedBackground = Azure,
+    quaternary = Gray_400,
+    quinary = Gray_450,
+    gray300 = DarkDesignTokens.colorGray300,
+    accentColor = ElementGreen,
+    placeholder = DarkDesignTokens.colorGray800,
+    isLight = false,
+)
