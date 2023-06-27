@@ -36,7 +36,6 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.elementresources)
     implementation(projects.libraries.uiStrings)
     api(projects.features.analytics.api)
     api(projects.services.analytics.api)
