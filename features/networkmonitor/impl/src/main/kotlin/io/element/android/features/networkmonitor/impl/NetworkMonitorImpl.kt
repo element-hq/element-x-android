@@ -38,8 +38,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
 
 @ContributesBinding(scope = AppScope::class)
@@ -54,27 +56,31 @@ class NetworkMonitorImpl @Inject constructor(
     override val connectivity: StateFlow<NetworkStatus> = callbackFlow {
 
         /**
-         *  Assume there is no network available as soon as onLost is called.
-         *  Reading activeNetwork synchronously from the callback is not safe.
-         *  If there is an other active network we'll get some callback in onCapabilitiesChanged.
+         *  Calling connectivityManager methods synchronously from the callbacks is not safe.
+         *  So instead we just keep the count of active networks, ie. those checking the capability request.
          *  Debounce the result to avoid quick offline<->online changes.
          */
         val callback = object : ConnectivityManager.NetworkCallback() {
+
+            private val activeNetworksCount = AtomicInteger(0)
+
             override fun onLost(network: Network) {
-                trySendBlocking(NetworkStatus.Offline)
+                if (activeNetworksCount.decrementAndGet() == 0) {
+                    trySendBlocking(NetworkStatus.Offline)
+                }
             }
 
-            override fun onCapabilitiesChanged(
-                network: Network,
-                networkCapabilities: NetworkCapabilities
-            ) {
-                trySendBlocking(networkCapabilities.getNetworkStatus())
+            override fun onAvailable(network: Network) {
+                if (activeNetworksCount.incrementAndGet() > 0) {
+                    trySendBlocking(NetworkStatus.Online)
+                }
             }
         }
         trySendBlocking(connectivityManager.activeNetworkStatus())
         val request = NetworkRequest.Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
             .build()
+
         connectivityManager.registerNetworkCallback(request, callback)
         Timber.d("Subscribe")
         awaitClose {
@@ -84,6 +90,9 @@ class NetworkMonitorImpl @Inject constructor(
     }
         .distinctUntilChanged()
         .debounce(300)
+        .onEach {
+            Timber.d("NetworkStatus changed=$it")
+        }
         .stateIn(appCoroutineScope, SharingStarted.WhileSubscribed(), connectivityManager.activeNetworkStatus())
 
     private fun ConnectivityManager.activeNetworkStatus(): NetworkStatus {
