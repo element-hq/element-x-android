@@ -38,7 +38,7 @@ import io.element.android.libraries.theme.ElementColors
 import io.element.android.libraries.theme.compound.compoundColorsDark
 import io.element.android.libraries.theme.compound.compoundColorsLight
 import io.element.android.libraries.theme.compound.compoundTypography
-import io.element.android.libraries.theme.compound.gen.SemanticColors
+import io.element.android.libraries.theme.compound.generated.SemanticColors
 import io.element.android.libraries.theme.elementColorsDark
 import io.element.android.libraries.theme.elementColorsLight
 import io.element.android.libraries.theme.materialColorSchemeDark

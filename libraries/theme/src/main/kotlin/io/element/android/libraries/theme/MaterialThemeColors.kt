@@ -18,8 +18,8 @@ package io.element.android.libraries.theme
 
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
-import io.element.android.libraries.theme.compound.gen.internal.DarkDesignTokens
-import io.element.android.libraries.theme.compound.gen.internal.LightDesignTokens
+import io.element.android.libraries.theme.compound.generated.internal.DarkDesignTokens
+import io.element.android.libraries.theme.compound.generated.internal.LightDesignTokens
 
 val materialColorSchemeLight = lightColorScheme(
     primary = LightDesignTokens.colorGray1400,

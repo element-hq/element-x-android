@@ -21,9 +21,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import io.element.android.libraries.theme.compound.gen.internal.DarkDesignTokens
-import io.element.android.libraries.theme.compound.gen.internal.LightDesignTokens
-import io.element.android.libraries.theme.compound.gen.SemanticColors
+import io.element.android.libraries.theme.compound.generated.internal.DarkDesignTokens
+import io.element.android.libraries.theme.compound.generated.internal.LightDesignTokens
+import io.element.android.libraries.theme.compound.generated.SemanticColors
 
 /**
  * Element color palette.

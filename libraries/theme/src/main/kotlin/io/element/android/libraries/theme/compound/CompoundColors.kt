@@ -16,9 +16,9 @@
 
 package io.element.android.libraries.theme.compound
 
-import io.element.android.libraries.theme.compound.gen.internal.DarkDesignTokens
-import io.element.android.libraries.theme.compound.gen.internal.LightDesignTokens
-import io.element.android.libraries.theme.compound.gen.SemanticColors
+import io.element.android.libraries.theme.compound.generated.internal.DarkDesignTokens
+import io.element.android.libraries.theme.compound.generated.internal.LightDesignTokens
+import io.element.android.libraries.theme.compound.generated.SemanticColors
 
 val compoundColorsLight = SemanticColors(
     textPrimary = LightDesignTokens.colorGray1400,
