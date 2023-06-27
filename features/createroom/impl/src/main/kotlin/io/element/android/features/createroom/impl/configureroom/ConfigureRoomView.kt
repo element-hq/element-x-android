@@ -65,8 +65,8 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
 import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
-import io.element.android.libraries.ui.strings.R as StringR
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -158,7 +158,7 @@ fun ConfigureRoomView(
 
     when (state.createRoomAction) {
         is Async.Loading -> {
-            ProgressDialog(text = stringResource(StringR.string.common_creating_room))
+            ProgressDialog(text = stringResource(CommonStrings.common_creating_room))
         }
 
         is Async.Failure -> {
@@ -198,7 +198,7 @@ fun ConfigureRoomToolbar(
                 onClick = onNextPressed,
             ) {
                 Text(
-                    text = stringResource(StringR.string.action_create),
+                    text = stringResource(CommonStrings.action_create),
                     fontSize = 16.sp,
                 )
             }
@@ -227,7 +227,7 @@ fun RoomNameWithAvatar(
         LabelledTextField(
             label = stringResource(R.string.screen_create_room_room_name_label),
             value = roomName,
-            placeholder = stringResource(StringR.string.common_room_name_placeholder),
+            placeholder = stringResource(CommonStrings.common_room_name_placeholder),
             singleLine = true,
             onValueChange = onRoomNameChanged,
         )
@@ -244,7 +244,7 @@ fun RoomTopic(
         modifier = modifier,
         label = stringResource(R.string.screen_create_room_topic_label),
         value = topic,
-        placeholder = stringResource(StringR.string.common_topic_placeholder),
+        placeholder = stringResource(CommonStrings.common_topic_placeholder),
         onValueChange = onTopicChanged,
         maxLines = 3,
     )

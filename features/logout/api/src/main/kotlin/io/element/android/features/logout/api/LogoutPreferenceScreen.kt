@@ -31,7 +31,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun LogoutPreferenceView(
@@ -81,7 +81,7 @@ fun LogoutPreferenceView(
 fun LogoutPreferenceContent(
     onClick: () -> Unit = {},
 ) {
-    PreferenceCategory(title = stringResource(id = StringR.string.settings_title_general)) {
+    PreferenceCategory(title = stringResource(id = CommonStrings.settings_title_general)) {
         PreferenceText(
             title = stringResource(id = R.string.screen_signout_preference_item),
             icon = Icons.Default.Logout,

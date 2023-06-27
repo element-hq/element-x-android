@@ -28,14 +28,14 @@ import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun BackButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     imageVector: ImageVector = Icons.Default.ArrowBack,
-    contentDescription: String = stringResource(StringR.string.action_back),
+    contentDescription: String = stringResource(CommonStrings.action_back),
     enabled: Boolean = true,
 ) {
     IconButton(

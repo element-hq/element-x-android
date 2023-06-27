@@ -19,8 +19,8 @@ package io.element.android.features.login.impl.error
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.login.impl.R
 import io.element.android.libraries.matrix.api.auth.AuthenticationException
+import io.element.android.libraries.ui.strings.CommonStrings
 import org.junit.Test
-import io.element.android.libraries.ui.strings.R as StringR
 
 class ErrorFormatterTests {
 
@@ -28,19 +28,19 @@ class ErrorFormatterTests {
     @Test
     fun `loginError - invalid unknown error returns unknown error message`() {
         val error = Throwable("Some unknown error")
-        assertThat(loginError(error)).isEqualTo(StringR.string.error_unknown)
+        assertThat(loginError(error)).isEqualTo(CommonStrings.error_unknown)
     }
 
     @Test
     fun `loginError - invalid auth error returns unknown error message`() {
         val error = AuthenticationException.SlidingSyncNotAvailable("Some message. Also contains M_FORBIDDEN, but won't be parsed")
-        assertThat(loginError(error)).isEqualTo(StringR.string.error_unknown)
+        assertThat(loginError(error)).isEqualTo(CommonStrings.error_unknown)
     }
 
     @Test
     fun `loginError - unknown error returns unknown error message`() {
         val error = AuthenticationException.Generic("M_UNKNOWN")
-        assertThat(loginError(error)).isEqualTo(StringR.string.error_unknown)
+        assertThat(loginError(error)).isEqualTo(CommonStrings.error_unknown)
     }
 
     @Test
