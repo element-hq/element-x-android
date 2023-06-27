@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_confirmation_dialog_content">"Ste si istí, že sa chcete odhlásiť?"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Odhlásiť sa"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Prebieha odhlasovanie…"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Odhlásiť sa"</string>
+  <string name="screen_signout_preference_item">"Odhlásiť sa"</string>
+</resources>

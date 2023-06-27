@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
@@ -33,6 +34,7 @@ import com.bumble.appyx.core.plugin.NodeReadyObserver
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.designsystem.utils.LocalSnackbarDispatcher
 import io.element.android.x.di.AppBindings
 import timber.log.Timber
 
@@ -42,11 +44,13 @@ class MainActivity : NodeComponentActivity() {
 
     private lateinit var mainNode: MainNode
 
+    private lateinit var appBindings: AppBindings
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.tag(loggerTag.value).w("onCreate, with savedInstanceState: ${savedInstanceState != null}")
         installSplashScreen()
         super.onCreate(savedInstanceState)
-        val appBindings = bindings<AppBindings>()
+        appBindings = bindings<AppBindings>()
         appBindings.matrixClientsHolder().restore(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
@@ -57,25 +61,29 @@ class MainActivity : NodeComponentActivity() {
     @Composable
     private fun MainContent(appBindings: AppBindings) {
         ElementTheme {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background),
+            CompositionLocalProvider(
+                LocalSnackbarDispatcher provides appBindings.snackbarDispatcher(),
             ) {
-                NodeHost(integrationPoint = appyxIntegrationPoint) {
-                    MainNode(
-                        it,
-                        appBindings.mainDaggerComponentOwner(),
-                        plugins = listOf(
-                            object : NodeReadyObserver<MainNode> {
-                                override fun init(node: MainNode) {
-                                    Timber.tag(loggerTag.value).w("onMainNodeInit")
-                                    mainNode = node
-                                    mainNode.handleIntent(intent)
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background),
+                ) {
+                    NodeHost(integrationPoint = appyxIntegrationPoint) {
+                        MainNode(
+                            it,
+                            appBindings.mainDaggerComponentOwner(),
+                            plugins = listOf(
+                                object : NodeReadyObserver<MainNode> {
+                                    override fun init(node: MainNode) {
+                                        Timber.tag(loggerTag.value).w("onMainNodeInit")
+                                        mainNode = node
+                                        mainNode.handleIntent(intent)
+                                    }
                                 }
-                            }
+                            )
                         )
-                    )
+                    }
                 }
             }
         }

@@ -50,6 +50,7 @@ class MessagesNode @AssistedInject constructor(
         fun onUserDataClicked(userId: UserId)
         fun onShowEventDebugInfoClicked(eventId: EventId, debugInfo: TimelineItemDebugInfo)
         fun onForwardEventClicked(eventId: EventId)
+        fun onReportMessage(eventId: EventId, senderId: UserId)
     }
 
     private fun onRoomDetailsClicked() {
@@ -73,6 +74,10 @@ class MessagesNode @AssistedInject constructor(
 
     override fun onForwardEventClicked(eventId: EventId) {
         callback?.onForwardEventClicked(eventId)
+    }
+
+    override fun onReportContentClicked(eventId: EventId, senderId: UserId) {
+        callback?.onReportMessage(eventId, senderId)
     }
 
     @Composable

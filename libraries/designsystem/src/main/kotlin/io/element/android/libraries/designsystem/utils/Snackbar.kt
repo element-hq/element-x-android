@@ -21,50 +21,51 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
+/**
+ * A global dispatcher of [SnackbarMessage] to be displayed in [Snackbar] via a [SnackbarHostState].
+ */
 class SnackbarDispatcher {
     private val mutex = Mutex()
 
-    private val snackbarState = MutableStateFlow<SnackbarMessage?>(null)
-    val snackbarMessage: Flow<SnackbarMessage?> = snackbarState
+    private val _snackbarMessage = MutableStateFlow<SnackbarMessage?>(null)
+    val snackbarMessage: Flow<SnackbarMessage?> = _snackbarMessage.asStateFlow()
 
     suspend fun post(message: SnackbarMessage) {
         mutex.withLock {
-            snackbarState.update { message }
+            _snackbarMessage.update { message }
         }
     }
 
     suspend fun clear() {
         mutex.withLock {
-            snackbarState.update { null }
+            _snackbarMessage.update { null }
         }
     }
 }
 
+/** Used to provide a [SnackbarDispatcher] to composable functions, it's needed for [rememberSnackbarHostState]. */
+val LocalSnackbarDispatcher = compositionLocalOf<SnackbarDispatcher> {
+    error("No SnackbarDispatcher provided")
+}
+
 @Composable
-fun handleSnackbarMessage(
-    snackbarDispatcher: SnackbarDispatcher
-): SnackbarMessage? {
-    val snackbarMessage by snackbarDispatcher.snackbarMessage.collectAsState(initial = null)
-    LaunchedEffect(snackbarMessage) {
-        if (snackbarMessage != null) {
-            launch {
-                snackbarDispatcher.clear()
-            }
-        }
-    }
-    return snackbarMessage
+fun SnackbarDispatcher.collectSnackbarMessageAsState(): State<SnackbarMessage?> {
+    return snackbarMessage.collectAsState(initial = null)
 }
 
 @Composable
@@ -74,6 +75,7 @@ fun rememberSnackbarHostState(snackbarMessage: SnackbarMessage?): SnackbarHostSt
     val snackbarMessageText = snackbarMessage?.let {
         stringResource(id = snackbarMessage.messageResId)
     }
+    val dispatcher = LocalSnackbarDispatcher.current
     LaunchedEffect(snackbarMessage) {
         if (snackbarMessageText == null) return@LaunchedEffect
         coroutineScope.launch {
@@ -81,6 +83,9 @@ fun rememberSnackbarHostState(snackbarMessage: SnackbarMessage?): SnackbarHostSt
                 message = snackbarMessageText,
                 duration = snackbarMessage.duration,
             )
+            if (isActive) {
+                dispatcher.clear()
+            }
         }
     }
     return snackbarHostState

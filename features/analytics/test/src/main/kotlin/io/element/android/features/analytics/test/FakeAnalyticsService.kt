@@ -29,8 +29,9 @@ class FakeAnalyticsService(
     didAskUserConsent: Boolean = false
 ): AnalyticsService {
 
-    private var isEnabledFlow = MutableStateFlow(isEnabled)
-    private var didAskUserConsentFlow = MutableStateFlow(didAskUserConsent)
+    private val isEnabledFlow = MutableStateFlow(isEnabled)
+    private val didAskUserConsentFlow = MutableStateFlow(didAskUserConsent)
+    val capturedEvents = mutableListOf<VectorAnalyticsEvent>()
 
     override fun getAvailableAnalyticsProviders(): List<AnalyticsProvider> = emptyList()
 
@@ -55,6 +56,7 @@ class FakeAnalyticsService(
     }
 
     override fun capture(event: VectorAnalyticsEvent) {
+        capturedEvents += event
     }
 
     override fun screen(screen: VectorAnalyticsScreen) {

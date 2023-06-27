@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"1 osoba"</item>
+    <item quantity="few">"%1$d ľudia"</item>
+    <item quantity="other">"%1$d ľudí"</item>
+  </plurals>
+  <string name="screen_room_details_add_topic_title">"Pridať tému"</string>
+  <string name="screen_room_details_edit_room_title">"Upraviť miestnosť"</string>
+  <string name="screen_room_details_edition_error">"Nepodarilo sa nám aktualizovať všetky informácie o tejto miestnosti."</string>
+  <string name="screen_room_details_edition_error_title">"Nepodarilo sa aktualizovať miestnosť"</string>
+  <string name="screen_room_details_encryption_enabled_title">"Šifrovanie správ je zapnuté"</string>
+  <string name="screen_room_details_invite_people_title">"Pozvať ľudí"</string>
+  <string name="screen_room_details_notification_title">"Oznámenie"</string>
+  <string name="screen_room_details_room_name_label">"Názov miestnosti"</string>
+  <string name="screen_room_details_share_room_title">"Zdieľať miestnosť"</string>
+  <string name="screen_room_details_updating_room">"Aktualizácia miestnosti…"</string>
+  <string name="screen_room_member_list_pending_header_title">"Čaká sa"</string>
+  <string name="screen_room_member_list_room_members_header_title">"Členovia miestnosti"</string>
+  <string name="screen_dm_details_block_alert_action">"Zablokovať"</string>
+  <string name="screen_dm_details_block_user">"Zablokovať používateľa"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Odblokovať"</string>
+  <string name="screen_dm_details_unblock_user">"Odblokovať používateľa"</string>
+  <string name="screen_room_details_leave_room_title">"Opustiť miestnosť"</string>
+  <string name="screen_room_details_people_title">"Ľudia"</string>
+  <string name="screen_room_details_security_title">"Bezpečnosť"</string>
+  <string name="screen_room_details_topic_title">"Téma"</string>
+</resources>

@@ -18,12 +18,18 @@ package io.element.android.features.preferences.impl.developer
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateMap
+import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
+import io.element.android.features.preferences.impl.tasks.ComputeCacheSizeUseCase
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.execute
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.featureflag.api.Feature
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -36,6 +42,8 @@ import javax.inject.Inject
 
 class DeveloperSettingsPresenter @Inject constructor(
     private val featureFlagService: FeatureFlagService,
+    private val computeCacheSizeUseCase: ComputeCacheSizeUseCase,
+    private val clearCacheUseCase: ClearCacheUseCase,
 ) : Presenter<DeveloperSettingsState> {
 
     @Composable
@@ -47,6 +55,12 @@ class DeveloperSettingsPresenter @Inject constructor(
         val enabledFeatures = remember {
             mutableStateMapOf<String, Boolean>()
         }
+        val cacheSize = remember {
+            mutableStateOf<Async<String>>(Async.Uninitialized)
+        }
+        val clearCacheAction = remember {
+            mutableStateOf<Async<Unit>>(Async.Uninitialized)
+        }
         LaunchedEffect(Unit) {
             FeatureFlags.values().forEach { feature ->
                 features[feature.key] = feature
@@ -55,6 +69,10 @@ class DeveloperSettingsPresenter @Inject constructor(
         }
         val featureUiModels = createUiModels(features, enabledFeatures)
         val coroutineScope = rememberCoroutineScope()
+        // Compute cache size each time the clear cache action value is changed
+        LaunchedEffect(clearCacheAction.value) {
+            computeCacheSize(cacheSize)
+        }
 
         fun handleEvents(event: DeveloperSettingsEvents) {
             when (event) {
@@ -64,11 +82,14 @@ class DeveloperSettingsPresenter @Inject constructor(
                     event.feature,
                     event.isEnabled
                 )
+                DeveloperSettingsEvents.ClearCache -> coroutineScope.clearCache(clearCacheAction)
             }
         }
 
         return DeveloperSettingsState(
             features = featureUiModels.toImmutableList(),
+            cacheSize = cacheSize.value,
+            clearCacheAction = clearCacheAction.value,
             eventSink = ::handleEvents
         )
     }
@@ -102,6 +123,18 @@ class DeveloperSettingsPresenter @Inject constructor(
         if (featureFlagService.setFeatureEnabled(feature, enabled)) {
             enabledFeatures[featureUiModel.key] = enabled
         }
+    }
+
+    private fun CoroutineScope.computeCacheSize(cacheSize: MutableState<Async<String>>) = launch {
+        suspend {
+            computeCacheSizeUseCase()
+        }.execute(cacheSize)
+    }
+
+    private fun CoroutineScope.clearCache(clearCacheAction: MutableState<Async<Unit>>) = launch {
+        suspend {
+            clearCacheUseCase()
+        }.execute(clearCacheAction)
     }
 }
 

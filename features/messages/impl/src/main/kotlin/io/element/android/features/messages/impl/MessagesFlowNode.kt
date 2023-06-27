@@ -35,12 +35,14 @@ import io.element.android.features.messages.impl.attachments.preview.Attachments
 import io.element.android.features.messages.impl.forward.ForwardMessagesNode
 import io.element.android.features.messages.impl.media.local.MediaInfo
 import io.element.android.features.messages.impl.media.viewer.MediaViewerNode
+import io.element.android.features.messages.impl.report.ReportMessageNode
 import io.element.android.features.messages.impl.timeline.debug.EventDebugInfoNode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.libraries.architecture.BackstackNode
+import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
@@ -83,6 +85,9 @@ class MessagesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class ForwardEvent(val eventId: EventId) : NavTarget
+
+        @Parcelize
+        data class ReportMessage(val eventId: EventId, val senderId: UserId) : NavTarget
     }
 
     private val callback = plugins<MessagesEntryPoint.Callback>().firstOrNull()
@@ -114,6 +119,10 @@ class MessagesFlowNode @AssistedInject constructor(
                     override fun onForwardEventClicked(eventId: EventId) {
                         backstack.push(NavTarget.ForwardEvent(eventId))
                     }
+
+                    override fun onReportMessage(eventId: EventId, senderId: UserId) {
+                        backstack.push(NavTarget.ReportMessage(eventId, senderId))
+                    }
                 }
                 createNode<MessagesNode>(buildContext, listOf(callback))
             }
@@ -141,6 +150,10 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
                 }
                 createNode<ForwardMessagesNode>(buildContext, listOf(inputs, callback))
+            }
+            is NavTarget.ReportMessage -> {
+                val inputs = ReportMessageNode.Inputs(navTarget.eventId, navTarget.senderId)
+                createNode<ReportMessageNode>(buildContext, listOf(inputs))
             }
         }
     }
@@ -197,6 +210,7 @@ class MessagesFlowNode @AssistedInject constructor(
         Children(
             navModel = backstack,
             modifier = modifier,
+            transitionHandler = rememberDefaultTransitionHandler(),
         )
     }
 }

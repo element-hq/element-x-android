@@ -33,6 +33,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 @SingleIn(AppScope::class)
@@ -45,7 +46,7 @@ class DefaultAnalyticsService @Inject constructor(
     private val sessionObserver: SessionObserver,
 ) : AnalyticsService, SessionListener {
     // Cache for the store values
-    private var userConsent: Boolean? = null
+    private val userConsent = AtomicBoolean(false)
 
     // Cache for the properties to send
     private var pendingUserProperties: UserProperties? = null
@@ -104,7 +105,7 @@ class DefaultAnalyticsService @Inject constructor(
         getUserConsent()
             .onEach { consent ->
                 Timber.tag(analyticsTag.value).d("User consent updated to $consent")
-                userConsent = consent
+                userConsent.set(consent)
                 initOrStop()
             }
             .launchIn(coroutineScope)
@@ -115,35 +116,33 @@ class DefaultAnalyticsService @Inject constructor(
     }
 
     private fun initOrStop() {
-        userConsent?.let { _userConsent ->
-            when (_userConsent) {
-                true -> {
-                    pendingUserProperties?.let {
-                        analyticsProviders.onEach { provider -> provider.updateUserProperties(it) }
-                        pendingUserProperties = null
-                    }
-                }
-                false -> {}
+        if (userConsent.get()) {
+            analyticsProviders.onEach { it.init() }
+            pendingUserProperties?.let {
+                analyticsProviders.onEach { provider -> provider.updateUserProperties(it) }
+                pendingUserProperties = null
             }
+        } else {
+            analyticsProviders.onEach { it.stop() }
         }
     }
 
     override fun capture(event: VectorAnalyticsEvent) {
         Timber.tag(analyticsTag.value).d("capture($event)")
-        if (userConsent == true) {
+        if (userConsent.get()) {
             analyticsProviders.onEach { it.capture(event) }
         }
     }
 
     override fun screen(screen: VectorAnalyticsScreen) {
         Timber.tag(analyticsTag.value).d("screen($screen)")
-        if (userConsent == true) {
+        if (userConsent.get()) {
             analyticsProviders.onEach { it.screen(screen) }
         }
     }
 
     override fun updateUserProperties(userProperties: UserProperties) {
-        if (userConsent == true) {
+        if (userConsent.get()) {
             analyticsProviders.onEach { it.updateUserProperties(userProperties) }
         } else {
             pendingUserProperties = userProperties
@@ -151,7 +150,7 @@ class DefaultAnalyticsService @Inject constructor(
     }
 
     override fun trackError(throwable: Throwable) {
-        if (userConsent == true) {
+        if (userConsent.get()) {
             analyticsProviders.onEach { it.trackError(throwable) }
         }
     }

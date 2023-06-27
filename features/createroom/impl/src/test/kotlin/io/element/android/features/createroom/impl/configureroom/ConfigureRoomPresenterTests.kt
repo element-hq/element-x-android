@@ -21,6 +21,8 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.CreatedRoom
+import io.element.android.features.analytics.test.FakeAnalyticsService
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.features.createroom.impl.userlist.UserListDataStore
@@ -62,6 +64,7 @@ class ConfigureRoomPresenterTests {
     private lateinit var fakeMatrixClient: FakeMatrixClient
     private lateinit var fakePickerProvider: FakePickerProvider
     private lateinit var fakeMediaPreProcessor: FakeMediaPreProcessor
+    private lateinit var fakeAnalyticsService: FakeAnalyticsService
 
     @Before
     fun setup() {
@@ -70,11 +73,13 @@ class ConfigureRoomPresenterTests {
         createRoomDataStore = CreateRoomDataStore(userListDataStore)
         fakePickerProvider = FakePickerProvider()
         fakeMediaPreProcessor = FakeMediaPreProcessor()
+        fakeAnalyticsService = FakeAnalyticsService()
         presenter = ConfigureRoomPresenter(
             dataStore = createRoomDataStore,
             matrixClient = fakeMatrixClient,
             mediaPickerProvider = fakePickerProvider,
             mediaPreProcessor = fakeMediaPreProcessor,
+            analyticsService = fakeAnalyticsService,
         )
 
         mockkStatic(File::readBytes)
@@ -215,6 +220,25 @@ class ConfigureRoomPresenterTests {
     }
 
     @Test
+    fun `present - record analytics when creating room`() = runTest {
+        moleculeFlow(RecompositionClock.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val createRoomResult = Result.success(RoomId("!createRoomResult:domain"))
+
+            fakeMatrixClient.givenCreateRoomResult(createRoomResult)
+
+            initialState.eventSink(ConfigureRoomEvents.CreateRoom(initialState.config))
+            skipItems(2)
+
+            val analyticsEvent = fakeAnalyticsService.capturedEvents.filterIsInstance<CreatedRoom>().firstOrNull()
+            assertThat(analyticsEvent).isNotNull()
+            assertThat(analyticsEvent?.isDM).isFalse()
+        }
+    }
+
+    @Test
     fun `present - trigger create room with upload error and retry`() = runTest {
         moleculeFlow(RecompositionClock.Immediate) {
             presenter.present()
@@ -229,6 +253,7 @@ class ConfigureRoomPresenterTests {
             assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Loading::class.java)
             val stateAfterCreateRoom = awaitItem()
             assertThat(stateAfterCreateRoom.createRoomAction).isInstanceOf(Async.Failure::class.java)
+            assertThat(fakeAnalyticsService.capturedEvents.filterIsInstance<CreatedRoom>()).isEmpty()
 
             fakeMatrixClient.givenUploadMediaResult(Result.success(AN_AVATAR_URL))
             stateAfterCreateRoom.eventSink(ConfigureRoomEvents.CreateRoom(initialState.config))

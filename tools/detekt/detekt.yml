@@ -113,7 +113,8 @@ Compose:
   CompositionLocalAllowlist:
     active: true
     # You can optionally define a list of CompositionLocals that are allowed here
-    allowedCompositionLocals: LocalColors, LocalCompoundColors
+
+    allowedCompositionLocals: LocalColors, LocalCompoundColors, LocalSnackbarDispatcher
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:

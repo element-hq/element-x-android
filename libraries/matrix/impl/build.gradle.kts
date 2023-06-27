@@ -32,6 +32,7 @@ dependencies {
     // api(projects.libraries.rustsdk)
     implementation(libs.matrix.sdk)
     implementation(projects.libraries.di)
+    implementation(projects.libraries.androidutils)
     implementation(projects.services.toolbox.api)
     api(projects.libraries.matrix.api)
     implementation(libs.dagger)

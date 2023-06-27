@@ -25,6 +25,7 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
+import io.element.android.features.messages.impl.timeline.model.event.canBeCopied
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import kotlinx.collections.immutable.toImmutableList
@@ -64,7 +65,9 @@ class ActionListPresenter @Inject constructor(
                 is TimelineItemRedactedContent,
                 is TimelineItemStateContent -> {
                     buildList {
-                        add(TimelineItemAction.Copy)
+                        if (timelineItem.content.canBeCopied()) {
+                            add(TimelineItemAction.Copy)
+                        }
                         if (buildMeta.isDebuggable) {
                             add(TimelineItemAction.Developer)
                         }
@@ -76,7 +79,9 @@ class ActionListPresenter @Inject constructor(
                     if (timelineItem.isMine) {
                         add(TimelineItemAction.Edit)
                     }
-                    add(TimelineItemAction.Copy)
+                    if (timelineItem.content.canBeCopied()) {
+                        add(TimelineItemAction.Copy)
+                    }
                     if (buildMeta.isDebuggable) {
                         add(TimelineItemAction.Developer)
                     }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_prompt_data_usage">"Nezaznamenávame ani neprofilujeme žiadne osobné údaje"</string>
+  <string name="screen_analytics_prompt_settings">"Môžete to kedykoľvek vypnúť"</string>
+  <string name="screen_analytics_prompt_third_party_sharing">"Vaše údaje nebudeme zdieľať s tretími stranami"</string>
+  <string name="screen_analytics_prompt_title">"Pomôžte zlepšiť %1$s"</string>
+</resources>

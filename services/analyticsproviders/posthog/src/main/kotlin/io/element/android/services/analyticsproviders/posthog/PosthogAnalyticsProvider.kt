@@ -42,7 +42,7 @@ class PosthogAnalyticsProvider @Inject constructor(
     private var posthog: PostHog? = null
     private var analyticsId: String? = null
 
-    override suspend fun init() {
+    override fun init() {
         posthog = createPosthog()
         posthog?.optOut(false)
         identifyPostHog()
@@ -66,10 +66,10 @@ class PosthogAnalyticsProvider @Inject constructor(
     }
 
     override fun updateUserProperties(userProperties: UserProperties) {
-        posthog?.identify(
-            REUSE_EXISTING_ID, userProperties.getProperties()?.toPostHogUserProperties(),
-            IGNORED_OPTIONS
-        )
+//        posthog?.identify(
+//            REUSE_EXISTING_ID, userProperties.getProperties()?.toPostHogUserProperties(),
+//            IGNORED_OPTIONS
+//        )
     }
 
     override fun trackError(throwable: Throwable) {

@@ -18,10 +18,12 @@ package io.element.android.x.di
 
 import com.squareup.anvil.annotations.ContributesTo
 import io.element.android.appnav.di.MatrixClientsHolder
+import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
 
 @ContributesTo(AppScope::class)
 interface AppBindings {
     fun matrixClientsHolder(): MatrixClientsHolder
     fun mainDaggerComponentOwner(): MainDaggerComponentsOwner
+    fun snackbarDispatcher(): SnackbarDispatcher
 }

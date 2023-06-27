@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.timeline
+package io.element.android.libraries.androidutils.clipboard
 
-import io.element.android.features.messages.impl.timeline.util.FileSizeFormatter
+class FakeClipboardHelper : ClipboardHelper {
 
-class FakeFileSizeFormatter : FileSizeFormatter {
-    override fun format(fileSize: Long): String {
-        return "$fileSize Bytes"
+    var clipboardContents: Any? = null
+
+    override fun copyPlainText(text: String) {
+        clipboardContents = text
     }
 }
