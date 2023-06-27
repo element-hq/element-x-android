@@ -69,7 +69,7 @@ class RoomListScreen(
             stateContentFormatter = StateContentFormatter(stringProvider),
         ),
         sessionVerificationService = sessionVerificationService,
-        networkMonitor = NetworkMonitorImpl(context),
+        networkMonitor = NetworkMonitorImpl(context, Singleton.appScope),
         snackbarDispatcher = SnackbarDispatcher(),
         inviteStateDataSource = DefaultInviteStateDataSource(matrixClient, DefaultSeenInvitesStore(context), coroutineDispatchers),
         leaveRoomPresenter = LeaveRoomPresenterImpl(matrixClient, RoomMembershipObserver(), coroutineDispatchers)
@@ -81,13 +81,11 @@ class RoomListScreen(
             Singleton.appScope.launch {
                 withContext(coroutineDispatchers.io) {
                     matrixClient.getRoom(roomId)!!.use { room ->
+                        room.open()
                         val timeline = room.timeline()
-
                         timeline.apply {
                             // TODO This doesn't work reliably as initialize is asynchronous, and the timeline can't be used until it's finished
-                            initialize()
                             paginateBackwards(20, 50)
-                            dispose()
                         }
                     }
                 }
@@ -108,10 +106,10 @@ class RoomListScreen(
 
         DisposableEffect(Unit) {
             Timber.w("Start sync!")
-            matrixClient.startSync()
+            matrixClient.syncService().startSync()
             onDispose {
                 Timber.w("Stop sync!")
-                matrixClient.stopSync()
+                matrixClient.syncService().stopSync()
             }
         }
     }

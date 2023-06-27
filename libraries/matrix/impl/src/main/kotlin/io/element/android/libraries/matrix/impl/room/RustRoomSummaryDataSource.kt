@@ -112,7 +112,7 @@ private fun RoomListLoadingState.toRoomSummaryDataSourceLoadingState(): RoomSumm
     }
 }
 
-fun RoomList.observeEntriesWithProcessor(processor: RoomSummaryListProcessor): Flow<RoomListEntriesUpdate> {
+private fun RoomList.observeEntriesWithProcessor(processor: RoomSummaryListProcessor): Flow<RoomListEntriesUpdate> {
     return entriesFlow { roomListEntries ->
         processor.postEntries(roomListEntries)
     }.onEach { update ->

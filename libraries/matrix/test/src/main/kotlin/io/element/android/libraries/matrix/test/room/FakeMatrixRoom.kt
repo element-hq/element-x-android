@@ -134,6 +134,10 @@ class FakeMatrixRoom(
         return matrixTimeline
     }
 
+    override fun open(): Result<Unit> {
+        return Result.success(Unit)
+    }
+
     override suspend fun userDisplayName(userId: UserId): Result<String?> = simulateLongTask {
         userDisplayNameResult
     }
