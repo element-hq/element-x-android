@@ -20,11 +20,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.SystemGrey4Dark
-import io.element.android.libraries.designsystem.SystemGrey6Light
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.previews.ColorListPreview
+import io.element.android.libraries.theme.ElementColors
+import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.SystemGrey4Dark
+import io.element.android.libraries.theme.SystemGrey6Light
+import io.element.android.libraries.theme.previews.ColorListPreview
 import kotlinx.collections.immutable.persistentMapOf
 
 /**

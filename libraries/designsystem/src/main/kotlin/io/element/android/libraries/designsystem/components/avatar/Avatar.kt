@@ -32,12 +32,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import io.element.android.libraries.designsystem.AvatarGradientEnd
-import io.element.android.libraries.designsystem.AvatarGradientStart
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.preview.debugPlaceholderAvatar
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.AvatarGradientEnd
+import io.element.android.libraries.theme.AvatarGradientStart
 import timber.log.Timber
 
 @Composable

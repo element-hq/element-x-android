@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.theme.previews
+package io.element.android.libraries.theme.previews
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableMap
 
 @Composable
-internal fun ColorListPreview(
+fun ColorListPreview(
     backgroundColor: Color,
     foregroundColor: Color,
     colors: ImmutableMap<String, Color>,

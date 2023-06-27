@@ -70,7 +70,6 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.LargeHeightPreview
-import io.element.android.libraries.designsystem.theme.LocalColors
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -315,7 +314,7 @@ internal fun OtherActionsSection(onLeaveRoom: () -> Unit, modifier: Modifier = M
         PreferenceText(
             title = stringResource(R.string.screen_room_details_leave_room_title),
             icon = ImageVector.vectorResource(R.drawable.ic_door_open),
-            tintColor = LocalColors.current.textActionCritical,
+            tintColor = MaterialTheme.colorScheme.error,
             onClick = onLeaveRoom,
         )
     }

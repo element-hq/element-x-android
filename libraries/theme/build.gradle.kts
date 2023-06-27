@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.utils
+plugins {
+    id("io.element.android-compose-library")
+    alias(libs.plugins.ksp)
+}
 
-import androidx.compose.ui.graphics.Color
+android {
+    namespace = "io.element.android.libraries.theme"
 
-/**
- * Convert color to Human Readable Format.
- */
-internal fun Color.toHrf(): String {
-    return "0x" + value.toString(16).take(8).uppercase()
+    dependencies {
+        ksp(libs.showkase.processor)
+        kspTest(libs.showkase.processor)
+
+        implementation(libs.accompanist.systemui)
+    }
 }

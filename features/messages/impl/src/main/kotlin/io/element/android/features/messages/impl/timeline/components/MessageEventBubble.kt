@@ -41,7 +41,7 @@ import io.element.android.features.messages.impl.timeline.model.bubble.BubbleSta
 import io.element.android.libraries.core.extensions.to01
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.ElementTheme
+import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 

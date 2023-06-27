@@ -21,7 +21,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.SliderColors
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
@@ -59,8 +62,10 @@ internal fun SlidersPreview() = ElementThemedPreview { ContentToPreview() }
 
 @Composable
 private fun ContentToPreview() {
+    var value by remember { mutableStateOf(0.33f) }
     Column {
-        Slider(onValueChange = {}, value = 0.33f, enabled = true)
-        Slider(onValueChange = {}, value = 0.33f, enabled = false)
+        Slider(onValueChange = { value = it }, value = value, enabled = true)
+        Slider(steps = 10, onValueChange = { value = it }, value = value, enabled = true)
+        Slider(onValueChange = { value = it }, value = value, enabled = false)
     }
 }
