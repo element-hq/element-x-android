@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,14 +29,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.theme.roomListPlaceHolder
+import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun PlaceholderAtom(
     width: Dp,
     height: Dp,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.roomListPlaceHolder(),
+    color: Color = ElementTheme.compoundColors.textPlaceholder,
 ) {
     Box(
         modifier = modifier
