@@ -31,7 +31,6 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import im.vector.app.features.analytics.plan.ViewRoom
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
@@ -44,8 +43,6 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.services.analytics.api.AnalyticsService
-import io.element.android.services.analytics.api.extensions.toAnalyticsViewRoom
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
