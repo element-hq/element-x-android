@@ -41,8 +41,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
-import io.element.android.libraries.ui.strings.R
-import io.element.android.libraries.ui.strings.R as StringsR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun AttachmentsPreviewView(
@@ -92,7 +91,7 @@ private fun AttachmentSendStateView(
 ) {
     when (sendActionState) {
         is Async.Loading -> {
-            ProgressDialog(text = stringResource(id = R.string.common_loading))
+            ProgressDialog(text = stringResource(id = CommonStrings.common_loading))
         }
 
         is Async.Failure -> {
@@ -151,10 +150,10 @@ private fun AttachmentsPreviewBottomActions(
         modifier = modifier,
     ) {
         TextButton(onClick = onCancelClicked) {
-            Text(stringResource(id = StringsR.string.action_cancel))
+            Text(stringResource(id = CommonStrings.action_cancel))
         }
         TextButton(onClick = onSendClicked) {
-            Text(stringResource(id = StringsR.string.action_send))
+            Text(stringResource(id = CommonStrings.action_send))
         }
     }
 }

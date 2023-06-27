@@ -40,7 +40,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.features.location.api.R
-import io.element.android.libraries.ui.strings.R as StringsR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 internal fun StaticMapPlaceholder(
@@ -76,7 +76,7 @@ internal fun StaticMapPlaceholder(
                         imageVector = Icons.Default.Refresh,
                         contentDescription = null
                     )
-                    Text(text = stringResource(id = StringsR.string.action_static_map_load))
+                    Text(text = stringResource(id = CommonStrings.action_static_map_load))
                 }
             }
         }

@@ -3,6 +3,7 @@
 <!--- TOC -->
 
 * [Contributing code to Matrix](#contributing-code-to-matrix)
+* [Developer onboarding](#developer-onboarding)
 * [Android Studio settings](#android-studio-settings)
 * [Compilation](#compilation)
 * [Strings](#strings)
@@ -31,6 +32,10 @@ Please read https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.md
 Element X Android support can be found in this room: [![Element Android Matrix room #element-android:matrix.org](https://img.shields.io/matrix/element-android:matrix.org.svg?label=%23element-android:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-android:matrix.org).
 
 The rest of the document contains specific rules for Matrix Android projects
+
+## Developer onboarding
+
+For a detailed overview of the project, see [Developer Onboarding](./docs/_developer_onboarding.md).
 
 ## Android Studio settings
 

@@ -83,8 +83,8 @@ import io.element.android.libraries.designsystem.theme.roomListUnreadIndicator
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.designsystem.R as DrawableR
-import io.element.android.libraries.ui.strings.R as StringR
 
 @Composable
 fun RoomListView(
@@ -229,7 +229,7 @@ fun RoomListContent(
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
                                     Text(
-                                        text = stringResource(StringR.string.action_invites_list),
+                                        text = stringResource(CommonStrings.action_invites_list),
                                         fontSize = 14.sp,
                                         style = noFontPadding,
                                     )
@@ -314,7 +314,7 @@ internal fun RequestVerificationHeader(
                     Icon(
                         modifier = Modifier.clickable(onClick = onDismissClicked),
                         imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(StringR.string.action_close)
+                        contentDescription = stringResource(CommonStrings.action_close)
                     )
                 }
                 Spacer(modifier = Modifier.height(4.dp))
@@ -325,7 +325,7 @@ internal fun RequestVerificationHeader(
                     contentPadding = PaddingValues(horizontal = 20.dp, vertical = 7.dp),
                     onClick = onVerifyClicked,
                 ) {
-                    Text(stringResource(StringR.string.action_continue), style = ElementTextStyles.Button)
+                    Text(stringResource(CommonStrings.action_continue), style = ElementTextStyles.Button)
                 }
             }
         }

@@ -55,8 +55,8 @@ class RoomMemberListPresenterTests {
 
             val loadedState = awaitItem()
             Truth.assertThat(loadedState.roomMembers).isInstanceOf(Async.Success::class.java)
-            Truth.assertThat((loadedState.roomMembers as Async.Success).state.invited).isEqualTo(listOf(aVictor(), aWalter()))
-            Truth.assertThat((loadedState.roomMembers as Async.Success).state.joined).isNotEmpty()
+            Truth.assertThat((loadedState.roomMembers as Async.Success).data.invited).isEqualTo(listOf(aVictor(), aWalter()))
+            Truth.assertThat((loadedState.roomMembers as Async.Success).data.joined).isNotEmpty()
         }
     }
 

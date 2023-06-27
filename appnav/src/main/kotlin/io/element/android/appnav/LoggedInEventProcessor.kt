@@ -21,7 +21,7 @@ import io.element.android.libraries.designsystem.utils.SnackbarMessage
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
-import io.element.android.libraries.ui.strings.R
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.drop
@@ -48,13 +48,13 @@ class LoggedInEventProcessor @Inject constructor(
     fun observeEvents(coroutineScope: CoroutineScope) {
         observingJob = coroutineScope.launch {
             displayLeftRoomMessage.onEach {
-                displayMessage(R.string.common_current_user_left_room)
+                displayMessage(CommonStrings.common_current_user_left_room)
             }.launchIn(this)
 
             displayVerificationSuccessfulMessage
                 .drop(1)
                 .onEach {
-                    displayMessage(R.string.common_verification_complete)
+                    displayMessage(CommonStrings.common_verification_complete)
                 }.launchIn(this)
         }
     }

@@ -32,7 +32,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
-import io.element.android.libraries.ui.strings.R as StringR
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun RageshakeDetectionView(
@@ -88,11 +88,11 @@ fun RageshakeDialogContent(
     onYesClicked: () -> Unit = { },
 ) {
     ConfirmationDialog(
-        title = stringResource(id = StringR.string.action_report_bug),
+        title = stringResource(id = CommonStrings.action_report_bug),
         content = stringResource(id = R.string.rageshake_detection_dialog_content),
-        thirdButtonText = stringResource(id = StringR.string.action_disable),
-        submitText = stringResource(id = StringR.string.action_yes),
-        cancelText = stringResource(id = StringR.string.action_no),
+        thirdButtonText = stringResource(id = CommonStrings.action_disable),
+        submitText = stringResource(id = CommonStrings.action_yes),
+        cancelText = stringResource(id = CommonStrings.action_no),
         onCancelClicked = onNoClicked,
         onThirdButtonClicked = onDisableClicked,
         onSubmitClicked = onYesClicked,

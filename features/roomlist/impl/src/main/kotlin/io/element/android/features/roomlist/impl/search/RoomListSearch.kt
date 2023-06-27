@@ -64,7 +64,7 @@ import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.copy
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.ui.strings.R
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 internal fun RoomListSearchResultView(
@@ -150,7 +150,7 @@ internal fun RoomListSearchResultContent(
                                 }) {
                                     Icon(
                                         imageVector = Icons.Default.Close,
-                                        contentDescription = stringResource(R.string.action_cancel)
+                                        contentDescription = stringResource(CommonStrings.action_cancel)
                                     )
                                 }
                             }

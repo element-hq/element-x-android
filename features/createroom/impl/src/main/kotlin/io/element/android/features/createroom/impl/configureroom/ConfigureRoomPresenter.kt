@@ -30,7 +30,7 @@ import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.execute
+import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -131,7 +131,7 @@ class ConfigureRoomPresenter @Inject constructor(
                     dataStore.clearCachedData()
                     analyticsService.capture(CreatedRoom(isDM = false))
                 }
-        }.execute(createRoomAction)
+        }.runCatchingUpdatingState(createRoomAction)
     }
 
     private suspend fun uploadAvatar(avatarUri: Uri): String {
