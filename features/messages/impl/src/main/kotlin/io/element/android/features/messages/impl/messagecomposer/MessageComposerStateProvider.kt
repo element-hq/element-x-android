@@ -30,6 +30,7 @@ open class MessageComposerStateProvider : PreviewParameterProvider<MessageCompos
 fun aMessageComposerState() = MessageComposerState(
     text = StableCharSequence(""),
     isFullScreen = false,
+    hasFocus = false,
     mode = MessageComposerMode.Normal(content = ""),
     showAttachmentSourcePicker = false,
     attachmentsState = AttachmentsState.None,

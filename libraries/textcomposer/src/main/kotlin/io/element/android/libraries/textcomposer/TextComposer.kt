@@ -53,6 +53,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
@@ -93,6 +94,7 @@ fun TextComposer(
     onResetComposerMode: () -> Unit = {},
     onComposerTextChange: (CharSequence) -> Unit = {},
     onAddAttachment: () -> Unit = {},
+    onFocusChanged: (Boolean) -> Unit = {},
 ) {
     val text = composerText.orEmpty()
     Row(
@@ -129,7 +131,8 @@ fun TextComposer(
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(min = minHeight)
-                        .focusRequester(focusRequester),
+                        .focusRequester(focusRequester)
+                        .onFocusEvent { onFocusChanged(it.hasFocus) },
                     value = text,
                     onValueChange = { onComposerTextChange(it) },
                     onTextLayout = {

@@ -38,12 +38,20 @@ fun MessageComposerView(
         state.eventSink(MessageComposerEvents.SendMessage(message))
     }
 
+    fun onAddAttachment() {
+        state.eventSink(MessageComposerEvents.AddAttachment)
+    }
+
     fun onCloseSpecialMode() {
         state.eventSink(MessageComposerEvents.CloseSpecialMode)
     }
 
     fun onComposerTextChange(text: CharSequence) {
         state.eventSink(MessageComposerEvents.UpdateText(text))
+    }
+
+    fun onFocusChanged(hasFocus: Boolean) {
+        state.eventSink(MessageComposerEvents.FocusChanged(hasFocus))
     }
 
     Box {
@@ -54,9 +62,8 @@ fun MessageComposerView(
             composerMode = state.mode,
             onResetComposerMode = ::onCloseSpecialMode,
             onComposerTextChange = ::onComposerTextChange,
-            onAddAttachment = {
-                state.eventSink(MessageComposerEvents.AddAttachment)
-            },
+            onAddAttachment = ::onAddAttachment,
+            onFocusChanged = ::onFocusChanged,
             composerCanSendMessage = state.isSendButtonVisible,
             composerText = state.text?.charSequence?.toString(),
             modifier = modifier
