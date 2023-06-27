@@ -23,6 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -34,6 +35,7 @@ import org.matrix.rustcomponents.sdk.RoomListInput
 import org.matrix.rustcomponents.sdk.RoomListLoadingState
 import org.matrix.rustcomponents.sdk.RoomListRange
 import org.matrix.rustcomponents.sdk.RoomListService
+import org.matrix.rustcomponents.sdk.RoomListServiceState
 import timber.log.Timber
 
 internal class RustRoomSummaryDataSource(
@@ -48,18 +50,31 @@ internal class RustRoomSummaryDataSource(
 
     private val allRoomsLoadingState: MutableStateFlow<RoomSummaryDataSource.LoadingState> = MutableStateFlow(RoomSummaryDataSource.LoadingState.NotLoaded)
     private val allRoomsListProcessor = RoomSummaryListProcessor(allRooms, roomListService, roomSummaryDetailsFactory)
+    private val inviteRoomsListProcessor = RoomSummaryListProcessor(inviteRooms, roomListService, roomSummaryDetailsFactory)
 
     init {
         sessionCoroutineScope.launch(coroutineDispatchers.computation) {
             val allRooms = roomListService.allRooms()
-            allRooms.observeEntriesWithProcessor(allRoomsListProcessor)
+            allRooms
+                .observeEntriesWithProcessor(allRoomsListProcessor)
                 .launchIn(this)
 
-            allRooms.loadingStateFlow()
+            allRooms
+                .loadingStateFlow()
                 .map { it.toRoomSummaryDataSourceLoadingState() }
                 .onEach {
                     allRoomsLoadingState.value = it
                 }.launchIn(this)
+
+            launch {
+                // Wait until running, as invites is only available after that
+                roomListService.stateFlow().first {
+                    it == RoomListServiceState.RUNNING
+                }
+                roomListService.invites()
+                    .observeEntriesWithProcessor(inviteRoomsListProcessor)
+                    .launchIn(this)
+            }
         }
     }
 
